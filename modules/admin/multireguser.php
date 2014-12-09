@@ -140,22 +140,30 @@ if (isset($_POST['submit'])) {
         <fieldset>        
         <div class='form-group'>
             <label for='fields' class='col-sm-3 control-label'>$langMultiRegFields:</label>
-            <div class='col-sm-9'><input id='fields' type='text' name='fields' size='50' value='first last id email phone' /></div>
-        </div>
-        <div class='form-group'>
-            <label for='user_info' class='col-sm-3 control-label'>$langUsersData:</label>
-            <div class='col-sm-9'><textarea class='auth_input' name='user_info' rows='10' cols='60'></textarea></div>
-        </div>
-        <div class='form-group'>
-        <label for='reg_type' class='col-sm-3 control-label'>$langMultiRegType:</label>
-            <div class='col-sm-9'><select name='type'>
-                    <option value='stud'>$langsOfStudents</option>
-                    <option value='prof'>$langOfTeachers</option></select>
+            <div class='col-sm-9'>
+                <input class='form-control' id='fields' type='text' name='fields' value='first last id email phone'>
             </div>
         </div>
         <div class='form-group'>
-            <label for='reg_prefix' class='col-sm-3 control-label'>$langMultiRegPrefix:</label>
-            <div class='col-sm-9'><input type='text' name='prefix' size='10' value='user' /></div>
+            <label for='user_info' class='col-sm-3 control-label'>$langUsersData:</label>
+            <div class='col-sm-9'>
+                <textarea class='auth_input form-control' name='user_info' id='user_info' rows='10'></textarea>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='type' class='col-sm-3 control-label'>$langMultiRegType:</label>
+            <div class='col-sm-9'>
+                <select class='form-control' name='type' id='type'>
+                    <option value='stud'>$langsOfStudents</option>
+                    <option value='prof'>$langOfTeachers</option>
+                </select>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='prefix' class='col-sm-3 control-label'>$langMultiRegPrefix:</label>
+            <div class='col-sm-9'>
+                <input class='form-control' type='text' name='prefix' id='prefix' value='user'>
+            </div>
         </div>
         <div class='form-group'>
         <label class='col-sm-3 control-label'>$langFaculty:</label>
@@ -171,33 +179,41 @@ if (isset($_POST['submit'])) {
     $tool_content .= "</div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langAm:</label>
-            <div class='col-sm-9'><input type='text' name='am' size='10' /></div>
+            <label for='am' class='col-sm-3 control-label'>$langAm:</label>
+            <div class='col-sm-9'>
+                <input class='form-control' type='text' name='am' id='am'>
+            </div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langLanguage:</label>
-            <div class='col-sm-9'>" . lang_select_options('lang') . "</div>
+        <label for='lang' class='col-sm-3 control-label'>$langLanguage:</label>
+            <div class='col-sm-9'>" . lang_select_options('lang', 'class="form-control"') . "</div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langEmail</label>
-            <div class='col-sm-9'>" . selection($access_options, 'email_public', ACCESS_PRIVATE) . "</div>
+        <label for='email_public' class='col-sm-3 control-label'>$langEmail</label>
+            <div class='col-sm-9'>" . selection($access_options, 'email_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langAm</label>
-            <div class='col-sm-9'>" . selection($access_options, 'am_public', ACCESS_PRIVATE) . "</div>
+        <label for='am_public' class='col-sm-3 control-label'>$langAm</label>
+            <div class='col-sm-9'>" . selection($access_options, 'am_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langPhone</label>
-            <div class='col-sm-9'>" . selection($access_options, 'phone_public', ACCESS_PRIVATE) . "</div>
+        <label for='phone_public' class='col-sm-3 control-label'>$langPhone</label>
+            <div class='col-sm-9'>" . selection($access_options, 'phone_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
         </div>
         <div class='form-group'>
-        <label class='col-sm-3 control-label'>$langInfoMail</label>
-            <div class='col-sm-9'><input name='send_mail' type='checkbox' />
-                $langMultiRegSendMail</div>
+        <label for='send_mail' class='col-sm-3 control-label'>$langInfoMail</label>
+            <div class='col-sm-9'>
+                <div class='checkbox'>
+                    <label>
+                        <input name='send_mail' id='send_mail' type='checkbox'> $langMultiRegSendMail
+                    </label>
+                </div>            
+            </div>
         </div>
         <div class='form-group'>
             <div class='col-sm-9 col-sm-offset-3'>
-            <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' />
+                <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                <a class='btn btn-default' href='index.php'>$langCancel</a>
             </div>
         </div>       
         </fieldset>
