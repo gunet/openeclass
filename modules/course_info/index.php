@@ -368,15 +368,10 @@ if (isset($_POST['submit'])) {
     $tool_content .= "
 	<div id='operations_container'>" .
             action_bar(array(
-                array('title' => $langDelCourse,
-                    'url' => "delete_course.php?course=$course_code",
-                    'icon' => 'fa-times',
-                    'button-class' => 'btn-danger',
-                    'level' => 'primary-label'),
                 array('title' => $langBackupCourse,
                     'url' => "archive_course.php?course=$course_code",
                     'icon' => 'fa-archive',
-                    'level' => 'primary'),
+                    'level' => 'primary-label'),
                 array('title' => $langRefreshCourse,
                     'url' => "refresh_course.php?course=$course_code",
                     'icon' => 'fa-refresh',
@@ -387,6 +382,11 @@ if (isset($_POST['submit'])) {
                     'level' => 'primary',
                     'show' => get_config('course_metadata')
                 ),
+                array('title' => $langDelCourse,
+                    'url' => "delete_course.php?course=$course_code",
+                    'icon' => 'fa-times',
+                    'button-class' => 'btn-danger',
+                    'level' => 'primary'),                
                 array('title' => $langCourseMetadataControlPanel,
                     'url' => "../course_metadata/control.php?course=$course_code",
                     'icon' => 'fa-list',
