@@ -188,14 +188,19 @@ function getUserLessonInfo($uid) {
  * @param type $param
  * @return string
  */ 
-function getUserAnnouncements($lesson_id) {
+function getUserAnnouncements($lesson_id, $type = '') {
 
     global $urlAppend, $dateFormatLong;
-
+            
     $ann_content = '';
-    $last_month = strftime('%Y %m %d', strtotime('now -1 month'));
+    $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
 
     $course_id_sql = implode(', ', array_fill(0, count($lesson_id), '?d'));
+    if ($type == 'more') {
+        $sql_append = '';
+    } else {
+        $sql_append = 'LIMIT 5';
+    }
     $q = Database::get()->queryArray("SELECT announcement.title,
                                              announcement.`date`,
                                              announcement.id,
@@ -209,7 +214,7 @@ function getUserAnnouncements($lesson_id) {
                                 AND announcement.`date` >= ?s
                                 AND course_module.module_id = ?d
                                 AND course_module.visible = 1
-                        ORDER BY announcement.`date` DESC LIMIT 5", $lesson_id, $last_month, MODULE_ID_ANNOUNCE);
+                        ORDER BY announcement.`date` DESC $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE);
     if ($q) { // if announcements exist
         foreach ($q as $ann) {
             $course_title = q(ellipsize($ann->course_title, 30));

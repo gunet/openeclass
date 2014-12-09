@@ -161,7 +161,7 @@ $tool_content .= "
                             $tool_content.="</ul>
                     </div>
                     <div class='panel-footer'>
-                        <p class='link-to-more'><a href='#'>$langMore&hellip;</a></p>
+                        <p class='link-to-more'><a href='../modules/announcements/myannouncements.php'>$langMore&hellip;</a></p>
                     </div>
                 </div>
             </div>

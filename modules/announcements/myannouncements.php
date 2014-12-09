@@ -26,6 +26,9 @@ require_once 'main/perso.php';
 
 $nameTools = $langMyPersoAnnouncements;
 
-$tool_content = "<div class='panel_content'>{%ANNOUNCE_CONTENT%}</div>";
+$tool_content = "<div class='panel_content'>
+                    <ul class='tablelist'>"
+                .getUserAnnouncements($lesson_ids, 'more').
+                "</ul></div>";
 
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
