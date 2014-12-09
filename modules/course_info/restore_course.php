@@ -610,11 +610,14 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             </div>
             </form>
         </div> 
-    <div class='alert alert-info'><label>$langSecondMethod</label> $langRequest2</div>        
+    <div class='alert alert-info'>
+        <label>$langSecondMethod</label> $langRequest2</div>        
         <div class='form-wrapper'>
-          <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
+          <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
             <div class='form-group'>
-                <input type='text' name='pathToArchive' />
+                <input type='text' class='form-control' name='pathToArchive'>
+            </div>
+            <div class='form-group'>
                 <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
           </form>

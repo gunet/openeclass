@@ -65,11 +65,13 @@ $tool_content .= "<div class='form-wrapper'>
     <fieldset>      
       <div class='form-group'>
       <label for='formsearchtitle' class='col-sm-2 control-label'>$langTitle:</label>
-        <div class='col-sm-10'><input type='text' id ='formsearchtitle' name='formsearchtitle' size='40' value='" . @$searchtitle . "'></div>
+        <div class='col-sm-10'><input type='text' class='form-control' id='formsearchtitle' name='formsearchtitle' value='" . @$searchtitle . "'></div>
       </div>
       <div class='form-group'>
         <label for='formsearchcode' class='col-sm-2 control-label'>$langCourseCode:</label>
-        <div class='col-sm-10'><input type='text' name='formsearchcode' size='40' value='" . @$searchcode . "'></div>
+        <div class='col-sm-10'>
+            <input type='text' class='form-control' name='formsearchcode' value='" . @$searchcode . "'>           
+        </div>
       </div>";
 
 if (isset($_GET['searchcode'])) {
@@ -126,7 +128,9 @@ $tool_content .= $html;
 $tool_content .= "</div></div>";
 $tool_content .= "<div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
-        <input class='btn btn-primary' type='submit' name='search_submit' value='$langSearch'></div>
+                        <input class='btn btn-primary' type='submit' name='search_submit' value='$langSearch'>
+                        <a href='index.php' class='btn btn-default'>$langCancel</a>        
+                    </div>
       </div>";
 $tool_content .= "</fieldset></form></div>";
 
