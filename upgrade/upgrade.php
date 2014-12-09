@@ -694,12 +694,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         });
     }
 
-    if (version_compare($oldversion, '2.9.1') == 1) {
+    if (version_compare($oldversion, '2.10', '<')) {
         DBHelper::fieldExists('course_units', 'public') or
                 Database::get()->query("ALTER TABLE `course_units` ADD `public` TINYINT(4) NOT NULL DEFAULT '1' AFTER `visibility`");
-    }
 
-    if (version_compare($oldversion, '2.10', '<')) {
         if (!DBHelper::tableExists('course_description_type')) {
             Database::get()->query("CREATE TABLE `course_description_type` (
                             `id` smallint(6) NOT NULL AUTO_INCREMENT,
