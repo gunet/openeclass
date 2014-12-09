@@ -254,7 +254,7 @@ function loggedInMenu() {
     if (isset($status) and ($status == USER_TEACHER)) {
         array_push($sideMenuText, $GLOBALS['langCourseCreate']);
         array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-plus-circle");
     }
     
     require_once 'modules/dropbox/class.mailbox.php';
@@ -267,15 +267,15 @@ function loggedInMenu() {
         array_push($sideMenuText, "<b>".$GLOBALS['langMyDropBox']." (".$new_msgs.")</b>");
     }
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-envelope-o");
 
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
     array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-calendar");
 
     array_push($sideMenuText, $GLOBALS['langNotes']);
     array_push($sideMenuLink, $urlServer . "main/notes/index.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-edit");
     
     if (isset($status) and ($status == USER_STUDENT)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
@@ -285,11 +285,11 @@ function loggedInMenu() {
     
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-user");
 
     array_push($sideMenuText, $GLOBALS['langMyStats']);
     array_push($sideMenuLink, $urlServer . "main/profile/personal_stats.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-area-chart");
 
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
