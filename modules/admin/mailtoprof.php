@@ -107,17 +107,17 @@ $langEmail: " . get_config('email_helpdesk') . "
 	<div class='form-group'>
 	  <label for='body_mail' class='col-sm-2 control-label'>$typeyourmessage</label>
               <div class='col-sm-10'>
-	      <textarea class='form-control' name='body_mail' rows='10'></textarea>
+	      <textarea class='form-control' name='body_mail' id='body_mail' rows='10'></textarea>
               </div/>
 	</div>
 	<div class='form-group'>
-	  <label class='col-sm-2 control-label'>$langSendMessageTo</label>
-              <div class='col-sm-10'>
-	    <select class='form-control' name='sendTo'>
-	      <option value='1'>$langProfOnly</option>
-		<option value='2'>$langStudentsOnly</option>
-	      <option value='0'>$langToAllUsers</option>
-	      </select>	    
+	  <label for='sendTo' class='col-sm-2 control-label'>$langSendMessageTo</label>
+            <div class='col-sm-10'>
+                <select class='form-control' name='sendTo' id='sendTo'>
+                    <option value='1'>$langProfOnly</option>
+                    <option value='2'>$langStudentsOnly</option>
+                    <option value='0'>$langToAllUsers</option>
+                </select>	    
             </div>
         </div>
 	<div class='col-sm-offset-2 col-sm-10'>	
