@@ -157,6 +157,7 @@ if (isset($_POST['submit'])) {
          <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                <a href='index.php' class='btn btn-default'>$langCancel</a>    
             </div>
         </div>
         </fieldset>

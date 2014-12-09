@@ -227,31 +227,31 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         <div class='form-group'>
         <label for='Name' class='col-sm-2 control-label'>$langName:</label>
             <div class='col-sm-10'>
-              <input id = 'Name' type='text' name='givenname_form' value='" . q($pn) . "' placeholder='$langName'>
+              <input class='form-control' id='Name' type='text' name='givenname_form' value='" . q($pn) . "' placeholder='$langName'>
             </div>
         </div>
         <div class='form-group'>
         <label for='Sur' class='col-sm-2 control-label'>$langSurname:</label>
             <div class='col-sm-10'>
-              <input id='Sur' type='text' name='surname_form' value='" . q($ps) . "' placeholder='$langSurname'>
+              <input class='form-control' id='Sur' type='text' name='surname_form' value='" . q($ps) . "' placeholder='$langSurname'>
             </div>
         </div>
         <div class='form-group'>
         <label for='Username' class='col-sm-2 control-label'>$langUsername:</label>
             <div class='col-sm-10'>
-                <input id = 'Username' type='text' name='uname' value='" . q($pu) . "' autocomplete='off' placeholder='$langUsername'>
+                <input class='form-control' id='Username' type='text' name='uname' value='" . q($pu) . "' autocomplete='off' placeholder='$langUsername'>
             </div>
         </div>
         <div class='form-group'>
         <label for='passsword' class='col-sm-2 control-label'>$langPass:</label>
             <div class='col-sm-10'>
-              <input type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  placeholder='$langPass'/><span id='result'></span>
+              <input class='form-control' type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  placeholder='$langPass'/><span id='result'></span>
             </div>
         </div>
         <div class='form-group'>
         <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
             <div class='col-sm-10'>
-              <input id='email' type='text' name='email_form' value='" . q($pe) . "' palceholder='$langEmail'>
+              <input class='form-control' id='email' type='text' name='email_form' value='" . q($pe) . "' palceholder='$langEmail'>
             </div>
         </div>
         <div class='form-group'>
@@ -267,7 +267,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         <div class='form-group'>
         <label for='phone' class='col-sm-2 control-label'>$langPhone:</label>
             <div class='col-sm-10'>            
-                <input id='phone' type='text' name='phone' value='" . q($pphone) . "' placeholder='$langPhone'>
+                <input class='form-control' id='phone' type='text' name='phone' value='" . q($pphone) . "' placeholder='$langPhone'>
             </div>
         </div>
         <div class='form-group'>
@@ -285,7 +285,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         <div class='form-group'>
         <label for='am' class='col-sm-2 control-label'>$langAm:</label>
            <div class='col-sm-10'>
-               <input id='am' type='text' name='am' value='" . q($pam) . "' placeholder='$langOptional'>
+               <input class='form-control' id='am' type='text' name='am' value='" . q($pam) . "' placeholder='$langOptional'>
            </div>
         </div>
         <div class='form-group'>
