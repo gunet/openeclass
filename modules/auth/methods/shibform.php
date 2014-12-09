@@ -48,25 +48,39 @@ if ($shibsettings != 'shibboleth' and $shibsettings != '') {
 } else {
     $checkedshib = $shibseparator = '';
 }
-$tool_content .= sprintf("<tr><td colspan='2'><div class='alert alert-info'>$langExplainShib</div></td></tr>", $webDir);
+$tool_content .= sprintf("<div class='alert alert-info'>$langExplainShib</div>", $webDir);
 $tool_content .= "
-  <tr>
-    <th class='left'>$langShibEmail:</th>
-    <td><input class='FormData_InputText' name='shibemail' type='text' size='30' value='" . q($shibemail) . "' /></td>
-  </tr>
-  <tr><th class='left'>$langShibUsername:</th>
-    <td><input class='FormData_InputText' name='shibuname' type='text' size='30' value='" . q($shibuname) . "' /></td>
-  </tr>
-  <tr>
-    <th class='left' rowspan='2'>$langShibCn:</th>
-    <td><input class='FormData_InputText' name='shibcn' type='text' size='30' value='" . q($shibcn) . "' /></td>
-  </tr>
-  <tr>
-    <td bgcolor='#F8F8F8'><input type='checkbox' name='checkseparator' value='on' $checkedshib />&nbsp;$langCharSeparator&nbsp;
-      <input class='FormData_InputText' name='shibseparator' type='text' size='1' maxlength='2' value='" . q($shibseparator) . "' /></td>
-  </tr>
-  <tr>
-    <th class='left'>$langInstructionsAuth:</th>
-    <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
-  </tr>
-";
+    <div class='form-group'>
+        <label for='dbfieldpass' class='col-sm-2 control-label'>$langShibEmail:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='shibemail' id='shibemail' type='text' value='" . q($shibemail) . "'>
+        </div>
+    </div>    
+    <div class='form-group'>
+        <label for='shibuname' class='col-sm-2 control-label'>$langShibUsername:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='shibuname' nid='shibuname' type='text' value='" . q($shibuname) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='shibcn' class='col-sm-2 control-label'>$langShibCn:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='shibcn' id='shibcn' type='text' value='" . q($shibcn) . "'>
+        </div>
+    </div>  
+     <div class='form-group form-inline'>
+        <div class='col-sm-10 col-sm-offset-2'>            
+            <div class='checkbox'>
+              <label>
+                   <input type='checkbox' name='checkseparator' value='on' $checkedshib />&nbsp;$langCharSeparator&nbsp;
+                   <input class='form-control' name='shibseparator' type='text' size='1' maxlength='2' value='" . q($shibseparator) . "' />
+              </label>
+            </div>
+        </div>     
+    </div>   
+    <div class='form-group'>
+        <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
+        <div class='col-sm-10'>
+            <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
+        </div>
+    </div>";

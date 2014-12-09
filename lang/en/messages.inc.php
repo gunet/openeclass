@@ -240,6 +240,7 @@ $langdbpass = "Database User's Password";
 $langdbtable = "Database Table Name";
 $langdbfielduser = "Table field name for users";
 $langdbfieldpass = "Table field name for users'passwords";
+$langdbpassencr = "Password field encryption";
 $langInstructionsAuth = "Liaison and Use Instructions/Info";
 $langTestAccount = "To activate the authentication method, you have to do probational use through a selected method account";
 $langpop3host = "POP3 server";

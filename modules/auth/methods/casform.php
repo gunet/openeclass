@@ -56,52 +56,10 @@ if (!empty($cassettings)) {
     $casuserlastattr = 'sn';
     $cas_altauth = 0;
 }
-
-$tool_content .= "
-    <tr>
-      <th class='left'>$langcas_host:</th>
-      <td><input class='FormData_InputText' name='cas_host' type='text' size='30' value='" . q($cas_host) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcas_port:</th>
-      <td><input class='FormData_InputText' name='cas_port' type='text' size='30' value='" . q($cas_port) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcas_context:</th>
-      <td><input class='FormData_InputText' name='cas_context' type='text' size='30' value='" . q($cas_context) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcas_logout:</th>
-      <td><input class='FormData_InputText' name='cas_logout' type='text' size='30' value='" . q($cas_logout) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcas_ssout:</th>
-      <td>";
 $cas_ssout_data = array();
 $cas_ssout_data[0] = $m['no'];
 $cas_ssout_data[1] = $m['yes'];
-$tool_content .= selection($cas_ssout_data, 'cas_ssout', $cas_ssout);
-$tool_content .= "    </td>
-    </tr>
-    <tr>
-      <th class='left'>$langcas_cachain:</th>
-      <td><input class='FormData_InputText' name='cas_cachain' type='text' size='40' value='" . q($cas_cachain) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcasusermailattr:</th>
-      <td><input class='FormData_InputText' name='casusermailattr' type='text' size='30' value='" . q($casusermailattr) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcasuserfirstattr:</th>
-      <td><input class='FormData_InputText' name='casuserfirstattr' type='text' size='30' value='" . q($casuserfirstattr) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcasuserlastattr:</th>
-      <td><input class='FormData_InputText' name='casuserlastattr' type='text' size='30' value='" . q($casuserlastattr) . "'></td>
-    </tr>
-    <tr>
-      <th class='left'>$langcas_altauth:</th>
-      <td>";
+
 
 $cas_altauth_data = array();
 $cas_altauth_data[0] = '-';
@@ -110,10 +68,71 @@ $cas_altauth_data[2] = 'POP3';
 $cas_altauth_data[3] = 'IMAP';
 $cas_altauth_data[4] = 'LDAP';
 $cas_altauth_data[5] = 'External DB';
-$tool_content .= selection($cas_altauth_data, 'cas_altauth', $cas_altauth);
-$tool_content .= "    </td>
-    </tr>
-    <tr>
-      <th class='left'>$langInstructionsAuth:</th>
-      <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
-    </tr>";
+
+$tool_content .= "
+    <div class='form-group'>
+        <label for='cas_host' class='col-sm-2 control-label'>$langcas_host:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='cas_host' id='cas_host' type='text' value='" . q($cas_host) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='cas_port' class='col-sm-2 control-label'>$langcas_port:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='cas_port' id='cas_port' type='text' value='" . q($cas_port) . "'>
+        </div>
+    </div>    
+    <div class='form-group'>
+        <label for='cas_context' class='col-sm-2 control-label'>$langcas_context:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='cas_context' id='cas_context' type='text' value='" . q($cas_context) . "'>
+        </div>
+    </div> 
+    <div class='form-group'>
+        <label for='cas_logout' class='col-sm-2 control-label'>$langcas_logout:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='cas_logout' id='cas_logout' type='text' value='" . q($cas_logout) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='cas_logout' class='col-sm-2 control-label'>$langcas_ssout:</label>
+        <div class='col-sm-10'>
+            ". selection($cas_ssout_data, 'cas_ssout', $cas_ssout, 'class="form-control"') ."
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='cas_cachain' class='col-sm-2 control-label'>$langcas_cachain:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='cas_cachain' id='cas_cachain' type='text' value='" . q($cas_cachain) . "'>
+        </div>
+    </div>  
+    <div class='form-group'>
+        <label for='casusermailattr' class='col-sm-2 control-label'>$langcasusermailattr:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='casusermailattr' id='casusermailattr' type='text' value='" . q($casusermailattr) . "'>
+        </div>
+    </div>       
+    <div class='form-group'>
+        <label for='casuserfirstattr' class='col-sm-2 control-label'>$langcasuserfirstattr:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='casuserfirstattr' id='casuserfirstattr' type='text' value='" . q($casuserfirstattr) . "'>
+        </div>
+    </div> 
+    <div class='form-group'>
+        <label for='casuserlastattr' class='col-sm-2 control-label'>$langcasuserlastattr:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='casuserlastattr' id='casuserlastattr' type='text' value='" . q($casuserlastattr) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='cas_altauth' class='col-sm-2 control-label'>$langcas_altauth:</label>
+        <div class='col-sm-10'>
+            ". selection($cas_altauth_data, 'cas_altauth', $cas_altauth, 'class="form-control"') ."
+        </div>
+    </div>     
+    <div class='form-group'>
+        <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
+        <div class='col-sm-10'>
+            <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
+        </div>
+    </div>";
