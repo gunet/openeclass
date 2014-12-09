@@ -51,15 +51,17 @@ if (isset($_POST['submit'])) {
                 // full deletion
                 $success = deleteUser($u, true);
                 // progress report
-                if ($success === true)
-                    $tool_content .= "<p>$langUserWithId $line $langWasDeleted.</p>\n";
-                else
-                    $tool_content .= "<p>$langErrorDelete: $line.</p>\n";
+                if ($success === true) {
+                    Session::Messages("$langUserWithId $line $langWasDeleted", 'alert-success');
+                    redirect_to_home_page('modules/admin/multideluser.php');
+                } else {
+                    Session::Messages("$langErrorDelete: $line", 'alert-danger');
+                    redirect_to_home_page('modules/admin/multideluser.php');
+                }
             }
         }
-
-        $line = strtok("\n");
     }
+    redirect_to_home_page('modules/admin/multideluser.php');
 } else {
 
     $usernames = '';
@@ -206,25 +208,26 @@ $tool_content .= action_bar(array(
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
 
-    $tool_content .= "<div class='alert alert-info'>" . $langMultiDelUserInfo . "</div>
+    $tool_content .= "
+    <div class='alert alert-info'>$langMultiDelUserInfo</div>
         <div class='form-wrapper'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
-        <fieldset>
-        <label>$langMultiDelUserData</label>
-        <div class='form-group'>
-        <label class='col-sm-2 control-label>$langUsersData:</label>
-            <div class='col-sm-9'>
-                <textarea class='auth_input' name='user_names' rows='30' cols='60'>$usernames</textarea>
-            </div>
-        </div>
-        <div class='form-group'>
-            <div class='col-sm-9 col-sm-offset-3'>            
-                <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' />
-            </div>
-        </div>        
-        </fieldset>
+            <fieldset>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langMultiDelUserData:</label>
+                    <div class='col-sm-9'>
+                        <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>            
+                        <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' />
+                        <a href='index.php' class='btn btn-default'>$langCancel</a>
+                    </div>
+                </div>        
+            </fieldset>
         </form>
-        </div>";
+    </div>";
 }
 
 draw($tool_content, 3, 'admin', $head_content);
