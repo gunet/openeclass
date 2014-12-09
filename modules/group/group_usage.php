@@ -35,21 +35,16 @@ require_once 'modules/usage/duration_query.php';
 load_js('tools.js');
 load_js('bootstrap-datepicker');
 
-$head_content .= "
-    <script type='text/javascript'>
-    $(function() {
-        $('#u_date_start').datepicker({
-            format: 'dd-mm-yyyy',
-            language: '$language',
-            autoclose: true
+$head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#user_date_start, #user_date_end').datepicker({
+                format: 'dd-mm-yyyy',
+                pickerPosition: 'bottom-left',
+                language: '".$language."',
+                autoclose: true    
+            });            
         });
-        $('#u_date_end').datepicker({
-            format: 'dd-mm-yyyy',
-            language: '$language',
-            autoclose: true
-        });
-    });"
-. "</script>";
+    </script>";
 
 $group_id = intval($_REQUEST['group_id']);
 
@@ -73,56 +68,85 @@ if (!$is_editor and !$is_tutor) {
 $nameTools = $group_name;
 
 $type = 'duration';
-if (isset($_GET['type']) and in_array($_GET['type'], array('duration', 'visits', 'lp'))) {
+if (isset($_GET['type'])) {
     $type = $_GET['type'];
 }
 
-$base = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $module . 'group_id=' . $group_id . '&amp;type=';
-
-if (isset($_POST['u_date_start']) and isset($_POST['u_date_end'])) {
-    $link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&amp;enc=1253&u_date_start=$_POST[u_date_start]&u_date_end=$_POST[u_date_end]'>$langCodeWin</a>)</li>";
+$base = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $module . 'group_id=' . $group_id . '';
+if (isset($_POST['user_date_start']) or isset($_POST['user_date_end'])) {
+    $append_url_link = "&amp;u_date_start=$_POST[user_date_start]&u_date_end=$_POST[user_date_end]";
 } else {
-    $link = "<li>$langDumpUserDurationToFile (<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id'>$langCodeUTF</a>
-	&nbsp;<a href='dumpgroupduration.php?course=$course_code&amp;group_id=$group_id&amp;enc=1253'>$langCodeWin</a>)</li>";
+    $append_url_link = '';
 }
+$tool_content .= action_bar(array(
+            array('title' => $langLearningPaths,
+                'url' => "$base&amp;type=lp",
+                'icon' => 'fa-bar-chart',
+                'show' => $type == "duration",
+                'level' => 'primary'),
+            array('title' => $langUsage,
+                'url' => "$base&amp;type=duration",
+                'icon' => 'fa-bar-chart',
+                'show' => $type == "lp",
+                'level' => 'primary'),
+            array('title' => "$langDumpUserDurationToFile ($langCodeUTF)",
+                'url' => "dumpgroupduration.php?course=$course_code&amp;group_id=$group_id$append_url_link",
+                'icon' => 'fa-file-archive-o',
+                'level' => 'primary'),
+            array('title' => "$langDumpUserDurationToFile ($langCodeWin)",
+                'url' => "dumpgroupduration.php?course=$course_code&amp;group_id=$group_id$append_url_link",
+                'icon' => 'fa-file-archive-o',                
+                'level' => 'primary')));
 
-$tool_content .= "<div id='operations_container'><ul id='opslist'>" .
-        link_current($langUsage, 'duration') .
-        link_current($langLearningPaths, 'lp') .
-        $link .
-        // link_curent($langUsageVisits, 'visits') .
-        "</ul></div>";
-
-$local_style = '
-    .month { font-weight : bold; color: #FFFFFF; background-color: #000066;
-     padding-left: 15px; padding-right : 15px; }
-    .content {position: relative; left: 25px; }';
-
-if ($type == 'duration') {    
+if ($type == 'duration') {
     $label = $langDuration;    
     
     $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;
-
-    if (isset($_POST['u_date_start']) and
-            isset($_POST['u_date_end'])) {
-        $u_date_start = $_POST['u_date_start'];
-        $u_date_end = $_POST['u_date_end'];
-    } else {
-        $u_date_start = strftime('%d-%m-%Y', strtotime($min_date));
-        $u_date_end = strftime('%d-%m-%Y', strtotime('now'));
-    }
     
-    $tool_content .= "<form method='post' action='$base$type'>
-        <table class = 'FormData' align = 'left'>
-            <tr><th class='left'>$langStartDate:</th>
-                <td><input type='text' name='u_date_start' id='u_date_start' value='$u_date_start'></td></tr>
-            <tr><th class='left'>$langEndDate:</th>
-                <td><input type='text' name='u_date_end' id='u_date_end' value='$u_date_end'></td></tr>                
-            <tr><th class='left'>&nbsp;</th>
-                <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td></tr>
-        </table>
-      </form>";
+    if (isset($_POST['user_date_start'])) {
+        $uds = DateTime::createFromFormat('d-m-Y', $_POST['user_date_start']);
+        $u_date_start = $uds->format('Y-m-d');
+        $user_date_start = $uds->format('d-m-Y');
+    } else {        
+        $date_start = DateTime::createFromFormat('Y-m-d', $min_date);
+        $u_date_start = $date_start->format('Y-m-d');
+        $user_date_start = $date_start->format('d-m-Y');       
+    }
+    if (isset($_POST['user_date_end'])) {
+        $ude = DateTime::createFromFormat('d-m-Y', $_POST['user_date_end']);    
+        $u_date_end = $ude->format('Y-m-d');
+        $user_date_end = $ude->format('d-m-Y');        
+    } else {
+        $date_end = new DateTime();
+        $u_date_end = $date_end->format('Y-m-d');
+        $user_date_end = $date_end->format('d-m-Y');        
+    }    
+    $tool_content .= "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='$base&amp;type=$type'>
+            <div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+            <label class='col-sm-2 control-label'>$langStartDate:</label>
+                <div class='col-xs-10 col-sm-9'>               
+                    <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+                </div>
+                <div class='col-xs-2 col-sm-1'>
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+                </div>";        
+    $tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label'>$langEndDate:</label>
+            <div class='col-xs-10 col-sm-9'>
+                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+            </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+            <input class='btn btn-primary' type='submit' name='btnUsage' value='$langSubmit'>
+            </div>";
+    $tool_content .= "</form></div>";
 } elseif ($type == 'lp') {
     $label = $langProgress;
     // list available learning paths
@@ -131,33 +155,22 @@ if ($type == 'duration') {
     $label = '?';
 }
 
-$tool_content .= "<table class='FormData' width='100%' id='a'>
+$tool_content .= "<div class='table-responsive'><table class='table-default'>
 	<tr>
-	<th class='left'>$langSurname $langName</th>
+	<th class='text-left'>$langSurname $langName</th>
 	<th>$langAm</th>
 	<th>$langGroup</th>
 	<th>$label</th>
 	</tr>";
 
-$i = 0;
-if ($type == 'duration') {   
-    $startDate_obj = DateTime::createFromFormat('d-m-Y', $u_date_start);
-    $startdate = $startDate_obj->format('Y-m-d');
-    $endDate_obj = DateTime::createFromFormat('d-m-Y', $u_date_end);
-    $enddate = $endDate_obj->format('Y-m-d');     
-    $result = user_duration_query($course_id, $startdate, $enddate, $group_id);    
-} else {        
+if ($type == 'duration') {    
+    $result = user_duration_query($course_id, $u_date_start, $u_date_end, $group_id);
+} else {
     $result = Database::get()->queryArray("SELECT user_id AS id FROM group_members WHERE group_id = ?d", $group_id);
 }
 if (count($result) > 0) {
     foreach ($result as $row) {
-        $user_id = $row->id;
-        if ($i % 2 == 0) {
-            $tool_content .= "<tr>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
-        $i++;
+        $user_id = $row->id;        
         if ($type == 'duration') {
             $value = format_time_duration(0 + $row->duration);
             $sortkey = $row->duration;
@@ -177,32 +190,13 @@ if (count($result) > 0) {
                 $sortkey = $total;
                 $value = disp_progress_bar($total, 1) . '&nbsp;<small>' . $total . '%</small>';
             } else {
-                $value = '--';
+                $value = '&mdash;';
             }
         }
-        $tool_content .= "<td width='30%'>" . q($name) . "</td><td width='30%'>" . q($am) . "</td><td align='center'>$group_name</td>"
+        $tool_content .= "<td width='30%'>" . q($name) . "</td><td width='30%'>" . q($am) . "</td><td align='text-center'>$group_name</td>"
                        . "<td>$value</td></tr>";
     }
 }
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 
 draw($tool_content, 2, null, $head_content);
-
-/**
- * 
- * @global type $type
- * @global string $base
- * @param type $title
- * @param type $this_type
- * @return type
- */
-function link_current($title, $this_type) {
-    
-    global $type, $base;
-    
-    if ($type == $this_type) {
-        return "<li>$title</li>";
-    } else {
-        return "<li><a href='$base$this_type'>$title</a></li>";
-    }
-}
