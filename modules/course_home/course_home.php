@@ -341,7 +341,8 @@ if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $opencourses_level = "
     <div class='row'>
-        <div class='col-md-4'>".icon('open_courses_logo_small', $langOpenCourses)."
+        <div class='col-md-4'>
+            <img src='$themeimg/open_courses_logo_small.png' title='" . $langOpenCourses . "' alt='" . $langOpenCourses . "' />
         </div>
         <div class='col-md-8 margin-top-thin'>
             ${langOpenCoursesLevel}: $level
