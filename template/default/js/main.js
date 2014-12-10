@@ -28,10 +28,10 @@ $(document).ready( function () {
     });
     
     // Leftnav - rotate Category Menu Item icon
-    $('.panel-collapse').on('shown.bs.collapse', function () {
+    $('.panel-collapse').on('show.bs.collapse', function () {
         $(this).prev("a").find("i").addClass("fa-rotate-90");
     });
-    $('.panel-collapse').on('hidden.bs.collapse', function () {
+    $('.panel-collapse').on('hide.bs.collapse', function () {
         $(this).prev("a").find("i").removeClass("fa-rotate-90");
     });
     
