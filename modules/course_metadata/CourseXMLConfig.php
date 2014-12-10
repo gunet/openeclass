@@ -144,7 +144,7 @@ class CourseXMLConfig {
         $courseinfo = $urlServer . 'modules/course_info/index.php?course=' . $course_code;
         $coursedesc = $urlServer . 'modules/course_description/index.php?course=' . $course_code;
         $coursehome = $urlServer . 'courses/' . $course_code . '/index.php';
-        $clang = langname_to_code($currentCourseLanguage);
+        $clang = $currentCourseLanguage;
 
         $valArr = array(
             'course_title_' . $clang => $courseinfo,
