@@ -398,7 +398,7 @@ $tool_content .= "<div class='form-group'>
           <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
         </div>
         <div class='col-sm-offset-2 col-sm-10'>        
-          <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+          <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
         </div>      
       </fieldset>

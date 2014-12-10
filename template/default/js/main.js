@@ -28,7 +28,7 @@ $(document).ready( function () {
     });
     
     // Leftnav - rotate Category Menu Item icon
-    if($(".collapse.in").length > 0){
+    if($(".collapse.in").length > 0){ //when page first loads the show.bs.collapse event is not triggered
         $(".collapse.in").prev("a").find("i").addClass("fa-rotate-90");
     }
     $('.panel-collapse').on('show.bs.collapse', function () {

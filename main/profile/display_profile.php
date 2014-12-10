@@ -66,7 +66,7 @@ if ($userdata) {
                 array('title' => $langModifyProfile,
                     'url' => "profile.php",
                     'icon' => 'fa-edit',
-                    'level' => 'primary-label'),
+                    'level' => 'primary'),
                 array('title' => $langChangePass,
                     'url' => "$passurl",
                     'icon' => 'fa-key',
