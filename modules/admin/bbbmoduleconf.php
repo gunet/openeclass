@@ -121,6 +121,9 @@ else if (isset($_POST['submit'])) {
     $ip = $_POST['ip_form'];
     $key = $_POST['key_form'];
     $api_url = $_POST['api_url_form'];
+    if (!preg_match('/\/$/', $api_url)) { // append '/' if doesn't exist
+        $api_url = $api_url . '/';
+    }
     $max_rooms = $_POST['max_rooms_form'];
     $max_users = $_POST['max_users_form'];
     $enable_recordings = $_POST['enable_recordings'];
