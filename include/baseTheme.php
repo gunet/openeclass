@@ -470,7 +470,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
         $t->set_var('STUDENT_VIEW_URL', $urlAppend . 'main/student_view.php?course=' . $course_code);
     } else {
-        $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
+        if (!$is_embedonce) {
+            $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
+        }
     }
 
     // if $require_help is true (set by each tool) display the help link
