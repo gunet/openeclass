@@ -60,29 +60,30 @@ if ($userdata) {
     } else {
         $allow_password_change = true;
     }    
-    $passurl = $urlSecure . 'main/profile/password.php';
-    $tool_content .= 
-            action_bar(array(
-                array('title' => $langModifyProfile,
-                    'url' => "profile.php",
-                    'icon' => 'fa-edit',
-                    'level' => 'primary'),
-                array('title' => $langChangePass,
-                    'url' => "$passurl",
-                    'icon' => 'fa-key',
-                    'show' => $allow_password_change,
-                    'level' => 'primary'),
-                array('title' => $langEmailUnsubscribe,
-                    'url' => "emailunsubscribe.php",
-                    'icon' => 'fa-envelope',
-                    'level' => 'primary'),
-                array('title' => $langUnregUser,
-                    'url' => "../unreguser.php",
-                    'icon' => 'fa-times',
-                    'button-class'=>'btn-danger',
-                    'level' => 'primary')
-                ));    
-    
+    if ($uid == $id) {
+        $passurl = $urlSecure . 'main/profile/password.php';
+        $tool_content .= 
+                action_bar(array(
+                    array('title' => $langModifyProfile,
+                        'url' => "profile.php",
+                        'icon' => 'fa-edit',
+                        'level' => 'primary'),
+                    array('title' => $langChangePass,
+                        'url' => $passurl,
+                        'icon' => 'fa-key',
+                        'show' => $allow_password_change,
+                        'level' => 'primary'),
+                    array('title' => $langEmailUnsubscribe,
+                        'url' => "emailunsubscribe.php",
+                        'icon' => 'fa-envelope',
+                        'level' => 'primary'),
+                    array('title' => $langUnregUser,
+                        'url' => "../unreguser.php",
+                        'icon' => 'fa-times',
+                        'button-class'=>'btn-danger',
+                        'level' => 'primary')
+                    ));    
+    } 
     $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
