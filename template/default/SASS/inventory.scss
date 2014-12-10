@@ -1698,17 +1698,18 @@ td.option-btn-cell{
     border: 0px;
 }
 
-.side_content
-{
-    padding-top: 24px;
-}
-
 #dropboxTabs .nav-tabs{
     margin-bottom: 15px;
 }
 
 #profile_menu_dropdown ul li:last-child{
     border-top: 1px #ddd solid;
+}
+.add-unit-btn{
+    line-height: 37px;
+    font-size: 22px;
+    margin: 0px 10px;
+    color: #5cb85c;
 }
 
 .dataTables_filter

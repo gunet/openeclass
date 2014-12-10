@@ -570,31 +570,26 @@ if (!$alter_layout) {
     $tool_content .= "
     <div class='col-md-8 course-units'>
         <div class='row'>
-            <div class='col-md-6 no-gutters' style='padding-top:24px;'>
-                <h3 class='content-title'>$unititle</h3>
-            </div>";
+            <div class='col-md-12 no-gutters'>
+                <h3 class='content-title  pull-left'>$unititle</h3>
+            ";
             
-        if ($is_editor and $course_info->view_type == 'units') {
-            $tool_content .= "<div class='col-md-6 no-gutters'>
-                <div class='toolbox margin-bottom-thin pull-right'>";            
+        if ($is_editor and $course_info->view_type == 'units') {            
             $link = "{$urlServer}modules/units/info.php?course=$course_code";
             $linktitle = $langAddUnit;
-            $tool_content .= "<a href='$link' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$linktitle' class='btn btn-default-eclass place-at-toolbox size-s'>";
-            $tool_content .= "<i class='fa fa-plus space-after-icon'></i>
-                $linktitle
-                    </a>
-                </div>
-            </div>";            
+            $tool_content .= "<a href='$link' class='pull-left add-unit-btn' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$linktitle'>
+                                <i class='fa fa-plus-circle'></i>
+                            </a>";           
         }
             
-        $tool_content .= "</div>";
+        $tool_content .= "</div></div>";
         $tool_content .= "<div class='row'>
             $cunits_content
         </div>";
     $tool_content .= "</div>";
 }
 
-$tool_content .= "<div class='col-md-$cunits_sidebar_columns side_content'>";
+$tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
 // display open course level if exist
 if (isset($level) && !empty($level)) {
     $tool_content .= "
