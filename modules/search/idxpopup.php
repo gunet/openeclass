@@ -22,7 +22,16 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-load_js('jquery-2.1.1.min');
+load_js('jquery-' . JQUERY_VERSION . '.min');
+
+if (isset($_GET['reindex'])) {
+    require_once 'modules/search/indexer.class.php';
+    Indexer::deleteAll();
+    Database::get()->query("DELETE FROM idx_queue");
+    Database::get()->queryFunc("SELECT id FROM course", function($r) {
+        Database::get()->query("INSERT INTO idx_queue (course_id) VALUES (?d)", $r->id);
+    });
+}
 
 ?>
 
@@ -31,7 +40,7 @@ load_js('jquery-2.1.1.min');
   <head>
     <title><?php echo $logo; ?></title>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <link href='../../install/install.css' rel='stylesheet' type='text/css' />
+    <link href='<?php echo $urlAppend; ?>/install/install.css' rel='stylesheet' type='text/css' />
     <?php echo $head_content; ?>
     <script type='text/javascript'>
     /* <![CDATA[ */
@@ -75,7 +84,7 @@ load_js('jquery-2.1.1.min');
   </head>
   <body style='background-color: #ffffff;'>
     <div class='container'>
-      <p align='center'><img src='../../template/classic/img/logo_openeclass.png' alt='logo' /></p>
+      <p align='center'><img src='<?php echo $urlAppend; ?>/template/classic/img/logo_openeclass.png' alt='logo' /></p>
       <div id='idxinfo' class='alert' align='center'>
         <p><?php echo $langIndexingAlert1; ?></p>
         <p id="idxresul"><?php echo $langIndexingAlert2; ?></p>

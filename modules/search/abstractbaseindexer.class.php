@@ -156,26 +156,27 @@ abstract class AbstractBaseIndexer {
      * Reindex all resources.
      * 
      * @param boolean $optimize - whether to optimize after reindexing
+     * @deprecated
      */
-    public function reindex($optimize = false) {
-        if (!get_config('enable_indexing')) {
-            return;
-        }
-        
-        // remove all resources from index
-        $docIds = $this->__index->termDocs($this->getTermForAllResources());
-        foreach ($docIds as $id) {
-            $this->__index->delete($id);
-        }
-
-        // get/index all resources from db
-        $res = $this->getAllResourcesFromDB();
-        foreach ($res as $row) {
-            $this->__index->addDocument($this->makeDoc($row));
-        }
-
-        $this->optimizeOrCommit($optimize);
-    }
+//    public function reindex($optimize = false) {
+//        if (!get_config('enable_indexing')) {
+//            return;
+//        }
+//        
+//        // remove all resources from index
+//        $docIds = $this->__index->termDocs($this->getTermForAllResources());
+//        foreach ($docIds as $id) {
+//            $this->__index->delete($id);
+//        }
+//
+//        // get/index all resources from db
+//        $res = $this->getAllResourcesFromDB();
+//        foreach ($res as $row) {
+//            $this->__index->addDocument($this->makeDoc($row));
+//        }
+//
+//        $this->optimizeOrCommit($optimize);
+//    }
     
     /**
      * Handle Write Exceptions.

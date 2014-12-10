@@ -122,6 +122,8 @@ define('COMMON', 3);
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
 
+define('JQUERY_VERSION', '2.1.1');
+
 require_once 'lib/session.class.php';
 
 // Check if a string looks like a valid email address
@@ -232,9 +234,6 @@ function load_js($file, $init='') {
             $file = "bootstrap-slider/js/bootstrap-slider.js";
         }               
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-        if ($file == 'jquery-1.10.2.min.js') {
-            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
-        }
     }
 
     if (strlen($init) > 0) {
@@ -1432,8 +1431,7 @@ function delete_course($cid) {
     removeDir("$webDir/video/$course_code");
     // refresh index
     require_once 'modules/search/indexer.class.php';
-    $idx = new Indexer();
-    $idx->removeAllByCourse($cid);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
     
     Database::get()->query("UPDATE oai_record SET deleted = 1, datestamp = ?t WHERE course_id = ?d", gmdate('Y-m-d H:i:s'), $cid);
 }
@@ -1879,13 +1877,8 @@ function handle_unit_info_edit() {
     }
     // update index    
     require_once 'modules/search/indexer.class.php';
-    require_once 'modules/search/courseindexer.class.php';
-    require_once 'modules/search/unitindexer.class.php';
-    $idx = new Indexer();
-    $cidx = new CourseIndexer($idx);
-    $uidx = new UnitIndexer($idx);
-    $uidx->store($unit_id);
-    $cidx->store($course_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
     // refresh course metadata
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);

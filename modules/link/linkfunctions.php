@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once 'modules/search/linkindexer.class.php';
+require_once 'modules/search/indexer.class.php';
 
 function makedefaultviewcode($locatie) {
     global $aantalcategories;
@@ -199,8 +199,7 @@ function submit_link() {
         $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
         $log_type = LOG_INSERT;
     }
-    $lidx = new LinkIndexer();
-    $lidx->store($id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
     // find category name
     $category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
                                                         WHERE link.category = link_category.id
@@ -305,8 +304,7 @@ function delete_link($id) {
     $url = $tuple->url;
     $title = $tuple->title;
     Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    $lidx = new LinkIndexer();
-    $lidx->remove($id);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_LINK, $id);
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
                                                                'url' => $url,
                                                                'title' => $title));

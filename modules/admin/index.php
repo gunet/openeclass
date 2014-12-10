@@ -22,6 +22,7 @@
 $require_usermanage_user = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'modalconfirmation.php';
 
 $nameTools = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
@@ -130,12 +131,6 @@ if (get_config('enable_indexing')) {
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
 
-    // optimize index
-    if (isset($_GET['optimize'])) {
-        set_time_limit(0);
-        $idx->getIndex()->optimize();
-    }
-
     $numDocs = $idx->getIndex()->numDocs();
     $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
 
@@ -158,9 +153,12 @@ if (get_config('enable_indexing')) {
                     <dd><a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a></dd>";
                 }
                 $tool_content .="
+                <dt></dt>
+                <dd><a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a></dd>
             </dl>
         </div>
     </div>";
+    $tool_content .= modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
 }
 
 // CRON RELATED
@@ -192,6 +190,7 @@ $head_content = <<<EOF
 /* <![CDATA[ */
 
 var optwindow = null;
+var reidxwindow = null;
                 
 function optpopup(url, w, h) {
     var left = (screen.width/2)-(w/2);
@@ -208,6 +207,46 @@ function optpopup(url, w, h) {
     
     return false;
 }
+                
+function reidxpopup(url, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+    
+    if (reidxwindow == null || reidxwindow.closed) {
+        reidxwindow = window.open(url, 'reidxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+        if (window.focus && reidxwindow !== null) {
+            reidxwindow.focus();
+        }
+    } else {
+        reidxwindow.focus();
+    }
+    
+    return false;
+}
+ 
+$(document).ready(function() {
+    
+    $('#confirmReindexDialog').modal({
+        show: false,
+        keyboard: false,
+        backdrop: 'static'
+    });
+        
+    $("#confirmReindexCancel").click(function() {
+        $("#confirmReindexDialog").modal("hide");
+    });
+        
+    $("#confirmReindexOk").click(function() {
+        $("#confirmReindexDialog").modal("hide");
+        reidxpopup('../search/idxpopup.php?reindex', 600, 500);
+    });
+    
+    $('#reindex_link').click(function(event) {
+        event.preventDefault();
+        $("#confirmReindexDialog").modal("show");
+    });
+    
+});
 
 /* ]]> */
 </script>

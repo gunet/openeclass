@@ -31,7 +31,7 @@ require_once 'include/sendMail.inc.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.php';
-require_once 'modules/search/announcementindexer.class.php';
+require_once 'modules/search/indexer.class.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 
@@ -43,14 +43,13 @@ define('RSS', 'modules/announcements/rss.php?c=' . $course_code);
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     if (isset($_POST['action']) && $is_editor) {
-        $aidx = new AnnouncementIndexer();
         if ($_POST['action']=='delete') {
            /* delete announcement */
             $row_id = intval($_POST['value']);
             $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $row_id);
             $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($announce->content)), 50, '+');
             Database::get()->query("DELETE FROM announcement WHERE id= ?d", $row_id);
-            $aidx->remove($row_id);
+            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
             Log::record($course_id, MODULE_ID_ANNOUNCE, LOG_DELETE, array('id' => $row_id,
                                                                           'title' => $announce->title,
                                                                           'content' => $txt_content));
@@ -60,7 +59,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
            $row_id = intval($_POST['value']);
            $visible = intval($_POST['visible']) ? 1 : 0;
            Database::get()->query("UPDATE announcement SET visible = ?d WHERE id = ?d", $visible, $row_id);
-           $aidx->store($row_id);
+           Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $row_id);
            exit();
         }
     }
@@ -208,6 +207,10 @@ $head_content .= "<script type='text/javascript'>
                               console.log(error);
                           }
                         });
+                        $.ajax({
+                            type: 'POST',
+                            url: '{$urlAppend}/modules/search/idxasync.php'
+                        });
                     }              
                 });                
             });
@@ -234,7 +237,11 @@ $head_content .= "<script type='text/javascript'>
                       console.log(textStatus);
                       console.log(error);
                   }
-                });                
+                });
+                $.ajax({
+                    type: 'POST',
+                    url: '{$urlAppend}/modules/search/idxasync.php'
+                });
             });
             $('.success').delay(3000).fadeOut(1500);
             $('.dataTables_filter input').attr('placeholder', '$langTitle');
@@ -254,9 +261,7 @@ if (isset($_GET['an_id'])) {
     }
 }
 if ($is_editor) {
-  $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
-       $langEmptyAnTitle . '";</script>';
-        $aidx = new AnnouncementIndexer();
+  $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
   $displayForm = true;
   /* up and down commands */
   if (isset($_GET['down'])) {
@@ -348,7 +353,7 @@ if ($is_editor) {
                                              stop_display = ?t", $newContent, $antitle, $course_id, $order, $start_display, $stop_display)->lastInsertID;
             $log_type = LOG_INSERT;
         }
-        $aidx->store($id);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
         Log::record($course_id, MODULE_ID_ANNOUNCE, $log_type, array('id' => $id,
                                                                      'email' => $send_mail,

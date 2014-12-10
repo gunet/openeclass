@@ -23,12 +23,7 @@ function process_actions() {
 
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
-    require_once 'modules/search/courseindexer.class.php';
-    require_once 'modules/search/unitresourceindexer.class.php';
     require_once 'modules/course_metadata/CourseXML.php';
-    $idx = new Indexer();
-    $cidx = new CourseIndexer($idx);
-    $urdx = new UnitResourceIndexer($idx);
 
     if (isset($_REQUEST['edit'])) {
         $res_id = intval($_GET['edit']);
@@ -44,8 +39,8 @@ function process_actions() {
                                         title = ?s,
                                         comments = ?s
                                         WHERE course_weekly_view_id = ?d AND id = ?d", $restitle, $rescomments, $id, $res_id);
-            $urdx->store($res_id);
-            $cidx->store($course_id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
         $tool_content .= "<div class='alert alert-success'>$langResourceUnitModified</div>";
@@ -53,8 +48,8 @@ function process_actions() {
         $res_id = intval($_GET['del']);
         if ($id = check_admin_unit_resource($res_id)) {
             Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);            
-            $urdx->remove($res_id, false, false);
-            $cidx->store($course_id);
+            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
             $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
         }
@@ -64,8 +59,8 @@ function process_actions() {
             $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view_activities WHERE id = ?d", $res_id)->visible;            
             $newvis = ($vis == 1) ? 0 : 1;
             Database::get()->query("UPDATE course_weekly_view_activities SET visible = '$newvis' WHERE id = ?d", $res_id);
-            $urdx->store($res_id);
-            $cidx->store($course_id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
     } elseif (isset($_REQUEST['down'])) { // change order down

@@ -31,8 +31,6 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/forumtopicindexer.class.php';
-require_once 'modules/search/forumpostindexer.class.php';
 require_once 'modules/rating/class.rating.php';
 
 ModalBoxHelper::loadModalBox();
@@ -85,17 +83,13 @@ $topic_locked = $myrow->locked;
 $total = get_total_posts($topic);
 
 if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
-    $idx = new Indexer();
-    $ftdx = new ForumTopicIndexer($idx);
-    $fpdx = new ForumPostIndexer($idx);
-
     $last_post_in_thread = get_last_post($topic);
 
     $this_post_time = $myrow->post_time;
     $this_post_author = $myrow->poster_id;
 
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
-    $fpdx->remove($post_id);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     //orphan replies get -1 to parent_post_id
     Database::get()->query("UPDATE forum_post SET parent_post_id = -1 WHERE parent_post_id = ?d", $post_id);
@@ -111,7 +105,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 
     if ($total == 1) { // if exists one post in topic
         Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic, $forum);
-        $ftdx->remove($topic);
+        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic);
         Database::get()->query("UPDATE forum SET num_topics = 0,
                             num_posts = 0
                             WHERE id = ?d

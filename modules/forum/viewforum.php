@@ -26,12 +26,6 @@ $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/forumtopicindexer.class.php';
-require_once 'modules/search/forumpostindexer.class.php';
-
-$idx = new Indexer();
-$ftdx = new ForumTopicIndexer($idx);
-$fpdx = new ForumPostIndexer($idx);
 
 if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
@@ -156,14 +150,14 @@ if (($is_editor) and isset($_GET['topicdel'])) {
             Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
         }
     }
-    $fpdx->removeByTopic($topic_id);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
     $number_of_topics = get_total_topics($forum_id);
     $num_topics = $number_of_topics - 1;
     if ($number_of_topics < 0) {
         $num_topics = 0;
     }
     Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic_id, $forum_id);
-    $ftdx->remove($topic_id);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
     Database::get()->query("UPDATE forum SET num_topics = ?d,
                                 num_posts = num_posts-$number_of_posts
                             WHERE id = ?d

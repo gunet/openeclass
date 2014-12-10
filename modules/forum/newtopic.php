@@ -29,12 +29,6 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/forumtopicindexer.class.php';
-require_once 'modules/search/forumpostindexer.class.php';
-
-$idx = new Indexer();
-$ftdx = new ForumTopicIndexer($idx);
-$fpdx = new ForumPostIndexer($idx);
 
 require_once 'config.php';
 require_once 'functions.php';
@@ -96,12 +90,11 @@ if (isset($_POST['submit'])) {
 
     $topic_id = Database::get()->query("INSERT INTO forum_topic (title, poster_id, forum_id, topic_time) VALUES (?s, ?d, ?d, ?t)"
                     , $subject, $uid, $forum_id, $time)->lastInsertID;
-
-    $ftdx->store($topic_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
 
     $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s, ?d, ?t, ?s)"
                     , $topic_id, $message, $uid, $time, $poster_ip)->lastInsertID;
-    $fpdx->store($post_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 
                         INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id

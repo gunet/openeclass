@@ -517,9 +517,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         // index course after restoring
         require_once 'modules/search/indexer.class.php';
-        $idx = new Indexer();
-        $idx->removeAllByCourse($course_id);
-        $idx->storeAllByCourse($course_id);
+        Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $course_id);
+        Indexer::queueAsync(Indexer::REQUEST_STOREALLBYCOURSE, Indexer::RESOURCE_IDX, $course_id);
 
         $tool_content .= "</p><br /><center><p><a href='../admin/index.php'>" . $GLOBALS['langBack'] . "</a></p></center>";
     });

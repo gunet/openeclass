@@ -505,6 +505,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
     
     if (isset($head_content)) {
+        global $webDir; // required by indexer
+        require_once 'modules/search/indexer.class.php';
+        if (isset($_SESSION[Indexer::SESSION_PROCESS_AT_NEXT_DRAW]) && $_SESSION[Indexer::SESSION_PROCESS_AT_NEXT_DRAW] === true) {
+            $inc_jquery = "<script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".min.js'></script>\n";
+            $head_content .= (strpos($head_content, $inc_jquery) === false) ? $inc_jquery : '';
+            $head_content .= Indexer::queueAsyncJSCode();
+            $_SESSION[Indexer::SESSION_PROCESS_AT_NEXT_DRAW] = false;
+        }
         $t->set_var('HEAD_EXTRAS', $head_content);
     }
     

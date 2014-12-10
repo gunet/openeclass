@@ -118,7 +118,7 @@ require_once 'include/lib/textLib.inc.php';
     <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
     <title>Chat messages</title>
     <!-- jQuery -->
-    <script type="text/javascript" src="<?php echo $urlServer;?>/js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="<?php echo $urlServer;?>/js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="<?php echo $urlServer;?>/template/default/js/bootstrap.min.js"></script>

@@ -25,6 +25,7 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'modalconfirmation.php';
 $nameTools = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
@@ -272,8 +273,7 @@ if (isset($_POST['submit'])) {
     // indexing was previously on, but now set to off, need to empty it
     if (get_config('enable_indexing') && !$enable_indexing) {
         require_once 'modules/search/indexer.class.php';
-        $idx = new Indexer();
-        $idx->deleteAll();
+        Indexer::deleteAll();
     }
 
     // update table `config`
@@ -974,23 +974,3 @@ $tool_content .= "
 }
 
 draw($tool_content, 3, null, $head_content);
-
-function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {
-    global $langCancel, $langOk;
-    return <<<htmlEOF
-<div class='modal fade' id='$id' tabindex='-1' role='dialog' aria-labelledby='$labelId' aria-hidden='true'>
-    <div class='modal-dialog'>
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <h4 class='modal-title' id='$labelId'>$title</h4>
-            </div>
-            <div class='modal-body'><p>$body</p></div>
-            <div class='modal-footer'>
-                <button id='$cancelId' type='button' class='btn btn-default'>$langCancel</button>
-                <button id='$okId' type='button' class='btn btn-primary'>$langOk</button>
-            </div>
-        </div>
-    </div>
-</div>
-htmlEOF;
-}

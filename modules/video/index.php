@@ -44,8 +44,6 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/videoindexer.class.php';
-require_once 'modules/search/videolinkindexer.class.php';
 
 $nameTools = $langVideo;
 
@@ -62,7 +60,7 @@ list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter']))
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     
-    load_js('jquery-2.1.1.min');
+    load_js('jquery-' . JQUERY_VERSION . '.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
@@ -126,9 +124,6 @@ hContent;
     $diskQuotaVideo = Database::get()->querySingle("SELECT video_quota FROM course WHERE code=?s", $course_code)->video_quota;
     $updir = "$webDir/video/$course_code"; //path to upload directory
     $diskUsed = dir_total_space($updir);
-    $idx = new Indexer();
-    $vdx = new VideoIndexer($idx);
-    $vldx = new VideolinkIndexer($idx);
 
     if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
             $nameTools = $langQuotaBar;
@@ -229,9 +224,9 @@ hContent;
                         $_POST['publisher'], $_POST['selectcategory'], $id);
             }
             if ($table == 'video') {
-                    $vdx->store($id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEO, $id);
             } else {
-                    $vldx->store($id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
             }
             $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
             Log::record($course_id, MODULE_ID_VIDEO, LOG_MODIFY, array('id' => $id,
@@ -253,7 +248,7 @@ hContent;
                                                         VALUES (?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s)',
                                                 $course_id, canonicalize_url($url), $title, $_POST['description'], $_POST['selectcategory'], $_POST['creator'], $_POST['publisher'], $_POST['date']);
                     $id = $q->lastInsertID;
-                    $vldx->store($id);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEOLINK, $id);
                     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
                                                                                 'url' => canonicalize_url($url),
@@ -301,7 +296,7 @@ hContent;
                                         , $course_id, $path, $url, $_POST['title'], $_POST['description'], $_POST['selectcategory']
                                         , $_POST['creator'], $_POST['publisher'], $_POST['date'])->lastInsertID;
                     }
-                    $vdx->store($id);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEO, $id);
                     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                     Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
                                                                                 'path' => $path,
@@ -642,7 +637,7 @@ function submit_video_category()
  * @param type $table
  */
 function delete_video($id, $table) {
-        global $course_id, $course_code, $webDir, $vdx, $vldx;
+        global $course_id, $course_code, $webDir;
 
         $myrow = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $title = $myrow->title;
@@ -651,9 +646,9 @@ function delete_video($id, $table) {
         }
         Database::get()->query("DELETE FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $id);
         if ($table == 'video') {
-            $vdx->remove($id);
+            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEO, $id);
         } else {
-            $vldx->remove($id);
+            Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_VIDEOLINK, $id);
         }
         Log::record($course_id, MODULE_ID_VIDEO, LOG_DELETE, array('id' => $id, 'title' => $title));
 }

@@ -39,9 +39,8 @@ if (isset($_POST['submit'])) {
     $unit_id = description_unit_id($course_id);
     add_unit_resource($unit_id, 'description', -1, $langDescription, trim($_POST['description']));
     // update index
-    require_once 'modules/search/courseindexer.class.php';
-    $idx = new CourseIndexer();
-    $idx->store($course_id);
+    require_once 'modules/search/indexer.class.php';
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
 }
 
 $description = '';

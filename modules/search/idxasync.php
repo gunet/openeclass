@@ -20,7 +20,6 @@
  * ======================================================================== 
  */
 
-$require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/cronutil.class.php';
 
@@ -37,8 +36,7 @@ require_once 'include/lib/cronutil.class.php';
     <div class='container'>
       <p align='center'><img src='<?php echo $urlAppend; ?>/template/classic/img/logo_openeclass.png' alt='logo' /></p>
       <div class='alert' align='center'>
-        <p><?php echo $langIndexingOptAlert1; ?></p>
-        <p><?php echo $langIndexingOptAlert2; ?></p>
+        <p>Processing ...</p>
       </div>
     </div>
   </body>
@@ -50,7 +48,9 @@ session_write_close();
 ignore_user_abort(true);
 CronUtil::flush();
 
-require_once 'modules/search/indexer.class.php';
-$idx = new Indexer();
-set_time_limit(0);
-$idx->getIndex()->optimize();
+if ($uid > 0) { // restrict anonymous access
+    set_time_limit(0);
+    require_once 'modules/search/indexer.class.php';
+    $idx = new Indexer();
+    $idx->queueAsyncProcess();
+}

@@ -48,14 +48,14 @@ require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
-require_once 'modules/search/documentindexer.class.php';
+require_once 'modules/search/indexer.class.php';
 require_once 'include/log.php';
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
     $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
-    load_js('jquery-2.1.1.min');
+    load_js('jquery-' . JQUERY_VERSION . '.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
@@ -168,8 +168,6 @@ if ($can_upload) {
     /* ******************************************************************** *
       UPLOAD FILE
      * ******************************************************************** */
-
-    $didx = new DocumentIndexer();
 
     $action_message = $dialogBox = '';
     if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
@@ -288,7 +286,7 @@ if ($can_upload) {
                             , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_creator']
                             , $file_date, $file_date, $_POST['file_subject'], $_POST['file_description'], $_POST['file_author']
                             , $file_format, $_POST['file_language'], $_POST['file_copyrighted'])->lastInsertID;
-            $didx->store($id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
             // Logging
             Log::record($course_id, MODULE_ID_DOCS, LOG_INSERT, array('id' => $id,
                 'filepath' => $file_path,
@@ -362,7 +360,7 @@ if ($can_upload) {
                     '<title>' . q($title) . '</title><body>' .
                     purify($_POST['file_content']) .
                     "</body></html>\n");
-                $didx->store($id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
             }
             $curDirPath = dirname($file_path);
         }
@@ -426,8 +424,8 @@ if ($can_upload) {
             // remove from index if relevant (except non-main sysbsystems and metadata)
             Database::get()->queryFunc("SELECT id FROM document WHERE course_id >= 1 AND subsystem = 0
                                             AND format <> '.meta' AND path LIKE ?s",
-                function ($r2) use($didx) {
-                    $didx->remove($r2->id);
+                function ($r2) {
+                    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_DOCUMENT, $r2->id);
                 },
                 $filePath . '%');
 
@@ -458,13 +456,14 @@ if ($can_upload) {
 
         $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
 
-        if ($r->format != '.dir')
+        if ($r->format != '.dir') {
             validateRenamedFile($_POST['renameTo'], $menuTypeID);
+        }
 
         Database::get()->query("UPDATE document SET filename= ?s, date_modified=NOW()
                           WHERE $group_sql AND path=?s"
                 , $_POST['renameTo'], $_POST['sourceFile']);
-        $didx->store($r->id);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $_POST['sourceFile'],
             'filename' => $r->filename,
             'newfilename' => $_POST['renameTo']));
@@ -522,7 +521,7 @@ if ($can_upload) {
                 $action_message = "<div class='alert alert-danger'>$langFileExists</div>";
             } else {
                 $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $newDirPath);
-                $didx->store($r->id);
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
                 $action_message = "<div class='alert alert-success'>$langDirCr</div>";
             }
         }
@@ -575,7 +574,7 @@ if ($can_upload) {
                                               path = ?s"
                     , $_POST['file_comment'], $_POST['file_category'], $_POST['file_title'], $_POST['file_subject']
                     , $_POST['file_description'], $_POST['file_author'], $file_language, $_POST['file_copyrighted'], $commentPath);
-            $didx->store($res->id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $res->id);
             Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('path' => $commentPath,
                 'filename' => $res->filename,
                 'comment' => $_POST['file_comment'],
@@ -662,7 +661,7 @@ if ($can_upload) {
                         Database::get()->query("UPDATE document SET path = ?s, filename=?s WHERE $group_sql AND path = ?s"
                                 , ($newpath . ".xml"), ($_FILES['newFile']['name'] . ".xml"), ($oldpath . ".xml"));
                     }
-                    $didx->store($docId);
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $docId);
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
                         'filename' => $_FILES['newFile']['name']));
@@ -941,7 +940,7 @@ if ($can_upload) {
                                           WHERE $group_sql AND
                                                 path = ?s", $newVisibilityStatus, $visibilityPath);
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
-        $didx->store($r->id);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
 
@@ -953,7 +952,7 @@ if ($can_upload) {
                                           WHERE $group_sql AND
                                                 path = ?s", $new_public_status, $path);
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
-        $didx->store($r->id);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         $action_message = "<div class='alert alert-success'>$langViMod</div>";
     }
 } // teacher only

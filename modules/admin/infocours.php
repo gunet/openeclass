@@ -76,13 +76,15 @@ if (isset($_POST['submit'])) {
         $olddeps = $course->getDepartmentIds($cId);
 
         foreach ($departments as $depId) {
-            if (!in_array($depId, $olddeps))
+            if (!in_array($depId, $olddeps)) {
                 validateNode(intval($depId), true);
+            }
         }
 
         foreach ($olddeps as $depId) {
-            if (!in_array($depId, $departments))
+            if (!in_array($depId, $departments)) {
                 validateNode($depId, true);
+            }
         }
     }
 
@@ -90,9 +92,7 @@ if (isset($_POST['submit'])) {
     Database::get()->query("UPDATE course SET title = ?s,
                     prof_names = ?s
                     WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
-
     $course->refresh($cId, $departments);
-
     $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
 }
 // Display edit form for course basic information

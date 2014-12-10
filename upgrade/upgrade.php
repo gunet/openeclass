@@ -1613,6 +1613,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `course_id` int(11) NOT NULL UNIQUE,
                         PRIMARY KEY (`id`)) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT,
+                        `user_id` int(11) NOT NULL,
+                        `request_type` VARCHAR(255) NOT NULL,
+                        `resource_type` VARCHAR(255) NOT NULL,
+                        `resource_id` int(11) NOT NULL,
+                        PRIMARY KEY (`id`)) $charset_spec");
 
         Database::get()->query("CREATE TABLE `course_weekly_view` (
                         `id` INT(11) NOT NULL auto_increment,
@@ -2182,6 +2190,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `wik_prop_id` ON  wiki_properties(course_id)");
     DBHelper::indexExists('idx_queue', 'idx_queue_cid') or
             Database::get()->query("CREATE INDEX `idx_queue_cid` ON `idx_queue` (course_id)");
+    DBHelper::indexExists('idx_queue_async', 'idx_queue_async_uid') or
+            Database::get()->query("CREATE INDEX `idx_queue_async_uid` ON idx_queue_async(user_id)");
 
     DBHelper::indexExists('attendance_users', 'attendance_users_aid') or
             Database::get()->query('CREATE INDEX `attendance_users_aid` ON `attendance_users` (attendance_id)');
@@ -2356,21 +2366,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("ALTER TABLE `exercise_answer` DROP `oldid`");
 
         if (get_config('enable_search')) {
-            $n = Database::get()->querySingle("SELECT COUNT(id) AS count FROM course")->count;
-
-            if ($n > 100) {
-                set_config('enable_search', 0);
-                set_config('enable_indexing', 0);
-                echo "<hr><p class='alert alert-info'>$langUpgIndexingNotice</p>";
-            } else {
-                set_config('enable_indexing', 1);
-                require_once 'modules/search/indexer.class.php';
-                $idx = new Indexer();
-                Database::get()->queryFunc("SELECT id FROM course", function ($r) use ($idx) {
-                    $idx->removeAllByCourse($r->id);
-                    $idx->storeAllByCourse($r->id);
-                });
-            }
+            set_config('enable_search', 0);
+            set_config('enable_indexing', 0);
+            echo "<hr><p class='alert alert-info'>$langUpgIndexingNotice</p>";
         }
     }
     // convert tables to InnoDB storage engine

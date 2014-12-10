@@ -51,15 +51,15 @@ class Course {
     public function refresh($id, $departments) {
         if ($departments != null) {
             Database::get()->query("DELETE FROM $this->departmenttable WHERE course = ?d", $id);
-            foreach (array_unique($departments) as $key => $department)
+            foreach (array_unique($departments) as $key => $department) {
                 Database::get()->query("INSERT INTO $this->departmenttable (course, department) VALUES (?d,?d)", $id, $department);
+            }
         }
         // refresh index
-        global $webDir;
-        require_once 'modules/search/courseindexer.class.php';
-        $idx = new CourseIndexer();
-        $idx->store($id);
+        require_once 'modules/search/indexer.class.php';
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $id);
         // refresh course metadata
+        global $webDir;
         require_once 'modules/course_metadata/CourseXML.php';
         CourseXMLElement::refreshCourse($id, course_id_to_code($id));
     }

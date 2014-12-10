@@ -34,7 +34,7 @@ require_once 'include/action.php';
 require_once 'include/log.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
-require_once 'modules/search/agendaindexer.class.php';
+require_once 'modules/search/indexer.class.php';
 require_once 'modules/agenda/course_calendar.inc.php';
 ModalBoxHelper::loadModalBox();
 
@@ -173,15 +173,14 @@ if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
 }
 
 if ($is_editor) {
-    $agdx = new AgendaIndexer();
     // modify visibility
     if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
         Database::get()->query("UPDATE agenda SET visible = 0 WHERE course_id = ?d AND id = ?d", $course_id, $id);
-        $agdx->store($id);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_AGENDA, $id);
         redirect_to_home_page("modules/agenda/index.php?course_code=$course_code"); 
     } elseif (isset($_GET['mkVisibl']) and ( $_GET['mkVisibl'] == true)) {
         Database::get()->query("UPDATE agenda SET visible = 1 WHERE course_id = ?d AND id = ?d", $course_id, $id);
-        $agdx->store($id);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_AGENDA, $id);
         redirect_to_home_page("modules/agenda/index.php?course_code=$course_code"); 
     }
     if (isset($_POST['event_title'])) {
@@ -194,7 +193,7 @@ if ($is_editor) {
             } else {
                 $resp = update_event($id, $event_title, $startdate, $duration, $content);
             }
-            $agdx->store($id);
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_AGENDA, $id);
         } else {
             $recursion = null;            
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
@@ -202,14 +201,14 @@ if ($is_editor) {
             }            
             $ev = add_event($event_title, $content, $startdate, $duration, $recursion);                                   
             foreach($ev['event'] as $id) {
-                $agdx->store($id);                
+                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_AGENDA, $id);
             }
         }
         Session::Messages($langStoredOK, 'alert-success');
         redirect_to_home_page("modules/agenda/index.php?course_code=$course_code");     
     } elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
         $resp = (isset($_GET['rep']) && $_GET['rep'] == 'yes')? delete_recursive_event($id):delete_event($id);
-        $agdx->remove($id);
+        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_AGENDA, $id);
         $msgresp = ($resp['success'])? $langDeleteOK : $langDeleteError.": ".$resp['message'];
         $alerttype = ($resp['success'])? 'alert-success' : 'alert-danger';
         Session::Messages($msgresp, $alerttype);
