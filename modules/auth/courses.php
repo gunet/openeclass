@@ -27,7 +27,6 @@ require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 
 $nameTools = $langChoiceLesson;
-$navigation[] = array('url' => 'courses.php', 'name' => $langChoiceDepartment);
 
 $icons = array(
     COURSE_OPEN => "<img src='$themeimg/lock_open.png' alt='" . $langOpenCourse . "' title='" . $langOpenCourse . "' />",
