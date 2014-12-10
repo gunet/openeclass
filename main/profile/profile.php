@@ -213,7 +213,7 @@ if (isset($_GET['msg'])) {
     switch ($_GET['msg']) {
         case 1: //profile information changed successfully
             $message = $langProfileReg;
-            $urlText = "<br /><a href='$urlServer'>$langHome</a>";
+            //$urlText = "<br /><a href='$urlServer'>$langHome</a>";
             $type = "success";
             break;
         case 3: //pass too easy

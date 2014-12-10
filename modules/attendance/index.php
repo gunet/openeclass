@@ -715,7 +715,7 @@ if ($is_editor) {
             }
             $tool_content .= "</table></div></div></div>";
         } else {
-            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div>";
+            Session::Messages($langAttendanceNoActMessageAss4);
         }
         
         $showAttendanceActivities = 0;
@@ -857,10 +857,7 @@ if ($is_editor) {
         //get all the available activities
         $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
         $announcementNumber = count($result);
-        
-        if (!$result or $activityNumber == 0) {
-            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>";
-        }else{
+        if ($announcementNumber > 0) {
             $tool_content .= "<h3>$langAttendanceActList</h3>
                               <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
@@ -871,7 +868,6 @@ if ($is_editor) {
                                 <th>$langAttendanceAbsences</th>
                                 <th class='text-center'><i class='fa fa-cogs'></i></th>
                             </tr>";
-        
             foreach ($result as $announce) {               
                 $content = ellipsize_html($announce->description, 50);
                 $d = strtotime($announce->date);
@@ -918,6 +914,8 @@ if ($is_editor) {
                         "</td></tr>";
             } // end of while
             $tool_content .= "</table></div></div></div>";
+        } else {
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>";
         }
         
 
@@ -931,15 +929,12 @@ if ($is_editor) {
 
     if ($announcementNumber > 0) {
         $tool_content .= "<h4>$langAttendanceAbsences</h4>";
-        $tool_content .= "<div class='info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div><br>";
+        $tool_content .= "<div class='info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div>";
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                             <table class='table-default sortable' id='t2'>";
         $tool_content .= "<tr><th >$langTitle</th><th>$langAttendanceActivityDate2</th><th>$langDescription</th><th>$langAttendanceAbsencesYes</th></tr>";
-    } else {
-        $tool_content .= "<p class='alert1'>$langAttendanceNoActMessage5</p>";
-    }    
-    if ($result) {        
+    
         foreach ($result as $announce) {
             $content = standard_text_escape($announce->description);
             $d = strtotime($announce->date);
@@ -975,10 +970,12 @@ if ($is_editor) {
             } else {
                 $tool_content .= icon('fa-question-circle', $langAttendanceStudentFailure);
             }
-            $tool_content .= "</td>";
+            $tool_content .= "</td></tr>";
         } // end of while
-    }
-    $tool_content .= "</tr></table></div></div></div>";
+        $tool_content .= "</table></div></div></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage5</div>";
+    }       
 }
 
 
