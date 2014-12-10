@@ -753,7 +753,7 @@ function pickerMenu() {
  * @global type $urlServer
  */
 function openCoursesExtra() {
-    global $urlServer;
+    global $urlServer, $themeimg;
 
     if (get_config('opencourses_enable')) {
         $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
