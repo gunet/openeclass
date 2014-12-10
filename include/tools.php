@@ -760,16 +760,14 @@ function openCoursesExtra() {
 
         if ($openCoursesNum > 0) {
             $GLOBALS['leftNavExtras'] = "
-                <div class='navmenu'>
-                    <div class='navcontainer'>
-                        <ul class='navlist'>
-                            <li class='category'>" . q($GLOBALS['langOpenCoursesShort']) . "</li>
-                        </ul><div style='text-align:center;'><img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'>
-                            &nbsp;<a href='" . $urlServer . "modules/course_metadata/openfaculties.php'>
-                    $GLOBALS[langListOpenCoursesShort]</a>
-                            <span class='smaller'>$openCoursesNum " .
-                    (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) .
-                    "</span></div>
+                <div style='text-align:center; color: white;'>
+                    <div>
+                        <h4>" . q($GLOBALS['langOpenCoursesShort']) . "</h4>
+                    </div>
+                    <div>
+                        <p><img src='$themeimg/open_courses_logo_small.png' title='" . $GLOBALS['langOpenCourses'] . "' alt='" . $GLOBALS['langOpenCourses'] . "' /></p>
+                        <p><a href='" . $urlServer . "modules/course_metadata/openfaculties.php'>" . $GLOBALS['langListOpenCoursesShort'] . "</a></p>
+                        <p class='smaller'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</p>
                     </div>
                 </div>";
         }
