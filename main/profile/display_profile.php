@@ -82,34 +82,60 @@ if ($userdata) {
                     'button-class'=>'btn-danger',
                     'level' => 'primary')
                 ));    
-    $tool_content .= "<table class='tbl'>
-            <tr>
-                <td>" . profile_image($id, IMAGESIZE_LARGE) . "</td>
-                <td><b>" . q("$userdata->givenname $userdata->surname") . "</b><br>";
-    if (!empty($userdata->email) and allow_access($userdata->email_public)) {
-        $tool_content .= "<b>$langEmail:</b> " . mailto($userdata->email) . "<br>";
-    }
-    if (!empty($userdata->am) and allow_access($userdata->am_public)) {
-        $tool_content .= "<b>$langAm:</b> " . q($userdata->am) . "<br>";
-    }
-    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
-        $tool_content .= "<b>$langPhone:</b> " . q($userdata->phone) . "<br>";
-    }
-    $tool_content .= "<b>$langFaculty:</b> ";
-
-    $departments = $user->getDepartmentIds($id);
-    $i = 1;
-    foreach ($departments as $dep) {
-        $br = ($i < count($departments)) ? '<br/>' : '';
-        $tool_content .= $tree->getFullPath($dep) . $br;
-        $i++;
-    }
-
-    $tool_content .= "<br>";
-    if (!empty($userdata->description)) {
-        $tool_content .= standard_text_escape($userdata->description);
-    }
-    $tool_content .= "</td></tr></table>";
+    
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+            <div class='row'>
+                <div class='col-md-12'>
+                    " . profile_image($id, IMAGESIZE_LARGE, 'img-responsive') . "
+                </div>
+            </div>
+            <div class='row'>
+                <div class='col-md-12'>
+                    " . q("$userdata->givenname $userdata->surname") . "
+                </div>
+            </div>";
+            if (!empty($userdata->email) and allow_access($userdata->email_public)) {
+                $tool_content .= "<div class='row'>
+                                    <div class='col-md-12'>$langEmail:
+                                    " . mailto($userdata->email) . "
+                                </div>
+                            </div>";
+            }
+            if (!empty($userdata->am) and allow_access($userdata->am_public)) {
+                $tool_content .= "<div class='row'>
+                                    <div class='col-md-12'>$langAm:
+                                    " . q($userdata->am) . "
+                                </div>
+                            </div>";
+            }
+            if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
+                $tool_content .= "<div class='row'>
+                                    <div class='col-md-12'>$langPhone:
+                                    " . q($userdata->phone) . "
+                                </div>
+                            </div>";
+            }
+            $tool_content .= "
+            <div class='row'>
+                <div class='col-md-12'>";
+                    $departments = $user->getDepartmentIds($id);
+                        $i = 1;
+                        foreach ($departments as $dep) {
+                            $br = ($i < count($departments)) ? '<br/>' : '';
+                            $tool_content .= $tree->getFullPath($dep) . $br;
+                            $i++;
+                        }
+                $tool_content .= "</div>
+            </div>";
+                if (!empty($userdata->description)) {
+                    $tool_content .= "<div class='row'>
+                                        <div class='col-md-12'>
+                                            ".standard_text_escape($userdata->description)."</div></div>";
+                }
+$tool_content .= "</div>
+        </div>";
 }
 
 draw($tool_content, 1);
