@@ -1387,7 +1387,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
                                 `name` VARCHAR(300) NOT NULL,
-                                `styles` LONGTEXT NOT NULL
+                                `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (

@@ -1534,7 +1534,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
 $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(300) NOT NULL,
-    `styles` LONGTEXT NOT NULL
+    `styles` LONGTEXT NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");

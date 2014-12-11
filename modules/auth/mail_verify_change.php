@@ -67,6 +67,7 @@ if (!empty($_POST['submit'])) {
         $subject = $langMailChangeVerificationSubject;
         $MailMessage = sprintf($mailbody1 . $langMailVerificationChangeBody, $urlServer . 'modules/auth/mail_verify.php?h=' . $hmac . '&id=' . $uid);
         $emailhelpdesk = get_config('email_helpdesk');
+        $emailAdministrator = get_config('email_sender');
         if (!send_mail($siteName, $emailAdministrator, '', $email, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;

@@ -140,7 +140,7 @@ if ($all_set) {
                 "$langAm: $am\n" .
                 "$langProfUname: $username\n$langProfEmail : $usermail\n" .
                 "$contactphone: $userphone\n\n\n$logo\n\n";
-
+        $emailAdministrator = get_config('email_sender');
         if (!send_mail($siteName, $emailAdministrator, '', $emailhelpdesk, $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
             $tool_content .= "<div class='alert alert-warning'>$langMailErrorMessage&nbsp; <a href='mailto:$emailhelpdesk' class='mainpage'>$emailhelpdesk</a>.</div>";
         }
@@ -249,7 +249,7 @@ if ($all_set) {
         $tool_content .= "<div class='form-group'>
               <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
               <div class='col-sm-10'>";
-        $tool_content .= lang_select_options('localize');
+        $tool_content .= lang_select_options('localize', "class='form-control'");
         $tool_content .= "</div></div>";
     if (get_config("display_captcha")) {        
         $tool_content .= "<div class='form-group'>                    

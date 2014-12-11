@@ -81,7 +81,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                             "$langAm: $am\n" .
                             "$langProfUname: $username\n$langProfEmail : $usermail\n" .
                             "$contactphone: $userphone\n\n\n$logo\n\n";
-
+                    $emailAdministrator = get_config('email_sender');        
                     if (!send_mail($siteName, $emailAdministrator, '', get_config('email_helpdesk'), $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
                         $user_msg = $langMailErrorMessage;
                     } else {
