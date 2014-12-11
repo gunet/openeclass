@@ -80,7 +80,6 @@ if ($userdata) {
                     array('title' => $langUnregUser,
                         'url' => "../unreguser.php",
                         'icon' => 'fa-times',
-                        'button-class'=>'btn-danger',
                         'level' => 'primary')
                     ));    
     } 
@@ -88,39 +87,22 @@ if ($userdata) {
         <div class='row'>
             <div class='col-sm-12'>
             <div class='row'>
-                <div class='col-md-12'>
-                    " . profile_image($id, IMAGESIZE_LARGE, 'img-responsive') . "
+                <div class='col-xs-12 col-sm-2'>
+                    <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
                 </div>
-            </div>
-            <div class='row'>
-                <div class='col-md-12'>
-                    " . q("$userdata->givenname $userdata->surname") . "
-                </div>
+                <div class='col-xs-12 col-sm-10 profile-pers-info'>
+                    <div class='profile-pers-info-name'>" . q("$userdata->givenname $userdata->surname") . "</div>"; // Name & Surname
+                    if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
+                        $tool_content .= "<div class='profile-pers-info'>$langEmail : " . mailto($userdata->email) . "</div>";}
+                    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
+                        $tool_content .= "<div class='profile-pers-info'>$langPhone : " . q($userdata->phone) . "</div>";}
+                    if (!empty($userdata->am) and allow_access($userdata->am_public)) { // Register Number
+                        $tool_content .= "<div class='profile-pers-info-data'>$langAm : " . q($userdata->am) . "</div>";}
+    $tool_content .= "</div>
             </div>";
-            if (!empty($userdata->email) and allow_access($userdata->email_public)) {
-                $tool_content .= "<div class='row'>
-                                    <div class='col-md-12'>$langEmail:
-                                    " . mailto($userdata->email) . "
-                                </div>
-                            </div>";
-            }
-            if (!empty($userdata->am) and allow_access($userdata->am_public)) {
-                $tool_content .= "<div class='row'>
-                                    <div class='col-md-12'>$langAm:
-                                    " . q($userdata->am) . "
-                                </div>
-                            </div>";
-            }
-            if (!empty($userdata->phone) and allow_access($userdata->phone_public)) {
-                $tool_content .= "<div class='row'>
-                                    <div class='col-md-12'>$langPhone:
-                                    " . q($userdata->phone) . "
-                                </div>
-                            </div>";
-            }
             $tool_content .= "
             <div class='row'>
-                <div class='col-md-12'>";
+                <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'><div>";
                     $departments = $user->getDepartmentIds($id);
                         $i = 1;
                         foreach ($departments as $dep) {
@@ -128,12 +110,12 @@ if ($userdata) {
                             $tool_content .= $tree->getFullPath($dep) . $br;
                             $i++;
                         }
-                $tool_content .= "</div>
+                $tool_content .= "</div></div>
             </div>";
                 if (!empty($userdata->description)) {
                     $tool_content .= "<div class='row'>
-                                        <div class='col-md-12'>
-                                            ".standard_text_escape($userdata->description)."</div></div>";
+                                        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'><div>
+                                            ".standard_text_escape($userdata->description)."</div></div></div>";
                 }
 $tool_content .= "</div>
         </div>";

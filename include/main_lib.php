@@ -39,6 +39,7 @@ define('USER_GUEST', 10);
 
 // resized user image
 define('IMAGESIZE_LARGE', 256);
+define('IMAGESIZE_MEDIUM', 155);
 define('IMAGESIZE_SMALL', 32);
 
 // profile info access
@@ -2156,7 +2157,7 @@ function profile_image($uid, $size, $class=null) {
     global $urlServer, $themeimg;
     
     // makes $class argument optional
-    $class_attr = ($class == null)?'':"class=$class";
+    $class_attr = ($class == null)?'':"class='".q($class)."'";
     
     if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
         return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='" . q(uid_to_name($uid)) . "'>";

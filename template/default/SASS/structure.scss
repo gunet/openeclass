@@ -55,15 +55,12 @@ body > .container{
             }
         }
         a{
-            background: transparent;
             color: #ADADAD;
             text-decoration: none;
         }
         a.parent-menu{
             outline: 0;
             display: block;
-            color: #ADADAD;
-            text-decoration: none;
             background: rgba(0, 0, 0, 0.2);
             &:not(.collapsed){
                 border-radius: 4px 0px 0px 0px;
@@ -80,6 +77,7 @@ body > .container{
             border: none;
             border-top: 1px solid rgba(255,255,255,.075);
             padding: 0.6em 15px;
+            background: transparent;
             text-align: center;
             @include transition(all $transition-time linear);
             > span{

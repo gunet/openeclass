@@ -258,7 +258,8 @@ $tool_content .=
             array('title' => $langBack,
                 'url' => "display_profile.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'))).
+                'level' => 'primary-label')));
+        $tool_content .=
             "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>                
                 <fieldset>     

@@ -1748,7 +1748,9 @@ table#portfolio-lessons tr
     color: #a7a7a7;
     cursor: pointer;
 }
-
+#profile-avatar{
+    width: 150px;
+}
 .panel-footer .event-legend > div{
     margin-bottom: 5px;
 }
@@ -1773,6 +1775,17 @@ table.dataTable tbody td.right-cell{
     padding-top: 0px;
     padding-bottom: 0px;
     width: 40px;
+}
+.profile-pers-info div{
+    padding: 2px 20px;
+}
+div.profile-pers-info-name{
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 15px;
+}
+div.profile-pers-info-data{
+    
 }
 
 #calendar_wrapper{
