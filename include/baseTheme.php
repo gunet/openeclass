@@ -448,7 +448,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
         $theme_options_styles = unserialize($theme_options->styles);
         $styles_str = '';
-        if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) $styles_str .= "body{background: $theme_options_styles[bgColor] url('$theme_options_styles[bgImage]');}";
+        if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
+            if ($theme_options_styles['bgType'] == 'stretch') { //Stretched
+                $background_type = "background-size: 100% 100%;";
+            } else { //Repeat
+                $background_type = "";
+            }
+            $styles_str .= "body{background: $theme_options_styles[bgColor] url('$theme_options_styles[bgImage]');$background_type}";
+        }
         if (!empty($theme_options_styles['leftNavBgColor'])) $styles_str .= "#leftnav{background:$theme_options_styles[leftNavBgColor];}";
         if (!empty($theme_options_styles['leftNavFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftNavFontColor];}";
         if (!empty($theme_options_styles['leftNavHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftNavHoverBgColor];}";

@@ -154,6 +154,20 @@ if (isset($_POST['optionsSave'])) {
               <div class='col-sm-9'>
                 <input name='bgImage' type='text' class='form-control' id='bgImage' value='$theme_options_styles[bgImage]'>
               </div>
+              <div class='form-inline col-sm-9 col-sm-offset-3'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
+                        Repeated Image &nbsp; 
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
+                        Stretched Image &nbsp;
+                      </label>
+                    </div>              
+              </div>
             </div>
             <hr>
             <h3>Left Navigation Options</h3>            
