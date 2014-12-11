@@ -2152,14 +2152,17 @@ function icon($name, $title = null, $link = null, $link_attrs = '') {
  * @param type $class
  * @return type
  */
-function profile_image($uid, $size, $class) {
+function profile_image($uid, $size, $class=null) {
     global $urlServer, $themeimg;
-
+    
+    // makes $class argument optional
+    $class_attr = ($class == null)?'':"class=$class";
+    
     if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
-        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' class='".q($class)."' title='" . q(uid_to_name($uid)) . "'>";
+        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='" . q(uid_to_name($uid)) . "'>";
     } else {
         $name = ($uid > 0) ? q(uid_to_name($uid)) : '';
-        return "<img src='$themeimg/default_$size.jpg' class='".q($class)."' title='$name' alt='$name'>";
+        return "<img src='$themeimg/default_$size.jpg' $class_attr title='$name' alt='$name'>";
     }
 }
 
