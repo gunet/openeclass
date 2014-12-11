@@ -89,7 +89,7 @@ if ($userdata) {
             <div class='col-sm-12'>
             <div class='row'>
                 <div class='col-md-12'>
-                    " . profile_image($id, IMAGESIZE_LARGE, 'img-responsive') . "
+                    " . profile_image($id, IMAGESIZE_LARGE) . "
                 </div>
             </div>
             <div class='row'>
