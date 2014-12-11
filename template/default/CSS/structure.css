@@ -131,29 +131,29 @@ img {
   transition: all 120ms linear;
 }
 /* line 57, ../SASS/structure.scss */
-#leftnav .panel > a.parent-menu {
+#leftnav .panel a {
+  background: transparent;
+  color: #ADADAD;
+  text-decoration: none;
+}
+/* line 62, ../SASS/structure.scss */
+#leftnav .panel a.parent-menu {
   outline: 0;
   display: block;
   color: #ADADAD;
   text-decoration: none;
   background: rgba(0, 0, 0, 0.2);
 }
-/* line 63, ../SASS/structure.scss */
-#leftnav .panel > a.parent-menu:not(.collapsed) {
+/* line 68, ../SASS/structure.scss */
+#leftnav .panel a.parent-menu:not(.collapsed) {
   border-radius: 4px 0px 0px 0px;
   color: #4da1e4;
 }
-/* line 70, ../SASS/structure.scss */
-#leftnav .panel > a.parent-menu:hover, #leftnav .panel > a.parent-menu:not(.collapsed) {
+/* line 75, ../SASS/structure.scss */
+#leftnav .panel a.parent-menu:hover, #leftnav .panel a.parent-menu:not(.collapsed) {
   border-radius: 4px 0px 0px 4px;
 }
-/* line 74, ../SASS/structure.scss */
-#leftnav .panel a {
-  background: transparent;
-  color: #ADADAD;
-  text-decoration: none;
-}
-/* line 78, ../SASS/structure.scss */
+/* line 79, ../SASS/structure.scss */
 #leftnav .panel a.list-group-item {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.075);
@@ -165,12 +165,12 @@ img {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 84, ../SASS/structure.scss */
+/* line 85, ../SASS/structure.scss */
 #leftnav .panel a.list-group-item > span {
   font-size: 0.9em;
   margin-left: 0.5em;
 }
-/* line 88, ../SASS/structure.scss */
+/* line 89, ../SASS/structure.scss */
 #leftnav .panel a.list-group-item:hover {
   text-decoration: none;
   color: #eee;
@@ -183,7 +183,7 @@ img {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 96, ../SASS/structure.scss */
+/* line 97, ../SASS/structure.scss */
 #leftnav .panel a.list-group-item.active {
   background: #FAFAFA;
   text-shadow: none;
@@ -193,11 +193,11 @@ img {
   -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
 }
-/* line 106, ../SASS/structure.scss */
+/* line 107, ../SASS/structure.scss */
 #leftnav .panel a.list-group-item:last-child {
   border-bottom: none;
 }
-/* line 109, ../SASS/structure.scss */
+/* line 110, ../SASS/structure.scss */
 #leftnav .panel a.list-group-item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.075);
 }

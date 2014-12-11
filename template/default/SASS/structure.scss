@@ -54,7 +54,12 @@ body > .container{
                 @include transition(all $transition-time linear);
             }
         }
-        > a.parent-menu{
+        a{
+            background: transparent;
+            color: #ADADAD;
+            text-decoration: none;
+        }
+        a.parent-menu{
             outline: 0;
             display: block;
             color: #ADADAD;
@@ -71,44 +76,39 @@ body > .container{
                 border-radius: 4px 0px 0px 4px;
             }
         }
-        a{
-            background: transparent;
-            color: #ADADAD;
-            text-decoration: none;
-            &.list-group-item{
-                border: none;
-                border-top: 1px solid rgba(255,255,255,.075);
-                padding: 0.6em 15px;
-                text-align: center;
+        a.list-group-item{
+            border: none;
+            border-top: 1px solid rgba(255,255,255,.075);
+            padding: 0.6em 15px;
+            text-align: center;
+            @include transition(all $transition-time linear);
+            > span{
+                font-size: 0.9em;
+                margin-left: 0.5em;
+            }
+            &:hover{
+                text-decoration: none;
+                color: #eee;
+                background: $color-hover;
+                border-radius: 4px 0px 0px 4px;
+                margin-left: 0px;
                 @include transition(all $transition-time linear);
-                > span{
-                    font-size: 0.9em;
-                    margin-left: 0.5em;
-                }
-                &:hover{
-                    text-decoration: none;
-                    color: #eee;
-                    background: $color-hover;
-                    border-radius: 4px 0px 0px 4px;
-                    margin-left: 0px;
-                    @include transition(all $transition-time linear);
-                }
-                &.active{
-                    background: $color-main-content;
-                    text-shadow: none;
-                    color: #333;
-                    border-radius: 4px 0px 0px 4px;
-                    box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
-                    -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
-                    -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
-                }
-                //we don't want a border-bottom if it's the last option
-                &:last-child{
-                    border-bottom: none;
-                }
-                &:first-child{
-                    border-top: 1px solid rgba(255,255,255,.075);
-                }
+            }
+            &.active{
+                background: $color-main-content;
+                text-shadow: none;
+                color: #333;
+                border-radius: 4px 0px 0px 4px;
+                box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+                -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
+                -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+            }
+            //we don't want a border-bottom if it's the last option
+            &:last-child{
+                border-bottom: none;
+            }
+            &:first-child{
+                border-top: 1px solid rgba(255,255,255,.075);
             }
         }
     }
