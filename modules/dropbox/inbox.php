@@ -188,7 +188,7 @@ if (isset($_GET['mid'])) {
     
     $out = "<div id='del_msg'></div><div id='inbox'>";
     
-    $out .= "<table id='inbox_table' class='table table-bordered'>
+    $out .= "<table id='inbox_table' class='table-default'>
                   <thead>
                     <tr>
                       <th>$langSubject</th>";
