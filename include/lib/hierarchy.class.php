@@ -609,6 +609,7 @@ $(document).ready(function() {
 jContent;
 
         if ($xmlout) {
+            $xmldata = str_replace('"', '\"', $xmldata);
             $js .= <<<jContent
         "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort"],
         "xml_data" : {

@@ -106,7 +106,7 @@ if (!isset($_GET['action'])) {
     </td>
     </tr>";
 
-    $xmldata = $tree->buildTreeDataSource(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
+    $xmldata = str_replace('"', '\"', $tree->buildTreeDataSource(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin))));
     $initopen = $tree->buildJSTreeInitOpen();
 
     $head_content .= <<<hContent
