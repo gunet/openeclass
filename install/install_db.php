@@ -1283,6 +1283,8 @@ $default_config = array(
     'active_ui_languages', $active_ui_languages,
     'student_upload_whitelist', $student_upload_whitelist,
     'teacher_upload_whitelist', $teacher_upload_whitelist,
+    'theme', 'default',
+    'theme_options_id', 0,
     'login_fail_check', 1,
     'login_fail_threshold', 15,
     'login_fail_deny_interval', 5,
@@ -1529,6 +1531,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
     `resource_id` int(11) NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(300) NOT NULL,
+    `styles` LONGTEXT NOT NULL
+    PRIMARY KEY (`id`)) $charset_spec");
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
 $db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");

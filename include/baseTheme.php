@@ -442,11 +442,24 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     } else {
         $t->set_block('mainBlock', 'mobileViewOpenDiv', 'delete');
     }
-    // Add the optional embed-specific css if necessarry
-    if ($is_embedonce) {
-        $t->set_var('EXTRA_CSS', "<link href=\"{$urlAppend}template/${theme}${tool_css}/theme_embed.css\" rel=\"stylesheet\" type=\"text/css\" >");
+    
+    // Add Theme Options styles
+    if (get_config('theme_options_id')) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
+        $theme_options_styles = unserialize($theme_options->styles);
+        $styles_str = '';
+        if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) $styles_str .= "body{background: $theme_options_styles[bgColor] url('$theme_options_styles[bgImage]');}";
+        if (!empty($theme_options_styles['leftNavBgColor'])) $styles_str .= "#leftnav{background:$theme_options_styles[leftNavBgColor];}";
+        if (!empty($theme_options_styles['leftNavFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftNavFontColor];}";
+        if (!empty($theme_options_styles['leftNavHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftNavHoverBgColor];}";
+        if (!empty($theme_options_styles['leftNavHoverFontColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftNavHoverFontColor];}";
+        if (!empty($theme_options_styles['leftNavMainCatBgColor'])) $styles_str .= "#leftnav .panel > a {background: $theme_options_styles[leftNavMainCatBgColor];}";
+        if (!empty($theme_options_styles['leftNavMainCatHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftNavMainCatHoverFontColor];}";
+        if (!empty($theme_options_styles['leftNavMainCatSelectedFontColor'])) $styles_str .= "#leftnav .panel > a:not(.collapsed){color: $theme_options_styles[leftNavMainCatSelectedFontColor];}";
+        $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");        
     }
 
+    //IS THIS NEEDED??!?!?
     // Add the optional tool-specific css of the tool, if it's set
     if (isset($tool_css)) {
         $t->set_var('TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >");

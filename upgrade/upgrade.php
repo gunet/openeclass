@@ -229,6 +229,8 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         set_config('email_sender', $emailAdministrator);
         set_config('admin_name', $administratorName . ' ' . $administratorSurname);
         set_config('email_helpdesk', $emailhelpdesk);
+        set_config('theme', 'default');
+        set_config('theme_options_id', 0);
         if (isset($emailAnnounce) and $emailAnnounce) {
             set_config('email_announce', $emailAnnounce);
         }
@@ -1382,7 +1384,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `assignment_id` int(11) NOT NULL,
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
-
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
+                                `id` int(11) NOT NULL AUTO_INCREMENT,
+                                `name` VARCHAR(300) NOT NULL,
+                                `styles` LONGTEXT NOT NULL
+                                PRIMARY KEY (`id`)) $charset_spec");
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

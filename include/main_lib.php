@@ -232,6 +232,9 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-slider') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-slider/css/bootstrap-slider.css'>\n";
             $file = "bootstrap-slider/js/bootstrap-slider.js";
+        } elseif ($file == 'bootstrap-colorpicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css'>\n";
+            $file = "bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js";
         }               
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     }
