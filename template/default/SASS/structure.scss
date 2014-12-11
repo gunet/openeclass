@@ -94,7 +94,6 @@ body > .container{
             border: none;
             border-top: 1px solid rgba(255,255,255,.075);
             padding: 0.6em 15px;
-            text-align: center;
 
             @include transition(all $transition-time linear);
 
