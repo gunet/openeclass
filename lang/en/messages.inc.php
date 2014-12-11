@@ -3249,6 +3249,7 @@ $langSharingDisAdmin = "Social sharing is globally disabled by the platform's ad
 $langSharingDisCourse = "Social sharing is disabled for non-open courses.";
 $langEnableSocialSharingLiks = "Enable social sharing links";
 $langThemeSettings = 'Theme Settings';
+$langSaveAs = 'Save as ...';
 $langCMeta['course_instructor_moreInformation'] = "More about instructor";
 $langCMeta['course_subthematic'] = "Thematic scientific sub-area";
 $langCMeta['asfa'] = "Athens School of Fine Arts";
@@ -3491,6 +3492,15 @@ $langOnlineUsers = 'Online Users';
  * Validation
  * ************************************************************ */
 $langTheField = 'The field';
+$langTheFieldIsRequired = 'The field is required.';
+$langDefaultThemeSettings = 'Default Theme Settings';
+$langThemeSettingsDelete = 'Are you sure you want to delete this theme settings group?';
+$langGeneralSettings = 'General Settings';
+$langBgColor = 'Background Color';
+$langImgUrl = 'Background Image URL';
+$langRepeatedImg = 'Repeated Image';
+$langStretchedImg = 'Stretched Image';
+$langNavSettings = 'Navigation Settings';
 $langFormErrors = 'Form contains errors. Please correct and resubmit form.';
 /* * ***********************************************************
  * Other

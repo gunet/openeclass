@@ -45,7 +45,7 @@ if (isset($_POST['optionsSave'])) {
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $_POST['active_theme_options'], 'theme_options_id');
     redirect_to_home_page('modules/admin/theme_options.php');     
 } else {
-    $nameTools = 'Theme Options';
+    $nameTools = $langThemeSettings;
     $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
     load_js('bootstrap-colorpicker');
     $head_content .= "
@@ -55,7 +55,7 @@ if (isset($_POST['optionsSave'])) {
             {
                 e.preventDefault();
                 bootbox.dialog({
-                    title: 'Αποθήκευση ως ...',
+                    title: '$langSaveAs',
                     message: '<div class=\"row\">'+
                                 '<div class=\"col-sm-12\">'+
                                     '<form class=\"form-horizontal\" role=\"form\">'+
@@ -80,7 +80,7 @@ if (isset($_POST['optionsSave'])) {
                                     $('#theme_options_form').append($(input)).submit();
                                 } else {
                                     $('#themeOptionsName').closest('.form-group').addClass('has-error');
-                                    $('#themeOptionsName').after('<span class=\"help-block\">Το πεδίο είναι απαραίτητο</span>');
+                                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
                                     return false;
                                 }
                             }
@@ -102,7 +102,7 @@ if (isset($_POST['optionsSave'])) {
         });
     </script>";
     $all_themes = Database::get()->queryArray("SELECT * FROM theme_options");
-    $themes_arr[0] = "---- Default Theme Options ----";
+    $themes_arr[0] = "---- $langDefaultThemeSettings ----";
     foreach ($all_themes as $row) {
         $themes_arr[$row->id] = $row->name;
     }
@@ -112,10 +112,10 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles = unserialize($theme_options->styles);
     } else {
         $theme_options_styles['leftNavBgColor'] = $theme_options_styles['bgColor'] = '#232C3A';
-        $theme_options_styles['leftNavFontColor'] = '#ADADAD';
-        $theme_options_styles['leftNavHoverBgColor'] = $theme_options_styles['leftNavMainCatSelectedFontColor'] = $theme_options_styles['leftNavMainCatHoverFontColor'] = "#4da1e4";
-        $theme_options_styles['leftNavHoverFontColor'] = "#eee";
-        $theme_options_styles['leftNavHoverBgColor'] = "rgba(0, 0, 0, 0.2)";
+        $theme_options_styles['leftMenuFontColor'] = $theme_options_styles['leftSubMenuFontColor'] = '#ADADAD';
+        $theme_options_styles['leftSubMenuHoverBgColor'] = $theme_options_styles['leftMenuSelectedFontColor'] = $theme_options_styles['leftMenuHoverFontColor'] = "#4da1e4";
+        $theme_options_styles['leftSubMenuHoverFontColor'] = "#eee";
+        $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
     }
     $delete_btn = (get_config('theme_options_id')) 
             ? 
@@ -123,7 +123,7 @@ if (isset($_POST['optionsSave'])) {
                 <div class='form-group'>
                     <div class='col-sm-9 col-sm-offset-3'>
                         <input type='hidden' name='delThemeId' value='".get_config('theme_options_id')."'>
-                        <a class='confirmAction btn btn-danger btn-xs' data-title='Επιβεβαίωση διαγραφής' data-message='Επιβεβαίωση διαγραφής θεματικών επιλογών' data-cancel-txt='Ακύρωση' data-action-txt='Διαγραφή' data-action-class='btn-danger'>$langDelete</a>
+                        <a class='confirmAction btn btn-danger btn-xs' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
                     </div>
                 </div>
             </form>"
@@ -132,7 +132,7 @@ if (isset($_POST['optionsSave'])) {
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
             <div class='form-group'>
-                <label for='bgColor' class='col-sm-3 control-label'>Active Theme Options:</label>
+                <label for='bgColor' class='col-sm-3 control-label'>$langActiveThemeSettings:</label>
                 <div class='col-sm-9'>
                     ".  selection($themes_arr, 'active_theme_options', get_config('theme_options_id'), 'class="form-control form-submit"')."
                 </div>
@@ -142,15 +142,15 @@ if (isset($_POST['optionsSave'])) {
     </div>
     <div class='form-wrapper'>
         <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-            <h3>General Options</h3>
+            <h3>$langGeneralSettings</h3>
             <div class='form-group'>
-              <label for='bgColor' class='col-sm-3 control-label'>Background Color :</label>
+              <label for='bgColor' class='col-sm-3 control-label'>$langBgColor:</label>
               <div class='col-sm-9'>
                 <input name='bgColor' type='text' class='form-control colorpicker' id='bgColor' value='$theme_options_styles[bgColor]'>
               </div>
             </div>
             <div class='form-group'>
-              <label for='bgImage' class='col-sm-3 control-label'>Background Image URL:</label>
+              <label for='bgImage' class='col-sm-3 control-label'>$langImgUrl:</label>
               <div class='col-sm-9'>
                 <input name='bgImage' type='text' class='form-control' id='bgImage' value='$theme_options_styles[bgImage]'>
               </div>
@@ -158,59 +158,65 @@ if (isset($_POST['optionsSave'])) {
                     <div class='radio'>
                       <label>
                         <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
-                        Repeated Image &nbsp; 
+                        $langRepeatedImg &nbsp; 
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
-                        Stretched Image &nbsp;
+                        $langStretchedImg &nbsp;
                       </label>
                     </div>              
               </div>
             </div>
             <hr>
-            <h3>Left Navigation Options</h3>            
+            <h3>$langNavSettings</h3>            
             <div class='form-group'>
-              <label for='leftNavBgColor' class='col-sm-3 control-label'>Background Color:</label>
+              <label for='leftNavBgColor' class='col-sm-3 control-label'>$langBgColor:</label>
               <div class='col-sm-9'>
                 <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
               </div>
             </div>
             <div class='form-group'>
-              <label for='leftNavFontColor' class='col-sm-3 control-label'>Font Color:</label>
+              <label for='leftSubMenuFontColor' class='col-sm-3 control-label'>Submenu Font Color:</label>
               <div class='col-sm-9'>
-                <input name='leftNavFontColor' type='text' class='form-control colorpicker' id='leftNavFontColor' value='$theme_options_styles[leftNavFontColor]'>
+                <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
               </div>
             </div>
             <div class='form-group'>
-              <label for='leftNavHoverBgColor' class='col-sm-3 control-label'>Hover Background Color:</label>
+              <label for='leftSubMenuHoverBgColor' class='col-sm-3 control-label'>Submenu Hover Background Color:</label>
               <div class='col-sm-9'>
-                <input name='leftNavHoverBgColor' type='text' class='form-control colorpicker' id='leftNavHoverBgColor' value='$theme_options_styles[leftNavHoverBgColor]'>
+                <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
               </div>
             </div>
             <div class='form-group'>
-              <label for='leftNavHoverFontColor' class='col-sm-3 control-label'>Font Hover Color:</label>
+              <label for='leftSubMenuHoverFontColor' class='col-sm-3 control-label'>Submenu Font Hover Color:</label>
               <div class='col-sm-9'>
-                <input name='leftNavHoverFontColor' type='text' class='form-control colorpicker' id='leftNavHoverFontColor' value='$theme_options_styles[leftNavHoverFontColor]'>
+                <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
               </div>
             </div>
             <div class='form-group'>
-              <label for='leftNavMainCatBgColor' class='col-sm-3 control-label'>Main Category Background Color:</label>
+              <label for='leftMenuFontColor' class='col-sm-3 control-label'>Menu Font Color:</label>
               <div class='col-sm-9'>
-                <input name='leftNavMainCatBgColor' type='text' class='form-control colorpicker' id='leftNavMainCatBgColor' value='$theme_options_styles[leftNavMainCatBgColor]'>
+                <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
+              </div>
+            </div>                     
+            <div class='form-group'>
+              <label for='leftMenuBgColor' class='col-sm-3 control-label'>Menu Background Color:</label>
+              <div class='col-sm-9'>
+                <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
               </div>
             </div>            
             <div class='form-group'>
-              <label for='leftNavMainCatHoverFontColor' class='col-sm-3 control-label'>Main Category Font Hover Color:</label>
+              <label for='leftMenuHoverFontColor' class='col-sm-3 control-label'>Menu Font Hover Color:</label>
               <div class='col-sm-9'>
-                <input name='leftNavMainCatHoverFontColor' type='text' class='form-control colorpicker' id='leftNavMainCatHoverFontColor' value='$theme_options_styles[leftNavMainCatHoverFontColor]'>
+                <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
               </div>
             </div>
             <div class='form-group'>
-              <label for='leftNavMainCatSelectedFontColor' class='col-sm-3 control-label'>Main Category Font Selected Color:</label>
+              <label for='leftMenuSelectedFontColor' class='col-sm-3 control-label'>Menu Font Selected Color:</label>
               <div class='col-sm-9'>
-                <input name='leftNavMainCatSelectedFontColor' type='text' class='form-control colorpicker' id='leftNavMainCatSelectedFontColor' value='$theme_options_styles[leftNavMainCatSelectedFontColor]'>
+                <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
               </div>
             </div>              
             <div class='form-group'>
