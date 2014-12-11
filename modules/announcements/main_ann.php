@@ -30,21 +30,18 @@ $nameTools = $langAnnouncements;
 $isaid = isset($_GET['aid']);
 $announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = ?d" :
                 "SELECT `date`, `title` , `body` FROM `admin_announcement`
-	        WHERE `visible` = 1 AND lang= ?s ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
+	        WHERE `visible` = 1 AND lang = ?s ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
 
 $numOfAnnouncements = count($announceArr);
 if ($numOfAnnouncements > 0) {
-    $tool_content .= "<table width='100%' class='sortable'>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'>";
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
-        $tool_content .= "<tr><td>
-		<img src='$themeimg/arrow.png' alt='' /></td>
-		<td><b>" . q($announceArr[$i]->title) . "</b>
+        $tool_content .= "<tr><td><label>" . q($announceArr[$i]->title) . "</label>
 		&nbsp;<span class='smaller'>(" . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . ")</span>
-		<p>
-		" . standard_text_escape($announceArr[$i]->body) . "<br /></p>
+		<p>" . standard_text_escape($announceArr[$i]->body) . "</p>
 		</td>
 		</tr>";
     }
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 }
 draw($tool_content, 0);
