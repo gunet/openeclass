@@ -3248,6 +3248,7 @@ $langShare = "Share it";
 $langSharingDisAdmin = "Social sharing is globally disabled by the platform's administrator.";
 $langSharingDisCourse = "Social sharing is disabled for non-open courses.";
 $langEnableSocialSharingLiks = "Enable social sharing links";
+$langThemeSettings = 'Theme Settings';
 $langCMeta['course_instructor_moreInformation'] = "More about instructor";
 $langCMeta['course_subthematic'] = "Thematic scientific sub-area";
 $langCMeta['asfa'] = "Athens School of Fine Arts";

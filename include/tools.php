@@ -531,6 +531,9 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langBBBConfig']);
         array_push($sideMenuLink, "../admin/bbbmoduleconf.php");
         array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langThemeSettings']);
+        array_push($sideMenuLink, "../admin/theme_options.php");        
+        array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langStat']);
         array_push($sideMenuLink, "../admin/stateclass.php");
         array_push($sideMenuImg, "arrow.png");
