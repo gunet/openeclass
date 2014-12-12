@@ -464,6 +464,16 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (!empty($theme_options_styles['leftMenuBgColor'])) $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
         if (!empty($theme_options_styles['leftMenuHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
         if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
+        if (isset($theme_options_styles['custom_logo'])) { 
+            $t->set_var('logo_img', $theme_options_styles['custom_logo']); 
+        } else { 
+            $t->set_var('logo_img', 'eclass-new-logo.png');
+        };
+        if (isset($theme_options_styles['custom_logo_small'])) { 
+            $t->set_var('logo_img_small', $theme_options_styles['custom_logo_small']); 
+        } else { 
+            $t->set_var('logo_img_small', 'eclass-new-logo-small.png');
+        };        
         $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");        
     }
 
