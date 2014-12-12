@@ -116,6 +116,7 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles['leftSubMenuHoverBgColor'] = $theme_options_styles['leftMenuSelectedFontColor'] = $theme_options_styles['leftMenuHoverFontColor'] = "#4da1e4";
         $theme_options_styles['leftSubMenuHoverFontColor'] = "#eee";
         $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
+        $theme_options_styles['bgType'] = 'repeat';
     }
     $delete_btn = (get_config('theme_options_id')) 
             ? 
