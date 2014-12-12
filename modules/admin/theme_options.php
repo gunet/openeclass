@@ -26,10 +26,10 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-if (isset($_GET['delete_logo'])) {
+if (isset($_GET['delete_image'])) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
         $theme_options_styles = unserialize($theme_options->styles);
-        $logo_type = $_GET['delete_logo'];
+        $logo_type = $_GET['delete_image'];
         unlink("$webDir/template/$theme/img/$theme_options_styles[$logo_type]");
         unset($theme_options_styles[$logo_type]);
         $serialized_data = serialize($theme_options_styles);
@@ -48,7 +48,13 @@ if (isset($_POST['optionsSave'])) {
         validateUploadedFile($file_name, 2);
         move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
         $_POST['custom_logo_small'] = $file_name;
-    }      
+    }
+    if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
+        $file_name = $_FILES['bgImage']['name'];
+        validateUploadedFile($file_name, 2);
+        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['bgImage'] = $file_name;
+    }          
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
     redirect_to_home_page('modules/admin/theme_options.php');
@@ -70,7 +76,13 @@ if (isset($_POST['optionsSave'])) {
         validateUploadedFile($file_name2, 2);
         move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
         $_POST['custom_logo_small'] = $file_name;
-    }         
+    }
+    if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
+        $file_name = $_FILES['bgImage']['name'];
+        validateUploadedFile($file_name, 2);
+        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['bgImage'] = $file_name;
+    }      
     $serialized_data = serialize($_POST);
     $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options_name, $serialized_data)->lastInsertID;
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $theme_options_id, 'theme_options_id');
@@ -165,7 +177,7 @@ if (isset($_POST['optionsSave'])) {
             : "";
     if (isset($theme_options_styles['custom_logo'])) {
         $logo_field = "
-            <img src='$themeimg/$theme_options_styles[custom_logo]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_logo=custom_logo'>$langDelete</a>
+            <img src='$themeimg/$theme_options_styles[custom_logo]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=custom_logo'>$langDelete</a>
             <input type='hidden' name='custom_logo' value='$theme_options_styles[custom_logo]'>
         ";
     } else {
@@ -173,12 +185,20 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['custom_logo_small'])) {
         $small_logo_field = "
-            <img src='$themeimg/$theme_options_styles[custom_logo_small]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_logo=custom_logo_small'>$langDelete</a>
+            <img src='$themeimg/$theme_options_styles[custom_logo_small]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=custom_logo_small'>$langDelete</a>
             <input type='hidden' name='custom_logo_small' value='$theme_options_styles[custom_logo_small]'>
         ";
     } else {
        $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall'>"; 
-    }    
+    }
+    if (isset($theme_options_styles['bgImage'])) {
+        $bg_field = "
+            <img src='$themeimg/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
+            <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
+        ";
+    } else {
+       $bg_field = "<input type='file' name='bgImage' id='bgImage'>"; 
+    }      
     @$tool_content .= "
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
@@ -201,7 +221,7 @@ if (isset($_POST['optionsSave'])) {
                 </div>
             </div>
             <div class='form-group'>
-                <label for='imageUpload' class='col-sm-3 control-label'>Λογότυπο <small>(Για μικρές οθόνες)</small>:</label>
+                <label for='imageUploadSmall' class='col-sm-3 control-label'>Λογότυπο <small>(Για μικρές οθόνες)</small>:</label>
                 <div class='col-sm-9'>
                    $small_logo_field
                 </div>
@@ -213,25 +233,25 @@ if (isset($_POST['optionsSave'])) {
               </div>
             </div>
             <div class='form-group'>
-              <label for='bgImage' class='col-sm-3 control-label'>$langImgUrl:</label>
-              <div class='col-sm-9'>
-                <input name='bgImage' type='text' class='form-control' id='bgImage' value='$theme_options_styles[bgImage]'>
-              </div>
-              <div class='form-inline col-sm-9 col-sm-offset-3'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
-                        $langRepeatedImg &nbsp; 
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
-                        $langStretchedImg &nbsp;
-                      </label>
-                    </div>              
-              </div>
-            </div>
+                <label for='imageBg' class='col-sm-3 control-label'>Εικόνα Φόντου:</small>:</label>
+                <div class='col-sm-9'>
+                   $bg_field
+                </div>
+                <div class='form-inline col-sm-9 col-sm-offset-3'>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='bgType' value='repeat' ".(($theme_options_styles['bgType'] == 'repeat')? 'checked' : '').">
+                          $langRepeatedImg &nbsp; 
+                        </label>
+                      </div>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
+                          $langStretchedImg &nbsp;
+                        </label>
+                      </div>              
+                </div>                
+            </div>              
             <hr>
             <h3>$langNavSettings</h3>            
             <div class='form-group'>
