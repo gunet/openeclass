@@ -308,7 +308,7 @@ $tool_content .= "<div class='form-group'>
                     </div>                    
                 </div>
                 <div class='form-group'>
-                    <label for='email' class='col-sm-2 control-label'>$langAm:</label>
+                    <label for='am_form' class='col-sm-2 control-label'>$langAm:</label>
                     <div class='col-sm-5'>
                         <input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>
                     </div>
