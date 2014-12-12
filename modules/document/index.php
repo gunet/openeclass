@@ -103,7 +103,7 @@ if (isset($_GET['download'])) {
         $format = '.dir';
         $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $public_code);
     } else {
-        $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path FROM document
+        $q = Database::get()->querySingle("SELECT filename, format, visible, extra_path, public FROM document
                         WHERE $group_sql AND
                         path = ?s", $downloadDir);
         if (!$q) {
@@ -113,7 +113,8 @@ if (isset($_GET['download'])) {
         $format = $q->format;
         $visible = $q->visible;
         $extra_path = $q->extra_path;
-        if (!$visible) {
+        $public = $q->public;
+        if (!(resource_access($visible, $public) or (isset($status) and $status == USER_TEACHER))) {        
             not_found($downloadDir);
         }
     }

@@ -389,19 +389,19 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
     $encoded_filenames = $decoded_filenames = $filename = array();
 
     $hidden_dirs = array();    
-    $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path FROM document
+    $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path, public FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
     foreach ($sql as $files) {
-        if ($cpath = common_doc_path($files->extra_path, true)) {
-            if ($GLOBALS['common_doc_visible'] and ( $include_invisible or $files->visible == 1)) {
+        if ($cpath = common_doc_path($files->extra_path, true)) {            
+            if ($GLOBALS['common_doc_visible'] and ($include_invisible or $files->visible == 1)) {
                 $GLOBALS['common_docs'][$files->path] = $cpath;
             }
         }
-        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or $files->visible == 1);
+        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));        
         array_push($encoded_filenames, $files->path);
         array_push($filename, $files->filename);
-        if (!$include_invisible and $files->format == '.dir' and $files->visible != 1) {
+        if (!$include_invisible and $files->format == '.dir' and !resource_access($files->visible, $files->public)) {
             $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
             // Don't need to check lower-level hidden dir if parent is there
             if (array_search($parentdir, $hidden_dirs) === false) {
