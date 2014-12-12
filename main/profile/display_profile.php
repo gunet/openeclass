@@ -59,31 +59,45 @@ if ($userdata) {
         $allow_password_change = false;
     } else {
         $allow_password_change = true;
-    }    
+    }
     if ($uid == $id) {
         $passurl = $urlSecure . 'main/profile/password.php';
         $tool_content .= 
-                action_bar(array(
-                    array('title' => $langModifyProfile,
-                        'url' => "profile.php",
-                        'icon' => 'fa-edit',
-                        'level' => 'primary'),
-                    array('title' => $langChangePass,
-                        'url' => $passurl,
-                        'icon' => 'fa-key',
-                        'show' => $allow_password_change,
-                        'level' => 'primary'),
-                    array('title' => $langEmailUnsubscribe,
-                        'url' => "emailunsubscribe.php",
-                        'icon' => 'fa-envelope',
-                        'level' => 'primary'),
-                    array('title' => $langUnregUser,
-                        'url' => "../unreguser.php",
-                        'icon' => 'fa-times',
-                        'level' => 'primary')
-                    ));    
-    } 
-    $tool_content .= "
+            action_bar(array(
+                array('title' => $langEditProfile,
+                    'url' => "profile.php",
+                    'icon' => 'fa-edit',
+                    'level' => 'primary-label'),
+                array('title' => $langChangePass,
+                    'url' => $passurl,
+                    'icon' => 'fa-key',
+                    'show' => $allow_password_change,
+                    'level' => 'primary'),
+                array('title' => $langEmailUnsubscribe,
+                    'url' => "emailunsubscribe.php",
+                    'icon' => 'fa-envelope',
+                    'level' => 'primary'),
+                array('title' => $langUnregUser,
+                    'url' => "../unreguser.php",
+                    'icon' => 'fa-times',
+                    'level' => 'primary')
+                ));    
+    }else{
+        $tool_content .= 
+            action_bar(array(
+                array('title' => $langProfileSendMail,
+                    'url' => "profile.php",
+                    'icon' => 'fa-envelope',
+                    'level' => 'primary-label')
+                ));
+    }
+    /*if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
+        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}
+    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
+        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langPhone :</span> <span class='tag-value'>" . q($userdata->phone) . "</span></div>";}
+    if (!empty($userdata->am) and allow_access($userdata->am_public)) { // Register Number
+        $tool_content .= "<div class='profile-pers-info-data'><span class='tag'>$langAm :</span> <span class='tag-value'>" . q($userdata->am) . "</span></div>";}
+    *//*$tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
             <div class='row'>
@@ -93,11 +107,35 @@ if ($userdata) {
                 <div class='col-xs-12 col-sm-10 profile-pers-info'>
                     <div class='profile-pers-info-name'>" . q("$userdata->givenname $userdata->surname") . "</div>"; // Name & Surname
                     if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
-                        $tool_content .= "<div class='profile-pers-info'>$langEmail : " . mailto($userdata->email) . "</div>";}
+                        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}
                     if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
-                        $tool_content .= "<div class='profile-pers-info'>$langPhone : " . q($userdata->phone) . "</div>";}
+                        $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langPhone :</span> <span class='tag-value'>" . q($userdata->phone) . "</span></div>";}
                     if (!empty($userdata->am) and allow_access($userdata->am_public)) { // Register Number
-                        $tool_content .= "<div class='profile-pers-info-data'>$langAm : " . q($userdata->am) . "</div>";}
+                        $tool_content .= "<div class='profile-pers-info-data'><span class='tag'>$langAm :</span> <span class='tag-value'>" . q($userdata->am) . "</span></div>";}
+    */$tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+            <div class='row'>
+                <div class='col-xs-12 col-sm-2'>
+                    <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
+                </div>
+                <div class='col-xs-12 col-sm-10 profile-pers-info'>
+                    <div class='profile-pers-info-name'>" . q("$userdata->givenname $userdata->surname") . "</div>"; // Name & Surname
+                    $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span>";
+                    if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
+                        $tool_content .= " <span class='tag-value'>" . mailto($userdata->email) . "</span>";}
+                    else{$tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";}
+                    $tool_content .= "</div>";
+                    $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langPhone :</span>";
+                    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
+                        $tool_content .= " <span class='tag-value'>" . q($userdata->phone) . "</span>";}
+                    else{$tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";}
+                    $tool_content .= "</div>";
+                    $tool_content .= "<div class='profile-pers-info-data'><span class='tag'>$langAm :</span>";
+                    if (!empty($userdata->am) and allow_access($userdata->am_public)) { // Register Number
+                        $tool_content .= " <span class='tag-value'>" . q($userdata->am) . "</span>";}
+                    else{$tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";}
+                        $tool_content .= "</div>";
     $tool_content .= "</div>
             </div>";
             $tool_content .= "
