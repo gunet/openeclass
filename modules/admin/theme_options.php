@@ -40,19 +40,25 @@ if (isset($_POST['optionsSave'])) {
     if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
         $file_name = $_FILES['imageUpload']['name'];
         validateUploadedFile($file_name, 2);
-        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        if (!is_file("$webDir/template/$theme/img/$file_name")) {
+            move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        }
         $_POST['custom_logo'] = $file_name;
     }
     if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
         $file_name = $_FILES['imageUploadSmall']['name'];
         validateUploadedFile($file_name, 2);
-        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        if (!is_file("$webDir/template/$theme/img/$file_name")) {
+            move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        }
         $_POST['custom_logo_small'] = $file_name;
     }
     if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
         $file_name = $_FILES['bgImage']['name'];
         validateUploadedFile($file_name, 2);
-        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        if (!is_file("$webDir/template/$theme/img/$file_name")) {
+            move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        }
         $_POST['bgImage'] = $file_name;
     }          
     $serialized_data = serialize($_POST);
@@ -68,21 +74,27 @@ if (isset($_POST['optionsSave'])) {
     if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
         $file_name = $_FILES['imageUpload']['name'];
         validateUploadedFile($file_name, 2);
-        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        if (!is_file("$webDir/template/$theme/img/$file_name")) {
+            move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        }
         $_POST['custom_logo'] = $file_name;
     }
     if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
         $file_name = $_FILES['imageUploadSmall']['name'];
-        validateUploadedFile($file_name2, 2);
-        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        validateUploadedFile($file_name, 2);
+        if (!is_file("$webDir/template/$theme/img/$file_name")) {
+            move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        }
         $_POST['custom_logo_small'] = $file_name;
     }
     if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
         $file_name = $_FILES['bgImage']['name'];
         validateUploadedFile($file_name, 2);
-        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        if (!is_file("$webDir/template/$theme/img/$file_name")) {
+            move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        }
         $_POST['bgImage'] = $file_name;
-    }      
+    }    
     $serialized_data = serialize($_POST);
     $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options_name, $serialized_data)->lastInsertID;
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $theme_options_id, 'theme_options_id');
