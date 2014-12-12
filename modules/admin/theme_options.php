@@ -40,31 +40,49 @@ if (isset($_POST['optionsSave'])) {
     if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
         $file_name = $_FILES['imageUpload']['name'];
         validateUploadedFile($file_name, 2);
-        if (!is_file("$webDir/template/$theme/img/$file_name")) {
-            move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $i=0;
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
         }
+        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
         $_POST['custom_logo'] = $file_name;
     }
     if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
         $file_name = $_FILES['imageUploadSmall']['name'];
         validateUploadedFile($file_name, 2);
-        if (!is_file("$webDir/template/$theme/img/$file_name")) {
-            move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
         }
+        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");       
         $_POST['custom_logo_small'] = $file_name;
     }
     if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
         $file_name = $_FILES['bgImage']['name'];
         validateUploadedFile($file_name, 2);
-        if (!is_file("$webDir/template/$theme/img/$file_name")) {
-            move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
         }
+        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
         $_POST['bgImage'] = $file_name;
     }          
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['delThemeId'])) {
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
+    $theme_options_styles = unserialize($theme_options->styles);
+    @unlink("$webDir/template/$theme/img/$theme_options_styles[custom_logo]");
+    @unlink("$webDir/template/$theme/img/$theme_options_styles[custom_logo_small]");
+    @unlink("$webDir/template/$theme/img/$theme_options_styles[bgImage]");
     Database::get()->query("DELETE FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", 0, 'theme_options_id');
     redirect_to_home_page('modules/admin/theme_options.php');
@@ -74,27 +92,40 @@ if (isset($_POST['optionsSave'])) {
     if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
         $file_name = $_FILES['imageUpload']['name'];
         validateUploadedFile($file_name, 2);
-        if (!is_file("$webDir/template/$theme/img/$file_name")) {
-            move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $i=0;
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
         }
+        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
         $_POST['custom_logo'] = $file_name;
     }
     if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
         $file_name = $_FILES['imageUploadSmall']['name'];
         validateUploadedFile($file_name, 2);
-        if (!is_file("$webDir/template/$theme/img/$file_name")) {
-            move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
         }
+        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");       
         $_POST['custom_logo_small'] = $file_name;
     }
     if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
         $file_name = $_FILES['bgImage']['name'];
         validateUploadedFile($file_name, 2);
-        if (!is_file("$webDir/template/$theme/img/$file_name")) {
-            move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
         }
+        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
         $_POST['bgImage'] = $file_name;
-    }    
+    }  
     $serialized_data = serialize($_POST);
     $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options_name, $serialized_data)->lastInsertID;
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $theme_options_id, 'theme_options_id');
