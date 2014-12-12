@@ -2661,6 +2661,9 @@ $langProfileInfoPrivate = 'ιδιωτικό';
 $langProfileInfoProfs = "εμφάνιση στους $langsTeachers";
 $langProfileInfoUsers = 'εμφάνιση σε όλους';
 $langEmailSettings = 'Ρυθμίσεις ηλεκτρονικού ταχυδρομείου';
+$langEditProfile = 'Επεξεργασία';
+$langProfileSendMail = 'Αποστολή πρωσοπικού μηνύματος';
+$langProfileNotAvailable = 'Μη διαθέσιμο';
 
 // user.php
 $langCompulsory = "(υποχρεωτικό)";
