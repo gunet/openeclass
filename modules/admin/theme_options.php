@@ -38,16 +38,16 @@ if (isset($_GET['delete_logo'])) {
 }
 if (isset($_POST['optionsSave'])) {
     if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-        validateUploadedFile($_FILES['imageUpload']['name'], 2);
-        $ext = get_file_extension($_FILES['imageUpload']['name']);
-        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/custom_logo.$ext");
-        $_POST['custom_logo'] = "custom_logo.$ext";
+        $file_name = $_FILES['imageUpload']['name'];
+        validateUploadedFile($file_name, 2);
+        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['custom_logo'] = $file_name;
     }
     if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
-        validateUploadedFile($_FILES['imageUploadSmall']['name'], 2);
-        $ext2 = get_file_extension($_FILES['imageUploadSmall']['name']);
-        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/custom_logo_small.$ext2");
-        $_POST['custom_logo_small'] = "custom_logo_small.$ext2";
+        $file_name = $_FILES['imageUploadSmall']['name'];
+        validateUploadedFile($file_name, 2);
+        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['custom_logo_small'] = $file_name;
     }      
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
@@ -60,17 +60,17 @@ if (isset($_POST['optionsSave'])) {
     $theme_options_name = $_POST['themeOptionsName'];
     unset($_POST['themeOptionsName']);
     if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-        validateUploadedFile($_FILES['imageUpload']['name'], 2);
-        $ext = get_file_extension($_FILES['imageUpload']['name']);
-        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/custom_logo.$ext");
-        $_POST['custom_logo'] = "custom_logo.$ext";
+        $file_name = $_FILES['imageUpload']['name'];
+        validateUploadedFile($file_name, 2);
+        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['custom_logo'] = $file_name;
     }
     if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
-        validateUploadedFile($_FILES['imageUploadSmall']['name'], 2);
-        $ext2 = get_file_extension($_FILES['imageUploadSmall']['name']);
-        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/custom_logo_small.$ext2");
-        $_POST['custom_logo_small'] = "custom_logo_small.$ext2";
-    }       
+        $file_name = $_FILES['imageUploadSmall']['name'];
+        validateUploadedFile($file_name2, 2);
+        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['custom_logo_small'] = $file_name;
+    }         
     $serialized_data = serialize($_POST);
     $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options_name, $serialized_data)->lastInsertID;
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $theme_options_id, 'theme_options_id');
