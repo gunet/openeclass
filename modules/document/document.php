@@ -200,7 +200,7 @@ if (isset($_GET['download'])) {
                         not_found($downloadDir);
                 }
                 list($real_filename, $format, $visibility, $extra_path, $public) = mysql_fetch_row($q);
-                if ((isset($statut) and $statut != 1) or !resource_access($visibility === 'v', $public)) {
+                if (!(resource_access($visibility === 'v', $public) or (isset($statut) and $statut == 1))) {
                         not_found($downloadDir);
                 }
         }
