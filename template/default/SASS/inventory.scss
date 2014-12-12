@@ -1623,20 +1623,20 @@ ul.expandable{
 }
 
 /* Datatables ---------------------------------------------------------*/
-    .not_visible{
+.not_visible{
+    color: rgba(3,3,3,0.3);
+    font-style: italic;        
+}
+tr.not_visible{
+    td:not(:last-child){
         color: rgba(3,3,3,0.3);
-        font-style: italic;        
-    }
-    tr.not_visible{
-        td:not(:last-child){
+        font-style: italic;
+        a{
             color: rgba(3,3,3,0.3);
             font-style: italic;
-            a{
-                color: rgba(3,3,3,0.3);
-                font-style: italic;
-            }
         }
     }
+}
 
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
 
@@ -1748,9 +1748,6 @@ table#portfolio-lessons tr
     color: #a7a7a7;
     cursor: pointer;
 }
-#profile-avatar{
-    width: 150px;
-}
 .panel-footer .event-legend > div{
     margin-bottom: 5px;
 }
@@ -1776,19 +1773,16 @@ table.dataTable tbody td.right-cell{
     padding-bottom: 0px;
     width: 40px;
 }
-.profile-pers-info div{
-    padding: 2px 20px;
-}
 div.profile-pers-info-name{
     font-size: 16px;
     font-weight: bold;
     padding-bottom: 15px;
     padding-top: 10px;
 }
-div.profile-pers-info-data{
-    
+div#profile-about-me{
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
-
 #calendar_wrapper{
     margin-bottom: 25px;
 

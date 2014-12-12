@@ -2664,6 +2664,11 @@ $langEmailSettings = 'Ρυθμίσεις ηλεκτρονικού ταχυδρο
 $langEditProfile = 'Επεξεργασία';
 $langProfileSendMail = 'Αποστολή πρωσοπικού μηνύματος';
 $langProfileNotAvailable = 'Μη διαθέσιμο';
+$langProfilePersInfo = 'Προσωπικά Στοιχεία';
+$langProfileAboutMe = 'Σχετικά με μένα';
+$langProfileStats = 'Στατιστικά';
+$langStatus = "Ιδιότητα";
+$langProfileMemberSince = 'Μέλος απο';
 
 // user.php
 $langCompulsory = "(υποχρεωτικό)";
