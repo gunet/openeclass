@@ -444,21 +444,22 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
         $encoded_filenames = $decoded_filenames = $filename = array();
 
         $hidden_dirs = array();
-        $sql = db_query("SELECT path, filename, visibility, format, extra_path FROM document
+        $sql = db_query("SELECT path, filename, visibility, format, extra_path, public FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
         while ($files = mysql_fetch_assoc($sql)) {
                 if ($cpath = common_doc_path($files['extra_path'], true)) {
                         if ($GLOBALS['common_doc_visible'] and
-                            ($include_invisible or $files['visibility'] == 'v')) {
+                            ($include_invisible or $files['visibility'] === 'v')) {
                                 $GLOBALS['common_docs'][$files['path']] = $cpath;
                         }
                 }
                 $GLOBALS['path_visibility'][$files['path']] =
-                        ($include_invisible or $files['visibility'] == 'v');
+                        ($include_invisible or resource_access($files['visibility'] === 'v', $files['public']));
                 array_push($encoded_filenames, $files['path']);
                 array_push($filename, $files['filename']);
-                if (!$include_invisible and $files['format'] == '.dir' and $files['visibility'] != 'v') {
+                if (!$include_invisible and $files['format'] == '.dir' and
+                    !resource_access($files['visibility'] === 'v', $files['public'])) {
                         $parentdir = preg_replace('|/[^/]+$|', '', $files['path']);
                         // Don't need to check lower-level hidden dir if parent is there
                         if (array_search($parentdir, $hidden_dirs) === false) {

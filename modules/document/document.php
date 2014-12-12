@@ -189,19 +189,18 @@ if (isset($_GET['showQuota'])) {
 // ---------------------------
 if (isset($_GET['download'])) {
         $downloadDir = $_GET['download'];
-
         if ($downloadDir == '/') {
                 $format = '.dir';
                 $real_filename = remove_filename_unsafe_chars($langDoc . ' ' . $fake_code);
         } else {
-                $q = db_query("SELECT filename, format, visibility, extra_path FROM document
+                $q = db_query("SELECT filename, format, visibility, extra_path, public FROM document
                                       WHERE $group_sql AND
                                             path = " . autoquote($downloadDir));
                 if (!$q or mysql_num_rows($q) != 1) {
                         not_found($downloadDir);
                 }
-                list($real_filename, $format, $visibility, $extra_path) = mysql_fetch_row($q);
-                if (($visibility != 'v') and (isset($statut) and $statut != 1)) {
+                list($real_filename, $format, $visibility, $extra_path, $public) = mysql_fetch_row($q);
+                if ((isset($statut) and $statut != 1) or !resource_access($visibility === 'v', $public)) {
                         not_found($downloadDir);
                 }
         }
