@@ -585,6 +585,7 @@ $langInsert = "Εισαγωγή";
 $langInHour = "(σε ώρες)";
 $langEmptyAgendaTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του γεγονότος";
 $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
+$langListAll = "Λίστα όλων";
 $langAgendaDueDay = "Προθεσμία";
 $langAgendaCourseEvent = "Γεγ. μαθήματος";
 $langAgendaPersonalEvent = "Προσ. μήνυμα";
