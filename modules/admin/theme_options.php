@@ -258,13 +258,13 @@ if (isset($_POST['optionsSave'])) {
         <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
             <h3>$langGeneralSettings</h3>
             <div class='form-group'>
-                <label for='imageUpload' class='col-sm-3 control-label'>Λογότυπο <small>(Κανονικό)</small>:</label>
+                <label for='imageUpload' class='col-sm-3 control-label'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-9'>
                    $logo_field
                 </div>
             </div>
             <div class='form-group'>
-                <label for='imageUploadSmall' class='col-sm-3 control-label'>Λογότυπο <small>(Για μικρές οθόνες)</small>:</label>
+                <label for='imageUploadSmall' class='col-sm-3 control-label'>$langLogo <small>$langLogoSmall</small>:</label>
                 <div class='col-sm-9'>
                    $small_logo_field
                 </div>
@@ -276,7 +276,7 @@ if (isset($_POST['optionsSave'])) {
               </div>
             </div>
             <div class='form-group'>
-                <label for='imageBg' class='col-sm-3 control-label'>Εικόνα Φόντου:</small>:</label>
+                <label for='imageBg' class='col-sm-3 control-label'>$langBgImg:</label>
                 <div class='col-sm-9'>
                    $bg_field
                 </div>
@@ -304,47 +304,47 @@ if (isset($_POST['optionsSave'])) {
               </div>
             </div>
             <div class='form-group'>
-              <label for='leftSubMenuFontColor' class='col-sm-3 control-label'>Submenu Font Color:</label>
-              <div class='col-sm-9'>
-                <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
-              </div>
-            </div>
-            <div class='form-group'>
-              <label for='leftSubMenuHoverBgColor' class='col-sm-3 control-label'>Submenu Hover Background Color:</label>
-              <div class='col-sm-9'>
-                <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
-              </div>
-            </div>
-            <div class='form-group'>
-              <label for='leftSubMenuHoverFontColor' class='col-sm-3 control-label'>Submenu Font Hover Color:</label>
-              <div class='col-sm-9'>
-                <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
-              </div>
-            </div>
-            <div class='form-group'>
-              <label for='leftMenuFontColor' class='col-sm-3 control-label'>Menu Font Color:</label>
-              <div class='col-sm-9'>
-                <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
-              </div>
-            </div>                     
-            <div class='form-group'>
-              <label for='leftMenuBgColor' class='col-sm-3 control-label'>Menu Background Color:</label>
+              <label for='leftMenuBgColor' class='col-sm-3 control-label'>$langMainMenuBgColor:</label>
               <div class='col-sm-9'>
                 <input name='leftMenuBgColor' type='text' class='form-control colorpicker' id='leftMenuBgColor' value='$theme_options_styles[leftMenuBgColor]'>
               </div>
-            </div>            
+            </div>             
             <div class='form-group'>
-              <label for='leftMenuHoverFontColor' class='col-sm-3 control-label'>Menu Font Hover Color:</label>
+              <label for='leftMenuFontColor' class='col-sm-3 control-label'>$langMainMenuLinkColor:</label>
+              <div class='col-sm-9'>
+                <input name='leftMenuFontColor' type='text' class='form-control colorpicker' id='leftMenuFontColor' value='$theme_options_styles[leftMenuFontColor]'>
+              </div>
+            </div>
+            <div class='form-group'>
+              <label for='leftMenuHoverFontColor' class='col-sm-3 control-label'>$langMainMenuLinkHoverColor:</label>
               <div class='col-sm-9'>
                 <input name='leftMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftMenuHoverFontColor' value='$theme_options_styles[leftMenuHoverFontColor]'>
               </div>
             </div>
             <div class='form-group'>
-              <label for='leftMenuSelectedFontColor' class='col-sm-3 control-label'>Menu Font Selected Color:</label>
+              <label for='leftMenuSelectedFontColor' class='col-sm-3 control-label'>$langMainMenuActiveLinkColor:</label>
               <div class='col-sm-9'>
                 <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
               </div>
-            </div>              
+            </div>               
+            <div class='form-group'>
+              <label for='leftSubMenuFontColor' class='col-sm-3 control-label'>$langSubMenuLinkColor:</label>
+              <div class='col-sm-9'>
+                <input name='leftSubMenuFontColor' type='text' class='form-control colorpicker' id='leftSubMenuFontColor' value='$theme_options_styles[leftSubMenuFontColor]'>
+              </div>
+            </div>
+            <div class='form-group'>
+              <label for='leftSubMenuHoverFontColor' class='col-sm-3 control-label'>$langSubMenuLinkHoverColor:</label>
+              <div class='col-sm-9'>
+                <input name='leftSubMenuHoverFontColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverFontColor' value='$theme_options_styles[leftSubMenuHoverFontColor]'>
+              </div>
+            </div>                
+            <div class='form-group'>
+              <label for='leftSubMenuHoverBgColor' class='col-sm-3 control-label'>$langSubMenuLinkBgHoverColor:</label>
+              <div class='col-sm-9'>
+                <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
+              </div>
+            </div>                                  
             <div class='form-group'>
                 <div class='col-sm-9 col-sm-offset-3'>
                     ".(get_config('theme_options_id') ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
