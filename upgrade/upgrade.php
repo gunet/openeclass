@@ -849,7 +849,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    if (version_compare($oldversion, '3', '<')) {
+    if (version_compare($oldversion, '3.0', '<')) {
         // Check whether new tables already exist and delete them if empty, 
         // rename them otherwise
         $new_tables = array('cron_params', 'log', 'log_archive', 'forum',
