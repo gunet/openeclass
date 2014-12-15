@@ -849,7 +849,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    if (version_compare($oldversion, '3.0', '<')) {
+    if (version_compare($oldversion, '3', '<')) {
         // Check whether new tables already exist and delete them if empty, 
         // rename them otherwise
         $new_tables = array('cron_params', 'log', 'log_archive', 'forum',
@@ -878,9 +878,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                                         ('actions_expire_interval', 12),
                                         ('course_metadata', 0)");
-
-        set_config('theme', 'default');
-        set_config('theme_options_id', 0);
 
         if (!DBHelper::fieldExists('user_request', 'state')) {
             Database::get()->query("ALTER TABLE `user_request`
@@ -1385,11 +1382,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `assignment_id` int(11) NOT NULL,
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
-                                `id` int(11) NOT NULL AUTO_INCREMENT,
-                                `name` VARCHAR(300) NOT NULL,
-                                `styles` LONGTEXT NOT NULL,
-                                PRIMARY KEY (`id`)) $charset_spec");
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2342,7 +2334,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         convert_db_utf8($mysqlMainDb);
     }
 
-    if (version_compare($oldversion, '3.0', '<')) { // special procedure, must execute after course upgrades
+    if (version_compare($oldversion, '3', '<')) { // special procedure, must execute after course upgrades
         Database::get()->query("USE `$mysqlMainDb`");
 
         Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
@@ -2386,6 +2378,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `" . $table->$value . "` ENGINE = InnoDB");
         }
     }
+
+    // upgrade from 3.0 beta to 3.0 new-ui
+    if (version_compare($oldversion, '3.0', '<')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
+                                `id` int(11) NOT NULL AUTO_INCREMENT,
+                                `name` VARCHAR(300) NOT NULL,
+                                `styles` LONGTEXT NOT NULL,
+                                PRIMARY KEY (`id`)) $charset_spec");
+        set_config('theme', 'default');
+        set_config('theme_options_id', 0);
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
