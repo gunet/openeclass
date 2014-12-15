@@ -334,7 +334,7 @@ $tool_content .= "<script type='text/javascript'>" .
     var calendar = $("#bootstrapcalendar").calendar(
         {
             tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
-            events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php",
+            events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php?course='.$course_code.'",
             language: "el-GR",
             onAfterViewLoad: function(view) {
                         $(".calendar-header h4").text(this.getTitle());
