@@ -2801,7 +2801,7 @@ $langProfileMemberSince = 'Member since';
 $langProfileSendMail = 'Send private message';
 $langProfileNotAvailable = 'Not availabele';
 $langProfilePersInfo = 'Personal Info';
-$langProfileAboutMe == 'About Me';
+$langProfileAboutMe = 'About Me';
 $langProfileStats = 'Statistics';
 $langDisplayProfile = "Public Profile View";
 $langNotifyRegUser1 = "You have been registered to the course ";

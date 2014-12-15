@@ -229,8 +229,6 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         set_config('email_sender', $emailAdministrator);
         set_config('admin_name', $administratorName . ' ' . $administratorSurname);
         set_config('email_helpdesk', $emailhelpdesk);
-        set_config('theme', 'default');
-        set_config('theme_options_id', 0);
         if (isset($emailAnnounce) and $emailAnnounce) {
             set_config('email_announce', $emailAnnounce);
         }
@@ -880,6 +878,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("INSERT IGNORE INTO `config` (`key`, `value`) VALUES
                                         ('actions_expire_interval', 12),
                                         ('course_metadata', 0)");
+
+        set_config('theme', 'default');
+        set_config('theme_options_id', 0);
 
         if (!DBHelper::fieldExists('user_request', 'state')) {
             Database::get()->query("ALTER TABLE `user_request`
