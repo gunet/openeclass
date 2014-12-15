@@ -142,6 +142,19 @@ if ($uid AND !isset($_GET['logout'])) {
     }
    
     if (!get_config('dont_display_login_form')) {
+        $head_content .= "
+            <script>
+            $(function() {
+                $('#revealPass')
+                    .mousedown(function() {
+                        $('#pass').attr('type', 'text');
+                    })
+                    .mouseup(function() {
+                        $('#pass').attr('type', 'password');
+                    })
+            });            
+            </script>
+        ";
         $tool_content .= "
 
 
@@ -158,7 +171,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                 <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
                             </div>
                             <div class='form-group'>
-                                <input type='password' name='pass' placeholder='$langPass'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp&nbsp<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
                             </div>
                             <div class='login-settings row'>";
                                 /*<div class='checkbox pull-left'>
@@ -259,6 +272,5 @@ if ($uid AND !isset($_GET['logout'])) {
 
     }
 
-
-    draw($tool_content, 0, null, $rss_link);
+    draw($tool_content, 0, null, $rss_link.$head_content);
 }
