@@ -251,6 +251,7 @@ function profile_init()
                 if (confirm(lang.confirmDelete)) {
                         var delBtn = $(this).closest("div");
                         delBtn.find('span').remove();
+                        $("li#profile_menu_dropdown img").attr("src", "/openeclass/template/default/img/default_32.jpg");
                         $.post('profile.php', { delimage: true });
                 }
         });

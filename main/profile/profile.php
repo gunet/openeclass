@@ -38,6 +38,7 @@ check_guest();
 
 $tree = new Hierarchy();
 $userObj = new User();
+$image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
 
 load_js('jstree');
 load_js('tools.js');
@@ -92,7 +93,6 @@ if (isset($_POST['submit'])) {
         mkdir($webDir . '/courses/userimg/', 0775);
         touch($webDir."courses/userimg/index.php");
     }
-    $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
