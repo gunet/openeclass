@@ -95,20 +95,20 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > $topics_per_page) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    $tool_content .= "<table width='100%'><tr>";
-    $tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
+    $tool_content .= "<div class='table-responsive'><table class-'table-default' width='100%'><tr>";
+    $tool_content .= "<td width='50%' class='text-left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
     $current_page = $first_topic / $topics_per_page + 1; // current page
     for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
         if ($current_page == $x) {
-            $tool_content .= "$x";
+            $tool_content .= "$x&nbsp;";
         } else {
             $start = ($x - 1) * $topics_per_page;
-            $tool_content .= "<a href='$base_url&amp;start=$start'>$x</a>";
+            $tool_content .= "<a href='$base_url&amp;start=$start'>$x&nbsp;</a>";
         }
     }
     $tool_content .= "</span></strong></span></td>";
-    $tool_content .= "<td colspan='4' align='right'>";
+    $tool_content .= "<td colspan='4' class='text-right'>";
 
     $next = $first_topic + $topics_per_page;
     $prev = $first_topic - $topics_per_page;
@@ -124,7 +124,7 @@ if ($total_topics > $topics_per_page) { // navigation
     } elseif ($start - $topics_per_page < $total_topics) { // end
         $tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>";
     }
-    $tool_content .= "</td></tr></table>";
+    $tool_content .= "</td></tr></table></div>";
 }
 
 // delete topic
@@ -205,9 +205,9 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page", $forum_id);
 
 
-if (count($result) > 0) { // topics found
-    $tool_content .= "
-	<table width='100%' class='table-default'>
+if (count($result) > 0) { // topics found    
+    $tool_content .= "<div class='table-responsive'>
+	<table class='table-default'>
 	<tr>
 	  <th colspan='2'>&nbsp;$langSubject</th>
 	  <th width='70' class='text-center'>$langAnswers</th>
@@ -215,14 +215,8 @@ if (count($result) > 0) { // topics found
 	  <th width='80' class='text-center'>$langSeen</th>
 	  <th width='190' class='text-center'>$langLastMsg</th>
 	  <th width='80' class='text-center'>" . icon('fa-gears') . "</th>
-	</tr>";
-    $i = 0;
-    foreach ($result as $myrow) {
-        if ($i % 2 == 1) {
-            $tool_content .= "<tr class='odd'>";
-        } else {
-            $tool_content .= "<tr class='even'>";
-        }
+	</tr>";    
+    foreach ($result as $myrow) {        
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
         $last_post_datetime = $myrow->post_time;
@@ -232,26 +226,21 @@ if (count($result) > 0) { // topics found
         $last_post_time = mktime($hour, $min, $sec, $month, $day, $year);
         if (!isset($last_visit)) {
             $last_visit = 0;
-        }
-        /*
-        if ($replies >= $hot_threshold) {
-            if ($last_post_time < $last_visit)
-                $image = $hot_folder_image;
-            else
-                $image = $hot_newposts_image;
-        } else {
-            if ($last_post_time < $last_visit) {
-                $image = icon('fa-comments');
-            } else {
-                $image = $newposts_image;
-            }
-        }*/
-        $image = icon('fa-comments');
-        $tool_content .= "<td class='text-center'>".$image."</td>";
+        }        
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
+        if ($topic_locked) {
+            $image = icon('fa-lock');
+        } else {
+            if ($replies >= $hot_threshold) {
+                $image = icon('fa-fire');
+            } else {
+                $image = icon('fa-comments');
+            }
+        }
+        $tool_content .= "<td class='text-center'>".$image."</td>";        
         if ($replies > $posts_per_page) {
             $total_reply_pages = ceil($replies / $posts_per_page);
             $pagination .= "<strong class='pagination'><span>".icon('fa-arrow-circle-right')."";
@@ -281,7 +270,7 @@ if (count($result) > 0) { // topics found
             $topic_link_notify = toggle_link($topic_action_notify);
             $topic_icon = toggle_icon($topic_action_notify);
         }
-        $tool_content .= "<td class='center'>";
+        $tool_content .= "<td>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array('title' => $langModify,
@@ -310,14 +299,12 @@ if (count($result) > 0) { // topics found
         }
         
         $dyntools[] = array('title' => $langNotify,
-            'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
-            'icon' => 'fa-envelope');
+                            'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
+                            'icon' => 'fa-envelope');
         $tool_content .= action_button($dyntools);
-
-        $tool_content .= "</td></tr>";
-        $i++;
+        $tool_content .= "</td></tr>";        
     } // end of while
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langNoTopics</div>";
 }

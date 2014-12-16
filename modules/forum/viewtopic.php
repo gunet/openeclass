@@ -231,7 +231,7 @@ if ($paging and $total > $posts_per_page) {
     if ($total > $posts_per_page) {
         $tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
     	<tr>
-    	<td width='60%' align='left'>
+    	<td width='60%' class='text-left'>
     	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
     	<td align='right'>";
         $tool_content .= "<span class='pages'>

@@ -343,33 +343,33 @@ elseif (isset($_GET['forumgodel'])) {
    if ($result) {
        $current_forum_id = $result->forum_id;
        
-       $tool_content .= "
-       <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
-       <fieldset>
-       <legend>$langEditTopic</legend>
-       <table class='tbl' width='100%'>
-           <tr>
-           <th>$langChangeTopicForum</th>
-           <td>
-           <select name='forum_id'>";
-       $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
-       foreach ($result as $result_row) {
+       $tool_content .= "<div class='form-wrapper'>
+       <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumtopicsave=yes&amp;topic_id=$topic_id' method='post'>
+       <fieldset>       
+       <div class='form-group'>
+        <div class='col-sm-10'>
+        <label>$langChangeTopicForum</label>
+        <select name='forum_id' class='form-control'>";
+        $result = Database::get()->queryArray("SELECT f.`id` as `forum_id`, f.`name` as `forum_name`, fc.`cat_title` as `cat_title` FROM `forum` AS `f`, `forum_category` AS `fc` WHERE f.`course_id` = ?d AND f.`cat_id` = fc.`id`", $course_id);
+        foreach ($result as $result_row) {
            $forum_id = $result_row->forum_id;
            $forum_name = $result_row->forum_name;
-           $cat_title = $result_row->cat_title;
-           
+           $cat_title = $result_row->cat_title;           
            if ($forum_id == $current_forum_id) {
                $tool_content .= "<option value='$forum_id' selected>" . q($forum_name) . " (" . q($cat_title) . ")</option>";
            } else {
                $tool_content .= "<option value='$forum_id'>" . q($forum_name) . " (" . q($cat_title) . ")</option>";
            }
        }
-       $tool_content .= "</select></td></tr>
-       <tr><th>&nbsp;</th>
-       <td class='right'><input class='btn btn-primary' type='submit' value='$langModify'></td>
-       </tr></table>
+       $tool_content .= "</select></div>
+       </div>
+       <div class='form-group'>
+            <div class='col-sm-8 col-sm-offset-4'>
+                <input class='btn btn-primary' type='submit' value='$langModify'>
+            </div>
+        </div>
        </fieldset>
-       </form>";
+       </form></div>";
    }
 } elseif (isset($_GET['forumtopicsave'])) {
     $topic_id = intval($_GET['topic_id']);
@@ -426,22 +426,29 @@ elseif (isset($_GET['forumgodel'])) {
         $checkEn = "";
     }
     
-    $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
+    $tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
-        <legend>$langRating</legend>
-        <table class='tbl' width='100%'>
-        <tbody>
-        <tr><td><input type=\"radio\" value=\"1\" name=\"r_radio\" $checkEn/>$langRatingEn</td></tr>
-        <tr><td><input type=\"radio\" value=\"0\" name=\"r_radio\" $checkDis/>$langRatingDis</td></tr>
-        <tr><td><input type=\"submit\" name=\"submitSettings\" value=\"$langSubmit\" /></td></tr>
-        </tbody>
-        </table>
+        <div class='form-group'>
+            <div class='col-sm-10'>
+                <div class='radio'>
+                    <label><input type='radio' value='1' name='r_radio' $checkEn/>$langRatingEn</label>
+                </div>
+                <div class='radio'>
+                    <label><input type='radio' value='0' name='r_radio' $checkDis/>$langRatingDis</label>
+                </div>
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-11 col-sm-offset-1'>
+                <input class='btn btn-primary' type='submit' name='submitSettings' value='$langSubmit'>
+            </div>
+        </div>
         </fieldset>
-        </form>";
+        </form>
+        </div>";
 } else {
-    $nameTools = $langAddCategory;
-    
+    $nameTools = $langAddCategory;    
     $tool_content .= "
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">            
