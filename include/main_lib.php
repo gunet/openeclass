@@ -2128,20 +2128,21 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $attrs = '') {
+function icon($name, $title = null, $link = null, $link_attrs = '') {
     global $themeimg;
 
     if (isset($title)) {
         $title = q($title);
-        $extra = " title='$title'";
+        $extra = "title='$title'";
     } else {
         $extra = '';
     }
 
+    $img = "<i class='fa $name' $extra></i>";
     if (isset($link)) {
-        return "<a href='$link'$attrs><i class='fa $name'$extra></i></a>";
+        return "<a href='$link'$link_attrs>$img</a>";
     } else {
-        return "<i class='fa $name'$extra $attrs></i>";
+        return $img;
     }
 }
 
@@ -2617,7 +2618,7 @@ function getOnlineUsers() {
 /**
  * Initialize copyright/license global arrays
  */
-function copyright_info($cid) {
+function copyright_info($cid, $noImg=1) {
 
     global $language, $license, $themeimg;
 
@@ -2633,10 +2634,14 @@ function copyright_info($cid) {
             $link_suffix = '';
         }
     }
+    if($noImg==1){
     $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'>
-            <img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a>";
+            <img class='img-responsive' src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
+    }else if($noImg==0){
+        $link = "";
+    }
 
-    return $link . '<br>' . q($license[$lic]['title']);
+    return $link . q($license[$lic]['title']);
 }
 
 /**
