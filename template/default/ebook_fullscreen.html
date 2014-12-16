@@ -27,6 +27,19 @@
             function change_section() {
                 top.location = '{%ebook_url_base%}' + document.getElementsByName('section')[0].value + '/{%unit_parameter%}';
             }
+            $(function() {
+                $("body").keydown(function(e) {
+                    if(e.keyCode == 37) { // left
+                        top.location = '{%back_chapter_link%}';
+                     }
+                    if(e.keyCode == 39) { // left
+                        top.location = '{%next_chapter_link%}';
+                     }
+                     if (e.keyCode == 27) { // esc
+                         top.location = '{%exit_fullscreen_link%}'; 
+                     }                      
+                });
+            });
         </script>
     </head>
 
