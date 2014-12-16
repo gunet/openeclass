@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,6 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+/**
+ * @file edit.php
+ * @brief edit ebook information
+ */
 
 $require_current_course = true;
 $require_help = true;
@@ -105,13 +109,13 @@ if (isset($_GET['delete'])) {
             Database::get()->query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
         }
     }
-    $tool_content .= "<p class='alert-success'>$langEBookSectionsModified</p>";
+    $tool_content .= "<div class='alert alert-success'>$langEBookSectionsModified</div>";
 }
 
 $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
 
 if (!$info) {
-    $tool_content .= "<p class='alert'>$langNoEBook</p>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else {
     $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
     $k = 0;
@@ -129,32 +133,30 @@ if (!$info) {
                          'level' => 'primary-label')
                     ));    
 
-    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>    
-      <table width='100%' class='tbl_alt'>
-      <tr>
-        <th width='1' class='right'>$langTitle</th>
-        <td>
-         <input type='hidden' name='id' value='$ebook_id' />
-         <input type='text' name='ebook_title' size='53' value='" . q($info->title) . "' />
-        </td>
-        <td width='75' class='center'>
-         <input class='btn btn-primary' name='title_submit' type='submit' value='$langModify' />
-        </td>
-      </tr>
-      </table>    
-    </form>";
+    $tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+            <input type='hidden' name='id' value='$ebook_id' />
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langTitle</label>         
+                <div class='col-sm-10'>
+                    <input type='text' name='ebook_title' size='53' value='" . q($info->title) . "' />
+                    <input class='btn btn-primary' name='title_submit' type='submit' value='$langModify' />
+                </div>
+            </div>
+        </form>
+    </div>";
 
     // Form #2 - edit sections
     $tool_content .= "
     <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <fieldset>
-    <legend>$langSections</legend>
+    <h4>$langSections</h4>
     <input type='hidden' name='id' value='$ebook_id' />
-      <table width='100%' class='tbl_alt'>
+      <table width='100%' class='table-default'>
       <tr>
-        <th width='1' class='right'>$langID</th>
+        <th width='1' class='text-right'>$langID</th>
         <th>$langTitle</th>
-        <th width='75' class='center'>$langActions</th>
+        <th width='75' class='text-center'>$langActions</th>
       </tr>";
     $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                        WHERE ebook_id = ?d
@@ -190,15 +192,13 @@ if (!$info) {
                                       'class' => 'delete',
                                       'confirm' => $langEBookSectionDelConfirm)
             ));            
-        }
-        $class = odd_even($k);
+        }       
         $tool_content .= "
-        <tr $class>
-          <td class='right'>$section_id</td>
+        <tr>
+          <td class='text-right'>$section_id</td>
           <td>$section_title</td>
-          <td class='center'>$section_tools</td>
-        </tr>";
-          $k++;
+          <td class='text-center'>$section_tools</td>
+        </tr>";          
     }
     if (!$section_editing) {
         $tool_content .= "
@@ -215,10 +215,9 @@ if (!$info) {
     // Form #3 - edit subsection file assignment
     $tool_content .= "
      <fieldset>
-     <legend>$langEBookMenuTitle</legend>
-     <table width='100%' class='tbl_alt'>
-     <tr>
-       <th>&nbsp;</th>
+     <h4>$langEBookMenuTitle</h4>
+     <table width='100%' class='table-default'>
+     <tr>       
        <th>$langFileName</th>
        <th>$langTitle</th>
        <th>$langSection</th>
@@ -236,41 +235,35 @@ if (!$info) {
                              ebook_section.id = ebook_subsection.section_id
                              ORDER BY CONVERT(psid, UNSIGNED), psid,
                                       CONVERT(pssid, UNSIGNED), pssid");
-    foreach ($q as $r) {
-        $class = odd_even($k);
+    foreach ($q as $r) {        
         $file_id = $r->file_id;
         $display_id = $r->sid . ',' . $r->ssid;
         $tool_content .= "
-            <tr$class>
-              <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet'></td>
+            <tr>              
               <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
               <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
-              <td>" . selection($sections, "sid[$file_id]", $r->sid) . "</td>
+              <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
               <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
                   <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "'></td>
             </tr>";
-        unset($files[$id_map[$file_id]]);
-        $k++;
+        unset($files[$id_map[$file_id]]);        
     }
-    foreach ($files as $key => $file) {
-        $class = odd_even($k);
+    foreach ($files as $key => $file) {        
         $path = $paths[$key];
         $file_id = $file_ids[$key];
         $title = get_html_title($basedir . $path);
         $tool_content .= "
-        <tr$class>
-          <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
+        <tr>          
           <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
           <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
-          <td>" . selection($sections, "sid[$file_id]") . "</td>
+          <td>" . selection($sections, "sid[$file_id]", 'class="form-control"') . "</td>
           <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
-        </tr>";
-        $k++;
+        </tr>";        
     }
     $tool_content .= "
      <tr>
-       <td colspan='4'>&nbsp;</td>
-       <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></td>
+       <td colspan='3'>&nbsp;</td>
+       <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
      </table>
      </fieldset>
      </form>";

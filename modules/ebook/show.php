@@ -88,12 +88,11 @@ if ($show_orphan_file and $file_path) {
 }
 
 $nameTools = $langEBook;
-
 if ($unit !== false) {
-    $exit_fullscreen_link = $urlAppend . '/modules/units/?id=' . $unit;
+    $exit_fullscreen_link = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$unit";
     $unit_parameter = 'unit=' . $unit;
 } else {
-    $exit_fullscreen_link = "$urlAppend/modules/ebook/index.php?course_code=$course_code";
+    $exit_fullscreen_link = $urlAppend . "modules/ebook/index.php?course_code=$course_code";
     $unit_parameter = '';
 }
 $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
