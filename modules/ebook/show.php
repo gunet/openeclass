@@ -93,7 +93,7 @@ if ($unit !== false) {
     $exit_fullscreen_link = $urlAppend . '/modules/units/?id=' . $unit;
     $unit_parameter = 'unit=' . $unit;
 } else {
-    $exit_fullscreen_link = $urlAppend . '/courses/' . $course_code . '/';
+    $exit_fullscreen_link = "$urlAppend/modules/ebook/index.php?course_code=$course_code";
     $unit_parameter = '';
 }
 $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
