@@ -2128,21 +2128,20 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '') {
+function icon($name, $title = null, $link = null, $attrs = '') {
     global $themeimg;
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "title='$title'";
+        $extra = " title='$title'";
     } else {
         $extra = '';
     }
 
-    $img = "<i class='fa $name' $extra></i>";
     if (isset($link)) {
-        return "<a href='$link'$link_attrs>$img</a>";
+        return "<a href='$link'$attrs><i class='fa $name'$extra></i></a>";
     } else {
-        return $img;
+        return "<i class='fa $name'$extra $attrs></i>";
     }
 }
 
