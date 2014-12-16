@@ -280,7 +280,7 @@ function loggedInMenu() {
     if (isset($status) and ($status == USER_STUDENT)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "gradebook");
     }
     
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
