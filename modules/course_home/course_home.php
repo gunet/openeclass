@@ -393,7 +393,7 @@ $tool_content .= "
     <div class ='col-md-12'>
         <div class='toolbox pull-right'>
             <div class='dropdown'>
-                <a class='txt btn btn-default-eclass place-at-toolbox' rel='tooltip' data-toggle='dropdown' data-placement='top'>$langCourseDescription<i class='fa fa-caret-down'></i></a>
+                <button class='txt btn btn-default-eclass place-at-toolbox' data-toggle='dropdown'>$langCourseDescription <i class='fa fa-caret-down'></i></button>
                 <ul class='dropdown-menu'>
                     $course_info_extra                  
                 </ul>

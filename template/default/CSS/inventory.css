@@ -441,7 +441,6 @@ hr {
 /* line 297, ../SASS/inventory.scss */
 .toolbox li {
   list-style-type: none;
-  display: inline-block;
 }
 /* line 303, ../SASS/inventory.scss */
 .toolbox ul.toolbox-submenu {
