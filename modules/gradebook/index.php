@@ -730,7 +730,7 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                            <h3>$langRefreshList</h3><small>($langAttendanceInfoForUsers)</small><br><br>
+                            <h4>$langRefreshList</h4><small>($langAttendanceInfoForUsers)</small><br><br>
                             <div class='form-group'>
                                 <div class='col-sm-12'>
                                     <select name='usersLimit' class='form-control'>                
@@ -761,10 +761,10 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                            <h3>$langGradebookRange</h3><br>
+                            <h4>$langGradebookRange</h4><br>
                             <div class='form-group'>
                                 <div class='col-sm-10'>
-                                    <select name='degreerange'><option value=10";
+                                    <select name='degreerange' class='form-control'><option value=10";
                                         if (isset($gradebook_range) and $gradebook_range == 10) {
                                             $tool_content .= " selected ";
                                         }
@@ -1042,7 +1042,7 @@ if ($is_editor) {
 
         //check if there is spare weight
         if(weightleft($gradebook_id, 0)){
-            $weightLeftMessage = "<div class='alert1'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
+            $weightLeftMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
         } else {
             $weightLeftMessage = "";
         }
@@ -1156,7 +1156,7 @@ if ($is_editor) {
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) as count FROM gradebook_book, gradebook_activities WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id AND gradebook_activities.visible = ?d AND uid = ?d AND gradebook_activities.gradebook_id = ?d", $visible, $userID, $gradebook_id)->count;
     if (!$checkForRecords) {
-        $tool_content .="<div class='alert1'>$langGradebookTotalGradeNoInput</div>";
+        $tool_content .="<div class='alert alert-warning'>$langGradebookTotalGradeNoInput</div>";
     }
 
     $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_activities.visible = ?d AND gradebook_id = ?d  ORDER BY `DATE` DESC", $visible, $gradebook_id);
@@ -1164,17 +1164,14 @@ if ($is_editor) {
 
     if ($announcementNumber > 0) {
         $tool_content .= "<h4>$langGradebookGrades</h4>";
-        $tool_content .= "<div class='info'>$langGradebookTotalGrade: <b>" . userGradeTotal($gradebook_id, $userID) . "</b> </div><br>";
+        $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: <b>" . userGradeTotal($gradebook_id, $userID) . "</b> </div><br>";
 
         if(weightleft($gradebook_id, 0) != 0){
-            $tool_content .= "<p class='alert1'>$langGradebookAlertToChange</p>";
+            $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</p>";
         }
 
-        $tool_content .= "
-                            <table class='table-default' >";
+        $tool_content .= "<table class='table-default' >";
         $tool_content .= "<tr><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langGradebookActivityDescription</th><th>$langGradebookActivityWeight</th><th>$langGradebookGrade</th></tr>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage5</div>";
     }
 
     if ($result) {
