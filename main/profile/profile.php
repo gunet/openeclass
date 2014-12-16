@@ -358,7 +358,7 @@ $tool_content .= "<div class='form-group'><label for='language' class='col-sm-2 
 if ($icon) {
     $message_pic = $langReplacePicture;
     $picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-    $delete = '&nbsp;' . icon('fa-times', $langDelete, null, 'id="delete"') . '&nbsp;';
+    $delete = '&nbsp;' . icon('fa-times', $langDelete, '#', 'id="delete"') . '&nbsp;';
 } else {
     $picture = $delete = '';
     $message_pic = $langAddPicture;

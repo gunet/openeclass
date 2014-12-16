@@ -249,9 +249,8 @@ function profile_init()
 {
         $(document).on('click', '#delete', function() {
                 if (confirm(lang.confirmDelete)) {
-                        var tr = $(this).closest('tr');
-                        tr.children('th').html(lang.addPicture);
-                        tr.find('span').remove();
+                        var delBtn = $(this).closest("div");
+                        delBtn.find('span').remove();
                         $.post('profile.php', { delimage: true });
                 }
         });
