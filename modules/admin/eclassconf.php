@@ -26,7 +26,7 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modalconfirmation.php';
-$nameTools = $langEclassConf;
+$pageName = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $head_content .= <<<EOF

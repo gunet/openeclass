@@ -32,7 +32,7 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-$nameTools = $langEBookEdit;
+$pageName = $langEBookEdit;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
 
 if (!$is_editor) {

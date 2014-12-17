@@ -33,7 +33,7 @@ $require_valid_uid = true;
 $mail_ver_excluded = true;
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
-$nameTools = $langMailVerify;
+$pageName = $langMailVerify;
 
 $uid = (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) ? $_SESSION['uid'] : NULL;
 

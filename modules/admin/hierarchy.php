@@ -42,20 +42,20 @@ $user = new User();
 
 load_js('jstree');
 
-$nameTools = $langHierarchyActions;
+$pageName = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['action'])) {
     $navigation[] = array('url' => $_SERVER['SCRIPT_NAME'], 'name' => $langHierarchyActions);
     switch ($_GET['action']) {
         case 'add':
-            $nameTools = $langNodeAdd;
+            $pageName = $langNodeAdd;
             break;
         case 'delete':
-            $nameTools = $langNodeDel;
+            $pageName = $langNodeDel;
             break;
         case 'edit':
-            $nameTools = $langNodeEdit;
+            $pageName = $langNodeEdit;
             break;
     }
 }

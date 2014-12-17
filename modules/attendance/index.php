@@ -112,7 +112,7 @@ if ($is_editor) {
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     if(isset($_GET['editUsers'])){
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $nameTools = $langConfig;
+        $pageName = $langConfig;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -121,7 +121,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['attendanceBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $nameTools = $langUsers;
+        $pageName = $langUsers;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -130,7 +130,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $nameTools = $langModify;
+        $pageName = $langModify;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -139,7 +139,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $nameTools = $langAttendanceBook;
+        $pageName = $langAttendanceBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -149,11 +149,11 @@ if ($is_editor) {
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         if (isset($_GET['addActivityAs'])) {
-            $nameTools = "$langAdd $langInsertWork";
+            $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
-            $nameTools = "$langAdd $langInsertExercise";
+            $pageName = "$langAdd $langInsertExercise";
         } else {
-            $nameTools = $langAttendanceAddActivity;
+            $pageName = $langAttendanceAddActivity;
         }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -163,7 +163,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $nameTools = $langAttendanceBook;
+        $pageName = $langAttendanceBook;
         $tool_content .= action_bar(array(
             array('title' => $langAttendanceBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
@@ -174,7 +174,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply space-after-icon',)
             ));
     } else {
-        $nameTools = $langAttendance;
+        $pageName = $langAttendance;
         $tool_content .= action_bar(array(
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
@@ -922,7 +922,7 @@ if ($is_editor) {
         
     }    
 } else { //============Student View==================    
-    $nameTools = $langAttendance;
+    $pageName = $langAttendance;
     $userID = $uid;        
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
     $announcementNumber = count($result);

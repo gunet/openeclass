@@ -37,7 +37,7 @@ $user = new User();
 
 load_js('jstree');
 
-$nameTools = $langMultiRegUser;
+$pageName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $error = '';

@@ -23,7 +23,7 @@ $require_current_course = FALSE;
 require_once '../../include/baseTheme.php';
 require_once 'indexer.class.php';
 require_once 'courseindexer.class.php';
-$nameTools = $langSearch;
+$pageName = $langSearch;
 
 // exit if search is disabled
 if (!get_config('enable_search')) {

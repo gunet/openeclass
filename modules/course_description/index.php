@@ -35,7 +35,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
 
-$nameTools = $langCourseDescription;
+$pageName = $langCourseDescription;
 $unit_id = description_unit_id($course_id);
 
 ModalBoxHelper::loadModalBox();

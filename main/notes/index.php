@@ -50,7 +50,7 @@ require_once 'main/notes/notes.class.php';
 //$action = new action();
 //$action->record(MODULE_ID_ANNOUNCE);
 
-$nameTools = $langNotes;
+$pageName = $langNotes;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
@@ -119,9 +119,9 @@ if (isset($_GET['modify'])) {
 /* display form */
 if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if (isset($_GET['modify'])) {
-        $langAdd = $nameTools = $langModifNote;
+        $langAdd = $pageName = $langModifNote;
     } else {
-        $nameTools = $langAddNote;
+        $pageName = $langAddNote;
     }
     $navigation[] = array('url' => "index.php", 'name' => $langNotes);
     if (!isset($noteToModify))
@@ -189,7 +189,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     
     $note = Notes::get_note(intval($_GET['nid']));
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
-    $nameTools = q($note->title);    
+    $pageName = q($note->title);    
     $tool_content .= "
         <div class='panel panel-action-btn-default'>
             <div class='panel-heading'>

@@ -46,7 +46,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 $navigation[] = array("url" => "details.php?course=$course_code&amp;path_id=" . $_REQUEST['path_id'], "name" => $langStatsOfLearnPath);
-$nameTools = $langTrackUser;
+$pageName = $langTrackUser;
 
 if (empty($_REQUEST['uInfo']) || empty($_REQUEST['path_id'])) {
     header("Location: ./index.php?course=$course_code");

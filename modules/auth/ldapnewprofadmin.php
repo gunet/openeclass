@@ -48,7 +48,7 @@ $auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : '';
 
 $msg = "$langProfReg (" . (get_auth_info($auth)) . ")";
 
-$nameTools = $msg;
+$pageName = $msg;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../admin/listreq.php", "name" => $langOpenProfessorRequests);
 $tool_content = "";

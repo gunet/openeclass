@@ -25,7 +25,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$nameTools = $langAdminAn;
+$pageName = $langAdminAn;
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -160,7 +160,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $titleform = $langAdminAddAnn;
     }
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
-    $nameTools = $titleform;
+    $pageName = $titleform;
 
     if (!isset($contentToModify)) {
         $contentToModify = '';

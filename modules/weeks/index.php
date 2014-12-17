@@ -105,14 +105,14 @@ if (isset($id) and $id !== false) {
 }
 
 if (!$info) {
-    $nameTools = $langUnitUnknown;
+    $pageName = $langUnitUnknown;
     $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $nameTools = "$langWeek $cnt$langOr";
+    $pageName = "$langWeek $cnt$langOr";
     if (!empty($info->title)) {
-        $nameTools = htmlspecialchars($info->title);
+        $pageName = htmlspecialchars($info->title);
     }
     $comments = trim($info->comments);
 }
@@ -175,7 +175,7 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
       <td class="right">' . $link['next'] . "</td>
     </tr>";
 }
-$tool_content .= "<tr><td colspan='2' class='unit_title'>$nameTools</td></tr></table>";
+$tool_content .= "<tr><td colspan='2' class='unit_title'>$pageName</td></tr></table>";
 
 
 if (!empty($comments)) {

@@ -56,7 +56,7 @@ $msg = get_auth_info($auth);
 $settings = get_auth_settings($auth);
 
 if (!empty($msg)) {
-    $nameTools = "$langConfirmUser ($msg)";
+    $pageName = "$langConfirmUser ($msg)";
 }
 
 if (isset($_GET['p']) and $_GET['p']) {

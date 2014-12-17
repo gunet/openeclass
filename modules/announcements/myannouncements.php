@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'main/perso.php';
 
-$nameTools = $langMyPersoAnnouncements;
+$pageName = $langMyPersoAnnouncements;
 
 $tool_content = "<div class='panel_content'>
                     <ul class='tablelist'>"

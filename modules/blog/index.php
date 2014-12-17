@@ -33,7 +33,7 @@ require_once 'modules/sharing/sharing.php';
 define ('RSS', 'modules/blog/rss.php?course='.$course_code);
 load_js('tools.js');
 
-$nameTools = $langBlog;
+$pageName = $langBlog;
 
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';

@@ -34,7 +34,7 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'include/phpass/PasswordHash.php';
 require_once 'include/log.php';
 
-$nameTools = $langChangePass;
+$pageName = $langChangePass;
 $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
 
 check_uid();

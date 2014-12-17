@@ -26,7 +26,7 @@ $helpTopic = 'Gradebook';
 require_once '../../include/baseTheme.php';
 
 //Module name
-$nameTools = $langGradebook;
+$pageName = $langGradebook;
 $userID = $uid;
 $content = false;
 $grade_content = '';

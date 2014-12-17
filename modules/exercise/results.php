@@ -32,7 +32,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-$nameTools = $langResults;
+$pageName = $langResults;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {

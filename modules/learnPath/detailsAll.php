@@ -52,10 +52,10 @@ require_once 'modules/usage/statistics_tools_bar.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
     $navigation[] = array('url' => '../usage/?course=' . $course_code, 'name' => $langUsage);
-    $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
+    $pageName = "$langLearningPaths - $langTrackAllPathExplanation";
 } else {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-    $nameTools = $langTrackAllPathExplanation;
+    $pageName = $langTrackAllPathExplanation;
 }
 
 // display a list of user and their respective progress

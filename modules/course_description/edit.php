@@ -29,7 +29,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/log.php';
 
-$nameTools = $langEditCourseProgram;
+$pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
 if (isset($_REQUEST['id'])) {

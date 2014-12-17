@@ -56,7 +56,7 @@ if (isset($_POST['course'])) {//for the case of course messages from central ui
     $cid = $course_id;
 }
 
-$nameTools = $langDropBox;
+$pageName = $langDropBox;
 
 require_once("class.msg.php");
 

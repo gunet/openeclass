@@ -34,7 +34,7 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include 'include/sendMail.inc.php';
 require_once 'include/phpass/PasswordHash.php';
-$nameTools = $lang_remind_pass;
+$pageName = $lang_remind_pass;
 
 // javascript
 load_js('pwstrength.js');

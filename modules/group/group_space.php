@@ -32,7 +32,7 @@ $helpTopic = 'Group';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 
-$nameTools = $langGroupSpace;
+$pageName = $langGroupSpace;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 require_once 'group_functions.php';
 

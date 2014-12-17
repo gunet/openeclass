@@ -28,7 +28,7 @@ require_once 'hierarchy_validations.php';
 
 $user = new User();
 
-$nameTools = $langSendInfoMail;
+$pageName = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Display link back to index.php

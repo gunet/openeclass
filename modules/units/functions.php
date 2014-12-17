@@ -1131,14 +1131,34 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     }
 
     if ($res_type == 'description') {
-        $icon_vis = ($status == 1) ? 'publish.png' : 'unpublish.png';
+        $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
         $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
-    } else {
-        $icon_vis = ($status == 1) ? 'visible.png' : 'invisible.png';
+    } else {        
+        $icon_vis = ($status == 1) ? 'fa-eye' : 'fa-eye-slash';
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
-    if ($status != 'del') {
+    $tool_content .= "<td class='option-btn-cell'>";
+    $tool_content .= action_button(array(
+                array('title' => $langEdit,
+                      'url' => $editlink,
+                      'icon' => 'fa-edit',
+                      'show' => $status != 'del'),
+                array('title' => $langDelete,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
+                      'icon' => 'fa-times',
+                      'confirm' => $langConfirmDelete,
+                      'class' => 'delete'),
+                array('title' => $langVisibility,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'icon' => $icon_vis,
+                      'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
+                array('title' => $langAddToCourseHome,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'icon' => $icon_vis,
+                      'show' => $status != 'del' and in_array($res_type, array('description')))
+    ));
+    /*if ($status != 'del') {
         $content = "<td width='3'><a href='$edit_link'>" .
                 "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a></td>";
     } else {
@@ -1148,7 +1168,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
             " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
             "<img src='$themeimg/delete.png' " .
             "title='$langDelete' alt='$langDelete'></a></td>";
-
+*/
     if ($status != 'del') {
         if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) {
             $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .

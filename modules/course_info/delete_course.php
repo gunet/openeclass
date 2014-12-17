@@ -24,7 +24,7 @@ $require_course_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 
-$nameTools = $langDelCourse;
+$pageName = $langDelCourse;
 
 if (isset($_POST['delete'])) {
     $tool_content .= action_bar(array(

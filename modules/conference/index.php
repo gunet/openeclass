@@ -58,7 +58,7 @@ $action = new action();
 $action->record(MODULE_ID_CHAT);
 /* * *********************************** */
 
-$nameTools = $langConference;
+$pageName = $langConference;
 
 // guest user not allowed
 if (check_guest()) {

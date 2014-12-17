@@ -40,7 +40,7 @@ load_js('jstree');
 list($js, $html) = $treeObj->buildCourseNodePicker();
 $head_content .= $js;
 
-$nameTools = $langRestoreCourse;
+$pageName = $langRestoreCourse;
 $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 
 // Default backup version

@@ -31,7 +31,7 @@ $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
 $prof = isset($_REQUEST['p']) ? intval($_REQUEST['p']) : 0;
 $am = !empty($_REQUEST['am']) ? intval($_REQUEST['am']) : '';
-$nameTools = $prof ? $langReqRegProf : $langUserRequest;
+$pageName = $prof ? $langReqRegProf : $langUserRequest;
 
 $user_registration = get_config('user_registration');
 $eclass_prof_reg = get_config('eclass_prof_reg');

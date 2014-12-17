@@ -21,7 +21,7 @@
 
 $mail_ver_excluded = true;
 require_once '../include/baseTheme.php';
-$nameTools = $langManuals;
+$pageName = $langManuals;
 
 $addon = '';
 

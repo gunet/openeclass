@@ -45,7 +45,7 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
 
-$nameTools = $langVideo;
+$pageName = $langVideo;
 
 if (isset($_SESSION['givenname'])) {
     $nick = q($_SESSION['givenname'] . ' ' . $_SESSION['surname']);
@@ -126,7 +126,7 @@ hContent;
     $diskUsed = dir_total_space($updir);
 
     if (isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
-            $nameTools = $langQuotaBar;
+            $pageName = $langQuotaBar;
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
             $tool_content .= showquota($diskQuotaVideo, $diskUsed);
             draw($tool_content, $menuTypeID);
@@ -153,7 +153,7 @@ hContent;
      */
     if (isset($_GET['action'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-        $nameTools =  ($_GET['action'] == 'edit-category') ? $langCategoryMod : $langCategoryAdd;
+        $pageName =  ($_GET['action'] == 'edit-category') ? $langCategoryMod : $langCategoryAdd;
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
         $tool_content .=  "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
         if ($_GET['action'] == 'editcategory') {
@@ -327,9 +327,9 @@ hContent;
                 $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
         } elseif (isset($_GET['form_input'])) { // display video form
                   if ($_GET['form_input'] == 'file') {
-                      $nameTools = $langAddV;
+                      $pageName = $langAddV;
                   } else {
-                      $nameTools = $langAddVideoLink;
+                      $pageName = $langAddVideoLink;
                   }
                 $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
                 
@@ -410,7 +410,7 @@ hContent;
             $id = $_GET['id'];
             $table_edit = select_table($_GET['table_edit']);
             
-            $nameTools = $langModify;
+            $pageName = $langModify;
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
             
             $myrow = Database::get()->querySingle("SELECT * FROM $table_edit WHERE course_id = ?d AND id = ?d ORDER BY title", $course_id, $id);

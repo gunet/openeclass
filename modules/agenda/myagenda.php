@@ -37,7 +37,7 @@ $helpTopic = 'MyAgenda';
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-$nameTools = $langMyAgenda;
+$pageName = $langMyAgenda;
 $year = '';
 $month = '';
 

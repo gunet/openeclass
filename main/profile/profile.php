@@ -48,7 +48,7 @@ var lang = {
         confirmDelete: '" . js_escape($langConfirmDelete) . "'}; 
 $(profile_init);</script>";
 
-$nameTools = $langModifyProfile;
+$pageName = $langModifyProfile;
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
                                             lang, status, has_icon, description,

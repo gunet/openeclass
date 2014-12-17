@@ -28,7 +28,7 @@ $require_login = true;
 include '../../include/baseTheme.php';
 require_once 'include/log.php';
 
-$nameTools = $langToolManagement;
+$pageName = $langToolManagement;
 add_units_navigation(TRUE);
 
 load_js('tools.js');
@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
                   'level' => 'primary'
                  )));
     
-    $nameTools = $langAddExtLink;
+    $pageName = $langAddExtLink;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
     $helpTopic = 'Module';
     $tool_content .= "<div class='form-wrapper'>

@@ -52,7 +52,7 @@ $action->record(MODULE_ID_ASSIGN);
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
-$nameTools = $langWorks;
+$pageName = $langWorks;
 
 //-------------------------------------------
 // main program
@@ -147,11 +147,11 @@ if ($is_editor) {
     $email_notify = (isset($_POST['email']) && $_POST['email']);
     if (isset($_POST['grade_comments'])) {
         $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", intval($_POST['assignment']))->title;
-        $nameTools = $work_title;
+        $pageName = $work_title;
         $navigation[] = $works_url;
         submit_grade_comments($_POST['assignment'], $_POST['submission'], $_POST['grade'], $_POST['comments'], $email_notify);
     } elseif (isset($_GET['add'])) {
-        $nameTools = $langNewAssign;
+        $pageName = $langNewAssign;
         $navigation[] = $works_url;        
         new_assignment();
     } elseif (isset($_POST['assign_type'])) {
@@ -179,7 +179,7 @@ if ($is_editor) {
         }
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
     } elseif (isset($_POST['grades'])) {
-        $nameTools = $langWorks;
+        $pageName = $langWorks;
         $navigation[] = $works_url;
         submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
     } elseif (isset($_REQUEST['id'])) {
@@ -193,7 +193,7 @@ if ($is_editor) {
             } else {
                 $user_id = $uid;
             }
-            $nameTools = $langAddGrade;
+            $pageName = $langAddGrade;
             $navigation[] = $works_url;
             $navigation[] = $work_id_url;
             submit_work($id, $user_id);
@@ -229,17 +229,17 @@ if ($is_editor) {
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'edit') {
-                $nameTools = $m['WorkEdit'];
+                $pageName = $m['WorkEdit'];
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
                 show_edit_assignment($id);
             } elseif ($choice == 'do_edit') {
-                $nameTools = $langWorks;
+                $pageName = $langWorks;
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
                 edit_assignment($id);       
             } elseif ($choice == 'add') {
-                $nameTools = $langAddGrade;
+                $pageName = $langAddGrade;
                 $navigation[] = $works_url;
                 $navigation[] = $work_id_url;
                 show_submission_form($id, groups_with_no_submissions($id), true);
@@ -247,7 +247,7 @@ if ($is_editor) {
                 show_plain_view($id);
             }
         } else {
-            $nameTools = $work_title;
+            $pageName = $work_title;
             $navigation[] = $works_url;
             if (isset($_GET['disp_results'])) {
                 show_assignment($id, true);
@@ -258,20 +258,20 @@ if ($is_editor) {
             }
         }
     } else {
-        $nameTools = $langWorks;
+        $pageName = $langWorks;
         show_assignments();
     }
 } else {
     if (isset($_REQUEST['id'])) {
         $id = intval($_REQUEST['id']);
         if (isset($_POST['work_submit'])) {
-            $nameTools = $m['SubmissionStatusWorkInfo'];
+            $pageName = $m['SubmissionStatusWorkInfo'];
             $navigation[] = $works_url;
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id", 'name' => $langWorks);
             submit_work($id);
         } else {
             $work_title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
-            $nameTools = $work_title;
+            $pageName = $work_title;
             $navigation[] = $works_url;
             show_student_assignment($id);
         }

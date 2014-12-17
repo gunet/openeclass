@@ -46,7 +46,7 @@ if ($is_editor) {
     $max_glossary_terms = get_config('max_glossary_terms');
 }
 
-$nameTools = $langGlossary;
+$pageName = $langGlossary;
 
 $categories = array();
 Database::get()->queryFunc("SELECT id, name, description, `order`
@@ -207,7 +207,7 @@ if ($is_editor) {
     // display configuration form
     if (isset($_GET['config'])) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-        $nameTools = $langConfig;
+        $pageName = $langConfig;
         $checked_expand = $expand_glossary ? ' checked="1"' : '';
         $checked_index = $glossary_index ? ' checked="1"' : '';
         $tool_content .= "<div class='form-wrapper'>
@@ -247,10 +247,10 @@ if ($is_editor) {
         $html_id = $html_term = $html_url = $definition = $notes = '';
         $category_id = 'none';
         if (isset($_GET['add'])) {
-            $nameTools = $langAddGlossaryTerm;
+            $pageName = $langAddGlossaryTerm;
             $submit_value = $langSubmit;
         } else {
-            $nameTools = $langEditGlossaryTerm;
+            $pageName = $langEditGlossaryTerm;
             $id = intval($_GET['edit']);
             $data = Database::get()->querySingle("SELECT term, definition, url, notes, category_id
                                               FROM glossary WHERE id = ?d", $id);
@@ -369,7 +369,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     }    
     if ($cat_id) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-        $nameTools = q($categories[$cat_id]);
+        $pageName = q($categories[$cat_id]);
         $where .= " AND category_id = $cat_id";
     }
     $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
@@ -388,7 +388,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
         $tool_content .= "</tr>";    
         foreach ($sql as $g) {
             if (isset($_GET['id'])) {
-                $nameTools = q($g->term);
+                $pageName = q($g->term);
             }        
             if (!empty($g->url)) {
                 $urllink = "<div><span class='smaller'>(<a href='" . q($g->url) .

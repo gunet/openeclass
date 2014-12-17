@@ -33,7 +33,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$nameTools = $langUserStats;
+$pageName = $langUserStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listusers.php", "name" => $langListUsers);
 

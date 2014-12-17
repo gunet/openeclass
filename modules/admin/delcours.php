@@ -47,7 +47,7 @@ $user = new User();
 // validate course Id
 validateCourseNodes($course_id, isDepartmentAdmin());
 
-$nameTools = $langCourseDel;
+$pageName = $langCourseDel;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 

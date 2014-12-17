@@ -43,7 +43,7 @@ $action->record(MODULE_ID_AGENDA);
 
 $dateNow = date("j-n-Y / H:i", time());
 
-$nameTools = $langAgenda;
+$pageName = $langAgenda;
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -204,7 +204,7 @@ if ($is_editor) {
     }
 
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
-        $nameTools = $langAddEvent;
+        $pageName = $langAddEvent;
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
         $rep = '';
         if (isset($id) && $id) {

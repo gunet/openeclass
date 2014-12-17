@@ -32,7 +32,7 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/units/functions.php';
 
 $tool_content = $head_content = "";
-$nameTools = $langEditCourseProgram;
+$pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
 if (isset($_POST['submit'])) {

@@ -35,7 +35,8 @@
  */
 
 $navigation = array();
-$nameTools = '';
+$pageName = '';
+$toolName = '';
 require_once 'init.php';
 
 if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
@@ -84,8 +85,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langMyPersoAnnouncements, $langMyPersoDeadlines,
         $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
         $langPersonalisedBriefcase, $langSearch, $langUser,
-        $langUserBriefcase, $langUserHeader, $language, $nameTools,
-        $navigation, $page_name,
+        $langUserBriefcase, $langUserHeader, $language,
+        $navigation, $pageName, $toolName,
         $require_current_course, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
@@ -321,7 +322,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_TITLE', $langSearch);
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
 
-    $t->set_var('TOOL_NAME', $nameTools);
+    $t->set_var('TOOL_NAME', $pageName);
 
     if ($is_editor) {
         $t->set_var('ACTIVATE_MODULE', $mod_activation);
@@ -338,8 +339,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     // breadcrumb and page title
     if (!$is_embedonce and !$is_mobile) {
-        if (!$page_name and $nameTools) {
-            $page_name = $nameTools;
+        if (!$page_name and $pageName) {
+            $page_name = $pageName;
         }
 
         $t->set_block('mainBlock', 'breadCrumbLinkBlock', 'breadCrumbLink');
@@ -355,7 +356,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('BREAD_HREF', $urlAppend);
             }
 
-            if ($nameTools) {
+            if ($pageName) {
                 $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
             } else {
                 $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
@@ -367,7 +368,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         // Breadcrumb course home entry
         if (isset($course_code)) {
             $t->set_var('BREAD_TEXT', q(ellipsize($title, 64)));
-            if ($nameTools) {
+            if ($pageName) {
                 $t->set_var('BREAD_HREF', $urlAppend . 'courses/' . $course_code . '/');
                 $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
             } else {
@@ -387,12 +388,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $pageTitle .= " | " . $step ["name"];
         }
 
-        if ($nameTools) {
-            $t->set_var('BREAD_TEXT', q($nameTools));
+        if ($pageName) {
+            $t->set_var('BREAD_TEXT', q($pageName));
             $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
         }
 
-        if (isset($page_name) && !$nameTools) {
+        if (isset($page_name) && !$pageName) {
             $pageTitle .= " | " . $page_name;
         }
 

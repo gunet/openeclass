@@ -48,7 +48,7 @@ $head_content .= "<script type='text/javascript'>
 
 statistics_tools($course_code, "index");
 
-$nameTools = $langUsage;
+$pageName = $langUsage;
 
 $made_chart = true;
 ob_start();

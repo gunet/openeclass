@@ -74,14 +74,14 @@ function confirmation() {
 $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
     $list_status = 5;
-    $nameTools = $langUserOpenRequests;
+    $pageName = $langUserOpenRequests;
     $reqtype = '&amp;type=user';
     $basetoolurl .= '?type=user';
     $linkreg = $langUserDetails;
     $linkget = '?type=user';
 } else {
     $list_status = 1;
-    $nameTools = $langOpenProfessorRequests;
+    $pageName = $langOpenProfessorRequests;
     $reqtype = '';
     $linkreg = $langProfReg;
     $linkget = '';
@@ -111,13 +111,13 @@ if (isDepartmentAdmin()) {
 // Deal with navigation
 switch ($show) {
     case "closed":
-        $navigation[] = array('url' => $basetoolurl, 'name' => $nameTools);
-        $nameTools = $langReqHaveClosed;
+        $navigation[] = array('url' => $basetoolurl, 'name' => $pageName);
+        $pageName = $langReqHaveClosed;
         $pagination_link = '&amp;show=closed';
         break;
     case "rejected":
-        $navigation[] = array('url' => $basetoolurl, 'name' => $nameTools);
-        $nameTools = $langReqHaveBlocked;
+        $navigation[] = array('url' => $basetoolurl, 'name' => $pageName);
+        $pageName = $langReqHaveBlocked;
         break;
 }
 

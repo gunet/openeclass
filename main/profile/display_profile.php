@@ -30,7 +30,7 @@ require_once 'include/lib/user.class.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$nameTools = $langUserProfile;
+$pageName = $langUserProfile;
 
 $userdata = array();
 

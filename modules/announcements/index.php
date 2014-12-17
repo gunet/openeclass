@@ -251,7 +251,7 @@ $head_content .= "<script type='text/javascript'>
 ModalBoxHelper::loadModalBox();
 
 $public_code = course_id_to_public_code($course_id);
-$nameTools = $langAnnouncements;
+$pageName = $langAnnouncements;
 
 if (isset($_GET['an_id'])) {
     (!$is_editor)? $student_sql = "AND visible = '1' AND start_display<=CURDATE() AND stop_display>=CURDATE()" : $student_sql = "";
@@ -422,9 +422,9 @@ if ($is_editor) {
     if ($displayForm && (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
         
         if (isset($_GET['modify'])) {
-            $langAdd = $nameTools = $langModifAnn;
+            $langAdd = $pageName = $langModifAnn;
         } else {
-            $nameTools = $langAddAnn;
+            $pageName = $langAddAnn;
         }
         $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAnnouncements);
         
@@ -523,7 +523,7 @@ if ($is_editor) {
 
     /* display announcements */
     if (isset($_GET['an_id'])) {
-        $nameTools = $row->title;
+        $pageName = $row->title;
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
         $tool_content .= $row->content;
     }

@@ -42,18 +42,18 @@ if (isset($_GET['uploadPath'])) {
 }
 
 $action = defined('COMMON_DOCUMENTS')? 'commondocs.php?': 'document.php?';
-$navigation[] = array('url' => $action . $groupset . "openDir=$uploadPath", 'name' => $nameTools);
+$navigation[] = array('url' => $action . $groupset . "openDir=$uploadPath", 'name' => $pageName);
 
 if ($can_upload) {
     if ($editPath) {
-        $nameTools = $langEditDoc;
+        $pageName = $langEditDoc;
         $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
         $htmlFileName = q($info->filename);
         $htmlTitle = ' value="' . q($info->title) . '"';
         $fileContent = file_get_contents($basedir . $info->path);
 	    $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
     } else {
-        $nameTools = $langCreateDoc;
+        $pageName = $langCreateDoc;
         $htmlFileName = "<input type='text' name='file_name' size='40'>";
         $htmlTitle = '';
         $fileContent = '';
@@ -62,7 +62,7 @@ if ($can_upload) {
     $action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
     $tool_content .= "<form action='$upload_target_url' method='post'>
 <fieldset>
-    <legend>$nameTools</legend>
+    <legend>$pageName</legend>
     $htmlPath
     $group_hidden_input
 	<table class='tbl' width='100%'>

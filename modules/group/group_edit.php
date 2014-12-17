@@ -31,7 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
-$nameTools = $langEditGroup;
+$pageName = $langEditGroup;
 
 require_once 'group_functions.php';
 initialize_group_id();

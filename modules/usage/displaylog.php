@@ -81,7 +81,7 @@ if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
 }
 
-$nameTools = $langUsersLog;
+$pageName = $langUsersLog;
 statistics_tools($course_code, "displaylog");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 

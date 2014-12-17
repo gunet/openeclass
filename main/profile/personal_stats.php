@@ -29,7 +29,7 @@ $require_valid_uid = TRUE;
 check_uid();
 check_guest();
 
-$nameTools = $langPersonalStats;
+$pageName = $langPersonalStats;
 
 $totalHits = 0;
 $totalDuration = 0;

@@ -48,7 +48,7 @@ validateCourseNodes($cId, isDepartmentAdmin());
 load_js('jstree');
 
 // Define $nameTools
-$nameTools = $langCourseInfo;
+$pageName = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 

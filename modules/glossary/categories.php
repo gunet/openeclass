@@ -33,7 +33,7 @@ $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-$nameTools = $langCategories;
+$pageName = $langCategories;
 
 $categories = array();
 $q = Database::get()->queryArray("SELECT id, name, description, `order`
@@ -127,10 +127,10 @@ if ($is_editor) {
     if (isset($_GET['add']) or isset($_GET['edit'])) {
         $html_id = $html_name = $description = '';
         if (isset($_GET['add'])) {
-            $nameTools = $langCategoryAdd;
+            $pageName = $langCategoryAdd;
             $submit_value = $langSubmit;
         } else {
-            $nameTools = $langCategoryMod;
+            $pageName = $langCategoryMod;
             $cat_id = intval($_GET['edit']);
             $data = Database::get()->querySingle("SELECT name, description
                                               FROM glossary_category WHERE id = ?d", $cat_id);

@@ -59,7 +59,7 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$nameTools = $langUserDetails;
+$pageName = $langUserDetails;
 $navigation[] = array("url" => "registration.php", "name" => $langNewUser);
 
 $user_registration = get_config('user_registration');

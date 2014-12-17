@@ -61,7 +61,7 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
-$nameTools = $langUpgrade;
+$pageName = $langUpgrade;
 
 $auth_methods = array('imap', 'pop3', 'ldap', 'db');
 $OK = "[<font color='green'> $langSuccessOk </font>]";

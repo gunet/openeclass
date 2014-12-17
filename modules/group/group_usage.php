@@ -65,7 +65,7 @@ if (!$is_editor and !$is_tutor) {
     exit;
 }
 
-$nameTools = $group_name;
+$pageName = $group_name;
 
 $type = 'duration';
 if (isset($_GET['type'])) {

@@ -30,7 +30,7 @@ $require_help = true;
 $helpTopic = 'AddCourseUnits';
 require_once '../../include/baseTheme.php';
 
-$nameTools = $langEditUnit;
+$pageName = $langEditUnit;
 
 load_js('tools.js');
 
@@ -38,7 +38,7 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $id = $_GET['edit'];
     $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_units WHERE id = ?d AND course_id = ?d",$id, $course_id);   
     if (!$cu) {
-        $nameTools = $langUnitUnknown;
+        $pageName = $langUnitUnknown;
         $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
         draw($tool_content, 2, null, $head_content);
         exit;
@@ -47,7 +47,7 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $unitdescr = $cu->comments;
     $unit_id = $cu->id;
 } else {
-    $nameTools = $langAddUnit;
+    $pageName = $langAddUnit;
     $unitdescr = $unittitle = '';
 }
 

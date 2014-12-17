@@ -28,7 +28,7 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$nameTools = $langUserAuthentication;
+$pageName = $langUserAuthentication;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $auth = isset($_GET['auth']) ? $_GET['auth'] : '';

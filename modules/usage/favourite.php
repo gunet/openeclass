@@ -49,7 +49,7 @@ $head_content .= "<script type='text/javascript'>
 
 statistics_tools($course_code, "favourite");
 
-$nameTools = $langFavourite;
+$pageName = $langFavourite;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
 if (isset($_POST['user_date_start'])) {

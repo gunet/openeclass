@@ -27,7 +27,7 @@ $helpTopic = 'Guest';
 require_once '../../include/baseTheme.php';
 require_once 'include/phpass/PasswordHash.php';
 
-$nameTools = $langAddGuest;
+$pageName = $langAddGuest;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langAdminUsers);
 
 // javascript

@@ -44,7 +44,7 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-$nameTools = $langOldStats;
+$pageName = $langOldStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 require_once 'admin_statistics_tools_bar.php';

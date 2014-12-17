@@ -44,7 +44,7 @@ if ($id != -1) {
     $q = Database::get()->querySingle("SELECT * FROM course_weekly_view
                                     WHERE id = ?d AND course_id = ?d", $id, $course_id);
     if (!$q) {
-        $nameTools = $langUnitUnknown;
+        $pageName = $langUnitUnknown;
         draw('', 2, null, $head_content);
         exit;
     }    
@@ -78,47 +78,47 @@ if (isset($_POST['submit_doc'])) {
 
 
 switch ($_GET['type']) {
-    case 'work': $nameTools = "$langAdd $langInsertWork";
+    case 'work': $pageName = "$langAdd $langInsertWork";
         include 'insert_work.php';
         list_assignments();
         break;
-    case 'doc': $nameTools = "$langAdd $langInsertDoc";
+    case 'doc': $pageName = "$langAdd $langInsertDoc";
         include 'insert_doc.php';
         list_docs();
         break;
-    case 'exercise': $nameTools = "$langAdd $langInsertExercise";
+    case 'exercise': $pageName = "$langAdd $langInsertExercise";
         include 'insert_exercise.php';
         list_exercises();
         break;
-    case 'text': $nameTools = "$langAdd $langInsertText";
+    case 'text': $pageName = "$langAdd $langInsertText";
         include 'insert_text.php';
         display_text_form();
         break;
-    case 'link': $nameTools = "$langAdd $langInsertLink";
+    case 'link': $pageName = "$langAdd $langInsertLink";
         include 'insert_link.php';
         list_links();
         break;
-    case 'lp': $nameTools = "$langAdd $langLearningPath1";
+    case 'lp': $pageName = "$langAdd $langLearningPath1";
         include 'insert_lp.php';
         list_lps();
         break;
-    case 'video': $nameTools = "$langAddV";
+    case 'video': $pageName = "$langAddV";
         include 'insert_video.php';
         list_videos();
         break;
-    case 'ebook': $nameTools = "$langAdd $langInsertEBook";
+    case 'ebook': $pageName = "$langAdd $langInsertEBook";
         include 'insert_ebook.php';
         list_ebooks();
         break;
-    case 'forum': $nameTools = "$langAdd $langInsertForum";
+    case 'forum': $pageName = "$langAdd $langInsertForum";
         include 'insert_forum.php';
         list_forums();
         break;
-    case 'poll': $nameTools = "$langAdd $langInsertPoll";
+    case 'poll': $pageName = "$langAdd $langInsertPoll";
         include 'insert_poll.php';
         list_polls();
         break;
-    case 'wiki': $nameTools = "$langAdd $langInsertWiki";
+    case 'wiki': $pageName = "$langAdd $langInsertWiki";
         include 'insert_wiki.php';
         list_wikis();
         break;

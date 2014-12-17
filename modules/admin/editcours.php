@@ -52,7 +52,7 @@ $cId = course_code_to_id($c);
 validateCourseNodes($cId, isDepartmentAdmin());
 
 // Define $nameTools
-$nameTools = $langCourseEdit;
+$pageName = $langCourseEdit;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 

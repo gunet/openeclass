@@ -44,7 +44,7 @@ $action = new action();
 $action->record(MODULE_ID_GROUPS);
 /* * *********************************** */
 
-$nameTools = $langGroups;
+$pageName = $langGroups;
 $totalRegistered = 0;
 unset($message);
 

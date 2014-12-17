@@ -78,7 +78,7 @@ if (defined('COMMON_DOCUMENTS')) {
 
 
 if (isset($_GET['showQuota'])) {
-    $nameTools = $langQuotaBar;
+    $pageName = $langQuotaBar;
     if ($subsystem == GROUP) {
         $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => $langDoc);
     } elseif ($subsystem == EBOOK) {

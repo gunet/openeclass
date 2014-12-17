@@ -36,7 +36,7 @@ if ($isInOpenCoursesMode) {
 }
 
 $tree = new Hierarchy();
-$nameTools = $langListCourses;
+$pageName = $langListCourses;
 $navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
 
 if (isset($_GET['fc'])) {

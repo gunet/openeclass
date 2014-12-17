@@ -24,7 +24,7 @@ $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modalconfirmation.php';
 
-$nameTools = $langAdmin;
+$pageName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 
 // Construct a table with platform identification info

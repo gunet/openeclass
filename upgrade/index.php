@@ -27,7 +27,7 @@ if ($urlAppend[strlen($urlAppend) - 1] != '/') {
     $urlAppend .= '/';
 }
 
-$nameTools = $langUpgrade;
+$pageName = $langUpgrade;
 
 if ($language == 'el') {
     $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=el:upgrade_doc';

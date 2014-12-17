@@ -28,7 +28,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 //Module name
-$nameTools = $langGradebook;
+$pageName = $langGradebook;
 
 //Datepicker
 load_js('tools.js');
@@ -113,7 +113,7 @@ if ($is_editor) {
     
     if(isset($_GET['editUsers'])){
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $nameTools = $langConfig;
+        $pageName = $langConfig;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -122,7 +122,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['gradebookBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $nameTools = $langUsers;
+        $pageName = $langUsers;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -131,7 +131,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $nameTools = $langModify;
+        $pageName = $langModify;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -140,7 +140,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $nameTools = $langGradebookBook;
+        $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -150,11 +150,11 @@ if ($is_editor) {
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         if (isset($_GET['addActivityAs'])) {
-            $nameTools = "$langAdd $langInsertWork";
+            $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
-            $nameTools = "$langAdd $langInsertExercise";
+            $pageName = "$langAdd $langInsertExercise";
         } else {
-            $nameTools = $langGradebookAddActivity;
+            $pageName = $langGradebookAddActivity;
         }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -164,7 +164,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['book'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $nameTools = $langGradebookBook;
+        $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -176,7 +176,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } else {
-        $nameTools = $langGradebook;
+        $pageName = $langGradebook;
         $tool_content .= action_bar(array(
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",

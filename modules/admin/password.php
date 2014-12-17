@@ -37,7 +37,7 @@ $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
 require_once 'include/phpass/PasswordHash.php';
 
-$nameTools = $langChangePass;
+$pageName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'edituser.php', 'name' => $langEditUser);
 

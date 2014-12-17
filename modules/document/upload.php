@@ -44,7 +44,7 @@ if ($can_upload) {
                           'level' => 'primary-label')));
     if (isset($_GET['ext'])) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
-        $nameTools = $langExternalFile;
+        $pageName = $langExternalFile;
         $fileinput = "
         <div class='form-group'>
           <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
@@ -53,7 +53,7 @@ if ($can_upload) {
           </div>
         </div>";
     } else {
-        $nameTools = $langDownloadFile;
+        $pageName = $langDownloadFile;
         $fileinput = "
         <div class='form-group'>
           <label for='userFile' class='col-md-6 control-label'>$langPathUploadFile</label>

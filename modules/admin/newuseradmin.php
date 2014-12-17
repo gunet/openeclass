@@ -214,10 +214,10 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
     }
 
     if ($pstatus == 5) {
-        $nameTools = $langUserDetails;
+        $pageName = $langUserDetails;
         $title = $langInsertUserInfo;
     } else {
-        $nameTools = $langProfReg;
+        $pageName = $langProfReg;
         $title = $langNewProf;
     }
 

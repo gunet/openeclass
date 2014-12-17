@@ -27,7 +27,7 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
-$nameTools = $langPHPInfo;
+$pageName = $langPHPInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Display link to go back to index.php

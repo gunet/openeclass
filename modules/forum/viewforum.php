@@ -54,7 +54,7 @@ $myrow = Database::get()->querySingle("SELECT id, name FROM forum WHERE id = ?d 
 $forum_name = $myrow->name;
 $forum_id = $myrow->id;
 
-$nameTools = q($forum_name);
+$pageName = q($forum_name);
 
 if (isset($_GET['empty'])) { // if we come from newtopic.php
     $tool_content .= "<div class='alert alert-warning'>$langEmptyNewTopic</div>";

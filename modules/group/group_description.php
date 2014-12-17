@@ -26,7 +26,7 @@ $require_help = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 
-$nameTools = $langAddDescription;
+$pageName = $langAddDescription;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : '';
 

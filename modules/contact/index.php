@@ -33,7 +33,7 @@ if (isset($_REQUEST['course_id'])) {
 }
 
 $title = course_id_to_title($course_id);
-$nameTools = $langContactProf;
+$pageName = $langContactProf;
 
 $userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
 

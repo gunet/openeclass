@@ -25,7 +25,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-$nameTools = $langAnnouncements;
+$pageName = $langAnnouncements;
 
 $isaid = isset($_GET['aid']);
 $announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `body` FROM `admin_announcement` WHERE id = ?d" :

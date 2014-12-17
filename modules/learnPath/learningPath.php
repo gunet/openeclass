@@ -65,7 +65,7 @@ if (isset($_GET['path_id'])) {
 }
 
 $lp = Database::get()->querySingle("SELECT name, visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
-$nameTools = $lp->name;
+$pageName = $lp->name;
 if (!add_units_navigation(TRUE)) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 }

@@ -134,7 +134,7 @@ if (isset($_POST['optionsSave'])) {
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $_POST['active_theme_options'], 'theme_options_id');
     redirect_to_home_page('modules/admin/theme_options.php');     
 } else {
-    $nameTools = $langThemeSettings;
+    $pageName = $langThemeSettings;
     $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
     load_js('bootstrap-colorpicker');
     $head_content .= "

@@ -42,7 +42,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_EXERCISE);
 
-$nameTools = $langExercices;
+$pageName = $langExercices;
 
 /* * **************************** */
 /* Clears the exercise session */

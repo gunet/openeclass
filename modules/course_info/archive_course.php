@@ -24,7 +24,7 @@ $require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-$nameTools = $langArchiveCourse;
+$pageName = $langArchiveCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 
 if (extension_loaded('zlib')) {

@@ -64,7 +64,7 @@ EOF;
 $messBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']), 'name' => $langAdm);
-$nameTools = $langInsertMyExerciseToolName;
+$pageName = $langInsertMyExerciseToolName;
 
 // see checked exercises to add
 $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);

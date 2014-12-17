@@ -44,7 +44,7 @@ require_once 'documentindexer.class.php';
 require_once 'unitindexer.class.php';
 require_once 'unitresourceindexer.class.php';
 
-$nameTools = $langSearch;
+$pageName = $langSearch;
 
 if (!get_config('enable_search')) {
     $tool_content .= "<div class='alert alert-info'>$langSearchDisabled</div>";

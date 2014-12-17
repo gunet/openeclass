@@ -51,7 +51,7 @@ ModalBoxHelper::loadModalBox();
 
 $body_action = '';
 
-$nameTools = $langLearningObject;
+$pageName = $langLearningObject;
 if (!add_units_navigation()) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
     if ($is_editor) {
@@ -143,30 +143,30 @@ $sql = "SELECT `contentType`,
 $resultBrowsed = Database::get()->querySingle($sql, $_SESSION['path_id'], $_SESSION['lp_module_id'] , $course_id);
 
 if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
-    $nameTools = $langSCORMTypeDesc;
+    $pageName = $langSCORMTypeDesc;
 }
 if ($module->contentType == CTEXERCISE_) {
-    $nameTools = $langExerciseAsModuleLabel;
+    $pageName = $langExerciseAsModuleLabel;
 }
 if ($module->contentType == CTDOCUMENT_) {
-    $nameTools = $langDocumentAsModuleLabel;
+    $pageName = $langDocumentAsModuleLabel;
 }
 if ($module->contentType == CTLINK_) {
-    $nameTools = $langLinkAsModuleLabel;
+    $pageName = $langLinkAsModuleLabel;
 }
 if ($module->contentType == CTCOURSE_DESCRIPTION_) {
-    $nameTools = $langCourseDescriptionAsModuleLabel;
+    $pageName = $langCourseDescriptionAsModuleLabel;
 }
 if ($module->contentType == CTLABEL_) {
-    $nameTools = $langModuleOfMyCourseLabel_onom;
+    $pageName = $langModuleOfMyCourseLabel_onom;
 }
 if ($module->contentType == CTMEDIA_ || $module->contentType == CTMEDIALINK_) {
-    $nameTools = $langMediaAsModuleLabel;
+    $pageName = $langMediaAsModuleLabel;
 }
 if ($is_editor) {
-    $nameTools = $langModify . " " . $nameTools;
+    $pageName = $langModify . " " . $pageName;
 } else {
-    $nameTools = $langTracking . " " . $nameTools;
+    $pageName = $langTracking . " " . $pageName;
 }
 
 // redirect user to the path browser if needed

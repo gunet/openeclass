@@ -58,7 +58,7 @@ require_once "include/lib/fileDisplayLib.inc.php";
 $pwd = getcwd();
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$nameTools = $langimportLearningPath;
+$pageName = $langimportLearningPath;
 
 // error handling
 $errorFound = false;

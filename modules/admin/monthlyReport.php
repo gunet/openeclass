@@ -30,7 +30,7 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
-$nameTools = $langMonthlyReport;
+$pageName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 require_once 'admin_statistics_tools_bar.php';

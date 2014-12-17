@@ -41,7 +41,7 @@ require_once 'include/action.php';
 $action_stats = new action();
 $action_stats->record(MODULE_ID_LINKS);
 
-$nameTools = $langLinks;
+$pageName = $langLinks;
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 $menuTypeID = ($is_in_tinymce) ? 5 : 2;
@@ -158,7 +158,7 @@ if ($is_editor) {
     // Display the correct title and form for adding or modifying a category or link.
     if (in_array($action, array('addlink', 'editlink'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
-        $nameTools = ($action == 'addlink')? $langLinkAdd : $langLinkModify;        
+        $pageName = ($action == 'addlink')? $langLinkAdd : $langLinkModify;        
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
         if ($action == 'editlink') {
@@ -215,7 +215,7 @@ if ($is_editor) {
         </div>";
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
-        $nameTools = ($action == 'addcategory')? $langCategoryAdd : $langCategoryMod;
+        $pageName = ($action == 'addcategory')? $langCategoryAdd : $langCategoryMod;
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
         if ($action == 'editcategory') {

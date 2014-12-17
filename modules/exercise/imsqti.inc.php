@@ -34,8 +34,8 @@ require_once "include/pclzip/pclzip.lib.php";
 
 $pwd = getcwd();
 
-$nameTools = $langimportLearningPath;
-$nameTools = "Import IMS QTI";
+$pageName = $langimportLearningPath;
+$pageName = "Import IMS QTI";
 
 // error handling
 $errorFound = false;

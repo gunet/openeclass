@@ -27,7 +27,7 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-$nameTools = $langChangeUser;
+$pageName = $langChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {

@@ -37,7 +37,7 @@ $require_current_course = true;
 require_once '../../../include/init.php';
 require_once 'include/lib/textLib.inc.php';
 
-$nameTools = $langCourseProgram;
+$pageName = $langCourseProgram;
 
 ?>
 <html>

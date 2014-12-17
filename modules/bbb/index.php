@@ -41,7 +41,7 @@ $action = new action();
 $action->record(MODULE_ID_BBB);
 /* * *********************************** */
 
-$nameTools = $langBBB;
+$pageName = $langBBB;
 
 // guest user not allowed
 if (check_guest()) {
@@ -129,7 +129,7 @@ if ($is_editor) {
 }
 
 if (isset($_GET['add'])) {    
-    $nameTools = $langNewBBBSession;
+    $pageName = $langNewBBBSession;
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
     new_bbb_session();
 }

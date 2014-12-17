@@ -28,7 +28,7 @@ require_once '../../include/baseTheme.php';
 require_once 'functions.php';
 require_once 'modules/graphics/plotter.php';
 
-$nameTools = $langPollCharts;
+$pageName = $langPollCharts;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langQuestionnaire);
 
 $head_content .= "<script type = 'text/javascript'>

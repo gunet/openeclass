@@ -80,7 +80,7 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    $nameTools = $langReply;
+    $pageName = $langReply;
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
     $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($myrow->name));
     $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => q($myrow->title));

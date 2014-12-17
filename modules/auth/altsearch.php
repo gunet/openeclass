@@ -81,7 +81,7 @@ $comment_required = !$autoregister;
 $email_required = !$autoregister || get_config('email_required');
 $am_required = !$prof && get_config('am_required');
 
-$nameTools = ($prof ? $langReqRegProf : $langUserData) . ' (' . (get_auth_info($auth)) . ')';
+$pageName = ($prof ? $langReqRegProf : $langUserData) . ' (' . (get_auth_info($auth)) . ')';
 $email_message = $langEmailNotice;
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 

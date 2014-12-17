@@ -27,7 +27,7 @@ $helpTopic = 'User';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 
-$nameTools = $langAddManyUsers;
+$pageName = $langAddManyUsers;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langAdminUsers);
 
 $tool_content .= action_bar(array(

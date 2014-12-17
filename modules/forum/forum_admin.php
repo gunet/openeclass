@@ -34,7 +34,7 @@ require_once 'include/course_settings.php';
 require_once 'functions.php';
 require_once 'modules/search/indexer.class.php';
 
-$nameTools = $langForumAdmin;
+$pageName = $langForumAdmin;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 
 $forum_id = isset($_REQUEST['forum_id']) ? intval($_REQUEST['forum_id']) : '';
@@ -76,7 +76,7 @@ $tool_content .= "<div id='operations_container'>".
 // forum go
 if (isset($_GET['forumgo'])) {
     $ctg = category_name($cat_id);
-    $nameTools = $langAddForCat;
+    $pageName = $langAddForCat;
     $tool_content .= "
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgoadd=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
@@ -118,7 +118,7 @@ elseif (isset($_GET['forumgoedit'])) {
     $forum_name = $result->name;
     $forum_desc = $result->desc;
     $cat_id_1 = $result->cat_id;
-    $nameTools = $langChangeForum;
+    $pageName = $langChangeForum;
     $tool_content .= "
                 <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumgosave=yes&amp;cat_id=$cat_id' method='post' onsubmit=\"return checkrequired(this,'forum_name');\">
@@ -170,7 +170,7 @@ elseif (isset($_GET['forumgoedit'])) {
 
 // edit forum category
 elseif (isset($_GET['forumcatedit'])) {
-    $nameTools = $langModCatName;
+    $pageName = $langModCatName;
     
     $result = Database::get()->querySingle("SELECT id, cat_title FROM forum_category
                                 WHERE id = ?d
@@ -230,7 +230,7 @@ elseif (isset($_GET['forumcatadd'])) {
 
 // forum go add
 elseif (isset($_GET['forumgoadd'])) {
-    $nameTools = $langAdd;
+    $pageName = $langAdd;
     
     $ctg = category_name($cat_id);
     $forid = Database::get()->query("INSERT INTO forum (name, `desc`, cat_id, course_id)
@@ -264,7 +264,7 @@ elseif (isset($_GET['forumgoadd'])) {
 
 // delete forum category
 elseif (isset($_GET['forumcatdel'])) {
-    $nameTools = $langCatForumAdmin;
+    $pageName = $langCatForumAdmin;
     
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id);
     foreach ($result as $result_row) {
@@ -301,7 +301,7 @@ elseif (isset($_GET['forumcatdel'])) {
 
 // delete forum
 elseif (isset($_GET['forumgodel'])) {
-    $nameTools = $langDelete;
+    $pageName = $langDelete;
     
     $result = Database::get()->queryArray("SELECT id FROM forum WHERE id = ?d AND course_id = ?d", $forum_id, $course_id);    
     foreach ($result as $result_row) {
@@ -448,7 +448,7 @@ elseif (isset($_GET['forumgodel'])) {
         </form>
         </div>";
 } else {
-    $nameTools = $langAddCategory;    
+    $pageName = $langAddCategory;    
     $tool_content .= "
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatadd=yes' method='post' onsubmit=\"return checkrequired(this,'categories');\">            

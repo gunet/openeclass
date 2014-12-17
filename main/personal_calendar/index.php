@@ -112,7 +112,7 @@ function show_day(day,month,year){
 //$action = new action();
 //$action->record(MODULE_ID_ANNOUNCE);
 
-$nameTools = $langMyAgenda;
+$pageName = $langMyAgenda;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
@@ -217,9 +217,9 @@ if (isset($message) && $message) {
 /* display form */
 if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
     if (isset($_GET['modify'])) {
-        $langAdd = $nameTools = $langModifEvent;
+        $langAdd = $pageName = $langModifEvent;
     } else {
-        $nameTools = $langAddEvent;
+        $pageName = $langAddEvent;
     }
     $navigation[] = array('url' => "index.php", 'name' => $langEvents);
     if (!isset($eventToModify))

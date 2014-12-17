@@ -35,7 +35,7 @@ require_once 'functions.php';
 
 load_js('bootstrap-slider');
 
-$nameTools = $langParticipate;
+$pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
 
 if (!isset($_REQUEST['UseCase']))

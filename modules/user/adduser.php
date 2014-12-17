@@ -32,7 +32,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/log.php';
 
-$nameTools = $langAddUser;
+$pageName = $langAddUser;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langAdminUsers);
 
 if (isset($_GET['add'])) {

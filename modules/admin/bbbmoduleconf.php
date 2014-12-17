@@ -26,7 +26,7 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/bbb/functions.php';
 
-$nameTools = $langBBBConf;
+$pageName = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 load_js('tools.js');

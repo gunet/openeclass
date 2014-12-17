@@ -25,7 +25,7 @@ define('HIDE_TOOL_TITLE', 1);
 
 require_once 'include/baseTheme.php';
 
-$nameTools = $langCheckTools;
+$pageName = $langCheckTools;
 
 load_js('check.js');
 $head_content .= <<<hContent

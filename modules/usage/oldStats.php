@@ -51,7 +51,7 @@ $head_content .= "<script type='text/javascript'>
 statistics_tools($course_code, "oldStats");
 
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-$nameTools = $langOldStats;
+$pageName = $langOldStats;
 
 if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);

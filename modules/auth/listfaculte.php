@@ -37,7 +37,7 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
 }
 
 $tree = new Hierarchy();
-$nameTools = $langSelectFac;
+$pageName = $langSelectFac;
 $roots = $tree->buildRootsArray();
 
 if (count($roots) <= 0) {

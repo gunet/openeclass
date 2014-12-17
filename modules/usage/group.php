@@ -36,7 +36,7 @@ require_once "statistics_tools_bar.php";
 
 statistics_tools($course_code, "group");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-$nameTools = $langGroupUsage;
+$pageName = $langGroupUsage;
 
 initialize_group_info();
 

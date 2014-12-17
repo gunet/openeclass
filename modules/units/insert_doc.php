@@ -63,7 +63,7 @@ function list_docs() {
     global $id, $webDir, $course_code, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
     $langDate, $langType, $langAddModulesButton, $langChoice,
-    $langNoDocuments, $course_code, $langCommonDocs, $nameTools;
+    $langNoDocuments, $course_code, $langCommonDocs, $pageName;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';
     $path = get_dir_path('path');
@@ -73,7 +73,7 @@ function list_docs() {
 
     if ($id == -1) {
         $common_docs = true;
-        $nameTools = $langCommonDocs;
+        $pageName = $langCommonDocs;
         $group_sql = "course_id = -1 AND subsystem = " . COMMON . "";
         $basedir = $webDir . '/courses/commondocs';
         $result = Database::get()->queryArray("SELECT * FROM document

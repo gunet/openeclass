@@ -31,7 +31,7 @@
 $mail_ver_excluded = true;
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
-$nameTools = $langMailVerify;
+$pageName = $langMailVerify;
 
 $code = (isset($_GET['h']) && ctype_xdigit($_GET['h'])) ? $_GET['h'] : NULL;
 $req_id = (isset($_GET['rid']) && is_numeric($_GET['rid'])) ? intval($_GET['rid']) : NULL;

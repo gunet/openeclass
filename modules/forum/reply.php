@@ -67,7 +67,7 @@ $forum_id = $forum;
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
-$nameTools = $langReply;
+$pageName = $langReply;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
 $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic&amp;forum=$forum_id", 'name' => q($topic_title));

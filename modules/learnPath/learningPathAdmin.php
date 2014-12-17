@@ -63,7 +63,7 @@ $body_action = '';
 $dialogBox = '';
 
 if (!add_units_navigation()) {
-    $nameTools = $langAdm;
+    $pageName = $langAdm;
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 }
 

@@ -29,7 +29,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$nameTools = $langMultiDelUser;
+$pageName = $langMultiDelUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 

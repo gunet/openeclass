@@ -136,12 +136,12 @@ if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
 }
 if (!$info) {
-    $nameTools = $langUnitUnknown;
+    $pageName = $langUnitUnknown;
     $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $nameTools = htmlspecialchars($info->title);
+    $pageName = htmlspecialchars($info->title);
     $comments = trim($info->comments);
 }
 
@@ -185,7 +185,7 @@ foreach (array('previous', 'next') as $i) {
 
 $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
-        <h3 class='page-title'>$nameTools</h3>
+        <h3 class='page-title'>$pageName</h3>
       </div>
     </div>";
 

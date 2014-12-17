@@ -216,7 +216,7 @@ $head_content .= "<script type='text/javascript'>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);
-$nameTools = $langListCours;
+$pageName = $langListCours;
 
 // Display Actions Toolbar
 $tool_content .= "<div id='operations_container'>" .
