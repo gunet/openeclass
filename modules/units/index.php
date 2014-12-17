@@ -69,8 +69,8 @@ if ($access) {
 if ($is_editor) {
     $base_url = $urlAppend . "modules/units/insert.php?course=$course_code&amp;id=$id&amp;type=";
     $tool_content .= "
-<div class='row'>
-  <div class='col-md-12'>" .
+    <div class='row'>
+        <div class='col-md-12'>" .
         action_bar(array(
             array('title' => $langEditUnitSection,
                   'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
@@ -122,9 +122,9 @@ if ($is_editor) {
                   'icon' => 'fa fa-paste',
                   'level' => 'secondary'),
             )) .
-   "
-  </div>
-</div>";
+    "
+    </div>
+  </div>";
 }
 
 if ($is_editor) {
@@ -149,14 +149,14 @@ if (!$info) {
 foreach (array('previous', 'next') as $i) {
     if ($i == 'previous') {
         $op = '<=';
-        $dir = 'DESC';
-        $arrow1 = '« ';
+        $dir = 'DESC';        
+        $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
         $arrow2 = '';
     } else {
         $op = '>=';
-        $dir = '';
+        $dir = '';      
         $arrow1 = '';
-        $arrow2 = ' »';
+        $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";        
     }
     
     if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
@@ -176,132 +176,69 @@ foreach (array('previous', 'next') as $i) {
                        LIMIT 1", $course_id, $id);
     if ($q) {
         $q_id = $q->id;
-        $q_title = htmlspecialchars($q->title);                
-        $link[$i] = "$arrow1<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$q_title</a>$arrow2";
+        $q_title = htmlspecialchars($q->title);         
+        $link[$i] = "<a class='btn-default-eclass place-at-toolbox' title='$q_title' rel='tooltip' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1 $q_title $arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
 }
 
-
-
-$tool_content .= "
-<div class='row margin-bottom'>
-  <div class='col-md-12'>
-    <h3 class='page-title'>$nameTools</h3>
-  </div>
-</div>
-";
-
-
-
-
+$tool_content .= "<div class='row margin-bottom'>
+      <div class='col-md-12'>
+        <h3 class='page-title'>$nameTools</h3>
+      </div>
+    </div>";
 
 if (!empty($comments)) {
-    $tool_content .= "
-
-<div class='row'>
-  <div class='col-md-12'>
-    <div class='panel padding'>
-
-          $comments
-
-    </div>
-  </div>
-</div>";
+    $tool_content .= "<div class='row'>
+      <div class='col-md-12'>
+        <div class='panel padding'>
+              $comments
+        </div>
+      </div>
+    </div>";
 }
 
+if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
+    $tool_content .= "<div class='row'>
+        <div class='col-md-12'>    
+        <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>";
+        
+    $tool_content .= "
+        ". $link['previous'] ."
+        ". $link['next'] ."";
+    
+    $tool_content .= "</div>
+        </div>
+    </div>";
+}
 
-
-$tool_content .= "
-<div class='row'>
+$tool_content .= "<div class='row'>
   <div class='col-md-12'>
     <div class='panel padding'>";
-
 show_resources($id);
-
 $tool_content .= "
-
     </div>
   </div>
 </div>";
 
-
-
-$tool_content .= "
-<div class='row'>
-  <div class='col-md-12'>
-    
-    <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>
-
-    <a class='btn-default-eclass place-at-toolbox' title='Previous Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='top' href=''>
-      <i class='fa fa-arrow-left space-after-icon'></i>Previous Chapter*
-    </a>    
-
-    <a class='btn-default-eclass place-at-toolbox' title='Select Chapter' rel='tooltip' data-toggle='tooltip' data-placement='top' href=''>
-      <i class='fa fa-angle-down space-after-icon'></i>Select Chapter*
-    </a>
-
-    
-
-    <a class='btn-default-eclass place-at-toolbox' title='Next Chapter*' rel='tooltip' data-toggle='tooltip' data-placement='top' href=''>
-      Next Chapter*<i class='fa fa-arrow-right space-before-icon'></i>
-    </a>
-
-    </div>
-  </div>
-</div>
-
-
-<div class='row'>
-  <div class='col-md-12'>
-    
-    <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>
-      
-
-  
-";
-if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "
-
-
-    
-
-    ". $link['previous'] ."
-    ". $link['next'] ."
-
-
-    <form name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
-          <table width='99%' class='tbl'>
-            <tr class='odd'>
-              <td class='right'>" . $langCourseUnits . ":&nbsp;</td>
-              <td width='50' class='right'>" .
-              "<select name='id' onChange='document.unitselect.submit();'>";
-
-$q = Database::get()->queryArray("SELECT id, title FROM course_units
-               WHERE course_id = ?d AND `order` > 0
-                     $visibility_check
-               ORDER BY `order`", $course_id);
-foreach ($q as $info) {
-    $selected = ($info->id == $id) ? ' selected ' : '';
-    $tool_content .= "<option value='$info->id'$selected>" .
-            htmlspecialchars(ellipsize($info->title, 40)) .
-            '</option>';
-}
-$tool_content .= "</select>
-            </td>
-          </tr>
-        </table>
-      </form>
-
-
-
-    ";
-}
-$tool_content .= "
-
-    </div>
-  </div>
-</div>";
+$tool_content .= "<div class='form-wrapper'>";
+$tool_content .= "<form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
+              <div class='form-group'>
+              <label class='col-sm-4 control-label'>$langCourseUnits</label>
+              <div class='col-sm-8'>
+              <select name='id' class='form-control' onChange='document.unitselect.submit();'>";
+              $q = Database::get()->queryArray("SELECT id, title FROM course_units
+                           WHERE course_id = ?d AND `order` > 0
+                                 $visibility_check
+                           ORDER BY `order`", $course_id);
+            foreach ($q as $info) {
+                $selected = ($info->id == $id) ? ' selected ' : '';
+                $tool_content .= "<option value='$info->id'$selected>" .
+                        htmlspecialchars(ellipsize($info->title, 40)) .
+                            '</option>';
+            }
+$tool_content .= "</select></div></div>
+      </form></div>";
 
 draw($tool_content, 2, null, $head_content);
