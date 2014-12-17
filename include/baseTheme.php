@@ -113,6 +113,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
     }
 
+    if (!$toolName and $pageName) {
+        $toolName = $pageName;
+    } elseif (!$pageName and $toolName) {
+        $pageName = $toolName;
+    }
+
     $pageTitle = '';
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
@@ -322,7 +328,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_TITLE', $langSearch);
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
 
-    $t->set_var('TOOL_NAME', $pageName);
+    $t->set_var('TOOL_NAME', $toolName);
 
     if ($is_editor) {
         $t->set_var('ACTIVATE_MODULE', $mod_activation);
@@ -339,9 +345,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     // breadcrumb and page title
     if (!$is_embedonce and !$is_mobile) {
-        if (!$page_name and $pageName) {
-            $page_name = $pageName;
-        }
 
         $t->set_block('mainBlock', 'breadCrumbLinkBlock', 'breadCrumbLink');
         $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
@@ -393,8 +396,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
         }
 
-        if (isset($page_name) && !$pageName) {
-            $pageTitle .= " | " . $page_name;
+        if ($pageName) {
+            $pageTitle .= " | " . $pageName;
         }
 
     } else {

@@ -30,7 +30,7 @@ require_once 'include/lib/user.class.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$pageName = $langUserProfile;
+$pageName = $langMyProfile;
 
 $userdata = array();
 
@@ -39,8 +39,8 @@ if (isset($_GET['id']) and isset($_GET['token'])) {
     if (!token_validate($id, $_GET['token'], 3600)) {
         forbidden($_SERVER['REQUEST_URI']);
     }
+    $pageName = $langUserProfile;
 } else {
-    $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
     $id = $uid;
 }
 

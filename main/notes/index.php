@@ -50,7 +50,7 @@ require_once 'main/notes/notes.class.php';
 //$action = new action();
 //$action->record(MODULE_ID_ANNOUNCE);
 
-$pageName = $langNotes;
+$toolName = $langNotes;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');

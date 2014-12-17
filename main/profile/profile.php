@@ -36,6 +36,8 @@ require_once 'include/log.php';
 check_uid();
 check_guest();
 
+$navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
+
 $tree = new Hierarchy();
 $userObj = new User();
 $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
