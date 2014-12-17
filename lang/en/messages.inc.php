@@ -3526,3 +3526,7 @@ $langFormErrors = 'Form contains errors. Please correct and resubmit form.';
  * ************************************************************ */
 $langMoreOptions = 'More options';
 $langLessOptions = 'Less options';
+
+$langMyCoursesSide = 'My Courses';
+$langMyMessagesSide = 'My Messages';
+$langQuickNotesSide = 'Quick Notes';

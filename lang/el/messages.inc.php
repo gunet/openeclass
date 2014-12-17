@@ -2655,7 +2655,7 @@ $langInvalidCharsPass = "Έχετε χρησιμοποιήσει μη επιτρ
 $langInvalidCharsUsername = "Έχετε χρησιμοποιήσει μη επιτρεπτούς χαρακτήρες στο όνομα χρήστη σας";
 $langProfileReg = "Οι αλλαγές στο προφίλ σας αποθηκεύτηκαν";
 $langOldPass = "Παρόν συνθηματικό";
-$langChangePass = "Αλλαγή συνθηματικού πρόσβασης";
+$langChangePass = "Αλλαγή συνθηματικού";
 $langUserProfile = 'Στοιχεία χρήστη';
 $langDisplayProfile = "Δημόσια Εμφάνιση Προφίλ";
 $langProfileInfoPrivate = 'ιδιωτικό';
@@ -4378,3 +4378,7 @@ $langFormErrors = 'Η φόρμα περιέχει λάθη. Παρακαλώ δ�
  * ************************************************************ */
 $langMoreOptions = 'Περισσότερες επιλογές';
 $langLessOptions = 'Λιγότερες επιλογές';
+
+$langMyCoursesSide = 'Τα μαθηματα μου';
+$langMyMessagesSide = 'Τα μηνυματα μου';
+$langQuickNotesSide = 'Συντομες σημειωσεις';

@@ -261,7 +261,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_STATS', $GLOBALS['langMyStats']);
         $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");        
         $t->set_var('LANG_LOGOUT', $langLogout);
-        $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');        
+        $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
+        $t->set_var('MY_COURSES', $GLOBALS['langMyCoursesSide']);
+        $t->set_var('MY_MESSAGES', $GLOBALS['langMyMessagesSide']);
+        $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
        
     $t->set_var('LOGGED_IN', 'true');
     } else {

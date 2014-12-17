@@ -72,7 +72,7 @@ if ($userdata) {
                     'url' => $passurl,
                     'icon' => 'fa-key',
                     'show' => $allow_password_change,
-                    'level' => 'primary'),
+                    'level' => 'primary-label'),
                 array('title' => $langEmailUnsubscribe,
                     'url' => "emailunsubscribe.php",
                     'icon' => 'fa-envelope',
