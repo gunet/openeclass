@@ -1122,7 +1122,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
 function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEdit, $langDelete, $langVisibility,
     $langAddToCourseHome, $langDown, $langUp,
-    $langConfirmDelete, $course_code, $themeimg;
+    $langConfirmDelete, $course_code;
 
     static $first = true;
 
@@ -1138,10 +1138,10 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
-    $tool_content .= "<td class='option-btn-cell'>";
-    $tool_content .= action_button(array(
+    $content = "<td class='option-btn-cell'>";
+    $content .= action_button(array(
                 array('title' => $langEdit,
-                      'url' => $editlink,
+                      'url' => $edit_link,
                       'icon' => 'fa-edit',
                       'show' => $status != 'del'),
                 array('title' => $langDelete,
@@ -1156,47 +1156,17 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                 array('title' => $langAddToCourseHome,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
                       'icon' => $icon_vis,
-                      'show' => $status != 'del' and in_array($res_type, array('description')))
-    ));
-    /*if ($status != 'del') {
-        $content = "<td width='3'><a href='$edit_link'>" .
-                "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a></td>";
-    } else {
-        $content = "<td width='3'>&nbsp;</td>";
-    }
-    $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id'" .
-            " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
-            "<img src='$themeimg/delete.png' " .
-            "title='$langDelete' alt='$langDelete'></a></td>";
-*/
-    if ($status != 'del') {
-        if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) {
-            $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
-                    "<img src='$themeimg/$icon_vis' " .
-                    "title='$langVisibility'></a></td>";
-        } elseif (in_array($res_type, array('description'))) {
-            $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
-                    "<img src='$themeimg/$icon_vis' " .
-                    "title='$langAddToCourseHome' alt='$langAddToCourseHome'></a></td>";
-        } else {
-
-            $content .= "<td width='3'>&nbsp;</td>";
-        }
-    } else {
-        $content .= "<td width='3'>&nbsp;</td>";
-    }
-    if ($resource_id != $GLOBALS['max_resource_id']) {
-        $content .= "<td width='12'><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id'>" .
-                "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a></div></td>";
-    } else {
-        $content .= "<td width='12'>&nbsp;</td>";
-    }
-    if (!$first) {
-        $content .= "<td width='12'><div align='left'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id'>" .
-                "<img src='$themeimg/up.png' title='$langUp' alt='$langUp'></a></div></td>";
-    } else {
-        $content .= "<td width='12'>&nbsp;</td>";
-    }
+                      'show' => $status != 'del' and in_array($res_type, array('description'))),
+                array('title' => $langDown,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id",
+                      'icon' => 'fa-arrow-down',
+                      'show' => $resource_id != $GLOBALS['max_resource_id']),
+                array('title' => $langUp,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
+                      'icon' => 'fa-arrow-up',
+                      'show' => !$first)
+            ));
+    
     $first = false;
     return $content;
 }
