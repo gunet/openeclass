@@ -34,6 +34,8 @@
  *
  */
 
+$navigation = array();
+$nameTools = '';
 require_once 'init.php';
 
 if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
@@ -41,8 +43,8 @@ if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
     $cid = course_code_to_id($course_code);
     $visible = ($_GET['hide'] == 0) ? 0 : 1;
     Database::get()->query("UPDATE course_module SET visible = ?d
-                        WHERE module_id = ?d AND
-                        course_id = ?d", $visible, $eclass_module_id, $cid);
+        WHERE module_id = ?d AND
+        course_id = ?d", $visible, $eclass_module_id, $cid);
 }
 
 if (isset($toolContent_ErrorExists)) {
@@ -56,7 +58,6 @@ if (isset($toolContent_ErrorExists)) {
     }
     exit();
 }
-
 
 require_once 'template/template.inc.php';
 require_once 'tools.php';
@@ -74,22 +75,22 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $courseHome, $course_code, $helpTopic,
-    $homePage, $title, $is_editor, $langActivate,
-    $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
-    $langChooseLang, $langCopyrightFooter, $langDeactivate,
-    $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp,
-    $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
-    $langMyPersoAnnouncements, $langMyPersoDeadlines,
-    $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
-    $langPersonalisedBriefcase, $langSearch, $langUser,
-    $langUserBriefcase, $langUserHeader, $language, $nameTools,
-    $navigation, $page_name, $page_navi,
-    $require_current_course, $require_help, $siteName, $siteName,
-    $status, $switchLangURL, $theme, $themeimg,
-    $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
-    $theme_settings, $language, $saved_is_editor,
-    $langStudentViewEnable, $langStudentViewDisable;
+    global $course_code, $helpTopic,
+        $title, $is_editor, $langActivate,
+        $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
+        $langChooseLang, $langCopyrightFooter, $langDeactivate,
+        $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp,
+        $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
+        $langMyPersoAnnouncements, $langMyPersoDeadlines,
+        $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
+        $langPersonalisedBriefcase, $langSearch, $langUser,
+        $langUserBriefcase, $langUserHeader, $language, $nameTools,
+        $navigation, $page_name,
+        $require_current_course, $require_help, $siteName, $siteName,
+        $status, $switchLangURL, $theme, $themeimg,
+        $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
+        $theme_settings, $language, $saved_is_editor,
+        $langStudentViewEnable, $langStudentViewDisable;
 
     //get blocks content from $toolContent array
     if ($perso_tool_content) {
@@ -133,7 +134,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $t->set_var('LANG', $language);
-    
+
     if ($is_embedonce) {
         $t->set_block('mainBlock', 'footerBlock', 'delete');
         $t->set_block('mainBlock', 'headerBlock', 'delete');
@@ -146,7 +147,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if (!get_config('enable_search')) {
         $t->set_block('mainBlock', 'searchBlock', 'delete');
     }
-    
+
     //	BEGIN constructing of left navigation
     //	----------------------------------------------------------------------
     $t->set_block('mainBlock', 'leftNavBlock', 'leftNav');
@@ -184,7 +185,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                     $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
                     $t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
                     if (in_array($toolArr[$i][2][$j], array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
-                            strpos($toolArr[$i][3][$j], 'external_link') === 0) {
+                        strpos($toolArr[$i][3][$j], 'external_link') === 0) {
                         $t->set_var('TOOL_ATTR', ' target="_blank"');
                     } else {
                         $t->set_var('TOOL_ATTR', '');
@@ -209,8 +210,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 }
                 if (!$group_opened and
                     ($current_module_dir == '/' or
-                     $current_module_dir == 'course_home' or
-                     $current_module_dir == 'main/portfolio.php')) {
+                    $current_module_dir == 'course_home' or
+                    $current_module_dir == 'main/portfolio.php')) {
                     $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
                     $group_opened = true;
                 }
@@ -231,17 +232,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     $t->set_var('TOOL_CONTENT', $toolContent);
 
-    // If we are on the login page we can define two optional variables
-    // in common.inc.php (to allow internationalizing messages)
-    // for extra content on the left and right bar.
-
-    if ($homePage && !isset($_SESSION['uid'])) {
-        $t->set_var('ECLASS_HOME_EXTRAS_LEFT', $langExtrasLeft);
-        $t->set_var('ECLASS_HOME_EXTRAS_RIGHT', $langExtrasRight);
-    }
-
-    if (isset($GLOBALS['leftNavExtras']))
+    if (isset($GLOBALS['leftNavExtras'])) {
         $t->set_var('ECLASS_LEFTNAV_EXTRAS', $GLOBALS['leftNavExtras']);
+    }
 
     //if user is logged in display the logout option
     if (isset($_SESSION['uid'])) {
@@ -265,8 +258,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('MY_COURSES', $GLOBALS['langMyCoursesSide']);
         $t->set_var('MY_MESSAGES', $GLOBALS['langMyMessagesSide']);
         $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
-       
-    $t->set_var('LOGGED_IN', 'true');
+
+        $t->set_var('LOGGED_IN', 'true');
     } else {
         if (!get_config('dont_display_login_form')) {
             $t->set_var('LANG_LOGOUT', $langLogin);
@@ -274,7 +267,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         } else {
             $t->set_var('LOGOUT_LINK', '#');
         }
-    $t->set_var('LOGGED_IN', 'false');
+        $t->set_var('LOGGED_IN', 'false');
     }
     // set the text and icon on the third bar (header)
     if ($menuTypeID == 2) {
@@ -311,14 +304,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
                 <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
                     <i class='fa fa-minus-square tiny-icon tiny-icon-red' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
-                </a>";
+                    </a>";
             } else {
                 $message = $langActivate;
                 $mod_activation = "
 
                 <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
                     <i class='fa fa-check-square tiny-icon tiny-icon-green' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
-                </a>";
+                    </a>";
             }
         }
     }
@@ -327,7 +320,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_ADVANCED_URL', $searchAdvancedURL);
     $t->set_var('SEARCH_TITLE', $langSearch);
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
-        
+
     $t->set_var('TOOL_NAME', $nameTools);
 
     if ($is_editor) {
@@ -345,93 +338,64 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     // breadcrumb and page title
     if (!$is_embedonce and !$is_mobile) {
-        if (!$page_navi)
-            $page_navi = $navigation;
-        if (!$page_name)
+        if (!$page_name and $nameTools) {
             $page_name = $nameTools;
+        }
 
-        $t->set_block('mainBlock', 'breadCrumbHomeBlock', 'breadCrumbHome');
+        $t->set_block('mainBlock', 'breadCrumbLinkBlock', 'breadCrumbLink');
+        $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
 
+        // Breadcrumb first entry (home / portfolio)
         if ($status != USER_GUEST) {
-            if (!isset($_SESSION['uid'])) {
-                $t->set_var('BREAD_TEXT', $langHomePage);
-            } else {
+            if (isset($_SESSION['uid'])) {
                 $t->set_var('BREAD_TEXT', $langPersonalisedBriefcase);
+                $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');
+            } else {
+                $t->set_var('BREAD_TEXT', $langHomePage);
+                $t->set_var('BREAD_HREF', $urlAppend);
             }
 
-            if (!$homePage) {
-                $t->set_var('BREAD_HREF_FRONT', '<a href="{%BREAD_START_LINK%}">');
-                $t->set_var('BREAD_START_LINK', $urlServer);
-                $t->set_var('BREAD_HREF_END', '</a>');
+            if ($nameTools) {
+                $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
+            } else {
+                $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
             }
-
-            $t->parse('breadCrumbHome', 'breadCrumbHomeBlock', false);
         }
 
         $pageTitle = $siteName;
 
-        $breadIterator = 1;
-        $t->set_block('mainBlock', 'breadCrumbStartBlock', 'breadCrumbStart');
-
-        if (isset($course_code) && !$courseHome) {
-            $t->set_var('BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">');
-            $t->set_var('BREAD_LINK', $urlServer . 'courses/' . $course_code . '/index.php');
+        // Breadcrumb course home entry
+        if (isset($course_code)) {
             $t->set_var('BREAD_TEXT', q(ellipsize($title, 64)));
-            if ($status == USER_GUEST)
-                $t->set_var('BREAD_ARROW', '');
-            $t->set_var('BREAD_HREF_END', '</a>');
-            $t->parse('breadCrumbStart', 'breadCrumbStartBlock', true);
-            $breadIterator ++;
-            if (isset($pageTitle)) {
-                $pageTitle .= " | " . q($title);
+            if ($nameTools) {
+                $t->set_var('BREAD_HREF', $urlAppend . 'courses/' . $course_code . '/');
+                $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
             } else {
-                $pageTitle = q($title);
+                $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
             }
-        } elseif (isset($course_code) && $courseHome) {
-            $t->set_var('BREAD_HREF_FRONT', '');
-            $t->set_var('BREAD_LINK', '');
-            $t->set_var('BREAD_TEXT', q(ellipsize($title, 64)));
-            $t->set_var('BREAD_ARROW', '&#187;');
-            $t->set_var('BREAD_HREF_END', '');
-            $t->parse('breadCrumbStart', 'breadCrumbStartBlock', true);
-            $breadIterator ++;
             $pageTitle .= " | " . q($title);
         }
 
-        if (isset($page_navi) && is_array($page_navi) && !$homePage) {
-            foreach ($page_navi as $step) {
-
-                $t->set_var('BREAD_HREF_FRONT', '<a href="{%BREAD_LINK%}">');
-                $t->set_var('BREAD_LINK', $step['url']);
-                $t->set_var('BREAD_TEXT', ellipsize($step['name'], 64));
-                $t->set_var('BREAD_ARROW', '&#187;');
-                $t->set_var('BREAD_HREF_END', '</a>');
-                $t->parse('breadCrumbStart', 'breadCrumbStartBlock', true);
-
-                $breadIterator ++;
-
-                $pageTitle .= " | " . $step ["name"];
+        foreach ($navigation as $step) {
+            $t->set_var('BREAD_TEXT', q($step['name']));
+            if (isset($step['url'])) {
+                $t->set_var('BREAD_HREF', $step['url']);
+                $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
+            } else {
+                $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
             }
+            $pageTitle .= " | " . $step ["name"];
         }
 
-        if (isset($page_name) && !$homePage) {
+        if ($nameTools) {
+            $t->set_var('BREAD_TEXT', q($nameTools));
+            $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
+        }
 
-            $t->set_var('BREAD_HREF_FRONT', '');
-            $t->set_var('BREAD_TEXT', $page_name);
-            $t->set_var('BREAD_ARROW', '&#187;');
-            $t->set_var('BREAD_HREF_END', '');
-
-            $t->parse('breadCrumbStart', 'breadCrumbStartBlock', true);
-            $breadIterator ++;
+        if (isset($page_name) && !$nameTools) {
             $pageTitle .= " | " . $page_name;
         }
 
-        $t->set_block('mainBlock', 'breadCrumbEndBlock', 'breadCrumbEnd');
-
-        for ($breadIterator2 = 0; $breadIterator2 < $breadIterator; $breadIterator2 ++) {
-
-            $t->parse('breadCrumbEnd', 'breadCrumbEndBlock', true);
-        }
     } else {
         $t->set_block('mainBlock', 'breadCrumbs', 'delete');
     }

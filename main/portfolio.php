@@ -33,8 +33,6 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/graphics/plotter.php';
 
-$nameTools = $langWelcomeToPortfolio;
-
 ModalBoxHelper::loadModalBox();
 
 if(!empty($langLanguageCode)){

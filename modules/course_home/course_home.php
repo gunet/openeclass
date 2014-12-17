@@ -49,7 +49,6 @@ $course = new Course();
 
 $require_help = TRUE;
 $helpTopic = 'course_home';
-$nameTools = $langIdentity;
 $main_content = $cunits_content = $bar_content = "";
 
 add_units_navigation(TRUE);
