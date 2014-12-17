@@ -22,13 +22,12 @@
 function display_text_form() {
     global $tool_content, $id, $langContent, $langAdd, $course_code;
 
-    $tool_content .= "
-        <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>";
-    $tool_content .= "
-        <fieldset>
-        <legend>$langContent:</legend>" . rich_text_editor('comments', 4, 20, '') . "
+    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='insert.php?course=$course_code' method='post'>
+                      <input type='hidden' name='id' value='$id'>";
+    $tool_content .= "<fieldset>
+        " . rich_text_editor('comments', 4, 20, '') . "
 	<br />
         <input class='btn btn-primary' type='submit' name='submit_text' value='$langAdd'>
 	</fieldset>
-	</form>";
+	</form></div>";
 }

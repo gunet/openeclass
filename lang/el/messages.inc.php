@@ -3730,7 +3730,7 @@ $langVia = 'μέσω';
 $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
 $langInactiveModule = "ανενεργό υποσύστημα";
-
+$langAvailableUnitResources = "Εκπαιδευτικό υλικό";
 
 /* * ********************************************************************
   mail_verify.php

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -50,29 +50,23 @@ function list_exercises() {
         $tool_content .= "<div class='alert alert-warning'>$langNoExercises</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id'>" .
-                "<table width='99%' class='tbl_alt'>" .
+                "<table class='table-default'>" .
                 "<tr>" .
-                "<th><div align='left'>&nbsp;$langExercices</div></th>" .
-                "<th><div align='left'>$langComments</div></th>" .
-                "<th width='100'>$langChoice</th>" .
-                "</tr>";
-        $i = 0;
+                "<th width='20%' class='text-left'>$langExercices</th>" .
+                "<th class='text-left'>$langComments</th>" .
+                "<th>$langChoice</th>" .
+                "</tr>";        
         foreach ($quizinfo as $entry) {
             if ($entry['visibility'] == '0') {
-                $vis = 'invisible';
+                $vis = 'not_visible';
             } else {
-                if ($i % 2 == 0) {
-                    $vis = 'even';
-                } else {
-                    $vis = 'odd';
-                }
+                $vis = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td>&laquo; <a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry[name]) . "</a></td>";
-            $tool_content .= "<td><div align='left'>" . q($entry[comment]) . "</div></td>";
-            $tool_content .= "<td class='center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
-            $tool_content .= "</tr>";
-            $i++;
+            $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
+            $tool_content .= "<td class='text-left'>" . q($entry['comment']) . "</td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
+            $tool_content .= "</tr>";            
         }
         $tool_content .= "<tr><th colspan='3'><div align='right'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_exercise' value='$langAddModulesButton'></div></th>";

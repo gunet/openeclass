@@ -30,14 +30,12 @@
  * @global type $langChoice
  * @global type $langNoLearningPath
  * @global type $langLearningPaths
- * @global type $course_code
- * @global type $themeimg
+ * @global type $course_code 
  */
 function list_lps() {
     global $id, $course_id, $tool_content, $urlServer, $langComments,
     $langAddModulesButton, $langChoice, $langNoLearningPath,
-    $langLearningPaths, $course_code, $themeimg;
-
+    $langLearningPaths, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name", $course_id);
     $lpinfo = array(); 
@@ -54,29 +52,23 @@ function list_lps() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
-                "<table width='99%' class='tbl_alt'>" .
+                "<table class='table-default'>" .
                 "<tr>" .
                 "<th><div align='left'>&nbsp;$langLearningPaths</div></th>" .
                 "<th><div align='left'>$langComments</div></th>" .
                 "<th width='80'>$langChoice</th>" .
-                "</tr>";
-        $i = 0;
+                "</tr>";        
         foreach ($lpinfo as $entry) {
             if ($entry['visible'] == 0) {
                 $vis = 'invisible';
             } else {
-                if ($i % 2 == 0) {
-                    $vis = 'even';
-                } else {
-                    $vis = 'odd';
-                }
+                $vis = '';
             }
             $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td>&nbsp;<img src='$themeimg/lp_on.png' />&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$entry[id]'>" . q($entry[name]) . "</a></td>";
-            $tool_content .= "<td>" . q($entry[comment]) . "</td>";
-            $tool_content .= "<td align='center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
-            $tool_content .= "</tr>";
-            $i++;
+            $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$entry[id]'>" . q($entry['name']) . "</a></td>";
+            $tool_content .= "<td>" . q($entry['comment']) . "</td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
+            $tool_content .= "</tr>";            
         }
         $tool_content .= "<tr>" .
                 "<th colspan='3'><div align='right'>";
