@@ -593,7 +593,7 @@ $(document).ready(function() {
             $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
                                  + '<input type="hidden" $params value="' + newnode.attr("id").substring(2) + '" />'
                                  + newnode.children("a").text()
-                                 + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><i class='fa fa-times' data-toggle='tooltip' data-original-title="'.$langNodeDel.'" rel='tooltip' data-placement='top' title="'.$langNodeDel.'"><\/i><\/a>'
+                                 + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><i class="fa fa-times" data-toggle="tooltip" data-original-title="$langNodeDel" rel="tooltip" data-placement="top" title="$langNodeDel"><\/i><\/a>'
                                  + '<\/p>');
 
             $( "#dialog-set-value" ).val( newnode.children("a").text() );
@@ -729,7 +729,7 @@ jContent;
             }
 
             $html .= '</div>';
-            $html .= '<div><p><a id="ndAdd" href="#add"><i class="fa fa-plus" data-toggle="tooltip" rel="tooltip" data-placement="top" title="'.$langNodeAdd.'"></i></a></p></div>';
+            $html .= '<div><p><a id="ndAdd" href="#add"><i class="fa fa-plus" data-toggle="tooltip" rel="tooltip" data-placement="top" title="'.q($langNodeAdd).'"></i></a></p></div>';
 
             // Unused for multi usecase, however present to use a unique generic JS event function
             $html .= '<input id="dialog-set-key" type="hidden" onchange="" />';
@@ -762,7 +762,7 @@ jContent;
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close treeModalClose"><span aria-hidden="true">&times;</span><span class="sr-only">' . $langCancel . '</span></button>
-                    <h4 class="modal-title" id="treeModalLabel">' . $langNodeAdd . '</h4>
+                    <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
                 </div>
                 <div class="modal-body">
                     <div id="js-tree">';
