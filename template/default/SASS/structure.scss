@@ -284,11 +284,9 @@ a.toggle-active{
 
                 i.fa
                 {
-                    display: block;
+                    padding-right: 10px;
                     opacity:.9;
-                    font-size: 2.3em;
-
-                    margin-top: 0.4em;
+                    font-size: 16px;
                 }
                 .tricky
                 {
@@ -432,11 +430,18 @@ a.toggle-active{
                     margin: 0px;
                     padding: 0px;
 
-                    h4{
+                    &>div{
                         margin-left: 0px;
                         margin-right: 0px;
                         border: none;
                         border-radius: 0px;
+                        
+                        i{
+                            display: block;
+                            position: absolute;
+                            right: 10px;
+                            top: 8px;
+                        }
                     }
                 }
 
@@ -470,7 +475,7 @@ a.toggle-active{
             background: #344458;
             font-size: 0.85em;
             margin:0px;
-            padding: 10px 15px;
+            padding: 10px 20px 10px 15px;
             cursor: pointer;
             position: relative;
             outline: none;

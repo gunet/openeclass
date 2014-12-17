@@ -248,7 +248,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseCourses">
                                 <h4 class="panel-title title">
-                                    <span class="txt" style="line-height: 14px;">Courses Activity</span><br><i class="fa fa-list-alt fa-2x"></i>
+                                    <i class="fa fa-list-alt"></i><span class="txt" >My Courses</span>
                                 </h4>
                             </div>
                             <div id="collapseCourses" class="panel-collapse collapse side-list">
@@ -257,14 +257,14 @@
                                         <!-- BEGIN sideBarCourseBlock -->
                                         <div class="panel panel-default">
                                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right" data-target="#collapse{%sideBarCollapseId%}-right">
-                                                <h4 class="panel-title lesson-title">
-                                                    {%sideBarCourseTitle%}
-                                                </h4>
+                                                <div class="panel-title lesson-title">
+                                                    <a href="{%sideBarCourseURL%}">{%sideBarCourseTitle%}</a><i class="fa fa-caret-down"></i>
+                                                </div>
                                             </div>
                                             <div id="collapse{%sideBarCollapseId%}-right" class="panel-collapse collapse">
                                                 <div class="panel-body">
                                                     <ul>
-                                                        <li class="lesson-id">ID: <a href="{%sideBarCourseURL%}">{%sideBarCourseCode%}</a></li>
+                                                        <!--<li class="lesson-id">ID: <a href="{%sideBarCourseURL%}">{%sideBarCourseCode%}</a></li>-->
                                                         <li class="lesson-professor">{%sideBarCourseProf%}</li>
                                                         <li class="lesson-notifications">
                                                             <!-- BEGIN sideBarCourseNotifyBlock -->
@@ -283,7 +283,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseMessages">
                                 <h4 class="panel-title title">
-                                    <span class="txt" style="line-height: 14px;">My Messages</span><br><i class="fa fa-envelope fa-2x"></i>
+                                    <i class="fa fa-envelope"></i><span class="txt">My Messages</span>
                                 </h4>
                             </div>
                             <div id="collapseMessages" class="panel-collapse collapse">
@@ -304,7 +304,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseNotices">
                                 <h4 class="panel-title title">
-                                    <span class="txt" style="line-height: 14px;">My Notes</span><br><i class="fa fa-pencil fa-2x"></i>
+                                    <i class="fa fa-pencil"></i><span class="txt">Quick Notes</span>
                                 </h4>
                             </div>
                             <div id="collapseNotices" class="panel-collapse collapse">
