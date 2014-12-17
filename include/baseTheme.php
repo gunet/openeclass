@@ -688,7 +688,11 @@ function module_path($path) {
     } elseif (strpos($path, '/info/') !== false) {
         return preg_replace('|^.*(info/.*\.php)|', '\1', $path);
     } elseif (strpos($path, '/admin/') !== false) {
-        return preg_replace('|^.*(/admin/.*)|', '\1', $path);
+        $new_path = preg_replace('|^.*(/admin/.*)|', '\1', $path);
+        if ($new_path == '/admin/auth_process.php') {
+            return '/admin/auth.php';
+        }
+        return $new_path;
     } elseif (strpos($path, '/main/unreguser.php') !== false or
               (strpos($path, '/main/profile') !== false and
                strpos($path, 'personal_stats') === false)) {
