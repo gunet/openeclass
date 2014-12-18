@@ -1172,7 +1172,6 @@ ul.tablelist li.list-item:hover {
   width: 100%;
   position: relative;
   display: inline-block;
-  padding-left: 1em;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;

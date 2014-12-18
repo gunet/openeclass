@@ -408,7 +408,6 @@ $tool_content .= "
 $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
-        
             <div class='panel clearfix'>
             <div class='row'><div class='col-md-12 add-gutter margin-top-fat margin-bottom-fat'>
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
@@ -464,7 +463,7 @@ if ($is_editor) {
     $sql = Database::get()->queryArray($query, $course_id);
     $total_cunits = count($sql);    
     if ($total_cunits > 0) {        
-        $cunits_content .= "<div class='panel'><ul class='boxlist'>";
+        $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'><ul class='boxlist'>";
         $count_index = 0;
         foreach ($sql as $cu) {
             if ($cu->visible == 1) {
@@ -541,7 +540,7 @@ if ($is_editor) {
             }
             $cunits_content .= "</li>";            
         }
-        $cunits_content .= "</ul></div>";
+        $cunits_content .= "</ul></div></div></div>";
     }
 
 // Contentbox: Thematikes enotites
@@ -563,7 +562,7 @@ if (!$alter_layout) {
     $tool_content .= "
     <div class='col-md-8 course-units'>
         <div class='row'>
-            <div class='col-md-12 no-gutters'>
+            <div class='col-md-12'>
                 <h3 class='content-title  pull-left'>$unititle</h3>
             ";
             
@@ -622,47 +621,45 @@ Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
 
-$tool_content .="
-                    <div class='col-md-$cunits_sidebar_subcolumns'>
-                        <h3 class='content-title'>$langCalendar</h3>
-                        <div class='panel'>
-                            <div class='panel-body'>
-                                $user_personal_calendar
-                            </div>
-                            <div class='panel-footer'>
-                                <div class='row'>
-                                    <div class='col-sm-6 event-legend'>
-                                        <div>
-                                            <span class='event event-important'></span><span>$langAgendaDueDay</span>
-                                        </div>
-                                        <div>
-                                            <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
-                                        </div>
+$tool_content .="<div class='row'>
+                <div class='col-md-$cunits_sidebar_subcolumns'>
+                    <h3 class='content-title'>$langCalendar</h3>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            $user_personal_calendar
+                        </div>
+                        <div class='panel-footer'>
+                            <div class='row'>
+                                <div class='col-sm-6 event-legend'>
+                                    <div>
+                                        <span class='event event-important'></span><span>$langAgendaDueDay</span>
                                     </div>
-                                    <div class='col-sm-6 event-legend'>
-                                        <div>
-                                            <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
-                                        </div>
-                                        <div>
-                                            <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
-                                        </div>
+                                    <div>
+                                        <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
+                                    </div>
+                                </div>
+                                <div class='col-sm-6 event-legend'>
+                                    <div>
+                                        <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
+                                    </div>
+                                    <div>
+                                        <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                
-                
-                    <div class='col-md-$cunits_sidebar_subcolumns'>
-                        <h3 class='content-title'>$langAnnouncements</h3>
-                        <div class='panel'>
-                            <div class='panel-body'>
-                                <ul class='tablelist'>" . course_announcements() . "
-                                </ul>
-                            </div>
+                </div>
+                <div class='col-md-$cunits_sidebar_subcolumns'>
+                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>" . course_announcements() . "
+                            </ul>
                         </div>
                     </div>
-                
+                </div>
+           </div>
            </div>
     </div>";
 
