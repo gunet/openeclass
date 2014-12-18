@@ -2739,23 +2739,23 @@ function action_bar($options) {
         }        
         if ($level == 'primary-label') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                "<li$class>$form_begin<a$confirm_extra class='btn btn-sm $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .
                 "<span class='hidden-xs'>$title</span></a>$form_end</li>");
         } elseif ($level == 'primary') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                "<li$class>$form_begin<a$confirm_extra class='btn btn-sm $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon]'></i></a>$form_end</li>");
         } else {
             array_unshift($out_secondary,
-                    "<li$class>$form_begin<a$confirm_extra  class='btn $button_class$confirm_modal_class'" . $href .
-                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                    " title='$title'$link_attrs>" .
-                    "<i class='fa $option[icon]'></i></a>$form_end</li>");
+                "<li$class>$form_begin<a$confirm_extra  class='btn btn-sm $button_class$confirm_modal_class'" . $href .
+                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " title='$title'$link_attrs>" .
+                "<i class='fa $option[icon]'></i></a>$form_end</li>");
         }
         $i++;
     }
@@ -2764,7 +2764,7 @@ function action_bar($options) {
         $out .= implode('', $out_primary);
     }
     if (count($out_secondary)) {
-        $out .= "<li><button type='button' class='btn btn-default expandable-btn'><i class='fa fa-th-large'></i></button></li>";
+        $out .= "<li><button type='button' class='btn btn-default btn-sm expandable-btn'><i class='fa fa-th-large'></i></button></li>";
     }
     $out .= "</ul>";
     if (count($out_secondary)) {
