@@ -2835,11 +2835,11 @@ function action_button($options) {
         }        
         
         if ($level == 'primary-label') {
-            array_push($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
         } elseif ($level == 'primary') {
-            array_push($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon]'></i></a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon]'></i></a>");
         } else {
-            array_push($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
+            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
         }        
     }
     $primary_buttons = "";

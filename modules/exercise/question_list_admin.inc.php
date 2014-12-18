@@ -259,25 +259,27 @@ if ($nbrQuestions) {
 			<td class='option-btn-cell'>".            
                     action_button(array(
                         array('title' => $langModify,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id",
-                              'icon-class' => 'warnLink',
-                              'icon-extra' => $objQuestionTmp->selectNbrExercises()>1? "data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "",
-                              'icon' => 'fa-edit'),
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id",
+                                'icon-class' => 'warnLink',
+                                'icon-extra' => $objQuestionTmp->selectNbrExercises()>1? "data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "",
+                                'icon' => 'fa-edit'),
                         array('title' => $langDelete,
-                              'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langConfirmYourChoice,
-                              'show' => !isset($fromExercise)),
+                                'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmYourChoice,
+                                'show' => !isset($fromExercise)),
                         array('title' => $langUp,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id",
-                              'icon' => 'fa-arrow-up',
-                              'show' => $i != 1
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id",
+                                'level' => 'primary',
+                                'icon' => 'fa-arrow-up',
+                                'show' => $i != 1
                             ),
                         array('title' => $langDown,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id",
-                              'icon' => 'fa-arrow-down',
-                              'show' => $i != $nbrQuestions
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id",
+                                'level' => 'primary',
+                                'icon' => 'fa-arrow-down',
+                                'show' => $i != $nbrQuestions
                             )                
                     ))."</td></tr>";
         $i++;
