@@ -251,7 +251,7 @@ $head_content .= "<script type='text/javascript'>
 ModalBoxHelper::loadModalBox();
 
 $public_code = course_id_to_public_code($course_id);
-$pageName = $langAnnouncements;
+$toolName = $langAnnouncements;
 
 if (isset($_GET['an_id'])) {
     (!$is_editor)? $student_sql = "AND visible = '1' AND start_display<=CURDATE() AND stop_display>=CURDATE()" : $student_sql = "";
@@ -273,7 +273,7 @@ if ($is_editor) {
     $sortDirection = "ASC";
   }
 
-        $thisAnnouncementOrderFound = false;
+  $thisAnnouncementOrderFound = false;
   if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) && $sortDirection) {
             $ids = Database::get()->queryArray("SELECT id, `order` FROM announcement
                                            WHERE course_id = ?d
@@ -455,7 +455,8 @@ if ($is_editor) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
-    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<h4>$pageName</h4>";
+    $tool_content .= "<div class='form-wrapper'>";   
     $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>
         <div class='form-group'>

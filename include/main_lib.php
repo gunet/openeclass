@@ -1860,7 +1860,7 @@ function units_set_maxorder() {
  */
 function handle_unit_info_edit() {
     
-    global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code;
+    global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code, $webDir;
     
     $title = $_REQUEST['unittitle'];
     $descr = $_REQUEST['unitdescr'];

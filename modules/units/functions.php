@@ -25,15 +25,19 @@ function process_actions() {
     require_once 'modules/search/indexer.class.php';
     require_once 'modules/course_metadata/CourseXML.php';
 
-    if (isset($_REQUEST['edit'])) {
+    if (isset($_REQUEST['edit'])) {        
         $res_id = intval($_GET['edit']);
-        if ($id = check_admin_unit_resource($res_id)) {
-            return edit_res($res_id);
+        if ($id = check_admin_unit_resource($res_id)) {            
+            $tool_content .= edit_res($res_id);
         }
     } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
         $res_id = intval($_REQUEST['resource_id']);
         if ($id = check_admin_unit_resource($res_id)) {
-            @$restitle = $_REQUEST['restitle'];
+            if (!isset($_REQUEST['restitle'])) {
+                $restitle = '';
+            } else {
+                $restitle = $_REQUEST['restitle'];
+            }
             $rescomments = purify($_REQUEST['rescomments']);
             $result = Database::get()->query("UPDATE unit_resources SET
                                         title = ?s,
@@ -88,12 +92,11 @@ function process_actions() {
  */
 function check_admin_unit_resource($resource_id) {
     global $course_id, $is_editor;
-
     if ($is_editor) {
         $q = Database::get()->querySingle("SELECT course_units.id AS cuid FROM course_units,unit_resources WHERE
             course_units.course_id = ?d AND course_units.id = unit_resources.unit_id
             AND unit_resources.id = ?d", $course_id, $resource_id);
-        if ($q) {
+        if ($q) {            
             $unit_id = $q->cuid;
             return $unit_id;
         }
@@ -175,7 +178,7 @@ function show_resource($info) {
             $tool_content .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'poll':
-            $tool_content .= show_poll($info->title, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'link':
             $tool_content .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
@@ -681,7 +684,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
  * @param type $visibility
  * @return string
  */
-function show_poll($title, $resource_id, $poll_id, $visibility) {
+function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
     
     global $course_id, $course_code, $is_editor, $urlServer;
     
@@ -713,10 +716,15 @@ function show_poll($title, $resource_id, $poll_id, $visibility) {
         $imagelink = $link . "" . icon('fa-question-circle') . "</a>";
     }
     
+    if (!empty($comments)) {
+        $comment_box = "<br />$comments";
+    } else {
+        $comment_box = "";
+    }
     return "
         <tr$class_vis>
           <td width='1'>$imagelink</td>
-          <td>$polllink </td>" .
+          <td>$polllink $comment_box</td>" .
             actions('poll', $resource_id, $visibility) . '
         </tr>';
     
@@ -1176,8 +1184,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @global type $id
  * @global type $urlServer
  * @global type $langTitle
- * @global type $langDescr
- * @global type $langEditForum
+ * @global type $langDescr 
  * @global type $langContents
  * @global type $langModify
  * @global type $course_code
@@ -1185,36 +1192,32 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescr, $langEditForum, $langContents, $langModify, $course_code;
+    global $id, $urlServer, $langTitle, $langDescr, $langContents, $langModify, $course_code;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM unit_resources WHERE id = ?d", $resource_id);   
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
     $rescomments = $ru->comments;
     $resource_id = $ru->id;
     $resource_type = $ru->type;
-
-    $tool_content = "<form method='post' action='${urlServer}modules/units/?course=$course_code'>" .
-            "<fieldset>" .
-            "<legend>$langEditForum</legend>" .
+    $content = "<div class='form-wrapper'>";
+    $content .= "<form class='form-horizontal' role='form' method='post' action='${urlServer}modules/units/?course=$course_code'>" .
+            "<fieldset>" .            
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {
-        $tool_content .= "<table class='tbl'>" .
-                "<tr>" .
-                "<th>$langTitle:</th>" .
-                "<td><input type='text' name='restitle' size='50' maxlength='255' $restitle></td>" .
-                "</tr>";
+        $content .= "<div class='form-group'>                   
+                <label class='col-sm-2 control-label'>$langTitle:</label>
+                <div class='col-sm-10'><input type='text' name='restitle' size='50' maxlength='255' $restitle></div>
+                </div>";
         $message = $langDescr;
     } else {
         $message = $langContents;
     }
-    $tool_content .= "<tr><th>$message:</th>
-                              <td>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</td></tr>
-                          <tr><th>&nbsp;</th>
-                              <td><input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'></td></tr>
-                        </table>
-                      </fieldset>
-                    </form>";
-
-    return $tool_content;
+    $content .= "<div class='form-group'><label class='col-sm-2 control-label'>$message:</label>
+                              <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
+                </div>                         
+                <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'></div>
+                </fieldset>
+                </form></div>";
+    return $content;
 }
