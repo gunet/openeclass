@@ -451,7 +451,7 @@ if ($is_editor) {
             });"
         . "</script>";
     $tool_content .= action_bar(array(
-                array('section_title' => $pageName),
+                'section_title' => $pageName,
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
