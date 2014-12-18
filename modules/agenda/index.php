@@ -43,7 +43,7 @@ $action->record(MODULE_ID_AGENDA);
 
 $dateNow = date("j-n-Y / H:i", time());
 
-$pageName = $langAgenda;
+$toolName = $langAgenda;
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -141,8 +141,12 @@ function checkrequired(thisform) {
 }
     
 // display action bar
-if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
+if (isset($_GET['addEvent']) or isset($_GET['edit'])) {    
     $tool_content .= action_bar(array(
+            array('section_title' => $langAddEvent,
+                  'show' => isset($_GET['addEvent'])),
+            array('section_title' => $langModifEvent,
+                  'show' => isset($_GET['edit'])),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
@@ -205,6 +209,9 @@ if ($is_editor) {
 
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
         $pageName = $langAddEvent;
+        $tool_content .= action_bar(array(
+                array('section_title' => $pageName)));
+        
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
         $rep = '';
         if (isset($id) && $id) {

@@ -30,6 +30,8 @@ if (!defined('COMMON_DOCUMENTS')) {
 require_once '../../include/baseTheme.php';
 require_once 'modules/document/doc_init.php';
 
+$toolName = $langDoc;
+
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
 } else {
@@ -38,6 +40,10 @@ if (isset($_GET['uploadPath'])) {
 
 if ($can_upload) {
     $tool_content .= action_bar(array(
+                    array('section_title' => $langExternalFile,
+                          'show' => isset($_GET['ext'])),
+                    array('section_title' => $langDownloadFile,
+                          'show' => !isset($_GET['ext'])),
                     array('title' => $langBack,
                           'url' => "index.php?course=$course_code",
                           'icon' => 'fa-reply',
@@ -45,6 +51,7 @@ if ($can_upload) {
     if (isset($_GET['ext'])) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $pageName = $langExternalFile;
+        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
         $fileinput = "
         <div class='form-group'>
           <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
@@ -54,6 +61,7 @@ if ($can_upload) {
         </div>";
     } else {
         $pageName = $langDownloadFile;
+        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
         $fileinput = "
         <div class='form-group'>
           <label for='userFile' class='col-md-6 control-label'>$langPathUploadFile</label>

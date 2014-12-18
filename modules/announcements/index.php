@@ -455,8 +455,7 @@ if ($is_editor) {
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
-    //$tool_content .= "<h4>$pageName</h4>";
+                      'level' => 'primary-label')));    
     $tool_content .= "<div class='form-wrapper'>";   
     $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'antitle');\">
         <fieldset>

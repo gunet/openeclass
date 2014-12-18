@@ -367,42 +367,34 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
     return $maxFileSize;
 }
 
-/*
-  function s1howquota()
-  param - quota
-  param - used , how much disp space is used
-  @last update: 18-07-2006 by Sakis Agorastos
-  @authors list: Agorastos Sakis <th_agorastos@hotmail.com>
-
-  @Description: A page that shows a table with statistic data and a
-  gauge bar. The statistical data are transfered here with GET in
-  $diskQuotaDocument and $diskUsed
-
-  This scipt uses the 'gaugebar.php' class for the graphic gauge bar
-  =============================================================== */
-
-//to be removed
-//require_once 'include/lib/gaugebar.php';
-
+/**
+ * @brief A page that shows a table with statistic data and a gauge bar
+ * @global type $langQuotaUsed
+ * @global type $langQuotaPercentage
+ * @global type $langQuotaTotal
+ * @global type $langBack
+ * @global type $langQuotaBar
+ * @global type $course_code
+ * @global type $subsystem
+ * @global type $group_id
+ * @global type $ebook_id
+ * @param type $quota
+ * @param type $used
+ * @return string
+ */
 function showquota($quota, $used) {
 
-    global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack,
-    $course_code, $subsystem, $group_id, $ebook_id;
+    global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, $langQuotaBar,
+    $course_code, $subsystem, $group_id, $ebook_id, $pageName;
 
     $retstring = '';
-
-    // diamorfwsh ths grafikhs mparas xrhsimopoioumenou kai eleftherou xwrou (me vash ta quotas)
-    // kai ypologismos statistikwn stoixeiwn
-//    $oGauge = new myGauge();
-//    $oGauge->MaxVal = $quota; //maximum value
-//    $oGauge->CurVal = $used; //current value
+    
     // pososto xrhsimopoioumenou xorou se %
     $diskUsedPercentage = round(($used / $quota) * 100) . "%";
     // morfopoihsh tou synolikou diathesimou megethous tou quota
     $quota = format_bytesize($quota / 1024);
     // morfopoihsh tou synolikou megethous pou xrhsimopoieitai
     $used = format_bytesize($used / 1024);
-
     // telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
     // ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
     if ($subsystem == GROUP) {
@@ -412,41 +404,41 @@ function showquota($quota, $used) {
     } else {
         $link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
     }
-    $action_bar_options[] = array(
-        'title' => $langBack,
-        'url' => $link,
-        'icon' => 'fa-reply',
-        'level' => 'primary-label'
-    );     
-    $retstring .= action_bar($action_bar_options);
-$retstring .= "
-<div class='row'><div class='col-sm-12'>
-<div class='form-wrapper'>
-<form class='form-horizontal' role='form'>
-  <div class='form-group'>
-    <label class='col-sm-2'>$langQuotaUsed:</label>
-    <div class='col-sm-10'>
-      <p class='form-control-static'>$used</p>
-    </div>
-  </div>
-  <div class='form-group'>
-    <label class='col-sm-2'>$langQuotaPercentage:</label>
-    <div class='col-sm-10'>
-        <div class='progress'>
-          <p class='progress-bar progress-bar-striped active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='width: $diskUsedPercentage;'>
-            $diskUsedPercentage
-          </p>
+    $pageName = $langQuotaBar;      
+    $retstring .= action_bar(array(
+                    array('section_title' => $langQuotaBar),
+                    array('title' => $langBack,
+                          'url' => $link,
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')));
+    $retstring .= "
+    <div class='row'><div class='col-sm-12'>
+    <div class='form-wrapper'>
+    <form class='form-horizontal' role='form'>
+      <div class='form-group'>
+        <label class='col-sm-2'>$langQuotaUsed:</label>
+        <div class='col-sm-10'>
+          <p class='form-control-static'>$used</p>
         </div>
-    </div>
-  </div>
-  <div class='form-group'>
-    <label class='col-sm-2'>$langQuotaTotal:</label>
-    <div class='col-sm-10'>
-          <p class='form-control-static'>$quota</p>
-    </div>
-  </div>  
-</form>
-</div></div></div>";
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-2'>$langQuotaPercentage:</label>
+        <div class='col-sm-10'>
+            <div class='progress'>
+              <p class='progress-bar progress-bar-striped active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='width: $diskUsedPercentage;'>
+                $diskUsedPercentage
+              </p>
+            </div>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-2'>$langQuotaTotal:</label>
+        <div class='col-sm-10'>
+              <p class='form-control-static'>$quota</p>
+        </div>
+      </div>  
+    </form>
+    </div></div></div>";
     $tmp_cwd = getcwd();
 
     return $retstring;
