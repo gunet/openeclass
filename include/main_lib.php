@@ -2702,9 +2702,14 @@ function action_bar($options) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
     $i=0;
+    $page_title = "";
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
+            continue;
+        }
+        if (isset($option['section_title'])) {
+            $page_title = "<div class='pull-left' style='padding-top:31px;'><h4>".q($option['section_title'])."</h4></div>";
             continue;
         }
         if (isset($option['class'])) {
@@ -2773,6 +2778,7 @@ function action_bar($options) {
     if ($out && $i!=0) {
         return "<div class='row'>" .
              "<div class='col-sm-12 clearfix'>" .
+             $page_title.
              "<div class='well well-sm action-bar-wrapper primary-tools margin-top-thin margin-bottom-thin pull-right'>" .
              $out . "</div></div></div>";
     } else {
