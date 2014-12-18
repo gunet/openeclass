@@ -152,11 +152,13 @@ foreach (array('previous', 'next') as $i) {
         $dir = 'DESC';        
         $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
         $arrow2 = '';
+        $page_btn = 'pull-left';
     } else {
         $op = '>=';
         $dir = '';      
         $arrow1 = '';
-        $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";        
+        $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";
+        $page_btn = 'pull-right';
     }
     
     if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
@@ -177,7 +179,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<a class='btn-default-eclass place-at-toolbox' title='$q_title' rel='tooltip' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1 $q_title $arrow2</a>";
+        $link[$i] = "<div class='$page_btn'><a class='btn-default-eclass place-at-toolbox' title='$q_title' rel='tooltip' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1 $q_title $arrow2</a></div>";
     } else {
         $link[$i] = '&nbsp;';
     }
@@ -201,8 +203,7 @@ if (!empty($comments)) {
 
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "<div class='row'>
-        <div class='col-md-12'>    
-        <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>";
+        <div class='col-md-12'><div class='toolbox whole-row'>";
         
     $tool_content .= "
         ". $link['previous'] ."
