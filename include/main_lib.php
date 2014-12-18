@@ -2128,7 +2128,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '') {
+function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false) {
     global $themeimg;
 
     if (isset($title)) {
@@ -2138,7 +2138,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '') {
         $extra = '';
     }
 
-    $img = "<i class='fa $name' $extra></i>";
+    $img = (isset($title) && $with_title) ? "<i class='fa $name' $extra></i> $title" : "<i class='fa $name' $extra></i>";
     if (isset($link)) {
         return "<a href='$link'$link_attrs>$img</a>";
     } else {
@@ -2796,8 +2796,9 @@ function action_bar($options) {
  */
 function action_button($options) {
     global $langConfirmDelete, $langCancel, $langDelete;
-    $out = '';
+    $out_primary = $out_secondary = array();
     foreach (array_reverse($options) as $option) {
+        $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
@@ -2807,33 +2808,57 @@ function action_button($options) {
         } else {
             $class = '';
         }
-        $icon_class = '';
+        if (isset($option['btn_class'])) {
+            $btn_class = ' '.$option['btn_class'];
+        } else {
+            $btn_class = ' btn-default';
+        }        
+        $icon_class = "class='list-group-item $class";
         if (isset($option['icon-class'])) {
-            $icon_class .= 'class="' . $option['icon-class'] . '"';
-        }
-        if (isset($option['icon-extra'])) {
-            $icon_class .= ' ' . $option['icon-extra'];
+            $icon_class .= " " . $option['icon-class'];
         }
         if (isset($option['confirm'])) {
             $title = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $icon_class .= " class='confirmAction' data-title='$title' data-message='" .
+            $icon_class .= " confirmAction' data-title='$title' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
             $url = '#';
         } else {
+            $icon_class .= "'";
             $confirm_extra = $form_begin = $form_end = '';
             $url = isset($option['url'])? $option['url']: '#';
-        }
-        $out .= "<div class='opt-btn-more-tool tool-btn$class'>" . $form_begin .
-            icon($option['icon'], $option['title'], $url, $icon_class ) .
-            $form_end . '</div>';
+        }       
+        if (isset($option['icon-extra'])) {
+            $icon_class .= ' ' . $option['icon-extra'];
+        }        
+        
+        if ($level == 'primary-label') {
+            array_push($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
+        } elseif ($level == 'primary') {
+            array_push($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon]'></i></a>");
+        } else {
+            array_push($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
+        }        
     }
-    return '<div class="opt-btn-wrapper">' .
-        '<div class="opt-btn-more-wrapper">' .
-        $out .
-        '</div><div class="opt-btn tool-btn"><i class="fa fa-gear "></i></div></div>';
+    $primary_buttons = "";
+    if (count($out_primary)) {
+        $primary_buttons = implode('', $out_primary);
+    }       
+    $action_button = "";
+    if (count($out_secondary)) {
+        $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
+        $action_button = "
+                <button type='button' class='btn btn-default' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                    <i class='fa fa-gear'></i>  <span class='caret'></span>
+                </button>";
+    }    
+    
+    return "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+                $primary_buttons
+                $action_button
+          </div>";
 }
 /**
  * Removes spcific get variable from Query String

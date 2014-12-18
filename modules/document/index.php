@@ -942,7 +942,8 @@ if ($can_upload) {
                                                 path = ?s", $newVisibilityStatus, $visibilityPath);
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
-        $action_message = "<div class='alert alert-success'>$langViMod</div>";
+        Session::Messages($langViMod, 'alert-success');
+        redirect_to_home_page("modules/document/index.php?course=$course_code");
     }
 
     // Public accessibility commands
@@ -1156,18 +1157,17 @@ if ($doc_count == 0) {
             </div>
         </div>
     </div>
-
     <div class='row'>
         <div class='col-md-12'>
                 <div class='table-responsive'>
                 <table class='table-default'>
                     <tr>";
-    $tool_content .= "<th width='50' class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
-                     "<th><div align='left'>" . headlink($langName, 'name') . '</div></th>' .
-                     "<th width='60' class='center'><b>$langSize</b></th>" .
-                     "<th width='80' class='center'><b>" . headlink($langDate, 'date') . '</b></th>';
+    $tool_content .= "<th class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
+                     "<th><div class='text-left'>" . headlink($langName, 'name') . '</div></th>' .
+                     "<th class='center'><b>$langSize</b></th>" .
+                     "<th class='text-center'><b>" . headlink($langDate, 'date') . '</b></th>';
     if (!$is_in_tinymce) {
-        $tool_content .= "<th width='50' class='text-center'>".icon('fa-gears', $langCommands)."</th>";
+        $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
     }
     $tool_content .= "</tr>";
 

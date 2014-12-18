@@ -15,10 +15,30 @@ input[type="file"] {
     background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
     border-color: #ccc;
 }
-
+// Action Button fix
+.popover-content {
+    padding: 9px 9px;
+    .list-group {
+        margin-bottom: 0px;
+    }
+}
+.popover-content
 // Affix styles
 .affix {
     top: 40px;
+}
+.option-btn-cell .btn-group {
+  display: flex;
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -ms-flex;    
+}
+a.list-group-item.delete{
+    color: #CE6B6B;
+}
+a.list-group-item.delete:hover{
+    background-color: #CE6B6B;
+    color: white;
 }
 @media(min-width: $screen-tablet){
   .affix {

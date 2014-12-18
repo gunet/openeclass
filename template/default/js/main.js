@@ -8,15 +8,54 @@ function animate_btn(){
         function(){
             $(this).children(".opt-btn-more-wrapper").animate({width:"56px"},150);});
 }
-
-
+function act_confirm(){
+          $('.confirmAction').on('click', function(e){
+                var message = $(this).attr('data-message');
+                var title = $(this).attr('data-title');
+                var cancel_text = $(this).attr('data-cancel-txt');
+                var action_text = $(this).attr('data-action-txt');
+                var action_btn_class = $(this).attr('data-action-class');
+                var form = $(this).closest('form');
+                bootbox.dialog({
+                 message: message,
+                 title: title,
+                 buttons: {
+                   cancel_btn: {
+                     label: cancel_text,
+                     className: "btn-default"
+                   },
+                   action_btn: {
+                     label: action_text,
+                     className: action_btn_class,
+                     callback: function() {
+                       form.submit();
+                     }
+                   }
+                 }
+               });
+          });
+    }
+function popover_init(){
+    var hidePopover = function () {
+        $(this).popover('hide');
+    }
+    , togglePopover = function () {
+        $(this).popover('toggle');
+    };               
+    $('[data-toggle="popover"]').popover().click(togglePopover).blur(hidePopover);
+    $('[data-toggle="popover"]').on('shown.bs.popover', function () {
+        act_confirm();
+    });
+}    
 $(document).ready( function () {
     
     
     // Initialisations
+    act_confirm();
     animate_btn();
     $('[rel=tooltip]').tooltip();
-    
+    popover_init();
+
 
     // Teacher - Student Button
     $('.btn-toggle').on('click',function(){

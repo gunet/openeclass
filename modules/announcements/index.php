@@ -115,13 +115,15 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                           'icon-class' => 'vis_btn',
                           'icon-extra' => "data-vis='$visible'"),
                     array('title' => $langMove,
+                          'level' => 'primary',
                           'icon' => 'fa-arrow-up',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id",
-                          'show' => $iterator != 1 || $offset > 0),
+                          'btn_class' => 'btn-default'. ($iterator != 1 || $offset > 0 ? '' : ' disabled'),
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id"),
                     array('title' => $langMove,
+                          'level' => 'primary',
+                          'btn_class' => 'btn-default'. ($offset + $iterator < $all_announc->total ? '' : ' disabled'),
                           'icon' => 'fa-arrow-down',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id",
-                          'show' => $offset + $iterator < $all_announc->total))));
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id"))));
             $iterator++;
         }
     } else {
@@ -155,7 +157,7 @@ $head_content .= "<script type='text/javascript'>
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
                 'fnDrawCallback': function( oSettings ) {
-                    animate_btn();
+                    popover_init();
 },
                 'sPaginationType': 'full_numbers',
                 'bSort': false,
