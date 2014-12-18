@@ -2812,7 +2812,8 @@ function action_button($options) {
             $btn_class = ' '.$option['btn_class'];
         } else {
             $btn_class = ' btn-default';
-        }        
+        }
+        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
         $icon_class = "class='list-group-item $class";
         if (isset($option['icon-class'])) {
             $icon_class .= " " . $option['icon-class'];
@@ -2835,9 +2836,9 @@ function action_button($options) {
         }        
         
         if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled'><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class'><i class='fa $option[icon]'></i></a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled'><i class='fa $option[icon]'></i></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
         }        
