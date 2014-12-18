@@ -408,8 +408,9 @@ $tool_content .= "
 $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
-        <div class='panel row padding'>
-
+        
+            <div class='panel clearfix'>
+            <div class='row'><div class='col-md-12 add-gutter margin-top-fat margin-bottom-fat'>
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
                 <div >
                     <img class='banner-image img-responsive' src='$themeimg/ph1.jpg'/>
@@ -433,7 +434,7 @@ $tool_content .= "
                     </div>";   
         }
 
-$tool_content .= "
+$tool_content .= "</div></div>
         </div>
     </div>
 </div>
