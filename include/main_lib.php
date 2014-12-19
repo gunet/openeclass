@@ -2699,17 +2699,17 @@ function forbidden($path) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options) {
-    global $langConfirmDelete, $langCancel, $langDelete;
+    global $langConfirmDelete, $langCancel, $langDelete, $pageName;
+    
     $out_primary = $out_secondary = array();
     $i=0;
     $page_title = "";
+    if (isset($pageName)) {
+        $page_title = "<div class='pull-left' style='padding-top:31px;'><h4>".q($pageName)."</h4></div>";
+    }    
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
-            continue;
-        }
-        if (isset($option['section_title'])) {
-            $page_title = "<div class='pull-left' style='padding-top:31px;'><h4>".q($option['section_title'])."</h4></div>";
             continue;
         }
         if (isset($option['class'])) {

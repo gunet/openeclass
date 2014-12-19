@@ -42,6 +42,22 @@ $action_stats = new action();
 $action_stats->record(MODULE_ID_LINKS);
 
 $toolName = $langLinks;
+if (isset($_GET['action'])) {
+    switch ($_GET['action']) {
+        case 'addlink':
+            $pageName = $langLinkAdd;
+            break;
+        case 'editlink':
+            $pageName = $langLinkModify;
+            break;
+        case 'addcategory':
+            $pageName = $langCategoryAdd;
+            break;
+        case 'editcategory':
+            $pageName = $langCategoryMod;
+            break;        
+    }
+}
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 $menuTypeID = ($is_in_tinymce) ? 5 : 2;
@@ -132,14 +148,6 @@ if ($is_editor) {
     if (!$is_in_tinymce) {
         if (isset($_GET['action'])) {
             $tool_content .= action_bar(array(
-                array('section_title' => $langLinkAdd,
-                      'show' => $_GET['action'] == 'addlink'),
-                array('section_title' => $langLinkModify,
-                      'show' => $_GET['action'] == 'editlink'),
-                array('section_title' => $langCategoryAdd,
-                      'show' => $_GET['action'] == 'addcategory'),
-                array('section_title' => $langCategoryMod,
-                      'show' => $_GET['action'] == 'editcategory'),
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
@@ -165,11 +173,6 @@ if ($is_editor) {
 
     // Display the correct title and form for adding or modifying a category or link.
     if (in_array($action, array('addlink', 'editlink'))) {
-        if ($_GET['action'] == 'addlink') {
-            $pageName = $langLinkAdd;
-        } else {
-            $pageName = $langLinkModify;
-        }
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
@@ -226,11 +229,6 @@ if ($is_editor) {
         </form>
         </div>";
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
-        if ($_GET['action'] == 'addcategory') {
-            $pageName = $langCategoryAdd;
-        } else {
-            $pageName = $langCategoryMod;
-        }
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);        
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
