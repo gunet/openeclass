@@ -1689,6 +1689,15 @@ td.option-btn-cell{
     margin: 0 0;
 }
 
+.descr_title div{
+    display: inline-block;
+    padding-top: 10px;
+}
+#descr_collapse{
+    height: 260px;
+    overflow: hidden;
+}
+
 #rename_doc_file label
 {
     word-wrap: break-word;

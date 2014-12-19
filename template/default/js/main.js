@@ -1,47 +1,48 @@
 // Action Button function
-function animate_btn(){
-
+function animate_btn() {
     $(".opt-btn-wrapper").hover(
-        function(){
-            tool_btn_offset =((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length)+1)*56)+"px";
-            $(this).children(".opt-btn-more-wrapper").animate({width:tool_btn_offset},150);},
-        function(){
-            $(this).children(".opt-btn-more-wrapper").animate({width:"56px"},150);});
+            function () {
+                tool_btn_offset = ((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length) + 1) * 56) + "px";
+                $(this).children(".opt-btn-more-wrapper").animate({width: tool_btn_offset}, 150);
+            },
+            function () {
+                $(this).children(".opt-btn-more-wrapper").animate({width: "56px"}, 150);
+            });
 }
-function act_confirm(){
-          $('.confirmAction').on('click', function(e){
-                var message = $(this).attr('data-message');
-                var title = $(this).attr('data-title');
-                var cancel_text = $(this).attr('data-cancel-txt');
-                var action_text = $(this).attr('data-action-txt');
-                var action_btn_class = $(this).attr('data-action-class');
-                var form = $(this).closest('form');
-                bootbox.dialog({
-                 message: message,
-                 title: title,
-                 buttons: {
-                   cancel_btn: {
-                     label: cancel_text,
-                     className: "btn-default"
-                   },
-                   action_btn: {
-                     label: action_text,
-                     className: action_btn_class,
-                     callback: function() {
-                       form.submit();
-                     }
-                   }
-                 }
-               });
-          });
-    }
-function popover_init(){
+function act_confirm() {
+    $('.confirmAction').on('click', function (e) {
+        var message = $(this).attr('data-message');
+        var title = $(this).attr('data-title');
+        var cancel_text = $(this).attr('data-cancel-txt');
+        var action_text = $(this).attr('data-action-txt');
+        var action_btn_class = $(this).attr('data-action-class');
+        var form = $(this).closest('form');
+        bootbox.dialog({
+            message: message,
+            title: title,
+            buttons: {
+                cancel_btn: {
+                    label: cancel_text,
+                    className: "btn-default"
+                },
+                action_btn: {
+                    label: action_text,
+                    className: action_btn_class,
+                    callback: function () {
+                        form.submit();
+                    }
+                }
+            }
+        });
+    });
+}
+function popover_init() {
     var hidePopover = function () {
         $(this).popover('hide');
     }
     , togglePopover = function () {
         $(this).popover('toggle');
-    };               
+    };
     $('[data-toggle="popover"]').popover().click(togglePopover).blur(hidePopover);
     $('[data-toggle="popover"]').on('shown.bs.popover', function () {
         act_confirm();
@@ -56,6 +57,16 @@ $(document).ready( function () {
     $('[rel=tooltip]').tooltip();
     popover_init();
 
+
+    // Course Description expand button
+    $("#descr_collapse_btn").on("click",function(){
+        var containerHeight = 260;
+        var contentHeight = $("#descr_content").height();
+        var blockHeight = ($("#descr_collapse").hasClass("container_expand"))?containerHeight:contentHeight;
+        $("#descr_collapse").animate({
+            height : blockHeight
+        },200,function(){$("#descr_collapse").toggleClass("container_expand");});
+    });
 
     // Teacher - Student Button
     $('.btn-toggle').on('click',function(){
