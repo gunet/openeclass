@@ -40,10 +40,6 @@ if (isset($_GET['uploadPath'])) {
 
 if ($can_upload) {
     $tool_content .= action_bar(array(
-                    array('section_title' => $langExternalFile,
-                          'show' => isset($_GET['ext'])),
-                    array('section_title' => $langDownloadFile,
-                          'show' => !isset($_GET['ext'])),
                     array('title' => $langBack,
                           'url' => "index.php?course=$course_code",
                           'icon' => 'fa-reply',
