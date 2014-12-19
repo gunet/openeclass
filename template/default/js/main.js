@@ -43,7 +43,7 @@ function popover_init() {
     , togglePopover = function () {
         $(this).popover('toggle');
     };
-    $('[data-toggle="popover"]').popover().click(togglePopover).blur(hidePopover);
+    $('[data-toggle="popover"]').popover().click(togglePopover).live('blur', hidePopover);
     $('[data-toggle="popover"]').on('shown.bs.popover', function () {
         act_confirm();
     });
