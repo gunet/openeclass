@@ -140,33 +140,6 @@ function checkrequired(thisform) {
 </script>";
 }
     
-// display action bar
-if (isset($_GET['addEvent']) or isset($_GET['edit'])) {    
-    $tool_content .= action_bar(array(
-            array('section_title' => $langAddEvent,
-                  'show' => isset($_GET['addEvent'])),
-            array('section_title' => $langModifEvent,
-                  'show' => isset($_GET['edit'])),
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa-reply',
-                  'level' => 'primary',
-                  'show' => $is_editor)));
-} else {
-    $tool_content .= action_bar(array(
-            array('title' => $langAddEvent,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1",
-                  'icon' => 'fa-plus-circle',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success',
-                  'show' => $is_editor),
-            array('title' => $langiCalExport,
-                  'url' => "icalendar.php?c=$course_id",
-                  'icon' => 'fa-calendar',
-                  'level' => 'primary')
-        ));                        
-}
-
 if ($is_editor) {
     $agdx = new AgendaIndexer();
     // modify visibility
@@ -210,8 +183,11 @@ if ($is_editor) {
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
         $pageName = $langAddEvent;
         $tool_content .= action_bar(array(
-                array('section_title' => $pageName)));
-        
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label',
+                      'show' => $is_editor)));        
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
         $rep = '';
         if (isset($id) && $id) {
@@ -302,84 +278,98 @@ if ($is_editor) {
             </form></div>";
     }
 }
+    /* ---------------------------------------------
+     *  End  of  prof only
+     * ------------------------------------------- */
+// display action bar
+if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
+    $tool_content .= action_bar(array(
+            array('title' => $langAddEvent,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1",
+                  'icon' => 'fa-plus-circle',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success',
+                  'show' => $is_editor),
+            array('title' => $langiCalExport,
+                  'url' => "icalendar.php?c=$course_id",
+                  'icon' => 'fa-calendar',
+                  'level' => 'primary')
+        ));                        
 
-/* ---------------------------------------------
- *  End  of  prof only
- * ------------------------------------------- */
-$cal_content_list = event_list_view();
-$tool_content .= ''
-            . '<div id="calendar_wrapper" class="row">
-                <div class="col-md-12">
-                    <div class="row calendar-header">
+    $cal_content_list = event_list_view();
+    $tool_content .= ''
+                . '<div id="calendar_wrapper" class="row">
                     <div class="col-md-12">
-                    <div id="calendar-header">
-                        <div class="pull-right form-inline">
-                            <div class="btn-group">
-                                    <button class="btn btn-primary btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
-                                    <button class="btn btn-sm" data-calendar-nav="today">' . $langToday . '</button>
-                                    <button class="btn btn-primary btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
+                        <div class="row calendar-header">
+                        <div class="col-md-12">
+                        <div id="calendar-header">
+                            <div class="pull-right form-inline">
+                                <div class="btn-group">
+                                        <button class="btn btn-primary btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
+                                        <button class="btn btn-sm" data-calendar-nav="today">' . $langToday . '</button>
+                                        <button class="btn btn-primary btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
+                                </div>
+                                <div class="btn-group">
+                                        <button class="btn btn-warning btn-sm" data-calendar-view="year">' . $langYear . '</button>
+                                        <button class="btn btn-warning btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
+                                        <button class="btn btn-warning btn-sm" data-calendar-view="week">' . $langWeek . '</button>
+                                        <button class="btn btn-warning btn-sm" data-calendar-view="day">' . $langDay . '</button>
+                                        <button class="btn btn-warning btn-sm" id="listviewbtn">' . $langListAll . '</button>
+                                </div>
                             </div>
-                            <div class="btn-group">
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="year">' . $langYear . '</button>
-                                    <button class="btn btn-warning btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="week">' . $langWeek . '</button>
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="day">' . $langDay . '</button>
-                                    <button class="btn btn-warning btn-sm" id="listviewbtn">' . $langListAll . '</button>
+                            <h4></h4>
                             </div>
-                        </div>
-                        <h4></h4>
-                        </div>
-                        </div>
-                    </div>'
-            . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'
-            . '<div class="row"><div class="col-md-12" id="raweventlist">'.$cal_content_list.'</div></div>'
-            . '</div></div>';
+                            </div>
+                        </div>'
+                . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'
+                . '<div class="row"><div class="col-md-12" id="raweventlist">'.$cal_content_list.'</div></div>'
+                . '</div></div>';
 
-$tool_content .= "<script type='text/javascript'>" .
-'$(document).ready(function(){
-    $("#raweventlist").hide();
-    var calendar = $("#bootstrapcalendar").calendar(
-        {
-            tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
-            events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php?course='.$course_code.'",
-            language: "el-GR",
-            onAfterViewLoad: function(view) {
-                        $(".calendar-header h4").text(this.getTitle());
-                        $(".btn-group button").removeClass("active");
-                        $("button[data-calendar-view=\'" + view + "\']").addClass("active");
-                        $("button[data-calendar-nav=\'today\']").text(this.getTitle());
-                        }
-        }
-    );
-    $(".btn-group button[data-calendar-nav]").each(function() {
-        var $this = $(this);
-        $this.click(function() {
-            calendar.navigate($this.data("calendar-nav"));
-            $("#raweventlist").hide();
-            $("#bootstrapcalendar").show();
+    $tool_content .= "<script type='text/javascript'>" .
+    '$(document).ready(function(){
+        $("#raweventlist").hide();
+        var calendar = $("#bootstrapcalendar").calendar(
+            {
+                tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
+                events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php?course='.$course_code.'",
+                language: "el-GR",
+                onAfterViewLoad: function(view) {
+                            $(".calendar-header h4").text(this.getTitle());
+                            $(".btn-group button").removeClass("active");
+                            $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                            $("button[data-calendar-nav=\'today\']").text(this.getTitle());
+                            }
+            }
+        );
+        $(".btn-group button[data-calendar-nav]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.navigate($this.data("calendar-nav"));
+                $("#raweventlist").hide();
+                $("#bootstrapcalendar").show();
+            });
         });
+
+        $(".btn-group button[data-calendar-view]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.view($this.data("calendar-view"));
+                $("#raweventlist").hide();
+                $("#bootstrapcalendar").show();
+            });
+
+        $("#listviewbtn").click(function() {
+            $("#listviewbtn").addClass("active");
+            $(".btn-group button").removeClass("active");
+            $("#bootstrapcalendar").hide();
+            $("#raweventlist").show();
+        });
+    });    
     });
 
-    $(".btn-group button[data-calendar-view]").each(function() {
-        var $this = $(this);
-        $this.click(function() {
-            calendar.view($this.data("calendar-view"));
-            $("#raweventlist").hide();
-            $("#bootstrapcalendar").show();
-        });
-        
-    $("#listviewbtn").click(function() {
-        $("#listviewbtn").addClass("active");
-        $(".btn-group button").removeClass("active");
-        $("#bootstrapcalendar").hide();
-        $("#raweventlist").show();
-    });
-});    
-});
-
-</script>';
+    </script>';
     
-
+}
 add_units_navigation(TRUE);
 
 draw($tool_content, 2, null, $head_content);
