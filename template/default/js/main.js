@@ -50,6 +50,21 @@ function popover_init() {
 }    
 $(document).ready( function () {
     
+    $(".navbar-toggle").on("click",function(){
+        if($("#leftnav").hasClass("leftnav-in")){
+            $("#leftnav").animate({
+                left: "0px"
+            },100,function(){
+                $(this).toggleClass("leftnav-in");
+            });
+        } else {
+            $("#leftnav").animate({
+                left: "-50px"
+            },100,function(){
+                $(this).toggleClass("leftnav-in");
+            });
+        }
+    });
     
     // Initialisations
     act_confirm();
