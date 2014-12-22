@@ -37,43 +37,7 @@ if (isset($_GET['delete_image'])) {
         redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_POST['optionsSave'])) {
-    if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-        $file_name = $_FILES['imageUpload']['name'];
-        validateUploadedFile($file_name, 2);
-        $i=0;
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['custom_logo'] = $file_name;
-    }
-    if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
-        $file_name = $_FILES['imageUploadSmall']['name'];
-        validateUploadedFile($file_name, 2);
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");       
-        $_POST['custom_logo_small'] = $file_name;
-    }
-    if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
-        $file_name = $_FILES['bgImage']['name'];
-        validateUploadedFile($file_name, 2);
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['bgImage'] = $file_name;
-    }          
+    upload_images();     
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
     redirect_to_home_page('modules/admin/theme_options.php');
@@ -89,43 +53,7 @@ if (isset($_POST['optionsSave'])) {
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
     unset($_POST['themeOptionsName']);
-    if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-        $file_name = $_FILES['imageUpload']['name'];
-        validateUploadedFile($file_name, 2);
-        $i=0;
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['custom_logo'] = $file_name;
-    }
-    if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
-        $file_name = $_FILES['imageUploadSmall']['name'];
-        validateUploadedFile($file_name, 2);
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");       
-        $_POST['custom_logo_small'] = $file_name;
-    }
-    if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
-        $file_name = $_FILES['bgImage']['name'];
-        validateUploadedFile($file_name, 2);
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['bgImage'] = $file_name;
-    }  
+    upload_images();
     $serialized_data = serialize($_POST);
     $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options_name, $serialized_data)->lastInsertID;
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $theme_options_id, 'theme_options_id');
@@ -206,6 +134,7 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles['leftSubMenuHoverFontColor'] = "#eee";
         $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
         $theme_options_styles['bgType'] = 'repeat';
+        $theme_options_styles['loginJumbotronBgColor'] = '#025694';
     }
     $delete_btn = (get_config('theme_options_id')) 
             ? 
@@ -241,7 +170,15 @@ if (isset($_POST['optionsSave'])) {
         ";
     } else {
        $bg_field = "<input type='file' name='bgImage' id='bgImage'>"; 
-    }      
+    }
+    if (isset($theme_options_styles['loginImg'])) {
+        $login_bg_field = "
+            <img src='$themeimg/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
+            <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
+        ";
+    } else {
+       $login_bg_field = "<input type='file' name='loginImg' id='loginImg'>"; 
+    }    
     @$tool_content .= "
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
@@ -294,7 +231,22 @@ if (isset($_POST['optionsSave'])) {
                         </label>
                       </div>              
                 </div>                
-            </div>              
+            </div>
+            <div class='form-group'>
+              <label for='loginJumbotronBgColor' class='col-sm-3 control-label'>Gradient Φόντο οθόνης σύνδεσης:</label>
+              <div class='col-sm-4'>
+                <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
+              </div>
+              <div class='col-sm-4'>
+                <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
+              </div>              
+            </div>
+            <div class='form-group'>
+                <label for='loginImg' class='col-sm-3 control-label'>$langLogo:</label>
+                <div class='col-sm-9'>
+                   $login_bg_field
+                </div>
+            </div>               
             <hr>
             <h3>$langNavSettings</h3>            
             <div class='form-group'>
@@ -354,5 +306,60 @@ if (isset($_POST['optionsSave'])) {
         </form>
     </div>
     ";
+}
+function upload_images() {
+    global $webDir, $theme;
+    if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
+        $file_name = $_FILES['imageUpload']['name'];
+        validateUploadedFile($file_name, 2);
+        $i=0;
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
+        }
+        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['custom_logo'] = $file_name;
+    }
+    if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
+        $file_name = $_FILES['imageUploadSmall']['name'];
+        validateUploadedFile($file_name, 2);
+        $i=0;
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
+        }
+        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");       
+        $_POST['custom_logo_small'] = $file_name;
+    }
+    if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
+        $file_name = $_FILES['bgImage']['name'];
+        validateUploadedFile($file_name, 2);
+        $i=0;
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
+        }
+        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['bgImage'] = $file_name;
+    }
+    if (isset($_FILES['loginImg']) && is_uploaded_file($_FILES['loginImg']['tmp_name'])) {
+        $file_name = $_FILES['loginImg']['name'];
+        validateUploadedFile($file_name, 2);
+        $i=0;
+        while (is_file("$webDir/template/$theme/img/$file_name")) {
+            $i++;
+            $name = pathinfo($file_name, PATHINFO_FILENAME);
+            $ext =  get_file_extension($file_name);
+            $file_name = "$name-$i.$ext";
+        }
+        move_uploaded_file($_FILES['loginImg']['tmp_name'], "$webDir/template/$theme/img/$file_name");
+        $_POST['loginImg'] = $file_name;
+    }     
 }
 draw($tool_content, 3, null, $head_content);

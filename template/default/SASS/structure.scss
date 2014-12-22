@@ -670,15 +670,11 @@ body.page-login h1{
   background: -ms-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
 
   .graphic{
-    position: absolute;
-    z-index: 9;
-
-    width: 77%;
-    max-width:100%;
-    
-    bottom: 1.5rem;
-    height: 90%;
-    width: auto; 
+    min-height:250px;
+    background-image: url('../img/indexlogo.png');
+    background-repeat: no-repeat;
+    background-position:20%;
+    background-size: 353px;
   }
 }
 
@@ -832,20 +828,6 @@ form.login-form{
 
 
 /* MEDIA QUERIES -------------------------------------------------------------------*/
-
-
-@media only screen and (min-width: 768px) and (max-width : 992px) {
-
-  .jumbotron.jumbotron-login img.graphic{
-    bottom: -3.5rem;
-    
-  }
-
-}
-
-
-
-
 
 
 

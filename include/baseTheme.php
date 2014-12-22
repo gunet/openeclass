@@ -426,6 +426,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$themeimg/$theme_options_styles[bgImage]')" : "";
             $styles_str .= "body{background: $theme_options_styles[bgColor]$bg_image;$background_type}";
         }
+        if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $styles_str .= ".jumbotron.jumbotron-login { background: -webkit-radial-gradient(30% 60%, closest-corner, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor]);}";
+        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login .graphic{ background-image: url('$themeimg/$theme_options_styles[loginImg]'); }";
         if (!empty($theme_options_styles['leftNavBgColor'])) $styles_str .= "#leftnav{background:$theme_options_styles[leftNavBgColor];}";
         if (!empty($theme_options_styles['leftSubMenuFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];}";
