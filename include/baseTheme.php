@@ -370,7 +370,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         // Breadcrumb course home entry
         if (isset($course_code)) {
-            $t->set_var('BREAD_TEXT', q(ellipsize($title, 64)));
+            $t->set_var('BREAD_TEXT', q(ellipsize($title, 48)));
             if ($pageName) {
                 $t->set_var('BREAD_HREF', $urlAppend . 'courses/' . $course_code . '/');
                 $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
@@ -504,8 +504,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         global $webDir; // required by indexer
         require_once 'modules/search/indexer.class.php';
         if (isset($_SESSION[Indexer::SESSION_PROCESS_AT_NEXT_DRAW]) && $_SESSION[Indexer::SESSION_PROCESS_AT_NEXT_DRAW] === true) {
-            $inc_jquery = "<script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".min.js'></script>\n";
-            $head_content .= (strpos($head_content, $inc_jquery) === false) ? $inc_jquery : '';
             $head_content .= Indexer::queueAsyncJSCode();
             $_SESSION[Indexer::SESSION_PROCESS_AT_NEXT_DRAW] = false;
         }
