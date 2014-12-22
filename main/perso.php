@@ -115,6 +115,7 @@ $perso_tool_content = array(
  * @return string
  */
 function getUserLessonInfo($uid) {
+    global $teacher_courses_count, $student_courses_count;
     global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm;
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
@@ -150,6 +151,8 @@ function getUserLessonInfo($uid) {
     }
 
     //getting user's lesson info
+    $teacher_courses_count = 0;
+    $student_courses_count = 0;
     if ($myCourses) {
         $lesson_content .= "<table id='portfolio_lessons' class='table table-striped'>";
         $lesson_content .= "<thead style='display:none'><tr><th></th><th></th></tr></thead>";
@@ -162,8 +165,10 @@ function getUserLessonInfo($uid) {
             $lesson_content .= "<td class='text-center right-cell'>";
             if ($data->status == USER_STUDENT) {
                 $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
+                $student_courses_count++;
             } elseif ($data->status == USER_TEACHER) {
                 $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code);
+                $teacher_courses_count++;
             }
             $lesson_content .= "</td></tr>";
         }
