@@ -3520,6 +3520,11 @@ $langBgImg = "Background Image";
 $langRepeatedImg = 'Repeated Image';
 $langStretchedImg = 'Stretched Image';
 $langNavSettings = 'Navigation Settings';
+$langSaveAs = 'Save as ...';
+$langLoginBgGradient = "Login screen background gradient";
+$langLoginImg = "Login screen image";
+$langThemeOptionsName = "Theme Options Name";
+
 $langFormErrors = 'Form contains errors. Please correct and resubmit form.';
 /* * ***********************************************************
  * Other

@@ -4365,6 +4365,9 @@ $langRepeatedImg = 'Επαναλαμβανόμενη Εικόνα';
 $langStretchedImg = 'Τεντωμένη Εικόνα';
 $langNavSettings = 'Ρυθμίσεις Μενού Πλοήγησης';
 $langSaveAs = 'Αποθήκευση ως ...';
+$langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
+$langLoginImg = "Εικόνα οθόνης σύνδεσης";
+$langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 
 /* * ***********************************************************
  * Validation

@@ -78,7 +78,7 @@ if (isset($_POST['optionsSave'])) {
                                     '<form class=\"form-horizontal\" role=\"form\">'+
                                         '<div class=\"form-group\">'+
                                         '<div class=\"col-sm-12\">'+
-                                            '<input id=\"themeOptionsName\" name=\"themeOptionsName\" type=\"text\" placeholder=\"Theme Options Name\" class=\"form-control\">'+
+                                            '<input id=\"themeOptionsName\" name=\"themeOptionsName\" type=\"text\" placeholder=\"$langThemeOptionsName\" class=\"form-control\">'+
                                         '</div>'+
                                         '</div>'+
                                     '</form>'+
@@ -172,12 +172,12 @@ if (isset($_POST['optionsSave'])) {
        $bg_field = "<input type='file' name='bgImage' id='bgImage'>"; 
     }
     if (isset($theme_options_styles['loginImg'])) {
-        $login_bg_field = "
+        $login_image_field = "
             <img src='$themeimg/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
         ";
     } else {
-       $login_bg_field = "<input type='file' name='loginImg' id='loginImg'>"; 
+       $login_image_field = "<input type='file' name='loginImg' id='loginImg'>"; 
     }    
     @$tool_content .= "
     <div class='form-wrapper'>
@@ -233,18 +233,21 @@ if (isset($_POST['optionsSave'])) {
                 </div>                
             </div>
             <div class='form-group'>
-              <label for='loginJumbotronBgColor' class='col-sm-3 control-label'>Gradient Φόντο οθόνης σύνδεσης:</label>
+              <label for='loginJumbotronBgColor' class='col-sm-3 control-label'>$langLoginBgGradient:</label>
               <div class='col-sm-4'>
                 <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
+              </div>
+              <div class='col-sm-1 text-center' style='padding-top: 7px;'>
+                <i class='hidden-xs fa fa-arrow-right'></i>
               </div>
               <div class='col-sm-4'>
                 <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
               </div>              
             </div>
             <div class='form-group'>
-                <label for='loginImg' class='col-sm-3 control-label'>$langLogo:</label>
+                <label for='loginImg' class='col-sm-3 control-label'>$langLoginImg:</label>
                 <div class='col-sm-9'>
-                   $login_bg_field
+                   $login_image_field
                 </div>
             </div>               
             <hr>
