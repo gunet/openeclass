@@ -406,7 +406,6 @@ function showquota($quota, $used) {
     }
     $pageName = $langQuotaBar;      
     $retstring .= action_bar(array(
-                    array('section_title' => $langQuotaBar),
                     array('title' => $langBack,
                           'url' => $link,
                           'icon' => 'fa-reply',
