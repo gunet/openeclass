@@ -35,6 +35,7 @@ require_once 'modules/rating/class.rating.php';
 
 ModalBoxHelper::loadModalBox();
 
+$toolName = $langForums;
 if ($is_editor) {
     load_js('tools.js');
 }

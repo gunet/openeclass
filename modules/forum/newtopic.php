@@ -33,8 +33,7 @@ require_once 'modules/search/indexer.class.php';
 require_once 'config.php';
 require_once 'functions.php';
 
-
-
+$toolName = $langForums;
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
 } else {

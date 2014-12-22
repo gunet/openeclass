@@ -37,6 +37,7 @@ require_once 'modules/forum/functions.php';
 if ($is_editor) {
     load_js('tools.js');
 }
+$toolName = $langForums;
 
 $paging = true;
 $next = 0;
@@ -54,12 +55,11 @@ $myrow = Database::get()->querySingle("SELECT id, name FROM forum WHERE id = ?d 
 $forum_name = $myrow->name;
 $forum_id = $myrow->id;
 
-$pageName = q($forum_name);
-
 if (isset($_GET['empty'])) { // if we come from newtopic.php
     $tool_content .= "<div class='alert alert-warning'>$langEmptyNewTopic</div>";
 }
 
+$pageName = q($forum_name);
 if ($can_post) {
     $tool_content .= 
             action_bar(array(

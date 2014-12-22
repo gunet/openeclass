@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014 Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -31,6 +31,8 @@ require_once 'modules/group/group_functions.php';
 require_once 'config.php';
 require_once 'functions.php';
 require_once 'modules/search/indexer.class.php';
+
+$toolName = $langForums;
 
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
@@ -179,8 +181,7 @@ if (isset($_POST['submit'])) {
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
             <input type='hidden' name='parent_post' value='$parent_post'>
-            <fieldset>        
-            <legend>$langTopicAnswer: " . q($topic_title) . "</legend>
+            <fieldset>
             <div class='form-group'>
               <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
               <div class='col-sm-10'>

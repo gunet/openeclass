@@ -45,7 +45,7 @@ require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
 
-$pageName = $langVideo;
+$toolName = $langVideo;
 
 if (isset($_SESSION['givenname'])) {
     $nick = q($_SESSION['givenname'] . ' ' . $_SESSION['surname']);
@@ -94,7 +94,7 @@ function checkrequired(which, entry) {
 hContent;
 
     if (!$is_in_tinymce and (!isset($_GET['showQuota']))) {
-        if (!isset($_GET['form_input']) and (!isset($_GET['action'])) and (!isset($_GET['table_edit']))) {
+        if (!isset($_GET['form_input']) and (!isset($_GET['action'])) and (!isset($_GET['table_edit']))) {            
             $tool_content .= action_bar(array(
                 array('title' => $langAddV,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file",
@@ -113,6 +113,15 @@ hContent;
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=true",
                       'icon' => 'fa-pie-chart')));
         } else {
+            if (isset($_GET['action'])) {
+                $pageName =  ($_GET['action'] == 'editcategory') ? $langCategoryMod : $langCategoryAdd;
+            }
+            if (isset($_GET['form_input'])) {
+                $pageName =  ($_GET['form_input'] == 'file') ? $langAddV : $langAddVideoLink;
+            }
+            if (isset($_GET['id']) and isset($_GET['table_edit']))  {
+                $pageName = $langModify;
+            }            
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -152,8 +161,7 @@ hContent;
      * display form for add / edit category
      */
     if (isset($_GET['action'])) {
-        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-        $pageName =  ($_GET['action'] == 'edit-category') ? $langCategoryMod : $langCategoryAdd;
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);        
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
         $tool_content .=  "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
         if ($_GET['action'] == 'editcategory') {
@@ -325,12 +333,7 @@ hContent;
                     delete_video($_GET['id'], $table);
                 }
                 $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
-        } elseif (isset($_GET['form_input'])) { // display video form
-                  if ($_GET['form_input'] == 'file') {
-                      $pageName = $langAddV;
-                  } else {
-                      $pageName = $langAddVideoLink;
-                  }
+        } elseif (isset($_GET['form_input'])) { // display video form                              
                 $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
                 
                 $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
@@ -408,9 +411,7 @@ hContent;
     // ------------------- if no submit -----------------------
     if (isset($_GET['id']) and isset($_GET['table_edit']))  {
             $id = $_GET['id'];
-            $table_edit = select_table($_GET['table_edit']);
-            
-            $pageName = $langModify;
+            $table_edit = select_table($_GET['table_edit']);                        
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
             
             $myrow = Database::get()->querySingle("SELECT * FROM $table_edit WHERE course_id = ?d AND id = ?d ORDER BY title", $course_id, $id);

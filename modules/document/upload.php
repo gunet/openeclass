@@ -38,12 +38,7 @@ if (isset($_GET['uploadPath'])) {
     $uploadPath = '';
 }
 
-if ($can_upload) {
-    $tool_content .= action_bar(array(
-                    array('title' => $langBack,
-                          'url' => "index.php?course=$course_code",
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')));
+if ($can_upload) {    
     if (isset($_GET['ext'])) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $pageName = $langExternalFile;
@@ -66,6 +61,11 @@ if ($can_upload) {
           </div>
         </div>";
     }
+    $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                          'url' => "index.php?course=$course_code",
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')));
     $tool_content .= "
         <div class='row margin-top-fat'>
             <div class='col-md-12'>
