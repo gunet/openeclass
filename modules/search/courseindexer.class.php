@@ -170,27 +170,27 @@ class CourseIndexer extends AbstractBaseIndexer implements ResourceIndexerInterf
         <fieldset>         
             <div class='form-group'>
                 <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                <div class='col-sm-10'><input id='title' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
+                <div class='col-sm-10'><input id='title' class='form-control' name='search_terms_title' type='text' placeholder='$langTitle_Descr'></div>
             </div>
             <div class='form-group'>
                 <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
-                <div class='col-sm-10'><input id='description' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>                    
+                <div class='col-sm-10'><input id='description' class='form-control' name='search_terms_description' type='text' placeholder='$langDescription_Descr'></div>                    
             </div>
             <div class='form-group'>
                 <label for='keywords' class='col-sm-2 control-label'>$langKeywords:</label>
-                <div class='col-sm-10'><input id='keywords' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>                
+                <div class='col-sm-10'><input id='keywords' class='form-control' name='search_terms_keywords' type='text' placeholder='$langKeywords_Descr'></div>                
             </div>
             <div class='form-group'>
                 <label for='teacher' class='col-sm-2 control-label'>$langTeacher:</label>
-                <div class='col-sm-10'><input id='teacher' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>                
+                <div class='col-sm-10'><input id='teacher' class='form-control' name='search_terms_instructor' type='text' placeholder='$langInstructor_Descr'></div>                
             </div>
             <div class='form-group'>
                 <label for='code' class='col-sm-2 control-label'>$langCourseCode:</label>
-                <div class='col-sm-10'><input id='code' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>                
+                <div class='col-sm-10'><input id='code' class='form-control' name='search_terms_coursecode' type='text' placeholder='$langCourseCode_Descr'></div>                
             </div>
             <div class='col-sm-offset-2 col-sm-10'>              
-              <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
-                <input class='btn' type='reset' name='reset' value='$langNewSearch'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langDoSearch'>
+                <input class='btn btn-default' type='reset' name='reset' value='$langNewSearch'>
             </div>            
             </fieldset>
             </form>
