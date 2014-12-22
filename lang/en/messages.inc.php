@@ -1,4 +1,4 @@
-<?php
+π<?php
 
 // Message file for language en
 // Generated 2011-12-14 17:17:43
@@ -3535,3 +3535,4 @@ $langLessOptions = 'Less options';
 $langMyCoursesSide = 'My Courses';
 $langMyMessagesSide = 'My Messages';
 $langQuickNotesSide = 'Quick Notes';
+$langMyStats = "My statistics";

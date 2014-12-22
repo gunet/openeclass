@@ -2851,9 +2851,9 @@ function action_button($options) {
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <button type='button' class='btn btn-default' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                <a tabindex='1' class='btn btn-default' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <i class='fa fa-gear'></i>  <span class='caret'></span>
-                </button>";
+                </a>";
     }    
     
     return "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
