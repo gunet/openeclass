@@ -9595,20 +9595,23 @@ a.list-group-item.delete:hover {
   }
 }
 @media (min-width: 768px) {
-  /* line 163, ../SASS/bootstrap-custom.scss */
+  /* line 165, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 20%;
   }
 }
 @media (min-width: 1200px) {
-  /* line 168, ../SASS/bootstrap-custom.scss */
+  /* line 170, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 17%;
   }
 }
 @media (min-width: 1450px) {
-  /* line 173, ../SASS/bootstrap-custom.scss */
+  /* line 175, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 12.4%;
   }
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 992px), only screen and (-o-min-device-pixel-ratio: 2 / 1) and (min-width: 992px), only screen and (min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min-resolution: 192dpi) and (min-width: 992px), only screen and (min-resolution: 2dppx) and (min-width: 992px) {
+  /* Medium screen, retina, stuff to override above media query */
 }
