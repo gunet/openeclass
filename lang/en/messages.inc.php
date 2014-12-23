@@ -1,4 +1,4 @@
-π<?php
+<?php
 
 // Message file for language en
 // Generated 2011-12-14 17:17:43

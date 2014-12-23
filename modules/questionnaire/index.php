@@ -19,13 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ===========================================================================
-  index.php
-  @last update: 17-4-2006 by Costas Tsibanis
-  @authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-  ==============================================================================
-  @Description: Main script for the questionnaire tool
-  ==============================================================================
+/**
+ * @file index.php
+ * @brief main script for the questionnaire tool
  */
 
 $require_login = TRUE;
@@ -40,7 +36,7 @@ $action = new action();
 $action->record(MODULE_ID_QUESTIONNAIRE);
 /* * *********************************** */
 
-$pageName = $langQuestionnaire;
+$toolName = $langQuestionnaire;
 
 load_js('tools.js');
 if ($is_editor) {

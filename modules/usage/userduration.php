@@ -52,7 +52,7 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
     $crlf, $crlf;
 } else {
     $format = 'html';
-
+    $toolName = $langUsage;
     $pageName = $langUserDuration;
     $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
     statistics_tools($course_code, "userduration");

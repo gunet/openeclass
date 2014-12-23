@@ -19,11 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* ===========================================================================
-  pollparticipate.php
-  @last update: 26-5-2006 by Dionysios Synodinos
-  @authors list: Dionysios G. Synodinos <synodinos@gmail.com>
-  ==============================================================================
+/**
+ * @file pollparticipate.php
  */
 
 $require_current_course = TRUE;
@@ -35,6 +32,7 @@ require_once 'functions.php';
 
 load_js('bootstrap-slider');
 
+$toolName = $langQuestionnaire;
 $pageName = $langParticipate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langQuestionnaire);
 
@@ -61,8 +59,8 @@ switch ($_REQUEST['UseCase']) {
 draw($tool_content, 2, null, $head_content);
 
 function printPollForm() {
-    global $course_id, $course_code, $tool_content, $langPollStart,
-    $langPollEnd, $langSubmit, $langPollInactive, $langPollUnknown, $uid,
+    global $course_id, $course_code, $tool_content,
+    $langSubmit, $langPollInactive, $langPollUnknown, $uid,
     $langPollAlreadyParticipated, $is_editor, $langBack, $langQuestion,
     $langCancel, $head_content;
     

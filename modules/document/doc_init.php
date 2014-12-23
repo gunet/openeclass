@@ -54,8 +54,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
     $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
     $pageName = $langFileAdmin;
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
-    $navigation[] = array('url' => 'edit.php?course=' . $course_code.'&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);    
 } elseif (defined('COMMON_DOCUMENTS')) {
     $subsystem = COMMON;
     $subsystem_id = 'NULL';

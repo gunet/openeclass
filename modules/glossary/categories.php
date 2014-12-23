@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2013  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -33,7 +33,7 @@ $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-$pageName = $langCategories;
+$toolName = $langGlossary;
 
 $categories = array();
 $q = Database::get()->queryArray("SELECT id, name, description, `order`
@@ -47,6 +47,16 @@ if ($is_editor) {
     load_js('tools.js');
 
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
+        if (isset($_GET['add'])) {
+            $pageName = $langCategoryAdd;
+        }
+        if (isset($_GET['config'])) {
+            $pageName = $langConfig;
+        }
+        if (isset($_GET['edit'])) {
+            $pageName = $langCategoryMod;
+        }
+        
         $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$cat_url",

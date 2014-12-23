@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -58,8 +58,8 @@ $action = new action();
 $action->record(MODULE_ID_CHAT);
 /* * *********************************** */
 
-$pageName = $langConference;
-
+$toolName = $langConference;
+$pageName = $langTypeMessage;
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
@@ -100,7 +100,6 @@ $tool_content .= "
     <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
    <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
    <fieldset>
-    <legend>$langTypeMessage</legend>
     <div class='col-xs-12'>
         <div class='input-group'>
           <input type='text' name='msg' size='80' class='form-control'>

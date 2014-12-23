@@ -32,8 +32,7 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
 
-$pageName = $langEBookEdit;
-$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
+$toolName = $langEBook;
 
 if (!$is_editor) {
     redirect_to_home_page();
@@ -117,6 +116,7 @@ $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d
 if (!$info) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else {
+    $pageName = $langEBookEdit;
     $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
     $k = 0;
     list($paths, $files, $file_ids, $id_map) = find_html_files();
@@ -256,7 +256,7 @@ if (!$info) {
         <tr>          
           <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
           <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
-          <td>" . selection($sections, "sid[$file_id]", 'class="form-control"') . "</td>
+          <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
           <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
         </tr>";        
     }

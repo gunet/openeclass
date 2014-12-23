@@ -19,14 +19,10 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id: group_properties.php,v 1.24 2011-05-16 12:36:35 adia Exp $
- *
- * @abstract This module is responsible for the user groups of each lesson
- *
+
+/**
+ * @file group_properties.php
+ * @brief display group properties
  */
 
 $require_current_course = true;
@@ -35,8 +31,9 @@ $helpTopic = 'Group';
 $require_editor = true;
 
 require_once '../../include/baseTheme.php';
+$toolName = $langGroups;
 $pageName = $langGroupProperties;
-$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroupManagement);
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroups);
 
 require_once 'group_functions.php';
 initialize_group_info();

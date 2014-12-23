@@ -39,7 +39,7 @@ $tree = new Hierarchy();
 $course = new Course();
 $user = new User();
 
-$pageName = $langCourseCreate;
+$toolName = $langCourseCreate;
 
 load_js('jstree');
 load_js('pwstrength.js');
@@ -208,8 +208,7 @@ foreach ($departments as $dep) {
 }
 
 // Check if the teacher is allowed to create in the departments he chose
-if (!$deps_valid) {
-    $pageName = "";
+if (!$deps_valid) {    
     $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
                     <p class='pull-right'><a class='btn btn-default' href='$_SERVER[PHP_SELF]'>$langBack</a></p>";
     draw($tool_content, 1, null, $head_content);
@@ -387,9 +386,7 @@ if (!isset($_POST['create_course'])) {
         header("Location:" . $urlServer . "modules/create_course/create_course.php");
         exit;
     }
-
-    $pageName = $langCourseCreate;
-
+    
     // create new course code: uppercase, no spaces allowed
     $code = strtoupper(new_code($departments[0]));
     $code = str_replace(' ', '', $code);

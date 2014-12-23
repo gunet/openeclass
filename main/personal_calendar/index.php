@@ -112,7 +112,7 @@ function show_day(day,month,year){
 //$action = new action();
 //$action->record(MODULE_ID_ANNOUNCE);
 
-$pageName = $langMyAgenda;
+$toolName = $langMyAgenda;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
@@ -215,13 +215,20 @@ if (isset($message) && $message) {
 }
 
 /* display form */
-if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
+if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) { 
     if (isset($_GET['modify'])) {
-        $langAdd = $pageName = $langModifEvent;
+        $pageName = $langModifEvent;
     } else {
         $pageName = $langAddEvent;
     }
-    $navigation[] = array('url' => "index.php", 'name' => $langEvents);
+    $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => $urlServer,
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')));
+    
+    $navigation[] = array('url' => "index.php", 'name' => $langMyAgenda);
+    
     if (!isset($eventToModify))
         $eventToModify = "";
     if (!isset($contentToModify))
@@ -335,7 +342,7 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
         <a class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
     </form>        
    ";
-} else {
+} else {    
     /* display actions toolbar */
     $tool_content .= 
                 action_bar(array(

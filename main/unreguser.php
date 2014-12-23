@@ -24,6 +24,7 @@ $require_login = TRUE;
 include '../include/baseTheme.php';
 require_once 'include/log.php';
 
+$toolName = $langMyProfile;
 $pageName = $langUnregUser;
 $navigation[] = array("url" => "profile/profile.php", "name" => $langModifyProfile);
 

@@ -46,7 +46,7 @@ if ($is_editor) {
     $max_glossary_terms = get_config('max_glossary_terms');
 }
 
-$pageName = $langGlossary;
+$toolName = $langGlossary;
 
 $categories = array();
 Database::get()->queryFunc("SELECT id, name, description, `order`
@@ -90,6 +90,15 @@ if ($glossary_data) {
 if ($is_editor) {
     
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
+        if (isset($_GET['add'])) {
+            $pageName = $langAddGlossaryTerm;
+        }
+        if (isset($_GET['config'])) {
+            $pageName = $langConfig;
+        }
+        if (isset($_GET['edit'])) {
+            $pageName = $langEdit;
+        }
         $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$base_url",

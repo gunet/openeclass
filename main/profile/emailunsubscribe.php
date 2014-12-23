@@ -24,6 +24,7 @@ $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
 load_js('tools.js');
 
+$toolName = $langMyProfile;
 $pageName = $langEmailUnsubscribe;
 $navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 

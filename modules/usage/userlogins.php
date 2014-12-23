@@ -145,8 +145,7 @@ if (count($unknown_users) > 0) {
 
 if ($table_cont) {
     $tool_content .= "<div class='table-responsive'>
-        <table class='table-default'>
-        <tr><th colspan='4'>$langUserLogins</th></tr>
+        <table class='table-default'>        
         <tr>
         <th class='text-left'>" . $langUser . "</th>
         <th>" . $langAddress . "</th>

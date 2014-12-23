@@ -30,13 +30,16 @@ require_once 'functions.php';
 
 load_js('tools.js');
 global $themeimg;
-
+$toolName = $langQuestionnaire;
+$navigation[] = array(
+            'url' => "index.php?course=$course_code", 
+            'name' => $langQuestionnaire
+        );
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
     $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
     $pid = intval($_GET['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
-    if(!$poll){
-        die('test');
+    if(!$poll){        
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
     $position = $poll->q_position;
@@ -196,7 +199,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $navigation[] = array(
             'url' => "admin.php?course=$course_code&amp;pid=$pid", 
             'name' => $poll->name
-        );            
+        );
     } else {
         $pageName = $langCreatePoll;
     }    
@@ -219,6 +222,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
 
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
+    $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'level' => 'primary-label',
