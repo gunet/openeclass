@@ -67,33 +67,29 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     // set display title
     $localtitle = ( $title === '__MainPage__' ) ? $langWikiMainPage : $title;
 
-    // display title
-    $out = '<div class="wikiTitle">' . "\n";
-    $out .= '<h1>' . $localtitle . '</h1>' . "\n";
-    $out .= '</div>' . "<br />";
-
-    // display editor
-    $out .= '<form method="POST" action="' . $script . '"'
-            . ' name="editform" id="editform">' . "\n"
-    ;
-
+    $out = "
+            <h1>$localtitle</h1>
+            <br>
+            <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='POST' action='$script' name='editform' id='editform'>";
+  
     if ($showWikiToolBar === true) {
         $wikiarea = new Wiki2xhtmlArea($content, 'wiki_content', 80, 15, null);
-        $out .= $wikiarea->toHTML();
-    } else {
-        $out .= '<label>Texte :</label><br />' . "\n";
-        $out .= '<textarea name="wiki_content" id="wiki_content"'
-                . ' cols="80" rows="15" wrap="virtual">'
-        ;
-        $out .= q($content);
-        $out .= '</textarea>' . "\n";
+        $out .= "<div class='form-group'><div class='col-xs-12'>". $wikiarea->toHTML() . "</div></div>";
+    } else { // Does it ever gets in here?
+        $out .= "<label>Texte :</label><br>
+                <textarea class='form-control' name='wiki_content' id='wiki_content'vcols='80' rows='15' wrap='virtual'>
+                    ". q($content) ."
+                </textarea>";
     }
 	
     //notes
-    $out .= '<div style="padding:10px;">' . "\n";
-    $out .= '<b>'.$langNote.':</b> <input type="text"  id="changelog" value="'.q($changelog).'"'. 
-	        ' name="changelog" size="70" maxlength="200" wrap="virtual">' . "\n";
-    $out .= '</div>' . "\n";
+    $out .= "<div class='form-group'>
+                <label for='changelog' class='col-sm-2 control-label'>$langNote:</label>
+                <div class='col-sm-10'>    
+                    <input class='form-control' type='text'  id='changelog' value='".q($changelog)."' name='changelog' size='70' maxlength='200' wrap='virtual'>
+                </div>        
+            </div>";
     //end notes
 
     $out .= '<div style="padding:10px;">' . "\n";
@@ -121,11 +117,10 @@ function claro_disp_wiki_editor($wikiId, $title, $versionId
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);
     $location = add_request_variable_to_url($location, "action", "show");
 
-    $out .= disp_button($location, $langCancel);
-
-    $out .= '</div>' . "\n";
-
-    $out .= "</form>\n";
+    $out .= "   <a class='btn btn-default' href='$location'>$langCancel</a>
+            </div>
+        </form>
+    </div>";
 
     return $out;
 }
@@ -141,17 +136,15 @@ function claro_disp_wiki_preview(&$wikiRenderer, $title, $content = '') {
     global $langWikiContentEmpty, $langWikiPreviewTitle
     , $langWikiPreviewWarning, $langWikiMainPage;
 
-    $out = "<div id=\"preview\" class=\"wikiTitle\">\n";
-
     if ($title === '__MainPage__') {
         $title = $langWikiMainPage;
     }
 
-    $title = "<h1 class=\"wikiTitle\">$langWikiPreviewTitle$title</h1>\n";
-    $out .= $title;
-    $out .= '</div>' . "\n";
-    $out .= "<div class='alert alert-danger'>$langWikiPreviewWarning</div><br />";
-    $out .= '<div class="wiki2xhtml">' . "\n";
+    $out = "<div id='preview' class='wikiTitle'>
+                <h1 class='wikiTitle'>$langWikiPreviewTitle$title</h1>
+            </div>
+            <div class='alert alert-danger'>$langWikiPreviewWarning</div><br>
+            <div class='wiki2xhtml'>";
 
     if ($content != '') {
         $out .= $wikiRenderer->render($content);
@@ -179,39 +172,21 @@ function claro_disp_wiki_preview_buttons($wikiId, $title, $content, $changelog =
 
     $script = ( is_null($script) ) ? $_SERVER['SCRIPT_NAME'] . "?course=$course_code" : $script;
 
-    $out = '<br><div><form method="POST" action="' . $script
-            . '" name="previewform" id="previewform">' . "\n"
-    ;
-    $out .= '<input type="hidden" name="wiki_content" value="'
-            . q($content) . '" />' . "\n"
-    ;
-
-    $out .= '<input type="hidden" name="changelog" value="'
-            . q($changelog) . '" />' . "\n"
-    ;
-    				
-    $out .= '<input type="hidden" name="title" value="'
-            . q($title)
-            . '" />' . "\n"
-    ;
-
-    $out .= '<input type="hidden" name="wikiId" value="'
-            . $wikiId
-            . '" />' . "\n"
-    ;
-
-    $out .= '<input class="btn btn-primary" type="submit" name="action[save]" value="'
-            . $langSave . '" />' . "\n"
-    ;
-    $out .= '<input class="btn btn-primary" type="submit" name="action[edit]" value="'
-            . $langEdit . '"/>' . "\n"
-    ;
+    $out = "<br>
+            <div><form method='POST' action='$script' name='previewform' id='previewform'>
+             <input type='hidden' name='wiki_content' value='". q($content) . "'>
+             <input type='hidden' name='changelog' value='". q($changelog) . "'>
+             <input type='hidden' name='title' value='". q($title) ."'>
+             <input type='hidden' name='wikiId' value='$wikiId'>
+             <input class='btn btn-primary' type='submit' name='action[save]' value='$langSave'>
+             <input class='btn btn-primary' type='submit' name='action[edit]' value='$langEdit'>
+            ";
 
     $location = add_request_variable_to_url($script, "wikiId", $wikiId);
     $location = add_request_variable_to_url($location, "title", $title);
     $location = add_request_variable_to_url($location, "action", "show");
 
-    $out .= disp_button($location, $langCancel);
+    $out .= "<a class='btn btn-default' href='$location'>$langCancel</a>";
 
     $out .= "</form></div>";
 
@@ -284,68 +259,6 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
                             <div class='col-sm-10'>
                                 <textarea class='form-control' id='wikiDesc' name='desc'>" . q($desc) . "</textarea>";
 
-
-    /*
-      . '<fieldset style="padding: 10px; margin: 10px;">' . "\n"
-      . '<legend>'.$langWikiDescriptionForm.'</legend>' . "\n"
-      . '<!-- wikiId = 0 if creation, != 0 if edition  -->' . "\n"
-      . '<p style="font-style: italic;">' . $langWikiDescriptionFormText . '</p>' . "\n"
-      . '<input type="hidden" name="wikiId" value="'.$wikiId.'" />' . "\n"
-      . '<!-- groupId = 0 if course wiki, != 0 if group_wiki  -->' . "\n"
-      . '<input type="hidden" name="groupId" value="'.$groupId.'" />' . "\n"
-      . '<div style="padding: 5px">' . "\n"
-
-      . '<label for="wikiTitle">' . $langWikiTitle . ' :</label><br />' . "\n"
-      . '<input type="text" name="title" id="wikiTitle" size="80" maxlength="254" value="'.htmlspecialchars($title).'" />' . "\n"
-      . '</div>' . "\n"
-      . '<div style="padding: 5px">' . "\n"
-      . '<label for="wikiDesc">'.$langWikiDescription.' :</label><br />' . "\n"
-      . '<textarea id="wikiDesc" name="desc" cols="80" rows="10">'.q($desc).'</textarea>' . "\n"
-      . '</div>' . "\n"
-      . '</fieldset>' . "\n"
-     */
-     // atkyritsis, for the moment we skip wiki ACL
-// commenting below and hardwiring the default ACL properties
-    /*            . '<fieldset id="acl" style="padding: 10px;margin: 10px;">' . "\n"
-      . '<legend>' . $langWikiAccessControl . '</legend>' . "\n"
-      . '<p style="font-style: italic;">'.$langWikiAccessControlText.'</p>' . "\n"
-      . '<table style="text-align: center; padding: 5px;" id="wikiACL">' . "\n"
-      . '<tr class="matrixAbs">' . "\n"
-      . '<td><!-- empty --></td>' . "\n"
-      . '<td>'.$langWikiReadPrivilege.'</td>' . "\n"
-      . '<td>'.$langWikiEditPrivilege.'</td>' . "\n"
-      . '<td>'.$langWikiCreatePrivilege.'</td>' . "\n"
-      . '</tr>' . "\n"
-      . '<tr>' . "\n"
-      . '<td class="matrixOrd">'.$langWikiCourseMembers.'</td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'course\',\'read\');" id="course_read" name="acl[course_read]"'.$course_read_checked.' /></td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'course\',\'edit\');" id="course_edit" name="acl[course_edit]"'.$course_edit_checked.' /></td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'course\',\'create\');" id="course_create" name="acl[course_create]"'.$course_create_checked.' /></td>' . "\n"
-      . '</tr>' . "\n"
-      ;
-
-      if ( $groupId != 0 )
-      {
-      $form .= '<!-- group acl row hidden if groupId == 0, set all to false -->' . "\n"
-      . '<tr>' . "\n"
-      . '<td class="matrixOrd">'.$langWikiGroupMembers.'</td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'group\',\'read\');" id="group_read" name="acl[group_read]"'.$group_read_checked.' /></td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'group\',\'edit\');" id="group_edit" name="acl[group_edit]"'.$group_edit_checked.' /></td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'group\',\'create\');" id="group_create" name="acl[group_create]"'.$group_create_checked.' /></td>' . "\n"
-      . '</tr>' . "\n"
-      ;
-      }
-
-      $form .= '<tr>' . "\n"
-      . '<td class="matrixOrd">'.$langWikiOtherUsers.'</td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'other\',\'read\');" id="other_read" name="acl[other_read]"'.$other_read_checked.' /></td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'other\',\'edit\');" id="other_edit" name="acl[other_edit]"'.$other_edit_checked.' /></td>' . "\n"
-      . '<td><input type="checkbox" onclick="updateBoxes(\'other\',\'create\');" id="other_create" name="acl[other_create]"'.$other_create_checked.' /></td>' . "\n"
-      . '</tr>' . "\n"
-      . '</table>' . "\n"
-      . '<p style="font-style: italic;">'.$langWikiOtherUsersText.'</p>' . "\n"
-      . '</fieldset>' . "\n"
-      ; */
 // atkyritsis
 // hardwiring
     if ($groupId == 0) {
@@ -370,7 +283,6 @@ function claro_disp_wiki_properties_form($wikiId = 0, $title = '', $desc = '', $
     }
 
 // hardwiring over
-    //$form .= '<div style="padding: 10px">' . "\n" ;
 
     $form .= "                  </div>
                             </div>

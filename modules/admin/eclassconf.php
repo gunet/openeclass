@@ -25,7 +25,8 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$nameTools = $langEclassConf;
+require_once 'modalconfirmation.php';
+$pageName = $langEclassConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $head_content .= <<<EOF
@@ -272,8 +273,7 @@ if (isset($_POST['submit'])) {
     // indexing was previously on, but now set to off, need to empty it
     if (get_config('enable_indexing') && !$enable_indexing) {
         require_once 'modules/search/indexer.class.php';
-        $idx = new Indexer();
-        $idx->deleteAll();
+        Indexer::deleteAll();
     }
 
     // update table `config`
@@ -322,142 +322,260 @@ EOF;
 } // end of if($submit)
 // Display config.php edit form
 else {
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
-                <fieldset><legend>$langBasicCfgSetting</legend>
-	<table class='tbl' width='100%'>
-	<tr>
-	  <th width='200' class='left'><b>$langSiteUrl:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formurlServer' size='40' value='" . q($urlServer) . "'></td>
-	</tr>
-        <tr>
-	  <th class='left'><b>$langphpMyAdminURL:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formphpMyAdminURL' size='40' value='" . q(get_config('phpMyAdminURL')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langSystemInfoURL:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formphpSysInfoURL' size='40' value='" . q(get_config('phpSysInfoURL')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langAdminEmail:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formemailAdministrator' size='40' value='" . q(get_config('email_sender')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langDefaultAdminName:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formadministratorName' size='40' value='" . q(get_config('admin_name')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langCampusName:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formsiteName' size='40' value='" . q(get_config('site_name')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'>$langPostMail</th>
-	      <td><textarea rows='3' cols='40' name='formpostaddress'>" . q(get_config('postaddress')) . "</textarea></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langPhone:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formtelephone' size='40' value='" . q(get_config('phone')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'>$langFax</th>
-	  <td><input class='FormData_InputText' type='text' name='formfax' size='40' value='" . q(get_config('fax')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langHelpDeskEmail:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formemailhelpdesk' size='40' value='" . q(get_config('email_helpdesk')) . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langInstituteShortName:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formInstitution' size='40' value='" . $Institution . "'></td>
-	</tr>
-	<tr>
-	  <th class='left'><b>$langInstituteName:</b></th>
-	  <td><input class='FormData_InputText' type='text' name='formInstitutionUrl' size='40' value='" . $InstitutionUrl . "'></td>
-	</tr>";
-    if ($language == "el") {
-        $grSel = "selected";
-        $enSel = "";
-    } else {
-        $grSel = "";
-        $enSel = "selected";
-    }
-    $tool_content .= "</table></fieldset>";
-
-    $tool_content .= "<fieldset>
-        <legend>$langUpgReg</legend>
-        <table class='tbl' width='100%'>";
-    $tool_content .= "<tr><th width='300' class='left'>$langUserRegistration</th><td>";
-    $tool_content .= selection(array('1' => $langActivate,
-        '0' => $langDeactivate), 'user_registration', get_config('user_registration'));
-    $tool_content .= "</td></tr>";
-    $tool_content .= "<tr><th class='left'>$langUserAccount $langViaeClass</th><td>";
-    $tool_content .= selection(array('0' => $langDisableEclassStudReg,
-        '1' => $langReqRegUser,
-        '2' => $langDisableEclassStudRegType), 'eclass_stud_reg', get_config('eclass_stud_reg'));
-    $tool_content .= "</td></tr>";
-    $tool_content .= "<tr><th class='left'>$langUserAccount $langViaAltAuthMethods</th><td>";
-    $tool_content .= selection(array('0' => $langDisableEclassStudReg,
-        '1' => $langReqRegUser,
-        '2' => $langDisableEclassStudRegType), 'alt_auth_stud_reg', get_config('alt_auth_stud_reg'));
-    $tool_content .= "</td></tr>";
-
-    $tool_content .= "<tr><th class='left'>$langProfAccount $langViaeClass</th><td>";
-    $tool_content .= selection(array('0' => $langDisableEclassProfReg,
-        '1' => $langReqRegProf), 'eclass_prof_reg', get_config('eclass_prof_reg'));
-    $tool_content .= "</td></tr>";
-
-    $tool_content .= "<tr><th class='left'>$langProfAccount $langViaAltAuthMethods</th><td>";
-    $tool_content .= selection(array('0' => $langDisableEclassProfReg,
-        '1' => $langReqRegProf), 'alt_auth_prof_reg', get_config('alt_auth_prof_reg'));
-    $tool_content .= "</td></tr>";
-
-    $tool_content .= "<tr>        
-                <td>$langUserDurationAccount&nbsp;($langMonthsUnit)&nbsp;&nbsp;<input type='text' name='formdurationAccount' size='3' maxlength='3' value='" . intval(get_config('account_duration') / MONTHS) . "'></td>
-                </tr>";
-    $tool_content .= "</table></fieldset>";
-
-    $tool_content .= "<fieldset><legend>$langEclassThemes</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-	  <th class='left'><b>$langMainLang</b></th>
-	  <td><select name='default_language'>
-	    <option value='el' $grSel>$langGreek</option>
-	    <option value='en' $enSel>$langEnglish</option>
-	  </select></td>
-	</tr>";
-    $active_ui_languages = explode(' ', get_config('active_ui_languages'));
-    $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
-    $sel = array();
-    foreach ($language_codes as $langcode => $langname) {
-        if (in_array($langcode, $langdirs)) {
-            $loclangname = $langNameOfLang[$langname];
-            $checked = in_array($langcode, $active_ui_languages) ? ' checked' : '';
-            $sel[] = "<input type='checkbox' name='av_lang[]' value='$langcode'$checked>$loclangname";
-        }
-    }
-    $tool_content .= "<tr><th class='left'>$langSupportedLanguages</th>
-	    <td>" . implode(' ', $sel) . "</td></tr>";
-
+    $head_content .= "
+        <script>
+        $(function() {
+            $('body').scrollspy({ target: '#affixedSideNav' });
+        });
+        </script>
+    ";
+    // Display link to index.php
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+    
     $tool_content .= "
-	  <tr><td class='left'><b>$langThemes</b></td>
-	    <td>" . selection($available_themes, 'theme', array_search($theme, $available_themes)) . "</td></tr>";
-    $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
-    $tool_content .= "<tr>		
-		<td colspan='2'><input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form />&nbsp;$lang_dont_display_login_form</td>
-	  </tr>";
-    $tool_content .= "</table></fieldset>";
+<div class='row'>
+    <div class='col-sm-9'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+            <div class='panel panel-default' id='one'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langBasicCfgSetting</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <label for='formurlServer' class='col-sm-2 control-label'>$langSiteUrl:</label>
+                           <div class='col-sm-10'>
+                                <input class='FormData_InputText form-control' type='text' name='formurlServer' id='formurlServer' value='" . q($urlServer) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formphpMyAdminURL' class='col-sm-2 control-label'>$langphpMyAdminURL:</label>
+                           <div class='col-sm-10'>
+                                <input class='FormData_InputText form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formphpSysInfoURL' class='col-sm-2 control-label'>$langSystemInfoURL:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='" . q(get_config('phpSysInfoURL')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formemailAdministrator' class='col-sm-2 control-label'>$langAdminEmail:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='" . q(get_config('email_sender')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formemailAdministrator' class='col-sm-2 control-label'>$langDefaultAdminName:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formsiteName' class='col-sm-2 control-label'>$langCampusName:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formsiteName' id='formsiteName' value='" . q(get_config('site_name')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formpostaddress' class='col-sm-2 control-label'>$langPostMail:</label>
+                           <div class='col-sm-10'>
+                               <textarea class='form-control' name='formpostaddress' id='formpostaddress'>" . q(get_config('postaddress')) . "</textarea>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formtelephone' class='col-sm-2 control-label'>$langPhone:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formtelephone' id='formtelephone' value='" . q(get_config('phone')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formfax' class='col-sm-2 control-label'>$langFax:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formemailhelpdesk' class='col-sm-2 control-label'>$langHelpDeskEmail:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='" . q(get_config('email_helpdesk')) . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formInstitution' class='col-sm-2 control-label'>$langInstituteShortName:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formInstitution' id='formInstitution' value='" . $Institution . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formInstitutionUrl' class='col-sm-2 control-label'>$langInstituteName:</label>
+                           <div class='col-sm-10'>
+                               <input class='FormData_InputText form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
+                           </div>
+                        </div>
+                    </fieldset>     
+                </div>
+            </div>
+            <div class='panel panel-default' id='two'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langUpgReg</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <label for='user_registration' class='col-sm-3 control-label'>$langUserRegistration:</label>
+                           <div class='col-sm-9'>
+                                ". selection(array('1' => $langActivate, '0' => $langDeactivate), 'user_registration', get_config('user_registration'), "class='form-control' id='user_registration'"). "
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='eclass_stud_reg' class='col-sm-3 control-label'>$langUserAccount $langViaeClass:</label>
+                           <div class='col-sm-9'>
+                                ". selection(array('0' => $langDisableEclassStudReg, '1' => $langReqRegUser, '2' => $langDisableEclassStudRegType), 'eclass_stud_reg', get_config('eclass_stud_reg'), "class='form-control' id='eclass_stud_reg'") ."
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='alt_auth_stud_reg' class='col-sm-3 control-label'>$langUserAccount $langViaAltAuthMethods:</label>
+                           <div class='col-sm-9'>
+                                ". selection(array('0' => $langDisableEclassStudReg, '1' => $langReqRegUser, '2' => $langDisableEclassStudRegType), 'alt_auth_stud_reg', get_config('alt_auth_stud_reg'), "class='form-control' id='alt_auth_stud_reg'") ."
+                           </div>
+                        </div> 
+                        <div class='form-group'>
+                           <label for='eclass_prof_reg' class='col-sm-3 control-label'>$langProfAccount $langViaeClass:</label>
+                           <div class='col-sm-9'>
+                                ". selection(
+                                        array(
+                                            '0' => $langDisableEclassProfReg, 
+                                            '1' => $langReqRegProf
+                                        ), 
+                                        'eclass_prof_reg', 
+                                        get_config('eclass_prof_reg'),
+                                        "class='form-control' id='eclass_prof_reg'"
+                                    ) ."
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='alt_auth_prof_reg' class='col-sm-3 control-label'>$langProfAccount $langViaAltAuthMethods:</label>
+                           <div class='col-sm-9'>
+                                ". selection(
+                                        array(
+                                                '0' => $langDisableEclassProfReg,
+                                                '1' => $langReqRegProf
+                                            ), 
+                                        'alt_auth_prof_reg', 
+                                        get_config('alt_auth_prof_reg'),
+                                        "class='form-control' id='alt_auth_prof_reg'"
+                                    ) ."
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='formdurationAccount' class='col-sm-3 control-label'>$langUserDurationAccount&nbsp;($langMonthsUnit): </label>
+                           <div class='col-sm-9'>
+                                <input type='text' class='form-control' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='" . intval(get_config('account_duration') / MONTHS) . "'>
+                           </div>
+                        </div>                         
+                    </fieldset>    
+                </div>
+            </div>";
+        if ($language == "el") {
+            $grSel = "selected";
+            $enSel = "";
+        } else {
+            $grSel = "";
+            $enSel = "selected";
+        }    
+        $active_ui_languages = explode(' ', get_config('active_ui_languages'));
+        $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
+        $sel = array();
+        $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
+        foreach ($language_codes as $langcode => $langname) {
+            if (in_array($langcode, $langdirs)) {
+                $loclangname = $langNameOfLang[$langname];
+                $checked = in_array($langcode, $active_ui_languages) ? ' checked' : '';
+                $sel[] = "<div class='checkbox'>
+                            <label>
+                                <input type='checkbox' name='av_lang[]' value='$langcode'$checked>
+                                $loclangname
+                            </label>
+                        </div>";
+                            
+            }
+        }   
+$tool_content .= "<div class='panel panel-default' id='three'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langEclassThemes</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <label for='default_language' class='col-sm-3 control-label'>$langMainLang: </label>
+                           <div class='col-sm-9'>
+                                <select class='form-control' name='default_language' id='default_language'>
+                                    <option value='el' $grSel>$langGreek</option>
+                                    <option value='en' $enSel>$langEnglish</option>
+                                </select>                                
+                           </div>
+                        </div> 
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langSupportedLanguages:</label>
+                            <div class='col-sm-9'>            
+                            " . implode(' ', $sel) . "
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='theme' class='col-sm-3 control-label'>$langThemes: </label>
+                           <div class='col-sm-9'>
+                                " . selection($available_themes, 'theme', array_search($theme, $available_themes), "class='form-control' id='theme'") . "                               
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='theme' class='col-sm-3 control-label'>$lang_login_form: </label>
+                           <div class='col-sm-9'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>    
+                                        $lang_dont_display_login_form
+                                    </label>
+                                </div>                              
+                           </div>
+                        </div>                        
+                    </fieldset>
+                </div>
+            </div>";
 
     $cbox_dont_mail_unverified_mails = get_config('dont_mail_unverified_mails') ? 'checked' : '';
     $cbox_email_from = get_config('email_from') ? 'checked' : '';
-    $tool_content .= "<fieldset>
-        <legend>$langEmailSettings</legend>
-        <table class='tbl' width='100%'>
-        <tr>	
-		<td><input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails />&nbsp;$lang_dont_mail_unverified_mails</td>
-	  </tr>
-          <tr>	
-		<td><input type='checkbox' name='email_from' value='1' $cbox_email_from />&nbsp;$lang_email_from</td>
-	  </tr>
-        </table></fieldset>";
+    $tool_content .= "
+            <div class='panel panel-default' id='four'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langEmailSettings</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails>    
+                                        $lang_dont_mail_unverified_mails
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='email_from' value='1' $cbox_email_from>    
+                                        $lang_email_from
+                                    </label>
+                                </div>                                  
+                           </div>
+                        </div>                        
+                    </fieldset>
+                </div>
+            </div>";
 
     $cbox_course_multidep = get_config('course_multidep') ? 'checked' : '';
     $cbox_user_multidep = get_config('user_multidep') ? 'checked' : '';
@@ -467,37 +585,75 @@ else {
     $cbox_insert_xml_metadata = get_config('insert_xml_metadata') ? 'checked' : '';
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
     $cbox_opencourses_enable = get_config('opencourses_enable') ? 'checked' : '';
-
-    $tool_content .= "<fieldset>
-        <legend>$langCourseSettings</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-		<td><input type='checkbox' name='course_multidep' value='1' $cbox_course_multidep />&nbsp;$lang_course_multidep</td>
-	  </tr>
-	  <tr>	
-		<td><input type='checkbox' name='user_multidep' value='1' $cbox_user_multidep />&nbsp;$lang_user_multidep</td>
-	  </tr>
-	  <tr>		
-		<td><input id='uown' type='checkbox' name='restrict_owndep' value='1' $cbox_restrict_owndep />&nbsp;$lang_restrict_owndep</td>
-	  </tr>
-	  <tr>		
-		<td><input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep />&nbsp;$lang_restrict_teacher_owndep</td>
-	  </tr>
-        </table></fieldset>";
-
-    $tool_content .= "<fieldset>
-        <legend>$langMetaCommentary</legend>
-        <table class='tbl' width='100%'>
-	  <tr>		
-                <td><input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata />&nbsp;$lang_insert_xml_metadata</td>
-          </tr>
-          <tr>
-                <td><input type='checkbox' id='course_metadata' name='course_metadata' value='1' $cbox_course_metadata />&nbsp;$lang_course_metadata</td>
-          </tr>
-          <tr>
-                <td><input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' $cbox_opencourses_enable />&nbsp;$lang_opencourses_enable</td>
-          </tr>
-        </table></fieldset>";
+    $tool_content .= "
+            <div class='panel panel-default' id='five'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langCourseSettings</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='course_multidep' value='1' $cbox_course_multidep>
+                                        $lang_course_multidep
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='user_multidep' value='1' $cbox_user_multidep>
+                                        $lang_user_multidep
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='uown' type='checkbox' name='restrict_owndep' value='1' $cbox_restrict_owndep>
+                                        $lang_restrict_owndep
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep>
+                                        $lang_restrict_teacher_owndep
+                                    </label>
+                                </div>                                  
+                           </div>
+                        </div>                        
+                    </fieldset>
+                </div>
+            </div>
+            <div class='panel panel-default' id='six'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langMetaCommentary</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='insert_xml_metadata' value='1' $cbox_insert_xml_metadata>
+                                        $lang_insert_xml_metadata
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' id='course_metadata' name='course_metadata' value='1' $cbox_course_metadata>
+                                        $lang_course_metadata
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' $cbox_opencourses_enable>
+                                        $lang_opencourses_enable
+                                    </label>
+                                </div>                                  
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>";
 
     $cbox_case_insensitive_usernames = get_config('case_insensitive_usernames') ? 'checked' : '';
     $cbox_email_required = get_config('email_required') ? 'checked' : '';
@@ -516,138 +672,296 @@ else {
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
 
-    $tool_content .= "<fieldset>
-        
-        <legend>$langOtherOptions</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-                <td><input type='checkbox' name='case_insensitive_usernames' value='1' $cbox_case_insensitive_usernames>&nbsp;$langCaseInsensitiveUsername</td>
-        </tr>
-        <tr>
-                <td><input type='checkbox' name='email_required' value='1' $cbox_email_required />&nbsp;$lang_email_required</td>
-        </tr>
-        <tr>	
-                <td><input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required />&nbsp;$lang_email_verification_required</td>
-        </tr>
-        <tr>		
-                <td><input type='checkbox' name='am_required' value='1' $cbox_am_required />&nbsp;$lang_am_required</td>
-        </tr>
-        <tr>		
-                <td><input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha />&nbsp;$lang_display_captcha</td>
-        </tr>
-        <tr>        
-                <td>$langMinPasswordLen&nbsp;&nbsp;<input type='text' name='min_password_len' size='15' value='" . intval(get_config('min_password_len')) . "'></td></tr>        
-        <tr>
-                <td><input id='index_enable' type='checkbox' name='enable_indexing' value='1' $cbox_enable_indexing />&nbsp;$langEnableIndexing</td>
-        </tr>
-        <tr>
-                <td><input id='search_enable' type='checkbox' name='enable_search' value='1' $cbox_enable_search />&nbsp;$langEnableSearch</td>
-        </tr>
-        <tr>		
-                <td>$lang_max_glossary_terms&nbsp;<input type='text' name='max_glossary_terms' value='$max_glossary_terms' size='5' /></td>
-        </tr>
-        <tr>		
-                <td><input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student />&nbsp;$lang_dropbox_allow_student_to_student</td>
-        </tr>
-        <tr>		
-                <td><input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages />&nbsp;$lang_dropbox_allow_personal_messages</td>
-        </tr>
-        <tr>		
-                <td><input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change />&nbsp;$lang_block_username_change</td>
-        </tr>        
-        <tr>		
-                <td><input $id_enable_mobileapi type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi />&nbsp;$lang_enable_mobileapi</td>
-        </tr>
-        <tr>
-                <td><input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs />&nbsp;$langEnableCommonDocs</td>
-        </tr>
-        <tr>
-                <td><input type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links />&nbsp;$langEnableSocialSharingLiks</td>
-        </tr>
-        <tr>
-                <td>$langActionsExpireInterval&nbsp;<input type='text' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "' size='5' />&nbsp;($langMonthsUnit)</td>
-        </tr>
-        </table></fieldset>";
-
-    $tool_content .= "<fieldset>
-        <legend>$langDefaultQuota</legend>
-        <table class='tbl' width='100%'>
-	  <tr>
-		<th class='left'><b>$langDocQuota</b></th>
-		<td><input class='FormData_InputText' type='text' name='doc_quota' value='" . get_config('doc_quota') . "' size='5'/>&nbsp;(Mb)</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$langVideoQuota</b></th>
-		<td><input class='FormData_InputText' type='text' name='video_quota' value='" . get_config('video_quota') . "' size='5' />&nbsp;(Mb)</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$langGroupQuota</b></th>
-		<td><input class='FormData_InputText' type='text' name='group_quota' value='" . get_config('group_quota') . "' size='5' />&nbsp;(Mb)</td>
-	  </tr>
-	  <tr>
-		<th class='left'><b>$langDropboxQuota</b></th>
-		<td><input class='FormData_InputText' type='text' name='dropbox_quota' value='" . get_config('dropbox_quota') . "' size='5' />&nbsp;(Mb)</td>
-	  </tr></table>
-	  </fieldset>
-	  <fieldset><legend>$langUploadWhitelist</legend>
-	  <table class='tbl' width='100%'>
-	  <tr>
-	  <th class='left'>$langStudentUploadWhitelist</th>
-	  <td><textarea rows='6' cols='60' name='student_upload_whitelist'>" . get_config('student_upload_whitelist') . "</textarea></td>
-	  </tr>
-	  <tr>
-	  <th class='left'>$langTeacherUploadWhitelist</th>
-	  <td><textarea rows='6' cols='60' name='teacher_upload_whitelist'>" . get_config('teacher_upload_whitelist') . "</textarea></td>
-	  </tr>
-	  </table>
-	  </fieldset>";
+        $tool_content .= "
+            <div class='panel panel-default' id='seven'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langOtherOptions</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='case_insensitive_usernames' value='1' $cbox_case_insensitive_usernames>
+                                        $langCaseInsensitiveUsername
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='email_required' value='1' $cbox_email_required>
+                                        $lang_email_required
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required>
+                                        $lang_email_verification_required
+                                    </label>
+                                </div>  
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='am_required' value='1' $cbox_am_required>
+                                        $lang_am_required
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha>
+                                        $lang_display_captcha
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='index_enable' type='checkbox' name='enable_indexing' value='1' $cbox_enable_indexing>
+                                        $langEnableIndexing
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='search_enable' type='checkbox' name='enable_search' value='1' $cbox_enable_search>
+                                        $langEnableSearch
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student>
+                                        $lang_dropbox_allow_student_to_student
+                                    </label>
+                                </div>  
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages>
+                                        $lang_dropbox_allow_personal_messages
+                                    </label>
+                                </div>  
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change>
+                                        $lang_block_username_change
+                                    </label>
+                                </div>                                  
+                                <div class='checkbox'>
+                                    <label>
+                                        <input $id_enable_mobileapi type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi>
+                                        $lang_enable_mobileapi
+                                    </label>
+                                </div>      
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
+                                        $langEnableCommonDocs
+                                    </label>
+                                </div>      
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links>
+                                        $langEnableSocialSharingLiks
+                                    </label>
+                                </div>                                      
+                           </div>                           
+                        </div>
+                        <hr><br>
+                        <div class='form-group'>
+                           <label for='min_password_len' class='col-sm-4 control-label'>$langMinPasswordLen: </label>
+                           <div class='col-sm-8'>
+                                <input type='text' class='form-control' name='min_password_len' id='min_password_len' value='" . intval(get_config('min_password_len')) . "'>                            
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='min_password_len' class='col-sm-4 control-label'>$lang_max_glossary_terms </label>
+                           <div class='col-sm-8'>
+                                <input class='form-control' type='text' name='max_glossary_terms' value='$max_glossary_terms'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='min_password_len' class='col-sm-4 control-label'>$langActionsExpireInterval ($langMonthsUnit):</label>
+                           <div class='col-sm-8'>
+                                <input type='text' class='form-control' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "'>
+                           </div>
+                        </div>                         
+                    </fieldset>
+                </div>
+            </div>
+            <div class='panel panel-default' id='eight'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langDefaultQuota</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <label for='doc_quota' class='col-sm-4 control-label'>$langDocQuota (Mb):</label>
+                           <div class='col-sm-8'>
+                                <input class='FormData_InputText form-control' type='text' name='doc_quota' id='doc_quota' value='" . get_config('doc_quota') . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='video_quota' class='col-sm-4 control-label'>$langVideoQuota (Mb):</label>
+                           <div class='col-sm-8'>
+                                <input class='FormData_InputText form-control' type='text' name='video_quota' id='video_quota' value='" . get_config('video_quota') . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='group_quota' class='col-sm-4 control-label'>$langGroupQuota (Mb):</label>
+                           <div class='col-sm-8'>
+                                <input class='FormData_InputText form-control' type='text' name='group_quota' id='group_quota' value='" . get_config('group_quota') . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='dropbox_quota' class='col-sm-4 control-label'>$langDropboxQuota (Mb):</label>
+                           <div class='col-sm-8'>
+                                <input class='FormData_InputText form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
+                           </div>
+                        </div>                         
+                    </fieldset>
+                </div>
+            </div>
+            <div class='panel panel-default' id='nine'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langUploadWhitelist</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <label for='student_upload_whitelist' class='col-sm-4 control-label'>$langStudentUploadWhitelist:</label>
+                           <div class='col-sm-8'>
+                                <textarea class='form-control' rows='6' name='student_upload_whitelist' id='student_upload_whitelist'>" . get_config('student_upload_whitelist') . "</textarea>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='teacher_upload_whitelist' class='col-sm-4 control-label'>$langTeacherUploadWhitelist:</label>
+                           <div class='col-sm-8'>
+                                <textarea class='form-control' rows='6' name='teacher_upload_whitelist' id='teacher_upload_whitelist'>" . get_config('teacher_upload_whitelist') . "</textarea>
+                           </div>
+                        </div>                         
+                    </fieldset>
+                </div>
+            </div>";
 
     $cbox_disable_log_actions = get_config('disable_log_actions') ? 'checked' : '';
     $cbox_disable_log_course_actions = get_config('disable_log_course_actions') ? 'checked' : '';
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
-    $tool_content .= "<fieldset>
-                <legend>$langLogActions</legend>
-                <table class='tbl' width='100%'>                    
-                <tr>
-                      <td><input type='checkbox' name='disable_log_actions' value='1' $cbox_disable_log_actions />&nbsp;$lang_disable_log_actions</td>
-                </tr>
-                <tr>
-                      <td><input type='checkbox' name='disable_log_course_actions' value='1' $cbox_disable_log_course_actions />&nbsp;$lang_disable_log_course_actions</td>
-                </tr>
-                <tr>
-                      <td><input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions />&nbsp;$lang_disable_log_system_actions</td>
-                </tr>
-                <tr>
-                        <td>$langLogExpireInterval&nbsp;<input type='text' name='log_expire_interval' value='" . get_config('log_expire_interval') . "' size='5' />&nbsp;($langMonthsUnit)</td>
-                </tr>
-                <tr>
-                        <td>$langLogPurgeInterval&nbsp;<input type='text' name='log_purge_interval' value='" . get_config('log_purge_interval') . "' size='5' />&nbsp;($langMonthsUnit)</td>
-                </tr>
-                </table>
-                </fieldset>";
-
-    $tool_content .= "<fieldset><legend>$langLoginFailCheck</legend>
-          <table class='tbl' width='100%'>
-          <tr>
-          <td><input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' $cbox_login_fail_check />&nbsp;$langEnableLoginFailCheck</td>
-          </tr>
-          <tr id='login_fail_threshold'>
-          <th class='left'>$langLoginFailThreshold</th>
-          <td><input class='FormData_InputText' type='text' name='login_fail_threshold' value='" . get_config('login_fail_threshold') . "' size='5' /></td>
-          </tr>
-          <tr id='login_fail_deny_interval'>
-          <th class='left'>$langLoginFailDenyInterval</th>
-          <td><input class='FormData_InputText' type='text' name='login_fail_deny_interval' value='" . get_config('login_fail_deny_interval') . "' size='5' />&nbsp;($langMinute)</td>
-          </tr>
-          <tr id='login_fail_forgive_interval'>
-          <th class='left'>$langLoginFailForgiveInterval</th>
-          <td><input class='FormData_InputText' type='text' name='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "' size='5' />&nbsp;($langHours)</td>
-          </tr>
-          </table>
-          </fieldset>
-	    <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-        </form>";
-
+    
+$tool_content .= "    
+            <div class='panel panel-default' id='ten'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langLogActions</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_log_actions' value='1' $cbox_disable_log_actions>
+                                        $lang_disable_log_actions
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_log_course_actions' value='1' $cbox_disable_log_course_actions>
+                                        $lang_disable_log_course_actions
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions>
+                                        $lang_disable_log_system_actions
+                                    </label>
+                                </div>                                
+                            </div>
+                        </div>
+                        <hr><br>
+                        <div class='form-group'>
+                           <label for='log_expire_interval' class='col-sm-4 control-label'>$langLogExpireInterval ($langMonthsUnit):</label>
+                           <div class='col-sm-8'>
+                                <input class='form-control' type='text' name='log_expire_interval' id='log_expire_interval' value='" . get_config('log_expire_interval') . "'>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label for='log_purge_interval' class='col-sm-4 control-label'>$langLogPurgeInterval ($langMonthsUnit):</label>
+                           <div class='col-sm-8'>
+                                <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='" . get_config('log_purge_interval') . "'>
+                           </div>
+                        </div>                        
+                    </fieldset>
+                </div>
+            </div>
+            <div class='panel panel-default' id='eleven'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langLoginFailCheck</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <div class='col-sm-12'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='login_fail_check' type='checkbox' name='login_fail_check' value='1' $cbox_login_fail_check>
+                                        $langEnableLoginFailCheck
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='form-group' id='login_fail_threshold'>
+                           <label for='login_fail_threshold' class='col-sm-4 control-label'>$langLoginFailThreshold:</label>
+                           <div class='col-sm-8'>
+                                <input class='FormData_InputText form-control' type='text' name='login_fail_threshold' id='login_fail_threshold' value='" . get_config('login_fail_threshold') . "'>
+                           </div>                          
+                        </div>
+                        <div class='form-group' id='login_fail_deny_interval'>
+                           <label for='login_fail_deny_interval' class='col-sm-4 control-label'>$langLoginFailDenyInterval ($langMinute):</label>
+                           <div class='col-sm-8'>
+                                <input class='FormData_InputText form-control' type='text' name='login_fail_deny_interval' id='login_fail_deny_interval' value='" . get_config('login_fail_deny_interval') . "'>
+                           </div>                          
+                        </div>
+                        <div class='form-group' id='login_fail_forgive_interval'>
+                           <label for='login_fail_forgive_interval' class='col-sm-4 control-label'>$langLoginFailForgiveInterval ($langHours):</label>
+                           <div class='col-sm-8'>
+                                <input class='FormData_InputText form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
+                           </div>                          
+                        </div>                         
+                    </fieldset>
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-12'>            
+                    <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+                    <a class='btn btn-default' href='index.php'>$langCancel</a>
+                </div>
+            </div>
+        </form>
+    </div>";
+    $head_content .= "
+        <script>
+        $(function() {
+            $('#floatMenu').affix({
+              offset: {
+                top: 200,
+                bottom: function () {
+                  return (this.bottom = $('.footer').outerHeight(true))
+                }
+              }
+            })
+        });
+        </script>";
+    $tool_content .= "
+        <div class='col-sm-3 hidden-xs' id='affixedSideNav'>
+            <ul id='floatMenu' class='nav nav-pills nav-stacked well well-sm' role='tablist'>
+                <li class='active'><a href='#one'>$langBasicCfgSetting</a></li>
+                <li><a href='#two'>$langUpgReg</a></li>
+                <li><a href='#three'>$langEclassThemes</a></li>
+                <li><a href='#four'>$langEmailSettings</a></li>
+                <li><a href='#five'>$langCourseSettings</a></li>
+                <li><a href='#six'>$langMetaCommentary</a></li>
+                <li><a href='#seven'>$langOtherOptions</a></li>
+                <li><a href='#eight'>$langDefaultQuota</a></li>
+                <li><a href='#nine'>$langUploadWhitelist</a></li>
+                <li><a href='#ten'>$langLogActions</a></li>
+                <li><a href='#eleven'>$langLoginFailCheck</a></li>     
+            </ul>
+        </div>
+    </div>";
     // Modal dialogs
     $tool_content .= modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmIndexCancel', 'confirmIndexOk');
     $tool_content .= modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', $langConfirmEnableMobileAPITitle, $langConfirmEnableMobileAPI, 'confirmMobileAPICancel', 'confirmMobileAPIOk');
@@ -659,30 +973,4 @@ else {
     }
 }
 
-// Display link to index.php
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
-
-function modalConfirmation($id, $labelId, $title, $body, $cancelId, $okId) {
-    global $langCancel, $langOk;
-    return <<<htmlEOF
-<div class='modal fade' id='$id' tabindex='-1' role='dialog' aria-labelledby='$labelId' aria-hidden='true'>
-    <div class='modal-dialog'>
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <h4 class='modal-title' id='$labelId'>$title</h4>
-            </div>
-            <div class='modal-body'><p>$body</p></div>
-            <div class='modal-footer'>
-                <button id='$cancelId' type='button' class='btn btn-default'>$langCancel</button>
-                <button id='$okId' type='button' class='btn btn-primary'>$langOk</button>
-            </div>
-        </div>
-    </div>
-</div>
-htmlEOF;
-}

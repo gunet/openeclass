@@ -51,7 +51,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">' . "\n"
  . '<div id="content">';
 
-$nameTools = $langExercicesResult;
+$pageName = $langExercicesResult;
 
 if (isset($_GET['exerciseId'])) {
     $exerciseId = intval($_GET['exerciseId']);

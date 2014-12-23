@@ -24,8 +24,8 @@ $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
 load_js('tools.js');
 
-$nameTools = $langEmailUnsubscribe;
-$navigation[] = array("url" => "profile.php", "name" => $langModifyProfile);
+$pageName = $langEmailUnsubscribe;
+$navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 
 check_uid();
 
@@ -90,11 +90,11 @@ $tool_content .= action_bar(array(
         $tool_content .= "<input type='checkbox' name='c_unsub' value='1' $selected>&nbsp;" . q($course_title) . "<br />";
         $tool_content .= "<input type='hidden' name='cid' value='$cid'>";
     } else { // displays all courses
-        foreach ($_SESSION['courses'] as $course_code => $status) {
-            $course_title = course_code_to_title($course_code);
-            $cid = course_code_to_id($course_code);
+        foreach ($_SESSION['courses'] as $code => $status) {
+            $title = course_code_to_title($code);
+            $cid = course_code_to_id($code);
             $selected = get_user_email_notification($uid, $cid) ? 'checked' : '';
-            $tool_content .= "<input type='checkbox' name='c_unsub[$course_code]' value='1' $selected>&nbsp;" . q($course_title) . "<br />";
+            $tool_content .= "<input type='checkbox' name='c_unsub[$code]' value='1' $selected>&nbsp;" . q($title) . "<br />";
         }
     }
     $tool_content .= "</div>

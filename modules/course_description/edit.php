@@ -29,7 +29,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/log.php';
 
-$nameTools = $langEditCourseProgram;
+$pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
 if (isset($_REQUEST['id'])) {
@@ -65,7 +65,7 @@ $tool_content .= action_bar(array(
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
-$tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
+$tool_content .= "<div class='row'><div class='col-xs-12'><div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
 if ($editId !== false) {
     $tool_content .= "<input type='hidden' name='editId' value='$editId' />";
 }
@@ -94,7 +94,7 @@ $tool_content .= "
             <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
         </div>
   </fieldset>
-  </form></div>";
+  </form></div></div></div>";
 
 
 $head_content .= <<<hCont

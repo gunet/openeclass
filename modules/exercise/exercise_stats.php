@@ -30,7 +30,7 @@ $exerciseId = $_GET['exerciseId'];
 $objExercise = new Exercise();
 $objExercise->read($exerciseId);
 
-$nameTools = $langExerciseStats;
+$pageName = $langExerciseStats;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
 $tool_content .= action_bar(array(

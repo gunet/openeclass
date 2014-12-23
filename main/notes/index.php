@@ -50,7 +50,7 @@ require_once 'main/notes/notes.class.php';
 //$action = new action();
 //$action->record(MODULE_ID_ANNOUNCE);
 
-$nameTools = $langNotes;
+$toolName = $langNotes;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
@@ -115,17 +115,13 @@ if (isset($_GET['modify'])) {
     }
 }
 
-if (isset($message) && $message) {
-    $tool_content .= $message . "<br/>";
-    $displayForm = false; //do not show form
-}
 
 /* display form */
-if ($displayForm and ( isset($_GET['addNote']) or isset($_GET['modify']))) {
+if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     if (isset($_GET['modify'])) {
-        $langAdd = $nameTools = $langModifNote;
+        $langAdd = $pageName = $langModifNote;
     } else {
-        $nameTools = $langAddNote;
+        $pageName = $langAddNote;
     }
     $navigation[] = array('url' => "index.php", 'name' => $langNotes);
     if (!isset($noteToModify))
@@ -141,8 +137,15 @@ if ($displayForm and ( isset($_GET['addNote']) or isset($_GET['modify']))) {
     if (!isset($type_selected))
         $type_selected = null;
     if (!isset($object_selected))
-        $object_selected = null;    
-    $tool_content .= "
+        $object_selected = null;
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'level' => 'primary-label',
+            'icon' => 'fa-reply',
+            'url' => $_SERVER['SCRIPT_NAME']
+        )
+    )). "
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
     <fieldset>
@@ -173,47 +176,78 @@ if ($displayForm and ( isset($_GET['addNote']) or isset($_GET['modify']))) {
     <input type='hidden' name='id' value='$noteToModify' />
     </fieldset>
     </form></div>";
+    
+} elseif (isset($_GET['nid'])) {
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'level' => 'primary-label',
+            'icon' => 'fa-reply',
+            'url' => $_SERVER['SCRIPT_NAME']
+        )
+    ));
+    
+    $note = Notes::get_note(intval($_GET['nid']));
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
+    $pageName = q($note->title);    
+    $tool_content .= "
+        <div class='panel panel-action-btn-default'>
+            <div class='panel-heading'>
+                <div class='pull-right'>".
+                    action_button(array(
+                        array('title' => $langModify,
+                            'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
+                            'icon' => 'fa-edit'),
+                        array('title' => $langGroupProperties,
+                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
+                            'confirm' => $langSureToDelNote,
+                            'class' => 'delete',
+                            'icon' => 'fa-times')
+                    ))
+               ."</div>
+                <h3 class='panel-title'>$note->title</h3>
+            </div>
+            <div class='panel-body'>
+                <div class='label label-success'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
+                $note->content
+            </div>
+        </div>
+    ";
 } else {
     /* display actions toolbar */
-    $tool_content .= "
-    <div id='operations_container'>"
-            . action_bar(array(
+    $tool_content .= action_bar(array(
                 array('title' => $langAddNote,
                     'url' => "$_SERVER[SCRIPT_NAME]?addNote=1",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'))) .
-            "</div>";
-}
+                    'button-class' => 'btn-success')
+            ));
 
 
-/* display notes */
-//$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
-if (isset($_GET['course'])) {
-    $cid = course_code_to_id($_GET['course']);
-    $notelist = Notes::get_all_course_notes($cid);
-} else { 
-    if (isset($_GET['nid'])) {
-        $notelist = array(Notes::get_note(intval($_GET['nid'])));
-    } else {
+
+    /* display notes */
+    //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
+    if (isset($_GET['course'])) {
+        $cid = course_code_to_id($_GET['course']);
+        $notelist = Notes::get_all_course_notes($cid);
+    } else { 
         $notelist = Notes::get_user_notes();
     }
-}
-//$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
+    //$notelist = isset($_GET['nid']) ? array(Notes::get_note(intval($_GET['nid']))) : Notes::get_user_notes();
 
-$iterator = 1;
-$bottomNote = $noteNumber = count($notelist);
+    $iterator = 1;
+    $bottomNote = $noteNumber = count($notelist);
 
-$tool_content .= "
-        <script type='text/javascript' src='../../modules/auth/sorttable.js'></script>
-        <div class='table-responsive'>
-            <table class='table-default'>";
-if ($noteNumber > 0) {
-    $tool_content .= "<tr><th>$langNotes</th>";
-    $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
-    $tool_content .= "</tr>";
-}
-if ($notelist)
+    $tool_content .= "
+            <script type='text/javascript' src='../../modules/auth/sorttable.js'></script>
+            <div class='table-responsive'>
+                <table class='table-default'>";
+    if ($noteNumber > 0) {
+        $tool_content .= "<tr><th>$langNotes</th>";
+        $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "</tr>";
+    }
+
     foreach ($notelist as $note) {
         $content = standard_text_escape($note->content);
         $note->date_time = claro_format_locale_date($dateFormatLong, strtotime($note->date_time));
@@ -227,13 +261,8 @@ if ($notelist)
         if (!is_null($note->reference_obj_type)) {
             $tool_content .= "<br><small>$langReferencedObject: " . References::item_link($note->reference_obj_module, $note->reference_obj_type, $note->reference_obj_id, $note->reference_obj_course) . "</small>";
         }
-        if (isset($_GET['nid'])) {
-            $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langNotes);
-            $nameTools = q($note->title);
-            $tool_content .= $content;
-        } else {
-            $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'> <span class='smaller'>[$langMore]</span></a></strong>"));
-        }
+
+        $tool_content .= standard_text_escape(ellipsize_html($content, 500, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?nid=$note->id'> <span class='smaller'>[$langMore]</span></a></strong>"));
         $tool_content .= "</td>";
 
         $tool_content .= "<td class='option-btn-cell'>" .
@@ -260,21 +289,21 @@ if ($notelist)
         $tool_content .= "</tr>";
         $iterator ++;
     } // end of while
-$tool_content .= "</table></div>";
+    $tool_content .= "</table></div>";
 
-if ($noteNumber < 1) {
-    $no_content = true;
-    if (isset($_GET['addNote'])) {
-        $no_content = false;
-    }
-    if (isset($_GET['modify'])) {
-        $no_content = false;
-    }
-    if ($no_content) {
-        $tool_content .= "<p class='alert alert-warning text-center'>$langNoNote</p>\n";
+    if ($noteNumber < 1) {
+        $no_content = true;
+        if (isset($_GET['addNote'])) {
+            $no_content = false;
+        }
+        if (isset($_GET['modify'])) {
+            $no_content = false;
+        }
+        if ($no_content) {
+            $tool_content .= "<p class='alert alert-warning text-center'>$langNoNote</p>\n";
+        }
     }
 }
-
 add_units_navigation(TRUE);
 
 draw($tool_content, 1, null, $head_content);

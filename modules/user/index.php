@@ -26,7 +26,6 @@ $require_help = TRUE;
 $helpTopic = 'User';
 
 require_once '../../include/baseTheme.php';
-require_once 'modules/admin/admin.inc.php';
 require_once 'include/log.php';
 
 //Identifying ajax request
@@ -189,7 +188,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
 
-$nameTools = $langUsers;
+$pageName = $langUsers;
 load_js('tools.js');
 load_js('datatables');
 load_js('datatables_filtering_delay');
@@ -320,8 +319,7 @@ if (get_config('opencourses_enable')) {
 }
 
 // show help link and link to Add new user, search new user and management page of groups
-$tool_content .= "
-<div id='operations_container'>" .
+$tool_content .= 
         action_bar(array(
             array('title' => $langOneUser,
                 'url' => "adduser.php?course=$course_code",
@@ -346,14 +344,13 @@ $tool_content .= "
                 'icon' => 'fa-times',
                 'button-class' => 'btn-danger',
                 'level' => 'primary'),
-        )) .
-        "</div>";
-
-// display number of users
-$tool_content .= "
-<div class='alert alert-info'><b>$langDumpUser $langCsv</b>: 1. <a href='dumpuser.php?course=$course_code'>$langcsvenc2</a>
-       2. <a href='dumpuser.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>
-  </div>";
+            array('title' => "$langDumpUser ($langCsv $langcsvenc1)",
+                'url' => "dumpuser.php?course=$course_code",
+                'icon' => 'fa-file-archive-o'),
+            array('title' => "$langDumpUser ($langCsv $langcsvenc2)",
+                'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
+                'icon' => 'fa-file'),
+        ));
 
 
 $tool_content .= "

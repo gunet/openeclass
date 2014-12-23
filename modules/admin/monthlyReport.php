@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,23 +19,18 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
-  ===========================================================================
-  admin/monthlyReport.php
-  @last update: 23-09-2006
-  @authors list: ophelia neofytou
-  ==============================================================================
-  @Description: Shows a form in order for the user to choose a month and display
+/**
+ * @file monltyReport.php
+ * @brief Shows a form in order for the user to choose a month and display
   a report regarding this month. The report is based on information stored in table
   'monthly_summary' in database.
-  ==============================================================================
  */
+
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
-$nameTools = $langMonthlyReport;
+$pageName = $langMonthlyReport;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 require_once 'admin_statistics_tools_bar.php';
@@ -48,12 +43,13 @@ for ($i = 0; $i < 12; $i++) {
     $months .= "<option value='$mval'>" . $langMonths[date('m', $mon)] . date(' Y', $mon);
 }
 
-$tool_content .= '
-<form method="post">
-<div><select name="selectedMonth">' . $months . '</select>
-<input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
-</div>
-</form>';
+$tool_content .= '<div class="form-wrapper">
+    <form class="form-horizontal" role="form" method="post">
+    <div class="form-group"><div class="col-sm-10"><select name="selectedMonth" class="form-control">' . $months . '</select></div>
+        <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+    </div>
+    </form>
+    </div>';
 
 if (isset($_POST["selectedMonth"])) {
     $month = q($_POST["selectedMonth"]);
@@ -79,15 +75,10 @@ if (isset($_POST["selectedMonth"])) {
 
     if ($coursNum) {
         $tool_content .= '
-		<table class="FormData" width="99%" align="left">
-		<tbody>
+		<table class="table-default">
+		<tbody>		
 		<tr>
-		<td class="left">&nbsp;</td>
-		<td>&nbsp;</td>
-		</tr>
-		<tr>
-		<th width="220"  class="left">&nbsp;</th>
-		<td>' . $langReport . ': ' . $msg_of_month . ' ' . $y . '</td>
+		<th colspan="2" class="text-center">' . $langReport . ': ' . $msg_of_month . ' ' . $y . '</th>
 		</tr>
 		<tr>
 		<th class="left">' . $langNbProf . ': </th>

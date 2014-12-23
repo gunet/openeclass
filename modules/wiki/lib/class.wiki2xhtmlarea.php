@@ -67,9 +67,9 @@ class Wiki2xhtmlArea {
         $this->setContent($content);
 
         $attributeList = array();
+        $attributeList['class'] = "form-control";
         $attributeList['name'] = $name;
         $attributeList['id'] = $name;
-        $attributeList['cols'] = $cols;
         $attributeList['rows'] = $rows;
 
         $this->attributeList = ( is_array($extraAttributes) ) ? array_merge($attributeList, $extraAttributes) : $attributeList

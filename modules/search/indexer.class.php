@@ -27,6 +27,7 @@ require_once 'Zend/Search/Exception.php';
 require_once 'Zend/Search/Lucene.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer.php';
 require_once 'Zend/Search/Lucene/Analysis/Analyzer/Common/Utf8Num/CaseInsensitive.php';
+require_once 'Zend/Search/Lucene/Exception.php';
 require_once 'Zend/Search/Lucene/Storage/Directory/Filesystem.php';
 require_once 'agendaindexer.class.php';
 require_once 'announcementindexer.class.php';
@@ -44,8 +45,36 @@ require_once 'videoindexer.class.php';
 require_once 'videolinkindexer.class.php';
 
 class Indexer {
-
+    
+    const REQUEST_REMOVE = 'remove';
+    const REQUEST_REMOVEALLBYCOURSE = 'removeAllByCourse';
+    const REQUEST_REMOVEBYFORUM = 'removeByForum';
+    const REQUEST_REMOVEBYTOPIC = 'removeByTopic';
+    const REQUEST_REMOVEBYUNIT = 'removeByUnit';
+    const REQUEST_REMOVEBYUSER = 'removeByUser';
+    const REQUEST_STORE = 'store';
+    const REQUEST_STOREALLBYCOURSE = 'storeAllByCourse';
+    
+    const RESOURCE_AGENDA = 'agenda';
+    const RESOURCE_ANNOUNCEMENT = 'announcement';
+    const RESOURCE_COURSE = 'course';
+    const RESOURCE_DOCUMENT = 'document';
+    const RESOURCE_EXERCISE = 'exercise';
+    const RESOURCE_FORUM = 'forum';
+    const RESOURCE_FORUMPOST = 'forum_post';
+    const RESOURCE_FORUMTOPIC = 'forum_topic';
+    const RESOURCE_IDX = 'idx';
+    const RESOURCE_LINK = 'link';
+    const RESOURCE_NOTE = 'note';
+    const RESOURCE_UNIT = 'unit';
+    const RESOURCE_UNITRESOURCE = 'unitresource';
+    const RESOURCE_VIDEO = 'video';
+    const RESOURCE_VIDEOLINK = 'videolink';
+    
+    const SESSION_PROCESS_AT_NEXT_DRAW = 'SESSION_PROCESS_AT_NEXT_DRAW';
+    
     private $__index = null;
+    private static $_index_dir = '/courses/idx';
     private static $_resultSetLimit = 100;
     private static $lookup = array(
         // Greek doubles
@@ -126,7 +155,7 @@ class Indexer {
             return;
         }
 
-        $index_path = $webDir . '/courses/idx';
+        $index_path = $webDir . self::$_index_dir;
         // Give read-writing permissions only for current user and group
         Zend_Search_Lucene_Storage_Directory_Filesystem::setDefaultFilePermissions(0600);
         // Utilize UTF-8 compatible text analyzer
@@ -308,70 +337,185 @@ class Indexer {
 
     /**
      * Batch index all possible contents.
+     * @deprecated
      */
-    public function reindexAll() {
-        if (!get_config('enable_indexing')) {
-            return;
-        }
-        
-        $cidx = new CourseIndexer($this);
-        $cidx->reindex();
-
-        $aidx = new AnnouncementIndexer($this);
-        $aidx->reindex();
-
-        $agdx = new AgendaIndexer($this);
-        $agdx->reindex();
-
-        $lidx = new LinkIndexer($this);
-        $lidx->reindex();
-
-        $vdx = new VideoIndexer($this);
-        $vdx->reindex();
-
-        $vldx = new VideolinkIndexer($this);
-        $vldx->reindex();
-
-        $eidx = new ExerciseIndexer($this);
-        $eidx->reindex();
-
-        $fidx = new ForumIndexer($this);
-        $fidx->reindex();
-
-        $ftdx = new ForumTopicIndexer($this);
-        $ftdx->reindex();
-
-        $fpdx = new ForumPostIndexer($this);
-        $fpdx->reindex();
-
-        $didx = new DocumentIndexer($this);
-        $didx->reindex();
-
-        $uidx = new UnitIndexer($this);
-        $uidx->reindex();
-
-        $urdx = new UnitResourceIndexer($this);
-        $urdx->reindex();
-        
-        $ndx = new NoteIndexer($this);
-        $ndx->reindex();
-    }
+//    public function reindexAll() {
+//        if (!get_config('enable_indexing')) {
+//            return;
+//        }
+//        
+//        $cidx = new CourseIndexer($this);
+//        $cidx->reindex();
+//
+//        $aidx = new AnnouncementIndexer($this);
+//        $aidx->reindex();
+//
+//        $agdx = new AgendaIndexer($this);
+//        $agdx->reindex();
+//
+//        $lidx = new LinkIndexer($this);
+//        $lidx->reindex();
+//
+//        $vdx = new VideoIndexer($this);
+//        $vdx->reindex();
+//
+//        $vldx = new VideolinkIndexer($this);
+//        $vldx->reindex();
+//
+//        $eidx = new ExerciseIndexer($this);
+//        $eidx->reindex();
+//
+//        $fidx = new ForumIndexer($this);
+//        $fidx->reindex();
+//
+//        $ftdx = new ForumTopicIndexer($this);
+//        $ftdx->reindex();
+//
+//        $fpdx = new ForumPostIndexer($this);
+//        $fpdx->reindex();
+//
+//        $didx = new DocumentIndexer($this);
+//        $didx->reindex();
+//
+//        $uidx = new UnitIndexer($this);
+//        $uidx->reindex();
+//
+//        $urdx = new UnitResourceIndexer($this);
+//        $urdx->reindex();
+//        
+//        $ndx = new NoteIndexer($this);
+//        $ndx->reindex();
+//    }
     
     /**
      * Batch remove all index contents.
      */
-    public function deleteAll() {
+    public static function deleteAll() {
+        global $webDir;
+        
         if (!get_config('enable_indexing')) {
             return;
         }
-
-        for ($count = 0; $count < $this->__index->maxDoc(); $count++) {
-            if (!$this->__index->isDeleted($count)) {
-                $this->__index->delete($count);
+        
+        $index_path = $webDir . self::$_index_dir;
+        if (is_dir($index_path)) {
+            $files = array_diff(scandir($index_path), array('.', '..'));
+            foreach ($files as $file) {
+                unlink($index_path ."/" . $file);
             }
+            rmdir($index_path);
         }
-
-        $this->__index->commit();
+    }
+    
+    /**
+     * Schedule Asynchronous Indexing.
+     * 
+     * @global int    $uid          - user id
+     * @param  string $requestType  - type of async request
+     * @param  string $resourceType - type of resource
+     * @param  int    $resourceId   - id of resource
+     */
+    public static function queueAsync($requestType, $resourceType, $resourceId) {
+        global $uid;
+        Database::get()->query("INSERT INTO idx_queue_async 
+            (user_id, request_type, resource_type, resource_id) 
+            VALUES (?d, ?s, ?s, ?d)", $uid, $requestType, $resourceType, $resourceId);
+        $_SESSION[self::SESSION_PROCESS_AT_NEXT_DRAW] = true;
+    }
+    
+    /**
+     * Return JS Code for triggering Asynchronous Indexing.
+     * 
+     * @global string $urlAppend
+     * @return string
+     */
+    public static function queueAsyncJSCode() {
+        global $urlAppend;
+        return "<script type='text/javascript'>
+        $(document).ready(function() {
+            $.ajax({
+                type: 'POST',
+                url: '{$urlAppend}/modules/search/idxasync.php'
+            });
+        })
+        </script>";
+    }
+    
+    /**
+     * Process Asynchronous Indexing Requests.
+     * 
+     * @global int $uid
+     */
+    public function queueAsyncProcess() {
+        global $uid;
+        $resources = Database::get()->queryArray("SELECT id, request_type, resource_id, resource_type FROM idx_queue_async WHERE user_id = ?d ORDER BY id", $uid);
+        foreach($resources as $resource) {
+            $varidx = null;
+            switch ($resource->resource_type) {
+                case self::RESOURCE_AGENDA:
+                    $varidx = new AgendaIndexer($this);
+                    break;
+                case self::RESOURCE_ANNOUNCEMENT:
+                    $varidx = new AnnouncementIndexer($this);
+                    break;
+                case self::RESOURCE_COURSE:
+                    $varidx = new CourseIndexer($this);
+                    break;
+                case self::RESOURCE_DOCUMENT:
+                    $varidx = new DocumentIndexer($this);
+                    break;
+                case self::RESOURCE_EXERCISE:
+                    $varidx = new ExerciseIndexer($this);
+                    break;
+                case self::RESOURCE_FORUM:
+                    $varidx = new ForumIndexer($this);
+                    break;
+                case self::RESOURCE_FORUMPOST:
+                    $varidx = new ForumPostIndexer($this);
+                    break;
+                case self::RESOURCE_FORUMTOPIC:
+                    $varidx = new ForumTopicIndexer($this);
+                    break;
+                case self::RESOURCE_IDX:
+                    $varidx = $this;
+                    break;
+                case self::RESOURCE_LINK:
+                    $varidx = new LinkIndexer($this);
+                    break;
+                case self::RESOURCE_NOTE:
+                    $varidx = new NoteIndexer($this);
+                    break;
+                case self::RESOURCE_UNIT:
+                    $varidx = new UnitIndexer($this);
+                    break;
+                case self::RESOURCE_UNITRESOURCE:
+                    $varidx = new UnitResourceIndexer($this);
+                    break;
+                case self::RESOURCE_VIDEO:
+                    $varidx = new VideoIndexer($this);
+                    break;
+                case self::RESOURCE_VIDEOLINK:
+                    $varidx = new VideolinkIndexer($this);
+                    break;
+                default:
+                    break;
+            }
+            self::callVariableIndexer($varidx, $resource->request_type, $resource->resource_id);
+            Database::get()->query("DELETE FROM idx_queue_async WHERE id = ?d", $resource->id);
+        }
+    }
+    
+    /**
+     * Calling helper for variable indexers and methods.
+     * 
+     * @param AbstractBaseIndexer $idxObj
+     * @param string              $method
+     * @param mixed               $arg
+     */
+    private static function callVariableIndexer($idxObj, $method, $arg) {
+        if ($idxObj !== null && $method !== null && is_callable(array($idxObj, $method))) {
+            $idxObj->$method($arg);
+        }
     }
 
     /**

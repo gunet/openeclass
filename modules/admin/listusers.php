@@ -371,7 +371,7 @@ $head_content .= "<script type='text/javascript'>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
-$nameTools = $langListUsersActions;
+$pageName = $langListUsersActions;
 
 // Display Actions Toolbar
 $tool_content .= "<div id='operations_container'>" .

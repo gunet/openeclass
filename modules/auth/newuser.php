@@ -59,7 +59,7 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$nameTools = $langUserDetails;
+$pageName = $langUserDetails;
 $navigation[] = array("url" => "registration.php", "name" => $langNewUser);
 
 $user_registration = get_config('user_registration');
@@ -145,7 +145,7 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
               <div class='col-sm-10'>";
-            $tool_content .= lang_select_options('localize');
+            $tool_content .= lang_select_options('localize', "class='form-control'");
             $tool_content .= "</div>
             </div>";
             if (get_config("display_captcha")) {                

@@ -39,6 +39,7 @@ define('USER_GUEST', 10);
 
 // resized user image
 define('IMAGESIZE_LARGE', 256);
+define('IMAGESIZE_MEDIUM', 155);
 define('IMAGESIZE_SMALL', 32);
 
 // profile info access
@@ -122,6 +123,8 @@ define('COMMON', 3);
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
 
+define('JQUERY_VERSION', '2.1.1');
+
 require_once 'lib/session.class.php';
 
 // Check if a string looks like a valid email address
@@ -168,6 +171,9 @@ function load_js($file, $init='') {
         if ($file == 'jstree') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jstree/jquery.cookie.min.js'></script>\n";
             $file = 'jstree/jquery.jstree.min.js';
+        } elseif ($file == 'jstree3') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jstree3/themes/proton/style.min.css'>";
+            $file = 'jstree3/jstree.min.js';
         } elseif ($file == 'jquery-ui') {
             if ($theme == 'modern' || $theme == 'ocean') {
                 $uiTheme = 'redmond';
@@ -227,11 +233,11 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-slider') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-slider/css/bootstrap-slider.css'>\n";
             $file = "bootstrap-slider/js/bootstrap-slider.js";
+        } elseif ($file == 'bootstrap-colorpicker') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css'>\n";
+            $file = "bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js";
         }               
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
-        if ($file == 'jquery-1.10.2.min.js') {
-            $head_content .= "<script type='text/javascript' src='{$urlAppend}js/jquery-migrate-1.2.1.min.js'></script>\n";
-        }
     }
 
     if (strlen($init) > 0) {
@@ -267,7 +273,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
             $user = $r;
         } else {
             if ($icon) {
-                return profile_image(0, IMAGESIZE_SMALL, true) . '&nbsp;' . $langAnonymous;
+                return profile_image(0, IMAGESIZE_SMALL) . '&nbsp;' . $langAnonymous;
             } else {
                 return $langAnonymous;
             }
@@ -279,11 +285,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
         $print_email = $print_email && !empty($email);
     }
     if ($icon) {
-        if ($user->has_icon) {
-            $icon = profile_image($user->id, IMAGESIZE_SMALL) . '&nbsp;';
-        } else {
-            $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
-        }
+        $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
     }
     
     if (!empty($class)) {
@@ -351,24 +353,24 @@ function uid_to_am($uid) {
  * @param int $size optional image size in pixels (IMAGESIZE_SMALL or IMAGESIZE_LARGE)
  * @return string
  */
-function user_icon($uid, $size=null) {
+function user_icon($uid, $size = null) {
     global $themeimg, $urlAppend;
 
-    if (!$size) {
-        $size = IMAGESIZE_SMALL;
-    }
-    $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
-    if ($user) {
-        if ($user->has_icon) {
-            return "${urlAppend}courses/userimg/${uid}_$size.jpg";
-        } else {
-            return "$themeimg/default_$size.jpg";
+    if (DBHelper::fieldExists("user", "id")) {
+        $user = Database::get()->querySingle("SELECT has_icon FROM user WHERE id = ?d", $uid);
+        if ($user) {
+            if (!$size) {
+                $size = IMAGESIZE_SMALL;
+            }
+            if ($user->has_icon) {
+                return "${urlAppend}courses/userimg/${uid}_$size.jpg";
+            } else {
+                return "$themeimg/default_$size.jpg";
+            }
         }
-    } else {
-        return '';
     }
+    return '';
 }
-
 
 /**
  * @brief Display links to the groups a user is member of
@@ -536,9 +538,11 @@ function check_guest($id = FALSE) {
  * @global type $course_id
  * @return boolean
  */
-function check_editor() {
+function check_editor($id = NULL) {
     global $uid, $course_id;
-
+    if(isset($id)) {
+        $uid = $id;
+    }
     if (isset($uid) and $uid) {
         $s = Database::get()->querySingle("SELECT editor FROM course_user
                                         WHERE user_id = ?d AND
@@ -1431,8 +1435,7 @@ function delete_course($cid) {
     removeDir("$webDir/video/$course_code");
     // refresh index
     require_once 'modules/search/indexer.class.php';
-    $idx = new Indexer();
-    $idx->removeAllByCourse($cid);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
     
     Database::get()->query("UPDATE oai_record SET deleted = 1, datestamp = ?t WHERE course_id = ?d", gmdate('Y-m-d H:i:s'), $cid);
 }
@@ -1598,7 +1601,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @param type $extra
  * @return type
  */
-function rich_text_editor($name, $rows, $cols, $text, $extra = '', $onFocus = false) {
+function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
     global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
     static $init_done = false;
     if (!$init_done) {
@@ -1678,7 +1681,7 @@ function openDocsPicker(field_name, url, type, win) {
 
 tinymce.init({
     // General options
-    selector: 'textarea:not(.mceNoEditor)',
+    selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
     plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
@@ -1708,7 +1711,7 @@ tinymce.init({
       array('[m]', '[/m]', '[m]', '[/m]'),
       $text); */
 
-    return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
+    return "<textarea class='mceEditor' name='$name' rows='$rows' cols='$cols'>" .
             q(str_replace('{', '&#123;', $text)) .
             "</textarea>\n";
 }
@@ -1726,28 +1729,6 @@ function text_area($name, $rows, $cols, $text, $extra = '') {
     return "<textarea name='$name' rows='$rows' cols='$cols' $extra>" .
             q(str_replace('{', '&#123;', $text)) .
             "</textarea>\n";
-}
-
-// 
-/**
- * @brief  Does the special course unit with course descriptions exist?
- *       If so, return its id, else create it first
- * @global type $langCourseDescription
- * @param type $course_id
- * @return type
- */
-function description_unit_id($course_id) {
-    global $langCourseDescription;
-    
-    $q = Database::get()->querySingle("SELECT id FROM course_units
-                                       WHERE course_id = ?d AND `order` = -1", $course_id);
-    if ($q) {
-        $id = $q->id;
-        return $id;
-    } else {
-        $sql = Database::get()->query("INSERT INTO course_units SET `order` = -1, `title` = ?s, `visible` = 0, `course_id` = ?d", $langCourseDescription, $course_id);
-        return $sql->lastInsertID;        
-    }
 }
 
 /**
@@ -1857,7 +1838,7 @@ function units_set_maxorder() {
  */
 function handle_unit_info_edit() {
     
-    global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code;
+    global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code, $webDir;
     
     $title = $_REQUEST['unittitle'];
     $descr = $_REQUEST['unitdescr'];
@@ -1878,13 +1859,8 @@ function handle_unit_info_edit() {
     }
     // update index    
     require_once 'modules/search/indexer.class.php';
-    require_once 'modules/search/courseindexer.class.php';
-    require_once 'modules/search/unitindexer.class.php';
-    $idx = new Indexer();
-    $cidx = new CourseIndexer($idx);
-    $uidx = new UnitIndexer($idx);
-    $uidx->store($unit_id);
-    $cidx->store($course_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNIT, $unit_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
     // refresh course metadata
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
@@ -2042,11 +2018,14 @@ function redirect($path) {
     exit;
 }
 
-function redirect_to_home_page($path = '') {
+function redirect_to_home_page($path='', $absolute=false) {
     global $urlServer;
     
-    $path = preg_replace('+^/+', '', $path);
-    header("Location: $urlServer$path");
+    if (!$absolute) {
+        $path = preg_replace('+^/+', '', $path);
+        $path = $urlServer . $path;
+    }
+    header("Location: $path");
     exit;
 }
 
@@ -2127,7 +2106,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '') {
+function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false) {
     global $themeimg;
 
     if (isset($title)) {
@@ -2137,7 +2116,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '') {
         $extra = '';
     }
 
-    $img = "<i class='fa $name' $extra></i>";
+    $img = (isset($title) && $with_title) ? "<i class='fa $name' $extra></i> $title" : "<i class='fa $name' $extra></i>";
     if (isset($link)) {
         return "<a href='$link'$link_attrs>$img</a>";
     } else {
@@ -2149,17 +2128,20 @@ function icon($name, $title = null, $link = null, $link_attrs = '') {
  * Link for displaying user profile
  * @param type $uid
  * @param type $size
- * @param type $default = false
+ * @param type $class
  * @return type
  */
-function profile_image($uid, $size, $default = false) {
+function profile_image($uid, $size, $class=null) {
     global $urlServer, $themeimg;
-
-    if (!$default) {
-        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' title='" . q(uid_to_name($uid)) . "'>";
+    
+    // makes $class argument optional
+    $class_attr = ($class == null)?'':"class='".q($class)."'";
+    
+    if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
+        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='" . q(uid_to_name($uid)) . "'>";
     } else {
         $name = ($uid > 0) ? q(uid_to_name($uid)) : '';
-        return "<img src='$themeimg/default_$size.jpg' title='$name' alt='$name'>";
+        return "<img src='$themeimg/default_$size.jpg' $class_attr title='$name' alt='$name'>";
     }
 }
 
@@ -2396,6 +2378,85 @@ function removeDir($dirPath) {
 }
 
 /**
+ * @brief update attendance about user activities
+ * @param type $id
+ * @param type $activity
+ * @return type
+ */
+function update_attendance_book($id, $activity) {
+    
+    global $uid;
+    
+    if ($activity == 'assignment') {
+        $type = 1;
+    } elseif ($activity == 'exercise') {
+        $type = 2;
+    }
+    $q = Database::get()->querySingle("SELECT id, attendance_id FROM attendance_activities WHERE module_auto_type = ?d
+                            AND module_auto_id = ?d 
+                            AND auto = 1", $type, $id);
+    if ($q) {
+        $u = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d
+                                AND attendance_id = ?d", $uid, $q->attendance_id);
+        if($u){
+            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1", $uid);
+        }
+    }
+    return;
+}
+
+/**
+ * @brief update gradebook about user grade
+ * @param type $uid
+ * @param type $id
+ * @param type $grade
+ * @param type $activity
+ */
+function update_gradebook_book($uid, $id, $grade, $activity) 
+{
+    global $course_id;
+    
+    if ($activity == 'assignment') {
+        $type = 1;
+    } elseif ($activity == 'exercise') {
+        $type = 2;
+    }
+
+    $q = Database::get()->querySingle("SELECT id, gradebook_id FROM gradebook_activities WHERE module_auto_type = ?d
+                            AND module_auto_id = ?d
+                            AND auto = 1", $type, $id);
+    if ($q) {
+        
+        $u = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d
+                                AND gradebook_id = ?d", $uid, $q->gradebook_id);
+        if($u){
+            if ($type == 2) { // exercises
+                $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record 
+                                                        WHERE uid = ?d AND eid = ?d", $uid, $id); 
+                if ($sql) {
+                   $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
+                   $score = $sql->total_score;
+                   $scoreMax = $sql->total_weighting;
+                    if($scoreMax) {
+                       $grade = round(($range * $score) / $scoreMax, 2);    
+                    } else {
+                        $grade = $score;
+                    }
+                }
+            }
+
+            $q2 = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $q->id AND uid = ?d", $uid);        
+            if ($q2) { // update grade if exists            
+                Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE gradebook_activity_id = $q->id AND uid = ?d", $grade, $uid);
+            } else {
+                Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?d", $uid, $grade);
+            }
+        }
+    }
+    return;    
+}
+
+/**
  * Generate a token verifying some info
  *
  * @param  string  $info           - The info that will be verified by the token
@@ -2535,7 +2596,7 @@ function getOnlineUsers() {
 /**
  * Initialize copyright/license global arrays
  */
-function copyright_info($cid) {
+function copyright_info($cid, $noImg=1) {
 
     global $language, $license, $themeimg;
 
@@ -2551,10 +2612,14 @@ function copyright_info($cid) {
             $link_suffix = '';
         }
     }
+    if($noImg==1){
     $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'>
-            <img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a>";
+            <img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
+    }else if($noImg==0){
+        $link = "";
+    }
 
-    return $link . '<br>' . q($license[$lic]['title']);
+    return $link . q($license[$lic]['title']);
 }
 
 /**
@@ -2612,9 +2677,14 @@ function forbidden($path) {
  * level is optional and can be 'primary' for primary entries or unset
  */
 function action_bar($options) {
-    global $langConfirmDelete, $langCancel, $langDelete;
+    global $langConfirmDelete, $langCancel, $langDelete, $pageName;
+    
     $out_primary = $out_secondary = array();
     $i=0;
+    $page_title = "";
+    if (isset($pageName)) {
+        $page_title = "<div class='pull-left' style='padding-top:31px;'><h4>".q($pageName)."</h4></div>";
+    }    
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
@@ -2645,25 +2715,30 @@ function action_bar($options) {
         } else {
             $button_class = $option['button-class'];
         }
+        if (isset($option['link-attrs'])) {
+            $link_attrs = " ".$option['link-attrs'];
+        } else {
+            $link_attrs = "";
+        }        
         if ($level == 'primary-label') {
             array_unshift($out_primary,
                 "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                " title='$title'>" .
+                " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .
                 "<span class='hidden-xs'>$title</span></a>$form_end</li>");
         } elseif ($level == 'primary') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                "<li$class>$form_begin<a$confirm_extra class='btn btn-sm $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                " title='$title'>" .
+                " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon]'></i></a>$form_end</li>");
         } else {
             array_unshift($out_secondary,
-                    "<li$class>$form_begin<a$confirm_extra  class='btn $button_class$confirm_modal_class'" . $href .
-                    " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
-                    " title='$title'>" .
-                    "<i class='fa $option[icon]'></i></a>$form_end</li>");
+                "<li$class>$form_begin<a$confirm_extra  class='btn btn-sm $button_class$confirm_modal_class'" . $href .
+                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " title='$title'$link_attrs>" .
+                "<i class='fa $option[icon]'></i></a>$form_end</li>");
         }
         $i++;
     }
@@ -2672,7 +2747,7 @@ function action_bar($options) {
         $out .= implode('', $out_primary);
     }
     if (count($out_secondary)) {
-        $out .= "<li><button type='button' class='btn btn-default expandable-btn'><i class='fa fa-th-large'></i></button></li>";
+        $out .= "<li><button type='button' class='btn btn-default btn-sm expandable-btn'><i class='fa fa-th-large'></i></button></li>";
     }
     $out .= "</ul>";
     if (count($out_secondary)) {
@@ -2681,6 +2756,7 @@ function action_bar($options) {
     if ($out && $i!=0) {
         return "<div class='row'>" .
              "<div class='col-sm-12 clearfix'>" .
+             $page_title.
              "<div class='well well-sm action-bar-wrapper primary-tools margin-top-thin margin-bottom-thin pull-right'>" .
              $out . "</div></div></div>";
     } else {
@@ -2698,8 +2774,9 @@ function action_bar($options) {
  */
 function action_button($options) {
     global $langConfirmDelete, $langCancel, $langDelete;
-    $out = '';
+    $out_primary = $out_secondary = array();
     foreach (array_reverse($options) as $option) {
+        $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
         if (isset($option['show']) and !$option['show']) {
             continue;
@@ -2709,33 +2786,58 @@ function action_button($options) {
         } else {
             $class = '';
         }
-        $icon_class = '';
-        if (isset($option['icon-class'])) {
-            $icon_class .= 'class="' . $option['icon-class'] . '"';
+        if (isset($option['btn_class'])) {
+            $btn_class = ' '.$option['btn_class'];
+        } else {
+            $btn_class = ' btn-default';
         }
-        if (isset($option['icon-extra'])) {
-            $icon_class .= ' ' . $option['icon-extra'];
+        $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
+        $icon_class = "class='list-group-item $class";
+        if (isset($option['icon-class'])) {
+            $icon_class .= " " . $option['icon-class'];
         }
         if (isset($option['confirm'])) {
             $title = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $icon_class .= " class='confirmAction' data-title='$title' data-message='" .
+            $icon_class .= " confirmAction' data-title='$title' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
             $url = '#';
         } else {
+            $icon_class .= "'";
             $confirm_extra = $form_begin = $form_end = '';
             $url = isset($option['url'])? $option['url']: '#';
-        }
-        $out .= "<div class='opt-btn-more-tool tool-btn$class'>" . $form_begin .
-            icon($option['icon'], $option['title'], $url, $icon_class ) .
-            $form_end . '</div>';
+        }       
+        if (isset($option['icon-extra'])) {
+            $icon_class .= ' ' . $option['icon-extra'];
+        }        
+        
+        if ($level == 'primary-label') {
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled'><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
+        } elseif ($level == 'primary') {
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled'><i class='fa $option[icon]'></i></a>");
+        } else {
+            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
+        }        
     }
-    return '<div class="opt-btn-wrapper">' .
-        '<div class="opt-btn-more-wrapper">' .
-        $out .
-        '</div><div class="opt-btn tool-btn"><i class="fa fa-gear "></i></div></div>';
+    $primary_buttons = "";
+    if (count($out_primary)) {
+        $primary_buttons = implode('', $out_primary);
+    }       
+    $action_button = "";
+    if (count($out_secondary)) {
+        $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
+        $action_button = "
+                <a tabindex='1' class='btn btn-default' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                    <i class='fa fa-gear'></i>  <span class='caret'></span>
+                </a>";
+    }    
+    
+    return "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+                $primary_buttons
+                $action_button
+          </div>";
 }
 /**
  * Removes spcific get variable from Query String

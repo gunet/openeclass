@@ -87,13 +87,12 @@ if ($show_orphan_file and $file_path) {
     }
 }
 
-$nameTools = $langEBook;
-
+$pageName = $langEBook;
 if ($unit !== false) {
-    $exit_fullscreen_link = $urlAppend . '/modules/units/?id=' . $unit;
+    $exit_fullscreen_link = $urlAppend . "modules/units/index.php?course=$course_code&amp;id=$unit";
     $unit_parameter = 'unit=' . $unit;
 } else {
-    $exit_fullscreen_link = $urlAppend . '/courses/' . $course_code . '/';
+    $exit_fullscreen_link = $urlAppend . "modules/ebook/index.php?course_code=$course_code";
     $unit_parameter = '';
 }
 $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
@@ -171,7 +170,9 @@ if ($file_path) {
 $t = new Template();
 $t->set_root($webDir . '/template/' . $theme);
 $t->set_file('page', 'ebook_fullscreen.html');
-$t->set_var('page_title', q($currentCourseName . ': ' . $nameTools));
+$t->set_var('URL_PATH', $urlAppend);
+$t->set_var('langBack', $langBack);
+$t->set_var('page_title', q($currentCourseName . ': ' . $pageName));
 $t->set_var('course_title', q($currentCourseName));
 $t->set_var('course_title_short', q(ellipsize($currentCourseName, 35)));
 $t->set_var('course_home_link', $urlAppend . '/courses/' . $course_code . '/');

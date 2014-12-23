@@ -55,7 +55,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = '%' . $searchtitle . '%';
     }
     if (!empty($searchcode)) {
-        $query .= ' AND (course.code LIKE ?s OR public_code ?s)';
+        $query .= ' AND (course.code LIKE ?s OR public_code LIKE ?s)';
         $terms[] = '%' . $searchcode . '%';
         $terms[] = '%' . $searchcode . '%';
     }
@@ -216,7 +216,7 @@ $head_content .= "<script type='text/javascript'>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);
-$nameTools = $langListCours;
+$pageName = $langListCours;
 
 // Display Actions Toolbar
 $tool_content .= "<div id='operations_container'>" .

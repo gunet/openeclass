@@ -26,7 +26,6 @@
 
 $require_usermanage_user = TRUE;
 require_once '../../include/baseTheme.php';
-require_once 'admin.inc.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
@@ -62,7 +61,7 @@ $head_content .= "<script type='text/javascript'>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
-$nameTools = $langEditUser;
+$pageName = $langEditUser;
 
 $u_submitted = isset($_POST['u_submitted']) ? $_POST['u_submitted'] : '';
 
@@ -90,7 +89,7 @@ if ($u) {
     }
     if (isset($_GET['edit']) and $_GET['edit'] = 'auth') {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?u=$u", 'name' => $langEditUser);
-        $nameTools = $langEditAuth;
+        $pageName = $langEditAuth;
         $current_auth = 1;
         $auth_names[1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {

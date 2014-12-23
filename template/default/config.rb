@@ -1,3 +1,4 @@
+gem 'bootstrap-sass', '=3.3.1.0'
 require 'bootstrap-sass'
 # Require any additional compass plugins here.
 

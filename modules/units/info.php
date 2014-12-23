@@ -30,7 +30,7 @@ $require_help = true;
 $helpTopic = 'AddCourseUnits';
 require_once '../../include/baseTheme.php';
 
-$nameTools = $langEditUnit;
+$pageName = $langEditUnit;
 
 load_js('tools.js');
 
@@ -38,7 +38,7 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $id = $_GET['edit'];
     $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_units WHERE id = ?d AND course_id = ?d",$id, $course_id);   
     if (!$cu) {
-        $nameTools = $langUnitUnknown;
+        $pageName = $langUnitUnknown;
         $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
         draw($tool_content, 2, null, $head_content);
         exit;
@@ -47,7 +47,7 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $unitdescr = $cu->comments;
     $unit_id = $cu->id;
 } else {
-    $nameTools = $langAddUnit;
+    $pageName = $langAddUnit;
     $unitdescr = $unittitle = '';
 }
 
@@ -57,52 +57,31 @@ if (isset($_GET['next'])) {
     $action = "${urlServer}courses/$course_code/";
 }
 
-/*$tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">
-    <fieldset>";*/
-
-$tool_content .= "
-
-    <div class='panel focused margin-top-fat padding'>
+$tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">";
 
-    if (isset($unit_id)) {
+if (isset($unit_id)) {
     $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
-
 }
-$tool_content .= "
-     
+$tool_content .= "<div class='form-group'>
+                    <label for='unitTitle' class='col-sm-2 control-label'>$langTitle</label>
+                    <div class='col-sm-10'>
+                        <input type='text' class='form-control' id='unitTitle' name='unittitle' $unittitle>
+                    </div>
+                  </div>
             <div class='form-group'>
-                <label for='unitTitle' class='col-sm-12 control-label align-left margin-bottom-thin'>$langUnitTitle</label>
-                <div class='col-sm-12 margin-bottom-fat'>
-                    <input type='text' class='form-control' id='unitTitle' name='unittitle' $unittitle>
-                </div>
-            </div>
-
-            <div class='form-group'>
-                <label for='unitTitle' class='col-sm-12 control-label align-left margin-bottom-thin'>$langUnitDescr</label>
-                <div class='col-sm-12'>
+                <label for='unitTitle' class='col-sm-2 control-label'>$langUnitDescr</label>
+                <div class='col-sm-10'>
                     " . rich_text_editor('unitdescr', 10, 20, $unitdescr) . "
                 </div>
             </div>
-
-
-
             <div class='form-group'>
                 <div class='col-sm-offset-5 col-sm-12'>
-                  <button type='submit' class='btn-default-eclass color-green size-l margin-top' name='edit_submit'>
-                    <i class='fa fa-save space-after-icon'></i>$langSubmit
-                  </button>
+                    <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langSubmit) . "'>
                 </div>
-             </div>
+            </div>            
         </form>
-    </div>
+    </div>";
 
-    ";
-
-
-
-/*$tool_content .= "
-    </fieldset>
-    </form>";*/
 draw($tool_content, 2, null, $head_content);
 

@@ -40,7 +40,7 @@ $action = new action();
 $action->record(MODULE_ID_QUESTIONNAIRE);
 /* * *********************************** */
 
-$nameTools = $langQuestionnaire;
+$pageName = $langQuestionnaire;
 
 load_js('tools.js');
 if ($is_editor) {

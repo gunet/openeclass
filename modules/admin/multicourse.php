@@ -28,8 +28,14 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'modules/admin/hierarchy_validations.php';
 require_once 'modules/create_course/functions.php';
 
-$nameTools = $langMultiCourse;
+$pageName = $langMultiCourse;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 if (isset($_POST['submit'])) {
     $line = strtok($_POST['courses'], "\n");
@@ -86,15 +92,15 @@ if (isset($_POST['submit'])) {
             if ($code) {
                 course_index($code);
             }
-            $class = $prof_not_found ? 'alert1' : 'success';
-            $tool_content .= "<p class='$class'><b>" . q($title) . '</b>: ' . q($langMultiCourseCreated);
+            $class = $prof_not_found ? 'alert alert-warning' : 'alert alert-success';
+            $tool_content .= "<div class='$class'><b>" . q($title) . '</b>: ' . q($langMultiCourseCreated);
             if ($prof_uid) {
                 $tool_content .= '<br>' . q($langTeacher) . ': <b>' . q($prof_name) . '</b>';
             } elseif ($prof_not_found) {
                 $tool_content .= '<br>' . q($langTeacher) . ': <b>' .
                         q($prof_info) . '</b>: ' . q($langNoUsersFound2);
             }
-            $tool_content .= '</p>';
+            $tool_content .= '</div>';
         }
         $line = strtok("\n");
     }
@@ -105,181 +111,68 @@ if (isset($_POST['submit'])) {
 
     load_js('jstree');
 
-    $tool_content .= "<div class='noteit'>" . $langMultiCourseInfo . "</div>
-        <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "' onsubmit=\"return validateNodePickerForm();\">
+    $tool_content .= "<div class='alert alert-info'>$langMultiCourseInfo</div>
+        <div class='form-wrapper'>
+        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "' onsubmit=\"return validateNodePickerForm();\">
         <fieldset>
-        <legend>" . $langMultiCourseData . "</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-            <th>$langMultiCourseTitles:</th>
-            <td>" . text_area('courses', 20, 80, '') . "</td>
-        </tr>
-	<tr>
-	  <th>$langFaculty:</th>
-          <td>";
+        <div class='form-group'>
+            <label for='title' class='col-sm-3 control-label'>$langMultiCourseTitles:</label>
+            <div class='col-sm-9'>" . text_area('courses', 20, 80, '') . "</div>
+        </div>
+	<div class='form-group'>
+            <label for='title' class='col-sm-3 control-label'>$langFaculty:</label>	  
+            <div class='col-sm-9'>";
+        list($js, $html) = $tree->buildCourseNodePicker(array('allowables' => $user->getDepartmentIds($uid)));
+        $head_content .= $js;
+        $tool_content .= $html;
+    $tool_content .= "</div></div>";
 
-    list($js, $html) = $tree->buildCourseNodePicker(array('allowables' => $user->getDepartmentIds($uid)));
-    $head_content .= $js;
-    $tool_content .= $html;
-
-    $tool_content .= "</td>
-          <td>&nbsp;</td>
-        </tr>";
-
-// Type field is not available in 3.0
-//    $tool_content .= "<tr>
-//	  <th class='left'>$langType:</th>
-//	  <td>" . selection(array('pre' => $langpre, 'post' => $langpost, 'other' => $langother), 'type') . "</td>
-//	  <td>&nbsp;</td>
-//        </tr>";
-
-    $tool_content .= "<tr>
-          <th>$langAvailableTypes:</th>
-	<td>
-	  <table class='tbl' width='100%'>
-	  <tr class='smaller'>
-	    <th width='130'><img src='$themeimg/lock_open.png' title='" . $m['legopen'] . "' alt='" . $m['legopen'] . "'width='16' height='16' /> " . $m['legopen'] . "</th>
-	    <td><input name='formvisible' type='radio' value='2' checked='checked' /></td>
-	    <td>$langPublic</td>
-	  </tr>
-	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_registration.png' title='" . $m['legrestricted'] . "' alt='" . $m['legrestricted'] . "' width='16' height='16' /> " . $m['legrestricted'] . "</th>
-	    <td valign='top'><input name='formvisible' type='radio' value='1' /></td>
-	    <td>
-              $langPrivOpen<br />
-              <div class='smaller' style='padding: 3px;'><em>$langOptPassword</em> <input type='text' name='password' class='FormData_InputText' id='password' autocomplete='off' />&nbsp;<span id='result'></span></div>
-            </td>
-          </tr>
-	  <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_closed.png' title='" . $m['legclosed'] . "' alt='" . $m['legclosed'] . "' width=\"16\" height=\"16\" /> " . $m['legclosed'] . "</th>
-	    <td valign='top'><input name='formvisible' type='radio' value='0' /></td>
-	    <td>$langClosedCourseShort</td>
-	  </tr>
-          <tr class='smaller'>
-	    <th valign='top'><img src='$themeimg/lock_inactive.png' title='" . $m['linactive'] . "' alt='" . $m['linactive'] . "' width='16' height='16' /> " . $m['linactive'] . "</th>
-	    <td valign='top'><input name='formvisible' type='radio' value='3' /></td>
-	    <td>$langCourseInactiveShort</td>
-	  </tr>
-	  </table>      
-	  <br />
-	</td>
-      </tr>";
-
-// Subsystems are created in a different way in 3.0
-//    $tool_content .= "<tr>
-//	<th colspan='2'>$langSubsystems</td>
-//      </tr>
-//      <tr>
-//	<td colspan='2'>
-// 	  <table class='tbl smaller' width='100%'>
-//	  <tr>
-//	    <td width='10' ><img src='$themeimg/calendar_on.png' alt='' height='16' width='16' /></td>
-//	    <td width='150'>$langAgenda</td>
-//	    <td width='30' ><input name='subsystems[]' type='checkbox' value='1' checked='checked' /></td>
-//	    <th width='2' >&nbsp;</th>
-//	    <td width='10' >&nbsp;<img src='$themeimg/dropbox_on.png' alt='' height='16' width='16' /></td>
-//	    <td width='150'>$langDropBox</td>
-// 	    <td width='30' ><input type='checkbox' name='subsystems[]' value='16' /></td>
-//	  </tr>
-//	  <tr  class='even'>
-//	    <td><img src='$themeimg/links_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langLinks</td>
-//	    <td><input name='subsystems[]' type='checkbox' value='2' checked='checked' /></td>
-//	    <th>&nbsp;</th>
-//	    <td>&nbsp;<img src='$themeimg/groups_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langGroups</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='15' /></td>
-//	  </tr>
-//	  <tr>
-//	    <td><img src='$themeimg/docs_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langDoc</td>
-//	    <td><input name='subsystems[]' type='checkbox' value='3' checked='checked' /></td>
-//	    <th>&nbsp;</th>
-//	    <td>&nbsp;<img src='$themeimg/conference_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langConference</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='19' /></td>
-//	  </tr>
-//	  <tr class='even'>
-//	    <td><img src='$themeimg/videos_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langVideo</td>
-//	    <td><input name='subsystems[]' type='checkbox' value='4'  /></td>
-//	    <th>&nbsp;</th>
-//	    <td>&nbsp;<img src='$themeimg/description_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langCourseDescription</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='20' checked='checked' /></td>
-//	  </tr>
-//	  <tr>
-//	    <td><img src='$themeimg/assignments_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langWorks</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='5' /></td>
-//	    <th>&nbsp;</th>
-//	    <td>&nbsp;<img src='$themeimg/questionnaire_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langQuestionnaire</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='21' /></td>
-//	  </tr>
-//	  <tr  class='even'>
-//	    <td><img src='$themeimg/announcements_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langAnnouncements</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='7' checked='checked'/></td>
-//	    <th>&nbsp;</th>
-//	    <td>&nbsp;<img src='$themeimg/lp_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langLearnPath</td>
-//	    <td><input type='checkbox' name='subsystems[]'  value='23' /></td>
-//	  </tr>
-//	  <tr>
-//	    <td><img src='$themeimg/forum_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langForums</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='9' /></td>
-//	    <th>&nbsp;</th>
-//	    <td>&nbsp;<img src='$themeimg/wiki_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langWiki</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='26' /></td>
-//	  </tr>
-//	  <tr class='even'>
-//	    <td><img src='$themeimg/exercise_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langExercices</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='10' /></td>
-//	    <th>&nbsp;</th>
-//            <td>&nbsp;<img src='$themeimg/glossary_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langGlossary</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='17' checked='checked' /></td>
-//	  </tr>
-//	  <tr>
-//	    <td><img src='$themeimg/ebook_on.png' alt='' height='16' width='16' /></td>
-//	    <td>$langEBook</td>
-//	    <td><input type='checkbox' name='subsystems[]' value='18' /></td>
-//	    <th>&nbsp;</th>
-//            <td>&nbsp;</td>
-//	    <td>&nbsp;</td>
-//	    <td>&nbsp;</td>
-//	  </tr>";
-    $tool_content .= "</table>
-        <br />
-	</td>
-      </tr>
-	<tr>
-	  <th class='left'>$langLanguage:</th>
-	  <td>" . lang_select_options('lang') . "</td>
-          <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <th>&nbsp;</th>
-            <td class='right'>
-            <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'></td>
-        </tr>
-        </table>
+    $tool_content .= "<div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langConfidentiality</label></div>
+        <div class='form-group'>
+            <label for='password' class='col-sm-3 control-label'>$langOptPassword</label>
+            <div class='col-sm-9'>
+                <input id='coursepassword' class='form-control' type='text' name='password' id='password' autocomplete='off' />
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='Public' class='col-sm-3 control-label'>$langOpenCourse</label>
+            <div class='col-sm-9 radio'><label><input id='courseopen' type='radio' name='formvisible' value='2' checked> $langPublic</label></div>
+            </div>
+        <div class='form-group'>
+            <label for='PrivateOpen' class='col-sm-3 control-label'>$langRegCourse</label>	
+            <div class='col-sm-9 radio'><label><input id='coursewithregistration' type='radio' name='formvisible' value='1'> $langPrivOpen</label></div>
+        </div>
+        <div class='form-group'>
+            <label for='PrivateClosed' class='col-sm-3 control-label'>$langClosedCourse</label>
+            <div class='col-sm-9 radio'><label><input id='courseclose' type='radio' name='formvisible' value='0'> $langClosedCourseShort</label></div>
+       </div>
+        <div class='form-group'>
+             <label for='Inactive' class='col-sm-3 control-label'>$langInactiveCourse</label>
+             <div class='col-sm-9 radio'><label><input id='courseinactive' type='radio' name='formvisible' value='3'> $langCourseInactiveShort</label></div>
+         </div>
+         <div class='form-group'>
+          <label for='language' class='col-sm-3 control-label'>$langLanguage:</label>	  
+           <div class='col-sm-9'>" . lang_select_options('lang') . "</div>
+         </div>
+         <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmit) . "'>
+                <a href='index.php' class='btn btn-default'>$langCancel</a>    
+            </div>
+        </div>
         </fieldset>
-        </form>";
+        </form>
+        </div>";
 }
 
-$tool_content .= action_bar(array(
-    array('title' => $langBackAdmin,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);
 
-// Helper function
+/**
+ * @brief helper function
+ * @param type $sql
+ * @param type $terms
+ * @return boolean
+ */
 function prof_query($sql, $terms) {
     $result = Database::get()->querySingle("SELECT id FROM user WHERE status = 1 AND ( $sql )", $terms);
     if ($result) {
@@ -289,7 +182,11 @@ function prof_query($sql, $terms) {
     }
 }
 
-// Find a professor by name ("Name surname") or username
+/**
+ * @brief find a professor by name ("Name surname") or username
+ * @param type $uname
+ * @return boolean
+ */
 function find_prof($uname) {
     if (($uid = prof_query('username = ?s', array($uname)))) {
         return $uid;

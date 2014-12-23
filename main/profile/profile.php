@@ -36,8 +36,11 @@ require_once 'include/log.php';
 check_uid();
 check_guest();
 
+$navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
+
 $tree = new Hierarchy();
 $userObj = new User();
+$image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
 
 load_js('jstree');
 load_js('tools.js');
@@ -47,7 +50,7 @@ var lang = {
         confirmDelete: '" . js_escape($langConfirmDelete) . "'}; 
 $(profile_init);</script>";
 
-$nameTools = $langModifyProfile;
+$pageName = $langModifyProfile;
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
                                             lang, status, has_icon, description,
@@ -92,7 +95,6 @@ if (isset($_POST['submit'])) {
         mkdir($webDir . '/courses/userimg/', 0775);
         touch($webDir."courses/userimg/index.php");
     }
-    $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
@@ -131,10 +133,12 @@ if (isset($_POST['submit'])) {
         $image_file = $_FILES['userimage']['tmp_name'];
 
         if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_path . '_' . IMAGESIZE_LARGE . '.jpg')) {
-            redirect_to_message(7);
+            Session::Messages($langInvalidPicture);
+            redirect_to_home_page("main/profile/profile.php");             
         }
         if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
-            redirect_to_message(7);
+            Session::Messages($langInvalidPicture);
+            redirect_to_home_page("main/profile/profile.php"); 
         }
         Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);        
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
@@ -144,12 +148,14 @@ if (isset($_POST['submit'])) {
 
     // check if email is valid
     if ((get_config('email_required') | get_config('email_verification_required')) and !email_seems_valid($email_form)) {
-        redirect_to_message(6);
+        Session::Messages($langEmailWrong);
+        redirect_to_home_page("main/profile/profile.php");         
     }
 
     // check if there are empty fields
     if (!$all_ok) {
-        redirect_to_message(4);
+        Session::Messages($langFieldsMissing);
+        redirect_to_home_page("main/profile/profile.php");        
     }
 
     if (!$allow_username_change) {
@@ -161,7 +167,8 @@ if (isset($_POST['submit'])) {
     if ($username_form != $_SESSION['uname']) {        
         $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $username_form);        
         if ($username_check) {
-            redirect_to_message(5);
+            Session::Messages($langUserFree);
+            redirect_to_home_page("main/profile/profile.php");
         }
     }
 
@@ -199,45 +206,13 @@ if (isset($_POST['submit'])) {
             $_SESSION['surname'] = $surname_form;
             $_SESSION['givenname'] = $givenname_form;
             $_SESSION['email'] = $email_form;
-            redirect_to_message(1);
+            Session::Messages($langProfileReg, 'alert-success');
+            redirect_to_home_page("main/profile/display_profile.php");
         }
     if ($old_language != $language) {
-        redirect_to_message(1);
+        Session::Messages($langProfileReg, 'alert-success');
+        redirect_to_home_page("main/profile/display_profile.php");
     }
-}
-
-//Show message if exists
-if (isset($_GET['msg'])) {
-    $urlText = '';
-    $type = 'warning';
-    switch ($_GET['msg']) {
-        case 1: //profile information changed successfully
-            $message = $langProfileReg;
-            $urlText = "<br /><a href='$urlServer'>$langHome</a>";
-            $type = "success";
-            break;
-        case 3: //pass too easy
-            $message = $langPassTooEasy . ": <strong>" . genPass() . "</strong>";
-            break;
-        case 4: // empty fields check
-            $message = $langFieldsMissing;
-            break;
-        case 5: //username already exists
-            $message = $langUserFree;
-            break;
-        case 6: //email not valid
-            $message = $langEmailWrong;
-            break;
-        case 7: //invalid image
-            $message = $langInvalidPicture;
-            break;
-        case 10: // invalid characters
-            $message = $langInvalidCharsUsername;
-            break;
-        default:
-            exit;
-    }
-    $tool_content .= "<div class='alert alert-$type'>$message$urlText</div>";
 }
 
 $surname_form = q($myrow->surname);
@@ -258,7 +233,8 @@ $tool_content .=
             array('title' => $langBack,
                 'url' => "display_profile.php",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'))).
+                'level' => 'primary-label')));
+        $tool_content .=
             "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>                
                 <fieldset>     
@@ -307,7 +283,7 @@ $tool_content .= "<div class='form-group'>
                     </div>                    
                 </div>
                 <div class='form-group'>
-                    <label for='email' class='col-sm-2 control-label'>$langAm:</label>
+                    <label for='am_form' class='col-sm-2 control-label'>$langAm:</label>
                     <div class='col-sm-5'>
                         <input type='text' class='form-control' name='am_form' id='am_form' value='$am_form'>
                     </div>
@@ -384,7 +360,7 @@ $tool_content .= "<div class='form-group'><label for='language' class='col-sm-2 
 if ($icon) {
     $message_pic = $langReplacePicture;
     $picture = profile_image($uid, IMAGESIZE_SMALL) . "&nbsp;&nbsp;";
-    $delete = '&nbsp;' . icon('fa-times', $langDelete, null, 'id="delete"') . '&nbsp;';
+    $delete = '&nbsp;' . icon('fa-times', $langDelete, '#', 'id="delete"') . '&nbsp;';
 } else {
     $picture = $delete = '';
     $message_pic = $langAddPicture;
@@ -398,7 +374,7 @@ $tool_content .= "<div class='form-group'>
           <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
         </div>
         <div class='col-sm-offset-2 col-sm-10'>        
-          <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+          <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
         </div>      
       </fieldset>
@@ -420,13 +396,4 @@ function valid_access($val) {
     } else {
         return 0;
     }
-}
-
-/**
- * @brief display message
- * @param type $id
- */
-function redirect_to_message($id) {
-    header('Location: ' . $_SERVER['SCRIPT_NAME'] . '?msg=' . $id);
-    exit();
 }

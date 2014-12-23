@@ -36,46 +36,38 @@ require_once "statistics_tools_bar.php";
 
 statistics_tools($course_code, "group");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-$nameTools = $langGroupUsage;
+$pageName = $langGroupUsage;
 
-$head_content = '<script type="text/javascript" src="../auth/sorttable.js"></script>';
 initialize_group_info();
 
-$i = 0;
 $q = Database::get()->queryArray("SELECT id, name, g.description, max_members, COUNT(*) AS registered
 	              FROM `group` AS g, group_members AS gm
 		      WHERE g.course_id = ?d AND g.id = gm.group_id
 		      GROUP BY g.id", $course_id);
 if (count($q) > 0) {
-    $tool_content .= "<table class='sortable' width='99%' id='b'>
+    $tool_content .= "<div class='table-responsive'><table class='table-default'>
 		<tr>
-		  <th class='left'>$langGroupName</th>
-		  <th>$langGroupTutor</th>
-		  <th class='center'>$langRegistered</th>
-		  <th class='center'>$langMax</th>
+		  <th class='text-left'>$langGroupName</th>
+		  <th class='text-center'>$langGroupTutor</th>
+		  <th class='text-center'>$langRegistered</th>
+		  <th class='text-center'>$langMax</th>
 		</tr>";
-    foreach ($q as $group) {
-        if ($i % 2 == 0) {
-            $tool_content .= "<tr class='even'>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
-        $tool_content .= "<td class='arrow'>
+    foreach ($q as $group) {        
+        $tool_content .= "<td>
 			<a href='../group/group_usage.php?course=$course_code&amp;module=usage&amp;group_id=$group->id'>" .
                 q($group->name) . "</a></td>";
         $tool_content .= "<td>" . display_user(group_tutors($group->id)) . "</td>";
-        $tool_content .= "<td class='center'>$group->registered</td>";
+        $tool_content .= "<td class='text-center'>$group->registered</td>";
         if ($group->max_members == 0) {
-            $tool_content .= "<td class='center'>-</td>";
+            $tool_content .= "<td class='text-center'>-</td>";
         } else {
-            $tool_content .= "<td class='center'>$group->max_members</td>";
+            $tool_content .= "<td class='text-center'>$group->max_members</td>";
         }
-        $tool_content .= "</tr>";
-        $i++;
+        $tool_content .= "</tr>";        
     }
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 } else {
     $tool_content .= "<div class='alert alert-danger'>$langNoGroup</div>";
 }
 
-draw($tool_content, 2, null, $head_content);
+draw($tool_content, 2);

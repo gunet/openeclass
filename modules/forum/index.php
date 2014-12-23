@@ -28,7 +28,7 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
-$nameTools = $langForums;
+$toolName = $langForums;
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';

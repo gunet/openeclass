@@ -23,7 +23,7 @@
  * @file exercise_admin.inc.php
  * @brief Create new exercise or modify an existing one
  */
-require_once 'modules/search/exerciseindexer.class.php';
+require_once 'modules/search/indexer.class.php';
 
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
@@ -55,8 +55,7 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
-        $eidx = new ExerciseIndexer();
-        $eidx->store($exerciseId);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);        
     } else {
         $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
@@ -336,17 +335,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <strong>$langExerciseStart:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    $exerciseType
-                </div>                
-            </div>
-            <div class='row  margin-bottom-fat'>
-                <div class='col-sm-3'>
-                    <strong>$langExerciseType:</strong>
-                </div>
-                <div class='col-sm-9'>
                     $exerciseStartDate
                 </div>                
-            </div> 
+            </div>
             <div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseEnd:</strong>

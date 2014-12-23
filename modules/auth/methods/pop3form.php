@@ -36,16 +36,21 @@ $pop3host = isset($_POST['pop3host']) ? $_POST['pop3host'] : $pop3host;
 $auth_instructions = isset($_POST['auth_instructions']) ? $_POST['auth_instructions'] : $auth_instructions;
 
 $tool_content .= "
-    <tr>
-      <th class='left'>$langpop3host:</th>
-      <td><input class='FormData_InputText' name='pop3host' type='text' size='30' value='" . q($pop3host) . "' /></td>
-    </tr>
-    <tr>
-      <th class='left'>$langpop3port:</th>
-      <td>110</td>
-    </tr>
-    <tr>
-      <th class='left'>$langInstructionsAuth:</th>
-      <td><textarea class='FormData_InputText' name='auth_instructions' cols='30' rows='10'>" . q($auth_instructions) . "</textarea></td>
-    </tr>
-";
+        <div class='form-group'>
+            <label for='pop3host' class='col-sm-2 control-label'>$langpop3host:</label>
+            <div class='col-sm-10'>
+                <input class='form-control' name='pop3host' id='pop3host' type='text' value='" . q($pop3host) . "'>
+            </div>
+        </div>    
+        <div class='form-group'>
+            <label for='pop3port' class='col-sm-2 control-label'>$langpop3port:</label>
+            <div class='col-sm-10'>
+                <input type='text' class='form-control' value='110' name='pop3port' id='pop3port' disabled>
+            </div>
+        </div>    
+        <div class='form-group'>
+            <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
+            <div class='col-sm-10'>
+                <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
+            </div>
+        </div>";

@@ -30,7 +30,7 @@
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$nameTools = $langUserMerge;
+$pageName = $langUserMerge;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listusers.php', 'name' => $langListUsersActions);
 

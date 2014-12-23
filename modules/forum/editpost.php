@@ -28,12 +28,6 @@ require_once '../../include/baseTheme.php';
 require_once 'config.php';
 require_once 'functions.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/forumtopicindexer.class.php';
-require_once 'modules/search/forumpostindexer.class.php';
-
-$idx = new Indexer();
-$ftdx = new ForumTopicIndexer($idx);
-$fpdx = new ForumPostIndexer($idx);
 
 if (isset($_REQUEST['forum'])) {
     $forum_id = intval($_REQUEST['forum']);
@@ -57,7 +51,7 @@ if (isset($_POST['submit'])) {
         draw($tool_content, 2, null, $head_content);
         exit();
     }
-    $fpdx->store($post_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     if (isset($_POST['subject'])) {
         $subject = $_POST['subject'];
@@ -69,7 +63,7 @@ if (isset($_POST['submit'])) {
             draw($tool_content, 2, null, $head_content);
             exit();
         }
-        $ftdx->store($topic_id);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
     }
     header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id");
     exit;
@@ -86,7 +80,7 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    $nameTools = $langReply;
+    $pageName = $langReply;
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
     $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($myrow->name));
     $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => q($myrow->title));
@@ -114,7 +108,7 @@ if (isset($_POST['submit'])) {
                 </tr>";
     }
     $tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />" .
-            rich_text_editor('message', 10, 50, $message, "class='FormData_InputText'")
+            rich_text_editor('message', 10, 50, $message)
             . "
         </td></tr>
         <tr><td class='right'>";

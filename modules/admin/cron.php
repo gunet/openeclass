@@ -164,7 +164,7 @@ function summarizeMonthlyActions() {
     Database::get()->queryFunc("SELECT id FROM course", function($course) use (&$action) {
         $min_time = ($res = Database::get()->querySingle("SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = ?d", intval($course->id))) ? $res->min_time : time();
         if ($min_time + get_config('actions_expire_interval') * 30 * 24 * 3600 < time()) {
-            $action->summarize($course_id);
+            $action->summarize($course->id);
         }
     });
 }
@@ -173,5 +173,6 @@ function optimizeIndex() {
     global $webDir; // required for indexer
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
+    set_time_limit(0);
     $idx->getIndex()->optimize();
 }

@@ -46,7 +46,7 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
-$nameTools = $langAuthSettings;
+$pageName = $langAuthSettings;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
@@ -194,7 +194,8 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             }
             if ($is_valid) {
                 $auth_allow = 1;
-                $tool_content .= "<table width='100%'><tbody><tr>
+                $tool_content .= "                  
+                        <table width='100%'><tbody><tr>
 				<td class='alert alert-success'>$langConnYes</td></tr></tbody></table><br /><br />";
                 // Debugging CAS
                 if ($debugCAS) {
@@ -258,15 +259,25 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     if ($auth != 6) {
         $auth_data = get_auth_settings($auth);
     }
-    $tool_content .= "<form name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
+    
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'icon' => 'fa-reply',
+            'level' => 'primary-label',
+            'url' => 'auth.php'
+        )
+    ))."
+    <div class='form-wrapper'> 
+    <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<fieldset>
 	<legend>" . get_auth_info($auth) . "</legend>
-	<table width='100%' class='tbl'><tr>
-	<th colspan='2'>
-	  <input type='hidden' name='auth' value='" . intval($auth) . "' />
-	</th>
-	</tr>";
+        <input type='hidden' name='auth' value='" . intval($auth) . "'>";
 
+    if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
+        $auth = 7;
+        $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
+    }
     switch ($auth) {
         case 2: require_once 'modules/auth/methods/pop3form.php';
             break;
@@ -282,20 +293,33 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             break;
         default:
             break;
-    }
-    if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {
-        $auth = 7;
-        $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
-    }
+    }       
     if ($auth != 6 && $auth != 7) {
-        $tool_content .= "<tr><td colspan='2'><div class='alert alert-info'>$langTestAccount</div></td></tr>
-		<tr><th width='220' class='left'>$langUsername: </th>
-		<td><input size='30' class='FormData_InputText' type='text' name='test_username' value='" . q(canonicalize_whitespace($test_username)) . "' autocomplete='off'></td></tr>
-		<tr><th class='left'>$langPass: </th>
-		<td><input size='30' class='FormData_InputText' type='password' name='test_password' value='" . q($test_password) . "' autocomplete='off'></td></tr>";
+        $tool_content .= "
+                <div class='alert alert-info'>$langTestAccount</div>
+                <div class='form-group'>
+                    <label for='test_username' class='col-sm-2 control-label'>$langUsername:</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' name='test_username' id='test_username' value='" . q(canonicalize_whitespace($test_username)) . "' autocomplete='off'>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <label for='test_password' class='col-sm-2 control-label'>$langPass:</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='password' name='test_password' id='test_password' value='" . q($test_password) . "' autocomplete='off'>
+                    </div>
+                </div>";                 
     }
-    $tool_content .= "<tr><th>&nbsp;</th><td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td></tr>";
-    $tool_content .= "</table></fieldset></form>";
+    $tool_content .= "
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+                        <a class='btn btn-default' href='auth.php'>$langCancel</a>                
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>";
 }
 
 draw($tool_content, 3);

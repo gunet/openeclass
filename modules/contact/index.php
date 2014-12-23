@@ -33,13 +33,13 @@ if (isset($_REQUEST['course_id'])) {
 }
 
 $title = course_id_to_title($course_id);
-$nameTools = $langContactProf;
+$pageName = $langContactProf;
 
 $userdata = Database::get()->querySingle("SELECT givenname, surname, email FROM user WHERE id = ?d", $uid);
 
 if (empty($userdata->email)) {
     if ($uid) {
-        $tool_content .= sprintf('<p>' . $langEmailEmpty . '</p>', $urlServer . 'modules/profile/profile.php');
+        $tool_content .= sprintf('<p>' . $langEmailEmpty . '</p>', $urlServer . 'main/profile/profile.php');
     } else {
         $tool_content .= sprintf('<p>' . $langNonUserContact . '</p>', $urlServer);
     }

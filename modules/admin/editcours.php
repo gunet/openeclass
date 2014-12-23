@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,30 +20,10 @@
  * ======================================================================== */
 
 
-/* ===========================================================================
-  editcours.php
-  @last update: 31-05-2006 by Pitsiougas Vagelis
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Pitsiougas Vagelis <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Show all information of a course and give links to edit
-
-  This script allows the administrator to see all available information of
-  a course and select other links to edit that information
-
-  The user can : - See all available course information
-  - Select a link to edit some information
-  - Return to course list
-
-  @Comments: The script is organised in three sections.
-
-  1) Gather course information
-  2) Embed available choices
-  3) Display all on an HTML page
-
-  @todo: Create a valid link for course statistics
-
-  ============================================================================== */
+/**
+ * @file editcours.php
+ * @brief modify course details
+ */
 
 $require_departmentmanage_user = true;
 
@@ -72,22 +52,27 @@ $cId = course_code_to_id($c);
 validateCourseNodes($cId, isDepartmentAdmin());
 
 // Define $nameTools
-$nameTools = $langCourseEdit;
+$pageName = $langCourseEdit;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
+
+$tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "searchcours.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
 
 // A course has been selected
 if (isset($c)) {    
     // Get information about selected course
     $row = Database::get()->querySingle("SELECT course.code as code, course.title as title , course.prof_names as prof_names, course.visible as visible
 		  FROM course
-		 WHERE course.code = ?s", $_GET['c']);    
+		 WHERE course.code = ?s", $_GET['c']);   
+    
     // Display course information and link to edit
-    $tool_content .= "<fieldset>
-                <legend>" . $langCourseInfo . " <a href='infocours.php?c=" . q($c) . "'>
-                <img src='$themeimg/edit.png' alt='' title='" . q($langModify) . "'></a></legend>
-	<table class='tbl' width='100%'>";
-
+    $tool_content .= "<table class='table-default'>
+                <th colspan='2'>" . $langCourseInfo . " ".icon('fa-gear',$langModify, "infocours.php?c=" . q($c) . "")."</th>";
+    
     $departments = $course->getDepartmentIds($cId);
     $i = 1;
     foreach ($departments as $dep) {
@@ -113,12 +98,10 @@ if (isset($c)) {
 	  <th><b>" . $langTutor . ":</b></th>
 	  <td>" . q($row->prof_names) . "</td>
 	</tr>
-	</table>
-	</fieldset>";
+	</table>";
     // Display course quota and link to edit
-    $tool_content .= "<fieldset>
-	<legend>" . $langQuota . " <a href='quotacours.php?c=" . q($c) . "'><img src='$themeimg/edit.png' alt='' title='" . q($langModify) . "'></a></legend>
-        <table width='100%' class='tbl'>
+    $tool_content .= "<table class='table-default'>
+	<th colspan='2'>$langQuota ".icon('fa-gear', $langModify, "quotacours.php?c=" . q($c) . ""). "
 	<tr>
 	  <td colspan='2'><div class='sub_title1'>$langTheCourse " . q($row->title) . " $langMaxQuota</div></td>
 	  </tr>";
@@ -150,13 +133,10 @@ if (isset($c)) {
 	  <td>$langLegend <b>$langDropBox</b>:</td>
 	  <td>" . $drq . "</td>
 	</tr>";
-    $tool_content .= "</table></fieldset>";
+    $tool_content .= "</table>";
     // Display course type and link to edit
-    $tool_content .= "<fieldset>
-                <legend>$langCourseStatus
-                        <a href='statuscours.php?c=" . q($c) . "'><img src='$themeimg/edit.png' alt='".q($langModify)."' title='".q($langModify)."'></a>
-                </legend>
-                <table width='100%' class='tbl'>";
+    $tool_content .= "<table class='table-default'>
+                <th colspan='2'>$langCourseStatus ".icon('fa-gear', $langModify, "statuscours.php?c=" . q($c) . "")."";
     $tool_content .= "<tr><th width='250'>" . $langCurrentStatus . ":</th><td>";
     switch ($row->visible) {
         case COURSE_CLOSED:
@@ -172,12 +152,9 @@ if (isset($c)) {
             $tool_content .= $langCourseInactive;
             break;
     }
-    $tool_content .= "</td></tr></table></fieldset>";
+    $tool_content .= "</td></tr></table>";
     // Display other available choices
-    $tool_content .= "
-	<fieldset>
-	<legend>" . $langOtherActions . "</legend>
-        <table width='100%' class='tbl'>";
+    $tool_content .= "<table width='100%' class='tbl'><th colspan='2'>$langOtherActions</th>";
     // Users list
     $tool_content .= "
 	<tr>
@@ -202,14 +179,11 @@ if (isset($c)) {
 	<tr>
 	  <td><a href='delcours.php?c=" . $cId . "'>" . $langCourseDel . "</a></td>
 	</tr>";
-    $tool_content .= "</table></fieldset>";        
+    $tool_content .= "</table>";
 }
 // If $c is not set we have a problem
 else {
     // Print an error message
-    $tool_content .= "<br><p align='right'>$langErrChoose</p>";    
+    $tool_content .= "<div class='alert alert-warning'>$langErrChoose</div>";
 }
-// Display link to go back to listcours.php
-    $tool_content .= "<br><p align='right'><a href='searchcours.php'>" . $langBack . "</a></p>";
-
 draw($tool_content, 3);

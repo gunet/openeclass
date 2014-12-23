@@ -23,7 +23,7 @@ $require_current_course = FALSE;
 require_once '../../include/baseTheme.php';
 require_once 'indexer.class.php';
 require_once 'courseindexer.class.php';
-$nameTools = $langSearch;
+$pageName = $langSearch;
 
 // exit if search is disabled
 if (!get_config('enable_search')) {
@@ -109,11 +109,11 @@ $tool_content .= "
 foreach ($hits as $hit) {    
     $course = Database::get()->querySingle("SELECT code, title, public_code, prof_names, keywords FROM course WHERE id = ?d", $hit->pkid);
 
-    // search in-course
+    // search in-course: Commented out @ 2014-11-24 because too costly to run 11 index sub-queries for each hit result
     $urlParam = '';
-    if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous)) {
-        $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
-    }
+    //if (isset($_POST['search_terms']) && search_in_course($_POST['search_terms'], $hit->pkid, $anonymous)) {
+    //    $urlParam = '?from_search=' . urlencode($_POST['search_terms']);
+    //}
     
     $tool_content .= "<tr><td>
                       <a href='../../courses/" . q($course->code) . "/" . $urlParam . "'>" . q($course->title) . "

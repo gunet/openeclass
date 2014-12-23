@@ -26,7 +26,7 @@ $require_help = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 
-$nameTools = $langAddDescription;
+$pageName = $langAddDescription;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : '';
 
@@ -34,39 +34,48 @@ if (isset($_GET['delete'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ''
 		WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
     if ($sql->affectedRows > 0) {
-        $tool_content .= "<div class='alert alert-success'>$langBlockDeleted<br /><br />";
+        Session::Messages($langBlockDeleted, 'alert-success');
     }
-    $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
+    redirect_to_home_page("modules/group/index.php?course=$course_code");
 } else if (isset($_POST['submit'])) {
     $sql = Database::get()->query("UPDATE group_members SET description = ?s
 			WHERE group_id = ?d AND user_id = ?d", $_POST['group_desc'], $group_id, $uid);
     if ($sql->affectedRows > 0) {
-        $tool_content .= "<div class='alert alert-success'>$langRegDone<br /><br />";
+        Session::Messages($langRegDone, 'alert-success');
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langNoChanges<br /><br />";
+        Session::Messages($langNoChanges);
     }
-    $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
+    redirect_to_home_page("modules/group/index.php?course=$course_code");
 } else { // display form
     $description = Database::get()->querySingle("SELECT description FROM group_members
-			WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
-    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-	  <table class='FormData' width='99%' align='left'>
-	  <tbody>
-	  <tr>
-	    <th>&nbsp;</th>
-	    <td>$langGroupDescInfo</td>
-	  </tr>
-	  <tr>
-	    <th class='left'>$langDescription</th>
-		<td><textarea class=auth_input name='group_desc' rows='10' cols='80'>" . @$description . "</textarea></td>
-	  </tr>
-	  <tr>
-	    <th>&nbsp;</th>
-	    <input type='hidden' name='group_id' value='$group_id'>
-	<td><input class='btn btn-primary' type='submit' name='submit' value='" . q($langAddModify) . "' /></td>
-	  </tr>
-	  </tbody>
-	  </table>
-	  </form>";
+			WHERE group_id = ?d AND user_id = ?d", $group_id, $uid)->description;
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'icon' => 'fa-reply',
+            'url' => "index.php?course=$course_code",
+            'level' => 'primary-label'
+        )
+    ))."
+    <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+            <input type='hidden' name='group_id' value='$group_id'>
+            <div class='form-group'>
+                <div class='col-xs-12'>$langGroupDescInfo</div>
+            </div>
+            <div class='form-group'>
+              <label for='group_desc' class='col-sm-2 control-label'>$langDescription:</label>
+              <div class='col-sm-10'>
+                <textarea class='form-control' name='group_desc' id='group_desc' rows='10'>" . @$description . "</textarea>
+              </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' name='submit' value='" . q($langAddModify) . "'>
+                    <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                </div>
+            </div>            
+        </form>
+    </div>";
 }
 draw($tool_content, 2);

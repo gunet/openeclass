@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.6
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -22,7 +22,6 @@
 
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
-require_once 'admin.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
@@ -30,7 +29,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$nameTools = $langMultiDelUser;
+$pageName = $langMultiDelUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 
@@ -52,15 +51,17 @@ if (isset($_POST['submit'])) {
                 // full deletion
                 $success = deleteUser($u, true);
                 // progress report
-                if ($success === true)
-                    $tool_content .= "<p>$langUserWithId $line $langWasDeleted.</p>\n";
-                else
-                    $tool_content .= "<p>$langErrorDelete: $line.</p>\n";
+                if ($success === true) {
+                    Session::Messages("$langUserWithId $line $langWasDeleted", 'alert-success');
+                    redirect_to_home_page('modules/admin/multideluser.php');
+                } else {
+                    Session::Messages("$langErrorDelete: $line", 'alert-danger');
+                    redirect_to_home_page('modules/admin/multideluser.php');
+                }
             }
         }
-
-        $line = strtok("\n");
     }
+    redirect_to_home_page('modules/admin/multideluser.php');
 } else {
 
     $usernames = '';
@@ -201,30 +202,33 @@ if (isset($_POST['submit'])) {
         }, $terms);
     }
 
-
-    $tool_content .= "<div class='noteit'>" . $langMultiDelUserInfo . "</div>
-        <form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
-        <fieldset>
-        <legend>" . $langMultiDelUserData . "</legend>
-        <table class='tbl' width='100%'>
-        <tr>
-            <th>" . $langUsersData . ":</th>
-            <td><textarea class='auth_input' name='user_names' rows='30' cols='60'>$usernames</textarea></td>
-        </tr>
-        <tr>
-            <th>&nbsp;</th>
-            <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' /></td>
-        </tr>
-        </table>
-        </fieldset>
-        </form>";
-}
-
 $tool_content .= action_bar(array(
     array('title' => $langBack,
         'url' => "index.php",
         'icon' => 'fa-reply',
         'level' => 'primary-label')));
+
+    $tool_content .= "
+    <div class='alert alert-info'>$langMultiDelUserInfo</div>
+        <div class='form-wrapper'>
+        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
+            <fieldset>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langMultiDelUserData:</label>
+                    <div class='col-sm-9'>
+                        <textarea class='auth_input form-control' name='user_names' rows='30'>$usernames</textarea>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>            
+                        <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' />
+                        <a href='index.php' class='btn btn-default'>$langCancel</a>
+                    </div>
+                </div>        
+            </fieldset>
+        </form>
+    </div>";
+}
 
 draw($tool_content, 3, 'admin', $head_content);
 

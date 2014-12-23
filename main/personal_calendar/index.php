@@ -112,7 +112,7 @@ function show_day(day,month,year){
 //$action = new action();
 //$action->record(MODULE_ID_ANNOUNCE);
 
-$nameTools = $langMyAgenda;
+$pageName = $langMyAgenda;
 
 ModalBoxHelper::loadModalBox();
 load_js('tools.js');
@@ -217,9 +217,9 @@ if (isset($message) && $message) {
 /* display form */
 if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) {
     if (isset($_GET['modify'])) {
-        $langAdd = $nameTools = $langModifEvent;
+        $langAdd = $pageName = $langModifEvent;
     } else {
-        $nameTools = $langAddEvent;
+        $pageName = $langAddEvent;
     }
     $navigation[] = array('url' => "index.php", 'name' => $langEvents);
     if (!isset($eventToModify))
@@ -369,15 +369,15 @@ $tool_content .= '<div id="calendar_wrapper" class="row">
                     <div id="calendar-header">
                         <div class="pull-right form-inline">
                             <div class="btn-group">
-                                    <button class="btn btn-primary btn-sm" data-calendar-nav="prev">&larr; ' . $langPrevious . '</button>
+                                    <button class="btn btn-primary btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
                                     <button class="btn btn-sm" data-calendar-nav="today">' . $langToday . '</button>
-                                    <button class="btn btn-primary btn-sm" data-calendar-nav="next">' . $langNext . ' &rarr;</button>
+                                    <button class="btn btn-primary btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
                             </div>
                             <div class="btn-group">
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="year">' . $langYear . '</button>
-                                    <button class="btn btn-warning btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="week">' . $langWeek . '</button>
-                                    <button class="btn btn-warning btn-sm" data-calendar-view="day">' . $langDay . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-view="year">' . $langYear . '</button>
+                                    <button class="btn btn-default btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-view="week">' . $langWeek . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-view="day">' . $langDay . '</button>
                             </div>
                         </div>
                         <h4></h4>
@@ -398,6 +398,7 @@ $tool_content .= '<div id="calendar_wrapper" class="row">
                             $(".calendar-header h4").text(this.getTitle());
                             $(".btn-group button").removeClass("active");
                             $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                            $("button[data-calendar-nav=\'today\']").text(this.getTitle());
                             }
             }
         );

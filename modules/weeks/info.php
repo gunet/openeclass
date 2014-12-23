@@ -39,9 +39,9 @@ if (isset($_GET['edit'])) { // display form for editing course unit
     $weektitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
     $weekdescr = $cu->comments;
     $week_id = $cu->id;
-    $nameTools = $langEditWeek;
+    $pageName = $langEditWeek;
 } else {
-    $nameTools = $langAddWeek;
+    $pageName = $langAddWeek;
     $weekdescr = $weektitle = '';
 }
 
@@ -50,7 +50,7 @@ $action = "${urlServer}courses/$course_code/";
 
 $tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'weektitle');\">
     <fieldset>
-    <legend>$nameTools</legend>";
+    <legend>$pageName</legend>";
 if (isset($week_id)) {
     $tool_content .= "<input type='hidden' name='week_id' value='$week_id'>";
 }

@@ -20,11 +20,10 @@
  * ======================================================================== */
 
 /**
- *      @file searchcours.php
- * 	@authors list: Karatzidis Stratos <kstratos@uom.gr>
- * 		       Pitsiougas Vagelis <vagpits@uom.gr>
- *      @brief: search on courses by title, code, type and faculty 	
+ * @file searchcours.php
+ * @brief search on courses by title, code, type and faculty
  */
+
 $require_departmentmanage_user = true;
 
 require_once '../../include/baseTheme.php';
@@ -49,24 +48,31 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-$nameTools = $langSearchCourse;
+$pageName = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
+
+$tool_content .= action_bar(array(
+    array('title' => $langBack,
+        'url' => "index.php",
+        'icon' => 'fa-reply',
+        'level' => 'primary-label')));
 
 $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $date = '';
 // search form
-$tool_content .= "<form action='listcours.php?search=yes' method='get'>
-    <fieldset>
-      <legend>" . $langSearchCriteria . " " . @$newsearch . "</legend>
-      <table width='100%' class='tbl'>
-      <tr>
-        <th class='left' width='150'>$langTitle:</th>
-        <td><input type='text' name='formsearchtitle' size='40' value='" . @$searchtitle . "'></td>
-      </tr>
-      <tr>
-        <th class='left'><b>$langCourseCode:</b></th>
-        <td><input type='text' name='formsearchcode' size='40' value='" . @$searchcode . "'></td>
-      </tr>";
+$tool_content .= "<div class='form-wrapper'>
+    <form role='form' class='form-horizontal' action='listcours.php?search=yes' method='get'>
+    <fieldset>      
+      <div class='form-group'>
+      <label for='formsearchtitle' class='col-sm-2 control-label'>$langTitle:</label>
+        <div class='col-sm-10'><input type='text' class='form-control' id='formsearchtitle' name='formsearchtitle' value='" . @$searchtitle . "'></div>
+      </div>
+      <div class='form-group'>
+        <label for='formsearchcode' class='col-sm-2 control-label'>$langCourseCode:</label>
+        <div class='col-sm-10'>
+            <input type='text' class='form-control' name='formsearchcode' value='" . @$searchcode . "'>           
+        </div>
+      </div>";
 
 if (isset($_GET['searchcode'])) {
     switch ($searchcode) {
@@ -88,35 +94,30 @@ if (isset($_GET['searchcode'])) {
     }
 }
 
-$tool_content .= "<tr><th class='left'><b>$langCourseVis:</b></th>
-        <td>
-          <select name='formsearchtype'>
+$tool_content .= "<div class='form-group'>
+        <label for='formsearchtype' class='col-sm-2 control-label'>$langCourseVis:</label>
+        <div class='col-sm-10'>
+          <select class='form-control' name='formsearchtype'>
            <option value='-1' " . @$typeSel[-1] . ">$langAllTypes</option>
            <option value='2' " . @$typeSel[2] . ">$langTypeOpen</option>
            <option value='1' " . @$typeSel[1] . ">$langTypeRegistration</option>
            <option value='0' " . @$typeSel[0] . ">$langTypeClosed</option>
            <option value='3' " . @$typeSel[3] . ">$langCourseInactiveShort</option>
           </select>
-        </td>
-      </tr>";
+        </div>
+      </div>";
 
-$tool_content .= "<tr><th class='left'>$langCreationDate:</th><td>";
 $reg_flag_data = array();
 $reg_flag_data[1] = $langAfter;
 $reg_flag_data[2] = $langBefore;
-$tool_content .= selection($reg_flag_data, 'reg_flag', $reg_flag);
-
-$tool_content .= "<div class='input-append date form-group' id='id_date' data-date='$date' data-date-format='dd-mm-yyyy'>";
-$tool_content .= "<div class='col-xs-11'>        
-            <input class='form-control' name='date' type='text' value='$date'>
-        </div>
-        <span class='add-on'><i class='fa fa-times'></i></span>
-        <span class='add-on'><i class='fa fa-calendar'></i></span>
-    </div>";
-
-$tool_content .= "</td></tr>";
-$tool_content .= "<tr><th class='left'>" . $langFaculty . ":</th><td>";
-
+$tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langCreationDate:</label>";        
+$tool_content .= "<div class='col-sm-5'>".selection($reg_flag_data, 'reg_flag', $reg_flag, 'class="form-control"')."</div>";
+$tool_content .= "<div class='col-sm-5'>";
+$tool_content .= "<input class='form-control' id='id_date' name='date' type='text' value='$date' data-date-format='dd-mm-yyyy' placeholder='$langCreationDate'>                    
+                </div>";
+$tool_content .= "</div>";
+$tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langFaculty:</label>";
+$tool_content .= "<div class='col-sm-10'>";
 if (isDepartmentAdmin())
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
 else
@@ -124,16 +125,13 @@ else
 
 $head_content .= $js;
 $tool_content .= $html;
-$tool_content .= "</td></tr>";
+$tool_content .= "</div></div>";
+$tool_content .= "<div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <input class='btn btn-primary' type='submit' name='search_submit' value='$langSearch'>
+                        <a href='index.php' class='btn btn-default'>$langCancel</a>        
+                    </div>
+      </div>";
+$tool_content .= "</fieldset></form></div>";
 
-$tool_content .= "<tr><th>&nbsp;</th>
-        <td class='right'><input class='btn btn-primary' type='submit' name='search_submit' value='$langSearch'></td>
-      </tr>";
-$tool_content .= "</table></fieldset></form>";
-
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 draw($tool_content, 3, null, $head_content);

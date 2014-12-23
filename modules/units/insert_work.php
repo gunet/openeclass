@@ -26,7 +26,7 @@
  * @global type $tool_content
  * @global type $langTitle
  * @global type $langChoice
- * @global type $m
+ * @global type $langGroupWorkDeadline_of_Submission
  * @global type $langAddModulesButton
  * @global type $langNoAssign
  * @global type $langActive
@@ -34,45 +34,40 @@
  * @global type $langVisible
  * @global type $course_id
  * @global type $course_code
- * @global type $themeimg
  */
 function list_assignments() {
-    global $id, $tool_content, $langTitle, $langChoice, $m,
+    global $id, $tool_content, $langTitle, $langChoice, $langGroupWorkDeadline_of_Submission,
     $langAddModulesButton, $langNoAssign, $langActive, $langInactive,
-    $langVisible, $course_id, $course_code, $themeimg;
+    $langVisible, $course_id, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM assignment WHERE course_id = ?d ORDER BY active, title", $course_id);
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
-                "<input type='hidden' name='id' value='$id' />" .
-                "<table width='99%' class='tbl_alt'>" .
+                "<input type='hidden' name='id' value='$id'>" .
+                "<table class='table-default'>" .
                 "<tr>" .
-                "<th class='left'>&nbsp;$langTitle</th>" .
+                "<th class='text-left'>&nbsp;$langTitle</th>" .
                 "<th width='110'>$langVisible</th>" .
-                "<th width='120'>$m[deadline]</th>" .
+                "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
                 "<th width='80'>$langChoice</th>" .
-                "</tr>";
-        $i = 0;        
+                "</tr>";        
         foreach ($result as $row) {
-            $visible = $row->active ?
-                    "<img title='$langActive' src='$themeimg/visible.png' />" :
-                    "<img title='$langInactive' src='$themeimg/invisible.png' />";
-            $description = empty($row->description) ? '' :
-                    "<div>$row->description</div>";
-            if ($i % 2) {
-                $rowClass = "class='odd'";
+            
+            if ($row->active) {
+                $visible = icon('fa-eye', $langActive);
             } else {
-                $rowClass = "class='even'";
-            }
-            $tool_content .= "<tr $rowClass>" .
+                $visible = icon('fa-eye-slash', $langInactive);
+            }            
+            $description = empty($row->description) ? '' :
+                    "<div>$row->description</div>";            
+            $tool_content .= "<tr>" .
                     "<td>&laquo; " . q($row->title) . " $description</td>" .
-                    "<td class='center'>$visible</td>" .
-                    "<td class='center'>$row->submission_date</td>" .
-                    "<td class='center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
-                    "</tr>";
-            $i++;
+                    "<td class='text-center'>$visible</td>" .
+                    "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
+                    "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
+                    "</tr>";            
         }
         $tool_content .= "<tr>" .
                 "<th colspan='4'><div align='right'>" .

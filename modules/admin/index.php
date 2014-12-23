@@ -22,8 +22,9 @@
 $require_usermanage_user = TRUE;
 
 require_once '../../include/baseTheme.php';
+require_once 'modalconfirmation.php';
 
-$nameTools = $langAdmin;
+$pageName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 
 // Construct a table with platform identification info
@@ -130,11 +131,6 @@ if (get_config('enable_indexing')) {
     require_once 'modules/search/indexer.class.php';
     $idx = new Indexer();
 
-    // optimize index
-    if (isset($_GET['optimize'])) {
-        $idx->getIndex()->optimize();
-    }
-
     $numDocs = $idx->getIndex()->numDocs();
     $isOpt = (!$idx->getIndex()->hasDeletions()) ? $m['yes'] : $m['no'];
 
@@ -154,12 +150,15 @@ if (get_config('enable_indexing')) {
                 if ($idx->getIndex()->hasDeletions()) {
                     $tool_content .= "
                     <dt></dt>
-                    <dd><a href='" . $_SERVER['SCRIPT_NAME'] . "?optimize'>$langOptimize</a></dd>";
+                    <dd><a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a></dd>";
                 }
                 $tool_content .="
+                <dt></dt>
+                <dd><a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a></dd>
             </dl>
         </div>
     </div>";
+    $tool_content .= modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
 }
 
 // CRON RELATED
@@ -186,5 +185,70 @@ if (count($res) >= 1) {
 </div>";
 }
 
+$head_content = <<<EOF
+<script type='text/javascript'>
+/* <![CDATA[ */
 
-draw($tool_content, 3);
+var optwindow = null;
+var reidxwindow = null;
+                
+function optpopup(url, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+    
+    if (optwindow == null || optwindow.closed) {
+        optwindow = window.open(url, 'optpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+        if (window.focus && optwindow !== null) {
+            optwindow.focus();
+        }
+    } else {
+        optwindow.focus();
+    }
+    
+    return false;
+}
+                
+function reidxpopup(url, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+    
+    if (reidxwindow == null || reidxwindow.closed) {
+        reidxwindow = window.open(url, 'reidxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+        if (window.focus && reidxwindow !== null) {
+            reidxwindow.focus();
+        }
+    } else {
+        reidxwindow.focus();
+    }
+    
+    return false;
+}
+ 
+$(document).ready(function() {
+    
+    $('#confirmReindexDialog').modal({
+        show: false,
+        keyboard: false,
+        backdrop: 'static'
+    });
+        
+    $("#confirmReindexCancel").click(function() {
+        $("#confirmReindexDialog").modal("hide");
+    });
+        
+    $("#confirmReindexOk").click(function() {
+        $("#confirmReindexDialog").modal("hide");
+        reidxpopup('../search/idxpopup.php?reindex', 600, 500);
+    });
+    
+    $('#reindex_link').click(function(event) {
+        event.preventDefault();
+        $("#confirmReindexDialog").modal("show");
+    });
+    
+});
+
+/* ]]> */
+</script>
+EOF;
+draw($tool_content, 3, null, $head_content);

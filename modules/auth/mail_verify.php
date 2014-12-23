@@ -31,7 +31,7 @@
 $mail_ver_excluded = true;
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
-$nameTools = $langMailVerify;
+$pageName = $langMailVerify;
 
 $code = (isset($_GET['h']) && ctype_xdigit($_GET['h'])) ? $_GET['h'] : NULL;
 $req_id = (isset($_GET['rid']) && is_numeric($_GET['rid'])) ? intval($_GET['rid']) : NULL;
@@ -81,7 +81,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                             "$langAm: $am\n" .
                             "$langProfUname: $username\n$langProfEmail : $usermail\n" .
                             "$contactphone: $userphone\n\n\n$logo\n\n";
-
+                    $emailAdministrator = get_config('email_sender');        
                     if (!send_mail($siteName, $emailAdministrator, '', get_config('email_helpdesk'), $subject, $MailMessage, $charset, "Reply-To: $usermail")) {
                         $user_msg = $langMailErrorMessage;
                     } else {

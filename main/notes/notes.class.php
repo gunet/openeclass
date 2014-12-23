@@ -33,8 +33,8 @@
  *  
  */
 
-require_once 'modules/search/noteindexer.class.php';
 require_once 'include/log.php';
+require_once 'modules/search/indexer.class.php';
 
 class Notes {
     
@@ -101,7 +101,7 @@ class Notes {
                                          reference_obj_type = ?s,
                                          reference_obj_id = ?d,
                                          reference_obj_course = ?d", purify($content), $title, $uid, $order, $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'])->lastInsertID;
-        
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_NOTE, $noteid);
         Log::record(0, MODULE_ID_NOTES, LOG_INSERT, array('user_id' => $uid, 'id' => $noteid,
         'title' => $title,
         'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
@@ -119,10 +119,7 @@ class Notes {
         global $uid;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
         Database::get()->query("UPDATE note SET title = ?s, content = ?s, reference_obj_module = ?d, reference_obj_type = ?s, reference_obj_id = ?d, reference_obj_course = ?d WHERE id = ?d", $title, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $noteid);
-                
-        $noteidx = new NoteIndexer();
-        $noteidx->store($noteid);
-        
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_NOTE, $noteid);
         Log::record(0, MODULE_ID_NOTES, LOG_MODIFY, array('user_id' => $uid, 'id' => $noteid,
         'title' => $title,
         'content' => ellipsize_html(canonicalize_whitespace(strip_tags($content)), 50, '+')));
@@ -134,7 +131,6 @@ class Notes {
      */
     public static function moveup_note($noteid){
         global $uid;
-        $noteidx = new NoteIndexer();
         $log_type = LOG_MODIFY;
         $thisorder = Database::get()->querySingle("SELECT `order` FROM note WHERE id=?d", $noteid);
         $swapnote = Database::get()->querySingle("SELECT id, `order` FROM note WHERE user_id = ?d AND `order` > ?d ORDER BY `order` LIMIT 1", $uid, $thisorder);
@@ -151,7 +147,6 @@ class Notes {
      */
     public static function movedown_note($noteid){
         global $uid;
-        $noteidx = new NoteIndexer();
         $log_type = LOG_MODIFY;
         $thisorder = Database::get()->querySingle("SELECT `order` FROM note WHERE id=?d", $noteid);
         $swapnote = Database::get()->querySingle("SELECT id, `order` FROM note WHERE  user_id = ?d AND `order` < ?d ORDER BY `order` DESC LIMIT 1", $uid, $thisorder);
@@ -170,10 +165,7 @@ class Notes {
         $note = Database::get()->querySingle("SELECT title, content FROM note WHERE id = ?d ", $noteid);
         $content = ellipsize_html(canonicalize_whitespace(strip_tags($note->content)), 50, '+');
         Database::get()->query("DELETE FROM note WHERE id = ?d", $noteid);
-        
-        $noteidx = new NoteIndexer();
-        $noteidx->remove($noteid);
-        
+        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_NOTE, $noteid);
         Log::record(0, MODULE_ID_NOTES, LOG_DELETE, array('user_id' => $uid, 'id' => $noteid,
             'title' => $note->title,
             'content' => $content));
@@ -186,10 +178,7 @@ class Notes {
     public static function delete_all_notes($user_id = NULL){
         global $uid;
         Database::get()->query("DELETE FROM note WHERE user_id = ?d", $uid);
-        
-        $noteidx = new NoteIndexer();
-        $noteidx->removeByUser($uid);
-        
+        Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUSER, Indexer::RESOURCE_NOTE, $uid);
         Log::record(0, MODULE_ID_NOTES, LOG_DELETE, array('user_id' => $uid, 'id' => 'all'));
     }
     

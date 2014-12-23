@@ -64,7 +64,7 @@ require_once 'include/log.php';
 $style = "";
 
 if (!add_units_navigation(TRUE)) {
-    $nameTools = $langLearningPaths;
+    $pageName = $langLearningPaths;
 }
 
 if (isset($_GET['cmd']) and $_GET['cmd'] == 'export' and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor) {
@@ -248,7 +248,7 @@ if ($is_editor) {
                     }
                 } else { // create form requested
                     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-                    $nameTools = $langCreateNewLearningPath;                  
+                    $pageName = $langCreateNewLearningPath;                  
                     $dialogBox = action_bar(array(
                         array('title' => $langBack,
                             'url' => "index.php?course=$course_code",

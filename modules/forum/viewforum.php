@@ -26,23 +26,18 @@ $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/forumtopicindexer.class.php';
-require_once 'modules/search/forumpostindexer.class.php';
-
-$idx = new Indexer();
-$ftdx = new ForumTopicIndexer($idx);
-$fpdx = new ForumPostIndexer($idx);
 
 if (!add_units_navigation(true)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 }
 
-require_once 'config.php';
-require_once 'functions.php';
+require_once 'modules/forum/config.php';
+require_once 'modules/forum/functions.php';
 
 if ($is_editor) {
     load_js('tools.js');
 }
+$toolName = $langForums;
 
 $paging = true;
 $next = 0;
@@ -60,12 +55,11 @@ $myrow = Database::get()->querySingle("SELECT id, name FROM forum WHERE id = ?d 
 $forum_name = $myrow->name;
 $forum_id = $myrow->id;
 
-$nameTools = q($forum_name);
-
 if (isset($_GET['empty'])) { // if we come from newtopic.php
     $tool_content .= "<div class='alert alert-warning'>$langEmptyNewTopic</div>";
 }
 
+$pageName = q($forum_name);
 if ($can_post) {
     $tool_content .= 
             action_bar(array(
@@ -73,7 +67,12 @@ if ($can_post) {
                     'url' => "newtopic.php?course=$course_code&amp;forum=$forum_id",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success')));
+                    'button-class' => 'btn-success'),
+                array('title' => $langBack,
+                    'url' => "index.php?course=$course_code",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')                
+                ));
 }
 
 /*
@@ -96,20 +95,20 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > $topics_per_page) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    $tool_content .= "<table width='100%'><tr>";
-    $tool_content .= "<td width='50%' align='left'><span class='row'><strong class='pagination'>
+    $tool_content .= "<div class='table-responsive'><table class-'table-default' width='100%'><tr>";
+    $tool_content .= "<td width='50%' class='text-left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
     $current_page = $first_topic / $topics_per_page + 1; // current page
     for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
         if ($current_page == $x) {
-            $tool_content .= "$x";
+            $tool_content .= "$x&nbsp;";
         } else {
             $start = ($x - 1) * $topics_per_page;
-            $tool_content .= "<a href='$base_url&amp;start=$start'>$x</a>";
+            $tool_content .= "<a href='$base_url&amp;start=$start'>$x&nbsp;</a>";
         }
     }
     $tool_content .= "</span></strong></span></td>";
-    $tool_content .= "<td colspan='4' align='right'>";
+    $tool_content .= "<td colspan='4' class='text-right'>";
 
     $next = $first_topic + $topics_per_page;
     $prev = $first_topic - $topics_per_page;
@@ -125,7 +124,7 @@ if ($total_topics > $topics_per_page) { // navigation
     } elseif ($start - $topics_per_page < $total_topics) { // end
         $tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>";
     }
-    $tool_content .= "</td></tr></table>";
+    $tool_content .= "</td></tr></table></div>";
 }
 
 // delete topic
@@ -151,19 +150,21 @@ if (($is_editor) and isset($_GET['topicdel'])) {
             Database::get()->query("INSERT INTO forum_user_stats (user_id, num_posts, course_id) VALUES (?d,?d,?d)", $author, $forum_user_stats->c, $course_id);
         }
     }
-    $fpdx->removeByTopic($topic_id);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
     $number_of_topics = get_total_topics($forum_id);
     $num_topics = $number_of_topics - 1;
     if ($number_of_topics < 0) {
         $num_topics = 0;
     }
     Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic_id, $forum_id);
-    $ftdx->remove($topic_id);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
     Database::get()->query("UPDATE forum SET num_topics = ?d,
                                 num_posts = num_posts-$number_of_posts
                             WHERE id = ?d
                                 AND course_id = ?d", $num_topics, $forum_id, $course_id);
     Database::get()->query("DELETE FROM forum_notify WHERE topic_id = ?d AND course_id = ?d", $topic_id, $course_id);
+    Session::Messages($langDeletedMessage, 'alert-success');
+    redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");   
 }
 
 // modify topic notification
@@ -204,9 +205,9 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
         ORDER BY topic_time DESC LIMIT $first_topic, $topics_per_page", $forum_id);
 
 
-if (count($result) > 0) { // topics found
-    $tool_content .= "
-	<table width='100%' class='table-default'>
+if (count($result) > 0) { // topics found    
+    $tool_content .= "<div class='table-responsive'>
+	<table class='table-default'>
 	<tr>
 	  <th colspan='2'>&nbsp;$langSubject</th>
 	  <th width='70' class='text-center'>$langAnswers</th>
@@ -214,14 +215,8 @@ if (count($result) > 0) { // topics found
 	  <th width='80' class='text-center'>$langSeen</th>
 	  <th width='190' class='text-center'>$langLastMsg</th>
 	  <th width='80' class='text-center'>" . icon('fa-gears') . "</th>
-	</tr>";
-    $i = 0;
-    foreach ($result as $myrow) {
-        if ($i % 2 == 1) {
-            $tool_content .= "<tr class='odd'>";
-        } else {
-            $tool_content .= "<tr class='even'>";
-        }
+	</tr>";    
+    foreach ($result as $myrow) {        
         $replies = $myrow->num_replies;
         $topic_id = $myrow->id;
         $last_post_datetime = $myrow->post_time;
@@ -231,26 +226,21 @@ if (count($result) > 0) { // topics found
         $last_post_time = mktime($hour, $min, $sec, $month, $day, $year);
         if (!isset($last_visit)) {
             $last_visit = 0;
-        }
-        /*
-        if ($replies >= $hot_threshold) {
-            if ($last_post_time < $last_visit)
-                $image = $hot_folder_image;
-            else
-                $image = $hot_newposts_image;
-        } else {
-            if ($last_post_time < $last_visit) {
-                $image = icon('fa-comments');
-            } else {
-                $image = $newposts_image;
-            }
-        }*/
-        $image = icon('fa-comments');
-        $tool_content .= "<td class='text-center'>".$image."</td>";
+        }        
         $topic_title = $myrow->title;
         $topic_locked = $myrow->locked;
         $pagination = '';
         $topiclink = "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id";
+        if ($topic_locked) {
+            $image = icon('fa-lock');
+        } else {
+            if ($replies >= $hot_threshold) {
+                $image = icon('fa-fire');
+            } else {
+                $image = icon('fa-comments');
+            }
+        }
+        $tool_content .= "<td class='text-center'>".$image."</td>";        
         if ($replies > $posts_per_page) {
             $total_reply_pages = ceil($replies / $posts_per_page);
             $pagination .= "<strong class='pagination'><span>".icon('fa-arrow-circle-right')."";
@@ -280,7 +270,7 @@ if (count($result) > 0) { // topics found
             $topic_link_notify = toggle_link($topic_action_notify);
             $topic_icon = toggle_icon($topic_action_notify);
         }
-        $tool_content .= "<td class='center'>";
+        $tool_content .= "<td>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array('title' => $langModify,
@@ -309,14 +299,12 @@ if (count($result) > 0) { // topics found
         }
         
         $dyntools[] = array('title' => $langNotify,
-            'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
-            'icon' => 'fa-envelope');
+                            'url' => (isset($_GET['start']) and $_GET['start'] > 0) ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=$_GET[start]&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;topicnotify=$topic_link_notify&amp;topic_id=$myrow->id",
+                            'icon' => 'fa-envelope');
         $tool_content .= action_button($dyntools);
-
-        $tool_content .= "</td></tr>";
-        $i++;
+        $tool_content .= "</td></tr>";        
     } // end of while
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langNoTopics</div>";
 }

@@ -42,7 +42,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-$nameTools = $langExercice;
+$pageName = $langExercice;
 $picturePath = "courses/$course_code/image";
 
 if (isset($_GET['course'])) {

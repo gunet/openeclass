@@ -33,8 +33,6 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/graphics/plotter.php';
 
-$nameTools = $langWelcomeToPortfolio;
-
 ModalBoxHelper::loadModalBox();
 
 if(!empty($langLanguageCode)){
@@ -121,14 +119,21 @@ jQuery(document).ready(function() {
 
 require_once 'perso.php';
 
-$tool_content = ($_SESSION['status'] == USER_TEACHER?
-    action_bar(array(
-        array('title' => $langCourseCreate,
+$tool_content .= action_bar(array(
+        array('title' => $langRegCourses, 
+              'url' => $urlAppend . 'modules/auth/courses.php',
+              'icon' => 'fa-check',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success'),
+    array('title' => $langCourseCreate,
               'url' => $urlAppend . 'modules/create_course/create_course.php',
+              'show' => $_SESSION['status'] == USER_TEACHER,
               'icon' => 'fa-plus-circle',
               'level' => 'primary-label',
-              'button-class' => 'btn-success'))): '') . "
-    <div class='row margin-top-fat'>
+              'button-class' => 'btn-success')));
+
+$tool_content .= "
+    <div class='row'>
         <div id='my-courses' class='col-md-7'>
             <div class='row'>
                 <div class='col-md-12'>
@@ -154,7 +159,7 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
                             $tool_content.="</ul>
                     </div>
                     <div class='panel-footer'>
-                        <p class='link-to-more'><a href='#'>$langMore&hellip;</a></p>
+                        <p class='link-to-more'><a href='../modules/announcements/myannouncements.php'>$langMore&hellip;</a></p>
                     </div>
                 </div>
             </div>
@@ -169,14 +174,24 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
                         {%PERSONAL_CALENDAR_CONTENT%}
                     </div>
                     <div class='panel-footer'>
-                        <p class='event-legend'>
-                            <span class='event event-important'></span><span>$langAgendaDueDay</span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp; 
-                            <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
-                        </p>
-                        <p class='event-legend'>
-                            <span class='event event-info'></span><span>$langAgendaCourseEvent</span>&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;
-                            <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
-                        </p>
+                        <div class='row'>
+                            <div class='col-sm-6 event-legend'>
+                                <div>
+                                    <span class='event event-important'></span><span>$langAgendaDueDay</span>
+                                </div>
+                                <div>
+                                    <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
+                                </div>
+                            </div>
+                            <div class='col-sm-6 event-legend'>
+                                <div>
+                                    <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
+                                </div>
+                                <div>
+                                    <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -202,17 +217,50 @@ $tool_content = ($_SESSION['status'] == USER_TEACHER?
             </div>
     </div>";
 
+$userdata = Database::get()->querySingle("SELECT surname, givenname, username, email, status, phone, am, registered_at,
+                has_icon, description, password,
+                email_public, phone_public, am_public
+            FROM user
+            WHERE id = ?d", $uid);
+$numUsersRegistered = Database::get()->querySingle("SELECT COUNT(*) AS numUsers
+        FROM course_user cu1, course_user cu2
+        WHERE cu1.course_id = cu2.course_id AND cu1.user_id = ?d AND cu1.status = ?d AND cu2.status <> ?d;", $uid, USER_TEACHER, USER_TEACHER)->numUsers;
+$lastVisit = Database::get()->queryArray("SELECT * FROM loginout
+                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 2", $uid);
 $tool_content .= "
 </div>
 <div id='profile_box' class='row'>
     <div class='col-md-12'>
+        <h3 class='content-title'>$langMyStats</h3>
         <div class='panel'>
             <div class='panel-body'>
                 <div class='row'>
-                    <div class='col-sm-3'>
-                        <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:100px;' class='img-circle center-block img-responsive' alt='Circular Image'>
-                        <h4 class='text-center'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
+                    <div class='col-xs-4 col-sm-2'>
+                        <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:80px;' class='img-circle center-block img-responsive' alt='Circular Image'>
                     </div>
+                    <div class='col-xs-8 col-sm-5'>
+                        <h4>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
+                        <h5 class='not_visible'>(-".q($_SESSION['uname'])."-)</h5>
+                        <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>$userdata->registered_at</span><br>
+                        <span class='tag'>Τελευταία επίσκεψη :". $lastVisit[1]->when."</span>
+                    </div>
+                    <div class='col-xs-12 col-sm-5'>
+                        <ul class='list-group'>
+                            <li class='list-group-item'>
+                              <span class='badge'>$student_courses_count</span>
+                              Μαθήματα που παρακολουθώ
+                            </li>
+                            <li class='list-group-item'>
+                              <span class='badge'>$teacher_courses_count</span>
+                              Μαθήματα που διαχειρίζομαι
+                            </li>
+                            <!--<li class='list-group-item'>
+                              <span class='badge'>$numUsersRegistered</span>
+                              Συνολικός αριθμός φοιτητών στα μαθήματά μου
+                            </li>-->
+                        </ul>
+                    </div>
+                    
                     <!--<div class='col-sm-9'>
                         <div class='stats'>".courseVisitsPlot()."</div>
                     </div>--> 

@@ -40,7 +40,7 @@ load_js('jstree');
 list($js, $html) = $treeObj->buildCourseNodePicker();
 $head_content .= $js;
 
-$nameTools = $langRestoreCourse;
+$pageName = $langRestoreCourse;
 $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 
 // Default backup version
@@ -50,7 +50,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
     $tool_content .= "<fieldset>
         <legend>" . $langFileSent . "</legend>
-        <table class='tbl' width='100%'>
+        <table class='table-default'>
                    <tr><th width='150'>$langFileSentName</td><td>" . q($_FILES['archiveZipped']['name']) . "</th></tr>
                    <tr><th>$langFileSentSize</td><td>" . q($_FILES['archiveZipped']['size']) . "</th></tr>
                    <tr><th>$langFileSentType</td><td>" . q($_FILES['archiveZipped']['type']) . "</th></tr>
@@ -58,7 +58,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                 </table></fieldset>
                         <fieldset>
         <legend>" . $langFileUnzipping . "</legend>
-        <table class='tbl' width='100%'>
+        <table class='table-default'>
                     <tr><td>" . unpack_zip_show_files($_FILES['archiveZipped']['tmp_name']) . "</td></tr>
                 </table></fieldset>";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
@@ -69,7 +69,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
     } else if (file_exists($pathToArchive)) {
         $tool_content .= "<fieldset>
         <legend>" . $langFileUnzipping . "</legend>
-        <table class='tbl' width='100%'>";
+        <table class='table-default'>";
         $tool_content .= "<tr><td>" . unpack_zip_show_files($pathToArchive) . "</td></tr>";
         $tool_content .= "</table></fieldset>";
     } else {
@@ -400,7 +400,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             'map' => array('uid' => $userid_map, 'assignment_id' => $assignments_map, 'group_id' => $group_map)), $url_prefix_map, $backupData, $restoreHelper);
 
         // Agenda
-        restore_table($restoreThis, 'agenda', array('delete' => array('id'), 'set' => array('course_id' => $course_id)), $url_prefix_map, $backupData, $restoreHelper);
+        $agenda_map = restore_table($restoreThis, 'agenda', array(
+            'return_mapping' => 'id', 
+            'set' => array('course_id' => $course_id)
+        ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Exercises
         $exercise_map = restore_table($restoreThis, 'exercise', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
@@ -477,6 +480,17 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             ), 
             'delete' => array('id')
         ), $url_prefix_map, $backupData, $restoreHelper);
+        
+        // Notes
+        restore_table($restoreThis, 'note', array(
+            'set' => array('reference_obj_course' => $course_id),
+            'map' => array('user_id' => $userid_map),
+            'map_function' => 'notes_map_function',
+            'map_function_data' => array($course_id, $agenda_map, $document_map, $link_map, 
+                $video_map, $videolink_map, $assignments_map, $exercise_map, $ebook_map,
+                $lp_learnPath_map),
+            'delete' => array('id')
+        ), $url_prefix_map, $backupData, $restoreHelper);
 
         // Units
         $unit_map = restore_table($restoreThis, 'course_units', array('set' => array('course_id' => $course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
@@ -503,9 +517,8 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 
         // index course after restoring
         require_once 'modules/search/indexer.class.php';
-        $idx = new Indexer();
-        $idx->removeAllByCourse($course_id);
-        $idx->storeAllByCourse($course_id);
+        Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $course_id);
+        Indexer::queueAsync(Indexer::REQUEST_STOREALLBYCOURSE, Indexer::RESOURCE_IDX, $course_id);
 
         $tool_content .= "</p><br /><center><p><a href='../admin/index.php'>" . $GLOBALS['langBack'] . "</a></p></center>";
     });
@@ -582,36 +595,31 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // -------------------------------------
 // Display restore info form
 // -------------------------------------
-    $tool_content .= "<br />
-       <fieldset>
-      <legend>$langFirstMethod</legend>
-        <table width='100%' class='tbl'><tr>
-          <td>$langRequest1
-          <br /><br />
-          <form action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>
-            <input type='file' name='archiveZipped' />
-            <input class='btn btn-primary' type='submit' name='send_archive' value='" . $langSend . "' />
+    $tool_content .= "<div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div>
+        <div class='form-wrapper'>
+            <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
+            <div class='form-group'>
+                <div class='col-sm-4'>
+                    <input type='file' name='archiveZipped' />
+                </div>
+                <div class='col-sm-6'>
+                    <input class='btn btn-primary' type='submit' name='send_archive' value='" . $langSend . "'>
+                    <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
+                </div>
+            </div>
             </form>
-            <div class='right smaller'>$langMaxFileSize " .
-            ini_get('upload_max_filesize') . "</div>
-            </td>
-        </tr></table>
-        </fieldset>
-<br />
-
- <fieldset>
-    <legend>$langSecondMethod</legend>
-    <table width='100%' class='tbl'>
-        <tr>
-          <td>$langRequest2
-          <br /><br />
-          <form action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
-            <input type='text' name='pathToArchive' />
-            <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "' />
+        </div> 
+    <div class='alert alert-info'>
+        <label>$langSecondMethod</label> $langRequest2</div>        
+        <div class='form-wrapper'>
+          <form role='form' class='form-inline' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post'>
+            <div class='form-group'>
+                <input type='text' class='form-control' name='pathToArchive'>
+            </div>
+            <div class='form-group'>
+                <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
+            </div>
           </form>
-          </td>
-        </tr>
-        </table></fieldset>
-        <br />";
+        </div>";
 }
 draw($tool_content, 3, null, $head_content);

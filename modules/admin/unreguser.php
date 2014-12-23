@@ -28,7 +28,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$nameTools = $langUnregUser;
+$pageName = $langUnregUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // get the incoming values and initialize them

@@ -83,11 +83,6 @@ require_once 'include/lib/references.class.php';
         if(is_null($cid)){
             $cid = $course_id;
         }
-        
-        if(is_null($user_id)){
-            $user_id = $uid;
-        }
-        
         //form date range condition
         $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
                                 "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
@@ -405,582 +400,22 @@ require_once 'include/lib/references.class.php';
         }
     }
 
-     /**
-      * A function to generate month view of a set of events
-      * @param array $day day to show
-      * @param integer $month month to show
-      * @param integer $year year to show
-      * @param array $weekdaynames
-      * @return object with `count` attribute containing the number of associated events with the item
-     */
-   function month_calendar($day, $month, $year) {
-       global $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $langDay, $langWeek, $langMonth, $langView;
-       $calendar_content = "";
-        //Handle leap year
-        $numberofdays = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-        if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0)) {
-            $numberofdays[2] = 29;
-        }
-
-        $eventlist = get_calendar_events("month", "$year-$month-$day");
-
-        $events = array();
-        if ($eventlist) {
-            foreach($eventlist as $event){
-                $eventday = new DateTime($event->startdate);
-                $eventday = $eventday->format('j');
-                if(!array_key_exists($eventday,$events)){
-                        $events[$eventday] = array();
-                }
-                array_push($events[$eventday], $event);
-            }
-        }
-
-        //Get the first day of the month
-        $dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
-        //Start the week on monday
-        $startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-
-        $backward = array('month'=>$month == 1 ? 12 : $month - 1, 'year' => $month == 1 ? $year - 1 : $year);
-        $foreward = array('month'=>$month == 12 ? 1 : $month + 1, 'year' => $month == 12 ? $year + 1 : $year);
-
-        $calendar_content .= '<div class="right" style="width:100%">'.$langView.':&nbsp;'.
-                '<a href="#" onclick="show_day(selectedday, selectedmonth, selectedyear);return false;">'.$langDay.'</a>&nbsp;|&nbsp;'.
-                '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
-                '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
-
-        $calendar_content .= '<table width=100% class="title1">';
-        $calendar_content .= "<tr>";
-        $calendar_content .= '<td width="250"><a href="#" onclick="show_month(1,'.$backward['month'].','.$backward['year'].'); return false;">&laquo;</a></td>';
-        $calendar_content .= "<td class='center'><b>{$langMonthNames['long'][$month-1]} $year</b></td>";
-        $calendar_content .= '<td width="250" class="right"><a href="#" onclick="show_month(1,'.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
-        $calendar_content .= "</tr>";
-        $calendar_content .= "</table><br />";
-        $calendar_content .= "<table width=100% class='tbl_1'><tr>";
-        for ($ii = 1; $ii < 8; $ii++) {
-            $calendar_content .= "<th class='center'>" . $langDay_of_weekNames['long'][$ii % 7] . "</th>";
-        }
-        $calendar_content .= "</tr>";
-        $curday = -1;
-        $today = getdate();
-
-        while ($curday <= $numberofdays[$month]) {
-            $calendar_content .= "<tr>";
-
-            for ($ii = 0; $ii < 7; $ii++) {
-                if (($curday == -1) && ($ii == $startdayofweek)) {
-                    $curday = 1;
-                }
-                if (($curday > 0) && ($curday <= $numberofdays[$month])) {
-                    $bgcolor = $ii < 5 ? "class='alert alert-danger'" : "class='odd'";
-                    $dayheader = "$curday";
-                    $class_style = "class=odd";
-                    if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
-                        $dayheader = "<b>$curday</b> <small>($langToday)</small>";
-                        $class_style = "class='today'";
-                    }
-                    $calendar_content .= "<td height=50 width=14% valign=top $class_style><b>$dayheader</b>";
-                    $thisDayItems = "";
-                    if(array_key_exists($curday, $events)){
-                        foreach($events[$curday] as $ev){
-                            $thisDayItems .= month_calendar_item($ev, $calsettings->{$ev->event_group."_color"});
-                        }
-                        $calendar_content .= "$thisDayItems</td>";
-                    }
-                    $curday++;
-                } else {
-                    $calendar_content .= "<td width=14%>&nbsp;</td>";
-                }
-            }
-            $calendar_content .= "</tr>";
-        }
-        $calendar_content .= "</table>";
-
-        /* Legend */
-        $calendar_content .= calendar_legend();
-        
-        
-        /***************************************  Bootstrap calendar  ******************************************************/
-        
-        $calendar_content .=  '<div id="bootstrapcalendar"></div>';
-        
-        return $calendar_content;
-    }
-
-     /**
-      * A function to generate month view of a set of events small enough for the portfolio page
-      * @param array $day day to show
-      * @param integer $month month to show
-      * @param integer $year year to show
-      * @param array $weekdaynames
-      * @return object with `count` attribute containing the number of associated events with the item
-     */
-   function small_month_calendar($day, $month, $year) {
-       global $uid, $langDay_of_weekNames, $langMonthNames, $langToday;
-       if($_SESSION['theme'] == 'bootstrap'){
-           return small_month_bootstrap_calendar();
-       }
-       $calendar_content = "";
-        //Handle leap year
-        $numberofdays = array(0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-        if (($year % 400 == 0) or ($year % 4 == 0 and $year % 100 <> 0)) {
-            $numberofdays[2] = 29;
-        }
-
-        $eventlist = get_calendar_events("month", "$year-$month-$day");
-
-        $events = array();
-        if ($eventlist) {
-            foreach($eventlist as $event){
-                $eventday = new DateTime($event->startdate);
-                $eventday = $eventday->format('d');
-                if(!array_key_exists($eventday,$events)){
-                        $events[$eventday] = array();
-                }
-                array_push($events[$eventday], $event);
-            }
-        }
-
-        //Get the first day of the month
-        $dayone = getdate(mktime(0, 0, 0, $month, 1, $year));
-        //Start the week on monday
-        $startdayofweek = $dayone['wday'] <> 0 ? ($dayone['wday'] - 1) : 6;
-
-        $backward = array('month'=>$month == 1 ? 12 : $month - 1, 'year' => $month == 1 ? $year - 1 : $year);
-        $foreward = array('month'=>$month == 12 ? 1 : $month + 1, 'year' => $month == 12 ? $year + 1 : $year);
-
-        $calendar_content .= "<table class='title1' style='with:450px;'>";
-        $calendar_content .= "<tr>";
-        $calendar_content .= '<td style="width:25px;"><a href="#" onclick="show_month(1,'.$backward['month'].','.$backward['year'].'); return false;">&laquo;</a></td>';
-        $calendar_content .= "<td class='center' style='width:400px;font-size:11px;'><b>{$langMonthNames['long'][$month-1]} $year</b></td>";
-        $calendar_content .= '<td style="width:25px;"><a href="#" onclick="show_month(1,'.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
-        $calendar_content .= "</tr>";
-        $calendar_content .= "</table>";
-        $calendar_content .= "<table style='min-width:450px;font-size:10px;' class='tbl_1'><tr>";
-        for ($ii = 1; $ii < 8; $ii++) {
-            $calendar_content .= "<th class='center'>" . $langDay_of_weekNames['short'][$ii % 7] . "</th>";
-        }
-        $calendar_content .= "</tr>";
-        $curday = -1;
-        $today = getdate();
-        while ($curday <= $numberofdays[$month]) {
-            $calendar_content .= "<tr>";
-
-            for ($ii = 0; $ii < 7; $ii++) {
-                if (($curday == -1) && ($ii == $startdayofweek)) {
-                    $curday = 1;
-                }
-                if (($curday > 0) && ($curday <= $numberofdays[$month])) {
-                    $bgcolor = $ii < 5 ? "class='alert alert-danger'" : "class='odd'";
-                    $dayheader = "$curday";
-                    $class_style = "class=odd";
-                    if (($curday == $today['mday']) && ($year == $today['year']) && ($month == $today['mon'])) {
-                        $dayheader = "<b>$curday</b> <small>($langToday)</small>";
-                        $class_style = "class='today'";
-                    }
-                    $calendar_content .= "<td height=50 width=14% valign=top $class_style><b>$dayheader</b>";
-                    $thisDayItems = "";
-                    if(array_key_exists($curday, $events)){
-                        foreach($events[$curday] as $ev){
-                            $thisDayItems .= month_calendar_item($ev, $calsettings->{$ev->event_group."_color"});
-                        }
-                        $calendar_content .= "$thisDayItems</td>";
-                    }
-                    $curday++;
-                } else {
-                    $calendar_content .= "<td width=14%>&nbsp;</td>";
-                }
-            }
-            $calendar_content .= "</tr>";
-        }
-        $calendar_content .= "</table>";
-
-        /* Legend */
-        $calendar_content .= calendar_legend();
-        return $calendar_content;
-    }
-
-   /**
-      * A function to generate week view of a set of events
-      * @param array $day day to show
-      * @param integer $month month to show
-      * @param integer $year year to show
-      * @param array $weekdaynames
-      * @return object with `count` attribute containing the number of associated events with the item
-     */
-    function week_calendar($day, $month, $year){
-        global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langView;
-        $calendar_content = "";
-        if(is_null($day)){
-            $day = 1;
-        }
-        $nextweekdate = new DateTime("$year-$month-$day");
-        $nextweekdate->add(new DateInterval('P1W'));
-        $previousweekdate = new DateTime("$year-$month-$day");
-        $previousweekdate->sub(new DateInterval('P1W'));
-
-        $thisweekday = new DateTime("$year-$month-$day");
-        $difffromMonday = ($thisweekday->format('w') == 0)? 6:$thisweekday->format('w')-1;
-        $monday = $thisweekday->sub(new DateInterval('P'.$difffromMonday.'D')); //Sunday->1, ..., Saturday->7
-        $weekdescription = ucfirst(claro_format_locale_date($dateFormatLong, $monday->getTimestamp()));
-        $sunday = $thisweekday->add(new DateInterval('P6D'));
-        $weekdescription .= ' - '.ucfirst(claro_format_locale_date($dateFormatLong, $sunday->getTimestamp()));
-        $cursorday = $thisweekday->sub(new DateInterval('P6D'));
-
-        $backward = array('day'=>$previousweekdate->format('d'), 'month'=>$previousweekdate->format('m'), 'year' => $previousweekdate->format('Y'));
-        $foreward = array('day'=>$nextweekdate->format('d'), 'month'=>$nextweekdate->format('m'), 'year' => $nextweekdate->format('Y'));
-
-        $calendar_content .= '<div class="right" style="width:100%">'.$langView.':&nbsp;'.
-                '<a href="#" onclick="show_day(selectedday, selectedmonth, selectedyear);return false;">'.$langDay.'</a>&nbsp;|&nbsp;'.
-                '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
-                '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
-
-        $calendar_content .= "<table width='100%' class='title1'>";
-        $calendar_content .= "<tr>";
-        $calendar_content .= '<td width="25"><a href="#" onclick="show_week('.$backward['day'].','.$backward['month'].','.$backward['year'].'); return false;">&laquo;</a></td>';
-        $calendar_content .= "<td class='center'><b>$weekdescription</b></td>";
-        $calendar_content .= '<td width="25" class="right"><a href="#" onclick="show_week('.$foreward['day'].','.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
-        $calendar_content .= "</tr>";
-        $calendar_content .= "</table>";        
-        $eventlist = get_calendar_events("week", "$year-$month-$day");
-        //$dateNow = date("j-n-Y", time());
-        $numLine = 0;
-
-        $calendar_content .= "<table width='100%' class='tbl_alt'>";
-        //                <tr><th colspan='2' class='left'>$langEvents</th>";
-        //$calendar_content .= "<th width='50'><b>$langActions</b></th>";
-        //$calendar_content .= "</tr>";
-
-        $curday = 0;
-        $now = getdate();
-        $today = new DateTime($now['year'].'-'.$now['mon'].'-'.$now['mday']);
-        $curstartddate = "";        
-        foreach ($eventlist as $thisevent) {        
-            if($curstartddate != $thisevent->startdate){ //event date changed
-                $thiseventdatetime = new DateTime($thisevent->startdate);
-                while($cursorday < $thiseventdatetime){
-                    if($cursorday == $today)
-                        $class = 'today';
-                    else
-                        $class = 'monthLabel';
-                    $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(claro_format_locale_date($dateFormatLong, $cursorday->getTimestamp())) . "</b></td></tr>";
-                    $calendar_content .= "<tr><td colspan='3'>$langNoEvents</td></tr>";
-                    $cursorday->add(new DateInterval('P1D'));
-                    $curday++;
-                }
-
-                /*if ($numLine % 2 == 0) {
-                    $classvis = "class='even'";
-                } else {
-                    $classvis = "class='odd'";
-                }*/
-
-                if($thiseventdatetime == $today)
-                    $class = 'today';
-                else
-                    $class = 'monthLabel';
-                $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(claro_format_locale_date($dateFormatLong, strtotime($thisevent->startdate))) . "</b></td></tr>";
-                if($cursorday <= $thiseventdatetime){
-                    $cursorday->add(new DateInterval('P1D'));
-                    $curday++;
-                }
-            }
-            $calendar_content .= week_calendar_item($thisevent, 'even');
-            $curstartddate = $thisevent->startdate;
-            //$numLine++;
-        }
-        /* Fill with empty days*/
-        for($i=$curday;$i<7;$i++){
-            if($cursorday == $today)
-                    $class = 'today';
-                else
-                    $class = 'monthLabel';
-                $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst(claro_format_locale_date($dateFormatLong, $cursorday->getTimestamp())) . "</b></td></tr>";
-                $calendar_content .= "<tr><td colspan='3'>$langNoEvents</td></tr>";
-                $cursorday->add(new DateInterval('P1D'));
-        }
-        $calendar_content .= "</table>";
-        /* Legend */
-        $calendar_content .= calendar_legend();
-
-        return $calendar_content;
-    }
-
-   /**
-      * A function to generate day view of a set of events
-      * @param array $day day to show
-      * @param integer $month month to show
-      * @param integer $year year to show
-      * @param array $weekdaynames
-      * @return object with `count` attribute containing the number of associated events with the item
-     */
-   function day_calendar($day, $month, $year){
-       global $langEvents, $langActions, $langCalendar, $langDateNow, $is_editor, $dateFormatLong, $langNoEvents, $langDay, $langWeek, $langMonth, $langView;
-        $calendar_content = "";
-        if(is_null($day)){
-            $day = 1;
-        }
-        $nextdaydate = new DateTime("$year-$month-$day");
-        $nextdaydate->add(new DateInterval('P1D'));
-        $previousdaydate = new DateTime("$year-$month-$day");
-        $previousdaydate->sub(new DateInterval('P1D'));
-
-        $thisday = new DateTime("$year-$month-$day");
-        $daydescription = ucfirst(claro_format_locale_date($dateFormatLong, $thisday->getTimestamp()));
-
-        $backward = array('day'=>$previousdaydate->format('d'), 'month'=>$previousdaydate->format('m'), 'year' => $previousdaydate->format('Y'));
-        $foreward = array('day'=>$nextdaydate->format('d'), 'month'=>$nextdaydate->format('m'), 'year' => $nextdaydate->format('Y'));
-
-        $calendar_content .= '<div class="right" style="width:100%">'.$langView.':&nbsp;'.
-                '<a href="#" onclick="show_day(selectedday, selectedmonth, selectedyear);return false;">'.$langDay.'</a>&nbsp;|&nbsp;'.
-                '<a href="#" onclick="show_week(selectedday, selectedmonth, selectedyear);return false;">'.$langWeek.'</a>&nbsp;|&nbsp;'.
-                '<a href="#" onclick="show_month(selectedday, selectedmonth, selectedyear);return false;">'.$langMonth.'</a></div>';
-
-        $calendar_content .= "<table width='100%' class='title1'>";
-        $calendar_content .= "<tr>";
-        $calendar_content .= '<td width="25"><a href="#" onclick="show_day('.$backward['day'].','.$backward['month'].','.$backward['year'].'); return false;">&laquo;</a></td>';
-        $calendar_content .= "<td class='center'><b>$daydescription</b></td>";
-        $calendar_content .= '<td width="25" class="right"><a href="#" onclick="show_day('.$foreward['day'].','.$foreward['month'].','.$foreward['year'].'); return false;">&raquo;</a></td>';
-        $calendar_content .= "</tr>";
-        $calendar_content .= "</table>";
-
-        $eventlist = get_calendar_events("day", "$year-$month-$day");        
-        $calendar_content .= "<table width='100%' class='tbl_alt'>";
-
-        $curhour = 0;
-        $now = getdate();
-        $today = new DateTime($now['year'].'-'.$now['mon'].'-'.$now['mday'].' '.$now['hours'].':'.$now['minutes']);
-        if($now['year'].'-'.$now['mon'].'-'.$now['mday'] == "$year-$month-$day"){
-            $thisdayistoday = true;
-        }
-        else{
-           $thisdayistoday = false;
-        }
-        $thishour = new DateTime($today->format('Y-m-d H:00'));
-        $cursorhour = new DateTime("$year-$month-$day 00:00");
-        $curstarthour = "";
-
-        foreach ($eventlist as $thisevent) {
-            $thiseventstart = new DateTime($thisevent->start);
-            $thiseventhour = new DateTime($thiseventstart->format('Y-m-d H:00'));
-            if($curstarthour != $thiseventhour){ //event date changed
-                while($cursorhour < $thiseventhour){
-                    if($thisdayistoday && $thishour>=$cursorhour && intval($cursorhour->diff($thishour,true)->format('%h'))<6)
-                        $class = 'today';
-                    else
-                        $class = 'monthLabel';
-                    $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst($cursorhour->format('H:i')) . "</b></td></tr>";
-                    if(intval($cursorhour->diff($thiseventhour,true)->format('%h'))>6){
-                        $calendar_content .= "<tr><td colspan='3'>$langNoEvents</td></tr>";
-                    }
-                    $cursorhour->add(new DateInterval('PT6H'));
-                    $curhour += 6;
-                }
-
-                if($thisdayistoday && $thishour>=$cursorhour && intval($cursorhour->diff($thishour,true)->format('%h'))<6)
-                    $class = 'today';
-                else
-                    $class = 'monthLabel';
-                //No hour tr for the event
-                //$calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst($thiseventhour->format('H:i')) . "</b></td></tr>";
-                if($cursorhour <= $thiseventhour){
-                    $cursorhour->add(new DateInterval('PT6H'));
-                    $curhour += 6;
-                }
-            }
-            $calendar_content .= day_calendar_item($thisevent, 'even');
-            $curstarthour = $thiseventhour;
-            //$numLine++;
-        }
-        /* Fill with empty days*/
-        for($i=$curhour;$i<24;$i+=6){
-            if($thisdayistoday && $thishour>=$cursorhour && intval($cursorhour->diff($thishour,true)->format('%h'))<6)
-                    $class = 'today';
-                else
-                    $class = 'monthLabel';
-                $calendar_content .= "<tr><td colspan='3' class='$class'>" . "&nbsp;<b>" . ucfirst($cursorhour->format('H:i')) . "</b></td></tr>";
-                $calendar_content .= "<tr><td colspan='3'>$langNoEvents</td></tr>";
-                $cursorhour->add(new DateInterval('PT6H'));
-        }
-        $calendar_content .= "</table>";
-        /* Legend */
-        $calendar_content .= calendar_legend();
-
-        return $calendar_content;
-   }
-
-   /**
-      * A function to generate event block in month calendar
-      * @param object $event event to format
-      * @param string $color event color
-      * @return html formatted item
-     */
-   function month_calendar_item($event, $color){
-       global $urlServer, $is_admin;
-       $link = str_replace('thisid', $event->id, $urlServer.$event_type_url[$event->event_type]);
-       if($event->event_type != 'personal' && $event->event_type != 'admin'){
-           $link = str_replace('thiscourse', $event->course, $link);
-       }
-       $formatted_calendar_item = "<a href=\"".$link."\"><div class=\"{$event->event_group}\" style=\"padding:2px;background-color:$color;\">".$event->title."</div></a>";
-       if(!$is_admin && $event->event_group == 'admin'){
-           $formatted_calendar_item = "<div class=\"{$event->event_group}\" style=\"padding:2px;background-color:$color;\">".$event->title."</div>";
-       }
-       return $formatted_calendar_item;
-   }
-
-   /**
-      * A function to generate event block in week calendar
-      * @param object $event event to format
-      * @param string $color event color
-      * @return html formatted item
-     */
-    function week_calendar_item($event, $class){
-        global $urlServer,$is_admin,$langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
-        $formatted_calendar_item = "";
-        $formatted_calendar_item .= "<tr $class>";
-        $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".$calsettings->{$event->event_group."_color"}."\"></div></td>";
-        $formatted_calendar_item .= "<td valign='top'>";
-        $eventdate = strtotime($event->start);
-        $formatted_calendar_item .= $langHour.": " . ucfirst(date('H:i', $eventdate));
-        if ($event->duration != '') {
-            $msg = "($langDuration: " . q($event->duration) . ")";
-        } else {
-            $msg = '';
-        }
-        $formatted_calendar_item .= "<br><b><div class='event'>";
-        $link = str_replace('thisid', $event->id, $urlServer.$event_type_url[$event->event_type]);
-        if($event->event_type != 'personal' && $event->event_type != 'admin'){
-            $link = str_replace('thiscourse', $event->course, $link);
-        }
-        if ($event->title == '') {
-            $formatted_calendar_item .= $langAgendaNoTitle;
-        } else {
-            if(!$is_admin && $event->event_type == 'admin'){
-                $formatted_calendar_item .= q($event->title);
-            } else {
-                $formatted_calendar_item .= "<a href=\"".$link."\">".q($event->title)."</a>";
-            }
-        }
-        if($event->event_type == "personal"){
-            $fullevent = get_event($event->id);
-            if($reflink = References::item_link($fullevent->reference_obj_module, $fullevent->reference_obj_type, $fullevent->reference_obj_id, $fullevent->reference_obj_course)){
-                $formatted_calendar_item .= "</b> $msg ".standard_text_escape($event->content)
-                    . "$langReferencedObject: "
-                    .$reflink
-                    . "</div></td>";
-            }
-        }
-        else{
-            $formatted_calendar_item .= "</b> $msg ".standard_text_escape($event->content). "</div></td>";
-        }
-        $formatted_calendar_item .= "<td class='right' width='70'>";
-        if($event->event_type == "personal" || ($event->event_type == "admin" && $is_admin)){
-            $formatted_calendar_item .= icon('fa-edit', $langModify, str_replace('thisid',$event->id, $urlServer.$event_type_url[$event->event_type])). "&nbsp;
-                        ".icon('fa-times', $langDelete, "?delete=$event->id&et=$event->event_type", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
-        }
-        $formatted_calendar_item .= "</td>";
-        $formatted_calendar_item .= "</tr>";
-
-       return $formatted_calendar_item;
-   }
-
-   /**
-      * A function to generate event block in day calendar
-      * @param object $event event to format
-      * @param string $color event color
-      * @return html formatted item
-     */
-    function day_calendar_item($event, $class){
-        global $urlServer, $is_admin, $langVisible, $dateFormatLong, $langDuration, $langAgendaNoTitle, $langModify, $langDelete, $langHour, $langConfirmDelete, $langReferencedObject;
-        $formatted_calendar_item = "";
-        $formatted_calendar_item .= "<tr $class>";
-        $formatted_calendar_item .= "<td valign='top'><div class=\"legend_color\" style=\"float:left;margin:3px;height:16px;width:16px;background-color:".$calsettings->{$event->event_group."_color"}."\"></div></td>";
-        $formatted_calendar_item .= "<td valign='top'>";
-        $eventdate = strtotime($event->start);
-        $formatted_calendar_item .= $langHour.": " . ucfirst(date('H:i', $eventdate));
-        if ($event->duration != '') {
-            $msg = "($langDuration: " . q($event->duration) . ")";
-        } else {
-            $msg = '';
-        }
-        $formatted_calendar_item .= "<br><b><div class='event'>";
-        $link = str_replace('thisid', $event->id, $urlServer.$event_type_url[$event->event_type]);
-        if($event->event_type != 'personal' && $event->event_type != 'admin'){
-            $link = str_replace('thiscourse', $event->course, $link);
-        }
-        if ($event->title == '') {
-            $formatted_calendar_item .= $langAgendaNoTitle;
-        } else {
-            if(!$is_admin && $event->event_type == 'admin'){
-                $formatted_calendar_item .= q($event->title);
-            } else {
-                $formatted_calendar_item .= "<a href=\"".$link."\">".q($event->title)."</a>";
-            }
-        }
-        if($event->event_type == "personal"){
-            $fullevent = get_event($event->id);
-            if($reflink = References::item_link($fullevent->reference_obj_module, $fullevent->reference_obj_type, $fullevent->reference_obj_id, $fullevent->reference_obj_course)){
-                $formatted_calendar_item .= "</b> $msg ".standard_text_escape($event->content)
-                    . "$langReferencedObject: "
-                    .$reflink
-                    . "</div></td>";
-            }
-        }
-        else{
-            $formatted_calendar_item .= "</b> $msg ".standard_text_escape($event->content). "</div></td>";
-        }
-        $formatted_calendar_item .= "<td class='right' width='70'>";
-        if($event->event_type == "personal" || ($event->event_type == "admin" && $is_admin)){
-            $formatted_calendar_item .= icon('fa-edit', $langModify, str_replace('thisid',$event->id,$event_type_url[$event->event_type])). "&nbsp;
-                        ".icon('fa-times', $langDelete, "?delete=$event->id&et=$event->event_type", "onClick=\"return confirmation('$langConfirmDelete');\""). "&nbsp;";
-        }
-        $formatted_calendar_item .= "</td>";
-        $formatted_calendar_item .= "</tr>";
-
-       return $formatted_calendar_item;
-   }
-
-   function calendar_legend(){
-       $legend = "";
-
-        /* Legend */
-        $legend .= "<br/>"
-                . "<table width=100% class='calendar_legend'>";
-        $legend .= "<tr>";
-        $legend .= "<td>";
-        foreach(array_values($event_groups) as $evtype)
-        {
-            global ${"langEvent".$evtype};
-            $evtype_legendtext = ${"langEvent".$evtype};
-            $legend .= "<div class=\"legend_item\" style=\"padding:3px;margin-left:10px;float:left;\"><div class=\"legend_color\" style=\"float:left;margin-right:3px;height:16px;width:16px;background-color:".$calsettings->{$evtype."_color"}."\"></div>".$evtype_legendtext."</div>";
-        }
-        $legend .= "<div style=\"clear:both;\"></both></td>";
-        $legend .= "</tr>";
-        $legend .= "</table>";
-       return $legend;
-   }
-
+     
    /**
       * A function to generate event block in month calendar
       * @param object $event event to format
       * @param string $color event color
       * @return icalendar list of user events
      */
-   function icalendar(){
+   function icalendar($cid){
+       global $course_id;
+       if(!isset($course_id)){
+           $course_id=$cid;
+       }
        $ical = "BEGIN:VCALENDAR".PHP_EOL;
        $ical .= "VERSION:2.0".PHP_EOL;
 
-       $show_personal_bak = $calsettings->show_personal;
-       $show_course_bak = $calsettings->show_course;
-       $show_deadline_bak = $calsettings->show_deadline;
-       $show_admin_bak = $calsettings->show_admin;
-       set_calendar_settings(1,1,1,1);
-       get_calendar_settings();
-       $eventlist = get_calendar_events();
-       set_calendar_settings($show_personal_bak,$show_course_bak,$show_deadline_bak,$show_admin_bak);
-       get_calendar_settings();
-
-       $events = array();
+       $eventlist = get_course_events();
        foreach($eventlist as $event){
            $ical .= "BEGIN:VEVENT".PHP_EOL;
            $startdatetime = new DateTime($event->start);
@@ -1006,14 +441,16 @@ require_once 'include/lib/references.class.php';
    
    function bootstrap_events($from, $to){
        global $urlServer, $uid, $langDay_of_weekNames, $langMonthNames, $langToday, $course_id;
+       
+       $event_type_url = array(
+            'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
+            'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
+            'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
+            'teleconference' => 'modules/bbb/?course=thiscourse');
+       
        $fromdatetime = date("Y-m-d H:i:s",$from/1000);
        $todatetime = date("Y-m-d H:i:s",$to/1000);
-       /* The type of calendar here defines how detailed the events are going to be. Default:month  */
-       if(!isset($course_id) || empty($course_id) || is_null($course_id)){
-           $eventlist = get_calendar_events("month", $fromdatetime, $todatetime);
-       } else {
-           $eventlist = Calendar_events::get_current_course_events("month", $fromdatetime, $todatetime);
-       }
+       $eventlist = get_course_events("month", $fromdatetime, $todatetime);
        $events = array();
        foreach($eventlist as $event){
            $startdatetime = new DateTime($event->start);
@@ -1043,5 +480,224 @@ require_once 'include/lib/references.class.php';
 
         return $calendar;
    }
+   
+   
+   function get_list_course_events($sens = 'ASC'){
+       global $is_editor, $course_id;
+       $result = array();
+       if ($is_editor) {
+            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end FROM agenda WHERE course_id = ?d
+		ORDER BY start " . $sens, $course_id);
+        } else {
+            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
+		AND visible = 1 ORDER BY start " . $sens, $course_id);
+        }
+        return $result;
+
+   }
+   
+    function event_list_view($sens = 'ASC'){
+        global $langNoEvents;
+        $events = get_list_course_events($sens);
+
+        if (count($events) > 0) {
+            return event_list($events, $sens);
+        }else{
+            return "<p class='alert alert-warning text-center'>$langNoEvents</p>";
+        }
+    }
+    
+    function event_list($events, $sens){
+        global $course_code, $is_editor, $langEvents, $langCalendar, $langDateNow, $dateFormatLong, $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, $langModify, $langVisible;
+        $dateNow = date("j-n-Y / H:i", time());
+        $barMonth = '';
+        $nowBarShowed = false;
+        $eventlist = "<div class='table-responsive'><table class='table-default'>
+                          <tr><th class='left'>$langEvents</th>";
+        if ($is_editor) {
+            $eventlist .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
+        }
+        $eventlist .= "</tr>";
+
+        foreach ($events as $myrow) {
+            $content = standard_text_escape($myrow->content);
+            $d = strtotime($myrow->start);
+            if (!$nowBarShowed) {
+                // Following order
+                if ((($d > time()) and ($sens == " ASC")) or ( ($d < time()) and ( $sens == " DESC "))) {
+                    if ($barMonth != date("m", time())) {
+                        $barMonth = date("m", time());
+                        $eventlist .= "<tr>";
+                        // current month
+                        $eventlist .= "<td colspan='2' class='monthLabel'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
+                        $eventlist .= "</tr>";
+                    }
+                    $nowBarShowed = TRUE;
+                    $eventlist .= "<tr>";
+                    $eventlist .= "<td colspan='2' class='today'>$langDateNow $dateNow</td>";
+                    $eventlist .= "</tr>";
+                }
+            }
+            if ($barMonth != date("m", $d)) {
+                $barMonth = date("m", $d);
+                // month LABEL
+                $eventlist .= "<tr>";            
+                $eventlist .= "<td colspan='2' class='monthLabel'>";            
+                $eventlist .= "<div align='center'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
+                $eventlist .= "</tr>";
+            }
+
+            $classvis = '';         
+            if ($is_editor) {
+                if ($myrow->visible == 0) {
+                    $classvis = 'class = "not_visible"';
+                }
+            }
+            $eventlist .= "<tr $classvis>";
+            if ($is_editor) {
+                $eventlist .= "<td>";
+            } else {
+                $eventlist .= "<td colspan='2'>";
+            }
+
+            $eventlist .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
+            if ($myrow->duration != '') {
+                if ($myrow->duration == 1) {
+                    $message = $langHour;
+                } else {
+                    $message = $langHours;
+                }
+                $msg = "($langDuration: " . q($myrow->duration) . " $message)";
+            } else {
+                $msg = '';
+            }
+            $eventlist .= "<br><b>";
+            if ($myrow->title == '') {
+                $eventlist .= $langAgendaNoTitle;
+            } else {
+                $eventlist .= q($myrow->title);
+            }
+            $eventlist .= " $msg $content</b></td>";
+
+           if ($is_editor) {
+               $eventlist .= "<td class='option-btn-cell'>";
+               $eventlist .= action_button(array(
+                       array('title' => $langDelete,
+                             'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes",
+                             'icon' => 'fa-times',
+                             'class' => 'delete',
+                             'confirm' => $langConfirmDeleteEvent),
+                       array('title' => $langConfirmDeleteRecursive,
+                             'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;rep=yes",
+                             'icon' => 'fa-times-circle-o',
+                             'class' => 'delete',
+                             'confirm' => $langConfirmDeleteRecursiveEvents,
+                             'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
+                       array('title' => $langModify,
+                             'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
+                             'icon' => 'fa-edit'),
+                       array('title' => $langVisible,
+                             'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
+                             'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye')
+                   ));
+              $eventlist .= "</td>";                                 
+           }
+           $eventlist .= "</tr>";
+       }
+       $eventlist .= "</table></div>";
+       return $eventlist;
+   }
+   
+   
+   /**
+     * Get calendar events for a given course 
+     * @param string $scope month|week|day the calendar selected view
+     * @param string $startdate mysql friendly formatted string representing the start of the time frame for which events are seeked
+     * @param string $enddate mysql friendly formatted string representing the end of the time frame for which events are seeked
+     * @return array of user events with details
+     */
+    function get_course_events($scope = "month", $startdate = null, $enddate = null){
+        
+        global $course_id;
+        //form date range condition
+        $dateconditions = array("month" => "date_format(?t".',"%Y-%m") = date_format(start,"%Y-%m")',
+                                "week" => "YEARWEEK(?t,1) = YEARWEEK(start,1)",
+                                 "day" => "date_format(?t".',"%Y-%m-%d") = date_format(start,"%Y-%m-%d")');
+        if(!is_null($startdate) && !is_null($enddate)){
+            $datecond = " AND start>=?t AND start<=?t";
+        }
+        elseif(!is_null($startdate)){
+            $datecond = " AND ";
+            $datecond .= (array_key_exists($scope, $dateconditions))? $dateconditions[$scope]:$dateconditions["month"];
+        }
+        else{
+            $datecond = "";
+        }
+        //retrieve events from various tables according to user preferences on what type of events to show
+        $q = "";
+        $q_args = array();
+        $q_args_templ = array();
+        $q_args_templ[] = $course_id;
+        if(!is_null($startdate)){
+           $q_args_templ[] = $startdate;
+        }
+        if(!is_null($enddate)){
+           $q_args_templ[] = $enddate;
+        }
+        
+        //agenda
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','ag.start',$datecond);
+        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
+                . "FROM agenda ag JOIN course c ON ag.course_id=c.id "
+                . "WHERE ag.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+        //big blue button
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','bbb.start_date',$datecond);
+        $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%s') `end`, bbb.description content, 'course' event_group, 'event-special' class, 'teleconference' event_type,  c.code course "
+                . "FROM bbb_session bbb JOIN course c ON bbb.course_id=c.id "
+                . "WHERE bbb.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+
+        //assignements
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','ass.deadline',$datecond);
+        $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+                . "FROM assignment ass JOIN course c ON ass.course_id=c.id "
+                . "WHERE ass.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+        //exercises
+        if(!empty($q)){
+            $q .= " UNION ";
+        }
+        $dc = str_replace('start','ex.end_date',$datecond);
+        $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+                . "FROM exercise ex JOIN course c ON ex.course_id=c.id "
+                . "WHERE ex.course_id =?d "
+                . $dc;
+        $q_args = array_merge($q_args, $q_args_templ);
+
+        if(empty($q))
+        {
+            return null;
+        }
+        $q .= " ORDER BY start, event_type"; 
+        return Database::get()->queryArray($q, $q_args);
+
+       
+    }
 
  ?>

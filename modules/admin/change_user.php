@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,18 +19,15 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/* ===========================================================================
-  change_user.php
-  ==============================================================================
-  @Description: Allows platform admin to login as another user without
-  asking for a password
-  ==============================================================================
+/**
+ * @file change_user.php
+ * @brief  Allows platform admin to login as another user without asking for password
  */
+
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-$nameTools = $langChangeUser;
+$pageName = $langChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
@@ -60,5 +57,14 @@ if (isset($_REQUEST['username'])) {
     }
 }
 
-$tool_content .= "<legend><form action='$_SERVER[SCRIPT_NAME]' method='post'>$langUsername: <input type='text' name='username' /></form></legend>";
+$tool_content .= "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+            <div class='form-group'>
+            <label for = 'username' class='col-sm-3 control-label'>$langUsername:</label>
+                <div class='col-sm-9'>
+                    <input id='username' type='text' name='username' placeholder='$langUsername'>
+                </div>
+            </div>
+        </form>
+        </div>";
 draw($tool_content, 3);

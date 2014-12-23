@@ -33,56 +33,50 @@ function update_field($table, $field, $field_name, $id_col, $id) {
 function add_field($table, $field, $type) {
     global $langToTable, $langAddField, $BAD;
 
-    $retString = "";
     $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$field'");
     if (count($fields) == 0) {
         if (!Database::get()->query("ALTER TABLE `$table` ADD `$field` $type")) {
-            $retString .= "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
+            $retString = "$langAddField <b>$field</b> $langToTable <b>$table</b>: ";
             $retString .= " $BAD<br>";
+            Debug::message($retString, Debug::ERROR);
         }
     }
-    return $retString;
 }
 
 function add_field_after_field($table, $field, $after_field, $type) {
     global $langToTable, $langAddField, $langAfterField, $BAD;
 
-    $retString = "";
-
     $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$field'");
     if (count($fields) == 0) {
         if (!Database::get()->query("ALTER TABLE `$table` ADD COLUMN `$field` $type AFTER `$after_field`")) {
-            $retString .= "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
+            $retString = "$langAddField <b>$field</b> $langAfterField <b>$after_field</b> $langToTable <b>$table</b>: ";
             $retString .= " $BAD<br>";
+            Debug::message($retString, Debug::ERROR);
         }
     }
-    return $retString;
 }
 
 function rename_field($table, $field, $new_field, $type) {
     global $langToA, $langRenameField, $langToTable, $BAD;
 
-    $retString = "";
-
     $fields = Database::get()->queryArray("SHOW COLUMNS FROM $table LIKE '$new_field'");
     if (count($fields) == 0) {
         if (!Database::get()->query("ALTER TABLE `$table` CHANGE  `$field` `$new_field` $type")) {
-            $retString .= "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
+            $retString = "$langRenameField <b>$field</b> $langToA <b>$new_field</b> $langToTable <b>$table</b>: ";
             $retString .= " $BAD<br>";
+            Debug::message($retString, Debug::ERROR);
         }
     }
-    return $retString;
 }
 
 function delete_field($table, $field) {
     global $langOfTable, $langDeleteField, $BAD;
 
-    $retString = "";
     if (!Database::get()->query("ALTER TABLE `$table` DROP `$field`")) {
-        $retString .= "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
+        $retString = "$langDeleteField <b>$field</b> $langOfTable <b>$table</b>";
         $retString .= " $BAD<br>";
+        Debug::message($retString, Debug::ERROR);
     }
-    return $retString;
 }
 
 function delete_table($table) {
@@ -90,16 +84,14 @@ function delete_table($table) {
     $retString = "";
 
     if (!Database::get()->query("DROP TABLE IF EXISTS $table")) {
-        $retString .= "$langDeleteTable <b>$table</b>: ";
+        $retString = "$langDeleteTable <b>$table</b>: ";
         $retString .= " $BAD<br>";
+        Debug::message($retString, Debug::ERROR);
     }
-    return $retString;
 }
 
 function merge_tables($table_destination, $table_source, $fields_destination, $fields_source) {
     global $langMergeTables, $BAD;
-
-    $retString = "";
 
     $query = "INSERT INTO $table_destination (";
     foreach ($fields_destination as $val) {
@@ -111,11 +103,10 @@ function merge_tables($table_destination, $table_source, $fields_destination, $f
     }
     $query = substr($query, 0, -1) . " FROM " . $table_source;
     if (!Database::get()->query($query)) {
-        $retString .= " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
+        $retString = " $langMergeTables <b>$table_destination</b>,<b>$table_source</b>";
         $retString .= " $BAD<br>";
+        Debug::message($retString, Debug::ERROR);
     }
-
-    return $retString;
 }
 
 // add index/indexes in specific table columns
@@ -170,7 +161,7 @@ function update_assignment_submit() {
         }
     });
     if ($updated) {
-        echo "$langTable assignment_submit: $GLOBALS[OK]<br>\n";
+        Debug::message("$langTable assignment_submit: $GLOBALS[OK]<br>\n", Debug::WARNING);
     }
 }
 
@@ -274,7 +265,7 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
         Database::get()->query("UPDATE dropbox_file SET filename = '$new_filename'
 	        	WHERE id = '$id'", $code);
     } else {
-        echo "$langEncDropboxError<br>";
+        Debug::message($langEncDropboxError, Debug::ERROR);
     }
 }
 
@@ -303,19 +294,14 @@ function upgrade_course($code, $lang) {
  * @global type $langUpgCourse
  * @global type $mysqlMainDb
  * @global type $webDir
- * @global type $langUpgradeCourseDone
  * @param type $code
  * @param type $extramessage
  * @param type $return_mapping
  * @return type
  */
-function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mapping = false) {
-    global $langUpgCourse, $mysqlMainDb, $webDir, $langUpgradeCourseDone;
+function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
+    global $langUpgCourse, $mysqlMainDb, $webDir;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (3.0) $extramessage<br>";
-    
-    flush();
-    
     Database::get()->query("USE `$code`");
     
     // move forum tables to central db
@@ -415,6 +401,13 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
             });
         }
 
+        
+        if (!DBHelper::fieldExists('video', 'visible', $code)) {
+            Database::get()->query("ALTER TABLE video ADD visible TINYINT(4) NOT NULL DEFAULT 1 AFTER date");
+        }
+        if (!DBHelper::fieldExists('video', 'public', $code)) {
+            Database::get()->query("ALTER TABLE video ADD public TINYINT(4) NOT NULL DEFAULT 1 AFTER visible");
+        }
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
                         SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
@@ -1139,7 +1132,6 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
     
     
     if ($q1 and $q2) { // if everything ok drop course db
-        echo $langUpgradeCourseDone;
         // finally drop database
         Database::get()->query("DROP DATABASE `$code`");
     }
@@ -1157,14 +1149,11 @@ function upgrade_course_3_0($code, $course_id, $extramessage = '', $return_mappi
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_11($code, $extramessage = '') {
+function upgrade_course_2_11($code) {
     
     global $langUpgCourse;
        
     Database::get()->query("USE `$code`");
-    
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.11) $extramessage<br>";
-    flush();
     
     if (!DBHelper::fieldExists('video', 'category', $code)) {
         Database::get()->query("ALTER TABLE video ADD category INT(6) DEFAULT NULL AFTER description");
@@ -1191,11 +1180,8 @@ function upgrade_course_2_11($code, $extramessage = '') {
  * @param type $course_id
  * @param type $extramessage
  */
-function upgrade_course_2_10($code, $course_id, $extramessage = '') {
+function upgrade_course_2_10($code, $course_id) {
     global $langUpgCourse;
-
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.10) $extramessage<br>";
-    flush();
 
     Database::get()->query("USE `$code`");
     
@@ -1222,13 +1208,10 @@ function upgrade_course_2_10($code, $course_id, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_9($code, $lang, $extramessage = '') {
+function upgrade_course_2_9($code, $lang) {
 
     global $langUpgCourse;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.9) $extramessage<br>";
-    flush();
-    
     Database::get()->query("USE `$code`");
     
     if (!DBHelper::fieldExists('dropbox_file', 'real_filename')) {
@@ -1246,12 +1229,9 @@ function upgrade_course_2_9($code, $lang, $extramessage = '') {
  * @param type $extramessage
  * 
  */
-function upgrade_course_2_8($code, $lang, $extramessage = '') {
+function upgrade_course_2_8($code, $lang) {
 
     global $langUpgCourse, $global_messages;
-
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.8) $extramessage<br>";
-    flush();
 
     Database::get()->query("USE `$code`");
     
@@ -1281,13 +1261,10 @@ function upgrade_course_2_8($code, $lang, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_5($code, $lang, $extramessage = '') {
+function upgrade_course_2_5($code, $lang) {
 
     global $langUpgCourse, $global_messages;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.5) $extramessage<br>";
-    flush();
-    
     Database::get()->query("USE `$code`");
     
     Database::get()->query("UPDATE `accueil` SET `rubrique` = " .
@@ -1345,12 +1322,9 @@ function upgrade_course_2_5($code, $lang, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_4($code, $course_id, $lang, $extramessage = '') {
+function upgrade_course_2_4($code, $course_id, $lang) {
     global $langUpgCourse, $mysqlMainDb, $global_messages, $webDir;
     
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.4) $extramessage<br>";
-    flush();
-
     Database::get()->query("USE `$code`");
     
     // not needed anymore
@@ -1488,12 +1462,9 @@ function upgrade_course_2_4($code, $course_id, $lang, $extramessage = '') {
  * @param type $code
  * @param type $extramessage
  */
-function upgrade_course_2_3($code, $extramessage = '') {
+function upgrade_course_2_3($code) {
     global $langUpgCourse;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.3) $extramessage<br>";
-    flush();
-        
     Database::get()->query("USE `$code`");
     
     // upgrade exercises
@@ -1509,11 +1480,8 @@ function upgrade_course_2_3($code, $extramessage = '') {
  * @param type $lang
  * @param type $extramessage
  */
-function upgrade_course_2_2($code, $lang, $extramessage = '') {
+function upgrade_course_2_2($code, $lang) {
     global $langUpgCourse, $global_messages;
-
-    echo "<hr><p>$langUpgCourse <b>$code</b> (2.2) $extramessage<br>";
-    flush();
 
     Database::get()->query("USE `$code`");
 
@@ -1558,12 +1526,9 @@ function upgrade_course_2_2($code, $lang, $extramessage = '') {
  * @param type $code
  * @param type $extramessage
  */
-function upgrade_course_2_1_3($code, $extramessage = '') {
+function upgrade_course_2_1_3($code) {
     global $langEncodeDropBoxDocuments, $langUpgCourse;
 
-    echo "<hr><p>$langUpgCourse <b>$code</b> $extramessage<br>";
-    flush();
-    
     Database::get()->query("USE `$code`");
 
     // added field visibility in agenda
@@ -1608,49 +1573,6 @@ function traverseDirTree($base, $fileFunc, $dirFunc, $data) {
         }
     }
     closedir($subdirectories);
-}
-
-// Convert course description to special course unit with order = -1
-function convert_description_to_units($code, $course_id) {
-    global $mysqlMainDb, $langCourseDescription;
-
-    $desc = $addon = '';
-    $qdesc = Database::get()->querySingle("SELECT description, course_addon FROM cours WHERE course_id = ?d", $course_id);
-    if ($qdesc) {
-        $desc = trim($qdesc->description);
-        $addon = trim($qdesc->course_addon);
-    }
-
-    $q = Database::get()->queryArray("SELECT * FROM `$code`.course_description");
-
-    // If old-style course description data don't exist and course description is
-    // empty, don't do anything
-    if ((!$q or count($q) == 0) and empty($desc) and empty($addon)) {
-        return;
-    }
-
-    $id = description_unit_id($course_id);
-
-    $error = false;
-    if (!empty($desc)) {
-        $error = add_unit_resource($id, 'description', -1, $GLOBALS['langCourseDescription'], html_cleanup($desc)) && $error;
-    }
-    if (!empty($addon)) {
-        $error = add_unit_resource($id, 'description', false, $GLOBALS['langCourseAddon'], $addon, 'v') && $error;
-    }
-    if (!$error) {
-        Database::get()->query("UPDATE cours SET description = '', course_addon = '' WHERE course_id = $course_id");
-    }
-
-    if ($q and count($q) > 0) {
-        $error = false;
-        foreach ($q as $row) {
-            $error = add_unit_resource($id, 'description', $row->id, $row->title, html_cleanup($row->content), 'i', $row->upDate) && $error;
-        }
-        if (!$error) {
-            Database::get()->query("DROP TABLE `$code`.course_description");
-        }
-    }
 }
 
 function upgrade_course_index_php($code) {

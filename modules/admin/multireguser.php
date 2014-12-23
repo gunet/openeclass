@@ -37,7 +37,7 @@ $user = new User();
 
 load_js('jstree');
 
-$nameTools = $langMultiRegUser;
+$pageName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $error = '';
@@ -122,11 +122,11 @@ if (isset($_POST['submit'])) {
     if (!empty($unparsed_lines)) {
         $tool_content .= "<p><b>$langErrors</b></p><pre>" . q($unparsed_lines) . "</pre>";
     }
-    $tool_content .= "<table class='tbl_alt'><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
+    $tool_content .= "<table class='table-default'><tr><th>$langSurname</th><th>$langName</th><th>e-mail</th><th>$langPhone</th><th>$langAm</th><th>username</th><th>password</th></tr>\n";
     foreach ($new_users_info as $n) {
         $tool_content .= "<tr><td>" . q($n[1]) . "</td><td>" . q($n[2]) . "</td><td>" . q($n[3]) . "</td><td>" . q($n[4]) . "</td><td>" . q($n[5]) . "</td><td>" . q($n[6]) . "</td><td>" . q($n[7]) . "</td></tr>\n";
     }
-    $tool_content .= "</table>\n";
+    $tool_content .= "</table>";
 } else {
     Database::get()->queryFunc("SELECT id, name FROM hierarchy WHERE allow_course = true ORDER BY name", function($n) use(&$facs) {
         $facs[$n->id] = $n->name;
@@ -134,26 +134,40 @@ if (isset($_POST['submit'])) {
     $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
         ACCESS_PROFS => $langProfileInfoProfs,
         ACCESS_USERS => $langProfileInfoUsers);
-    $tool_content .= "<div class='noteit'>$langMultiRegUserInfo</div>
-        <form method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
-        <fieldset>
-        <legend>$langMultiRegUserData</legend>
-        <table class='tbl' width='100%'>
-        <tr><th>$langMultiRegFields:</th>
-            <td><input type='text' name='fields' size='50' value='first last id email phone' /></td>
-            <tr><th>$langUsersData:</th>
-            <td><textarea class='auth_input' name='user_info' rows='10' cols='60'></textarea></td>
-        </tr>
-        <tr><th>$langMultiRegType:</th>
-            <td><select name='type'>
+    $tool_content .= "<div class='alert alert-info'>$langMultiRegUserInfo</div>
+        <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
+        <fieldset>        
+        <div class='form-group'>
+            <label for='fields' class='col-sm-3 control-label'>$langMultiRegFields:</label>
+            <div class='col-sm-9'>
+                <input class='form-control' id='fields' type='text' name='fields' value='first last id email phone'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='user_info' class='col-sm-3 control-label'>$langUsersData:</label>
+            <div class='col-sm-9'>
+                <textarea class='auth_input form-control' name='user_info' id='user_info' rows='10'></textarea>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='type' class='col-sm-3 control-label'>$langMultiRegType:</label>
+            <div class='col-sm-9'>
+                <select class='form-control' name='type' id='type'>
                     <option value='stud'>$langsOfStudents</option>
-                    <option value='prof'>$langOfTeachers</option></select></td>
-        </tr>
-        <tr><th>$langMultiRegPrefix:</th>
-            <td><input type='text' name='prefix' size='10' value='user' /></td>
-        </tr>
-        <tr><th>$langFaculty:</th>
-            <td>";
+                    <option value='prof'>$langOfTeachers</option>
+                </select>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='prefix' class='col-sm-3 control-label'>$langMultiRegPrefix:</label>
+            <div class='col-sm-9'>
+                <input class='form-control' type='text' name='prefix' id='prefix' value='user'>
+            </div>
+        </div>
+        <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langFaculty:</label>
+            <div class='col-sm-9'>";
     if (isDepartmentAdmin()) {
         list($js, $html) = $tree->buildUserNodePicker(array('params' => 'name="facid[]"',
             'allowables' => $user->getDepartmentIds($uid)));
@@ -162,30 +176,49 @@ if (isset($_POST['submit'])) {
     }
     $head_content .= $js;
     $tool_content .= $html;
-    $tool_content .= "</td>
-        </tr>
-        <tr><th>$langAm:</th>
-            <td><input type='text' name='am' size='10' /></td>
-        </tr>
-        <tr><th>$langLanguage:</th>
-            <td>" . lang_select_options('lang') . "</td>
-        </tr>
-        <tr><th>$langEmail</th>
-            <td>" . selection($access_options, 'email_public', ACCESS_PRIVATE) . "</td></tr>
-        <tr><th>$langAm</th>
-            <td>" . selection($access_options, 'am_public', ACCESS_PRIVATE) . "</td></tr>
-        <tr><th>$langPhone</th>
-            <td>" . selection($access_options, 'phone_public', ACCESS_PRIVATE) . "</td></tr>
-        <tr><th>$langInfoMail:</th>
-            <td><input name='send_mail' type='checkbox' />
-                $langMultiRegSendMail</td>
-        </tr>
-        <tr><th>&nbsp;</th>
-            <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></td>
-        </tr>
-        </table>
+    $tool_content .= "</div>
+        </div>
+        <div class='form-group'>
+            <label for='am' class='col-sm-3 control-label'>$langAm:</label>
+            <div class='col-sm-9'>
+                <input class='form-control' type='text' name='am' id='am'>
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='lang' class='col-sm-3 control-label'>$langLanguage:</label>
+            <div class='col-sm-9'>" . lang_select_options('lang', 'class="form-control"') . "</div>
+        </div>
+        <div class='form-group'>
+        <label for='email_public' class='col-sm-3 control-label'>$langEmail</label>
+            <div class='col-sm-9'>" . selection($access_options, 'email_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
+        </div>
+        <div class='form-group'>
+        <label for='am_public' class='col-sm-3 control-label'>$langAm</label>
+            <div class='col-sm-9'>" . selection($access_options, 'am_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
+        </div>
+        <div class='form-group'>
+        <label for='phone_public' class='col-sm-3 control-label'>$langPhone</label>
+            <div class='col-sm-9'>" . selection($access_options, 'phone_public', ACCESS_PRIVATE, 'class="form-control"') . "</div>
+        </div>
+        <div class='form-group'>
+        <label for='send_mail' class='col-sm-3 control-label'>$langInfoMail</label>
+            <div class='col-sm-9'>
+                <div class='checkbox'>
+                    <label>
+                        <input name='send_mail' id='send_mail' type='checkbox'> $langMultiRegSendMail
+                    </label>
+                </div>            
+            </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-9 col-sm-offset-3'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                <a class='btn btn-default' href='index.php'>$langCancel</a>
+            </div>
+        </div>       
         </fieldset>
-        </form>";
+        </form>
+        </div>";
 }
 
 draw($tool_content, 3, null, $head_content);

@@ -22,8 +22,7 @@
 
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
-require_once 'admin.inc.php';
-$nameTools = $langUnregUser;
+$pageName = $langUnregUser;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 // get the incoming values and initialize them

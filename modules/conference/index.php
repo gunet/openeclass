@@ -29,6 +29,28 @@ $require_help = TRUE;
 $helpTopic = 'Conference';
 
 require_once '../../include/baseTheme.php';
+$coursePath = $webDir . '/courses/';
+    $fileChatName = $coursePath . $course_code . '/chat.txt';
+    $tmpArchiveFile = $coursePath . $course_code . '/tmpChatArchive.txt';
+
+    $nick = uid_to_name($uid);
+
+// How many lines to show on screen
+    define('MESSAGE_LINE_NB', 40);
+// How many lines to keep in temporary archive
+// (the rest are in the current chat file)
+    define('MAX_LINE_IN_FILE', 80);
+
+    if ($GLOBALS['language'] == 'el') {
+        $timeNow = date("d-m-Y / H:i", time());
+    } else {
+        $timeNow = date("Y-m-d / H:i", time());
+    }
+
+    if (!file_exists($fileChatName)) {
+        $fp = fopen($fileChatName, 'w') or die('<center>$langChatError</center>');
+        fclose($fp);
+    }
 
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
@@ -36,7 +58,7 @@ $action = new action();
 $action->record(MODULE_ID_CHAT);
 /* * *********************************** */
 
-$nameTools = $langConference;
+$pageName = $langConference;
 
 // guest user not allowed
 if (check_guest()) {
@@ -44,13 +66,16 @@ if (check_guest()) {
     draw($tool_content, 2, 'conference');
 }
 
-$head_content = '<script type="text/javascript">
-function prepare_message() {
-	document.chatForm.chatLine.value=document.chatForm.msg.value;
-	document.chatForm.msg.value = "";
-	document.chatForm.msg.focus();
-	return true;
-}
+$head_content .= '<script type="text/javascript">
+    function prepare_message() {
+            document.chatForm.chatLine.value=document.chatForm.msg.value;
+            document.chatForm.msg.value = "";
+            document.chatForm.msg.focus();
+            return true;
+    }
+    setTimeout(function(){
+        $( "#iframe" ).attr( "src", function ( i, val ) { return val; });
+    }, 2000);        
 </script>';
 
 if ($is_editor) {
@@ -59,17 +84,20 @@ if ($is_editor) {
             'url' => "messageList.php?course=$course_code&amp;store=true",
             'icon' => 'fa-plus-circle',
             'level' => 'primary-label',
-            'button-class' => 'btn-success'
+            'button-class' => 'btn-success',
+            'link-attrs' => "target='messageList'"
         ),
-        array('title' => $langSave,
+        array('title' => $langWash,
             'url' => "messageList.php?course=$course_code&amp;reset=true",
-            'icon' => 'fa-university',
-            'level' => 'primary'
+            'icon' => 'fa-trash',
+            'level' => 'primary',
+            'link-attrs' => "target='messageList'"
             )
     ));
 }
 
 $tool_content .= "
+    <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
    <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
    <fieldset>
     <legend>$langTypeMessage</legend>
@@ -82,11 +110,11 @@ $tool_content .= "
           </span>
         </div>
         <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
-          <iframe class='embed-responsive-item' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;'></iframe>
+          <iframe class='embed-responsive-item' id='iframe' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
         </div>       
     </div>   
    </fieldset>
-   </form>";
+   </form></div></div></div>";
 
 add_units_navigation(TRUE);
 draw($tool_content, 2, null, $head_content);

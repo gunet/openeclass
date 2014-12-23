@@ -16,14 +16,16 @@
 
 class Debug {
 
-    private static $level = Debug::ERROR;
+    public static $level = Debug::ERROR;
     private static $default_level = Debug::ERROR;
     private static $log_location = null;
+    private static $output;
 
     const LOW = 0;
     const INFO = 10;
-    const ERROR = 20;
-    const CRITICAL = 30;
+    const WARNING = 20;
+    const ERROR = 30;
+    const CRITICAL = 40;
     const ALWAYS = 100;
 
     public static function setLevel($level) {
@@ -34,15 +36,29 @@ class Debug {
         Debug::$default_level = abs(intval($level));
     }
 
+    /**
+     * Set the current output module for Debug
+     * @param type $newoutput Type of: function ($message, $level)
+     */
+    public static function setOutput($newoutput) {
+        Debug::$output = $newoutput;
+    }
+
     public static function message($message, $level = null, $backtrace_file = null, $backtrace_line = 'unknown') {
         if (is_null($level))
             $level = Debug::$default_level;
         if ($level >= Debug::$level) {
-            echo "<p><br>";
+            $full_message = "<p>";
             if (!is_null($backtrace_file)) {
-                echo "In file <b>" . $backtrace_file . "</b> on line <b>" . $backtrace_line . "</b>";
+                $full_message .= "In file <b>" . $backtrace_file . "</b> on line <b>" . $backtrace_line . "</b> : ";
             }
-            echo "<br> $message </p>";
+            $full_message .="<i>$message</i></p>";
+            if (is_null(Debug::$output))
+                echo $full_message;
+            else {
+                $curoutput = Debug::$output;
+                $curoutput($full_message, $level);
+            }
         }
         if (!is_null(Debug::$log_location))
             file_put_contents(Debug::$log_location, $message . "\n", FILE_APPEND | LOCK_EX);

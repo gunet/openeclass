@@ -28,7 +28,7 @@ $alt_auth_prof_reg = get_config('alt_auth_prof_reg');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
 $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
 
-$nameTools = $langNewUser;
+$pageName = $langNewUser;
 $auth = get_auth_active_methods();
 
 if ($user_registration) {

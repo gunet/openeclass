@@ -38,7 +38,7 @@ require_once 'include/sendMail.inc.php';
 
 $group_id = intval($_REQUEST['group_id']);
 
-$nameTools = $langEmailGroup;
+$pageName = $langEmailGroup;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroupSpace,
     'url' => "group_space.php?group_id=$group_id", 'name' => $langGroupSpace);
 

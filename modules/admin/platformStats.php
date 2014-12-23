@@ -27,7 +27,7 @@
 $require_admin = TRUE;
 
 require_once '../../include/baseTheme.php';
-$nameTools = $langVisitsStats;
+$pageName = $langVisitsStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $page_title = $langPlatformStats . ": " . $langVisitsStats;
 
@@ -36,7 +36,7 @@ load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#u_date_start, #u_date_end').datetimepicker({
+            $('#user_date_start, #user_date_end').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-left',
                 language: '" . $language . "',

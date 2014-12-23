@@ -63,7 +63,7 @@ $head_content = '<script type="text/javascript">
                     }
                 </script>';
 
-$nameTools = $langDropBox;
+$pageName = $langDropBox;
 
 // action bar 
 if (!isset($_GET['showQuota'])) {    
@@ -113,7 +113,7 @@ if (!isset($_GET['showQuota'])) {
 }
 
 if (isset($_GET['course']) and isset($_GET['showQuota']) and $_GET['showQuota'] == TRUE) {
-    $nameTools = $langQuotaBar;
+    $pageName = $langQuotaBar;
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langDropBox);
     $space_released = 0;
     if ($is_editor && ($diskUsed/$diskQuotaDropbox >= 0.9)) { 

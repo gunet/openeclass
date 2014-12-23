@@ -23,7 +23,7 @@ $require_current_course = true;
 $require_course_admin = true;
 define('STATIC_MODULE', 1);
 require_once '../../include/baseTheme.php';
-$nameTools = $langCourseMetadataControlPanel;
+$pageName = $langCourseMetadataControlPanel;
 require_once 'CourseXML.php';
 
 // exit if feature disabled or is not reviewer

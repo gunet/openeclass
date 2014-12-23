@@ -26,7 +26,7 @@ $helpTopic = 'Gradebook';
 require_once '../../include/baseTheme.php';
 
 //Module name
-$nameTools = $langGradebook;
+$pageName = $langGradebook;
 $userID = $uid;
 $content = false;
 $grade_content = '';
@@ -36,18 +36,23 @@ $courses = Database::get()->queryArray("SELECT course.id course_id, code, title 
                                             AND user.id = ?d
                                             AND course.visible != " . COURSE_INACTIVE . "", $userID, $userID);
 if (count($courses) > 0) {
-    $grade_content .= "<table class='table-default'><tr><th>$langCourse</th><th>$langGradebookGrade</th><th>$langMore</th></tr>";
+    $grade_content .= "<div class ='table-responsive'>
+            <table class='table-default'><tr><th>$langCourse</th><th>$langGradebookGrade</th></tr>";
     foreach ($courses as $course1) {
-        $course_id = $course1->course_id;    
+        $course_id = $course1->course_id;
+        $course_code = $course1->code;
         $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);        
-        if ($gradebook) {
-            $content = true;
-            $gradebook_id = $gradebook->id;  
-            $grade_content .= "<tr><td>".$course1->title."</td><td>".userGradeTotal($gradebook_id, $userID)." ($langMax: ".$gradebook->range.")</td>
-                                   <td><a href='../../modules/gradebook/index.php?course=".$course1->code."'>$langMore</a></td></tr>";
+        if ($gradebook) {            
+            $gradebook_id = $gradebook->id;
+            $grade = userGradeTotal($gradebook_id, $userID, $course_code);
+            if ($grade) {
+                $content = true;
+                $grade_content .= "<tr><td>".$course1->title."</td>
+                    <td><a href='../../modules/gradebook/index.php?course=$course_code'>".$grade."</a> <small>($langMax: ".$gradebook->range.")</small></td></tr>";
+            }            
         }
     }
-    $grade_content .= "</table>";
+    $grade_content .= "</table></div>";
     if (!$content) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGradebook</div>";
     } else {
@@ -64,7 +69,7 @@ if (count($courses) > 0) {
  * @param type $userID
  * @return string
  */
-function userGradeTotal ($gradebook_id, $userID) {
+function userGradeTotal ($gradebook_id, $userID, $course_code) {
     
     $visible = 1;
     
@@ -76,7 +81,7 @@ function userGradeTotal ($gradebook_id, $userID) {
     if ($userGradeTotal) {
         return round($userGradeTotal/100, 2);
     } else {
-        return "-";
+        return false;
     }
 }
 

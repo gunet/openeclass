@@ -47,35 +47,43 @@ $statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ?
         '<option value="yearly"  ' . (($u_interval == 'yearly') ? ('selected') : ('')) . '>' . $langYearly . "</option>\n" .
         '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>\n";
 
-$tool_content .= '
-<form method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">
-<fieldset>
-  <legend>' . $langUsageVisits . '</legend>
-  <table class="tbl">
-  <tr>
-    <th>&nbsp;</th>
-    <td>' . $langCreateStatsGraph . '</td>
-  </tr>
-  <tr>
-    <th>' . $langValueType . ':</th>
-    <td><select name="u_stats_value">' . $statsValueOptions . '</select></td>
-  </tr>
-  <tr>
-    <th>' . $langStartDate . ':</th>
-    <td><input type="text" name="u_date_start" value="' . $u_date_start . '"></td>
-  </tr>
-  <tr>
-    <th>' . $langEndDate . ':</th>
-    <td><input type="text" name="u_date_end" value="' . $u_date_end . '"></td>    
-  </tr>
-  <tr>
-    <th>' . $langModule . ':</th>
-    <td><select name="u_module_id">' . $mod_opts . '</select></td>
-  </tr>
-  <tr>
-    <th>' . $langInterval . ':</th>
-    <td><select name="u_interval">' . $statsIntervalOptions . '</select></td>
-  </tr>
-  </table>
-</fieldset>
-</form>';
+
+
+$tool_content .= '<div class="form-wrapper">';
+$tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
+$tool_content .= '<div class="form-group">  
+                    <label class="col-sm-2 control-label">' . $langValueType . ':</label>
+                    <div class="col-sm-10"><select name="u_stats_value" class="form-control">' . $statsValueOptions . '</select></div>
+                  </div>';
+$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+    <label class='col-sm-2 control-label'>$langStartDate:</label>
+        <div class='col-xs-10 col-sm-9'>               
+            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+        </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";        
+$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label'>$langEndDate:</label>
+            <div class='col-xs-10 col-sm-9'>
+                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
+            </div>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
+        </div>
+        </div>";
+$tool_content .= '<div class="form-group">
+        <label class="col-sm-2 control-label">' . $langModule . ':</label>
+        <div class="col-sm-10"><select name="u_module_id" class="form-control">' . $mod_opts . '</select></div>
+  </div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">' . $langInterval . ':</label>
+     <div class="col-sm-10"><select name="u_interval" class="form-control">' . $statsIntervalOptions . '</select></div>
+  </div>
+  <div class="col-sm-offset-2 col-sm-10">
+    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+    </div>
+</form></div>';

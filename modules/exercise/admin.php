@@ -33,7 +33,7 @@ require_once 'include/lib/multimediahelper.class.php';
 
 ModalBoxHelper::loadModalBox();
 
-$nameTools = $langExercices;
+$pageName = $langExercices;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 // picture path
@@ -119,7 +119,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
                     redirect_to_home_page("modules/exercise/admin.php?course=$course_code&editQuestion=$question_id");
                 }
             }
-            $nameTools = $langQuestionManagement;
+            $pageName = $langQuestionManagement;
             $navigation[] = array(
                 'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
                 'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
@@ -129,7 +129,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
             $objAnswer = new Answer($question_id);            
             include('answer_admin.inc.php');
         } else {
-            $nameTools = $langInfoQuestion;
+            $pageName = $langInfoQuestion;
             $navigation[] = array(
                 'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
                 'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
@@ -137,7 +137,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
             include('statement_admin.inc.php');
         }
     } else {
-        $nameTools = $langNewQu;
+        $pageName = $langNewQu;
         $navigation[] = array(
             'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
             'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
@@ -145,7 +145,7 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
         include('statement_admin.inc.php');
     }
 } elseif (isset($_GET['importIMSQTI'])) {
-	$nameTools = $langNewQu;
+	$pageName = $langNewQu;
 	$navigation[] = array(
 	  'url' => (isset($exerciseId) ? "admin.php?course=$course_code&amp;exerciseId=$exerciseId" : "question_pool.php?course=$course_code&amp;exerciseId=0"), 
 	  'name' => (isset($exerciseId) ? $langExerciseManagement : $langQuestionPool)
@@ -153,12 +153,12 @@ if (isset($_GET['editQuestion']) || isset($_GET['newQuestion']) || isset($_GET['
 	include('imsqti.inc.php');
 } else {
     if (isset($_GET['NewExercise'])) {
-        $nameTools = $langNewEx;
+        $pageName = $langNewEx;
     } elseif (isset($_GET['modifyExercise'])) {
-        $nameTools = $langInfoExercise;
+        $pageName = $langInfoExercise;
         $navigation[] = array('url' => "admin.php?course=$course_code&amp;exerciseId=$exerciseId", 'name' => $langExerciseManagement);
     } else {
-        $nameTools = q($objExercise->selectTitle());
+        $pageName = q($objExercise->selectTitle());
     }
     include('exercise_admin.inc.php');
     if (!isset($_GET['NewExercise']) && !isset($_GET['modifyExercise'])) {

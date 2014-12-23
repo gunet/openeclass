@@ -33,9 +33,8 @@ require_once 'modules/sharing/sharing.php';
 define ('RSS', 'modules/blog/rss.php?course='.$course_code);
 load_js('tools.js');
 
-$nameTools = $langBlog;
+$pageName = $langBlog;
 
-$head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/blog/style.css">';
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
 
@@ -92,7 +91,7 @@ if ($is_editor) {
         	unset($message);
         }
         
-        $tool_content .= "<form action=\"\" method=\"post\" >";
+        
         
         if (setting_get(SETTING_BLOG_STUDENT_POST, $course_id) == 1) {
             $checkTeach = "";
@@ -101,16 +100,6 @@ if ($is_editor) {
             $checkTeach = "checked ";
             $checkStud = "";
         }
-        
-        $tool_content .= "<fieldset><legend>$langBlogPerm</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"1_radio\" $checkTeach/>$langBlogPermTeacher</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"1_radio\" $checkStud/>$langBlogPermStudents</td></tr>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
-        
         if (setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id) == 1) {
         	$checkDis = "";
         	$checkEn = "checked ";
@@ -118,16 +107,6 @@ if ($is_editor) {
         	$checkDis = "checked ";
         	$checkEn = "";
         }
-        
-        $tool_content .= "<fieldset><legend>$langCommenting</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"2_radio\" $checkEn/>$langCommentsEn</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"2_radio\" $checkDis/>$langCommentsDis</td></tr>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
-        
         if (setting_get(SETTING_BLOG_RATING_ENABLE, $course_id) == 1) {
         	$checkDis = "";
         	$checkEn = "checked ";
@@ -135,16 +114,6 @@ if ($is_editor) {
         	$checkDis = "checked ";
         	$checkEn = "";
         }
-        
-        $tool_content .= "<fieldset><legend>$langRating</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"3_radio\" $checkEn/>$langRatingEn</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"3_radio\" $checkDis/>$langRatingDis</td></tr>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
-		
         if (!$sharing_allowed) {
             $radio_dis = " disabled";
             $sharing_dis_label = "<tr><td><em>";
@@ -168,19 +137,88 @@ if ($is_editor) {
             $checkEn = "";
         }
         
-        $tool_content .= "<fieldset><legend>$langSharing</legend>";
-        $tool_content .= "<table class=\"tbl\" width=\"100%\">";
-        $tool_content .= "<tbody>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"1\" name=\"4_radio\" $checkEn $radio_dis/>$langSharingEn</td></tr>";
-        $tool_content .= "<tr><td><input type=\"radio\" value=\"0\" name=\"4_radio\" $checkDis $radio_dis/>$langSharingDis</td></tr>";
-        $tool_content .= "<tr><td>$sharing_dis_label</tr></td>";
-        $tool_content .= "</tbody>";
-        $tool_content .= "</table>";
-        $tool_content .= "</fieldset>";
         
-        $tool_content .= "<p class=\"right\"><input type=\"submit\" name=\"submitSettings\" value=\"$langSubmit\" /></p>";
+        $tool_content .= "
+            <div class='row'>
+                <div class='col-sm-12'>
+                    <div class='form-wrapper'>
+                        <form class='form-horizontal' action='' role='form' method='post'>
+                            <fieldset>                               
+                                <div class='form-group'>
+                                    <label class='col-sm-3'>$langBlogPerm</label>
+                                    <div class='col-sm-9'> 
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='1_radio' $checkTeach>$langBlogPermTeacher
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='1_radio' $checkStud>$langBlogPermStudents
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <fieldset>
+                                <div class='form-group'>
+                                    <label class='col-sm-3'>$langCommenting</label>
+                                    <div class='col-sm-9'>    
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='2_radio' $checkEn>$langCommentsEn
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='2_radio' $checkDis>$langCommentsDis
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>                            
+                                <div class='form-group'>
+                                    <label class='col-sm-3'>$langRating:</label>
+                                    <div class='col-sm-9'>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='3_radio' $checkEn>$langRatingEn
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='3_radio' $checkDis>$langRatingDis
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <label class='col-sm-3'>$langSharing:</label>
+                                    <div class='col-sm-9'>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='1' name='4_radio' $checkEn $radio_dis>$langSharingEn
+                                            </label>
+                                        </div>
+                                        <div class='radio'>
+                                            <label>
+                                                <input type='radio' value='0' name='4_radio' $checkDis $radio_dis>$langSharingDis
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class='form-group'>
+                                <div class='col-sm-10 col-sm-offset-2'>
+                                  <input type='submit' class='btn btn-primary' name='submitSettings' value='$langSubmit'>
+                                  <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>";
         
-        $tool_content .= "</form>";
+        
         
     }
 }
@@ -194,17 +232,17 @@ if ($action == "delPost") {
     if ($post->loadFromDB($pId)) {
         if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
             if($post->delete()) {
-                $message = "<div class='alert alert-success'>$langBlogPostDelSucc</div>";
+                Session::Messages($langBlogPostDelSucc, 'alert-success');
             } else {
-                $message = "<div class='alert alert-warning'>$langBlogPostDelFail</div>";
+                Session::Messages($langBlogPostDelFail);
             }
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedDel</div>";
+            Session::Messages($langBlogPostNotAllowedDel);
         }
     } else {
-        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+        Session::Messages($langBlogPostNotFound);      
     }
-    $action = "showBlog";
+    redirect_to_home_page("modules/blog/index.php?course=$course_code");
 }
 
 //create blog post form
@@ -237,7 +275,8 @@ if ($action == "createPost") {
             </form>
         </div>";
     } else {
-        $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
+        Session::Messages($langBlogPostNotAllowedCreate);
+        redirect_to_home_page("modules/blog/index.php?course=$course_code");
     }
     
 }
@@ -275,12 +314,13 @@ if ($action == "editPost") {
             </form>
         </div>";
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
+            Session::Messages($langBlogPostNotAllowedEdit);
+            redirect_to_home_page("modules/blog/index.php?course=$course_code");            
         }
     } else {
-        $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+        Session::Messages($langBlogPostNotFound);
+        redirect_to_home_page("modules/blog/index.php?course=$course_code");        
     }
-
 }
 
 //save blog post
@@ -290,31 +330,30 @@ if ($action == "savePost") {
         if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
             $post = new BlogPost();
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
-                $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
+                Session::Messages($langBlogPostSaveSucc, 'alert-success');
             } else {
-                $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
+                Session::Messages($langBlogPostSaveFail);
             }
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedCreate</div>";
+            Session::Messages($langBlogPostNotAllowedCreate);
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
         if ($post->loadFromDB($_POST['pId'])) {
             if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
-                    $message = "<div class='alert alert-success'>$langBlogPostSaveSucc</div>";
+                    Session::Messages($langBlogPostSaveSucc, 'alert-success');
                 } else {
-                    $message = "<div class='alert alert-warning'>$langBlogPostSaveFail</div>";
+                    Session::Messages($langBlogPostSaveFail);
                 }
             } else {
-                $message = "<div class='alert alert-warning'>$langBlogPostNotAllowedEdit</div>";
+                Session::Messages($langBlogPostNotAllowedEdit);
             }
         } else {
-            $message = "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+            Session::Messages($langBlogPostNotFound);                      
         }
     } 
-    $action = "showBlog";
-    
+    redirect_to_home_page("modules/blog/index.php?course=$course_code");      
 }
 
 if (isset($message) && $message) {
@@ -333,42 +372,60 @@ if ($action == "showPost") {
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
         $post->incViews();
-        
-        $tool_content .= "<div class='blog_post'>";
-        $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
-        
-        if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
-            $tool_content .= "
-            <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
-            <img src='$themeimg/edit.png' alt='".$langModify."' title='".$langModify."'/></a>
-            <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
-            <img src='$themeimg/delete.png' alt='".$langDelete."' title='".$langDelete."' /></a>";
-        }
-        
-        $tool_content .= "</h2></div>";
-        
-        $tool_content .= "<div class='blog_post_content'>".standard_text_escape($post->getContent())."</div>";
-        $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.display_user($post->getAuthor(), false, false)."</div>";
-        $tool_content .= "</div>";
-        
-        if ($ratings_enabled == 1) {
-        	$rating = new Rating('up_down', 'blogpost', $post->getId());
-        	$tool_content .= $rating->put($is_editor, $uid, $course_id);
-        }
-        
+        $sharing_content = '';
+        $rating_content = '';
         if ($sharing_allowed) {
-            if ($sharing_enabled == 1) {
-                $tool_content .= print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle());
-            }
+            $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
         }
+        if ($ratings_enabled) {
+            $rating = new Rating('up_down', 'blogpost', $post->getId());
+            $rating_content = $rating->put($is_editor, $uid, $course_id);
+        }        
+        $tool_content .= "<div class='panel panel-action-btn-default'>
+                            <div class='panel-heading'>
+                                <div class='pull-right'>
+                                    ". action_button(array(
+                                        array(
+                                            'title' => $langModify,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editPost&amp;pId=".$post->getId(),
+                                            'icon' => 'fa-edit',
+                                            'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                        ),
+                                        array(
+                                            'title' => $langDelete,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=delPost&amp;pId=".$post->getId(),
+                                            'icon' => 'fa-times',
+                                            'class' => 'delete',
+                                            'confirm' => $langSureToDelBlogPost,
+                                            'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                        )                                        
+                                    ))."
+                                </div>
+                                <h3 class='panel-title'>
+                                    ".q($post->getTitle())."
+                                </h3>
+                            </div>
+                            <div class='panel-body'><div class='label label-success'>" . nice_format($post->getTime(), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape($post->getContent())."</div>
+                            <div class='panel-footer'>
+                                <div class='row'>
+                                    <div class='col-sm-6'>$rating_content</div>
+                                    <div class='col-sm-6 text-right'>$sharing_content</div>
+                                </div>
+                            </div>
+                        </div>";
         
-        if ($comments_enabled == 1) {
+
+        
+
+        
+        if ($comments_enabled) {
             $comm = new Commenting('blogpost', $post->getId());
-            $tool_content .= $comm->put($course_code, $is_editor, $uid);
+            $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
         }
         
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langBlogPostNotFound</div>";
+        Session::Messages($langBlogPostNotFound);
+        redirect_to_home_page("modules/blog/index.php?course=$course_code");  
     }
 
 }
@@ -400,45 +457,61 @@ if ($action == "showBlog") {
         
         //retrieve blog posts
         $posts = $blog->getBlogPostsDB($page, $posts_per_page);
-        
+                
         /***blog posts area***/
-        $tool_content .= "<div class='blog_posts'>";
+        $tool_content .= "<div class='row'>";
+        $tool_content .= "<div class='col-sm-9'>";
         foreach ($posts as $post) {
-            $tool_content .= "<div class='blog_post'>";
-            $tool_content .= "<div class='blog_post_title'><h2><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
-            
-            if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
-                $tool_content .= "
-                <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=editPost&amp;pId=".$post->getId()."'>
-                <img src='$themeimg/edit.png' alt='".$langModify."' title='".$langModify."'/></a>
-                <a href='$_SERVER[SCRIPT_NAME]?course=".$course_code."&amp;action=delPost&amp;pId=".$post->getId()."' onClick=\"return confirmation('$langSureToDelBlogPost');\">
-                <img src='$themeimg/delete.png' alt='".$langDelete."' title='".$langDelete."' /></a>";
-            }
-            
-            $tool_content .= "</h2></div>";
-            
-            $tool_content .= "<div class='blog_post_content'>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."</div>";
-            $tool_content .= "<div class='smaller'>" . nice_format($post->getTime(), true).$langBlogPostUser.display_user($post->getAuthor(), false, false)."</div>";
-            $tool_content .= "</div>";
-            
-            if ($ratings_enabled == 1) {
-            	$rating = new Rating('up_down', 'blogpost', $post->getId());
-            	$tool_content .= $rating->put($is_editor, $uid, $course_id);
-            }
-            
+            $sharing_content = '';
+            $rating_content = '';
             if ($sharing_allowed) {
-                if ($sharing_enabled == 1) {
-                    $tool_content .= print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle());
-                }
+                $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
+            }            
+            if ($ratings_enabled) {
+                $rating = new Rating('up_down', 'blogpost', $post->getId());
+                $rating_content = $rating->put($is_editor, $uid, $course_id);
             }
-            
-            if ($comments_enabled == 1) {
+            if ($comments_enabled) {
                 $comm = new Commenting('blogpost', $post->getId());
-                $tool_content .= $comm->put($course_code, $is_editor, $uid);
+                $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
-                $tool_content .= "<div class=\"blog_post_empty_space\"></div>";
-            }
-            
+                $comment_content = "<div class=\"blog_post_empty_space\"></div>";
+            }            
+            $tool_content .= "<div class='panel panel-action-btn-default'>
+                                <div class='panel-heading'>
+                                    <div class='pull-right'>
+                                        ". action_button(array(
+                                            array(
+                                                'title' => $langModify,
+                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editPost&amp;pId=".$post->getId(),
+                                                'icon' => 'fa-edit',
+                                                'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                            ),
+                                            array(
+                                                'title' => $langDelete,
+                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=delPost&amp;pId=".$post->getId(),
+                                                'icon' => 'fa-times',
+                                                'class' => 'delete',
+                                                'confirm' => $langSureToDelBlogPost,
+                                                'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                            )                                        
+                                        ))."
+                                    </div>
+                                    <h3 class='panel-title'>
+                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                    </h3>                                    
+                                </div>
+                                <div class='panel-body'>
+                                    <div class='label label-success'>" . nice_format($post->getTime(), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."
+                                    $comment_content
+                                </div>
+                                <div class='panel-footer'>
+                                    <div class='row'>
+                                        <div class='col-sm-6'>$rating_content</div>
+                                        <div class='col-sm-6 text-right'>$sharing_content</div>
+                                    </div>                                    
+                                </div>
+                             </div>";            
         }
         
         
@@ -450,11 +523,11 @@ if ($action == "showBlog") {
         
         
         /***sidebar area***/
-        $tool_content .= "<div style=\"float: right; width: 25%;\">";
+        $tool_content .= "<div class='col-sm-3'>";
         $tool_content .= $blog->popularBlogPostsHTML($num_popular);
         $tool_content .= $blog->chronologicalTreeHTML(date('n',strtotime($posts[0]->getTime())), date('Y',strtotime($posts[0]->getTime())));
         
-        $tool_content .= "</div>";
+        $tool_content .= "</div></div>";
         /***end of sidebar area***/
     }
 }

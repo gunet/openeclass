@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -25,18 +25,17 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
-require_once 'config.php';
-require_once 'functions.php';
+require_once 'modules/forum/config.php';
+require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/forumtopicindexer.class.php';
-require_once 'modules/search/forumpostindexer.class.php';
 require_once 'modules/rating/class.rating.php';
 
 ModalBoxHelper::loadModalBox();
 
+$toolName = $langForums;
 if ($is_editor) {
     load_js('tools.js');
 }
@@ -85,17 +84,13 @@ $topic_locked = $myrow->locked;
 $total = get_total_posts($topic);
 
 if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
-    $idx = new Indexer();
-    $ftdx = new ForumTopicIndexer($idx);
-    $fpdx = new ForumPostIndexer($idx);
-
     $last_post_in_thread = get_last_post($topic);
 
     $this_post_time = $myrow->post_time;
     $this_post_author = $myrow->poster_id;
 
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
-    $fpdx->remove($post_id);
+    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     //orphan replies get -1 to parent_post_id
     Database::get()->query("UPDATE forum_post SET parent_post_id = -1 WHERE parent_post_id = ?d", $post_id);
@@ -111,7 +106,7 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
 
     if ($total == 1) { // if exists one post in topic
         Database::get()->query("DELETE FROM forum_topic WHERE id = ?d AND forum_id = ?d", $topic, $forum);
-        $ftdx->remove($topic);
+        Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMTOPIC, $topic);
         Database::get()->query("UPDATE forum SET num_topics = 0,
                             num_posts = 0
                             WHERE id = ?d
@@ -156,7 +151,7 @@ if (!add_units_navigation(TRUE)) {
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
     $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum", 'name' => q($forum_name));
 }
-$nameTools = q($topic_subject);
+$pageName = q($topic_subject);
 
 if (isset($_SESSION['message'])) {
     $tool_content .= $_SESSION['message'];
@@ -172,13 +167,17 @@ if ($topic_locked == 1) {
                     'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success')));
+                    'button-class' => 'btn-success'),
+                array('title' => $langBack,
+                    'url' => "viewforum.php?course=$course_code&forum=$forum",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')                
+                ));
 }
 
 if ($paging and $total > $posts_per_page) {
     $times = 1;
-    $tool_content .= "
-        <table width='100%' class='tbl'>
+    $tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
 	<tr>
           <td width='50%' align='left'>
 	  <span class='row'><strong class='pagination'>
@@ -228,22 +227,22 @@ if ($paging and $total > $posts_per_page) {
     $tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a></span>
 	</td>
 	</tr>
-	</table>";
+	</table></div>";
 } else {
     if ($total > $posts_per_page) {
-        $tool_content .= "<table width='100%' class='tbl'>
+        $tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
     	<tr>
-    	<td width='60%' align='left'>
+    	<td width='60%' class='text-left'>
     	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
     	<td align='right'>";
         $tool_content .= "<span class='pages'>
 		&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
 		</span>";
-        $tool_content .= "</td></tr></table>";
+        $tool_content .= "</td></tr></table></div>";
     }
 }
 
-$tool_content .= "<table width='100%' class='table-default'>
+$tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
     <tr>
       <th width='220'>$langAuthor</th>
       <th>$langMessage</th>";
@@ -270,21 +269,20 @@ if (isset($_GET['all'])) {
 $count = 0;
 $user_stats = array();
 foreach ($result as $myrow) {
-    if ($count % 2 == 1) {
-        $tool_content .= "<tr class='odd'>";
-    } else {
-        $tool_content .= "<tr class='even'>";
-    }
     if (!isset($user_stats[$myrow->poster_id])) {
         $user_num_posts = Database::get()->querySingle("SELECT num_posts FROM forum_user_stats WHERE user_id = ?d AND course_id = ?d", $myrow->poster_id, $course_id);
-        if ($user_num_posts->num_posts == 1) {
-            $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessage";
+        if ($user_num_posts) {
+            if ($user_num_posts->num_posts == 1) {
+                $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessage";
+            } else {
+                $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessages";
+            }
         } else {
-            $user_stats[$myrow->poster_id] = "<br/>".$user_num_posts->num_posts." $langMessages";
+            $user_stats[$myrow->poster_id] = '';
         }
     }
     
-    $tool_content .= "<td valign='top'>" . display_user($myrow->poster_id) . $user_stats[$myrow->poster_id]."</td>";
+    $tool_content .= "<td valign='top'>" . display_user($myrow->poster_id) . $user_stats[$myrow->poster_id]."</td>";    
     $message = $myrow->post_text;
     // support for math symbols
     $message = mathfilter($message, 12, "../../courses/mathimg/");
@@ -343,11 +341,11 @@ foreach ($result as $myrow) {
 Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
             WHERE id = ?d AND forum_id = ?d", $topic, $forum);
 
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 
 if ($paging and $total > $posts_per_page) {
     $times = 1;
-    $tool_content .= "<table class='tbl'>
+    $tool_content .= "<div class='table-responsive'><table class='table-default'>
 	<tr>
 	<td width='50%'>
 	<span class='row'><strong class='pagination'><span>";
@@ -357,7 +355,7 @@ if ($paging and $total > $posts_per_page) {
 
     for ($x = 0; $x < $total; $x += $posts_per_page) {
         if ($times != 1) {
-            $tool_content .= "\n<span class='page-sep'>,</span>";
+            $tool_content .= "<span class='page-sep'>,</span>";
         }
         if ($start && ($start == $x)) {
             $tool_content .= "" . $times;
@@ -381,9 +379,9 @@ if ($paging and $total > $posts_per_page) {
     }
     $tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
 	</span>
-	</td></tr></table>";
+	</td></tr></table></div>";
 } else {
-    $tool_content .= "<table class='tbl'>
+    $tool_content .= "<div class='table-responsive'><table class='table-responsive'>
 	<tr>
 	<td width='60%' align='left'>
 	<span class='row'><strong class='pagination'>&nbsp;</strong>
@@ -395,6 +393,6 @@ if ($paging and $total > $posts_per_page) {
     } else {
         $tool_content .= '&nbsp;';
     }
-    $tool_content .= "</span></td></tr></table>";
+    $tool_content .= "</span></td></tr></table></div>";
 }
 draw($tool_content, 2, null, $head_content);

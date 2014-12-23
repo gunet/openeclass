@@ -20,9 +20,14 @@
  * ======================================================================== */
 
 function admin_statistics_tools($self_link = "") {
-    global $tool_content, $langPlatformGenStats, $langVisitsStats, $langVisitsCourseStats, $langOldStats, $langAccept, $langOldStatsExpireConfirm, $langMonthlyReport;
-    $tool_content .= "<div id='operations_container'>" .
-            action_bar(array(
+    global $tool_content, $langPlatformGenStats, $langVisitsStats, $langVisitsCourseStats, 
+            $langBack, $langOldStats, $langAccept, $langOldStatsExpireConfirm, $langMonthlyReport;
+    
+    $tool_content .= action_bar(array(                
+                array('title' => $langBack,
+                    'url' => "",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label'),
                 array('title' => $langPlatformGenStats,
                     'url' => "stateclass.php",
                     'icon' => 'fa-bar-chart',
@@ -51,6 +56,5 @@ function admin_statistics_tools($self_link = "") {
                     'icon' => 'fa-calendar',
                     'show' => $self_link != "monthlyReport",
                     'level' => 'primary'),
-            )) .
-            "</div>";
+            ));
 }

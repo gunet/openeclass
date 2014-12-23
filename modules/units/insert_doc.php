@@ -57,14 +57,13 @@ function get_dir_path($name) {
  * @global type $langAddModulesButton
  * @global type $langChoice
  * @global type $langNoDocuments
- * @global type $course_code
- * @global type $themeimg
+ * @global type $course_code 
  */
 function list_docs() {
     global $id, $webDir, $course_code, $tool_content,
     $group_sql, $langDirectory, $langUp, $langName, $langSize,
     $langDate, $langType, $langAddModulesButton, $langChoice,
-    $langNoDocuments, $course_code, $themeimg, $langCommonDocs, $nameTools;
+    $langNoDocuments, $course_code, $langCommonDocs, $pageName;
 
     $basedir = $webDir . '/courses/' . $course_code . '/document';
     $path = get_dir_path('path');
@@ -74,7 +73,7 @@ function list_docs() {
 
     if ($id == -1) {
         $common_docs = true;
-        $nameTools = $langCommonDocs;
+        $pageName = $langCommonDocs;
         $group_sql = "course_id = -1 AND subsystem = " . COMMON . "";
         $basedir = $webDir . '/courses/commondocs';
         $result = Database::get()->queryArray("SELECT * FROM document
@@ -117,7 +116,7 @@ function list_docs() {
             'object' => MediaResourceFactory::initFromDocument($row));
     }
     if (count($fileinfo) == 0) {
-        $tool_content .= "\n  <div class='alert alert-warning'>$langNoDocuments</div>\n";
+        $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
     } else {
         if (empty($path)) {
             $dirname = '';
@@ -134,7 +133,7 @@ function list_docs() {
             $colspan = 4;
         }
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />" .
-                "<table class='tbl_alt' width='99%'>" .
+                "<table class='table-default'>" .
                 "<tr>" .
                 "<th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
                 $parenthtml .
@@ -145,7 +144,7 @@ function list_docs() {
                 "<th width='100'>$langSize</th>" .
                 "<th width='80'>$langDate</th>" .
                 "<th width='80'>$langChoice</th>" .
-                "</tr>\n";
+                "</tr>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
             foreach ($fileinfo as $entry) {
@@ -172,26 +171,22 @@ function list_docs() {
                 if ($entry['visible'] == 'i') {
                     $vis = 'invisible';
                 } else {
-                    if ($counter % 2 == 0) {
-                        $vis = 'even';
-                    } else {
-                        $vis = 'odd';
-                    }
+                    $vis = '';                    
                 }
-                $tool_content .= "\n    <tr class='$vis'>";
-                $tool_content .= "\n      <td width='1' class='center'>" . icon($image, '') . "</td>";
-                $tool_content .= "\n      <td>$link_href";
+                $tool_content .= "<tr class='$vis'>";
+                $tool_content .= "<td width='1' class='center'>" . icon($image, '') . "</td>";
+                $tool_content .= "<td>$link_href";
 
-                /*                 * * comments ** */
+                /* * * comments ** */
                 if (!empty($entry['comment'])) {
                     $tool_content .= "<br /><div class='comment'>" .
                             standard_text_escape($entry['comment']) .
-                            "</div>\n";
+                            "</div>";
                 }
                 $tool_content .= "</td>";
                 if ($is_dir) {
                     // skip display of date and time for directories
-                    $tool_content .= "\n      <td>&nbsp;</td>\n      <td>&nbsp;</td>";
+                    $tool_content .= "<td>&nbsp;</td><td>&nbsp;</td>";
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = nice_format($entry['date'], true, true);
@@ -204,6 +199,6 @@ function list_docs() {
         }
         $tool_content .= "<tr><th colspan=$colspan><div align='right'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div></th>";
-        $tool_content .= "</tr></table>$dir_html</form>\n";
+        $tool_content .= "</tr></table>$dir_html</form>";
     }
 }

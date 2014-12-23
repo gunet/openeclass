@@ -47,7 +47,7 @@ $head_content .= "<script type='text/javascript'>
     </script>";
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$nameTools = $langSearchUser;
+$pageName = $langSearchUser;
 
 // get the incoming values
 $inactive_checked = (isset($_GET['search']) and $_GET['search'] == 'inactive') ?

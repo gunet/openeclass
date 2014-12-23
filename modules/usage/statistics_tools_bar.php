@@ -20,9 +20,12 @@
  * ======================================================================== */
 
 function statistics_tools($course_code, $self_link = "", $relative_path = "") {
-    global $tool_content, $langStat, $langUsersLog, $langFavourite, $langUserLogins, $langUserDuration, $langLearningPaths, $langGroupUsage, $langOldStats, $langAccept, $langOldStatsExpireConfirm;
-    $tool_content .= "<div id='operations_container'>" .
-            action_bar(array(
+    
+    global $tool_content, $langStat, $langUsersLog, $langFavourite, $langUserLogins, 
+            $langUserDuration, $langLearningPaths, $langGroupUsage, $langOldStats, 
+            $langAccept, $langOldStatsExpireConfirm;
+    
+    return $tool_content .= action_bar(array(
                 array('title' => $langStat,
                     'url' => $relative_path . "index.php?course=$course_code",
                     'icon' => 'fa-bar-chart',
@@ -66,6 +69,5 @@ function statistics_tools($course_code, $self_link = "", $relative_path = "") {
                     'confirm' => $langOldStatsExpireConfirm,
                     'show' => $self_link != "oldStats",
                     'level' => 'primary'),
-            )) .
-            "</div>";
+            ));
 }

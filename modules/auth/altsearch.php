@@ -81,7 +81,7 @@ $comment_required = !$autoregister;
 $email_required = !$autoregister || get_config('email_required');
 $am_required = !$prof && get_config('am_required');
 
-$nameTools = ($prof ? $langReqRegProf : $langUserData) . ' (' . (get_auth_info($auth)) . ')';
+$pageName = ($prof ? $langReqRegProf : $langUserData) . ' (' . (get_auth_info($auth)) . ')';
 $email_message = $langEmailNotice;
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
@@ -279,6 +279,7 @@ if ($is_valid) {
         $telephone = get_config('phone');
         $administratorName = get_config('admin_name');
         $emailhelpdesk = get_config('email_helpdesk');
+        $emailAdministrator = get_config('email_sender');
         $emailsubject = "$langYourReg $siteName";
         $emailbody = "$langDestination $givenname_form $surname_form\n" .
                 "$langYouAreReg $siteName $langSettings $uname\n" .
@@ -350,6 +351,7 @@ if ($is_valid) {
         $request_id = $q1->lastInsertID;
         // email does not need verification -> mail helpdesk
         if (!$email_verification_required) {
+            $emailAdministrator = get_config('email_sender');
             // send email
             $MailMessage = $mailbody1 . $mailbody2 . "$givenname_form $surname_form\n\n" . $mailbody3
                     . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . $tree->getFullPath($depid) . "
@@ -368,6 +370,7 @@ if ($is_valid) {
             // email needs verification -> mail user
             $hmac = token_generate($uname . $email . $request_id);
             $emailhelpdesk = get_config('email_helpdesk');
+            $emailAdministrator = get_config('email_sender');
             $subject = $langMailVerificationSubject;
             $MailMessage = sprintf($mailbody1 . $langMailVerificationBody1, $urlServer . 'modules/auth/mail_verify.php?ver=' . $hmac . '&rid=' . $request_id);
             if (!send_mail($siteName, $emailAdministrator, '', $email, $subject, $MailMessage, $charset, "Reply-To: $emailhelpdesk")) {
@@ -410,13 +413,13 @@ function set($name) {
  * @global type $langName
  * @global type $langSurname
  * @global type $langEmail
+ * @global type $langCompulsory
+ * @global type $langOptional
  * @global type $langPhone
  * @global type $langComments
  * @global type $langFaculty
  * @global type $langRegistration
- * @global type $langLanguage
- * @global type $langUserData
- * @global type $langRequiredFields
+ * @global type $langLanguage  
  * @global type $langAm
  * @global type $profreason
  * @global type $auth_user_info
@@ -425,19 +428,18 @@ function set($name) {
  * @global string $usercomment
  * @global int $depid
  * @global type $email_required
- * @global type $phone_required
- * @global type $am_required
+ * @global type $phone_required 
  * @global type $comment_required
  * @global type $langEmailNotice
  * @global Hierarchy $tree
  * @global type $head_content
  */
 function user_info_form() {
-    global $tool_content, $langName, $langSurname, $langEmail,
+    global $tool_content, $langName, $langSurname, $langEmail, $langCompulsory, $langOptional,
     $langPhone, $langComments, $langFaculty, $langRegistration, $langLanguage,
-    $langUserData, $langRequiredFields, $langAm, $profreason,
+    $langAm, $profreason,
     $auth_user_info, $auth, $prof, $usercomment, $depid, $email_required,
-    $phone_required, $am_required, $comment_required, $langEmailNotice, $tree, $head_content;
+    $phone_required, $comment_required, $langEmailNotice, $tree, $head_content;
 
     if (!isset($usercomment)) {
         $usercomment = '';
@@ -450,82 +452,88 @@ function user_info_form() {
     } else {
         $mail_message = "";
     }
-
-    $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]' method='post'>        
-        <fieldset>
-        <legend>$langUserData</legend>
-        <table width='99%' class='tbl'>
-          <tr>
-            <th class='left'>$langName</th>
-            <td colspan='2'>" . (isset($auth_user_info) ?
+    
+    $tool_content .= "<div class='form-wrapper'>
+        <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
+        <fieldset>                
+        <div class='form-group'>
+            <label for='Name' class='col-sm-2 control-label'>$langName:</label>
+            <div class='col-sm-10'> ". (isset($auth_user_info) ?
                     $auth_user_info['firstname'] :
-                    '<input type="text" name="givenname_form" size="30" maxlength="30"' . set('givenname_form') . '>&nbsp;&nbsp;(*)') . "
-            </td>
-          </tr>
-          <tr>
-             <th class='left'>$langSurname</th>
-             <td colspan='2'>" . (isset($auth_user_info) ?
+              '<input type="text" name="givenname_form" size="30" maxlength="30"' . set('givenname_form') . '> ') . "
+            </div>
+        </div>
+        <div class='form-group'>
+                <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
+                <div class='col-sm-10'> ". (isset($auth_user_info) ?
                     $auth_user_info['lastname'] :
-                    '<input type="text" name="surname_form" size="30" maxlength="30"' . set('surname_form') . '>&nbsp;&nbsp;(*)') . "
-             </td>
-          </tr>
-          <tr>
-             <th class='left'>$langEmail</th>
-             <td><input type='text' name='email' size='30' maxlength='30'" . set('email') . '></td><td>' .
-            ($email_required ? "&nbsp;&nbsp;(*)" : "<small>$mail_message</small>") . "
-			 	 </td>
-          </tr>";
-    if (!$prof) {
-        $tool_content .= "
-                <tr>
-                <th class='left'>$langAm</th>
-                <td colspan='2'><input type='text' name='am' size='20' maxlength='20'" . set('am') . ">" . ($am_required ? '&nbsp;&nbsp;(*)' : '') . "</td>
-                </tr>";
+                '<input type="text" name="surname_form" size="30" maxlength="30"' . set('surname_form') . '> ') . "
+                </div>
+        </div>          
+        <div class='form-group'>
+            <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
+            <div class='col-sm-10'>
+                <input type='text' name='email' size='30' maxlength='30'" . set('email') . "'>
+                 " .($email_required ? "&nbsp;" : "<span class='help-block'><small>$mail_message</small></span>") . "
+            </div>
+        </div>";
+    if (!$prof) {        
+        if (get_config('am_required')) {
+            $am_message = $langCompulsory;
+        } else {
+            $am_message = $langOptional;
+        }
+        $tool_content .= "<div class='form-group'>
+                <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='am' size='20' maxlength='20'" . set('am') . "' placeholder='$am_message'>
+                </div>
+            </div>";        
     }
-    $tool_content .= "
-          <tr>
-             <th class='left'>$langPhone</th>
-             <td colspan='2'><input type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . '>' .
-            ($phone_required ? '&nbsp;&nbsp;(*)' : '') . "</td>
-          </tr>";
+    if (isset($phone_required)) {
+        $phone_message = $langCompulsory;
+    } else {
+        $phone_message = $langOptional;
+    }
+    $tool_content .= "<div class='form-group'>
+                <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
+                <div class='col-sm-10'>
+                    <input type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . "' placeholder = '$phone_message'>
+                </div>
+            </div>";                
     if ($comment_required) {
-        $tool_content .= "
-          <tr>
-             <th class='left'>$langComments</th>
-             <td colspan='2'><textarea name='usercomment' cols='32' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;(*) $profreason</td>
-          </tr>";
-    }
-    $tool_content .= "
-          <tr>
-             <th class='left'>$langFaculty:</th>
-             <td colspan='2'>";
+        $tool_content .= "<div class='form-group'>
+          <label for='UserComment' class='col-sm-2 control-label'>$langComments:</label>
+            <div class='col-sm-10'>
+             <textarea name='usercomment' cols='32' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;(*) $profreason</div>
+          </div>";
+    }    
+    $tool_content .= "<div class='form-group'>
+              <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
+                <div class='col-sm-10'>";
     list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html;
-    $tool_content .= "&nbsp;&nbsp;(*)</td>
-           </tr>
-           <tr>
-             <th class='left'>$langLanguage</th>
-             <td colspan='2'>" . lang_select_options('localize') . "</td>
-           </tr>
-           <tr>
-             <th class='left'>&nbsp;</th>
-             <td colspan='2'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "' />
-                 <input type='hidden' name='p' value='$prof'>";
+    $tool_content .= "</div>
+    </div>";                
+    $tool_content .= "<div class='form-group'>
+              <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
+              <div class='col-sm-10'>";
+            $tool_content .= lang_select_options('localize', "class='form-control'");
+            $tool_content .= "</div>
+            </div>";
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
+                    </div>
+        <input type='hidden' name='p' value='$prof'>";
+                        
     if (isset($_SESSION['shib_uname'])) {
-        $tool_content .= "<input type='hidden' name='uname' value='" . q($_SESSION['shib_uname']) . "' />";
+        $tool_content .= "<input type='hidden' name='uname' value='" . q($_SESSION['shib_uname']) . "'>";
     } else {
-        $tool_content .= "<input type='hidden' name='uname' value='" . q($_SESSION['was_validated']['uname']) . "' />";
+        $tool_content .= "<input type='hidden' name='uname' value='" . q($_SESSION['was_validated']['uname']) . "'>";
     }
-    $tool_content .= "<input type='hidden' name='auth' value='$auth' />
-             </td>
-           </tr>
-           <tr>
-             <th class='left'>&nbsp;</th>
-             <td colspan='2'>$langRequiredFields</td>
-           </tr>
-         </table>
-       </fieldset>
-  </form>";
+    $tool_content .= "<input type='hidden' name='auth' value='$auth'>";
+    $tool_content .= "</fieldset>
+    </form>
+    </div>";            
 }

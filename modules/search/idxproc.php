@@ -37,6 +37,8 @@ if ($n > 0) {
     $idx = new Indexer();
     $idx->removeAllByCourse($cid);
     $idx->storeAllByCourse($cid);
+    set_time_limit(0);
+    $idx->getIndex()->optimize();
     
     // remove course from queue
     Database::get()->query("DELETE FROM idx_queue WHERE course_id = ?d", $cid);

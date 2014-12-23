@@ -215,7 +215,7 @@ function loggedInMenu() {
 
     array_push($sideMenuText, $GLOBALS['langListCourses']);
     array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-list");
 
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
@@ -254,7 +254,7 @@ function loggedInMenu() {
     if (isset($status) and ($status == USER_TEACHER)) {
         array_push($sideMenuText, $GLOBALS['langCourseCreate']);
         array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-plus-circle");
     }
     
     require_once 'modules/dropbox/class.mailbox.php';
@@ -267,29 +267,29 @@ function loggedInMenu() {
         array_push($sideMenuText, "<b>".$GLOBALS['langMyDropBox']." (".$new_msgs.")</b>");
     }
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-envelope-o");
 
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
     array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-calendar");
 
     array_push($sideMenuText, $GLOBALS['langNotes']);
     array_push($sideMenuLink, $urlServer . "main/notes/index.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-edit");
     
     if (isset($status) and ($status == USER_STUDENT)) {
         array_push($sideMenuText, $GLOBALS['langGradeTotal']);
         array_push($sideMenuLink, $urlServer . "main/gradebookUserTotal/index.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "gradebook");
     }
     
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-user");
 
     array_push($sideMenuText, $GLOBALS['langMyStats']);
     array_push($sideMenuLink, $urlServer . "main/profile/personal_stats.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-area-chart");
 
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -531,6 +531,9 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langBBBConfig']);
         array_push($sideMenuLink, "../admin/bbbmoduleconf.php");
         array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langThemeSettings']);
+        array_push($sideMenuLink, "../admin/theme_options.php");        
+        array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langStat']);
         array_push($sideMenuLink, "../admin/stateclass.php");
         array_push($sideMenuImg, "arrow.png");
@@ -753,23 +756,21 @@ function pickerMenu() {
  * @global type $urlServer
  */
 function openCoursesExtra() {
-    global $urlServer;
+    global $urlServer, $themeimg;
 
     if (get_config('opencourses_enable')) {
         $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
 
         if ($openCoursesNum > 0) {
             $GLOBALS['leftNavExtras'] = "
-                <div class='navmenu'>
-                    <div class='navcontainer'>
-                        <ul class='navlist'>
-                            <li class='category'>" . q($GLOBALS['langOpenCoursesShort']) . "</li>
-                        </ul><div style='text-align:center;'><img src='$themeimg/open_courses_logo_small.png' title='$GLOBALS[langOpenCourses]' alt='$GLOBALS[langOpenCourses]'>
-                            &nbsp;<a href='" . $urlServer . "modules/course_metadata/openfaculties.php'>
-                    $GLOBALS[langListOpenCoursesShort]</a>
-                            <span class='smaller'>$openCoursesNum " .
-                    (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) .
-                    "</span></div>
+                <div style='text-align:center; color: white;'>
+                    <div>
+                        <h4>" . q($GLOBALS['langOpenCoursesShort']) . "</h4>
+                    </div>
+                    <div>
+                        <p><img src='$themeimg/open_courses_logo_small.png' title='" . $GLOBALS['langOpenCourses'] . "' alt='" . $GLOBALS['langOpenCourses'] . "' /></p>
+                        <p><a href='" . $urlServer . "modules/course_metadata/openfaculties.php'>" . $GLOBALS['langListOpenCoursesShort'] . "</a></p>
+                        <p class='smaller'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</p>
                     </div>
                 </div>";
         }

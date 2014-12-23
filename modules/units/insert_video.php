@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -32,15 +32,14 @@ function list_videos() {
     $video_found = FALSE;
     $cnt1 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM video WHERE course_id = ?d", $course_id)->cnt;
     $cnt2 = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE course_id = ?d", $course_id)->cnt;
-    $count = $cnt1 + $cnt2;
-    $numLine = 0;
+    $count = $cnt1 + $cnt2;    
     if ($count > 0) {
         $video_found = TRUE;
-        $tool_content .= " <form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
-                    $tool_content .= "<table class='tbl_alt' width='99%'>";
+        $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
+                    $tool_content .= "<table class='table-default'>";
                     $tool_content .= "<tr>" .
-                                     "<th width='200'><div align='left'>&nbsp;$langTitle</div></th>" .
-                                     "<th><div align='left'>$langDescr</div></th>" .
+                                     "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
+                                     "<th class='text-left'>$langDescr</th>" .
                                      "<th width='100'>$langDate</th>" .
                                      "<th width='80'>$langChoice</th>" .
                                      "</tr>";
@@ -54,26 +53,20 @@ function list_videos() {
                 } else {
                     $vObj = MediaResourceFactory::initFromVideoLink($row);
                     $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
-                }
-                if ($numLine%2 == 0) {
-                    $tool_content .= "<tr class='even'>";
-                } else {
-                    $tool_content .= "<tr class='odd'>";
-                }
-                $tool_content .= "<td>&nbsp;<img src='$themeimg/videos_on.png' />&nbsp;&nbsp;" . $videolink . "</td>".
+                }                
+                $tool_content .= "<td>&nbsp;".icon('fa-film')."&nbsp;&nbsp;" . $videolink . "</td>".
                                  "<td>" . q($row->description) . "</td>".
-                                 "<td class='center'>" . nice_format($row->date, true, true) . "</td>" .
-                                 "<td class='center'><input type='checkbox' name='video[]' value='$table:$row->id' /></td>" .
-                                 "</tr>";
-                $numLine++;
+                                 "<td class='text-center'>" . nice_format($row->date, true, true) . "</td>" .
+                                 "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$row->id' /></td>" .
+                                 "</tr>";                
             }
         }
         $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
         if ($sql) {
-            $tool_content .= "<tr class='odd'><td colspan='3' class='bold'>&nbsp;$langCatVideoDirectory</td></tr>";
+            $tool_content .= "<tr><td colspan='3' class='bold'>&nbsp;$langCatVideoDirectory</td></tr>";
             foreach ($sql as $videocat) {
-                $tool_content .= "<tr class='even'>";
-                $tool_content .= "<td><img src='$themeimg/folder_open.png' />&nbsp;&nbsp;" .
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" .
                                  q($videocat->name) . "</td>";
                 $tool_content .= "<td colspan='2'>" . standard_text_escape($videocat->description) . "</td>";
                 $tool_content .= "<td align='center'><input type='checkbox' name='videocatlink[]' value='$videocat->id' /></td>";
@@ -81,12 +74,12 @@ function list_videos() {
                 foreach (array('video', 'videolink') as $table) {
                     $sql2 = Database::get()->queryArray("SELECT * FROM $table WHERE category = ?d", $videocat->id);
                     foreach ($sql2 as $linkvideocat) {
-                            $tool_content .= "<tr class='even'>";
+                            $tool_content .= "<tr>";
                             $tool_content .= "<td>&nbsp;&nbsp;&nbsp;&nbsp;<img src='$themeimg/links_on.png' />&nbsp;&nbsp;<a href='" . q($linkvideocat->url) . "' target='_blank'>" .
                                     q(($linkvideocat->title == '')? $linkvideocat->url: $linkvideocat->title) . "</a></td>";
                             $tool_content .= "<td>" . standard_text_escape($linkvideocat->description) . "</td>";
-                            $tool_content .= "<td class='center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
-                            $tool_content .= "<td align='center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
+                            $tool_content .= "<td class='text-center'>" . nice_format($linkvideocat->date, true, true) . "</td>";
+                            $tool_content .= "<td class='text-center'><input type='checkbox' name='video[]' value='$table:$linkvideocat->id' /></td>";
                             $tool_content .= "</tr>";	
                     }
                 }

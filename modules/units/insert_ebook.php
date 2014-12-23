@@ -32,12 +32,11 @@
  * @global type $langNoEbook
  * @global type $langEBook
  * @global type $course_code
- * @global type $themeimg
  */
 function list_ebooks() {
     global $id, $course_id, $course_code, $tool_content, $urlServer,
     $langAddModulesButton, $langChoice, $langNoEBook,
-    $langEBook, $course_code, $themeimg;
+    $langEBook, $course_code;
     
     $result = Database::get()->queryArray("SELECT * FROM ebook WHERE course_id = ?d ORDER BY `order`", $course_id);
     if (count($result) == 0) {
@@ -45,17 +44,17 @@ function list_ebooks() {
     } else {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
 				<input type='hidden' name='id' value='$id' />" .
-                "<table class='tbl_alt' width='99%'>" .
+                "<table class='table-default'>" .
                 "<tr>" .
-                "<th align='left'>&nbsp;$langEBook</th>" .
-                "<th width='80' class='center'>$langChoice</th>" .
+                "<th class='text-left'>&nbsp;$langEBook</th>" .
+                "<th width='80' class='text-center'>$langChoice</th>" .
                 "</tr>";
         $unit_parameter = 'unit=' . $id;
         foreach ($result as $catrow) {        
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='bold'><img src='$themeimg/folder_open.png' />&nbsp;&nbsp;" .
+            $tool_content .= "<td class='bold'>".icon('fa-folder-o')."&nbsp;&nbsp;" .
                     q($catrow->title) . "</td>";
-            $tool_content .= "<td align='center'>
+            $tool_content .= "<td class='text-center'>
                             <input type='checkbox' name='ebook[]' value='$catrow->id' />
                             <input type='hidden' name='ebook_title[$catrow->id]'
                                value='" . q($catrow->title) . "'></td>";
@@ -80,25 +79,22 @@ function list_ebooks() {
                                                  CONVERT(pssid, UNSIGNED), pssid", $catrow->id, $course_id, $course_id);
 
             $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$catrow->id/";
-            $old_sid = false;
-            $class = 'odd';
-            foreach ($q as $row) {
-                $class = ($class == 'odd') ? 'even' : 'odd';
+            $old_sid = false;            
+            foreach ($q as $row) {                
                 $sid = $row->sid;
                 $ssid = $row->ssid;
                 $display_id = $sid . ',' . $ssid;
                 $surl = $ebook_url_base . $display_id . '/' . $unit_parameter;
                 if ($old_sid != $sid) {
-                    $tool_content .= "<tr class='even'>
-                                    <td class='section'><img src='$themeimg/links_on.png' />&nbsp;&nbsp;
+                    $tool_content .= "<tr>
+                                    <td class='section'>".icon('fa-link')."&nbsp;&nbsp;
                                         " . q($row->section_title) . "</td>
                                     <td align='center'><input type='checkbox' name='section[]' value='$sid' />
                                         <input type='hidden' name='section_title[$sid]'
                                                value='" . q($row->section_title) . "'></td></tr>";
                 }
-
-                $tool_content .= "<tr class='$class'>
-                                <td class='subsection'><img src='$themeimg/links_on.png' />&nbsp;&nbsp;
+                $tool_content .= "<tr>
+                                <td class='subsection'>".icon('fa-link')."&nbsp;&nbsp;
                                 <a href='" . q($surl) . "' target='_blank'>" . q($row->subsection_title) . "</a></td>
                                 <td align='center'><input type='checkbox' name='subsection[]' value='$ssid' />
                                    <input type='hidden' name='subsection_title[$ssid]'

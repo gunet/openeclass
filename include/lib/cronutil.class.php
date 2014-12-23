@@ -57,8 +57,9 @@ class CronUtil {
         global $webDir;
         $lock = $webDir . self::$dlockpath;
 
-        if (file_exists($lock))
+        if (file_exists($lock)) {
             rmdir($lock);
+        }
     }
 
 }

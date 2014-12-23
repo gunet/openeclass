@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -68,10 +68,10 @@ $head_content .= "<script type='text/javascript'>
 
 $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#u_date_start, #u_date_end').datetimepicker({
+            $('#user_date_start, #user_date_end').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii',
                 pickerPosition: 'bottom-left',
-                language: '" . $language . "',
+                language: '".$language."',
                 autoclose: true    
             });            
         });
@@ -81,7 +81,7 @@ if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
 }
 
-$nameTools = $langUsersLog;
+$pageName = $langUsersLog;
 statistics_tools($course_code, "displaylog");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
@@ -89,26 +89,34 @@ $logtype = isset($_REQUEST['logtype']) ? intval($_REQUEST['logtype']) : '0';
 $u_user_id = isset($_REQUEST['u_user_id']) ? intval($_REQUEST['u_user_id']) : '-1';
 $u_module_id = isset($_REQUEST['u_module_id']) ? intval($_REQUEST['u_module_id']) : '-1';
 
-if (isset($_REQUEST['u_date_start'])) {
-    $uds = DateTime::createFromFormat('d-m-Y H:i', $_REQUEST['u_date_start']);
-    $u_date_start = $uds->format('Y-m-d H:i');
+if (isset($_POST['user_date_start'])) {    
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');    
+    $user_date_start = $uds->format('d-m-Y H:i');
 } else {
     $date_start = new DateTime();
-    $date_start->sub(new DateInterval('P30D'));
-    $u_date_start = $date_start->format('d-m-Y H:i');
+    $date_start->sub(new DateInterval('P30D'));    
+    $u_date_start = $date_start->format('Y-m-d H:i');
+    $user_date_start = $date_start->format('d-m-Y H:i');       
 }
-if (isset($_REQUEST['u_date_end'])) {
-    $ude = DateTime::createFromFormat('d-m-Y H:i', $_REQUEST['u_date_end']);
+if (isset($_POST['user_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
     $u_date_end = $ude->format('Y-m-d H:i');
+    $user_date_end = $ude->format('d-m-Y H:i');        
 } else {
     $date_end = new DateTime();
+    $u_date_end = $date_end->format('Y-m-d H:i');
     $date_end->add(new DateInterval('P1D'));
-    $u_date_end = $date_end->format('d-m-Y H:i');
+    $user_date_end = $date_end->format('d-m-Y H:i');        
 }
 
 if (isset($_REQUEST['submit'])) {
     $log = new Log();
-    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['PHP_SELF']);
+    echo $u_date_start;
+    echo "<br>";
+    echo $u_date_end;
+    
+    $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 }
 
 $letterlinks = '';
@@ -143,16 +151,12 @@ foreach ($result as $row) {
     $user_opts .= '<option ' . $selected . ' value="' . $row->id . '">' .
             q($row->givenname . ' ' . $row->surname) . "</option>";
 }
-$tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-        <fieldset>
-        <legend>$langUsersLog</legend>
-        <table class='tbl'>
-        <tr>
-        <td>&nbsp;</td>
-        <td class='bold'>$langCreateStatsGraph:</td>
-        </tr>
-        <th class='left'>$langLogModules :</th>
-        <td><select name='u_module_id'>";
+
+$tool_content .= '<div class="form-wrapper">';
+$tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
+$tool_content .= '<div class="form-group">
+        <label class="col-sm-2 control-label">' . $langLogModules . ':</label>
+        <div class="col-sm-10"><select name="u_module_id" class="form-control">';
 $tool_content .= "<option value='-1'>$langAllModules</option>";
 foreach ($modules as $m => $mid) {
     $extra = '';
@@ -169,53 +173,48 @@ if ($u_module_id == MODULE_ID_TOOLADMIN) {
 }
 $tool_content .= "<option value = " . MODULE_ID_USERS . " $extra>$langAdminUsers</option>";
 $tool_content .= "<option value = " . MODULE_ID_TOOLADMIN . " $extra>$langExternalLinks</option>";
-$tool_content .= "</select></td></tr>
-        <tr><th class='left'>$langLogTypes :</th>
-         <td>";
+$tool_content .= "</select></div></div>";
+$tool_content .= '<div class="form-group">
+        <label class="col-sm-2 control-label">' . $langLogTypes . ':</label>        
+         <div class="col-sm-10">';
 $log_types = array(0 => $langAllActions,
-    LOG_INSERT => $langInsert,
-    LOG_MODIFY => $langModify,
-    LOG_DELETE => $langDelete);
-$tool_content .= selection($log_types, 'logtype', $logtype);
-$tool_content .= "</td></tr>
-        <tr>
-        <th class='left'>$langStartDate :</th>
-        <td>
-        <div class='input-append date form-group' id='u_date_start' data-date = '" . q($u_date_start) . "'>
-            <div class='col-xs-11'>        
-                <input class='form-control' name='u_date_start' type='text' value = '" . q($u_date_start) . "'>
+                LOG_INSERT => $langInsert,
+                LOG_MODIFY => $langModify,
+                LOG_DELETE => $langDelete);
+$tool_content .= selection($log_types, 'logtype', $logtype, "class='form-control'");
+$tool_content .= "</div></div>";
+$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
+<label class='col-sm-2 control-label'>$langStartDate:</label>
+<div class='col-xs-10 col-sm-9'>               
+    <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
+</div>
+<div class='col-xs-2 col-sm-1'>
+    <span class='add-on'><i class='fa fa-times'></i></span>
+    <span class='add-on'><i class='fa fa-calendar'></i></span>
+</div>
+</div>";        
+$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
+        <label class='col-sm-2 control-label'>$langEndDate:</label>
+            <div class='col-xs-10 col-sm-9'>
+                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
             </div>
-        <span class='add-on'><i class='fa fa-times'></i></span>
-        <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>            
-        </tr>
-        <tr>
-        <th class='left'>$langEndDate :</th>
-        <td>
-        <div class='input-append date form-group' id='u_date_end' data-date= '" . q($u_date_end) . "'>
-            <div class='col-xs-11'>
-                <input class='form-control' name='u_date_end' type='text' value= '" . q($u_date_end) . "'>
-            </div>
-        <span class='add-on'><i class='fa fa-times'></i></span>
-        <span class='add-on'><i class='fa fa-calendar'></i></span>
+        <div class='col-xs-2 col-sm-1'>
+            <span class='add-on'><i class='fa fa-times'></i></span>
+            <span class='add-on'><i class='fa fa-calendar'></i></span>
         </div>
-        </td>
-        </tr>
-        <tr>
-        <th class='left' rowspan='2' valign='top'>$langUser:</td>
-        <td>$langFirstLetterUser : $letterlinks </td>
-        </tr>
-        <tr>
-        <td><select name='u_user_id'>$user_opts</select></td>
-        </tr>
-        <tr>
-        <td>&nbsp;</td>
-        <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
-        </td>
-        </tr>
-        </table>
-        </fieldset>
-        </form>";
+        </div>";
+$tool_content .= '<div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langFirstLetterUser . ':</label>
+    <div class="col-sm-10">' . $letterlinks . '</div>
+  </div>
+  <div class="form-group">  
+    <label class="col-sm-2 control-label">' . $langUser . ':</label>
+     <div class="col-sm-10"><select name="u_user_id" class="form-control">' . $user_opts . '</select></div>
+  </div> 
+  <div class="col-sm-offset-2 col-sm-10">    
+    <input class="btn btn-primary" type="submit" name="submit" value="' . $langSubmit . '">
+    </div>  
+</form></div>';        
 
 if (isset($_GET['from_admin'])) {
     draw($tool_content, 3, null, $head_content);

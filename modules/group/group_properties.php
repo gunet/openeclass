@@ -35,7 +35,7 @@ $helpTopic = 'Group';
 $require_editor = true;
 
 require_once '../../include/baseTheme.php';
-$nameTools = $langGroupProperties;
+$pageName = $langGroupProperties;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroupManagement);
 
 require_once 'group_functions.php';

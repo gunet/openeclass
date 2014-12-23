@@ -10,12 +10,13 @@
 
 body
 {
-    background: $color-background;
-    font-family: 'Open Sans';
+	background: $color-background;
+        font-family: 'Open Sans';
+        position: relative;
 }
  
 body > .container{
-  padding: 0;
+  padding: 0 15px;
 }
 
 
@@ -24,115 +25,91 @@ body > .container{
 #leftnav{
     background: $color-background;
     padding: 0;
-
-	.logo{
-            margin:2em 1em;
-            img{margin:0 auto;}
-	}
-
-	.panel{
+    .logo{
+        margin:2em 1em;a
+        img{margin:0 auto;}
+    }
+    .panel{
+        border: none;
+        margin: 0;
+        margin-bottom: 1em;
+        background: inherit;		
+        border-top: 2px solid rgba(255,255,255,.1);
+        border-bottom: 2px solid rgba(255,255,255,.1);
+        border-radius: 5px 0px 0px 5px;
+        .list-group{
+            border-radius:0;
+            @include box-shadow(none);
+        }
+        .panel-heading{
+            border-radius: 4px 0px 0px 0px!important;
+            padding: 10px 7px;
+            .panel-title{
+                text-align: center;
+                font-size: 0.85em;
+                font-weight: bold;
+            }
+            &:hover{
+                color: $color-hover;
+                @include transition(all $transition-time linear);
+            }
+        }
+        a{
+            color: #ADADAD;
+            text-decoration: none;
+        }
+        a.parent-menu{
+            outline: 0;
+            display: block;
+            background: rgba(0, 0, 0, 0.2);
+            &:not(.collapsed){
+                border-radius: 4px 0px 0px 0px;
+                color: $color-hover;
+            }
+            &:hover{
+                //background: rgba(255,255,255,.25);
+            }
+            &:hover, &:not(.collapsed){
+                border-radius: 4px 0px 0px 4px;
+            }
+        }
+        a.list-group-item{
             border: none;
-            margin: 0;
-            margin-bottom: 1em;
-            background: inherit;	
-            border-top: 2px solid rgba(255,255,255,.1);
-            border-bottom: 2px solid rgba(255,255,255,.1);
-            border-radius: 5px 0px 0px 5px;
-
-    .list-group{
-      border-radius:0;
-      @include box-shadow(none);
-
+            border-top: 1px solid rgba(255,255,255,.075);
+            padding: 0.6em 15px;
+            background: transparent;
+            text-align: center;
+            @include transition(all $transition-time linear);
+            > span{
+                font-size: 0.9em;
+                margin-left: 0.5em;
+            }
+            &:hover{
+                text-decoration: none;
+                color: #eee;
+                background: $color-hover;
+                border-radius: 4px 0px 0px 4px;
+                margin-left: 0px;
+                @include transition(all $transition-time linear);
+            }
+            &.active{
+                background: $color-main-content;
+                text-shadow: none;
+                color: #333;
+                border-radius: 4px 0px 0px 4px;
+                box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+                -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
+                -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+            }
+            //we don't want a border-bottom if it's the last option
+            &:last-child{
+                border-bottom: none;
+            }
+            &:first-child{
+                border-top: 1px solid rgba(255,255,255,.075);
+            }
+        }
     }
-		.panel-heading{
-                    border-radius: 4px 0px 0px 0px!important;
-
-                    .panel-title{
-                        text-align: center;
-                        font-size: 0.85em;
-                        font-weight: bold;
-                    }
-
-                    &:hover{
-                        color: $color-hover;
-
-        @include transition(all $transition-time linear);
-			}
-		}
-
-
-    > a{
-      outline: 0;
-      display: block;
-      background: rgba(0, 0, 0, 0.2)!important;
-
-      &:not(.collapsed){
-        border-radius: 4px 0px 0px 0px!important;
-        color: $color-hover;
-      }
-
-      &:hover{
-        background: rgba(255,255,255,.25);
-      }
-
-      &:hover, &:not(.collapsed){
-        border-radius: 4px 0px 0px 4px;
-      }
-    }
-
-		a{
-			background: transparent;
-			color: #ADADAD;
-      text-decoration: none;
-
-
-			&.list-group-item{
-
-				border: none;
-        border-top: 1px solid rgba(255,255,255,.075);
-				padding: 1em;
-        text-align: center;
-
-        @include transition(all $transition-time linear);
-
-        > span{
-          font-size: 0.9em;
-          margin-left: 0.5em;
-        }
-
-        &:hover{
-          text-decoration: none;
-          color: #eee;
-          background: $color-hover;
-          border-radius: 4px 0px 0px 4px;
-
-          margin-left: 0px;
-
-          @include transition(all $transition-time linear);
-        }
-
-        &.active{
-          background: $color-main-content;
-          text-shadow: none;
-          color: #333;
-          border-radius: 4px 0px 0px 4px;
-
-          box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
-          -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
-          -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
-        }
-
-				//we don't want a border-bottom if it's the last option
-				&:last-child{
-					border-bottom: none;
-				}
-
-				&:first-child{
-					border-top: 1px solid rgba(255,255,255,.075);
-				}
-			}
-		}
-	}
 }
 
 
@@ -164,7 +141,7 @@ body > .container{
     background-color: $color-header;
     border-bottom: 1px solid #DBDBDB;
     
-		.custom-nav{
+		.navbar-nav{
 			margin: 0;
 			float:right;
 
@@ -210,10 +187,24 @@ body > .container{
 
 .navbar-default
 {
-  border-radius: 0px; 
+  border-radius: 4px 4px 0px 0px; 
 }
 
+#progressbar-outer
+{
+    width:500px;
+    border:1px solid #025694;
+}
 
+#progressbar-inner
+{
+    height: 25px;
+    background: #423440;
+    background: linear-gradient(top,  #273242,  #6F8FBD);
+    background: -ms-linear-gradient(top,  #273242,  #6F8FBD);
+    background: -webkit-gradient(linear, left top, left bottom, from(#273242), to(#6F8FBD));
+    background: -moz-linear-gradient(top,  #273242,  #6F8FBD);
+}
 
 
 /* FOOTER --------------------------------------------------------------------------------------*/
@@ -224,6 +215,7 @@ footer.footer
   background: $color-footer;
   color: rgb(167, 167, 167);
   border-top: 1px solid #DBDBDB;
+  border-radius: 0 0 4px 4px;
 }
 
 
@@ -292,11 +284,9 @@ a.toggle-active{
 
                 i.fa
                 {
-                    display: block;
+                    padding-right: 10px;
                     opacity:.9;
-                    font-size: 2.3em;
-
-                    margin-top: 0.4em;
+                    font-size: 16px;
                 }
                 .tricky
                 {
@@ -440,11 +430,18 @@ a.toggle-active{
                     margin: 0px;
                     padding: 0px;
 
-                    h4{
+                    &>div{
                         margin-left: 0px;
                         margin-right: 0px;
                         border: none;
                         border-radius: 0px;
+                        
+                        i{
+                            display: block;
+                            position: absolute;
+                            right: 10px;
+                            top: 8px;
+                        }
                     }
                 }
 
@@ -463,22 +460,19 @@ a.toggle-active{
 }
 #sidebar
 {
-
     .side-list{
         background: #253447;
         border-top: none;
         color: rgba(255,255,255,.9);
         margin: 0 16px;
-
         &:last-of-type{
             @include border-radius(0px 0px 4px 4px);
         }
-
         .lesson-title{
             background: #344458;
             font-size: 0.85em;
             margin:0px;
-            padding: 10px 15px;
+            padding: 10px 20px 10px 15px;
             cursor: pointer;
             position: relative;
             outline: none;
@@ -497,7 +491,6 @@ a.toggle-active{
             &:last-of-type{
                 @include border-radius(0px 0px 4px 4px);
             }
-
             &:hover{
                 background: #48586D;
                 color: rgba(255,255,255,0.85);
@@ -506,7 +499,6 @@ a.toggle-active{
                     color: rgba(255,255,255,.6);
                 }
             }
-
             &.ui-accordion-header-active{
                 border-bottom: none;
                 color: rgba(255,255,255,1);
@@ -521,7 +513,6 @@ a.toggle-active{
                 }
             }
         }
-
         ul{
             font-size: 0.75em;
 
@@ -529,26 +520,20 @@ a.toggle-active{
                 padding: 5px 0em;          
             }
         }
-
         .lesson-id{
             opacity: 0.5;
             font-size:0.85em;
             font-weight:700;
         }
-
         .lesson-professor{
             font-weight: 600;
             padding-top:0px;
         }
-
         .lesson-notifications{
-
             margin-top:1em;
-
             .item{
                 margin-right:1.5em;
                 position: relative;
-
                 .count{
                     position: absolute;
                     left: 0.8em;
@@ -564,7 +549,6 @@ a.toggle-active{
                     //border: 2px solid #253447;
                     @include border-radius(0.75em);
                 }
-
                 .fa{
                     font-size: 1.2em;
                     color: rgba(255,255,255,.8);
@@ -673,15 +657,11 @@ body.page-login h1{
   background: -ms-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
 
   .graphic{
-    position: absolute;
-    z-index: 9;
-
-    width: 77%;
-    max-width:100%;
-    
-    bottom: 1.5rem;
-    height: 90%;
-    width: auto; 
+    min-height:250px;
+    background-image: url('../img/indexlogo.png');
+    background-repeat: no-repeat;
+    background-position:20%;
+    background-size: 353px;
   }
 }
 
@@ -837,20 +817,6 @@ form.login-form{
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 
 
-@media only screen and (min-width: 768px) and (max-width : 992px) {
-
-  .jumbotron.jumbotron-login img.graphic{
-    bottom: -3.5rem;
-    
-  }
-
-}
-
-
-
-
-
-
 
 /* No breakpoints bellow 1366 or smth */
 
@@ -888,7 +854,7 @@ form.login-form{
   }
 
   #leftnav .panel a.list-group-item{
-      padding:1em 0.8em;
+      padding:0.5em 0.8em;
   }
 
   #main-content,

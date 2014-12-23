@@ -28,7 +28,7 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$nameTools = $langUserAuthentication;
+$pageName = $langUserAuthentication;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $auth = isset($_GET['auth']) ? $_GET['auth'] : '';
@@ -90,9 +90,9 @@ if (empty($auth)) {
 }
 
 $tool_content .= "<table class='table-default'>";
-$tool_content .= "<th>$langAllAuthTypes</th><th>$langActions</th>";
+$tool_content .= "<th>$langAllAuthTypes</th><th class='text-center'>".icon('fa-gears', $langActions)."</th>";
 foreach ($auth_ids as $auth_id => $auth_name) {
-        $tool_content .= "<tr><td>".  strtoupper($auth_name).":</td><td width='90'>";
+        $tool_content .= "<tr><td>".  strtoupper($auth_name).":</td><td class='option-btn-cell'>";
         if (in_array($auth_id, $auth_methods)) {
                 $activation_url = "auth.php?auth=$auth_id&amp;active=no";
                 $activation_title = $langDeactivate;

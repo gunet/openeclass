@@ -2097,8 +2097,7 @@ $langConfigError2 = "Impossible de lire le fichier de configurations config.php 
 $langConfigError3 = "config.php was NOT modified! Please check permissions.";
 $langUpgradeSuccess = "La mise à niveau des bases de données d'eClass a été effectuée !";
 $langUpgReady = "Vous êtes prêt à utiliser la nouvelle édition de la plateforme Open eClass !";
-$langUpgSucNotice = "If an error occured, you may encounter problems.<br><br>
-In that case, please contact us at <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a> with a description of the problem, including (if possible) all error messages.";
+$langUpgSucNotice = "An error occured, you may encounter problems.<br>In that case, please contact us at <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a> with a description of the problem, including (if possible) all error messages.";
 $langUpgCourse = "Mise à niveau du cours";
 $langUpgFileNotRead = "Le fichier n'a pas pu être lu. Vérifiez les droits d'accès.";
 $langUpgFileNotModify = "Impossible de modifier le fichier. Vérifiez les droits d'accès.";

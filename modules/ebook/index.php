@@ -34,7 +34,7 @@ $action_stats = new action();
 $action_stats->record(MODULE_ID_EBOOK);
 /* * *********************************** */
 
-$nameTools = $langEBook;
+$pageName = $langEBook;
 
 if ($is_editor) {
     if (isset($_GET['create'])) {

@@ -27,7 +27,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/pclzip/pclzip.lib.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-$nameTools = $langEBookCreate;
+$pageName = $langEBookCreate;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langEBook);
 define('EBOOK_DOCUMENTS', true);
 

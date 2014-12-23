@@ -33,7 +33,7 @@ $base_url = 'index.php?course=' . $course_code;
 $cat_url = 'categories.php?course=' . $course_code;
 
 $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
-$nameTools = $langCategories;
+$pageName = $langCategories;
 
 $categories = array();
 $q = Database::get()->queryArray("SELECT id, name, description, `order`
@@ -49,7 +49,7 @@ if ($is_editor) {
     if (isset($_GET['add']) or isset($_GET['config']) or isset($_GET['edit'])) {
         $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                      'url' => "$base_url",
+                      'url' => "$cat_url",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));        
     } else {
@@ -117,7 +117,8 @@ if ($is_editor) {
             Database::get()->query("UPDATE glossary SET category_id = NULL
                                                   WHERE course_id = ?d AND
                                                         category_id = ?d", $course_id, $cat_id);
-            $tool_content .= "<div class='alert alert-success'>$langCategoryDeletedGlossary</div><br />";
+            Session::Messages($langCategoryDeletedGlossary, 'alert-success');
+            redirect_to_home_page("modules/glossary/categories.php?course=$course_code");
         }        
     }
 
@@ -126,10 +127,10 @@ if ($is_editor) {
     if (isset($_GET['add']) or isset($_GET['edit'])) {
         $html_id = $html_name = $description = '';
         if (isset($_GET['add'])) {
-            $nameTools = $langCategoryAdd;
+            $pageName = $langCategoryAdd;
             $submit_value = $langSubmit;
         } else {
-            $nameTools = $langCategoryMod;
+            $pageName = $langCategoryMod;
             $cat_id = intval($_GET['edit']);
             $data = Database::get()->querySingle("SELECT name, description
                                               FROM glossary_category WHERE id = ?d", $cat_id);
@@ -157,7 +158,7 @@ if ($is_editor) {
                    <div class='form-group'>    
                         <div class='col-sm-10 col-sm-offset-2'>
                              <input class='btn btn-primary' type='submit' name='submit_category' value='$submit_value'>
-                             <a href='$base_url' class='btn btn-default'>$langCancel</a>
+                             <a href='$cat_url' class='btn btn-default'>$langCancel</a>
                         </div>
                     </div>                            
                 </form>
@@ -165,42 +166,46 @@ if ($is_editor) {
     }
 }
 
-$q = Database::get()->queryArray("SELECT id, name, description
-                      FROM glossary_category WHERE course_id = ?d
-                      ORDER BY name", $course_id);
+if (!isset($_GET['edit']) && !isset($_GET['add'])) {
+    $q = Database::get()->queryArray("SELECT id, name, description
+                          FROM glossary_category WHERE course_id = ?d
+                          ORDER BY name", $course_id);
 
-if ($q and count($q)) {    
-        $tool_content .= "<table width='100%' class='table-striped table-bordered table-hover'>
-            <tr><th class='text-left'>$langName</th>" .
-         ($is_editor ? "<th class='text-center'>" . icon('fa-gears') . "</th>" : '') . "
-            </tr>";
-    
-    foreach ($q as $cat) {        
-        if ($cat->description) {
-            $desc = "<br>" . standard_text_escape($cat->description);
-        } else {
-            $desc = '';
-        }        
-        $tool_content .= "<tr><td><a href='$base_url&amp;cat=$cat->id'>" . q($cat->name) . "</a>$desc</td>";                       
-        if ($is_editor) {
-            $tool_content .= "<td class='option-btn-cell'>";
-            $tool_content .= action_button(array(
-                    array('title' => $langCategoryMod,
-                          'url' => "$cat_url&amp;edit=$cat->id",
-                          'icon' => 'fa-edit'),
-                    array('title' => $langCategoryDel,
-                          'url' => "$cat_url&amp;delete=$cat->id",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDelete))
-                );
-           $tool_content .= "</td>";                        
+    if ($q and count($q)) {    
+            $tool_content .= "
+        <div class='table-responsive'>    
+            <table class='table-default'>
+                <tr><th class='text-left'>$langName</th>" .
+             ($is_editor ? "<th class='text-center'>" . icon('fa-gears') . "</th>" : '') . "
+                </tr>";
+
+        foreach ($q as $cat) {        
+            if ($cat->description) {
+                $desc = "<br>" . standard_text_escape($cat->description);
+            } else {
+                $desc = '';
+            }        
+            $tool_content .= "<tr><td><a href='$base_url&amp;cat=$cat->id'>" . q($cat->name) . "</a>$desc</td>";                       
+            if ($is_editor) {
+                $tool_content .= "<td class='option-btn-cell'>";
+                $tool_content .= action_button(array(
+                        array('title' => $langCategoryMod,
+                              'url' => "$cat_url&amp;edit=$cat->id",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langCategoryDel,
+                              'url' => "$cat_url&amp;delete=$cat->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmDelete))
+                    );
+               $tool_content .= "</td>";                        
+            }
+            $tool_content .= "</tr>";
         }
-        $tool_content .= "</tr>";
+        $tool_content .= "</table></div>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
     }
-    $tool_content .= "</table>";
-} else {
-    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
 }
 
 draw($tool_content, 2, null, $head_content);

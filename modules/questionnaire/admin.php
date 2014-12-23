@@ -176,7 +176,7 @@ if (isset($_GET['pid'])) {
     if(!$poll){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
     }
-    $nameTools = $poll->name;
+    $pageName = $poll->name;
     $attempt_counter = Database::get()->querySingle("SELECT COUNT(*) AS count FROM poll_answer_record WHERE pid = ?d", $pid)->count;  
     if ($attempt_counter>0) {
         Session::Messages($langThereAreParticipants);
@@ -192,13 +192,13 @@ $aType = array($langUniqueSelect, $langFreeText, $langMultipleSelect, $langLabel
 // Modify/Create poll form
 if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if (isset($_GET['modifyPoll'])) {
-        $nameTools = $langInfoPoll;
+        $pageName = $langInfoPoll;
         $navigation[] = array(
             'url' => "admin.php?course=$course_code&amp;pid=$pid", 
             'name' => $poll->name
         );            
     } else {
-        $nameTools = $langCreatePoll;
+        $pageName = $langCreatePoll;
     }    
     load_js('bootstrap-datetimepicker');   
     $head_content .= "<script type='text/javascript'>
@@ -290,7 +290,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
         }
     }
-    $nameTools = $langPollManagement;
+    $pageName = $langPollManagement;
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid", 
         'name' => $poll->name
@@ -340,13 +340,13 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         if(!$question) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
         }
-        $nameTools = $question->question_text;
+        $pageName = $question->question_text;
         $navigation[] = array(
             'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid", 
             'name' => $langPollManagement
         );         
     } else {
-        $nameTools = $langNewQu;        
+        $pageName = $langNewQu;        
     }
      
     $action_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid".(isset($_GET['modifyQuestion']) ? "&amp;modifyQuestion=$question->pqid" : "&amp;newQuestion=yes");
@@ -457,7 +457,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if(!$question || $question->qtype == QTYPE_LABEL || $question->qtype == QTYPE_FILL || $question->qtype == QTYPE_SCALE) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     }
-    $nameTools = $langAnswers;
+    $pageName = $langAnswers;
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid", 
         'name' => $langPollManagement

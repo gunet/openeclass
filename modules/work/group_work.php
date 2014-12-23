@@ -40,7 +40,7 @@ if (!file_exists($coursePath))
 $workPath = $coursePath . '/work';
 $groupPath = $coursePath . '/group/' . group_secret($group_id);
 
-$nameTools = $langGroupSubmit;
+$pageName = $langGroupSubmit;
 
 if (isset($_GET['submit'])) {
     $tool_content .= "<p>$langGroupWorkIntro</p>";

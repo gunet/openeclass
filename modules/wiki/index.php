@@ -63,7 +63,7 @@ if (is_object($result) && $result->wiki == 1) {
 }
 
 
-$nameTools = $langWiki;
+$pageName = $langWiki;
 
 // display mode
 // check and set user access level for the tool
@@ -288,13 +288,13 @@ if ($action == 'rqEdit') {
 switch ($action) {
     case "rqEdit": {
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId", 'name' => $langWiki);
-            $nameTools = $langWikiProperties;
+            $pageName = $langWikiProperties;
             $noPHP_SELF = true;
             break;
         }
     case "list":
     default: {
-            $nameTools = $langWiki;
+            $pageName = $langWiki;
         }
 }
 

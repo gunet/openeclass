@@ -37,9 +37,6 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'include/phpass/PasswordHash.php';
 
-// $homePage is used by baseTheme.php to parse correctly the breadcrumb
-$homePage = true;
-
 // unset system that records visitor only once by course for statistics
 require_once 'include/action.php';
 if (isset($dbname)) {
@@ -142,6 +139,19 @@ if ($uid AND !isset($_GET['logout'])) {
     }
    
     if (!get_config('dont_display_login_form')) {
+        $head_content .= "
+            <script>
+            $(function() {
+                $('#revealPass')
+                    .mousedown(function() {
+                        $('#pass').attr('type', 'text');
+                    })
+                    .mouseup(function() {
+                        $('#pass').attr('type', 'password');
+                    })
+            });            
+            </script>
+        ";
         $tool_content .= "
 
 
@@ -149,8 +159,7 @@ if ($uid AND !isset($_GET['logout'])) {
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>
-                        <div class='hidden-xs col-sm-7 col-md-7' style='position: static;'>
-                            <img class='graphic' src='$themeimg/indexlogo.png'/>
+                        <div class='hidden-xs hidden-sm col-sm-7 col-md-7 graphic'>
                         </div>                        
                         <form class='login-form col-xs-12 col-sm-7 col-md-5 col-lg-4 pull-right' action='$urlSecure' method='post'>
                             <h2>$langUserLogin</h2>
@@ -158,7 +167,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                 <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
                             </div>
                             <div class='form-group'>
-                                <input type='password' name='pass' placeholder='$langPass'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp&nbsp<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
                             </div>
                             <div class='login-settings row'>";
                                 /*<div class='checkbox pull-left'>
@@ -243,14 +252,14 @@ if ($uid AND !isset($_GET['logout'])) {
                 <div class='panel'>
                     <div class='panel-body'>
                         <a href='http://opencourses.gr'>
-                            <img src='$themeimg/open_courses_bnr.png'>
+                            <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
                         </a>
                     </div>
                 </div>
                 <div class='panel'>
                     <div class='panel-body'>
                         <a href='http://www.openeclass.org/'>
-                            <img src='$themeimg/open_eclass_bnr.png'>
+                            <img class='img-responsive' src='$themeimg/open_eclass_bnr.png'>
                         </a>
                     </div>
                 </div>
@@ -259,6 +268,5 @@ if ($uid AND !isset($_GET['logout'])) {
 
     }
 
-
-    draw($tool_content, 0, null, $rss_link);
+    draw($tool_content, 0, null, $rss_link.$head_content);
 }

@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-require_once 'modules/search/linkindexer.class.php';
+require_once 'modules/search/indexer.class.php';
 
 function makedefaultviewcode($locatie) {
     global $aantalcategories;
@@ -86,14 +86,14 @@ function showlinksofcategory($catid) {
                 $editlink .= "&amp;category=$category";
             }
             $tool_content .= action_button(array(
-                array('title' => $langModify,
-                      'icon' => 'fa-edit',
-                      'url' => $editlink),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
                       'confirm' => $langLinkDelconfirm),
+                array('title' => $langModify,
+                      'icon' => 'fa-edit',
+                      'url' => $editlink),
                 array('title' => $langUp,
                       'icon' => 'fa-arrow-up',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id",
@@ -133,14 +133,14 @@ function showcategoryadmintools($categoryid) {
 
     $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
     $tool_content .= action_button(array(
-                array('title' => $langModify,
-                      'icon' => 'fa-edit',
-                      'url' => "$basecaturl" . "action=editcategory"),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'url' => "$basecaturl" . "action=deletecategory",
                       'class' => 'delete',
                       'confirm' => $langCatDel),
+                array('title' => $langModify,
+                      'icon' => 'fa-edit',
+                      'url' => "$basecaturl" . "action=editcategory"),
                 array('title' => $langUp,
                       'icon' => 'fa-arrow-up',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid",
@@ -156,7 +156,6 @@ function showcategoryadmintools($categoryid) {
 /**
  * @brief Enter the modified info submitted from the link form into the database
  * @global type $course_id
- * @global type $catlinkstatus
  * @global type $langLinkMod
  * @global type $langLinkAdded
  * @global type $urllink
@@ -168,7 +167,7 @@ function showcategoryadmintools($categoryid) {
  * @return type
  */
 function submit_link() {
-    global $course_id, $catlinkstatus, $langLinkMod, $langLinkAdded,
+    global $course_id, $langLinkMod, $langLinkAdded,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
 
     register_posted_variables(array('urllink' => true,
@@ -177,9 +176,13 @@ function submit_link() {
         'selectcategory' => true), 'all', 'trim');
     $urllink = canonicalize_url($urllink);
     if (!is_url_accepted($urllink,"(https?|ftp)")){
-        $catlinkstatus = $langLinkNotPermitted;
-        $state = "error";
-        return ;
+        $message = $langLinkNotPermitted;
+        if (isset($_POST['id'])) {
+            $id = $_POST['id'];
+            redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=$id&urlview=");
+        } else {
+            redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
+        }
     }
     $set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
     $terms = array($urllink, $title, purify($description), $selectcategory);
@@ -188,18 +191,15 @@ function submit_link() {
         $id = intval($_POST['id']);
         Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
 
-        $catlinkstatus = $langLinkMod;
         $log_type = LOG_MODIFY;
     } else {
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
                                       WHERE course_id = ?d AND category = ?d", $course_id, $selectcategory)->maxorder;
         $order++;
         $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
-        $catlinkstatus = $langLinkAdded;
         $log_type = LOG_INSERT;
     }
-    $lidx = new LinkIndexer();
-    $lidx->store($id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
     // find category name
     $category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
                                                         WHERE link.category = link_category.id
@@ -264,11 +264,10 @@ function link_form_defaults($id) {
  * @global type $langCategoryModded
  * @global type $categoryname
  * @global type $description
- * @global type $catlinkstatus
  */
 function submit_category() {
     global $course_id, $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description, $catlinkstatus;
+    $categoryname, $description;
 
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');
@@ -278,14 +277,12 @@ function submit_category() {
     if (isset($_POST['id'])) {
         $id = $_POST['id'];
         Database::get()->query("UPDATE `link_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
-        $catlinkstatus = $langCategoryModded;
         $log_type = LOG_MODIFY;
     } else {
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link_category`
                                       WHERE course_id = ?d", $course_id)->maxorder;
         $order++;
         $id = Database::get()->query("INSERT INTO `link_category` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
-        $catlinkstatus = $langCategoryAdded;
         $log_type = LOG_INSERT;
     }
     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
@@ -298,19 +295,16 @@ function submit_category() {
  * @brief delete link
  * @global type $course_id
  * @global type $langLinkDeleted
- * @global type $catlinkstatus
  * @param type $id
  */
 function delete_link($id) {
-    global $course_id, $langLinkDeleted, $catlinkstatus;
+    global $course_id, $langLinkDeleted;
 
     $tuple = Database::get()->querySingle("SELECT url, title FROM link WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $url = $tuple->url;
     $title = $tuple->title;
     Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    $lidx = new LinkIndexer();
-    $lidx->remove($id);
-    $catlinkstatus = $langLinkDeleted;
+    Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_LINK, $id);
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
                                                                'url' => $url,
                                                                'title' => $title));
@@ -329,7 +323,6 @@ function delete_category($id) {
     Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, $id);
     $category = Database::get()->querySingle("SELECT name FROM link_category WHERE course_id = ?d AND id = ?d", $course_id, $id)->name;
     Database::get()->query("DELETE FROM `link_category` WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    $catlinkstatus = $langCategoryDeleted;
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id,
                                                                'category' => $category));
 }

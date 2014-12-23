@@ -48,12 +48,26 @@ validateCourseNodes($cId, isDepartmentAdmin());
 load_js('jstree');
 
 // Define $nameTools
-$nameTools = $langCourseInfo;
+$pageName = $langCourseInfo;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCours);
 $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
 
-// Update cours basic information
+if (isset($_GET['c'])) {
+    $tool_content .= action_bar(array(
+     array('title' => $langBack,
+           'url' => "editcours.php?c=$_GET[c]",
+           'icon' => 'fa-reply',
+           'level' => 'primary-label')));
+} else {
+    $tool_content .= action_bar(array(
+        array('title' => $langBackAdmin,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
+  }
+
+
+// Update course basic information
 if (isset($_POST['submit'])) {
     $departments = isset($_POST['department']) ? $_POST['department'] : array();
 
@@ -62,71 +76,70 @@ if (isset($_POST['submit'])) {
         $olddeps = $course->getDepartmentIds($cId);
 
         foreach ($departments as $depId) {
-            if (!in_array($depId, $olddeps))
+            if (!in_array($depId, $olddeps)) {
                 validateNode(intval($depId), true);
+            }
         }
 
         foreach ($olddeps as $depId) {
-            if (!in_array($depId, $departments))
+            if (!in_array($depId, $departments)) {
                 validateNode($depId, true);
+            }
         }
     }
 
     // Update query
     Database::get()->query("UPDATE course SET title = ?s,
                     prof_names = ?s
-                    WHERE code = ?s", $_POST['title'], $_POST['prof_names'], $_GET['c']);
-
+                    WHERE code = ?s", $_POST['title'], $_POST['titulary'], $_GET['c']);
     $course->refresh($cId, $departments);
-
-    $tool_content .= "<div class='alert alert-success'>$langModifDone</div>
-                <p>&laquo; <a href='editcours.php?c=$_GET[c]'>$langBack</a></p>";
+    $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
 }
 // Display edit form for course basic information
 else {
-    $row = Database::get()->querySingle("SELECT course.code as code, course.title as title ,course.prof_names as prof_name, course.id as id
-		  FROM course
-		 WHERE course.code = ?s" ,$_GET['c']);
-    $tool_content .= "
-	<form action='" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($_GET['c']) . "' method='post' onsubmit='return validateNodePickerForm();'>
+    $row = Database::get()->querySingle("SELECT course.code AS code, course.title AS title, course.prof_names AS prof_name, course.id AS id
+                                            FROM course
+                                           WHERE course.code = ?s" ,$_GET['c']);
+    $tool_content .= "<div class='form-wrapper'>
+	<form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "?c=" . q($_GET['c']) . "' method='post' onsubmit='return validateNodePickerForm();'>
 	<fieldset>
-	<legend>" . $langCourseInfoEdit . "</legend>
-<table width='100%' class='tbl'><tr><th>$langFaculty</th><td>";
+        <div class='form-group'>
+	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
+            <div class='col-sm-10'>";    
 
-    if (isDepartmentAdmin())
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id), 'allowables' => $user->getDepartmentIds($uid)));
-    else
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id)));
-
-    $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</td></tr>
-	<tr>
-	  <th width='150'>" . $langCourseCode . ":</th>
-	  <td><i>" . $row->code . "</i></td>
-	</tr>
-	<tr>
-	  <th>" . $langTitle . ":</th>
-	  <td><input type='text' name='title' value='" . q($row->title) . "' size='60'></td>
-	</tr>
-	<tr>
-	  <th>" . $langTeacher . ":</th>
-	  <td><input type='text' name='prof_names' value='" . q($row->prof_name) . "' size='60'></td>
-	</tr>
-	<tr>
-	  <th>&nbsp;</th>
-	  <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td>
-	</tr>
-	</tbody>
-	</table>
-	</form></fieldset>\n";
-}
-// If course selected go back to editcours.php
-if (isset($_GET['c'])) {
-    $tool_content .= "<p align='right'><a href='editcours.php?c=" . q($_GET['c']) . "'>" . $langBack . "</a></p>";
-}
-// Else go back to index.php directly
-else {
-    $tool_content .= "<p align='right'><a href='index.php'>" . $langBackAdmin . "</a></p>";
+        if (isDepartmentAdmin()) {
+            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id), 'allowables' => $user->getDepartmentIds($uid)));
+        } else {
+            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($row->id)));
+        }
+        $head_content .= $js;
+        $tool_content .= $html;
+        $tool_content .= "</div></div>";
+        $tool_content .= "<div class='form-group'>
+            <label for='fcode' class='col-sm-2 control-label'>$langCode</label>
+            <div class='col-sm-10'>
+                <input type='text' class='form-control' name='fcode' id='fcode' value='$row->code' size='60' />
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='title' class='col-sm-2 control-label'>$langCourseTitle:</label>
+            <div class='col-sm-10'>
+		<input type='text' class='form-control' name='title' id='title' value='" . q($row->title) . "' size='60' />
+	    </div>
+        </div>
+        <div class='form-group'>
+            <label for='titulary' class='col-sm-2 control-label'>$langTeachers:</label>
+            <div class='col-sm-10'>
+		<input type='text' class='form-control' name='titulary' id='titulary' value='" . q($row->prof_name) . "' size='60' />
+	    </div>
+        </div>
+        <div class='form-group'>
+            <div class='col-sm-10 col-sm-offset-4'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+            </div>
+        </div>
+        </fieldset>
+	</form>
+        </div>";
 }
 draw($tool_content, 3, null, $head_content);

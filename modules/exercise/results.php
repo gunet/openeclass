@@ -32,7 +32,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
-$nameTools = $langResults;
+$pageName = $langResults;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 if (isset($_GET['exerciseId'])) {
@@ -77,7 +77,7 @@ if($exerciseDescription_temp) {
 $tool_content .= "</table>
 </div><br>";
 $status = (isset($_GET['status'])) ? intval($_GET['status']) : 0; 
-$tool_content .= "<select style='margin:0 0 12px 0;' id='status_filtering'>
+$tool_content .= "<select class='form-control' style='margin:0 0 12px 0;' id='status_filtering'>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId' ".(($status == 0)? 'selected' : '').">--- $langCurrentStatus ---</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_COMPLETED."' ".(($status == 1)? 'selected' : '').">$langAttemptCompleted</option>
         <option value='results.php?course=$course_code&exerciseId=$exerciseId&status=".ATTEMPT_PENDING."' ".(($status == 2)? 'selected' : '').">$langAttemptPending</option>

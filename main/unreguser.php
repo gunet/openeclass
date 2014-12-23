@@ -24,18 +24,18 @@ $require_login = TRUE;
 include '../include/baseTheme.php';
 require_once 'include/log.php';
 
-$nameTools = $langUnregUser;
+$pageName = $langUnregUser;
 $navigation[] = array("url" => "profile/profile.php", "name" => $langModifyProfile);
 
 if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     // admin cannot be deleted
     if ($is_admin) {
-        $tool_content .= "<div class='alert alert-danger'>$langAdminNo";
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "profile/profile.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
+        $tool_content .= "<div class='alert alert-danger'>$langAdminNo</div>";
         draw($tool_content, 1);
         exit;
     } else {
@@ -51,15 +51,14 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             $tool_content .= "</li>";
             $tool_content .= "<li>$langNo: <a href='profile/profile.php'>$langBack</a>";
             $tool_content .= "</li></ul>";
-            $tool_content .= "</td></tr></table>";
         } else {
-            $tool_content .= "<div class='alert alert-danger'><b>$langNotice: </b> ";
-            $tool_content .= "$langExplain<br />";
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                     'url' => "profile/profile.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
+            $tool_content .= "<div class='alert alert-danger'>$langNotice:</br> ";
+            $tool_content .= "$langExplain</div>";
         }
     }  //endif is admin
 } else {
@@ -72,13 +71,12 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
             'username' => $un,
             'name' => $n));
         unset($_SESSION['uid']);
-        $tool_content .= "<div class='alert alert-success'><b>$langDelSuccess</b><br />";
-        $tool_content .= "$langThanks";
         $tool_content .= action_bar(array(
             array('title' => $langLogout,
                 'url' => "../index.php?logout=yes",
                 'icon' => 'fa-sign-out',
                 'level' => 'primary-label')));
+        $tool_content .= "<div class='alert alert-success'>$langDelSuccess</br>$langThanks</div>";
     }
 }
 if (isset($_SESSION['uid'])) {

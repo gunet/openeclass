@@ -26,12 +26,31 @@
 
 require_once 'modules/graphics/plotter.php';
 
+if (isset($_POST['user_date_start'])) {
+    $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
+    $u_date_start = $uds->format('Y-m-d H:i');
+    $user_date_start = $uds->format('d-m-Y H:i');
+} else {
+    $date_start = new DateTime();
+    $date_start->sub(new DateInterval('P30D'));    
+    $u_date_start = $date_start->format('Y-m-d H:i');
+    $user_date_start = $date_start->format('d-m-Y H:i');       
+}
+if (isset($_POST['user_date_end'])) {
+    $ude = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_end']);    
+    $u_date_end = $ude->format('Y-m-d H:i');
+    $user_date_end = $ude->format('d-m-Y H:i');        
+} else {
+    $date_end = new DateTime();
+    $u_date_end = $date_end->format('Y-m-d H:i');
+    $user_date_end = $date_end->format('d-m-Y H:i');        
+}
+
+
 $usage_defaults = array(
     'u_stats_value' => 'visits',
     'u_interval' => 'daily',
-    'u_module_id' => -1,
-    'u_date_start' => strftime('%Y-%m-%d', strtotime('now -30 day')),
-    'u_date_end' => strftime('%Y-%m-%d', strtotime('now')),
+    'u_module_id' => -1    
 );
 
 foreach ($usage_defaults as $key => $val) {
@@ -49,7 +68,7 @@ if ($u_module_id != -1) {
 }
 
 
-$date_fmt = '%d-%m-%Y';
+$date_fmt = '%Y-%m-%d';
 $date_where = "(`day` BETWEEN '$u_date_start' AND '$u_date_end') ";
 $date_what = "";
 
@@ -119,14 +138,6 @@ switch ($u_stats_value) {
 
         break;
     case "duration":
-
-        $query = "SELECT " . $date_what . " SUM(duration) AS tot_dur
-                FROM actions_daily
-                WHERE $date_where
-                AND $mod_where
-                AND course_id = $course_id
-                $date_group ORDER BY day ASC";
-
         $result = Database::get()->queryArray("SELECT $date_what SUM(duration) AS tot_dur
                                                 FROM actions_daily
                                                 WHERE $date_where
@@ -167,7 +178,7 @@ switch ($u_stats_value) {
         }
 
         $chart->setTitle("$langDurationVisits");
-        $tool_content .= "<p>$langDurationExpl</p>";
+        $tool_content .= "<div class='alert alert-info'>$langDurationExpl</div>";
 
         break;
 }

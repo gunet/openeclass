@@ -39,17 +39,33 @@ if (setting_get($setting_id, $course_id) == 1) {
         if (Commenting::permCreate($is_editor, $uid, $course_id)) {
             $comment = new Comment();
             if ($comment->create($_POST['commentText'], $uid, $_POST['rtype'], intval($_POST['rid']))) {
+                $post_actions = '<div class="pull-right">';
+                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
+                $post_actions .= icon('fa-edit', $langModify).'</a> ';
+                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                $post_actions .= icon('fa-times', $langDelete).'</a>';
+                $post_actions .='</div>';   
+                
                 $response[0] = 'OK';
                 $response[1] = "<div class='alert alert-success'>".$langCommentsSaveSuccess."</div>";
                 $response[2] = $comment->getId();
-                $response[3] = '<div class="smaller">'.nice_format($comment->getTime(), true).$langBlogPostUser.display_user($comment->getAuthor(), false, false).':</div>';
-                $response[3] .= '<div id="comment_content-'.$comment->getId().'">'.q($comment->getContent()).'</div>';
-                $response[3] .= '<div class="comment_actions">';
-                $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editLoad\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \'\', '.$comment->getId().')">';
-                $response[3] .= '<img src="'.$themeimg.'/edit.png" alt="'.$langModify.'" title="'.$langModify.'"/></a>';
-                $response[3] .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'delete\', '.$_POST['rid'].', \''.$_POST['rtype'].'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                $response[3] .= '<img src="'.$themeimg.'/delete.png" alt="'.$langDelete.'" title="'.$langDelete.'"/></a>';
-                $response[3] .='</div>';
+                $response[3] = "
+         <div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
+                    <div class='col-xs-12'>
+                        <div class='media'>
+                            <a class='media-left' href='#'>
+                                ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
+                            </a>
+                            <div class='media-body bubble'>
+                                <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.
+                                    "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
+                                    $post_actions
+                                    ."<div class='margin-top-thin' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                    
+                ";
             } else {
                 $response[0] = 'ERROR';
                 $response[1] = "<div class='alert alert-warning'>".$langCommentsSaveFail."</div>";
@@ -85,7 +101,7 @@ if (setting_get($setting_id, $course_id) == 1) {
             if ($comment->permEdit($is_editor, $uid)) {
                 $response[0] = 'OK';
                 $response[1] = '';
-                $response[2] = '<textarea id="edit-textarea-'.$_POST['cid'].'" cols="40" rows="5">'.q($comment->getContent()).'</textarea><br/>';
+                $response[2] = '<textarea class="form-control" id="edit-textarea-'.$_POST['cid'].'" rows="5">'.q($comment->getContent()).'</textarea><br/>';
                 $response[2] .= '<input class="btn btn-primary" type="submit" value="'.$langSubmit.'" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$course_code.'\', \'editSave\','.$comment->getRid().', \''.$comment->getRtype().'\', \''.$langCommentsSaveConfirm.'\', '.$comment->getId().');"/>';
             } else {
                 $response[0] = 'ERROR';

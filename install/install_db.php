@@ -175,6 +175,7 @@ $db->query("CREATE TABLE `course` (
   `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
   `start_date` DATE NOT NULL default '0000-00-00',
   `finish_date` DATE NOT NULL default '0000-00-00',
+  `description` MEDIUMTEXT NOT NULL,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 #
@@ -404,7 +405,7 @@ $db->query("CREATE TABLE monthly_summary (
         visitorsNum int(11) NOT NULL default 0,
         coursNum int(11) NOT NULL default 0,
         logins int(11) NOT NULL default 0,
-        details text,
+        details MEDIUMTEXT,
         PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
@@ -1283,6 +1284,8 @@ $default_config = array(
     'active_ui_languages', $active_ui_languages,
     'student_upload_whitelist', $student_upload_whitelist,
     'teacher_upload_whitelist', $teacher_upload_whitelist,
+    'theme', 'default',
+    'theme_options_id', 0,
     'login_fail_check', 1,
     'login_fail_threshold', 15,
     'login_fail_deny_interval', 5,
@@ -1521,6 +1524,19 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue` (
     `course_id` int(11) NOT NULL UNIQUE,
     PRIMARY KEY (`id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
+    `request_type` VARCHAR(255) NOT NULL,
+    `resource_type` VARCHAR(255) NOT NULL,
+    `resource_id` int(11) NOT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(300) NOT NULL,
+    `styles` LONGTEXT NOT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
 $db->query("CREATE INDEX `actions_summary_index` ON actions_summary(module_id, course_id)");
@@ -1601,6 +1617,7 @@ $db->query('CREATE INDEX `user_events_dates` ON personal_calendar (user_id,start
 $db->query('CREATE INDEX `agenda_item_dates` ON agenda (course_id,start)');
 $db->query('CREATE INDEX `deadline_dates` ON assignment (course_id, deadline)');
 $db->query('CREATE INDEX `idx_queue_cid` ON `idx_queue` (course_id)');
+$db->query('CREATE INDEX `idx_queue_async_uid` ON `idx_queue_async` (user_id)');
 
 $db->query('CREATE INDEX `attendance_users_aid` ON `attendance_users` (attendance_id)');
 $db->query('CREATE INDEX `gradebook_users_gid` ON `gradebook_users` (gradebook_id)');

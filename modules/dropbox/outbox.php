@@ -46,7 +46,7 @@ if (isset($_GET['mid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out = "<div style=\"float:right;\"><a href=\"outbox.php".$urlstr."\">$langBack</a></div>";
-        $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table class='table table-bordered'>";
+        $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table class='table-default'>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
         $out .= "<tr id='$msg->id'><td>$langDelete:</td><td class='delete'><i class='class='fa fa-times'></i></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
@@ -63,7 +63,7 @@ if (isset($_GET['mid'])) {
         }
         
         $out .= "<tr><td>$langRecipients:</td><td>".$recipients."</td></tr>";
-        $out .= "<tr><td>$langMessage:</td><td>".standard_text_escape($msg->body)."</td></tr>";
+        $out .= "<tr><td>$langMessage:</td><td id='out_msg_body'>".standard_text_escape($msg->body)."</td></tr>";
 
         if ($msg->filename != '') {
             $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
@@ -74,6 +74,8 @@ if (isset($_GET['mid'])) {
 
         $out .= '<script>
         $(function() {
+        $("#out_msg_body").find("a").addClass("outtabs");          
+                      
         $(".delete").click(function() {
             if (confirm("' . $langConfirmDelete . '")) {
             var rowContainer = $(this).parent().parent();

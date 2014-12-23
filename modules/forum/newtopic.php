@@ -29,18 +29,11 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
-require_once 'modules/search/forumtopicindexer.class.php';
-require_once 'modules/search/forumpostindexer.class.php';
-
-$idx = new Indexer();
-$ftdx = new ForumTopicIndexer($idx);
-$fpdx = new ForumPostIndexer($idx);
 
 require_once 'config.php';
 require_once 'functions.php';
 
-
-
+$toolName = $langForums;
 if (isset($_GET['forum'])) {
     $forum = intval($_GET['forum']);
 } else {
@@ -61,7 +54,7 @@ $forum_id = $myrow->id;
 $is_member = false;
 $group_id = init_forum_group_info($forum_id);
 
-$nameTools = $langNewTopic;
+$pageName = $langNewTopic;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
 $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($forum_name));
 
@@ -96,12 +89,11 @@ if (isset($_POST['submit'])) {
 
     $topic_id = Database::get()->query("INSERT INTO forum_topic (title, poster_id, forum_id, topic_time) VALUES (?s, ?d, ?d, ?t)"
                     , $subject, $uid, $forum_id, $time)->lastInsertID;
-
-    $ftdx->store($topic_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMTOPIC, $topic_id);
 
     $post_id = Database::get()->query("INSERT INTO forum_post (topic_id, post_text, poster_id, post_time, poster_ip) VALUES (?d, ?s, ?d, ?t, ?s)"
                     , $topic_id, $message, $uid, $time, $poster_ip)->lastInsertID;
-    $fpdx->store($post_id);
+    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
     $forum_user_stats = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post 
                         INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
@@ -155,40 +147,33 @@ if (isset($_POST['submit'])) {
     }
     // end of notification
 
-    $dynbar = array(
-            array('title' => $langReturnMessages,
-                    'url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id&amp;$total_topic",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label'),
-            array('title' => $langReturnTopic,
-                    'url' => "viewforum.php?course=$course_code&forum=$forum_id",
-                    'icon' => 'fa-reply',
-                    'level' => 'primary-label')
-    );
-    $tool_content .= action_bar($dynbar);
-    $tool_content .= "<div class='alert alert-success'>$langStored</div>";
+    Session::Messages($langStored, 'alert-success');
+    redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 } else {
     $tool_content .= "
-        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
+    <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&forum=$forum_id' method='post'>
         <fieldset>
-          <legend>$langTopicData</legend>
-	  <table class='tbl' width='100%'>
-	  <tr>
-	    <th>$langSubject:</th>
-	    <td><input type='text' name='subject' size='53' maxlength='100' /></td>
-	  </tr>
-	  <tr>
-            <th valign='top'>$langBodyMessage:</th>
-            <td>" . rich_text_editor('message', 14, 50, '', '') . "</td>
-          </tr>
-	  <tr>
-            <th>&nbsp;</th>
-	    <td class='right'>
-	       <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' />&nbsp;	       
-	    </td>
-          </tr>
-	  </table>
+            <div class='form-group'>
+              <label for='subject' class='col-sm-2 control-label'>$langSubject:</label>
+              <div class='col-sm-10'>
+                <input type='text' name='subject' id='subject' class='form-control' maxlength='100'>
+              </div>
+            </div>   
+            <div class='form-group'>
+              <label for='message' class='col-sm-2 control-label'>$langBodyMessage:</label>
+              <div class='col-sm-10'>
+                " . rich_text_editor('message', 14, 50, '') . "
+              </div>
+            </div>
+            <div class='form-group'>
+              <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                <a class='btn btn-default' href='viewforum.php?course=$course_code&forum=$forum_id'>$langCancel</a>
+              </div>
+            </div>            
 	</fieldset>
-	</form>";
+	</form>
+    </div>";
 }
 draw($tool_content, 2, null, $head_content);

@@ -298,35 +298,42 @@ function directory_selection($source_value, $command, $entryToExclude) {
     }
     $dirList = directory_list();
     $dialogBox = "
-	<form action='$_SERVER[SCRIPT_NAME]$groupset' method='post'>
-	<fieldset>
-	<input type='hidden' name='source' value='$source_value'>
-        <table class='tbl' width='99%'>
-        <tr>
-          <td>$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:";
-    $dialogBox .= "
-            <select name='$command'>";
-    if ($entryToExclude != '/') {
-        $dialogBox .= "<option value=''>$langParentDir</option>\n";
-    }
+        <div class='row'>
+            <div class='col-xs-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]$groupset' method='post'>
+                        <fieldset>
+                                <input type='hidden' name='source' value='$source_value'>
+                                <div class='form-group'>
+                                    <label for='$command' class='col-sm-4 control-label word-wrapping' >$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:</label>
+                                    <div class='col-sm-8'>
+                                        <select name='$command' class='form-control'>";
+                                        if ($entryToExclude != '/') {
+                                            $dialogBox .= "<option value=''>$langParentDir</option>";
+                                        }
 
-    /* build html form inputs */
-    foreach ($dirList as $path => $filename) {
-        $depth = substr_count($path, '/');
-        $tab = str_repeat('&nbsp;&nbsp;&nbsp;', $depth);
-        if ($path != $entryToExclude) {
-            $dialogBox .= "<option value='$path'>$tab$filename</option>\n";
-        }
-    }
-
-    $dialogBox .= "
-            </select>
-          </td>
-          <td class='right'><input class='btn btn-primary' type='submit' value='$langMove'></td>
-        </tr>
-        </table>
-        </fieldset>
-	</form>";
+                                        /* build html form inputs */
+                                        foreach ($dirList as $path => $filename) {
+                                            $depth = substr_count($path, '/');
+                                            $tab = str_repeat('&nbsp;&nbsp;&nbsp;', $depth);
+                                            if ($path != $entryToExclude) {
+                                                $dialogBox .= "<option value='$path'>$tab$filename</option>";
+                                            }
+                                        }
+                                    $dialogBox .= "</select>
+                                        </div>
+                                </div>
+                                <div class='form-group'>
+                                    <div class='col-sm-offset-3 col-sm-9'>
+                                        <input class='btn btn-primary' type='submit' value='$langMove' >
+                                    </div>
+                                </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>";
+        
     return $dialogBox;
 }
 
@@ -381,19 +388,19 @@ function create_map_to_real_filename($downloadDir, $include_invisible) {
     $encoded_filenames = $decoded_filenames = $filename = array();
 
     $hidden_dirs = array();    
-    $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path FROM document
+    $sql = Database::get()->queryArray("SELECT path, filename, visible, format, extra_path, public FROM document
                                 WHERE $group_sql AND
                                       path LIKE '$downloadDir%'");
     foreach ($sql as $files) {
-        if ($cpath = common_doc_path($files->extra_path, true)) {
-            if ($GLOBALS['common_doc_visible'] and ( $include_invisible or $files->visible == 1)) {
+        if ($cpath = common_doc_path($files->extra_path, true)) {            
+            if ($GLOBALS['common_doc_visible'] and ($include_invisible or $files->visible == 1)) {
                 $GLOBALS['common_docs'][$files->path] = $cpath;
             }
         }
-        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or $files->visible == 1);
+        $GLOBALS['path_visibility'][$files->path] = ($include_invisible or resource_access($files->visible, $files->public));        
         array_push($encoded_filenames, $files->path);
         array_push($filename, $files->filename);
-        if (!$include_invisible and $files->format == '.dir' and $files->visible != 1) {
+        if (!$include_invisible and $files->format == '.dir' and !resource_access($files->visible, $files->public)) {
             $parentdir = preg_replace('|/[^/]+$|', '', $files->path);
             // Don't need to check lower-level hidden dir if parent is there
             if (array_search($parentdir, $hidden_dirs) === false) {

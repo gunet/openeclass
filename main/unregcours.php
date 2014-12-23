@@ -24,7 +24,7 @@ $require_login = TRUE;
 include '../include/baseTheme.php';
 require_once 'include/log.php';
 
-$nameTools = $langUnregCourse;
+$pageName = $langUnregCourse;
 
 if (isset($_GET['cid'])) {
     $cid = q($_GET['cid']);

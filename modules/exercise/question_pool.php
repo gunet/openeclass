@@ -42,7 +42,7 @@ $head_content .= "
 ";
 $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
 
-$nameTools = $langQuestionPool;
+$pageName = $langQuestionPool;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 
 if (isset($_GET['fromExercise'])) {

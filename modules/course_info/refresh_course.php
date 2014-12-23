@@ -45,7 +45,7 @@ $('#before_date').datepicker({
 });
 </script>";
 
-$nameTools = $langRefreshCourse;
+$pageName = $langRefreshCourse;
 
 if (isset($_POST['submit'])) {
     

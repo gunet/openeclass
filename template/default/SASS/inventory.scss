@@ -200,12 +200,6 @@ hr
 }*/
 
 
-img
-{
-  max-width: 100%;
-  position: relative;
-}
-
 .content-title
 {
   //text-transform: uppercase;
@@ -303,7 +297,7 @@ img
   li
   {
     list-style-type: none;
-    display: inline-block;
+    //display: inline-block;
   }
 
   ul.toolbox-submenu
@@ -348,7 +342,7 @@ img
 
 .tiny-icon
 {
-  color:#999;
+  color:#666;
   font-size: 15px !important;
   text-decoration: none;
   @include transition(all $transition-time linear);
@@ -1024,7 +1018,7 @@ ul.tablelist
     width: 100%;
     position: relative;    
     display: inline-block;
-    padding-left: 1em;
+    //padding-left: 1em;
     @include box-sizing(border-box);
   }
 
@@ -1034,9 +1028,10 @@ ul.tablelist
     border-bottom:1px solid #eee;
   }
 
-  .item-header .item-title
+  .item-header h4.item-title
   {
     margin:0px;
+    font-size: 15px;
   }
 
   .item-header .item-date
@@ -1628,26 +1623,30 @@ ul.expandable{
 }
 
 /* Datatables ---------------------------------------------------------*/
-    .not_visible{
+.not_visible{
+    color: rgba(3,3,3,0.3);
+    font-style: italic;        
+}
+tr.not_visible{
+    td:not(:last-child){
         color: rgba(3,3,3,0.3);
-        font-style: italic;        
-    }
-    tr.not_visible{
-        td:not(:last-child){
+        font-style: italic;
+        a{
             color: rgba(3,3,3,0.3);
             font-style: italic;
-            a{
-                color: rgba(3,3,3,0.3);
-                font-style: italic;
-            }
         }
     }
+}
 
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
 
 .row
 {
     position: relative !important;
+}
+#leftnav.no-embed
+{
+    top: -53px;
 }
 .row-main{
     padding-bottom: 2em;
@@ -1670,23 +1669,18 @@ ul.expandable{
 /*# sourceMappingURL=inventory.css.map */
 
 th.option-btn-cell{
-    width: 56px;
+    width: 42px;
     padding-right: 0px !important;
     padding-left: 0px !important;
 }
 
 td.option-btn-cell{
-   width: 56px;
+   width: 42px;
    padding: 0px !important;
 }
-
-.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand{
-    margin-left: 0px;
-    padding: 2px 0;
-}
-
-#wholesearch{
-    padding: 80px 10px 15px 10px;
+.container{
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 #Frame
@@ -1695,27 +1689,39 @@ td.option-btn-cell{
     margin: 0 0;
 }
 
-.container-fluid{
-    position: relative;
-    .navbar-header{
-        position: relative;
-        width: 100%;
-    }
+.descr_title div{
+    display: inline-block;
+    padding-top: 10px;
+}
+#descr_collapse{
+    height: 260px;
+    overflow: hidden;
 }
 
-.side_content
+#rename_doc_file label
 {
-    padding-top: 24px;
+    word-wrap: break-word;
 }
-.content-container{
-    margin-top: 15px;
-    margin-bottom: 15px;
+
+.no-borders{
+    border: 0px;
 }
+
 #dropboxTabs .nav-tabs{
     margin-bottom: 15px;
 }
 
-#portfolio_lessons_filter, #inbox_table_filter, #outbox_table_filter
+#profile_menu_dropdown ul li:last-child{
+    border-top: 1px #ddd solid;
+}
+.add-unit-btn{
+    line-height: 37px;
+    font-size: 22px;
+    margin: 0px 10px;
+    color: #5cb85c;
+}
+
+.dataTables_filter
 {
     position: relative;
     &:before{
@@ -1728,6 +1734,7 @@ td.option-btn-cell{
     }
     label{
         margin: 0 0 10px 0;
+        width: 100%;
     }
     input{
         margin: 0px;
@@ -1739,10 +1746,27 @@ table#portfolio-lessons tr
     padding: 5px 0;
 }
 
+#scrollToTop{
+    position: absolute;
+    right: 0px;
+    padding-right: 30px;
+    top: -30px;
+}
+#scrollToTop i{
+    padding: 0 0 10px 0;
+    color: #a7a7a7;
+    cursor: pointer;
+}
+.panel-footer .event-legend > div{
+    margin-bottom: 5px;
+}
 .panel-footer .event
 {
     display: inline-block;
-    margin-right: 10px;
+    margin-right: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
 }
 
 p.link-to-more{
@@ -1758,7 +1782,16 @@ table.dataTable tbody td.right-cell{
     padding-bottom: 0px;
     width: 40px;
 }
-
+div.profile-pers-info-name{
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 15px;
+    padding-top: 10px;
+}
+div#profile-about-me{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
 #calendar_wrapper{
     margin-bottom: 25px;
 
@@ -1792,29 +1825,23 @@ span[data-cal-date]
 }
 
 .event-legend{
-    font-size: 12px;
+    font-size: 11px;
     color: #666;
-    line-height: 15px;
-    padding: 0px;
-    margin: 0px;
+    line-height: 10px;
     .event{
         margin-top: 0px !important;
         margin-bottom: 0px !important;
-        margin-right: 5px;
-        width: 8px !important;
-        height: 8px !important;
-        border-radius: 4px !important;
     }
 }
 
 .event
 {
-  width: 14px !important;
-  height: 14px !important;
+  width: 14px;
+  height: 14px;
   opacity: 0.7 !important;
-  border-radius: 7px !important;
+  border-radius: 7px;
   border: 0px !important;
-  margin-bottom: 4px !important;
+  margin-bottom: 4px;
 
   @include box-shadow(0 0px 0px #BBBBBB !important);
   @include transition(all $transition-time linear);

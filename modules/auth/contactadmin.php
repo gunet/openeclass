@@ -35,7 +35,7 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-$nameTools = $langContactAdmin;
+$pageName = $langContactAdmin;
 
 $userid = isset($_GET['userid']) ? intval($_GET['userid']) : 0;
 

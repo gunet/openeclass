@@ -24,7 +24,7 @@ require_once '../../include/baseTheme.php';
 require_once 'work_functions.php';
 require_once 'modules/group/group_functions.php';
 
-$nameTools = $m['grades'];
+$pageName = $m['grades'];
 
 if ($is_editor && isset($_GET['assignment']) && isset($_GET['submission'])) {
     $as_id = intval($_GET['assignment']);

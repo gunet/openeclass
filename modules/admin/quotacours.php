@@ -44,10 +44,24 @@ $user = new User();
 $cId = course_code_to_id($_GET['c']);
 validateCourseNodes($cId, isDepartmentAdmin());
 
-$nameTools = $langQuota;
+$pageName = $langQuota;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);
+
+if (isset($_GET['c'])) {
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "editcours.php?c=$_GET[c]",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));
+    } else {
+        $tool_content .= action_bar(array(
+            array('title' => $langBackAdmin,
+                  'url' => "index.php",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));           
+    }
 
 // Initialize some variables
 $quota_info = '';
@@ -64,15 +78,15 @@ if (isset($_POST['submit'])) {
 			WHERE code = ?s", $dq, $vq, $gq, $drq, $_GET['c']);
     // Some changes occured
     if ($sql->affectedRows > 0) {
-        $tool_content .= "<p>" . $langQuotaSuccess . "</p>";
+        $tool_content .= "<div class='alert alert-info'>$langQuotaSuccess</div>";
     }
     // Nothing updated
     else {
-        $tool_content .= "<p>" . $langQuotaFail . "</p>";
+        $tool_content .= "<div class='alert alert-warning'>$langQuotaFail</div>";
     }
 }
 // Display edit form for course quota
-else {
+else {        
     $q = Database::get()->querySingle("SELECT code, title, doc_quota, video_quota, group_quota, dropbox_quota FROM course WHERE code = ?s", $_GET['c']);
     $quota_info .= $langTheCourse . " <b>" . q($q->title) . "</b> " . $langMaxQuota;
     $dq = $q->doc_quota / MB;
@@ -80,31 +94,33 @@ else {
     $gq = $q->group_quota / MB;
     $drq = $q->dropbox_quota / MB;
 
-    $tool_content .= "
-	<form action='$_SERVER[SCRIPT_NAME]?c=" . q($_GET['c']) . "' method='post'>
-        <fieldset>
-            <legend>" . $langQuotaAdmin . "</legend>
-            <table width='100%' class='tbl'>
-                <tr><td colspan='2' class='sub_title1'>" . $quota_info . "</td></tr>
-                <tr><td>$langLegend <b>$langDoc</b>:</td>
-                    <td><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</td></tr>
-                <tr><td width='250'>$langLegend <b>$langVideo</b>:</td>
-                    <td><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</td></tr>
-                <tr><td>$langLegend <b>$langGroups</b>:</td>
-                    <td><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</td></tr>
-                <tr><td>$langLegend <b>$langDropBox</b>:</td>
-                    <td><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</td></tr>
-                <tr><td>&nbsp;</td>
-                    <td class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td></tr>
-            </table>
-	</fieldset></form>\n";
-}
-// If course selected go back to editcours.php
-if (isset($_GET['c'])) {
-    $tool_content .= "<p align='right'><a href='editcours.php?c=" . htmlspecialchars($_GET['c']) . "'>" . $langBack . "</a></p>";
-}
-// Else go back to index.php directly
-else {
-    $tool_content .= "<p align='right'><a href='index.php'>" . $langBackAdmin . "</a></p>";
+    $tool_content .= "<div class='form-wrapper'>
+            <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?c=" . q($_GET['c']) . "' method='post'>
+            <fieldset>                    
+                <div class='alert alert-info'>$quota_info</div>
+                <div class='form-group'>
+                    <label class='col-sm-4 control-label'>$langLegend $langDoc:</label>
+                        <div class='col-sm-6'><input type='text' name='dq' value='$dq' size='4' maxlength='4'> Mb.</div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-4 control-label'>$langLegend $langVideo:</label>
+                        <div class='col-sm-6'><input type='text' name='vq' value='$vq' size='4' maxlength='4'> Mb.</div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-4 control-label'>$langLegend <b>$langGroups</b>:</label>
+                        <div class='col-sm-6'><input type='text' name='gq' value='$gq' size='4' maxlength='4'> Mb.</div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-sm-4 control-label'>$langLegend <b>$langDropBox</b>:</label>
+                        <div class='col-sm-6'><input type='text' name='drq' value='$drq' size='4' maxlength='4'> Mb.</div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-4'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
+                    </div>
+                </div>
+            </fieldset>
+            </form>
+        </div>";
 }
 draw($tool_content, 3);

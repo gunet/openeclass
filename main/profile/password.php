@@ -34,7 +34,8 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'include/phpass/PasswordHash.php';
 require_once 'include/log.php';
 
-$nameTools = $langChangePass;
+$pageName = $langChangePass;
+$navigation[] = array('url' => 'display_profile.php', 'name' => $langMyProfile);
 $navigation[] = array('url' => 'profile.php', 'name' => $langModifyProfile);
 
 check_uid();
@@ -91,12 +92,11 @@ if (isset($_POST['submit'])) {
         Log::record(0, 0, LOG_PROFILE,
             array('uid' => $_SESSION['uid'], 'pass_change' => 1));
         Session::Messages($langPassChanged, 'alert-success');
-        redirect_to_home_page('main/profile/profile.php');
+        redirect_to_home_page('main/profile/display_profile.php');
         exit;
     } else {
         Session::Messages($langPassOldWrong);
-        header($passLocation);
-        exit;
+        redirect_to_home_page('main/profile/profile.php');
     }
 }
 
@@ -134,7 +134,7 @@ if (!isset($_POST['changePass'])) {
     <div class='form-group'>
       <div class='col-sm-offset-2 col-sm-8'>
          <input type='submit' class='btn btn-primary' name='submit' value='$langModify'>
-         <a href='profile.php' class='btn btn-default'>$langCancel</a>
+         <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
       </div>
     </div>
   </fieldset>

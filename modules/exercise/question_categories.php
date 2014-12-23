@@ -55,7 +55,7 @@ if (isset($_POST['submitCat'])) {
         }        
     }    
 } elseif (isset($_GET['modifyCat']) || isset($_GET['newCat'])) {
-    $nameTools = isset($_GET['newCat']) ? $langNewCat : $langEditCat;
+    $pageName = isset($_GET['newCat']) ? $langNewCat : $langEditCat;
     $navigation = array(
                     array("url" => "index.php?course=$course_code", "name" => $langExercices),
                     array("url" => "question_categories.php?course=$course_code", "name" => $langQuestionCats)
@@ -100,7 +100,7 @@ if (isset($_POST['submitCat'])) {
     }
     redirect_to_home_page("modules/exercise/question_categories.php?course=$course_code");
 } else {
-    $nameTools = $langQuestionCats;
+    $pageName = $langQuestionCats;
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
     
     $tool_content .= action_bar(array(

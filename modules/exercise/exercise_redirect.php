@@ -32,7 +32,7 @@ $helpTopic = 'Exercise';
 
 include '../../include/baseTheme.php';
 
-$nameTools = $langExercicesView;
+$pageName = $langExercicesView;
 require_once 'include/lib/textLib.inc.php';
 
 $picturePath = "courses/$course_code/image";

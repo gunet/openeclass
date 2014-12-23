@@ -1930,7 +1930,7 @@ $langConfigError2 = "Il file di configurazione config.php non è letto! Verifica
 $langConfigError3 = "Il file di configurazione config.php non è modificato! Verifica le autorizzazioni di accesso.";
 $langUpgradeSuccess = "L'aggiornamento del database di eClass è finito con successo!";
 $langUpgReady = "Ora siete pronti per utilizzare la nuova versione di Open eClass!";
-$langUpgSucNotice = "Se un errore si è verificato, forse un corso non funziona abbastanza bene.<br>In questo caso, contattaci all' indirizzo <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a> descrivendo il problema che hai affrontato e inviando tutti i messaggi che sono apparsi sullo schermo (se possibile)";
+$langUpgSucNotice = "Verificato un errore, forse un corso non funziona abbastanza bene.<br>In questo caso, contattaci all' indirizzo <a href='mailto:eclass@gunet.gr'>eclass@gunet.gr</a> descrivendo il problema che hai affrontato e inviando tutti i messaggi che sono apparsi sullo schermo (se possibile)";
 $langUpgCourse = "Aggiornamento del Corso";
 $langUpgFileNotRead = "Non è possibile leggere il file. Verifica le autorizzazioni di accesso.";
 $langUpgFileNotModify = "Non è possibile modificare il file. Verifica le autorizzazioni di accesso.";

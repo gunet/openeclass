@@ -52,10 +52,10 @@ require_once 'modules/usage/statistics_tools_bar.php';
 
 if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come from statistics
     $navigation[] = array('url' => '../usage/?course=' . $course_code, 'name' => $langUsage);
-    $nameTools = "$langLearningPaths - $langTrackAllPathExplanation";
+    $pageName = "$langLearningPaths - $langTrackAllPathExplanation";
 } else {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-    $nameTools = $langTrackAllPathExplanation;
+    $pageName = $langTrackAllPathExplanation;
 }
 
 // display a list of user and their respective progress
@@ -87,9 +87,8 @@ if ($lcnt == 0) {
 
 // display tab header
 $tool_content .= "
-  <table width='99%' class='tbl_alt'>
+  <table class='table-default'>
   <tr>
-    <th>&nbsp;</th>
     <th class='left'><div align='left'>$langStudent</div></th>
     <th width='120'>$langAm</th>
     <th>$langGroup</th>
@@ -105,11 +104,8 @@ foreach ($usersList as $user) {
 
     $iterator = 1;
     $globalprog = 0;
-    if ($k % 2 == 0) {
-        $tool_content .= "  <tr class=\"even\">\n";
-    } else {
-        $tool_content .= "  <tr class=\"odd\">\n";
-    }
+    
+    $tool_content .= "  <tr>";
     foreach ($learningPathList as $learningPath) {
         // % progress
         $prog = get_learnPath_progress($learningPath->learnPath_id, $user->id);
@@ -119,18 +115,18 @@ foreach ($usersList as $user) {
         $iterator++;
     }
     $total = round($globalprog / ($iterator - 1));
-    $tool_content .= '    <td width="1"><img src="' . $themeimg . '/arrow.png" alt=""></td>' . "\n"
-            . '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>' . "\n"
-            . '    <td class="center">' . q(uid_to_am($user->id)) . '</td>' . "\n"
-            . '    <td align="center">' . user_groups($course_id, $user->id) . '</td>' . "\n"
+    $tool_content .= 
+            '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>'
+            . '    <td class="center">' . q(uid_to_am($user->id)) . '</td>'
+            . '    <td align="center">' . user_groups($course_id, $user->id) . '</td>'
             . '    <td class="right" width=\'120\'>'
             . disp_progress_bar($total, 1)
-            . '</td>' . "\n"
-            . '    <td align="left" width=\'10\'>' . $total . '%</td>' . "\n"
-            . '</tr>' . "\n";
+            . '</td>'
+            . '    <td align="left" width=\'10\'>' . $total . '%</td>'
+            . '</tr>';
     $k++;
 }
 // foot of table
-$tool_content .= '</table>' . "\n\n";
+$tool_content .= '</table>';
 
 draw($tool_content, 2, null, $head_content);

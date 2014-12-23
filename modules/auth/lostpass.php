@@ -34,7 +34,7 @@ include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include 'include/sendMail.inc.php';
 require_once 'include/phpass/PasswordHash.php';
-$nameTools = $lang_remind_pass;
+$pageName = $lang_remind_pass;
 
 // javascript
 load_js('pwstrength.js');
@@ -102,27 +102,29 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         }
         if (!$change_ok) {
             $tool_content .= "
-            <form method='post' action='$_SERVER[SCRIPT_NAME]'>
-            <input type='hidden' name='u' value='$userUID'>
-            <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
-            <fieldset>
-            <legend>$langPassword</legend>
-            <table class='tbl'>
-            <tr>
-               <th>$langNewPass1</th>
-               <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
-            </tr>
-            <tr>
-               <th>$langNewPass2</th>
-               <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
-            </tr>
-            <tr>
-               <th>&nbsp;</th>
-               <td><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td>
-            </tr>
-            </table>
-            </fieldset>
-            </form>";
+            <div class='form-wrapper'>
+                <form method='post' action='$_SERVER[SCRIPT_NAME]'>
+                <input type='hidden' name='u' value='$userUID'>
+                <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
+                <fieldset>
+                <legend>$langPassword</legend>
+                <table class='tbl'>
+                <tr>
+                   <th>$langNewPass1</th>
+                   <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>
+                </tr>
+                <tr>
+                   <th>$langNewPass2</th>
+                   <td><input type='password' size='40' name='newpass1' value='' autocomplete='off'></td>
+                </tr>
+                <tr>
+                   <th>&nbsp;</th>
+                   <td><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td>
+                </tr>
+                </table>
+                </fieldset>
+                </form>
+            </div>";
         }
     } else {
         $tool_content = "<div class='alert alert-danger'>$langAccountResetInvalidLink</div>
@@ -196,25 +198,32 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
 } else {
     /*     * *** Email address entry form **** */
     $tool_content .= "<div class='alert alert-info'>$lang_pass_intro</div><br>";
-    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>
+    $tool_content .= "
+<div class='form-wrapper'>        
+    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-          <legend>$langUserData</legend>
-	  <table class='tbl' width='100%'>
-	  <tr>
-            <th width='100'>$lang_username:</th>
-	    <td><input type='text' name='userName' size='40' autocomplete='off'></td>
-          </tr>
-	  <tr>
-	    <th>$lang_email: </th>
-	    <td><input type='text' name='email' size='40' autocomplete='off'></td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td class='right'><input class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'></td>
-          </tr>
-	  </table>
+            <legend>$langUserData</legend>
+            <div class='form-group'>
+                <label for='userName' class='col-sm-2 control-label'>$lang_username:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' type='text' name='userName' id='userName' autocomplete='off'>
+                </div>
+            </div>       
+            <div class='form-group'>
+                <label for='email' class='col-sm-2 control-label'>$lang_email:</label>
+                <div class='col-sm-10'>
+                    <input class='form-control' type='text' name='email' id='email' autocomplete='off'>
+                </div>
+            </div>   
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <input class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'> 
+                    <a class='btn btn-default' href='$urlServer'>$langCancel</a>
+                </div>
+            </div>              
         </fieldset>
-	</form>";
+    </form>
+</div>";
 }
 
 draw($tool_content, 0, null, $head_content);

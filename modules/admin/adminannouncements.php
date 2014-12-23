@@ -25,11 +25,10 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$nameTools = $langAdminAn;
+$pageName = $langAdminAn;
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
-
 
 $head_content .= <<<hContent
 <script type='text/javascript'>
@@ -43,12 +42,16 @@ hContent;
 
 $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#id_start_date, #id_end_date').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
-                language: '" . $language . "',
-                autoclose: true    
+            $('#startdatecal').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true
             });
+            $('#enddatecal').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true
+            });    
         });
     </script>";
 
@@ -81,31 +84,34 @@ if (isset($_GET['delete'])) {
 } elseif (isset($_GET['modify'])) {
     // modify announcement command
     $id = intval($_GET['modify']);
-    $myrow = Database::get()->querySingle("SELECT id, title, body, `date`, 
-                                                DATE_FORMAT(`begin`,'%Y-%d-%m %H:%i') as `begin`,
-                                                DATE_FORMAT(`end`,'%Y-%d-%m %H:%i') as `end`, 
+    $myrow = Database::get()->querySingle("SELECT id, title, body, `date`, `begin`,`end`, 
                                                 lang, `order`, visible FROM admin_announcement WHERE id = ?d", $id);
     if ($myrow) {
         $titleToModify = q($myrow->title);
         $contentToModify = standard_text_escape($myrow->body);
         $displayAnnouncementList = true;
-        $begindate = $myrow->begin;
-        //$begindate = DateTime::createFromFormat("Y-m-d H:i", $myrow->begin);        
-        $enddate = $myrow->end;
+        $d1 = DateTime::createFromFormat('Y-m-d H:i:s', $myrow->begin);
+        if ($d1) {
+            $begindate = $d1->format("d-m-Y H:i");
+        }
+        $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $myrow->end);
+        if ($d2) {
+            $enddate = $d2->format("d-m-Y H:i");        
+        }
     }
 } elseif (isset($_POST['submitAnnouncement'])) {
     // submit announcement command
     $dates = array();
-    if (isset($_POST['start_date_active']) and isset($_POST['start_date'])) {
+    if (isset($_POST['startdate_active']) and isset($_POST['startdate'])) {
         $start_sql = 'begin = ?s';
-        $date_started = DateTime::createFromFormat("d-m-Y H:i", $_POST['start_date']);
+        $date_started = DateTime::createFromFormat("d-m-Y H:i", $_POST['startdate']);
         $dates[] = $date_started->format("Y-m-d H:i:s");
     } else {
         $start_sql = 'begin = NULL';
     }
-    if (isset($_POST['end_date_active']) and isset($_POST['end_date'])) {
+    if (isset($_POST['enddate_active']) and isset($_POST['enddate'])) {
         $end_sql = 'end = ?s';
-        $date_ended = DateTime::createFromFormat("d-m-Y H:i", $_POST['end_date']);
+        $date_ended = DateTime::createFromFormat("d-m-Y H:i", $_POST['enddate']);
         $dates[] = $date_ended->format("Y-m-d H:i:s");
     } else {
         $end_sql = 'end = NULL';
@@ -154,7 +160,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
         $titleform = $langAdminAddAnn;
     }
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
-    $nameTools = $titleform;
+    $pageName = $titleform;
 
     if (!isset($contentToModify)) {
         $contentToModify = '';
@@ -162,65 +168,89 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     if (!isset($titleToModify)) {
         $titleToModify = '';
     }
-
-    $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]'>";
+    $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
+    $tool_content .= "<form role='form' class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>";
     if (isset($_GET['modify'])) {
         $tool_content .= "<input type='hidden' name='id' value='$id' />";
     }
-    $tool_content .= "<fieldset><legend>$titleform</legend>";
-    $tool_content .= "<table width='100%' class='tbl'>";
-    $tool_content .= "<tr><td><b>$langTitle:</b>
-		<input type='text' name='title' value='$titleToModify' size='50' /></td></tr>
-		<tr><td><b>$langAnnouncement:</b><br />" .
-            rich_text_editor('newContent', 5, 40, $contentToModify)
-            . "</td></tr>";
-    $tool_content .= "<tr><td><b>$langLanguage:</b><br />";
+    $tool_content .= "<fieldset>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>
+                        <div class='col-sm-10'><input type='text' name='title' value='$titleToModify' size='50' /></div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='newContent' class='col-sm-2 control-label'>$langAnnouncement:</label>
+                    <div class='col-sm-10'>" . rich_text_editor('newContent', 5, 40, $contentToModify) . "</div></div>";
+    $tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langLanguage:</label>";
     if (isset($_GET['modify'])) {
         if (isset($begindate)) {
             $start_checkbox = 'checked';
-            $start_date = $begindate;
+            $startdate = $begindate;
         } else {
             $start_checkbox = '';
+            $startdate = date('d-m-Y H:i', strtotime('now'));
         }
         if (isset($enddate)) {
-            $end_checkbox = 'checked';
-            $end_date = $enddate;
+            $end_checkbox = 'checked';            
         } else {
             $end_checkbox = '';
+            $enddate = date('d-m-Y H:i', strtotime('now +1 month'));
         }
-        $tool_content .= lang_select_options('lang_admin_ann', '', $myrow->lang);
+        $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'", $myrow->lang) . "</div>";
     } else {
-        $start_checkbox = $end_checkbox = $end_date = $start_date = '';
-        $tool_content .= lang_select_options('lang_admin_ann');
+        $start_checkbox = $end_checkbox = '';
+        $startdate = date('d-m-Y H:i', strtotime('now'));
+        $enddate = date('d-m-Y H:i', strtotime('now +1 month'));        
+        $tool_content .= "<div class='col-sm-10'>" . lang_select_options('lang_admin_ann', "class='form-control'") . "</div>";
     }
-    $tool_content .= "<span class='smaller'>$langTipLangAdminAnn</span></td></tr>
-        <tr><td><b>$langStartDate:</b><br />
-        <div class='input-append date form-group' id='id_start_date' data-date='$start_date' data-date-format='dd-mm-yyyy'>
-            <div class='col-xs-11'>        
-                <input class='form-control' name='start_date' type='text' value='$start_date'>
+    $tool_content .= "<small class='text-right'><span class='help-block'>$langTipLangAdminAnn</span></small></div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+            <div class='checkbox'>
+                <label><input type='checkbox' name='startdate_active' " .
+                    "$start_checkbox onClick=\"toggle(1,this,'startdate')\">&nbsp;" .
+                    "$langActivate
+                </label>
             </div>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
+            </div>
         </div>
-            <span class='smaller'><input type='checkbox' name='start_date_active' " .
-            "$end_checkbox onClick=\"toggle(1,this,'start_date')\">&nbsp;" .
-            "$langActivate</span></td></tr>";
-    $tool_content .= "<tr><td><b>$langEndDate:</b><br />
-            <div class='input-append date form-group' id='id_end_date' data-date='$end_date' data-date-format='dd-mm-yyyy'>
-            <div class='col-xs-11'>        
-                <input class='form-control' name='end_date' type='text' value='$end_date'>
+        <div class='input-append date form-group' id='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                <label for='startdate' class='col-sm-2 control-label'>$langStartDate :</label>
+                <div class='col-xs-10 col-sm-9'>        
+                    <input class='form-control' name='startdate' id='startdate' type='text' value = '" .$startdate . "'>
+                </div>
+                <div class='col-xs-2 col-sm-1'>  
+                    <span class='add-on'><i class='fa fa-times'></i></span>
+                    <span class='add-on'><i class='fa fa-calendar'></i></span>
+                </div>
+            </div>";
+    $tool_content .= "<div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <div class='checkbox'>
+                        <label><input type='checkbox' name='enddate_active' " .
+                        "$end_checkbox onClick=\"toggle(2,this,'enddate')\">&nbsp;" .
+                        "$langActivate</label>
+                    </div>
+                </div>
+                </div>
+                <div class='input-append date form-group' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                    <label for='enddate' class='col-sm-2 control-label'>$langStartDate :</label>
+                    <div class='col-xs-10 col-sm-9'>        
+                        <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
+                    </div>
+                    <div class='col-xs-2 col-sm-1'>  
+                        <span class='add-on'><i class='fa fa-times'></i></span>
+                        <span class='add-on'><i class='fa fa-calendar'></i></span>
+                    </div>
+                </div>               
+             <div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
+                </div>
             </div>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-            </div>
-            <span class='smaller'><input type='checkbox' name='end_date_active' " .
-            "$end_checkbox onClick=\"toggle(2,this,'end_date')\">&nbsp;" .
-            "$langActivate</span></td></tr>
-        <tr><td class='right'><input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'></td></tr>
-    </table></fieldset></form>";
+        </fieldset></form></div></div></div>";
 }
 
-// modify order taken from announcements.php
 if (isset($_GET['down'])) {
     $thisAnnouncementId = q($_GET['down']);
     $sortDirection = "DESC";
@@ -255,43 +285,33 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 
 // display admin announcements
 if ($displayAnnouncementList == true) {
-    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");
-    // announcement order taken from announcements.php
-    $iterator = 1;
+    $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");    
     $bottomAnnouncement = $announcementNumber = count($result);
     if (!isset($_GET['addAnnounce'])) {
-        $tool_content .= "<div id='operations_container'>" .
-                action_bar(array(
+        $tool_content .= action_bar(array(
                     array('title' => $langAdminAddAnn,
                         'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary-label',
                         'button-class' => 'btn-success'),
-                )) .
-                "</div>";
+                    ));
     }
     if ($announcementNumber > 0) {
-        $tool_content .= "<table class='tbl_alt' width='100%'>
-                        <tr><th colspan='2'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$langTitle</th>
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>
+                        <tr><th>$langTitle</th>
                             <th>$langAnnouncement</th>
                             <th colspan='2'><div align='center'>" . icon('fa-gears') . "</th>";
         foreach ($result as $myrow) {
             if ($myrow->visible == 1) {
                 $visibility = 0;
-                $classvis = 'visible';
-                if ($iterator % 2 == 0) {
-                    $classvis = 'even';
-                } else {
-                    $classvis = 'odd';
-                }
+                $classvis = '';
             } else {
                 $visibility = 1;
-//                $classvis = 'invisible';  // 
+                $classvis = 'not_visible';
             }
             $myrow->date = claro_format_locale_date($dateFormatLong, strtotime($myrow->date));
             $tool_content .= "<tr class='$classvis'>
-                <td width='1'><img style='margin-top:4px;' src='$themeimg/arrow.png' alt=''></td>
-                <td width='180'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>
+                <td width='200'><b>" . q($myrow->title) . "</b><br><span class='smaller'>$myrow->date</span></td>
                 <td>" . standard_text_escape($myrow->body) . "</td>
                 <td width='6'>" .
                     action_button(array(
@@ -314,9 +334,9 @@ if ($displayAnnouncementList == true) {
                             'icon' => 'fa-arrow-down'),
                     )) . "
                 </td></tr>";
-            $iterator++;
         }
         $tool_content .= "</table>";
+        $tool_content .= "</div>";
     }
 }
 

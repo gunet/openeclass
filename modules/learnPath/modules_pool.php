@@ -66,7 +66,7 @@ function confirmation(name) {
 </script>";
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
-$nameTools = $langLearningObjectsInUse;
+$pageName = $langLearningObjectsInUse;
 
 // display use explication text
 $tool_content .= "<p>$langUseOfPool</p><br />";

@@ -26,7 +26,7 @@
  */
 
 require_once '../include/baseTheme.php';
-$nameTools = $langInfo;
+$pageName = $langInfo;
 $tool_content .= "<div class='col-sm-10 alert alert-info page-header'>
 <div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</div>
 <div><label>$langVersion:&nbsp;</label><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></div>
