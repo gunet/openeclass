@@ -460,17 +460,14 @@ a.toggle-active{
 }
 #sidebar
 {
-
     .side-list{
         background: #253447;
         border-top: none;
         color: rgba(255,255,255,.9);
         margin: 0 16px;
-
         &:last-of-type{
             @include border-radius(0px 0px 4px 4px);
         }
-
         .lesson-title{
             background: #344458;
             font-size: 0.85em;
@@ -494,7 +491,6 @@ a.toggle-active{
             &:last-of-type{
                 @include border-radius(0px 0px 4px 4px);
             }
-
             &:hover{
                 background: #48586D;
                 color: rgba(255,255,255,0.85);
@@ -503,7 +499,6 @@ a.toggle-active{
                     color: rgba(255,255,255,.6);
                 }
             }
-
             &.ui-accordion-header-active{
                 border-bottom: none;
                 color: rgba(255,255,255,1);
@@ -518,7 +513,6 @@ a.toggle-active{
                 }
             }
         }
-
         ul{
             font-size: 0.75em;
 
@@ -526,26 +520,20 @@ a.toggle-active{
                 padding: 5px 0em;          
             }
         }
-
         .lesson-id{
             opacity: 0.5;
             font-size:0.85em;
             font-weight:700;
         }
-
         .lesson-professor{
             font-weight: 600;
             padding-top:0px;
         }
-
         .lesson-notifications{
-
             margin-top:1em;
-
             .item{
                 margin-right:1.5em;
                 position: relative;
-
                 .count{
                     position: absolute;
                     left: 0.8em;
@@ -561,7 +549,6 @@ a.toggle-active{
                     //border: 2px solid #253447;
                     @include border-radius(0.75em);
                 }
-
                 .fa{
                     font-size: 1.2em;
                     color: rgba(255,255,255,.8);
@@ -813,79 +800,4 @@ form.login-form{
   height: 400px;
   border: 1px solid #eee;
   background: rgba(0,0,0,.05);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* MEDIA QUERIES -------------------------------------------------------------------*/
-
-
-
-/* No breakpoints bellow 1366 or smth */
-
-@media (max-width: 1339px){
-  body > .container {
-    width: 100%;
-  }
-}
-
-@media (min-width: 1340px){
-  .container {
-    width: 1340px;
-  }
-}
-
-@media (min-width: 992px){
-  #leftnav .panel a.list-group-item,
-  #leftnav .panel .panel-heading .panel-title{
-    text-align: left;
-  }
-}
-
-@media (max-width: 992px){
-  body>.container{
-    padding:0;
-    margin:0;
-  }
-
-  #leftnav .panel a{
-    font-size: 1.5em;
-  }
-
-  .navbar .navbar-nav > li a{
-    padding: 15px 0.5em;    
-  }
-
-  #leftnav .panel a.list-group-item{
-      padding:0.5em 0.8em;
-  }
-
-  #main-content,
-  #leftnav .panel a.list-group-item,
-  #header.navbar .navbar-nav > li:last-child > a,
-  .navbar-default{
-    border-radius: 0px!important;
-  }
-}
-
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 992px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 992px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 992px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 992px),
-only screen and (                min-resolution: 192dpi) and (min-width: 992px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 992px) { 
-
-  /* Medium screen, retina, stuff to override above media query */
-
 }

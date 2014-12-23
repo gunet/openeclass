@@ -40,26 +40,7 @@ a.list-group-item.delete:hover{
     background-color: #CE6B6B;
     color: white;
 }
-@media(min-width: $screen-tablet){
-  .affix {
-    width: 20%;
-  }     
-}
-@media(min-width: $screen-desktop){
-   .affix {
-    width: 18%;
-  }   
-}
-@media(min-width: $screen-lg-desktop){
-   .affix {
-    width: 17%;
-  }   
-}
-@media(min-width: 1450px){
-   .affix {
-    width: 12.4%;
-  }   
-}
+
 //Speech bubble styles
 .bubble 
 {
@@ -135,4 +116,61 @@ top: 8px;
             background-color: whitesmoke;
         }
     }
+}
+
+/* MEDIA QUERIES -------------------------------------------------------------------*/
+
+
+
+/* No breakpoints bellow 1366 or smth */
+
+@media (max-width: 1339px){
+  body > .container {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1340px){
+  .container {
+    width: 1340px;
+  }
+}
+
+@media (min-width: $screen-desktop){
+  #leftnav .panel a.list-group-item,
+  #leftnav .panel .panel-heading .panel-title{
+    text-align: left;
+  }
+  .affix {
+    width: 18%;
+  } 
+}
+
+@media (max-width: $screen-desktop){
+  body>.container{
+    padding:0;
+    margin:0;
+  }
+
+  #main-content,
+  #leftnav .panel a.list-group-item,
+  #header.navbar .navbar-nav > li:last-child > a,
+  .navbar-default{
+    border-radius: 0px!important;
+  }
+}
+@media(min-width: $screen-tablet){
+  .affix {
+    width: 20%;
+  }     
+}
+@media(min-width: $screen-lg-desktop){
+   .affix {
+    width: 17%;
+  }   
+}
+@media(min-width: 1450px){
+   .affix {
+    width: 12.4%;
+  }   
 }
