@@ -107,7 +107,7 @@ if (isset($_GET['from_search'])) { // if we come from home page search
 }
 
 $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
-                                               view_type, start_date, finish_date
+                                               view_type, start_date, finish_date, description
                                           FROM course WHERE id = ?d", $course_id);
 
 $keywords = q(trim($course_info->keywords));
@@ -142,13 +142,8 @@ if ($is_editor) {
 }
 
 $main_content .= "<div class='course_info'>";
-$desccomm = Database::get()->querySingle("SELECT comments FROM unit_resources WHERE unit_id =
-                        (SELECT id FROM course_units WHERE course_id = ?d AND `order` = -1)
-                        AND res_id = -1 ORDER BY `order`", $course_id);
-if ($desccomm && $desccomm->comments) {
-    $description = standard_text_escape($desccomm->comments);
-}
-if (!empty($description)) {
+if ($course_info->description) {
+    $description = standard_text_escape($course_info->description);
     $main_content .= "
         <div id='descr_collapse'>
             <div id='descr_content'>

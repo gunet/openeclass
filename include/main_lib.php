@@ -1731,28 +1731,6 @@ function text_area($name, $rows, $cols, $text, $extra = '') {
             "</textarea>\n";
 }
 
-// 
-/**
- * @brief  Does the special course unit with course descriptions exist?
- *       If so, return its id, else create it first
- * @global type $langCourseDescription
- * @param type $course_id
- * @return type
- */
-function description_unit_id($course_id) {
-    global $langCourseDescription;
-    
-    $q = Database::get()->querySingle("SELECT id FROM course_units
-                                       WHERE course_id = ?d AND `order` = -1", $course_id);
-    if ($q) {
-        $id = $q->id;
-        return $id;
-    } else {
-        $sql = Database::get()->query("INSERT INTO course_units SET `order` = -1, `title` = ?s, `visible` = 0, `course_id` = ?d", $langCourseDescription, $course_id);
-        return $sql->lastInsertID;        
-    }
-}
-
 /**
  * 
  * @param type $unit_id

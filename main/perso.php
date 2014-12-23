@@ -123,30 +123,30 @@ function getUserLessonInfo($uid) {
     $lesson_ids = array();
     if ($session->status == USER_TEACHER) {
         $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                                course.code code,
-                                course.public_code,
-	                        course.title title,
-                                course.prof_names professor,
-	                        course.lang,
-	                        course_user.status status	                        
-	                   FROM course, course_user, user
-                          WHERE course.id = course_user.course_id AND
-	                        course_user.user_id = ?d AND
-	                        user.id = ?d
+                             course.code code,
+                             course.public_code,
+                             course.title title,
+                             course.prof_names professor,
+                             course.lang,
+                             course_user.status status	                        
+                       FROM course, course_user, user
+                       WHERE course.id = course_user.course_id AND
+                             course_user.user_id = ?d AND
+                             user.id = ?d
                        ORDER BY course.title, course.prof_names", $uid, $uid);
     } else {
         $myCourses = Database::get()->queryArray("SELECT course.id course_id,
-                                course.code code,
-                                course.public_code,
-                                course.title title,
-                                course.prof_names professor,
-                                course.lang,
-                                course_user.status status                                
-                           FROM course, course_user, user
-                          WHERE course.id = course_user.course_id AND
-                                course_user.user_id = ?d AND
-                                user.id = ?d AND
-                                course.visible != ?d
+                             course.code code,
+                             course.public_code,
+                             course.title title,
+                             course.prof_names professor,
+                             course.lang,
+                             course_user.status status                                
+                       FROM course, course_user, user
+                       WHERE course.id = course_user.course_id AND
+                             course_user.user_id = ?d AND
+                             user.id = ?d AND
+                             course.visible != ?d
                        ORDER BY course.title, course.prof_names", $uid, $uid, COURSE_INACTIVE);
     }
 
@@ -160,7 +160,7 @@ function getUserLessonInfo($uid) {
             array_push($lesson_ids, $data->course_id);
             $lesson_content .= "<tr>
 			  <td class='text-left'>
-			  <b><a href='${urlServer}courses/$data->code/'>" . q($data->title) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
+			  <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
 			  <div class='smaller'>" . q($data->professor) . "</div></td>";
             $lesson_content .= "<td class='text-center right-cell'>";
             if ($data->status == USER_STUDENT) {
