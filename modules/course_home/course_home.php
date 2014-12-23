@@ -170,24 +170,41 @@ $main_content .= "</div>";
 if (!empty($addon)) {
     $main_content .= "<div class='course_info'><h1>$langCourseAddon</h1><p>$addon</p></div>";
 }
-
-if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
-    $rating = new Rating('fivestar', 'course', $course_id);
-    $rating_content = $rating->put($is_editor, $uid, $course_id);
-}
-
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
     commenting_add_js();
     $comm = new Commenting('course', $course_id);
     $main_content .= $comm->put($course_code, $is_editor, $uid);
 }
-
+if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
+    $rating = new Rating('fivestar', 'course', $course_id);
+    $rating_content = $rating->put($is_editor, $uid, $course_id);
+}
 if (is_sharing_allowed($course_id)) {
     if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
         $social_content = print_sharing_links($urlServer."courses/$course_code", $currentCourseName);
     }
 }
-
+$panel_footer = "";
+if(isset($rating_content) || isset($social_content)) {
+    $panel_footer .= "                
+                <div class='panel-footer'>
+                    <div class='row'>";
+    if(isset($rating_content)){
+     $panel_footer .=
+            "<div class='col-sm-6'>
+                $rating_content
+            </div>";       
+    }
+    if(isset($social_content)){
+     $panel_footer .=
+            "<div class='col-sm-6 ".(isset($rating_content) ? "text-right" : "")."'>
+                $social_content
+            </div>";         
+    }
+    $panel_footer .= "                
+                </div>
+            </div>";          
+}
 units_set_maxorder();
 
 // other actions in course unit
@@ -447,16 +464,7 @@ $tool_content .= "
                                 <div class=''>$main_content</div>
                             </div>
                 </div>
-                <div class='panel-footer'>
-                    <div class='row'>
-                        <div class='col-sm-6'>
-                            $rating_content
-                        </div>
-                        <div class='col-sm-6 text-right'>
-                            $social_content
-                        </div>                        
-                    </div>
-                </div>
+                $panel_footer
             </div>
         </div>
 </div>
