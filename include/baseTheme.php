@@ -35,6 +35,7 @@
  */
 
 $navigation = array();
+$sectionName = '';
 $pageName = '';
 $toolName = '';
 require_once 'init.php';
@@ -77,7 +78,7 @@ require_once 'tools.php';
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
     global $course_code, $helpTopic,
-        $title, $is_editor, $langActivate,
+        $is_editor, $langActivate,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
         $langChooseLang, $langCopyrightFooter, $langDeactivate,
         $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp,
@@ -86,7 +87,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
         $langPersonalisedBriefcase, $langSearch, $langUser,
         $langUserBriefcase, $langUserHeader, $language,
-        $navigation, $pageName, $toolName,
+        $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
@@ -276,17 +277,25 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
         $t->set_var('LOGGED_IN', 'false');
     }
+    if (isset($require_current_course) and !isset($sectionName)) {
+        $sectionName = $currentCourseName;
+    }
     // set the text and icon on the third bar (header)
     if ($menuTypeID == 2) {
-        $t->set_var('SECTION_TITLE', "<a href='${urlServer}courses/$course_code/'>" . q($title) . '</a>');
+        if (!$pageName) {
+            $t->set_var('SECTION_TITLE', q($currentCourseName));
+        } else {
+            $t->set_var('SECTION_TITLE', "<a href='${urlServer}courses/$course_code/'>" . q($currentCourseName) . '</a>');
+        }
     } elseif ($menuTypeID == 3) {
         $t->set_var('SECTION_TITLE', $langAdmin);
+        $sectionName = $langAdmin;
     } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
         $t->set_var('SECTION_TITLE', $langUserBriefcase);
-    } elseif ($menuTypeID > 0) {
-        $t->set_var('SECTION_TITLE', $langPersonalisedBriefcase);
+        $sectionName = $langUserBriefcase;
     } else {
         $t->set_var('SECTION_TITLE', $langEclass);
+        $sectionName = $langEclass;
     }
 
     //set the appropriate search action for the searchBox form
@@ -359,7 +368,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->set_var('BREAD_HREF', $urlAppend);
             }
 
-            if ($pageName) {
+            if (isset($require_current_course) or $pageName) {
                 $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
             } else {
                 $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
@@ -370,14 +379,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         // Breadcrumb course home entry
         if (isset($course_code)) {
-            $t->set_var('BREAD_TEXT', q(ellipsize($title, 48)));
+            $t->set_var('BREAD_TEXT', q(ellipsize($currentCourseName, 48)));
             if ($pageName) {
                 $t->set_var('BREAD_HREF', $urlAppend . 'courses/' . $course_code . '/');
                 $t->parse('breadCrumbEntry', 'breadCrumbLinkBlock', true);
             } else {
                 $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
             }
-            $pageTitle .= " | " . q($title);
+            $pageTitle .= " | " . ellipsize($currentCourseName, 32);
         }
 
         foreach ($navigation as $step) {
@@ -388,7 +397,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             } else {
                 $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
             }
-            $pageTitle .= " | " . $step ["name"];
         }
 
         if ($pageName) {
@@ -440,12 +448,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (isset($theme_options_styles['custom_logo_small'])) $t->set_var('logo_img_small', $theme_options_styles['custom_logo_small']); 
       
         $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");        
-    }
-
-    //IS THIS NEEDED??!?!?
-    // Add the optional tool-specific css of the tool, if it's set
-    if (isset($tool_css)) {
-        $t->set_var('TOOL_CSS', "<link href=\"{%TOOL_PATH%}modules/$tool_css/tool.css\" rel=\"stylesheet\" type=\"text/css\" >");
     }
 
     $t->set_var('TOOL_PATH', $urlAppend);

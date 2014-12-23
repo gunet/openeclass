@@ -268,19 +268,16 @@ if (isset($require_current_course) and $require_current_course) {
                                            WHERE course.id = course_department.course AND
                                                  hierarchy.id = course_department.department AND
                                                  course.code=?s"
-                , function ($course_info) use (&$course_id, &$public_code, &$course_code, &$title, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseDepartment, &$currentCourseTitular, &$currentCourseLanguage ) {
+                , function ($course_info) use (&$course_id, &$public_code, &$course_code, &$fac, &$titulaires, &$languageInterface, &$visible, &$currentCourseName, &$currentCourseLanguage ) {
             $course_id = $course_info->cid;
             $public_code = $course_info->public_code;
             $course_code = $course_info->code;
-            $title = $course_info->title;
             $fac = $course_info->faculte;
             $titulaires = $course_info->prof_names;
             $languageInterface = $course_info->lang;
             $visible = $course_info->visible;
             // New variables
-            $currentCourseName = $title;
-            $currentCourseDepartment = $fac;
-            $currentCourseTitular = $titulaires;
+            $currentCourseName = $course_info->title;
             $currentCourseLanguage = $languageInterface;
         }
                 , function ($errormsg) use($urlServer) {

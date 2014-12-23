@@ -47,6 +47,7 @@ require_once 'main/personal_calendar/calendar_events.class.php';
 $tree = new Hierarchy();
 $course = new Course();
 
+$pageName = ''; // delete $pageName set in doc_init.php
 $require_help = TRUE;
 $helpTopic = 'course_home';
 $main_content = $cunits_content = $bar_content = "";
