@@ -9487,7 +9487,31 @@ a.list-group-item.delete:hover {
   color: white;
 }
 
-/* line 45, ../SASS/bootstrap-custom.scss */
+@media (min-width: 768px) {
+  /* line 44, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 20%;
+  }
+}
+@media (min-width: 992px) {
+  /* line 49, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 18%;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 54, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 17%;
+  }
+}
+@media (min-width: 1450px) {
+  /* line 59, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 12.4%;
+  }
+}
+/* line 64, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9499,7 +9523,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-/* line 57, ../SASS/bootstrap-custom.scss */
+/* line 76, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9513,7 +9537,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-/* line 71, ../SASS/bootstrap-custom.scss */
+/* line 90, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -9527,91 +9551,28 @@ a.list-group-item.delete:hover {
   top: 8px;
 }
 
-/* line 96, ../SASS/bootstrap-custom.scss */
+/* line 115, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 99, ../SASS/bootstrap-custom.scss */
+/* line 118, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 102, ../SASS/bootstrap-custom.scss */
+/* line 121, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 109, ../SASS/bootstrap-custom.scss */
+/* line 128, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 112, ../SASS/bootstrap-custom.scss */
+/* line 131, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 115, ../SASS/bootstrap-custom.scss */
+/* line 134, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading .opt-btn {
   background-color: whitesmoke;
-}
-
-/* MEDIA QUERIES -------------------------------------------------------------------*/
-/* No breakpoints bellow 1366 or smth */
-@media (max-width: 1339px) {
-  /* line 128, ../SASS/bootstrap-custom.scss */
-  body > .container {
-    width: 100%;
-  }
-}
-@media (min-width: 1340px) {
-  /* line 134, ../SASS/bootstrap-custom.scss */
-  .container {
-    width: 1340px;
-  }
-}
-@media (min-width: 992px) {
-  /* line 140, ../SASS/bootstrap-custom.scss */
-  #leftnav .panel a.list-group-item,
-  #leftnav .panel .panel-heading .panel-title {
-    text-align: left;
-  }
-
-  /* line 144, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 18%;
-  }
-}
-@media (max-width: 992px) {
-  /* line 150, ../SASS/bootstrap-custom.scss */
-  body > .container {
-    padding: 0;
-    margin: 0;
-  }
-
-  /* line 155, ../SASS/bootstrap-custom.scss */
-  #main-content,
-  #leftnav .panel a.list-group-item,
-  #header.navbar .navbar-nav > li:last-child > a,
-  .navbar-default {
-    border-radius: 0px !important;
-  }
-}
-@media (min-width: 768px) {
-  /* line 165, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 20%;
-  }
-}
-@media (min-width: 1200px) {
-  /* line 170, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 17%;
-  }
-}
-@media (min-width: 1450px) {
-  /* line 175, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 12.4%;
-  }
-}
-@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 992px), only screen and (-o-min-device-pixel-ratio: 2 / 1) and (min-width: 992px), only screen and (min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min-resolution: 192dpi) and (min-width: 992px), only screen and (min-resolution: 2dppx) and (min-width: 992px) {
-  /* Medium screen, retina, stuff to override above media query */
 }
