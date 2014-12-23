@@ -1644,10 +1644,6 @@ tr.not_visible{
 {
     position: relative !important;
 }
-#leftnav.no-embed
-{
-    top: -53px;
-}
 .row-main{
     padding-bottom: 2em;
     padding-top: 1em;
@@ -1688,7 +1684,9 @@ td.option-btn-cell{
     padding: 0 0;
     margin: 0 0;
 }
-
+/*.no-embed{
+    top: -53px;
+}*/
 .descr_title div{
     display: inline-block;
     padding-top: 10px;
@@ -1697,7 +1695,21 @@ td.option-btn-cell{
     height: 260px;
     overflow: hidden;
 }
-
+#header .navbar-brand{
+    padding: 0px;
+}
+#quick-search-wrapper{
+    padding: 40px 10px 30px 10px;
+}
+#quick-search-wrapper .advanced-search
+{
+    margin: 10px 0;
+    font-size: 11px;
+    padding-left: 13px;
+}
+#quick-search-wrapper .advanced-search a:hover{
+    text-decoration: none !important;
+}
 #rename_doc_file label
 {
     word-wrap: break-word;
@@ -1746,11 +1758,16 @@ table#portfolio-lessons tr
     padding: 5px 0;
 }
 
+.navbar-toggle{
+    margin-left: 15px;
+}
+
 #scrollToTop{
-    position: absolute;
+    display: none;
+    position: fixed;
     right: 0px;
-    padding-right: 30px;
-    top: -30px;
+    padding-right: 45px;
+    bottom: 15px;
 }
 #scrollToTop i{
     padding: 0 0 10px 0;

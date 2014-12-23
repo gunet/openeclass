@@ -45,10 +45,28 @@ a.list-group-item.delete:hover{
     width: 20%;
   }     
 }
+@media(max-width: $screen-desktop){
+   .float-menu {
+       position: absolute;
+       width: 225px;
+       left: -225px;
+       top: 0px;
+       height: 100%;
+  }
+  .navbar-toggle{
+      display: block;
+  }
+}
+.lalala{
+    display: none;
+}
 @media(min-width: $screen-desktop){
    .affix {
     width: 18%;
-  }   
+  }
+  .navbar-custom{
+    margin: 15px 15px 0px;
+}
 }
 @media(min-width: $screen-lg-desktop){
    .affix {

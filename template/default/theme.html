@@ -54,18 +54,35 @@
         <!-- BEGIN headerBlock -->
             <div class="row" id="header_section">
                 <!-- BEGIN normalViewOpenDiv -->
-                <div class="col-xs-11 col-sm-11 col-md-10 col-xs-offset-1 col-sm-offset-1 col-md-offset-2">
+                <div class="hidden-xs hidden-sm col-md-2">
+                    <!-- BEGIN logoBlock -->
+                    <div class="logo">
+                        <a href='{%URL_PATH%}'>
+                        <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/{%logo_img%}" alt=''>
+                        </a>
+                    </div>
+                    <!-- END logoBlock -->
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-10 nav-container">
                 <!-- END normalViewOpenDiv -->
                 <!-- BEGIN mobileViewOpenDiv -->
                 <div class="col-xs-12">
                 <!-- END mobileViewOpenDiv -->
                     <nav id="header" class="navbar navbar-default" role="navigation">
+                        <button class="navbar-toggle pull-left">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <!-- BEGIN logoBlock -->
+                        <a href='{%URL_PATH%}' class="navbar-brand">
+                            <img class="img-responsive hidden-md hidden-lg" src="{%template_base%}/img/{%logo_img_small%}" alt=''>
+                            </a>
+                        <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
                             <!-- BEGIN LoggedInBlock -->
                             <li><a href="{%URL_PATH%}main/portfolio.php"><i class="fa fa-home"></i></a></li>
-                            <!-- BEGIN searchBlock -->
-                            <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
-                            <!-- END searchBlock -->
                             <li id="profile_menu_dropdown" class="dropdown">
                                <a class="dropdown-toggle" role="button" id="dropdownMenu1" data-toggle="dropdown">
                                     <img alt="" class="img-circle user-icon" src="{%USER_ICON%}">{%USERNAME%}
@@ -96,9 +113,6 @@
                             <li><a id="toggle-sidebar"><i class="fa fa-sliders"></i></a></li>
                             <!-- END LoggedInBlock -->
                             <!-- BEGIN LoggedOutBlock -->
-                            <!-- BEGIN searchBlock -->
-                            <li><a href="{%URL_PATH%}modules/search/search.php"><i class="fa fa-search"></i></a></li>
-                            <!-- END searchBlock -->
                             {%LANG_SELECT%}
 
                             <li><a href="{%URL_PATH%}main/login_form.php"><i class="fa fa-lock"></i></a></li>
@@ -113,51 +127,9 @@
         <!-- LeftNav & Main Content Section -->
 
         <div class="row" id="Frame">
-            <!-- BEGIN leftNavBlock -->
-            <div id="leftnav" class="col-xs-1 col-sm-1 col-md-2 sidebar {%leftNavClass%}">
-
-                <!-- BEGIN logoBlock -->
-                <div class="logo">
-                    <a href='{%URL_PATH%}'>
-                    <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/{%logo_img%}" alt=''>
-                    <img class="img-responsive hidden-md hidden-lg" src="{%template_base%}/img/{%logo_img_small%}" alt=''>
-                    </a>
-                </div>
-                <!-- END logoBlock -->
-
-                <div class="panel-group" id="sidebar-accordion">                   
-                    <!-- BEGIN leftNavCategoryBlock -->
-                    <div class="panel">
-
-                        <!-- BEGIN leftNavCategoryTitleBlock -->
-                        <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{%TOOL_GROUP_ID%}">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <i class="fa fa-chevron-right space-after-icon"></i>
-                                    <span class="hidden-sm hidden-xs">{%ACTIVE_TOOLS%}</span>
-                                </h4>
-                            </div>
-                        </a>
-                        <!-- END leftNavCategoryTitleBlock -->
-
-                        <div id="collapse{%TOOL_GROUP_ID%}" class="panel-collapse list-group collapse {%GROUP_CLASS%}">
-                            <!-- BEGIN leftNavLinkBlock -->
-                            <a href="{%TOOL_LINK%}" class="list-group-item {%TOOL_CLASS%}">
-                                <i class="fa {%IMG_CLASS%} "></i>
-                                <span class="hidden-sm hidden-xs">{%TOOL_TEXT%}</span>
-                            </a>
-                            <!-- END leftNavLinkBlock -->
-                        </div>
-
-                    </div>
-                    <!-- END leftNavCategoryBlock -->
-                    {%ECLASS_LEFTNAV_EXTRAS%}
-                </div>
-            </div>
-            <!-- END leftNavBlock -->
             <!-- BEGIN normalViewOpenDiv -->
-            <div id="background-cheat" class="col-xs-11 col-sm-11 col-md-10"></div>
-            <div id="main-content" class="col-xs-11 col-sm-11 col-md-10">
+            <div id="background-cheat" class="col-xs-12 col-sm-12 col-md-10 col-md-push-2"></div>
+            <div id="main-content" class="col-xs-12 col-sm-12 col-md-10 col-md-push-2">
             <!-- END normalViewOpenDiv -->
             <!-- BEGIN mobileViewOpenDiv -->
             <div id="background-cheat" class="col-xs-12"></div>
@@ -238,6 +210,55 @@
                     </div>
                 </div>
             </div>
+            <!-- BEGIN leftNavBlock -->
+            <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar {%leftNavClass%} float-menu">
+                
+                <div id="quick-search-wrapper">
+                    <!-- BEGIN searchBlock -->
+                    <form action='{%URL_PATH%}modules/search/search.php' method='post' >
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search_terms" placeholder="Αναζήτηση...">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit" name="quickSearch"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                    <div class="advanced-search">
+                    <a href="{%URL_PATH%}modules/search/search.php" >Σύνθετη Αναζήτηση</a>
+                    </div>
+                    <!-- END searchBlock -->
+                </div>
+                
+                <div class="panel-group" id="sidebar-accordion">                   
+                    <!-- BEGIN leftNavCategoryBlock -->
+                    <div class="panel">
+
+                        <!-- BEGIN leftNavCategoryTitleBlock -->
+                        <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{%TOOL_GROUP_ID%}">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <i class="fa fa-chevron-right space-after-icon"></i>
+                                    <span class="">{%ACTIVE_TOOLS%}</span>
+                                </h4>
+                            </div>
+                        </a>
+                        <!-- END leftNavCategoryTitleBlock -->
+
+                        <div id="collapse{%TOOL_GROUP_ID%}" class="panel-collapse list-group collapse {%GROUP_CLASS%}">
+                            <!-- BEGIN leftNavLinkBlock -->
+                            <a href="{%TOOL_LINK%}" class="list-group-item {%TOOL_CLASS%}">
+                                <i class="fa {%IMG_CLASS%} "></i>
+                                <span class="">{%TOOL_TEXT%}</span>
+                            </a>
+                            <!-- END leftNavLinkBlock -->
+                        </div>
+
+                    </div>
+                    <!-- END leftNavCategoryBlock -->
+                    {%ECLASS_LEFTNAV_EXTRAS%}
+                </div>
+            </div>
+            <!-- END leftNavBlock -->
             <!-- BEGIN sideBarBlock -->
             <div id="sidebar-container">
                 <aside id="sidebar" class="outer">
@@ -325,7 +346,7 @@
         <!-- BEGIN footerBlock -->
         <div class="row" id="footer_section">
             <!-- BEGIN normalViewOpenDiv -->
-            <div class="col-xs-11 col-sm-11 col-md-10 col-xs-offset-1 col-sm-offset-1 col-md-offset-2">
+            <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-2">
             <!-- END normalViewOpenDiv -->
             <!-- BEGIN mobileViewOpenDiv -->
             <div class="col-xs-12">

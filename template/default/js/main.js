@@ -73,14 +73,26 @@ $(document).ready( function () {
     popover_init();
 
 
-    // Course Description expand button
-    $("#descr_collapse_btn").on("click",function(){
-        var containerHeight = 260;
-        var contentHeight = $("#descr_content").height();
-        var blockHeight = ($("#descr_collapse").hasClass("container_expand"))?containerHeight:contentHeight;
-        $("#descr_collapse").animate({
-            height : blockHeight
-        },200,function(){$("#descr_collapse").toggleClass("container_expand");});
+    $(".navbar-toggle").on("click", function () {
+        if (!$("#leftnav").hasClass("float-menu-in")) {
+            $("#leftnav").animate({
+                "left": "0"
+            }, 150, function () {
+                $(this).toggleClass("float-menu-in");
+            });
+        } else {
+            $(".float-menu").animate({
+                "left": "-225px"
+            }, 150, function () {
+                $(this).toggleClass("float-menu-in");
+            });
+        }
+    });
+    $(window).on("resize",function(){
+        if($(".float-menu").css("position") == "relative"){
+            $(".float-menu").removeAttr("style");
+            $(".float-menu").removeClass("float-menu-in");
+        }
     });
 
     // Teacher - Student Button
@@ -117,6 +129,14 @@ $(document).ready( function () {
         };
     }
     
+    $(window).scroll(function () {
+        if ($(window).scrollTop() > 250) {
+            $("#scrollToTop").css("display","block");
+        }else{
+            $("#scrollToTop").css("display","none");
+        }
+    });
+    
     $("#scrollToTop i").on('click', function(){
         scrollToTop("html, body",500);
     });
@@ -151,7 +171,6 @@ $(document).ready( function () {
         $('#toggle-sidebar').click(function () {
             var inOut = $("#sidebar").hasClass("in") ? "-18.5em" : "0em";
             
-            
             $("#sidebar").animate(
                     {"right": inOut}, {duration: 150, easing: "linear",
                 start: function () {
@@ -159,7 +178,6 @@ $(document).ready( function () {
                 },
                 complete: function () {
                     $("#toggle-sidebar").toggleClass("toggle-active");
-                    //$("#toggle-sidebar i").toggleClass("fa-rotate-180");
                     if ($("#sidebar").hasClass("in")) $("#sidebar-container").css({"display":"none"});
                     $("#sidebar").toggleClass("in");
                 }
