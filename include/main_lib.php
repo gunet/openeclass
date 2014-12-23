@@ -2722,7 +2722,7 @@ function action_bar($options) {
         }        
         if ($level == 'primary-label') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn btn-sm $button_class$confirm_modal_class'" . $href .
+                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .

@@ -46,17 +46,33 @@ if (isset($_POST['submit'])) {
 }
 
 $description = Database::get()->querySingle('SELECT description FROM course WHERE id = ?d', $course_id)->description;
-$tool_content = "
-    <div class='row'><div class='col-xs-12'>
-    <div class='form-wrapper'>
-        <form role='form' method='post' action='editdesc.php?course=$course_code'>
-          <fieldset>
-          <legend>$langDescription</legend>
-                " . rich_text_editor('description', 4, 20, $description) . "
-          <br>
-          <div class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>
-          </fieldset>
-        </form>
+$tool_content = action_bar(array(
+        array(
+            'title' => $langBack,
+            'url' => $urlAppend."courses/".$course_code,
+            'icon' => 'fa-reply',
+            'level' => 'primary-label'
+        )
+    ))."
+    <div class='row'>
+        <div class='col-xs-12'>
+            <div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code'>
+                    <fieldset>
+                    <div class='form-group'>
+                        <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
+                        <div class='col-sm-10'>
+                            " . rich_text_editor('description', 4, 20, $description) . "
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                            <a href='{$urlAppend}courses/$course_code' class='btn btn-default'>$langCancel</a>
+                        </div>
+                    </div>
+                  </fieldset>
+                </form>
     </div></div></div>";
 
 draw($tool_content, 2, null, $head_content);
