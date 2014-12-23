@@ -1575,49 +1575,6 @@ function traverseDirTree($base, $fileFunc, $dirFunc, $data) {
     closedir($subdirectories);
 }
 
-// Convert course description to special course unit with order = -1
-function convert_description_to_units($code, $course_id) {
-    global $mysqlMainDb, $langCourseDescription;
-
-    $desc = $addon = '';
-    $qdesc = Database::get()->querySingle("SELECT description, course_addon FROM cours WHERE course_id = ?d", $course_id);
-    if ($qdesc) {
-        $desc = trim($qdesc->description);
-        $addon = trim($qdesc->course_addon);
-    }
-
-    $q = Database::get()->queryArray("SELECT * FROM `$code`.course_description");
-
-    // If old-style course description data don't exist and course description is
-    // empty, don't do anything
-    if ((!$q or count($q) == 0) and empty($desc) and empty($addon)) {
-        return;
-    }
-
-    $id = description_unit_id($course_id);
-
-    $error = false;
-    if (!empty($desc)) {
-        $error = add_unit_resource($id, 'description', -1, $GLOBALS['langCourseDescription'], html_cleanup($desc)) && $error;
-    }
-    if (!empty($addon)) {
-        $error = add_unit_resource($id, 'description', false, $GLOBALS['langCourseAddon'], $addon, 'v') && $error;
-    }
-    if (!$error) {
-        Database::get()->query("UPDATE cours SET description = '', course_addon = '' WHERE course_id = $course_id");
-    }
-
-    if ($q and count($q) > 0) {
-        $error = false;
-        foreach ($q as $row) {
-            $error = add_unit_resource($id, 'description', $row->id, $row->title, html_cleanup($row->content), 'i', $row->upDate) && $error;
-        }
-        if (!$error) {
-            Database::get()->query("DROP TABLE `$code`.course_description");
-        }
-    }
-}
-
 function upgrade_course_index_php($code) {
     global $langUpgNotIndex, $langCheckPerm;
     $course_base_dir = "$GLOBALS[webDir]/courses/$code";

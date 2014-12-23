@@ -36,7 +36,6 @@ $action = new action();
 $action->record(MODULE_ID_DESCRIPTION);
 
 $pageName = $langCourseDescription;
-$unit_id = description_unit_id($course_id);
 
 ModalBoxHelper::loadModalBox();
 if ($is_editor) {
@@ -61,15 +60,6 @@ if ($is_editor) {
         }
         Session::Messages($langCourseUnitAdded,"alert-success");
         redirect_to_home_page("modules/course_description/index.php");
-    } else if (isset($_POST['submit']) && isset($_POST['edIdBloc'])) {
-        // Save results from block edit (save action)
-        $res_id = intval($_POST['edIdBloc']);
-        if ($res_id == -1) {
-            $unit_id = description_unit_id($course_id);
-            add_unit_resource($unit_id, 'description', $res_id, $_POST['edTitleBloc'], $_POST['edContentBloc']);
-            header("Location: {$urlServer}courses/$course_code");
-            exit;
-        }
     }
 }
 

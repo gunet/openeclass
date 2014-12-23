@@ -175,6 +175,7 @@ $db->query("CREATE TABLE `course` (
   `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
   `start_date` DATE NOT NULL default '0000-00-00',
   `finish_date` DATE NOT NULL default '0000-00-00',
+  `description` MEDIUMTEXT NOT NULL,
   PRIMARY KEY  (`id`)) $charset_spec");
 
 #

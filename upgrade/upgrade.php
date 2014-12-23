@@ -2298,7 +2298,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (version_compare($oldversion, '2.4', '<')) {
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.4");
-            convert_description_to_units($row->code, $row->id);
             upgrade_course_index_php($row->code);
             upgrade_course_2_4($row->code, $row->id, $row->lang);
         }
@@ -2386,6 +2385,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `name` VARCHAR(300) NOT NULL,
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
+        // Move course description from unit_resources to new course.description field
+        if (!DBHelper::fieldExists('description', 'course') or
+            Database::get()->query("ALTER TABLE course ADD description MEDIUMTEXT NOT NULL");
+        $result = Database::get()->query("UPDATE course, course_units, unit_resources
+            SET course.description = unit_resources.comments
+            WHERE course.id = course_units.course_id AND
+                  course_units.id = unit_resources.unit_id AND
+                  course_units.`order` = -1 AND
+                  unit_resources.res_id = -1");
+        if ($result->affectedRows) {
+            Database::get()->query("DELETE FROM unit_resources WHERE res_id = -1");
+            Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
+        }
         set_config('theme', 'default');
         set_config('theme_options_id', 0);
     }

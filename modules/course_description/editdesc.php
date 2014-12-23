@@ -36,42 +36,25 @@ $pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
 if (isset($_POST['submit'])) {
-    $unit_id = description_unit_id($course_id);
-    add_unit_resource($unit_id, 'description', -1, $langDescription, trim($_POST['description']));
+    Database::get()->query('UPDATE course SET description = ?s WHERE id = ?d',
+        purify($_POST['description']), $course_id);
     // update index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+    header("Location: {$urlServer}courses/$course_code");
+    exit;
 }
 
-$description = '';
-$unit_id = description_unit_id($course_id);
-$q = Database::get()->queryArray("SELECT id, res_id, comments FROM unit_resources WHERE unit_id = ?d
-                      AND (res_id < 0 OR `order` < 0)", $unit_id);
-if ($q && count($q) > 0) {
-    foreach ($q as $row) {
-        if ($row->res_id == -1) {
-            $description = $row->comments;
-        } else {
-            $new_order = add_unit_resource_max_order($unit_id);
-            $new_res_id = new_description_res_id($unit_id);
-            Database::get()->query("UPDATE unit_resources SET
-                        res_id = ?d, visibility = 'v', `order` = ?d
-                        WHERE id = ?d", $new_res_id, $new_order, $row->id);
-        }
-    }
-}
-
+$description = Database::get()->querySingle('SELECT description FROM course WHERE id = ?d', $course_id)->description;
 $tool_content = "
     <div class='row'><div class='col-xs-12'>
     <div class='form-wrapper'>
-        <form role='form' method='post' action='index.php?course=$course_code'>
-        <input type='hidden' name='edIdBloc' value='-1' />
-        <input type='hidden' name='edTitleBloc' value='$langDescription' />
+        <form role='form' method='post' action='editdesc.php?course=$course_code'>
           <fieldset>
           <legend>$langDescription</legend>
-                " . rich_text_editor('edContentBloc', 4, 20, $description) . "
-          <br />
-          <div class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' /></div>
+                " . rich_text_editor('description', 4, 20, $description) . "
+          <br>
+          <div class='right'><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></div>
           </fieldset>
         </form>
     </div></div></div>";
