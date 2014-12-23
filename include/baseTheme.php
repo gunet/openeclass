@@ -234,7 +234,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     //If there is a message to display, show it (ex. Session timeout)
     if ($messages = Session::getMessages()) {
-        $t->set_var('EXTRA_MSG', $messages);
+        $t->set_var('EXTRA_MSG', "<div class='row'><div class='col-xs-12'>".$messages."</div></div>");
     }
 
     $t->set_var('TOOL_CONTENT', $toolContent);
