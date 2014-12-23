@@ -122,42 +122,41 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
 $tool_content .= "<div style='display: none'>";
-$course_info_extra = '';
-foreach ($res as $row) {
-    $desctype = intval($row->type) - 1;    
-    $hidden_id = "hidden_" . $row->id;
-    $tool_content .= "<div id='$hidden_id'><h1>" .
-            q($row->title) . "</h1>" .
-            standard_text_escape($row->comments) . "</div>";    
-    $course_info_extra .= "<li><a class='md-trigger inline' data-modal='syllabus-prof' href='#$hidden_id'>".q($row->title) ."</a></li>";
+
+if(count($res)>0){
+    foreach ($res as $row) {
+        $desctype = intval($row->type) - 1;    
+        $hidden_id = "hidden_" . $row->id;
+        $tool_content .= "<div id='$hidden_id'><h1>" .
+                q($row->title) . "</h1>" .
+                standard_text_escape($row->comments) . "</div>";    
+        $course_info_extra .= "<li><a class='md-trigger inline' data-modal='syllabus-prof' href='#$hidden_id'>".q($row->title) ."</a></li>";
+    }
+    $course_info_btn = "
+            <div class='btn-group' role='group'>
+              <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
+                $langCourseDescription
+                <span class='caret'></span>
+              </button>
+              <ul class='dropdown-menu' role='menu'>
+                $course_info_extra
+              </ul>
+            </div>";    
+} else {
+   $course_info_btn = ''; 
 }
+
 $tool_content .= "</div>";
 
-if ($is_editor) {
-    $edit_link = "
-    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' class='tiny-icon'>
-        <i class='fa fa-edit space-before-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
-    </a>";
-} else {
-    $edit_link = '';
-}
+
 
 $main_content .= "<div class='course_info'>";
 if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
     $main_content .= "
-        <div id='descr_collapse'>
-            <div id='descr_content'>
-                $description
-            </div>
-        </div>
-    <div class='descr_title'>
-        <div id='descr_collapse_btn'>
-            <button class='btn btn-default btn-xs'><i class='fa fa-caret-down'></i></button>
-        </div>
-        <div>
-            $edit_link
-        </div>
+
+    <div id='descr_content'>
+        $description
     </div>
     ";
 } else {
@@ -174,7 +173,7 @@ if (!empty($addon)) {
 
 if (setting_get(SETTING_COURSE_RATING_ENABLE, $course_id) == 1) {
     $rating = new Rating('fivestar', 'course', $course_id);
-    $main_content .= $rating->put($is_editor, $uid, $course_id);
+    $rating_content = $rating->put($is_editor, $uid, $course_id);
 }
 
 if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
@@ -185,7 +184,7 @@ if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
 
 if (is_sharing_allowed($course_id)) {
     if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
-        $main_content .= print_sharing_links($urlServer."courses/$course_code", $title);
+        $social_content = print_sharing_links($urlServer."courses/$course_code", $title);
     }
 }
 
@@ -288,7 +287,6 @@ if ($is_editor) {
 }
 //style='color:#999999; font-size:13px;'
 $bar_content .= "<b>" . $langCode . ":</b> " . q($public_code) . "" .
-                "<br><b>" . $langTeachers . ":</b> " . q($professor) . "" .
                 "<br><b>" . $langFaculty . ":</b> ";
 
 $departments = $course->getDepartmentIds($course_id);
@@ -318,7 +316,7 @@ switch ($visible) {
             break;
         }
     case COURSE_INACTIVE: {
-            $lessonStatus = "<span class='invisible' title='$langCourseInactiveShort'>$langCourseInactive</span>";
+            $lessonStatus = "<span title='$langCourseInactiveShort'>$langCourseInactive</span>";
             break;
         }
 }
@@ -390,65 +388,75 @@ if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
 
-// Title and Toolbox
-$tool_content .= "
-<div class='row margin-top-thin'>
-    <div class ='col-md-12'>
-        <div class='toolbox pull-right'>
-            <div class='dropdown'>
-                <button class='txt btn btn-default-eclass place-at-toolbox' data-toggle='dropdown'>$langCourseDescription <i class='fa fa-caret-down'></i></button>
-                <ul class='dropdown-menu'>
-                    $course_info_extra                  
-                </ul>
-            </div>";
-            // Button: toggle student view
-            $tool_content .= "
-        </div>
-    </div>
-</div>";
-
 
 // Contentbox: Course main contentbox
 //Temp commit (waiting for Alex to fix course description issue) 
 if (true) {
-   $image = "
+    if(!empty($license_info_box)){
+
+     $license_holder = "   <div class ='col-xs-12 text-center margin-top-fat'>
+                           $license_info_box
+                        </div>";   
+    }           
+   $left_column = "
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
                 <div>
                     <img class='banner-image img-responsive' src='$themeimg/ph1.jpg'/>
                 </div>
+                <hr class='col-xs-12 margin-top-fat margin-bottom-fat'>                
+                <div class='col-xs-12 form-wrapper'>              
+                     $bar_content
+                     $bar_content_2
+                </div>
+                <hr class='col-xs-12 margin-top-slim margin-bottom-fat'>                 
+                $license_holder
+                <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>                      
             </div>";       
    $main_content_cols = 'col-md-7 col-sm-7';
 } else {
-    $image = '';
+    $left_column = '';
     $main_content_cols = '';
-}            
+}
+$edit_link = "";
+if ($is_editor) {
+    $edit_link = "
+    <a href='../../modules/course_description/editdesc.php?course=$course_code' class='btn btn-default'>
+        <i class='fa fa-edit space-before-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langEdit'></i> $langEdit
+    </a>";
+}
+if (!empty($edit_link) || !empty($course_info_btn)) {
+    $action_buttons = "
+                    <div class='btn-group pull-right' role='group' aria-label='...'>
+                      $edit_link
+                      $course_info_btn
+                    </div>
+                    <div class='clearfix'></div>";
+} else {
+    $action_buttons = "";
+}
 $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
-            <div class='panel clearfix'>
-            <div class='row'>
-                <div class='col-md-12 add-gutter margin-top-fat margin-bottom-fat'>
-                    $image
-                    <div class='col-xs-12 $main_content_cols'>
-                        <div class=''>$main_content</div>
+            <div class='panel panel-default'>
+                $action_buttons
+                <div class='panel-body'>
+                            $left_column
+                            <div class='col-xs-12 $main_content_cols'>
+                                <div class=''>$main_content</div>
+                            </div>
+                </div>
+                <div class='panel-footer'>
+                    <div class='row'>
+                        <div class='col-sm-6'>
+                            $rating_content
+                        </div>
+                        <div class='col-sm-6 text-right'>
+                            $social_content
+                        </div>                        
                     </div>
-                    <div class ='col-xs-12'>
-                        <hr class='margin-top-thin margin-bottom-thin'>
-                    </div>
-            <div class ='".(!empty($license_info_box) ? 'col-sm-8' : 'col-sm-12')."'>              
-                 $bar_content
-                 $bar_content_2
-            </div>";
-        if(!empty($license_info_box)){
-            $tool_content .= "
-                    <div class ='col-sm-4 text-center margin-top-fat'>
-                       $license_info_box
-                    </div>";   
-        }
-
-$tool_content .= "</div></div>
+                </div>
+            </div>
         </div>
-    </div>
 </div>
 ";
 
