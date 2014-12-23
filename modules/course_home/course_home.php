@@ -413,23 +413,32 @@ $tool_content .= "
 
 
 // Contentbox: Course main contentbox
+//Temp commit (waiting for Alex to fix course description issue) 
+if (true) {
+   $image = "
+            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
+                <div>
+                    <img class='banner-image img-responsive' src='$themeimg/ph1.jpg'/>
+                </div>
+            </div>";       
+   $main_content_cols = 'col-md-7 col-sm-7';
+} else {
+    $image = '';
+    $main_content_cols = '';
+}            
 $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
             <div class='panel clearfix'>
-            <div class='row'><div class='col-md-12 add-gutter margin-top-fat margin-bottom-fat'>
-            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
-                <div >
-                    <img class='banner-image img-responsive' src='$themeimg/ph1.jpg'/>
-                </div>
-            </div>
-
-            <div class='col-md-7 col-sm-7 col-xs-12'>
-                <div class=''>$main_content</div>
-            </div>
-            <div class ='col-xs-12'>
-                <hr class='margin-top-thin margin-bottom-thin'>
-            </div>
+            <div class='row'>
+                <div class='col-md-12 add-gutter margin-top-fat margin-bottom-fat'>
+                    $image
+                    <div class='col-xs-12 $main_content_cols'>
+                        <div class=''>$main_content</div>
+                    </div>
+                    <div class ='col-xs-12'>
+                        <hr class='margin-top-thin margin-bottom-thin'>
+                    </div>
             <div class ='".(!empty($license_info_box) ? 'col-sm-8' : 'col-sm-12')."'>              
                  $bar_content
                  $bar_content_2
