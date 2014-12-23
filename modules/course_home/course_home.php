@@ -134,7 +134,7 @@ $tool_content .= "</div>";
 
 if ($is_editor) {
     $edit_link = "
-    <a href='../../modules/course_description/editdesc.php?course=$course_code' class='tiny-icon'>
+    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' class='tiny-icon'>
         <i class='fa fa-edit space-before-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langEdit'></i>
     </a>";
 } else {
