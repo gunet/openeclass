@@ -184,7 +184,7 @@ if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
 
 if (is_sharing_allowed($course_id)) {
     if (setting_get(SETTING_COURSE_SHARING_ENABLE, $course_id) == 1) {
-        $social_content = print_sharing_links($urlServer."courses/$course_code", $title);
+        $social_content = print_sharing_links($urlServer."courses/$course_code", $currentCourseName);
     }
 }
 
@@ -394,9 +394,13 @@ if (!empty($rec_mail)) {
 if (true) {
     if(!empty($license_info_box)){
 
-     $license_holder = "   <div class ='col-xs-12 text-center margin-top-fat'>
+        $license_holder = "<hr class='col-xs-12 margin-top-slim margin-bottom-fat'>
+                        <div class ='col-xs-12 text-center margin-top-fat'>
                            $license_info_box
-                        </div>";   
+                        </div>
+                        <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>";
+    } else {
+        $license_holder = "";
     }           
    $left_column = "
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
@@ -407,10 +411,8 @@ if (true) {
                 <div class='col-xs-12 form-wrapper'>              
                      $bar_content
                      $bar_content_2
-                </div>
-                <hr class='col-xs-12 margin-top-slim margin-bottom-fat'>                 
+                </div>               
                 $license_holder
-                <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>                      
             </div>";       
    $main_content_cols = 'col-md-7 col-sm-7';
 } else {
