@@ -58,8 +58,7 @@ $action = new action();
 $action->record(MODULE_ID_CHAT);
 /* * *********************************** */
 
-$toolName = $langConference;
-$pageName = $langTypeMessage;
+$toolName = $langChat;
 // guest user not allowed
 if (check_guest()) {
     $tool_content .= "<div class='alert alert-danger'>$langNoGuest</div>";
@@ -96,7 +95,7 @@ if ($is_editor) {
     ));
 }
 
-$tool_content .= "
+$tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
     <div class='row'><div class='col-sm-12'><div class='form-wrapper'>
    <form name='chatForm' action='messageList.php' method='get' target='messageList' onSubmit='return prepare_message();'><input type='hidden' name='course' value='$course_code'/>
    <fieldset>

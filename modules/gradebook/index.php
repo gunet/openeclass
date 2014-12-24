@@ -28,7 +28,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 //Module name
-$pageName = $langGradebook;
+$toolName = $langGradebook;
 
 //Datepicker
 load_js('tools.js');
@@ -74,7 +74,6 @@ $(function() {
     });
 });
 </script>";
-
 
 //gradebook_id for the course: check if there is an gradebook module for the course. If not insert it
 $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d ", $course_id);
@@ -175,8 +174,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
-    } else {
-        $pageName = $langGradebook;
+    } else {       
         $tool_content .= action_bar(array(
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
@@ -246,8 +244,7 @@ if ($is_editor) {
             
             <div class='row'>
                 <div class='col-sm-12'>
-                    <div class='form-wrapper'>
-                    <h4>$langGradebookActAttend</h4>
+                    <div class='form-wrapper'>                    
                         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                             <fieldset>";
                                 if (isset($_GET['modify'])) { //edit an existed activity            
@@ -730,7 +727,7 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                            <h4>$langRefreshList</h4><small>($langAttendanceInfoForUsers)</small><br><br>
+                        <div class='form-group'><label class='col-sm-offset-1'>$langRefreshList</label><small class='help-block'>($langGradebookInfoForUsers)</small></div>                            
                             <div class='form-group'>
                                 <div class='col-sm-12'>
                                     <select name='usersLimit' class='form-control'>                
@@ -761,7 +758,7 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                            <h4>$langGradebookRange</h4><br>
+                        <div class='form-group'><label class='col-sm-offset-1'>$langGradebookRange</label></div>                            
                             <div class='form-group'>
                                 <div class='col-sm-10'>
                                     <select name='degreerange' class='form-control'><option value=10";
@@ -781,7 +778,7 @@ if ($is_editor) {
                             </div>
                             <div class='form-group'>
                                 <div class='col-sm-12'>
-                                    <input class='btn btn-primary' type='submit' name='submitGradebookRange' value='$langGradebookUpdate' />
+                                    <input class='btn btn-primary' type='submit' name='submitGradebookRange' value='$langGradebookUpdate'>
                                 </div>
                             </div>
                         </fieldset>
@@ -842,7 +839,7 @@ if ($is_editor) {
             } // end of while        
             $tool_content .= "</tr></table></div></div></div>";
         } else {
-               $tool_content .= "<p class='alert1'>$langAttendanceNoActMessageAss4</p>";
+               $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div>";
         }
         $showGradebookActivities = 0;
     }
@@ -976,7 +973,7 @@ if ($is_editor) {
         
         $result = Database::get()->querySingle("SELECT * FROM gradebook_activities  WHERE id = ?d", $actID);
         
-        $tool_content .= "<h3>" . $langGradebookBook . ": " . $result->title . "</h3><br>";               
+        $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
 
         //show all the students
         $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM gradebook_users, user, course_user  WHERE gradebook_id = ?d AND gradebook_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
@@ -1054,11 +1051,12 @@ if ($is_editor) {
         if (!$result or $activityNumber == 0) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</div>";
         } else {
-            $tool_content .= "<h3>$langGradebookActList</h3>";
+            
             $tool_content .= $weightLeftMessage;
             $tool_content .= "
                 <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
+                              <tr><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
                               <tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
                               <th class='text-center'>$langView</th>
                               <th class='text-center'>$langScore</th>
@@ -1162,9 +1160,8 @@ if ($is_editor) {
     $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_activities.visible = ?d AND gradebook_id = ?d  ORDER BY `DATE` DESC", $visible, $gradebook_id);
     $announcementNumber = count($result);
 
-    if ($announcementNumber > 0) {
-        $tool_content .= "<h4>$langGradebookGrades</h4>";
-        $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: <b>" . userGradeTotal($gradebook_id, $userID) . "</b> </div><br>";
+    if ($announcementNumber > 0) {        
+        $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: <b>" . userGradeTotal($gradebook_id, $userID) . "</b> </div>";
 
         if(weightleft($gradebook_id, 0) != 0){
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</p>";

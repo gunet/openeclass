@@ -748,8 +748,6 @@ $langCheckOk = "Έχετε εγκαταστήσει όλα τα προαπαιτ
 /* * **********************************************************
  * conference
  * **************************************************************** */
-
-$langConference = "Τηλεσυνεργασία";
 $langWash = "Καθάρισμα";
 $langWashSuccess = "Η κουβέντα καθάρισε με επιτυχία.";
 $langWashFrom = "Η κουβέντα καθάρισε από";
@@ -761,11 +759,7 @@ $langButtonVideo = "Μετάδοση";
 $langButtonPresantation = "Μετάδοση";
 $langconference = "Ενεργοποίηση τηλεδιάσκεψης";
 $langpresantation = "Σύνδεσμος παρουσίασης ιστοσελίδας";
-$langVideo_content = "<p align='justify'>Εδώ θα παρουσιαστεί το βίντεο αφού το ενεργοποιήσει ο $langsTeacher.</p>";
-$langTeleconference_content1 = "<p align='justify'>Εδώ θα παρουσιαστεί η τηλεδιάσκεψη αφού την ενεργοποιήσει ο $langsTeacher.</p>";
-$langTeleconference_content_noIE = "<p align='justify'>Η τηλεδιάσκεψη ενεργοποιείται μόνο αν έχετε IE ως πλοηγό.</p>";
 $langWashVideo = "Παύση μετάδοσης";
-$langPresantation_content = "<p align='center'>Εδώ θα παρουσιαστεί μία ιστοσελίδα που θα επιλέξει ο $langsTeacher.</p>";
 $langWashPresanation = "Παύση μετάδοσης";
 $langSaveChat = "Αποθήκευση κουβέντας";
 $langSaveMessage = "Η κουβέντα αποθηκεύθηκε στα Έγγραφα";
@@ -1071,6 +1065,7 @@ $langGradebookActToAddExe = "Ασκήσεις προς εισαγωγή στο �
 $langGradebookStudentFailure = "Δεν έχει γίνει ακόμη καταχώρηση βαθμών";
 $langGradebookStats = "Στατιστικά";
 $langGradebookMEANS = "Τιμές";
+$langGradebookInfoForUsers = 'επιλέξτε από τη λίστα των χρηστών ποιοι θα συμμετέχουν στο βαθμολόγιο';
 $langGradebookActiveUsers = "Χρήστες βαθμολογίου";
 $langGradebookActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
 $langGradebookRange = "Κλίμακα βαθμολογίου";

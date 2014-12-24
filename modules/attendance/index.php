@@ -78,6 +78,8 @@ $(function() {
 });
 </script>";
     
+$toolName = $langAttendance;
+
 //attendance_id for the course: check if there is an attendance module for the course. If not insert it and create list of users
 $attendance = Database::get()->querySingle("SELECT id,`limit`, `students_semester` FROM attendance WHERE course_id = ?d ", $course_id);
 if ($attendance) {
@@ -165,7 +167,7 @@ if ($is_editor) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $pageName = $langAttendanceBook;
         $tool_content .= action_bar(array(
-            array('title' => $langAttendanceBook,
+            array('title' => $langUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
                   'icon' => 'fa fa-reply space-after-icon',
                   'level' => 'primary-label'),
@@ -173,8 +175,7 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa fa-reply space-after-icon',)
             ));
-    } else {
-        $pageName = $langAttendance;
+    } else {        
         $tool_content .= action_bar(array(
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
@@ -209,25 +210,24 @@ if ($is_editor) {
             <div class='col-sm-12'>
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' >
-                        <fieldset>
-                            <legend>$langAttendanceActivity</legend>";
-                                if (isset($_GET['modify'])) { //edit an existed activity
-                                    $id = intval($_GET['modify']);
+                        <fieldset>";                            
+                        if (isset($_GET['modify'])) { //edit an existed activity
+                            $id = intval($_GET['modify']);
 
-                                    //all activity data (check if it is in this attendance)
-                                    $mofifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
-                                    $titleToModify = $mofifyActivity->title;
-                                    $contentToModify = $mofifyActivity->description;
-                                    $attendanceActivityToModify = $id;
-                                    $date = $mofifyActivity->date;
-                                    $module_auto_id = $mofifyActivity->module_auto_id;
-                                    $auto = $mofifyActivity->auto;
+                            //all activity data (check if it is in this attendance)
+                            $mofifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
+                            $titleToModify = $mofifyActivity->title;
+                            $contentToModify = $mofifyActivity->description;
+                            $attendanceActivityToModify = $id;
+                            $date = $mofifyActivity->date;
+                            $module_auto_id = $mofifyActivity->module_auto_id;
+                            $auto = $mofifyActivity->auto;
 
-                                } else { //new activity 
-                                    $attendanceActivityToModify = "";
-                                    $titleToModify = '';
-                                    $contentToModify = '';
-                                }
+                        } else { //new activity 
+                            $attendanceActivityToModify = "";
+                            $titleToModify = '';
+                            $contentToModify = '';
+                        }
         $tool_content .= "<div class='form-group'>
                                 <label for='actTitle' class='col-sm-2 control-label'>$langTitle:</label>
                                 <div class='col-sm-10'>
@@ -442,7 +442,7 @@ if ($is_editor) {
             //check if there are booking records for the user, otherwise alert message for first input
             $checkForRecords = Database::get()->querySingle("SELECT COUNT(attendance_book.id) as count FROM attendance_book, attendance_activities WHERE attendance_book.attendance_activity_id = attendance_activities.id AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
             if(!$checkForRecords){
-                $tool_content .="<div class='info'>$langAttendanceNewBookRecord</div>";
+                $tool_content .="<div class='alert alert-info'>$langAttendanceNewBookRecord</div>";
             }
             
             //get all the activities
@@ -623,7 +623,7 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                            <h3>$langRefreshList</h3><small>($langAttendanceInfoForUsers)</small><br><br>
+                            <div class='form-group'><label class='col-sm-offset-1'>$langRefreshList</label><small class='help-block'>($langAttendanceInfoForUsers)</small></div>
                             <div class='form-group'>
                                 <div class='col-sm-12'>
                                     <select name='usersLimit' class='form-control'>                
@@ -634,7 +634,7 @@ if ($is_editor) {
                                 </div>
                             </div>
                             <div class='form-group'>
-                                <div class='col-sm-10'>
+                                <div class='col-sm-offset-2 col-sm-10'>
                                     <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
                                 </div>
                             </div>
@@ -654,7 +654,7 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                            <h3>$langAttendanceLimitTitle</h3><br><br>
+                        <div class='form-group'><label class='col-sm-offset-1'>$langAttendanceLimitTitle</label></div>
                             <div class='form-group'>
                                 <label for='limit' class='col-sm-2 control-label'>$langAttendanceLimitNumber:</label>
                                 <div class='col-sm-10'>
@@ -684,8 +684,7 @@ if ($is_editor) {
 
         $checkForAssNumber = count($checkForAss);        
         
-        if ($checkForAssNumber > 0) {
-            $tool_content .= "<h3>$langWorks</h3>";
+        if ($checkForAssNumber > 0) {            
             $tool_content .= "<div class='row'><div class='col-sm-12><div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>";
             $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
@@ -715,7 +714,7 @@ if ($is_editor) {
             }
             $tool_content .= "</table></div></div></div>";
         } else {
-            Session::Messages($langAttendanceNoActMessageAss4);
+            $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageAss4</div>";
         }
         
         $showAttendanceActivities = 0;
@@ -728,8 +727,7 @@ if ($is_editor) {
         $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d AND  exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2)", $course_id);
         $checkForExerNumber = count($checkForExer);
         
-        if ($checkForExerNumber > 0) {            
-            $tool_content .= "<h3>$langExercises</h3>";
+        if ($checkForExerNumber > 0) {
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>";
             $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
@@ -800,7 +798,7 @@ if ($is_editor) {
         
         $result = Database::get()->querySingle("SELECT * FROM attendance_activities  WHERE id = ?d", $actID);
         
-        $tool_content .= "<h3>" . $langAttendanceBook . ": " . $result->title . "</h3><br>";
+        $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
 
         //show all the students
         $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
@@ -858,10 +856,10 @@ if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
         $announcementNumber = count($result);
         if ($announcementNumber > 0) {
-            $tool_content .= "<h3>$langAttendanceActList</h3>
-                              <div class='row'><div class='col-sm-12'><div class='table-responsive'>
+            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
-                            <tr>
+                              <tr><th class='text-center' colspan='5'>$langAttendanceActList</th></tr>
+                            <tr>                            
                                 <th>$langTitle</th>
                                 <th>$langAttendanceActivityDate</th>
                                 <th>$langType</th>
@@ -927,9 +925,8 @@ if ($is_editor) {
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities  WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);
     $announcementNumber = count($result);
 
-    if ($announcementNumber > 0) {
-        $tool_content .= "<h4>$langAttendanceAbsences</h4>";
-        $tool_content .= "<div class='info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div>";
+    if ($announcementNumber > 0) {        
+        $tool_content .= "<div class='alert alert-info'>" . userAttendTotal($attendance_id, $userID) ." ". $langAttendanceAbsencesFrom . " ". q($attendance_limit) . " " . $langAttendanceAbsencesFrom2. " </div>";
         $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
                             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
                             <table class='table-default sortable' id='t2'>";

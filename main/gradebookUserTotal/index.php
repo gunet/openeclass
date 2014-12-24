@@ -40,15 +40,15 @@ if (count($courses) > 0) {
             <table class='table-default'><tr><th>$langCourse</th><th>$langGradebookGrade</th></tr>";
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;
-        $course_code = $course1->code;
+        $code = $course1->code;
         $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);        
         if ($gradebook) {            
             $gradebook_id = $gradebook->id;
-            $grade = userGradeTotal($gradebook_id, $userID, $course_code);
+            $grade = userGradeTotal($gradebook_id, $userID, $code);
             if ($grade) {
                 $content = true;
                 $grade_content .= "<tr><td>".$course1->title."</td>
-                    <td><a href='../../modules/gradebook/index.php?course=$course_code'>".$grade."</a> <small>($langMax: ".$gradebook->range.")</small></td></tr>";
+                    <td><a href='../../modules/gradebook/index.php?course=$code'>".$grade."</a> <small>($langMax: ".$gradebook->range.")</small></td></tr>";
             }            
         }
     }

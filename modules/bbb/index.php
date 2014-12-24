@@ -41,7 +41,7 @@ $action = new action();
 $action->record(MODULE_ID_BBB);
 /* * *********************************** */
 
-$pageName = $langBBB;
+$toolName = $langBBB;
 
 // guest user not allowed
 if (check_guest()) {
@@ -106,6 +106,11 @@ $head_content .= "
 
 if ($is_editor) {
     if (isset($_GET['add']) or isset($_GET['choice'])) {
+        if (isset($_GET['add'])) {  
+            $pageName = $langNewBBBSession;
+        } elseif ((isset($_GET['choice'])) and $_GET['choice'] == 'edit') {
+            $pageName = $langModify;
+        }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -128,8 +133,7 @@ if ($is_editor) {
     }    
 }
 
-if (isset($_GET['add'])) {    
-    $pageName = $langNewBBBSession;
+if (isset($_GET['add'])) {        
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
     new_bbb_session();
 }
@@ -141,6 +145,7 @@ elseif(isset($_POST['update_bbb_session']))
 }
 elseif(isset($_GET['choice']))
 {
+    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langBBB);
     switch($_GET['choice'])
     {
         case 'edit':

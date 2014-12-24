@@ -52,7 +52,7 @@ private function _processXmlResponse($url){
         curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
         $data = curl_exec( $ch );
         curl_close( $ch );
-
+        
         if($data)
         return (new SimpleXMLElement($data));
         else
