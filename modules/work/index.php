@@ -1103,13 +1103,16 @@ function delete_user_assignment($id) {
     global $tool_content, $course_code, $webDir;
 
     $filename = Database::get()->querySingle("SELECT file_path FROM assignment_submit WHERE id = ?d", $id);
-    $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
     if (Database::get()->query("DELETE FROM assignment_submit WHERE id = ?d", $id)->affectedRows > 0) {
-        if (my_delete($file)) {
-            return true;
+        if ($filename->file_path) {
+            $file = $webDir . "/courses/" . $course_code . "/work/" . $filename->file_path;
+            if (!my_delete($file)) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
+    return false;
 }
 /**
  * @brief delete teacher assignment file
