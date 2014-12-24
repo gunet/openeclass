@@ -117,11 +117,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     array('title' => $langMove,
                           'level' => 'primary',
                           'icon' => 'fa-arrow-up',
-                          'disabled' => $iterator != 1 || $offset > 0,
+                          'disabled' => !($iterator != 1 || $offset > 0),
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$myrow->id"),
                     array('title' => $langMove,
                           'level' => 'primary',
-                          'disabled' => $offset + $iterator < $all_announc->total,
+                          'disabled' => $offset + $iterator >= $all_announc->total,
                           'icon' => 'fa-arrow-down',
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$myrow->id"))));
             $iterator++;
