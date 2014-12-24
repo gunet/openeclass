@@ -56,15 +56,7 @@ $(document).ready(function () {
     $('[rel=tooltip]').tooltip();
     popover_init();
 
-    $("html body").on("click", function () {
-        if ($("#leftnav").hasClass("float-menu-in")) {
-            $("#leftnav").animate({
-                "left": "-225px"
-            }, 150, function () {
-                $(this).toggleClass("float-menu-in");
-            });
-        }
-    });
+    
     $(".navbar-toggle").on("click", function (e) {
         $("#sidebar").animate(
                     {"right": "-18.5em"}, {duration: 150, easing: "linear",
