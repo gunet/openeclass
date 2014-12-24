@@ -149,12 +149,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'logoBlock', 'delete');
         $t->set_block('mainBlock', 'titleRowBlock', 'delete');
     } else {
+        //Remove search if not enabled
+        if (!get_config('enable_search')) {
+            $t->set_block('mainBlock', 'searchBlock', 'delete');
+        }        
         $t->set_var('leftNavClass', 'no-embed');
     }
-    //Remove search if not enabled
-    if (!get_config('enable_search')) {
-        $t->set_block('mainBlock', 'searchBlock', 'delete');
-    }
+
 
     //	BEGIN constructing of left navigation
     //	----------------------------------------------------------------------

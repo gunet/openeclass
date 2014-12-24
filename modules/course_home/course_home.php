@@ -431,11 +431,23 @@ if (true) {
                      $bar_content_2
                 </div>               
                 $license_holder
-            </div>";       
+            </div>";
+   $horizontal_info_row = '';
    $main_content_cols = 'col-md-7 col-sm-7';
 } else {
     $left_column = '';
     $main_content_cols = '';
+    $horizontal_info_row =
+                "<div class='col-xs-12'>
+                    <hr class='margin-top-fat margin-bottom-fat'>
+                </div>
+                <div class='col-xs-8'>              
+                     $bar_content
+                     $bar_content_2
+                </div>
+                <div class='col-xs-4 text-center'> 
+                    $license_info_box
+                </div>";
 }
 $edit_link = "";
 if ($is_editor) {
@@ -464,7 +476,9 @@ $tool_content .= "
                             <div class='col-xs-12 $main_content_cols'>
                                 <div class=''>$main_content</div>
                             </div>
+                            $horizontal_info_row
                 </div>
+                
                 $panel_footer
             </div>
         </div>
