@@ -235,16 +235,16 @@ $tool_content .= "
         <div class='panel'>
             <div class='panel-body'>
                 <div class='row'>
-                    <div class='col-sm-2'>
+                    <div class='col-xs-4 col-sm-2'>
                         <img src='" . user_icon($uid, IMAGESIZE_LARGE) . "' style='width:80px;' class='img-circle center-block img-responsive' alt='Circular Image'>
                     </div>
-                    <div class='col-sm-5'>
+                    <div class='col-xs-8 col-sm-5'>
                         <h4>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
                         <h5 class='not_visible'>(-".q($_SESSION['uname'])."-)</h5>
                         <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>$userdata->registered_at</span><br>
                         <span class='tag'>Τελευταία επίσκεψη :". $lastVisit[1]->when."</span>
                     </div>
-                    <div class='col-sm-5'>
+                    <div class='col-xs-12 col-sm-5'>
                         <ul class='list-group'>
                             <li class='list-group-item'>
                               <span class='badge'>$student_courses_count</span>
