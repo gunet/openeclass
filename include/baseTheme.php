@@ -146,7 +146,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if ($is_embedonce) {
         $t->set_block('mainBlock', 'footerBlock', 'delete');
         $t->set_block('mainBlock', 'headerBlock', 'delete');
-        $t->set_block('mainBlock', 'logoBlock', 'delete');
         $t->set_block('mainBlock', 'titleRowBlock', 'delete');
     } else {
         $t->set_var('leftNavClass', 'no-embed');
