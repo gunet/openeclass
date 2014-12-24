@@ -47,10 +47,11 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-statistics_tools($course_code, "favourite");
-
+$toolName = $langUsage;
 $pageName = $langFavourite;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
+
+statistics_tools($course_code, "favourite");
 
 if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);

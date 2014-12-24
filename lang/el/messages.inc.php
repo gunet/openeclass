@@ -964,7 +964,6 @@ $langWorks = "Εργασίες";
 $langForums = "Συζητήσεις";
 $langExercices = "Ασκήσεις";
 $langAddPageHome = "Ανέβασμα Ιστοσελίδας";
-$langLinkSite = "Προσθήκη συνδέσμου στην αρχική σελίδα";
 $langModifyInfo = "Διαχείριση Μαθήματος";
 $langDropBox = "Μηνύματα";
 $langMyDropBox = "Τα Μηνύματά μου";
@@ -1478,6 +1477,7 @@ $langNewCatSuccess = "Η κατηγορία δημιουργήθηκε με επ
 $langEditCatSuccess = "Η κατηγορία τροποποιήθηκε με επιτυχία";
 $langDelCatSuccess = "Η κατηγορία διαγράφηκε με επιτυχία";
 $langImportQTI = "Εισαγωγή από IMS QTI";
+$langExportQTI = "Εξαγωγή σε IMS QTI";
 $langIMSQTIUploadFile = "Εντοπισμός θέσης του αρχείου IMS QTI μάθησης στον Η/Υ σας (τοπικά)";
 // admin.php
 $langExerciseManagement = "Διαχείριση Άσκησης";
@@ -1726,7 +1726,7 @@ $langPrivate_3 = "ελεύθερη πρόσβαση (μόνο για ανάγν�
 // Group space
 $langGroupThisSpace = "Περιοχή για την ομάδα χρηστών";
 $langGroupName = "Όνομα ομάδας χρηστών";
-$langEditGroup = "Διόρθωση της ομάδας χρηστών";
+$langEditGroup = "Διόρθωση των στοιχείων της ομάδας χρηστών";
 $langOptional = "(προαιρετικό)";
 $langNoGroupStudents = "Μη εγγεγραμμένοι " . $langsStudents . " ";
 $langGroupMembers = "Μέλη ομάδας χρηστών";

@@ -188,7 +188,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
 $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;
 
-$pageName = $langUsers;
+$toolName = $langUsers;
 load_js('tools.js');
 load_js('datatables');
 load_js('datatables_filtering_delay');

@@ -493,12 +493,9 @@ class Log {
         global $langTitle, $langContent, $langDuration, $langhours, $langDate;
 
         $details = unserialize($details);
-        $date = $details['date'];
-
+        
         $content = "$langTitle &laquo" . q($details['title']) .
-                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo" . $details['content'] . "&raquo
-                             &nbsp;&mdash;&nbsp;$langDate: " . q(nice_format($date, true)) . "
-                             &nbsp;&mdash;&nbsp;$langDuration: " . q($details['duration']) . " $langhours";
+                "&raquo&nbsp;&mdash;&nbsp; $langContent &laquo" . $details['content'] . "";
         return $content;
     }
 

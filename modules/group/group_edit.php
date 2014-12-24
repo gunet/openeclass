@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
+$toolName = $langGroups;
 $pageName = $langEditGroup;
 
 require_once 'group_functions.php';
@@ -58,7 +59,7 @@ $head_content .= "<script type='text/javascript' src='{$urlAppend}js/tools.js'><
 
 $message = '';
 // Once modifications have been done, the user validates and arrives here
-if (isset($_POST['modify'])) {
+if (isset($_POST['modify'])) {    
     // Update main group settings
     register_posted_variables(array('name' => true, 'description' => true), 'all');
     register_posted_variables(array('maxStudent' => true), 'all');
@@ -92,26 +93,23 @@ if (isset($_POST['modify'])) {
 
     // Count number of members
     $numberMembers = @count($_POST['ingroup']);
+   
+    // Insert new list of members
+    if ($maxStudent < $numberMembers and $maxStudent != 0) {
+        // More members than max allowed
+        $message .= "<div class='alert alert-warning'>$langGroupTooManyMembers</div>";
+    } else {
+        // Delete all members of this group
+        Database::get()->query("DELETE FROM group_members
+                                    WHERE group_id = ?d AND is_tutor = 0", $group_id);
+        $numberMembers--;
 
-    if (isset($_POST['jsCheck'])) {
-        // Modifications possible only if JavaScript is enabled
-        // Insert new list of members
-        if ($maxStudent < $numberMembers and $maxStudent != 0) {
-            // More members than max allowed
-            $message .= "<div class='alert alert-warning'>$langGroupTooManyMembers</div>";
-        } else {
-            // Delete all members of this group
-            Database::get()->query("DELETE FROM group_members
-                                        WHERE group_id = ?d AND is_tutor = 0", $group_id);
-            $numberMembers--;
-
-            for ($i = 0; $i <= $numberMembers; $i++) {
-                Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
-                                          VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
-            }
-            $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
+        for ($i = 0; $i <= $numberMembers; $i++) {
+            Database::get()->query("INSERT IGNORE INTO group_members (user_id, group_id)
+                                      VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
         }
-    }
+        $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
+    }    
     initialize_group_info($group_id);
 }
 
@@ -202,33 +200,31 @@ $tool_content .= "<div id='operations_container'>" .
         )) .
         "</div>";
 
-$tool_content .="
-  <form name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
-    <fieldset>
-    <legend>$langGroupInfo</legend>
-    <table width='99%' class='tbl'>
-    <tr>
-      <th class='left'>$langGroupName:</th>
-      <td><input type=text name='name' size=40 value='$tool_content_group_name' /></td>
-    </tr>
-    <tr>
-      <th class='left'>$langDescription $langOptional:</th>
-      <td><textarea name='description' rows='2' cols='60'>$tool_content_group_description</textarea></td>
-    </tr>
-    <tr>
-      <th class='left'>$langMax $langGroupPlacesThis:</th>
-      <td><input type=text name='maxStudent' size=2 value='$tool_content_max_student' /></td>
-    </tr>
-    <tr>
-      <th class='left'>$langGroupTutor:</th>
-      <td>
-         $tool_content_tutor
-      </td>
-    </tr>
-    <tr>
-      <th class='left' valign='top'>$langGroupMembers :</th>
-      <td>
-          <table width='99%' align='center' class='tbl_white'>
+$tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
+        <fieldset>    
+        <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupName:</label>
+              <div class='col-sm-10'><input type=text name='name' size=40 value='$tool_content_group_name' /></div>
+        </div>
+        <div class='form-group'>
+          <label class='col-sm-2 control-label'>$langDescription $langOptional:</label>
+          <div class='col-sm-10'><textarea name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
+        </div>
+        <div class='form-group'>
+          <label class='col-sm-2 control-label'>$langMax $langGroupPlacesThis:</label>
+          <div class='col-sm-10'><input type=text name='maxStudent' size=2 value='$tool_content_max_student'></div>
+        </div>
+        <div class='form-group'>
+          <label class='col-sm-2 control-label'>$langGroupTutor:</label>
+          <div class='col-sm-10'>
+             $tool_content_tutor
+          </div>
+        </div>
+        <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langGroupMembers:</label>
+        <div class='col-sm-10'>
+          <table class='table-default'>
           <tr class='title1'>
             <td>$langNoGroupStudents</td>
             <td width='100' class='center'>$langMove</td>
@@ -250,14 +246,13 @@ $tool_content .="
             </td>
           </tr>
           </table>
-      </td>
-    </tr>
-    <tr>
-      <th class=\"left\">&nbsp;</th>
-      <td><input class='btn btn-primary' type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\" /></td>
-    </tr>
-    </table>
+      </div>
+    </div>
+    <div class='col-sm-10 col-sm-offset-3'>      
+      <input class='btn btn-primary' type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\">
+    </div>    
     </fieldset>
-</form>";
+    </form>
+</div>";
 
 draw($tool_content, 2, null, $head_content);

@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -20,10 +20,10 @@
  * ======================================================================== */
 
 $require_current_course = true;
-$require_departmentmanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
+$toolName = $langCourseInfo;
 $pageName = $langArchiveCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 
@@ -44,7 +44,7 @@ $archivedir = $basedir . '/' . $backup_date;
 mkpath($archivedir);
 
 $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
-$tool_content .= "<table class='tbl' align='center'><tbody><tr><th align='left'><ol>";
+$tool_content .= "<table class='table-default' align='center'><tbody><tr><th align='left'><ol>";
 
 // backup subsystems from main db
 $sql_course = "course_id = $course_id";

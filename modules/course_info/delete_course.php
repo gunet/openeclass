@@ -24,8 +24,10 @@ $require_course_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 
+$toolName = $langCourseInfo;
 $pageName = $langDelCourse;
 
+$navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 if (isset($_POST['delete'])) {
     $tool_content .= action_bar(array(
         array('title' => "$langBackHome $siteName",

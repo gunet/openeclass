@@ -1684,6 +1684,11 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
+    image_dimensions: false,
+    image_class_list: [
+        {title: 'Responsive', value: 'img-responsive'},
+        {title: 'None', value: ''}
+    ],
     plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
     entity_encoding: 'raw',
     relative_urls: false,

@@ -34,10 +34,11 @@ $action_stats = new action();
 $action_stats->record(MODULE_ID_EBOOK);
 /* * *********************************** */
 
-$pageName = $langEBook;
+$toolName = $langEBook;
 
 if ($is_editor) {
     if (isset($_GET['create'])) {
+        $pageName = $langCreate;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -72,6 +73,7 @@ if ($is_editor) {
             $tool_content .= "<div class='alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
         }
     } elseif (isset($_GET['create'])) {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langEBook);
         $tool_content .= "
         <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>     

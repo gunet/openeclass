@@ -32,7 +32,8 @@ $helpTopic = 'Group';
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 
-$pageName = $langGroupSpace;
+$toolName = $langGroups;
+$pageName = $langGroupInfo;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 require_once 'group_functions.php';
 
@@ -102,12 +103,8 @@ $tool_content .= "<div id='operations_container'>" .
         )) .
         "</div>";
 
-$tool_content .= "<br />
-    <fieldset>
-    <legend>$langGroupInfo</legend>
-    <table width='100%' class='tbl'>
-    <tr>
-      <th class='left' width='180'>$langGroupName:</th>
+$tool_content .= "<div class='table-responsive'><table class='table-default'>
+    <tr><th class='text-left' width='180'>$langGroupName:</th>
       <td>" . q($group_name) . "</td>
     </tr>";
 
@@ -133,7 +130,7 @@ if ($tutors) {
     $tool_content_tutor = $langGroupNoTutor;
 }
 
-$tool_content .= "<tr><th class='left'>$langGroupTutor:</th>
+$tool_content .= "<tr><th class='text-left'>$langGroupTutor:</th>
                 <td>$tool_content_tutor</td></tr>";
 
 $group_description = trim($group_description);
@@ -147,26 +144,19 @@ $tool_content .= "<tr><th class='left'>$langDescription:</th>
       <td>$tool_content_description</td></tr>";
 
 // members
-$tool_content .= "
-    <tr>
+$tool_content .= "<tr>
       <th class='left' valign='top'>$langGroupMembers:</th>
       <td>
-        <table width='100%' align='center' class='tbl_alt'>
+        <table class='table-default'>
         <tr>
           <th class='left'>$langSurnameName</th>
           <th class='center' width='120'>$langAm</th>
           <th class='center' width='150'>$langEmail</th>
         </tr>";
 
-if (count($members) > 0) {
-    $i = 0;
+if (count($members) > 0) {    
     foreach ($members as $member) {
-        $user_group_description = $member->description;
-        if ($i % 2 == 0) {
-            $tool_content .= "<tr class='even'>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
+        $user_group_description = $member->description;        
         $tool_content .= "<td>" . display_user($member->id);
         if ($user_group_description) {
             $tool_content .= "<br />" . q($user_group_description);
@@ -177,21 +167,20 @@ if (count($members) > 0) {
         } else {
             $tool_content .= '-';
         }
-        $tool_content .= "</td><td class='center'>";
+        $tool_content .= "</td><td class='text-center'>";
         $email = q(trim($member->email));
         if (!empty($email)) {
             $tool_content .= "<a href='mailto:$email'>$email</a>";
         } else {
             $tool_content .= '-';
         }
-        $tool_content .= "</td></tr>";
-        $i++;
+        $tool_content .= "</td></tr>";     
     }
 } else {
     $tool_content .= "<tr><td colspan='3'>$langGroupNoneMasc</td></tr>";
 }
 
 $tool_content .= "</table>";
-$tool_content .= "</td></tr></table></fieldset>";
+$tool_content .= "</td></tr></table></div>";
 draw($tool_content, 2);
 

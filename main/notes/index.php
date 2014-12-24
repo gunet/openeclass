@@ -198,7 +198,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                         array('title' => $langModify,
                             'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
                             'icon' => 'fa-edit'),
-                        array('title' => $langGroupProperties,
+                        array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
                             'confirm' => $langSureToDelNote,
                             'class' => 'delete',
@@ -211,8 +211,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                 <div class='label label-success'>". claro_format_locale_date($dateFormatLong, strtotime($note->date_time)). "</div><br><br>
                 $note->content
             </div>
-        </div>
-    ";
+        </div>";
 } else {
     /* display actions toolbar */
     $tool_content .= action_bar(array(
@@ -243,8 +242,8 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             <div class='table-responsive'>
                 <table class='table-default'>";
     if ($noteNumber > 0) {
-        $tool_content .= "<tr><th>$langNotes</th>";
-        $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<tr>";
+        $tool_content .= "<th colspan='2' class='text-right'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
     }
 
@@ -270,7 +269,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                     array('title' => $langModify,
                         'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
                         'icon' => 'fa-edit'),
-                    array('title' => $langGroupProperties,
+                    array('title' => $langDelete,
                         'url' => "$_SERVER[SCRIPT_NAME]?delete=$note->id",
                         'confirm' => $langSureToDelNote,
                         'class' => 'delete',

@@ -44,34 +44,9 @@ $action = new action();
 $action->record(MODULE_ID_GROUPS);
 /* * *********************************** */
 
-$pageName = $langGroups;
+$toolName = $langGroups;
 $totalRegistered = 0;
 unset($message);
-
-$head_content = <<< END
-<script type="text/javascript">
-function confirmation (name)
-{
-        if (name == "delall") {
-                if(confirm("$langDeleteGroupAllWarn"))
-                {return true;}
-                else
-                {return false;}
-        } else if (name == "emptyall") {
-                if (confirm("$langDeleteGroupAllWarn"))
-                {return true;}
-                else
-                {return false;}
-        } else {
-                if (confirm("$langConfirmDelete")) {
-                    return true;
-                } else {
-                        return false;
-                }
-            }
-}
-</script>
-END;
 
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
@@ -344,7 +319,7 @@ if ($is_editor) {
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
                     'icon' => 'fa-times',
                     'level' => 'primary',
-                    'class' => 'delete',
+                    'button-class' => 'btn-danger',
                     'confirm' => $langDeleteGroupAllWarn,
                     'show' => $num_of_groups > 0),
                 array('title' => $langFillGroupsAll,
@@ -361,126 +336,6 @@ if ($is_editor) {
                     'confirm_title' => $langEmtpyGroupsAll,
                     'show' => $num_of_groups > 0))) .
             "</div>";
-
-
-    // ---------- display properties ------------------------
-    /*
-    $tool_content .= "<table class='tbl_courseid' width='100%'>
-        <tr>
-          <td class='title1' colspan='2'><a href='group_properties.php?course=$course_code' title='$langPropModify'>$langGroupProperties</a>&nbsp;
-              <a href='group_properties.php?course=$course_code' title='$langPropModify'>
-            <img src='$themeimg/edit.png' align='middle' alt='$langPropModify' title='$langPropModify' /></a>
-          </td>
-          <td class='even'>&nbsp;</td>
-          <td class='title1'><a href='../user/?course=$course_code'>$langGroupUsersList</a></td>
-        </tr>";
-
-    $total_students = Database::get()->querySingle("SELECT COUNT(*) as count FROM course_user
-                                                WHERE course_id = ?d
-                                                AND status = " . USER_STUDENT . " AND tutor = 0", $course_id)->count;
-    $unregistered_students = Database::get()->querySingle(
-                    "SELECT COUNT(*) as count
-                        FROM (user u, course_user cu)
-                        WHERE cu.course_id = ?d AND
-                              cu.user_id = u.id AND
-                              cu.status = " . USER_STUDENT . " AND
-                              cu.tutor = 0 AND
-                              u.id NOT IN (SELECT user_id
-                                            FROM group_members, `group`
-                                            WHERE `group`.id = group_members.group_id AND
-                                                  `group`.course_id = ?d)", $course_id, $course_id)->count;
-
-
-    $registered_students = $total_students - $unregistered_students;
-    
-    
-    
-    $tool_content .= "
-        <tr>
-          <td colspan='2'><u>$langGroupPrefs</u></td>
-          <td rowspan='7' class='even'>&nbsp;</td>
-          <td>
-            <img src='$themeimg/arrow.png' alt='' />&nbsp;<b>$registered_students</b> $langGroupStudentsInGroup
-          </td>
-        </tr>
-        <tr>
-          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;$langGroupAllowStudentRegistration</td>
-          <td align='right' width='50'>";
-    if ($self_reg) {
-        $tool_content .= "<font color='green'>$langYes</font>";
-    } else {
-        $tool_content .= "<font color='red'>$langNo</font>";
-    }
-    $tool_content .= "</td>
-          <td><img src='$themeimg/arrow.png' alt='' />&nbsp;<b>$unregistered_students</b> $langGroupNoGroup</td>
-        </tr>
-        <tr>
-          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;$langGroupAllowMultipleRegistration</td>
-          <td align='right'>";
-
-    if ($multi_reg) {
-        $tool_content .= "<font color='green'>$langYes</font>";
-    } else {
-        $tool_content .= "<font color='red'>$langNo</font>";
-    }
-    $tool_content .= "</td>
-          <td><img src='$themeimg/arrow.png' alt='' />&nbsp;<b>$total_students</b> $langGroupStudentsRegistered</td>
-        </tr>
-        <tr>
-          <td colspan=2 class='left'><u>$langTools</u></td>
-        </tr>
-        <tr>
-          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
-
-    if ($has_forum) {
-        $tool_content .= "$langGroupForum</td>
-                <td align='right'><font color='green'>$langYes</font>";
-        $fontColor = "black";
-    } else {
-        $tool_content .= "$langGroupForum</td>
-                    <td align='right'>
-                    <font color='red'>$langNo</font>";
-        $fontColor = "silver";
-    }
-    $tool_content .= "</td>
-        </tr>
-        <tr>
-          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
-    if ($private_forum) {
-        $tool_content .= "$langForumType</td>
-                    <td align='right'><font color='red'>$langForumClosed</font>";
-    } else {
-        $tool_content .= "$langForumType</td>
-                    <td align='right'><font color='green'>$langForumOpen</font>";
-    }
-    $tool_content .= "</td>
-        </tr>
-        <tr>
-          <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
-    if ($documents) {
-        $tool_content .= "$langDoc</td>
-                    <td align='right'><font color='green'>$langYes</font>";
-    } else {
-        $tool_content .= "$langDoc</td>
-                    <td align='right'><font color='red'>$langNo</font>";
-    }
-    $tool_content .= "</td>
-    </tr>
-    <tr>
-    <td class='smaller'><img src='$themeimg/arrow.png' alt='' />&nbsp;";
-    if ($wiki) {
-        $tool_content .= "$langWiki</td>
-    	<td align='right'><font color='green'>$langYes</font>";
-    } else {
-        $tool_content .= "$langWiki</td>
-    	<td align='right'><font color='red'>$langNo</font>";
-    }
-    $tool_content .= "</td></tr>";
-    
-    $tool_content .= "</table>";
-    
-     */
-    
     
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $myIterator = 0;
@@ -537,9 +392,9 @@ if ($is_editor) {
     if (count($q) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {
-        $tool_content .= "<table class='table-default'>
+        $tool_content .= "<div class='table-responsive'><table class='table-default'>
                 <tr>
-                  <th><div align='left'>$langGroupName</div></th>
+                  <th class='text-left'>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>";
         $tool_content .= "<th width='50'>$langRegistration</th>";
 
@@ -547,8 +402,7 @@ if ($is_editor) {
         foreach ($q as $row) {
             $group_id = $row->id;
             initialize_group_info($group_id);
-            $tool_content .= "
-                          <td class='text-left'>";
+            $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if member
             if ($is_member) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) .
@@ -564,14 +418,14 @@ if ($is_editor) {
                 $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td class='center'>";
+            $tool_content .= "<td class='text-center'>";
             foreach ($tutors as $t) {                
                 $tool_content .= display_user($t->user_id) . "<br />";
             }
             $tool_content .= "</td>";
 
             // If self-registration and multi registration allowed by admin and group is not full
-            $tool_content .= "<td class='center'>";
+            $tool_content .= "<td class='text-center'>";
             if ($uid and
                     $self_reg and ( !$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= "<a href='group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id'>$langRegistration</a>";
@@ -579,11 +433,11 @@ if ($is_editor) {
                 $tool_content .= "-";
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td class='center'>$member_count</td><td class='center'>" .
+            $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
                     ($max_members ? $max_members : '-') . "</td></tr>";
             $totalRegistered += $member_count;
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
     }
 }
 

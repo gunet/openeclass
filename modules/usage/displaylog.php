@@ -81,7 +81,7 @@ if (!isset($_REQUEST['course_code'])) {
     $course_code = course_id_to_code($course_id);
 }
 
-$pageName = $langUsersLog;
+$toolName = $langUsersLog;
 statistics_tools($course_code, "displaylog");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
 
@@ -111,11 +111,7 @@ if (isset($_POST['user_date_end'])) {
 }
 
 if (isset($_REQUEST['submit'])) {
-    $log = new Log();
-    echo $u_date_start;
-    echo "<br>";
-    echo $u_date_end;
-    
+    $log = new Log();    
     $log->display($course_id, $u_user_id, $u_module_id, $logtype, $u_date_start, $u_date_end, $_SERVER['SCRIPT_NAME']);
 }
 

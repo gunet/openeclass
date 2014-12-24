@@ -63,11 +63,17 @@ $head_content = '<script type="text/javascript">
                     }
                 </script>';
 
-$pageName = $langDropBox;
+$toolName = $langDropBox;
 
 // action bar 
 if (!isset($_GET['showQuota'])) {    
     if (isset($_GET['upload'])) {
+        $navigation[] = array('url' => "index.php", 'name' => $langDropBox);
+        if (isset($_GET['type'])) {
+            $pageName = $langNewCourseMessage;
+        } else {
+            $pageName = $langNewPersoMessage;
+        }
         $tool_content .= action_bar(array(
                             array('title' => $langBack,
                                   'url' => "$_SERVER[SCRIPT_NAME]" . (($course_id != 0)? "?course=$course_code" : ""),
@@ -75,7 +81,7 @@ if (!isset($_GET['showQuota'])) {
                                   'level' => 'primary-label')
                         ));
     } else {
-        if ($course_id != 0) {
+        if ($course_id != 0) {            
             $tool_content .= action_bar(array(
                                 array('title' => $langNewCourseMessage,
                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;upload=1&amp;type=cm",
@@ -90,7 +96,7 @@ if (!isset($_GET['showQuota'])) {
                                       'class' => 'delete_all_in',
                                       'icon' => 'fa-times')
                             ));
-        } else {            
+        } else {
             $tool_content .= action_bar(array(
                                 array('title' => $langNewCourseMessage,
                                       'url' => "$_SERVER[SCRIPT_NAME]?upload=1&amp;type=cm",

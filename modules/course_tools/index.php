@@ -28,7 +28,7 @@ $require_login = true;
 include '../../include/baseTheme.php';
 require_once 'include/log.php';
 
-$pageName = $langToolManagement;
+$toolName = $langToolManagement;
 add_units_navigation(TRUE);
 
 load_js('tools.js');
@@ -111,14 +111,14 @@ if (isset($_POST['submit'])) {
                                                                    'link' => $link,
                                                                    'name_link' => $name_link));
 } elseif (isset($_GET['action'])) { // add external link
+    $pageName = $langAddExtLink;
     $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
                   'level' => 'primary'
                  )));
-    
-    $pageName = $langAddExtLink;
+        
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
     $helpTopic = 'Module';
     $tool_content .= "<div class='form-wrapper'>

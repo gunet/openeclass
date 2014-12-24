@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,14 +19,9 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * Groups Component
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract This module is responsible for the user groups of each lesson
- *
+/**
+ * @file group_email.php
+ * @brief email to users group
  */
 
 $require_current_course = TRUE;
@@ -38,9 +33,19 @@ require_once 'include/sendMail.inc.php';
 
 $group_id = intval($_REQUEST['group_id']);
 
+$toolName = $langGroups;
 $pageName = $langEmailGroup;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroupSpace,
-    'url' => "group_space.php?group_id=$group_id", 'name' => $langGroupSpace);
+                      'url' => "group_space.php?group_id=$group_id", 'name' => $langGroups);
+
+$tool_content .= action_bar(array(
+    array(
+        'title' => $langBack,
+        'level' => 'primary-label',
+        'icon' => 'fa-reply',
+        'url' => "index.php?course=$course_code"
+    )
+));
 
 $tutor_id = Database::get()->querySingle("SELECT is_tutor FROM group_members WHERE group_id = ?d", $group_id)->is_tutor;
 $is_tutor = ($tutor_id == 1);
@@ -75,32 +80,26 @@ if ($is_editor or $is_tutor) {
         $tool_content .= "<div class='alert alert-success'>$langEmailSuccess<br>";
         $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
     } else {
-        $tool_content .= "
-                <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+        $tool_content .= "<div class='form-wrapper'>
+                <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                 <fieldset>
-                <legend>$langTypeMessage</legend>
                 <input type='hidden' name='group_id' value='$group_id'>
-                <table width='99%' class='FormData'>
-                <thead>
-                <tr>
-                  <td class='left'>$langMailSubject</td></tr>
-                </tr>
-                <tr>
-                    <td><input type='text' name='subject' size='58' class='FormData_InputText'></input></td>
-                </tr>
-                <tr>
-                  <td class='left'>$langMailBody</td>
-                </tr>
-                <tr>
-                  <td><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></td>
-                </tr>
-                <tr>
-                  <td><input class='btn btn-primary' type='submit' name='submit' value='$langSend'></input></td>
-                </tr>
-                </thead>
-                </table>
+                <div class='form-group'>                
+                  <label>$langMailSubject</label>
+                </div>
+                <div class='form-group'>
+                    <input type='text' name='subject' size='58' class='FormData_InputText'></input>
+                </div>
+                <div class='form-group'>
+                  <label>$langMailBody</label>
+                </div>
+                <div class='form-group'>
+                  <label><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></label>
+                </div>
+                 <input class='btn btn-primary' type='submit' name='submit' value='$langSend'></input>                                
                 </fieldset>
-                 </form>";
+                 </form>
+                 </div>";
     }
 }
 draw($tool_content, 2);

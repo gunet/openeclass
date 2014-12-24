@@ -1,4 +1,4 @@
-π<?php
+<?php
 
 // Message file for language en
 // Generated 2011-12-14 17:17:43
@@ -945,6 +945,9 @@ $langExerciseScores1 = "HTML";
 $langExerciseScores2 = "Percentages";
 $langExerciseScores3 = "CSV";
 $langNotRecorded = "Not recorded";
+$langImportQTI = "IMS QTI Import";
+$langExportQTI = "IMS QTI Export";
+$langIMSQTIUploadFile = "Locate IMS QTI file on your computer";
 $langSubTitle = "<br><strong>Tip: </strong>If you want to add a link to a page,
 		go to that page, cut and paste its address in the
 		URL bar on the top of your browser and insert it into the \"link\" field below.<br><br>";
