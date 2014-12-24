@@ -2385,6 +2385,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `name` VARCHAR(300) NOT NULL,
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
+        //Add course home_layout fiels
+        if (!DBHelper::fieldExists('home_layout', 'course') or
+            Database::get()->query("ALTER TABLE course ADD home_layout TINYINT(1) NOT NULL DEFAULT 1");
+        Database::get()->query("UPDATE course SET home_layout = 3");    
+        //Add course image field
+        if (!DBHelper::fieldExists('course_image', 'course') or
+            Database::get()->query("ALTER TABLE course ADD course_image VARCHAR(400) NULL");            
         // Move course description from unit_resources to new course.description field
         if (!DBHelper::fieldExists('description', 'course') or
             Database::get()->query("ALTER TABLE course ADD description MEDIUMTEXT NOT NULL");

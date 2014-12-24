@@ -280,6 +280,11 @@ $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του μαθήματο�
 // editcours
 $langCourseEdit = "Επεξεργασία Μαθήματος";
 $langCourseInfo = "Ρυθμίσεις";
+$langCourseImage = "Φωτογραφία Μαθήματος";
+$langCourseLayout = "Διάταξη";
+$langCourseLayout1 = "2 Στήλες (προεπιλογή)";
+$langCourseLayout2 = "2 Στήλες, Χωρις Φωτογραφία";
+$langCourseLayout3 = "Πλήρες Πλάτος";
 $langQuota = "Όρια αποθηκευτικού χώρου";
 $langCourseStatus = "Κατάσταση Μαθήματος";
 $langCurrentStatus = "Τρέχουσα κατάσταση";

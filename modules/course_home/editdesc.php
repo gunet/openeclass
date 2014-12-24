@@ -79,7 +79,7 @@ if (isset($_GET['delete_image'])) {
             });          
         });
     </script>";        
-$layouts = array(1 => '2 Columns (default)', 2 => '2 Columns, no image', 3 => 'Full Width');
+$layouts = array(1 => $langCourseLayout1, 2 => $langCourseLayout2, 3 => $langCourseLayout3);
 $description = $course->description;
 $layout = $course->home_layout;
 
@@ -107,13 +107,13 @@ $tool_content = action_bar(array(
                 <form class='form-horizontal' role='form' method='post' action='editdesc.php?course=$course_code' enctype='multipart/form-data'>
                     <fieldset>
                     <div class='form-group'>
-                        <label for='description' class='col-sm-2 control-label'>Layouts:</label>
+                        <label for='description' class='col-sm-2 control-label'>$langCourseLayout:</label>
                         <div class='col-sm-10'>
                             ".  selection($layouts, 'layout', $layout, 'class="form-control"')."
                         </div>
                     </div>
                     <div id='image_field' class='form-group".(($layout == 1)?"":" hidden")."'>
-                        <label for='course_image' class='col-sm-2 control-label'>Φωτογραφία Μαθήματος:</label>
+                        <label for='course_image' class='col-sm-2 control-label'>$langCourseImage:</label>
                         <div class='col-sm-10'>
                             $course_image
                         </div>
