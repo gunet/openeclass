@@ -1895,7 +1895,13 @@ table#portfolio-lessons tr {
   margin-left: 15px;
 }
 
-/* line 1765, ../SASS/inventory.scss */
+/* line 1764, ../SASS/inventory.scss */
+.quick-change-pwd {
+  text-align: right;
+  font-size: 11px;
+}
+
+/* line 1769, ../SASS/inventory.scss */
 #scrollToTop {
   display: none;
   position: fixed;
@@ -1904,19 +1910,19 @@ table#portfolio-lessons tr {
   bottom: 15px;
 }
 
-/* line 1772, ../SASS/inventory.scss */
+/* line 1776, ../SASS/inventory.scss */
 #scrollToTop i {
   padding: 0 0 10px 0;
   color: #a7a7a7;
   cursor: pointer;
 }
 
-/* line 1777, ../SASS/inventory.scss */
+/* line 1781, ../SASS/inventory.scss */
 .panel-footer .event-legend > div {
   margin-bottom: 5px;
 }
 
-/* line 1780, ../SASS/inventory.scss */
+/* line 1784, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 8px;
@@ -1925,14 +1931,14 @@ table#portfolio-lessons tr {
   border-radius: 5px;
 }
 
-/* line 1789, ../SASS/inventory.scss */
+/* line 1793, ../SASS/inventory.scss */
 p.link-to-more {
   text-align: right;
   font-size: 12px;
   margin: 0px;
 }
 
-/* line 1795, ../SASS/inventory.scss */
+/* line 1799, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -1941,7 +1947,7 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 1802, ../SASS/inventory.scss */
+/* line 1806, ../SASS/inventory.scss */
 div.profile-pers-info-name {
   font-size: 16px;
   font-weight: bold;
@@ -1949,56 +1955,56 @@ div.profile-pers-info-name {
   padding-top: 10px;
 }
 
-/* line 1808, ../SASS/inventory.scss */
+/* line 1812, ../SASS/inventory.scss */
 div#profile-about-me {
   padding-top: 20px;
   padding-bottom: 20px;
 }
 
-/* line 1812, ../SASS/inventory.scss */
+/* line 1816, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1815, ../SASS/inventory.scss */
+/* line 1819, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 1819, ../SASS/inventory.scss */
+/* line 1823, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1823, ../SASS/inventory.scss */
+/* line 1827, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1829, ../SASS/inventory.scss */
+/* line 1833, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1838, ../SASS/inventory.scss */
+/* line 1842, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1844, ../SASS/inventory.scss */
+/* line 1848, ../SASS/inventory.scss */
 .event-legend {
   font-size: 11px;
   color: #666;
   line-height: 10px;
 }
-/* line 1848, ../SASS/inventory.scss */
+/* line 1852, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
-/* line 1854, ../SASS/inventory.scss */
+/* line 1858, ../SASS/inventory.scss */
 .event {
   width: 14px;
   height: 14px;
@@ -2015,7 +2021,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1866, ../SASS/inventory.scss */
+/* line 1870, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -2025,7 +2031,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1872, ../SASS/inventory.scss */
+/* line 1876, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;
