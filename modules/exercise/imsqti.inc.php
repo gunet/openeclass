@@ -34,8 +34,7 @@ require_once "include/pclzip/pclzip.lib.php";
 
 $pwd = getcwd();
 
-$pageName = $langimportLearningPath;
-$pageName = "Import IMS QTI";
+$pageName = $langImportQTI;
 
 // error handling
 $errorFound = false;
@@ -48,7 +47,7 @@ $msgs = array();
 
 //3 MB
 $maxFileSize = 3145728; 
-$allowed_file_types =  array('xml', 'zip');
+$allowed_file_types =  array('xml');
 
 // handle upload
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
@@ -79,30 +78,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
       $tool_content .= "\n<p><!-- Messages -->\n";
       foreach ($okMsgs as $msg) {
-        $tool_content .= "\n<span class=\"correct\">$langSuccessOk</span>" . $msg . "<br />";
+        $tool_content .= "<i class='fa fa-check-square'></i>&nbsp;$langSuccessOk&nbsp;" . $msg . "<br />";
       }
 
       foreach ($errorMsgs as $msg) {
-        $tool_content .= "<span class='error'>$langError</span>" . $msg . "<br />";
+        $tool_content .= "<i class='fa fa-close'></i>&nbsp;$langError&nbsp;" . $msg . "<br />";
       }
 
       foreach ($msgs as $msg) {
         if($msg[0]) {
-          $tool_content .= "<span class='correct'>$langSuccessOk</span>" . $msg[1] . "<br />";
+          $tool_content .= "<i class='fa fa-check-square'></i>&nbsp;$langSuccessOk&nbsp;" . $msg[1] . "<br />";
         } else {
-          $tool_content .= "<span class='error'>$langError</span>" . $msg[1] . "<br />";
+          $tool_content .= "<i class='fa fa-close'></i>&nbsp;$langError&nbsp;" . $msg[1] . "<br />";
         }
       }
 
       $tool_content .= "\n<!-- End messages -->\n";
       $tool_content .= "\n<br /><a href='question_pool.php?course=$course_code'>$langBack</a></p>";
 
-} else { // if method == 'post'
+} else {
+    // if method == 'post'
     // don't display the form if user already sent it
     /* --------------------------------------
       UPLOAD FORM
       -------------------------------------- */
-      $tool_content .= "
+    $tool_content .= "
       <form enctype=\"multipart/form-data\" action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&importIMSQTI=yes\" method=\"post\">
       <fieldset>
       <legend>$langImport</legend>
@@ -129,6 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
       </form>
       <p>";
 
-    }
+}
 
-    chdir($pwd);
+chdir($pwd);
+

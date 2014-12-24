@@ -28,6 +28,9 @@ $require_current_course = TRUE;
 
 include '../../include/baseTheme.php';
 
+require_once 'imsqtilib.php';
+
+
 $head_content .= "
 <script>
   $(function() {
@@ -119,11 +122,17 @@ if ($is_editor) {
                 'button-class' => 'btn-success'),
 			array('title' => $langImportQTI,
                 'url' => "admin.php?course=$course_code&amp;importIMSQTI=yes",
-                'icon' => 'fa-plus-circle',
+                'icon' => 'fa-download',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
+			array('title' => $langExportQTI,
+                'url' => "question_pool.php?". $_SERVER['QUERY_STRING'] . "&amp;exportIMSQTI=yes",
+                'icon' => 'fa-upload',
                 'level' => 'primary-label',
                 'button-class' => 'btn-success')
          );          
     }
+	
     $tool_content .= action_bar($action_bar_options);
     
     if (isset($fromExercise)) {
@@ -253,93 +262,110 @@ if ($is_editor) {
             $exerciseId = 0;            
         }
     }
-    
-    //END OF BUILDING QUERIES AND QUERY VARS
-    $result = Database::get()->queryArray($result_query, $result_query_vars);     
-    $total_questions = Database::get()->querySingle($total_query, $total_query_vars)->total;
-    
-    $nbrQuestions = count($result);
-    $tool_content .= "
+
+    if (isset($_GET['exportIMSQTI'])) {
+
+        $result = Database::get()->queryArray($result_query, $result_query_vars);    
+        header('Content-type: text/xml');
+        header('Content-Disposition: attachment; filename="exportQTI.xml"');
+        exportIMSQTI($result);
+
+        exit();
+
+    } else {
+
+        //END OF BUILDING QUERIES AND QUERY VARS
+        $result = Database::get()->queryArray($result_query, $result_query_vars);     
+        $total_questions = Database::get()->querySingle($total_query, $total_query_vars)->total;
+
+        $nbrQuestions = count($result);
+        $tool_content .= "
 	<tr>
 	  <th>$langQuesList</th>
           <th class='text-center'>".icon('fa-gears')."</th>
         </tr>";
-    foreach ($result as $row) {
-        $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
-        if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
-            if ($row->type == 1) {
-                $answerType = $langUniqueSelect;
-            } elseif ($row->type == 2) {
-                $answerType = $langMultipleSelect;
-            } elseif ($row->type == 3) {
-                $answerType = $langFillBlanks;
-            } elseif ($row->type == 4) {
-                $answerType = $langMatching;
-            } elseif ($row->type == 5) {
-                $answerType = $langTrueFalse;
-            } elseif ($row->type == 6) {
-                $answerType = $langFreeText;
+        foreach ($result as $row) {
+            $exercise_ids = Database::get()->queryArray("SELECT exercise_id FROM `exercise_with_questions` WHERE question_id = ?d", $row->id);
+            if (isset($fromExercise) || !is_object(@$objExercise) || !$objExercise->isInList($row->id)) {
+                if ($row->type == 1) {
+                    $answerType = $langUniqueSelect;
+                } elseif ($row->type == 2) {
+                    $answerType = $langMultipleSelect;
+                } elseif ($row->type == 3) {
+                    $answerType = $langFillBlanks;
+                } elseif ($row->type == 4) {
+                    $answerType = $langMatching;
+                } elseif ($row->type == 5) {
+                    $answerType = $langTrueFalse;
+                } elseif ($row->type == 6) {
+                    $answerType = $langFreeText;
+                }
+                $tool_content .= "<tr>";
+                if (!isset($fromExercise)) {
+                    $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+                } else {
+                    $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+                }
+                $tool_content .= "<td class='option-btn-cell'>".
+                    action_button(array(
+                        array('title' => $langModify,
+                              'url' => "admin.php?course=$course_code&amp;editQuestion=" . $row->id,
+                              'icon-class' => 'warnLink',
+                              'icon-extra' => ((count($exercise_ids)>0)?
+                                    " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),
+                              'icon' => 'fa-edit',
+                              'show' => !isset($fromExercise)),
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmYourChoice,
+                              'show' => !isset($fromExercise)),
+                        array('title' => $langReuse,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=" .
+                                    (isset($fromExercise) ? $fromExercise : '') .
+                                    "&amp;exerciseId=$exerciseId",
+                              'icon' => 'fa-plus-square',
+                              'show' => isset($fromExercise))
+                     )) .
+                     "</td></tr>";       
             }
+        }
+        if (!$nbrQuestions) {
             $tool_content .= "<tr>";
-            if (!isset($fromExercise)) {
-                $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+            if (isset($fromExercise) && ($fromExercise)) {
+                $tool_content .= "<td colspan='3'>";
             } else {
-                $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+                $tool_content .= "<td colspan='4'>";
             }
-            $tool_content .= "<td class='option-btn-cell'>".
-            action_button(array(
-                    array('title' => $langModify,
-                          'url' => "admin.php?course=$course_code&amp;editQuestion=" . $row->id,
-                          'icon-class' => 'warnLink',
-                          'icon-extra' => ((count($exercise_ids)>0)? " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),
-                          'icon' => 'fa-edit',
-                          'show' => !isset($fromExercise)),
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmYourChoice,
-                          'show' => !isset($fromExercise)),
-                    array('title' => $langReuse,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=".(isset($fromExercise) ? $fromExercise : '')."&amp;exerciseId=$exerciseId",
-                          'icon' => 'fa-plus-square',
-                          'show' => isset($fromExercise))
-                ))."</td></tr>";       
+            $tool_content .= $langNoQuestion . "</td></tr>";
         }
+        // questions pagination
+        $numpages = intval(($total_questions-1) / QUESTIONS_PER_PAGE);
+        if ($numpages > 0) {
+            $tool_content .= "<tr>";
+            if (isset($fromExercise)) {
+                $tool_content .= "<th align='right' colspan='3'>";
+            } else {
+                $tool_content .= "<th align='right' colspan='4'>";
+            }
+            if ($page > 0) {
+                $prevpage = $page - 1;
+                $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
+                $tool_content .= "<small>&lt;&lt; <a href='$query_string_url&amp;page=$prevpage'>$langPreviousPage</a></small>";            
+            }
+            if ($page < $numpages) {
+                $nextpage = $page + 1;
+                $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
+                $tool_content .= "<small><a href='$query_string_url&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;</small>";
+            }
+        }
+        $tool_content .= "</table>";
     }
-    if (!$nbrQuestions) {
-        $tool_content .= "<tr>";
-        if (isset($fromExercise) && ($fromExercise)) {
-            $tool_content .= "<td colspan='3'>";
-        } else {
-            $tool_content .= "<td colspan='4'>";
-        }
-        $tool_content .= $langNoQuestion . "</td></tr>";
-    }
-    // questions pagination
-    $numpages = intval(($total_questions-1) / QUESTIONS_PER_PAGE);
-    if ($numpages > 0) {
-        $tool_content .= "<tr>";
-        if (isset($fromExercise)) {
-            $tool_content .= "<th align='right' colspan='3'>";
-        } else {
-            $tool_content .= "<th align='right' colspan='4'>";
-        }
-        if ($page > 0) {
-            $prevpage = $page - 1;
-            $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
-            $tool_content .= "<small>&lt;&lt; <a href='$query_string_url&amp;page=$prevpage'>$langPreviousPage</a></small>";            
-        }
-        if ($page < $numpages) {
-            $nextpage = $page + 1;
-            $query_string_url = removeGetVar($_SERVER['REQUEST_URI'], 'page');
-            $tool_content .= "<small><a href='$query_string_url&amp;page=$nextpage'>$langNextPage</a> &gt;&gt;</small>";
-        }
-    }
-    $tool_content .= "</table>";
 } else { // if not admin of course
     $tool_content .= $langNotAllowed;
 }
+
 $tool_content .= "
 <!-- Modal -->
 <div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
@@ -359,4 +385,5 @@ $tool_content .= "
   </div>
 </div>    
 ";
+
 draw($tool_content, 2, null, $head_content);
