@@ -108,7 +108,7 @@ if (isset($_GET['from_search'])) { // if we come from home page search
 }
 
 $course_info = Database::get()->querySingle("SELECT keywords, visible, prof_names, public_code, course_license, finish_date,
-                                               view_type, start_date, finish_date, description
+                                               view_type, start_date, finish_date, description, home_layout, course_image
                                           FROM course WHERE id = ?d", $course_id);
 
 $keywords = q(trim($course_info->keywords));
@@ -406,35 +406,9 @@ if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
 
-
 // Contentbox: Course main contentbox
 //Temp commit (waiting for Alex to fix course description issue) 
-if (true) {
-    if(!empty($license_info_box)){
-
-        $license_holder = "<hr class='col-xs-12 margin-top-slim margin-bottom-fat'>
-                        <div class ='col-xs-12 text-center margin-top-fat'>
-                           $license_info_box
-                        </div>
-                        <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>";
-    } else {
-        $license_holder = "";
-    }           
-   $left_column = "
-            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>
-                <div>
-                    <img class='banner-image img-responsive' src='$themeimg/ph1.jpg'/>
-                </div>
-                <hr class='col-xs-12 margin-top-fat margin-bottom-fat'>                
-                <div class='col-xs-12 form-wrapper'>              
-                     $bar_content
-                     $bar_content_2
-                </div>               
-                $license_holder
-            </div>";
-   $horizontal_info_row = '';
-   $main_content_cols = 'col-md-7 col-sm-7';
-} else {
+if ($course_info->home_layout == 3) {
     $left_column = '';
     $main_content_cols = '';
     $horizontal_info_row =
@@ -447,7 +421,38 @@ if (true) {
                 </div>
                 <div class='col-xs-4 text-center'> 
                     $license_info_box
-                </div>";
+                </div>";    
+
+} else {
+    if(!empty($license_info_box)){
+
+        $license_holder = "<hr class='col-xs-12 margin-top-slim margin-bottom-fat'>
+                        <div class ='col-xs-12 text-center margin-top-fat'>
+                           $license_info_box
+                        </div>
+                        <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>";
+    } else {
+        $license_holder = "";
+    }           
+   $left_column = "
+            <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>";
+   if ($course_info->home_layout == 1) {
+       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/$course_info->course_image" : "$themeimg/ph1.jpg";
+       $left_column .= "
+                <div>
+                    <img class='banner-image img-responsive' src='$course_image_url'/>
+                </div>
+                <hr class='col-xs-12 margin-top-fat margin-bottom-fat'>";
+   }
+    $left_column .= "
+                <div class='col-xs-12 form-wrapper'>              
+                     $bar_content
+                     $bar_content_2
+                </div>               
+                $license_holder
+            </div>";
+   $horizontal_info_row = '';
+   $main_content_cols = 'col-md-7 col-sm-7';
 }
 $edit_link = "";
 if ($is_editor) {

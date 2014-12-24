@@ -1684,7 +1684,6 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
-    image_dimensions: false,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
         {title: 'None', value: ''}
