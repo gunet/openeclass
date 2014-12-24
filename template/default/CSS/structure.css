@@ -924,24 +924,19 @@ form.login-form .btn.btn-login:hover {
     margin: 0;
   }
 
-  /* line 848, ../SASS/structure.scss */
-  #leftnav .panel a {
-    font-size: 1.5em;
+  /* line 847, ../SASS/structure.scss */
+  #leftnav .panel a.list-group-item,
+  #leftnav .panel .panel-heading .panel-title {
+    text-align: left;
   }
 
-  /* line 852, ../SASS/structure.scss */
+  /* line 851, ../SASS/structure.scss */
   .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 856, ../SASS/structure.scss */
-  #leftnav .panel a.list-group-item {
-    padding: 0.5em 0.8em;
-  }
-
-  /* line 860, ../SASS/structure.scss */
+  /* line 855, ../SASS/structure.scss */
   #main-content,
-  #leftnav .panel a.list-group-item,
   #header.navbar .navbar-nav > li:last-child > a,
   .navbar-default {
     border-radius: 0px !important;

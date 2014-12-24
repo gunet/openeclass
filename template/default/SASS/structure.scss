@@ -844,21 +844,15 @@ form.login-form{
     padding:0;
     margin:0;
   }
-
-  #leftnav .panel a{
-    font-size: 1.5em;
+#leftnav .panel a.list-group-item,
+  #leftnav .panel .panel-heading .panel-title{
+    text-align: left;
   }
-
   .navbar .navbar-nav > li a{
     padding: 15px 0.5em;    
   }
 
-  #leftnav .panel a.list-group-item{
-      padding:0.5em 0.8em;
-  }
-
   #main-content,
-  #leftnav .panel a.list-group-item,
   #header.navbar .navbar-nav > li:last-child > a,
   .navbar-default{
     border-radius: 0px!important;

@@ -2670,6 +2670,10 @@ $langProfileAboutMe = 'Σχετικά με μένα';
 $langProfileStats = 'Στατιστικά';
 $langStatus = "Ιδιότητα";
 $langProfileMemberSince = 'Μέλος απο';
+$langSumCoursesEnrolled = "Μαθήματα που παρακολουθώ";
+$langSumCoursesSupport = "Μαθήματα που υποστηρίζω";
+$langProfileLastVisit = "Τελευταία επίσκεψη";
+$langProfileQuickPassword = "Αλλαγή Κωδικού";
 
 // user.php
 $langCompulsory = "(υποχρεωτικό)";

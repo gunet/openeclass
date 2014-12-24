@@ -133,22 +133,23 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $head_content .= $GLOBALS['head_content'];
     $t = new Template('template/' . $theme);
 
-    $t->set_file('fh', 'theme.html');
+    if ($is_embedonce) {
+        $template_file = 'embed.html';
+    } else {
+        $template_file = 'theme.html';
+    }
+
+    $t->set_file('fh', $template_file);
     $t->set_block('fh', 'mainBlock', 'main');
 
     // template_callback() can be defined in theme settings.php
     if (function_exists('template_callback')) {
-        template_callback($t, $menuTypeID);
+        template_callback($t, $menuTypeID, $is_embedonce);
     }
 
     $t->set_var('LANG', $language);
 
-    if ($is_embedonce) {
-        $t->set_block('mainBlock', 'footerBlock', 'delete');
-        $t->set_block('mainBlock', 'headerBlock', 'delete');
-        $t->set_block('mainBlock', 'logoBlock', 'delete');
-        $t->set_block('mainBlock', 'titleRowBlock', 'delete');
-    } else {
+    if (!$is_embedonce) {
         //Remove search if not enabled
         if (!get_config('enable_search')) {
             $t->set_block('mainBlock', 'searchBlock', 'delete');
@@ -410,22 +411,26 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
 
     } else {
-        $t->set_block('mainBlock', 'breadCrumbs', 'delete');
+        if (!$is_embedonce) {
+            $t->set_block('mainBlock', 'breadCrumbs', 'delete');
+        }
     }
 
     //END breadcrumb --------------------------------
 
     $t->set_var('PAGE_TITLE', q($pageTitle));
 
-    if ($is_mobile) {
-        $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
-    } else {
-        $t->set_block('mainBlock', 'mobileViewOpenDiv', 'delete');
+    if (!$is_embedonce) {
+        if ($is_mobile) {
+            $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
+        } else {
+            $t->set_block('mainBlock', 'mobileViewOpenDiv', 'delete');
+        }
     }
     
     // Add Theme Options styles
-    $t->set_var('logo_img', 'eclass-new-logo.png');
-    $t->set_var('logo_img_small', 'eclass-new-logo-small.png');
+    $t->set_var('logo_img', 'logo_eclass.png');
+    $t->set_var('logo_img_small', 'logo_eclass_small.png');
     if (get_config('theme_options_id')) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
         $theme_options_styles = unserialize($theme_options->styles);

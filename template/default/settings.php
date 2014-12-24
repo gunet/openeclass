@@ -33,11 +33,15 @@ $theme_settings = array(
     ),
 );
 
-function template_callback($template, $menuTypeID)
+function template_callback($template, $menuTypeID, $embed)
 {
-    global $uid, $session, $native_language_names_init, $course_id, $professor, $modules, $admin_modules, $theme_settings;
+    global $uid, $session, $native_language_names_init, $course_id, $professor,
+           $modules, $admin_modules, $theme_settings;
+
     if ($uid) {
-        $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
+        if (!$embed) {
+            $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
+        }
         $template->set_block('mainBlock', 'sideBarCourseBlock', 'sideBarCourse');
         $template->set_block('sideBarCourseBlock', 'sideBarCourseNotifyBlock', 'sideBarCourseNotify');
         // FIXME: smarter selection of courses for sidebar
@@ -75,10 +79,12 @@ function template_callback($template, $menuTypeID)
         $template->set_block('mainBlock', 'LoggedInBlock', 'delete');
     }
 
-    if (!$course_id or !isset($professor) or !$professor) {
-        $template->set_block('mainBlock', 'professorBlock', 'delete');
-    } else {
-        $template->set_var('PROFESSOR', q($professor));
+    if (!$embed) {
+        if (!$course_id or !isset($professor) or !$professor) {
+            $template->set_block('mainBlock', 'professorBlock', 'delete');
+        } else {
+            $template->set_var('PROFESSOR', q($professor));
+        }
     }
 
     if ($menuTypeID != 2) {
