@@ -50,22 +50,6 @@ function popover_init() {
 }    
 $(document).ready( function () {
     
-    $(".navbar-toggle").on("click",function(){
-        if($("#leftnav").hasClass("leftnav-in")){
-            $("#leftnav").animate({
-                left: "0px"
-            },100,function(){
-                $(this).toggleClass("leftnav-in");
-            });
-        } else {
-            $("#leftnav").animate({
-                left: "-50px"
-            },100,function(){
-                $(this).toggleClass("leftnav-in");
-            });
-        }
-    });
-    
     // Initialisations
     act_confirm();
     animate_btn();
@@ -89,9 +73,18 @@ $(document).ready( function () {
         }
     });
     $(window).on("resize",function(){
-        if($(".float-menu").css("position") == "relative"){
+        if($(".float-menu").css("position") === "relative"){
             $(".float-menu").removeAttr("style");
             $(".float-menu").removeClass("float-menu-in");
+        }
+    });
+    $("html body").on("click", function(){
+        if($("#leftnav").hasClass("float-menu-in")){
+            $("#leftnav").animate({
+                "left": "-225"
+            }, 150, function () {
+                $(this).toggleClass("float-menu-in");
+            });
         }
     });
 
