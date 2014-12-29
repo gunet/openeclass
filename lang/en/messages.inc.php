@@ -1454,6 +1454,7 @@ $langYourBestScore = "Your best performance";
 $lang_enroll = "Enrol";
 $langimportLearningPath = "Import a learning path";
 $langScormErrorExport = "Error exporting SCORM package";
+$langLPViewerToggleLeftTOC = "Toggle table of contents";
 $langActiveTools = "Active tools";
 $langAdministrationTools = "Administration tools";
 $langAdministratorTools = "Administrator tools";

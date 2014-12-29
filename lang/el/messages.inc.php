@@ -2232,6 +2232,7 @@ $langYourBestScore = "Η καλύτερή σου βαθμολογία";
 $lang_enroll = "Eγγραφή";
 $langimportLearningPath = "Εισαγωγή γραμμής μάθησης";
 $langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πακέτου SCORM";
+$langLPViewerToggleLeftTOC = "Εναλλαγή εμφάνισης περιεχομένων";
 
 /* * ***********************************************
  * lessontools.php

@@ -100,7 +100,7 @@ if ($displayFull == 0) {
     . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
     . "<title>" . q($titlePage) . "</title>" . "\n"
     . "</head>" . "\n"
-    . "<frameset cols=\"*\" border=\"0\">" . "\n"
+    . "<frameset cols=\"*\" border=\"0\" frameborder=\"0\">" . "\n"
     . "<frame src=\"navigation/startModule.php?course=$course_code\" name=\"mainFrame\" />" . "\n"
     . "</frameset>" . "\n"
     . "<noframes>" . "\n"

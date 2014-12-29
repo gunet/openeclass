@@ -176,11 +176,34 @@ if ($moduleNb > 1) {
     }
 }
 
+load_js('jquery-' . JQUERY_VERSION . '.min');
+
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
     <link href='{$urlAppend}template/$theme/lp.css' rel='stylesheet' type='text/css' />
+    $head_content
+    <script type='text/javascript'>
+    /* <![CDATA[ */
+    
+    $(document).ready(function() {
+    
+        $('#leftTOCtoggler').on('click', function() {
+            var fs = window.parent.document.getElementById('colFrameset');
+            var fsJQe = $('#colFrameset', window.parent.document);
+            
+            fsJQe.toggleClass('hidden');
+            if (fsJQe.hasClass('hidden')) {
+                fs.cols = '0, *';
+            } else {
+                fs.cols = '200, *';
+            }
+        });
+    });
+    
+    /* ]]> */
+    </script>
 </head>
 <body>
 <div class='header'>
@@ -192,7 +215,9 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
  q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
         <a href='{$urlAppend}modules/learnPath/index.php?course=$course_code' target='_top'>
                 $langLearningPaths</a> &#187;
-        <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a></div>
+        <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a id='leftTOCtoggler' href='#'>$langLPViewerToggleLeftTOC</a></div>
     <div class='clear'></div>
     <div class='logo'><img src='$themeimg/lp/logo_openeclass.png' alt='' title='' /></div>
     <div class='lp_right_grey'>";
