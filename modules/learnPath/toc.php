@@ -141,17 +141,17 @@ foreach ($flatElementList as $module) {
         echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font></li>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "fa-pencil-square-o";
+            $moduleImg = "exercise_$image_bullet";
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "fa-link";
+            $moduleImg = "links_$image_bullet";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "fa-info-circle";
+            $moduleImg = "description_$image_bullet";
         } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
         } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) { // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-            $moduleImg = "fa-square-o";
+            $moduleImg = "lp_check";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "fa-film";
+            $moduleImg = "videos_on";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -162,17 +162,17 @@ foreach ($flatElementList as $module) {
         unset($imagePassed);
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
-                $moduleImg = 'fa-check-square-o';
+                $moduleImg = 'tick';
             } else {
-                $imagePassed = icon('fa-check-square-o', $module['lesson_status']);
+                $imagePassed = icon_old_style('tick', $module['lesson_status']);
             }
         }
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
-            $moduleImg = 'fa-times-circle';
+            $moduleImg = 'lp_failed';
         }
 
-        echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg, '');
+        echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon_old_style($moduleImg, '');
 
         // emphasize currently displayed module or not
         if ($_SESSION['lp_module_id'] == $module['module_id']) {

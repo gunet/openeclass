@@ -2128,6 +2128,28 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
     }
 }
 
+function icon_old_style($name, $title = null, $link = null, $attrs = null, $format = 'png', $link_attrs = '') {
+    global $themeimg;
+
+    if (isset($title)) {
+        $title = q($title);
+        $extra = "alt='$title' title='$title'";
+    } else {
+        $extra = "alt=''";
+    }
+
+    if (isset($attrs)) {
+        $extra .= ' ' . $attrs;
+    }
+
+    $img = "<img src='$themeimg/$name.$format' $extra>";
+    if (isset($link)) {
+        return "<a href='$link'$link_attrs>$img</a>";
+    } else {
+        return $img;
+    }
+}
+
 /**
  * Link for displaying user profile
  * @param type $uid
