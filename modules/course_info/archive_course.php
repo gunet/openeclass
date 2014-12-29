@@ -29,14 +29,13 @@ $toolName = $langCourseInfo;
 $pageName = $langArchiveCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 
-$backup_date_short = date('Ymd');
-$result = doArchive($course_id, $course_code);
+$success = doArchive($course_id, $course_code);
 
-$tool_content .= "<table class='table-default' align='center'><tbody><tr><th align='left'><ol>";
-$tool_content .= "<li>$langBUCourseDataOfMainBase $course_code</li>\n";
-$tool_content .= "<li>$langBackupOfDataBase $course_code</li></ol></th>
-        <td>&nbsp;</td></tr></tbody></table>";
-if (!$result) {
+$tool_content .= "<table class='table-default' align='center'><tbody><tr><th align='left'><ol>"
+        . "<li>$langBUCourseDataOfMainBase $course_code</li>\n"
+        . "<li>$langBackupOfDataBase $course_code</li></ol></th><td>&nbsp;</td></tr></tbody></table>";
+
+if (!$success) {
     $tool_content .= "Error: " . $zipCourse->errorInfo(true);
     draw($tool_content, 2);
     exit;
@@ -44,7 +43,7 @@ if (!$result) {
     $tool_content.="<br /><div class='alert alert-success'>$langBackupSuccesfull</div>";
     $tool_content .= action_bar(array(
         array('title' => $langDownloadIt,
-            'url' => "{$urlAppend}courses/archive/$course_code/$course_code-$backup_date_short.zip",
+            'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
             'icon' => 'fa-download',
             'button-class' => 'btn-success',
             'level' => 'primary-label'),

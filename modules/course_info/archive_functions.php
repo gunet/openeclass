@@ -20,6 +20,13 @@
  * ======================================================================== 
  */
 
+/**
+ * Do the main task of archiving a course.
+ * 
+ * @param int $course_id
+ * @param string $course_code
+ * @return boolean $success
+ */
 function doArchive($course_id, $course_code) {
     global $webDir, $urlServer, $urlAppend, $siteName;
     
@@ -147,26 +154,31 @@ function doArchive($course_id, $course_code) {
         'siteName' => $siteName,
         'version' => get_config('version'))));
 
+    // $htmldir is not needed anywhere
     //$htmldir = $archivedir . '/html';
 
     // create zip file
     $zipCourse = new PclZip($zipfile);
-    $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive");
-    $result = $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html");
-    $result = $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
+    $result1 = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive");
+    $result2 = $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html");
+    $result3 = $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
+    
+    $success = true;
+    if ($result1 === 0 || $result2 === 0 || $result3 === 0) {
+        $success = false;
+    }
 
     removeDir($archivedir);
-    return $result;
+    return $success;
 }
 
 /**
  * @brief back up a table
- * @param type $basedir
- * @param type $table
- * @param type $condition
+ * @param string $basedir
+ * @param string $table
+ * @param string $condition
  */
 function backup_table($basedir, $table, $condition) {
-
     $q = Database::get()->queryArray("SELECT * FROM `$table` WHERE $condition");
     $backup = array();
     foreach ($q as $data) {
@@ -175,12 +187,17 @@ function backup_table($basedir, $table, $condition) {
     file_put_contents("$basedir/$table", serialize($backup));
 }
 
-// Delete everything in $basedir older than $age seconds
+/**
+ * Delete everything in $basedir older than $age seconds.
+ * 
+ * @param string $basedir
+ * @param string $age
+ */
 function cleanup($basedir, $age) {
     if (($handle = opendir($basedir))) {
         while (($file = readdir($handle)) !== false) {
             $entry = "$basedir/$file";
-            if ($file != '.' and $file != '..' and ( time() - filemtime($entry) > $age)) {
+            if ($file != '.' && $file != '..' && (time() - filemtime($entry) > $age)) {
                 if (is_dir($entry)) {
                     removeDir($entry);
                 } else {

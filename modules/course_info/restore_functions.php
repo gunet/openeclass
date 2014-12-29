@@ -195,14 +195,14 @@ function get_option($options, $name) {
 }
 
 /**
- * @param type $code
- * @param type $title
- * @param type $prof
- * @param type $lang
- * @param type $type - can be null
- * @param type $vis
- * @param type $desc
- * @param type $faculty - can be null
+ * @param string $code
+ * @param string $title
+ * @param string $prof
+ * @param string $lang
+ * @param string $type - can be null
+ * @param int $vis
+ * @param string $desc
+ * @param mixed $faculty - can be null
  */
 function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $faculty) {
     global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
