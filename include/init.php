@@ -405,7 +405,7 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'sharing' => MODULE_ID_SHARING,
     'notes' => MODULE_ID_NOTES);
 
-// the system admin adn power users has rights to all courses
+// the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {
     $is_course_admin = true;
     if (isset($currentCourse)) {
@@ -418,7 +418,7 @@ if ($is_admin or $is_power_user) {
 $is_editor = false;
 if (isset($_SESSION['courses'])) {
     if (isset($currentCourse)) {
-        if (check_editor()) { // chech if user is editor of course
+        if (check_editor()) { // check if user is editor of course
             $is_editor = true;
         }
         if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER) {
