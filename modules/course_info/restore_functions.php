@@ -22,13 +22,13 @@
 
 // form select about visibility
 function visibility_select($current) {
-    global $m;
+    global $langOpenCourse, $langRegCourse, $langClosedCourse, $langInactiveCourse;
 
     $ret = "<select name='course_vis'>\n";
-    foreach (array($m['legopen'] => COURSE_OPEN,
- $m['legrestricted'] => COURSE_REGISTRATION,
- $m['legclosed'] => COURSE_CLOSED,
- $m['linactive'] => COURSE_INACTIVE) as $text => $type) {
+    foreach (array($langOpenCourse => COURSE_OPEN,
+            $langRegCourse => COURSE_REGISTRATION,
+            $langClosedCourse => COURSE_CLOSED,
+            $langInactiveCourse => COURSE_INACTIVE) as $text => $type) {
         $selected = ($type == $current) ? ' selected' : '';
         $ret .= "<option value='$type'$selected>" . q($text) . "</option>\n";
     }
@@ -194,7 +194,17 @@ function get_option($options, $name) {
     }
 }
 
-function course_details_form($code, $title, $prof, $lang, $type = null, $vis, $desc, $faculty = null) {
+/**
+ * @param type $code
+ * @param type $title
+ * @param type $prof
+ * @param type $lang
+ * @param type $type - can be null
+ * @param type $vis
+ * @param type $desc
+ * @param type $faculty - can be null
+ */
+function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $faculty) {
     global $langInfo1, $langInfo2, $langCourseCode, $langLanguage, $langTitle,
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
