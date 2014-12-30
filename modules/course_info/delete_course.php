@@ -39,8 +39,8 @@ if (isset($_POST['delete'])) {
     // logging
     Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
                                                'code' => $course_code,
-                                               'title' => $title));
-    $tool_content .= "<div class='alert alert-success'>$langTheCourse <b>(" . q($title) . " $course_code)</b> $langHasDel</div>";
+                                               'title' => $currentCourseName));
+    $tool_content .= "<div class='alert alert-success'>$langTheCourse <b>(" . q($currentCourseName) . " $course_code)</b> $langHasDel</div>";
     unset($course_code);
     unset($_SESSION['dbname']);
     draw($tool_content, 1);
@@ -53,7 +53,7 @@ if (isset($_POST['delete'])) {
               'level' => 'primary-label')));
     
     $tool_content .= "<div class='alert alert-danger'>
-            $langByDel_A <b>" . q($title) . " ($course_code) ;</b></div>
+            $langByDel_A <b>" . q($currentCourseName) . " ($course_code) ;</b></div>
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
     <div class='form-group'>
