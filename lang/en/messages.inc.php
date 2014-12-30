@@ -509,6 +509,7 @@ $langIdentity = "About";
 $langCourseS = "course";
 $langCourseIden = "Course Info";
 $langBackupCourse = "Archive this course";
+$langCloneCourse = "Clone this course";
 $langModifInfo = "Course Admin";
 $langModifDone = "The information has been modified";
 $langHome = "Back to Home Page";

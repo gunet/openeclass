@@ -837,6 +837,7 @@ $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσει
  * ******************************************* */
 $langCourseIden = "Ταυτότητα Μαθήματος";
 $langBackupCourse = "Αντίγραφο ασφαλείας";
+$langCloneCourse = "Κλώνος μαθήματος";
 $langModifDone = "Η πληροφορία έχει αλλάξει";
 $langHome = "Επιστροφή στην αρχική σελίδα";
 $langCode = "Κωδικός";
