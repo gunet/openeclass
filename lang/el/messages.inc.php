@@ -2675,7 +2675,7 @@ $langProfileMemberSince = 'Μέλος απο';
 $langSumCoursesEnrolled = "Μαθήματα που παρακολουθώ";
 $langSumCoursesSupport = "Μαθήματα που υποστηρίζω";
 $langProfileLastVisit = "Τελευταία επίσκεψη";
-$langProfileQuickPassword = "Αλλαγή Κωδικού";
+$langProfileQuickPassword = "Αλλαγή Συνθηματικού";
 
 // user.php
 $langCompulsory = "(υποχρεωτικό)";
