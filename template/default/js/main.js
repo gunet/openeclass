@@ -56,9 +56,10 @@ $(document).ready(function () {
     $('[rel=tooltip]').tooltip();
     popover_init();
 
-    
+
     $(".navbar-toggle").on("click", function (e) {
-        $("#sidebar").animate(
+        if ($("#sidebar").hasClass("in")) {
+            $("#sidebar").animate(
                     {"right": "-18.5em"}, {duration: 150, easing: "linear",
                 start: function () {
                     if (!$("#sidebar").hasClass("in"))
@@ -66,11 +67,13 @@ $(document).ready(function () {
                 },
                 complete: function () {
                     $("#toggle-sidebar").toggleClass("toggle-active");
-                    if ($("#sidebar").hasClass("in"))
+                    if ($("#sidebar").hasClass("in")) {
                         $("#sidebar-container").css({"display": "none"});
-                    $("#sidebar").toggleClass("in");
+                        $("#sidebar").toggleClass("in");
+                    }
                 }
             });
+        }
         e.stopPropagation();
         if (!$("#leftnav").hasClass("float-menu-in")) {
             $("#leftnav").animate({
@@ -169,7 +172,7 @@ $(document).ready(function () {
         // Right Side toggle menu animation
         $('#toggle-sidebar').click(function () {
             var inOut = $("#sidebar").hasClass("in") ? "-18.5em" : "0em";
-            
+
             if ($("#leftnav").hasClass("float-menu-in")) {
                 $("#leftnav").animate({
                     "left": "-225"
