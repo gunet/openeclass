@@ -2473,6 +2473,9 @@ function update_gradebook_book($uid, $id, $grade, $activity)
             if ($q2) { // update grade if exists            
                 Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE gradebook_activity_id = $q->id AND uid = ?d", $grade, $uid);
             } else {
+                if ($grade == '') {
+                    $grade = 0;
+                }
                 Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?d", $uid, $grade);
             }
         }

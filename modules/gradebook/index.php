@@ -369,6 +369,13 @@ if ($is_editor) {
                 $actDate = $checkForAss->deadline;
                 $actDesc = $checkForAss->description;
                 Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
+                $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+                    foreach ($sql as $u) {
+                        $grd = Database::get()->querySingle("SELECT grade FROM assignment_submit WHERE assignment_id = ?d AND uid = $u->uid", $id);
+                        if ($grd) {
+                            update_gradebook_book($u->uid, $id, $grd->grade, 'assignment');
+                        }
+            	}
             }
         }
         //check the type of the module (2 for exercises)
@@ -386,6 +393,14 @@ if ($is_editor) {
                 $actDesc = $checkForExe->description;
 
                 Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
+                $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+                foreach ($sql as $u) {
+                    $grd = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record 
+                                            WHERE uid = $u->uid AND eid = ?d", $id);      				
+                    if ($grd) {     					
+                            update_gradebook_book($u->uid, $id, $grd->total_score, 'exercise');
+                    }                	
+            	}
             }
         }
         //check the type of the module (3 for LP - scorm and exercises)
