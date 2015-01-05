@@ -2189,9 +2189,7 @@ function is_url_accepted($url,$protocols=""){
 }
 
 function stop_output_buffering() {
-    while (ob_get_level() > 0) {
-        ob_end_flush();
-    }
+    while (@ob_end_flush());
 }
 
 // Seed mt_rand
