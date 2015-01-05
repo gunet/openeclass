@@ -180,10 +180,9 @@ if (count($res) >= 1) {
             $tool_content .= "
             </dl>
         </div>
-    </div>
-</div>
-</div>";
+    </div>";
 }
+$tool_content .= "</div></div>";
 
 $head_content = <<<EOF
 <script type='text/javascript'>
