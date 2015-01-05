@@ -135,7 +135,7 @@ if(count($res)>0){
     }
     $course_info_btn = "
             <div class='btn-group' role='group'>
-              <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
+              <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false' style='border-top-right-radius:0px;border-bottom-right-radius:0px;'>
                 $langCourseDescription
                 <span class='caret'></span>
               </button>
@@ -457,7 +457,7 @@ if ($course_info->home_layout == 3) {
 $edit_link = "";
 if ($is_editor) {
     $edit_link = "
-    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' class='btn btn-default'>
+    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' class='btn btn-default' style='border-top-left-radius:0px;'>
         <i class='fa fa-edit space-before-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langEdit'></i> $langEdit
     </a>";
 }
