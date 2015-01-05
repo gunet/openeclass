@@ -2388,24 +2388,27 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
         //Add course home_layout fiels
-        if (!DBHelper::fieldExists('home_layout', 'course') or
+        if (!DBHelper::fieldExists('home_layout', 'course')) {
             Database::get()->query("ALTER TABLE course ADD home_layout TINYINT(1) NOT NULL DEFAULT 1");
-        Database::get()->query("UPDATE course SET home_layout = 3");    
+            Database::get()->query("UPDATE course SET home_layout = 3");
+        }
         //Add course image field
-        if (!DBHelper::fieldExists('course_image', 'course') or
-            Database::get()->query("ALTER TABLE course ADD course_image VARCHAR(400) NULL");            
+        if (!DBHelper::fieldExists('course_image', 'course')) {
+            Database::get()->query("ALTER TABLE course ADD course_image VARCHAR(400) NULL");
+        }
         // Move course description from unit_resources to new course.description field
-        if (!DBHelper::fieldExists('description', 'course') or
+        if (!DBHelper::fieldExists('description', 'course')) {
             Database::get()->query("ALTER TABLE course ADD description MEDIUMTEXT NOT NULL");
-        $result = Database::get()->query("UPDATE course, course_units, unit_resources
-            SET course.description = unit_resources.comments
-            WHERE course.id = course_units.course_id AND
-                  course_units.id = unit_resources.unit_id AND
-                  course_units.`order` = -1 AND
-                  unit_resources.res_id = -1");
-        if ($result->affectedRows) {
-            Database::get()->query("DELETE FROM unit_resources WHERE res_id = -1");
-            Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
+            $result = Database::get()->query("UPDATE course, course_units, unit_resources
+                SET course.description = unit_resources.comments
+                WHERE course.id = course_units.course_id AND
+                      course_units.id = unit_resources.unit_id AND
+                      course_units.`order` = -1 AND
+                      unit_resources.res_id = -1");
+            if ($result->affectedRows) {
+                Database::get()->query("DELETE FROM unit_resources WHERE res_id = -1");
+                Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
+            }
         }
         set_config('theme', 'default');
         set_config('theme_options_id', 0);
