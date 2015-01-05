@@ -33,7 +33,7 @@ require_once 'include/lib/multimediahelper.class.php';
 
 ModalBoxHelper::loadModalBox();
 
-$pageName = $langExercices;
+$toolName = $langExercices;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langExercices);
 
 // picture path

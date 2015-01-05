@@ -52,7 +52,7 @@ $action->record(MODULE_ID_ASSIGN);
 
 $workPath = $webDir . "/courses/" . $course_code . "/work";
 $works_url = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langWorks);
-$pageName = $langWorks;
+$toolName = $langWorks;
 
 //-------------------------------------------
 // main program
@@ -178,8 +178,7 @@ if ($is_editor) {
             Session::Messages($langDelError, 'alert-danger');
         }
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
-    } elseif (isset($_POST['grades'])) {
-        $pageName = $langWorks;
+    } elseif (isset($_POST['grades'])) {        
         $navigation[] = $works_url;
         submit_grades(intval($_POST['grades_id']), $_POST['grades'], $email_notify);
     } elseif (isset($_REQUEST['id'])) {
@@ -694,7 +693,7 @@ function new_assignment() {
 function show_edit_assignment($id) {
     
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
-        $urlAppend, $works_url, $end_cal_Work_db, $course_id, $head_content, $language, 
+        $urlAppend, $works_url, $course_id, $head_content, $language, 
         $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment,
         $langLessOptions, $langMoreOptions;
     
@@ -1854,7 +1853,7 @@ function show_assignments() {
                 $num_ungraded = '&nbsp;';
             }
             
-            $tool_content .= "\n<tr class='".(!$row->active ? "not_visible":"")."'>";
+            $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
             $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
             $tool_content .= "<td>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>$row->title</a>
@@ -1881,7 +1880,7 @@ function show_assignments() {
                     array('title' => $m['WorkSubsDelete'],
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                           'icon' => 'fa-eraser',
-                          'confirm' => $langWarnForSubmissions. $langDelSure,
+                          'confirm' => "$langWarnForSubmissions $langDelSure",
                           'show' => is_numeric($num_submitted) && $num_submitted > 0),
                     array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
@@ -1891,7 +1890,7 @@ function show_assignments() {
         }
         $tool_content .= '</table></div></div></div>';
     } else {
-        $tool_content .= "\n<div class='alert alert-warning'>$langNoAssign</div>";        
+        $tool_content .= "<div class='alert alert-warning'>$langNoAssign</div>";        
     }
 }
 

@@ -63,7 +63,7 @@ if (is_object($result) && $result->wiki == 1) {
 }
 
 
-$pageName = $langWiki;
+$toolName = $langWiki;
 
 // display mode
 // check and set user access level for the tool
