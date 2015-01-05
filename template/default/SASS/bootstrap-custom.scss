@@ -50,7 +50,7 @@ a.list-group-item.delete:hover{
        position: absolute;
        width: 225px;
        left: -225px;
-       top: 0px;
+       top: 0px !important;
        height: 100%;
   }
   #leftnav{
@@ -60,9 +60,6 @@ a.list-group-item.delete:hover{
   .navbar-toggle{
       display: block;
   }
-}
-.lalala{
-    display: none;
 }
 @media(min-width: $screen-desktop){
    .affix {

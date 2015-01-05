@@ -9499,7 +9499,7 @@ a.list-group-item.delete:hover {
     position: absolute;
     width: 225px;
     left: -225px;
-    top: 0px;
+    top: 0px !important;
     height: 100%;
   }
 
@@ -9514,35 +9514,30 @@ a.list-group-item.delete:hover {
     display: block;
   }
 }
-/* line 64, ../SASS/bootstrap-custom.scss */
-.lalala {
-  display: none;
-}
-
 @media (min-width: 992px) {
-  /* line 68, ../SASS/bootstrap-custom.scss */
+  /* line 65, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 18%;
   }
 
-  /* line 71, ../SASS/bootstrap-custom.scss */
+  /* line 68, ../SASS/bootstrap-custom.scss */
   .navbar-custom {
     margin: 15px 15px 0px;
   }
 }
 @media (min-width: 1200px) {
-  /* line 76, ../SASS/bootstrap-custom.scss */
+  /* line 73, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 17%;
   }
 }
 @media (min-width: 1450px) {
-  /* line 81, ../SASS/bootstrap-custom.scss */
+  /* line 78, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 12.4%;
   }
 }
-/* line 86, ../SASS/bootstrap-custom.scss */
+/* line 83, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9554,7 +9549,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-/* line 98, ../SASS/bootstrap-custom.scss */
+/* line 95, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9568,7 +9563,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-/* line 112, ../SASS/bootstrap-custom.scss */
+/* line 109, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -9582,28 +9577,28 @@ a.list-group-item.delete:hover {
   top: 8px;
 }
 
-/* line 137, ../SASS/bootstrap-custom.scss */
+/* line 134, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 140, ../SASS/bootstrap-custom.scss */
+/* line 137, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 143, ../SASS/bootstrap-custom.scss */
+/* line 140, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 150, ../SASS/bootstrap-custom.scss */
+/* line 147, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 153, ../SASS/bootstrap-custom.scss */
+/* line 150, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 156, ../SASS/bootstrap-custom.scss */
+/* line 153, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }

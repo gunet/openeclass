@@ -23,10 +23,12 @@ body > .container{
 
 /* LEFTNAV - MAIN MENU, LOGO */
 #leftnav{
+    top: -53px;
     background: $color-background;
     padding: 0;
     .logo{
-        margin:2em 1em;a
+        //margin:2em 1em;
+        margin: 0.8em 0.8em 0px;
         img{margin:0 auto;}
     }
     .panel{

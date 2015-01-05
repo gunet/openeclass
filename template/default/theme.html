@@ -55,13 +55,13 @@
             <div class="row" id="header_section">
                 <!-- BEGIN normalViewOpenDiv -->
                 <div class="hidden-xs hidden-sm col-md-2">
-                    <!-- BEGIN logoBlock -->
+<!--                     BEGIN logoBlock 
                     <div class="logo">
                         <a href='{%URL_PATH%}'>
                         <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/{%logo_img%}" alt=''>
                         </a>
                     </div>
-                    <!-- END logoBlock -->
+                     END logoBlock -->
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-10 nav-container">
                 <!-- END normalViewOpenDiv -->
@@ -77,7 +77,7 @@
                         </button>
                         <!-- BEGIN logoBlock -->
                         <a href='{%URL_PATH%}' class="navbar-brand">
-                            <img class="img-responsive hidden-md hidden-lg" src="{%template_base%}/img/{%logo_img_small%}" alt=''>
+                            <img class="img-responsive hidden-md hidden-lg" src="{%template_base%}/img/{%logo_img_small%}" style="max-height: 49px;padding-top:2px;" alt=''>
                             </a>
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
@@ -212,6 +212,14 @@
             </div>
             <!-- BEGIN leftNavBlock -->
             <div id="leftnav" class="col-md-2 col-xs-pull-10 col-sm-pull-10 col-md-pull-10 sidebar {%leftNavClass%} embeded float-menu">
+                
+                <!-- BEGIN logoBlock -->
+                    <div class="logo">
+                        <a href='{%URL_PATH%}'>
+                        <img class="img-responsive hidden-xs hidden-sm" src="{%template_base%}/img/{%logo_img%}" alt=''>
+                        </a>
+                    </div>
+                    <!-- END logoBlock -->
                 
                 <div id="quick-search-wrapper">
                     <!-- BEGIN searchBlock -->
