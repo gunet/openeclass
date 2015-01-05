@@ -682,21 +682,21 @@ $tool_content .="<div class='row'>
                         <div class='panel-footer'>
                             <div class='row'>
                                 <div class='col-sm-6 event-legend'>
-                                    <div>
-                                        <span class='event event-important'></span><span>$langAgendaDueDay</span>
-                                    </div>
-                                    <div>
-                                        <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
-                                    </div>
+                                <div>
+                                    <span class='event event-important'></span><span>$langAgendaDueDay</span>
                                 </div>
-                                <div class='col-sm-6 event-legend'>
-                                    <div>
-                                        <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
-                                    </div>
-                                    <div>
-                                        <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
-                                    </div>
+                                <div>
+                                    <span class='event event-info'></span><span>$langAgendaCourseEvent</span>
                                 </div>
+                            </div>
+                            <div class='col-sm-6 event-legend'>
+                                <div>
+                                    <span class='event event-success'></span><span>$langAgendaSystemEvent</span>
+                                </div>
+                                <div>
+                                    <span class='event event-special'></span><span>$langAgendaPersonalEvent</span>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>

@@ -593,7 +593,7 @@ $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
 $langListAll = "Λίστα όλων";
 $langAgendaDueDay = "Προθεσμία";
 $langAgendaCourseEvent = "Γεγ. μαθήματος";
-$langAgendaPersonalEvent = "Προσ. μήνυμα";
+$langAgendaPersonalEvent = "Προσ. γεγονός";
 $langAgendaSystemEvent = "Γεγ. συστήματος";
 
 // week days

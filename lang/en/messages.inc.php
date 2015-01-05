@@ -3549,4 +3549,9 @@ $langLessOptions = 'Less options';
 $langMyCoursesSide = 'My Courses';
 $langMyMessagesSide = 'My Messages';
 $langQuickNotesSide = 'Quick Notes';
-$langMyStats = "My statistics";
+$langMyStats = 'My statistics';
+
+$langAgendaDueDay = "Due day";
+$langAgendaCourseEvent = "Course event";
+$langAgendaPersonalEvent = "Pers. event";
+$langAgendaSystemEvent = "System event";

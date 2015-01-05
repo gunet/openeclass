@@ -185,10 +185,10 @@ $tool_content .= "
                             </div>
                             <div class='col-sm-6 event-legend'>
                                 <div>
-                                    <span class='event event-success'></span><span>$langAgendaPersonalEvent</span>
+                                    <span class='event event-success'></span><span>$langAgendaSystemEvent</span>
                                 </div>
                                 <div>
-                                    <span class='event event-special'></span><span>$langAgendaSystemEvent</span>
+                                    <span class='event event-special'></span><span>$langAgendaPersonalEvent</span>
                                 </div>
                             </div>
                         </div>
@@ -254,10 +254,6 @@ $tool_content .= "
                               <span class='badge'>$teacher_courses_count</span>
                               $langSumCoursesSupport
                             </li>
-                            <!--<li class='list-group-item'>
-                              <span class='badge'>$numUsersRegistered</span>
-                              Συνολικός αριθμός φοιτητών στα μαθήματά μου
-                            </li>-->
                         </ul>
                         <div class='quick-change-pwd'><a href='".$urlSecure."main/profile/password.php'>$langProfileQuickPassword</a></div>
                     </div>
