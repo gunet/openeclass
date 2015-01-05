@@ -78,15 +78,10 @@ if (isset($uid) and $uid) {
  
 // exit if not results
 if (count($hits) <= 0) {
-    $tool_content .= action_bar(array(
-                    array('title' => $langBack,
-                          'url' => "search.php",
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')));
-    $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
     
-    draw($tool_content, 0);
-    exit();
+    Session::Messages($langNoResult);
+    redirect_to_home_page('modules/search/search.php');
+    
 }
 
 //////// PRINT RESULTS ////////
