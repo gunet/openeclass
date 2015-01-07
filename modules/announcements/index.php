@@ -109,11 +109,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                     array('title' => $langVisible,
                           'icon' => $vis_icon,
                           'icon-class' => 'vis_btn',
-                          'icon-extra' => "data-vis='$visible'"),
+                          'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
                     array('title' => $langDelete,
                           'class' => 'delete',
                           'icon' => 'fa-times',
-                          'icon-class' => 'delete_btn'),                    
+                          'icon-class' => 'delete_btn',
+                          'icon-extra' => "data-id='$myrow->id'"),                    
                     array('title' => $langMove,
                           'level' => 'primary',
                           'icon' => 'fa-arrow-up',
@@ -180,7 +181,7 @@ $head_content .= "<script type='text/javascript'>
             }).fnSetFilteringDelay(1000);
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                var row_id = $(this).closest('tr').attr('id');
+                var row_id = $(this).data('id');
                 bootbox.confirm('$langSureToDelAnnounce', function(result) {
                     if(result) {                       
                         $.ajax({
@@ -219,7 +220,7 @@ $head_content .= "<script type='text/javascript'>
             $(document).on( 'click','.vis_btn', function (g) {
                 g.preventDefault();
                 var vis = $(this).data('vis');
-                var row_id = $(this).closest('tr').attr('id');
+                var row_id = $(this).data('id');
                 $.ajax({
                   type: 'POST',
                   url: '',
