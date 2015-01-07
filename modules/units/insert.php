@@ -300,7 +300,7 @@ function insert_work($id) {
         } else {
             $visibility = 1;
         }
-        $q = Database::get()->querySingle("INSERT INTO unit_resources SET
+        $q = Database::get()->query("INSERT INTO unit_resources SET
                                 unit_id = ?d,
                                 type = 'work',
                                 title = ?s,
@@ -370,7 +370,7 @@ function insert_forum($id) {
                                         WHERE id = ?d
                                         AND forum_id = ?d", $topic_id, $forum_id);
             $q = Database::get()->query("INSERT INTO unit_resources
-                                            SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter . ", res_id = ?d", 
+                                            SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                         $id, $topic->title, $order, $topic->id);
         } else {
             $forum_id = $ids[0];
