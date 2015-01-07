@@ -109,18 +109,21 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resourcesWeeks($unit_id) {
-    global $tool_content, $max_resource_id;
+    global $tool_content, $max_resource_id, $langAvailableUnitResources;
     
     $req = Database::get()->queryArray("SELECT * FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
         $max_resource_id = Database::get()->querySingle("SELECT id FROM course_weekly_view_activities
                                 WHERE course_weekly_view_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                     
-        $tool_content .= "<table class='tbl_alt_bordless' width='99%' >";
+        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th><th>".icon('fa-gears')."</th>";
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resourceWeek($info);
         }
         $tool_content .= "</table>";
+        $tool_content .= "</div>";
     }
 }
 
@@ -1063,6 +1066,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     $langAddToCourseHome, $langDown, $langUp,
     $langConfirmDelete, $course_code, $themeimg;
 
+    
     static $first = true;
 
     if (!$is_editor) {
@@ -1070,47 +1074,49 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     }
 
     if ($res_type == 'description') {
-        $icon_vis = ($status == 1) ? 'publish.png' : 'unpublish.png';
+        $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
         $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
-    } else {
-        $icon_vis = ($status == 1) ? 'visible.png' : 'invisible.png';
-        $edit_link = "../../modules/weeks/?course=$course_code&amp;edit=$resource_id";
+    } else {        
+        $icon_vis = ($status == 1) ? 'fa-eye' : 'fa-eye-slash';
+        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
-    if ($status != 'del') {
-        $content = "<td width='3'><a href='$edit_link'>" .
-                "<img src='$themeimg/edit.png' title='$langEdit' alt='$langEdit'></a></td>";
-    } else {
-        $content = "<td width='3'>&nbsp;</td>";
-    }
-    $content .= "<td width='3'><a href='../../modules/weeks/?course=$course_code&amp;del=$resource_id'" .
-            " onClick=\"return confirmation('" . js_escape($langConfirmDelete) . "')\">" .
-            "<img src='$themeimg/delete.png' " .
-            "title='$langDelete' alt='$langDelete'></a></td>";
-
-    if ($status != 'del') {
-        if (in_array($res_type, array('text', 'video', 'forum', 'topic'))) {
-            $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
-                    "<img src='$themeimg/$icon_vis' " .
-                    "title='$langVisibility'></a></td>";
-        } elseif (in_array($res_type, array('description'))) {
-            $content .= "<td width='3'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id'>" .
-                    "<img src='$themeimg/$icon_vis' " .
-                    "title='$langAddToCourseHome' alt='$langAddToCourseHome'></a></td>";
-        } else {
-
-            $content .= "<td width='3'>&nbsp;</td>";
-        }
-    } else {
-        $content .= "<td width='3'>&nbsp;</td>";
-    }
-    if ($resource_id != $GLOBALS['max_resource_id']) {
-        $content .= "<td width='12'><div align='right'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id'>" .
-                "<img src='$themeimg/down.png' title='$langDown' alt='$langDown'></a></div></td>";
-    } else {
-        $content .= "<td width='12'>&nbsp;</td>";
-    }
+    $content = "<td class='option-btn-cell'>";
+    $content .= action_button(array(
+                array('title' => $langEdit,
+                      'url' => $edit_link,
+                      'icon' => 'fa-edit',
+                      'show' => $status != 'del'),
+                array('title' => $langDelete,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
+                      'icon' => 'fa-times',
+                      'confirm' => $langConfirmDelete,
+                      'class' => 'delete'),
+                array('title' => $langVisibility,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'icon' => $icon_vis,
+                      'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
+                array('title' => $langAddToCourseHome,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'icon' => $icon_vis,
+                      'show' => $status != 'del' and in_array($res_type, array('description'))),
+                array('title' => $langDown,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id",
+                      'icon' => 'fa-arrow-down',
+                      'show' => $resource_id != $GLOBALS['max_resource_id']),
+                array('title' => $langUp,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
+                      'icon' => 'fa-arrow-up',
+                      'show' => !$first)
+            ));
     
+    $first = false;
+    return $content;
+    
+    
+   
+   
+   /*
     $weekly_id = Database::get()->querySingle("SELECT course_weekly_view_id FROM course_weekly_view_activities WHERE id = ?d ", $resource_id)->course_weekly_view_id;
     $check = Database::get()->querySingle("SELECT id FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d ORDER BY `order` ASC LIMIT 1", $weekly_id);
     
@@ -1121,7 +1127,7 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $content .= "<td width='12'>&nbsp;</td>";
     }
     $first = false;
-    return $content;
+    return $content;*/
 }
 
 /**

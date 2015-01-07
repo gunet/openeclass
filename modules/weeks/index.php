@@ -48,6 +48,7 @@ if (isset($_GET['cnt'])) {
     $cnt = intval($_REQUEST['cnt']);
 }
 
+$pageName = '';
 $lang_editor = $language;
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
@@ -198,7 +199,7 @@ foreach (array('previous', 'next') as $i) {
 
 $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
-        <h3 class='page-title'>$pageName</h3>
+        <h4 class='page-title'>$pageName</h4>
       </div>
     </div>";
 
