@@ -110,26 +110,6 @@ a
   {
     outline: 0;
   }
-
-  &.goto
-  {
-    position: relative;
-    padding-right: 1.5em!important;
-    font-size: 0.75em;
-    
-    &:after
-    {
-      content: "\f105";
-      font-family: $font-icon;
-      position: absolute;
-      display:block;
-      right:0px;
-      top: calc(50% - 0.5em);
-      width:1em;
-      height:1em;
-      color: #7E7E7E;
-    }
-  }
 }
 
 

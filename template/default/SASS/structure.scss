@@ -275,7 +275,6 @@ a.toggle-active{
 
             .title
             {
-
                 margin: 0;
                 padding: 2em 0em!important;
                 font-weight: 700;
@@ -290,66 +289,6 @@ a.toggle-active{
                     opacity:.9;
                     font-size: 16px;
                 }
-                .tricky
-                {
-
-                    margin-left:-100%;
-                    width: 200%;
-                    position: relative;
-                    height: 45px;
-                    @include transition(margin-left $transition-time linear);
-
-                    > div{        
-                        display: inline-block;
-                        width: 49%;
-                        height: 100%;
-                        position: relative;
-                        top: 0px;
-                        vertical-align: middle;
-                        padding: 0.5em 0em;
-
-                        @include transition(opacity 60ms linear);  
-                    }
-
-                    .icon{
-                        opacity: 1;
-                    }
-
-                    .description{
-                        font-weight: 400;
-                        padding:0.5em 1em;
-                        opacity: 0;
-                    }
-                }
-
-                &:hover:not(.ui-accordion-header-active){
-                    .tricky{
-                        margin-left: 0%;
-
-                        .description{
-                            opacity: .55;
-                        }
-
-                        .icon{
-                            opacity:0;
-                        }
-
-                    }
-
-                    .txt{
-                        color:$color-hover;
-                    }
-                }
-
-                &.ui-accordion-header-active{
-                    .tricky{
-                        margin-left: 0%;
-                        .description{
-                            opacity: .55;
-                        }
-                    }
-                }
-
             }
 
             li.outerpanel{
@@ -364,12 +303,6 @@ a.toggle-active{
                     padding:1em 0em;
                 }
 
-                textarea,input{
-                    width: 90%;
-                    margin: 0em auto 1em auto;
-                    display: block;
-                }
-
                 textarea{ 
                     min-height: 12em;
                 }
@@ -377,30 +310,6 @@ a.toggle-active{
                 button{
                     margin: 1.1em;
                     margin-top: 0em;
-                    font-size: 0.8em;
-                }
-
-                .goto{
-                    float: right;
-                    color: #7E7E7E;
-                    padding: 0.5em;
-                    margin-right: 0.5em;
-                }
-
-                .input-parent{
-                    position: relative;
-
-                    textarea,input{
-                        padding-left:2em;
-                    }
-
-                    .fa{
-                        position: absolute;
-                        top: 0.7em;
-                        left: 1.5em;
-                        z-index: 9;
-                        opacity: 0.2;
-                    }
                 }
             }
 
@@ -419,9 +328,18 @@ a.toggle-active{
                     cursor: pointer;
                 }
             }
-
+            .goto{
+                    display: inline-block;
+                    float: right;
+                    margin-right: 0.5em;
+                    font-size: 0.75em;
+                }
+                .goto:hover{
+                    text-decoration: none;
+                }
             .innerpanel{
                 margin-bottom:0px;
+                 @include border-radius(4px 4px 4px 4px);
 
                 .panel-body{
                     background: #253447;
@@ -476,10 +394,6 @@ a.toggle-active{
         background: #253447;
         border-top: none;
         color: rgba(255,255,255,.9);
-        margin: 0 16px;
-        &:last-of-type{
-            @include border-radius(0px 0px 4px 4px);
-        }
         .lesson-title{
             background: #344458;
             font-size: 0.85em;

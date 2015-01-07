@@ -312,18 +312,18 @@
                                     <i class="fa fa-envelope"></i><span class="txt">{%MY_MESSAGES%}</span>
                                 </h4>
                             </div>
-                            <div id="collapseMessages" class="panel-collapse collapse">
+                            <div id="collapseMessages" class="panel-collapse collapse side-list">
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        <input class="recipients-input" type="text" placeholder="Recipients...">
+                                        <input class="recipients-input form-control" type="text" placeholder="Recipients...">
                                     </div>
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                        <textarea placeholder="Message..."></textarea>
+                                        <textarea class="form-control" placeholder="Message..."></textarea>
                                     </div>
-                                    <button data-label="Send" class="btn btn-default-eclass btn-sm">SAVE</button>
-                                    <a class="goto" href="#">All messages</a>
+                                    <button data-label="Send" class="btn btn-default btn-xs">Send</button>
+                                    <a class="goto" href="{%URL_PATH%}/modules/dropbox/index.php">All messages</a>
                                 </div>
                             </div>
                         </div>
@@ -333,14 +333,14 @@
                                     <i class="fa fa-pencil"></i><span class="txt">{%QUICK_NOTES%}</span>
                                 </h4>
                             </div>
-                            <div id="collapseNotices" class="panel-collapse collapse">
+                            <div id="collapseNotices" class="panel-collapse collapse side-list">
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                                        <textarea placeholder="Type a note..."></textarea>
+                                        <textarea class="form-control" placeholder="Type a note..."></textarea>
                                     </div>
-                                    <button data-label="Save" class="btn btn-default-eclass btn-sm">SAVE</button>
-                                    <a class="goto" href="#">All notes</a>
+                                    <button data-label="Save" class="btn btn-default btn-xs">Save</button>
+                                    <a class="goto" href="{%URL_PATH%}/main/notes/index.php">All notes</a>
                                 </div>
                             </div>
                         </div>
