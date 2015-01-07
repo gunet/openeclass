@@ -77,7 +77,7 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $course_code, $helpTopic,
+    global $course_code, $course_id, $helpTopic,
         $is_editor, $langActivate,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
         $langChooseLang, $langCopyrightFooter, $langDeactivate,
@@ -419,6 +419,11 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     //END breadcrumb --------------------------------
 
     $t->set_var('PAGE_TITLE', q($pageTitle));
+
+    if (isset($course_code)) {
+        $t->set_var('COURSE_CODE', $course_code);
+        $t->set_var('COURSE_ID', $course_id);
+    }
 
     if (!$is_embedonce) {
         if ($is_mobile) {

@@ -86,6 +86,10 @@ if (isset($_POST['submitNote'])) {
         redirect_to_home_page('main/notes/index.php');        
     } else { // new note
         $id = Notes::add_note($newTitle, $newContent, $refobjid);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            echo $langNoteAdd;
+            exit;
+        }
         Session::Messages($langNoteAdd, 'alert-success');
         redirect_to_home_page('main/notes/index.php');
     }
