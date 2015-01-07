@@ -437,14 +437,24 @@ a.toggle-active{
                         margin-right: 0px;
                         border: none;
                         border-radius: 0px;
-                        
-                        i{
-                            display: block;
-                            position: absolute;
-                            right: 10px;
-                            top: 8px;
-                        }
                     }
+                }
+                a.lesson-title-link
+                {
+                    display: inline-block;
+                    height: 100%;
+                    width: 80%;
+                    line-height: 37px;
+                    padding-left: 10px;
+                }
+                i.lesson-title-caret
+                {
+                    display: inline-block;
+                    height: 100%;
+                    width: 20%;
+                    text-align: center;
+                    line-height: 37px;
+                    border-left: solid 1px #232c3a;
                 }
 
             }
@@ -474,7 +484,7 @@ a.toggle-active{
             background: #344458;
             font-size: 0.85em;
             margin:0px;
-            padding: 10px 20px 10px 15px;
+            padding: 0px;
             cursor: pointer;
             position: relative;
             outline: none;
