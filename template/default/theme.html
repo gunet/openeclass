@@ -21,6 +21,7 @@
     bootbox.setDefaults({
       locale: "{%LANG%}"
     });
+    var sidebarConfig = { notesLink: '{%NOTES_LINK%}', messagesLink: '{%MESSAGES_LINK%}', courseCode: '{%COURSE_CODE%}', courseId: '{%COURSE_ID%}' };
     </script>
     <!-- Our javascript -->
     <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
@@ -316,13 +317,13 @@
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        <input class="recipients-input form-control" type="text" placeholder="Recipients...">
+                                        <input id="msg-recipients" class="form-control" type="text" placeholder="Recipients...">
                                     </div>
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                        <textarea class="form-control" placeholder="Message..."></textarea>
+                                        <textarea id="message_text" class="form-control" placeholder="Message..."></textarea>
                                     </div>
-                                    <button data-label="Send" class="btn btn-default btn-xs">Send</button>
+                                    <button id="send_message" data-label="Send" class="btn btn-default btn-xs">Send</button>
                                     <a class="goto" href="{%MESSAGES_LINK%}">All messages</a>
                                 </div>
                             </div>
@@ -337,9 +338,13 @@
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                                        <textarea class="form-control" placeholder="Type a note..."></textarea>
+                                        <input id="note-title" class="form-control" type="text" placeholder="Title...">
                                     </div>
-                                    <button data-label="Save" class="btn btn-default btn-xs">Save</button>
+                                    <div class="input-parent input-group">
+                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <textarea id="note-text" class="form-control" placeholder="Type a note..."></textarea>
+                                    </div>
+                                    <button id="save_note" data-label="Save" class="btn btn-default btn-xs">Save</button>
                                     <a class="goto" href="{%NOTES_LINK%}">All notes</a>
                                 </div>
                             </div>

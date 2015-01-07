@@ -69,6 +69,19 @@ $(document).ready(function () {
             }
         }
     });
+    
+    $("#save_note").on("click", function () {
+        var note_title = $("#note_title").val();
+        var note_text = $("#note_text").val();
+        $.ajax({
+            type: "POST",
+            url: sidebarConfig.notesLink,
+            data: { newTitle: note_title, newContent: note_text, submitNote: 1 } 
+        })
+                .done(function (msg) {
+                    alert("hello");
+                });
+    });
 
     $(".navbar-toggle").on("click", function (e) {
         if ($("#sidebar").hasClass("in")) {
