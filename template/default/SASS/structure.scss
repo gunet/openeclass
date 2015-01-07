@@ -341,11 +341,6 @@ a.toggle-active{
                 margin-bottom:0px;
                  @include border-radius(4px 4px 4px 4px);
 
-                .panel-body{
-                    background: #253447;
-                    border-top: none;
-                    color: rgba(255, 255, 255, 0.9);
-                }
                 .panel-heading{
                     margin: 0px;
                     padding: 0px;
@@ -353,9 +348,15 @@ a.toggle-active{
                     &>div{
                         margin-left: 0px;
                         margin-right: 0px;
-                        border: none;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
                         border-radius: 0px;
                     }
+                }
+                .panel-body{
+                    background: #253447;
+                    border-top: none;
+                    color: rgba(255, 255, 255, 0.9);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
                 }
                 a.lesson-title-link
                 {
@@ -401,7 +402,6 @@ a.toggle-active{
             padding: 0px;
             cursor: pointer;
             position: relative;
-            outline: none;
             color: rgba(255,255,255,0.5);
             font-weight: 600;      
             margin: 0 16px;
@@ -417,9 +417,19 @@ a.toggle-active{
             &:last-of-type{
                 @include border-radius(0px 0px 4px 4px);
             }
-            &:hover{
+            & a.lesson-title-link:hover{
                 background: #48586D;
                 color: rgba(255,255,255,0.85);
+                text-decoration: none;
+
+                &:after{
+                    color: rgba(255,255,255,.6);
+                }
+            }
+            & i.lesson-title-caret:hover{
+                background: #48586D;
+                color: rgba(255,255,255,0.85);
+                text-decoration: none;
 
                 &:after{
                     color: rgba(255,255,255,.6);
