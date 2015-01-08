@@ -3401,6 +3401,7 @@ $langPersonalEvent = "Personal event";
 $langSelectFromMenu = "Select...";
 $langSureToDelNote = "Are you sure about deleting this note?";
 $langSureToDelNoteAll = "Are you sure about deleting all your notes?";
+$langNoteSaved = "Submitted successfully";
 
 /* * ******************************************
   Personal calendar

@@ -3832,6 +3832,7 @@ $langReferencedObject = "Αφορά";
 $langSelectFromMenu = "Επιλέξτε...";
 $langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
 $langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
+$langNoteSaved = "Αποθηκεύτηκε επιτυχώς";
 
 /* * ******************************************
   Personal calendar

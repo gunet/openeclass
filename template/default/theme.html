@@ -314,6 +314,10 @@
                                 </h4>
                             </div>
                             <div id="collapseMessages" class="panel-collapse collapse side-list">
+                                <div class="spinner-div hidden">
+                                    <img src="{%template_base%}/img/ajax-loader.gif">
+                                    <p class="hidden">$langNoteSaved</p>
+                                </div>
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -335,14 +339,18 @@
                                 </h4>
                             </div>
                             <div id="collapseNotices" class="panel-collapse collapse side-list">
+                                <div class="spinner-div hidden">
+                                    <img src="{%template_base%}/img/ajax-loader.gif">
+                                    <p class="hidden">$langNoteSaved</p>
+                                </div>
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                                        <input id="note-title" class="form-control" type="text" placeholder="Title...">
+                                        <input id="title-note" class="form-control" type="text" placeholder="Title...">
                                     </div>
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                                        <textarea id="note-text" class="form-control" placeholder="Type a note..."></textarea>
+                                        <textarea id="text-note" class="form-control" placeholder="Type a note..."></textarea>
                                     </div>
                                     <button id="save_note" data-label="Save" class="btn btn-default btn-xs">Save</button>
                                     <a class="goto" href="{%NOTES_LINK%}">All notes</a>

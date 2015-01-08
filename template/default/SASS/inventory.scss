@@ -1659,6 +1659,15 @@ td.option-btn-cell{
     margin-bottom: 15px;
 }
 
+div.spinner-div
+{
+    position: absolute;
+    z-index: 9999;
+    background-color: rgba(0,0,0,0.6);
+    text-align: center;
+    padding-top: 50px;
+}
+
 #Frame
 {
     padding: 0 0;
