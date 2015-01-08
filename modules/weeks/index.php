@@ -60,18 +60,6 @@ if (isset($_REQUEST['edit_submit'])) {
 
 $form = process_actions();
 
-// check if we are trying to access a protected resource directly
-/*
-$access = Database::get()->querySingle("SELECT public FROM course_units WHERE id = ?d", $id);
-if ($access) {
-    if (!resource_access(1, $access->public)) {
-        $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
-        draw($tool_content, 2, null, $head_content);
-        exit;    
-    }
-}
-*/
-
 if ($is_editor) {
     $base_url = $urlAppend . "modules/weeks/insert.php?course=$course_code&amp;id=$id&amp;type=";
     $tool_content .= "

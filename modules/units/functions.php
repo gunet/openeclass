@@ -217,15 +217,15 @@ function show_resource($info) {
 function show_doc($title, $comments, $resource_id, $file_id) {
     global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code;
 
-    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
-    if (count($file) == 0) {
+    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);    
+    if (!$file) {
         if (!$is_editor) {
             return '';
         }
         $status = 'del';
         $image = 'fa-times';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
-    } else {        
+    } else {
         $status = $file->visible;
         if (!$is_editor and ( !resource_access($file->visible, $file->public))) {
             return '';
@@ -311,7 +311,7 @@ function show_description($title, $comments, $id, $res_id, $visibility) {
  */
 function show_lp($title, $comments, $resource_id, $lp_id) {
     global $id, $urlServer, $course_id, $is_editor,
-    $langWasDeleted, $course_code, $themeimg, $langInactiveModule;
+    $langWasDeleted, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
     if (!$module_visible and ! $is_editor) {
@@ -323,7 +323,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
 
     $title = q($title);
     $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
-    if (count($lp) == 0) { // check if lp was deleted
+    if (!$lp) { // check if lp was deleted
         if (!$is_editor) {
             return '';
         } else {

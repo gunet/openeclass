@@ -30,16 +30,22 @@ $require_help = true;
 $helpTopic = '';
 require_once '../../include/baseTheme.php';
 
+$pageName = $langEditWeek;
 
 load_js('tools.js');
 
 if (isset($_GET['edit'])) { // display form for editing course unit
     $id = $_GET['edit'];
-    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_weekly_view WHERE id = ?d  AND course_id = ?d",$id,$course_id);    
+    $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_weekly_view WHERE id = ?d  AND course_id = ?d",$id,$course_id);
+    if (!$cu) {
+        $pageName = $langUnitUnknown;
+        $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
+        draw($tool_content, 2, null, $head_content);
+        exit;
+    }
     $weektitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
     $weekdescr = $cu->comments;
-    $week_id = $cu->id;
-    $pageName = $langEditWeek;
+    $week_id = $cu->id;    
 } else {
     $pageName = $langAddWeek;
     $weekdescr = $weektitle = '';
@@ -47,32 +53,32 @@ if (isset($_GET['edit'])) { // display form for editing course unit
 
 $action = "${urlServer}courses/$course_code/";
 
+$tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' method='post' action='$action' onsubmit=\"return checkrequired(this, 'weektitle');\">";
 
-$tool_content .= "<form method='post' action='$action' onsubmit=\"return checkrequired(this, 'weektitle');\">
-    <fieldset>
-    <legend>$pageName</legend>";
 if (isset($week_id)) {
     $tool_content .= "<input type='hidden' name='week_id' value='$week_id'>";
 }
-$tool_content .= "
-    <table class='tbl' width='100%'>
-    <tr>
-      <th width='150'>$langWeekTitle ($langOptionalCfgSetting):</th>
-    </tr>
-    <tr>
-      <td><input type='text' name='weektitle' size='50' maxlength='255' $weektitle ></td>
-    </tr>
-    <tr>
-      <th valign='top'>$langUnitDescr:</th>
-    </tr>
-    <tr>
-      <td>" . rich_text_editor('weekdescr', 4, 20, $weekdescr) . "</td>
-    </tr>
-    <tr>
-      <td class='right'><input class='btn btn-primary' type='submit' name='edit_submitW' value='$langSubmit'></td>
-    </tr>
-    </table>
-    </fieldset>
-    </form>";
+
+$tool_content .= "<div class='form-group'>
+                    <label for='weekTitle' class='col-sm-2 control-label'>$langWeekTitle:</label>
+                    <div class='col-sm-10'>
+                        <input type='text' class='form-control' id='weekTitle' name='weektitle' $weektitle>
+                    </div>
+                  </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langUnitDescr</label>
+                <div class='col-sm-10'>
+                    " . rich_text_editor('weekdescr', 10, 20, $weekdescr) . "
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-offset-5 col-sm-12'>
+                    <input class='btn btn-primary' type='submit' name='edit_submitW' value='" . q($langSubmit) . "'>
+                </div>
+            </div>            
+        </form>
+    </div>";
+
 draw($tool_content, 2, null, $head_content);
 

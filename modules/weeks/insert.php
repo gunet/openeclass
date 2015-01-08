@@ -79,7 +79,7 @@ if (isset($_POST['submit_doc'])) {
 
 switch ($_GET['type']) {
     case 'work': $pageName = "$langAdd $langInsertWork";
-        include 'insert_work.php';
+        include 'modules/units/insert_work.php';
         list_assignments();
         break;
     case 'doc': $pageName = "$langAdd $langInsertDoc";
