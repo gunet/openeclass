@@ -34,7 +34,7 @@ foreach (array($language, 'en', 'el') as $l) {
 
 $tool_content = str_replace(
     array('{%INSTITUTION%}', '{%EMAIL_HELPDESK%}'),
-    array(q(get_config('institution')), "<a href='$email'>$email</a>"),
+    array(q(get_config('institution')), "<a href='mailto:$email'>$email</a>"),
     file_get_contents($terms_file));
 
 if (isset($_SESSION['uid'])) {
