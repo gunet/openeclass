@@ -1776,12 +1776,17 @@ td.option-btn-cell {
 div.spinner-div {
   position: absolute;
   z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(100, 100, 100, 0.9);
   text-align: center;
   padding-top: 50px;
 }
 
-/* line 1671, ../SASS/inventory.scss */
+/* line 1670, ../SASS/inventory.scss */
+.overlayed {
+  position: relative;
+}
+
+/* line 1674, ../SASS/inventory.scss */
 #Frame {
   padding: 0 0;
   margin: 0 0;
@@ -1790,61 +1795,61 @@ div.spinner-div {
 /*.no-embed{
     top: -53px;
 }*/
-/* line 1679, ../SASS/inventory.scss */
+/* line 1682, ../SASS/inventory.scss */
 .descr_title div {
   display: inline-block;
   padding-top: 10px;
 }
 
-/* line 1683, ../SASS/inventory.scss */
+/* line 1686, ../SASS/inventory.scss */
 #descr_collapse {
   height: 260px;
   overflow: hidden;
 }
 
-/* line 1687, ../SASS/inventory.scss */
+/* line 1690, ../SASS/inventory.scss */
 #header .navbar-brand {
   padding: 0px;
 }
 
-/* line 1690, ../SASS/inventory.scss */
+/* line 1693, ../SASS/inventory.scss */
 #quick-search-wrapper {
   padding: 40px 10px 30px 10px;
 }
 
-/* line 1693, ../SASS/inventory.scss */
+/* line 1696, ../SASS/inventory.scss */
 #quick-search-wrapper .advanced-search {
   margin: 10px 0;
   font-size: 11px;
   padding-left: 13px;
 }
 
-/* line 1699, ../SASS/inventory.scss */
+/* line 1702, ../SASS/inventory.scss */
 #quick-search-wrapper .advanced-search a:hover {
   text-decoration: none !important;
 }
 
-/* line 1702, ../SASS/inventory.scss */
+/* line 1705, ../SASS/inventory.scss */
 #rename_doc_file label {
   word-wrap: break-word;
 }
 
-/* line 1707, ../SASS/inventory.scss */
+/* line 1710, ../SASS/inventory.scss */
 .no-borders {
   border: 0px;
 }
 
-/* line 1711, ../SASS/inventory.scss */
+/* line 1714, ../SASS/inventory.scss */
 #dropboxTabs .nav-tabs {
   margin-bottom: 15px;
 }
 
-/* line 1715, ../SASS/inventory.scss */
+/* line 1718, ../SASS/inventory.scss */
 #profile_menu_dropdown ul li:last-child {
   border-top: 1px #ddd solid;
 }
 
-/* line 1718, ../SASS/inventory.scss */
+/* line 1721, ../SASS/inventory.scss */
 .add-unit-btn {
   line-height: 37px;
   font-size: 22px;
@@ -1852,11 +1857,11 @@ div.spinner-div {
   color: #5cb85c;
 }
 
-/* line 1725, ../SASS/inventory.scss */
+/* line 1728, ../SASS/inventory.scss */
 .dataTables_filter {
   position: relative;
 }
-/* line 1728, ../SASS/inventory.scss */
+/* line 1731, ../SASS/inventory.scss */
 .dataTables_filter:before {
   position: absolute;
   font-family: FontAwesome;
@@ -1865,34 +1870,34 @@ div.spinner-div {
   content: "\f002";
   color: #999;
 }
-/* line 1736, ../SASS/inventory.scss */
+/* line 1739, ../SASS/inventory.scss */
 .dataTables_filter label {
   margin: 0 0 10px 0;
   width: 100%;
 }
-/* line 1740, ../SASS/inventory.scss */
+/* line 1743, ../SASS/inventory.scss */
 .dataTables_filter input {
   margin: 0px;
   padding-right: 25px;
 }
 
-/* line 1745, ../SASS/inventory.scss */
+/* line 1748, ../SASS/inventory.scss */
 table#portfolio-lessons tr {
   padding: 5px 0;
 }
 
-/* line 1750, ../SASS/inventory.scss */
+/* line 1753, ../SASS/inventory.scss */
 .navbar-toggle {
   margin-left: 15px;
 }
 
-/* line 1753, ../SASS/inventory.scss */
+/* line 1756, ../SASS/inventory.scss */
 .quick-change-pwd {
   text-align: right;
   font-size: 11px;
 }
 
-/* line 1758, ../SASS/inventory.scss */
+/* line 1761, ../SASS/inventory.scss */
 #scrollToTop {
   display: none;
   position: fixed;
@@ -1901,19 +1906,19 @@ table#portfolio-lessons tr {
   bottom: 15px;
 }
 
-/* line 1765, ../SASS/inventory.scss */
+/* line 1768, ../SASS/inventory.scss */
 #scrollToTop i {
   padding: 0 0 10px 0;
   color: #a7a7a7;
   cursor: pointer;
 }
 
-/* line 1770, ../SASS/inventory.scss */
+/* line 1773, ../SASS/inventory.scss */
 .panel-footer .event-legend > div {
   margin-bottom: 5px;
 }
 
-/* line 1773, ../SASS/inventory.scss */
+/* line 1776, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 8px;
@@ -1922,14 +1927,14 @@ table#portfolio-lessons tr {
   border-radius: 5px;
 }
 
-/* line 1782, ../SASS/inventory.scss */
+/* line 1785, ../SASS/inventory.scss */
 p.link-to-more {
   text-align: right;
   font-size: 12px;
   margin: 0px;
 }
 
-/* line 1788, ../SASS/inventory.scss */
+/* line 1791, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -1938,7 +1943,7 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 1795, ../SASS/inventory.scss */
+/* line 1798, ../SASS/inventory.scss */
 div.profile-pers-info-name {
   font-size: 16px;
   font-weight: bold;
@@ -1946,56 +1951,56 @@ div.profile-pers-info-name {
   padding-top: 10px;
 }
 
-/* line 1801, ../SASS/inventory.scss */
+/* line 1804, ../SASS/inventory.scss */
 div#profile-about-me {
   padding-top: 20px;
   padding-bottom: 20px;
 }
 
-/* line 1805, ../SASS/inventory.scss */
+/* line 1808, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1808, ../SASS/inventory.scss */
+/* line 1811, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 1812, ../SASS/inventory.scss */
+/* line 1815, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1816, ../SASS/inventory.scss */
+/* line 1819, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1822, ../SASS/inventory.scss */
+/* line 1825, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1831, ../SASS/inventory.scss */
+/* line 1834, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1837, ../SASS/inventory.scss */
+/* line 1840, ../SASS/inventory.scss */
 .event-legend {
   font-size: 11px;
   color: #666;
   line-height: 10px;
 }
-/* line 1841, ../SASS/inventory.scss */
+/* line 1844, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
-/* line 1847, ../SASS/inventory.scss */
+/* line 1850, ../SASS/inventory.scss */
 .event {
   width: 14px;
   height: 14px;
@@ -2012,7 +2017,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1859, ../SASS/inventory.scss */
+/* line 1862, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -2022,7 +2027,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1865, ../SASS/inventory.scss */
+/* line 1868, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;

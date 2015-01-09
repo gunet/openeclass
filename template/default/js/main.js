@@ -74,51 +74,58 @@ $(document).ready(function () {
         var note_title = $("#title-note").val();
         var note_text = $("#text-note").val();
         note_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
-        var notesHeight = $(".spinner-div").parent().height();
-        var notesWidth = $(".spinner-div").parent().width();
-        $(".spinner-div").removeClass("hidden").css({height: notesHeight, width: notesWidth});
-        $.ajax({
-            type: "POST",
-            url: sidebarConfig.notesLink,
-            data: { newTitle: note_title, newContent: note_text, refobjgentype: 0, submitNote: 1 },
-            success: function(){
-                $(".spinner-div img").toggleClass("hidden");
-                $(".spinner-div p").toggleClass("hidden");
-                setTimeout(function(){
-                    $(".spinner-div").addClass("hidden");
-                    $(".spinner-div img").toggleClass("hidden");
-                    $(".spinner-div p").toggleClass("hidden");
-                    $("#title-note").val('');
-                    $("#text-note").val('');
-                }, 2000);
-            }
-        });      
+        
+        var notesHeight = $(".overlayed").height();
+        var notesWidth = $(".overlayed").width();
+        console.log(notesHeight);
+        console.log(notesWidth);
+//        $(".spinner-div").removeClass("hidden").css({height: notesHeight, width: notesWidth});
+//        $.ajax({
+//            type: "POST",
+//            url: sidebarConfig.notesLink,
+//            data: { newTitle: note_title, newContent: note_text, refobjgentype: 0, refcourse: 0, refobjtype: 0, refobjid: 0, submitNote: 1 },
+//            success: function(data){
+//                $(".spinner-div p").text(data);
+//                $(".spinner-div img").toggleClass("hidden");
+//                $(".spinner-div p").toggleClass("hidden");
+//                setTimeout(function(){
+//                    $(".spinner-div").addClass("hidden");
+//                    $(".spinner-div img").toggleClass("hidden");
+//                    $(".spinner-div p").toggleClass("hidden");
+//                    $("#title-note").val('');
+//                    $("#text-note").val('');
+//                }, 2000);
+//            }
+//        });      
     });
     
-    $("#send_message").on("click", function () {
-        var note_title = $("#title-note").val();
-        var note_text = $("#text-note").val();
-        note_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
-        var notesHeight = $(".spinner-div").parent().height();
-        var notesWidth = $(".spinner-div").parent().width();
-        $(".spinner-div").removeClass("hidden").css({height: notesHeight, width: notesWidth});
-        $.ajax({
-            type: "POST",
-            url: sidebarConfig.notesLink,
-            data: { newTitle: note_title, newContent: note_text, refobjgentype: 0, submitNote: 1 },
-            success: function(){
-                $(".spinner-div img").toggleClass("hidden");
-                $(".spinner-div p").toggleClass("hidden");
-                setTimeout(function(){
-                    $(".spinner-div").addClass("hidden");
-                    $(".spinner-div img").toggleClass("hidden");
-                    $(".spinner-div p").toggleClass("hidden");
-                    $("#title-note").val('');
-                    $("#text-note").val('');
-                }, 2000);
-            }
-        });      
-    });
+//    $("#send_message").on("click", function () {
+//        var msg_recipients = $("#msg-recipients").val();
+//        var msg_text = $("#msg-text").val();
+//        msg_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
+//        var msgHeight = $(".spinner-div").parent().height();
+//        var msgWidth = $(".spinner-div").parent().width();
+//        $(".spinner-div").removeClass("hidden").css({height: msgHeight, width: msgWidth});
+//        $.ajax({
+//            type: "POST",
+//            url: sidebarConfig.notesLink,
+//            data: { message_title: "nanana", body: "na", recipients: "" },
+//            success: function(data){
+//                $(".spinner-div p").text(data);
+//                $(".spinner-div img").toggleClass("hidden");
+//                $(".spinner-div p").toggleClass("hidden");
+//                setTimeout(function(){
+//                    $(".spinner-div").addClass("hidden");
+//                    $(".spinner-div img").toggleClass("hidden");
+//                    $(".spinner-div p").toggleClass("hidden");
+//                    $("#msg-recipients").val('');
+//                    $("#msg-text").val('');
+//                }, 2000);
+//            }
+//        });      
+//    });
+    
+    
 
     $(".navbar-toggle").on("click", function (e) {
         if ($("#sidebar").hasClass("in")) {

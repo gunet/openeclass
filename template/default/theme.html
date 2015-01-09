@@ -313,10 +313,10 @@
                                     <i class="fa fa-envelope"></i><span class="txt">{%MY_MESSAGES%}</span>
                                 </h4>
                             </div>
-                            <div id="collapseMessages" class="panel-collapse collapse side-list">
+                            <div id="collapseMessages" class="panel-collapse collapse side-list overlayed">
                                 <div class="spinner-div hidden">
                                     <img src="{%template_base%}/img/ajax-loader.gif">
-                                    <p class="hidden">$langNoteSaved</p>
+                                    <p class="hidden"></p>
                                 </div>
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
@@ -325,7 +325,7 @@
                                     </div>
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                        <textarea id="message_text" class="form-control" placeholder="Message..."></textarea>
+                                        <textarea id="msg-text" class="form-control" placeholder="Message..."></textarea>
                                     </div>
                                     <button id="send_message" data-label="Send" class="btn btn-default btn-xs">Send</button>
                                     <a class="goto" href="{%MESSAGES_LINK%}">All messages</a>
@@ -338,7 +338,7 @@
                                     <i class="fa fa-pencil"></i><span class="txt">{%QUICK_NOTES%}</span>
                                 </h4>
                             </div>
-                            <div id="collapseNotices" class="panel-collapse collapse side-list">
+                            <div id="collapseNotices" class="panel-collapse collapse side-list overlayed">
                                 <div class="spinner-div hidden">
                                     <img src="{%template_base%}/img/ajax-loader.gif">
                                     <p class="hidden">$langNoteSaved</p>

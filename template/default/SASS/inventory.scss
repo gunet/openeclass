@@ -1663,9 +1663,12 @@ div.spinner-div
 {
     position: absolute;
     z-index: 9999;
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(100,100,100,0.9);
     text-align: center;
     padding-top: 50px;
+}
+.overlayed{
+    position: relative;
 }
 
 #Frame
