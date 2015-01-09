@@ -487,6 +487,7 @@ The content of Electronic Courses hosted on the Open eClass platform, as well as
 all copyrights of this content, belongs to the authors of the courses and
 GUnet claims no rights on it. For every use or republication of course
 content, please contact the persons in charge of the respective course.';
+$langUsageTerms = 'Terms of Usage';
 $langCourseProgram = "Course Description";
 $langThisCourseDescriptionIsEmpty = "This course is presently not described";
 $langEditCourseProgram = "Create and edit";
