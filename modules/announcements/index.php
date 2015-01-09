@@ -372,7 +372,7 @@ if ($is_editor) {
             $emailContent = "$professorMessage: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "<br>\n<br>\n" .
                     q($_POST['antitle']) .
                     "<br>\n<br>\n" .
-                    q($_POST['newContent']);
+                    $_POST['newContent'];
             $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
             // select students email list
             $countEmail = 0;
