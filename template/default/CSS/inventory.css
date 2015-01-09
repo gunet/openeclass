@@ -1826,7 +1826,7 @@ div.spinner-div {
 #quick-search-wrapper .advanced-search {
   margin: 10px 0 0 0;
   font-size: 11px;
-  padding-left: 13px;
+  text-align: right;
 }
 
 /* line 1707, ../SASS/inventory.scss */
