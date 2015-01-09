@@ -151,12 +151,14 @@ foreach (array('previous', 'next') as $i) {
         $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
         $arrow2 = '';        
         $cnt--;
+        $page_btn = 'pull-left';
     } else {
         $op = '>=';
         $dir = '';
         $arrow1 = '';
         $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";
         $cnt += 2;
+        $page_btn = 'pull-right';
     }
     
     if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
@@ -179,15 +181,28 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = $langFrom . " " . nice_format($q->start_week) . " $langUntil " .nice_format($q->finish_week);
-        $link[$i] = "<a class='btn-default-eclass place-at-toolbox' title='$q_title' rel='tooltip' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a>";        
+        $link[$i] = "<div class='$page_btn'><a class='btn-default-eclass place-at-toolbox' title='$q_title' rel='tooltip' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a></div>";
     } else {
         $link[$i] = '&nbsp;';
     }
 }
 
+if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
+    $tool_content .= "<div class='row'>
+        <div class='col-md-12'><div class='toolbox whole-row'>";
+        
+    $tool_content .= "
+        ". $link['previous'] ."
+        ". $link['next'] ."";
+    
+    $tool_content .= "</div>
+        </div>
+    </div>";
+}
+
 $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
-        <h4 class='page-title'>$pageName</h4>
+        <h4 class='text-center'>$pageName</h4>
       </div>
     </div>";
 
@@ -200,20 +215,6 @@ if (!empty($comments)) {
               $comments
         </div>
       </div>
-    </div>";
-}
-
-if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "<div class='row'>
-        <div class='col-md-12'>    
-        <div class='toolbox whole-row margin-top-thin margin-bottom-thin'>";
-        
-    $tool_content .= "
-        ". $link['previous'] ."
-        ". $link['next'] ."";
-    
-    $tool_content .= "</div>
-        </div>
     </div>";
 }
 

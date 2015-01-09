@@ -186,9 +186,22 @@ foreach (array('previous', 'next') as $i) {
     }
 }
 
+if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
+    $tool_content .= "<div class='row'>
+        <div class='col-md-12'><div class='toolbox whole-row'>";
+        
+    $tool_content .= "
+        ". $link['previous'] ."
+        ". $link['next'] ."";
+    
+    $tool_content .= "</div>
+        </div>
+    </div>";
+}
+
 $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
-        <h4 class='page-title'>$pageName</h4>
+        <h4 class='text-center'>$pageName</h4>
       </div>
     </div>";
 
@@ -202,18 +215,6 @@ if (!empty($comments)) {
     </div>";
 }
 
-if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='toolbox whole-row'>";
-        
-    $tool_content .= "
-        ". $link['previous'] ."
-        ". $link['next'] ."";
-    
-    $tool_content .= "</div>
-        </div>
-    </div>";
-}
 
 $tool_content .= "<div class='row'>
   <div class='col-md-12'>
