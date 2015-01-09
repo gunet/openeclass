@@ -298,12 +298,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('user_multidep', '0'),
                     ('restrict_owndep', '0'),
                     ('restrict_teacher_owndep', '0')");
-
+    
+    // upgrade from versions < 2.1.3 is not possible
     if (version_compare($oldversion, '2.1.3', '<') or ( !isset($oldversion))) {
         updateInfo(1, $langUpgTooOld);
         exit;
     }
-
+    // upgrade from version 2.x to 3.0
     if (version_compare($oldversion, '2.2', '<')) {
         // course units
         Database::get()->query("CREATE TABLE IF NOT EXISTS `course_units` (
@@ -2069,7 +2070,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
     DBHelper::indexExists('course', 'course_index') or
             Database::get()->query("CREATE INDEX `course_index` ON course(code)");
-    DBHelper::indexExists('course_department', 'course_index') or
+    DBHelper::indexExists('course_department', 'cdep_index') or
             Database::get()->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
     DBHelper::indexExists('course_description', 'cd_type_index') or
             Database::get()->query('CREATE INDEX `cd_type_index` ON course_description(`type`)');
@@ -2323,7 +2324,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.10");
             upgrade_course_2_11($row->code);
         }
-        if (version_compare($oldversion, '3.0', '<')) {
+        if (version_compare($oldversion, '3.0b2', '<')) {
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0");
             upgrade_course_3_0($row->code, $row->id);
         }
@@ -2335,7 +2336,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         convert_db_utf8($mysqlMainDb);
     }
 
-    if (version_compare($oldversion, '3', '<')) { // special procedure, must execute after course upgrades
+    if (version_compare($oldversion, '3.0b2', '<')) { // special procedure, must execute after course upgrades
         Database::get()->query("USE `$mysqlMainDb`");
 
         Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
@@ -2370,18 +2371,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             set_config('enable_indexing', 0);
             echo "<hr><p class='alert alert-info'>$langUpgIndexingNotice</p>";
         }
-    }
-    // convert tables to InnoDB storage engine
-    $result = Database::get()->queryArray("SHOW FULL TABLES");
-    foreach ($result as $table) {
-        $value = "Tables_in_$mysqlMainDb";
-        if ($table->Table_type === 'BASE TABLE') {
-            Database::get()->query("ALTER TABLE `" . $table->$value . "` ENGINE = InnoDB");
+        
+        // convert tables to InnoDB storage engine
+        $result = Database::get()->queryArray("SHOW FULL TABLES");
+        foreach ($result as $table) {
+            $value = "Tables_in_$mysqlMainDb";
+            if ($table->Table_type === 'BASE TABLE') {
+                Database::get()->query("ALTER TABLE `" . $table->$value . "` ENGINE = InnoDB");
+            }
         }
     }
-
-    // upgrade from 3.0 beta to 3.0 new-ui
+        
     if (version_compare($oldversion, '3.0', '<')) {
+        Database::get()->query("USE `$mysqlMainDb`");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
                                 `name` VARCHAR(300) NOT NULL,
@@ -2411,9 +2413,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
         }
         set_config('theme', 'default');
-        set_config('theme_options_id', 0);
+        set_config('theme_options_id', 0);    
     }
-
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
