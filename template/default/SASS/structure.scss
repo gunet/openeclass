@@ -339,6 +339,8 @@ a.toggle-active{
                 }
             .innerpanel{
                 margin-bottom:0px;
+                max-height: 200px;
+                overflow: scroll;
                  @include border-radius(4px 4px 4px 4px);
 
                 .panel-heading{
@@ -365,6 +367,9 @@ a.toggle-active{
                     width: 80%;
                     line-height: 37px;
                     padding-left: 10px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
                 i.lesson-title-caret
                 {

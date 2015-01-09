@@ -231,7 +231,7 @@ $tool_content .= "
 </div>
 <div id='profile_box' class='row'>
     <div class='col-md-12'>
-        <h3 class='content-title'>$langMyStats</h3>
+        <h3 class='content-title'>$langCompactProfile</h3>
         <div class='panel'>
             <div class='panel-body'>
                 <div class='row'>

@@ -48,8 +48,7 @@ function template_callback($template, $menuTypeID, $embed)
         Database::get()->queryFunc("SELECT id, code, title, prof_names, public_code
             FROM course, course_user
             WHERE course.id = course_id AND user_id = ?d
-            ORDER BY reg_date DESC
-            LIMIT 5", function ($c) use ($template, $modules, $admin_modules, $theme_settings) {
+            ORDER BY reg_date DESC", function ($c) use ($template, $modules, $admin_modules, $theme_settings) {
                 global $urlAppend;
                 static $counter = 1;
 

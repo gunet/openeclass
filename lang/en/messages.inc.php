@@ -1139,6 +1139,7 @@ $langNoCourses = "There are no courses";
 $langCourseCreate = "Create Course";
 $langMyAgenda = "My calendar";
 $langMyStats = "User Statistics";
+$langCompactProfile = "Brief Profile";
 $langMyAnnouncements = "My Announcements";
 $langWelcome = "courses are freely available below. Other  courses require
 a username and a password, which you can obtain by clicking on 'registration'. " . $langTeachers . "
@@ -3550,7 +3551,7 @@ $langLessOptions = 'Less options';
 
 $langMyCoursesSide = 'My Courses';
 $langMyMessagesSide = 'My Messages';
-$langQuickNotesSide = 'Quick Notes';
+$langQuickNotesSide = 'Quick Note';
 $langMyStats = 'My statistics';
 
 $langAgendaDueDay = "Due day";

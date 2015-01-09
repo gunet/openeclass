@@ -1891,6 +1891,7 @@ $langCourseOptions = "Επιλογές Μαθήματος";
 $langAlternateLogin = "Εναλλακτική σύνδεση";
 $langTooManyFails = "Έχετε κάνει πολλές αποτυχημένες προσπάθειες. Πρέπει να περιμένετε για ένα μικρό διάστημα μέχρι την επόμενη προσπάθεια.";
 $langMyStats = "Τα στατιστικά μου";
+$langCompactProfile = "Συνοπτικό Προφίλ";
 
 /* * *********************************************************
  * install.php
@@ -4391,4 +4392,4 @@ $langLessOptions = 'Λιγότερες επιλογές';
 
 $langMyCoursesSide = 'Τα μαθηματα μου';
 $langMyMessagesSide = 'Τα μηνυματα μου';
-$langQuickNotesSide = 'Συντομες σημειωσεις';
+$langQuickNotesSide = 'Γρηγορη σημειωση';

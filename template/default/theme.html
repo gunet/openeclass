@@ -319,15 +319,7 @@
                                     <p class="hidden"></p>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        <input id="msg-recipients" class="form-control" type="text" placeholder="Recipients...">
-                                    </div>
-                                    <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                        <textarea id="msg-text" class="form-control" placeholder="Message..."></textarea>
-                                    </div>
-                                    <button id="send_message" data-label="Send" class="btn btn-default btn-xs">Send</button>
+                                    {%MY_MESSAGES%}
                                     <a class="goto" href="{%MESSAGES_LINK%}">All messages</a>
                                 </div>
                             </div>
