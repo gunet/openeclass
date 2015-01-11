@@ -319,8 +319,14 @@
                                     <p class="hidden"></p>
                                 </div>
                                 <div class="panel-body">
-                                    {%MY_MESSAGES%}
-                                    <a class="goto" href="{%MESSAGES_LINK%}">All messages</a>
+                                    <!-- BEGIN sideBarMyMessages -->
+                                    <ul class="sidebar-mymessages">
+                                        {%myMessagesList%}
+                                    </ul>
+                                    <!-- END sideBarMyMessages -->
+                                    <div>
+                                        <a class="goto" href="{%MESSAGES_LINK%}">All messages</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
