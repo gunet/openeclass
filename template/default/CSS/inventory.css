@@ -1882,7 +1882,7 @@ div.spinner-div {
 }
 /* line 1748, ../SASS/inventory.scss */
 .dataTables_filter input {
-  margin: 0px;
+  margin: 0px !important;
   padding-right: 25px;
 }
 

@@ -141,7 +141,6 @@ load_js('tools.js');
 //check if Datables code is needed
 if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
 load_js('datatables');
-load_js('datatables_bootstrap');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
@@ -159,6 +158,10 @@ $head_content .= "<script type='text/javascript'>
                ],
                 'fnDrawCallback': function( oSettings ) {
                     popover_init();
+                    $('#ann_table8_filter label input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
 },
                 'sPaginationType': 'full_numbers',
                 'bSort': false,
@@ -169,7 +172,7 @@ $head_content .= "<script type='text/javascript'>
                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       '".$langSearch."',
+                       'sSearch':       '',
                        'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
