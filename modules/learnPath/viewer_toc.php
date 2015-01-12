@@ -184,6 +184,8 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
         
+    <script type='text/javascript' src='{$urlAppend}js/jquery.cookie.js'></script>
+        
     <!-- Our javascript -->
     <script type='text/javascript' src='{$urlAppend}template/default/js/main.js'></script>
 
@@ -225,7 +227,20 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     /* <![CDATA[ */
     
     $(document).ready(function() {
-    
+        var leftTOChiddenStatus = 0;
+        if ($.cookie('leftTOChiddenStatus') !== undefined) {
+            leftTOChiddenStatus = $.cookie('leftTOChiddenStatus');
+        }
+        var fs = window.parent.document.getElementById('colFrameset');
+        var fsJQe = $('#colFrameset', window.parent.document);
+        if (leftTOChiddenStatus != fsJQe.hasClass('hidden')) {
+            fsJQe.toggleClass('hidden');
+            if (fsJQe.hasClass('hidden')) {
+                fs.cols = '0, *';
+            } else {
+                fs.cols = '200, *';
+            }
+        }
         $('#leftTOCtoggler').on('click', function() {
             var fs = window.parent.document.getElementById('colFrameset');
             var fsJQe = $('#colFrameset', window.parent.document);
@@ -233,8 +248,10 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
             fsJQe.toggleClass('hidden');
             if (fsJQe.hasClass('hidden')) {
                 fs.cols = '0, *';
+                $.cookie('leftTOChiddenStatus', 1, { path: '/' });
             } else {
                 fs.cols = '200, *';
+                $.cookie('leftTOChiddenStatus', 0, { path: '/' });
             }
         });
     });
