@@ -159,20 +159,16 @@ foreach ($flatElementList as $module) {
 $prevNextString = "";
 // display previous and next links only if there is more than one module
 if ($moduleNb > 1) {
-    $imgPrevious = '<img src="' . $themeimg . '/lp/back.png" alt="' . $langPrevious . '" title="' . $langPrevious . '">';
-    $imgNext = '<img src="' . $themeimg . '/lp/next.png" alt="' . $langNext . '" title="' . $langNext . '">';
 
     if ($previousModule != '') {
-        $prevNextString .= '<a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame">' . $imgPrevious . '</a>';
+        $prevNextString .= '<li><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
     } else {
-        $prevNextString .= $imgPrevious;
+        $prevNextString .= "<li><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
     }
-    $prevNextString .= '&nbsp;';
-
     if ($nextModule != '') {
-        $prevNextString .= '<a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame">' . $imgNext . '</a>';
+        $prevNextString .= '<li><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
     } else {
-        $prevNextString .= $imgNext;
+        $prevNextString .= "<li><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
     }
 }
 
@@ -182,8 +178,49 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <html>
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
-    <link href='{$urlAppend}template/$theme/lp.css' rel='stylesheet' type='text/css' />
+    <!-- jQuery -->
+    <script type='text/javascript' src='{$urlAppend}js/jquery-2.1.1.min.js'></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
+        
+    <!-- Our javascript -->
+    <script type='text/javascript' src='{$urlAppend}template/default/js/main.js'></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
+
+    <!-- Optional theme -->
+    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-theme.min.css'>
+
+    <!-- Font Awesome - A font of icons -->
+    <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>
+        
     $head_content
+
+    <style>
+        .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
+        .navbar-inverse .navbar-nav > li > a.inactive, .navbar-inverse .navbar-nav > li > a.inactive:hover, .navbar-inverse .navbar-nav > li > a.inactive:focus {color: #9d9d9d; cursor: default;}
+        .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus { color: #9BCCF7; }   
+        a#leftTOCtoggler {
+            color: whitesmoke;
+        }
+        .navbar-collapse.collapse {
+        display: block!important;
+        }
+
+        .navbar-nav>li, .navbar-nav {
+        float: left !important;
+        }
+
+        .navbar-nav.navbar-right:last-child {
+        margin-right: -15px !important;
+        }
+
+        .navbar-right {
+        float: right!important;
+        }        
+    </style>    
     <script type='text/javascript'>
     /* <![CDATA[ */
     
@@ -206,23 +243,49 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     </script>
 </head>
 <body>
-<div class='header'>
-    <div class='tools'>
-    <div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>
-        <img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='$langQuitViewer' /></a></div>
-    <div class='lp_left'>
-        <a href='{$urlAppend}courses/$course_code' target='_top' title='" .
- q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
-        <a href='{$urlAppend}modules/learnPath/index.php?course=$course_code' target='_top'>
-                $langLearningPaths</a> &#187;
-        <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a>
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        <a id='leftTOCtoggler' href='#'>$langLPViewerToggleLeftTOC</a></div>
-    <div class='clear'></div>
-    <div class='logo'><img src='$themeimg/lp/logo_openeclass.png' alt='' title='' /></div>
-    <div class='lp_right_grey'>";
-if ($uid) {
-    $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
-    echo $langProgress . ': ' . disp_progress_bar($lpProgress, 1) . "&nbsp;" . $lpProgress . "%";
-}
-echo "</div></div></div></body></html>";
+
+    <nav class='navbar navbar-inverse navbar-static-top' role='navigation'>
+            <div class='container-fluid'>
+                <div class='navbar-header col-xs-2'>
+                  <a id='leftTOCtoggler' class='btn pull-left' style='margin-top:12px;'><i class='fa fa-bars fa-lg'></i></a>
+                  <a class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png'></a>
+                </div>
+                <div class='navbar-header col-xs-10 pull-right'>
+                    <ul class='nav navbar-nav navbar-right'>
+                        $prevNextString
+                        <li><a href='$returl' target='_top'><i class='fa fa-reply fa-lg'></i> <span class='hidden-xs'>$langBack</span></a></li>
+                    </ul>                
+                    <div class='pull-right'>";
+                  
+                         if ($uid) {
+                            $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
+                            echo disp_progress_bar($lpProgress, 1);
+                        }
+echo "</div>
+                </div>                
+            </div>       
+    </nav>
+    </body>
+</html>";
+      
+    
+//<div class='header'>
+//    <div class='tools'>
+//    <div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>
+//        <img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='$langQuitViewer' /></a></div>
+//    <div class='lp_left'>
+//        <a href='{$urlAppend}courses/$course_code' target='_top' title='" .
+// q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
+//        <a href='{$urlAppend}modules/learnPath/index.php?course=$course_code' target='_top'>
+//                $langLearningPaths</a> &#187;
+//        <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a>
+//        &nbsp;&nbsp;|&nbsp;&nbsp;
+//        <a id='leftTOCtoggler' href='#'>$langLPViewerToggleLeftTOC</a></div>
+//    <div class='clear'></div>
+//    <div class='logo'><img src='$themeimg/lp/logo_openeclass.png' alt='' title='' /></div>
+//    <div class='lp_right_grey'>";
+//if ($uid) {
+//    $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
+//    echo $langProgress . ': ' . disp_progress_bar($lpProgress, 1) . "&nbsp;" . $lpProgress . "%";
+//}
+//echo "</div></div></div></body></html>";

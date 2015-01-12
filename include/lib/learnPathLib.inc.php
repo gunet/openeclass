@@ -1388,28 +1388,19 @@ function disp_button($url, $text, $confirmMessage = '') {
  */
 
 function disp_progress_bar($progress, $factor) {
-    global $themeimg;
+    global $themeimg, $langProgress;
 
     $maxSize = $factor * 100; //pixels
     $barwidth = $factor * $progress;
 
     // display progress bar
     // origin of the bar
-    $progressBar = "<img src='$themeimg/bar_1.gif' width='1' height='12' alt='' />";
-
-    if ($progress != 0) {
-        $progressBar .= "<img src='$themeimg/bar_1u.gif' width='$barwidth' height='12' alt='' />";
-    }
-
-    if ($progress != 100 && $progress != 0) {
-        $progressBar .= "<img src='$themeimg/bar_1m.gif' width='1' height='12' alt='' />";
-    }
-
-    if ($progress != 100) {
-        $progressBar .= "<img src='$themeimg/bar_1r.gif' width='" . ($maxSize - $barwidth) . "' height='12' alt='' />";
-    }
-
-    $progressBar .= "<img src='$themeimg/bar_1.gif' width='1' height='12' alt='' />";
+    $progressBar = "
+    <div class='progress' style='display: inline-block; width: 200px; margin-right: 20px; margin-top: 15px;'>
+        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%;'>
+            $progress%
+        </div>
+    </div>";
     return $progressBar;
 }
 
