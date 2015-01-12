@@ -355,7 +355,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     // breadcrumb and page title
-    if (!$is_embedonce and !$is_mobile) {
+    if (!$is_embedonce and !$is_mobile and $current_module_dir != '/') {
 
         $t->set_block('mainBlock', 'breadCrumbLinkBlock', 'breadCrumbLink');
         $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
