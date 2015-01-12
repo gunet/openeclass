@@ -88,13 +88,15 @@ if ($q && count($q) > 0) {
                                 'icon' => $row->visible ? 'fa-eye-slash' : 'fa-eye'
                             ),
                             array('title' => q($langUp),
+                                'level' => 'primary',
                                 'icon' => 'fa-arrow-up',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$row->id",
-                                'show' => $i > 0),
+                                'disabled' => $i <= 0),
                             array('title' => q($langDown),
+                                'level' => 'primary',
                                 'icon' => 'fa-arrow-down',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$row->id",
-                                'show' => $i + 1 < count($q))
+                                'disabled' => $i + 1 >= count($q))
                         )
                 ) ."</div>
               <h3 class='panel-title'>$row->title</h3>      
