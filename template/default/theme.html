@@ -21,7 +21,7 @@
     bootbox.setDefaults({
       locale: "{%LANG%}"
     });
-    var sidebarConfig = { notesLink: '{%NOTES_LINK%}', messagesLink: '{%MESSAGES_LINK%}', courseCode: '{%COURSE_CODE%}', courseId: '{%COURSE_ID%}' };
+    var sidebarConfig = { notesLink: '{%NOTES_LINK%}', messagesLink: '{%URL_PATH%}/main/ajax_sidebar.php', courseCode: '{%COURSE_CODE%}', courseId: '{%COURSE_ID%}' };
     </script>
     <!-- Our javascript -->
     <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
@@ -232,9 +232,9 @@
                             </span>
                         </div>
                     </form>
-                    <div class="advanced-search">
+<!--                    <div class="advanced-search">
                     <a href="{%URL_PATH%}modules/search/search.php" >Σύνθετη Αναζήτηση</a>
-                    </div>
+                    </div>-->
                     <!-- END searchBlock -->
                 </div>
                 
