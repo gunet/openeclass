@@ -48,6 +48,9 @@ function popover_init() {
         act_confirm();
     });
 }
+function sidebar_reset(){
+    
+}
 $(document).ready(function () {
 
     // Initialisations
@@ -223,14 +226,14 @@ $(document).ready(function () {
     $(".expandable-btn").click(function () {
         $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
     });
-    
-    
+
+
     $(".course-btn i").on("click", function (e) {
         var upOrDown = $(this).attr("id");
         var topOffset = $("#innerpanel-container").find(".panel.panel-default").outerHeight(true);
         var topPosition = $("#innerpanel-container").position().top;
         var bottomPosition = topPosition + $("#innerpanel-container").outerHeight(true) - $(".innerpanel").outerHeight(true);
-        
+
         if (upOrDown === "up") {
             if (bottomPosition >= 0) {
                 var topAnimate = topPosition - topOffset;
@@ -300,9 +303,11 @@ $(document).ready(function () {
                 },
                 complete: function () {
                     $("#toggle-sidebar").toggleClass("toggle-active");
-                    if ($("#sidebar").hasClass("in"))
+                    if ($("#sidebar").hasClass("in")) {
                         $("#sidebar-container").css({"display": "none"});
-                        $("#sidebar").toggleClass("in");
+                        sidebar_reset();
+                    }
+                    $("#sidebar").toggleClass("in");
                 }
             });
         });

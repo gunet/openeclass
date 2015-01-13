@@ -512,7 +512,7 @@ a.toggle-active {
 }
 /* line 419, ../SASS/structure.scss */
 #sidebar .side-list ul > li {
-  padding: 5px 0em;
+  padding: 5px 5px;
 }
 /* line 423, ../SASS/structure.scss */
 #sidebar .side-list .lesson-id {
