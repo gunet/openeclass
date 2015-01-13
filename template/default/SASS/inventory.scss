@@ -1762,7 +1762,14 @@ table#portfolio-lessons tr
 }
 
 .navbar-toggle{
-    margin-left: 15px;
+    border: none;
+    margin-left: 8px;
+border-right: 1px solid #e7e7e7;
+border-radius: 0px;
+margin: 0px;
+padding-left: 15px;
+padding-right: 15px;
+height: 52px;
 }
 .quick-change-pwd
 {
