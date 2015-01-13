@@ -1026,7 +1026,6 @@ $langAttendanceActiveUsers6 = "$langStudents μόνο τελευταίου εξ�
 $langAttendanceActiveUsers3 = "$langStudents μόνο τελευταίου τριμήνου";
 $langAttendanceActiveUsersAll = "Όλοι οι εγγεγραμμένοι $langsStudents";
 $langAttendanceActivity = "Δραστηριότητα";
-$langAttendanceSystemEditActivity = "Επεξεργασία δραστηριότητας από το σύστημα";
 $langAttendanceAutoBook = "Αυτόματη καταχώρηση παρουσίας";
 $langAttendanceInfoForUsers = 'επιλέξτε από τη λίστα των χρηστών ποιοι θα συμμετέχουν στο παρουσιολόγιο';
 $langAttendance6Months = "Συμμετέχουν οι $langsStudents τελευταίου εξαμήνου";
