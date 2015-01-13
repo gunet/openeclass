@@ -47,7 +47,7 @@ $head_content .= "<script type='text/javascript'>
     </script>";
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$pageName = $langSearchUser;
+$toolName = $langSearchUser;
 
 // get the incoming values
 $inactive_checked = (isset($_GET['search']) and $_GET['search'] == 'inactive') ?
@@ -75,8 +75,7 @@ if (isDepartmentAdmin()) {
 }
 
 // Display Actions Toolbar
-$tool_content .= "<div id='operations_container'>" .
-        action_bar(array(
+$tool_content .= action_bar(array(
             array('title' => $langAllUsers,
                 'url' => "listusers.php?search=yes",
                 'icon' => 'fa-search',
@@ -84,9 +83,11 @@ $tool_content .= "<div id='operations_container'>" .
             array('title' => $langInactiveUsers,
                 'url' => "listusers.php?search=inactive",
                 'icon' => 'fa-search',
-                'level' => 'primary-label')
-        ))
-        . "</div>";
+                'level' => 'primary-label'),
+            array('title' => $langBack,
+                'url' => "index.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary')));
 
 //Preparing form data
 $usertype_data = array(
@@ -203,12 +204,6 @@ $tool_content .= "
 </fieldset>
 </form></div>";
 // end form
-
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 
 // display administrator menu
 draw($tool_content, 3, null, $head_content);

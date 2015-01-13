@@ -371,11 +371,10 @@ $head_content .= "<script type='text/javascript'>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
-$pageName = $langListUsersActions;
+$toolName = $langListUsersActions;
 
 // Display Actions Toolbar
-$tool_content .= "<div id='operations_container'>" .
-        action_bar(array(
+$tool_content .= action_bar(array(
             array('title' => $langAllUsers,
                 'url' => "$_SERVER[SCRIPT_NAME]",
                 'icon' => 'fa-search',
@@ -389,9 +388,12 @@ $tool_content .= "<div id='operations_container'>" .
                 'url' => "updatetheinactive.php?activate=1",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary',
-                'show' => (isset($_GET['search']) and $_GET['search'] == 'inactive')),
-        ))
-        . "</div>";
+                'show' => (isset($_GET['search']) and $_GET['search'] == 'inactive')),            
+            array('title' => $langBack,
+                'url' => "search_user.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary')
+                ));
 
 // display search results
 $tool_content .= "<table id='search_results_table' class='display'>
@@ -415,12 +417,6 @@ foreach ($_REQUEST as $key => $value) {
 }
 
 $tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'></form></div>";
-//$tool_content .= "<p align='center'><a href='search_user.php?$pagination_link'>$langBack</a></p>";
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "search_user.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
 
 draw($tool_content, 3, null, $head_content);
 

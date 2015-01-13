@@ -33,9 +33,16 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$pageName = $langUserStats;
+$toolName = $langUserStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "listusers.php", "name" => $langListUsers);
+
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "listusers.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')
+                ));
 
 $u = isset($_REQUEST['u']) ? intval($_REQUEST['u']) : '';
 
@@ -44,36 +51,30 @@ if (isDepartmentAdmin())
 
 if (!empty($u)) {
     $info = Database::get()->querySingle("SELECT username FROM user WHERE id =?d", $u)->username;
-    $tool_content .= "<p class='title1'>$langUserStats: <b>" . q($info) . "</b></p>
-		<p><b>$langStudentParticipation</b></p>";
+    $tool_content .= "<h4>$langStudentParticipation " . q($info) . "</h4>";
 
     // display user courses (if any)
-    $foundUsers = false;
-    $k = 0;
+    $foundUsers = false;   
     Database::get()->queryFunc("SELECT DISTINCT a.code, a.title, b.status, a.id
                            FROM course AS a
                            JOIN course_department ON a.id = course_department.course
                            JOIN hierarchy ON course_department.department = hierarchy.id
                            LEFT JOIN course_user AS b ON a.id = b.course_id
                            WHERE b.user_id = ?d
-                           ORDER BY b.status, hierarchy.name", function($logs) use (&$foundUsers, &$k, &$tool_content, $langCourseCode, $langProperty, $langTeacher, $langStudent, $langVisitor ) {
+                           ORDER BY b.status, hierarchy.name", function($logs) use (&$foundUsers, &$tool_content, $langCourseCode, $langProperty, $langTeacher, $langStudent, $langVisitor ) {
         if (!$foundUsers) {
             $foundUsers = true;
-            $tool_content .= "
-		<table class='tbl_alt' width='99%' align='left'>
+            $tool_content .= "<div class='table-responsive'>
+		<table class='table-default'>
 		<tr>
-		  <th colspan='2'><div align='left'>&nbsp;&nbsp;$langCourseCode</div></th>
+		  <th class='text-left'>&nbsp;&nbsp;$langCourseCode</th>
 		  <th>$langProperty</th>
 		</tr>";
         }
-        if ($k % 2 == 0) {
-            $tool_content .= "<tr class='even'>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
-        $tool_content .= "<td class='bullet' width='1'></td>
-				<td align=''>" . htmlspecialchars($logs->code) . " (" . htmlspecialchars($logs->title) . ")</td>
-				<td><div align='left'>";
+        
+        $tool_content .= "<tr>";
+        $tool_content .= "<td align=''>" . htmlspecialchars($logs->code) . " (" . htmlspecialchars($logs->title) . ")</td>
+				<td class='text-left'>";
         switch ($logs->status) {
             case USER_TEACHER:
                 $tool_content .= $langTeacher;
@@ -84,13 +85,12 @@ if (!empty($u)) {
             default:
                 $tool_content .= $langVisitor;
                 break;
-        }
-        $k++;
+        }        
     }, $u);
     if ($foundUsers) {
-        $tool_content .= "</div></td></tr></table>";
+        $tool_content .= "</td></tr></table></div>";
     } else {
-        $tool_content .= "<p>$langNoStudentParticipation </p>";
+        $tool_content .= "<p class='alert alert-info'>$langNoStudentParticipation</p>";
     }
 
     $tool_content .= "<p><b>$langTotalVisits</b>: ";
@@ -126,39 +126,28 @@ if (!empty($u)) {
     }
     $tool_content .= $chart->plot();
     // End of chart display; chart unlinked at end of script.
-    $tool_content .= "<p>$langLastUserVisits " . q($info) . "</p>\n";
-    $tool_content .= "
-	      <table class='tbl_alt' width='99%'>
+    $tool_content .= "<p>$langLastUserVisits " . q($info) . "</p>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'>
 	      <tr>
-		<th colspan='2'><div align='left'>&nbsp;&nbsp;$langDate</div></th>
-		<th>$langAction</th>
+		<th class='text-left'>&nbsp;&nbsp;$langDate</th>
+		<th class='text-center'>$langAction</th>
 	      </tr>";
     $Action["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
     $Action["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
-
-    $i = 0;
+    
     Database::get()->queryFunc("SELECT * FROM loginout WHERE id_user = '$u' ORDER by idLog DESC LIMIT 15", function($r) use (&$i, &$tool_content, $Action) {
         $when = $r->when;
-        $action = $r->action;
-        if ($i % 2 == 0) {
-            $tool_content .= "<tr>";
-        } else {
-            $tool_content .= "<tr class='odd'>";
-        }
-        $tool_content .= "<td class='bullet' width='1'></td>
-			<td>" . strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when)) . "</td>
-			<td align='center'><div align='center'>" . $Action[$action] . "</div></td>
-		      </tr>";
-        $i++;
+        $action = $r->action;       
+        $tool_content .= "<tr>";        
+        $tool_content .= "<td>" . strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when)) . "</td>
+			<td class='text-center'>" . $Action[$action] . "</td></tr>";
     });
 
-    $tool_content .= "</table>";
+    $tool_content .= "</table></div>";
 } else {
-    $tool_content .= "<div class='alert alert-danger'>$langNoUserSelected</div>
-                <p align='pull-right'><a href='index.php'>$langBack</p>";
+    $tool_content .= "<div class='alert alert-danger'>$langNoUserSelected</div>";
     draw($tool_content, 3);
     exit();
 }
 
-$tool_content .= "<p align='right'><a href='listusers.php'>$langBack</a></p>";
 draw($tool_content, 3, null, $head_content);
