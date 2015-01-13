@@ -125,6 +125,7 @@ if (isset($_POST['submit'])) {
     $cat_name = category_name($category_id);
     $c = course_code_to_title($course_code);
     $name = uid_to_name($uid);
+    $title = course_id_to_title($course_id);
     $forum_message = "-------- $langBodyMessage ($langSender: $name)\n$message--------";
     $plain_forum_message = q(html2text($forum_message));
     $body_topic_notify = "$langBodyForumNotify $langInForums '" . q($forum_name) . "' 

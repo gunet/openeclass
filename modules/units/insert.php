@@ -230,7 +230,7 @@ function insert_lp($id) {
 			WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
         $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='lp', title = ?s, comments = ?s,
                                         visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                                $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
+                                $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
         $uresId = $q->lastInsertID;
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
     }
@@ -378,7 +378,7 @@ function insert_forum($id) {
                                         WHERE id = ?d
                                         AND course_id = ?d", $forum_id, $course_id);
             $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'forum', title = ?s,
-                                            comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter . ", res_id = ?d", 
+                                            comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                     $id, $forum->name, $forum->desc, $order, $forum->id);
         }
         $uresId = $q->lastInsertID;
@@ -497,7 +497,7 @@ function insert_ebook($id) {
         if (isset($_POST[$type]) and count($_POST[$type]) > 0) {
             foreach ($_POST[$type] as $ebook_id) {
                 $order++;
-                $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = $id, type = '$type',
+                $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = '$type',
                                                 title = ?s, comments = '', visible=1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ",res_id = ?d", 
                                             $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id);
                 $uresId = $q->lastInsertID;

@@ -64,7 +64,7 @@ function list_exercises() {
             }
             $tool_content .= "<tr class='$vis'>";
             $tool_content .= "<td class='text-left'><a href='${urlServer}modules/exercise/exercise_submit.php?course=$course_code&amp;exerciseId=$entry[id]'>" . q($entry['name']) . "</a></td>";
-            $tool_content .= "<td class='text-left'>" . q($entry['comment']) . "</td>";
+            $tool_content .= "<td class='text-left'>" . $entry['comment'] . "</td>";
             $tool_content .= "<td class='text-center'><input type='checkbox' name='exercise[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";            
         }

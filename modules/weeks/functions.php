@@ -164,7 +164,7 @@ function show_resourceWeek($info) {
             $tool_content .= show_wiki($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'poll':
-            $tool_content .= show_poll($info->title, $info->id, $info->res_id, $info->visible);
+            $tool_content .= show_poll($info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'link':
             $tool_content .= show_link($info->title, $info->comments, $info->id, $info->res_id, $info->visible);

@@ -230,7 +230,7 @@ function insert_lp($id) {
 			WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
         $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type='lp', title = ?s, comments = ?s,
                                         visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                                $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
+                                $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
         $uresId = $q->lastInsertID;
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
     }
@@ -289,7 +289,7 @@ function insert_work($id) {
         } else {
             $visibility = 1;
         }
-        $q = Database::get()->querySingle("INSERT INTO course_weekly_view_activities SET
+        $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET
                                 course_weekly_view_id = ?d,
                                 type = 'work',
                                 title = ?s,
@@ -359,7 +359,7 @@ function insert_forum($id) {
                                         WHERE id = ?d
                                         AND forum_id = ?d", $topic_id, $forum_id);
             $q = Database::get()->query("INSERT INTO course_weekly_view_activities
-                                            SET course_weekly_view_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter . ", res_id = ?d", 
+                                            SET course_weekly_view_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                         $id, $topic->title, $order, $topic->id);
         } else {
             $forum_id = $ids[0];
@@ -367,7 +367,7 @@ function insert_forum($id) {
                                         WHERE id = ?d
                                         AND course_id = ?d", $forum_id, $course_id);
             $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type = 'forum', title = ?s,
-                                            comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter . ", res_id = ?d", 
+                                            comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
                                     $id, $forum->name, $forum->desc, $order, $forum->id);
         }
         $uresId = $q->lastInsertID;
@@ -392,7 +392,7 @@ function insert_poll($id) {
     $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d", $id)->maxorder;
     foreach ($_POST['poll'] as $poll_id) {
         $order++;
-        $poll = Database::get()->querySingle("SELECT * from poll where course_id = ?d", $course_id);
+        $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d", $course_id);
         $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type = 'poll', 
                                         title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
                                     $id, $poll->name, $order, $poll->pid);
@@ -486,7 +486,7 @@ function insert_ebook($id) {
         if (isset($_POST[$type]) and count($_POST[$type]) > 0) {
             foreach ($_POST[$type] as $ebook_id) {
                 $order++;
-                $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = $id, type = '$type',
+                $q = Database::get()->query("INSERT INTO course_weekly_view_activities SET course_weekly_view_id = ?d, type = '$type',
                                                 title = ?s, comments = '', visible=1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ",res_id = ?d", 
                                             $id, $_POST[$type . '_title'][$ebook_id], $order, $ebook_id);
                 $uresId = $q->lastInsertID;
