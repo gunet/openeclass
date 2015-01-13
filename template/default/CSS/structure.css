@@ -310,19 +310,19 @@ a.toggle-active {
 #sidebar-container {
   display: none;
   position: absolute;
-  width: 18.5em;
+  width: 20.5em;
   right: 0px;
   overflow: hidden;
-  border-left: #c9c9c9;
   border-bottom: #c9c9c9;
 }
-/* line 243, ../SASS/structure.scss */
+/* line 242, ../SASS/structure.scss */
 #sidebar-container #sidebar {
   position: relative;
   width: 18.5em;
   right: -18.5em;
   background-color: #DEE0E2;
   word-wrap: break-word;
+  box-shadow: -3px 0px 7px 0px #999;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

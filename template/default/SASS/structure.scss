@@ -234,10 +234,9 @@ a.toggle-active{
 #sidebar-container{
     display: none;
     position: absolute;
-    width: 18.5em;
+    width: 20.5em;
     right: 0px;
     overflow: hidden;
-    border-left: #c9c9c9;
     border-bottom: #c9c9c9;
 
     #sidebar{
@@ -247,6 +246,7 @@ a.toggle-active{
         //padding: 1.6em 0;
         background-color: $color-sidebar;
         word-wrap:break-word;
+        box-shadow: -3px 0px 7px 0px #999;
         @include user-select(none);
 
         .panel-group.outerpanel{

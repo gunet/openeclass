@@ -242,7 +242,7 @@ $(document).ready(function () {
 
         // Right Side toggle menu animation
         $('#toggle-sidebar').click(function () {
-            var inOut = $("#sidebar").hasClass("in") ? "-18.5em" : "0em";
+            var inOut = $("#sidebar").hasClass("in") ? "-18.5em" : "-2em";
 
             if ($("#leftnav").hasClass("float-menu-in")) {
                 $("#leftnav").animate({
@@ -258,7 +258,7 @@ $(document).ready(function () {
                     url: sidebarConfig.messagesLink,
                     dataType: "json",
                     success: function (data) {
-                        $("ul.sidebar-mymessages").append(data.messages);
+                        $("ul.sidebar-mymessages").html(data.messages);
                         $(".spinner-div img").toggleClass("hidden");
                         $(".spinner-div p").toggleClass("hidden");
                         setTimeout(function () {
@@ -282,7 +282,7 @@ $(document).ready(function () {
                     $("#toggle-sidebar").toggleClass("toggle-active");
                     if ($("#sidebar").hasClass("in"))
                         $("#sidebar-container").css({"display": "none"});
-                    $("#sidebar").toggleClass("in");
+                        $("#sidebar").toggleClass("in");
                 }
             });
         });
