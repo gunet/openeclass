@@ -322,7 +322,7 @@ a.toggle-active {
   right: -18.5em;
   background-color: #DEE0E2;
   word-wrap: break-word;
-  box-shadow: -3px 0px 7px 0px #999;
+  box-shadow: -3px 6px 7px 0px #999;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;

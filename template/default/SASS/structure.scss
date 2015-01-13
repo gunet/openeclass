@@ -246,7 +246,7 @@ a.toggle-active{
         //padding: 1.6em 0;
         background-color: $color-sidebar;
         word-wrap:break-word;
-        box-shadow: -3px 0px 7px 0px #999;
+        box-shadow: -3px 6px 7px 0px #999;
         @include user-select(none);
 
         .panel-group.outerpanel{
