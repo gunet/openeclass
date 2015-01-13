@@ -273,13 +273,13 @@ if ($nbrQuestions) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id",
                                 'level' => 'primary',
                                 'icon' => 'fa-arrow-up',
-                                'show' => $i != 1
+                                'disabled' => $i == 1
                             ),
                         array('title' => $langDown,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveDown=$id",
                                 'level' => 'primary',
                                 'icon' => 'fa-arrow-down',
-                                'show' => $i != $nbrQuestions
+                                'disabled' => $i == $nbrQuestions
                             )                
                     ))."</td></tr>";
         $i++;
