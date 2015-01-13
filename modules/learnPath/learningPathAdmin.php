@@ -358,7 +358,7 @@ if (isset($sortDirection) && $sortDirection) {
     }
 }
 
-$tool_content .="<fieldset><legend>$langLearningPathData</legend><table width='100%' class='tbl'>";
+$tool_content .="<fieldset><legend>$langLearningPathData</legend><table class='table-default'>";
 
 
 //############################ LEARNING PATH NAME BOX ################################\\
@@ -391,7 +391,7 @@ $tool_content .= "</td>
     </fieldset>
     <fieldset>
     <legend>$langLearningPathConfigure</legend>
-    <table width='100%' class='tbl'>";
+    <table class='table-default'>";
 
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
@@ -445,7 +445,7 @@ $tool_content .="
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
-    <table class=\"tbl\">
+    <table class=\"table-default\">
     <tr>
       <th>" . $langMove . ":</th>
       <td>
@@ -534,11 +534,11 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 
 // -------------------------- learning path list header ----------------------------
 $tool_content .="
-    <table width=\"99%\" class=\"tbl_alt\">
+    <div class='table-responsive'>
+    <table class=\"table-default\">
     <tr>
       <th colspan=\"" . ($maxDeep + 1) . "\"><div align=\"left\">&nbsp;" . $langContents . "</div></th>
-      <th width='1' ><div align='center'>" . icon('fa-arrows') . "</div></th>
-      <th width='1' ><div align=\"center\">" . icon('fa-gears') . "</div></th>
+      <th><div align=\"center\">" . icon('fa-gears') . "</div></th>
     </tr>";
 
 // -------------------- LEARNING PATH LIST DISPLAY ---------------------------------
@@ -597,21 +597,6 @@ foreach ($flatElementList as $module) {
     }
     $tool_content .= "</td>"; // end of td of module name
 
-    $tool_content .= "<td width='10' class='center'>" .
-            action_button(array(
-                array('title' => $langMove, // DISPLAY CATEGORY MOVE COMMAND
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'],
-                    'icon' => 'fa-mail-forward'),
-                array('title' => $langUp, // DISPLAY MOVE UP COMMAND only if it is not the top learning path
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'],
-                    'icon' => 'fa-arrow-up',
-                    'show' => $module['up']),
-                array('title' => $langDown, // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;cmdid=" . $module['learnPath_module_id'],
-                    'icon' => 'fa-arrow-down',
-                    'show' => $module['down']),
-            )) .
-            "</td>";
 
     if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
         $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveSCORM);
@@ -620,7 +605,7 @@ foreach ($flatElementList as $module) {
     } else {
         $del_conf_text = clean_str_for_javascript($langAreYouSureToRemoveStd);
     }
-    $tool_content .= "<td width='10' class='center'>" .
+    $tool_content .= "<td class='option-btn-cell'>" .
             action_button(array(
                 // LOCK
                 array('title' => $langBlock,
@@ -651,6 +636,19 @@ foreach ($flatElementList as $module) {
                     'confirm_title' => "",
                     'confirm_button' => $langAccept,
                     'show' => $module['visible'] != 0),
+                array('title' => $langMove, // DISPLAY CATEGORY MOVE COMMAND
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'],
+                    'icon' => 'fa-mail-forward'),
+                array('title' => $langUp, // DISPLAY MOVE UP COMMAND only if it is not the top learning path
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'],
+                    'level' => 'primary',
+                    'icon' => 'fa-arrow-up',
+                    'disabled' => !$module['up']),
+                array('title' => $langDown, // DISPLAY MOVE DOWN COMMAND only if it is not the bottom learning path
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;cmdid=" . $module['learnPath_module_id'],
+                    'level' => 'primary',
+                    'icon' => 'fa-arrow-down',
+                    'disabled' => !$module['down'])                
             )) .
             "</td>";
 
@@ -660,5 +658,5 @@ foreach ($flatElementList as $module) {
     $ind++;
 } // end of foreach
 
-$tool_content .= "</table><br />";
+$tool_content .= "</table></div><br>";
 draw($tool_content, 2, null, $head_content, $body_action);
