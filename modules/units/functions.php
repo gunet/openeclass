@@ -1166,13 +1166,15 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('description'))),
                 array('title' => $langDown,
+                      'level' => 'primary',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id",
                       'icon' => 'fa-arrow-down',
-                      'show' => $resource_id != $GLOBALS['max_resource_id']),
+                      'disabled' => $resource_id == $GLOBALS['max_resource_id']),
                 array('title' => $langUp,
+                      'level' => 'primary',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
                       'icon' => 'fa-arrow-up',
-                      'show' => !$first)
+                      'disabled' => $first)
             ));
     
     $first = false;
