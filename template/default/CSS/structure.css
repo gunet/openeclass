@@ -335,14 +335,15 @@ a.toggle-active {
   margin: 0px;
 }
 /* line 256, ../SASS/structure.scss */
-#sidebar-container #sidebar .panel-group.outerpanel .input-group-addon {
-  width: 39px;
+#sidebar-container #sidebar .panel-group.outerpanel .panel-body {
+  padding: 0px 8px;
+  border: none;
 }
-/* line 260, ../SASS/structure.scss */
+/* line 261, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .input-group {
   margin: 5px 0;
 }
-/* line 264, ../SASS/structure.scss */
+/* line 265, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-title {
   margin: 0;
   font-weight: 600;
@@ -352,7 +353,7 @@ a.toggle-active {
   padding: 1.8em;
   background: #e3e4e6;
 }
-/* line 276, ../SASS/structure.scss */
+/* line 275, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title {
   margin: 0;
   padding: 2em 0em !important;
@@ -362,90 +363,86 @@ a.toggle-active {
   overflow: hidden;
   text-transform: uppercase;
 }
-/* line 286, ../SASS/structure.scss */
+/* line 285, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title i.fa {
   padding-right: 10px;
   opacity: .9;
   font-size: 16px;
 }
-/* line 294, ../SASS/structure.scss */
-#sidebar-container #sidebar .panel-group.outerpanel li.outerpanel {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+/* line 292, ../SASS/structure.scss */
+#sidebar-container #sidebar .panel-group.outerpanel .course-btn {
+  color: #888;
+  padding: 8px 0;
+  width: 24px;
 }
 /* line 297, ../SASS/structure.scss */
-#sidebar-container #sidebar .panel-group.outerpanel li.outerpanel > .ui-accordion-content,
-#sidebar-container #sidebar .panel-group.outerpanel li.outerpanel > .ui-accordion-header-active {
-  background: rgba(255, 255, 255, 0.3);
+#sidebar-container #sidebar .panel-group.outerpanel .course-btn i {
+  cursor: pointer;
 }
-/* line 302, ../SASS/structure.scss */
-#sidebar-container #sidebar .panel-group.outerpanel li.outerpanel > .ui-accordion-content {
-  padding: 1em 0em;
-}
-/* line 306, ../SASS/structure.scss */
-#sidebar-container #sidebar .panel-group.outerpanel li.outerpanel textarea {
-  min-height: 12em;
-}
-/* line 310, ../SASS/structure.scss */
-#sidebar-container #sidebar .panel-group.outerpanel li.outerpanel button {
-  margin: 1.1em;
-  margin-top: 0em;
-}
-/* line 316, ../SASS/structure.scss */
+/* line 301, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel {
   border: none;
   margin: 0px;
   background-color: #dddddd;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
 }
-/* line 322, ../SASS/structure.scss */
+/* line 308, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-heading {
   background-image: none;
   border: none;
   background-color: #DEE0E2;
 }
-/* line 327, ../SASS/structure.scss */
+/* line 313, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-heading h4 {
   cursor: pointer;
 }
-/* line 331, ../SASS/structure.scss */
+/* line 317, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .goto {
   display: inline-block;
   float: right;
   margin-right: 0.5em;
   font-size: 0.75em;
 }
-/* line 337, ../SASS/structure.scss */
+/* line 323, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .goto:hover {
   text-decoration: none;
 }
-/* line 340, ../SASS/structure.scss */
+/* line 326, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel {
   margin-bottom: 0px;
-  max-height: 200px;
-  overflow: scroll;
-  border-radius: 4px 4px 4px 4px;
-  -webkit-border-radius: 4px 4px 4px 4px;
-  -moz-border-radius: 4px 4px 4px 4px;
+  max-height: 227px;
+  overflow: hidden;
+  position: relative;
 }
-/* line 346, ../SASS/structure.scss */
+/* line 332, ../SASS/structure.scss */
+#sidebar-container #sidebar .panel-group.outerpanel .innerpanel #innerpanel-container {
+  position: relative;
+  top: 0px;
+}
+/* line 337, ../SASS/structure.scss */
+#sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel {
+  margin: 4px 3px 7px 3px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
+}
+/* line 342, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading {
   margin: 0px;
   padding: 0px;
 }
-/* line 350, ../SASS/structure.scss */
+/* line 346, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading > div {
   margin-left: 0px;
   margin-right: 0px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0px;
 }
-/* line 357, ../SASS/structure.scss */
+/* line 351, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-body {
-  background: #253447;
+  background-color: #fafafa;
   border-top: none;
-  color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #999;
 }
-/* line 363, ../SASS/structure.scss */
+/* line 356, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link {
   display: inline-block;
   height: 100%;
@@ -455,15 +452,23 @@ a.toggle-active {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: #4da1e4;
 }
-/* line 374, ../SASS/structure.scss */
+/* line 368, ../SASS/structure.scss */
+#sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link:hover, #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link.active {
+  text-decoration: none;
+  color: #1a70b1;
+}
+/* line 373, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel i.lesson-title-caret {
+  background-color: #fafafa;
   display: inline-block;
   height: 100%;
   width: 20%;
   text-align: center;
   line-height: 37px;
-  border-left: solid 1px #232c3a;
+  border-left: solid 1px #ececec;
+  color: #666;
 }
 /* line 387, ../SASS/structure.scss */
 #sidebar-container h1, #sidebar-container h2, #sidebar-container h3, #sidebar-container h4, #sidebar-container h5, #sidebar-container h6 {
@@ -479,13 +484,13 @@ a.toggle-active {
 
 /* line 399, ../SASS/structure.scss */
 #sidebar .side-list {
-  background: #253447;
+  background: #f7f7f7;
   border-top: none;
   color: rgba(255, 255, 255, 0.9);
 }
 /* line 403, ../SASS/structure.scss */
 #sidebar .side-list .lesson-title {
-  background: #344458;
+  background: #fff;
   font-size: 0.85em;
   margin: 0px;
   padding: 0px;
@@ -494,7 +499,6 @@ a.toggle-active {
   color: rgba(255, 255, 255, 0.5);
   font-weight: 600;
   margin: 0 16px;
-  border: 1px solid #48586D;
   border-top-width: 0px;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
@@ -502,84 +506,35 @@ a.toggle-active {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 417, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title:first-of-type {
-  border-top-width: 1px;
-  border-radius: 4px 4px 0px 0px;
-  -webkit-border-radius: 4px 4px 0px 0px;
-  -moz-border-radius: 4px 4px 0px 0px;
-}
-/* line 422, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title:last-of-type {
-  border-radius: 0px 0px 4px 4px;
-  -webkit-border-radius: 0px 0px 4px 4px;
-  -moz-border-radius: 0px 0px 4px 4px;
-}
-/* line 425, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title a.lesson-title-link:hover {
-  background: #48586D;
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-}
-/* line 430, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title a.lesson-title-link:hover:after {
-  color: rgba(255, 255, 255, 0.6);
-}
-/* line 434, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title i.lesson-title-caret:hover {
-  background: #48586D;
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-}
-/* line 439, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title i.lesson-title-caret:hover:after {
-  color: rgba(255, 255, 255, 0.6);
-}
-/* line 443, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title.ui-accordion-header-active {
-  border-bottom: none;
-  color: white;
-  background: #425164;
-}
-/* line 448, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title.ui-accordion-header-active:last-of-type {
-  border-radius: 0px;
-  -webkit-border-radius: 0px;
-  -moz-border-radius: 0px;
-}
-/* line 452, ../SASS/structure.scss */
-#sidebar .side-list .lesson-title.ui-accordion-header-active:after {
-  color: #4da1e4;
-}
-/* line 457, ../SASS/structure.scss */
+/* line 416, ../SASS/structure.scss */
 #sidebar .side-list ul {
   font-size: 0.75em;
 }
-/* line 460, ../SASS/structure.scss */
+/* line 419, ../SASS/structure.scss */
 #sidebar .side-list ul > li {
   padding: 5px 0em;
 }
-/* line 464, ../SASS/structure.scss */
+/* line 423, ../SASS/structure.scss */
 #sidebar .side-list .lesson-id {
   opacity: 0.5;
   font-size: 0.85em;
   font-weight: 700;
 }
-/* line 469, ../SASS/structure.scss */
+/* line 428, ../SASS/structure.scss */
 #sidebar .side-list .lesson-professor {
   font-weight: 600;
   padding-top: 0px;
 }
-/* line 473, ../SASS/structure.scss */
+/* line 432, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications {
   margin-top: 1em;
 }
-/* line 475, ../SASS/structure.scss */
+/* line 434, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications .item {
   margin-right: 1.5em;
   position: relative;
 }
-/* line 478, ../SASS/structure.scss */
+/* line 437, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications .item .count {
   position: absolute;
   left: 0.8em;
@@ -596,27 +551,27 @@ a.toggle-active {
   -webkit-border-radius: 0.75em;
   -moz-border-radius: 0.75em;
 }
-/* line 493, ../SASS/structure.scss */
+/* line 452, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications .item .fa {
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
 }
 
 /* ACCORDIONS --------------------------------------------------------------------*/
-/* line 503, ../SASS/structure.scss */
+/* line 462, ../SASS/structure.scss */
 .accordion {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 507, ../SASS/structure.scss */
+/* line 466, ../SASS/structure.scss */
 .accordion ul, .accordion li {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
 
-/* line 515, ../SASS/structure.scss */
+/* line 474, ../SASS/structure.scss */
 .accordion-title,
 .ui-accordion-header {
   padding-right: 2em !important;
@@ -625,7 +580,7 @@ a.toggle-active {
   outline: none !important;
   cursor: pointer;
 }
-/* line 525, ../SASS/structure.scss */
+/* line 484, ../SASS/structure.scss */
 .accordion-title:after,
 .ui-accordion-header:after {
   position: absolute;
@@ -650,7 +605,7 @@ a.toggle-active {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 548, ../SASS/structure.scss */
+/* line 507, ../SASS/structure.scss */
 .accordion-title.ui-state-active:after,
 .ui-accordion-header.ui-state-active:after {
   behavior: url(-ms-transform.htc);
@@ -666,12 +621,12 @@ a.toggle-active {
 }
 
 /* INDEX --------------------------------------------------------------------------- */
-/* line 565, ../SASS/structure.scss */
+/* line 524, ../SASS/structure.scss */
 body.page-login h1 {
   margin: 1.25em 1em;
 }
 
-/* line 570, ../SASS/structure.scss */
+/* line 529, ../SASS/structure.scss */
 .jumbotron.jumbotron-login {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -696,7 +651,7 @@ body.page-login h1 {
   background: -moz-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
   background: -ms-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
 }
-/* line 600, ../SASS/structure.scss */
+/* line 559, ../SASS/structure.scss */
 .jumbotron.jumbotron-login .graphic {
   min-height: 250px;
   background-image: url("../img/indexlogo.png");
@@ -705,7 +660,7 @@ body.page-login h1 {
   background-size: 353px;
 }
 
-/* line 610, ../SASS/structure.scss */
+/* line 569, ../SASS/structure.scss */
 form.login-form {
   font-size: 0.85em;
   position: relative;
@@ -722,7 +677,7 @@ form.login-form {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 624, ../SASS/structure.scss */
+/* line 583, ../SASS/structure.scss */
 form.login-form:hover {
   box-shadow: 0px 0px 20px 3px black;
   -moz-box-shadow: 0px 0px 20px 3px black;
@@ -733,7 +688,7 @@ form.login-form:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 632, ../SASS/structure.scss */
+/* line 591, ../SASS/structure.scss */
 form.login-form h2 {
   text-align: center;
   font-size: 1.8em;
@@ -741,16 +696,16 @@ form.login-form h2 {
   margin-top: 0rem;
   color: #232c3a;
 }
-/* line 640, ../SASS/structure.scss */
+/* line 599, ../SASS/structure.scss */
 form.login-form .form-group {
   margin: 0rem;
 }
-/* line 645, ../SASS/structure.scss */
+/* line 604, ../SASS/structure.scss */
 form.login-form .form-group > * {
   display: inline-block;
   float: none;
 }
-/* line 651, ../SASS/structure.scss */
+/* line 610, ../SASS/structure.scss */
 form.login-form .form-group input {
   width: 82%;
   border-bottom: 1px solid #eeeeee;
@@ -768,53 +723,53 @@ form.login-form .form-group input {
   line-height: 1.42857143;
   color: #444444;
 }
-/* line 672, ../SASS/structure.scss */
+/* line 631, ../SASS/structure.scss */
 form.login-form .form-group input:focus {
   border-color: #4da1e4;
 }
-/* line 678, ../SASS/structure.scss */
+/* line 637, ../SASS/structure.scss */
 form.login-form .form-group label {
   width: 17%;
   margin: 0;
   text-align: center;
 }
-/* line 684, ../SASS/structure.scss */
+/* line 643, ../SASS/structure.scss */
 form.login-form .form-group i.fa {
   font-size: 1.2em;
   margin: 0;
   color: #aaaaaa;
 }
-/* line 691, ../SASS/structure.scss */
+/* line 650, ../SASS/structure.scss */
 form.login-form .login-settings {
   margin: 2rem 0rem;
   font-size: 0.9em;
 }
-/* line 695, ../SASS/structure.scss */
+/* line 654, ../SASS/structure.scss */
 form.login-form .login-settings > * {
   margin: 0;
 }
-/* line 699, ../SASS/structure.scss */
+/* line 658, ../SASS/structure.scss */
 form.login-form .login-settings .checkbox,
 form.login-form .login-settings .link {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 704, ../SASS/structure.scss */
+/* line 663, ../SASS/structure.scss */
 form.login-form .login-settings .checkbox label,
 form.login-form .login-settings .link label {
   font-weight: bold;
 }
-/* line 709, ../SASS/structure.scss */
+/* line 668, ../SASS/structure.scss */
 form.login-form .login-settings .link a {
   float: right;
   margin-top: 0.3em;
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 715, ../SASS/structure.scss */
+/* line 674, ../SASS/structure.scss */
 form.login-form .login-settings .checkbox label span {
   margin-top: 0.3em;
   display: inline-block;
 }
-/* line 721, ../SASS/structure.scss */
+/* line 680, ../SASS/structure.scss */
 form.login-form .btn.btn-login {
   width: 100%;
   height: 4rem;
@@ -825,13 +780,13 @@ form.login-form .btn.btn-login {
   letter-spacing: 0.1em;
   outline: none;
 }
-/* line 732, ../SASS/structure.scss */
+/* line 691, ../SASS/structure.scss */
 form.login-form .btn.btn-login:hover {
   background: #3071a9;
 }
 
 /* DELETE THIS */
-/* line 740, ../SASS/structure.scss */
+/* line 699, ../SASS/structure.scss */
 .row .deleteThisClass {
   height: 400px;
   border: 1px solid #eee;
@@ -841,43 +796,43 @@ form.login-form .btn.btn-login:hover {
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 /* No breakpoints bellow 1366 or smth */
 @media (max-width: 1339px) {
-  /* line 765, ../SASS/structure.scss */
+  /* line 724, ../SASS/structure.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 771, ../SASS/structure.scss */
+  /* line 730, ../SASS/structure.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 777, ../SASS/structure.scss */
+  /* line 736, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 784, ../SASS/structure.scss */
+  /* line 743, ../SASS/structure.scss */
   body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 788, ../SASS/structure.scss */
+  /* line 747, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 
-  /* line 792, ../SASS/structure.scss */
+  /* line 751, ../SASS/structure.scss */
   .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 796, ../SASS/structure.scss */
+  /* line 755, ../SASS/structure.scss */
   #main-content,
   #header.navbar .navbar-nav > li:last-child > a,
   .navbar-default, .footer {

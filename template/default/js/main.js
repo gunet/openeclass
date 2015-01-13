@@ -223,6 +223,26 @@ $(document).ready(function () {
     $(".expandable-btn").click(function () {
         $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
     });
+    
+    
+    $(".course-btn i").on("click", function (e) {
+        var upOrDown = $(this).attr("id");
+        var topOffset = $("#innerpanel-container").find(".panel.panel-default").outerHeight(true);
+        var topPosition = $("#innerpanel-container").position().top;
+        var bottomPosition = topPosition + $("#innerpanel-container").outerHeight(true) - $(".innerpanel").outerHeight(true);
+        
+        if (upOrDown === "up") {
+            if (bottomPosition >= 0) {
+                var topAnimate = topPosition - topOffset;
+                $("#innerpanel-container").animate({top: topAnimate}, 100);
+            }
+        } else if (upOrDown === "down") {
+            if (topPosition <= 0) {
+                var topAnimate = topPosition + topOffset;
+                $("#innerpanel-container").animate({top: topAnimate}, 100);
+            }
+        }
+    });
 
 
     // Actions needed to be done after full DOM elements downloaded

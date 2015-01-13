@@ -253,8 +253,9 @@ a.toggle-active{
             padding: 0px;
             margin: 0px;
             
-            .input-group-addon{
-                width: 39px;
+            .panel-body{
+                padding: 0px 8px;
+                border: none;
             }
             
             .input-group{
@@ -269,10 +270,8 @@ a.toggle-active{
                 font-size: 0.75em; 
                 text-transform: uppercase;
                 padding: 1.8em;
-
                 background: rgb(227, 228, 230);
             }
-
             .title
             {
                 margin: 0;
@@ -290,33 +289,20 @@ a.toggle-active{
                     font-size: 16px;
                 }
             }
-
-            li.outerpanel{
-                border-bottom: 1px solid rgba(0,0,0,.05);
-
-                > .ui-accordion-content,
-                > .ui-accordion-header-active {
-                    background: rgba(255,255,255,.3);
-                }
-
-                > .ui-accordion-content{
-                    padding:1em 0em;
-                }
-
-                textarea{ 
-                    min-height: 12em;
-                }
-
-                button{
-                    margin: 1.1em;
-                    margin-top: 0em;
+            .course-btn{
+                color: #888;
+                padding: 8px 0;
+                width: 24px;
+                
+                i{
+                    cursor: pointer;
                 }
             }
-
             .panel{
                 border: none;
                 margin: 0px;
                 background-color: #dddddd;
+                @include border-radius(0px);
             }
 
             .panel-heading{
@@ -339,9 +325,19 @@ a.toggle-active{
                 }
             .innerpanel{
                 margin-bottom:0px;
-                max-height: 200px;
-                overflow: scroll;
-                 @include border-radius(4px 4px 4px 4px);
+                max-height: 227px;
+                overflow: hidden;
+                position: relative;
+                
+                #innerpanel-container{
+                    position: relative;
+                    top: 0px;
+                }
+                 
+                 .panel{
+                     margin: 4px 3px 7px 3px;
+                     box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+                 }
 
                 .panel-heading{
                     margin: 0px;
@@ -350,15 +346,12 @@ a.toggle-active{
                     &>div{
                         margin-left: 0px;
                         margin-right: 0px;
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        border-radius: 0px;
                     }
                 }
                 .panel-body{
-                    background: #253447;
+                    background-color: #fafafa;
                     border-top: none;
-                    color: rgba(255, 255, 255, 0.9);
-                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    color: #999;
                 }
                 a.lesson-title-link
                 {
@@ -370,17 +363,24 @@ a.toggle-active{
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    color: #4da1e4;
+                }
+                a.lesson-title-link:hover, a.lesson-title-link.active
+                {
+                    text-decoration: none;
+                    color: #1a70b1;
                 }
                 i.lesson-title-caret
                 {
+                    background-color: #fafafa;
                     display: inline-block;
                     height: 100%;
                     width: 20%;
                     text-align: center;
                     line-height: 37px;
-                    border-left: solid 1px #232c3a;
+                    border-left: solid 1px #ececec;
+                    color: #666;
                 }
-
             }
         }
     }
@@ -397,11 +397,11 @@ a.toggle-active{
 #sidebar
 {
     .side-list{
-        background: #253447;
+        background: #f7f7f7;
         border-top: none;
         color: rgba(255,255,255,.9);
         .lesson-title{
-            background: #344458;
+            background: #fff;
             font-size: 0.85em;
             margin:0px;
             padding: 0px;
@@ -410,49 +410,8 @@ a.toggle-active{
             color: rgba(255,255,255,0.5);
             font-weight: 600;      
             margin: 0 16px;
-            border: 1px solid #48586D;
             border-top-width: 0px;
             @include transition(all $transition-time linear);
-            //@include box-shadow(0px 1px 5px 0px rgba(0,0,0,.1));
-            &:first-of-type{
-                border-top-width: 1px;
-                @include border-radius(4px 4px 0px 0px);
-            }
-
-            &:last-of-type{
-                @include border-radius(0px 0px 4px 4px);
-            }
-            & a.lesson-title-link:hover{
-                background: #48586D;
-                color: rgba(255,255,255,0.85);
-                text-decoration: none;
-
-                &:after{
-                    color: rgba(255,255,255,.6);
-                }
-            }
-            & i.lesson-title-caret:hover{
-                background: #48586D;
-                color: rgba(255,255,255,0.85);
-                text-decoration: none;
-
-                &:after{
-                    color: rgba(255,255,255,.6);
-                }
-            }
-            &.ui-accordion-header-active{
-                border-bottom: none;
-                color: rgba(255,255,255,1);
-                background: #425164;
-
-                &:last-of-type{
-                    @include border-radius(0px);
-                }
-
-                &:after{
-                    color: $color-hover;
-                }
-            }
         }
         ul{
             font-size: 0.75em;
