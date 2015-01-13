@@ -582,14 +582,14 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility>
+                        <input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2]>
                         <img src='$themeimg/lock_open.png' alt='$langOpenCourse' title='$langOpenCourse' width='16'>&nbsp;$langOpenCourse
                         <span class='help-block'><small>$langPublic</small></span>
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility>
+                        <input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1]>
                         <img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16'>&nbsp;$m[legrestricted]
                         <span class='help-block'><small>$langPrivOpen</small></span>
                       </label>
