@@ -166,18 +166,25 @@ foreach ($questions as $theQuestion) {
             if ($theQuestion->qtype == QTYPE_SINGLE) {
                 $chart->addPoint($langPollUnknown, 0);
             }
-            $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count FROM poll_answer_record a, poll_question_answer b WHERE a.aid = b.pqaid AND a.qid = ?d GROUP BY a.aid", $theQuestion->pqid);
-            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;            
+            $answers = Database::get()->queryArray("SELECT a.aid AS aid, b.answer_text AS answer_text, count(a.aid) AS count FROM poll_answer_record a LEFT JOIN poll_question_answer b ON a.aid = b.pqaid WHERE a.qid = ?d GROUP BY a.aid", $theQuestion->pqid);
+            $answer_total = Database::get()->querySingle("SELECT COUNT(*) AS total FROM poll_answer_record WHERE qid= ?d", $theQuestion->pqid)->total;
             $answers_table = "
                 <table class='table-default'>
                     <tr>
                         <th>$langAnswer</th>
                         <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";            
-            foreach ($answers as $answer) {
+            foreach ($answers as $answer) {              
                 $percentage = round(100 * ($answer->count / $answer_total),2);
-                $chart->addPoint(q($answer->answer_text), $percentage);
+                if(isset($answer->answer_text)){
+                    $q_answer = q($answer->answer_text);
+                    $aid = $answer->aid;
+                } else {
+                    $q_answer = $langPollUnknown;
+                    $aid = -1;
+                }
+                $chart->addPoint($q_answer, $percentage);
                 if ($thePoll->anonymized != 1) {
-                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.aid = ?d AND a.user_id = b.id", $answer->aid);                   
+                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.aid = ?d AND a.user_id = b.id", $aid);   
                     foreach($names as $name) {
                       $names_array[] = $name->fullname;
                     }
@@ -186,13 +193,13 @@ foreach ($questions as $theQuestion) {
                 }
                 $answers_table .= "
                     <tr>
-                            <td>".q($answer->answer_text)."</td>
+                            <td>".$q_answer."</td>
                             <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
                 unset($names_array);
             }
             $answers_table .= "</table><br>";
             $chart->normalize();
-            $tool_content .= $chart->plot();
+            $tool_content .= $chart->plot();                
             $tool_content .= $answers_table;
         } elseif ($theQuestion->qtype == QTYPE_SCALE) {
             $chart = new Plotter(800, 300);

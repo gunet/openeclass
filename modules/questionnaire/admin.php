@@ -639,14 +639,16 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 array(
                                     'title' => $langUp,
                                     'icon' => 'fa-arrow-up',
+                                    'level' => 'primary',
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;moveUp=$question->pqid",
-                                    'show' => $i!=1
+                                    'disabled' => $i==1
                                 ),
                                 array(
                                     'title' => $langDown,
                                     'icon' => 'fa-arrow-down',
+                                    'level' => 'primary',
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;moveDown=$question->pqid",
-                                    'show' => $i!=$nbrQuestions                                   
+                                    'disabled' => $i==$nbrQuestions                                   
                                 )
                             ))."</td></tr>";
             $i++;
