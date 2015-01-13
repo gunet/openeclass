@@ -45,7 +45,7 @@ function confirmation (name)
         if (confirm(\"$langDelWarn1 \"+ name + \". $langWarnForSubmissions. $langDelSure \"))
             {return true;}
         else
-            {return false;}    
+            {return false;}
     }
 }
 
@@ -194,7 +194,7 @@ if ($is_editor) {
                         } elseif ($choice == 'do_purge') {
                                 $nameTools = $m['WorkSubsDelete'];
                                 $navigation[] = $works_url;
-                                purge_assignment_subs($id);                                
+                                purge_assignment_subs($id);
                         } elseif ($choice == 'edit') {
                                 $nameTools = $m['WorkEdit'];
                                 $navigation[] = $works_url;
@@ -235,7 +235,7 @@ if ($is_editor) {
                         submit_work($id);
                 } else {
                         $work_title = db_query_get_single_value("SELECT title FROM assignments WHERE id = $id", $currentCourseID);
-                        $nameTools = $work_title;                        
+                        $nameTools = $work_title;
                         show_student_assignment($id);
                 }
         } else {
@@ -258,7 +258,7 @@ function show_submission($sid)
 
         $nameTools = $langWorks;
         $navigation[] = $works_url;
-        
+
         if ($sub = mysql_fetch_array(db_query("SELECT * FROM assignment_submit WHERE id = $sid"))) {
                 $tool_content .= "<p>$langSubmissionDescr".
                                  q(uid_to_name($sub['uid'])).
@@ -364,7 +364,7 @@ function submit_work($id, $on_behalf_of=null)
                 }
 
                 validateUploadedFile($_FILES['userfile']['name'], 2);
-                
+
                 if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
                         $tool_content .= "<div class='caution'>$langUnwantedFiletype: ".q($_FILES['userfile']['name']).
                                 "</p><p><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$id'>$langBack</a></p></div>";
@@ -612,17 +612,18 @@ function purge_assignment_subs($id) {
 	$tool_content .="<p class='success'>$langAssignmentSubsDeleted<br /><a href='$_SERVER[SCRIPT_NAME]?course=$code_cours'>".$langBack."</a></p>";
 }
 
-function delete_user_assignment($id) 
+function delete_user_assignment($id)
 {
         global $currentCourseID, $webDir, $langBack, $langDeleted, $tool_content;
-        
-        $filename = db_query_get_single_value("SELECT file_path FROM assignment_submit WHERE id = $id");        
-        $file = $webDir."courses/".$currentCourseID."/work/".$filename;        
-        if (my_delete($file)) {
-                db_query("DELETE FROM assignment_submit WHERE id = $id");
-                $tool_content .= "<p class='success'>$langDeleted<br />
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$currentCourseID'>".$langBack."</a></p>";
-        }                
+
+        $filename = db_query_get_single_value("SELECT file_path FROM assignment_submit WHERE id = $id");
+        if ($filename) {
+            $file = $webDir."courses/".$currentCourseID."/work/".$filename;
+            my_delete($file);
+        }
+        db_query("DELETE FROM assignment_submit WHERE id = $id");
+        $tool_content .= "<p class='success'>$langDeleted<br />
+                <a href='$_SERVER[SCRIPT_NAME]?course=$currentCourseID'>".$langBack."</a></p>";
 }
 
 
@@ -857,7 +858,7 @@ function show_assignment($id, $message = false, $display_graph_results = false)
                $langDays, $langDaysLeft, $langGradeOk, $currentCourseID, $webDir, $urlServer,
                $nameTools, $langGraphResults, $m, $code_cours, $themeimg, $works_url,
                $navigation;
-        
+
         $res = db_query("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                  FROM assignments
                                  WHERE id = $id");
@@ -1187,7 +1188,7 @@ function show_assignments($message = null)
                             <a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=edit'>
                                 <img src='$themeimg/edit.png' alt='$m[edit]' />
                             </a>";
-                        if (is_numeric($num_submitted) && $num_submitted>0) {    
+                        if (is_numeric($num_submitted) && $num_submitted>0) {
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$code_cours&amp;id=$row[id]&amp;choice=do_purge' onClick=\"return confirmation('purge');\">
                                 <img src='$themeimg/clear.png' alt='".q($m['WorkSubsDelete'])."' title='".q($m['WorkSubsDelete'])."'>
                             </a>";
