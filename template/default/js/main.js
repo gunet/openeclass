@@ -253,7 +253,6 @@ $(document).ready(function () {
             }
 
             if (!$("#sidebar").hasClass("in")) {
-                
                 $.ajax({
                     type: "POST",
                     url: sidebarConfig.messagesLink,

@@ -36,7 +36,7 @@ $theme_settings = array(
 function template_callback($template, $menuTypeID, $embed)
 {
     global $uid, $session, $native_language_names_init, $course_id, $professor,
-           $modules, $admin_modules, $theme_settings, $user_messages;
+           $modules, $admin_modules, $theme_settings;
 
     if ($uid) {
         if (!$embed) {
@@ -44,9 +44,7 @@ function template_callback($template, $menuTypeID, $embed)
         }
         $template->set_block('mainBlock', 'sideBarCourseBlock', 'sideBarCourse');
         $template->set_block('sideBarCourseBlock', 'sideBarCourseNotifyBlock', 'sideBarCourseNotify');
-        $template->set_block('mainBlock', 'sideBarMyMessages');
         
-        $template->set_var('myMessagesList', $user_messages);
         
         // FIXME: smarter selection of courses for sidebar
         Database::get()->queryFunc("SELECT id, code, title, prof_names, public_code

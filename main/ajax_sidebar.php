@@ -62,3 +62,4 @@ function getSidebarMessages() {
 }
 
 $json_obj = array('messages' => getSidebarMessages());
+echo json_encode($json_obj);
