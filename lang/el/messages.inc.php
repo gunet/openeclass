@@ -2556,6 +2556,9 @@ $langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευ
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
 $langCreateDuplicate = "Δημιουργία Αντιγράφου";
 $langCopy2 = "Αντίγραφο";
+$langCreateDuplicateIn = "Δημιουργία Αντιγράφου στο ...";
+$langCurrentCourse = "Τρέχων Μάθημα";
+$langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επιτυχία!";
 
 // polls
 $langPollsActive = "Ενεργά Ερωτηματολόγια";

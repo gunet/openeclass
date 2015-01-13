@@ -1708,6 +1708,9 @@ $langQQuestionNotGiven = "You have not entered the text for the last question.";
 $langQFillInAllQs = "Please answer all questions.";
 $langCreateDuplicate = "Create Duplicate";
 $langCopy2 = "Copy";
+$langCreateDuplicateIn = "Create Duplicate in ...";
+$langCurrentCourse = "Current Course";
+$langCopySuccess = "The copy was successfully created!";
 $langQuestion1 = array('In this unit, my effort was focused in subjects that interested me.'
     , 'Almost never.'
     , 'Seldom.'
