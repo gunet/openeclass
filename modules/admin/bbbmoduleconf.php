@@ -26,7 +26,7 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/bbb/functions.php';
 
-$pageName = $langBBBConf;
+$toolName = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 load_js('tools.js');
@@ -37,7 +37,7 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
 if (isset($_GET['add_server'])) {
-    
+    $pageName = $langAddBBBServer;
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "bbbmoduleconf.php",
@@ -158,6 +158,7 @@ else if (isset($_POST['submit'])) {
 // Display config.php edit form
 else {    
     if (isset($_GET['edit_server'])) {
+        $pageName = $langEdit;
         $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "bbbmoduleconf.php",

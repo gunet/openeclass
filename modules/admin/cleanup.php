@@ -22,7 +22,7 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 
-$pageName = $langCleanUp;
+$toolName = $langCleanUp;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $tool_content .= action_bar(array(

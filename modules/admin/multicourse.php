@@ -28,7 +28,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'modules/admin/hierarchy_validations.php';
 require_once 'modules/create_course/functions.php';
 
-$pageName = $langMultiCourse;
+$toolName = $langMultiCourse;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $tool_content .= action_bar(array(

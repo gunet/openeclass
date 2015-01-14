@@ -46,7 +46,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // pagination
     $limit = intval($_GET['iDisplayLength']);
     $offset = intval($_GET['iDisplayStart']);
-
     // Search for courses
     $query = '';
     $terms = array();
@@ -162,7 +161,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
         $data['aaData'][] = array(
             '0' => $course_title,
-            '1' => icon($icon, $title),
+            '1' => icon_old_style($icon, $title),
             '2' => $dep,
             '3' => $icon_content
         );
@@ -216,17 +215,18 @@ $head_content .= "<script type='text/javascript'>
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourses);
-$pageName = $langListCours;
+$toolName = $langListCours;
 
 // Display Actions Toolbar
-$tool_content .= "<div id='operations_container'>" .
-        action_bar(array(
+$tool_content .= action_bar(array(
             array('title' => $langAllCourses,
                 'url' => "$_SERVER[SCRIPT_NAME]?formsearchtitle=&amp;formsearchcode=&amp;formsearchtype=-1&amp;reg_flag=1&amp;date=&amp;formsearchfaculte=0&amp;search_submit=$langSearch",
                 'icon' => 'fa-search',
-                'level' => 'primary-label'),
-        )) .
-        "</div>";
+                'level' => 'primary-label'),            
+            array('title' => $langReturnSearch,
+                'url' => "searchcours.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary')));                    
 
 $width = (!isDepartmentAdmin()) ? 100 : 80;
 // Construct course list table
@@ -240,12 +240,5 @@ $tool_content .= "<table id='course_results_table' class='display'>
     </tr></thead>";
 
 $tool_content .= "<tbody></tbody></table>";
-$tool_content .= "<div align='center' style='margin-top: 60px; margin-bottom:10px;'>";
-$tool_content .= action_bar(array(
-    array('title' => $langReturnSearch,
-        'url' => "searchcours.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
-$tool_content .= "</div>";
 
 draw($tool_content, 3, null, $head_content);

@@ -44,7 +44,7 @@ $user = new User();
 $cId = course_code_to_id($_GET['c']);
 validateCourseNodes($cId, isDepartmentAdmin());
 
-$pageName = $langQuota;
+$toolName = $langQuota;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'searchcours.php', 'name' => $langSearchCourse);
 $navigation[] = array('url' => 'editcours.php?c=' . q($_GET['c']), 'name' => $langCourseEdit);

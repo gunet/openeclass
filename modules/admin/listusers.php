@@ -303,11 +303,29 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($logs->id == 1) { // don't display actions for admin user
             $icon_content = "&mdash;&nbsp;";
         } else {
+            /*$icon_content = action_button(array(
+                        array('title' => $langEdit,
+                              'url' => "edituser.php?u=$logs->id",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                              'url' => "deluser.php?u=$logs->id",
+                              'icon' => 'fa-times'),
+                        array('title' => $langStat,
+                              'url' => "userstats.php?u=$logs->id",
+                              'icon' => 'fa-pie-chart'),
+                        array('title' => $langActions,
+                              'url' => "userlogs.php?u=$logs->id",
+                              'icon' => 'fa-list-alt'),
+                        array('title' => $changetip,
+                              'url' => "change_user.php?username=" . urlencode($logs->username) . "",
+                              'icon' => 'fa-key',
+                              'show' => !isDepartmentAdmin()),
+                        ));*/
             $changetip = q("$langChangeUserAs $logs->username");
             $icon_content = icon('fa-edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
-                    icon('fa-times', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
-                    icon('fa-pie-chart', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
-                    icon('fa-list-alt', $langActions, "userlogs.php?u=$logs->id");
+                            icon('fa-times', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
+                            icon('fa-pie-chart', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
+                            icon('fa-list-alt', $langActions, "userlogs.php?u=$logs->id");
             if (!isDepartmentAdmin()) {
                 $icon_content .= '&nbsp;' . icon('fa-key', $changetip, 'change_user.php?username=' . urlencode($logs->username));
             }

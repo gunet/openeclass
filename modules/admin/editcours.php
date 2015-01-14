@@ -51,8 +51,7 @@ if (!isset($c)) {
 $cId = course_code_to_id($c);
 validateCourseNodes($cId, isDepartmentAdmin());
 
-// Define $nameTools
-$pageName = $langCourseEdit;
+$toolName = $langCourseEdit;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'listcours.php', 'name' => $langListCours);
 
@@ -159,12 +158,7 @@ if (isset($c)) {
     $tool_content .= "
 	<tr>
 	  <td><a href='listusers.php?c=" . $cId . "'>" . $langListUsersActions . "</a></td>
-	</tr>";
-    // Register unregister users
-    $tool_content .= "
-	<tr>
-	  <td><a href='addusertocours.php?c=" . q($c) . "'>" . $langAdminUsers . "</a></td>
-	</tr>";
+	</tr>";    
     // Backup course
     $tool_content .= "<tr>
 	  <td><a href='../course_info/archive_course.php?c=" . q($c) . "'>" . $langTakeBackup . "</a></td>

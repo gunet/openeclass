@@ -25,7 +25,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$pageName = $langAdminAn;
+$toolName = $langAdminAn;
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -293,7 +293,15 @@ if ($displayAnnouncementList == true) {
                         'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary-label',
-                        'button-class' => 'btn-success'),
+                        'button-class' => 'btn-success')
+                    ));
+    } else {
+        $pageName = $langAdminAddAnn;
+        $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
+                        'icon' => 'fa-plus-circle',
+                        'level' => 'primary-label')
                     ));
     }
     if ($announcementNumber > 0) {
