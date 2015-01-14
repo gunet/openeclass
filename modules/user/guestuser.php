@@ -62,7 +62,7 @@ $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary'
+                  'level' => 'primary-label'
                  )));
 
 if (isset($_POST['submit'])) {
@@ -85,32 +85,33 @@ if (isset($_POST['submit'])) {
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
         <fieldset>        
         <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langName:</label>
             <div class='col-sm-10'>
-                <label class='col-sm-2 control-label'>$langName:</label>
-                $guest_info->givenname
+                <input class='form-control' value='".q($guest_info->givenname)."' disabled>
             </div>
         </div>
         <div class='form-group'>
-            <div class='col-sm-10'>
-                <label class='col-sm-2 control-label'>$langSurname:</label>
-                $guest_info->surname
+            <label class='col-sm-2 control-label'>$langSurname:</label>
+            <div class='col-sm-10'>    
+                <input class='form-control' value='".q($guest_info->surname)."' disabled>
             </div>
         </div>
         <div class='form-group'>
+            <label class='col-sm-2 control-label'>$langUsername:</label>
             <div class='col-sm-10'>
-                <label class='col-sm-2 control-label'>$langUsername:</label>
-                $guest_info->username
+                <input class='form-control' value='".q($guest_info->username)."' disabled>
             </div>
         </div>
         <div class='form-group'>
             <label for='password' class='col-sm-2 control-label'>$langPass:</label>
             <div class='col-sm-10'>
-                <input type='text' name='guestpassword' value='' id='password' autocomplete='off' placeholder='$langAskGuest'>
+                <input class='form-control' type='text' name='guestpassword' value='' id='password' autocomplete='off' placeholder='$langAskGuest'>
                 <span id='result'></span>
             </div>
         </div>
         <div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$submit_label'>
+          <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
         </div>
         </fieldset>
         </form>

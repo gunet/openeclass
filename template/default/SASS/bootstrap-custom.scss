@@ -53,7 +53,21 @@ line-height: 1.428571429;
 color: #333333;
 white-space: nowrap;
 }
-
+.dropdown-menu>li>form>a:hover, .dropdown-menu>li>form>a:focus {
+background-color: #e8e8e8;
+background-image: -webkit-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+background-image: -o-linear-gradient(top,#f5f5f5 0,#e8e8e8 100%);
+background-image: -webkit-gradient(linear,left top,left bottom,from(#f5f5f5),to(#e8e8e8));
+background-image: linear-gradient(to bottom,#f5f5f5 0,#e8e8e8 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
+background-repeat: repeat-x;
+}
+.dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
+text-decoration: none;
+color: #262626;
+background-color: whitesmoke;
+cursor: pointer; 
+}
 @media(min-width: $screen-tablet){
   .affix {
     width: 20%;

@@ -9535,14 +9535,33 @@ a.list-group-item.delete:hover {
   white-space: nowrap;
 }
 
+/* line 56, ../SASS/bootstrap-custom.scss */
+.dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
+  background-color: #e8e8e8;
+  background-image: -webkit-linear-gradient(top, whitesmoke 0, #e8e8e8 100%);
+  background-image: -o-linear-gradient(top, whitesmoke 0, #e8e8e8 100%);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(whitesmoke), to(#e8e8e8));
+  background-image: linear-gradient(to bottom, #f5f5f5 0%, #e8e8e8 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
+  background-repeat: repeat-x;
+}
+
+/* line 65, ../SASS/bootstrap-custom.scss */
+.dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
+  text-decoration: none;
+  color: #262626;
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+
 @media (min-width: 768px) {
-  /* line 58, ../SASS/bootstrap-custom.scss */
+  /* line 72, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 20%;
   }
 }
 @media (max-width: 992px) {
-  /* line 63, ../SASS/bootstrap-custom.scss */
+  /* line 77, ../SASS/bootstrap-custom.scss */
   .float-menu {
     position: absolute;
     width: 225px;
@@ -9551,41 +9570,41 @@ a.list-group-item.delete:hover {
     height: 100%;
   }
 
-  /* line 70, ../SASS/bootstrap-custom.scss */
+  /* line 84, ../SASS/bootstrap-custom.scss */
   #leftnav {
     overflow: scroll;
     z-index: 8888;
   }
 
-  /* line 74, ../SASS/bootstrap-custom.scss */
+  /* line 88, ../SASS/bootstrap-custom.scss */
   .navbar-toggle {
     display: block;
   }
 }
 @media (min-width: 992px) {
-  /* line 79, ../SASS/bootstrap-custom.scss */
+  /* line 93, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 18%;
   }
 
-  /* line 82, ../SASS/bootstrap-custom.scss */
+  /* line 96, ../SASS/bootstrap-custom.scss */
   .navbar-custom {
     margin: 15px 15px 0px;
   }
 }
 @media (min-width: 1200px) {
-  /* line 87, ../SASS/bootstrap-custom.scss */
+  /* line 101, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 17%;
   }
 }
 @media (min-width: 1450px) {
-  /* line 92, ../SASS/bootstrap-custom.scss */
+  /* line 106, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 12.4%;
   }
 }
-/* line 98, ../SASS/bootstrap-custom.scss */
+/* line 112, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9597,7 +9616,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-/* line 110, ../SASS/bootstrap-custom.scss */
+/* line 124, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9611,7 +9630,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-/* line 124, ../SASS/bootstrap-custom.scss */
+/* line 138, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -9625,33 +9644,33 @@ a.list-group-item.delete:hover {
   top: 8px;
 }
 
-/* line 148, ../SASS/bootstrap-custom.scss */
+/* line 162, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 151, ../SASS/bootstrap-custom.scss */
+/* line 165, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 154, ../SASS/bootstrap-custom.scss */
+/* line 168, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 161, ../SASS/bootstrap-custom.scss */
+/* line 175, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 164, ../SASS/bootstrap-custom.scss */
+/* line 178, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 167, ../SASS/bootstrap-custom.scss */
+/* line 181, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 173, ../SASS/bootstrap-custom.scss */
+/* line 187, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;
