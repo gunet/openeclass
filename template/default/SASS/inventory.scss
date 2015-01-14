@@ -1650,6 +1650,10 @@ tr.not_visible{
     background: $color-background;
     height: 49px;
 }
+#bgr-cheat-header{
+    background: $color-background;
+    height: 53px;
+}
 
 #my-courses .panel .alert
 {
@@ -1722,6 +1726,10 @@ div.spinner-div
 #rename_doc_file label
 {
     word-wrap: break-word;
+}
+
+.small-logo{
+    padding-left: 10px !important;
 }
 
 .no-borders{
