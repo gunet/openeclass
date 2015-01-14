@@ -9446,7 +9446,7 @@ button.close {
 #btn-search {
   color: white;
   background-color: #232C3A;
-  border-color: black;
+  border-color: #111111;
 }
 /* line 11, ../../../../../../Ruby/Gems/2.0.0/gems/bootstrap-sass-3.3.1.0/assets/stylesheets/bootstrap/mixins/_buttons.scss */
 #btn-search:hover, #btn-search:focus, #btn-search.focus, #btn-search:active, #btn-search.active, .open > #btn-search.dropdown-toggle {
@@ -9461,7 +9461,7 @@ button.close {
 /* line 29, ../../../../../../Ruby/Gems/2.0.0/gems/bootstrap-sass-3.3.1.0/assets/stylesheets/bootstrap/mixins/_buttons.scss */
 #btn-search.disabled, #btn-search.disabled:hover, #btn-search.disabled:focus, #btn-search.disabled.focus, #btn-search.disabled:active, #btn-search.disabled.active, #btn-search[disabled], #btn-search[disabled]:hover, #btn-search[disabled]:focus, #btn-search[disabled].focus, #btn-search[disabled]:active, #btn-search[disabled].active, fieldset[disabled] #btn-search, fieldset[disabled] #btn-search:hover, fieldset[disabled] #btn-search:focus, fieldset[disabled] #btn-search.focus, fieldset[disabled] #btn-search:active, fieldset[disabled] #btn-search.active {
   background-color: #232C3A;
-  border-color: black;
+  border-color: #111111;
 }
 /* line 40, ../../../../../../Ruby/Gems/2.0.0/gems/bootstrap-sass-3.3.1.0/assets/stylesheets/bootstrap/mixins/_buttons.scss */
 #btn-search .badge {

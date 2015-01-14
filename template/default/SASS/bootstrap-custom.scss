@@ -7,7 +7,7 @@
     @extend .table, .table-striped;  
 }
 #btn-search{
-    @include button-variant(white, #232C3A, black);
+    @include button-variant(white, #232C3A, #111111);
 }
 //Input file global fix
 input[type="file"] {
