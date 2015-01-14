@@ -41,7 +41,7 @@ if (isset($_POST['optionsSave'])) {
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
     redirect_to_home_page('modules/admin/theme_options.php');
-} elseif (isset($_POST['delThemeId'])) {
+} elseif (isset($_GET['delThemeId'])) {
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
     $theme_options_styles = unserialize($theme_options->styles);
     @unlink("$webDir/template/$theme/img/$theme_options_styles[custom_logo]");
@@ -138,10 +138,9 @@ if (isset($_POST['optionsSave'])) {
     }
     $delete_btn = (get_config('theme_options_id')) 
             ? 
-            "<form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
+            "<form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=".get_config('theme_options_id')."'>
                 <div class='form-group'>
                     <div class='col-sm-9 col-sm-offset-3'>
-                        <input type='hidden' name='delThemeId' value='".get_config('theme_options_id')."'>
                         <a class='confirmAction btn btn-danger btn-xs' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
                     </div>
                 </div>
