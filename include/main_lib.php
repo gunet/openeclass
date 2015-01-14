@@ -2749,43 +2749,50 @@ function action_bar($options) {
         }        
         if ($level == 'primary-label') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .
-                "<span class='hidden-xs'>$title</span></a>$form_end</li>");
+                "<span class='hidden-xs'>$title</span></a>$form_end");
         } elseif ($level == 'primary') {
             array_unshift($out_primary,
-                "<li$class>$form_begin<a$confirm_extra class='btn btn-sm $button_class$confirm_modal_class'" . $href .
+                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon]'></i></a>$form_end</li>");
+                "<i class='fa $option[icon]'></i></a>$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$class>$form_begin<a$confirm_extra  class='btn btn-sm $button_class$confirm_modal_class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                "<li$class>$form_begin<a$confirm_extra  class='$confirm_modal_class'" . $href .
                 " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon]'></i></a>$form_end</li>");
+                "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
         }
         $i++;
     }
-    $out = "<ul class='list-inline'>";
+    $out = '';                
     if (count($out_primary)) {
         $out .= implode('', $out_primary);
     }
+
+    $action_button = "";
     if (count($out_secondary)) {
-        $out .= "<li><button type='button' class='btn btn-default btn-sm expandable-btn'><i class='fa fa-th-large'></i></button></li>";
-    }
-    $out .= "</ul>";
-    if (count($out_secondary)) {
-        $out .= "<ul class='list-inline expandable' style=\"float:right\">" . implode('', $out_secondary) . "</ul>";
+        //$action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
+        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa fa-gears'></i> <span class='caret'></span></button>";
+        $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
+                     ".implode('', $out_secondary)."
+                  </ul>";
     }
     if ($out && $i!=0) {
-        return "<div class='row'>" .
-             "<div class='col-sm-12 clearfix'>" .
-             $page_title.
-             "<div class='well well-sm action-bar-wrapper primary-tools margin-top-thin margin-bottom-thin pull-right'>" .
-             $out . "</div></div></div>";
+        return "<div class='row'>
+                    <div class='col-sm-12 clearfix'>
+                        $page_title
+                        <div class='margin-top-thin margin-bottom-thin pull-right'>
+                            <div class='btn-group'>
+                            $out
+                            $action_button
+                            </div>                         
+                        </div>
+                    </div>
+                </div>";
     } else {
         return '';
     }

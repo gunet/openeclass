@@ -56,7 +56,7 @@ $(document).ready(function () {
     // Initialisations
     act_confirm();
     animate_btn();
-    $('[rel=tooltip]').tooltip();
+    $('[rel=tooltip]').tooltip({container: 'body'});
     popover_init();
 
     $(document).on("click", function (e) {
