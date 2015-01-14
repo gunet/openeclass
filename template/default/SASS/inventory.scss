@@ -1639,9 +1639,10 @@ tr.not_visible{
 #background-cheat-leftnav
 {
     position: absolute;
+    background: $color-background;
     height: 100%;
     left: 0px;
-    top: 49px;
+    top: 0px;
     padding: 0px;
 }
 

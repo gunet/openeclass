@@ -254,6 +254,9 @@ $(document).ready(function () {
         var initialHeight;
         var windowHeight = $(window).height();
         var contentHeight = $("#Frame").height();
+        
+        var backgroundCheat = $("#background-cheat-leftnav").outerHeight(true) + 49;
+        $("#background-cheat-leftnav").outerHeight(backgroundCheat);
 
 
         // Initialisation of Main Content height
