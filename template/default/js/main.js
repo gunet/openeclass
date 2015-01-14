@@ -48,8 +48,8 @@ function popover_init() {
         act_confirm();
     });
 }
-function sidebar_reset(){
-    
+function sidebar_reset() {
+
 }
 $(document).ready(function () {
 
@@ -71,6 +71,10 @@ $(document).ready(function () {
                 });
             }
         }
+    });
+
+    $(".lesson-title-link").on('click', function (e) {
+        e.preventDefault;
     });
 
     $("#save_note").on("click", function () {

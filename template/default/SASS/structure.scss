@@ -252,6 +252,10 @@ a.toggle-active{
             padding: 0px;
             margin: 0px;
             
+            > .panel{
+                padding-bottom: 5px;
+                background-color: $color-sidebar;
+            }
             .panel-body{
                 padding: 0px 8px;
                 border: none;
@@ -297,10 +301,9 @@ a.toggle-active{
                     cursor: pointer;
                 }
             }
-            .panel{
+            .panel{ 
                 border: none;
                 margin: 0px;
-                background-color: #dddddd;
                 @include border-radius(0px);
             }
 
@@ -354,15 +357,16 @@ a.toggle-active{
                 }
                 a.lesson-title-link
                 {
-                    display: inline-block;
-                    height: 100%;
-                    width: 80%;
+                    display: block;
+                    float: left;
+                    height: 37px;
                     line-height: 37px;
+                    width: 80%;
                     padding-left: 10px;
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    color: #4da1e4;
+                    color: #86CEFD;
                 }
                 a.lesson-title-link:hover, a.lesson-title-link.active
                 {
@@ -372,8 +376,9 @@ a.toggle-active{
                 i.lesson-title-caret
                 {
                     background-color: #fafafa;
-                    display: inline-block;
-                    height: 100%;
+                    display: block;
+                    float: right;
+                    height: 37px;
                     width: 20%;
                     text-align: center;
                     line-height: 37px;
@@ -400,6 +405,7 @@ a.toggle-active{
         border-top: none;
         color: rgba(255,255,255,.9);
         .lesson-title{
+            height: 37px;
             background: #fff;
             font-size: 0.85em;
             margin:0px;
