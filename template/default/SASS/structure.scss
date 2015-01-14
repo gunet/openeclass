@@ -256,6 +256,9 @@ a.toggle-active{
                 padding-bottom: 5px;
                 background-color: $color-sidebar;
             }
+            .sidebar-mymessages{
+                color: #999;
+            }
             .panel-body{
                 padding: 0px 8px;
                 border: none;
@@ -404,6 +407,9 @@ a.toggle-active{
         background: #f7f7f7;
         border-top: none;
         color: rgba(255,255,255,.9);
+        .panel-body{
+            padding: 10px 8px !important;
+        }
         .lesson-title{
             height: 37px;
             background: #fff;

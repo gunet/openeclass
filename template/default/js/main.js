@@ -73,10 +73,6 @@ $(document).ready(function () {
         }
     });
 
-    $(".lesson-title-link").on('click', function (e) {
-        e.preventDefault;
-    });
-
     $("#save_note").on("click", function () {
         var note_title = $("#title-note").val();
         var note_text = $("#text-note").val();
