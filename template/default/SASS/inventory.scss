@@ -1641,9 +1641,14 @@ tr.not_visible{
     position: absolute;
     background: $color-background;
     height: 100%;
+    padding-bottom: 49px;
     left: 0px;
     top: 0px;
     padding: 0px;
+}
+#bgr-cheat-footer{
+    background: $color-background;
+    height: 49px;
 }
 
 #my-courses .panel .alert
