@@ -214,7 +214,7 @@ function new_bbb_session() {
  */
 function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
-    global $tool_content, $langBBBAddSuccessful;
+    global $tool_content;
     global $langBBBScheduledSession, $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2;
 
     // Groups of participants per session
@@ -240,7 +240,6 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
     Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record,sessionUsers)"
         . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group,$record,$sessionUsers);
     
-    $tool_content .= "<div class='alert alert-success'>$langBBBAddSuccessful</div>";   
 
     // if we have to notify users for new session
     if($notifyUsers=="1")
@@ -300,7 +299,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
  */
 function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
-    global $tool_content, $langBBBAddSuccessful, $course_id;
+    global $tool_content, $course_id;
     global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2 ;
 
     // Groups of participants per session
@@ -323,8 +322,6 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
     Database::get()->querySingle("UPDATE bbb_session SET title=?s,description=?s,"
             . "start_date=?t,public=?s,active=?s,unlock_interval=?d,external_users=?s,participants=?s,record=?s,sessionUsers=?d WHERE id=?d",$title, $desc, $start_session, $type, $status, $minutes_before, $external_users, $r_group, $record, $sessionUsers, $session_id);
     
-    $tool_content .= "<div class='alert alert-success'>$langBBBAddSuccessful</div>";
-
     // if we have to notify users for new session
     if($notifyUsers=="1")
     {

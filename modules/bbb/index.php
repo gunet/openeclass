@@ -142,6 +142,8 @@ elseif(isset($_POST['update_bbb_session']))
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');   
     update_bbb_session($_GET['id'],$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'],$_POST['record'],$_POST['sessionUsers']);
+    Session::Messages($langBBBAddSuccessful, 'alert-success');
+    redirect("index.php?course=$course_code");
 }
 elseif(isset($_GET['choice']))
 {
@@ -197,11 +199,11 @@ elseif(isset($_GET['choice']))
     } 
    
 } elseif(isset($_POST['new_bbb_session'])) {
-    $tool_content .= "<p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></p>";
-    
     $startDate_obj = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_session']);
     $start = $startDate_obj->format('Y-m-d H:i:s');    
     add_bbb_session($course_id,$_POST['title'], $_POST['desc'], $start, $_POST['type'] ,$_POST['status'],(isset($_POST['notifyUsers']) ? '1' : '0'),$_POST['minutes_before'],$_POST['external_users'], $_POST['record'], $_POST['sessionUsers']);
+    Session::Messages($langBBBAddSuccessful, 'alert-success'); 
+    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
 else {    
     bbb_session_details();

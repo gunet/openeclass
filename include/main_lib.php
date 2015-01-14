@@ -2730,7 +2730,7 @@ function action_bar($options) {
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
-            $form_begin = "<form method=post action='$option[url]'>";
+            $form_begin = "<form method=post action='$option[url]' style='display:inline-block;'>";
             $form_end = '</form>';
             $href = '';
         } else {
@@ -2785,7 +2785,7 @@ function action_bar($options) {
         return "<div class='row'>
                     <div class='col-sm-12 clearfix'>
                         $page_title
-                        <div class='margin-top-thin margin-bottom-thin pull-right'>
+                        <div class='margin-top-thin margin-bottom-fat pull-right'>
                             <div class='btn-group'>
                             $out
                             $action_button
