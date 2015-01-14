@@ -384,36 +384,6 @@
         <!-- END footerBlock -->
 
     </div>
-    <!-- BEGIN modalWindowBlock -->
-        <!-- Dialog show event handler -->
-        <script type='text/javascript'>
-          $('.confirmAction').on('click', function(e){
-                var message = $(this).attr('data-message');
-                var title = $(this).attr('data-title');
-                var cancel_text = $(this).attr('data-cancel-txt');
-                var action_text = $(this).attr('data-action-txt');
-                var action_btn_class = $(this).attr('data-action-class');
-                var form = $(this).closest('form');
-                bootbox.dialog({
-                 message: message,
-                 title: title,
-                 buttons: {
-                   cancel_btn: {
-                     label: cancel_text,
-                     className: "btn-default"
-                   },
-                   action_btn: {
-                     label: action_text,
-                     className: action_btn_class,
-                     callback: function() {
-                       form.submit();
-                     }
-                   }
-                 }
-               });
-          });
-        </script>
-    <!-- END modalWindowBlock -->
 </body>
 </html>
 <!-- END mainBlock -->
