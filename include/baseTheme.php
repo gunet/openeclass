@@ -447,7 +447,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $styles_str .= ".jumbotron.jumbotron-login { background: -webkit-radial-gradient(30% 60%, closest-corner, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor]);}";
         if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login .graphic{ background-image: url('$themeimg/$theme_options_styles[loginImg]'); }";
-        if (!empty($theme_options_styles['leftNavBgColor'])) $styles_str .= "#leftnav{background:$theme_options_styles[leftNavBgColor];}";
+        if (!empty($theme_options_styles['leftNavBgColor'])) {
+            $rgba_no_alpha = explode(',', $theme_options_styles['leftNavBgColor']);
+            $rgba_no_alpha[3] = "1)";
+            $rgba_no_alpha = implode(',', $rgba_no_alpha);
+
+            $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
+        }
         if (!empty($theme_options_styles['leftSubMenuFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";
