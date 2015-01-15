@@ -21,7 +21,7 @@
     bootbox.setDefaults({
       locale: "{%LANG%}"
     });
-    var sidebarConfig = { notesLink: '{%NOTES_LINK%}', messagesLink: '{%URL_PATH%}/main/ajax_sidebar.php', courseCode: '{%COURSE_CODE%}', courseId: '{%COURSE_ID%}' };
+    var sidebarConfig = { notesLink: '{%NOTES_LINK%}', messagesLink: '{%URL_PATH%}main/ajax_sidebar.php', courseCode: '{%COURSE_CODE%}', courseId: '{%COURSE_ID%}' };
     </script>
     <!-- Our javascript -->
     <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
@@ -293,7 +293,7 @@
                                                     <ul id="lessons-list">
                                                         <!--<li class="lesson-id">ID: <a href="{%sideBarCourseURL%}">{%sideBarCourseCode%}</a></li>-->
                                                         <li class="lesson-professor">{%sideBarCourseProf%}</li>
-                                                        <li class="lesson-notifications">
+                                                        <li class="lesson-notifications" data-id="{%sideBarCourseID%}">
                                                             <!-- BEGIN sideBarCourseNotifyBlock -->
                                                             <span class="item"><i class="fa {%sideBarCourseNotifyIcon%}"></i><span class="count">{%sideBarCourseNotifyCount%}</span></span>
                                                             <!-- END sideBarCourseNotifyBlock -->
