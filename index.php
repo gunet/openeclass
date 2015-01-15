@@ -20,12 +20,10 @@ session_start();
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/*
- * @file index.php
+/**
  *
- * @abstract This file serves as the home page of eclass when the user
- * is not logged in.
- *
+/* @abstract home page of eclass
+ * @file index.php 
  */
 
 define('HIDE_TOOL_TITLE', 1);
@@ -169,10 +167,7 @@ if ($uid AND !isset($_GET['logout'])) {
                             <div class='form-group'>
                                 <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp&nbsp<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
                             </div>
-                            <div class='login-settings row'>";
-                                /*<div class='checkbox pull-left'>
-                                  <label><input type='checkbox'><span>Θυμήσου με</span></label>
-                                </div>";*/
+                            <div class='login-settings row'>";                                
         if (!empty($shibboleth_link) or !empty($cas_link)) {
             $tool_content .= "<div class='link-pull-right'>                
                     <label>$langAlternateLogin</label>
@@ -202,73 +197,70 @@ if ($uid AND !isset($_GET['logout'])) {
                                                 ORDER BY `order` DESC", $language);
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
-        $ann_content .= "<h4>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
-                    <i class='fa fa-rss-square'></i>
-                    </a></h4><ul class='front-announcements'>";
+        $ann_content .= "<h4>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>".icon('fa-rss-square')."</a>
+                            </h4><ul class='front-announcements'>";
         $numOfAnnouncements = sizeof($announceArr);
         for ($i = 0; $i < $numOfAnnouncements; $i++) {
             $aid = $announceArr[$i]->id;
-            $ann_content .= "
-                    <li>
-                    <a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a>
+            $ann_content .= "<li><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
             " . standard_text_escape(ellipsize_html($announceArr[$i]->body, 500, "<a class='announcements-more' href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a>"))."</li>";
-        }        
+        }
     }
 
-        $tool_content .= "
-
-        <div class='row'>
-
-            <div class='col-md-8'>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        $langInfoAbout
-                    </div>
-                </div>
-                <div class='panel'>
-                    <div class='panel-body'>";
-                    if(!empty($ann_content)){
-                            $tool_content .= $ann_content;
-                        }else{
-                            $tool_content .= "<li>$langNoRecentAnnounce</li>";
-                        }
-                    $tool_content.="</ul></div>
+    $tool_content .= "<div class='row'>
+        <div class='col-md-8'>
+            <div class='panel'>
+                <div class='panel-body'>
+                    $langInfoAbout
                 </div>
             </div>
-            
-            <div class='col-md-4'>
+            <div class='panel'>
+                <div class='panel-body'>";
+                if(!empty($ann_content)) {
+                    $tool_content .= $ann_content;
+                } else {
+                    $tool_content .= "<li>$langNoRecentAnnounce</li>";
+                }
+                $tool_content.="</ul></div>
+            </div>
+        </div>
+        <div class='col-md-4'>";
 
-            ";
-
-
-        $online_users = getOnlineUsers();
-        $tool_content .= "
-
-                <div class='panel'>
-                    <div class='panel-body'>
-                        <i class='fa fa-group space-after-icon'></i>$langOnlineUsers: $online_users
-                    </div>
+    $online_users = getOnlineUsers();
+    $tool_content .= "<div class='panel'>
+                <div class='panel-body'>
+                    <i class='fa fa-group space-after-icon'></i>$langOnlineUsers: $online_users
                 </div>
-
-                <div class='panel'>
-                    <div class='panel-body'>
-                        <a href='http://opencourses.gr'>
-                            <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
-                        </a>
-                    </div>
+            </div>";
+    
+    if (get_config('opencourses_enable')) {
+        $tool_content .= "<div class='panel'>
+                <div class='panel-body'>
+                    <a href='http://opencourses.gr'>
+                        <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
+                    </a>
                 </div>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        <a href='http://www.openeclass.org/'>
-                            <img class='img-responsive' src='$themeimg/open_eclass_bnr.png'>
-                        </a>
-                    </div>
+            </div>";
+    }
+    if (get_config('enable_mobileapi')) {
+        $tool_content .= "<div class='panel'>
+                <div class='panel-body'>
+                <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='appstore.png' alt='Available on the App Store'></a>&nbsp;
+                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='playstore.png' alt='Available on the Play Store'></a>                    
+                </div>
+            </div>";
+    }
+    
+    $tool_content .= "<div class='panel'>
+                <div class='panel-body'>
+                    <a href='http://www.openeclass.org/'>
+                        <img class='img-responsive' src='$themeimg/open_eclass_bnr.png'>
+                    </a>
                 </div>
             </div>
+        </div>
         </div>";
-
     }
-
     draw($tool_content, 0, null, $rss_link.$head_content);
 }
