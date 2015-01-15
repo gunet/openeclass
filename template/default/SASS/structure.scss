@@ -304,6 +304,12 @@ a.toggle-active{
                     cursor: pointer;
                 }
             }
+            #up.course-btn{
+                padding-bottom: 0px;
+            }
+            #down.course-btn{
+                padding-top: 0px;
+            }
             .panel{ 
                 border: none;
                 margin: 0px;
@@ -337,6 +343,7 @@ a.toggle-active{
                 #innerpanel-container{
                     position: relative;
                     top: 0px;
+                    padding: 1px 0;
                 }
                  
                  .panel{
@@ -408,7 +415,7 @@ a.toggle-active{
         border-top: none;
         color: rgba(255,255,255,.9);
         .panel-body{
-            padding: 10px 8px !important;
+            padding: 6px 8px 10px !important;
         }
         .lesson-title{
             height: 37px;
