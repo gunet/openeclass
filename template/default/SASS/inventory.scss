@@ -1751,6 +1751,43 @@ div.spinner-div
     color: #5cb85c;
 }
 
+ul.front-announcements
+{
+    list-style: none;
+    padding-left: 0px;
+    li{
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        a:hover{
+            text-decoration: none;
+        }
+        .announcement-title{
+            font-weight: bold;
+            font-size: 15px;
+            display: block;
+        }
+        .announcement-date{
+            font-style: italic;
+            color: #777;
+            font-size: 13px;
+            line-height: 30px;
+            display: block;
+        }
+        .announcements-more{
+            font-weight: bold;
+            display: block;
+            text-align: right;
+        }
+    }
+    li:first-child{
+        
+    }
+    li:last-child{
+        border-bottom: none;
+        padding-bottom: 10px;
+    }
+}
+
 .dataTables_filter
 {
     position: relative;
