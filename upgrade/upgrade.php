@@ -850,7 +850,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    if (version_compare($oldversion, '3', '<')) {
+    if (version_compare($oldversion, '3.0b2', '<')) {
         // Check whether new tables already exist and delete them if empty, 
         // rename them otherwise
         $new_tables = array('cron_params', 'log', 'log_archive', 'forum',
@@ -2336,7 +2336,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         convert_db_utf8($mysqlMainDb);
     }
 
-    if (version_compare($oldversion, '3.0b2', '<')) { // special procedure, must execute after course upgrades
+    if (version_compare($oldversion, '3.0b2', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
 
         Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS
