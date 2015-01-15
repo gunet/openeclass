@@ -763,16 +763,20 @@ function openCoursesExtra() {
 
         if ($openCoursesNum > 0) {
             $GLOBALS['leftNavExtras'] = "
-                <div style='text-align:center; color: white;'>
-                    <div>
-                        <h4>" . q($GLOBALS['langOpenCoursesShort']) . "</h4>
-                    </div>
-                    <div>
-                        <p><img src='$themeimg/open_courses_logo_small.png' title='" . $GLOBALS['langOpenCourses'] . "' alt='" . $GLOBALS['langOpenCourses'] . "' /></p>
-                        <p><a href='" . $urlServer . "modules/course_metadata/openfaculties.php'>" . $GLOBALS['langListOpenCoursesShort'] . "</a></p>
-                        <p class='smaller'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</p>
-                    </div>
-                </div>";
+                <hr style='margin: 24px 0'>
+                <div style='text-align:center; color: white;margin-bottom: 30px;'>
+                    <h4>" . q($GLOBALS['langOpenCoursesShort']) . "<br><small style='color:white'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</small></h4>
+                </div>
+                <hr style='margin: 24px 0'>
+                <div class='panel'>
+                    <a href='{$urlServer}modules/course_metadata/openfaculties.php' class='parent-menu collapsed'>
+                        <div class='panel-heading'>    
+                        <h4 class='panel-title'>
+                            <i class='fa fa-chevron-right space-after-icon'></i>$GLOBALS[langListOpenCoursesShort]
+                        </h4>
+                        </div>
+                    </a>
+               </div>";
         }
     }
 }
