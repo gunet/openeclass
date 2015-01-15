@@ -76,7 +76,15 @@ cursor: pointer;
 @media(min-width: $screen-tablet){
   .affix {
     width: 20%;
-  }     
+  }
+}
+
+  @media(max-width: $screen-tablet){
+  .login-form{
+      margin-right: 5%;
+      margin-left: 5%;
+      width: 90%;
+  }
 }
 @media(max-width: $screen-desktop){
    .float-menu {
