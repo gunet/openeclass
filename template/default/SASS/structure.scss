@@ -455,6 +455,9 @@ a.toggle-active{
         }
         .lesson-notifications{
             margin-top:1em;
+            i{
+                color: #444 !important;
+            }
             .item{
                 margin-right:1.5em;
                 position: relative;
