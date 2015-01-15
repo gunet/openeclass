@@ -173,21 +173,20 @@ if ($uid AND !isset($_GET['logout'])) {
                                     <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                                 </form>
                             <div class='login-settings row'>
-                                <div>
-                                      <label><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></label>
+                                <div class='text-center'>
+                                      <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                                     </div>
                                 <hr>";
                                 if (!empty($shibboleth_link) or !empty($cas_link)) {
-                                    $tool_content .= "<div>
-                                        $langAlternateLogin :               
-                                            <span>$shibboleth_link</span>
-                                            <span>$cas_link</span>
-                                         </div>";
+                                    $tool_content .= "<div class='alt_login text-center'>
+                                        <span>$langAlternateLogin :</span>";
+                                            if(!empty($cas_link)){ $tool_content.= "<span>$cas_link</span>";}
+                                            if(!empty($shibboleth_link)){ $tool_content.= "<span>$shibboleth_link</span>";}
+                                         $tool_content .= "</div>";
                                 }
-                    $tool_content .= " </div>
-
-                                <p>$warning</p>
-                        </div>
+                    $tool_content .= " </div>";
+                            if(!empty($warning)){ $tool_content.= "<br><span>$warning</span>";}
+                        $tool_content .= "</div>
                     </div>
                 </div>
             </div>
