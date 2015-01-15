@@ -230,17 +230,17 @@ $(document).ready(function () {
 
     $(".course-btn i").on("click", function (e) {
         var upOrDown = $(this).parent().attr("id");
-        var topOffset = $("#innerpanel-container").find(".panel.panel-default").outerHeight(true);
+        var topOffset = 3*($("#innerpanel-container").find(".panel.panel-default").outerHeight() + 6);
         var topPosition = $("#innerpanel-container").position().top;
         var bottomPosition = topPosition + $("#innerpanel-container").outerHeight(true) - $(".innerpanel").outerHeight(true);
 
         if (upOrDown === "up") {
-            if (bottomPosition >= 0) {
+            if (bottomPosition > 0) {
                 var topAnimate = topPosition - topOffset;
                 $("#innerpanel-container").animate({top: topAnimate}, 100);
             }
         } else if (upOrDown === "down") {
-            if (topPosition <= 0) {
+            if (topPosition < -1) {
                 var topAnimate = topPosition + topOffset;
                 $("#innerpanel-container").animate({top: topAnimate}, 100);
             }
