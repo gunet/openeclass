@@ -36,22 +36,24 @@ function getSidebarNotifications() {
     global $modules, $admin_modules, $theme_settings;
 
     $notifications_html = array();
-    $t = new Template();
-    $t->set_var('sideBarCourseNotifyBlock', $_SESSION['template']['sideBarCourseNotifyBlock']);
-    foreach ($_POST['courseIDs'] as $id) {
-        $t->set_var('sideBarCourseNotify', '');
-        $notifications = get_course_notifications($id);
-        foreach ($notifications as $n) {
-            $modules_array = (isset($modules[$n->module_id]))? $modules: $admin_modules;
-            if (isset($modules_array[$n->module_id]) &&
-                isset($modules_array[$n->module_id]['image']) &&
-                isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])) {
-                $t->set_var('sideBarCourseNotifyIcon', $theme_settings['icon_map'][$modules_array[$n->module_id]['image']]);
-                $t->set_var('sideBarCourseNotifyCount', $n->notcount);
-                $t->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
+    if (isset($_POST['courseIDs']) and count($_POST['courseIDs'])) {
+        $t = new Template();
+        $t->set_var('sideBarCourseNotifyBlock', $_SESSION['template']['sideBarCourseNotifyBlock']);
+        foreach ($_POST['courseIDs'] as $id) {
+            $t->set_var('sideBarCourseNotify', '');
+            $notifications = get_course_notifications($id);
+            foreach ($notifications as $n) {
+                $modules_array = (isset($modules[$n->module_id]))? $modules: $admin_modules;
+                if (isset($modules_array[$n->module_id]) &&
+                    isset($modules_array[$n->module_id]['image']) &&
+                    isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])) {
+                    $t->set_var('sideBarCourseNotifyIcon', $theme_settings['icon_map'][$modules_array[$n->module_id]['image']]);
+                    $t->set_var('sideBarCourseNotifyCount', $n->notcount);
+                    $t->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
+                }
             }
+            $notifications_html[$id] = $t->get_var('sideBarCourseNotify');
         }
-        $notifications_html[$id] = $t->get_var('sideBarCourseNotify');
     }
     return $notifications_html;
 }
