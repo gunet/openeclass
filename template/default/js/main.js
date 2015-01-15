@@ -229,7 +229,7 @@ $(document).ready(function () {
 
 
     $(".course-btn i").on("click", function (e) {
-        var upOrDown = $(this).attr("id");
+        var upOrDown = $(this).parent().attr("id");
         var topOffset = $("#innerpanel-container").find(".panel.panel-default").outerHeight(true);
         var topPosition = $("#innerpanel-container").position().top;
         var bottomPosition = topPosition + $("#innerpanel-container").outerHeight(true) - $(".innerpanel").outerHeight(true);
