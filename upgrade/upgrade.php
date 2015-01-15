@@ -2394,6 +2394,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE course ADD home_layout TINYINT(1) NOT NULL DEFAULT 1");
             Database::get()->query("UPDATE course SET home_layout = 3");
         }
+        if (!DBHelper::fieldExists('q_scale', 'poll_question')) {
+            Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
+        }
         //Add course image field
         if (!DBHelper::fieldExists('course_image', 'course')) {
             Database::get()->query("ALTER TABLE course ADD course_image VARCHAR(400) NULL");
