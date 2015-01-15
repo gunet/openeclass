@@ -261,24 +261,29 @@ if (get_config('opencourses_enable')) {
             </div>";
     }
     if (get_config('enable_mobileapi')) {
-        $tool_content .= "<div class='panel'>
+        $tool_content .= "<div class='panel mobile-apps'>
                 <div class='panel-body'>
-                <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='appstore.png' alt='Available on the App Store'></a>&nbsp;
-                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='playstore.png' alt='Available on the Play Store'></a>                    
+                <div class='row'>
+                <div class='col-xs-6'>
+                <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
                 </div>
+                <div class='col-xs-6'>
+                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>                    
+                </div>
+                </div></div>
             </div>";
     }
                $tool_content .= "<div class='panel'>
                     <div class='panel-body'>
                         <a href='http://opencourses.gr'>
-                            <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
+                            <img class='img-responsive center-block' src='$themeimg/open_courses_bnr.png'>
                         </a>
                     </div>
                 </div>
                 <div class='panel'>
                     <div class='panel-body'>
                         <a href='http://www.openeclass.org/'>
-                            <img class='img-responsive' src='$themeimg/open_eclass_bnr.png'>
+                            <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
                         </a>
                     </div>
                 </div>
