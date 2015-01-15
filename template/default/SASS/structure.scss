@@ -590,7 +590,7 @@ body.page-login h1{
 }
 
 // LOGIN FORM
-form.login-form{
+div.login-form{
 
   font-size: 0.85em;
 
@@ -672,7 +672,7 @@ form.login-form{
 
   // Remember me + forgot your password
   .login-settings{
-    margin: 2rem 0rem;
+    margin: 1rem 0rem;
     font-size:0.9em;
     
     > * {
@@ -702,13 +702,12 @@ form.login-form{
   }
 
   .btn.btn-login{
-     width: 100%;
+    margin: 15px 0;
+    width: 100%;
     height:4rem;
     border-radius: 4rem;
     font-weight: 600;
-    
     color:white;
-
     background:#428bca;
     letter-spacing:0.1em;
     outline: none;
