@@ -27,7 +27,7 @@
 $require_admin = TRUE;
 
 require_once '../../include/baseTheme.php';
-$pageName = $langVisitsStats;
+$toolName = $langVisitsStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 $page_title = $langPlatformStats . ": " . $langVisitsStats;
 

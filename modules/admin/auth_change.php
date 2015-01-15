@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -34,7 +34,7 @@
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$pageName = $langAuthChangeUser;
+$toolName = $langAuthChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 
@@ -47,50 +47,45 @@ if (!isset($auth)) {
     $auth = $_SESSION['auth_temp'];
 }
 
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "auth.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ));
+
 $auth_change = isset($_REQUEST['auth_change']) ? intval($_REQUEST['auth_change']) : false;
 register_posted_variables(array('submit' => true));
-$auth_methods = get_auth_active_methods();
 
+if ($submit && $auth && $auth_change) {
+    if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s AND id != 1", $auth_ids[$auth_change], $auth_ids[$auth])->affectedRows >= 1) {
+        $tool_content .= "<div class='alert alert-success'>$langAuthChangeYes</div";                        
+        draw($tool_content, 3);
+    }
+}
+
+$auth_methods = get_auth_active_methods();
 foreach ($auth_methods as $key => $value) {
     // remove current auth method
     if ($auth == $value or $value == 1) { // cannot change to eclass native method
         unset($auth_methods[$key]);
     }
 }
-
 foreach ($auth_methods as $value) {
     $auth_methods_active[$value] = $auth_ids[$value];
 }
 
-$c = count_auth_users($auth);
-$tool_content .= "<form name='authchange' method='post' action='$_SERVER[SCRIPT_NAME]'>
-<fieldset>
-<legend>" . get_auth_info($auth) . " ($langNbUsers: $c)</legend>
-<table width='100%' class='tbl'><tr>
-<th colspan='2'>
-	<input type='hidden' name='auth' value='" . intval($auth) . "' />
-</th>
-</tr>";
-
-if ($submit && $auth && $auth_change) {
-    if (Database::get()->query("UPDATE user SET password=?s WHERE password=?s and user_id != 1", $auth_ids[$auth_change], $auth_ids[$auth])->affectedRows >= 1) {
-        $tool_content .= "
-				<td class='alert alert-success'>$langAuthChangeYes</td></tr></tbody></table><br /><br />";
-        draw($tool_content, 3);
-    }
-}
-
-if (count($auth_methods_active) == 0) {
+if (isset($auth_methods_active) == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langAuthChangeno</div>";
 } else {
-    $tool_content .= "
-		<tr>
-			<th class='left'>$langAuthChangeto: </th>
-			<td>";
-    $tool_content .= selection($auth_methods_active, 'auth_change');
-    $tool_content .= "</td></tr>";
-    $tool_content .= "<tr><th>&nbsp;</th><td class='left'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></td></tr>";
+    $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' name='authchange' method='post' action='$_SERVER[SCRIPT_NAME]'>";    
+    $tool_content .= "<fieldset><div class='form-group'><label class='col-sm-2 control-label'>$langAuthChangeto:</label>";
+    $tool_content .= "<div class='col-sm-10'>";
+    $tool_content .= selection($auth_methods_active, 'auth_change', '', "class='form-control'");
+    $tool_content .= "</div></div>";
+    $tool_content .= "<input type='hidden' name='auth' value='" . intval($auth) . "'>";    
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>";
+    $tool_content .= "</fieldset></form></div>";
 }
-$tool_content .= "</table></fieldset></form>";
 
 draw($tool_content, 3);

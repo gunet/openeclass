@@ -42,7 +42,7 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-$pageName = $langVisitsCourseStats;
+$toolName = $langVisitsCourseStats;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 require_once 'admin_statistics_tools_bar.php';
