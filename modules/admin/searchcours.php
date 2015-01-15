@@ -48,7 +48,7 @@ $head_content .= "<script type='text/javascript'>
         });
     </script>";
 
-$pageName = $langSearchCourse;
+$toolName = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $tool_content .= action_bar(array(

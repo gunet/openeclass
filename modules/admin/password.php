@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -19,16 +19,11 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-/*
- * Index
- *
- * @author Evelthon Prodromou <eprodromou@upnet.gr>
- * @version $Id$
- *
- * @abstract Password change component (for platform administrator)
- *
+/**
+ * @file password.php
+ * @brief change user password
  */
+
 $require_login = true;
 $require_admin = TRUE;
 $helpTopic = 'Profile';
@@ -37,7 +32,7 @@ $require_valid_uid = TRUE;
 include '../../include/baseTheme.php';
 require_once 'include/phpass/PasswordHash.php';
 
-$pageName = $langChangePass;
+$toolName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'edituser.php', 'name' => $langEditUser);
 
@@ -74,41 +69,49 @@ if (!isset($urlSecure)) {
     $passurl = $urlSecure . 'modules/admin/password.php';
 }
 
-if (!isset($_POST['changePass'])) {
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?userid=$_REQUEST[userid]",
+                'icon' => 'fa-reply',
+                'level' => 'primary')
+                ));
+
+if (!isset($_POST['changePass'])) {       
     if (!isset($_GET['userid'])) {
         header("Location: {$urlServer}modules/admin/");
         exit;
     }
-    $tool_content .= "
-<form method='post' action='$passurl'>
-<fieldset>
-  <legend>$lang_remind_pass</legend>
-  <input type='hidden' name='userid' value='$_GET[userid]' />
-  <table class='tbl' width='100%'>
-  <tr>
-    <th class='left' width='160'>$langNewPass1:</th>
-    <td><input type='password' size='40' name='password_form' value='' id='password' autocomplete='off' />&nbsp;<span id='result'></span></td>
-  </tr>
-  <tr>
-    <th class='left'>$langNewPass2:</th>
-    <td><input type='password' size='40' name='password_form1' value='' autocomplete='off' /></td>
-  </tr>
-  <tr>
-    <th class='left'>&nbsp;</th>
-    <td class='right'><input class='btn btn-primary' type='submit' name='changePass' value='$langModify' /></td>
-  </tr>
-  </table>
-</fieldset>
-</form>";
+    $tool_content .= "<div class='form-wrapper'>
+    <form class='form-horizontal' role='form' method='post' action='$passurl'>
+    <fieldset>      
+      <input type='hidden' name='userid' value='$_GET[userid]' />
+      <div class='form-group'>
+      <label class='col-sm-3 control-label'>$langNewPass1</label>
+        <div class='col-sm-9'>
+            <input type='password' size='40' name='password_form' value='' id='password' autocomplete='off' />&nbsp;<span id='result'></span>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label class='col-sm-3 control-label'>$langNewPass2</label>
+        <div class='col-sm-9'>
+            <input type='password' size='40' name='password_form1' value='' autocomplete='off' />
+        </div>
+      </div>
+      <div class='col-sm-offset-3 col-sm-9'>
+        <input class='btn btn-primary' type='submit' name='changePass' value='$langModify' />
+      </div>      
+    </fieldset>
+    </form>
+    </div>";
 } else {
     $userid = intval($_POST['userid']);
     if (empty($_POST['password_form']) || empty($_POST['password_form1'])) {
-        $tool_content .= mes($langFieldsMissing, '', 'caution');
+        $tool_content .= mes($langFieldsMissing, '', 'warning');
         draw($tool_content, 3);
         exit();
     }
     if ($_POST['password_form1'] !== $_POST['password_form']) {
-        $tool_content .= mes($langPassTwo, '', 'caution_small');
+        $tool_content .= mes($langPassTwo, '', 'warning');
         draw($tool_content, 3);
         exit();
     }
@@ -116,17 +119,22 @@ if (!isset($_POST['changePass'])) {
     $hasher = new PasswordHash(8, false);
     $new_pass = $hasher->HashPassword($_POST['password_form']);
     Database::get()->query("UPDATE `user` SET `password` = ?s WHERE `id` = ?d", $new_pass, $userid);
-    $tool_content .= mes($langPassChanged, $langHome, 'success');
+    $tool_content .= mes($langPassChanged, $langHome, 'info');
     draw($tool_content, 3);
     exit();
 }
 
 draw($tool_content, 3, null, $head_content);
 
-// display message
-function mes($message, $urlText, $type) {
-    global $urlServer, $langBack, $userid;
 
-    $str = "<p class='$type'>$message</p><br /><a href='$_SERVER[SCRIPT_NAME]?userid=$userid'>$langBack</a></p>";
+/**
+ * @brief display message
+ * @param type $message
+ * @param type $urlText
+ * @param type $type
+ * @return type
+ */
+function mes($message, $urlText, $type) {    
+    $str = "<div class='alert alert-$type'>$message</div>";
     return $str;
 }

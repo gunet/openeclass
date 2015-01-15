@@ -30,7 +30,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'admin_statistics_tools_bar.php';
 
-$pageName = $langPlatformGenStats;
+$toolName = $langPlatformGenStats;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 admin_statistics_tools("stateclass");

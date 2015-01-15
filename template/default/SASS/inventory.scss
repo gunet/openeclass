@@ -1652,7 +1652,8 @@ tr.not_visible{
 }
 #bgr-cheat-header{
     background: $color-background;
-    height: 54px;
+    height: 53px;
+    border-bottom: 1px solid transparent;
 }
 
 #my-courses .panel .alert
@@ -1748,6 +1749,42 @@ div.spinner-div
     font-size: 22px;
     margin: 0px 10px;
     color: #5cb85c;
+}
+
+ul.front-announcements
+{
+    list-style: none;
+    padding-left: 0px;
+    li{
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        a:hover{
+            text-decoration: none;
+        }
+        .announcement-title{
+            font-weight: bold;
+            font-size: 15px;
+            display: block;
+        }
+        .announcement-date{
+            font-style: italic;
+            color: #777;
+            font-size: 13px;
+            line-height: 30px;
+            display: block;
+        }
+        .announcements-more{
+            display: block;
+            text-align: right;
+        }
+    }
+    li:first-child{
+        
+    }
+    li:last-child{
+        border-bottom: none;
+        padding-bottom: 10px;
+    }
 }
 
 .dataTables_filter

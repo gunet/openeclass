@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -28,8 +28,15 @@
  */
 $require_admin = TRUE;
 require_once '../../include/baseTheme.php';
-$pageName = $langMailVerification;
+$toolName = $langMailVerification;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "$_SERVER[PHP_SELF]",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ));
 
 $mr = get_config('email_required') ? $m['yes'] : $m['no'];
 $mv = get_config('email_verification_required') ? $m['yes'] : $m['no'];
@@ -71,41 +78,41 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
 // admin hasn't clicked on edit
 if (empty($submit0) && empty($submit1) && empty($submit2)) {
     $tool_content .= "<form name='mail_verification' method='post' action='$_SERVER[SCRIPT_NAME]'>
-	<table width='100%' class='tbl_1' style='margin-top: 20px;'>
-		<tr><td class='left' colspan='3'><b>$langMailVerificationSettings</b></td></tr>
-		<tr><td class='left' colspan='2'>$lang_email_required:</td>
-			<td class='center'>$mr</td></tr>
-		<tr><td class='left' colspan='2'>$lang_email_verification_required:</td>
-			<td class='center'>$mv</td></tr>
-		<tr><td class='left' colspan='2'>$lang_dont_mail_unverified_mails:</td>
-			<td class='center'>$mm</td></tr>
+	<table class='table-default' style='margin-top: 20px;'>
+		<tr><td class='text-left' colspan='3'><b>$langMailVerificationSettings</b></td></tr>
+		<tr><td class='text-left' colspan='2'>$lang_email_required:</td>
+			<td class='text-center'>$mr</td></tr>
+		<tr><td class='text-left' colspan='2'>$lang_email_verification_required:</td>
+			<td class='text-center'>$mv</td></tr>
+		<tr><td class='text-left' colspan='2'>$lang_dont_mail_unverified_mails:</td>
+			<td class='text-center'>$mm</td></tr>
 		<tr><td colspan='3'>&nbsp;</td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></td>
-			<td class='center'><b>" .
-            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt .
-            "</b></td><td class='right'><input class='btn btn-primary' type='submit' name='submit1' value='{$m['edit']}'></td></tr>
+			<td class='text-center'><b>" .
+            Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFIED . ";")->cnt .
+            "</b></td><td class='text-right'><input class='btn btn-primary' type='submit' name='submit1' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=2'>$langMailVerificationNo</a></td>
-			<td class='center'><b>" .
-            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt .
-            "</b></td><td class='right'><input class='btn btn-primary' type='submit' name='submit2' value='{$m['edit']}'></td></tr>
+			<td class='text-center'><b>" .
+            Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_UNVERIFIED . ";")->cnt .
+            "</b></td><td class='text-right'><input class='btn btn-primary' type='submit' name='submit2' value='{$m['edit']}'></td></tr>
 		<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langMailVerificationPending</a></td>
-			<td class='center'><b>" .
-            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt .
-            "</b></td><td class='right'><input class='btn btn-primary' type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
+			<td class='text-center'><b>" .
+            Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = " . EMAIL_VERIFICATION_REQUIRED . ";")->cnt .
+            "</b></td><td class='text-right'><input class='btn btn-primary' type='submit' name='submit0' value='{$m['edit']}'></td></tr>";
     if (!get_config('email_required')) {
         $tool_content .= "<tr><td><a href='listusers.php?search=yes&verified_mail=0'>$langUsersWithNoMail</a></td>
-                                <td class='center'><b>" .
-                Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user WHERE email = '';")->cnt .
-                "</b></td><td class='right'>&nbsp;</td></tr>";
+                                <td class='text-center'><b>" .
+                Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE email = '';")->cnt .
+                "</b></td><td class='text-right'>&nbsp;</td></tr>";
     }
     $tool_content .= "<tr><td><a href='listusers.php?search=yes'>$langTotal $langUsersOf</a></td>
-			<td class='center'><b>" .
-            Database::get()->querySingle("SELECT COUNT(*) as cnt FROM user;")->cnt .
-            "</b></td><td class='right'>&nbsp;</td></tr>
+			<td class='text-center'><b>" .
+            Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt .
+            "</b></td><td class='text-right'>&nbsp;</td></tr>
 	</table></form>";
 }
-// admin wants to change user's mail verirication value. 3 possible
-else {
+// admin wants to change user's mail verification value. 3 possible
+else { 
     if (!empty($submit0)) {
         $sub = 0;
         $msg = $langMailVerificationPending;
@@ -121,25 +128,22 @@ else {
     $c = Database::get()->querySingle("SELECT count(*) as cnt FROM user WHERE verified_mail = $sub;")->cnt;
 
     if (isset($sub)) {
-        $tool_content .= "<form name='mail_verification_change' method='post' action='$_SERVER[SCRIPT_NAME]'>
-		<fieldset>
-		<legend>$msg ($langNbUsers: $c)</legend>
-		<table width='100%' class='tbl'>
-		<tr><th class='left'>$langChangeTo: </th>
-			<td>";
-        $tool_content .= selection($mail_ver_data, "new_mail_ver", $sub);
-
-        $tool_content .= "</td>
-		</tr>
-		<tr><th>&nbsp;</th><td class='left'><input class='btn btn-primary' type='submit' name='submit' value='{$m['edit']}'></td></tr>
-		<tr><th colspan='2'><input type='hidden' name='old_mail_ver' value='$sub' /></th></tr>
-		</table>
+        $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' name='mail_verification_change' method='post' action='$_SERVER[SCRIPT_NAME]'>
+		<fieldset>		
+                <div class='form-group'>
+		<label class='col-sm-2 control-label'>$langChangeTo:</label>
+                <div class='col-sm-10'>";
+        $tool_content .= selection($mail_ver_data, "new_mail_ver", $sub, "class='form-control'");
+        $tool_content .= "</div>
+		</div>
+		<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langEdit'></div>
+		<input type='hidden' name='old_mail_ver' value='$sub'>		
 		</fieldset>
-		</form>";
+		</form></div>";
     }
 }
 
-$tool_content .= "<p class='alert alert-warning'><b>$langNote</b>:<br />$langMailVerificationNotice</p>";
+$tool_content .= "<div class='alert alert-warning'><b>$langNote</b>:<br>$langMailVerificationNotice</div>";
 $tool_content .= "<div class='alert alert-info'>$langMailVerificationNoticeAdmin</div>";
 
 draw($tool_content, 3);

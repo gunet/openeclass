@@ -202,15 +202,17 @@ if ($uid AND !isset($_GET['logout'])) {
                                                 ORDER BY `order` DESC", $language);
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
-        $ann_content .= "<h4>$langAnnouncements</h4> <a href='${urlServer}rss.php'>
-                    <img src='$themeimg/feed.png' alt='RSS Feed' title='RSS Feed' />
-                    </a>";
+        $ann_content .= "<h4>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
+                    <i class='fa fa-rss-square'></i>
+                    </a></h4><ul class='front-announcements'>";
         $numOfAnnouncements = sizeof($announceArr);
         for ($i = 0; $i < $numOfAnnouncements; $i++) {
             $aid = $announceArr[$i]->id;
-            $ann_content .= "<b><a href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></b>
-                    &nbsp;<span class='smaller'>(" . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . ")</span>
-            " . standard_text_escape(ellipsize_html($announceArr[$i]->body, 500, "<strong>&nbsp;<a href='modules/announcements/main_ann.php?aid=$aid'>... <span class='smaller'>[$langMore]</span></a></strong>")) . "<br>";
+            $ann_content .= "
+                    <li>
+                    <a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a>
+                    <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
+            " . standard_text_escape(ellipsize_html($announceArr[$i]->body, 500, "<a class='announcements-more' href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a>"))."</li>";
         }        
     }
 
@@ -229,9 +231,9 @@ if ($uid AND !isset($_GET['logout'])) {
                     if(!empty($ann_content)){
                             $tool_content .= $ann_content;
                         }else{
-                            $tool_content .= $langNoRecentAnnounce;
+                            $tool_content .= "<li>$langNoRecentAnnounce</li>";
                         }
-                    $tool_content.="</div>
+                    $tool_content.="</ul></div>
                 </div>
             </div>
             

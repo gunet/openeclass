@@ -42,7 +42,7 @@ $user = new User();
 
 load_js('jstree');
 
-$pageName = $langHierarchyActions;
+$toolName = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_GET['action'])) {

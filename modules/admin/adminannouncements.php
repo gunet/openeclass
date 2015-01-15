@@ -25,7 +25,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-$pageName = $langAdminAn;
+$toolName = $langAdminAn;
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -68,6 +68,29 @@ foreach (array('title', 'lang_admin_ann') as $var) {
         $GLOBALS[$var] = '';
     }
 }
+
+if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {    
+        if (isset($_GET['addAnnounce'])) {
+            $pageName = $langAdminAddAnn;
+        } else {
+            $pageName = $langAdminModifAnn;
+        }
+        $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                        'url' => $_SERVER['SCRIPT_NAME'],
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label')
+                    ));
+    } else {
+        $tool_content .= action_bar(array(
+                array('title' => $langAdminAddAnn,
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success')
+                ));
+        
+    }
 
 // modify visibility
 if (isset($_GET['vis'])) {
@@ -153,14 +176,8 @@ if (isset($message) && !empty($message)) {
 // display form
 if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     $displayAnnouncementList = false;
-    // display add announcement command
-    if (isset($_GET['modify'])) {
-        $titleform = $langAdminModifAnn;
-    } else {
-        $titleform = $langAdminAddAnn;
-    }
+    // display add announcement command    
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]", "name" => $langAdminAn);
-    $pageName = $titleform;
 
     if (!isset($contentToModify)) {
         $contentToModify = '';
@@ -168,7 +185,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     if (!isset($titleToModify)) {
         $titleToModify = '';
     }
-    $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
+    $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form role='form' class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>";
     if (isset($_GET['modify'])) {
         $tool_content .= "<input type='hidden' name='id' value='$id' />";
@@ -248,7 +265,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
                 </div>
             </div>
-        </fieldset></form></div></div></div>";
+        </fieldset></form></div>";
 }
 
 if (isset($_GET['down'])) {
@@ -286,16 +303,7 @@ if (isset($thisAnnouncementId) && $thisAnnouncementId && isset($sortDirection) &
 // display admin announcements
 if ($displayAnnouncementList == true) {
     $result = Database::get()->queryArray("SELECT * FROM admin_announcement ORDER BY `order` DESC");    
-    $bottomAnnouncement = $announcementNumber = count($result);
-    if (!isset($_GET['addAnnounce'])) {
-        $tool_content .= action_bar(array(
-                    array('title' => $langAdminAddAnn,
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?addAnnounce=1",
-                        'icon' => 'fa-plus-circle',
-                        'level' => 'primary-label',
-                        'button-class' => 'btn-success'),
-                    ));
-    }
+    $bottomAnnouncement = $announcementNumber = count($result);    
     if ($announcementNumber > 0) {
         $tool_content .= "<div class='table-responsive'><table class='table-default'>
                         <tr><th>$langTitle</th>

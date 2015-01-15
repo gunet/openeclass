@@ -20,33 +20,16 @@
  * ======================================================================== */
 
 
-/* ===========================================================================
-  auth_process.php
-  @last update: 27-06-2006 by Stratos Karatzidis
-  @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Vagelis Pitsioygas <vagpits@uom.gr>
-  ==============================================================================
-  @Description: Platform Authentication Methods and their settings
-
-  This script tries to get the values of an authentication method, establish
-  a connectiond and with a test account successfully connect to the server.
-  Possible scenarios:
-  - The settings of the method are fine and the mechanism authenticates the
-  test account
-  - The settings of the method are fine, but the method does not work
-  with the test account
-  - The settings are wrong.
-
-  The admin can: - choose a method and define its settings
-
-  ==============================================================================
+/**
+ * @brief Platform Authentication Methods and their settings
+ * @file auth_process.php
  */
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
-$pageName = $langAuthSettings;
+$toolName = $langAuthSettings;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
@@ -72,8 +55,8 @@ if ($auth == 7) {
         $_SESSION['cas_do'] = true;
         // $_POST is lost after we come back from CAS
         foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
-    'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
-    'cas_altauth', 'cas_logout', 'cas_ssout', 'auth_instructions') as $var) {
+                        'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
+                        'cas_altauth', 'cas_logout', 'cas_ssout', 'auth_instructions') as $var) {
             if (isset($_POST[$var])) {
                 $_SESSION[$var] = $_POST[$var];
             }
@@ -259,7 +242,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     if ($auth != 6) {
         $auth_data = get_auth_settings($auth);
     }
-    
+    $pageName = get_auth_info($auth);
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
@@ -270,8 +253,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     ))."
     <div class='form-wrapper'> 
     <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
-	<fieldset>
-	<legend>" . get_auth_info($auth) . "</legend>
+	<fieldset>	
         <input type='hidden' name='auth' value='" . intval($auth) . "'>";
 
     if (!empty($_SESSION['cas_warn']) && $_SESSION['cas_do']) {

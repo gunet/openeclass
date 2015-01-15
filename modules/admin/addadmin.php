@@ -23,7 +23,7 @@ $require_admin = TRUE;
 
 require_once '../../include/baseTheme.php';
 
-$pageName = $langAdmins;
+$toolName = $langAdmins;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Initialize the incoming variables

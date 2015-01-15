@@ -28,7 +28,7 @@ require_once 'hierarchy_validations.php';
 
 $user = new User();
 
-$pageName = $langSendInfoMail;
+$toolName = $langSendInfoMail;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // Display link back to index.php
@@ -121,8 +121,7 @@ $langEmail: " . get_config('email_helpdesk') . "
             </div>
         </div>
 	<div class='col-sm-offset-2 col-sm-10'>	
-	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
-          <a class='btn btn-default' href='index.php'>$langCancel</a>
+	  <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>          
         </div>	
     </fieldset>
     </form>
