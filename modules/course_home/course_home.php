@@ -638,7 +638,7 @@ $tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
 // display open course level if exist
 if (isset($level) && !empty($level)) {
     $tool_content .= "
-    
+    <div class='row'>
         <div class='col-md-$cunits_sidebar_subcolumns'>
             <h3 class='content-title'>$langOpenCourseShort</h3>
             <div class='panel'>
@@ -647,6 +647,7 @@ if (isset($level) && !empty($level)) {
                 </div>
             </div>
         </div>
+    </div>
     ";
 }
 
