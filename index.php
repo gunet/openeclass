@@ -273,13 +273,8 @@ if (get_config('opencourses_enable')) {
                 </div></div>
             </div>";
     }
-               $tool_content .= "<div class='panel'>
-                    <div class='panel-body'>
-                        <a href='http://opencourses.gr'>
-                            <img class='img-responsive center-block' src='$themeimg/open_courses_bnr.png'>
-                        </a>
-                    </div>
-                </div>
+
+            $tool_content .= "              
                 <div class='panel'>
                     <div class='panel-body'>
                         <a href='http://www.openeclass.org/'>
