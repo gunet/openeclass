@@ -177,16 +177,16 @@ if ($uid AND !isset($_GET['logout'])) {
                                 <hr>";
                                 if (!empty($shibboleth_link) or !empty($cas_link)) {
                                     $tool_content .= "<div class='alt_login text-center'>
-                                        <span>$langAlternateLogin :</span>";
-                                            if(!empty($cas_link)){ $tool_content.= "<span>$cas_link</span>";}
-                                            if(!empty($shibboleth_link)){ $tool_content.= "<span>$shibboleth_link</span>";}
+                                        <span>$langAlternateLogin:</span> ";
+                                            if (!empty($cas_link)) { $tool_content.= "<span>$cas_link</span>"; }
+                                            if (!empty($shibboleth_link)) { $tool_content.= "<span>$shibboleth_link</span>"; }
                                          $tool_content .= "</div>";
                                 }
-                    $tool_content .= " </div>";
-                            if(!empty($warning)){ $tool_content.= "<br><span>$warning</span>";}
-                        $tool_content .= "</div>";
+                    $tool_content .= "</div>";
+                    if (!empty($warning)) { $tool_content.= "<br><span>$warning</span>"; }
+                    $tool_content .= "</div>";
         }
-                    $tool_content .= "</div>
+        $tool_content .= "</div>
                 </div>
             </div>
         </div>";    
