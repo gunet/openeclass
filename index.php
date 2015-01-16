@@ -253,7 +253,7 @@ if ($uid AND !isset($_GET['logout'])) {
 if (get_config('opencourses_enable')) {
         $tool_content .= "<div class='panel'>
                 <div class='panel-body'>
-                    <a href='http://opencourses.gr'>
+                    <a href='http://opencourses.gr' target='_blank'>
                         <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
                     </a>
                 </div>
@@ -276,7 +276,7 @@ if (get_config('opencourses_enable')) {
             $tool_content .= "              
                 <div class='panel'>
                     <div class='panel-body'>
-                        <a href='http://www.openeclass.org/'>
+                        <a href='http://www.openeclass.org/' target='_blank'>
                             <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
                         </a>
                     </div>
