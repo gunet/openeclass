@@ -217,7 +217,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if (in_array($fullKey, CourseXMLConfig::$mandatoryFields)) {
             $fieldStart .= "(<span style='color:red'>*</span>)";
         }        
-        $fieldStart .= ":</label><div class='col-xs-8'>";
+        $fieldStart .= ":</label><div class='col-sm-9'>";
         $fieldEnd = "</div>";
 
         $fieldEnd .= "</div>";
