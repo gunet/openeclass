@@ -34,8 +34,8 @@ $auth = get_auth_active_methods();
 if ($user_registration) {
     // student registration
     if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE) {
-        $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
-        $tool_content .= "<tr><th width='160'>$langOfStudent</th></tr>";
+        $tool_content .= "<table class='table-default table-responsive'>";
+        $tool_content .= "<tr><th>$langOfStudent</th></tr>";
         if ($eclass_stud_reg == 2) { // allow student registration via eclass
             $tool_content .= "<tr><td><a href='newuser.php'>$langUserAccountInfo2</a></td></tr>";
         } elseif ($eclass_stud_reg == 1) { // allow student registration via request                        
@@ -62,19 +62,19 @@ if ($user_registration) {
 
     // teacher registration
     if ($eclass_prof_reg or $alt_auth_prof_reg) { // allow teacher registration
-        $tool_content .= "<table class='table table-striped table-bordered table-hover'>";
+        $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr><th>$langOfTeacher</th></tr>";
         if ($eclass_prof_reg) {
             $tool_content .= "<tr><td><a href='formuser.php?p=1'>$langUserAccountInfo1</a></td></tr>";
         }
         if (count($auth) > 1 and $alt_auth_prof_reg) {
-            $tool_content .= "<tr><td>$langUserAccountInfo1 $langWith:";
+            $tool_content .= "<td>$langUserAccountInfo1 $langWith:";
             foreach ($auth as $k => $v) {
                 if ($v != 1) {  // bypass the eclass auth method
                     $tool_content .= "<br /><a href='altnewuser.php?p=1&amp;auth=" . $v . "'>" . get_auth_info($v) . "</a>";
                 }
             }
-            $tool_content .= "</td></tr>";
+            $tool_content .= "</td>";
         }
         $tool_content .= "</table>";
     } else {

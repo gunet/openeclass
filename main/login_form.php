@@ -29,35 +29,39 @@ $next = isset($_GET['next']) ?
         ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>") :
         '';
 
-$tool_content .= "<div class='form-wrapper'>
+$tool_content .= "<div class='form-wrapper login-form-page'>
         <form class='form-horizontal' role='form' action='$urlSecure' method='post'>
   $next
-  <div class='form-group'>
-    <label class='col-sm-offset-2 col-sm-10'>$langUserLogin</label>
-  </div> 
+ <h4>$langUserLogin</h4> 
     <div class='form-group'>       
-        <label class='col-sm-2 control-label'>$langUsername</label>
-        <div class='col-sm-10'>
-            <input class='Login' name='uname' size='20' placeholder='$langUsername'>
+        <div class='col-sm-8'>
+            <input class='form-control' name='uname' placeholder='$langUsername'>
         </div>
     </div>
     <div class='form-group'>
-        <label class='col-sm-2 control-label'>$langPass</label>
-        <div class='col-sm-10'>
-            <input name='pass' type='password' size='20' placeholder='$langPass'>
+        <div class='col-sm-8'>
+            <input class='form-control' name='pass' type='password' placeholder='$langPass'>
         </div>
     </div>
-    <p class='pull-right'>
-    <input class='btn btn-primary' name='submit' type='submit' size='20' value='$langEnter' />
-    $warning</p>
-    <p class='smaller'><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></p><br>";
+    <div class='form-group'>
+    <div class='col-sm-8'>
+    <button class='btn btn-primary pull-left' type='submit' value='$langEnter'>$langEnter</button>
+        <div class='pull-right'><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></div>
+        </div>
+        </div>";
+$tool_content .= "</form>";
+    if (!isset($warning)) {
+    $tool_content .= "<div class='alert alert-warning' role='alert'>$warning</div>";
+        }
+        
+        $tool_content .= "<div class='row'><div class='col-sm-8'><hr style='margin: 5px 0 10px;'></div></div>";
     if (!empty($shibboleth_link) or !empty($cas_link)) {
-     $tool_content .= "<div class='link-pull-right'>                
-             <label>$langAlternateLogin</label>
+     $tool_content .= "<div class='row'><div class='col-sm-8'>                
+             <label>$langAlternateLogin:</label>
              <label>$shibboleth_link</label>
              <label>$cas_link</label>
-          </div>";
+          </div></div>";
     }
-$tool_content .= "</form></div>";
+        $tool_content .= "</div>";
 
 draw($tool_content, 0);
