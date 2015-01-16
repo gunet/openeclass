@@ -3223,7 +3223,6 @@ $langWarnShibUser = "
 
 $langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
 $langPersonalisedBriefcase = "Προσωπικό Χαρτοφυλάκιο";
-$langCopyrightFooter = "<span class='smaller'>Πληροφορίες Πνευματικών Δικαιωμάτων</span>";
 $langAdvancedSearch = "Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";

@@ -81,7 +81,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $is_editor, $langActivate,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
         $langChooseLang, $langCopyrightFooter, $langDeactivate,
-        $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp,
+        $langEclass, $langExtrasLeft, $langExtrasRight, $langHelp, $langUsageTerms,
         $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyPersoDeadlines,
         $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
@@ -566,7 +566,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
     }
 
-    $t->set_var('LANG_COPYRIGHT_NOTICE', $langCopyrightFooter);
+    $t->set_var('COPYRIGHT', 'Open eClass © 2003-' . date('Y'));
+    $t->set_var('TERMS_URL', $urlAppend .'info/terms.php');
+    $t->set_var('LANG_TERMS', $langUsageTerms);
 
     // Remove tool title block from selected pages
     if (defined('HIDE_TOOL_TITLE')) {
