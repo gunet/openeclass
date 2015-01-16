@@ -37,11 +37,10 @@ load_js('tools.js');
 if (isset($_POST['submit'])) {
 
     $line = strtok($_POST['user_names'], "\n");
-
     while ($line !== false) {
         // strip comments
         $line = preg_replace('/#.*/', '', trim($line));
-
+        
         if (!empty($line)) {
             // fetch uid
             $u = usernameToUid($line);
@@ -52,15 +51,16 @@ if (isset($_POST['submit'])) {
                 $success = deleteUser($u, true);
                 // progress report
                 if ($success === true) {
-                    Session::Messages("$langUserWithId $line $langWasDeleted", 'alert-success');
-                    redirect_to_home_page('modules/admin/multideluser.php');
+                    $success_mgs[] = "$langUserWithId $line $langWasDeleted";                   
                 } else {
-                    Session::Messages("$langErrorDelete: $line", 'alert-danger');
-                    redirect_to_home_page('modules/admin/multideluser.php');
+                    $error_mgs[] = "$langErrorDelete: $line";
                 }
             }
         }
+        $line = strtok("\n");
     }
+    if (isset($success_mgs)) Session::Messages($success_mgs, 'alert-success');
+    if (isset($error_mgs)) Session::Messages($error_mgs, 'alert-danger');
     redirect_to_home_page('modules/admin/multideluser.php');
 } else {
 
