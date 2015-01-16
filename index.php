@@ -153,8 +153,6 @@ if ($uid AND !isset($_GET['logout'])) {
             </script>
         ";
         $tool_content .= "
-
-
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
@@ -191,6 +189,7 @@ if ($uid AND !isset($_GET['logout'])) {
                 </div>
             </div>
         </div>";
+    }
         $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
             $urlServer . "rss.php'>";
 
@@ -281,6 +280,5 @@ if ($uid AND !isset($_GET['logout'])) {
             </div>
         </div>
         </div>";
-    }
     draw($tool_content, 0, null, $rss_link.$head_content);
 }
