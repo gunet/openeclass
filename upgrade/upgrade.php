@@ -100,6 +100,10 @@ if (!DBHelper::fieldExists('user', 'id')) {
     Database::get()->query("UPDATE user
                         SET registered_at = FROM_UNIXTIME(ts_registered_at),
                             expires_at = FROM_UNIXTIME(ts_expires_at)");
+    Database::get()->query("ALTER TABLE assignment
+                        ADD auto_judge TINYINT(1),
+                        ADD auto_judge_scenarios VARCHAR(2048),
+                        ADD lang VARCHAR(10)");
     Database::get()->query("ALTER TABLE user
                         CHANGE user_id id INT(11) NOT NULL AUTO_INCREMENT,
                         CHANGE nom surname VARCHAR(100) NOT NULL DEFAULT '',
@@ -117,7 +121,7 @@ if (!DBHelper::fieldExists('user', 'id')) {
                         CHANGE whitelist whitelist TEXT,
                         DROP forum_flag,
                         DROP announce_flag,
-                        DROP doc_flag,                      
+                        DROP doc_flag,
                         DROP KEY user_username");
     Database::get()->query("ALTER TABLE admin
                         CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
@@ -158,7 +162,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>";
     // get old contact values
     $tool_content .= "<div class='form-wrapper'>
-            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>            
+            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
             <fieldset>
             <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langUpgContact</label></div>
             <div class='form-group'>
@@ -184,7 +188,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
                 <div class='col-sm-10'>
                     <input class=auth_input_admin type='text' name='fax' value='" . @$fax . "'>
                 </div>
-            </div>        
+            </div>
             </fieldset>
             <p class='pull-right'><input class='btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'></p>
             </form>
@@ -285,8 +289,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('am_required', '0'),
                     ('dropbox_allow_student_to_student', '0'),
                     ('dropbox_allow_personal_messages', '0'),
-                    ('enable_social_sharing_links', '0'),                                
-                    ('block_username_change', '0'),                    
+                    ('enable_social_sharing_links', '0'),
+                    ('block_username_change', '0'),
                     ('enable_mobileapi', '0'),
                     ('display_captcha', '0'),
                     ('insert_xml_metadata', '0'),
@@ -298,7 +302,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('user_multidep', '0'),
                     ('restrict_owndep', '0'),
                     ('restrict_teacher_owndep', '0')");
-    
+
     // upgrade from versions < 2.1.3 is not possible
     if (version_compare($oldversion, '2.1.3', '<') or ( !isset($oldversion))) {
         updateInfo(1, $langUpgTooOld);
@@ -560,7 +564,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             $eclass_stud_reg = 1;
         }
         Database::get()->query("UPDATE `config`
-                              SET `key` = 'eclass_stud_reg', 
+                              SET `key` = 'eclass_stud_reg',
                                   `value`= $eclass_stud_reg
                               WHERE `key` = 'close_user_registration'");
 
@@ -689,7 +693,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     $last_review = date('Y-m-d H:i:s', $ts);
                 }
 
-                Database::get()->query("INSERT INTO course_review (course_id, is_certified, level, last_review, last_reviewer) 
+                Database::get()->query("INSERT INTO course_review (course_id, is_certified, level, last_review, last_reviewer)
                                 VALUES (" . $course->cours_id . ", $is_certified, $level, '$last_review', $uid)");
             }
         });
@@ -851,7 +855,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     if (version_compare($oldversion, '3.0b2', '<')) {
-        // Check whether new tables already exist and delete them if empty, 
+        // Check whether new tables already exist and delete them if empty,
         // rename them otherwise
         $new_tables = array('cron_params', 'log', 'log_archive', 'forum',
             'forum_category', 'forum_post', 'forum_topic',
@@ -971,7 +975,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                        ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31',
                                        DROP INDEX annonces");
         } else {
-            Database::get()->query("ALTER TABLE announcement 
+            Database::get()->query("ALTER TABLE announcement
                                        ADD `start_display` NOT NULL DATE DEFAULT '2014-01-01',
                                        ADD `stop_display` NOT NULL DATE DEFAULT '2094-12-31'");
         }
@@ -1040,9 +1044,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
 
-        $forum_stats = Database::get()->queryArray("SELECT forum.course_id, forum_post.poster_id, count(*) as c FROM forum_post 
-                            INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id 
-                            INNER JOIN forum ON forum.id = forum_topic.forum_id 
+        $forum_stats = Database::get()->queryArray("SELECT forum.course_id, forum_post.poster_id, count(*) as c FROM forum_post
+                            INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                            INNER JOIN forum ON forum.id = forum_topic.forum_id
                             GROUP BY forum.course_id, forum_post.poster_id");
 
         if ($forum_stats) {
@@ -1091,8 +1095,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("CREATE TABLE IF NOT EXISTS video_category (
                             id INT(6) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             `course_id` INT(11) NOT NULL,
-                            name VARCHAR(255) NOT NULL, 
-                            description TEXT DEFAULT NULL) 
+                            name VARCHAR(255) NOT NULL,
+                            description TEXT DEFAULT NULL)
                             $charset_spec");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
@@ -1100,7 +1104,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `author_id` INT(11) UNSIGNED NOT NULL,
                             `subject` VARCHAR(250) NOT NULL,
-                            `body` LONGTEXT NOT NULL,                
+                            `body` LONGTEXT NOT NULL,
                             `timestamp` INT(11) NOT NULL) $charset_spec");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
@@ -1360,7 +1364,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `secret_directory` VARCHAR(30) NOT NULL,
                             `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
                             `max_grade` FLOAT DEFAULT NULL,
-                            `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,                            
+                            `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                             file_path VARCHAR(200) DEFAULT '' NOT NULL,
                             file_name VARCHAR(200) DEFAULT '' NOT NULL)
                             $charset_spec");
@@ -1391,7 +1395,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `course_id` INT(11) NOT NULL,
                             `title` VARCHAR(200) NOT NULL,
                             `content` TEXT NOT NULL,
-                            `start` DATETIME NOT NULL DEFAULT '0000-00-00',                                
+                            `start` DATETIME NOT NULL DEFAULT '0000-00-00',
                             `duration` VARCHAR(20) NOT NULL,
                             `visible` TINYINT(4),
                              recursion_period varchar(30) DEFAULT NULL,
@@ -1426,7 +1430,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `total_score` FLOAT(5,2) NOT NULL DEFAULT '0',
                             `total_weighting` FLOAT(5,2) DEFAULT '0',
                             `attempt` INT(11) NOT NULL DEFAULT '0',
-                            `attempt_status` TINYINT(4) NOT NULL DEFAULT '1',                            
+                            `attempt_status` TINYINT(4) NOT NULL DEFAULT '1',
                             `secs_remaining` INT(11) NOT NULL DEFAULT '0')
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
@@ -1436,7 +1440,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `answer` text,
                             `answer_id` int(11) NOT NULL,
                             `weight` float(5,2) DEFAULT NULL,
-                            `is_answered` TINYINT NOT NULL DEFAULT '1') 
+                            `is_answered` TINYINT NOT NULL DEFAULT '1')
                              $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1615,7 +1619,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `course_id` int(11) NOT NULL UNIQUE,
                         PRIMARY KEY (`id`)) $charset_spec");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
                         `id` int(11) NOT NULL AUTO_INCREMENT,
                         `user_id` int(11) NOT NULL,
@@ -1681,14 +1685,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->queryFunc("SELECT * FROM `faculte`", function ($r) use (&$i, &$max, $langpre, $langpost, $langother) {
                 $lft = 2 + 8 * $i;
                 $rgt = $lft + 7;
-                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user) 
+                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user)
                                 VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?d, true, true)", $r->id, $r->code, $r->name, $r->number, $r->generator, $lft, $rgt);
 
-                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
                                 VALUES (?d, ?s, ?s, ?d, ?d, true, true)", ( ++$max), $r->code, $langpre, ($lft + 1), ($lft + 2));
-                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
                                 VALUES (?d, ?s, ?s, ?d, ?d, true, true)", ( ++$max), $r->code, $langpost, ($lft + 3), ($lft + 4));
-                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user) 
+                Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
                                 VALUES (?d, ?s, ?s, ?d, ?d, true, true)", ( ++$max), $r->code, $langother, ($lft + 5), ($lft + 6));
                 $i++;
             });
@@ -1746,7 +1750,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("DROP TABLE IF EXISTS `faculte`");
         }
 
-        // hierarchy stored procedures                    
+        // hierarchy stored procedures
         Database::get()->query("DROP VIEW IF EXISTS `hierarchy_depth`");
         Database::get()->query("CREATE VIEW `hierarchy_depth` AS
                                 SELECT node.id, node.code, node.name, node.number, node.generator,
@@ -2024,7 +2028,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 KEY `actionsdailycourseindex` (`course_id`) )");
 
     Database::get()->query("ALTER TABLE monthly_summary CHANGE details details MEDIUMTEXT");
-    
+
     // drop stale full text indexes
     if (DBHelper::indexExists('document', 'document')) {
         Database::get()->query("ALTER TABLE document DROP INDEX document");
@@ -2038,7 +2042,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (DBHelper::indexExists('unit_resources', 'unit_resources_title')) {
         Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
     }
-    
+
     // // ----------------------------------
     // creation of indexes
     // ----------------------------------
@@ -2351,9 +2355,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 GROUP BY DATE(`date_time`), `user_id`, `module_id`, `course_id`");
 
         Database::get()->queryFunc("SELECT * FROM `actions_daily_tmpview`", function ($row) {
-            Database::get()->query("INSERT INTO `actions_daily` 
-                    (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`) 
-                    VALUES 
+            Database::get()->query("INSERT INTO `actions_daily`
+                    (`id`, `user_id`, `module_id`, `course_id`, `hits`, `duration`, `day`, `last_update`)
+                    VALUES
                     (NULL, ?d, ?d, ?d, ?d, ?d, ?t, NOW())", $row->user_id, $row->module_id, $row->course_id, $row->hits, $row->duration, $row->day);
         });
 
@@ -2371,7 +2375,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             set_config('enable_indexing', 0);
             echo "<hr><p class='alert alert-info'>$langUpgIndexingNotice</p>";
         }
-        
+
         // convert tables to InnoDB storage engine
         $result = Database::get()->queryArray("SHOW FULL TABLES");
         foreach ($result as $table) {
@@ -2381,7 +2385,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
         }
     }
-        
+
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
@@ -2416,7 +2420,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
         }
         set_config('theme', 'default');
-        set_config('theme_options_id', 0);    
+        set_config('theme_options_id', 0);
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
@@ -2431,4 +2435,4 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     updateInfo(1, $output_result, false);
     $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
     file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
-} // end of if not submit                
+} // end of if not submit

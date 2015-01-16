@@ -1733,6 +1733,15 @@ div.spinner-div
     padding-left: 10px !important;
 }
 
+.mobile-apps{
+    .col-xs-6:first-child{
+        padding-right: 7px;
+    }
+    .col-xs-6:last-child{
+        padding-left: 7px;
+    }
+}
+
 .no-borders{
     border: 0px;
 }

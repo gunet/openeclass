@@ -276,14 +276,22 @@ $(document).ready(function () {
             }
 
             if (!$("#sidebar").hasClass("in")) {
+                var courseIDs = [];
+                $(".lesson-notifications").each(function () {
+                    courseIDs.push($(this).data('id'));
+                });
                 $.ajax({
                     type: "POST",
                     url: sidebarConfig.messagesLink,
                     dataType: "json",
+                    data: { courseIDs: courseIDs },
                     success: function (data) {
                         $("ul.sidebar-mymessages").html(data.messages);
                         $(".spinner-div img").toggleClass("hidden");
                         $(".spinner-div p").toggleClass("hidden");
+                        $(".lesson-notifications").each(function () {
+                            $(this).html(data.notifications[$(this).data('id')]);
+                        });
                         setTimeout(function () {
                             $(".spinner-div").addClass("hidden");
                             $(".spinner-div img").toggleClass("hidden");

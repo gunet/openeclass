@@ -1,5 +1,4 @@
 <?php
-require_once('main/notifications/notifications.inc.php');
 $theme_settings = array(
     'js_loaded' => array('jquery'),
     'classes' => array('tool_active' => 'active',
@@ -44,7 +43,9 @@ function template_callback($template, $menuTypeID, $embed)
         }
         $template->set_block('mainBlock', 'sideBarCourseBlock', 'sideBarCourse');
         $template->set_block('sideBarCourseBlock', 'sideBarCourseNotifyBlock', 'sideBarCourseNotify');
-        
+
+        // Save sideBarCourseNotifyBlock in session for use in AJAX callback
+        $_SESSION['template']['sideBarCourseNotifyBlock'] = trim($template->get_var('sideBarCourseNotifyBlock'));
         
         // FIXME: smarter selection of courses for sidebar
         Database::get()->queryFunc("SELECT id, code, title, prof_names, public_code
@@ -58,21 +59,10 @@ function template_callback($template, $menuTypeID, $embed)
                 $template->set_var('sideBarCourseURL', $urlAppend . 'courses/' . $c->code . '/');
                 $template->set_var('sideBarCourseTitle', q($c->title));
                 $template->set_var('sideBarCourseCode', q($c->public_code));
+                $template->set_var('sideBarCourseID', q($c->id));
                 $template->set_var('sideBarCourseProf', q($c->prof_names));
-                $template->set_var('sideBarCourseNotify', '');
-                $notifications = get_course_notifications($c->id);
-                
-                foreach ($notifications as $n) {
-                    $modules_array = (isset($modules[$n->module_id]))? $modules:$admin_modules;
-                    if(isset($modules_array[$n->module_id]) && isset($modules_array[$n->module_id]['image']) && isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])){
-                        $template->set_var('sideBarCourseNotifyIcon', $theme_settings['icon_map'][$modules_array[$n->module_id]['image']]);
-                        $template->set_var('sideBarCourseNotifyCount', $n->notcount);
-                        $template->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
-                    }
-                }
                 $template->parse('sideBarCourse', 'sideBarCourseBlock', true);
                 $counter++;
-
             }, $uid);
 
 

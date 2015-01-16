@@ -159,9 +159,9 @@ if ($uid AND !isset($_GET['logout'])) {
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>
-                        <div class='hidden-xs hidden-sm col-sm-7 col-md-7 graphic'>
+                        <div class='hidden-xs col-sm-6 col-md-7 graphic'>
                         </div>                        
-                        <div class='login-form col-xs-12 col-sm-7 col-md-5 col-lg-4 pull-right'>
+                        <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                             <h2>$langUserLogin</h2>
                                 <form  action='$urlSecure' method='post'>
                                     <div class='form-group'>
@@ -173,21 +173,20 @@ if ($uid AND !isset($_GET['logout'])) {
                                     <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                                 </form>
                             <div class='login-settings row'>
-                                <div>
-                                      <label><a href='modules/auth/lostpass.php'>$lang_forgot_pass</a></label>
+                                <div class='text-center'>
+                                      <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                                     </div>
                                 <hr>";
                                 if (!empty($shibboleth_link) or !empty($cas_link)) {
-                                    $tool_content .= "<div>
-                                        $langAlternateLogin :               
-                                            <span>$shibboleth_link</span>
-                                            <span>$cas_link</span>
-                                         </div>";
+                                    $tool_content .= "<div class='alt_login text-center'>
+                                        <span>$langAlternateLogin :</span>";
+                                            if(!empty($cas_link)){ $tool_content.= "<span>$cas_link</span>";}
+                                            if(!empty($shibboleth_link)){ $tool_content.= "<span>$shibboleth_link</span>";}
+                                         $tool_content .= "</div>";
                                 }
-                    $tool_content .= " </div>
-
-                                <p>$warning</p>
-                        </div>
+                    $tool_content .= " </div>";
+                            if(!empty($warning)){ $tool_content.= "<br><span>$warning</span>";}
+                        $tool_content .= "</div>
                     </div>
                 </div>
             </div>
@@ -261,24 +260,24 @@ if (get_config('opencourses_enable')) {
             </div>";
     }
     if (get_config('enable_mobileapi')) {
-        $tool_content .= "<div class='panel'>
+        $tool_content .= "<div class='panel mobile-apps'>
                 <div class='panel-body'>
-                <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='appstore.png' alt='Available on the App Store'></a>&nbsp;
-                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='playstore.png' alt='Available on the Play Store'></a>                    
+                <div class='row'>
+                <div class='col-xs-6'>
+                <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
                 </div>
+                <div class='col-xs-6'>
+                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>                    
+                </div>
+                </div></div>
             </div>";
     }
-               $tool_content .= "<div class='panel'>
-                    <div class='panel-body'>
-                        <a href='http://opencourses.gr'>
-                            <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
-                        </a>
-                    </div>
-                </div>
+
+            $tool_content .= "              
                 <div class='panel'>
                     <div class='panel-body'>
                         <a href='http://www.openeclass.org/'>
-                            <img class='img-responsive' src='$themeimg/open_eclass_bnr.png'>
+                            <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
                         </a>
                     </div>
                 </div>
