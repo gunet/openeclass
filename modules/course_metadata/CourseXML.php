@@ -957,6 +957,7 @@ class CourseXMLElement extends SimpleXMLElement {
         }
         
         $oaiRecordId = Database::get()->querySingle("SELECT id FROM oai_record WHERE course_id = ?d", $courseId)->id;
+        Database::get()->query("DELETE FROM oai_metadata WHERE oai_record = ?d", intval($oaiRecordId));
         
         // Metadata fields
         self::storeMetadata($oaiRecordId, 'dc_title', self::serialize($xml->title));
@@ -1021,12 +1022,7 @@ class CourseXMLElement extends SimpleXMLElement {
     }
     
     private static function storeMetadata($oaiRecordId, $field, $value) {
-        $exists = Database::get()->querySingle("SELECT 1 AS `exists` FROM oai_metadata WHERE oai_record = ?d AND field = ?s", $oaiRecordId, $field);
-        if ($exists && intval($exists->exists) == 1) {
-            Database::get()->query("UPDATE oai_metadata SET field = ?s, value = ?s WHERE oai_record = ?d", $field, $value, intval($oaiRecordId));
-        } else {
-            Database::get()->query("INSERT INTO oai_metadata SET oai_record = ?d, field = ?s, value = ?s", intval($oaiRecordId), $field, $value);
-        }
+        Database::get()->query("INSERT INTO oai_metadata SET oai_record = ?d, field = ?s, value = ?s", intval($oaiRecordId), $field, $value);
     }
 
     /**
