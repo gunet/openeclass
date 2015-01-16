@@ -235,7 +235,8 @@ function loggedInMenu() {
     array_push($sideMenuGroup, $sideMenuSubGroup);
 
     openCoursesExtra();
-
+    displayExtrasLeft();
+    
     $sideMenuSubGroup = array();
     $sideMenuText = array();
     $sideMenuLink = array();
@@ -347,9 +348,11 @@ function loggedOutMenu() {
     array_push($sideMenuSubGroup, $sideMenuImg);
 
     array_push($sideMenuGroup, $sideMenuSubGroup);
-
+    
     openCoursesExtra();
-
+    displayExtrasLeft();
+    
+    
     return $sideMenuGroup;
 }
 
@@ -758,6 +761,8 @@ function pickerMenu() {
 function openCoursesExtra() {
     global $urlServer, $themeimg;
 
+    $GLOBALS['leftNavExtras'] = '';
+        
     if (get_config('opencourses_enable')) {
         $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
 
@@ -770,5 +775,19 @@ function openCoursesExtra() {
                     <small style='color:white'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</small>
                 </div>";
         }
+    }
+}
+
+/**
+ * display extras left
+ * @global type $langExtrasLeft
+ * @global type $leftNavExtras
+ */
+function displayExtrasLeft() {
+    
+    global $langExtrasLeft, $leftNavExtras;
+    
+    if (isset($langExtrasLeft) and !empty($langExtrasLeft)) {
+        $leftNavExtras .= $langExtrasLeft;
     }
 }

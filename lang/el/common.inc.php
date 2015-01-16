@@ -80,4 +80,4 @@ $langInfoAbout = "Η πλατφόρμα <strong>$siteName</strong> αποτελ�
 ";
 
 $langExtrasLeft = '';
-$langExtrasRight = "<a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='appstore.png' alt='Available on the App Store'></a>";
+$langExtrasRight = '';

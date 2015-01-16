@@ -216,48 +216,47 @@ if ($uid AND !isset($_GET['logout'])) {
         }        
     }
 
-        $tool_content .= "
-
-        <div class='row'>
-
-            <div class='col-md-8'>
-                <div class='panel'>
-                    <div class='panel-body'>
-                        $langInfoAbout
-                    </div>
-                </div>
-                <div class='panel'>
-                    <div class='panel-body'>";
-                    if(!empty($ann_content)){
-                            $tool_content .= $ann_content;
-                        }else{
-                            $tool_content .= "<li>$langNoRecentAnnounce</li>";
-                        }
-                    $tool_content.="</ul></div>
+    $tool_content .= "<div class='row'>
+        <div class='col-md-8'>
+            <div class='panel'>
+                <div class='panel-body'>
+                    $langInfoAbout
                 </div>
             </div>
-            
-            <div class='col-md-4'>
-
-            ";
-
-
-        $online_users = getOnlineUsers();
-        $tool_content .= "
-
-                <div class='panel'>
+            <div class='panel'>
+                <div class='panel-body'>";
+                if(!empty($ann_content)){
+                        $tool_content .= $ann_content;
+                    }else{
+                        $tool_content .= "<li>$langNoRecentAnnounce</li>";
+                    }
+                $tool_content.="</ul></div>
+            </div>
+        </div>            
+        <div class='col-md-4'>";
+                    
+    if (isset($langExtrasRight) and !empty($langExtrasRight)) {
+        $tool_content .= "<div class='panel'>
+            <div class='panel-body'>$langExtrasRight
+                </a>
+            </div>
+        </div>";
+    }
+    // display online users
+    $online_users = getOnlineUsers();
+    $tool_content .= "<div class='panel'>
+               <div class='panel-body'>
+                   <i class='fa fa-group space-after-icon'></i>$langOnlineUsers: $online_users
+               </div>
+           </div>";
+    if (get_config('opencourses_enable')) {
+            $tool_content .= "<div class='panel'>
                     <div class='panel-body'>
-                        <i class='fa fa-group space-after-icon'></i>$langOnlineUsers: $online_users
+                        <a href='http://opencourses.gr' target='_blank'>
+                            <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
+                        </a>
                     </div>
                 </div>";
-if (get_config('opencourses_enable')) {
-        $tool_content .= "<div class='panel'>
-                <div class='panel-body'>
-                    <a href='http://opencourses.gr' target='_blank'>
-                        <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
-                    </a>
-                </div>
-            </div>";
     }
     if (get_config('enable_mobileapi')) {
         $tool_content .= "<div class='panel mobile-apps'>
@@ -272,19 +271,16 @@ if (get_config('opencourses_enable')) {
                 </div></div>
             </div>";
     }
-
-            $tool_content .= "              
-                <div class='panel'>
-                    <div class='panel-body'>
-                        <a href='http://www.openeclass.org/' target='_blank'>
-                            <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
-                        </a>
-                    </div>
+        $tool_content .= "              
+            <div class='panel'>
+                <div class='panel-body'>
+                    <a href='http://www.openeclass.org/' target='_blank'>
+                        <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
+                    </a>
                 </div>
             </div>
+        </div>
         </div>";
-
     }
-
     draw($tool_content, 0, null, $rss_link.$head_content);
 }

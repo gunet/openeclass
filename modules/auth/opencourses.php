@@ -36,8 +36,13 @@ if ($isInOpenCoursesMode) {
 }
 
 $tree = new Hierarchy();
-$pageName = $langListCourses;
-$navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
+
+$toolName = $langListCourses;
+if ($isInOpenCoursesMode) {
+    $navigation[] = array('url' => '../auth/listfaculte.php', 'name' => $langSelectFac);
+} else {
+    $navigation[] = array('url' => 'listfaculte.php', 'name' => $langSelectFac);
+}
 
 if (isset($_GET['fc'])) {
     $fc = intval($_GET['fc']);
