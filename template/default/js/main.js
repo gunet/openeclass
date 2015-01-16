@@ -73,62 +73,6 @@ $(document).ready(function () {
         }
     });
 
-    $("#save_note").on("click", function () {
-        var note_title = $("#title-note").val();
-        var note_text = $("#text-note").val();
-        note_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
-
-        var notesHeight = $(".overlayed").height();
-        var notesWidth = $(".overlayed").width();
-        console.log(notesHeight);
-        console.log(notesWidth);
-        $(".spinner-div").removeClass("hidden").css({height: notesHeight, width: notesWidth});
-        $.ajax({
-            type: "POST",
-            url: sidebarConfig.notesLink,
-            data: {newTitle: note_title, newContent: note_text, refobjgentype: 0, refcourse: 0, refobjtype: 0, refobjid: 0, submitNote: 1},
-            success: function (data) {
-                $(".spinner-div p").text(data);
-                $(".spinner-div img").toggleClass("hidden");
-                $(".spinner-div p").toggleClass("hidden");
-                setTimeout(function () {
-                    $(".spinner-div").addClass("hidden");
-                    $(".spinner-div img").toggleClass("hidden");
-                    $(".spinner-div p").toggleClass("hidden");
-                    $("#title-note").val('');
-                    $("#text-note").val('');
-                }, 2000);
-            }
-        });
-    });
-
-//    $("#send_message").on("click", function () {
-//        var msg_recipients = $("#msg-recipients").val();
-//        var msg_text = $("#msg-text").val();
-//        msg_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
-//        var msgHeight = $(".spinner-div").parent().height();
-//        var msgWidth = $(".spinner-div").parent().width();
-//        $(".spinner-div").removeClass("hidden").css({height: msgHeight, width: msgWidth});
-//        $.ajax({
-//            type: "POST",
-//            url: sidebarConfig.notesLink,
-//            data: { message_title: "nanana", body: "na", recipients: "" },
-//            success: function(data){
-//                $(".spinner-div p").text(data);
-//                $(".spinner-div img").toggleClass("hidden");
-//                $(".spinner-div p").toggleClass("hidden");
-//                setTimeout(function(){
-//                    $(".spinner-div").addClass("hidden");
-//                    $(".spinner-div img").toggleClass("hidden");
-//                    $(".spinner-div p").toggleClass("hidden");
-//                    $("#msg-recipients").val('');
-//                    $("#msg-text").val('');
-//                }, 2000);
-//            }
-//        });      
-//    });
-
-
 
     $(".navbar-toggle").on("click", function (e) {
         if ($("#sidebar").hasClass("in")) {
@@ -230,19 +174,19 @@ $(document).ready(function () {
 
     $(".course-btn i").on("click", function (e) {
         var upOrDown = $(this).parent().attr("id");
-        var topOffset = 3*($("#innerpanel-container").find(".panel.panel-default").outerHeight() + 6);
+        var topOffset = 3 * ($("#innerpanel-container").find(".panel.panel-default").outerHeight() + 6);
         var topPosition = $("#innerpanel-container").position().top;
         var bottomPosition = topPosition + $("#innerpanel-container").outerHeight(true) - $(".innerpanel").outerHeight(true);
 
         if (upOrDown === "up") {
             if (bottomPosition > 0) {
                 var topAnimate = topPosition - topOffset;
-                $("#innerpanel-container").animate({top: topAnimate}, 100);
+                $("#innerpanel-container").animate({top: topAnimate}, 200);
             }
         } else if (upOrDown === "down") {
             if (topPosition < -1) {
                 var topAnimate = topPosition + topOffset;
-                $("#innerpanel-container").animate({top: topAnimate}, 100);
+                $("#innerpanel-container").animate({top: topAnimate}, 200);
             }
         }
     });
@@ -281,10 +225,10 @@ $(document).ready(function () {
                     courseIDs.push($(this).data('id'));
                 });
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: sidebarConfig.messagesLink,
                     dataType: "json",
-                    data: { courseIDs: courseIDs },
+                    data: {courseIDs: courseIDs},
                     success: function (data) {
                         $("ul.sidebar-mymessages").html(data.messages);
                         $(".spinner-div img").toggleClass("hidden");
@@ -302,6 +246,33 @@ $(document).ready(function () {
                     }
                 });
             }
+
+            $("#save_note").on("click", function () {
+                var note_title = $("#title-note").val();
+                var note_text = $("#text-note").val();
+                note_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
+
+//                var notesHeight = $(".overlayed").height();
+//                var notesWidth = $(".overlayed").width();
+                $(".spinner-div").removeClass("hidden");
+                $.ajax({
+                    type: "POST",
+                    url: sidebarConfig.notesLink,
+                    data: {newTitle: note_title, newContent: note_text, refobjgentype: 0, refcourse: 0, refobjtype: 0, refobjid: 0, submitNote: 1},
+                    success: function (data) {
+                        $(".spinner-div p").text(data);
+                        $(".spinner-div img").toggleClass("hidden");
+                        $(".spinner-div p").toggleClass("hidden");
+                        setTimeout(function () {
+                            $(".spinner-div").addClass("hidden");
+                            $(".spinner-div img").toggleClass("hidden");
+                            $(".spinner-div p").toggleClass("hidden");
+                            $("#title-note").val('');
+                            $("#text-note").val('');
+                        }, 2000);
+                    }
+                });
+            });
 
             $("#sidebar").animate(
                     {"right": inOut}, {duration: 150, easing: "linear",

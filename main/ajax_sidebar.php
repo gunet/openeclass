@@ -36,10 +36,10 @@ function getSidebarNotifications() {
     global $modules, $admin_modules, $theme_settings;
 
     $notifications_html = array();
-    if (isset($_POST['courseIDs']) and count($_POST['courseIDs'])) {
+    if (isset($_GET['courseIDs']) and count($_GET['courseIDs'])) {
         $t = new Template();
         $t->set_var('sideBarCourseNotifyBlock', $_SESSION['template']['sideBarCourseNotifyBlock']);
-        foreach ($_POST['courseIDs'] as $id) {
+        foreach ($_GET['courseIDs'] as $id) {
             $t->set_var('sideBarCourseNotify', '');
             $notifications = get_course_notifications($id);
             foreach ($notifications as $n) {
