@@ -2555,7 +2555,7 @@ $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ε
 $langCreateDuplicate = "Δημιουργία Αντιγράφου";
 $langCopy2 = "Αντίγραφο";
 $langCreateDuplicateIn = "Δημιουργία Αντιγράφου στο ...";
-$langCurrentCourse = "Τρέχων Μάθημα";
+$langCurrentCourse = "Τρέχον Μάθημα";
 $langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επιτυχία!";
 
 // polls
