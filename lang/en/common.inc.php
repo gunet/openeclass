@@ -40,4 +40,4 @@ $langpost = "Postgraduate";
 $langother = "Other";
 $langInfoAbout = "The <strong>$siteName</strong> platform is a complete Course Management System that supports Asynchronous eLearning Services via a simple web browser. Its goal is the incorporation and constructive use of the Internet and web technologies in the teaching and learning process. It supports the electronic management, storage and presentation of teaching materials, independently of the spatial and time limiting factors of conventional teaching and creating the necessary conditions for a dynamic teaching environment.";
 $langExtrasLeft = '';
-$langExtrasRight = '&nbsp;';
+$langExtrasRight = '';
