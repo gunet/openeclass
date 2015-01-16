@@ -369,7 +369,6 @@ function getUserDocuments($lesson_id) {
  * @brief display course user assingment
  * @global type $langNoAssignmentsExist
  * @global type $langGroupWorkSubmitted
- * @global type $langGroupWorkNotSubmitted
  * @global type $langGroupWorkDeadline_of_Submission
  * @global type $langGroupWorkSubmitted
  * @global type $urlServer
@@ -380,7 +379,7 @@ function getUserDocuments($lesson_id) {
 function getUserAssignments($lesson_id) {
 
     global $langNoAssignmentsExist, $langGroupWorkSubmitted, $langDays, $langDaysLeft,
-    $langGroupWorkDeadline_of_Submission, $langGroupWorkSubmitted, $urlServer, $uid;
+    $langGroupWorkDeadline_of_Submission, $urlServer, $uid;
 
     $found = false;
     $assign_content = '<table width="100%">';

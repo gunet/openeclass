@@ -3604,7 +3604,6 @@ $langGroupWorkIntro = '
 	από τον διδάσκοντα.';
 
 $langGroupWorkSubmitted = "Έχει υποβληθεί";
-$langGroupWorkNotSubmitted = "ΔΕΝ έχει υποβληθεί";
 $langGroupWorkDeadline_of_Submission = "Προθεσμία υποβολής";
 $langEmptyAsTitle = "Δεν συμπληρώσατε τον τίτλο της εργασίας";
 $langEditSuccess = "Η διόρθωση των στοιχείων της εργασίας έγινε με επιτυχία!";

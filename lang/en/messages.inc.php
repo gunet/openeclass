@@ -3589,7 +3589,6 @@ $m['late_submission'] = "Late Submission";
 $m['late_submission_enable'] = "Enable late submission";
 $m['WorkToAllUsers'] = 'To All '.$langStudents;
 $m['WorkToAllGroups'] = 'To All  '.$langGroups;
-$langGroupWorkNotSubmitted = '⟪$langGroupWorkNotSubmitted⟫';
 $langEditUnitSection = '⟪$langEditUnitSection⟫';
 $langCourseUnitDeleteConfirm = "Are you sure you want to delete the specific Course unit?";
 $langInsertPoll = '⟪$langInsertPoll⟫';
