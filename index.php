@@ -137,8 +137,7 @@ if ($uid AND !isset($_GET['logout'])) {
         	$cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
     	}
     }
-   
-    if (!get_config('dont_display_login_form')) {
+       
         $head_content .= "
             <script>
             $(function() {
@@ -158,8 +157,9 @@ if ($uid AND !isset($_GET['logout'])) {
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>
                         <div class='hidden-xs col-sm-6 col-md-7 graphic'>
-                        </div>                        
-                        <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
+                        </div>";
+        if (!get_config('dont_display_login_form')) {
+                        $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                             <h2>$langUserLogin</h2>
                                 <form  action='$urlSecure' method='post'>
                                     <div class='form-group'>
@@ -184,12 +184,13 @@ if ($uid AND !isset($_GET['logout'])) {
                                 }
                     $tool_content .= " </div>";
                             if(!empty($warning)){ $tool_content.= "<br><span>$warning</span>";}
-                        $tool_content .= "</div>
-                    </div>
+                        $tool_content .= "</div>";
+        }
+                    $tool_content .= "</div>
                 </div>
             </div>
         </div>";
-    }
+    //}
         $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
             $urlServer . "rss.php'>";
 
