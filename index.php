@@ -252,7 +252,7 @@ if ($uid AND !isset($_GET['logout'])) {
             $tool_content .= "<div class='panel'>
                     <div class='panel-body'>
                         <a href='http://opencourses.gr' target='_blank'>
-                            <img class='img-responsive' src='$themeimg/open_courses_bnr.png'>
+                            <img class='img-responsive center-block' src='$themeimg/open_courses_bnr.png'>
                         </a>
                     </div>
                 </div>";
