@@ -130,7 +130,8 @@ if (isset($_POST['optionsSave'])) {
     } else {
         $theme_options_styles['leftNavBgColor'] = $theme_options_styles['bgColor'] = '#232C3A';
         $theme_options_styles['leftMenuFontColor'] = $theme_options_styles['leftSubMenuFontColor'] = '#ADADAD';
-        $theme_options_styles['leftSubMenuHoverBgColor'] = $theme_options_styles['leftMenuSelectedFontColor'] = $theme_options_styles['leftMenuHoverFontColor'] = "#4da1e4";
+        $theme_options_styles['linkBgColor'] = $theme_options_styles['leftSubMenuHoverBgColor'] = $theme_options_styles['leftMenuSelectedFontColor'] = $theme_options_styles['leftMenuHoverFontColor'] = "#4da1e4";
+        $theme_options_styles['linkHoverBgColor'] = '#23527c';
         $theme_options_styles['leftSubMenuHoverFontColor'] = "#eee";
         $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
         $theme_options_styles['bgType'] = 'repeat';
@@ -225,12 +226,30 @@ if (isset($_POST['optionsSave'])) {
                       </div>
                       <div class='radio'>
                         <label>
+                          <input type='radio' name='bgType' value='fix' ".(($theme_options_styles['bgType'] == 'fix')? 'checked' : '').">
+                          $langFixedImg &nbsp;
+                        </label>
+                      </div>                        
+                      <div class='radio'>
+                        <label>
                           <input type='radio' name='bgType' value='stretch' ".(($theme_options_styles['bgType'] == 'stretch')? 'checked' : '').">
                           $langStretchedImg &nbsp;
                         </label>
                       </div>              
                 </div>                
             </div>
+            <div class='form-group'>
+              <label for='linkColor' class='col-sm-3 control-label'>$langLinkColor:</label>
+              <div class='col-sm-9'>
+                <input name='linkColor' type='text' class='form-control colorpicker' id='linkColor' value='$theme_options_styles[linkColor]'>
+              </div>
+            </div> 
+            <div class='form-group'>
+              <label for='linkHoverColor' class='col-sm-3 control-label'>$langLinkHoverColor:</label>
+              <div class='col-sm-9'>
+                <input name='linkHoverColor' type='text' class='form-control colorpicker' id='linkHoverColor' value='$theme_options_styles[linkHoverColor]'>
+              </div>
+            </div>                 
             <div class='form-group'>
               <label for='loginJumbotronBgColor' class='col-sm-3 control-label'>$langLoginBgGradient:</label>
               <div class='col-sm-4'>

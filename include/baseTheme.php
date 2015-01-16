@@ -441,7 +441,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $theme_options_styles = unserialize($theme_options->styles);
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
-            $background_type = $theme_options_styles['bgType'] == 'stretch' ? "background-size: 100% 100%;" : "";
+            $background_type = "";
+            if ($theme_options_styles['bgType'] == 'stretch') {
+                $background_type .= "background-size: 100% 100%;";
+            } elseif($theme_options_styles['bgType'] == 'fix') {
+                $background_type .= "background-size: 100% 100%;background-attachment: fixed;";
+            }
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$themeimg/$theme_options_styles[bgImage]')" : "";
             $styles_str .= "body{background: $theme_options_styles[bgColor]$bg_image;$background_type}";
         }
@@ -454,6 +459,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
             $styles_str .= "#background-cheat-leftnav, #bgr-cheat-header, #bgr-cheat-footer{background:$theme_options_styles[leftNavBgColor];} @media(max-width: 992px){#leftnav{background:$rgba_no_alpha;}}";
         }
+        if (!empty($theme_options_styles['linkColor'])) $styles_str .= "a {color: $theme_options_styles[linkColor];}";
+        if (!empty($theme_options_styles['linkHoverColor'])) $styles_str .= "a:hover, a:focus {color: $theme_options_styles[linkHoverColor];}";
         if (!empty($theme_options_styles['leftSubMenuFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";
