@@ -768,18 +768,11 @@ function openCoursesExtra() {
             $GLOBALS['leftNavExtras'] = "
                 <hr style='margin: 24px 0'>
                 <div style='text-align:center; color: white;margin-bottom: 30px;'>
+                <img src='{$themeimg}/open-courses-trans.png'>
                     <h4>" . q($GLOBALS['langOpenCoursesShort']) . "<br><small style='color:white'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</small></h4>
+                    <a style='color:#4da1e4' href='{$urlServer}modules/course_metadata/openfaculties.php'>$GLOBALS[langListOpenCoursesShort]</a>    
                 </div>
-                <hr style='margin: 24px 0'>
-                <div class='panel'>
-                    <a href='{$urlServer}modules/course_metadata/openfaculties.php' class='parent-menu collapsed'>
-                        <div class='panel-heading'>    
-                        <h4 class='panel-title'>
-                            <i class='fa fa-chevron-right space-after-icon'></i>$GLOBALS[langListOpenCoursesShort]
-                        </h4>
-                        </div>
-                    </a>
-               </div>";
+                <hr style='margin: 24px 0'>";
         }
     }
 }

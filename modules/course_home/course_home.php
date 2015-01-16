@@ -642,7 +642,7 @@ if (isset($level) && !empty($level)) {
         <div class='col-md-$cunits_sidebar_subcolumns'>
             <h3 class='content-title'>$langOpenCourseShort</h3>
             <div class='panel'>
-                <div class='panle-body'>
+                <div class='panel-body'>
                     $opencourses_level
                 </div>
             </div>

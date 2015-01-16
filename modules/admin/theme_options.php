@@ -130,8 +130,8 @@ if (isset($_POST['optionsSave'])) {
     } else {
         $theme_options_styles['leftNavBgColor'] = $theme_options_styles['bgColor'] = '#232C3A';
         $theme_options_styles['leftMenuFontColor'] = $theme_options_styles['leftSubMenuFontColor'] = '#ADADAD';
-        $theme_options_styles['linkBgColor'] = $theme_options_styles['leftSubMenuHoverBgColor'] = $theme_options_styles['leftMenuSelectedFontColor'] = $theme_options_styles['leftMenuHoverFontColor'] = "#4da1e4";
-        $theme_options_styles['linkHoverBgColor'] = '#23527c';
+        $theme_options_styles['linkColor'] = $theme_options_styles['leftSubMenuHoverBgColor'] = $theme_options_styles['leftMenuSelectedFontColor'] = $theme_options_styles['leftMenuHoverFontColor'] = "#4da1e4";
+        $theme_options_styles['linkHoverColor'] = '#23527c';
         $theme_options_styles['leftSubMenuHoverFontColor'] = "#eee";
         $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
         $theme_options_styles['bgType'] = 'repeat';
