@@ -35,10 +35,6 @@ div.right {
     margin-top: 10px;
 }
 
-.form-control, input[type="text"], select, textarea {
-    width: auto;
-}
-
 
 /* -- OpenCourses Metadata Form -- */
 

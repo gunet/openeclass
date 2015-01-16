@@ -77,7 +77,8 @@ class CourseXMLElement extends SimpleXMLElement {
     public function asForm($data = null) {
         global $course_code, $langSubmit, $langRequiredFields;
         $out = "<div class='right smaller'>$langRequiredFields</div>";
-        $out .= "<form method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+        $out .= "
+                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                 <ul class='nav nav-tabs' role='tablist'>
                    <li class='active'><a href='#tabs-1' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['courseGroup'] . "</a></li>
                    <li><a href='#tabs-2' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['instructorGroup'] . "</a></li>
@@ -85,7 +86,7 @@ class CourseXMLElement extends SimpleXMLElement {
                    <li><a href='#tabs-4' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                 </ul>
                 <div class='tab-content'>
-                    <div class='tab-pane fade in active' id='tabs-1'>";
+                    <div class='tab-pane fade in active' id='tabs-1' style='padding-top:20px'>";
         if ($data != null) {
             $this->populate($data);
         }
@@ -112,7 +113,7 @@ class CourseXMLElement extends SimpleXMLElement {
                    <li><a href='#tabs-4' role='tab' data-toggle='tab'>" . $GLOBALS['langCMeta']['unitsGroup'] . "</a></li>
                 </ul>
                 <div class='tab-content'>
-                    <div class='tab-pane fade in active' id='tabs-1'>";
+                    <div class='tab-pane fade in active' id='tabs-1' style='padding-top:20px'>";
         if ($data != null) {
             $this->populate($data);
         }
@@ -179,7 +180,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // init vars
         $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
-        $helptitle = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? "data-toggle='tooltip' title='" . $GLOBALS['langCMeta']['help_' . $fullKey] . "'" : '';
+        $helptitle = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? "rel='tooltip' data-toggle='tooltip' title='" . $GLOBALS['langCMeta']['help_' . $fullKey] . "'" : '';
         $fullKeyNoLang = $fullKey;
         $sameAsCourseLang = false;
         $lang = '';
@@ -207,18 +208,18 @@ class CourseXMLElement extends SimpleXMLElement {
                         <div class='panel-body'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0 || in_array($fullKey, CourseXMLConfig::$overrideClass)) ? 'cmetalabel' : 'cmetalabelinaccordion';
-        $fieldStart .= "<div $helptitle class='cmetarow'><span class='$cmetalabel'>";
+        $fieldStart .= "<div class='form-group'><label $helptitle class='control-label col-sm-3'>";
         if (in_array($fullKeyNoLang, CourseXMLConfig::$linkedFields) && (!$this->getAttribute('lang') || $sameAsCourseLang)) {
             $fieldStart .= "<a href='" . CourseXMLConfig::getLinkedValue($fullKey) . "' target='_blank'>" . q($keyLbl . $lang) . "</a>";
         } else {
             $fieldStart .= q($keyLbl . $lang);
         }
-        $fieldStart .= ":</span><span class='cmetafield'>";
-
-        $fieldEnd = "</span>";
         if (in_array($fullKey, CourseXMLConfig::$mandatoryFields)) {
-            $fieldEnd .= "<span class='cmetamandatory'>*</span>";
-        }
+            $fieldStart .= "(<span style='color:red'>*</span>)";
+        }        
+        $fieldStart .= ":</label><div class='col-xs-8'>";
+        $fieldEnd = "</div>";
+
         $fieldEnd .= "</div>";
 
         // break divs
@@ -233,7 +234,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // break tabs
         if (array_key_exists($fullKey, CourseXMLConfig::$breakFields)) {
-            $fieldEnd .= "</div><div class='tab-pane fade' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
+            $fieldEnd .= "</div><div class='tab-pane fade' style='padding-top:20px' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
         }
 
         // hidden/auto-generated fields. NOTE: if we need to uncomment the following, introduce hiddenMultiLangFields
@@ -248,12 +249,12 @@ class CourseXMLElement extends SimpleXMLElement {
                 $value = 'false';
             }
             return $fieldStart . selection(array('false' => $GLOBALS['langCMeta']['false'],
-                        'true' => $GLOBALS['langCMeta']['true']), $fullKey, $value) . $fieldEnd;
+                        'true' => $GLOBALS['langCMeta']['true']), $fullKey, $value, "class='form-control'") . $fieldEnd;
         }
 
         // enumeration fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$enumerationFields)) {
-            return $fieldStart . selection(CourseXMLConfig::getEnumerationValues($fullKey), $fullKey, (string) $this, "id='" . $fullKeyNoLang . "'") . $fieldEnd;
+            return $fieldStart . selection(CourseXMLConfig::getEnumerationValues($fullKey), $fullKey, (string) $this, "id='" . $fullKeyNoLang . "' class='form-control'") . $fieldEnd;
         }
 
         // multiple enumeration fields
@@ -276,12 +277,12 @@ class CourseXMLElement extends SimpleXMLElement {
             if (empty($value)) {
                 $value = 0;
             }
-            return $fieldStart . "<input type='text' size='2' name='" . q($fullKey) . "' value='" . intval($value) . "' $readonly>" . $fieldEnd;
+            return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . intval($value) . "' $readonly>" . $fieldEnd;
         }
 
         // textarea fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$textareaFields)) {
-            return $fieldStart . "<textarea cols='53' rows='2' name='" . q($fullKey) . "' $readonly>" . q((string) $this) . "</textarea>" . $fieldEnd;
+            return $fieldStart . "<textarea rows='5' class='form-control' name='" . q($fullKey) . "' $readonly>" . q((string) $this) . "</textarea>" . $fieldEnd;
         }
 
         // binary (file-upload) fields
@@ -355,11 +356,11 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // array fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$arrayFields) || in_array($fullKeyNoLang, CourseXMLConfig::$unitFields)) {
-            return $fieldStart . "<input type='text' size='55' name='" . q($fullKey) . "[]' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
+            return $fieldStart . "<input class='form-control' type='text' name='" . q($fullKey) . "[]' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
         }
 
         // all others get a typical input type box
-        return $fieldStart . "<input type='text' size='55' name='" . q($fullKey) . "' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
+        return $fieldStart . "<input type='text' class='form-control' name='" . q($fullKey) . "' value='" . q((string) $this) . "' $readonly>" . $fieldEnd;
     }
 
     /**
@@ -406,7 +407,7 @@ class CourseXMLElement extends SimpleXMLElement {
             $fieldEnd .= "</div></div></div></div>";
         }
         if (array_key_exists($fullKey, CourseXMLConfig::$breakFields)) {
-            $fieldEnd .= "</div><div class='tab-pane fade' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
+            $fieldEnd .= "</div><div class='tab-pane fade' style='padding-top:20px' id='tabs-" . CourseXMLConfig::$breakFields[$fullKey] . "'>";
         }
 
         // hidden/auto-generated fields
