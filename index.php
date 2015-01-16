@@ -189,8 +189,7 @@ if ($uid AND !isset($_GET['logout'])) {
                     $tool_content .= "</div>
                 </div>
             </div>
-        </div>";
-    //}
+        </div>";    
         $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
             $urlServer . "rss.php'>";
 
@@ -217,24 +216,24 @@ if ($uid AND !isset($_GET['logout'])) {
     }
 
     $tool_content .= "<div class='row'>
-        <div class='col-md-8'>
-            <div class='panel'>
-                <div class='panel-body'>
-                    $langInfoAbout
-                </div>
+        <div class='col-md-8'>";     
+        $tool_content .= "<div class='panel'>
+            <div class='panel-body'>
+                $langInfoAbout
             </div>
-            <div class='panel'>
-                <div class='panel-body'>";
-                if(!empty($ann_content)){
-                        $tool_content .= $ann_content;
-                    }else{
-                        $tool_content .= "<li>$langNoRecentAnnounce</li>";
-                    }
-                $tool_content.="</ul></div>
-            </div>
-        </div>            
-        <div class='col-md-4'>";
-                    
+        </div>";
+        
+        // display admin announcements    
+        if(!empty($ann_content)) {
+            $tool_content .= "<div class='panel'>
+                            <div class='panel-body'>";
+            $tool_content .= $ann_content;
+            $tool_content .= "</ul></div></div>";
+        }
+        $tool_content .= "</div>";        
+        $tool_content .= "<div class='col-md-4'>";
+
+    // display extras right
     if (isset($langExtrasRight) and !empty($langExtrasRight)) {
         $tool_content .= "<div class='panel'>
             <div class='panel-body'>$langExtrasRight
