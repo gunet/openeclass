@@ -100,16 +100,8 @@ class Session {
     //Sets automatically generated on next request messages
     public static function Messages($messages, $class='alert-warning'){
         if ( !is_array($messages)) $messages = array($class => array($messages));
-        foreach ($messages as $message) {
-            if (is_array($message)) {
-                $i=0;
-                foreach ($message as $row) {
-                    $_SESSION['messages'][$class][$i] = $row;
-                    $i++;
-                }
-            } else {
-                $_SESSION['messages'][$class] = $message;
-            }
+        foreach ($messages as $i => $message) {           
+            $_SESSION['messages'][$class][$i] = $message;
         }
         if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
         array_push($_SESSION['flash_new'], 'messages');
@@ -167,7 +159,6 @@ class Session {
         }
         $item_messages = $_SESSION['messages'];
         $msg_boxes = '';
-
         foreach($item_messages as $class => $value){
             $msg_boxes .= "<div class='alert $class'><ul><li>".(is_array($value) ? implode('</li><li>', $value) : $value)."</li></ul></div>";
         }
