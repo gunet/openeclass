@@ -399,9 +399,9 @@ class CourseXMLElement extends SimpleXMLElement {
                         <div class='panel-body'>";
         }
         $cmetalabel = (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || strpos($fullKey, 'course_unit_') === 0 || strpos($fullKey, 'course_numberOfUnits') === 0) ? 'cmetalabel cmetalabel-wd' : 'cmetalabelinaccordion cmetalabelinaccordion-wd';
-        $fieldStart .= "<div class='cmetarow'><span class='$cmetalabel'>" . q($keyLbl . $lang) . ":</span><span class='cmetafield cmetafield-sh'>";
+        $fieldStart .= "<div class='row margin-top-thin margin-bottom-thin'><div class='col-sm-3'><strong>" . q($keyLbl . $lang) . ":</strong></div><div class='col-sm-9'>";
 
-        $fieldEnd = "</span></div>";
+        $fieldEnd = "</div></div>";
         if (in_array($fullKey, CourseXMLConfig::$breakAccordionEndFields)) {
             $fieldEnd .= "</div></div></div></div>";
         }

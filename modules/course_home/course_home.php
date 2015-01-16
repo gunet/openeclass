@@ -358,6 +358,29 @@ require_once 'modules/course_metadata/CourseXML.php';
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
+    $head_content .= "
+<link rel='stylesheet' type='text/css' href='course_metadata.css'>
+<style type='text/css'></style>
+<script type='text/javascript'>
+/* <![CDATA[ */
+
+    var dialog;
+    
+    var showMetadata = function(course) {
+        $('.modal-body', dialog).load('../../modules/course_metadata/anoninfo.php', {course: course}, function(response, status, xhr) {
+            if (status === 'error') {
+                $('.modal-body', dialog).html('Sorry but there was an error, please try again');
+            }
+        });
+        dialog.modal('show');
+    };
+        
+    $(document).ready(function() {
+        dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><h4 class='modal-title' id='modal-label'>{$langCourseMetadata}</h4></div><div class='modal-body'>body</div></div></div></div>\");
+    });
+
+/* ]]> */
+</script>";   
     $opencourses_level = "
     <div class='row'>
         <div class='col-md-4'>
@@ -366,8 +389,8 @@ if (isset($level) && !empty($level)) {
         <div class='col-md-8 margin-top-thin'>
             ${langOpenCoursesLevel}: $level
             <br />
-            <small><a href='$metadataUrl'>$langCourseMetadata " .
-            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</small>
+            <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata " .
+            icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
         </div>
     </div>
 
