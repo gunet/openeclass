@@ -570,7 +570,7 @@ body.page-login h1{
   background-color: #025694;
   /* fallback from css grandient */
   
-  background: url('{%template_base%}/img/jumbotron-bg.png') repeat center center fixed; 
+  background: url('../img/jumbotron-bg.png') repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
