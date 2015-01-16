@@ -61,6 +61,7 @@ $db->query("DROP TABLE IF EXISTS user_request");
 $db->query("DROP TABLE IF EXISTS prof_request");
 $db->query("DROP TABLE IF EXISTS user");
 $db->query("DROP TABLE IF EXISTS oai_record");
+$db->query("DROP TABLE IF EXISTS oai_metadata");
 $db->query("DROP TABLE IF EXISTS bbb_servers");
 $db->query("DROP TABLE IF EXISTS bbb_session");
 
@@ -1446,67 +1447,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `oai_record` (
     `oai_set` varchar(255) DEFAULT 'class:course',
     `datestamp` datetime DEFAULT NULL,
     `deleted` tinyint(1) NOT NULL DEFAULT 0,
-    `dc_title` text DEFAULT NULL,
-    `dc_description` text DEFAULT NULL,
-    `dc_syllabus` text DEFAULT NULL,
-    `dc_subject` text DEFAULT NULL,
-    `dc_subsubject` text DEFAULT NULL,
-    `dc_objectives` text DEFAULT NULL,
-    `dc_level` text DEFAULT NULL,
-    `dc_prerequisites` text DEFAULT NULL,
-    `dc_instructor` text DEFAULT NULL,
-    `dc_department` text DEFAULT NULL,
-    `dc_institution` text DEFAULT NULL,
-    `dc_coursephoto` text DEFAULT NULL,
-    `dc_coursephotomime` text DEFAULT NULL,
-    `dc_instructorphoto` text DEFAULT NULL,
-    `dc_instructorphotomime` text DEFAULT NULL,
-    `dc_url` text DEFAULT NULL,
-    `dc_identifier` text DEFAULT NULL,
-    `dc_language` text DEFAULT NULL,
-    `dc_date` datetime DEFAULT NULL,
-    `dc_format` text DEFAULT NULL,
-    `dc_rights` text DEFAULT NULL,
-    `dc_videolectures` text DEFAULT NULL,
-    `dc_code` text DEFAULT NULL,
-    `dc_keywords` text DEFAULT NULL,
-    `dc_contentdevelopment` text DEFAULT NULL,
-    `dc_formattypes` text DEFAULT NULL,
-    `dc_recommendedcomponents` text DEFAULT NULL,
-    `dc_assignments` text DEFAULT NULL,
-    `dc_requirements` text DEFAULT NULL,
-    `dc_remarks` text DEFAULT NULL,
-    `dc_acknowledgments` text DEFAULT NULL,
-    `dc_coteaching` text DEFAULT NULL,
-    `dc_coteachingcolleagueopenscourse` text DEFAULT NULL,
-    `dc_coteachingautonomousdepartment` text DEFAULT NULL,
-    `dc_coteachingdepartmentcredithours` text DEFAULT NULL,
-    `dc_yearofstudy` text DEFAULT NULL,
-    `dc_semester` text DEFAULT NULL,
-    `dc_coursetype` text DEFAULT NULL,
-    `dc_credithours` text DEFAULT NULL,
-    `dc_credits` text DEFAULT NULL,
-    `dc_institutiondescription` text DEFAULT NULL,
-    `dc_curriculumtitle` text DEFAULT NULL,
-    `dc_curriculumdescription` text DEFAULT NULL,
-    `dc_outcomes` text DEFAULT NULL,
-    `dc_curriculumkeywords` text DEFAULT NULL,
-    `dc_sector` text DEFAULT NULL,
-    `dc_targetgroup` text DEFAULT NULL,
-    `dc_curriculumtargetgroup` text DEFAULT NULL,
-    `dc_featuredbooks` text DEFAULT NULL,
-    `dc_structure` text DEFAULT NULL,
-    `dc_teachingmethod` text DEFAULT NULL,
-    `dc_assessmentmethod` text DEFAULT NULL,
-    `dc_eudoxuscode` text DEFAULT NULL,
-    `dc_eudoxusurl` text DEFAULT NULL,
-    `dc_kalliposurl` text DEFAULT NULL,
-    `dc_numberofunits` text DEFAULT NULL,
-    `dc_unittitle` text DEFAULT NULL,
-    `dc_unitdescription` text DEFAULT NULL,
-    `dc_unitkeywords` text DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `oai_identifier` (`oai_identifier`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `oai_metadata` (
+    `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+    `oai_record` int(11) NOT NULL references oai_record(id),
+    `field` varchar(255) NOT NULL,
+    `value` text,
+    INDEX `field_index` (`field`) )");
 
 $db->query("CREATE TABLE IF NOT EXISTS `note` (
         `id` int(11) NOT NULL auto_increment,
@@ -1598,8 +1547,6 @@ $db->query("CREATE INDEX `lp_id` ON lp_learnPath(course_id)");
 $db->query("CREATE INDEX `lp_mod_id` ON lp_module(course_id)");
 $db->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
 $db->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
-$db->query('CREATE INDEX `cid` ON oai_record (course_id)');
-$db->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
 $db->query("CREATE INDEX `poll_index` ON poll(course_id)");
 $db->query("CREATE INDEX `poll_ans_id` ON poll_answer_record(pid, user_id)");
 $db->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");

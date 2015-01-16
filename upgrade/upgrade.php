@@ -679,12 +679,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 }
 
                 $level = CourseXMLElement::NO_LEVEL;
-                if (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true')
+                if (isset($xmlData['course_confirmAMinusLevel']) && $xmlData['course_confirmAMinusLevel'] == 'true') {
                     $level = CourseXMLElement::A_MINUS_LEVEL;
-                if (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true')
+                }
+                if (isset($xmlData['course_confirmALevel']) && $xmlData['course_confirmALevel'] == 'true') {
                     $level = CourseXMLElement::A_LEVEL;
-                if (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true')
+                }
+                if (isset($xmlData['course_confirmAPlusLevel']) && $xmlData['course_confirmAPlusLevel'] == 'true') {
                     $level = CourseXMLElement::A_PLUS_LEVEL;
+                }
 
                 $last_review = date('Y-m-d H:i:s');
                 if (isset($xmlData['course_lastLevelConfirmation']) &&
@@ -1943,6 +1946,79 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 break;
             }
         }
+        
+        // oai_metadata
+        Database::get()->query("ALTER TABLE `oai_record` DROP COLUMN `dc_title`,
+            DROP COLUMN `dc_description`,
+            DROP COLUMN `dc_syllabus`,
+            DROP COLUMN `dc_subject`,
+            DROP COLUMN `dc_subsubject`,
+            DROP COLUMN `dc_objectives`,
+            DROP COLUMN `dc_level`,
+            DROP COLUMN `dc_prerequisites`,
+            DROP COLUMN `dc_instructor`,
+            DROP COLUMN `dc_department`,
+            DROP COLUMN `dc_institution`,
+            DROP COLUMN `dc_coursephoto`,
+            DROP COLUMN `dc_coursephotomime`,
+            DROP COLUMN `dc_instructorphoto`,
+            DROP COLUMN `dc_instructorphotomime`,
+            DROP COLUMN `dc_url`,
+            DROP COLUMN `dc_identifier`,
+            DROP COLUMN `dc_language`,
+            DROP COLUMN `dc_date`,
+            DROP COLUMN `dc_format`,
+            DROP COLUMN `dc_rights`,
+            DROP COLUMN `dc_videolectures`,
+            DROP COLUMN `dc_code`,
+            DROP COLUMN `dc_keywords`,
+            DROP COLUMN `dc_contentdevelopment`,
+            DROP COLUMN `dc_formattypes`,
+            DROP COLUMN `dc_recommendedcomponents`,
+            DROP COLUMN `dc_assignments`,
+            DROP COLUMN `dc_requirements`,
+            DROP COLUMN `dc_remarks`,
+            DROP COLUMN `dc_acknowledgments`,
+            DROP COLUMN `dc_coteaching`,
+            DROP COLUMN `dc_coteachingcolleagueopenscourse`,
+            DROP COLUMN `dc_coteachingautonomousdepartment`,
+            DROP COLUMN `dc_coteachingdepartmentcredithours`,
+            DROP COLUMN `dc_yearofstudy`,
+            DROP COLUMN `dc_semester`,
+            DROP COLUMN `dc_coursetype`,
+            DROP COLUMN `dc_credithours`,
+            DROP COLUMN `dc_credits`,
+            DROP COLUMN `dc_institutiondescription`,
+            DROP COLUMN `dc_curriculumtitle`,
+            DROP COLUMN `dc_curriculumdescription`,
+            DROP COLUMN `dc_outcomes`,
+            DROP COLUMN `dc_curriculumkeywords`,
+            DROP COLUMN `dc_sector`,
+            DROP COLUMN `dc_targetgroup`,
+            DROP COLUMN `dc_curriculumtargetgroup`,
+            DROP COLUMN `dc_featuredbooks`,
+            DROP COLUMN `dc_structure`,
+            DROP COLUMN `dc_teachingmethod`,
+            DROP COLUMN `dc_assessmentmethod`,
+            DROP COLUMN `dc_eudoxuscode`,
+            DROP COLUMN `dc_eudoxusurl`,
+            DROP COLUMN `dc_kalliposurl`,
+            DROP COLUMN `dc_numberofunits`,
+            DROP COLUMN `dc_unittitle`,
+            DROP COLUMN `dc_unitdescription`,
+            DROP COLUMN `dc_unitkeywords`,
+            DROP INDEX cid,
+            DROP INDEX oaiid
+            ");
+        
+        if (!DBHelper::tableExists('oai_metadata')) {
+            Database::get()->query("CREATE TABLE `oai_metadata` (
+                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+                `oai_record` int(11) NOT NULL references oai_record(id),
+                `field` varchar(255) NOT NULL,
+                `value` text,
+                INDEX `field_index` (`field`) )");
+        }
     }
 
     // Rename table `cours` to `course` and `cours_user` to `course_user`
@@ -2164,10 +2240,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `lp_rel_lp_id` ON lp_rel_learnPath_module(learnPath_id, module_id)");
     DBHelper::indexExists('lp_user_module_progress', 'optimize') or
             Database::get()->query("CREATE INDEX `optimize` ON lp_user_module_progress (user_id, learnPath_module_id)");
-    DBHelper::indexExists('oai_record', 'cid') or
-            Database::get()->query('CREATE INDEX `cid` ON oai_record (course_id)');
-    DBHelper::indexExists('oai_record', 'oaiid') or
-            Database::get()->query('CREATE INDEX `oaiid` ON oai_record (oai_identifier)');
     DBHelper::indexExists('poll', 'poll_index') or
             Database::get()->query("CREATE INDEX `poll_index` ON poll(course_id)");
     DBHelper::indexExists('poll_answer_record', 'poll_ans_id') or
@@ -2340,7 +2412,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         convert_db_utf8($mysqlMainDb);
     }
 
-    if (version_compare($oldversion, '3.0b2', '<')) {
+    if (version_compare($oldversion, '3.0b2', '<')) { // special procedure, must execute after course upgrades
         Database::get()->query("USE `$mysqlMainDb`");
 
         Database::get()->query("CREATE VIEW `actions_daily_tmpview` AS

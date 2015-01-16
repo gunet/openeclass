@@ -62,7 +62,17 @@ class ECLASS_OAIDC {
                 $query = "select * from oai_record where oai_identifier = '" . $key . "'";
                 $res = exec_pdo_query($this->db, $query);
                 $record = $res->fetch(PDO::FETCH_ASSOC);
-                foreach ($record as $rkey => $rvalue) {
+                
+                $q2 = "select * from oai_metadata where oai_record = " . intval($record['id']);
+                $res2 = exec_pdo_query($this->db, $q2);
+                $metadata = $res2->fetchAll(PDO::FETCH_ASSOC);
+                
+                $meta_record = array();
+                foreach ($metadata as $meta_row) {
+                    $meta_record[$meta_row['field']] = $meta_row['value'];
+                }
+                
+                foreach ($meta_record as $rkey => $rvalue) {
                     if (!strncmp($rkey, 'dc_', 3)) {
                         $is_serialized = false;
                         $valArr = @unserialize(base64_decode($rvalue));

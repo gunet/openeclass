@@ -1135,10 +1135,16 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         // finally drop database
         Database::get()->query("DROP DATABASE `$code`");
     }
+    
+    // refresh XML metadata
+    require_once "modules/course_metadata/CourseXML.php";
+    if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
+        CourseXMLElement::refreshCourse($course_id, $code, true);
+    }
 
     // NOTE: no code must occur after this statement or else course upgrade will be broken
     if ($return_mapping) {
-        return array($video_map, $videolinks_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
+        return array($video_map, $videolink_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
 }
 

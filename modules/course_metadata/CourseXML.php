@@ -943,132 +943,88 @@ class CourseXMLElement extends SimpleXMLElement {
             Database::get()->query("UPDATE oai_record SET
                 `oai_identifier` = ?s,
                 `datestamp` = ?t,
-                `deleted` = ?d,
-                `dc_title` = ?s,
-                `dc_description` = ?s,
-                `dc_syllabus` = ?s,
-                `dc_subject` = ?s,
-                `dc_subsubject` = ?s,
-                `dc_objectives` = ?s,
-                `dc_level` = ?s,
-                `dc_prerequisites` = ?s,
-                `dc_instructor` = ?s,
-                `dc_department` = ?s,
-                `dc_institution` = ?s,
-                `dc_coursephoto` = ?s,
-                `dc_coursephotomime` = ?s,
-                `dc_instructorphoto` = ?s,
-                `dc_instructorphotomime` = ?s,
-                `dc_url` = ?s,
-                `dc_language` = ?s,
-                `dc_date` = ?t,
-                `dc_format` = ?s,
-                `dc_rights` = ?s,
-                `dc_videolectures` = ?s,
-                `dc_code` = ?s,
-                `dc_keywords` = ?s,
-                `dc_contentdevelopment` = ?s,
-                `dc_formattypes` = ?s,
-                `dc_recommendedcomponents` = ?s,
-                `dc_assignments` = ?s,
-                `dc_requirements` = ?s,
-                `dc_remarks` = ?s,
-                `dc_acknowledgments` = ?s,
-                `dc_coteaching` = ?s,
-                `dc_coteachingcolleagueopenscourse` = ?s,
-                `dc_coteachingautonomousdepartment` = ?s,
-                `dc_coteachingdepartmentcredithours` = ?s,
-                `dc_yearofstudy` = ?s,
-                `dc_semester` = ?s,
-                `dc_coursetype` = ?s,
-                `dc_credithours` = ?s,
-                `dc_credits` = ?s,
-                `dc_institutiondescription` = ?s,
-                `dc_curriculumtitle` = ?s,
-                `dc_curriculumdescription` = ?s,
-                `dc_outcomes` = ?s,
-                `dc_curriculumkeywords` = ?s,
-                `dc_sector` = ?s,
-                `dc_targetgroup` = ?s,
-                `dc_curriculumtargetgroup` = ?s,
-                `dc_featuredbooks` = ?s,
-                `dc_structure` = ?s,
-                `dc_teachingmethod` = ?s,
-                `dc_assessmentmethod` = ?s,
-                `dc_eudoxuscode` = ?s,
-                `dc_eudoxusurl` = ?s,
-                `dc_kalliposurl` = ?s,
-                `dc_numberofunits` = ?s,
-                `dc_unittitle` = ?s,
-                `dc_unitdescription` = ?s,
-                `dc_unitkeywords` = ?s
-                WHERE course_id = ?d", "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $nowdatestamp, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), (string) $xml->coursePhoto, (string) $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), (string) $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), (string) $xml->videolectures, (string) $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), (string) $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), (string) $xml->coTeaching, (string) $xml->coTeachingColleagueOpensCourse, (string) $xml->coTeachingAutonomousDepartment, (string) $xml->coTeachingDepartmentCreditHours, (string) $xml->yearOfStudy, (string) $xml->semester, (string) $xml->type, (string) $xml->credithours, (string) $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), (string) $xml->eudoxusCode, (string) $xml->eudoxusURL, (string) $xml->kalliposURL, (string) $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"), intval($courseId));
+                `deleted` = ?d
+                WHERE course_id = ?d", "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $nowdatestamp, $deleted, intval($courseId));
         } else {
             if ($is_certified) {
                 Database::get()->query("INSERT INTO oai_record SET
                     `course_id` = ?d,
                     `oai_identifier` = ?s,
                     `datestamp` = ?t,
-                    `deleted` = ?d,
-                    `dc_title` = ?s,
-                    `dc_description` = ?s,
-                    `dc_syllabus` = ?s,
-                    `dc_subject` = ?s,
-                    `dc_subsubject` = ?s,
-                    `dc_objectives` = ?s,
-                    `dc_level` = ?s,
-                    `dc_prerequisites` = ?s,
-                    `dc_instructor` = ?s,
-                    `dc_department` = ?s,
-                    `dc_institution` = ?s,
-                    `dc_coursephoto` = ?s,
-                    `dc_coursephotomime` = ?s,
-                    `dc_instructorphoto` = ?s,
-                    `dc_instructorphotomime` = ?s,
-                    `dc_url` = ?s,
-                    `dc_language` = ?s,
-                    `dc_date` = ?t,
-                    `dc_format` = ?s,
-                    `dc_rights` = ?s,
-                    `dc_videolectures` = ?s,
-                    `dc_code` = ?s,
-                    `dc_keywords` = ?s,
-                    `dc_contentdevelopment` = ?s,
-                    `dc_formattypes` = ?s,
-                    `dc_recommendedcomponents` = ?s,
-                    `dc_assignments` = ?s,
-                    `dc_requirements` = ?s,
-                    `dc_remarks` = ?s,
-                    `dc_acknowledgments` = ?s,
-                    `dc_coteaching` = ?s,
-                    `dc_coteachingcolleagueopenscourse` = ?s,
-                    `dc_coteachingautonomousdepartment` = ?s,
-                    `dc_coteachingdepartmentcredithours` = ?s,
-                    `dc_yearofstudy` = ?s,
-                    `dc_semester` = ?s,
-                    `dc_coursetype` = ?s,
-                    `dc_credithours` = ?s,
-                    `dc_credits` = ?s,
-                    `dc_institutiondescription` = ?s,
-                    `dc_curriculumtitle` = ?s,
-                    `dc_curriculumdescription` = ?s,
-                    `dc_outcomes` = ?s,
-                    `dc_curriculumkeywords` = ?s,
-                    `dc_sector` = ?s,
-                    `dc_targetgroup` = ?s,
-                    `dc_curriculumtargetgroup` = ?s,
-                    `dc_featuredbooks` = ?s,
-                    `dc_structure` = ?s,
-                    `dc_teachingmethod` = ?s,
-                    `dc_assessmentmethod` = ?s,
-                    `dc_eudoxuscode` = ?s,
-                    `dc_eudoxusurl` = ?s,
-                    `dc_kalliposurl` = ?s,
-                    `dc_numberofunits` = ?s,
-                    `dc_unittitle` = ?s,
-                    `dc_unitdescription` = ?s,
-                    `dc_unitkeywords` = ?s", intval($courseId), "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $nowdatestamp, $deleted, self::serialize($xml->title), self::serialize($xml->description), self::serialize($xml->contents), self::makeMultiLang($xml->thematic), self::makeMultiLang($xml->subthematic), self::serialize($xml->objectives), self::makeMultiLang($xml->level), self::serialize($xml->prerequisites), self::serializeMulti($xml->instructor, "fullName"), self::serialize($xml->department), self::makeMultiLang($xml->institution), (string) $xml->coursePhoto, (string) $xml->coursePhoto['mime'], self::serializeMulti($xml->instructor, "photo"), self::serializeAttr($xml->instructor, "photo", "mime"), (string) $xml->url, self::serialize($xml->language), $firstCreateDate, $level, self::serialize($xml->license), (string) $xml->videolectures, (string) $xml->code, self::serialize($xml->keywords), self::serialize($xml->contentDevelopment), (string) $xml->format, self::serialize($xml->recommendedComponents), self::serialize($xml->assignments), self::serialize($xml->requirements), self::serialize($xml->remarks), self::serialize($xml->acknowledgments), (string) $xml->coTeaching, (string) $xml->coTeachingColleagueOpensCourse, (string) $xml->coTeachingAutonomousDepartment, (string) $xml->coTeachingDepartmentCreditHours, (string) $xml->yearOfStudy, (string) $xml->semester, (string) $xml->type, (string) $xml->credithours, (string) $xml->credits, self::serialize($xml->institutionDescription), self::serialize($xml->curriculumTitle), self::serialize($xml->curriculumDescription), self::serialize($xml->outcomes), self::serialize($xml->curriculumKeywords), self::serialize($xml->sector), self::serialize($xml->targetGroup), self::serialize($xml->curriculumTargetGroup), self::serialize($xml->featuredBooks), self::serialize($xml->structure), self::serialize($xml->teachingMethod), self::serialize($xml->assessmentMethod), (string) $xml->eudoxusCode, (string) $xml->eudoxusURL, (string) $xml->kalliposURL, (string) $xml->numberOfUnits, self::serializeMulti($xml->unit, "title"), self::serializeMulti($xml->unit, "description"), self::serializeMulti($xml->unit, "keywords"));
+                    `deleted` = ?d", intval($courseId), "oai:" . $_SERVER['SERVER_NAME'] . ":" . $courseId, $nowdatestamp, $deleted);
             }
+        }
+        
+        $oaiRecordId = Database::get()->querySingle("SELECT id FROM oai_record WHERE course_id = ?d", $courseId)->id;
+        
+        // Metadata fields
+        self::storeMetadata($oaiRecordId, 'dc_title', self::serialize($xml->title));
+        self::storeMetadata($oaiRecordId, 'dc_description', self::serialize($xml->description));
+        self::storeMetadata($oaiRecordId, 'dc_syllabus', self::serialize($xml->contents));
+        self::storeMetadata($oaiRecordId, 'dc_subject', self::makeMultiLang($xml->thematic));
+        self::storeMetadata($oaiRecordId, 'dc_subsubject', self::makeMultiLang($xml->subthematic));
+        self::storeMetadata($oaiRecordId, 'dc_objectives', self::serialize($xml->objectives));
+        self::storeMetadata($oaiRecordId, 'dc_level', self::makeMultiLang($xml->level));
+        self::storeMetadata($oaiRecordId, 'dc_prerequisites', self::serialize($xml->prerequisites));
+        self::storeMetadata($oaiRecordId, 'dc_instructor', self::serializeMulti($xml->instructor, "fullName"));
+        self::storeMetadata($oaiRecordId, 'dc_department', self::serialize($xml->department));
+        self::storeMetadata($oaiRecordId, 'dc_institution', self::makeMultiLang($xml->institution));
+        self::storeMetadata($oaiRecordId, 'dc_coursephoto', (string) $xml->coursePhoto);
+        self::storeMetadata($oaiRecordId, 'dc_coursephotomime', (string) $xml->coursePhoto['mime']);
+        self::storeMetadata($oaiRecordId, 'dc_instructorphoto', self::serializeMulti($xml->instructor, "photo"));
+        self::storeMetadata($oaiRecordId, 'dc_instructorphotomime', self::serializeAttr($xml->instructor, "photo", "mime"));
+        self::storeMetadata($oaiRecordId, 'dc_url', (string) $xml->url);
+        // unused ATM self::storeMetadata($oaiRecordId, 'dc_identifier', );
+        self::storeMetadata($oaiRecordId, 'dc_language', self::serialize($xml->language));
+        self::storeMetadata($oaiRecordId, 'dc_date', $firstCreateDate);
+        self::storeMetadata($oaiRecordId, 'dc_format', $level);
+        self::storeMetadata($oaiRecordId, 'dc_rights', self::serialize($xml->license));
+        self::storeMetadata($oaiRecordId, 'dc_videolectures', (string) $xml->videolectures);
+        self::storeMetadata($oaiRecordId, 'dc_code', (string) $xml->code);
+        self::storeMetadata($oaiRecordId, 'dc_keywords', self::serialize($xml->keywords));
+        self::storeMetadata($oaiRecordId, 'dc_contentdevelopment', self::serialize($xml->contentDevelopment));
+        self::storeMetadata($oaiRecordId, 'dc_formattypes', (string) $xml->format);
+        self::storeMetadata($oaiRecordId, 'dc_recommendedcomponents', self::serialize($xml->recommendedComponents));
+        self::storeMetadata($oaiRecordId, 'dc_assignments', self::serialize($xml->assignments));
+        self::storeMetadata($oaiRecordId, 'dc_requirements', self::serialize($xml->requirements));
+        self::storeMetadata($oaiRecordId, 'dc_remarks', self::serialize($xml->remarks));
+        self::storeMetadata($oaiRecordId, 'dc_acknowledgments', self::serialize($xml->acknowledgments));
+        self::storeMetadata($oaiRecordId, 'dc_coteaching', (string) $xml->coTeaching);
+        self::storeMetadata($oaiRecordId, 'dc_coteachingcolleagueopenscourse', (string) $xml->coTeachingColleagueOpensCourse);
+        self::storeMetadata($oaiRecordId, 'dc_coteachingautonomousdepartment', (string) $xml->coTeachingAutonomousDepartment);
+        self::storeMetadata($oaiRecordId, 'dc_coteachingdepartmentcredithours', (string) $xml->coTeachingDepartmentCreditHours);
+        self::storeMetadata($oaiRecordId, 'dc_yearofstudy', (string) $xml->yearOfStudy);
+        self::storeMetadata($oaiRecordId, 'dc_semester', (string) $xml->semester);
+        self::storeMetadata($oaiRecordId, 'dc_coursetype', (string) $xml->type);
+        self::storeMetadata($oaiRecordId, 'dc_credithours', (string) $xml->credithours);
+        self::storeMetadata($oaiRecordId, 'dc_credits', (string) $xml->credits);
+        self::storeMetadata($oaiRecordId, 'dc_institutiondescription', self::serialize($xml->institutionDescription));
+        self::storeMetadata($oaiRecordId, 'dc_curriculumtitle', self::serialize($xml->curriculumTitle));
+        self::storeMetadata($oaiRecordId, 'dc_curriculumdescription', self::serialize($xml->curriculumDescription));
+        self::storeMetadata($oaiRecordId, 'dc_outcomes', self::serialize($xml->outcomes));
+        self::storeMetadata($oaiRecordId, 'dc_curriculumkeywords', self::serialize($xml->curriculumKeywords));
+        self::storeMetadata($oaiRecordId, 'dc_sector', self::serialize($xml->sector));
+        self::storeMetadata($oaiRecordId, 'dc_targetgroup', self::serialize($xml->targetGroup));
+        self::storeMetadata($oaiRecordId, 'dc_curriculumtargetgroup', self::serialize($xml->curriculumTargetGroup));
+        self::storeMetadata($oaiRecordId, 'dc_featuredbooks', self::serialize($xml->featuredBooks));
+        self::storeMetadata($oaiRecordId, 'dc_structure', self::serialize($xml->structure));
+        self::storeMetadata($oaiRecordId, 'dc_teachingmethod', self::serialize($xml->teachingMethod));
+        self::storeMetadata($oaiRecordId, 'dc_assessmentmethod', self::serialize($xml->assessmentMethod));
+        self::storeMetadata($oaiRecordId, 'dc_eudoxuscode', (string) $xml->eudoxusCode);
+        self::storeMetadata($oaiRecordId, 'dc_eudoxusurl', (string) $xml->eudoxusURL);
+        self::storeMetadata($oaiRecordId, 'dc_kalliposurl', (string) $xml->kalliposURL);
+        self::storeMetadata($oaiRecordId, 'dc_numberofunits', (string) $xml->numberOfUnits);
+        self::storeMetadata($oaiRecordId, 'dc_unittitle', self::serializeMulti($xml->unit, "title"));
+        self::storeMetadata($oaiRecordId, 'dc_unitdescription', self::serializeMulti($xml->unit, "description"));
+        self::storeMetadata($oaiRecordId, 'dc_unitkeywords', self::serializeMulti($xml->unit, "keywords"));
+    }
+    
+    private static function storeMetadata($oaiRecordId, $field, $value) {
+        $exists = Database::get()->querySingle("SELECT 1 AS `exists` FROM oai_metadata WHERE oai_record = ?d AND field = ?s", $oaiRecordId, $field);
+        if ($exists && intval($exists->exists) == 1) {
+            Database::get()->query("UPDATE oai_metadata SET field = ?s, value = ?s WHERE oai_record = ?d", $field, $value, intval($oaiRecordId));
+        } else {
+            Database::get()->query("INSERT INTO oai_metadata SET oai_record = ?d, field = ?s, value = ?s", intval($oaiRecordId), $field, $value);
         }
     }
 
