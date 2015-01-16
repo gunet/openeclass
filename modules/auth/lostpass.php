@@ -201,27 +201,23 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     $tool_content .= "
 <div class='form-wrapper'>        
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-        <fieldset>
-            <legend>$langUserData</legend>
+            <div class='row'><div class='col-sm-8'><legend>$langUserData</legend></div></div>
             <div class='form-group'>
-                <label for='userName' class='col-sm-2 control-label'>$lang_username:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='userName' id='userName' autocomplete='off'>
+                <div class='col-sm-8'>
+                    <input class='form-control' type='text' name='userName' id='userName' autocomplete='off' placeholder='$lang_username'>
                 </div>
             </div>       
             <div class='form-group'>
-                <label for='email' class='col-sm-2 control-label'>$lang_email:</label>
-                <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='email' id='email' autocomplete='off'>
+                <div class='col-sm-8'>
+                    <input class='form-control' type='text' name='email' id='email' autocomplete='off' placeholder='$lang_email'>
                 </div>
             </div>   
             <div class='form-group'>
-                <div class='col-sm-10 col-sm-offset-2'>
-                    <input class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'> 
-                    <a class='btn btn-default' href='$urlServer'>$langCancel</a>
+                <div class='col-sm-8'>
+                    <button class='btn btn-primary' type='submit' name='send_link' value='$lang_pass_submit'>$lang_pass_submit</button> 
+                    <button class='btn btn-default' href='$urlServer'>$langCancel</button>
                 </div>
-            </div>              
-        </fieldset>
+            </div> 
     </form>
 </div>";
 }

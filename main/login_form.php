@@ -32,7 +32,11 @@ $next = isset($_GET['next']) ?
 $tool_content .= "<div class='form-wrapper login-form-page'>
         <form class='form-horizontal' role='form' action='$urlSecure' method='post'>
   $next
- <h4>$langUserLogin</h4> 
+      <div class='row'>
+      <div class='col-sm-8'>
+ <legend>$langUserLogin</legend>
+     </div>
+     </div>
     <div class='form-group'>       
         <div class='col-sm-8'>
             <input class='form-control' name='uname' placeholder='$langUsername'>
