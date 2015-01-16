@@ -537,9 +537,6 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langStat']);
         array_push($sideMenuLink, "../admin/stateclass.php");
         array_push($sideMenuImg, "arrow.png");
-        array_push($sideMenuText, $GLOBALS['langauto_judge']);
-        array_push($sideMenuLink, "../admin/auto_judge.php");
-        array_push($sideMenuImg, "arrow.png");
         if (get_config('enable_common_docs')) {
             array_push($sideMenuText, $GLOBALS['langCommonDocs']);
             array_push($sideMenuLink, "../admin/commondocs.php");

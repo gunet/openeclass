@@ -823,9 +823,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `max_grade` FLOAT DEFAULT NULL,
                 `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                 `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                `auto_judge` TINYINT(1),
-                `auto_judge_scenarios` VARCHAR(2048),
-                `lang` VARCHAR(10),
                 `file_name` VARCHAR(200) DEFAULT '' NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
@@ -834,7 +831,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `assignment_id` INT(11) NOT NULL DEFAULT 0,
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                `auto_judge_scenarios_output` VARCHAR(1024),
                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                 `file_name` VARCHAR(200) NOT NULL DEFAULT '',
                 `comments` TEXT NOT NULL,
@@ -1247,7 +1243,6 @@ $db->query("CREATE TABLE `config` (
     `value` TEXT NOT NULL,
     PRIMARY KEY (`key`))");
 $default_config = array(
-    'autojudge_connector', 'CodepadConnector',
     'base_url', $urlForm,
     'default_language', $lang,
     'dont_display_login_form', 0,
