@@ -766,13 +766,11 @@ function openCoursesExtra() {
 
         if ($openCoursesNum > 0) {
             $GLOBALS['leftNavExtras'] = "
-                <hr style='margin: 24px 0'>
-                <div style='text-align:center; color: white;margin-bottom: 30px;'>
+                <div style='text-align:center; color: white;margin: 40px 0;'>
                 <img src='{$themeimg}/open-courses-trans.png'>
                     <h4>" . q($GLOBALS['langOpenCoursesShort']) . "<br><small style='color:white'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</small></h4>
                     <a style='color:#4da1e4' href='{$urlServer}modules/course_metadata/openfaculties.php'>$GLOBALS[langListOpenCoursesShort]</a>    
-                </div>
-                <hr style='margin: 24px 0'>";
+                </div>";
         }
     }
 }
