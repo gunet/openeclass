@@ -49,7 +49,7 @@ $tool_content .= "<div class='form-wrapper login-form-page'>
     </div>
     <div class='form-group'>
     <div class='col-sm-8'>
-    <button class='btn btn-primary pull-left' type='submit' value='$langEnter'>$langEnter</button>
+    <button class='btn btn-primary pull-left' type='submit' name='submit' value='$langEnter'>$langEnter</button>
         <div class='pull-right'><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></div>
         </div>
         </div>";

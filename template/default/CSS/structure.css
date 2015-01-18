@@ -13,7 +13,7 @@
 /* TRANSITIONS ------------------------------------------------------------------- */
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 114, ../SASS/global.scss */
+/* line 113, ../SASS/global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -23,76 +23,52 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
-  /* line 120, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
-
-  /* line 121, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
-
-  /* line 122, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
-
 @-moz-keyframes NEW-ITEM-FX {
-  /* line 128, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
-
-  /* line 129, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
-
-  /* line 130, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
-
 @-o-keyframes NEW-ITEM-FX {
-  /* line 136, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
-
-  /* line 137, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
-
-  /* line 138, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
-
 @keyframes NEW-ITEM-FX {
-  /* line 144, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
-
-  /* line 145, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
-
-  /* line 146, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
-
-/* line 12, ../SASS/structure.scss */
+/* line 11, ../SASS/structure.scss */
 body {
-  background: #232c3a;
+  background: #232C3A;
   font-family: 'Open Sans';
   position: relative;
 }
@@ -206,7 +182,7 @@ body > .container {
 }
 /* line 96, ../SASS/structure.scss */
 #leftnav .panel a.list-group-item.active {
-  background: #fafafa;
+  background: #FAFAFA;
   text-shadow: none;
   color: #333;
   border-radius: 4px 0px 0px 4px;
@@ -224,16 +200,16 @@ body > .container {
 }
 
 /* LOGO - Extent bootstrap style -------------------------------------*/
-/* line 123, ../SASS/structure.scss */
+/* line 122, ../SASS/structure.scss */
 .logo {
   min-height: 20px;
   min-width: 20px;
 }
 
 /* MAIN-CONTENT -------------------------------------------------------*/
-/* line 133, ../SASS/structure.scss */
+/* line 132, ../SASS/structure.scss */
 #main-content {
-  background-color: #fafafa;
+  background-color: #FAFAFA;
   overflow: hidden;
 }
 
@@ -242,7 +218,7 @@ body > .container {
   margin-bottom: 0px;
   padding: 0;
   border: 0;
-  background-color: #eeeeee;
+  background-color: #EEEEEE;
   border-bottom: 1px solid #DBDBDB;
 }
 /* line 145, ../SASS/structure.scss */
@@ -276,12 +252,12 @@ body > .container {
 #header.navbar .navbar-nav > li a i.fa {
   margin: 0 1em;
 }
-/* line 169, ../SASS/structure.scss */
+/* line 168, ../SASS/structure.scss */
 #header.navbar .navbar-nav > li a:hover, #header.navbar .navbar-nav > li a:focus {
   background: #4da1e4;
   color: white;
 }
-/* line 176, ../SASS/structure.scss */
+/* line 175, ../SASS/structure.scss */
 #header.navbar .navbar-nav > li .user-icon {
   width: 20px;
   margin-right: 10px;
@@ -291,33 +267,33 @@ body > .container {
   border-radius: 0 4px 0px 0px;
 }
 
-/* line 190, ../SASS/structure.scss */
+/* line 189, ../SASS/structure.scss */
 .navbar-default {
   border-radius: 4px 4px 0px 0px;
 }
 
-/* line 195, ../SASS/structure.scss */
+/* line 194, ../SASS/structure.scss */
 #progressbar-outer {
   width: 500px;
   border: 1px solid #025694;
 }
 
-/* line 201, ../SASS/structure.scss */
+/* line 200, ../SASS/structure.scss */
 #progressbar-inner {
   height: 25px;
   background: #423440;
-  background: linear-gradient(top, #273242, #6f8fbd);
-  background: -ms-linear-gradient(top, #273242, #6f8fbd);
-  background: -webkit-gradient(linear, left top, left bottom, from(#273242), to(#6f8fbd));
-  background: -moz-linear-gradient(top, #273242, #6f8fbd);
+  background: linear-gradient(top, #273242, #6F8FBD);
+  background: -ms-linear-gradient(top, #273242, #6F8FBD);
+  background: -webkit-gradient(linear, left top, left bottom, from(#273242), to(#6F8FBD));
+  background: -moz-linear-gradient(top, #273242, #6F8FBD);
 }
 
 /* FOOTER --------------------------------------------------------------------------------------*/
-/* line 213, ../SASS/structure.scss */
+/* line 212, ../SASS/structure.scss */
 footer.footer {
   text-align: center;
   padding: 1em;
-  background: #eeeeee;
+  background: #EEEEEE;
   color: #a7a7a7;
   border-top: 1px solid #DBDBDB;
   border-radius: 0 0 4px 4px;
@@ -343,7 +319,7 @@ a.toggle-active {
   position: relative;
   width: 18.5em;
   right: -18.5em;
-  background-color: #eaeaea;
+  background-color: #EAEAEA;
   word-wrap: break-word;
   box-shadow: -3px 6px 7px 0px #999;
   -webkit-user-select: none;
@@ -360,7 +336,7 @@ a.toggle-active {
 /* line 255, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel > .panel {
   padding-bottom: 5px;
-  background-color: #eaeaea;
+  background-color: #EAEAEA;
 }
 /* line 259, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-mymessages {
@@ -375,7 +351,7 @@ a.toggle-active {
 #sidebar-container #sidebar .panel-group.outerpanel .input-group {
   margin: 5px 0;
 }
-/* line 272, ../SASS/structure.scss */
+/* line 271, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-title {
   margin: 0;
   font-weight: 600;
@@ -385,7 +361,7 @@ a.toggle-active {
   padding: 1.8em;
   background: #e3e4e6;
 }
-/* line 282, ../SASS/structure.scss */
+/* line 281, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title {
   margin: 0;
   padding: 2em 0em !important;
@@ -395,7 +371,7 @@ a.toggle-active {
   overflow: hidden;
   text-transform: uppercase;
 }
-/* line 292, ../SASS/structure.scss */
+/* line 291, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title i.fa {
   padding-right: 10px;
   opacity: .9;
@@ -490,7 +466,7 @@ a.toggle-active {
   border-top: none;
   color: #999;
 }
-/* line 375, ../SASS/structure.scss */
+/* line 374, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link {
   display: block;
   float: left;
@@ -501,14 +477,14 @@ a.toggle-active {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: #86CEFD;
+  color: #4da1e4;
 }
-/* line 388, ../SASS/structure.scss */
+/* line 387, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link:hover, #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link.active {
   text-decoration: none;
   color: #1a70b1;
 }
-/* line 393, ../SASS/structure.scss */
+/* line 392, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel i.lesson-title-caret {
   background-color: #fafafa;
   display: block;
@@ -600,7 +576,7 @@ a.toggle-active {
   bottom: 0.8em;
   display: inline-block;
   text-align: center;
-  background: #ce6b6b;
+  background: #CE6B6B;
   color: white;
   width: 1.5em;
   height: 1.5em;
@@ -630,7 +606,7 @@ a.toggle-active {
   list-style: none;
 }
 
-/* line 502, ../SASS/structure.scss */
+/* line 501, ../SASS/structure.scss */
 .accordion-title,
 .ui-accordion-header {
   padding-right: 2em !important;
@@ -706,9 +682,9 @@ body.page-login h1 {
   background-position: 30% 60%;
   background-repeat: no-repeat;
   background: -webkit-gradient(radial, 30% 60%, 0, 30% 60%, 300, from(#009bcf), to(#025694));
-  background: -webkit-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
-  background: -moz-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
-  background: -ms-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
+  background: -webkit-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+  background: -moz-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+  background: -ms-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
 }
 /* line 586, ../SASS/structure.scss */
 .jumbotron.jumbotron-login .graphic {
@@ -822,12 +798,12 @@ div.login-form .login-settings .alt_login span:first-child {
 div.login-form .login-settings > * {
   margin: 0;
 }
-/* line 690, ../SASS/structure.scss */
+/* line 689, ../SASS/structure.scss */
 div.login-form .login-settings .checkbox,
 div.login-form .login-settings .link {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 695, ../SASS/structure.scss */
+/* line 694, ../SASS/structure.scss */
 div.login-form .login-settings .checkbox label,
 div.login-form .login-settings .link label {
   font-weight: bold;
@@ -883,7 +859,7 @@ div.login-form .btn.btn-login:hover {
   }
 }
 @media (min-width: 992px) {
-  /* line 767, ../SASS/structure.scss */
+  /* line 766, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
@@ -896,7 +872,7 @@ div.login-form .btn.btn-login:hover {
     margin: 0;
   }
 
-  /* line 778, ../SASS/structure.scss */
+  /* line 777, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
@@ -907,7 +883,7 @@ div.login-form .btn.btn-login:hover {
     padding: 15px 0.5em;
   }
 
-  /* line 787, ../SASS/structure.scss */
+  /* line 785, ../SASS/structure.scss */
   #main-content,
   #header.navbar .navbar-nav > li:last-child > a,
   .navbar-default, .footer {
