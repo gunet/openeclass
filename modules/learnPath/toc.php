@@ -41,7 +41,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <html>
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
-    <link href='{$urlAppend}template/$theme/lp.css' rel='stylesheet' type='text/css' />
+    <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet' type='text/css' />
 </head>
 <body style='padding-right: 5px;'>
 <div class='menu_left'>";

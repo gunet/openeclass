@@ -200,6 +200,9 @@ $(document).ready(function () {
         var contentHeight = $("#Frame").height();
 
 
+        
+        $("#innerpanel-container").slimScroll({height: '215px'});
+        
         // Initialisation of Main Content height
         var margin_offset = 131;
         var initialHeight = ((contentHeight > windowHeight) ? contentHeight : windowHeight) - margin_offset;
