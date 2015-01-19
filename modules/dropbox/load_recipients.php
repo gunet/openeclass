@@ -123,16 +123,25 @@ if (isset($_POST['course'])) {
         echo json_encode(array());
     }
 } elseif (isset($_GET['autocomplete']) && $_GET['autocomplete'] == 1) {
-    $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
-            FROM user u, course_user cu
-		    WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
-            AND cu.user_id = u.id
-            AND cu.status != ?d
-            AND u.id != ?d
-            AND (u.surname LIKE ?s OR u.username LIKE ?s)
-            ORDER BY UPPER(u.surname), UPPER(u.givenname)
-            LIMIT 10";
-    $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+    if ($is_admin) {
+        $res = Database::get()->queryArray("SELECT id user_id, CONCAT(surname,' ', givenname) AS name, username
+            FROM user
+            WHERE id != ?d AND (surname LIKE ?s OR username LIKE ?s)
+            ORDER BY UPPER(surname), UPPER(givenname)
+            LIMIT 10",
+            $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+    } else {
+        $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
+                FROM user u, course_user cu
+                WHERE cu.course_id IN (SELECT course_id FROM course_user WHERE user_id = ?d)
+                AND cu.user_id = u.id
+                AND cu.status != ?d
+                AND u.id != ?d
+                AND (u.surname LIKE ?s OR u.username LIKE ?s)
+                ORDER BY UPPER(u.surname), UPPER(u.givenname)
+                LIMIT 10";
+        $res = Database::get()->queryArray($sql, $uid, USER_GUEST, $uid, "%".$_GET['q']."%", "%".$_GET['q']."%");
+    }
     
     $jsonarr["items"] = array();
     $i = 0;
