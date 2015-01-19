@@ -4378,6 +4378,8 @@ $langNavSettings = 'Ρυθμίσεις Μενού Πλοήγησης';
 $langSaveAs = 'Αποθήκευση ως ...';
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
+$langLoginImgPlacementSmall = "Μικρή (δεξιά στοίχηση)";
+$langLoginImgPlacementFull = "Πλήρους Πλάτους";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 
 /* * ***********************************************************

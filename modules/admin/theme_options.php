@@ -274,13 +274,13 @@ if (isset($_POST['optionsSave'])) {
                       <div class='radio'>
                         <label>
                           <input type='radio' name='loginImgPlacement' value='small-right' ".(($theme_options_styles['loginImgPlacement'] == 'small-right')? 'checked' : '').">
-                          Μικρή Δεξιά &nbsp; 
+                          $langLoginImgPlacementSmall &nbsp; 
                         </label>
                       </div>
                       <div class='radio'>
                         <label>
                           <input type='radio' name='loginImgPlacement' value='full-width' ".(($theme_options_styles['loginImgPlacement'] == 'full-width')? 'checked' : '').">
-                          Πλήρους Πλάτους &nbsp;
+                          $langLoginImgPlacementFull &nbsp;
                         </label>
                       </div>                                    
                 </div> 
