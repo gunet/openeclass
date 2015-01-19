@@ -100,10 +100,6 @@ if (!DBHelper::fieldExists('user', 'id')) {
     Database::get()->query("UPDATE user
                         SET registered_at = FROM_UNIXTIME(ts_registered_at),
                             expires_at = FROM_UNIXTIME(ts_expires_at)");
-    Database::get()->query("ALTER TABLE assignment
-                        ADD auto_judge TINYINT(1),
-                        ADD auto_judge_scenarios VARCHAR(2048),
-                        ADD lang VARCHAR(10)");
     Database::get()->query("ALTER TABLE user
                         CHANGE user_id id INT(11) NOT NULL AUTO_INCREMENT,
                         CHANGE nom surname VARCHAR(100) NOT NULL DEFAULT '',
@@ -2465,20 +2461,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `name` VARCHAR(300) NOT NULL,
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
-        //Add course home_layout fiels
-        if (!DBHelper::fieldExists('home_layout', 'course')) {
+        
+        if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
+            Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
+        }
+        //Add course home_layout fiels        
+        if (!DBHelper::fieldExists('course', 'home_layout')) {
             Database::get()->query("ALTER TABLE course ADD home_layout TINYINT(1) NOT NULL DEFAULT 1");
             Database::get()->query("UPDATE course SET home_layout = 3");
         }
-        if (!DBHelper::fieldExists('q_scale', 'poll_question')) {
-            Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
-        }
         //Add course image field
-        if (!DBHelper::fieldExists('course_image', 'course')) {
+        if (!DBHelper::fieldExists('course', 'course_image')) {
             Database::get()->query("ALTER TABLE course ADD course_image VARCHAR(400) NULL");
         }
         // Move course description from unit_resources to new course.description field
-        if (!DBHelper::fieldExists('description', 'course')) {
+        if (!DBHelper::fieldExists('course', 'description')) {
             Database::get()->query("ALTER TABLE course ADD description MEDIUMTEXT NOT NULL");
             $result = Database::get()->query("UPDATE course, course_units, unit_resources
                 SET course.description = unit_resources.comments
