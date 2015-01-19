@@ -40,7 +40,6 @@ $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
 $t->set_block('mainBlock', 'pageTitleBlock', 'delete');
 $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
 $t->set_block('mainBlock', 'breadCrumbs', 'delete');
-$t->set_block('mainBlock', 'modalWindowBlock', 'delete');
 $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
 $t->set_var('template_base', 'template/default');
 $t->set_var('PAGE_TITLE', 'Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης Open eClass');
