@@ -2494,6 +2494,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
+    // add new modules to courses by reinserting all modules
+    Database::get()->queryFunc("SELECT id, code FROM course", function ($course) {
+        global $modules;
+        $modules_count = count($modules);
+        $placeholders = implode(', ', array_fill(0, $modules_count, '(?d, ?d, ?d)'));
+        $values = array();
+        foreach($modules as $mid => $minfo) {
+            $values[] = array($mid, 0, $course->id);
+        }
+        Database::get()->query("INSERT IGNORE INTO course_module (module_id, visible, course_id) VALUES " .
+            $placeholders, $values);
+    });
+
     updateInfo(1, $langUpgradeSuccess);
     $logdate = date("Y-m-d_G:i:s");
 
