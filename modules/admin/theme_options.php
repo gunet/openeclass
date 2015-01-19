@@ -136,6 +136,7 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
         $theme_options_styles['bgType'] = 'repeat';
         $theme_options_styles['loginJumbotronBgColor'] = '#025694';
+        $theme_options_styles['loginImgPlacement'] = 'small-right';
     }
     $delete_btn = (get_config('theme_options_id')) 
             ? 
@@ -267,7 +268,34 @@ if (isset($_POST['optionsSave'])) {
                 <div class='col-sm-9'>
                    $login_image_field
                 </div>
-            </div>               
+            </div>
+            <div class='form-group'>
+                <div class='form-inline col-sm-9 col-sm-offset-3'>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='loginImgPlacement' value='small-right' ".(($theme_options_styles['loginImgPlacement'] == 'small-right')? 'checked' : '').">
+                          Μικρή Δεξιά &nbsp; 
+                        </label>
+                      </div>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='loginImgPlacement' value='full-width' ".(($theme_options_styles['loginImgPlacement'] == 'full-width')? 'checked' : '').">
+                          Πλήρους Πλάτους &nbsp;
+                        </label>
+                      </div>                                    
+                </div> 
+            </div>
+            <div class='form-group'>
+                <label for='loginImg' class='col-sm-3 control-label'>Banner Open eClass Οθόνης Σύνδεσης:</label>
+                <div class='col-sm-9'>
+                      <div class='checkbox'>
+                        <label>
+                          <input type='checkbox' name='openeclassBanner' value='1' ".((isset($theme_options_styles['openeclassBanner']))? 'checked' : '').">
+                          $langDeactivate
+                        </label>
+                      </div>                   
+                </div>
+            </div>            
             <hr>
             <h3>$langNavSettings</h3>            
             <div class='form-group'>

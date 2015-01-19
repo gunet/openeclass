@@ -450,8 +450,17 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$themeimg/$theme_options_styles[bgImage]')" : "";
             $styles_str .= "body{background: $theme_options_styles[bgColor]$bg_image;$background_type}";
         }
-        if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $styles_str .= ".jumbotron.jumbotron-login { background: -webkit-radial-gradient(30% 60%, closest-corner, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor]);}";
-        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login .graphic{ background-image: url('$themeimg/$theme_options_styles[loginImg]'); }";
+        $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
+        if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
+        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$themeimg/$theme_options_styles[loginImg]'), $gradient_str }";
+        if ($theme_options_styles['loginImgPlacement']=='small-right') {
+            $styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
+        } else {
+            $styles_str .= ".jumbotron.jumbotron-login {  background-size: cover, cover; background-position: 0% 0%;}";
+        }
+        if (isset($theme_options_styles['openeclassBanner'])){
+             $styles_str .= "#openeclass-banner {display: none;}";
+        }
         if (!empty($theme_options_styles['leftNavBgColor'])) {
             $rgba_no_alpha = explode(',', $theme_options_styles['leftNavBgColor']);
             $rgba_no_alpha[3] = "1)";

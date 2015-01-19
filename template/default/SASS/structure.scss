@@ -556,6 +556,7 @@ body.page-login h1{
   padding-bottom: 3rem;
   margin-bottom:60px;
   margin-top:10px;
+  min-height: 315px;
 
   margin-left: -15px;
   margin-right: -15px;
@@ -573,20 +574,10 @@ body.page-login h1{
   -o-background-size: cover;
   background-size: cover;
 
-  background-position: 30% 60%;
   background-repeat: no-repeat;
-  background: -webkit-gradient(radial, 30% 60%, 0, 30% 60%, 300, from(#009bcf), to(#025694));
-  background: -webkit-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
-  background: -moz-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
-  background: -ms-radial-gradient(30% 60%, closest-corner, #009BCF, #025694);
+  background: url('../img/indexlogo.png') 10% 60% no-repeat, radial-gradient(closest-corner at 30% 60%, #009BCF, #025694);
+  background-size: 353px, cover;
 
-  .graphic{
-    min-height:250px;
-    background-image: url('../img/indexlogo.png');
-    background-repeat: no-repeat;
-    background-position:20%;
-    background-size: 353px;
-  }
 }
 
 // LOGIN FORM

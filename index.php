@@ -156,8 +156,7 @@ if ($uid AND !isset($_GET['logout'])) {
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>
-                        <div class='hidden-xs col-sm-6 col-md-7 graphic'>
-                        </div>";
+                        ";
         if (!get_config('dont_display_login_form')) {
                         $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                             <h2>$langUserLogin</h2>
@@ -271,7 +270,7 @@ if ($uid AND !isset($_GET['logout'])) {
             </div>";
     }
         $tool_content .= "              
-            <div class='panel'>
+            <div class='panel' id='openeclass-banner'>
                 <div class='panel-body'>
                     <a href='http://www.openeclass.org/' target='_blank'>
                         <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
