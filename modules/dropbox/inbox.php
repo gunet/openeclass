@@ -50,11 +50,15 @@ if (isset($_GET['mid'])) {
                             array('title' => $langBack,
                                   'url' => "inbox.php".$urlstr,
                                   'icon' => 'fa-reply',
-                                  'level' => 'primary-label')
+                                  'level' => 'primary-label'),
+                            array('title' => $langDelete,
+                                    'url' => 'javascript:void(0)',
+                                    'icon' => 'fa-times',
+                                    'class' => 'delete_in',
+                                    'link-attrs' => "id='$msg->id'")
                         ));        
-        $out .= "<div id='del_msg'></div><div id='msg_area'><table >";
+        $out .= "<div id='del_msg'></div><div id='msg_area' class='table-responsive'><table class='table-default'>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
-        $out .= "<tr id='$msg->id'><td>$langDelete:</td><td><img src=\"".$themeimg.'/delete.png'."\" class=\"delete\"/></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
             $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
         }
@@ -96,8 +100,8 @@ if (isset($_GET['mid'])) {
                     $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
                 }
             }            
-            $out .= "<fieldset>
-                       <table width='100%' class='table table-bordered'>
+            $out .= "<div class='table-responsive'>
+                       <table class='table-default'>
                          <caption><b>$langReply</b></caption>
                          <tr>
                            <th>$langSender:</th>
@@ -105,7 +109,7 @@ if (isset($_GET['mid'])) {
     	                 </tr>
                          <tr>
                            <th>$langSubject:</th>
-                           <td><input type='text' name='message_title' value='".$langMsgRe.$msg->subject."' /></td>
+                           <td><input class='form-control' type='text' name='message_title' value='".$langMsgRe.$msg->subject."' /></td>
     	                 </tr>";
             $out .= "<tr>
                       <th>" . $langMessage . ":</th>
@@ -125,13 +129,17 @@ if (isset($_GET['mid'])) {
                           $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
                      </tr>
                    </table>
-                 </fieldset>
+                 </div>
                </form>
                <p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
     
              $out .= "<script type='text/javascript' src='{$urlAppend}js/select2-3.5.1/select2.min.js'></script>\n
                  <script type='text/javascript'>
                         $(document).ready(function () {
+                        
+                            $('.row.title-row').next('.row').hide();
+                            $('#dropboxTabs .nav.nav-tabs').hide();
+
                             $('#select-recipients').select2();       
                             $('#selectAll').click(function(e) {
                                 e.preventDefault();
@@ -243,11 +251,10 @@ if (isset($_GET['mid'])) {
                         }
                     }
                  }).fnSetFilteringDelay(1000);
-                 
+
                  $(document).on( 'click','.delete_in', function (e) {
                      e.preventDefault();
-                     var rowContainer = $(this).parent().parent();
-                     var id = rowContainer.attr('id');
+                     var id = $('.delete_in a').attr('id');
                      var string = 'mid='+id;
                      bootbox.confirm('$langConfirmDelete', function(result) {                       
                      if(result) {
@@ -267,6 +274,7 @@ if (isset($_GET['mid'])) {
                              }
                              $('#del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteSuccess</p>');
                              $('.alert-success').delay(3000).fadeOut(1500);
+                             $('#msg_area').remove();
                              oTable.fnPageChange(page_number);
                           },
                           error: function(xhr, textStatus, error){

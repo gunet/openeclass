@@ -358,6 +358,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         
         $head_content .= "<script type='text/javascript'>
                             $(document).ready(function () {
+
                                 $('#recipients').select2({
                                     placeholder:'$langSearch',
                                     multiple: true,
@@ -377,8 +378,8 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                                         },
                                         cache: true
                                      },
-                                })
-                            })
+                                });
+                            });
                            </script>";
         
         $tool_content .= "
@@ -412,6 +413,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
         load_js('select2');
         $head_content .= "<script type='text/javascript'>
             $(document).ready(function () {
+
                 $('#select-recipients').select2();       
                 $('#selectAll').click(function(e) {
                     e.preventDefault();
@@ -436,6 +438,7 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
     load_js('datatables_filtering_delay');
     $head_content .= "<script type='text/javascript'>
                         $(document).ready(function() {
+
                             // bootstrap tabs load external content via AJAX
                             $('a[data-toggle=\"tab\"]').on('show.bs.tab', function (e) {
                                 var contentID = $(e.target).attr('data-target');

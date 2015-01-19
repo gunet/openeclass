@@ -45,10 +45,19 @@ if (isset($_GET['mid'])) {
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
         }
-        $out = "<div style=\"float:right;\"><a href=\"outbox.php".$urlstr."\">$langBack</a></div>";
+        $out = action_bar(array(
+                            array('title' => $langBack,
+                                  'url' => "outbox.php".$urlstr,
+                                  'icon' => 'fa-reply',
+                                  'level' => 'primary-label'),
+                            array('title' => $langDelete,
+                                    'url' => 'javascript:void(0)',
+                                    'icon' => 'fa-times',
+                                    'class' => 'delete_out',
+                                    'link-attrs' => "id='$msg->id'")
+                        ));
         $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table class='table-default'>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
-        $out .= "<tr id='$msg->id'><td>$langDelete:</td><td class='delete'><i class='class='fa fa-times'></i></td></tr>";
         if ($msg->course_id != 0 && $course_id == 0) {
             $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
         }
@@ -73,6 +82,10 @@ if (isset($_GET['mid'])) {
         $out .= "</table><br/>";
 
         $out .= '<script>
+            
+        $(".row.title-row").next(".row").hide();
+        $("#dropboxTabs .nav.nav-tabs").hide();
+            
         $(function() {
         $("#out_msg_body").find("a").addClass("outtabs");          
                       
@@ -102,8 +115,8 @@ if (isset($_GET['mid'])) {
     }
 } else {
     
-    $out = "<div id='out_del_msg'></div><div id='outbox'>";
-    $out .= "<table id='outbox_table' class='table table-bordered'>
+    $out = "<div id='out_del_msg'></div><div id='outbox' class='table-responsive'>";
+    $out .= "<table id='outbox_table' class='table-default'>
                <thead>
                  <tr>
                     <th>$langSubject</th>";
@@ -121,6 +134,7 @@ if (isset($_GET['mid'])) {
     
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
+
                  var oTable2 = $('#outbox_table').dataTable({
                     'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],
                     'bStateSave' : true,
@@ -161,8 +175,7 @@ if (isset($_GET['mid'])) {
                     
                     $(document).on( 'click','.delete_out', function (e) {
                         e.preventDefault();
-                        var rowContainer = $(this).parent().parent();
-                        var id = rowContainer.attr('id');
+                        var id = $('.delete_out a').attr('id');
                         var string = 'mid='+ id ;
                         bootbox.confirm('$langConfirmDelete', function(result) {
                             if (result) {
@@ -182,6 +195,7 @@ if (isset($_GET['mid'])) {
                                     }
                                     $('#out_del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteSuccess</p>');
                                     $('.alert-success').delay(3000).fadeOut(1500);
+                                    $('#out_msg_area').remove();
                                     oTable2.fnPageChange(page_number);
                                   }
                                });
