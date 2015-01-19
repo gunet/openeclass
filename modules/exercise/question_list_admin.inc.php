@@ -235,7 +235,7 @@ if (isset($_GET['deleteQuestion'])) {
             'icon' => 'fa-bank',
             'level' => 'primary-label'
         )       
-    ));  
+    ), false);  
     
 if ($nbrQuestions) {
     $questionList = $objExercise->selectQuestionList();

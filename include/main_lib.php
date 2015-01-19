@@ -2703,14 +2703,14 @@ function forbidden($path) {
  * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'level' => 'primary')
  * level is optional and can be 'primary' for primary entries or unset
  */
-function action_bar($options) {
+function action_bar($options, $page_title_flag = true) {
     global $langConfirmDelete, $langCancel, $langDelete, $pageName;
     
     $out_primary = $out_secondary = array();
     $i=0;
     $page_title = "";
-    if (isset($pageName)) {
-        $page_title = "<div class='pull-left' style='padding-top:31px;'><h4>".q($pageName)."</h4></div>";
+    if (isset($pageName) && $page_title_flag) {
+        $page_title = "<div class='pull-left' style='padding-top:15px;'><h4>".q($pageName)."</h4></div>";
     }    
     foreach (array_reverse($options) as $option) {
         // skip items with show=false
