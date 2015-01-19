@@ -67,7 +67,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $offset = intval($_GET['iDisplayStart']);
     $keyword = '%' . $_GET['sSearch'] . '%';
 
-    $student_sql = $is_editor? '': 'AND visible = 1 AND start_display<=CURDATE() AND stop_display>=CURDATE() ';
+    $student_sql = $is_editor? '': 'AND visible = 1 AND (start_display<=CURDATE() OR start_display = "0000-00-00") AND (stop_display>=CURDATE() OR stop_display = "0000-00-00")';
     $all_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d $student_sql", $course_id);
     $filtered_announc = Database::get()->querySingle("SELECT COUNT(*) AS total FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql", $course_id, $keyword);
     if ($limit>0) {
@@ -77,7 +77,6 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $extra_sql = '';
         $extra_terms = array();
     }
-
     $result = Database::get()->queryArray("SELECT * FROM announcement WHERE course_id = ?d AND title LIKE ?s $student_sql ORDER BY `order` DESC $extra_sql", $course_id, $keyword, $extra_terms);
 
     $data['iTotalRecords'] = $all_announc->total;
@@ -260,7 +259,7 @@ $public_code = course_id_to_public_code($course_id);
 $toolName = $langAnnouncements;
 
 if (isset($_GET['an_id'])) {
-    (!$is_editor)? $student_sql = "AND visible = '1' AND start_display<=CURDATE() AND stop_display>=CURDATE()" : $student_sql = "";
+    (!$is_editor)? $student_sql = "AND visible = '1' AND (start_display<=CURDATE() OR start_display = '0000-00-00') AND (stop_display>=CURDATE() OR stop_display = '0000-00-00')" : $student_sql = "";    
     $row = Database::get()->querySingle("SELECT * FROM announcement WHERE course_id = ?d AND id = ". intval($_GET['an_id']) ." ".$student_sql, $course_id);
     if(empty($row)){
         redirect_to_home_page("modules/announcements/");
@@ -504,36 +503,45 @@ if ($is_editor) {
         </fieldset>
         </form>
         </div>";
-    } else {
-        if (isset($_GET['an_id'])) {
+    }
+} // end: teacher only
+
+if (isset($_GET['an_id'])) {
+            $pageName = $row->title;
             $tool_content .= action_bar(array(
                 array('title' => $langModify,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
                       'icon' => 'fa-edit',
-                      'level' => 'primary-label'),
+                      'level' => 'primary-label',
+                       'show' => $is_editor),
                 array('title' => $langDelete,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
                       'icon' => 'fa-times',
                       'level' => 'primary',
-                      'confirm' => $langSureToDelAnnounce)));
+                      'confirm' => $langSureToDelAnnounce,
+                      'show' => $is_editor),
+                array('title' => $langBack,
+                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
+                      'icon' => 'fa-replay',
+                      'level' => 'primary-label')));
         } else {
             $tool_content .= action_bar(array(
                 array('title' => $langAddAnn,
                       'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
                       'icon' => 'fa-plus-circle',
                       'level' => 'primary-label',
-                      'button-class' => 'btn-success')));
+                      'button-class' => 'btn-success',
+                      'show' => $is_editor)));
         }
-    }
-} // end: teacher only
-
     /* display announcements */
-    if (isset($_GET['an_id'])) {
-        $pageName = $row->title;
+    if (isset($_GET['an_id'])) {        
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
+        $tool_content .= "<div class='panel'>";
+        $tool_content .= "<div class='panel-body'>";
         $tool_content .= $row->content;
+        $tool_content .= "</div></div>";
     }
-    if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {
+    if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
         $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table table-bordered' width='100%'>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
