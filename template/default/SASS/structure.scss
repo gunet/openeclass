@@ -257,7 +257,18 @@ a.toggle-active{
                 background-color: $color-sidebar;
             }
             .sidebar-mymessages{
-                color: #999;
+                color: #333;
+                font-size: 12px;
+            }
+            .sidebar-mymessages .list-item{
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #ccc;
+            }
+            .sidebar-mymessages .list-item:last-child{
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                border-bottom: none;
             }
             .panel-body{
                 padding: 0px 8px;
@@ -398,9 +409,6 @@ a.toggle-active{
                     border-left: solid 1px #ececec;
                     color: #666;
                 }
-            }
-            #collapseMessages{
-                
             }
         }
     }

@@ -59,7 +59,7 @@ function getSidebarNotifications() {
 }
 
 function getSidebarMessages() {
-    global $uid, $urlServer, $langFrom, $dateFormatLong, $langDropboxNoMessage;
+    global $uid, $urlServer, $langFrom, $dateFormatLong, $langDropboxNoMessage, $langMailSubject, $langCourse;
 
     $message_content = '';
 
@@ -82,17 +82,19 @@ function getSidebarMessages() {
             }
 
             $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
-            $message_content .= "<li class='list-item'>" .
-                            "<span class='item-wholeline'>" .
-                                "<div class='text-title'>$langFrom " .
-                                    display_user($message->author_id, false, false) . ":<br>" .
-                                    "<a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .
-                                        q($message->subject) . "</a>" .
-                                "</div>" .
-                                "<div class='text-grey'>$course_title</div>" .
-                                "<div>$message_date</div>" .
-                                "</span>" .
-                            "</li>";
+            $message_content .= "<li class='list-item'>
+                            <span class='item-wholeline'>
+                                <div class='text-title'>$langFrom: " .
+                                    display_user($message->author_id, false, false) . "<br>
+                                    $langMailSubject: <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .
+                                        q($message->subject) . "</a>
+                                </div>";
+                                    if ($course_title) {
+                                       $message_content .= "<div class='text-grey'>$langCourse: $course_title</div>"; 
+                                    }
+                                $message_content .= "<div>$message_date</div>
+                                </span>
+                            </li>";
         }
     }
     return $message_content;

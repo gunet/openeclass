@@ -340,18 +340,31 @@ a.toggle-active {
 }
 /* line 259, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-mymessages {
-  color: #999;
+  color: #333;
+  font-size: 12px;
 }
-/* line 262, ../SASS/structure.scss */
+/* line 263, ../SASS/structure.scss */
+#sidebar-container #sidebar .panel-group.outerpanel .sidebar-mymessages .list-item {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+/* line 268, ../SASS/structure.scss */
+#sidebar-container #sidebar .panel-group.outerpanel .sidebar-mymessages .list-item:last-child {
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: none;
+}
+/* line 273, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-body {
   padding: 0px 8px;
   border: none;
 }
-/* line 267, ../SASS/structure.scss */
+/* line 278, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .input-group {
   margin: 5px 0;
 }
-/* line 271, ../SASS/structure.scss */
+/* line 282, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-title {
   margin: 0;
   font-weight: 600;
@@ -361,7 +374,7 @@ a.toggle-active {
   padding: 1.8em;
   background: #e3e4e6;
 }
-/* line 281, ../SASS/structure.scss */
+/* line 292, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title {
   margin: 0;
   padding: 2em 0em !important;
@@ -371,31 +384,31 @@ a.toggle-active {
   overflow: hidden;
   text-transform: uppercase;
 }
-/* line 291, ../SASS/structure.scss */
+/* line 302, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title i.fa {
   padding-right: 10px;
   opacity: .9;
   font-size: 16px;
 }
-/* line 298, ../SASS/structure.scss */
+/* line 309, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .course-btn {
   color: #888;
   padding: 8px 0;
   width: 24px;
 }
-/* line 303, ../SASS/structure.scss */
+/* line 314, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .course-btn i {
   cursor: pointer;
 }
-/* line 307, ../SASS/structure.scss */
+/* line 318, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel #up.course-btn {
   padding-bottom: 0px;
 }
-/* line 310, ../SASS/structure.scss */
+/* line 321, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel #down.course-btn {
   padding-top: 0px;
 }
-/* line 313, ../SASS/structure.scss */
+/* line 324, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel {
   border: none;
   margin: 0px;
@@ -403,67 +416,67 @@ a.toggle-active {
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
 }
-/* line 319, ../SASS/structure.scss */
+/* line 330, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-heading {
   background-image: none;
   border: none;
   background-color: #DEE0E2;
 }
-/* line 324, ../SASS/structure.scss */
+/* line 335, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-heading h4 {
   cursor: pointer;
 }
-/* line 328, ../SASS/structure.scss */
+/* line 339, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .goto {
   display: inline-block;
   float: right;
   margin-right: 0.5em;
   font-size: 0.75em;
 }
-/* line 334, ../SASS/structure.scss */
+/* line 345, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .goto:hover {
   text-decoration: none;
 }
-/* line 337, ../SASS/structure.scss */
+/* line 348, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel {
   margin-bottom: 0px;
 }
-/* line 340, ../SASS/structure.scss */
+/* line 351, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel #innerpanel-container {
   position: relative;
   top: -1px;
   padding: 1px 0;
 }
-/* line 346, ../SASS/structure.scss */
+/* line 357, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel {
   margin: 6px 3px;
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.5);
 }
-/* line 350, ../SASS/structure.scss */
+/* line 361, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel:first-child {
   margin-top: 3px;
 }
-/* line 353, ../SASS/structure.scss */
+/* line 364, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel:last-child {
   margin-bottom: 3px;
 }
-/* line 357, ../SASS/structure.scss */
+/* line 368, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading {
   margin: 0px;
   padding: 0px;
 }
-/* line 361, ../SASS/structure.scss */
+/* line 372, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading > div {
   margin-left: 0px;
   margin-right: 0px;
 }
-/* line 366, ../SASS/structure.scss */
+/* line 377, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-body {
   background-color: #fafafa;
   border-top: none;
   color: #999;
 }
-/* line 371, ../SASS/structure.scss */
+/* line 382, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link {
   display: block;
   float: left;
@@ -476,12 +489,12 @@ a.toggle-active {
   text-overflow: ellipsis;
   color: #4da1e4;
 }
-/* line 384, ../SASS/structure.scss */
+/* line 395, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link:hover, #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link.active {
   text-decoration: none;
   color: #1a70b1;
 }
-/* line 389, ../SASS/structure.scss */
+/* line 400, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel i.lesson-title-caret {
   background-color: #fafafa;
   display: block;
@@ -493,29 +506,29 @@ a.toggle-active {
   border-left: solid 1px #ececec;
   color: #666;
 }
-/* line 407, ../SASS/structure.scss */
+/* line 415, ../SASS/structure.scss */
 #sidebar-container h1, #sidebar-container h2, #sidebar-container h3, #sidebar-container h4, #sidebar-container h5, #sidebar-container h6 {
   color: #686868;
   font-weight: 600;
 }
-/* line 411, ../SASS/structure.scss */
+/* line 419, ../SASS/structure.scss */
 #sidebar-container ul, #sidebar-container li {
   list-style-type: none;
   padding: 0em;
   margin: 0em;
 }
 
-/* line 419, ../SASS/structure.scss */
+/* line 427, ../SASS/structure.scss */
 #sidebar .side-list {
   background: #f7f7f7;
   border-top: none;
   color: rgba(255, 255, 255, 0.9);
 }
-/* line 423, ../SASS/structure.scss */
+/* line 431, ../SASS/structure.scss */
 #sidebar .side-list .panel-body {
   padding: 6px 8px 10px !important;
 }
-/* line 426, ../SASS/structure.scss */
+/* line 434, ../SASS/structure.scss */
 #sidebar .side-list .lesson-title {
   height: 37px;
   background: #fff;
@@ -534,39 +547,39 @@ a.toggle-active {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 440, ../SASS/structure.scss */
+/* line 448, ../SASS/structure.scss */
 #sidebar .side-list ul {
   font-size: 0.75em;
 }
-/* line 443, ../SASS/structure.scss */
+/* line 451, ../SASS/structure.scss */
 #sidebar .side-list ul > li {
   padding: 5px 5px;
 }
-/* line 447, ../SASS/structure.scss */
+/* line 455, ../SASS/structure.scss */
 #sidebar .side-list .lesson-id {
   opacity: 0.5;
   font-size: 0.85em;
   font-weight: 700;
 }
-/* line 452, ../SASS/structure.scss */
+/* line 460, ../SASS/structure.scss */
 #sidebar .side-list .lesson-professor {
   font-weight: 600;
   padding-top: 0px;
 }
-/* line 456, ../SASS/structure.scss */
+/* line 464, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications {
   margin-top: 1em;
 }
-/* line 458, ../SASS/structure.scss */
+/* line 466, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications i {
   color: #444 !important;
 }
-/* line 461, ../SASS/structure.scss */
+/* line 469, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications .item {
   margin-right: 1.5em;
   position: relative;
 }
-/* line 464, ../SASS/structure.scss */
+/* line 472, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications .item .count {
   position: absolute;
   left: 0.8em;
@@ -583,27 +596,27 @@ a.toggle-active {
   -webkit-border-radius: 0.75em;
   -moz-border-radius: 0.75em;
 }
-/* line 479, ../SASS/structure.scss */
+/* line 487, ../SASS/structure.scss */
 #sidebar .side-list .lesson-notifications .item .fa {
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
 }
 
 /* ACCORDIONS --------------------------------------------------------------------*/
-/* line 489, ../SASS/structure.scss */
+/* line 497, ../SASS/structure.scss */
 .accordion {
   list-style: none;
   margin: 0px;
   padding: 0px;
 }
-/* line 493, ../SASS/structure.scss */
+/* line 501, ../SASS/structure.scss */
 .accordion ul, .accordion li {
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
 
-/* line 501, ../SASS/structure.scss */
+/* line 509, ../SASS/structure.scss */
 .accordion-title,
 .ui-accordion-header {
   padding-right: 2em !important;
@@ -612,7 +625,7 @@ a.toggle-active {
   outline: none !important;
   cursor: pointer;
 }
-/* line 511, ../SASS/structure.scss */
+/* line 519, ../SASS/structure.scss */
 .accordion-title:after,
 .ui-accordion-header:after {
   position: absolute;
@@ -637,7 +650,7 @@ a.toggle-active {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 534, ../SASS/structure.scss */
+/* line 542, ../SASS/structure.scss */
 .accordion-title.ui-state-active:after,
 .ui-accordion-header.ui-state-active:after {
   behavior: url(-ms-transform.htc);
@@ -653,12 +666,12 @@ a.toggle-active {
 }
 
 /* INDEX --------------------------------------------------------------------------- */
-/* line 551, ../SASS/structure.scss */
+/* line 559, ../SASS/structure.scss */
 body.page-login h1 {
   margin: 1.25em 1em;
 }
 
-/* line 556, ../SASS/structure.scss */
+/* line 564, ../SASS/structure.scss */
 .jumbotron.jumbotron-login {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -682,7 +695,7 @@ body.page-login h1 {
   background-size: 353px, cover;
 }
 
-/* line 587, ../SASS/structure.scss */
+/* line 595, ../SASS/structure.scss */
 div.login-form {
   font-size: 0.85em;
   position: relative;
@@ -701,7 +714,7 @@ div.login-form {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 597, ../SASS/structure.scss */
+/* line 605, ../SASS/structure.scss */
 div.login-form:hover {
   box-shadow: 0px 0px 20px 3px black;
   -moz-box-shadow: 0px 0px 20px 3px black;
@@ -712,7 +725,7 @@ div.login-form:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 601, ../SASS/structure.scss */
+/* line 609, ../SASS/structure.scss */
 div.login-form h2 {
   text-align: center;
   font-size: 1.8em;
@@ -720,16 +733,16 @@ div.login-form h2 {
   margin-top: 0rem;
   color: #232c3a;
 }
-/* line 609, ../SASS/structure.scss */
+/* line 617, ../SASS/structure.scss */
 div.login-form .form-group {
   margin: 0rem;
 }
-/* line 614, ../SASS/structure.scss */
+/* line 622, ../SASS/structure.scss */
 div.login-form .form-group > * {
   display: inline-block;
   float: none;
 }
-/* line 620, ../SASS/structure.scss */
+/* line 628, ../SASS/structure.scss */
 div.login-form .form-group input {
   width: 82%;
   border-bottom: 1px solid #eeeeee;
@@ -747,66 +760,66 @@ div.login-form .form-group input {
   line-height: 1.42857143;
   color: #444444;
 }
-/* line 641, ../SASS/structure.scss */
+/* line 649, ../SASS/structure.scss */
 div.login-form .form-group input:focus {
   border-color: #4da1e4;
 }
-/* line 647, ../SASS/structure.scss */
+/* line 655, ../SASS/structure.scss */
 div.login-form .form-group label {
   width: 17%;
   margin: 0;
   text-align: center;
 }
-/* line 653, ../SASS/structure.scss */
+/* line 661, ../SASS/structure.scss */
 div.login-form .form-group i.fa {
   font-size: 1.2em;
   margin: 0;
   color: #aaaaaa;
 }
-/* line 660, ../SASS/structure.scss */
+/* line 668, ../SASS/structure.scss */
 div.login-form .login-settings {
   margin: 5px 0px 0px 0px;
   font-size: 0.9em;
 }
-/* line 664, ../SASS/structure.scss */
+/* line 672, ../SASS/structure.scss */
 div.login-form .login-settings > div:first-child {
   text-align: right;
   padding: 5px 0;
 }
-/* line 669, ../SASS/structure.scss */
+/* line 677, ../SASS/structure.scss */
 div.login-form .login-settings > hr {
   margin: 5px 0 10px;
 }
-/* line 673, ../SASS/structure.scss */
+/* line 681, ../SASS/structure.scss */
 div.login-form .login-settings .alt_login span:first-child {
   font-weight: bold;
 }
-/* line 676, ../SASS/structure.scss */
+/* line 684, ../SASS/structure.scss */
 div.login-form .login-settings > * {
   margin: 0;
 }
-/* line 680, ../SASS/structure.scss */
+/* line 688, ../SASS/structure.scss */
 div.login-form .login-settings .checkbox,
 div.login-form .login-settings .link {
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 685, ../SASS/structure.scss */
+/* line 693, ../SASS/structure.scss */
 div.login-form .login-settings .checkbox label,
 div.login-form .login-settings .link label {
   font-weight: bold;
 }
-/* line 690, ../SASS/structure.scss */
+/* line 698, ../SASS/structure.scss */
 div.login-form .login-settings .link a {
   float: right;
   margin-top: 0.3em;
   color: rgba(0, 0, 0, 0.5);
 }
-/* line 696, ../SASS/structure.scss */
+/* line 704, ../SASS/structure.scss */
 div.login-form .login-settings .checkbox label span {
   margin-top: 0.3em;
   display: inline-block;
 }
-/* line 702, ../SASS/structure.scss */
+/* line 710, ../SASS/structure.scss */
 div.login-form .btn.btn-login {
   margin: 15px 0 5px;
   width: 100%;
@@ -818,13 +831,13 @@ div.login-form .btn.btn-login {
   letter-spacing: 0.1em;
   outline: none;
 }
-/* line 712, ../SASS/structure.scss */
+/* line 720, ../SASS/structure.scss */
 div.login-form .btn.btn-login:hover {
   background: #3071a9;
 }
 
 /* DELETE THIS */
-/* line 720, ../SASS/structure.scss */
+/* line 728, ../SASS/structure.scss */
 .row .deleteThisClass {
   height: 400px;
   border: 1px solid #eee;
@@ -834,43 +847,43 @@ div.login-form .btn.btn-login:hover {
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 /* No breakpoints bellow 1366 or smth */
 @media (max-width: 1339px) {
-  /* line 745, ../SASS/structure.scss */
+  /* line 753, ../SASS/structure.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 751, ../SASS/structure.scss */
+  /* line 759, ../SASS/structure.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 757, ../SASS/structure.scss */
+  /* line 765, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 764, ../SASS/structure.scss */
+  /* line 772, ../SASS/structure.scss */
   body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 768, ../SASS/structure.scss */
+  /* line 776, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 
-  /* line 772, ../SASS/structure.scss */
+  /* line 780, ../SASS/structure.scss */
   .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 776, ../SASS/structure.scss */
+  /* line 784, ../SASS/structure.scss */
   #main-content,
   #header.navbar .navbar-nav > li:last-child > a,
   .navbar-default, .footer {
