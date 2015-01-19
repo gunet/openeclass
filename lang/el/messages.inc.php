@@ -4379,7 +4379,7 @@ $langSaveAs = 'Αποθήκευση ως ...';
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
 $langLoginImgPlacementSmall = "Μικρή (δεξιά στοίχηση)";
-$langLoginImgPlacementFull = "Πλήρους Πλάτους";
+$langLoginImgPlacementFull = "Πλήρους Πλάτους (πλάτος: 1091px, ύψος: 315px)";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 
 /* * ***********************************************************
