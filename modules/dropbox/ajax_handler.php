@@ -140,9 +140,29 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
         $td[$i++] = $bold_start.nice_format(date('Y-m-d H:i:s',$msg->timestamp), true).$bold_end;
         if ($mbox_type == 'inbox') {
-            $td[$i++] = "<i class='fa fa-times delete_in'></i>";
+            
+            $td[$i++] = action_button(array(
+                array(
+                    'icon' => 'fa-times',
+                    'url' => 'javascript:void(0);',
+                    'level' => 'primary',
+                    'title' => $langDelete,
+                    'btn_class' => 'delete_in btn-default',
+                    'link-attrs' => "data-id='$msg->id'"
+                    )
+                )
+            );
         } else {
-            $td[$i++] = "<i class='fa fa-times delete_out'></i>";
+            $td[$i++] = action_button(array(
+                array(
+                    'icon' => 'fa-times',
+                    'url' => 'javascript:void(0);',
+                    'level' => 'primary',
+                    'title' => $langDelete,
+                    'btn_class' => 'delete_out btn-default',
+                    'link-attrs' => "data-id='$msg->id'")
+                )
+            );
         }
         
         if ($course_id == 0) {

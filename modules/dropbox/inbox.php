@@ -50,12 +50,13 @@ if (isset($_GET['mid'])) {
                             array('title' => $langBack,
                                   'url' => "inbox.php".$urlstr,
                                   'icon' => 'fa-reply',
+                                  'button-class' => 'back_index btn-default',
                                   'level' => 'primary-label'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
                                     'icon' => 'fa-times',
-                                    'class' => 'delete_in',
-                                    'link-attrs' => "id='$msg->id'")
+                                    'button-class' => 'delete_in',
+                                    'link-attrs' => "data-id='$msg->id'")
                         ));        
         $out .= "<div id='del_msg'></div><div id='msg_area' class='table-responsive'><table class='table-default'>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
@@ -139,6 +140,11 @@ if (isset($_GET['mid'])) {
                         
                             $('.row.title-row').next('.row').hide();
                             $('#dropboxTabs .nav.nav-tabs').hide();
+                            
+                            $('.back_index').on('click', function(){
+                                $('.row.title-row').next('.row').show();
+                                $('#dropboxTabs .nav.nav-tabs').show();
+                            });
 
                             $('#select-recipients').select2();       
                             $('#selectAll').click(function(e) {
@@ -214,6 +220,7 @@ if (isset($_GET['mid'])) {
     
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
+
                  var oTable = $('#inbox_table').dataTable({
                    'aoColumnDefs':[{'sClass':'option-btn-cell text-center', 'aTargets':[-1]}],
                    'bStateSave' : true,
@@ -254,7 +261,7 @@ if (isset($_GET['mid'])) {
 
                  $(document).on( 'click','.delete_in', function (e) {
                      e.preventDefault();
-                     var id = $('.delete_in a').attr('id');
+                     var id = $(this).data('id');
                      var string = 'mid='+id;
                      bootbox.confirm('$langConfirmDelete', function(result) {                       
                      if(result) {

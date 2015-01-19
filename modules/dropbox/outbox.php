@@ -49,12 +49,13 @@ if (isset($_GET['mid'])) {
                             array('title' => $langBack,
                                   'url' => "outbox.php".$urlstr,
                                   'icon' => 'fa-reply',
+                                  'button-class' => 'back_index btn-default',
                                   'level' => 'primary-label'),
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
                                     'icon' => 'fa-times',
-                                    'class' => 'delete_out',
-                                    'link-attrs' => "id='$msg->id'")
+                                    'button-class' => 'delete_out',
+                                    'link-attrs' => "data-id='$msg->id'")
                         ));
         $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table class='table-default'>";
         $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
@@ -85,6 +86,11 @@ if (isset($_GET['mid'])) {
             
         $(".row.title-row").next(".row").hide();
         $("#dropboxTabs .nav.nav-tabs").hide();
+        
+        $(".back_index").on("click", function(){
+                                $(".row.title-row").next(".row").show();
+                                $("#dropboxTabs .nav.nav-tabs").show();
+                            });
             
         $(function() {
         $("#out_msg_body").find("a").addClass("outtabs");          
@@ -175,7 +181,7 @@ if (isset($_GET['mid'])) {
                     
                     $(document).on( 'click','.delete_out', function (e) {
                         e.preventDefault();
-                        var id = $('.delete_out a').attr('id');
+                        var id = $(this).data('id');
                         var string = 'mid='+ id ;
                         bootbox.confirm('$langConfirmDelete', function(result) {
                             if (result) {
