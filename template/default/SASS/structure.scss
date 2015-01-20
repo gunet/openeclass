@@ -255,6 +255,7 @@ a.toggle-active{
             > .panel{
                 padding-bottom: 5px;
                 background-color: $color-sidebar;
+                box-shadow: none !important;
             }
             .sidebar-mymessages{
                 color: #333;
@@ -268,7 +269,6 @@ a.toggle-active{
             .sidebar-mymessages .list-item:last-child{
                 padding-bottom: 10px;
                 margin-bottom: 10px;
-                border-bottom: none;
             }
             .panel-body{
                 padding: 0px 8px;
@@ -356,7 +356,7 @@ a.toggle-active{
                  
                  .panel{
                      margin: 6px 3px;
-                     box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+/*                     box-shadow: 0px 1px 3px rgba(0,0,0,0.2);*/
                  }
                  .panel:first-child{
                      margin-top: 3px;
@@ -458,8 +458,7 @@ a.toggle-active{
             font-weight:700;
         }
         .lesson-professor{
-            font-weight: 600;
-            padding-top:0px;
+            color: #333;
         }
         .lesson-notifications{
             margin-top:1em;
