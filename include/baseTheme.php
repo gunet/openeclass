@@ -119,8 +119,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     } elseif (!$pageName and $toolName) {
         $pageName = $toolName;
     }
-
-    $pageTitle = '';
+    $pageTitle = $siteName;    
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     unset($_SESSION['embedonce']);
@@ -376,9 +375,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
             }
         }
-
-        $pageTitle = $siteName;
-
+        
         // Breadcrumb course home entry
         if (isset($course_code)) {
             $t->set_var('BREAD_TEXT', q(ellipsize($currentCourseName, 48)));
