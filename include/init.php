@@ -479,8 +479,7 @@ if (isset($course_id) and !$is_editor and $module_id and !defined('STATIC_MODULE
                                                   " . MODULE_ID_FORUM . ",
                                                   " . MODULE_ID_GROUPS . ",
                                                   " . MODULE_ID_WIKI . ",
-                                                  " . MODULE_ID_GRADEBOOK . ",
-                                                  " . MODULE_ID_GRADEBOOKTOTAL . ",
+                                                  " . MODULE_ID_GRADEBOOK . ",                                                  
                                                   " . MODULE_ID_ATTENDANCE . ",
                                                   " . MODULE_ID_LP . ")", $course_id);
     }

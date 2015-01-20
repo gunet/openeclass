@@ -1124,9 +1124,11 @@ class CourseXMLElement extends SimpleXMLElement {
     private static function makeMultiLang($ele) {
         global $currentCourseLanguage, $webDir, $siteName, $Institution, $InstitutionUrl;
         if (empty($currentCourseLanguage)) {
-            $currentCourseLanguage = 'greek';
+            $clang = $currentCourseLanguage = 'el';
         }
-        $clang = langname_to_code($currentCourseLanguage);
+        else {
+            $clang = langname_to_code($currentCourseLanguage);
+        }
         $arr = array();
         $key = (string) $ele;
         if (!isset($GLOBALS['langCMeta'][$key])) {
