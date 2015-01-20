@@ -47,6 +47,11 @@ if (isset($_GET['mid'])) {
             $urlstr = "?course=".$course_code;
         }
         $out = action_bar(array(
+                            array('title' => $langReply,
+                                  'url' => "javascript:void(0)",
+                                  'icon' => 'fa-edit',
+                                  'button-class' => 'btn-reply btn-default',
+                                  'level' => 'primary-label'),            
                             array('title' => $langBack,
                                   'url' => "inbox.php".$urlstr,
                                   'icon' => 'fa-reply',
@@ -57,43 +62,97 @@ if (isset($_GET['mid'])) {
                                     'icon' => 'fa-times',
                                     'button-class' => 'delete_in',
                                     'link-attrs' => "data-id='$msg->id'")
-                        ));        
-        $out .= "<div id='del_msg'></div><div id='msg_area' class='table-responsive'><table class='table-default'>";
-        $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
-        if ($msg->course_id != 0 && $course_id == 0) {
-            $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
-        }
-        $out .= "<tr><td>$langDate:</td><td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td></tr>";
-        $out .= "<tr><td>$langSender:</td><td>".display_user($msg->author_id, false, false, "outtabs")."</td></tr>";
-        
+                        ));
         $recipients = '';
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
                 $recipients .= display_user($r, false, false, "outtabs").'<br/>';
             }
+        }        
+        $out .= "<div id='del_msg'></div>
+                <div id='msg_area'>
+                    <div class='panel panel-primary'>
+                        <div class='panel-body'>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langSubject:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    ".q($msg->subject)."
+                                </div>  
+                            </div>";
+        if ($msg->course_id != 0 && $course_id == 0) {
+            $out .= "       <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langCourse:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
+                                </div>                
+                            </div>";
         }
-        
-        $out .= "<tr><td>$langRecipients:</td><td>".$recipients."</td></tr>";
-        $out .= "<tr><td>$langMessage:</td><td id='in_msg_body'>".standard_text_escape($msg->body)."</td></tr>";
-
-        if ($msg->filename != '' && $msg->filesize != 0) {
-            $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
-            <img class='outtabs' src='$themeimg/save.png' /></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</td></tr>";
-        }
-        
-        $out .= "</table><br/>";
+        $out .= "       
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langDate:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    ".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."
+                                </div>                
+                            </div>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langSender:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    ".display_user($msg->author_id, false, false, "outtabs")."
+                                </div>                
+                            </div>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langRecipients:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    $recipients
+                                </div>                
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>$langMessage</div>
+                        <div class='panel-body'>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-xs-12'>
+                                    ".standard_text_escape($msg->body)."
+                                </div>
+                            </div>";
+                if ($msg->filename != '' && $msg->filesize != 0) {
+                   $out .= "<hr>
+                            <div class='row  margin-top-thin'>
+                                <div class='col-sm-2'>
+                                    $langAttachedFile
+                                </div>
+                                <div class='col-sm-10'>
+                                 <a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
+                    &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")
+                                </div>
+                            </div>";
+               }          
+               $out .= "</div>
+                    </div>";
         
         /*****Reply Form****/
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
         } else {
+            $out .= "<div class='form-wrapper' id='replyBox' style='display:none;'>";
             if ($course_id == 0) {
-                $out .= "<form method='post' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                $out .= "<form method='post' class='form-horizontal' role='form' action='dropbox_submit.php' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
                 if ($msg->course_id != 0) {//thread belonging to a course viewed from the central ui
                     $out .= "<input type='hidden' name='course' value='".course_id_to_code($msg->course_id)."' />";
                 }
             } else {
-                $out .= "<form method='post' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
+                $out .= "<form method='post' class='form-horizontal' role='form' action='dropbox_submit.php?course=$course_code' enctype='multipart/form-data' onsubmit='return checkForm(this)'>";
             }
             //hidden variables needed in case of a reply
             foreach ($msg->recipients as $rec) {
@@ -101,38 +160,60 @@ if (isset($_GET['mid'])) {
                     $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
                 }
             }            
-            $out .= "<div class='table-responsive'>
-                       <table class='table-default'>
-                         <caption><b>$langReply</b></caption>
-                         <tr>
-                           <th>$langSender:</th>
-                           <td>" . q(uid_to_name($uid)) . "</td>
-    	                 </tr>
-                         <tr>
-                           <th>$langSubject:</th>
-                           <td><input class='form-control' type='text' name='message_title' value='".$langMsgRe.$msg->subject."' /></td>
-    	                 </tr>";
-            $out .= "<tr>
-                      <th>" . $langMessage . ":</th>
-                      <td>".rich_text_editor('body', 4, 20, '')."
-                        <small><br/>$langMaxMessageSize</small></td>
-                     </tr>";
+            $out .= "
+                <fieldset>
+                <legend>$langReply</legend>
+                    <div class='form-group'>
+                        <label for='senderName' class='col-sm-2 control-label'>$langSender:</label>
+                        <div class='col-sm-10'>
+                            <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
+                        </div>                            
+                    </div>
+                    <div class='form-group'>
+                        <label for='message_title' class='col-sm-2 control-label'>$langSubject:</label>
+                        <div class='col-sm-10'>
+                            <input name='message_title' type='text' class='form-control' id='message_title' value='".$langMsgRe.$msg->subject."'>
+                        </div>                            
+                    </div>
+                    <div class='form-group'>
+                        <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
+                        <div class='col-sm-10'>
+                            ".rich_text_editor('body', 4, 20, '')."
+                            <span class='help-block'>$langMaxMessageSize</span>        
+                        </div>                            
+                    </div>";
+                 
             if ($course_id != 0) {
-                $out .= "<tr>
-                       <th width='120'>$langFileName:</th>
-                       <td><input type='file' name='file' size='35' />
-                       </td>
-                     </tr>";
-            }            
-            $out .= "<tr>
-    	               <th>&nbsp;</th>
-                       <td class='left'><input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "' />&nbsp;
-                          $langMailToUsers<input type='checkbox' name='mailing' value='1' checked /></td>
-                     </tr>
-                   </table>
-                 </div>
-               </form>
-               <p class='right smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</p>";
+                $out .= "<div class='form-group'>
+                            <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
+                            <div class='col-sm-10'>
+                                <input type='file' name='file' size='35'>
+                            </div>
+                        </div>";
+            }              
+$out .=         "
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='mailing' value='1' checked>
+                                        $langMailToUsers                                    
+                                    </label>
+                                </div>
+                                    
+                        </div>                            
+                    </div>     
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
+                            <a id='cancelReply' class='btn btn-default' href='javascript:void(0)'>$langCancel</a>
+                        </div>                            
+                    </div>        
+                </fieldset>";
+        
+            $out .= "
+                 <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+               </form></div>";
     
              $out .= "<script type='text/javascript' src='{$urlAppend}js/select2-3.5.1/select2.min.js'></script>\n
                  <script type='text/javascript'>
@@ -140,7 +221,18 @@ if (isset($_GET['mid'])) {
                         
                             $('.row.title-row').next('.row').hide();
                             $('#dropboxTabs .nav.nav-tabs').hide();
-                            
+                            $('.btn-reply').on('click', function(){
+                                $('#replyBox').show();
+                                $('html, body').animate({
+                                    scrollTop: $('#replyBox').offset().top
+                                }, 2000);                                
+                            });
+                            $('#cancelReply').on('click', function(){
+                                $('#replyBox').hide();
+                                $('html, body').animate({
+                                    scrollTop: $('#header_section').offset().top
+                                }, 2000);                                
+                            });                            
                             $('.back_index').on('click', function(){
                                 $('.row.title-row').next('.row').show();
                                 $('#dropboxTabs .nav.nav-tabs').show();

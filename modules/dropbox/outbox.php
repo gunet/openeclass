@@ -133,11 +133,7 @@ if (isset($_GET['mid'])) {
                             </div>";
                }       
                $out .= "</div>
-                    </div>
-                    <table class='table-default'>";
-
-        
-        $out .= "</table><br/>";
+                    </div>";
 
         $out .= '<script>
             
