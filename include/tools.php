@@ -763,26 +763,20 @@ function pickerMenu() {
  * @global type $urlServer
  */
 function openCoursesExtra() {
-    global $urlAppend, $themeimg;
+    global $urlAppend, $themeimg, $openCoursesExtraHTML;
 
-    $GLOBALS['leftNavExtras'] = '';
-
+    if (!isset($openCoursesExtraHTML)) {
+        setOpenCoursesExtraHTML();
+    }
     $menuGroup = false;
-    if (get_config('opencourses_enable')) {
+    if (get_config('opencourses_enable') and $openCoursesExtraHTML) {
         $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
 
         if ($openCoursesNum > 0) {
             $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
-            $GLOBALS['leftNavExtras'] = "
-                <div style='text-align:center; color: white;margin: 40px 0;'>
-                <img src='{$themeimg}/open-courses-trans.png'>
-                    <h4>" . q($GLOBALS['langOpenCoursesShort']) . "<br></h4>
-                    <a style='color:#4da1e4' href='$openFacultiesUrl'>$GLOBALS[langListOpenCoursesShort]</a><br>
-                    <small style='color:white'>$openCoursesNum " . (($openCoursesNum == 1) ? $GLOBALS['langNumOpenCourse'] : $GLOBALS['langNumOpenCourses']) . "</small>
-                </div>";
             $menuGroup = array(
                 array('type' => 'text',
-                      'text' => $GLOBALS['langOpenCourses'],
+                      'text' => $GLOBALS['langOpenCoursesShort'],
                       'class' => 'basic'),
                 array($GLOBALS['langListOpenCoursesShort']),
                 array($openFacultiesUrl),

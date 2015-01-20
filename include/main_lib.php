@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.0');
+define('ECLASS_VERSION', '3.0rc1');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -2887,4 +2887,22 @@ function removeGetVar($url, $varname) {
     unset($qsvars[$varname]);
     $newqs = http_build_query($qsvars);
     return $urlpart . '?' . $newqs;
+}
+
+function setOpenCoursesExtraHTML() {
+    global $urlAppend, $openCoursesExtraHTML,
+        $langOpenCoursesShort, $langListOpenCoursesShort,
+        $langNumOpenCourse, $langNumOpenCourses;
+    $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
+    if ($openCoursesNum > 0) {
+        $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
+        $openCoursesExtraHTML = "
+            <div style='text-align: center; margin: 40px 0;'>
+                <h4>" . q($langOpenCoursesShort) . "<br></h4>
+                <a href='$openFacultiesUrl'>" .
+                    q($langListOpenCoursesShort) . "</a><br>
+                <small>$openCoursesNum " .
+                q(($openCoursesNum == 1)? $langNumOpenCourse: $langNumOpenCourses) .
+                "</small></div>";
+    }
 }
