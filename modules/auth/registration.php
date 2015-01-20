@@ -32,6 +32,13 @@ $pageName = $langNewUser;
 $auth = get_auth_active_methods();
 
 if ($user_registration) {
+    $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
     // student registration
     if ($eclass_stud_reg != FALSE or $alt_auth_stud_reg != FALSE) {
         $tool_content .= "<table class='table-default table-responsive'>";
@@ -81,6 +88,13 @@ if ($user_registration) {
         $tool_content .= "<div class='alert alert-info'>$langTeacherCannotRegister</div>";
     }
 } else { // disable registration
+    $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
     $tool_content .= "<div class='alert alert-info'>$langCannotRegister</div>";
 }
 

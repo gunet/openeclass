@@ -29,7 +29,13 @@ if (!in_array($language, array('el', 'en'))) {
     $language = 'en';
     $addon = "($langOnlyInEnglish)";
 }
-
+$tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
 $tool_content .= "<table class='table table-striped table-bordered table-hover'>
   <tr>
     <th width='16'>".icon('fa-globe')."</th>

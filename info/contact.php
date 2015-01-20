@@ -32,7 +32,14 @@ $phonemessage = empty($phone) ? '' : "<label>$langPhone:&nbsp;</label>$phone<br>
 $faxmessage = empty($fax) ? '' : "<label>$langFax</label>$fax<br>";
 $emailhelpdesk = get_config('email_helpdesk');
 
-$tool_content .= "<div class='alert alert-info col-sm-10 page-header'>
+$tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
+$tool_content .= "<div class='alert alert-info col-sm-12 page-header'>
 <label>$langPostMail&nbsp;</label>$Institution<br> $postaddress 
 
 $phonemessage

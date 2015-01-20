@@ -73,7 +73,13 @@ $icons = array(
 if (count($tree->buildRootsArray()) > 1) {
     $tool_content .= $tree->buildRootsSelectForm($fc);
 }
-
+$tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
 $tool_content .= "<table class='table table-striped table-bordered table-hover'>
                     <tr>
                     <th><a name='top'></a>$langFaculty:&nbsp;<b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b></th>

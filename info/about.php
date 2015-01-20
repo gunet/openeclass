@@ -27,7 +27,14 @@
 
 require_once '../include/baseTheme.php';
 $pageName = $langInfo;
-$tool_content .= "<div class='col-sm-10 alert alert-info page-header'>
+$tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
+$tool_content .= "<div class='col-sm-12 alert alert-info page-header'>
 <div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</div>
 <div><label>$langVersion:&nbsp;</label><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></div>
 <div><label>$langSupportUser&nbsp;</label>" . q(get_config('admin_name')) . "</div>
@@ -36,7 +43,7 @@ $a = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE vi
 $a1 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;
 $a2 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_REGISTRATION)->count;
 $a3 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_CLOSED)->count;
-$tool_content .= "<div class='col-sm-5'>";
+$tool_content .= "<div class='col-sm-6'>";
 $tool_content .= "<ul class='list-group'>
     <li class='list-group-item'><label>$langCoursesHeader</label><span class='badge'>$a</span></li>
     <li class='list-group-item'>$langOpenCoursesShort<span class='badge'>$a1</span></li>
@@ -50,7 +57,7 @@ $b = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE stat
 $c = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_STUDENT)->count;
 $d = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_GUEST)->count;
 
-$tool_content .= "<div class='col-sm-5'>";
+$tool_content .= "<div class='col-sm-6'>";
 $tool_content .= "<ul class='list-group'>
           <li class='list-group-item'><label>$langUsers</label><span class='badge'>$e</span></li>
           <li class='list-group-item'>$langTeachers<span class='badge'>$b</span></li>

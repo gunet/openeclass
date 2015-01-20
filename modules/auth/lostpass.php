@@ -91,16 +91,37 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                                                       WHERE id = ?d",
                     $hasher->HashPassword($_POST['newpass']), $userUID);
             if ($q1->affectedRows > 0) {
+                $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
                 $tool_content = "<div class='alert alert-success'><p>$langAccountResetSuccess1</p></div>
                                                        $homelink";
                 $change_ok = true;
             }
         } elseif (count($error_messages)) {
+            $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
             $tool_content .= "<div class='alert alert-warning'><ul><li>" .
                     implode("</li>\n<li>", $error_messages) .
                     "</li></ul></div>";
         }
         if (!$change_ok) {
+            $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
             $tool_content .= "
             <div class='form-wrapper'>
                 <form method='post' action='$_SERVER[SCRIPT_NAME]'>
@@ -127,6 +148,13 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
             </div>";
         }
     } else {
+        $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
         $tool_content = "<div class='alert alert-danger'>$langAccountResetInvalidLink</div>
                                  $homelink";
     }
@@ -197,6 +225,13 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     }
 } else {
     /*     * *** Email address entry form **** */
+    $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
     $tool_content .= "<div class='alert alert-info'>$lang_pass_intro</div><br>";
     $tool_content .= "
 <div class='form-wrapper'>        

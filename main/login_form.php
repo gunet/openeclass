@@ -29,6 +29,13 @@ $next = isset($_GET['next']) ?
         ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>") :
         '';
 
+$tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
 $tool_content .= "<div class='form-wrapper login-form-page'>
         <form class='form-horizontal' role='form' action='$urlSecure' method='post'>
   $next
