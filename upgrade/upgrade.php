@@ -2035,7 +2035,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("ALTER TABLE course CHANGE `cours_id` `id` INT(11) NOT NULL AUTO_INCREMENT,
                                              CHANGE `languageCourse` `lang` VARCHAR(16) DEFAULT 'el',
                                              CHANGE `intitule` `title` VARCHAR(250) NOT NULL DEFAULT '',
-                                             CHANGE `description` `description` MEDIUMTEXT NOT NULL,
+                                             CHANGE `description` `description` MEDIUMTEXT DEFAULT NULL,
                                              CHANGE `course_keywords` `keywords` TEXT NOT NULL,
                                              DROP COLUMN `course_addon`,
                                              CHANGE `titulaires` `prof_names` varchar(200) NOT NULL DEFAULT '',

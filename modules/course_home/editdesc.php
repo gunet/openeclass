@@ -100,7 +100,7 @@ $tool_content = action_bar(array(
             'icon' => 'fa-reply',
             'level' => 'primary-label',
         )
-    ))."
+    ),false)."
     <div class='row'>
         <div class='col-xs-12'>
             <div class='form-wrapper'>
