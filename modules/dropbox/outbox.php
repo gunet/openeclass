@@ -44,7 +44,7 @@ if (isset($_GET['mid'])) {
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
-        }
+        }       
         $out = action_bar(array(
                             array('title' => $langBack,
                                   'url' => "outbox.php".$urlstr,
@@ -57,28 +57,85 @@ if (isset($_GET['mid'])) {
                                     'button-class' => 'delete_out',
                                     'link-attrs' => "data-id='$msg->id'")
                         ));
-        $out .= "<div id='out_del_msg'></div><div id='out_msg_area'><table class='table-default'>";
-        $out .= "<tr><td>$langSubject:</td><td>".q($msg->subject)."</td></tr>";
-        if ($msg->course_id != 0 && $course_id == 0) {
-            $out .= "<tr><td>$langCourse:</td><td><a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a></td></tr>";
-        }
-        $out .= "<tr><td>$langDate:</td><td>".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."</td></tr>";
-        $out .= "<tr><td>$langSender:</td><td>".display_user($msg->author_id, false, false, "outtabs")."</td></tr>";
-        
         $recipients = '';
         foreach ($msg->recipients as $r) {
             if ($r != $msg->author_id) {
                 $recipients .= display_user($r, false, false, "outtabs").'<br/>';
             }
+        }        
+        $out .= "<div id='out_del_msg'></div>
+                <div id='out_msg_area'>
+                    <div class='panel panel-primary'>
+                        <div class='panel-body'>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langSubject:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    ".q($msg->subject)."
+                                </div>                
+                            </div>";
+        if ($msg->course_id != 0 && $course_id == 0) {
+            $out .= "       <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langCourse:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
+                                </div>                
+                            </div>";
         }
-        
-        $out .= "<tr><td>$langRecipients:</td><td>".$recipients."</td></tr>";
-        $out .= "<tr><td>$langMessage:</td><td id='out_msg_body'>".standard_text_escape($msg->body)."</td></tr>";
+        $out .= "       
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langDate:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    ".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."
+                                </div>                
+                            </div>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langSender:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    ".display_user($msg->author_id, false, false, "outtabs")."
+                                </div>                
+                            </div>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-sm-2'>
+                                    <strong>$langRecipients:</strong>
+                                </div>
+                                <div class='col-sm-10'>
+                                    $recipients
+                                </div>                
+                            </div>                            
+                        </div>
+                    </div>
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>$langMessage</div>
+                        <div class='panel-body'>
+                            <div class='row  margin-bottom-thin'>
+                                <div class='col-xs-12'>
+                                    ".standard_text_escape($msg->body)."
+                                </div>
+                            </div>";
+                if ($msg->filename != '') {
+                   $out .= "<hr>
+                            <div class='row  margin-top-thin'>
+                                <div class='col-sm-2'>
+                                    $langAttachedFile
+                                </div>
+                                <div class='col-sm-10'>
+                                 <a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
+                    &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")
+                                </div>
+                            </div>";
+               }       
+               $out .= "</div>
+                    </div>
+                    <table class='table-default'>";
 
-        if ($msg->filename != '') {
-            $out .= "<tr><td>$langAttachedFile</td><td><a href=\"dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=$msg->id\" class=\"outtabs\" target=\"_blank\">$msg->real_filename
-            <img class='outtabs' src='$themeimg/save.png' /></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</td></tr>";
-        }
         
         $out .= "</table><br/>";
 
