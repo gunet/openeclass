@@ -1228,7 +1228,7 @@ if ($doc_count == 0) {
                     $edit_url = "new.php?course=$course_code&amp;editPath=$entry[path]" .
                         ($groupset? "&amp;$groupset": '');
                     $link_title_extra .= '&nbsp;' .
-                        icon('edit', $langEdit, $edit_url);
+                        icon('fa-edit', $langEdit, $edit_url);
                 }
                 if ($copyid = $entry['copyrighted'] and
                     $copyicon = $copyright_icons[$copyid]) {
