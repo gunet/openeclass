@@ -53,7 +53,8 @@ if (isset($_POST['optionsSave'])) {
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
     unset($_POST['themeOptionsName']);
-    upload_images();
+    rename_images(); //clone and rename already used images
+    upload_images(); //upload new images
     $serialized_data = serialize($_POST);
     $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options_name, $serialized_data)->lastInsertID;
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $theme_options_id, 'theme_options_id');
@@ -135,6 +136,7 @@ if (isset($_POST['optionsSave'])) {
         $theme_options_styles['leftSubMenuHoverFontColor'] = "#eee";
         $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
         $theme_options_styles['bgType'] = 'repeat';
+        $theme_options_styles['loginJumbotronRadialBgColor'] = "rgba(0,155,207,1)";
         $theme_options_styles['loginJumbotronBgColor'] = '#025694';
         $theme_options_styles['loginImgPlacement'] = 'small-right';
     }
@@ -355,6 +357,27 @@ if (isset($_POST['optionsSave'])) {
         </form>
     </div>
     ";
+}
+function rename_images() {
+    global $webDir, $theme;
+    $images = array('bgImage','custom_logo','custom_logo_small','loginImg');
+    foreach($images as $image) {
+        if (isset($_POST[$image])) {
+            $file_name = $old_image = $_POST[$image];
+            $i=0;
+            while (is_file("$webDir/template/$theme/img/$file_name")) {
+                $i++;
+                $name = pathinfo($file_name, PATHINFO_FILENAME);
+                $ext =  get_file_extension($file_name);
+                $file_name = "$name-$i.$ext";
+            }
+            if ($old_image != $file_name) {
+                if(copy("$webDir/template/$theme/img/$old_image", "$webDir/template/$theme/img/$file_name")){
+                    $_POST[$image] = $file_name;
+                }                
+            }
+        }
+    }
 }
 function upload_images() {
     global $webDir, $theme;
