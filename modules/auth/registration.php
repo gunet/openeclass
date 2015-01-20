@@ -34,7 +34,7 @@ $auth = get_auth_active_methods();
 if ($user_registration) {
     $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
@@ -90,7 +90,7 @@ if ($user_registration) {
 } else { // disable registration
     $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')

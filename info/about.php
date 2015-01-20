@@ -29,7 +29,7 @@ require_once '../include/baseTheme.php';
 $pageName = $langInfo;
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')

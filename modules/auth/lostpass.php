@@ -227,7 +227,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     /*     * *** Email address entry form **** */
     $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
