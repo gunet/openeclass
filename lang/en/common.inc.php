@@ -3,7 +3,7 @@
 // Message file for language en
 // Generated 2014-05-09 10:56:47
 
-$langEclass = "Open eClass - Asynchronous Teleteaching Platform";
+$langEclass = "E-Learning Platform";
 $langYes = "Yes";
 $langNo = "No";
 $langTeacher = "Teacher";
