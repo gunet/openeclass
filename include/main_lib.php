@@ -2888,3 +2888,21 @@ function removeGetVar($url, $varname) {
     $newqs = http_build_query($qsvars);
     return $urlpart . '?' . $newqs;
 }
+
+function setOpenCoursesExtraHTML() {
+    global $urlAppend, $openCoursesExtraHTML,
+        $langOpenCoursesShort, $langListOpenCoursesShort,
+        $langNumOpenCourse, $langNumOpenCourses;
+    $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
+    if ($openCoursesNum > 0) {
+        $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
+        $openCoursesExtraHTML = "
+            <div style='text-align: center; margin: 40px 0;'>
+                <h4>" . q($langOpenCoursesShort) . "<br></h4>
+                <a href='$openFacultiesUrl'>" .
+                    q($langListOpenCoursesShort) . "</a><br>
+                <small>$openCoursesNum " .
+                q(($openCoursesNum == 1)? $langNumOpenCourse: $langNumOpenCourses) .
+                "</small></div>";
+    }
+}
