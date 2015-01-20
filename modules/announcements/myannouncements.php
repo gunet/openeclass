@@ -27,8 +27,22 @@ require_once 'main/perso.php';
 $pageName = $langMyPersoAnnouncements;
 
 if (!getUserAnnouncements($lesson_ids)) {
+    $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlAppend,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
     $tool_content .= "<div class='alert alert-warning'>$langNoAnnounce</div>";
 } else {
+    $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlAppend,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
 $tool_content = "<div class='panel_content'>
                     <ul class='tablelist'>"
                 .getUserAnnouncements($lesson_ids, 'more').

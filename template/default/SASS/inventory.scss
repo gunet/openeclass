@@ -1646,11 +1646,13 @@ tr.not_visible{
 #bgr-cheat-footer{
     background: $color-background;
     height: 49px;
+    border-radius: 0px 0px 4px 4px;
 }
 #bgr-cheat-header{
     background: $color-background;
     height: 53px;
     border-bottom: 1px solid transparent;
+    border-radius: 4px 4px 0px 0px;
 }
 
 #my-courses .panel .alert
