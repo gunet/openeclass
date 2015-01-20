@@ -611,6 +611,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
         $assignments_map = restore_table($restoreThis, 'assignment', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        $assignments_map[0] = 0;
         restore_table($restoreThis, 'assignment_submit', array('delete' => array('id'),
             'map' => array('uid' => $userid_map, 'assignment_id' => $assignments_map, 'group_id' => $group_map)), $url_prefix_map, $backupData, $restoreHelper);
 
@@ -619,9 +620,11 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'return_mapping' => 'id', 
             'set' => array('course_id' => $new_course_id)
         ), $url_prefix_map, $backupData, $restoreHelper);
+        $agenda_map[0] = 0;
 
         // Exercises
         $exercise_map = restore_table($restoreThis, 'exercise', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        $exercise_map[0] = 0;
         restore_table($restoreThis, 'exercise_user_record', array('delete' => array('eurid'),
             'map' => array('eid' => $exercise_map, 'uid' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
         $question_map = restore_table($restoreThis, 'exercise_question', array('set' => array('course_id' => $new_course_id),
@@ -1033,6 +1036,9 @@ function document_map_function(&$data, $maps) {
 }
 
 function unit_map_function(&$data, $maps) {
+    // opoy yparxei if isset, isxyei h:
+    // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
+    // des to ekei comment gia ta spasmena FKs
     list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = $maps;
     $type = $data['type'];
     if ($type == 'doc') {
@@ -1058,9 +1064,17 @@ function unit_map_function(&$data, $maps) {
     } elseif ($type == 'wiki') {
         $data['res_id'] = $wiki_map[$data['res_id']];
     } elseif ($type == 'work') {
-        $data['res_id'] = $assignments_map[$data['res_id']];
+        if (isset($assignments_map[$data['res_id']])) {
+            $data['res_id'] = $assignments_map[$data['res_id']];
+        } else {
+            $data['res_id'] = $assignments_map[0];
+        }
     } elseif ($type == 'exercise') {
-        $data['res_id'] = $exercise_map[$data['res_id']];
+        if (isset($exercise_map[$data['res_id']])) {
+            $data['res_id'] = $exercise_map[$data['res_id']];
+        } else {
+            $data['res_id'] = $exercise_map[0];
+        }
     }
     return true;
 }
@@ -1090,15 +1104,34 @@ function comments_map_function(&$data, $maps) {
 function attendance_gradebook_activities_map_function(&$data, $maps) {
     list($assignments_map, $exercise_map) = $maps;
     $type = intval($data['module_auto_type']);
+    
+    // PROSOXH! edw kanoyme thn exhs symvash/paradoxh:
+    // Yparxei pi8anothta ta attendance/gradebook activities na kanoun
+    // reference se mh-yparkto record, logw ths apoysias pragmatikou FK klp.
+    // H restore gia na mporesei na leitoyrghsei me th logikh: "prospa8w na anakthsw
+    // thn arxikh bash xwris data loss, akoma kai asyndeta/spasmena data", telikws 8a 
+    // kanei assign se ayta to id mhden (0).
+    
     if ($type === 1) {
-        $data['module_auto_id'] = $assignments_map[$data['module_auto_id']];
+        if (isset($assignments_map[$data['module_auto_id']])) {
+            $data['module_auto_id'] = $assignments_map[$data['module_auto_id']];
+        } else {
+            $data['module_auto_id'] = $assignments_map[0];
+        }
     } else if ($type === 2) {
-        $data['module_auto_id'] = $exercise_map[$data['module_auto_id']];
+        if (isset($exercise_map[$data['module_auto_id']])) {
+            $data['module_auto_id'] = $exercise_map[$data['module_auto_id']];
+        } else {
+            $data['module_auto_id'] = $exercise_map[0];
+        }
     }
     return true;
 }
 
 function notes_map_function(&$data, $maps) {
+    // opoy yparxei if isset, isxyei h:
+    // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
+    // des to ekei comment gia ta spasmena FKs
     list($course_id, $agenda_map, $document_map, $link_map, $video_map, 
             $videolink_map, $assignments_map, $exercise_map, $ebook_map, 
             $lp_learnPath_map) = $maps;
@@ -1108,7 +1141,11 @@ function notes_map_function(&$data, $maps) {
             $data['reference_obj_id'] = $course_id;
             break;
         case 'course_event':
-            $data['reference_obj_id'] = $agenda_map[$data['reference_obj_id']];
+            if (isset($agenda_map[$data['reference_obj_id']])) {
+                $data['reference_obj_id'] = $agenda_map[$data['reference_obj_id']];
+            } else {
+                $data['reference_obj_id'] = $agenda_map[0];
+            }
             break;
         case 'course_document':
             $data['reference_obj_id'] = $document_map[$data['reference_obj_id']];
@@ -1123,10 +1160,18 @@ function notes_map_function(&$data, $maps) {
             $data['reference_obj_id'] = $videolink_map[$data['reference_obj_id']];
             break;
         case 'course_assignment':
-            $data['reference_obj_id'] = $assignments_map[$data['reference_obj_id']];
+            if (isset($assignments_map[$data['reference_obj_id']])) {
+                $data['reference_obj_id'] = $assignments_map[$data['reference_obj_id']];
+            } else {
+                $data['reference_obj_id'] = $assignments_map[0];
+            }
             break;
         case 'course_exercise':
-            $data['reference_obj_id'] = $exercise_map[$data['reference_obj_id']];
+            if (isset($exercise_map[$data['reference_obj_id']])) {
+                $data['reference_obj_id'] = $exercise_map[$data['reference_obj_id']];
+            } else {
+                $data['reference_obj_id'] = $exercise_map[0];
+            }
             break;
         case 'course_ebook':
             $data['reference_obj_id'] = $ebook_map[$data['reference_obj_id']];
