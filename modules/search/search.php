@@ -78,10 +78,8 @@ if (isset($uid) and $uid) {
  
 // exit if not results
 if (count($hits) <= 0) {
-    
     Session::Messages($langNoResult);
-    redirect_to_home_page('modules/search/search.php');
-    
+    redirect_to_home_page('modules/search/search.php');  
 }
 
 //////// PRINT RESULTS ////////
