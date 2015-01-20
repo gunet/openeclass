@@ -33,15 +33,21 @@ $announceArr = Database::get()->queryArray($isaid ? "SELECT `date`, `title` , `b
 	        WHERE `visible` = 1 AND lang = ?s ORDER BY `date` DESC", $isaid ? intval($_GET['aid']) : $language);
 
 $numOfAnnouncements = count($announceArr);
+$tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => "/openeclass/",
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
 if ($numOfAnnouncements > 0) {
-    $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
     for ($i = 0; $i < $numOfAnnouncements; $i++) {
-        $tool_content .= "<tr><td><label>" . q($announceArr[$i]->title) . "</label>
-		&nbsp;<span class='smaller'>(" . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . ")</span>
+        $tool_content .= "<div class='single_announcement'><div class='announcement-title'>" . q($announceArr[$i]->title) . "</div>
+		<span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
 		<p>" . standard_text_escape($announceArr[$i]->body) . "</p>
-		</td>
-		</tr>";
+		</div>";
     }
-    $tool_content .= "</table></div>";
+    $tool_content .= "</div></div></div></div>";
 }
 draw($tool_content, 0);

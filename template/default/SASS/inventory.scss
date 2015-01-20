@@ -1763,7 +1763,7 @@ div.spinner-div
     color: #5cb85c;
 }
 
-ul.front-announcements
+ul.front-announcements, .single_announcement
 {
     list-style: none;
     padding-left: 0px;
@@ -1773,7 +1773,7 @@ ul.front-announcements
         a:hover{
             text-decoration: none;
         }
-        .announcement-title{
+    }.announcement-title{
             font-weight: bold;
             font-size: 15px;
         }
@@ -1786,7 +1786,6 @@ ul.front-announcements
         .announcements-more{
             text-align: right;
         }
-    }
     li:first-child{
         
     }
