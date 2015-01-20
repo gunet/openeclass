@@ -74,14 +74,14 @@ function confirmation() {
 $basetoolurl = $_SERVER['SCRIPT_NAME'];
 if (isset($_GET['type']) and $_GET['type'] == 'user') {
     $list_status = 5;
-    $pageName = $langUserOpenRequests;
+    $toolName = $langUserOpenRequests;
     $reqtype = '&amp;type=user';
     $basetoolurl .= '?type=user';
     $linkreg = $langUserDetails;
     $linkget = '?type=user';
 } else {
     $list_status = 1;
-    $pageName = $langOpenProfessorRequests;
+    $toolName = $langOpenProfessorRequests;
     $reqtype = '';
     $linkreg = $langProfReg;
     $linkget = '';
@@ -111,13 +111,11 @@ if (isDepartmentAdmin()) {
 // Deal with navigation
 switch ($show) {
     case "closed":
-        $navigation[] = array('url' => $basetoolurl, 'name' => $pageName);
-        $pageName = $langReqHaveClosed;
+        $toolName = $langReqHaveClosed;
         $pagination_link = '&amp;show=closed';
         break;
-    case "rejected":
-        $navigation[] = array('url' => $basetoolurl, 'name' => $pageName);
-        $pageName = $langReqHaveBlocked;
+    case "rejected":        
+        $toolName = $langReqHaveBlocked;
         break;
 }
 
@@ -183,9 +181,9 @@ if (!empty($show) and $show == 'closed') {
                                       'icon' => 'fa-retweet')));
             $tool_content .= "</td></tr>";
         }
+        $tool_content .= "</table></div>";
     }
-    $tool_content .= "</table></div>";
-
+    
 // -----------------------------------
 // display rejected requests 
 // ----------------------------------
@@ -367,11 +365,6 @@ else {
     }
 }
 
-// If show is set then we return to listreq, else return to admin index.php
-//if (isset($close) or isset($closed)) {
-if (!empty($show) or ! empty($close)) {
-    $tool_content .= "<div style='margin-top:60px;'><p align='right'><a href='$_SERVER[SCRIPT_NAME]$linkget'>$langBackRequests</a></p></div>";
-}
 draw($tool_content, 3, null, $head_content);
 
 /**
