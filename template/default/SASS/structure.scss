@@ -28,7 +28,9 @@ body > .container{
     .logo{
         //margin:2em 1em;
         margin: 0.8em 0.8em 0px;
-        img{margin:0 auto;}
+        img{
+            max-width: 90px;
+            margin:0 auto;}
     }
     .panel{
         border: none;

@@ -93,7 +93,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
             if ($q1->affectedRows > 0) {
                 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
@@ -105,7 +105,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         } elseif (count($error_messages)) {
             $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
@@ -117,7 +117,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
         if (!$change_ok) {
             $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
@@ -150,7 +150,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
     } else {
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => "/openeclass/",
+                                      'url' => $urlServer,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
