@@ -222,6 +222,7 @@ if (isset($_POST['submit'])) {
         'user_multidep' => true,
         'restrict_owndep' => true,
         'restrict_teacher_owndep' => true,
+        'allow_teacher_clone_course' => true,
         'disable_log_actions' => true,
         'disable_log_course_actions' => true,
         'disable_log_system_actions' => true,
@@ -581,6 +582,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_user_multidep = get_config('user_multidep') ? 'checked' : '';
     $cbox_restrict_owndep = get_config('restrict_owndep') ? 'checked' : '';
     $cbox_restrict_teacher_owndep = get_config('restrict_teacher_owndep') ? 'checked' : '';
+    $cbox_allow_teacher_clone_course = get_config('allow_teacher_clone_course') ? 'checked' : '';
     $town_dis = get_config('restrict_owndep') ? '' : 'disabled';
     $cbox_insert_xml_metadata = get_config('insert_xml_metadata') ? 'checked' : '';
     $cbox_course_metadata = get_config('course_metadata') ? 'checked' : '';
@@ -617,7 +619,13 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input id='town' type='checkbox' name='restrict_teacher_owndep' value='1' $town_dis $cbox_restrict_teacher_owndep>
                                         $lang_restrict_teacher_owndep
                                     </label>
-                                </div>                                  
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='allow_teacher_clone_course' value='1' $cbox_allow_teacher_clone_course>
+                                        $lang_allow_teacher_clone_course
+                                    </label>
+                                </div>
                            </div>
                         </div>                        
                     </fieldset>

@@ -1271,6 +1271,7 @@ $default_config = array(
     'user_multidep', 0,
     'restrict_owndep', 0,
     'restrict_teacher_owndep', 0,
+    'allow_teacher_clone_course', 0,
     'max_glossary_terms', '250',
     'phpSysInfoURL', $phpSysInfoURL, 
     'email_sender', $emailForm,

@@ -297,7 +297,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     ('course_multidep', '0'),
                     ('user_multidep', '0'),
                     ('restrict_owndep', '0'),
-                    ('restrict_teacher_owndep', '0')");
+                    ('restrict_teacher_owndep', '0'),
+                    ('allow_teacher_clone_course', '0')");
 
     // upgrade from versions < 2.1.3 is not possible
     if (version_compare($oldversion, '2.1.3', '<') or ( !isset($oldversion))) {

@@ -23,6 +23,13 @@
 $require_current_course = true;
 $require_course_admin = true;
 require_once '../../include/baseTheme.php';
+
+// access control
+if (!get_config('allow_teacher_clone_course') && !$is_admin) {
+    header("Location:" . $urlServer . "index.php");
+    exit();
+}
+
 require_once 'include/lib/hierarchy.class.php';
 require_once 'archive_functions.php';
 require_once 'restore_functions.php';

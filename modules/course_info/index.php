@@ -365,33 +365,42 @@ if (isset($_POST['submit'])) {
         }
     }
 } else {
+    $action_bar_array0 = array(
+        array('title' => $langBackupCourse,
+            'url' => "archive_course.php?course=$course_code",
+            'icon' => 'fa-archive',
+            'level' => 'primary-label')
+    );
+    
+    // access control for when to display the link to clone course
+    if (get_config('allow_teacher_clone_course') || $is_admin) {
+        $action_bar_array0 = array_merge($action_bar_array0, array(
+            array('title' => $langCloneCourse,
+                'url' => "clone_course.php?course=$course_code",
+                'icon' => 'fa-archive')
+        ));
+    }
+    
+    $action_bar_array = array_merge($action_bar_array0, array(
+        array('title' => $langRefreshCourse,
+            'url' => "refresh_course.php?course=$course_code",
+            'icon' => 'fa-refresh'),
+        array('title' => $langCourseMetadata,
+            'url' => "../course_metadata/index.php?course=$course_code",
+            'icon' => 'fa-file-text',
+            'show' => get_config('course_metadata')),
+        array('title' => $langDelCourse,
+            'url' => "delete_course.php?course=$course_code",
+            'icon' => 'fa-times',
+            'button-class' => 'btn-danger'),                
+        array('title' => $langCourseMetadataControlPanel,
+            'url' => "../course_metadata/control.php?course=$course_code",
+            'icon' => 'fa-list',
+            'show' => get_config('opencourses_enable') && $is_opencourses_reviewer),
+    ));
+    
     $tool_content .= "
-	<div id='operations_container'>" .
-            action_bar(array(
-                array('title' => $langBackupCourse,
-                    'url' => "archive_course.php?course=$course_code",
-                    'icon' => 'fa-archive',
-                    'level' => 'primary-label'),
-                array('title' => $langCloneCourse,
-                    'url' => "clone_course.php?course=$course_code",
-                    'icon' => 'fa-archive'),
-                array('title' => $langRefreshCourse,
-                    'url' => "refresh_course.php?course=$course_code",
-                    'icon' => 'fa-refresh'),
-                array('title' => $langCourseMetadata,
-                    'url' => "../course_metadata/index.php?course=$course_code",
-                    'icon' => 'fa-file-text',
-                    'show' => get_config('course_metadata')),
-                array('title' => $langDelCourse,
-                    'url' => "delete_course.php?course=$course_code",
-                    'icon' => 'fa-times',
-                    'button-class' => 'btn-danger'),                
-                array('title' => $langCourseMetadataControlPanel,
-                    'url' => "../course_metadata/control.php?course=$course_code",
-                    'icon' => 'fa-list',
-                    'show' => get_config('opencourses_enable') && $is_opencourses_reviewer),
-            )) .
-            "</div>";
+	<div id='operations_container'>" . action_bar($action_bar_array) . "</div>";
 
     $c = Database::get()->querySingle("SELECT title, keywords, visible, public_code, prof_names, lang,
                 	       course_license, password, id, view_type, start_date, finish_date
