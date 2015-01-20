@@ -28,9 +28,7 @@ body > .container{
     .logo{
         //margin:2em 1em;
         margin: 0.8em 0.8em 0px;
-        img{
-            max-width: 90px;
-            margin:0 auto;}
+        img{margin:0 auto;}
     }
     .panel{
         border: none;
@@ -358,7 +356,7 @@ a.toggle-active{
                  
                  .panel{
                      margin: 6px 3px;
-/*                     box-shadow: 0px 1px 3px rgba(0,0,0,0.2);*/
+                     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
                  }
                  .panel:first-child{
                      margin-top: 3px;
@@ -377,7 +375,7 @@ a.toggle-active{
                     }
                 }
                 .panel-body{
-                    background-color: #fafafa;
+                    background-color: #efefef;
                     border-top: none;
                     color: #999;
                 }
@@ -401,7 +399,7 @@ a.toggle-active{
                 }
                 i.lesson-title-caret
                 {
-                    background-color: #fafafa;
+                    background-color: #efefef;
                     display: block;
                     float: right;
                     height: 37px;

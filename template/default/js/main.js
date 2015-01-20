@@ -213,19 +213,18 @@ $(document).ready(function () {
                     dataType: "json",
                     data: {courseIDs: courseIDs},
                     success: function (data) {
+                        var objData = data.messages;
+                        var $jqObjData = $(objData);
+                        var noMsgs = $jqObjData.filter("li.no-messages").length;
+                        if( !(noMsgs > 0) ) {
+                            var numMsgs = $jqObjData.filter("li").length;
+                            var numMsgsString = " ("+numMsgs+") ";
+                            $("span.num-msgs").html(numMsgsString);
+                        }
                         $("ul.sidebar-mymessages").html(data.messages);
-                        $(".spinner-div img").toggleClass("hidden");
-                        $(".spinner-div p").toggleClass("hidden");
                         $(".lesson-notifications").each(function () {
                             $(this).html(data.notifications[$(this).data('id')]);
                         });
-                        setTimeout(function () {
-                            $(".spinner-div").addClass("hidden");
-                            $(".spinner-div img").toggleClass("hidden");
-                            $(".spinner-div p").toggleClass("hidden");
-                            $("#title-note").val('');
-                            $("#text-note").val('');
-                        }, 2000);
                     }
                 });
             }
@@ -235,8 +234,7 @@ $(document).ready(function () {
                 var note_text = $("#text-note").val();
                 note_text = $('<p/>').text(note_text).wrap('<div/>').parent().html();
 
-//                var notesHeight = $(".overlayed").height();
-//                var notesWidth = $(".overlayed").width();
+
                 $(".spinner-div").removeClass("hidden");
                 $.ajax({
                     type: "POST",

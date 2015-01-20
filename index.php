@@ -252,11 +252,8 @@ if ($uid AND !isset($_GET['logout'])) {
         setOpenCoursesExtraHTML();
     }
     if (get_config('opencourses_enable')) {
-            $tool_content .= "<div class='panel'>
+            $tool_content .= "<div class='panel opencourses'>
                     <div class='panel-body'>
-                        <a href='http://opencourses.gr' target='_blank'>
-                            <img class='img-responsive center-block' src='$themeimg/open_courses_bnr.png'>
-                        </a>
                         $openCoursesExtraHTML
                     </div>
                 </div>";

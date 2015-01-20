@@ -2892,17 +2892,14 @@ function removeGetVar($url, $varname) {
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML,
         $langOpenCoursesShort, $langListOpenCoursesShort,
-        $langNumOpenCourse, $langNumOpenCourses;
+        $langNumOpenCourseBanner, $langNumOpenCoursesBanner;
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
     if ($openCoursesNum > 0) {
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
-            <div style='text-align: center; margin: 40px 0;'>
-                <h4>" . q($langOpenCoursesShort) . "<br></h4>
-                <a href='$openFacultiesUrl'>" .
-                    q($langListOpenCoursesShort) . "</a><br>
-                <small>$openCoursesNum " .
-                q(($openCoursesNum == 1)? $langNumOpenCourse: $langNumOpenCourses) .
-                "</small></div>";
+            <div class='inner_opencourses'>
+                <span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>
+                <a class='clearfix' href='$openFacultiesUrl'><span class='opencourse_link'>".q($langListOpenCoursesShort)."</span><span class='opencourse_num'>$openCoursesNum</span><span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span><span class='opencourse_triangle'></span>".
+                "</a></div>";
     }
 }

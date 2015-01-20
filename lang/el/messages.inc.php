@@ -4398,4 +4398,8 @@ $langLessOptions = 'Λιγότερες επιλογές';
 
 $langMyCoursesSide = 'Τα μαθηματα μου';
 $langMyMessagesSide = 'Τα μηνυματα μου';
+$langNewMyMessagesSide = 'Νεα Μηνυματα';
 $langQuickNotesSide = 'Γρηγορη σημειωση';
+$langNumOpenCoursesBanner = "ανοικτά<br>μαθήματα";
+$langNumOpenCourseBanner = "ανοικτό<br>μάθημα";
+$langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";

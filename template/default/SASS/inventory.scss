@@ -1744,6 +1744,54 @@ div.spinner-div
     }
 }
 
+.opencourses .inner_opencourses{
+    
+    span.opencourse_header{
+            display: block;
+            font-size: 18px;
+            color: #888;
+        }
+    a{
+        display: block;
+        width: 100%;
+        
+        span{
+            display: block;
+        }
+        span.opencourse_link{
+            font-size: 16px;
+            color: #444;
+            padding: 10px 0px;
+        }
+        span.opencourse_num{
+            font-size: 40px;
+            float: left;
+            font-weight: bold;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 10px;
+        }
+        span.opencourse_sub{
+            float: left;
+            background-color: #428bca;
+            height: 40px;
+            color: white;
+            font-size: 13px;
+            padding: 0px 15px;
+        }
+        span.opencourse_triangle{
+            float: left;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #428bca;
+            width: 0px;
+            height: 0px;
+        }
+    }
+    a:hover{
+        text-decoration:none;
+    }
+}
 .no-borders{
     border: 0px;
 }

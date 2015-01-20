@@ -64,11 +64,11 @@ function getSidebarMessages() {
     $message_content = '';
 
     $mbox = new Mailbox($uid, 0);
-    $msgs = $mbox->getInboxMsgs('', 5);
+    $msgs = $mbox->getInboxMsgs('');
 
     $msgs = array_filter($msgs, function ($msg) { return !$msg->is_read; });
     if (!count($msgs)) {
-        $message_content .= "<li class='list-item'>" .
+        $message_content .= "<li class='list-item no-messages'>" .
                             "<span class='item-wholeline'>" .
                                 $langDropboxNoMessage .
                             "</span>" .
