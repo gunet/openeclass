@@ -892,12 +892,9 @@ ul.tablelist
     .item-right-cols .options-content
     {
       display:block;
-      
       margin-right:-25em;
-
       background:#333333;
       color:white;
-
       @include transition(all $transition-time linear);
     }
 
@@ -934,13 +931,13 @@ ul.tablelist
 
   }
 
-  li.list-item:first-child,
+/*  li.list-item:first-child,
    li.list-item:first-child .item-date{
   -webkit-animation: NEW-ITEM-FX 3s 1;
   -moz-animation:    NEW-ITEM-FX 3s 1;
   -o-animation:      NEW-ITEM-FX 3s 1;
   animation:         NEW-ITEM-FX 3s 1;
-  }
+  }*/
 
   li.list-item:hover
   {
