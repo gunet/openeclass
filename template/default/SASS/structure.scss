@@ -151,18 +151,17 @@ body > .container{
 				float: left;
                                 cursor: pointer;
                                 ul li a{
-                                    padding-top: 3px;
-                                    padding-bottom: 3px;
+                                    padding: 6px 17px;
                                 }
 				a {
 					padding-top: 15px;
 					padding-bottom: 15px;
                                         line-height: 22px;
 
-          @include transition(all $transition-time linear);
+/*          @include transition(all $transition-time linear);*/
 
 					i.fa{
-						margin:0 1em;		
+						margin:0 1em 0 0;		
 					}
 
 					&:hover,
