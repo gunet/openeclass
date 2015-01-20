@@ -1124,7 +1124,8 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     private static function makeMultiLang($ele) {
-        global $currentCourseLanguage, $webDir, $siteName, $Institution, $InstitutionUrl;
+        global $currentCourseLanguage, $webDir;
+        global $siteName, $Institution, $InstitutionUrl; // required for proper including commons and langs, ignore unused scope warning
         if (empty($currentCourseLanguage)) {
             $clang = $currentCourseLanguage = 'el';
         } else {
@@ -1148,13 +1149,13 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($clang != 'en') {
             include("${webDir}/lang/en/common.inc.php");
             include("${webDir}/lang/en/messages.inc.php");
-            $arr['en'] = $langCMeta[$key];
+            $arr['en'] = $GLOBALS['langCMeta'][$key];
             $revert = true;
         }
         if ($clang != 'el') {
             include("${webDir}/lang/el/common.inc.php");
             include("${webDir}/lang/el/messages.inc.php");
-            $arr['en'] = $langCMeta[$key];
+            $arr['en'] = $GLOBALS['langCMeta'][$key];
             $revert = true;
         }
         if ($revert) { // revert messages back to current language
