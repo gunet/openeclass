@@ -250,7 +250,7 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                 </div>
                 </div>
                 <div class='input-append date form-group' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                    <label for='enddate' class='col-sm-2 control-label'>$langStartDate :</label>
+                    <label for='enddate' class='col-sm-2 control-label'>$langEndDate :</label>
                     <div class='col-xs-10 col-sm-9'>        
                         <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
                     </div>
