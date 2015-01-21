@@ -1252,7 +1252,7 @@ if ($doc_count == 0) {
                 // External document
                 $download_url = $entry['extra_path'];
             }
-            $tool_content .= "<tr $style><td class='text-center' width='30'>$img_href</td>
+            $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
                               <td>$link_href $link_title_extra";
             // comments
             if (!empty($entry['comment'])) {
