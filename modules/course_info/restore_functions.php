@@ -258,8 +258,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     if (isset($GLOBALS['course_code'])) {
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
-    return "<p>$langInfo1</p>
-                <p>$langInfo2</p>
+    return "<div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
                 <form action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
                 <table width='99%' class='tbl'><tbody>
                    <tr><td>&nbsp;</td></tr>
