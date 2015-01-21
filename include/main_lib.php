@@ -2901,11 +2901,13 @@ function setOpenCoursesExtraHTML() {
                 <span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>
                 <a class='clearfix' href='$openFacultiesUrl'>
                     <span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>
-                    <div class='num_sub_wrapper center-block clearfix'>
-                        <span class='opencourse_num'>$openCoursesNum</span>
-                        <div>
+                    <div class='row num_sub_wrapper center-block clearfix'>
+                        <div class='col-xs-6 col-md-4 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
+                        <div class='col-xs-6 col-md-8'>
+                        <div class='pull-left'>
                             <span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span>
                             <span class='opencourse_triangle'></span>
+                            </div>
                         </div>
                     </div>
                 </a>

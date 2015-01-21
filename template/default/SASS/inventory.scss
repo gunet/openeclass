@@ -1759,13 +1759,13 @@ div.spinner-div
         span{
             display: block;
         }
-        span.opencourse_link{
+        .opencourse_link{
             font-size: 16px;
             color: #444;
             padding: 8px 0px 14px 0;
             text-align: center;
         }
-        span.opencourse_num{
+        .opencourse_num{
             font-size: 40px;
             float: left;
             font-weight: 900;
@@ -1773,21 +1773,18 @@ div.spinner-div
             line-height: 40px;
             padding: 0 10px;
         }
-        >div{
-            width: 190px;
-        }
         >div>div{
             float: right;
         }
-        span.opencourse_sub{
+        .opencourse_sub{
             float: left;
             background-color: #428bca;
             height: 40px;
             color: white;
             font-size: 13px;
-            padding: 0px 25px;
+            padding: 0px 15px;
         }
-        span.opencourse_triangle{
+        .opencourse_triangle{
             float: left;
             border-top: 20px solid transparent;
             border-bottom: 20px solid transparent;
