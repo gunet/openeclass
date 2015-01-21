@@ -26,7 +26,7 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-if (isset($_GET['reset_theme_oprions'])) {
+if (isset($_GET['reset_theme_options'])) {
     $theme_options_sets = Database::get()->queryArray("SELECT * FROM theme_options");
     foreach ($theme_options_sets as $theme_options) {
         $theme_options_styles = unserialize($theme_options->styles);
@@ -38,6 +38,7 @@ if (isset($_GET['reset_theme_oprions'])) {
            $theme_options_styles['imageUploadSmall'] = $theme_options_styles['custom_logo_small'];
            unset($theme_options_styles['custom_logo_small']);              
         }
+        unset($theme_options_styles['optionsSave']);
         $serialized_data = serialize($theme_options_styles);
         Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_options->id);
     }
