@@ -112,7 +112,7 @@ if (isset($_GET['id'])) {
         array('title' => $langBackRequests,
             'url' => "../admin/listreq.php$reqtype",
             'icon' => 'fa-reply',
-            'level' => 'primary',
+            'level' => 'primary-label',
             'show' => (isset($submit) and $success))));
 }
     

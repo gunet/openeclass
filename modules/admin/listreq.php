@@ -137,7 +137,7 @@ $tool_content .= "
                 'icon' => 'fa-ban',
                 'level' => 'primary'),            
             array('title' => $langBack,
-                'url' => "$_SERVER[PHP_SELF]",
+                'url' => '../admin/index.php',
                 'icon' => 'fa-reply',
                 'level' => 'primary')
                 )) .
