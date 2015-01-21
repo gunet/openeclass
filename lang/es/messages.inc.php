@@ -2710,6 +2710,7 @@ $langWikiNoContent = "Wiki page has no content yet. Use editor to add text.";
 $langWrongWikiPageTitle = "Wrong Wiki Page Title";
 $langInsertEBook = "ebook";
 $langAddToCourseHome = "Add to course home page";
+$langRemoveFromCourseHome = "Remove from course home page";
 $langGlossaryExpand = 'Display glossary terms in course pages';
 $langConfig = 'Config settings';
 $langGlossaryToCsv = "Terms in csv form";

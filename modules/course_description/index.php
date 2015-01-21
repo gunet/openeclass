@@ -68,8 +68,10 @@ if ($q && count($q) > 0) {
     $i = 0;
     foreach ($q as $row) {
         $tool_content .= "            
-            <div class='panel panel-action-btn-default ".($row->visible ? "" : "not_visible")."'>
-              <div class='panel-heading'>
+            <div class='panel panel-action-btn-default'>
+              <div class='panel-heading'>";
+        if ($is_editor) {
+        $tool_content .= "      
                 <div class='pull-right'>".
                 action_button(
                         array(
@@ -83,7 +85,7 @@ if ($q && count($q) > 0) {
                                 'url' => "edit.php?course=$course_code&amp;id=$row->id",
                                 'icon' => 'fa-edit'
                             ),
-                            array('title' => $langAddToCourseHome,
+                            array('title' => $row->visible ? $langRemoveFromCourseHome : $langAddToCourseHome,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$row->id",
                                 'icon' => $row->visible ? 'fa-eye-slash' : 'fa-eye'
                             ),
@@ -98,8 +100,10 @@ if ($q && count($q) > 0) {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$row->id",
                                 'disabled' => $i + 1 >= count($q))
                         )
-                ) ."</div>
-              <h3 class='panel-title'>$row->title</h3>      
+                ) ."</div>";
+        }
+        $tool_content .= "  
+              <h3 class='panel-title'>$row->title ".($row->visible && $is_editor ? "&nbsp;<span rel='tooltip' data-original-title='$langSeenToCourseHome' data-placement='bottom' class='label label-primary'><i class='fa fa-eye'></i></span>" : "")."</h3>      
               </div>
               <div class='panel-body'>"
                 .handleType($row->type)."<br><br>"
