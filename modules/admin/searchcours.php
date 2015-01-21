@@ -52,6 +52,10 @@ $toolName = $langSearchCourse;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
 
 $tool_content .= action_bar(array(
+    array('title' => $langAllCourses,
+        'url' => "listcours.php",
+        'icon' => 'fa-search',
+        'level' => 'primary-label'),
     array('title' => $langBack,
         'url' => "index.php",
         'icon' => 'fa-reply',
