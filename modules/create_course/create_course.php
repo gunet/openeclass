@@ -226,6 +226,13 @@ if (!isset($_POST['create_course'])) {
                 $cc_license[$id] = $l_info['title'];
             }
         }       
+        $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlServer,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
         $tool_content .= "
 <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' name='createform' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return validateNodePickerForm() && checkrequired(this, 'title', 'prof_names');\">
