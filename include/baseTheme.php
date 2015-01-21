@@ -199,15 +199,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 for ($j = 0; $j < $numOfTools; $j++) {
                     $t->set_var('TOOL_LINK', $toolArr[$i][2][$j]);
                     $t->set_var('TOOL_TEXT', $toolArr[$i][1][$j]);
-                    if (in_array($toolArr[$i][2][$j], array(get_config('phpMyAdminURL'), get_config('phpSysInfoURL'))) or
-                        strpos($toolArr[$i][3][$j], 'external_link') === 0) {
-                        $t->set_var('TOOL_ATTR', ' target="_blank"');
+                    if (is_external_link($toolArr[$i][2][$j]) or $toolArr[$i][3][$j] == 'fa-external-link') {
+                        $t->set_var('TOOL_EXTRA', ' target="_blank"');
                     } else {
-                        $t->set_var('TOOL_ATTR', '');
+                        $t->set_var('TOOL_EXTRA', '');
                     }
 
-                    $t->set_var('IMG_FILE', $toolArr [$i] [3] [$j]);
-                    $img_class = basename($toolArr [$i] [3] [$j], ".png");
+                    $t->set_var('IMG_FILE', $toolArr[$i][3][$j]);
+                    $img_class = basename($toolArr[$i][3][$j], ".png");
                     $img_class = preg_replace('/_(on|off)$/', '', $img_class);
                     if (isset($theme_settings['icon_map'][$img_class])) {
                         $img_class = $theme_settings['icon_map'][$img_class];
@@ -754,3 +753,19 @@ function module_path($path) {
     return preg_replace('|^.*modules/([^/]+)/.*$|', '\1', $path);
 }
 
+function is_external_link($link) {
+    global $urlServer;
+    static $host, $phpMyAdminURL, $phpSysInfoURL;
+
+    if (!isset($host)) {
+        $host = parse_url($urlServer);
+        $host = $host['host'];
+        $phpMyAdminURL = get_config('phpMyAdminURL');
+        $phpSysInfoURL = get_config('phpSysInfoURL');
+    }
+
+    $info = parse_url($link);
+    return (isset($info['host']) and $info['host'] != $host) or
+        $link == $phpMyAdminURL or
+        $link == $phpSysInfoURL;
+}

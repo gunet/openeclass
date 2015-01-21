@@ -552,14 +552,10 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langAdminAn']);
         array_push($sideMenuLink, "../admin/adminannouncements.php");
         array_push($sideMenuImg, "arrow.png");
+
         array_push($sideMenuText, $GLOBALS['langAdminManual']);
-
-
-        if ($language == 'el') {
-            array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=el:admin_doc");
-        } else {
-            array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=en:admin_doc");
-        }
+        $manual_language = ($language == 'el')? $language: 'en';
+        array_push($sideMenuLink, "http://wiki.openeclass.org/doku.php?id=$manual_language:admin_doc");
         array_push($sideMenuImg, "arrow.png");
 
         array_push($sideMenuSubGroup, $sideMenuText);
@@ -667,7 +663,7 @@ function lessonToolsMenu() {
         foreach ($result2 as $ex_link) {
             array_push($sideMenuText, q($ex_link->title));
             array_push($sideMenuLink, q($ex_link->url));
-            array_push($sideMenuImg, "external_link" . $section['iconext']);
+            array_push($sideMenuImg, 'fa-external-link');
         }
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
