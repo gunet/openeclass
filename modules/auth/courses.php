@@ -116,6 +116,13 @@ if (isset($_POST['submit'])) {
         $numofcourses = getdepnumcourses($fc);
         if (count($tree->buildRootsArray()) > 1)
             $tool_content .= $tree->buildRootsSelectForm($fc);
+        $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlServer,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<table class='table-default'>
                                   <tr><th><a name='top'></a>$langFaculty: " .
