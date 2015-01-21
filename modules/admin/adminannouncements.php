@@ -345,6 +345,8 @@ if ($displayAnnouncementList == true) {
         }
         $tool_content .= "</table>";
         $tool_content .= "</div>";
+    } else {
+        $tool_content .= "<div class='row'><div class='col-xs-12'><div class='alert alert-warning'>$langNoAnnounce</div></div></div>";
     }
 }
 
