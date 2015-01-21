@@ -2470,7 +2470,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
           array('name' => 'Open eClass Classic Ice','styles' => 'a:18:{s:7:"bgColor";s:19:"rgba(208,219,229,1)";s:7:"bgImage";s:7:"ice.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:17:"rgba(35,82,124,1)";s:14:"linkHoverColor";s:19:"rgba(140,195,239,1)";s:21:"loginJumbotronBgColor";s:16:"rgba(2,86,148,1)";s:27:"loginJumbotronRadialBgColor";s:17:"rgba(0,155,207,1)";s:8:"loginImg";s:14:"eclass_ice.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:20:"rgba(57,78,113,0.71)";s:15:"leftMenuBgColor";s:15:"rgba(0,0,0,0.2)";s:17:"leftMenuFontColor";s:22:"rgba(220,215,215,0.89)";s:22:"leftMenuHoverFontColor";s:19:"rgba(149,173,192,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(153,199,236,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(217,208,208,1)";s:25:"leftSubMenuHoverFontColor";s:19:"rgba(238,238,238,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(77,161,228,1)";s:11:"imageUpload";s:23:"eclass-new-logo_ice.png";}')
         );
         foreach ($theme_options as $theme) {
-            $db->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme['name'], $theme['styles']);
+            Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)", $theme['name'], $theme['styles']);
         }        
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
