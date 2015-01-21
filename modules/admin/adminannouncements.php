@@ -190,10 +190,9 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
     if (isset($_GET['modify'])) {
         $tool_content .= "<input type='hidden' name='id' value='$id' />";
     }
-    $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='title' class='col-sm-2 control-label'>$langTitle:</label>
-                        <div class='col-sm-10'><input type='text' name='title' value='$titleToModify' size='50' /></div>
+                        <div class='col-sm-10'><input class='form-control' type='text' name='title' value='$titleToModify' size='50' /></div>
                     </div>
                     <div class='form-group'>
                         <label for='newContent' class='col-sm-2 control-label'>$langAnnouncement:</label>
@@ -265,7 +264,8 @@ if ($displayForm && isset($_GET['addAnnounce']) || isset($_GET['modify'])) {
                     <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='$langSubmit'>
                 </div>
             </div>
-        </fieldset></form></div>";
+            </form>
+            </div>";
 }
 
 if (isset($_GET['down'])) {
