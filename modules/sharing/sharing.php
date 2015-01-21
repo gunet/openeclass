@@ -35,19 +35,19 @@ function print_sharing_links ($url, $text) {
 
     //facebook
     $sharer = "https://www.facebook.com/sharer/sharer.php?u=".urlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/facebook.png' alt='Facebook' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-facebook-square fa-2x'></i></a></li>";
     //twitter
     $sharer = "https://twitter.com/intent/tweet?url=".urlencode($url)."&amp;text=".urlencode($text);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/twitter.png' alt='Twitter' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-twitter-square fa-2x'></i></a></li>";
     //google+
     $sharer = "https://plus.google.com/share?url=".urlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/google+.png' alt='Google+' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-google-plus-square fa-2x'></i></a></li>";
     //linkedin
     $sharer = "http://www.linkedin.com/shareArticle?mini=true&amp;url=".urlencode($url)."&amp;title=".urlencode($text);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/linkedin.png' alt='LinkedIn' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-linkedin-square fa-2x'></i></a></li>";
     //email
     $sharer = "mailto:?subject=".urlencode($text)."&amp;body=".urlencode($url);
-    $out .= "<li><a href='".$sharer."' target='_blank'><img src='".$urlServer."/modules/sharing/icons/mail.png' alt='Email' /></a></li>";
+    $out .= "<li><a href='".$sharer."' target='_blank'><i class='fa fa-envelope-square fa-2x'></i></a></li>";
     
     $out .= "</ul>";
     $out .= "</div>";
