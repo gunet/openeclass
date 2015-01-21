@@ -4357,7 +4357,7 @@ $langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμο�
  * ***************************************** */
 $langThemeSettings = 'Ρυθμίσεις Θέματος';
 $langActiveThemeSettings = 'Ενεργές Ρυθμίσεις Θέματος';
-$langDefaultThemeSettings = 'Προεπιλεγμένες Ρυθμίσεις Θέματος';
+$langDefaultThemeSettings = 'Open eClass Default';
 $langThemeSettingsDelete = 'Είστε σίγουρος ότι θέλετε να διαγράψετε την συγκεκριμένη ομάδα ρυθμίσεων θέματος?';
 $langThemeSettingsName = "Όνομα Ρυθμίσεων Θέματος";
 $langGeneralSettings = 'Γενικές Ρυθμίσεις';
