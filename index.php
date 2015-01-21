@@ -258,7 +258,17 @@ if ($uid AND !isset($_GET['logout'])) {
                     </div>
                 </div>";
     }
-    if (get_config('enable_mobileapi')) {
+    
+        $tool_content .= "              
+            <div class='panel' id='openeclass-banner'>
+                <div class='panel-body'>
+                    <a href='http://www.openeclass.org/' target='_blank'>
+                        <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
+                    </a>
+                </div>
+            </div>";
+    
+        if (get_config('enable_mobileapi')) {
         $tool_content .= "<div class='panel mobile-apps'>
                 <div class='panel-body'>
                 <div class='row'>
@@ -271,15 +281,8 @@ if ($uid AND !isset($_GET['logout'])) {
                 </div></div>
             </div>";
     }
-        $tool_content .= "              
-            <div class='panel' id='openeclass-banner'>
-                <div class='panel-body'>
-                    <a href='http://www.openeclass.org/' target='_blank'>
-                        <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
-                    </a>
-                </div>
-            </div>
-        </div>
+        
+        $tool_content .= "</div>
         </div>";
     draw($tool_content, 0, null, $rss_link.$head_content);
 }
