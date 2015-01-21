@@ -70,11 +70,19 @@ if (count($result) > 0) {  // found courses ?
             $chart->modDimension(7, 0);
         }
     }
+    $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlServer,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
     $tool_content .= $chart->plot();
 
     $totalDuration = format_time_duration(0 + $totalDuration);
-    $tool_content .= "<fieldset>
-                <legend>$langPlatformGenStats</legend>
+    $tool_content .= "
+                <h4>$langPlatformGenStats</h4>
                 <table class='table-default'>
                 <tr>
                 <th>$langTotalVisitsCourses:</th>
@@ -123,6 +131,6 @@ foreach ($q as $result) {
         </tr>";
 }
 $tool_content .= "</table>";
-$tool_content .= "</td></tr></table></fieldset>";
+$tool_content .= "</td></tr></table></div></div></div></div>";
 
 draw($tool_content, 1, null, $head_content);
