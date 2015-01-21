@@ -152,13 +152,29 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
 
         // Add links to course users, delete course and course edit
-        $icon_content = icon('fa-user', $langUsers, "listusers.php?c=$logs->id") . "&nbsp;";
-        if (!isDepartmentAdmin()) {
-            $icon_content .= icon('fa-list', $langUsersLog, "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE") . "&nbsp;";
-        }
-        $icon_content .= icon('fa-edit', $langEdit, "editcours.php?c=$logs->code") . "&nbsp;";
-        $icon_content .= icon('fa-times', $langDelete, "delcours.php?c=$logs->id");
-
+        $icon_content = action_button(array(
+            array(
+                'title' => $langUsers,
+                'icon' => 'fa-user',
+                'url' => "listusers.php?c=$logs->id"
+            ),
+            array(
+                'title' => $langUsersLog,
+                'icon' => 'fa-list',
+                'url' => "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE",
+                'show' => !isDepartmentAdmin()
+            ),
+            array(
+                'title' => $langEdit,
+                'icon' => 'fa-edit',
+                'url' => "editcours.php?c=$logs->code"
+            ),  
+            array(
+                'title' => $langDelete,
+                'icon' => 'fa-times',
+                'url' => "delcours.php?c=$logs->id"
+            )            
+        ));
         $data['aaData'][] = array(
             '0' => $course_title,
             '1' => icon_old_style($icon, $title),
@@ -176,6 +192,7 @@ load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
             $('#course_results_table').dataTable ({
+                ".(($is_editor)?"'aoColumnDefs':[{'sClass':'option-btn-cell', 'aTargets':[-1]}],":"")."            
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
@@ -191,6 +208,9 @@ $head_content .= "<script type='text/javascript'>
                     {'bSortable' : false, 'sWidth': '25%' },
                     {'bSortable' : false },
                 ],
+                'fnDrawCallback': function( oSettings ) {
+                    popover_init();
+                },
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                    'sZeroRecords':  '" . $langNoResult . "',
@@ -236,7 +256,7 @@ $tool_content .= "<table id='course_results_table' class='display'>
     <th align='left'>$langCourseCode</th>
     <th>$langGroupAccess</th>
     <th width='260' align='left'>$langFaculty</th>
-    <th width='$width'>$langActions</th>
+    <th>".icon('fa-cogs')."</th>
     </tr></thead>";
 
 $tool_content .= "<tbody></tbody></table>";
