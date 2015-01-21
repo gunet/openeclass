@@ -263,7 +263,8 @@ $out .=         "
         $out .= '<script>
                   $(function() {
                     $("#in_msg_body").find("a").addClass("outtabs");
-                
+                    
+                    $(document).off( "click",".delete_in");
                     $(".delete").click(function() {
                       if (confirm("' . $langConfirmDelete . '")) {
                         var rowContainer = $(this).parent().parent();

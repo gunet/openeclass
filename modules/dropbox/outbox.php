@@ -146,7 +146,9 @@ if (isset($_GET['mid'])) {
                             });
             
         $(function() {
-        $("#out_msg_body").find("a").addClass("outtabs");          
+        $("#out_msg_body").find("a").addClass("outtabs"); 
+        
+        $(document).off( "click",".delete_out");
                       
         $(".delete").click(function() {
             if (confirm("' . $langConfirmDelete . '")) {
