@@ -29,7 +29,7 @@ define('HIDE_TOOL_TITLE', 1);
 
 // Construct a table with platform identification info
 $tool_content .= "
-    <div class='row'>
+    <div class='row margin-top-fat'>
         <div class='col-md-12'>
             <div class='alert alert-info'>$langOnlineUsers: <b>" . getOnlineUsers() . "</b></div>
         </div>
@@ -41,18 +41,38 @@ $tool_content .= "
                     <h3 class='panel-title'>$langPlatformIdentity</h3>
                 </div>
                 <div class='panel-body'>
-                    <dl class='dl-horizontal'>
-                        <dt>Version:</dt>
-                        <dd>$langAboutText <b>$siteName " . ECLASS_VERSION . "</b></dd>
-                        <dt>IP Host:</dt>
-                        <dd>$langHostName <b>$_SERVER[SERVER_NAME]</b></dd>
-                        <dt>Web Server:</dt>
-                        <dd>$langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b></dd>
-                        <dt>Data Base Server:</dt>
-                        <dd>";
-                            $tool_content .= "$langMySqlVersion<b>" . Database::get()->attributes()->serverVersion() . "</b>";
-                            $tool_content .= "</dd>
-                    </dl>
+                    <div class='row margin-bottom-thin'>
+                        <div class='col-sm-2'>
+                        <strong>Version:</strong>
+                        </div>
+                        <div class='col-sm-10'>
+                        $langAboutText <b>$siteName " . ECLASS_VERSION . "</b>
+                        </div>                        
+                    </div>
+                    <div class='row margin-bottom-thin'>
+                        <div class='col-sm-2'>
+                        <strong>IP Host:</strong>
+                        </div>
+                        <div class='col-sm-10'>
+                        $langHostName <b>$_SERVER[SERVER_NAME]</b>
+                        </div>                        
+                    </div>
+                    <div class='row margin-bottom-thin'>
+                        <div class='col-sm-2'>
+                        <strong>Web Server:</strong>
+                        </div>
+                        <div class='col-sm-10'>
+                        $langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b>
+                        </div>                        
+                    </div>
+                    <div class='row margin-bottom-thin'>
+                        <div class='col-sm-2'>
+                        <strong>Data Base Server:</strong>
+                        </div>
+                        <div class='col-sm-10'>
+                        $langMySqlVersion<b>" . Database::get()->attributes()->serverVersion() . "</b>
+                        </div>                        
+                    </div>                       
                 </div>
             </div>";
 
@@ -105,23 +125,50 @@ $tool_content .= "
             <h3 class='panel-title'>$langInfoAdmin</h3>
         </div>
         <div class='panel-body'>
-            <dl class='dl-horizontal'>
-                <dt>$langOpenRequests:</dt>
-                <dd>$prof_request_msg</dd>
-                <dt>$langLastLesson</dt>
-                <dd>$last_course_info</dd>
-                <dt>$langLastProf</dt>
-                <dd>$last_prof_info</dd>
-                <dt>$langLastStud</dt>
-                <dd>$last_stud_info</dd>
-                <dt>$langAfterLastLoginInfo</dt>
-                <dd>$langAfterLastLogin
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-4'>
+                <strong>$langOpenRequests:</strong>
+                </div>
+                <div class='col-sm-8'>
+                    $prof_request_msg
+                </div>                        
+            </div>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-4'>
+                <strong>$langLastLesson</strong>
+                </div>
+                <div class='col-sm-8'>
+                    $last_course_info
+                </div>                        
+            </div>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-4'>
+                <strong>$langLastProf</strong>
+                </div>
+                <div class='col-sm-8'>
+                    $last_prof_info
+                </div>                        
+            </div>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-4'>
+                <strong>$langLastStud</strong>
+                </div>
+                <div class='col-sm-8'>
+                    $last_stud_info
+                </div>                        
+            </div>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-4'>
+                <strong>$langAfterLastLoginInfo</strong>
+                </div>
+                <div class='col-sm-8'>
+                $langAfterLastLogin
                     <ul class='custom_list'>
                       <li><b>" . $lastregisteredprofs . "</b> $langTeachers</li>
                       <li><b>" . $lastregisteredstuds . "</b> $langStudents </li>
                     </ul>
-                </dd>
-            </dl>
+                </div>                        
+            </div>                 
         </div>
     </div>";
 
@@ -141,21 +188,36 @@ if (get_config('enable_indexing')) {
             <h3 class='panel-title'>$langIndexInfo</h3>
         </div>
         <div class='panel-body'>
-            <dl class='dl-horizontal'>
-                <dt>$langIndexNumDocs:</dt>
-                <dd>$numDocs</dd>
-                <dt>$langIndexIsOptimized</dt>
-                <dd>$isOpt</dd>
-                ";
-                if ($idx->getIndex()->hasDeletions()) {
-                    $tool_content .= "
-                    <dt></dt>
-                    <dd><a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a></dd>";
-                }
-                $tool_content .="
-                <dt></dt>
-                <dd><a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a></dd>
-            </dl>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-3'>
+                <strong>$langIndexNumDocs:</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $numDocs
+                </div>                        
+            </div>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-3'>
+                <strong>$langIndexIsOptimized</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $isOpt
+                </div>
+            </div>";
+if ($idx->getIndex()->hasDeletions()) {   
+    $tool_content .= "        
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-9 col-sm-offset-3'>
+                    <a href='../search/optpopup.php' onclick=\"return optpopup('../search/optpopup.php', 600, 500)\">$langOptimize</a>
+                </div>            
+            </div>";
+}
+$tool_content .= "
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-9 col-sm-offset-3'>
+                    <a id='reindex_link' href='../search/idxpopup.php?reindex'>$langReindex</a>
+                </div>            
+            </div>    
         </div>
     </div>";
     $tool_content .= modalConfirmation('confirmReindexDialog', 'confirmReindexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmReindexCancel', 'confirmReindexOk');
@@ -171,14 +233,20 @@ if (count($res) >= 1) {
             <h3 class='panel-title'>$langCronInfo</h3>
         </div>
         <div class='panel-body'>
-            <dl class='dl-horizontal'>
-                <dt>$langCronName</dt>
-                <dd>$langCronLastRun</dd>";
-                foreach ($res as $row) {
-                    $tool_content .= "<dt>" . $row->name . "</dt><dd>" . $row->last_run . "</dd>";
-                }
-            $tool_content .= "
-            </dl>
+            <div class='row margin-bottom-thin'>
+                <div class='col-sm-3'>
+                <strong>$langCronName</strong>
+                </div>
+                <div class='col-sm-9'>
+                    $langCronLastRun
+                    <dic class='row'>";
+                
+foreach ($res as $row) {
+    $tool_content .= "<div class='col-xs-6'>" . $row->name . "</div><div class='col-xs-6'>" . $row->last_run . "</div>";
+}    
+$tool_content .= "</div>
+                </div>
+            </div>        
         </div>
     </div>";
 }
