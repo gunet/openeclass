@@ -115,38 +115,62 @@ if ($userdata) {
     */$tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
-            <div id='pers_info' class='row'>
-                <div class='col-xs-12 col-sm-2'>
-                    <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
-                </div>
-                <div class='col-xs-12 col-sm-10 profile-pers-info'>
-                    <div class='row profile-pers-info-name'><div class='col-xs-12'><div>" . q("$userdata->givenname $userdata->surname") . "</div>
-                        <div class='not_visible'>(".$userdata->username.")</div>
-            </div></div>"; // Name & Surname
-                    $tool_content .= "<div class='row'><div class='col-xs-6'>";
-                    $tool_content .= "<h4>$langProfilePersInfo</h4><div class='profile-pers-info'><span class='tag'>$langEmail :</span>";
-                    if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
-                        $tool_content .= " <span class='tag-value'>" . mailto($userdata->email) . "</span>";}
-                    else{$tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";}
-                    $tool_content .= "</div>";
-                    $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langPhone :</span>";
-                    if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
-                        $tool_content .= " <span class='tag-value'>" . q($userdata->phone) . "</span>";}
-                    else{$tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";}
-                    $tool_content .= "</div>";
-                    $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langStatus :</span>";
-                    if (!empty($userdata->status)) { // Status
-                        $status = (q($userdata->status)==1)?$langTeacher:$langStudent;
-                        $tool_content .= " <span class='tag-value'>$status</span>";}
-                    else{$tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";}
-                    $tool_content .= "</div>";
-                    $tool_content .= "<div class='profile-pers-info-data'><span class='tag'>$langAm :</span>";
-                    if (!empty($userdata->am) and allow_access($userdata->am_public)) { // Register Number
-                        $tool_content .= " <span class='tag-value'>" . q($userdata->am) . "</span>";}
-                    else{$tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";}
-                        $tool_content .= "</div></div>";
-    $tool_content .= "</div></div>
-            </div>";
+                <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <div id='pers_info' class='row'>
+                        <div class='col-xs-12 col-sm-2'>
+                            <div id='profile-avatar'>" . profile_image($id, IMAGESIZE_LARGE, 'img-responsive img-circle') . "</div>
+                        </div>
+                        <div class='col-xs-12 col-sm-10 profile-pers-info'>
+                            <div class='row profile-pers-info-name'>
+                                <div class='col-xs-12'>
+                                    <div>" . q("$userdata->givenname $userdata->surname") . "</div>
+                                    <div class='not_visible'>(".$userdata->username.")</div>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-xs-6'>
+                                    <h4>$langProfilePersInfo</h4>
+                                    <div class='profile-pers-info'>
+                                        <span class='tag'>$langEmail :</span>";
+                if (!empty($userdata->email) and allow_access($userdata->email_public)) { 
+                    $tool_content .= " <span class='tag-value'>" . mailto($userdata->email) . "</span>";
+                } else {
+                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                }
+                $tool_content .= "</div>
+                                  <div class='profile-pers-info'>
+                                    <span class='tag'>$langPhone :</span>";
+                if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
+                    $tool_content .= " <span class='tag-value'>" . q($userdata->phone) . "</span>";
+
+                } else {
+                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                }
+                $tool_content .= "</div>
+                                  <div class='profile-pers-info'><span class='tag'>$langStatus :</span>";
+                if (!empty($userdata->status)) { // Status
+                    $status = (q($userdata->status)==1)?$langTeacher:$langStudent;
+                    $tool_content .= " <span class='tag-value'>$status</span>";
+
+                } else {
+                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+                }
+                $tool_content .= "</div>
+                                  <div class='profile-pers-info-data'>
+                                    <span class='tag'>$langAm :</span>";
+                if (!empty($userdata->am) and allow_access($userdata->am_public)) {
+                    $tool_content .= " <span class='tag-value'>" . q($userdata->am) . "</span>";
+
+                } else {
+                    $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+
+                }
+                $tool_content .= "</div>
+                        </div> <!-- end of col-xs-6 -->
+                    </div> <!-- end of row -->
+                </div> <!-- end of col-xs-12 profile-pers-info -->
+            </div> <!-- end of pers_info row -->";
     if (!empty($userdata->description)) {
         $tool_content .= "<div id='profile-about-me' class='row'>
                             <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
@@ -156,7 +180,7 @@ if ($userdata) {
         $tool_content .= "
     <div id='profile-departments' class='row'>
         <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-        <h4>$langProfileStats</h4>
+            <h4>$langProfileStats</h4>
             <div>";
             $departments = $user->getDepartmentIds($id);
                 $i = 1;
@@ -169,10 +193,12 @@ if ($userdata) {
             <div>
                 <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>$userdata->registered_at</span>
             </div>
-            </div>
+        </div>
     </div>";
 $tool_content .= "</div>
-        </div>";
+        </div>
+    </div>
+</div>";
 }
 draw($tool_content, 1);
 
