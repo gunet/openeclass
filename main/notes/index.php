@@ -280,11 +280,13 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
                         'icon' => 'fa-times'),
                     array('title' => $langMove . " " . $langUp,
                         'url' => "$_SERVER[SCRIPT_NAME]?up=$note->id",
-                        'show' => $iterator != 1,
+                        'level' => 'primary',
+                        'disabled' => $iterator == 1,
                         'icon' => 'fa-arrow-up'),
                     array('title' => $langMove . " " . $langDown,
                         'url' => "$_SERVER[SCRIPT_NAME]?down=" . $note->id,
-                        'show' => $iterator < $bottomNote,
+                        'level' => 'primary',
+                        'disabled' => $iterator >= $bottomNote,
                         'icon' => 'fa-arrow-down')
                 )) .
                 "</td>";
