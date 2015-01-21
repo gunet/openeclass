@@ -94,7 +94,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $theme_settings, $language, $saved_is_editor,
         $langStudentViewEnable, $langStudentViewDisable;
 
-    //get blocks content from $toolContent array
+    // negative course_id might be set in common documents
+    if ($course_id < 1) {
+        unset($course_id);
+        unset($course_code);
+    }
+
+    // get blocks content from $toolContent array
     if ($perso_tool_content) {
         $lesson_content = $perso_tool_content ['lessons_content'];
         $assigns_content = $perso_tool_content ['assigns_content'];

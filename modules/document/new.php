@@ -24,8 +24,11 @@
  */
 
 if (!defined('COMMON_DOCUMENTS')) {
-        $require_current_course = true;
-        $require_login = true;
+    $require_current_course = true;
+    $require_login = true;
+    $back_separator = '&amp;';
+} else {
+    $back_separator = '?';
 }
 
 require_once "../../include/baseTheme.php";
@@ -41,8 +44,7 @@ if (isset($_GET['uploadPath'])) {
     $uploadPath = dirname($editPath);
 }
 
-$action = defined('COMMON_DOCUMENTS')? 'commondocs.php?': 'document.php?';
-$navigation[] = array('url' => $action . $groupset . "openDir=$uploadPath", 'name' => $pageName);
+$navigation[] = array('url' => $upload_target_url . $back_separator . "openDir=$uploadPath", 'name' => $pageName);
 
 if ($can_upload) {
     if ($editPath) {
