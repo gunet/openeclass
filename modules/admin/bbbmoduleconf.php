@@ -253,39 +253,42 @@ else {
             ));
         
         $q = Database::get()->queryArray("SELECT * FROM bbb_servers");
-        
-        $tool_content .= "<div class='table-responsive'>";
-        $tool_content .= "<table class='table-default'>
-            <thead>
-            <tr><th class = 'text-center'>$langHost</th>
-                <th class = 'text-center'>IP</th>
-                <th class = 'text-center'>$langBBBEnabled</th>
-                <th class = 'text-center'>$langBBBConnectedUsers</th>
-                <th class = 'text-center'>$langBBBServerOrderP</th>
-                <th class = 'text-center'>".icon('fa-gears')."</th></tr>
-            </thead>";
-        foreach ($q as $srv) {
-            $enabled_bbb_server = ($srv->enabled)? $langYes : $langNo;
-            $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip) . '/' . $srv->max_rooms;
-            $tool_content .= "<tr>";
-            $tool_content .= "<td>$srv->hostname</td>";
-            $tool_content .= "<td>$srv->ip</td>";
-            $tool_content .= "<td>$enabled_bbb_server</td>";
-            $tool_content .= "<td>$connected_users</td>";
-            $tool_content .= "<td>$srv->weight</td>";
-            $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                                array('title' => $langEdit,
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
-                                                      'icon' => 'fa-edit'),
-                                                array('title' => $langDelete,
-                                                      'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
-                                                      'icon' => 'fa-times',
-                                                      'class' => 'delete',
-                                                      'confirm' => $langConfirmDelete)
-                                                ))."</td>";
-            $tool_content .= "</tr>";
-        }            	
-        $tool_content .= "</table></div>";
+        if (count($q)>0) {
+            $tool_content .= "<div class='table-responsive'>";
+            $tool_content .= "<table class='table-default'>
+                <thead>
+                <tr><th class = 'text-center'>$langHost</th>
+                    <th class = 'text-center'>IP</th>
+                    <th class = 'text-center'>$langBBBEnabled</th>
+                    <th class = 'text-center'>$langBBBConnectedUsers</th>
+                    <th class = 'text-center'>$langBBBServerOrderP</th>
+                    <th class = 'text-center'>".icon('fa-gears')."</th></tr>
+                </thead>";
+            foreach ($q as $srv) {
+                $enabled_bbb_server = ($srv->enabled)? $langYes : $langNo;
+                $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip) . '/' . $srv->max_rooms;
+                $tool_content .= "<tr>";
+                $tool_content .= "<td>$srv->hostname</td>";
+                $tool_content .= "<td>$srv->ip</td>";
+                $tool_content .= "<td>$enabled_bbb_server</td>";
+                $tool_content .= "<td>$connected_users</td>";
+                $tool_content .= "<td>$srv->weight</td>";
+                $tool_content .= "<td class='option-btn-cell'>".action_button(array(
+                                                    array('title' => $langEdit,
+                                                          'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
+                                                          'icon' => 'fa-edit'),
+                                                    array('title' => $langDelete,
+                                                          'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
+                                                          'icon' => 'fa-times',
+                                                          'class' => 'delete',
+                                                          'confirm' => $langConfirmDelete)
+                                                    ))."</td>";
+                $tool_content .= "</tr>";
+            }            	
+            $tool_content .= "</table></div>";
+        } else {
+             $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>";
+        }
     }
 }
 
