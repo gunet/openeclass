@@ -2899,7 +2899,16 @@ function setOpenCoursesExtraHTML() {
         $openCoursesExtraHTML = "
             <div class='inner_opencourses'>
                 <span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>
-                <a class='clearfix' href='$openFacultiesUrl'><span class='opencourse_link'>".q($langListOpenCoursesShort)."</span><span class='opencourse_num'>$openCoursesNum</span><span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span><span class='opencourse_triangle'></span>".
-                "</a></div>";
+                <a class='clearfix' href='$openFacultiesUrl'>
+                    <span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>
+                    <div class='num_sub_wrapper center-block clearfix'>
+                        <span class='opencourse_num'>$openCoursesNum</span>
+                        <div>
+                            <span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span>
+                            <span class='opencourse_triangle'></span>
+                        </div>
+                    </div>
+                </a>
+            </div>";
     }
 }
