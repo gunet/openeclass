@@ -446,7 +446,7 @@ a.toggle-active {
 /* line 357, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel {
   margin: 6px 3px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 /* line 361, ../SASS/structure.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel:first-child {
