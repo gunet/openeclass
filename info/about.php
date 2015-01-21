@@ -34,16 +34,16 @@ $tool_content .= action_bar(array(
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-$tool_content .= "<div class='col-sm-12 alert alert-info page-header'>
+$tool_content .= "<div class='row'><div class='col-sm-12'><div class='panel'><div class='panel-body'>
 <div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</div>
 <div><label>$langVersion:&nbsp;</label><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></div>
 <div><label>$langSupportUser&nbsp;</label>" . q(get_config('admin_name')) . "</div>
-</div>";
+</div></div></div>";
 $a = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", COURSE_INACTIVE)->count;
 $a1 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_OPEN)->count;
 $a2 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_REGISTRATION)->count;
 $a3 = Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible = ?d", COURSE_CLOSED)->count;
-$tool_content .= "<div class='col-sm-6'>";
+$tool_content .= "</div><div class='row'><div class='col-sm-6'>";
 $tool_content .= "<ul class='list-group'>
     <li class='list-group-item'><label>$langCoursesHeader</label><span class='badge'>$a</span></li>
     <li class='list-group-item'>$langOpenCoursesShort<span class='badge'>$a1</span></li>
@@ -64,7 +64,7 @@ $tool_content .= "<ul class='list-group'>
           <li class='list-group-item'>$langStudents<span class='badge'>$c</span></li>
           <li class='list-group-item'>$langGuest<span class='badge'>$d</span> </li>
       </ul>";
-$tool_content .= "</div>";
+$tool_content .= "</div></div>";
 
 if (isset($uid) and $uid) {
     draw($tool_content, 1);
