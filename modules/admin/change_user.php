@@ -62,9 +62,14 @@ $tool_content .= "<div class='form-wrapper'>
             <div class='form-group'>
             <label for = 'username' class='col-sm-3 control-label'>$langUsername:</label>
                 <div class='col-sm-9'>
-                    <input id='username' type='text' name='username' placeholder='$langUsername'>
+                    <input id='username' class='form-control' type='text' name='username' placeholder='$langUsername'>
                 </div>
             </div>
+            <div class='form-group'>
+                <div class='col-sm-9 col-sm-offset-3'>
+                    <input class='btn btn-primary' type='submit' value='$langSubmit'>
+                </div>
+            </div>            
         </form>
         </div>";
 draw($tool_content, 3);
