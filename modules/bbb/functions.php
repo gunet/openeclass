@@ -674,7 +674,7 @@ function bbb_session_details() {
         }
         
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langNoBBBSesssions</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoBBBSesssions</div>";
     }
 }
 
