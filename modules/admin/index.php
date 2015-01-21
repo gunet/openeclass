@@ -239,7 +239,7 @@ if (count($res) >= 1) {
                 </div>
                 <div class='col-sm-9'>
                     $langCronLastRun
-                    <dic class='row'>";
+                    <div class='row'>";
                 
 foreach ($res as $row) {
     $tool_content .= "<div class='col-xs-6'>" . $row->name . "</div><div class='col-xs-6'>" . $row->last_run . "</div>";
