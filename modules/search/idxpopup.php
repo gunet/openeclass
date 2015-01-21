@@ -40,7 +40,7 @@ if (isset($_GET['reindex'])) {
   <head>
     <title><?php echo $logo; ?></title>
     <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <link href='<?php echo $urlAppend; ?>/install/install.css' rel='stylesheet' type='text/css' />
+    <link href='<?php echo $urlAppend; ?>install/install.css' rel='stylesheet' type='text/css' />
     <?php echo $head_content; ?>
     <script type='text/javascript'>
     /* <![CDATA[ */
@@ -84,7 +84,7 @@ if (isset($_GET['reindex'])) {
   </head>
   <body style='background-color: #ffffff;'>
     <div class='container'>
-      <p align='center'><img src='<?php echo $urlAppend; ?>/template/classic/img/logo_openeclass.png' alt='logo' /></p>
+      <p align='center'><img src='<?php echo $urlAppend; ?>template/default/img/logo_eclass_small.png' alt='logo' /></p>
       <div id='idxinfo' class='alert' align='center'>
         <p><?php echo $langIndexingAlert1; ?></p>
         <p id="idxresul"><?php echo $langIndexingAlert2; ?></p>
