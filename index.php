@@ -268,7 +268,7 @@ if ($uid AND !isset($_GET['logout'])) {
             <div class='panel' id='openeclass-banner'>
                 <div class='panel-body'>
                     <a href='http://www.openeclass.org/' target='_blank'>
-                        <img class='img-responsive center-block' src='$themeimg/open_eclass_bnr.png'>
+                        <img class='img-responsive center-block' src='$themeimg/open_eclass_banner.png'>
                     </a>
                 </div>
             </div>";
