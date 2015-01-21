@@ -25,7 +25,20 @@
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
-
+//Default Styles
+$defaults = array(
+                'rgba(35,44,58,1)' => array('leftNavBgColor','bgColor'),
+                'rgba(173,173,173,1)' => array('leftMenuFontColor', 'leftSubMenuFontColor'),
+                "rgba(77,161,228,1)" => array('linkColor', 'leftSubMenuHoverBgColor', 'leftMenuSelectedFontColor', 'leftMenuHoverFontColor'),
+                "rgba(35,82,124,1)" => array('linkHoverColor'),
+                "rgba(238,238,238,1)" => array('leftSubMenuHoverFontColor'),
+                "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
+                "repeat" => array('bgType'),
+                "rgba(0,155,207,1)" => array('loginJumbotronRadialBgColor'),
+                "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
+                "small-right" => array("loginImgPlacement")        
+            );
+    
 if (isset($_GET['reset_theme_options'])) {
     $theme_options_sets = Database::get()->queryArray("SELECT * FROM theme_options");
     foreach ($theme_options_sets as $theme_options) {
@@ -56,7 +69,7 @@ if (isset($_GET['delete_image'])) {
 }
 if (isset($_POST['optionsSave'])) {
     upload_images();
-    unset($theme_options_styles['optionsSave']);
+    clear_default_settings();
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
     redirect_to_home_page('modules/admin/theme_options.php');
@@ -71,7 +84,7 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
-    unset($_POST['themeOptionsName']);
+    clear_default_settings();
     rename_images(); //clone and rename already used images
     upload_images(); //upload new images
     $serialized_data = serialize($_POST);
@@ -147,18 +160,9 @@ if (isset($_POST['optionsSave'])) {
     if (get_config('theme_options_id')) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
         $theme_options_styles = unserialize($theme_options->styles);
-    } else {
-        $theme_options_styles['leftNavBgColor'] = $theme_options_styles['bgColor'] = '#232C3A';
-        $theme_options_styles['leftMenuFontColor'] = $theme_options_styles['leftSubMenuFontColor'] = '#ADADAD';
-        $theme_options_styles['linkColor'] = $theme_options_styles['leftSubMenuHoverBgColor'] = $theme_options_styles['leftMenuSelectedFontColor'] = $theme_options_styles['leftMenuHoverFontColor'] = "#4da1e4";
-        $theme_options_styles['linkHoverColor'] = '#23527c';
-        $theme_options_styles['leftSubMenuHoverFontColor'] = "#eee";
-        $theme_options_styles['leftMenuBgColor'] = "rgba(0, 0, 0, 0.2)";
-        $theme_options_styles['bgType'] = 'repeat';
-        $theme_options_styles['loginJumbotronRadialBgColor'] = "rgba(0,155,207,1)";
-        $theme_options_styles['loginJumbotronBgColor'] = '#025694';
-        $theme_options_styles['loginImgPlacement'] = 'small-right';
     }
+    initialize_settings();
+    
     $delete_btn = (get_config('theme_options_id')) 
             ? 
             "<form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=".get_config('theme_options_id')."'>
@@ -377,6 +381,26 @@ if (isset($_POST['optionsSave'])) {
     </div>
     ";
 }
+
+function clear_default_settings() {
+    global $defaults;
+    foreach ($defaults as $setting => $option_array) {
+        foreach ($option_array as $option){
+            if(isset($_POST[$option]) && $_POST[$option] == $setting) unset($_POST[$option]);
+        }
+    }
+    if(isset($_POST['themeOptionsName'])) unset($_POST['themeOptionsName']);
+    if(isset($_POST['optionsSave'])) unset($_POST['optionsSave']); //unnecessary submit button value
+}
+function initialize_settings() {
+    global $theme_options_styles, $defaults;
+
+    foreach ($defaults as $setting => $option_array) {
+        foreach ($option_array as $option){
+            if(!isset($theme_options_styles[$option])) $theme_options_styles[$option] = $setting;
+        }
+    }    
+}
 function rename_images() {
     global $webDir, $theme;
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
@@ -400,57 +424,21 @@ function rename_images() {
 }
 function upload_images() {
     global $webDir, $theme;
-    if (isset($_FILES['imageUpload']) && is_uploaded_file($_FILES['imageUpload']['tmp_name'])) {
-        $file_name = $_FILES['imageUpload']['name'];
-        validateUploadedFile($file_name, 2);
-        $i=0;
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
+    foreach($images as $image) {
+        if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
+            $file_name = $_FILES[$image]['name'];
+            validateUploadedFile($file_name, 2);
+            $i=0;
+            while (is_file("$webDir/template/$theme/img/$file_name")) {
+                $i++;
+                $name = pathinfo($file_name, PATHINFO_FILENAME);
+                $ext =  get_file_extension($file_name);
+                $file_name = "$name-$i.$ext";
+            }
+            move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/template/$theme/img/$file_name");
+            $_POST[$image] = $file_name;
         }
-        move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['imageUpload'] = $file_name;
     }
-    if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
-        $file_name = $_FILES['imageUploadSmall']['name'];
-        validateUploadedFile($file_name, 2);
-        $i=0;
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");       
-        $_POST['imageUploadSmall'] = $file_name;
-    }
-    if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
-        $file_name = $_FILES['bgImage']['name'];
-        validateUploadedFile($file_name, 2);
-        $i=0;
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['bgImage']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['bgImage'] = $file_name;
-    }
-    if (isset($_FILES['loginImg']) && is_uploaded_file($_FILES['loginImg']['tmp_name'])) {
-        $file_name = $_FILES['loginImg']['name'];
-        validateUploadedFile($file_name, 2);
-        $i=0;
-        while (is_file("$webDir/template/$theme/img/$file_name")) {
-            $i++;
-            $name = pathinfo($file_name, PATHINFO_FILENAME);
-            $ext =  get_file_extension($file_name);
-            $file_name = "$name-$i.$ext";
-        }
-        move_uploaded_file($_FILES['loginImg']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['loginImg'] = $file_name;
-    }     
 }
 draw($tool_content, 3, null, $head_content);

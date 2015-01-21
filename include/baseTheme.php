@@ -444,18 +444,19 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
-            if ($theme_options_styles['bgType'] == 'stretch') {
+            if (isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'stretch') {
                 $background_type .= "background-size: 100% 100%;";
-            } elseif($theme_options_styles['bgType'] == 'fix') {
+            } elseif(isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'fix') {
                 $background_type .= "background-size: 100% 100%;background-attachment: fixed;";
             }
             $bg_image = isset($theme_options_styles['bgImage']) ? " url('$themeimg/$theme_options_styles[bgImage]')" : "";
-            $styles_str .= "body{background: $theme_options_styles[bgColor]$bg_image;$background_type}";
+            $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
+            $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
         }
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
         if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$themeimg/$theme_options_styles[loginImg]'), $gradient_str }";
-        if ($theme_options_styles['loginImgPlacement']=='small-right') {
+        if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='small-right') {
             $styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
         } else {
             $styles_str .= ".jumbotron.jumbotron-login {  background-size: cover, cover; background-position: 0% 0%;}";
