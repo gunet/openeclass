@@ -1170,10 +1170,10 @@ if ($doc_count == 0) {
                 <div class='table-responsive'>
                 <table class='table-default'>
                     <tr>";
-    $tool_content .= "<th class='center'><b>" . headlink($langType, 'type') . '</b></th>' .
-                     "<th><div class='text-left'>" . headlink($langName, 'name') . '</div></th>' .
-                     "<th class='center'><b>$langSize</b></th>" .
-                     "<th class='text-center'><b>" . headlink($langDate, 'date') . '</b></th>';
+    $tool_content .= "<th class='text-left'>" . headlink($langType, 'type') . '</th>' .
+                     "<th class='text-left'>" . headlink($langName, 'name') . '</th>' .
+                     "<th class='text-left'>$langSize</th>" .
+                     "<th class='text-left'>" . headlink($langDate, 'date') . '</th>';
     if (!$is_in_tinymce) {
         $tool_content .= "<th class='text-center'>".icon('fa-gears', $langCommands)."</th>";
     }
@@ -1252,7 +1252,7 @@ if ($doc_count == 0) {
                 // External document
                 $download_url = $entry['extra_path'];
             }
-            $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
+            $tool_content .= "<tr $style><td class='text-center' width='30'>$img_href</td>
                               <td>$link_href $link_title_extra";
             // comments
             if (!empty($entry['comment'])) {
@@ -1267,10 +1267,10 @@ if ($doc_count == 0) {
                 $tool_content .= "<td>&nbsp;</td><td class='center'>$date</td>";
             } else if ($entry['format'] == ".meta") {
                 $size = format_file_size($entry['size']);
-                $tool_content .= "<td class='center'>$size</td><td class='center'>$date</td>";
+                $tool_content .= "<td>$size</td><td>$date</td>";
             } else {
                 $size = format_file_size($entry['size']);
-                $tool_content .= "<td class='center'>$size</td><td class='center' title='$date_with_time'>$date</td>";
+                $tool_content .= "<td>$size</td><td title='$date_with_time'>$date</td>";
             }
             if (!$is_in_tinymce) {
                 if ($can_upload) {
