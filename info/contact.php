@@ -28,9 +28,10 @@ $postaddress = nl2br(q(get_config('postaddress')));
 $Institution = q(get_config('institution'));
 $phone = q(get_config('phone'));
 $fax = q(get_config('fax'));
-$phonemessage = empty($phone) ? '' : "<label>$langPhone:&nbsp;</label>$phone<br>";
-$faxmessage = empty($fax) ? '' : "<label>$langFax</label>$fax<br>";
+$phonemessage = empty($phone) ? "<label>$langPhone:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langPhone:&nbsp;</label>$phone<br>";
+$faxmessage = empty($fax) ? "<label>$langFax</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langFax</label>$fax<br>";
 $emailhelpdesk = get_config('email_helpdesk');
+$emailhelpdesk = empty($emailhelpdesk) ? "<label>$langEmail:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langEmail</label>mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))<br>";
 
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
@@ -39,13 +40,16 @@ $tool_content .= action_bar(array(
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-$tool_content .= "<div class='alert alert-info col-sm-12 page-header'>
-<label>$langPostMail&nbsp;</label>$Institution<br> $postaddress 
-
-$phonemessage
-$faxmessage
-<label>$langEmail:&nbsp;</label>" . mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk)) . "
-</div>";
+$tool_content .= "<div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                <label>$langPostMail&nbsp;</label>$Institution<br> $postaddress $phonemessage $faxmessage $emailhelpdesk
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>";
 
 if (isset($uid) and $uid) {
     draw($tool_content, 1);
