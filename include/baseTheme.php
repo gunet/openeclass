@@ -474,8 +474,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (!empty($theme_options_styles['leftMenuBgColor'])) $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
         if (!empty($theme_options_styles['leftMenuHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
         if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
-        if (isset($theme_options_styles['custom_logo'])) $t->set_var('logo_img', $theme_options_styles['custom_logo']);        
-        if (isset($theme_options_styles['custom_logo_small'])) $t->set_var('logo_img_small', $theme_options_styles['custom_logo_small']); 
+        if (isset($theme_options_styles['imageUpload'])) $t->set_var('logo_img', $theme_options_styles['imageUpload']);        
+        if (isset($theme_options_styles['imageUploadSmall'])) $t->set_var('logo_img_small', $theme_options_styles['imageUploadSmall']); 
       
         $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");        
     }

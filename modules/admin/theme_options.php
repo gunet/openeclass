@@ -26,6 +26,23 @@ $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
+if (isset($_GET['reset_theme_oprions'])) {
+    $theme_options_sets = Database::get()->queryArray("SELECT * FROM theme_options");
+    foreach ($theme_options_sets as $theme_options) {
+        $theme_options_styles = unserialize($theme_options->styles);
+        if (isset($theme_options_styles['custom_logo'])) {
+           $theme_options_styles['imageUpload'] = $theme_options_styles['custom_logo'];
+           unset($theme_options_styles['custom_logo']);           
+        }
+        if (isset($theme_options_styles['custom_logo_small'])) {
+           $theme_options_styles['imageUploadSmall'] = $theme_options_styles['custom_logo_small'];
+           unset($theme_options_styles['custom_logo_small']);              
+        }
+        $serialized_data = serialize($theme_options_styles);
+        Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_options->id);
+    }
+    $theme_options_styles = unserialize($theme_options->styles);    
+}
 if (isset($_GET['delete_image'])) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
         $theme_options_styles = unserialize($theme_options->styles);
@@ -44,8 +61,8 @@ if (isset($_POST['optionsSave'])) {
 } elseif (isset($_GET['delThemeId'])) {
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
     $theme_options_styles = unserialize($theme_options->styles);
-    @unlink("$webDir/template/$theme/img/$theme_options_styles[custom_logo]");
-    @unlink("$webDir/template/$theme/img/$theme_options_styles[custom_logo_small]");
+    @unlink("$webDir/template/$theme/img/$theme_options_styles[imageUpload]");
+    @unlink("$webDir/template/$theme/img/$theme_options_styles[imageUploadSmall]");
     @unlink("$webDir/template/$theme/img/$theme_options_styles[bgImage]");
     Database::get()->query("DELETE FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
     Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", 0, 'theme_options_id');
@@ -150,18 +167,18 @@ if (isset($_POST['optionsSave'])) {
                 </div>
             </form>"
             : "";
-    if (isset($theme_options_styles['custom_logo'])) {
+    if (isset($theme_options_styles['imageUpload'])) {
         $logo_field = "
-            <img src='$themeimg/$theme_options_styles[custom_logo]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=custom_logo'>$langDelete</a>
-            <input type='hidden' name='custom_logo' value='$theme_options_styles[custom_logo]'>
+            <img src='$themeimg/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
+            <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
         ";
     } else {
        $logo_field = "<input type='file' name='imageUpload' id='imageUpload'>"; 
     }
-    if (isset($theme_options_styles['custom_logo_small'])) {
+    if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "
-            <img src='$themeimg/$theme_options_styles[custom_logo_small]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=custom_logo_small'>$langDelete</a>
-            <input type='hidden' name='custom_logo_small' value='$theme_options_styles[custom_logo_small]'>
+            <img src='$themeimg/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
+            <input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>
         ";
     } else {
        $small_logo_field = "<input type='file' name='imageUploadSmall' id='imageUploadSmall'>"; 
@@ -360,7 +377,7 @@ if (isset($_POST['optionsSave'])) {
 }
 function rename_images() {
     global $webDir, $theme;
-    $images = array('bgImage','custom_logo','custom_logo_small','loginImg');
+    $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $file_name = $old_image = $_POST[$image];
@@ -392,7 +409,7 @@ function upload_images() {
             $file_name = "$name-$i.$ext";
         }
         move_uploaded_file($_FILES['imageUpload']['tmp_name'], "$webDir/template/$theme/img/$file_name");
-        $_POST['custom_logo'] = $file_name;
+        $_POST['imageUpload'] = $file_name;
     }
     if (isset($_FILES['imageUploadSmall']) && is_uploaded_file($_FILES['imageUploadSmall']['tmp_name'])) {
         $file_name = $_FILES['imageUploadSmall']['name'];
@@ -405,7 +422,7 @@ function upload_images() {
             $file_name = "$name-$i.$ext";
         }
         move_uploaded_file($_FILES['imageUploadSmall']['tmp_name'], "$webDir/template/$theme/img/$file_name");       
-        $_POST['custom_logo_small'] = $file_name;
+        $_POST['imageUploadSmall'] = $file_name;
     }
     if (isset($_FILES['bgImage']) && is_uploaded_file($_FILES['bgImage']['tmp_name'])) {
         $file_name = $_FILES['bgImage']['name'];
