@@ -244,7 +244,7 @@ if ($uid AND !isset($_GET['logout'])) {
     $online_users = getOnlineUsers();
     $tool_content .= "<div class='panel'>
                <div class='panel-body'>
-                   <i class='fa fa-group space-after-icon'></i>$langOnlineUsers: $online_users
+                   <i class='fa fa-group space-after-icon'></i> &nbsp;$langOnlineUsers: $online_users
                </div>
            </div>";
     if (!isset($openCoursesExtraHTML)) {
@@ -256,6 +256,11 @@ if ($uid AND !isset($_GET['logout'])) {
                     <div class='panel-body'>
                         $openCoursesExtraHTML
                     </div>
+                </div>
+                <div class='panel opencourses-national'>
+                <a href='http://opencourses.gr' target='_blank'>
+                    $langNationalOpenCourses
+                 </a>
                 </div>";
     }
     

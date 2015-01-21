@@ -1792,6 +1792,25 @@ div.spinner-div
         text-decoration:none;
     }
 }
+.panel.opencourses-national{
+
+    min-height: 2px;
+
+    a{
+        display: block;
+        font-size: 14px;
+        text-transform: uppercase;
+        background-color: #666;
+        color: white;
+        padding: 15px 5px;
+        height: 100%;
+        text-align: center;
+    }
+    a:hover{
+        text-decoration: none;
+        color: white;
+    }
+}
 .no-borders{
     border: 0px;
 }
