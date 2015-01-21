@@ -332,16 +332,16 @@
                             <div id="collapseNotices" class="panel-collapse collapse side-list overlayed">
                                 <div class="spinner-div hidden">
                                     <img src="{%template_base%}/img/ajax-loader.gif">
-                                    <p class="hidden">$langNoteSaved</p>
+                                    <p class="hidden"></p>
                                 </div>
                                 <div class="panel-body">
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                                        <input id="title-note" class="form-control" type="text" placeholder="Title...">
+                                        <input id="title-note" class="form-control" type="text" placeholder="{%langNoteTitle%}...">
                                     </div>
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                                        <textarea id="text-note" class="form-control" placeholder="Type a note..."></textarea>
+                                        <textarea id="text-note" class="form-control" rows="6" placeholder="{%langEnterNote%}..."></textarea>
                                     </div>
                                     <button id="save_note" data-label="Save" class="btn btn-default btn-xs">Save</button>
                                     <a class="goto" href="{%NOTES_LINK%}">All notes</a>

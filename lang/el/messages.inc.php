@@ -3818,6 +3818,7 @@ $langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
 $langAddNote = "Νέα σημείωση";
 $langDocument = "Έγγραφο";
 $langEmptyNoteTitle = "Νέα σημείωση";
+$langEnterNote = "Εισάγετε σημείωση";
 $langEvent = "Γεγονός";
 $langLastUpdate = "Τελευταία ενημέρωση";
 $langModifNote = "Αλλαγή σημείωσης";
