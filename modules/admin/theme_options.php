@@ -55,7 +55,8 @@ if (isset($_GET['delete_image'])) {
         redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_POST['optionsSave'])) {
-    upload_images();     
+    upload_images();
+    unset($theme_options_styles['optionsSave']);
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
     redirect_to_home_page('modules/admin/theme_options.php');
