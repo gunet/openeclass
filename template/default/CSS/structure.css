@@ -234,7 +234,7 @@ body > .container {
 }
 /* line 153, ../SASS/structure.scss */
 #header.navbar .navbar-nav > li ul li a {
-  padding: 6px 17px;
+  padding: 6px 17px 6px 4px;
 }
 /* line 156, ../SASS/structure.scss */
 #header.navbar .navbar-nav > li a {
@@ -245,7 +245,7 @@ body > .container {
 }
 /* line 163, ../SASS/structure.scss */
 #header.navbar .navbar-nav > li a i.fa {
-  margin: 0 1em 0 0;
+  margin: 0 1em;
 }
 /* line 167, ../SASS/structure.scss */
 #header.navbar .navbar-nav > li a:hover, #header.navbar .navbar-nav > li a:focus {
