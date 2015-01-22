@@ -182,7 +182,7 @@ $(document).ready(function () {
 
         
         $("#innerpanel-container").slimScroll({height: '215px'});
-        $("#collapseMessages ul.sidebar-mymessages").slimScroll({height: '300px'});
+        $("#collapseMessages ul.sidebar-mymessages").slimScroll({height: '215px'});
         
         // Initialisation of Main Content height
         var margin_offset = 131;
