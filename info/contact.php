@@ -31,7 +31,7 @@ $fax = q(get_config('fax'));
 $phonemessage = empty($phone) ? "<label>$langPhone:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langPhone:&nbsp;</label>$phone<br>";
 $faxmessage = empty($fax) ? "<label>$langFax</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langFax</label>$fax<br>";
 $emailhelpdesk = get_config('email_helpdesk');
-$emailhelpdesk = empty($emailhelpdesk) ? "<label>$langEmail:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langEmail</label>mailto($emailhelpdesk, str_replace('@', ' &lt;at> ', $emailhelpdesk))<br>";
+$emailhelpdesk = empty($emailhelpdesk) ? "<label>$langEmail:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langEmail: </label>&nbsp;<a href='mailto:$emailhelpdesk'>".str_replace('@', ' &lt;at> ', $emailhelpdesk)."</a>";       
 
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
