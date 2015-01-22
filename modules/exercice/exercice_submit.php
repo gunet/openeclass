@@ -143,10 +143,10 @@ if (isset($_POST['formSent'])) {
 		}
 	}
 	// the script "exercise_result.php" will take the variable $exerciseResult from the session
-	$_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;
+	$_SESSION['exerciseResult'][$exerciseId] = $exerciseResult;        
 	// if it is the last question (only for a sequential exercise)
 	if($exerciseType == 1 or $questionNum >= $nbrQuestions 
-                or ($exerciseType == 2 and (isset($error) and $error == 'langExerciseExpiredTime'))) {
+                or ($exerciseType == 2 and (isset($error) and $error == 'langExerciseExpiredTime'))) {                        
 		// goes to the script that will show the result of the exercise
 		header('Location: exercise_result.php?course='.$code_cours.'&exerciseId='.$exerciseId);
 		exit();
@@ -221,7 +221,7 @@ if (!$is_editor) {
 		$attempt = $tmp[0];
 	}        
 	if (!isset($_SESSION['exercise_begin_time'][$exerciseId]) && $nbrQuestions > 0) {
-		$_SESSION['exercise_begin_time'][$exerciseId] = $RecordStartDate = $temp_CurrentDate;
+		$_SESSION['exercise_begin_time'][$exerciseId] = $RecordStartDate = $temp_CurrentDate;                
 		// save begin time in db
 		$start = date('Y-m-d H:i:s', $_SESSION['exercise_begin_time'][$exerciseId]);
 		$sql = "SELECT COUNT(*) FROM `$TBL_RECORDS` WHERE eid='$exerciseId' AND uid='$uid'";
@@ -233,8 +233,6 @@ if (!$is_editor) {
 		                                VALUES ('$exerciseId','$uid','$start', 0, 0, $attempt)";
 			$result = db_query($sql);
 			$timeleft = $exerciseTimeConstrain*60;
-                        unset($_SESSION['exercise_begin_time']);
-                        unset($_SESSION['exercise_end_time']);
 		}
 	}
 	// Checking everything is between correct boundaries:
