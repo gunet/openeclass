@@ -134,13 +134,15 @@ body > .container{
   background-color: $color-main-content;
   overflow: hidden;
 }
+#header_section .nav-container{
+    border-bottom: 1px solid #DBDBDB;
+}
 
 #header.navbar{
     margin-bottom: 0px;
     padding: 0;
     border: 0;
     background-color: $color-header;
-    border-bottom: 1px solid #DBDBDB;
     
 		.navbar-nav{
 			margin: 0;
