@@ -908,7 +908,7 @@ if (!class_exists('Exercise')):
                                     $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;        
             if ($clone_course_id != $course_id) { // copy questions to new course question_pool
                 Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
-                                            SELECT ?d, question, description, weight, q_position, type, difficulty, category
+                                            SELECT ?d, question, description, weight, q_position, type, difficulty, 0
                                               FROM `exercise_question`
                                              WHERE course_id = ?d", $clone_course_id, $course_id);                
             }
