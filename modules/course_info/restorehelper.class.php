@@ -226,7 +226,17 @@ class RestoreHelper {
     
     private function populateTypes() {
         $this->types = array();
+        $this->types[self::STYLE_3X]['agenda']['visible'] = '?d';
+        $this->types[self::STYLE_3X]['agenda']['recursion_end'] = '?t';
+        $this->types[self::STYLE_3X]['agenda']['source_event_id'] = '?d';
+        $this->types[self::STYLE_3X]['assignment']['max_grade'] = '?f';
+        $this->types[self::STYLE_3X]['course_description']['type'] = '?d';
+        $this->types[self::STYLE_3X]['course_description']['visible'] = '?d';
+        $this->types[self::STYLE_3X]['document']['subsystem_id'] = '?d';
+        $this->types[self::STYLE_3X]['exercise_user_record']['record_end_date'] = '?t';
+        $this->types[self::STYLE_3X]['exercise_user_record']['total_weighting'] = '?f';
         $this->types[self::STYLE_3X]['gradebook_activities']['activity_type'] = '?d';
+        $this->types[self::STYLE_3X]['gradebook_activities']['date'] = '?t';
     }
 
 }
