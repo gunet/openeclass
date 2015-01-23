@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2012-10-19 13:31:15
+// Generated 2015-01-23 13:34:12
 
 $langEclass = "Open eClass - Plateforme de Télé-enseignement Asynchrone"
 ;
@@ -17,10 +17,10 @@ $langsOfTeacher = "de l'enseignant"
 ;
 $langsTeachers = "enseignants";
 $langsOfTeachers = "des enseignants";
-$langStudent = "Étudiant";
+$langStudent = "étudiant";
 $langOfStudent = "de l'Étudiant"
 ;
-$langStudents = "Étudiants";
+$langStudents = "étudiants";
 $langOfStudents = "des Étudiants";
 $langsStudent = "étudiant";
 $langsOfStudent = "de l'étudiant"
@@ -56,4 +56,10 @@ $langother = "Autre";
 $langInfoAbout = "La plateforme <strong>$siteName</strong> est un Système complet de Gestion de Cours (CMS). Inspirée par la philosophie du logiciel libre (open source), cette plateforme supporte le Service de Télé-enseignement Asynchrone, étant facilement accessible par le biais d'un simple navigateur web, sans besoin de connaissances techniques et sans restriction de temps et d'espace."
 ;
 $langExtrasLeft = '';
-$langExtrasRight = '&nbsp;';
+$langExtrasRight = '';
+$langGroupTutor = "Υπεύθυνος ομάδας";
+$langEditor = "Enseignant assistant";
+$langOfEditor = "Βοηθού εκπαιδευτή";
+$langsEditor = "βοηθός εκπαιδευτή";
+$langsOfEditor = "βοηθού εκπαιδευτή";
+$langsOfGroupTutor = "υπεύθυνου ομάδας";

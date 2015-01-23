@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-31 12:32:35
+// Generated 2015-01-23 13:34:13
 
 $langEclass = 'Open eClass - Piattaforma di eLearning asincrona';
 $langYes = "Sì";
@@ -40,4 +40,10 @@ $langpost = "Post Laurea";
 $langother = 'Altro';
 $langInfoAbout = "La piattaforma <strong>$siteName</strong>  è un sistema completo di gestione di corsi elettronici. Adotta la filosofia del software a codice sorgente aperto e supporta il servizio di e-learning asincrono senza limitazioni ed impegni. L'accesso al servizio si fa con l'uso di un semplice web browser senza l'esigenza di nozioni tecniche e speciali.";
 $langExtrasLeft = '';
-$langExtrasRight = '&nbsp;';
+$langExtrasRight = '';
+$langGroupTutor = "Υπεύθυνος ομάδας";
+$langEditor = "Insegnante di Sostegno";
+$langOfEditor = "Βοηθού εκπαιδευτή";
+$langsEditor = "βοηθός εκπαιδευτή";
+$langsOfEditor = "βοηθού εκπαιδευτή";
+$langsOfGroupTutor = "υπεύθυνου ομάδας";
