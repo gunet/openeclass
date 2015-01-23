@@ -46,7 +46,14 @@ if (count($roots) <= 0) {
     header("Location:" . $urlServer . $redirectUrl . intval($roots[0]));
     exit();
 } else {
-    $tool_content = $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback);
+    $tool_content = action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => $urlServer,
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'button-class' => 'btn-default')
+                            ),false);
+    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback);
 }
 
 

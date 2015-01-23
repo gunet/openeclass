@@ -70,9 +70,6 @@ $icons = array(
     0 => "<img src='$themeimg/lock_closed.png' alt='" . $langClosedCourse . "' title='" . $langClosedCourse . "' width='16' height='16' />"
 );
 
-if (count($tree->buildRootsArray()) > 1) {
-    $tool_content .= $tree->buildRootsSelectForm($fc);
-}
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
@@ -80,7 +77,10 @@ $tool_content .= action_bar(array(
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-$tool_content .= "<table class='table table-striped table-bordered table-hover'>
+if (count($tree->buildRootsArray()) > 1) {
+    $tool_content .= $tree->buildRootsSelectForm($fc);
+}
+$tool_content .= "<table class='table-default'>
                     <tr>
                     <th><a name='top'></a>$langFaculty:&nbsp;<b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b></th>
                     </tr>
@@ -149,7 +149,7 @@ if ($runQuery) {
 }
 
 if (count($courses) > 0) {
-    $tool_content .= "<table class='table table-striped table-bordered table-hover'>        
+    $tool_content .= "<table class='table-default'>        
                 <tr><th class='text-left'>" . q($m['lessoncode']) . "</th>";
 
     if ($isInOpenCoursesMode) {
