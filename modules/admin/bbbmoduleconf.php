@@ -91,17 +91,17 @@ if (isset($_GET['add_server'])) {
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
             var chkValidator  = new Validator("serverForm");
-            chkValidator.addValidation("hostname_form","req","' . $langΒΒΒServerAlertHostname . '");
-            chkValidator.addValidation("ip_form","req","' . $langΒΒΒServerAlertIP . '");
-            chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","' . $langΒΒΒServerAlertIP . '");
-            chkValidator.addValidation("key_form","req","' . $langΒΒΒServerAlertKey . '");
-            chkValidator.addValidation("api_url_form","req","' . $langΒΒΒServerAlertAPIUrl . '");
-            chkValidator.addValidation("max_rooms_form","req","' . $langΒΒΒServerAlertMaxRooms . '");
-            chkValidator.addValidation("max_rooms_form","numeric","' . $langΒΒΒServerAlertMaxRooms . '");
-            chkValidator.addValidation("max_users_form","req","' . $langΒΒΒServerAlertMaxUsers . '");
-            chkValidator.addValidation("max_users_form","numeric","' . $langΒΒΒServerAlertMaxUsers . '");
-            chkValidator.addValidation("weight","req","' . $langΒΒΒServerAlertOrder . '");
-            chkValidator.addValidation("weight","numeric","' . $langΒΒΒServerAlertOrder . '");
+            chkValidator.addValidation("hostname_form","req","' . $langBBBServerAlertHostname . '");
+            chkValidator.addValidation("ip_form","req","' . $langBBBServerAlertIP . '");
+            chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","' . $langBBBServerAlertIP . '");
+            chkValidator.addValidation("key_form","req","' . $langBBBServerAlertKey . '");
+            chkValidator.addValidation("api_url_form","req","' . $langBBBServerAlertAPIUrl . '");
+            chkValidator.addValidation("max_rooms_form","req","' . $langBBBServerAlertMaxRooms . '");
+            chkValidator.addValidation("max_rooms_form","numeric","' . $langBBBServerAlertMaxRooms . '");
+            chkValidator.addValidation("max_users_form","req","' . $langBBBServerAlertMaxUsers . '");
+            chkValidator.addValidation("max_users_form","numeric","' . $langBBBServerAlertMaxUsers . '");
+            chkValidator.addValidation("weight","req","' . $langBBBServerAlertOrder . '");
+            chkValidator.addValidation("weight","numeric","' . $langBBBServerAlertOrder . '");
         //]]></script>';
     
 } else if (isset($_GET['delete_server'])) {
@@ -229,17 +229,17 @@ else {
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
                     var chkValidator  = new Validator("serverForm");
-                    chkValidator.addValidation("hostname_form","req","' . $langΒΒΒServerAlertHostname . '");
-                    chkValidator.addValidation("ip_form","req","' . $langΒΒΒServerAlertIP . '");
-                    chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","' . $langΒΒΒServerAlertIP . '");
-                    chkValidator.addValidation("key_form","req","' . $langΒΒΒServerAlertKey . '");
-                    chkValidator.addValidation("api_url_form","req","' . $langΒΒΒServerAlertAPIUrl . '");
-                    chkValidator.addValidation("max_rooms_form","req","' . $langΒΒΒServerAlertMaxRooms . '");
-                    chkValidator.addValidation("max_rooms_form","numeric","' . $langΒΒΒServerAlertMaxRooms . '");
-                    chkValidator.addValidation("max_users_form","req","' . $langΒΒΒServerAlertMaxUsers . '");
-                    chkValidator.addValidation("max_users_form","numeric","' . $langΒΒΒServerAlertMaxUsers . '");
-                    chkValidator.addValidation("weight","req","' . $langΒΒΒServerAlertOrder . '");
-                    chkValidator.addValidation("weight","numeric","' . $langΒΒΒServerAlertOrder . '");
+                    chkValidator.addValidation("hostname_form","req","' . $langBBBServerAlertHostname . '");
+                    chkValidator.addValidation("ip_form","req","' . $langBBBServerAlertIP . '");
+                    chkValidator.addValidation("ip_form","regexp=^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$","' . $langBBBServerAlertIP . '");
+                    chkValidator.addValidation("key_form","req","' . $langBBBServerAlertKey . '");
+                    chkValidator.addValidation("api_url_form","req","' . $langBBBServerAlertAPIUrl . '");
+                    chkValidator.addValidation("max_rooms_form","req","' . $langBBBServerAlertMaxRooms . '");
+                    chkValidator.addValidation("max_rooms_form","numeric","' . $langBBBServerAlertMaxRooms . '");
+                    chkValidator.addValidation("max_users_form","req","' . $langBBBServerAlertMaxUsers . '");
+                    chkValidator.addValidation("max_users_form","numeric","' . $langBBBServerAlertMaxUsers . '");
+                    chkValidator.addValidation("weight","req","' . $langBBBServerAlertOrder . '");
+                    chkValidator.addValidation("weight","numeric","' . $langBBBServerAlertOrder . '");
                 //]]></script>';
                     
     } else {
