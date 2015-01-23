@@ -190,7 +190,11 @@ function field_placeholders($data, $table, $set, $restoreHelper) {
         if (is_int($value)) {
             $values[] = '?d';
         } else {
-            $values[] = '?s';
+            // consult restoreHelper in case we cannot determine the type
+            // just by looking at the value. For example, if the value
+            // is null we cannot be sure if the type is string or numeric
+            // and this is not helpful for SQL strict mode.
+            $values[] = $restoreHelper->getType($table, $name, $value);
         }
     }
     return '(' . implode(', ', $values) . ')';
@@ -293,7 +297,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                 </form>";
 }
 
-function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_vis, $course_prof) {
+function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
     global $webDir, $urlServer, $urlAppend;
     require_once 'modules/create_course/functions.php';
     require_once 'modules/course_info/restorehelper.class.php';
@@ -301,7 +305,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
     $new_course_code = null;
     $new_course_id = null;
     
-    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend) {
+    Database::get()->transaction(function() use (&$new_course_code, &$new_course_id, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof, $webDir, &$tool_content, $urlServer, $urlAppend) {
         $departments = array();
         if (isset($_POST['department'])) {
             foreach ($_POST['department'] as $did) {
@@ -315,7 +319,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         }
 
         $r = $restoreThis . '/html';
-        list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title, $departments, $course_vis, $course_prof);
+        list($new_course_code, $new_course_id) = create_course($course_code, $course_lang, $course_title, $course_desc, $departments, $course_vis, $course_prof);
         if (!$new_course_code) {
             $tool_content = "<div class='alert alert-warning'>" . $GLOBALS['langError'] . "</div>";
             draw($tool_content, 3);

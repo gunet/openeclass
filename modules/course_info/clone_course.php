@@ -62,7 +62,7 @@ if (isset($_POST['create_restored_course'])) {
                 'course_desc' => true,
                 'course_vis' => true,
                 'course_prof' => true), 'all', 'autounquote');
-            create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_vis, $course_prof);
+            create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
             $tool_content .= "</p><br /><center><p><a href='index.php?course=$currentCourseCode'>$langBack</a></p></center>";
             $course_code = $currentCourseCode; // revert course code to the correct value
         }

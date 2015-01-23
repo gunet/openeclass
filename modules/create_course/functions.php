@@ -21,16 +21,17 @@
 
 /**
  * @brief create course
- * @param  type  $fake_code
+ * @param  type  $public_code
  * @param  type  $lang
  * @param  type  $title
+ * @param string $description
  * @param  array $departments
  * @param  type  $vis
  * @param  type  $prof
  * @param  type  $password
  * @return boolean
  */
-function create_course($public_code, $lang, $title, $departments, $vis, $prof, $password = '') {
+function create_course($public_code, $lang, $title, $description, $departments, $vis, $prof, $password = '') {
 
     $code = strtoupper(new_code($departments[0]));
     if (!create_course_dirs($code)) {
@@ -44,13 +45,14 @@ function create_course($public_code, $lang, $title, $departments, $vis, $prof, $
                              lang = ?s,
                              title = ?s,
                              keywords = '',
+                             description = ?s,
                              visible = ?d,
                              prof_names = ?s,
                              public_code = ?s,
                              created = " . DBHelper::timeAfter() . ",
                              password = ?s,
                              glossary_expand = 0,
-                             glossary_index = 1", $code, $lang, $title, $vis, $prof, $public_code, $password);
+                             glossary_index = 1", $code, $lang, $title, $description, $vis, $prof, $public_code, $password);
     if ($q) {
         $course_id = $q->lastInsertID;
     } else {

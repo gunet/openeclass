@@ -32,6 +32,7 @@ class RestoreHelper {
     private $files;
     private $fields;
     private $values;
+    private $types;
 
     public function __construct($eclassVersion) {
         $this->eclassVersion = $eclassVersion;
@@ -39,6 +40,7 @@ class RestoreHelper {
         $this->populateFiles();
         $this->populateFields();
         $this->populateValues();
+        $this->populateTypes();
     }
 
     public function getFile($obj) {
@@ -68,6 +70,16 @@ class RestoreHelper {
             return $this->values[$this->backupVersion][$obj][$field]($value);
         } else {
             return $value;
+        }
+    }
+    
+    public function getType($obj, $field, $value) {
+        if (isset($this->types[$this->eclassVersion][$obj][$field])) {
+            return $this->types[$this->eclassVersion][$obj][$field];
+        } else if (isset($this->types[$this->backupVersion][$obj][$field])) {
+            return $this->types[$this->backupVersion][$obj][$field];
+        } else {
+            return '?s';
         }
     }
     
@@ -200,6 +212,7 @@ class RestoreHelper {
         $to_int = function($value) {
             return intval($value);
         };
+        $this->values = array();
         // syntax is: [new table][old field]
         $this->values[self::STYLE_2X]['announcement']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['document']['visibility'] = $visibility;
@@ -209,6 +222,11 @@ class RestoreHelper {
         $this->values[self::STYLE_2X]['course_units']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['unit_resources']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['forum_category']['cat_order'] = $to_int;
+    }
+    
+    private function populateTypes() {
+        $this->types = array();
+        $this->types[self::STYLE_3X]['gradebook_activities']['activity_type'] = '?d';
     }
 
 }
