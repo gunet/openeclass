@@ -198,9 +198,9 @@ $(document).ready(function () {
             if ($("#leftnav").hasClass("float-menu-in")) {
                 $("#leftnav").animate({
                     "left": "-225"
-                }, 150, function () {
-                    $(this).toggleClass("float-menu-in");
-                });
+                },{duration: 150, start: function () {
+                    $(this).removeClass("float-menu-in");
+                }});
             }
 
             if (!$("#sidebar").hasClass("in")) {
@@ -266,7 +266,6 @@ $(document).ready(function () {
                     $("#toggle-sidebar").toggleClass("toggle-active");
                     if ($("#sidebar").hasClass("in")) {
                         $("#sidebar-container").css({"display": "none"});
-                        sidebar_reset();
                     }
                     $("#sidebar").toggleClass("in");
                 }
