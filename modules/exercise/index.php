@@ -121,6 +121,7 @@ if ($is_editor) {
                     break;
                 case 'clone':  // make exercise limited
                     $objExerciseTmp->duplicate();
+                    Session::Messages($langCopySuccess, 'alert-success');
                     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                     break;                
             }
@@ -262,7 +263,9 @@ if (!$nbrExercises) {
                           'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-pie-chart'),
                     array('title' => $langCreateDuplicate,
-                          'url' => "index.php?course=$course_code&amp;choice=clone&amp;exerciseId=$row->id",
+                          'icon-class' => 'warnLink',
+                          'icon-extra' => "data-exerciseid='$row->id'",
+                          'url' => "#",
                           'icon' => 'fa-copy')                
                     ))."</td></tr>";
             
@@ -334,6 +337,41 @@ $head_content .= "<script type='text/javascript'>
                 }
             });             
         });
-    });
+    });";
+if ($is_editor) {
+    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
+    $courses_options = "";
+    foreach ($my_courses as $row) {
+        $courses_options .= "'<option value=\"$row->Course_id\">$row->Title</option>'+";
+    }    
+    $head_content .= "    
+        $(document).on('click', '.warnLink', function() {
+            var exerciseid = $(this).data('exerciseid');
+            bootbox.dialog({
+                title: '$langCreateDuplicateIn',
+                message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_form\">'+
+                            '<select class=\"form-control\" id=\"course_id\" name=\"clone_to_course_id\">'+
+                                '<option value=\"$course_id\">--- $langCurrentCourse ---</option>'+
+                                $courses_options    
+                            '</select>'+
+                          '</form>',
+                    buttons: {
+                        success: {
+                            label: '$langCreateDuplicate',
+                            className: 'btn-success',
+                            callback: function (d) {    
+                                $('#clone_form').attr('action', 'index.php?course=$course_code&choice=clone&exerciseId=' + exerciseid);
+                                $('#clone_form').submit();  
+                            }
+                        },
+                        cancel: {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        }                        
+                    }
+            });
+        });";
+}
+$head_content .= " 
 </script>";
 draw($tool_content, 2, null, $head_content);

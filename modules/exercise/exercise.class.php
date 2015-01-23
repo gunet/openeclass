@@ -886,9 +886,9 @@ if (!class_exists('Exercise')):
          */
         function duplicate() {
             global $langCopy2, $course_id;
-            
+            $clone_course_id = $_POST['clone_to_course_id'];
             $id = $this->id;
-            $exercise = $this->exercise." ($langCopy2)";
+            $exercise = $this->exercise.(($clone_course_id == $course_id)? " ($langCopy2)" : "");
             $description = standard_text_escape($this->description);
             $type = $this->type;
             $startDate = $this->startDate;
@@ -904,13 +904,23 @@ if (!class_exists('Exercise')):
             $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date, 
                                     end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score) 
                                     VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
-                                    $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
+                                    $clone_course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
                                     $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;        
-            Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
+            if ($clone_course_id != $course_id) { // copy questions to new course question_pool
+                Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
+                                            SELECT ?d, question, description, weight, q_position, type, difficulty, category
+                                              FROM `exercise_question`
+                                             WHERE course_id = ?d", $clone_course_id, $course_id);                
+            }
+            if ($clone_course_id == $course_id) { //add question to exercise
+                Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
                                         SELECT question_id, ?d
                                           FROM `exercise_with_questions`
-                                         WHERE exercise_id = ?d", $clone_id, $id);            
-            
+                                         WHERE exercise_id = ?d", $clone_id, $id);
+            } else { // add copied questions to exercise 
+                Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
+                                        SELECT id, ?d FROM `exercise_question` WHERE course_id = ?d", $clone_id, $clone_course_id);
+            }
         }        
 
     }
