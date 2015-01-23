@@ -40,7 +40,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $user = new User();
     // get the incoming values
     $search = isset($_GET['search']) ? $_GET['search'] : '';
-    $c = isset($_GET['c']) ? intval($_GET['c']) : '';
+    $c = isset($_GET['c']) ? intval($_GET['c']) : ''; // course id
     $lname = isset($_GET['lname']) ? $_GET['lname'] : '';
     $fname = isset($_GET['fname']) ? $_GET['fname'] : '';
     $uname = isset($_GET['uname']) ? canonicalize_whitespace($_GET['uname']) : '';
@@ -165,9 +165,27 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         // remove last ',' from $ids
         $deps = substr($ids, 0, -1);
 
-        $pref = ($c) ? 'a' : 'user';
-        $criteria[] = $pref . '.id = user_department.user';
+        $criteria[] = 'user.id = user_department.user';
         $criteria[] = 'department IN (' . $deps . ')';
+    }
+
+    // user status
+    if (!empty($_GET['sSearch_4'])) {
+        if ($c) { // listing course users, get user's status in this course
+            $criteria[] = '(course_user.status = ?d)';
+        } else { // listing all users, get user's global status
+            $criteria[] = '(user.status = ?d)';
+        }
+        $terms[] = $_GET['sSearch_4'];
+    }
+
+    // internal search
+    if (!empty($_GET['sSearch'])) {
+        $criteria[] = '(surname LIKE ?s OR givenname LIKE ?s OR username LIKE ?s OR email LIKE ?s)';
+        $keywords = array_fill(0, 4, $l1 . $_GET['sSearch'] . $l2);
+        $terms = array_merge($terms, $keywords);
+    } else {
+        $keywords = array_fill(0, 4, '%');
     }
 
     if (count($criteria)) {
@@ -178,13 +196,13 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // end filter/criteria
     if ($c) { // users per course
-        $qry_base = "FROM user AS a LEFT JOIN course_user AS b ON a.id = b.user_id
-                              $depqryadd WHERE b.course_id = ?d";
+        $qry_base = "FROM user LEFT JOIN course_user ON user.id = course_user.user_id
+                              $depqryadd WHERE course_user.course_id = ?d";
         if ($qry_criteria) {
             $qry_base .= ' AND ' . $qry_criteria;
         }
-        $qry = "SELECT DISTINCT a.id, a.surname, a.givenname, a.username, a.email,
-                           a.verified_mail, b.status " . $qry_base;
+        $qry = "SELECT DISTINCT user.id, user.surname, user.givenname, user.username, user.email,
+                           user.verified_mail, course_user.status " . $qry_base;
         add_param('c');
         array_unshift($terms, $c);
     } elseif ($search == 'no_login') { // users who have never logged in
@@ -193,7 +211,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($qry_criteria) {
             $qry_base .= ' AND ' . $qry_criteria;
         }
-        $qry = "SELECT DISTINCT user.id, surname, givenname, username, email, verified_mail, status " .
+        $qry = "SELECT DISTINCT id, surname, givenname, username, email, verified_mail, status " .
                 $qry_base;
         add_param('search', 'no_login');
     } else {
@@ -206,26 +224,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     $terms_base[] = $terms;
 
-    // internal search
-    if (!empty($_GET['sSearch'])) {
-        if (($qry_criteria) or ( $c)) {
-            $qry .= ' AND (surname LIKE ?s OR givenname LIKE ?s OR username LIKE ?s OR email LIKE ?s)';
-        } else {
-            $qry .= ' WHERE (surname LIKE ?s OR givenname LIKE ?s OR username LIKE ?s OR email LIKE ?s)';
-        }
-        $keywords = array_fill(0, 4, $l1 . $_GET['sSearch'] . $l2);
-        $terms = array_merge($terms, $keywords);
-    } else {
-        $keywords = array_fill(0, 4, '%');
-    }
-    if (!empty($_GET['sSearch_4'])) { 
-        if (!empty($_GET['sSearch'])) {
-            $qry .= ' AND (status = ?d)';            
-        } else {
-            $qry .= ' WHERE (status = ?d)';
-        }
-        $terms = array_merge($terms, array($_GET['sSearch_4']));
-    }
     // sorting
     if (!empty($_GET['iSortCol_0'])) {
         switch ($_GET['iSortCol_0']) {
@@ -327,7 +325,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'title' => $langStat,
                     'icon' => 'fa-pie-chart',
                     'url' => "userstats.php?u=$logs->id"
-                ),  
+                ),
                 array(
                     'title' => $langActions,
                     'icon' => 'fa-list-alt',
@@ -338,7 +336,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'icon' => 'fa-key',
                     'url' => 'change_user.php?username=' . urlencode($logs->username),
                     'hide' => isDepartmentAdmin()
-                )                
+                )
             ));
         }
         $data['aaData'][] = array(
@@ -369,11 +367,11 @@ $head_content .= "<script type='text/javascript'>
         . "                             '<option value=\'".USER_STUDENT."\'>$langStudent</option>'+"
         . "                             '<option value=\'".USER_GUEST."\'>$langVisitor</option>'+
                                     '</select>')
-                                    .appendTo( $(column.footer()).empty() );                   
+                                    .appendTo( $(column.footer()).empty() );
                 },
                 'fnDrawCallback': function( oSettings ) {
                     popover_init();
-                },                
+                },
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
@@ -414,7 +412,7 @@ $head_content .= "<script type='text/javascript'>
                     .column( $(this).parent().index()+':visible' )
                     .search($('select#select_role').val())
                     .draw();
-            });            
+            });
             $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";
@@ -438,7 +436,7 @@ $tool_content .= action_bar(array(
                 'url' => "updatetheinactive.php?activate=1",
                 'icon' => 'fa-plus-circle',
                 'level' => 'primary',
-                'show' => (isset($_GET['search']) and $_GET['search'] == 'inactive')),            
+                'show' => (isset($_GET['search']) and $_GET['search'] == 'inactive')),
             array('title' => $langBack,
                 'url' => "search_user.php",
                 'icon' => 'fa-reply',
@@ -466,7 +464,7 @@ $tool_content .= "<table id='search_results_table' class='display'>
                     <th></th>
                     <th></th>
                 </tr>
-            </tfoot>";           
+            </tfoot>";
 $tool_content .= "<tbody></tbody></table>";
 
 $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
