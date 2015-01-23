@@ -218,6 +218,14 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     } else {
         $keywords = array_fill(0, 4, '%');
     }
+    if (!empty($_GET['sSearch_4'])) { 
+        if (!empty($_GET['sSearch'])) {
+            $qry .= ' AND (status = ?d)';            
+        } else {
+            $qry .= ' WHERE (status = ?d)';
+        }
+        $terms = array_merge($terms, array($_GET['sSearch_4']));
+    }
     // sorting
     if (!empty($_GET['iSortCol_0'])) {
         switch ($_GET['iSortCol_0']) {
@@ -303,32 +311,35 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         if ($logs->id == 1) { // don't display actions for admin user
             $icon_content = "&mdash;&nbsp;";
         } else {
-            /*$icon_content = action_button(array(
-                        array('title' => $langEdit,
-                              'url' => "edituser.php?u=$logs->id",
-                              'icon' => 'fa-edit'),
-                        array('title' => $langDelete,
-                              'url' => "deluser.php?u=$logs->id",
-                              'icon' => 'fa-times'),
-                        array('title' => $langStat,
-                              'url' => "userstats.php?u=$logs->id",
-                              'icon' => 'fa-pie-chart'),
-                        array('title' => $langActions,
-                              'url' => "userlogs.php?u=$logs->id",
-                              'icon' => 'fa-list-alt'),
-                        array('title' => $changetip,
-                              'url' => "change_user.php?username=" . urlencode($logs->username) . "",
-                              'icon' => 'fa-key',
-                              'show' => !isDepartmentAdmin()),
-                        ));*/
             $changetip = q("$langChangeUserAs $logs->username");
-            $icon_content = icon('fa-edit', $langEdit, "edituser.php?u=$logs->id") . '&nbsp;' .
-                            icon('fa-times', $langDelete, "deluser.php?u=$logs->id") . '&nbsp;' .
-                            icon('fa-pie-chart', $langStat, "userstats.php?u=$logs->id") . '&nbsp;' .
-                            icon('fa-list-alt', $langActions, "userlogs.php?u=$logs->id");
-            if (!isDepartmentAdmin()) {
-                $icon_content .= '&nbsp;' . icon('fa-key', $changetip, 'change_user.php?username=' . urlencode($logs->username));
-            }
+            $icon_content = action_button(array(
+                array(
+                    'title' => $langEdit,
+                    'icon' => 'fa-edit',
+                    'url' => "edituser.php?u=$logs->id"
+                ),
+                array(
+                    'title' => $langDelete,
+                    'icon' => 'fa-times',
+                    'url' => "deluser.php?u=$logs->id"
+                ),
+                array(
+                    'title' => $langStat,
+                    'icon' => 'fa-pie-chart',
+                    'url' => "userstats.php?u=$logs->id"
+                ),  
+                array(
+                    'title' => $langActions,
+                    'icon' => 'fa-list-alt',
+                    'url' => "userlogs.php?u=$logs->id"
+                ),
+                array(
+                    'title' => $changetip,
+                    'icon' => 'fa-key',
+                    'url' => 'change_user.php?username=' . urlencode($logs->username),
+                    'hide' => isDepartmentAdmin()
+                )                
+            ));
         }
         $data['aaData'][] = array(
             '0' => $logs->surname,
@@ -348,7 +359,21 @@ load_js('datatables');
 load_js('datatables_filtering_delay');
 $head_content .= "<script type='text/javascript'>
         $(document).ready(function() {
-            $('#search_results_table').dataTable ({
+         var table = $('#search_results_table').DataTable ({
+                initComplete: function () {
+                    var api = this.api();
+                    var column = api.column(4);
+                    var select = $('<select id=\'select_role\'>'+
+                                        '<option value=\'0\'>-- Όλοι --</option>'+
+                                        '<option value=\'".USER_TEACHER."\'>$langTeacher</option>'+"
+        . "                             '<option value=\'".USER_STUDENT."\'>$langStudent</option>'+"
+        . "                             '<option value=\'".USER_GUEST."\'>$langVisitor</option>'+
+                                    '</select>')
+                                    .appendTo( $(column.footer()).empty() );                   
+                },
+                'fnDrawCallback': function( oSettings ) {
+                    popover_init();
+                },                
                 'bProcessing': true,
                 'bServerSide': true,
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
@@ -363,8 +388,8 @@ $head_content .= "<script type='text/javascript'>
                     {'bSortable' : true, 'sWidth': '20%' },
                     {'bSortable' : true, 'sWidth': '20%' },
                     {'bSortable' : false, 'sWidth': '20%' },
-                    {'bSortable' : false, 'sClass': 'center' },
-                    {'bSortable' : false, 'sWidth': '30%' },
+                    {'bSortable' : false, 'sClass': 'text-center' },
+                    {'bSortable' : false, 'sClass': 'text-center' },
                 ],
                 'oLanguage': {
                    'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
@@ -382,7 +407,14 @@ $head_content .= "<script type='text/javascript'>
                        'sLast':     '&raquo;'
                    }
                }
-            }).fnSetFilteringDelay(1000);
+            });
+            // Apply the filter
+            $(document).on('change', '#search_results_table tfoot select#select_role', function (e) {
+                table
+                    .column( $(this).parent().index()+':visible' )
+                    .search($('select#select_role').val())
+                    .draw();
+            });            
             $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
         });
         </script>";
@@ -416,14 +448,25 @@ $tool_content .= action_bar(array(
 // display search results
 $tool_content .= "<table id='search_results_table' class='display'>
             <thead>
-            <tr>
-              <th width='150'>$langSurname</th>
-              <th width='100' class='left'>$langName</th>
-              <th width='170' class='left'>$langUsername</th>
-              <th>$langEmail</th>
-              <th>$langProperty</th>
-              <th width='130' class='centertext-center'>" . icon('fa-gears') . "</th>
-            </tr></thead>";
+                <tr>
+                  <th width='150'>$langSurname</th>
+                  <th width='100' class='left'>$langName</th>
+                  <th width='170' class='left'>$langUsername</th>
+                  <th>$langEmail</th>
+                  <th>$langProperty</th>
+                  <th width='130' class='centertext-center'>" . icon('fa-gears') . "</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>";           
 $tool_content .= "<tbody></tbody></table>";
 
 $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
