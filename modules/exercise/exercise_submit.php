@@ -102,7 +102,7 @@ if (isset($_POST['buttonCancel'])) {
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
         unset_exercise_var($exerciseId);
 
-        Session::Messages($langAttemptCanceled);
+        Session::Messages($langAttemptWasCanceled);
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
