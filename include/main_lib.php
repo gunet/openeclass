@@ -235,7 +235,10 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-colorpicker') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css'>\n";
             $file = "bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js";
-        }               
+        }   elseif ($file == 'spectrum') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/spectrum/spectrum.css'>\n";
+            $file = "spectrum/spectrum.js";
+        }                
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     }
 

@@ -97,7 +97,7 @@ if (isset($_POST['optionsSave'])) {
 } else {
     $pageName = $langThemeSettings;
     $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
-    load_js('bootstrap-colorpicker');
+    load_js('spectrum');
     $head_content .= "
     <script>
         $(function(){
@@ -146,9 +146,15 @@ if (isset($_POST['optionsSave'])) {
             {
                 $(this).closest('form').submit();
             });        
-            $('.colorpicker').colorpicker({
-                format: 'rgba'
+            $('.colorpicker').spectrum({
+            preferredFormat: 'rgb',
+                showAlpha: true,
+                showInitial: true,
+                showInput: true
             });
+            $('#btnEnterAColor').click(function() {
+                $(this).closest('.colorpicker').spectrum('set', $('#enterAColor').val());
+            });            
         });
     </script>";
     $all_themes = Database::get()->queryArray("SELECT * FROM theme_options");
@@ -278,13 +284,13 @@ if (isset($_POST['optionsSave'])) {
             </div>                 
             <div class='form-group'>
               <label for='loginJumbotronBgColor' class='col-sm-3 control-label'>$langLoginBgGradient:</label>
-              <div class='col-sm-4'>
+              <div class='col-xs-4 col-sm-1'>
                 <input name='loginJumbotronBgColor' type='text' class='form-control colorpicker' id='loginJumbotronBgColor' value='$theme_options_styles[loginJumbotronBgColor]'>
               </div>
-              <div class='col-sm-1 text-center' style='padding-top: 7px;'>
-                <i class='hidden-xs fa fa-arrow-right'></i>
+              <div class='col-xs-1 text-center' style='padding-top: 7px;'>
+                <i class='fa fa-arrow-right'></i>
               </div>
-              <div class='col-sm-4'>
+              <div class='col-xs-4 col-sm-1'>
                 <input name='loginJumbotronRadialBgColor' type='text' class='form-control colorpicker' id='loginJumbotronRadialBgColor' value='$theme_options_styles[loginJumbotronRadialBgColor]'>
               </div>              
             </div>
