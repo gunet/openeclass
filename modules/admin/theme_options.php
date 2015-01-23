@@ -150,7 +150,10 @@ if (isset($_POST['optionsSave'])) {
             preferredFormat: 'rgb',
                 showAlpha: true,
                 showInitial: true,
-                showInput: true
+                showInput: true,
+                 cancelText: '$langCancel',
+                chooseText: '$langSubmit'
+                    
             });
             $('#btnEnterAColor').click(function() {
                 $(this).closest('.colorpicker').spectrum('set', $('#enterAColor').val());
