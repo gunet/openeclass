@@ -60,9 +60,12 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
     };
     /* Before the element becomes affixed, add left CSS that is equal to the distance of the element from the left of the screen */
     stickywidget.on('affix.bs.affix',function(){
+        stickywidget.removeAttr('style');
         explicitlySetAffixPosition();
+    }); 
+    stickywidget.on('affixed-bottom.bs.affix',function(){
+        stickywidget.css('left', 'auto');
     });
-
     /* On resize of window, un-affix affixed widget to measure where it should be located, set the left CSS accordingly, re-affix it */
     $(window).resize(function(){
         if(stickywidget.hasClass('affix')) {

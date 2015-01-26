@@ -34,6 +34,9 @@ input[type="file"] {
 .affix {
     top: 15px;
 }
+.affix-bottom {
+position: relative;
+}
 .option-btn-cell .btn-group {
   display: flex;
   display: -webkit-flex;
