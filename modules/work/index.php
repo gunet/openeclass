@@ -1363,7 +1363,7 @@ function assignment_details($id, $row) {
                     <strong>$m[title]:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    $row->title
+                    " .q($row->title) . "
                 </div>                
             </div>";
         if (!empty($row->description)) {
@@ -1856,7 +1856,7 @@ function show_assignments() {
             $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
             $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
             $tool_content .= "<td>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>$row->title</a>
+                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
                             </td>
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
