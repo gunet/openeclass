@@ -154,7 +154,7 @@ $tool_content .= "
                             if(!empty($user_announcements)){
                                 $tool_content.=$user_announcements;
                             }else{
-                                $tool_content.="<li class='list-item' style='border-bottom:none;'>$langNoRecentAnnounce</li>";
+                                $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langNoRecentAnnounce - </div></li>";
                             }
                             $tool_content.="</ul>
                     </div>
@@ -205,7 +205,7 @@ $tool_content .= "
                             if(!empty($user_messages)){
                                 $tool_content.=$user_messages;
                             }else{
-                                $tool_content.="<li class='list-item' style='border-bottom:none;'>$langDropboxNoMessage</li>";
+                                $tool_content.="<li class='list-item' style='border-bottom:none;'><div class='text-title not_visible'> - $langDropboxNoMessage- </div></li>";
                             }
                             $tool_content.="</ul>
                         </div>
