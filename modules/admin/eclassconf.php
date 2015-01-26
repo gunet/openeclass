@@ -964,7 +964,7 @@ $tool_content .= "
         $(function() {
             $('#floatMenu').affix({
               offset: {
-                top: 200,
+                top: 230,
                 bottom: function () {
                   return (this.bottom = $('.footer').outerHeight(true))
                 }
