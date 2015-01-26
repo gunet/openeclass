@@ -64,6 +64,10 @@ $(document).ready(function () {
     $('body').on('click', 'a.disabled', function(e) {
         e.preventDefault();
     });
+    $('body').on('click', 'a.back_btn', function(e) {
+        e.preventDefault();
+        javascript:window.history.back();
+    });
     $(document).on("click", function (e) {
         var target = $(e.target);
         //console.log(target.parents("#leftnav").length);

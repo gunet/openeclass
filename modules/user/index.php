@@ -212,7 +212,7 @@ $head_content .= "
                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
-                       'sSearch':       '" . $langSearch . "',
+                       'sSearch':       '',
                        'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
@@ -257,7 +257,7 @@ $head_content .= "
                     }
                 });     
             });
-            $('.dataTables_filter input').attr('placeholder', '$langName, Username, Email');
+            $('.dataTables_filter input').attr({style: 'width:200px', class:'form-control input-sm', placeholder: '$langName, Username, Email'});
             $('.success').delay(3000).fadeOut(1500);
         });
         </script>";
@@ -352,17 +352,18 @@ $tool_content .=
 
 
 $tool_content .= "
-<table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
-    <thead>
-        <tr>
-          <th>$langName $langSurname</th>
-          <th class='text-center'>$langGroup</th>
-          <th class='text-center' width='80'>$langRegistrationDateShort</th>
-          <th class='text-center'>".icon('fa-gears')."</th>
-        </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>";
-
+<div class='table-responsive'>    
+    <table id='users_table{$course_id}' class='table-default'>
+        <thead>
+            <tr>
+              <th>$langName $langSurname</th>
+              <th class='text-center'>$langGroup</th>
+              <th class='text-center' width='80'>$langRegistrationDateShort</th>
+              <th class='text-center'>".icon('fa-gears')."</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>";
 draw($tool_content, 2, null, $head_content);

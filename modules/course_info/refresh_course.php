@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
             array('title' => $langBack,
                   'url' => "refresh_course?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary'
+                  'level' => 'primary-label'
                  )));
     
     $output = array();
@@ -98,9 +98,10 @@ if (isset($_POST['submit'])) {
     
     $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "index.php?course=$course_code",
+                  'url' => "#",
+                  'class' => 'back_btn',
                   'icon' => 'fa-reply',
-                  'level' => 'primary'
+                  'level' => 'primary-label'
                  )));
     
     $tool_content .= "<div class='alert alert-info'>$langRefreshInfo $langRefreshInfo_A</div>
