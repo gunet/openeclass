@@ -106,7 +106,7 @@ if (isset($_GET['id'])) {
        
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'url' => "../admin/index.php",
+              'class' => 'back_btn',
               'icon' => 'fa-reply',
               'level' => 'primary-label'),
         array('title' => $langBackRequests,
