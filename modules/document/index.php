@@ -1236,7 +1236,7 @@ if ($doc_count == 0) {
                 if ($copyid = $entry['copyrighted'] and
                     $copyicon = $copyright_icons[$copyid]) {
                     $link_title_extra .= "&nbsp;" .
-                        icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
+                        icon_old_style($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
                 }
                 $dload_msg = $langSave;
 
