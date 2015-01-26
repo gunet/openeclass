@@ -67,7 +67,7 @@ if ($can_upload) {
                           'icon' => 'fa-reply',
                           'level' => 'primary-label')));
     $tool_content .= "
-        <div class='row margin-top-fat'>
+        <div class='row'>
             <div class='col-md-12'>
                 <div class='form-wrapper'>
 
@@ -75,8 +75,6 @@ if ($can_upload) {
           <input type='hidden' name='uploadPath' value='$uploadPath' />
           $group_hidden_input
           $fileinput
-              
-      <hr class='margin-bottom-fat'/>
       <div class='form-group'>
         <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle</label>
         <div class='col-sm-10'>

@@ -50,44 +50,58 @@ if ($can_upload) {
     if ($editPath) {
         $pageName = $langEditDoc;
         $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
-        $htmlFileName = q($info->filename);
+        $htmlFileName = '<p class="form-control-static">'.q($info->filename).'</p>';
         $htmlTitle = ' value="' . q($info->title) . '"';
         $fileContent = file_get_contents($basedir . $info->path);
-	    $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
+	$htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
     } else {
         $pageName = $langCreateDoc;
-        $htmlFileName = "<input type='text' name='file_name' size='40'>";
+        $htmlFileName = "<input type='text' class='form-control' id='file_name' name='file_name'>";
         $htmlTitle = '';
         $fileContent = '';
-	    $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
+	$htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
     }
     $action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
-    $tool_content .= "<form action='$upload_target_url' method='post'>
-<fieldset>
-    <legend>$pageName</legend>
+    $tool_content .= action_bar(array(
+                                array('title' => $langBack,
+                                      'url' => '#',
+                                      'icon' => 'fa-reply',
+                                      'level' => 'primary-label',
+                                      'class' => 'back_btn')
+                            ),false);
+    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<form class='form-horizontal' role='form' action='$upload_target_url' method='post'>
     $htmlPath
     $group_hidden_input
-	<table class='tbl' width='100%'>
-	<tr>
-	  <th>$langFileName:</th>
-	  <td>$htmlFileName</td>
-	</tr>
-	<tr>
-	  <th>$langTitle:</th>
-	  <td><input type='text' name='file_title'$htmlTitle size='40'></td>
-	</tr>
-	<tr>
-	  <th>$langContent:</th>
-	  <td>" . rich_text_editor('file_content', 20, 40, $fileContent) . "</td>
-    </tr>
-	<tr>
-      <td class='right' colspan=2>
-        <input class='btn btn-primary' type='submit' value='" . $langSubmit . "'>
-      </td>
-    </tr>
-  </table>
-</fieldset>
-</form>";
+
+              <div class='form-group'>
+        <label for='file_name' class='col-sm-2 control-label'>$langFileName:</label>
+        <div class='col-sm-10'>
+          $htmlFileName
+        </div>
+      </div>
+	
+        <div class='form-group'>
+        <label for='file_title' class='col-sm-2 control-label'>$langTitle:</label>
+        <div class='col-sm-10'>
+          <input type='text' class='form-control' id='file_title' name='file_title'$htmlTitle>
+        </div>
+      </div>
+      <div class='form-group'>
+        <label for='file_title' class='col-sm-2 control-label'>$langContent:</label>
+        <div class='col-sm-10'>"
+          . rich_text_editor('file_content', 20, 40, $fileContent) .
+        "</div>
+      </div>
+	  
+	<div class='form-group'>
+        <div class='col-xs-offset-2 col-xs-10'>
+          <button type='submit' value='" . $langSubmit . "' class='btn btn-primary'>
+            $langSubmit
+          </button>
+        </div>
+      </div>
+</form></div>";
 } else {
 	$tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
 }
