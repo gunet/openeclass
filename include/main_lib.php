@@ -89,6 +89,7 @@ define('MODULE_ID_RATING', 39);
 define('MODULE_ID_BBB', 34);
 define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
+define('MODULE_ID_ABUSE_REPORT', 42);
 
 // user modules
 define('MODULE_ID_SETTINGS', 31);

@@ -363,6 +363,9 @@ if (isset($_POST['submit'])) {
         if (isset($_POST['c_radio'])) {
             setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
         }
+        if (isset($_POST['ar_radio'])) {
+            setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
+        }
     }
 } else {
     $action_bar_array0 = array(
@@ -474,6 +477,14 @@ if (isset($_POST['submit'])) {
     }
     // USER COMMENTS
     if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
+        $checkDis = "";
+        $checkEn = "checked ";
+    } else {
+        $checkDis = "checked ";
+        $checkEn = "";
+    }
+    // ABUSE REPORT
+    if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) == 1) {
         $checkDis = "";
         $checkEn = "checked ";
     } else {
@@ -681,6 +692,21 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                             <input type='radio' value='0' name='c_radio' $checkDis> $langCommentsDis                    
+                      </label>
+                    </div>                   
+                </div>                    
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langAbuseReport:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='1' name='ar_radio' $checkEn> $langAbuseReportEn
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='ar_radio' $checkDis> $langAbuseReportDis                    
                       </label>
                     </div>                   
                 </div>                    

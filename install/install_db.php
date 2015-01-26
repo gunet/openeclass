@@ -777,6 +777,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
                 `tag` VARCHAR(50),
                 INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `course_id` INT(11) NOT NULL,
+                `reason` VARCHAR(50) NOT NULL DEFAULT '',
+                `message` TEXT NOT NULL,
+                `timestamp` INT(11) NOT NULL DEFAULT 0,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,

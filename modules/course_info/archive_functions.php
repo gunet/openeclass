@@ -144,6 +144,7 @@ function doArchive($course_id, $course_code) {
         'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
         'rating' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
         'rating_cache' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
+        'abuse_report' => "id IN (SELECT id FROM abuse_report WHERE course_id = $course_id)",
         'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)");
 
     foreach ($archive_conditions as $table => $condition) {

@@ -402,6 +402,7 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'comments' => MODULE_ID_COMMENTS,
     'rating' => MODULE_ID_RATING,
     'sharing' => MODULE_ID_SHARING,
+    'abuse_report' => MODULE_ID_ABUSE_REPORT,            
     'notes' => MODULE_ID_NOTES);
 
 // the system admin and power users have rights to all courses
