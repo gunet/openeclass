@@ -356,7 +356,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
         }
         $tool_content .= "</table></div></div></div>";
     } else {   // no links
-        $tool_content .= "<div class='alert alert-warning text-center'>$langNoLinksExist</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoLinksExist</div>";
     }
     add_units_navigation(true);
 }

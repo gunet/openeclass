@@ -30,10 +30,12 @@ input[type="file"] {
         margin-bottom: 0px;
     }
 }
-.popover-content
 // Affix styles
 .affix {
-    top: 40px;
+    top: 15px;
+}
+.affix-bottom {
+position: relative;
 }
 .option-btn-cell .btn-group {
   display: flex;

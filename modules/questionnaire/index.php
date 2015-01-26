@@ -161,12 +161,41 @@ function printPolls() {
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
     $head_content, $langCreateDuplicateIn, $langCurrentCourse;
-
+    
+    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
+    $courses_options = "";
+    foreach ($my_courses as $row) {
+        $courses_options .= "'<option value=\"$row->Course_id\">$row->Title</option>'+";
+    }    
     $head_content .= "
     <script>
         $(document).on('click', '.warnLink', function() {
             var pid = $(this).data('pid');
-            $('#clone_form').attr('action', '$_SERVER[SCRIPT_NAME]?pid=' + pid);
+            bootbox.dialog({
+                title: '$langCreateDuplicateIn',
+                message: '<form action=\"$_SERVER[SCRIPT_NAME]\" method=\"POST\" id=\"clone_form\">'+
+                            '<select class=\"form-control\" id=\"course_id\" name=\"clone_to_course_id\">'+
+                                '<option value=\"$course_id\">--- $langCurrentCourse ---</option>'+
+                                $courses_options    
+                            '</select>'+
+                          '</form>',
+                    buttons: {
+                        success: {
+                            label: '$langCreateDuplicate',
+                            className: 'btn-success',
+                            callback: function (d) {    
+                                $('#clone_form').attr('action', '$_SERVER[SCRIPT_NAME]?pid=' + pid);
+                                $('#clone_form').submit();  
+                            }
+                        },
+                        cancel: {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        }                        
+                    }
+                            
+                    
+            });
         });          
     </script>
     ";
@@ -297,7 +326,7 @@ function printPolls() {
                                 'title' => $langCreateDuplicate,
                                 'icon' => 'fa-copy',
                                 'icon-class' => 'warnLink',
-                                'icon-extra' => "data-toggle='modal' data-target='#modalWarning' data-remote='false' data-pid='$pid'",
+                                'icon-extra' => "data-pid='$pid'",
                                 'url' => "#"
                             )                                        
                         ))."</td></tr>";
@@ -322,33 +351,4 @@ function printPolls() {
         }
         $tool_content .= "</table></div>";
     }
-    $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
-    $tool_content .= "
-    <!-- Modal -->
-    <div class='modal fade' id='modalWarning' tabindex='-1' role='dialog' aria-labelledby='modalWarningLabel' aria-hidden='true'>
-      <div class='modal-dialog'>
-        <div class='modal-content'>
-          <div class='modal-header'>
-          $langCreateDuplicateIn
-            <button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>Close</span></button>
-          </div>
-          <form action='$_SERVER[SCRIPT_NAME]' method='POST' id='clone_form'>
-          <div class='modal-body'>
-            <select class='form-control' id='course_id' name='clone_to_course_id'>
-                <option value='$course_id' selected>--- $langCurrentCourse ---</option>";
-    foreach ($my_courses as $row) {
-        $tool_content .= "<option value='$row->Course_id'>$row->Title</option>";
-    }
-    $tool_content .= "            
-            </select>
-          </div>
-          <div class='modal-footer'>
-            <input type='submit' class='btn btn-primary' value='$langCreateDuplicate'>
-            <a href='#' data-dismiss='modal' class='btn btn-default'>$langCancel</a>
-          </div>
-          </form>
-        </div>
-      </div>
-    </div>    
-    ";    
 }

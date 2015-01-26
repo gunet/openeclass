@@ -68,7 +68,7 @@ if (isset($_POST['submit'])) {
             } else {
                 $prof_name = '';
             }
-            list($code, $cid) = create_course('', $_POST['lang'], $title, $departments, $vis, $prof_name, $_POST['password']);
+            list($code, $cid) = create_course('', $_POST['lang'], $title, '', $departments, $vis, $prof_name, $_POST['password']);
             if ($cid) {
                 if ($prof_uid) {
                     Database::get()->query("INSERT INTO course_user

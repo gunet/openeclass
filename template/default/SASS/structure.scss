@@ -134,13 +134,15 @@ body > .container{
   background-color: $color-main-content;
   overflow: hidden;
 }
+#header_section .nav-container{
+    border-bottom: 1px solid #DBDBDB;
+}
 
 #header.navbar{
     margin-bottom: 0px;
     padding: 0;
     border: 0;
     background-color: $color-header;
-    border-bottom: 1px solid #DBDBDB;
     
 		.navbar-nav{
 			margin: 0;
@@ -151,7 +153,7 @@ body > .container{
 				float: left;
                                 cursor: pointer;
                                 ul li a{
-                                    padding: 6px 17px;
+                                    padding: 6px 17px 6px 4px;
                                 }
 				a {
 					padding-top: 15px;
@@ -161,7 +163,7 @@ body > .container{
 /*          @include transition(all $transition-time linear);*/
 
 					i.fa{
-						margin:0 1em 0 0;		
+						margin:0 1em;		
 					}
 
 					&:hover,
@@ -356,7 +358,7 @@ a.toggle-active{
                  
                  .panel{
                      margin: 6px 3px;
-                     box-shadow: none;;
+                     box-shadow: none;
                  }
                  .panel:first-child{
                      margin-top: 3px;

@@ -114,8 +114,6 @@ if (isset($_POST['submit'])) {
     } else {
         // department exists
         $numofcourses = getdepnumcourses($fc);
-        if (count($tree->buildRootsArray()) > 1)
-            $tool_content .= $tree->buildRootsSelectForm($fc);
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
@@ -123,6 +121,9 @@ if (isset($_POST['submit'])) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
+        if (count($tree->buildRootsArray()) > 1) {
+            $tool_content .= $tree->buildRootsSelectForm($fc);
+        }
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<table class='table-default'>
                                   <tr><th><a name='top'></a>$langFaculty: " .

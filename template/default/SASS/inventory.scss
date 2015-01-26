@@ -1677,19 +1677,24 @@ td.option-btn-cell{
     margin-bottom: 15px;
 }
 
-div.spinner-div
-{
-    position: absolute;
-    z-index: 9999;
-    background-color: rgba(100,100,100,0.7);
-    text-align: center;
-    padding-top: 50px;
-    width: 100%;
-    height: 100%;
-}
 .overlayed{
     position: relative;
     width: 259px;
+
+    div.spinner-div
+    {
+        position: absolute;
+        z-index: 9999;
+        background-color: rgba(100,100,100,0.9);
+        text-align: center;
+        padding-top: 50px;
+        width: 100%;
+        height: 100%;
+
+        p{
+            font-size: 16px;
+        }
+    }
 }
 
 #Frame
@@ -1759,13 +1764,13 @@ div.spinner-div
         span{
             display: block;
         }
-        span.opencourse_link{
+        .opencourse_link{
             font-size: 16px;
             color: #444;
             padding: 8px 0px 14px 0;
             text-align: center;
         }
-        span.opencourse_num{
+        .opencourse_num{
             font-size: 40px;
             float: left;
             font-weight: 900;
@@ -1773,21 +1778,18 @@ div.spinner-div
             line-height: 40px;
             padding: 0 10px;
         }
-        >div{
-            width: 190px;
-        }
         >div>div{
             float: right;
         }
-        span.opencourse_sub{
+        .opencourse_sub{
             float: left;
             background-color: #428bca;
             height: 40px;
             color: white;
             font-size: 13px;
-            padding: 0px 25px;
+            padding: 0px 15px;
         }
-        span.opencourse_triangle{
+        .opencourse_triangle{
             float: left;
             border-top: 20px solid transparent;
             border-bottom: 20px solid transparent;

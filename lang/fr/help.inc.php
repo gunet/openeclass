@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2012-10-19 13:31:15
+// Generated 2015-01-23 13:34:12
 
 $langCourseAccessHelp = "
 <ul>
@@ -58,7 +58,7 @@ $langWindowClose = "Fermer la fenêtre";
 $langHDefault = 'Aide non disponible';
 $langDefaultContent = "<p>Il n'y a pas de texte d'aide pour la page de la plateforme sur laquelle vous êtes actuellement.</p>";
 $langPHPMathPublisher = "<p><b>Mathematic symbols support</b></p>
-<p>For the incorporation of mathematic symbols in your texts, you can use the <a href='../../manuals/PhpMathPublisherHelp.pdf' target='_blank'>commands</a> (symbolisms) provided by PhpMathPublisher.
+<p>For the incorporation of mathematic symbols in your texts, you can use the <a href='http://wiki.openeclass.org/doku.php?id=mathp'>commands</a> (symbolisms) provided by PhpMathPublisher.
 More specifically, you may use the text editor in order to insert your content. If the content you import contains mathematic symbols you wish to present, then:</p>
 <ol>
   <li>Click the 'Toggle HTML Source' icon.</li>
@@ -80,8 +80,6 @@ Enter a title and a description for the forum and click on Add.</p>
   <li>Εmail notification if replies are posted. Clicking (<img src='$themeimg/email.png' width=16 height=16>) you select to start or stop receiving email notifications on posts in a specific forum category.</li>
   </ul>
 ";
-$langHInit_student = $langHInit;
-$langInit_studentContent = $langInitContent;
 $langHDoc = "Documents";
 $langHDoc_student = $langHDoc;
 $langDocContent = "<p>The Documents tool is similar to the FileManager of your desktop computer.</p>
@@ -162,7 +160,7 @@ $langUserContent = "<p>Τhis section allows user management and presents informa
         <p>To provide co-admin rights to a registered user click <img src='$themeimg/assistant_add.png' width=24 height=16>.</p>               
         <p>To provide group tutor rights to a registered user click <img src='$themeimg/group_manager.png' width=16 height=16>.</p>
         <p>To unregister a user from the course click <img src='$themeimg/cunregister.png' width=16 height=16>.</p>";
-$langHGuest = "d'utilisateur visiteur";
+$langHGuest = "un utilisateur visiteur";
 $langGuestContent = "<p>By clicking on 'Add guest account' you can create an account for a new guest user.</p>";
 $langHQuestionnaire = "Questionnaire";
 $langHQuestionnaire_student = $langHQuestionnaire;
@@ -173,7 +171,7 @@ Click on 'Create Questionnaire' in order to complete the creation procedure.</br
 <p><img src='$themeimg/warning.png' width=18 height=18> <b>Warning</b>: If within an active questionnaire, at least one question has been answered by a student, then the procedure of correction of this questionnaire is accomplished through the creation of a 'new' questionnaire (the corrected one). This automatic procedure reassures the questionnaire results reliability.</p>
 </p>
 <hr>
-<p><b>Other actions</b><br>
+<p><b>Available actions</b><br>
 <ul>
   <li>Questionnaire modification. Click on the (<img src='$themeimg/edit.png' width=16 height=16>) button in order to modify the contents of a questionnaire.</li>
   <li>Questionnaire deletion. Click on the (<img src='$themeimg/delete.png' width=16 height=16>) button in order to delete a questionnaire.</li>
@@ -232,10 +230,10 @@ Add an optional comment. This comment won't be seen by the student till the mome
 Give a weighting to the answer. The weighting can be any positive or negative integer, or zero<br>
 Click on 'Create' to save your answers.</p>
 <hr>
-<p>You can import questions from another exercise through the 'Get Existing Question' link. Select the question you want to reuse and click on the <img src='$themeimg/enroll.png' width=16 height=16> icon.</p>
-<p>Click on <img src='$themeimg/edit.png' width=16 height=16> icon in order to modify an exercise. 
-Click on <img src='$themeimg/delete.png' width=16 height=16> icon in order to delete an exercise.
-Click on <img src='$themeimg/visible.png' width=16 height=16> icon to make an exercise visible or invisible to students.
+<p>You can import questions from another exercise through the 'Get Existing Question' link. Select the question you want to reuse and click on the <i class='fa fa-plus-square'></i> icon.</p>
+<p>Click on <i class='fa fa-edit'></i> icon in order to modify an exercise. 
+Click on <i class='fa fa-times'></i> icon in order to delete an exercise.
+Click on <i class='fa fa-eye'></i> icon to make an exercise visible or invisible to students.
 Click on 'Question Pool' to list all questions (from all exercises).
 Finally, you can see the results for each exercise in HTML or CSV format by clicking on the corresponding link.
 </p>";
@@ -351,7 +349,7 @@ Browse your computer for the file to upload, type a title and optionally a descr
     </ul>
 </p>";
 $langVideo_studentContent = "<p>It is a module presenting multimedia educational material. There are two choices, multimedia file or link to video that is stored in a VOD Server (Video on Demand) Server. These two choices are transparent for the students. Every video has a title and a short description.
-</p>";
+</p>" ;
 $langHCoursedescription = "Descriptif du cours";
 $langHCoursedescription_student = $langHCoursedescription;
 $langCoursedescriptionContent = "<p>You can add additional information about the course, by selecting the 'Create and Edit' option. 
@@ -466,18 +464,11 @@ To attend a learning object within a learning path click on its title. Select th
 Selection of button <img src='$themeimg/monitor.png' width=16 height=16> allows you to see the details of a learning object such as: Title, Comments, Module type, Total time, etc.</p>";
 $langHDropbox = "DropBox : Échange de fichiers";
 $langHDropbox_student = $langHDropbox;
-$langDropboxContent = "<p>Dropbox is a tool for exchanging files with other course users.Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description.
-Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure. </p>
-<p>Two Dropbox folders are displayed: </p>
-<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file. </p>
-<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed, along with additional information on the files exchange. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
-</p>
-<p>Finally, a list with other Dropbox files is presented along with additional information on the files exchange.</p>";
-$langDropbox_studentContent = "<p>Dropbox is a tool for exchanging files with the users registered to the course. Click on 'File Upload' to send a file. Locate the file you want to upload through the 'Browse' option and optionally enter a description. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, to send an email notification to users. Click on 'Send' to complete the procedure.</p>
-<p>Two Dropbox folders are displayed:</p>
-<p><b><u>Received Files</u></b>. All files you have received are displayed here along with information on the sender of the file, the file size and the date of upload. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a received file.</p>
-<p><b><u>Sent files</u></b>. A list with all files you have sent to the registered course users (students and teachers) is displayed along with additional information on the files. Click on <img src='$themeimg/delete.png' width=10 height=10> icon to delete a file from the list.</p>
-</p>";
+$langDropboxContent = "<p>'Message exchange' is a tool for sending to / receiving from messages from other users. Click on 'New message' to compose your message. Enter its title and main message body. If you want to attach a file click on 'Filename'. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, if you want to send an email notification to users. Finally, click on 'Send' to send your message.</p>
+<p>By default you will be displayed with your incoming messages. If you want to have access in your out coming messages click on 'Outcoming messages'. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a message.</p>
+<p>Note that if you can have access to course users mail messages by clicking in 'Other messages'.</p>";
+$langDropbox_studentContent = "<p>'Message exchange' is a tool for sending to / receiving from messages from course teachers (or/and with other users if platform administrator has given you appropriate permissions). Click on 'New message' to compose your message. Enter its title and main message body. If you want to attach a file click on 'Filename'. Select the file recipient(s) through the 'Send to' selection list. Tick the corresponding box, if you want to send an email notification to users. Finally, click on 'Send' to send your message.</p>
+<p>By default you will be displayed with your incoming messages. If you want to have access in your out coming messages click on 'Outcoming messages'. Click on <img src='$themeimg/delete.png' width=10 height=10> to delete a message.</p>";
 $langHUsage = "Statistiques d'utilisation";
 $langUsageContent = "<p>This module presents course usage statistics information. More specifically,</p>
 <p>
@@ -518,8 +509,6 @@ $langWiki_studentContent = "The Wiki module is a new collaboration tool that all
 <p><b>Recent changes.</b> Through this option you can view all recent modifications made in the Wiki. You can click on 'Main page' (<img src='$themeimg/wiki.png' align='absmiddle'>) to view the Wiki main page, you can click on 'All pages' (<img src='$themeimg/book.png' align='absmiddle'>) to view a list of all Wiki pages, or click on 'List of Wiki' (<img src='$themeimg/list.png' align='absmiddle'>) to view a list with all Wikis.</p>
 
 $langWikiSyntaxHelp";
-$langHAddCourseUnitscontent = "Ajouter le contenu d'une unité thématique";
-$langAddCourseUnitscontentContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
 $langHGlossary = "Glossaire";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "<p>
@@ -613,7 +602,7 @@ Click on icon <strong>Delete</strong> to <strong>delete</strong> an E-Book.</p>
 For accomplishing this, click on the course unit you want to link and from the available tools select <strong>'Add e-book'</strong>.
 From the displaying form select the desired E-Book section.
 After that click on <strong>'Add selection'</strong>.</p>";
-$langEBook_studentContent = "<p>The 'E-Book' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
+$langEBook_studentContent = "<p>'eBook' is a set of <b>hypertext</b> content that 'simulates' a book (print version). Basically an electronic book is a flexible structure that apart from text in digital format can additionally be enriched with multimedia content such as images, videos, external links, etc. Moreover, this module allows structuring of the book contents into sections - subsections. The presentation of content is made through a list box. Navigation through an e-book is done in a friendly way as there are various tools for handling actions e.g. previous-next.</p>
 <p>Select from the left menu the 'E-Book' option. A list of the course e-books will be displayed. To browse an e-book just click on it.</p>";
 $langFor_studentContent = "<p>The platform allows you to communicate with all other course students.</p>
 You can either create a new discussion topic by clicking 'New topic' (after you have first selected the corresponding discussion area), or reply to an existing topic by clicking 'Reply'.
@@ -643,3 +632,26 @@ $langGroupSpaceContent = "<p>To correct the user group info click on 'Edit this 
         Clicking on 'Forum' you enter the 'Forum' area where a distinct forum has been created for each user group. Click on 'Documents of the Group' in order to add or remove documents related to the group. Please note that these documents are only related to the specific group and have no relation with the 'Documents' module of the platform main screen.
         You may send an email to all users within a group by clicking on 'Email to group' selection.
          You may also view the group usage statistics by clicking on 'Usage Statistics'.</p>";
+$langHAddCourseUnits = 'Add course unit content';
+$langAddCourseUnitsContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
+$langHBBB = "Teleconference";
+$langHBBB_student = $langHBBB;
+$langBBBContent = "<p>To schedule a new teleconference for your course, please click on the \"Schedule New Teleconference\" button. 
+You can use the \"Title\" field for a short descriptive title and the \"Description\" field for the agenda of the discussion or presentation.
+        <br /><br />The other fields can be set as follows:</p> 
+        <p>
+        <ul>
+        <li><strong>Teleconference start</strong>: Set the scheduled start date and time</li>
+        <li><strong>Teleconference type</strong>: Public to others: All registered platform users will be able to join the teleconference, regardless of their being registered to this course or not -  Private: The teleconference will be accessible only to participants registered to your course.</li>
+        <li><strong>Status</strong>: Visible: the teleconference will be displayed to users of your course - Invisible: the teleconference will be displayed only to the course administrators. Use the latter option to schedule the teleconference in advance but only display it at a later time.</li>
+        <li><strong>Session availability</strong>: Select how many minutes before the scheduled start time participants will be able to join the teleconference.</li>
+        <li><strong>Notify external participants</strong>: Enter a list of email recipients who will be invited to participate in the teleconference (e.g. visitors, external institution members with no access to the platform, etc).</li>
+        <li><strong>Notify users for teleconference schedule</strong>: Enable this option to send an email notification to all participants.</li>
+        </ul>
+        </p>";
+$langBBB_studentContent = "<p>Here you can find all scheduled course teleconferences. 
+        <ul>        
+        <li>To join one of them, please click on its title.</li>
+        <li>The link becomes active in a predetermined period before the scheduled start time. This period is set by the course administrator.</li>
+        </ul>
+        </p>";

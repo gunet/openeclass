@@ -236,7 +236,10 @@ function load_js($file, $init='') {
         } elseif ($file == 'bootstrap-colorpicker') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css'>\n";
             $file = "bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js";
-        }               
+        }   elseif ($file == 'spectrum') {
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/spectrum/spectrum.css'>\n";
+            $file = "spectrum/spectrum.js";
+        }                
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     }
 
@@ -2534,7 +2537,7 @@ class HtmlCutString {
     function __construct($string, $limit, $postfix) {
         // create dom element using the html string
         $this->tempDiv = new DomDocument;
-        $this->tempDiv->loadXML('<div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
+        @$this->tempDiv->loadXML('<div>' . $string . '</div>', LIBXML_NONET|LIBXML_DTDLOAD|LIBXML_DTDATTR);
         // keep the characters count till now
         $this->charCount = 0;
         // put the postfix at the end
@@ -2717,11 +2720,9 @@ function action_bar($options, $page_title_flag = true) {
         if (isset($option['show']) and !$option['show']) {
             continue;
         }
-        if (isset($option['class'])) {
-            $class = " class='$option[class]'";
-        } else {
-            $class = '';
-        }
+        $class = isset($option['class']) ? " ".$option['class'] : '';
+        $wrapped_class = isset($option['class']) ? " class='$option[class]'" : '';
+        $url = isset($option['url']) ? $option['url'] : "#";
         $title = q($option['title']);
         $level = isset($option['level'])? $option['level']: 'secondary';
         if (isset($option['confirm'])) {
@@ -2730,18 +2731,18 @@ function action_bar($options, $page_title_flag = true) {
             $confirm_extra = " data-title='$title_conf' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept_conf' data-action-class='btn-danger'";
             $confirm_modal_class = ' confirmAction';
-            $form_begin = "<form method=post action='$option[url]' style='display:inline-block;'>";
+            $form_begin = "<form method=post action='$url' style='display:inline-block;'>";
             $form_end = '</form>';
             $href = '';
         } else {
             $confirm_extra = $confirm_modal_class = $form_begin = $form_end = '';
-            $href = " href='" . $option['url'] . "'";
+            $href = " href='$url'";
         }
         if (!isset($option['button-class'])) {
             $button_class = 'btn-default';
         } else {
             $button_class = $option['button-class'];
-        }
+        }     
         if (isset($option['link-attrs'])) {
             $link_attrs = " ".$option['link-attrs'];
         } else {
@@ -2749,7 +2750,7 @@ function action_bar($options, $page_title_flag = true) {
         }        
         if ($level == 'primary-label') {
             array_unshift($out_primary,
-                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
                 " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .
@@ -2762,7 +2763,7 @@ function action_bar($options, $page_title_flag = true) {
                 "<i class='fa $option[icon]'></i></a>$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$class>$form_begin<a$confirm_extra  class='$button_class$confirm_modal_class'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$button_class$confirm_modal_class'" . $href .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
         }
@@ -2831,7 +2832,7 @@ function action_button($options) {
             $link_attrs = "";
         }  
         $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
-        $icon_class = "class='list-group-item $class";
+        $icon_class = "class='list-group-item $class$disabled";
         if (isset($option['icon-class'])) {
             $icon_class .= " " . $option['icon-class'];
         }
@@ -2855,7 +2856,7 @@ function action_button($options) {
         if ($level == 'primary-label') {
             array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' rel='tooltip' title='$option[title]' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
         }        
@@ -2902,11 +2903,13 @@ function setOpenCoursesExtraHTML() {
                 <span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>
                 <a class='clearfix' href='$openFacultiesUrl'>
                     <span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>
-                    <div class='num_sub_wrapper center-block clearfix'>
-                        <span class='opencourse_num'>$openCoursesNum</span>
-                        <div>
+                    <div class='row num_sub_wrapper center-block clearfix'>
+                        <div class='col-xs-6 col-md-4 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
+                        <div class='col-xs-6 col-md-8'>
+                        <div class='pull-left'>
                             <span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span>
                             <span class='opencourse_triangle'></span>
+                            </div>
                         </div>
                     </div>
                 </a>

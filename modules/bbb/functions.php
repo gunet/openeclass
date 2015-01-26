@@ -53,7 +53,7 @@ function new_bbb_session() {
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;    
     global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
-    global $langΒΒΒAlertTitle,$langΒΒΒAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
+    global $langBBBAlertTitle,$langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
    
     $textarea = rich_text_editor('desc', 4, 20, '');
     $start_date = new DateTime;
@@ -189,9 +189,9 @@ function new_bbb_session() {
         $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
             var chkValidator  = new Validator("sessionForm");
-            chkValidator.addValidation("title","req","'.$langΒΒΒAlertTitle.'");
-            chkValidator.addValidation("sessionUsers","req","'.$langΒΒΒAlertMaxParticipants.'");
-            chkValidator.addValidation("sessionUsers","numeric","'.$langΒΒΒAlertMaxParticipants.'");
+            chkValidator.addValidation("title","req","'.$langBBBAlertTitle.'");
+            chkValidator.addValidation("sessionUsers","req","'.$langBBBAlertMaxParticipants.'");
+            chkValidator.addValidation("sessionUsers","numeric","'.$langBBBAlertMaxParticipants.'");
         //]]></script>';
 }
 
@@ -388,7 +388,7 @@ function edit_bbb_session($session_id) {
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
-    global $langΒΒΒAlertTitle, $langΒΒΒAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
+    global $langBBBAlertTitle, $langBBBAlertMaxParticipants, $langJQCheckAll, $langJQUncheckAll;
 
     
     $row = Database::get()->querySingle("SELECT * FROM bbb_session WHERE id = ?d ", $session_id);
@@ -533,9 +533,9 @@ function edit_bbb_session($session_id) {
                 $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[
                     var chkValidator  = new Validator("sessionForm");
-                    chkValidator.addValidation("title","req","'.$langΒΒΒAlertTitle.'");
-                    chkValidator.addValidation("sessionUsers","req","'.$langΒΒΒAlertMaxParticipants.'");
-                    chkValidator.addValidation("sessionUsers","numeric","'.$langΒΒΒAlertMaxParticipants.'");
+                    chkValidator.addValidation("title","req","'.$langBBBAlertTitle.'");
+                    chkValidator.addValidation("sessionUsers","req","'.$langBBBAlertMaxParticipants.'");
+                    chkValidator.addValidation("sessionUsers","numeric","'.$langBBBAlertMaxParticipants.'");
                     //]]></script>';
         }
 

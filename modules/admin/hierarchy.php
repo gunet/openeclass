@@ -241,7 +241,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>$langNodeCode1:</label>
                 <div class='col-sm-9'>
-                    <input type='text' name='code' placeholder='$langCodeFaculte2'>
+                    <input class='form-control' type='text' name='code' placeholder='$langCodeFaculte2'>
                 </div>
             </div>";
             $i = 0;
@@ -250,7 +250,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                         <label class='col-sm-3 control-label'>$langNodeName:</label>";
                 $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
                 $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-                $tool_content .= $tdpre . "<input type='text' name='name-" . $langcode . "' placeholder='$placeholder'></div></div>";
+                $tool_content .= $tdpre . "<input class='form-control' type='text' name='name-" . $langcode . "' placeholder='$placeholder'></div></div>";
                 $i++;
             }
 
@@ -265,23 +265,23 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         <div class='form-group'>
           <label class='col-sm-3 control-label'>$langNodeAllowCourse:</label>
             <div class='col-sm-9'>
-                  <input type='checkbox' name='allow_course' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowCourse2</small></span>
+                  <input class='form-control' type='checkbox' name='allow_course' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowCourse2</small></span>
           </div>
         </div>
         <div class='form-group'>
         <label class='col-sm-3 control-label'>$langNodeAllowUser</label>
           <div class='col-sm-9'>
-              <input type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
+              <input class='form-control' type='checkbox' name='allow_user' value='1' checked='checked'><span class='help-block'><small>$langNodeAllowUser2</small></span>
           </div>
         </div>
         <div class='form-group'>
         <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
           <div class='col-sm-9'>
-              <input type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
+              <input class='form-control' type='text' name='order_priority'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
           </div>
         </div>
         <div class='form-group'>
-          <div class='col-sm-10 col-sm-offset-2'>
+          <div class='col-sm-2'>
               <input class='btn btn-primary' type='submit' name='add' value='" . $langAdd . "' />
           </div>
         </div>
@@ -369,7 +369,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         <div class='form-group'>
             <label class='col-sm-3 control-label'>$langNodeCode1:</label>
             <div class='col-sm-9'>
-                <input type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i>
+                <input class='form-control' type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i>
             </div>
         </div>";            
 

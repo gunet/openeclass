@@ -696,7 +696,6 @@ if ($can_upload) {
                 $oldFilename = $fileName;
             $dialogBox .= "
                         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                        <fieldset>
                           <legend>$langAddComment</legend>
                           <input type='hidden' name='commentPath' value='" . q($comment) . "' />
                           <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
@@ -765,7 +764,6 @@ if ($can_upload) {
                         <input type='hidden' size='80' name='file_creator' value='$oldCreator' />
                         <input type='hidden' size='80' name='file_date' value='$oldDate' />
                         <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage' />
-                        </fieldset>
                         </form>";
         } else {
             $action_message = "<div class='alert alert-danger'>$langFileNotFound</div>";
@@ -1236,7 +1234,7 @@ if ($doc_count == 0) {
                 if ($copyid = $entry['copyrighted'] and
                     $copyicon = $copyright_icons[$copyid]) {
                     $link_title_extra .= "&nbsp;" .
-                        icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
+                        icon_old_style($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
                 }
                 $dload_msg = $langSave;
 

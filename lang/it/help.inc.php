@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2012-10-31 12:32:35
+// Generated 2015-01-23 13:34:13
 
 $langCourseAccessHelp = "<ul> 
 <li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 
@@ -81,8 +81,6 @@ $langForContent = "<p>Puoi comunicare con tutti gli utenti del corso.</p>
   <li>Notifica tramite una e-mail con l' invio di risposte. Cliccando sul tasto (<img src='$themeimg/email.png' width=16 height=16>) puoi attivare la notifica tramite e-mail quando un post o una risposta al forum della propria categoria viene apposta.</li> 
   </ul>
 ";
-$langHInit_student = $langHInit;
-$langInit_studentContent = $langInitContent;
 $langHDoc = 'Documenti';
 $langHDoc_student = $langHDoc;
 $langDocContent = "<p>Il modulo 'Documenti' è uno strumento importante che aiuta notevolmente lo
@@ -216,7 +214,7 @@ gestione degli utenti, come segue: </p>
 $langHGuest = "Utente Ospite";
 $langGuestContent = "<p>Selezionando 'Aggiungere utente ospite' puoi aggiungere un nuovo utente ospite.</p>";
 $langHQuestionnaire = "Questionario";
-$langHQuestionnaire_student = $langHQuestionnaire;
+$langHQuestionnaire_student = $langHQuestionnaire ;
 $langQuestionnaireContent = "<p>Lo strumento 'Questionario' ti permette di <b>creare</b> sia delle domande
 a 'Scelta multipla' che domande a 'Compilazione'. Per creare un questionario,
 clicca sul link 'Creare Questionario'. Nel display che appare, compila il
@@ -259,7 +257,7 @@ corretto). Questo processo si effettua automaticamente dalla piattaforma e
 garantisce la massima affidabilità dei risultati dei questionari.
 </p>";
 $langHExercise = "Esercizi";
-$langHExercise_student = $langHExercise;
+$langHExercise_student = $langHExercise ;
 $langExerciseContent = "<p>Il modulo 'Esercizi'  aiuta alla autovalutazione degli studenti in una serie di esercizi che sono stati creati dall' insegnante del corso. Nella home page degli esercizi vengono visualizzati tutti gli esercizi del corso e una serie di operazioni è fornita per la loro gestione (Modificare, Eliminare , Cambiare Visibilità). <br>
 <br>I tipi di domande che puoi includere in un esercizio sono i seguenti: <br>
 <ul>
@@ -338,7 +336,7 @@ Sulla destra di ogni domanda c'è un 'peso' che corrisponde alla sua valutazione
 </p>
 ";
 $langHWork = "Compiti";
-$langHWork_student = $langHWork;
+$langHWork_student = $langHWork ;
 $langWorkContent = "<p>Il modulo 'Compiti'  è un sistema integrato per creare e gestire dei compiti.</p> 
 <p>Come un insegnante, puoi creare un compito facendo clic sul link <b>Creare compito'</b>.
 Compila il titolo del compito e specifica la data del suo invio. Facoltativamente puoi aggiungere un commento. Questo modulo contiene due tipi di compiti: 'Individuale', 'Collettivo'. Se selezioni 'Collettivo' come tipo di compito,  devi avere attivato il modulo  'Gruppi di utenti' in anticipo.</p> 
@@ -391,7 +389,7 @@ $langGroupContent = "<p>Il modulo 'Gruppi di utenti'  favorisce la collaborazion
 <p><b>b) Gestione della lista degli utenti.</b> In questo modulo è possibile gestire la lista degli utenti nel corso. È possibile aggiungere uno o più utenti attraverso il link 'Aggiungere un utente' e 'Aggiungere molti utenti'. Puoi anche aggiungere un utente ospite, cliccando sul link 'Aggiungere un utente ospite'. Per cercare un utente fai clic su 'Cercare utente' e compila il suo nome e cognome o il username. Per cancellare un utente basta premere il pulsante (<img src='$themeimg/delete.png' width=16 height=16>) che si trova sul lato destro dei dati dell'utente. </p>";
 $langGroup_studentContent = "<p>Un gruppo di utenti è una <b>collezione</b> di utenti registrati che condividono lo stesso forum e lo stesso spazio sul server di file e compiti caricati. Il modulo 'Gruppi di utenti' permette la collaborazione e l'interazione degli studenti attraverso la loro organizzazione in gruppi. In questo modo si rinforza l' apprendimento collaborativo, si sono risposte varie domande e scambiate delle opinioni su certe questioni del corso. I dati di un gruppo come: il manager del gruppo, il numero degli utenti registrati, il numero massimo degli utenti autorizzati nel gruppo è alla tua disposizione, per il tuo migliore aggiornamento riguardante al gruppo.</p>.";
 $langHAgenda = "Agenda";
-$langHAgenda_student = $langHAgenda;
+$langHAgenda_student = $langHAgenda ;
 $langAgendaContent = "<p>Il modulo 'Agenda' ha l' obbiettivo  di <b>aggiornare</b> e <b>organizzare</b> il tempo degli insegnanti e degli studenti sui processi che hanno luogo in un certo corso. La specificazione dei capitoli (materia didattica), la specificazione del tempo quando avranno luogo la presentazioni del corso e dei soggetti che tratterà il corso, sono alcuni degli usi di questo modulo. Per aggiungere un evento all' agenda del corso, clicca sul link 'Aggiungere un evento '. Imposta il titolo, la descrizione, la data, l'ora e la durata che questo fatto venga postato. Per inserire dei simboli matematici segui le istruzioni che seguono. Il  processo viene completato premendo il link 'Aggiungere / Modificare'. </p> 
 <p><b>Operazioni supportate dal modulo 'Agenda'</b><br><br> 
 Le operazioni che sono supportate dalla piattaforma sul modulo 'Agenda' sono le seguenti: 
@@ -407,7 +405,7 @@ Le operazioni che sono supportate dalla piattaforma sul modulo 'Agenda' sono le 
 $langAgenda_studentContent = "
 <p>Il modulo 'Agenda' ha l' obbiettivo  di <b>aggiornare</b> e <b>organizzare</b> il tempo degli studenti sui processi che hanno luogo in un certo corso. La specificazione dei capitoli (materia didattica), la specificazione del tempo quando avranno luogo la presentazioni del corso, dei soggetti che tratterà il corso, sono alcuni degli usi di questo modulo. Usando la 'barra di scorrimento' sul lato destro del tuo browser, si possono vedere i vari eventi che si svolgono in un certo corso. È importante notare che oltre alla data programmata  di un evento, si riferisce ancora  l'ora esatta della sua realizzazione. L'utilità di questo modulo è evidente soprattutto in caso di emergenze o del cambiamento dell' orario della realizzazione di un corso.
 </p> 
-";
+" ;
 $langHLink = "Links";
 $langHLink_student = $langHLink;
 $langLinkContent = "<p>Via il modulo 'Link' puoi raccogliere tutti i link che sono utili per il corso. La piattaforma offre la possibilità di sistemare i link in categorie per facilitare il loro accesso. Le caratteristiche di questo modulo sono:</p>
@@ -422,7 +420,7 @@ $langLinkContent = "<p>Via il modulo 'Link' puoi raccogliere tutti i link che so
 ";
 $langLink_studentContent = "<p>Il modulo link ti dà la possibilità di accedere a risorse utili su Internet raggruppate in categorie correlate al corso. Questi link sono scelti dall' insegnante del corso. Ogni link ha un titolo, una descrizione, con ulteriori informazioni. La piattaforma favorisce la <b>classificazione</b> dei link, rendendoli più facili da accederli. </p>";
 $langHAnnounce = "Annunci";
-$langHAnnounce_student = $langHAnnounce;
+$langHAnnounce_student = $langHAnnounce ;
 $langAnnounceContent = "<p>Puoi aggiungere degli annunci nella pagina del corso cliccando sul link 'Aggiungere Annuncio'. Compila nel modulo visualizzato il titolo e il corpo dell' annuncio. Per inserire dei simboli matematici effettua le operazioni che seguono:
 <p>Attraverso le icone <img src='$themeimg/edit.png' width=16 height=16> (Modificare) e <img src='$themeimg/delete.png' width=16 height=16> (Eliminare) puoi raggiungere le funzioni corrispondenti di un annuncio. L' attivazione-disattivazione del modulo degli annunci si realizza cliccando sui link 'Attivazione' - 'Disattivazione'  che stanno a destra del titolo del modulo.</p> 
 <p>L' icona <img src='$themeimg/feed.png' width=16 height=16> abilita il ricevimento automatico degli annunci del corso attraverso il RSS (Really Simple Syndication) sia da un telefono cellulare che da un computer. Basta premere sull' icona e se hai un computer o telefono cellulare, fornito di un lettore RSS, sarai in grado di approfittarti dei vantaggi di questo servizio. </p>
@@ -458,7 +456,7 @@ Le operazioni supportate dalla piattaforma sul modulo dell' attivazione degli st
 </p>";
 $langHInfocours = "Gestione di Corso";
 $langHConference = "Collaborazione remota";
-$langHConference_student = $langHConference;
+$langHConference_student = $langHConference ;
 $langConferenceContent = "<p>Il modulo 'Collaborazione Remota', in forma semplice, favorisce lo scambio di opinioni e la comunicazione in tempo reale nell' ambito del corso. La comunicazione si effettua con testo normale (plaintext). Per inserire un messaggio alla collaborazione remota, basta digitare il tuo messaggio e premere il pulsante (<img src = '$themeimg/arrow. png' width=16 height=16>). </p>
 <ul>
 <li><b>Svuotare</b>. Cliccando su questo link si puoi <b>svuotare</b> l'area di messaggi della 'Collaborazione Remota', sia quando il volume dei messaggi è molto grande, che quando inizi un nuovo tema di 'Collaborazione Remota'</li>
@@ -468,7 +466,7 @@ $langConferenceContent = "<p>Il modulo 'Collaborazione Remota', in forma semplic
 $langConference_studentContent = "<p>Il modulo 'Collaborazione Remota', in forma semplice, favorisce lo scambio di opinioni e la comunicazione in tempo reale nell' ambito del corso. La comunicazione si effettua con testo normale (plaintext). Per inserire un messaggio alla collaborazione remota, basta digitare il tuo messaggio e premere il pulsante (<img src = '$themeimg/arrow. png' width=16 height=16>). </p>
 ";
 $langHVideo = "Multimedia";
-$langHVideo_student = $langHVideo;
+$langHVideo_student = $langHVideo ;
 $langVideoContent = "<p>
 Una parte del materiale dei corsi potrebbe essere del materiale audiovisivo.
 Il modulo 'Multimedia' può servire a migliorare il process dell'insegnamento e dell' apprendimento. Attraverso l' animazione e il suono che offre un file multimediale lo studente può sviluppare le abilità che sono difficili da creare attraverso un materiale stampato. Per pubblicare un file multimediale la piattaforma impiega due modi: </p> 
@@ -495,7 +493,7 @@ Se desideri scaricare un file multimediale sul tuo computer da salvarlo, clicca 
 Combinando il modulo 'Multimedia' con il modulo 'Documenti' risulta uno 'strumento di apprendimento' <b>potente</b> che è disponibile allo studente.
 </p> ";
 $langHCoursedescription = "Descrizione del corso";
-$langHCoursedescription_student = $langHCoursedescription;
+$langHCoursedescription_student = $langHCoursedescription ;
 $langCoursedescriptionContent = "<p>Attraverso il modulo 'Descrizione del Corso' puoi aggiungere delle informazioni cliccando sul link 'Creare e Modificare'. Le aree in cui puoi aggiungere delle informazioni si dividono nelle categorie seguenti: 
 <ul>
    <li>Contenuto del corso</li>
@@ -539,7 +537,7 @@ $langCoursedescription_studentContent = "<p>Se il responsabile insegnante  <b>cr
 </ ul>
 <p>Tutte queste zone sono state progettate per raggiungere il tuo migliore aggiornamento e la tua migliore organizzazione ai corsi che stai attualmente seguendo.</p";
 $langHPath = "Guida - Linea d' apprendimento";
-$langHPath_student = $langHPath;
+$langHPath_student = $langHPath ;
 $langPathContent = "<p>Lo strumento 'Percorso di apprendimento' (learning path) supporta quattro operazioni principali:</p>
 <ul>
 <li>Creare percorso di apprendimento</li>
@@ -647,7 +645,7 @@ l'altro). Tutti gli oggetti del percorso di apprendimento hanno uno stato: compl
 quindi il progresso degli studenti è sempre disponibile attraverso lo 
 strumento speciale 'Monitorizzare i percorsi dell'apprendimento'. Per monitorizzare un oggetto didattico di un percorso di apprendimento, clicca sul titolo del percorso. Scegli tra gli oggetti visualizzati quale vuoi monitorizzare (attenzione: ad alcuni ha un ruolo la loro classifica). A seconda delle azioni che si svolgono (monitoraggio delle diapositive) si cambiano le percentuali dell' indice di progresso (a destra). Cliccando sul pulsante<img src='$themeimg/monitor.png'width=16 height=16> puoi visualizzare le informazioni dettagliate dell' Oggetto Didattico come: il Titolo, i Commenti, il Tipo della sezione, il tempo totale ecc.</p>";
 $langHDropbox = "Area di Condivisione di File";
-$langHDropbox_student = $langHDropbox;
+$langHDropbox_student = $langHDropbox ;
 $langDropboxContent = "<p>Il modulo 'Dropbox' (Area di Scambio File) è uno strumento che serve allo scambio di file tra insegnante e studente. Puoi scambiare qualsiasi tipo di file conosciuti (doc, docx, odt, pdf, ecc).</p> 
 <p>Il modulo include due cartelle condivise:</p> 
 <p><b><u>File in arrivo</u></b>. In questa cartella si visualizzano tutti i file che hai ricevuto dagli studenti con alcune informazioni ulteriori sul file, come: il nome dell' utente, la dimensione del file e la data d' invio. Per eliminare un file in arrivo, basta cliccare sull'icona (<img src='$themeimg/delete.png' width=10 height=10>) che sta sulla stessa riga con il file che vuoi rimuovere.</p> 
@@ -695,7 +693,7 @@ La piattaforma supporta i seguenti modi di accesso da parte degli utenti:</p>
 $langCourseAccessHelp 
 ";
 $langHWiki = "Wiki";
-$langHWiki_student = $langHWiki;
+$langHWiki_student = $langHWiki ;
 $langWikiContent = "<p>Attraverso il modulo <b>Wiki</b> gli studenti e gli insegnanti possono  creare documenti in collaborazione. Questa operazione viene effettuata utilizzando un browser. Per questo motivo,  i <b>Wiki</b> sono uno strumento utile per la collaborazione tra gruppi di studenti nell' ambito del corso.</p>
 <p>Per creare un nuovo <b>Wiki</b> basta fare clic sul link 'Creare un nuovo Wiki'. Nel display visualizzato, compila il titolo del Wiki, inserisci una descrizione e fai clic sul pulsante 'Salvare' o 'Annullare' per procedere all' operazione rispettiva.</p>
 <p>Una serie di operazioni sono alla tua disposizione per quanto riguarda il Wiki. In particolare:</p>
@@ -715,8 +713,6 @@ $langWiki_studentContent = "
 <li><b>Ultime modifiche.</b> Con questa opzione puoi osservare le ultime modifiche effettuate al wiki. Operazioni come <img src='$themeimg/wiki.png' align='absmiddle'> la visualizzazione della Home Page di Wiki, <img src='$themeimg/book.png' align='absmiddle'> la visualizzazione di tutte le pagine , <img src='$themeimg/list.png' align='absmiddle'>la visualizzare dell'elenco delle pagine di Wiki sono disponibili tramite questo modulo. </li>
 
 $langWikiSyntaxHelp";
-$langHAddCourseUnitscontent = "Aggiungere contenuto di sezione tematica";
-$langAddCourseUnitscontentContent = "<p class='helptopic'>In questo display dei contenuti o delle risorse vengono aggiunti alla sezione tematica selezionata. Il tipo delle risorse che si possono  aggiungere è scritto accanto alla parola 'Aggiungere:'. Cliccandola vengono visualizzate le risorse disponibili che corrispondono al tipo selezionato. Seleziona le risorse desiderate e quindi fai clic su 'Aggiungere selezionati'. Ogni risorsa che viene aggiunta, appare in un elenco e ha sulla destra le icone 'Modificare' e 'Eliminare'. Nota che qualora ci siano più di una sezioni tematiche in un corso, vengono visualizzati i link alla sezione successiva e precedente. Altrimenti puoi utilizzare  la lista delle opzioni che viene visualizzata nella parte inferiore della pagina,  per andare direttamente a qualsiasi sezione.</p>";
 $langHGlossary = "Glossario";
 $langHGlossary_student = $langHGlossary;
 $langGlossaryContent = "
@@ -866,3 +862,26 @@ $langGroupSpaceContent = "<p>Per modificare gli elementi del gruppo di utenti, f
         Qui, deve essere addirittura sottolineato che i documenti del gruppo caricati non sono relativi al modulo 'Documenti' della Home Page della piattaforma. 
         Puoi inviare una e-mail ai membri di un gruppo cliccando su 'Inviare e-mail al gruppo'.
          Puoi anche vedere alcune statistiche per un gruppo cliccando su 'Statistiche' </p>.";
+$langHAddCourseUnits = 'Add course unit content';
+$langAddCourseUnitsContent = "<p class='helptopic'>Here you can add content or resources to the selected course unit. The types of resources that can be added are listed next to the 'Add:' label. By clicking on 'Add', you can find resources of the selected type available in your course. Tick the ones you would like to add and click on 'Add selected'. Newly added resources are immediately listed, with edit and delete icons for each one. Please note that when multiple course units exist in a course, links to the next and previous unit appear automatically. You can also use the selection box below to navigate directly to a specific unit.</p>";
+$langHBBB = "Teleconference";
+$langHBBB_student = $langHBBB;
+$langBBBContent = "<p>To schedule a new teleconference for your course, please click on the \"Schedule New Teleconference\" button. 
+You can use the \"Title\" field for a short descriptive title and the \"Description\" field for the agenda of the discussion or presentation.
+        <br /><br />The other fields can be set as follows:</p> 
+        <p>
+        <ul>
+        <li><strong>Teleconference start</strong>: Set the scheduled start date and time</li>
+        <li><strong>Teleconference type</strong>: Public to others: All registered platform users will be able to join the teleconference, regardless of their being registered to this course or not -  Private: The teleconference will be accessible only to participants registered to your course.</li>
+        <li><strong>Status</strong>: Visible: the teleconference will be displayed to users of your course - Invisible: the teleconference will be displayed only to the course administrators. Use the latter option to schedule the teleconference in advance but only display it at a later time.</li>
+        <li><strong>Session availability</strong>: Select how many minutes before the scheduled start time participants will be able to join the teleconference.</li>
+        <li><strong>Notify external participants</strong>: Enter a list of email recipients who will be invited to participate in the teleconference (e.g. visitors, external institution members with no access to the platform, etc).</li>
+        <li><strong>Notify users for teleconference schedule</strong>: Enable this option to send an email notification to all participants.</li>
+        </ul>
+        </p>";
+$langBBB_studentContent = "<p>Here you can find all scheduled course teleconferences. 
+        <ul>        
+        <li>To join one of them, please click on its title.</li>
+        <li>The link becomes active in a predetermined period before the scheduled start time. This period is set by the course administrator.</li>
+        </ul>
+        </p>";

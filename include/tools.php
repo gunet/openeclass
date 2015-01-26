@@ -214,19 +214,19 @@ function loggedInMenu() {
 
     array_push($sideMenuText, $GLOBALS['langListCourses']);
     array_push($sideMenuLink, $urlServer . "modules/auth/courses.php");
-    array_push($sideMenuImg, "fa-list");
+    array_push($sideMenuImg, "fa-graduation-cap");
 
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-file-video-o");
 
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-credit-card");
 
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-phone");
 
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);
@@ -324,26 +324,29 @@ function loggedOutMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
-	$arrMenuType['class'] = 'basic';
+    $arrMenuType['class'] = 'basic';    
     array_push($sideMenuSubGroup, $arrMenuType);
-
+    
     array_push($sideMenuText, $GLOBALS['langListCourses']);
     array_push($sideMenuLink, $urlServer . "modules/auth/listfaculte.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-graduation-cap");
+    
     if (get_config('user_registration')) {
         array_push($sideMenuText, $GLOBALS['langNewUser']);
         array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuImg, "fa-pencil-square-o");
     }
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-file-video-o");
+    
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-credit-card");
+    
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
-    array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuImg, "fa-phone");
 
     array_push($sideMenuSubGroup, $sideMenuText);
     array_push($sideMenuSubGroup, $sideMenuLink);

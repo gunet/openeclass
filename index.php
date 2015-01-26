@@ -252,11 +252,14 @@ if ($uid AND !isset($_GET['logout'])) {
         setOpenCoursesExtraHTML();
     }
     if (get_config('opencourses_enable')) {
+        if ($openCoursesExtraHTML) {
             $tool_content .= "<div class='panel opencourses'>
                     <div class='panel-body'>
                         $openCoursesExtraHTML
                     </div>
-                </div>
+                </div>";
+        }
+        $tool_content .= "
                 <div class='panel opencourses-national'>
                 <a href='http://opencourses.gr' target='_blank'>
                     $langNationalOpenCourses

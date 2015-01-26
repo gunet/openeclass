@@ -376,9 +376,9 @@ $tool_content .= '<div id="calendar_wrapper" class="row">
                     <div id="calendar-header">
                         <div class="pull-right form-inline">
                             <div class="btn-group">
-                                    <button class="btn btn-primary btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
-                                    <button class="btn btn-sm" data-calendar-nav="today">' . $langToday . '</button>
-                                    <button class="btn btn-primary btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
+                                    <button class="btn btn-default btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-nav="today">' . $langToday . '</button>
+                                    <button class="btn btn-default btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
                             </div>
                             <div class="btn-group">
                                     <button class="btn btn-default btn-sm" data-calendar-view="year">' . $langYear . '</button>
