@@ -92,7 +92,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $status, $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
         $theme_settings, $language, $saved_is_editor,
-        $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote;
+        $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
 
     // negative course_id might be set in common documents
     if ($course_id < 1) {
@@ -274,6 +274,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
         $t->set_var('langNoteTitle', $langNoteTitle);
         $t->set_var('langEnterNote', $langEnterNote);
+        $t->set_var('langFieldsRequ', $langFieldsRequ);
 
         $t->set_var('LOGGED_IN', 'true');
     } else {
