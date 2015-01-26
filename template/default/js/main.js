@@ -48,6 +48,9 @@ function popover_init() {
         act_confirm();
     });
 }
+function tooltip_init() {
+    $('[rel=tooltip]').tooltip({container: 'body'});
+}
 function sidebar_reset() {
 
 }
@@ -56,9 +59,11 @@ $(document).ready(function () {
     // Initialisations
     act_confirm();
     animate_btn();
-    $('[rel=tooltip]').tooltip({container: 'body'});
+    tooltip_init();
     popover_init();
-
+    $('body').on('click', 'a.disabled', function(e) {
+        e.preventDefault();
+    });
     $(document).on("click", function (e) {
         var target = $(e.target);
         //console.log(target.parents("#leftnav").length);

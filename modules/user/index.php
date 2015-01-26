@@ -71,13 +71,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $search_sql = '';
         $search_values = array();
     }
-    if (!empty($_GET['iSortCol_0'])) {
-        $order_sql = 'ORDER BY ';
-        $order_sql .= ($_GET['iSortCol_0'] == 1) ? 'user.givenname ' : 'course_user.reg_date ';
-        $order_sql .= $_GET['sSortDir_0'];
-    } else {
-        $order_sql = '';
-    }
+
+    $order_sql = 'ORDER BY ';
+    $order_sql .= ($_GET['iSortCol_0'] == 0) ? 'user.givenname ' : 'course_user.reg_date ';
+    $order_sql .= $_GET['sSortDir_0'];
+
     $limit_sql = ($limit > 0) ? "LIMIT $offset,$limit" : "";
 
     $all_users = Database::get()->querySingle("SELECT COUNT(*) AS total FROM course_user, user 
@@ -98,7 +96,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $data['iTotalRecords'] = $all_users;
     $data['iTotalDisplayRecords'] = $filtered_users;
     $data['aaData'] = array();
-    $iterator = 1;
     foreach ($result as $myrow) {
         $full_name = $myrow->givenname . " " . $myrow->surname;
         $am_message = empty($myrow->am) ? '' : ("<div class='right'>($langAm: " . q($myrow->am) . ")</div>");
@@ -114,73 +111,68 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
           } */
         //create date field with unregister button
         $date_field = ($myrow->reg_date == '0000-00-00') ? $langUnknownDate : nice_format($myrow->reg_date);
-        if ($myrow->status != '1') {
-            $date_field .= "&nbsp;&nbsp;" . icon('fa-times', $langUnregCourse, '', 'class="delete_btn"');
-        }
+
         //Create appropriate role control buttons
-        //Tutor right
-        if ($myrow->tutor == '0') {
-            $user_role_controls = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveTutor=$myrow->id'><img src='$themeimg/group_manager_add.png' alt='$langGiveRightTutor' title='$langGiveRightTutor'></a>";
-        } else {
-            $user_role_controls = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeTutor=$myrow->id'><img src='$themeimg/group_manager_remove.png' alt='$langRemoveRightTutor' title='$langRemoveRightTutor'></a>";
-        }
-        //Editor right
-        if ($myrow->editor == '0') {
-            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveEditor=$myrow->id'><img src='$themeimg/assistant_add.png' alt='$langGiveRightEditor' title='$langGiveRightEditor'></a>";
-        } else {
-            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeEditor=$myrow->id'><img src='$themeimg/assistant_remove.png' alt='$langRemoveRightEditor' title='$langRemoveRightEditor'></a>";
-        }
         // Admin right
-        if ($myrow->id != $_SESSION["uid"]) {
-            if ($myrow->status == '1') {
-                if (get_config('opencourses_enable') && $myrow->reviewer == '1') {
-                    $user_role_controls .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor'>";
-                } else {
-                    $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeAdmin=$myrow->id'><img src='$themeimg/teacher_remove.png' alt='$langRemoveRightAdmin' title='$langRemoveRightAdmin'></a>";
-                }
-            } else {
-                $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow->id'><img src='$themeimg/teacher_add.png' alt='$langGiveRightAdmin' title='$langGiveRightAdmin'></a>";
-            }
+        $user_role_controls ="";
+        if ($myrow->id != $_SESSION["uid"] && $myrow->reviewer == '1') {
+            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
         } else {
-            if ($myrow->status == '1') {
-                $user_role_controls .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor'>";
-            } else {
-                $user_role_controls .= icon('fa-plus', $langGiveRightAdmin, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveAdmin=$myrow->id");
-            }
+            $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
         }
         // opencourses reviewer right
         if (get_config('opencourses_enable')) {
-            if ($myrow->id != $_SESSION["uid"]) {
-                if ($is_opencourses_reviewer and ! $is_admin) {
-                    // do nothing as the reviewer cannot give the reviewer right to other users
-                    $user_role_controls .= "";
-                } else {
-                    if ($myrow->reviewer == '1') {
-                        $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
-                    } else {
-                        $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
-                    }
-                }
-            } else {
                 if ($myrow->reviewer == '1') {
-                    $user_role_controls .= "<img src='$themeimg/reviewer.png' alt='$langOpenCoursesReviewer' title='$langOpenCoursesReviewer'>";
+                    $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
                 } else {
-                    // do nothing as the course teacher cannot make himeself a reviewer
-                    $user_role_controls .= "";
+                    $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;giveReviewer=$myrow->id'><img src='$themeimg/reviewer_add.png' alt='$langGiveRightReviewer' title='$langGiveRightReviewer'></a>";
                 }
-            }
         }
+        $user_role_controls = action_button(array(
+            array(
+              'title' => $langUnregCourse,
+              'level' => 'primary',
+              'url' => '#',
+              'icon' => 'fa-times',
+              'btn_class' => 'delete_btn btn-default'
+            ),
+            array(
+                'title' => $myrow->tutor == '0' ? $langGiveRightTutor : $langRemoveRightTutor,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->tutor == '0' ? "give" : "remove")."Tutor=$myrow->id",
+                'icon' => $myrow->tutor == '0' ? "fa-square-o" : "fa-check-square-o"
+            ),
+            array(
+                'title' => $myrow->editor == '0' ? $langGiveRightEditor : $langRemoveRightEditor,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->editor == '0' ? "give" : "remove")."Editor=$myrow->id",
+                'icon' => $myrow->editor == '0' ? "fa-square-o" : "fa-check-square-o"
+            ),            
+            array(
+                'title' => $myrow->status != '1' ? $langGiveRightAdmin : $langRemoveRightAdmin,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->status == '1' ? "remove" : "give")."Admin=$myrow->id",
+                'icon' => $myrow->status != '1' ? "fa-square-o" : "fa-check-square-o",
+                'disabled' => $myrow->id == $_SESSION["uid"] || ($myrow->id != $_SESSION["uid"] && get_config('opencourses_enable') && $myrow->reviewer == '1')
+            ),
+            array(
+                'title' => $myrow->reviewer != '1' ? $langGiveRightReviewer : $langRemoveRightReviewer,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($myrow->reviewer == '1' ? "remove" : "give")."Reviewer=$myrow->id",
+                'icon' => $myrow->reviewer != '1' ? "fa-square-o" : "fa-check-square-o",
+                'disabled' => $myrow->id == $_SESSION["uid"],
+                'show' => get_config('opencourses_enable') && 
+                            (
+                                ($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1') || 
+                                ($myrow->id != $_SESSION["uid"] && !$is_opencourses_reviewer && $is_admin)
+                            )
+            )            
+        ));
         //setting datables column data
         $data['aaData'][] = array(
             'DT_RowId' => $myrow->id,
             'DT_RowClass' => 'smaller',
-            '0' => $iterator,
-            '1' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message</span>",
-            '2' => user_groups($course_id, $myrow->id),
-            '3' => $date_field,
-            '4' => $user_role_controls
+            '0' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message</span>",
+            '1' => user_groups($course_id, $myrow->id),
+            '2' => $date_field,
+            '3' => $user_role_controls
         );
-        $iterator++;
     }
     echo json_encode($data);
     exit();
@@ -200,7 +192,10 @@ $head_content .= "
                 'bProcessing': true,
                 'bServerSide': true,
                 'sScrollX': true,
-                'sDom': '<\"top\"pfl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
+                'fnDrawCallback': function( oSettings ) {
+                    tooltip_init();
+                    popover_init();
+                },                
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',                   
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -208,7 +203,8 @@ $head_content .= "
                ],                    
                 'sPaginationType': 'full_numbers',              
                 'bSort': true,
-                'aoColumnDefs': [{ 'bSortable': false, 'aTargets': [ 0 ] }, { 'bSortable': false, 'aTargets': [ 2 ] }, { 'bSortable': false, 'aTargets': [ 4 ] }],
+                'aaSorting': [[0, 'desc']],
+                'aoColumnDefs': [{'sClass':'option-btn-cell', 'aTargets':[-1]}, { 'bSortable': false, 'aTargets': [ 1 ] }, { 'bSortable': false, 'aTargets': [ 3 ] }],
                 'oLanguage': {                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '" . $langNoResult . "',
@@ -228,36 +224,38 @@ $head_content .= "
             }).fnSetFilteringDelay(1000);
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
-                if (confirmation('" . js_escape($langDeleteUser) . " " . js_escape($langDeleteUser2) . "')) {
-                    var row_id = $(this).closest('tr').attr('id');
-                    $.ajax({
-                      type: 'POST',
-                      url: '',
-                      datatype: 'json',
-                      data: {
-                        action: 'delete', 
-                        value: row_id
-                      },
-                      success: function(data){
-                        var num_page_records = oTable.fnGetData().length;
-                        var per_page = oTable.fnPagingInfo().iLength;
-                        var page_number = oTable.fnPagingInfo().iPage;
-                        if(num_page_records==1){
-                            if(page_number!=0) {
-                                page_number--;
+                var row_id = $(this).closest('tr').attr('id');
+                bootbox.confirm('" . js_escape($langDeleteUser) . " " . js_escape($langDeleteUser2) . "', function(result) {
+                    if (result) {
+                        $.ajax({
+                          type: 'POST',
+                          url: '',
+                          datatype: 'json',
+                          data: {
+                            action: 'delete', 
+                            value: row_id
+                          },
+                          success: function(data){
+                            var num_page_records = oTable.fnGetData().length;
+                            var per_page = oTable.fnPagingInfo().iLength;
+                            var page_number = oTable.fnPagingInfo().iPage;
+                            if(num_page_records==1){
+                                if(page_number!=0) {
+                                    page_number--;
+                                }
                             }
-                        }
-                        $('#tool_title').after('<p class=\"success\">$langUserDeleted</p>');
-                        $('.success').delay(3000).fadeOut(1500);    
-                        oTable.fnPageChange(page_number);
-                      },
-                      error: function(xhr, textStatus, error){
-                          console.log(xhr.statusText);
-                          console.log(textStatus);
-                          console.log(error);
-                      }
-                    });                    
-                 }
+                            $('#tool_title').after('<p class=\"success\">$langUserDeleted</p>');
+                            $('.success').delay(3000).fadeOut(1500);    
+                            oTable.fnPageChange(page_number);
+                          },
+                          error: function(xhr, textStatus, error){
+                              console.log(xhr.statusText);
+                              console.log(textStatus);
+                              console.log(error);
+                          }
+                        });                    
+                    }
+                });     
             });
             $('.dataTables_filter input').attr('placeholder', '$langName, Username, Email');
             $('.success').delay(3000).fadeOut(1500);
@@ -357,11 +355,10 @@ $tool_content .= "
 <table width='100%' id='users_table{$course_id}' class='tbl_alt custom_list_order'>
     <thead>
         <tr>
-          <th width='1'>$langID</th>
-          <th><div align='left' width='100'>$langName $langSurname</div></th>
-          <th class='center'>$langGroup</th>
-          <th class='center' width='80'>$langRegistrationDateShort</th>
-          <th class='center' width='100'>$langAddRole</th>
+          <th>$langName $langSurname</th>
+          <th class='text-center'>$langGroup</th>
+          <th class='text-center' width='80'>$langRegistrationDateShort</th>
+          <th class='text-center'>".icon('fa-gears')."</th>
         </tr>
     </thead>
     <tbody>
