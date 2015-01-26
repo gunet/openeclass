@@ -125,7 +125,7 @@ if ($userdata) {
                             <div class='row profile-pers-info-name'>
                                 <div class='col-xs-12'>
                                     <div>" . q("$userdata->givenname $userdata->surname") . "</div>
-                                    <div class='not_visible'>(".$userdata->username.")</div>
+                                    <div class='not_visible'>(".q($userdata->username).")</div>
                                 </div>
                             </div>
                             <div class='row'>
