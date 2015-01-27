@@ -771,5 +771,5 @@ function course_announcements() {
             return $ann_content;
         }
     }
-    return "<li class='list-item'>$langNoAnnounce</li>";
+    return "<li class='list-item'><span class='item-wholeline'><div class='text-title not_visible'> - $langNoAnnounce - </div></span></li>";
 }
