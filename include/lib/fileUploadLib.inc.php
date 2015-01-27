@@ -415,14 +415,14 @@ function showquota($quota, $used) {
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form'>
       <div class='form-group'>
-        <label class='col-sm-2'>$langQuotaUsed:</label>
-        <div class='col-sm-10'>
+        <label class='col-sm-3 control-label'>$langQuotaUsed:</label>
+        <div class='col-sm-9'>
           <p class='form-control-static'>$used</p>
         </div>
       </div>
       <div class='form-group'>
-        <label class='col-sm-2'>$langQuotaPercentage:</label>
-        <div class='col-sm-10'>
+        <label class='col-sm-3 control-label'>$langQuotaPercentage:</label>
+        <div class='col-sm-9'>
             <div class='progress'>
               <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='width: $diskUsedPercentage;'>
                 $diskUsedPercentage
@@ -431,8 +431,8 @@ function showquota($quota, $used) {
         </div>
       </div>
       <div class='form-group'>
-        <label class='col-sm-2'>$langQuotaTotal:</label>
-        <div class='col-sm-10'>
+        <label class='col-sm-3 control-label'>$langQuotaTotal:</label>
+        <div class='col-sm-9'>
               <p class='form-control-static'>$quota</p>
         </div>
       </div>  
