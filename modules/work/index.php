@@ -1363,7 +1363,7 @@ function assignment_details($id, $row) {
                     <strong>$m[title]:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    " .q($row->title) . "
+                    " . q($row->title) . "
                 </div>                
             </div>";
         if (!empty($row->description)) {
