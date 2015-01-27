@@ -1171,7 +1171,7 @@ if ($doc_count == 0) {
                 <div class='table-responsive'>
                 <table class='table-default'>
                     <tr>";
-    $tool_content .= "<th class='text-left'>" . headlink($langType, 'type') . '</th>' .
+    $tool_content .= "<th class='text-left' width='60'>" . headlink($langType, 'type') . '</th>' .
                      "<th class='text-left'>" . headlink($langName, 'name') . '</th>' .
                      "<th class='text-left'>$langSize</th>" .
                      "<th class='text-left'>" . headlink($langDate, 'date') . '</th>';
