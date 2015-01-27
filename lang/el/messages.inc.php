@@ -3739,6 +3739,7 @@ $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
 $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
+$langNoUnits = "Δεν υπάρχουν θεματικές ενότητες";
 
 /* * ********************************************************************
   mail_verify.php

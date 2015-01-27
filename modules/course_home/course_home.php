@@ -617,6 +617,8 @@ if ($is_editor) {
             $cunits_content .= "</li>";            
         }
         $cunits_content .= "</ul></div></div></div>";
+    } else {
+        $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
     }
 
 // Contentbox: Thematikes enotites
