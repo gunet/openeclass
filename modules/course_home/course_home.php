@@ -658,21 +658,6 @@ if (!$alter_layout) {
 }
 
 $tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
-// display open course level if exist
-if (isset($level) && !empty($level)) {
-    $tool_content .= "
-    <div class='row'>
-        <div class='col-md-$cunits_sidebar_subcolumns'>
-            <h3 class='content-title'>$langOpenCourseShort</h3>
-            <div class='panel'>
-                <div class='panel-body'>
-                    $opencourses_level
-                </div>
-            </div>
-        </div>
-    </div>
-    ";
-}
 
 //if (!empty($license_info_box)) {
 //    $tool_content .= "
@@ -700,6 +685,15 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
 
 $tool_content .="<div class='row'>
                 <div class='col-md-$cunits_sidebar_subcolumns'>
+                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>" . course_announcements() . "
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-md-$cunits_sidebar_subcolumns'>
                     <h3 class='content-title'>$langCalendar</h3>
                     <div class='panel'>
                         <div class='panel-body'>
@@ -726,16 +720,21 @@ $tool_content .="<div class='row'>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>";
+        // display open course level if exist
+        if (isset($level) && !empty($level)) {
+            $tool_content .= "
                 <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <h3 class='content-title'>$langOpenCourseShort</h3>
                     <div class='panel'>
                         <div class='panel-body'>
-                            <ul class='tablelist'>" . course_announcements() . "
-                            </ul>
+                            $opencourses_level
                         </div>
                     </div>
                 </div>
+            ";
+        }
+$tool_content .= "                
            </div>
            </div>
     </div>";
