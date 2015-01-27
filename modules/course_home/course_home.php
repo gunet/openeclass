@@ -561,13 +561,8 @@ if ($is_editor) {
             $cunits_content .= "<li class='list-item contentbox'>
                                     <div class='item-content'>
                                         <div class='item-header'>
-                                            <h4 class='item-title'>$href</h4>
-                                        </div>	
-                                        <div class='item-body'>
-                                            $cu->comments
-                                        </div>			
-                                    </div>";
-            if ($is_editor) {
+                                            <h4 class='item-title'>$href</h4>";
+                                if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
@@ -613,6 +608,11 @@ if ($is_editor) {
                     '</div>';
                 }
             }
+                        $cunits_content .= "</div>	
+                                        <div class='item-body'>
+                                            $cu->comments
+                                        </div>			
+                                    </div>";
             $cunits_content .= "</li>";            
         }
         $cunits_content .= "</ul></div></div></div>";

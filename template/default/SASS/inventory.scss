@@ -1001,14 +1001,16 @@ ul.tablelist
 
   .item-header
   {
-    padding:1em 4em 1em 0em;
-    border-bottom:1px solid #eee;
+    padding:0em 4em 1em 0em;
+    border-bottom:1px solid #ccc;
+    margin-top: 1em;
   }
 
   .item-header h4.item-title
   {
     margin:0px;
     font-size: 15px;
+    width: 85%;
   }
 
   .item-header .item-date
@@ -1028,7 +1030,7 @@ ul.tablelist
   {
     display:inline-block;
     position: absolute;
-    top:0px;
+    top:1em;
     right:0px;
     color:#eee;
     -webkit-transition: all 50ms linear;
@@ -1758,7 +1760,9 @@ td.option-btn-cell{
             text-align: center;
         }
     div{
-        
+        .num_sub_wrapper{
+            padding-top: 15px;
+        }
         span{
             display: block;
         }
