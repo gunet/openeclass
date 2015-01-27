@@ -1757,9 +1757,7 @@ td.option-btn-cell{
             color: #aaa;
             text-align: center;
         }
-    a{
-        display: block;
-        width: 100%;
+    div{
         
         span{
             display: block;
@@ -1776,7 +1774,14 @@ td.option-btn-cell{
             font-weight: 900;
             height: 40px;
             line-height: 40px;
-            padding: 0 10px;
+            padding: 0 3px;
+        }
+        .opencourse_num_text{
+            padding: 0px;
+            
+            a{
+                display: block;
+            }
         }
         >div>div{
             float: right;
