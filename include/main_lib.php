@@ -2945,7 +2945,7 @@ function setOpenCoursesExtraHTML() {
                 <!--<span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>-->
                 <div class='row'>
                     <div class='col-xs-6 col-xs-offset-3 col-md-12 col-md-offset-0'>
-                        <img class='img-responsive' src='".$themeimg."/banner_open_courses.png' />
+                        <img class='img-responsive center-block' src='".$themeimg."/banner_open_courses.png' />
                     </div>
                 </div>
                 <div class='clearfix'>
