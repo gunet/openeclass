@@ -55,8 +55,8 @@ if ($can_upload) {
         $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
         $fileinput = "
         <div class='form-group'>
-          <label for='userFile' class='col-md-6 control-label'>$langPathUploadFile</label>
-          <div class='col-md-3'>
+          <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile</label>
+          <div class='col-sm-10'>
             <input type='file' id='userFile' name='userFile'>
           </div>
         </div>";

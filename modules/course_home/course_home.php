@@ -128,8 +128,7 @@ if(count($res)>0){
     foreach ($res as $row) {
         $desctype = intval($row->type) - 1;    
         $hidden_id = "hidden_" . $row->id;
-        $tool_content .= "<div id='$hidden_id'><h1>" .
-                q($row->title) . "</h1>" .
+        $tool_content .= "<div id='$hidden_id'><h1>" . q($row->title) . "</h1>" .
                 standard_text_escape($row->comments) . "</div>";    
         $course_info_extra .= "<li><a class='md-trigger inline' data-modal='syllabus-prof' href='#$hidden_id'>".q($row->title) ."</a></li>";
     }
@@ -562,13 +561,8 @@ if ($is_editor) {
             $cunits_content .= "<li class='list-item contentbox'>
                                     <div class='item-content'>
                                         <div class='item-header'>
-                                            <h4 class='item-title'>$href</h4>
-                                        </div>	
-                                        <div class='item-body'>
-                                            $cu->comments
-                                        </div>			
-                                    </div>";
-            if ($is_editor) {
+                                            <h4 class='item-title'>$href</h4>";
+                                if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
@@ -614,9 +608,16 @@ if ($is_editor) {
                     '</div>';
                 }
             }
+                        $cunits_content .= "</div>	
+                                        <div class='item-body'>
+                                            $cu->comments
+                                        </div>			
+                                    </div>";
             $cunits_content .= "</li>";            
         }
         $cunits_content .= "</ul></div></div></div>";
+    } else {
+        $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
     }
 
 // Contentbox: Thematikes enotites
@@ -629,7 +630,7 @@ if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple'))
 } else {
     $alter_layout = TRUE;
     $cunits_sidebar_columns = 12;
-    $cunits_sidebar_subcolumns = 4;
+    $cunits_sidebar_subcolumns = 6;
 }
 $tool_content .= "<div class='row'>";
 //if (!$alter_layout or $course_info->view_type != 'simple') {
@@ -657,37 +658,7 @@ if (!$alter_layout) {
     $tool_content .= "</div>";
 }
 
-$tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
-// display open course level if exist
-if (isset($level) && !empty($level)) {
-    $tool_content .= "
-    <div class='row'>
-        <div class='col-md-$cunits_sidebar_subcolumns'>
-            <h3 class='content-title'>$langOpenCourseShort</h3>
-            <div class='panel'>
-                <div class='panel-body'>
-                    $opencourses_level
-                </div>
-            </div>
-        </div>
-    </div>
-    ";
-}
-
-//if (!empty($license_info_box)) {
-//    $tool_content .= "
-//        
-//            <div class='col-md-$cunits_sidebar_subcolumns'>
-//                <h3 class='content-title'>$langLicense</h3>
-//                <div class='panel license_info_box'>
-//                    <div class='panel-body'>
-//                        $license_info_box
-//                    </div>
-//                </div>
-//            </div>
-//        ";
-//}
-
+$tool_content .= "<div class='sssssss col-md-$cunits_sidebar_columns'>";
 
 //BEGIN - Get user personal calendar
 $today = getdate();
@@ -699,6 +670,15 @@ $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $y
 //END - Get personal calendar
 
 $tool_content .="<div class='row'>
+                <div class='col-md-$cunits_sidebar_subcolumns'>
+                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <div class='panel'>
+                        <div class='panel-body'>
+                            <ul class='tablelist'>" . course_announcements() . "
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 <div class='col-md-$cunits_sidebar_subcolumns'>
                     <h3 class='content-title'>$langCalendar</h3>
                     <div class='panel'>
@@ -726,16 +706,21 @@ $tool_content .="<div class='row'>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>";
+        // display open course level if exist
+        if (isset($level) && !empty($level)) {
+            $tool_content .= "
                 <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langAnnouncements</h3>
+                    <h3 class='content-title'>$langOpenCourseShort</h3>
                     <div class='panel'>
                         <div class='panel-body'>
-                            <ul class='tablelist'>" . course_announcements() . "
-                            </ul>
+                            $opencourses_level
                         </div>
                     </div>
                 </div>
+            ";
+        }
+$tool_content .= "                
            </div>
            </div>
     </div>";
@@ -772,5 +757,5 @@ function course_announcements() {
             return $ann_content;
         }
     }
-    return "<li class='list-item'>$langNoAnnounce</li>";
+    return "<li class='list-item'><span class='item-wholeline'><div class='text-title not_visible'> - $langNoAnnounce - </div></span></li>";
 }

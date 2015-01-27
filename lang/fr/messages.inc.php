@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-01-23 13:34:12
+// Generated 2015-01-27 12:44:19
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -4022,3 +4022,4 @@ $langDropboxNumUnreadMessages = "Unread messages";
 $langNationalOpenCourses = "National Open Courses Portal";
 $langEnterNote = "Enter note";
 $langAttemptWasCanceled = "The attempt was canceled.";
+$langNoUnits = "No course units";

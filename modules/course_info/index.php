@@ -343,11 +343,14 @@ if (isset($_POST['submit'])) {
             $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
 
             if ($noWeeklyMessage) {
-                $tool_content .= "<div class='alert alert-warning'>$langCourseWeeklyFormatNotice</div>";
+                Session::Messages($langCourseWeeklyFormatNotice);
+            } else {
+                Session::Messages($langModifDone.". <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a>",'alert-success');
             }
+            
+            redirect_to_home_page("modules/course_info/index.php?course=$course_code");
+            
 
-            $tool_content .= "<p>&laquo; <a href='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>$langBack</a></p>
-                            <p>&laquo; <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a></p>";
         }
 
         if (isset($_POST['s_radio'])) {

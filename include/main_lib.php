@@ -1015,14 +1015,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
@@ -1106,7 +1106,7 @@ $native_language_names_init = array(
     'de' => 'Deutsch',
     'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => '日本語',
+    'jp' => '日本�',
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
@@ -1378,6 +1378,14 @@ function delete_course($cid) {
                          (SELECT id FROM ebook WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM ebook WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM forum_notify WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE forum_post FROM forum_post INNER JOIN forum_topic ON forum_post.topic_id = forum_topic.id
+                            INNER JOIN forum ON forum_topic.forum_id = forum.id
+                            WHERE forum.course_id = ?d", $cid);
+    Database::get()->query("DELETE forum_topic FROM forum_topic INNER JOIN forum ON forum_topic.forum_id = forum.id
+                            WHERE forum.course_id = ?d", $cid);    
+    Database::get()->query("DELETE FROM forum_category WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM forum WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM forum_user_stats WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
@@ -1391,6 +1399,15 @@ function delete_course($cid) {
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM abuse_report WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id` 
+                            WHERE `comments`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `blog_post` ON `rating`.`rid` = `blog_post`.`id`
+                            WHERE `rating`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `blog_post` ON `rating_cache`.`rid` = `blog_post`.`id`
+                            WHERE `rating_cache`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
+    Database::get()->query("DELETE FROM `rating` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
+    Database::get()->query("DELETE FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
+    Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
@@ -2860,7 +2877,7 @@ function action_button($options) {
         } elseif ($level == 'primary') {
             array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' rel='tooltip' title='$option[title]' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
+            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }        
     }
     $primary_buttons = "";
@@ -2893,28 +2910,61 @@ function removeGetVar($url, $varname) {
     return $urlpart . '?' . $newqs;
 }
 
+//function setOpenCoursesExtraHTML() {
+//    global $urlAppend, $openCoursesExtraHTML,
+//        $langOpenCoursesShort, $langListOpenCoursesShort,
+//        $langNumOpenCourseBanner, $langNumOpenCoursesBanner;
+//    $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
+//    if ($openCoursesNum > 0) {
+//        $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
+//        $openCoursesExtraHTML = "
+//            <div class='inner_opencourses'>
+//                <span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>
+//                <a class='clearfix' href='$openFacultiesUrl'>
+//                    <span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>
+//                    <div class='row num_sub_wrapper center-block clearfix'>
+//                        <div class='col-xs-6 col-md-4 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
+//                        <div class='col-xs-6 col-md-8'>
+//                        <div class='pull-left'>
+//                            <span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span>
+//                            <span class='opencourse_triangle'></span>
+//                            </div>
+//                        </div>
+//                    </div>
+//                </a>
+//            </div>";
+//    }
+//}
+
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML,
         $langOpenCoursesShort, $langListOpenCoursesShort,
-        $langNumOpenCourseBanner, $langNumOpenCoursesBanner;
+        $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg;
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
     if ($openCoursesNum > 0) {
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
             <div class='inner_opencourses'>
-                <span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>
-                <a class='clearfix' href='$openFacultiesUrl'>
-                    <span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>
+                <!--<span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>-->
+                <div class='row'>
+                    <div class='col-xs-6 col-xs-offset-3 col-md-12 col-md-offset-0'>
+                        <img class='img-responsive center-block' src='".$themeimg."/banner_open_courses.png' />
+                    </div>
+                </div>
+                <div class='clearfix'>
+                    <!--<span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>-->
                     <div class='row num_sub_wrapper center-block clearfix'>
-                        <div class='col-xs-6 col-md-4 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
-                        <div class='col-xs-6 col-md-8'>
+                        <div class='col-xs-6 col-md-5 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
+                        <div class='col-xs-6 col-md-7 opencourse_num_text'>
+                        <a target='_blank' href='$openFacultiesUrl'>
                         <div class='pull-left'>
                             <span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span>
                             <span class='opencourse_triangle'></span>
                             </div>
                         </div>
+                        </a>
                     </div>
-                </a>
+                </div>
             </div>";
     }
 }

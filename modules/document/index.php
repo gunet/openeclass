@@ -414,7 +414,7 @@ if ($can_upload) {
     /*     * ************************************
       DELETE FILE OR DIRECTORY
      * ************************************ */
-    if (isset($_GET['delete']) and isset($_GET['filePath']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_GET['delete']) and isset($_GET['filePath'])) {        
         $filePath = $_GET['filePath'];
         // Check if file actually exists
         $r = Database::get()->querySingle("SELECT path, extra_path, format, filename FROM document
@@ -1171,7 +1171,7 @@ if ($doc_count == 0) {
                 <div class='table-responsive'>
                 <table class='table-default'>
                     <tr>";
-    $tool_content .= "<th class='text-left'>" . headlink($langType, 'type') . '</th>' .
+    $tool_content .= "<th class='text-left' width='60'>" . headlink($langType, 'type') . '</th>' .
                      "<th class='text-left'>" . headlink($langName, 'name') . '</th>' .
                      "<th class='text-left'>$langSize</th>" .
                      "<th class='text-left'>" . headlink($langDate, 'date') . '</th>';

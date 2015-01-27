@@ -185,6 +185,43 @@ $available_themes = active_subdirs("$webDir/template", 'theme.html');
 
 define('MONTHS', 30 * 24 * 60 * 60);
 
+// schedule indexing if necessary
+if (Session::get('scheduleIndexing')) {
+    $tool_content .= "<div class='alert alert-warning'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></div>";
+    
+    $head_content .= <<<EOF
+<script type='text/javascript'>
+/* <![CDATA[ */
+
+var idxwindow = null;
+
+function idxpopup(url, w, h) {
+    var left = (screen.width/2)-(w/2);
+    var top = (screen.height/2)-(h/2);
+
+    if (idxwindow == null || idxwindow.closed) {
+        idxwindow = window.open(url, 'idxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
+        if (window.focus && idxwindow !== null) {
+            idxwindow.focus();
+        }
+    } else {
+        idxwindow.focus();
+    }
+
+    return false;
+}
+
+$(document).ready(function() {
+
+    $('#idxpbut').click();
+
+});
+
+/* ]]> */
+</script>
+EOF;
+}
+
 // Save new config.php
 if (isset($_POST['submit'])) {
     $active_lang_codes = array();
@@ -305,46 +342,13 @@ if (isset($_POST['submit'])) {
     }
 
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
+    Session::flash('scheduleIndexing', $scheduleIndexing);
+    Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    redirect_to_home_page('modules/admin/eclassconf.php');
 
-    // schedule indexing if necessary
-    if ($scheduleIndexing) {
-        $tool_content .= "<div class='alert alert-warning'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></div>";
-        $head_content .= <<<EOF
-<script type='text/javascript'>
-/* <![CDATA[ */
-
-var idxwindow = null;
-                
-function idxpopup(url, w, h) {
-    var left = (screen.width/2)-(w/2);
-    var top = (screen.height/2)-(h/2);
-    
-    if (idxwindow == null || idxwindow.closed) {
-        idxwindow = window.open(url, 'idxpopup', 'resizable=yes, scrollbars=yes, status=yes, width='+w+', height='+h+', top='+top+', left='+left);
-        if (window.focus && idxwindow !== null) {
-            idxwindow.focus();
-        }
-    } else {
-        idxwindow.focus();
-    }
-    
-    return false;
-}
-
-$(document).ready(function() {
-
-    $('#idxpbut').click();
-
-});
-
-/* ]]> */
-</script>
-EOF;
-    }
 } // end of if($submit)
-// Display config.php edit form
 else {
+    // Display config.php edit form
     $head_content .= "
         <script>
         $(function() {

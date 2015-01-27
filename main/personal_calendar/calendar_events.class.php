@@ -1287,9 +1287,9 @@ class Calendar_Events {
        global $langNext, $langPrevious;
        
        $calendar = '<div id="cal-header" class="btn-group btn-group-justified btn-group-sm">
-                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="prev"><i class="fa fa-caret-left"></i> '.$langPrevious.'</button></div>
-                            <div class="btn-group btn-group-sm"><button id="current-month" type="button" class="btn btn-default" disabled="disabled">&nbsp;</button></div>
-                            <div class="btn-group btn-group-sm"><button type="button" class="btn btn-default" data-calendar-nav="next">'.$langNext.' <i class="fa fa-caret-right"></i></button></div>
+                            <div class="btn-group btn-group-sm" style="width:20%;"><button type="button" class="btn btn-default" data-calendar-nav="prev"><i class="fa fa-caret-left"></i></button></div>
+                            <div class="btn-group btn-group-sm" style="width:60%;"><button id="current-month" type="button" class="btn btn-default" disabled="disabled">&nbsp;</button></div>
+                            <div class="btn-group btn-group-sm" style="width:20%;"><button type="button" class="btn btn-default" data-calendar-nav="next"><i class="fa fa-caret-right"></i></button></div>
                     </div>';
        
        $calendar .= '<div id="bootstrapcalendar"></div><div class="clearfix"></div>';

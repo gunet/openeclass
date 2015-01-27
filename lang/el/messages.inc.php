@@ -2730,7 +2730,7 @@ $langToUser = "στον χρήστη";
 
 // search_user.php
 $langUserNoneMasc = "-";
-$langTutor = "Εκπαιδευτής";
+$langTutor = "Υπεύθυνος Ομάδας";
 $langEditor = "Βοηθός εκπαιδευτή";
 $langTutorDefinition = "Διδάσκων (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
 $langAdminDefinition = "Διαχειριστής (δικαίωμα να αλλάζει το περιεχόμενο των μαθημάτων)";
@@ -3739,6 +3739,7 @@ $langStudentViewEnable = "Περιβάλλον $langsOfStudent";
 $langStudentViewDisable = "Περιβάλλον $langsOfTeacher";
 $langInactiveModule = "ανενεργό υποσύστημα";
 $langAvailableUnitResources = "Εκπαιδευτικό υλικό";
+$langNoUnits = "Δεν υπάρχουν θεματικές ενότητες";
 
 /* * ********************************************************************
   mail_verify.php
