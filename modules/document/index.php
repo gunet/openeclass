@@ -414,7 +414,7 @@ if ($can_upload) {
     /*     * ************************************
       DELETE FILE OR DIRECTORY
      * ************************************ */
-    if (isset($_GET['delete']) and isset($_GET['filePath']) and $_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_GET['delete']) and isset($_GET['filePath'])) {        
         $filePath = $_GET['filePath'];
         // Check if file actually exists
         $r = Database::get()->querySingle("SELECT path, extra_path, format, filename FROM document
