@@ -2730,7 +2730,7 @@ $langToUser = "στον χρήστη";
 
 // search_user.php
 $langUserNoneMasc = "-";
-$langTutor = "Εκπαιδευτής";
+$langTutor = "Υπεύθυνος Ομάδας";
 $langEditor = "Βοηθός εκπαιδευτή";
 $langTutorDefinition = "Διδάσκων (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
 $langAdminDefinition = "Διαχειριστής (δικαίωμα να αλλάζει το περιεχόμενο των μαθημάτων)";

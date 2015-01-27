@@ -160,18 +160,25 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'show' => get_config('opencourses_enable') && 
                             (
                                 ($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1') || 
-                                ($myrow->id != $_SESSION["uid"] && !$is_opencourses_reviewer && $is_admin)
+                                ($myrow->id != $_SESSION["uid"] && $is_opencourses_reviewer && $is_admin)
                             )
             )            
         ));
+        //die(var_dump($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1'));
+        $user_roles = array();
+        ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langTeacher);
+        if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
+        if ($myrow->editor == '1') array_push($user_roles, $langEditor);        
+        if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
         //setting datables column data
         $data['aaData'][] = array(
             'DT_RowId' => $myrow->id,
             'DT_RowClass' => 'smaller',
             '0' => display_user($myrow->id) . "&nbsp<span>(<a href='mailto:" . $myrow->email . "'>" . $myrow->email . "</a>) $am_message</span>",
-            '1' => user_groups($course_id, $myrow->id),
-            '2' => $date_field,
-            '3' => $user_role_controls
+            '1' => "<small>".implode(', ', $user_roles)."</small>",
+            '2' => user_groups($course_id, $myrow->id),
+            '3' => $date_field,
+            '4' => $user_role_controls
         );
     }
     echo json_encode($data);
@@ -204,7 +211,7 @@ $head_content .= "
                 'sPaginationType': 'full_numbers',              
                 'bSort': true,
                 'aaSorting': [[0, 'desc']],
-                'aoColumnDefs': [{'sClass':'option-btn-cell', 'aTargets':[-1]}, { 'bSortable': false, 'aTargets': [ 1 ] }, { 'bSortable': false, 'aTargets': [ 3 ] }],
+                'aoColumnDefs': [{'sClass':'option-btn-cell', 'aTargets':[-1]}, { 'sClass':'text-center', 'bSortable': false, 'aTargets': [ 2 ] }, { 'bSortable': false, 'aTargets': [ 4 ] }],
                 'oLanguage': {                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '" . $langNoResult . "',
@@ -357,6 +364,7 @@ $tool_content .= "
         <thead>
             <tr>
               <th>$langName $langSurname</th>
+              <th class='text-center'>Ρόλοι</th>
               <th class='text-center'>$langGroup</th>
               <th class='text-center' width='80'>$langRegistrationDateShort</th>
               <th class='text-center'>".icon('fa-gears')."</th>
