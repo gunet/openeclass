@@ -128,8 +128,7 @@ if(count($res)>0){
     foreach ($res as $row) {
         $desctype = intval($row->type) - 1;    
         $hidden_id = "hidden_" . $row->id;
-        $tool_content .= "<div id='$hidden_id'><h1>" .
-                q($row->title) . "</h1>" .
+        $tool_content .= "<div id='$hidden_id'><h1>" . q($row->title) . "</h1>" .
                 standard_text_escape($row->comments) . "</div>";    
         $course_info_extra .= "<li><a class='md-trigger inline' data-modal='syllabus-prof' href='#$hidden_id'>".q($row->title) ."</a></li>";
     }
@@ -631,7 +630,7 @@ if (($total_cunits > 0 or $is_editor) and ($course_info->view_type != 'simple'))
 } else {
     $alter_layout = TRUE;
     $cunits_sidebar_columns = 12;
-    $cunits_sidebar_subcolumns = 4;
+    $cunits_sidebar_subcolumns = 6;
 }
 $tool_content .= "<div class='row'>";
 //if (!$alter_layout or $course_info->view_type != 'simple') {
@@ -659,22 +658,7 @@ if (!$alter_layout) {
     $tool_content .= "</div>";
 }
 
-$tool_content .= "<div class='col-md-$cunits_sidebar_columns'>";
-
-//if (!empty($license_info_box)) {
-//    $tool_content .= "
-//        
-//            <div class='col-md-$cunits_sidebar_subcolumns'>
-//                <h3 class='content-title'>$langLicense</h3>
-//                <div class='panel license_info_box'>
-//                    <div class='panel-body'>
-//                        $license_info_box
-//                    </div>
-//                </div>
-//            </div>
-//        ";
-//}
-
+$tool_content .= "<div class='sssssss col-md-$cunits_sidebar_columns'>";
 
 //BEGIN - Get user personal calendar
 $today = getdate();
