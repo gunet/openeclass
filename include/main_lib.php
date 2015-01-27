@@ -2874,7 +2874,7 @@ function action_button($options) {
         } elseif ($level == 'primary') {
             array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' rel='tooltip' title='$option[title]' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
         } else {
-            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class, true) . $form_end);
+            array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }        
     }
     $primary_buttons = "";
