@@ -1390,6 +1390,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM abuse_report WHERE course_id = ?d", $cid);
     // check if we have guest account. If yes delete him.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
@@ -1488,6 +1489,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
             Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM abuse_report WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
             Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
