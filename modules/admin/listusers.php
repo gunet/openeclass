@@ -455,6 +455,7 @@ $tool_content .= "<table id='search_results_table' class='display'>
                   <th width='130' class='centertext-center'>" . icon('fa-gears') . "</th>
                 </tr>
             </thead>
+            <!-- DO NOT DELETE THESE EMPTY COLUMNS -->
             <tfoot>
                 <tr>
                     <th></th>

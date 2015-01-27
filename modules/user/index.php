@@ -71,7 +71,20 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $search_sql = '';
         $search_values = array();
     }
-
+    // user status
+    if (!empty($_GET['sSearch_1'])) {
+        $filter = $_GET['sSearch_1'];
+        $status = array('teacher','student');
+        $others = array('editor', 'reviewer', 'tutor');
+        if (in_array($filter, $status)) {
+            $value = $filter == 'teacher' ? 1 : 5;
+            $search_values[] = $value;
+            $search_sql .= " AND (course_user.status = ?d)";
+        } elseif (in_array($filter, $others)) {
+            $search_sql .= " AND (course_user.$filter = 1)";
+        }
+        
+    }
     $order_sql = 'ORDER BY ';
     $order_sql .= ($_GET['iSortCol_0'] == 0) ? 'user.givenname ' : 'course_user.reg_date ';
     $order_sql .= $_GET['sSortDir_0'];
@@ -166,7 +179,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         ));
         //die(var_dump($myrow->id == $_SESSION["uid"] && $myrow->reviewer == '1'));
         $user_roles = array();
-        ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langTeacher);
+        ($myrow->status == '1') ? array_push($user_roles, $langTeacher) : array_push($user_roles, $langStudent);
         if ($myrow->tutor == '1') array_push($user_roles, $langTutor);
         if ($myrow->editor == '1') array_push($user_roles, $langEditor);        
         if ($myrow->reviewer == '1') array_push($user_roles, $langOpenCoursesReviewer);
@@ -194,7 +207,20 @@ load_js('datatables_filtering_delay');
 $head_content .= "
 <script type='text/javascript'>
         $(document).ready(function() {
-           var oTable = $('#users_table{$course_id}').dataTable ({
+           var oTable = $('#users_table{$course_id}').DataTable ({
+                initComplete: function () {
+                    var api = this.api();
+                    var column = api.column(1);
+                    var select = $('<select id=\'select_role\'>'+
+                                        '<option value=\'0\'>-- Όλοι --</option>'+
+                                        '<option value=\'teacher\'>$langTeacher</option>'+
+                                        '<option value=\'student\'>$langStudent</option>'+
+                                        '<option value=\'editor\'>$langEditor</option>'+
+                                        '<option value=\'tutor\'>$langTutor</option>'+
+                                        ".(get_config('opencourses_enable') ? "'<option value=\'reviewer\'>$langOpenCoursesReviewer</option>'+" : "")."
+                                    '</select>')
+                                    .appendTo( $(column.footer()).empty() );
+                },               
                 'bStateSave': true,
                 'bProcessing': true,
                 'bServerSide': true,
@@ -211,7 +237,7 @@ $head_content .= "
                 'sPaginationType': 'full_numbers',              
                 'bSort': true,
                 'aaSorting': [[0, 'desc']],
-                'aoColumnDefs': [{'sClass':'option-btn-cell', 'aTargets':[-1]}, { 'sClass':'text-center', 'bSortable': false, 'aTargets': [ 2 ] }, { 'bSortable': false, 'aTargets': [ 4 ] }],
+                'aoColumnDefs': [{'sClass':'option-btn-cell', 'aTargets':[-1]}, {'bSortable': false, 'aTargets': [ 1 ] }, { 'sClass':'text-center', 'bSortable': false, 'aTargets': [ 2 ] }, { 'bSortable': false, 'aTargets': [ 4 ] }],
                 'oLanguage': {                       
                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                        'sZeroRecords':  '" . $langNoResult . "',
@@ -228,7 +254,14 @@ $head_content .= "
                            'sLast':     '&raquo;'
                        }
                    }
-            }).fnSetFilteringDelay(1000);
+            });
+            // Apply the filter
+            $(document).on('change', 'select#select_role', function (e) {
+                oTable
+                    .column( $(this).parent().index()+':visible' )
+                    .search($('select#select_role').val())
+                    .draw();
+            });            
             $(document).on( 'click','.delete_btn', function (e) {
                 e.preventDefault();
                 var row_id = $(this).closest('tr').attr('id');
@@ -358,8 +391,7 @@ $tool_content .=
         ));
 
 
-$tool_content .= "
-<div class='table-responsive'>    
+$tool_content .= " 
     <table id='users_table{$course_id}' class='table-default'>
         <thead>
             <tr>
@@ -372,6 +404,14 @@ $tool_content .= "
         </thead>
         <tbody>
         </tbody>
-    </table>
-</div>";
+        <tfoot>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>         
+    </table>";
 draw($tool_content, 2, null, $head_content);
