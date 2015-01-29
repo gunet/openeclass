@@ -143,7 +143,7 @@ function show_resource($info) {
 
     if ($info->visible == 0 and ! $is_editor) {
         return;
-    }
+    }    
     switch ($info->type) {
         case 'doc':
             $tool_content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
@@ -159,6 +159,7 @@ function show_resource($info) {
             break;
         case 'video':
         case 'videolink':
+        case 'videolinks':   // old table name. keep it for backward compatibility
             $tool_content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'videolinkcategory':                    
@@ -373,10 +374,13 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility) {
     global $is_editor, $course_id, $tool_content, $langInactiveModule;
 
+    if ($table == 'videolinks') {
+        $table = 'videolink';  // ugly hack for backward compatibility
+    }
     $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
     if (!$module_visible and ! $is_editor) {
         return '';
-    }
+    }    
     $comment_box = $class_vis = $imagelink = $link = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';
