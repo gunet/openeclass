@@ -112,7 +112,7 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resources($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources;
+    global $tool_content, $max_resource_id, $langAvailableUnitResources, $is_editor;
     
     $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
@@ -120,7 +120,10 @@ function show_resources($unit_id) {
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th><th class='text-center'>".icon('fa-gears')."</th>";
+        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th>";
+        if( $is_editor ) {
+            $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
+        }
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resource($info);
