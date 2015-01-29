@@ -1187,7 +1187,8 @@ function show_student_assignment($id) {
 function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
     global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid, $is_member,
     $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $course_code, $langBack, $is_editor, $langCancel;
-
+    
+    $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $id)->max_grade;
     $group_select_hidden_input = $group_select_form = '';
     $is_group_assignment = is_group_assignment($id);
     if ($is_group_assignment) {
@@ -1247,7 +1248,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         <div class='form-group'>
                             <label for='userfile' class='col-sm-2 control-label'>$m[grade]:</label>
                             <div class='col-sm-10'>
-                              <input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]:)
+                              <input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]: $max_grade)
                               <input type='hidden' name='on_behalf_of' value='1'>
                             </div>
                         </div>
@@ -1533,7 +1534,8 @@ function show_assignment($id, $display_graph_results = false) {
                         <input type='hidden' name='grades_id' value='$id' />
                         <p><div class='sub_title1'>$langSubmissions:</div><p>
                         <p>$num_of_submissions</p>
-                        <table width='100%' class='sortable'>
+                        <div class='table-responsive'>    
+                        <table class='table-default'>
                         <tr>
                       <th width='3'>&nbsp;</th>";
             sort_link($m['username'], 'username');
@@ -1611,6 +1613,7 @@ function show_assignment($id, $display_graph_results = false) {
             } //END of Foreach
 
             $tool_content .= "</table>
+                            </div>
                         <p class='smaller right'><img src='$themeimg/email.png' alt='' >
                                 $m[email_users]: <input type='checkbox' value='1' name='email'></p>
                         <p><input class='btn btn-primary' type='submit' name='submit_grades' value='$langGradeOk'></p>
