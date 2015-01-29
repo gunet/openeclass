@@ -120,7 +120,7 @@ function show_resources($unit_id) {
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th><th>".icon('fa-gears')."</th>";
+        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th><th class='text-center'>".icon('fa-gears')."</th>";
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resource($info);

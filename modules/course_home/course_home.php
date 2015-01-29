@@ -669,17 +669,21 @@ Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
 
-$tool_content .="<div class='row'>
-                <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langAnnouncements</h3>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            <ul class='tablelist'>" . course_announcements() . "
-                            </ul>
+$tool_content .="<div class='row'>";
+        // display open course level if exist
+            if (isset($level) && !empty($level)) {
+                $tool_content .= "
+                    <div class='col-md-$cunits_sidebar_subcolumns'>
+                        <h3 class='content-title'>$langOpenCourseShort</h3>
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                $opencourses_level
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class='col-md-$cunits_sidebar_subcolumns'>
+                ";
+            }
+                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
                     <h3 class='content-title'>$langCalendar</h3>
                     <div class='panel'>
                         <div class='panel-body'>
@@ -706,24 +710,19 @@ $tool_content .="<div class='row'>
                             </div>
                         </div>
                     </div>
-                </div>";
-        // display open course level if exist
-        if (isset($level) && !empty($level)) {
-            $tool_content .= "
-                <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langOpenCourseShort</h3>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            $opencourses_level
-                        </div>
-                    </div>
                 </div>
-            ";
-        }
-$tool_content .= "                
-           </div>
-           </div>
-    </div>";
+                <div class='col-md-$cunits_sidebar_subcolumns'>
+                                <h3 class='content-title'>$langAnnouncements</h3>
+                                <div class='panel'>
+                                    <div class='panel-body'>
+                                        <ul class='tablelist'>" . course_announcements() . "
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                       </div>
+                </div>";
 
 draw($tool_content, 2, null, $head_content);
 
