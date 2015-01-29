@@ -242,11 +242,13 @@ if ($uid AND !isset($_GET['logout'])) {
     }
     // display online users
     $online_users = getOnlineUsers();
-    $tool_content .= "<div class='panel'>
+    if ($online_users > 0) {
+        $tool_content .= "<div class='panel'>
                <div class='panel-body'>
                    <i class='fa fa-group space-after-icon'></i> &nbsp;$langOnlineUsers: $online_users
                </div>
            </div>";
+    }
     if (!isset($openCoursesExtraHTML)) {
         $openCoursesExtraHTML = '';
         setOpenCoursesExtraHTML();
