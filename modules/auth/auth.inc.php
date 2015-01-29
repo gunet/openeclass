@@ -36,6 +36,7 @@
 require_once 'include/log.php';
 // pop3 class
 include 'modules/auth/methods/pop3.php';
+require_once 'include/phpass/PasswordHash.php';
 
 $auth_ids = array(1 => 'eclass',
     2 => 'pop3',
@@ -268,18 +269,16 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
         case '1':
             $unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = ";            
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
-            if ($result) {
-                foreach ($result as $myrow) {
-                    $hasher = new PasswordHash(8, false);
-                    if ($hasher->CheckPassword($test_password, $myrow->password)) {
-                        $testauth = true;
-                    } else if (strlen($myrow->password) < 60 && md5($test_password) == $myrow->password) {
-                        $testauth = true;
-                        // password is in old md5 format, update transparently
-                        $password_encrypted = $hasher->HashPassword($test_password);
-                        Database::get()->query("UPDATE user SET password = ?s WHERE username COLLATE utf8_bin = ?s" ,$password_encrypted, $test_username);
-                    }
-                }
+            if ($result) {                
+                $hasher = new PasswordHash(8, false);                    
+                if ($hasher->CheckPassword($test_password, $result->password)) {
+                    $testauth = true;
+                } else if (result($myrow->password) < 60 && md5($test_password) == $result->password) {
+                    $testauth = true;
+                    // password is in old md5 format, update transparently
+                    $password_encrypted = $hasher->HashPassword($test_password);
+                    Database::get()->query("UPDATE user SET password = ?s WHERE username COLLATE utf8_bin = ?s" ,$password_encrypted, $test_username);
+                }                
             }
             break;
 
