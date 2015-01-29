@@ -48,7 +48,7 @@ function get_assignment_details($id) {
 // Show to professor details of a student's submission and allow editing of fields
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign) {
-    global $m, $langGradeOk, $tool_content, $course_code;
+    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langBack;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
@@ -59,43 +59,69 @@ function show_edit_form($id, $sid, $assign) {
         } else {
             $group_submission = '';
         }
-
-        $tool_content .= "
-                <form method='post' action='index.php?course=$course_code'>
+        $pageName = $m['addgradecomments'];
+        $tool_content .= action_bar(array(
+                array(
+                    'title' => $langBack,
+                    'url' => "index.php?course=$course_code&id=$sub->assignment_id",
+                    'icon' => "fa-reply",
+                    'level' => 'primary-label'
+                )
+            ))."
+            <div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
                 <input type='hidden' name='assignment' value='$id'>
                 <input type='hidden' name='submission' value='$sid'>
                 <fieldset>
-                <legend>$m[addgradecomments]</legend>
-                <table width='99%' class='tbl'>
-                <tr>
-                    <th class='left' width='180'>${m['username']}:</th>
-                    <td>${uid_2_name} ".q($group_submission)."</td>
-                </tr>
-                <tr>
-                    <th class='left'>${m['sub_date']}:</th>
-                    <td>".q($sub->submission_date)."</td></tr>
-                <tr>
-                    <th class='left'>${m['filename']}:</th>
-                    <td><a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a></td>
-                </tr>
-                <tr>
-                    <th class='left'>$m[grade]:</th>
-                    <td><input type='text' name='grade' maxlength='3' size='3' value='".q($sub->grade)."'></td></tr>
-                <tr>
-                    <th class='left'>$m[gradecomments]:</th>
-                    <td><textarea cols='60' rows='3' name='comments'>".q($sub->grade_comments)."</textarea></td>
-                </tr>
-                <tr>
-                    <th><label for='email_button'>$m[email_users]:</label></th>
-                    <td><input type='checkbox' value='1' id='email_button' name='email'></td>
-                </tr>
-                <tr>
-                    <th class='left'>&nbsp;</th>
-                    <td><input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'></td>
-                </tr>
-                </table>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$m[username]:</label>
+                        <div class='col-sm-9'>
+                        $uid_2_name ".q($group_submission)."
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$m[sub_date]:</label>
+                        <div class='col-sm-9'>
+                            <span>".q($sub->submission_date)."</span>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$m[filename]:</label>
+                        <div class='col-sm-9'>
+                            <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='grade' class='col-sm-3 control-label'>$m[grade]:</label>
+                        <div class='col-sm-2'>
+                            <input class='form-control' type='text' name='grade' id='grade' maxlength='3' value='".q($sub->grade)."'>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='comments' class='col-sm-3 control-label'>$m[gradecomments]:</label>
+                        <div class='col-sm-9'>
+                            <textarea class='form-control' rows='3' name='comments'  id='comments'>".q($sub->grade_comments)."</textarea>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-9 col-sm-offset-3'>
+                            <div class='checkbox'>
+                                <label>
+                                    <input type='checkbox' value='1' id='email_button' name='email'>
+                                    $m[email_users]
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-9 col-sm-offset-3'>
+                            <input class='btn btn-primary' type='submit' name='grade_comments' value='$langGradeOk'>
+                            <a class='btn btn-default' href='index.php?course=$course_code&id=$sub->assignment_id'>$langCancel</a>
+                        </div>
+                    </div>
                 </fieldset>
-                </form><br>";
+                </form>
+            </div>";
     } else {
         Session::Messages($m['WorkNoSubmission'], 'alert-danger');
         redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
