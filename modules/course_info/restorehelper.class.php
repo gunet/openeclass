@@ -222,21 +222,101 @@ class RestoreHelper {
         $this->values[self::STYLE_2X]['course_units']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['unit_resources']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['forum_category']['cat_order'] = $to_int;
+        
+        $this->values[self::STYLE_3X]['lp_module']['contentType'] = function($value) {
+            if ($value === '') {
+                return 'SCORM';
+            } else {
+                return $value;
+            }
+        };
     }
     
     private function populateTypes() {
         $this->types = array();
+        $this->types[self::STYLE_3X]['admin_announcement']['begin'] = '?t';
+        $this->types[self::STYLE_3X]['admin_announcement']['end'] = '?t';
+        $this->types[self::STYLE_3X]['admin_announcement']['visible'] = '?d';
+        $this->types[self::STYLE_3X]['admin_calendar']['recursion_end'] = '?t';
+        $this->types[self::STYLE_3X]['admin_calendar']['source_event_id'] = '?d';
+        $this->types[self::STYLE_3X]['admin_calendar']['visibility_level'] = '?d';
+        $this->types[self::STYLE_3X]['admin_calendar']['email_notification'] = '?t';
         $this->types[self::STYLE_3X]['agenda']['visible'] = '?d';
         $this->types[self::STYLE_3X]['agenda']['recursion_end'] = '?t';
         $this->types[self::STYLE_3X]['agenda']['source_event_id'] = '?d';
+        $this->types[self::STYLE_3X]['announcement']['date'] = '?t';
         $this->types[self::STYLE_3X]['assignment']['max_grade'] = '?f';
+        $this->types[self::STYLE_3X]['assignment_submit']['grade'] = '?f';
+        $this->types[self::STYLE_3X]['assignment_submit']['group_id'] = '?d';
+        $this->types[self::STYLE_3X]['attendance_activities']['date'] = '?t';
+        $this->types[self::STYLE_3X]['bbb_servers']['max_rooms'] = '?d';
+        $this->types[self::STYLE_3X]['bbb_servers']['max_users'] = '?d';
+        $this->types[self::STYLE_3X]['bbb_servers']['weight'] = '?d';
+        $this->types[self::STYLE_3X]['bbb_session']['course_id'] = '?d';
+        $this->types[self::STYLE_3X]['bbb_session']['start_date'] = '?t';
+        $this->types[self::STYLE_3X]['bbb_session']['running_at'] = '?d';
+        $this->types[self::STYLE_3X]['bbb_session']['unlock_interval'] = '?d';
+        $this->types[self::STYLE_3X]['bbb_session']['sessionUsers'] = '?d';
         $this->types[self::STYLE_3X]['course_description']['type'] = '?d';
         $this->types[self::STYLE_3X]['course_description']['visible'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['syllabus'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['objectives'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['bibliography'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['teaching_method'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['assessment_method'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['prerequisites'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['featured_books'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['instructors'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['target_group'] = '?d';
+        $this->types[self::STYLE_3X]['course_description_type']['active'] = '?d';
+        $this->types[self::STYLE_3X]['course_units']['visible'] = '?d';
+        $this->types[self::STYLE_3X]['course_weekly_view_activities']['visible'] = '?d';
         $this->types[self::STYLE_3X]['document']['subsystem_id'] = '?d';
+        $this->types[self::STYLE_3X]['exercise']['start_date'] = '?t';
+        $this->types[self::STYLE_3X]['exercise']['end_date'] = '?t';
+        $this->types[self::STYLE_3X]['exercise']['time_constraint'] = '?d';
+        $this->types[self::STYLE_3X]['exercise']['attempts_allowed'] = '?d';
+        $this->types[self::STYLE_3X]['exercise']['active'] = '?d';
+        $this->types[self::STYLE_3X]['exercise_answer']['correct'] = '?d';
+        $this->types[self::STYLE_3X]['exercise_answer']['weight'] = '?f';
+        $this->types[self::STYLE_3X]['exercise_answer']['r_position'] = '?d';
+        $this->types[self::STYLE_3X]['exercise_answer_record']['weight'] = '?f';
+        $this->types[self::STYLE_3X]['exercise_question']['weight'] = '?f';
+        $this->types[self::STYLE_3X]['exercise_question']['q_position'] = '?d';
+        $this->types[self::STYLE_3X]['exercise_question']['type'] = '?d';
+        $this->types[self::STYLE_3X]['exercise_question']['difficulty'] = '?d';
+        $this->types[self::STYLE_3X]['exercise_question']['category'] = '?d';
         $this->types[self::STYLE_3X]['exercise_user_record']['record_end_date'] = '?t';
         $this->types[self::STYLE_3X]['exercise_user_record']['total_weighting'] = '?f';
+        $this->types[self::STYLE_3X]['forum_post']['post_time'] = '?t';
+        $this->types[self::STYLE_3X]['forum_topic']['poster_id'] = '?d';
+        $this->types[self::STYLE_3X]['forum_topic']['topic_time'] = '?t';
+        $this->types[self::STYLE_3X]['glossary']['category_id'] = '?d';
         $this->types[self::STYLE_3X]['gradebook_activities']['activity_type'] = '?d';
         $this->types[self::STYLE_3X]['gradebook_activities']['date'] = '?t';
+        $this->types[self::STYLE_3X]['group']['forum_id'] = '?d';
+        $this->types[self::STYLE_3X]['hierarchy']['order_priority'] = '?d';
+        $this->types[self::STYLE_3X]['note']['reference_obj_module'] = '?d';
+        $this->types[self::STYLE_3X]['note']['reference_obj_id'] = '?d';
+        $this->types[self::STYLE_3X]['note']['reference_obj_course'] = '?d';
+        $this->types[self::STYLE_3X]['oai_record']['datestamp'] = '?t';
+        $this->types[self::STYLE_3X]['personal_calendar']['recursion_end'] = '?t';
+        $this->types[self::STYLE_3X]['personal_calendar']['source_event_id'] = '?d';
+        $this->types[self::STYLE_3X]['personal_calendar']['reference_obj_module'] = '?d';
+        $this->types[self::STYLE_3X]['personal_calendar']['reference_obj_id'] = '?d';
+        $this->types[self::STYLE_3X]['personal_calendar']['reference_obj_course'] = '?d';
+        $this->types[self::STYLE_3X]['personal_calendar_settings']['show_personal'] = '?d';
+        $this->types[self::STYLE_3X]['personal_calendar_settings']['show_course'] = '?d';
+        $this->types[self::STYLE_3X]['personal_calendar_settings']['show_deadline'] = '?d';
+        $this->types[self::STYLE_3X]['personal_calendar_settings']['show_admin'] = '?d';
+        $this->types[self::STYLE_3X]['poll_question']['q_position'] = '?d';
+        $this->types[self::STYLE_3X]['poll_question']['q_scale'] = '?d';
+        $this->types[self::STYLE_3X]['unit_resources']['visible'] = '?d';
+        $this->types[self::STYLE_3X]['user']['last_passreminder'] = '?t';
+        $this->types[self::STYLE_3X]['user_request']['date_open'] = '?t';
+        $this->types[self::STYLE_3X]['user_request']['date_closed'] = '?t';
+        $this->types[self::STYLE_3X]['video']['category'] = '?d';
+        $this->types[self::STYLE_3X]['videolink']['category'] = '?d';
     }
 
 }

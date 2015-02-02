@@ -641,7 +641,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
                         WHERE module.startAsset_id = asset.asset_id
-                        AND course_id = ?d AND contentType = 'EXERCISE'";
+                        AND course_id = ?d AND contentType = 'EXERCISE' AND path <> '' AND path IS NOT NULL";
         $rows = Database::get()->queryArray($sql, intval($new_course_id));
 
         if (is_array($rows) && count($rows) > 0) {
