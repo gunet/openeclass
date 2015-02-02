@@ -435,7 +435,7 @@ foreach ($result as $list) { // while ... learning path list
 
     if ($list->visible == 0) {
         if ($is_editor) {
-            $style = " class='invisible'";
+            $style = " class='not_visible'";
             $image_bullet = "arrow.png";
         } else {
             continue; // skip the display of this file
