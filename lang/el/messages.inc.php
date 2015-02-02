@@ -4358,6 +4358,9 @@ $langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμο�
 $langAbuseReport = 'Αναφορά κατάχρησης';
 $langAbuseReportEn = 'Ενεργοποιημένη αναφορά κατάχρησης';
 $langAbuseReportDis = 'Απενεργοποιημένη αναφορά κατάχρησης';
+$langAbuseReportCat = 'Είδος αναφοράς κατάχρησης';
+$langSpam = 'Spam';
+$langRudeness = 'Αγένεια';
  
 /* * ******************************************
   Theme Options
