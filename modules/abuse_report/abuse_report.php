@@ -71,6 +71,9 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
                                           <label for="abuse_form_txt'.$rtype.'_'.$rid.'">'.$langMessage.'</label>
                                           <textarea class="form-control" name="abuse_report_msg" id="abuse_form_txt'.$rtype.'_'.$rid.'"></textarea>
                                       </div>
+                                      <input type="hidden" name="rtype" value="'.$rtype.'">
+                                      <input type="hidden" name="rid" value="'.$rid.'">
+                                      <input type="hidden" name="cid" value="'.$course_id.'">                                                                                         
 		                         </fieldset>
 		                     </form>
                          </div>
