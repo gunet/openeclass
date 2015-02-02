@@ -47,7 +47,8 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
-        $tool_content .= "<div class='alert alert-success'>$langResourceUnitModified</div>";
+        Session::Messages($langResourceUnitModified, 'alert-success');
+        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if ($id = check_admin_unit_resource($res_id)) {
@@ -120,10 +121,6 @@ function show_resources($unit_id) {
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th>";
-        if( $is_editor ) {
-            $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
-        }
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resource($info);
