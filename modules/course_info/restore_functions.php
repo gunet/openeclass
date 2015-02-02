@@ -206,10 +206,17 @@ function field_args($data, $table, $set, $url_prefix_map, $restoreHelper) {
         if (isset($set[$restoreHelper->getField($table, $name)])) {
             $value = $set[$restoreHelper->getField($table, $name)];
         }
+        $rhvalue = $restoreHelper->getValue($table, $name, $value);
         if (isset($url_prefix_map)) {
-            $values[] = strtr($restoreHelper->getValue($table, $name, $value), $url_prefix_map);
+            // preserve null values because strtr() below turns NULL
+            // into empty string ('') which is bad for STRICT SQL mode
+            if (is_null($rhvalue)) {
+                $values[] = $rhvalue;
+            } else {
+                $values[] = strtr($rhvalue, $url_prefix_map);
+            }
         } else {
-            $values[] = $restoreHelper->getValue($table, $name, $value);
+            $values[] = $rhvalue;
         }
     }
     return $values;
