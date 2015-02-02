@@ -2001,39 +2001,47 @@ ul.front-announcements, .single_announcement {
 /* line 1855, ../SASS/inventory.scss */
 ul.front-announcements li, .single_announcement li {
   padding: 15px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
 }
 /* line 1858, ../SASS/inventory.scss */
 ul.front-announcements li a:hover, .single_announcement li a:hover {
   text-decoration: none;
 }
-/* line 1861, ../SASS/inventory.scss */
+/* line 1862, ../SASS/inventory.scss */
+ul.front-announcements li:first-child, .single_announcement li:first-child {
+  padding-top: 0px;
+}
+/* line 1865, ../SASS/inventory.scss */
+ul.front-announcements li:last-child, .single_announcement li:last-child {
+  padding-bottom: 0px !important;
+}
+/* line 1868, ../SASS/inventory.scss */
 ul.front-announcements .announcement-title, .single_announcement .announcement-title {
   font-weight: bold;
   font-size: 15px;
 }
-/* line 1865, ../SASS/inventory.scss */
+/* line 1872, ../SASS/inventory.scss */
 ul.front-announcements .announcement-date, .single_announcement .announcement-date {
   font-style: italic;
   color: #777;
   font-size: 13px;
   line-height: 30px;
 }
-/* line 1871, ../SASS/inventory.scss */
+/* line 1878, ../SASS/inventory.scss */
 ul.front-announcements .announcements-more, .single_announcement .announcements-more {
   text-align: right;
 }
-/* line 1877, ../SASS/inventory.scss */
+/* line 1884, ../SASS/inventory.scss */
 ul.front-announcements li:last-child, .single_announcement li:last-child {
   border-bottom: none;
   padding-bottom: 10px;
 }
 
-/* line 1883, ../SASS/inventory.scss */
+/* line 1890, ../SASS/inventory.scss */
 .dataTables_filter {
   position: relative;
 }
-/* line 1886, ../SASS/inventory.scss */
+/* line 1893, ../SASS/inventory.scss */
 .dataTables_filter:before {
   position: absolute;
   font-family: FontAwesome;
@@ -2042,23 +2050,23 @@ ul.front-announcements li:last-child, .single_announcement li:last-child {
   content: "\f002";
   color: #999;
 }
-/* line 1894, ../SASS/inventory.scss */
+/* line 1901, ../SASS/inventory.scss */
 .dataTables_filter label {
   margin: 0 0 10px 0;
   width: 100%;
 }
-/* line 1898, ../SASS/inventory.scss */
+/* line 1905, ../SASS/inventory.scss */
 .dataTables_filter input {
   margin: 0px !important;
   padding-right: 25px;
 }
 
-/* line 1903, ../SASS/inventory.scss */
+/* line 1910, ../SASS/inventory.scss */
 table#portfolio-lessons tr {
   padding: 5px 0;
 }
 
-/* line 1908, ../SASS/inventory.scss */
+/* line 1915, ../SASS/inventory.scss */
 .navbar-toggle {
   border: none;
   margin-left: 8px;
@@ -2070,13 +2078,13 @@ table#portfolio-lessons tr {
   height: 52px;
 }
 
-/* line 1918, ../SASS/inventory.scss */
+/* line 1925, ../SASS/inventory.scss */
 .quick-change-pwd {
   text-align: right;
   font-size: 11px;
 }
 
-/* line 1923, ../SASS/inventory.scss */
+/* line 1930, ../SASS/inventory.scss */
 #scrollToTop {
   display: none;
   position: fixed;
@@ -2085,30 +2093,30 @@ table#portfolio-lessons tr {
   bottom: 15px;
 }
 
-/* line 1930, ../SASS/inventory.scss */
+/* line 1937, ../SASS/inventory.scss */
 #scrollToTop i {
   padding: 0 0 10px 0;
   color: #a7a7a7;
   cursor: pointer;
 }
 
-/* line 1935, ../SASS/inventory.scss */
+/* line 1942, ../SASS/inventory.scss */
 .footer {
   height: 49px;
   font-size: 12px;
 }
 
-/* line 1939, ../SASS/inventory.scss */
+/* line 1946, ../SASS/inventory.scss */
 .footer span {
   line-height: 24px;
 }
 
-/* line 1942, ../SASS/inventory.scss */
+/* line 1949, ../SASS/inventory.scss */
 .panel-footer .event-legend > div {
   margin-bottom: 5px;
 }
 
-/* line 1945, ../SASS/inventory.scss */
+/* line 1952, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 8px;
@@ -2117,14 +2125,14 @@ table#portfolio-lessons tr {
   border-radius: 5px;
 }
 
-/* line 1954, ../SASS/inventory.scss */
+/* line 1961, ../SASS/inventory.scss */
 p.link-to-more {
   text-align: right;
   font-size: 12px;
   margin: 0px;
 }
 
-/* line 1960, ../SASS/inventory.scss */
+/* line 1967, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -2133,7 +2141,7 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 1967, ../SASS/inventory.scss */
+/* line 1974, ../SASS/inventory.scss */
 div.profile-pers-info-name {
   font-size: 16px;
   font-weight: bold;
@@ -2141,56 +2149,56 @@ div.profile-pers-info-name {
   padding-top: 10px;
 }
 
-/* line 1973, ../SASS/inventory.scss */
+/* line 1980, ../SASS/inventory.scss */
 div#profile-about-me {
   padding-top: 20px;
   padding-bottom: 20px;
 }
 
-/* line 1977, ../SASS/inventory.scss */
+/* line 1984, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1980, ../SASS/inventory.scss */
+/* line 1987, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 1984, ../SASS/inventory.scss */
+/* line 1991, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1988, ../SASS/inventory.scss */
+/* line 1995, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1994, ../SASS/inventory.scss */
+/* line 2001, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 2003, ../SASS/inventory.scss */
+/* line 2010, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 2009, ../SASS/inventory.scss */
+/* line 2016, ../SASS/inventory.scss */
 .event-legend {
   font-size: 11px;
   color: #666;
   line-height: 10px;
 }
-/* line 2013, ../SASS/inventory.scss */
+/* line 2020, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
-/* line 2019, ../SASS/inventory.scss */
+/* line 2026, ../SASS/inventory.scss */
 .event {
   width: 14px;
   height: 14px;
@@ -2207,7 +2215,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 2031, ../SASS/inventory.scss */
+/* line 2038, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -2217,7 +2225,7 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 2037, ../SASS/inventory.scss */
+/* line 2044, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232C3A !important;
   background-image: none;

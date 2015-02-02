@@ -1854,11 +1854,18 @@ ul.front-announcements, .single_announcement
     padding-left: 0px;
     li{
         padding: 15px 0;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #ddd;
         a:hover{
             text-decoration: none;
         }
-    }.announcement-title{
+    }
+    li:first-child{
+        padding-top: 0px;
+    }
+    li:last-child{
+        padding-bottom: 0px !important;
+    }
+    .announcement-title{
             font-weight: bold;
             font-size: 15px;
         }

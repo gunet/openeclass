@@ -200,9 +200,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                                 ORDER BY `order` DESC", $language);
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
-        $ann_content .= "<h4>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
-                    <i class='fa fa-rss-square'></i>
-                    </a></h4><ul class='front-announcements'>";
+        $ann_content .= "<ul class='front-announcements'>";
         $numOfAnnouncements = sizeof($announceArr);
         for ($i = 0; $i < $numOfAnnouncements; $i++) {
             $aid = $announceArr[$i]->id;
@@ -224,6 +222,9 @@ if ($uid AND !isset($_GET['logout'])) {
         
         // display admin announcements    
         if(!empty($ann_content)) {
+            $tool_content .= "<h3 class='content-title'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
+                    <i class='fa fa-rss-square'></i>
+                    </a></h3>";
             $tool_content .= "<div class='panel'>
                             <div class='panel-body'>";
             $tool_content .= $ann_content;
