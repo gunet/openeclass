@@ -536,7 +536,7 @@ if ($is_editor) {
     $sql = Database::get()->queryArray($query, $course_id);
     $total_cunits = count($sql);    
     if ($total_cunits > 0) {        
-        $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'><ul class='boxlist'>";
+        $cunits_content .= "";
         $count_index = 0;
         foreach ($sql as $cu) {
             if ($cu->visible == 1) {
@@ -558,7 +558,7 @@ if ($is_editor) {
             } else {
                 $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
-            $cunits_content .= "<li class='list-item contentbox'>
+            $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'>
                                     <div class='item-content'>
                                         <div class='item-header'>
                                             <h4 class='item-title'>$href</h4>";
@@ -613,9 +613,8 @@ if ($is_editor) {
                                             $cu->comments
                                         </div>			
                                     </div>";
-            $cunits_content .= "</li>";            
+            $cunits_content .= "</div></div></div>";            
         }
-        $cunits_content .= "</ul></div></div></div>";
     } else {
         $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
     }
@@ -652,7 +651,7 @@ if (!$alter_layout) {
         }
             
         $tool_content .= "</div></div>";
-        $tool_content .= "<div class='row'>
+        $tool_content .= "<div class='row boxlist no-list'>
             $cunits_content
         </div>";
     $tool_content .= "</div>";
