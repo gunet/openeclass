@@ -126,7 +126,7 @@ function list_docs() {
             $dirname = Database::get()->querySingle("SELECT filename FROM document
                                                                    WHERE $group_sql AND path = ?s", $path);
             $parentpath = dirname($path);
-            $dirname = "/" . htmlspecialchars($dirname);
+            $dirname = "/" . htmlspecialchars($dirname->filename);
             $parentlink = $urlbase . $parentpath;
             $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> " .
                     icon('fa-upload', $langUp, $parentlink) . "</th>";

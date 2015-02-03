@@ -340,8 +340,20 @@ if (isset($_POST['submit'])) {
                 'prof_names' => $_POST['titulary'],
                 'lang' => $session->language));
 
-            $tool_content .= "<div class='alert alert-success'>$langModifDone</div>";
+            if (isset($_POST['s_radio'])) {
+                setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
+            }
 
+            if (isset($_POST['r_radio'])) {
+                setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
+            }
+            if (isset($_POST['ran_radio'])) {
+                setting_set(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $_POST['ran_radio'], $course_id);
+            }
+            if (isset($_POST['c_radio'])) {
+                setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
+            }
+            
             if ($noWeeklyMessage) {
                 Session::Messages($langCourseWeeklyFormatNotice);
             } else {
@@ -349,22 +361,6 @@ if (isset($_POST['submit'])) {
             }
             
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
-            
-
-        }
-
-        if (isset($_POST['s_radio'])) {
-            setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
-        }
-
-        if (isset($_POST['r_radio'])) {
-            setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
-        }
-        if (isset($_POST['ran_radio'])) {
-            setting_set(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $_POST['ran_radio'], $course_id);
-        }
-        if (isset($_POST['c_radio'])) {
-            setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
         }
         if (isset($_POST['ar_radio'])) {
             setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);

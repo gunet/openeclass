@@ -206,10 +206,17 @@ function field_args($data, $table, $set, $url_prefix_map, $restoreHelper) {
         if (isset($set[$restoreHelper->getField($table, $name)])) {
             $value = $set[$restoreHelper->getField($table, $name)];
         }
+        $rhvalue = $restoreHelper->getValue($table, $name, $value);
         if (isset($url_prefix_map)) {
-            $values[] = strtr($restoreHelper->getValue($table, $name, $value), $url_prefix_map);
+            // preserve null values because strtr() below turns NULL
+            // into empty string ('') which is bad for STRICT SQL mode
+            if (is_null($rhvalue)) {
+                $values[] = $rhvalue;
+            } else {
+                $values[] = strtr($rhvalue, $url_prefix_map);
+            }
         } else {
-            $values[] = $restoreHelper->getValue($table, $name, $value);
+            $values[] = $rhvalue;
         }
     }
     return $values;
@@ -641,7 +648,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
                         WHERE module.startAsset_id = asset.asset_id
-                        AND course_id = ?d AND contentType = 'EXERCISE'";
+                        AND course_id = ?d AND contentType = 'EXERCISE' AND path <> '' AND path IS NOT NULL";
         $rows = Database::get()->queryArray($sql, intval($new_course_id));
 
         if (is_array($rows) && count($rows) > 0) {

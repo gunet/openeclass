@@ -1891,7 +1891,7 @@ function handle_unit_info_edit() {
     require_once 'modules/course_metadata/CourseXML.php';
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
-    return "<div class='alert alert-success'>$successmsg</div>";
+    Session::Messages($successmsg, 'alert-success');
 }
 
 function math_unescape($matches) {

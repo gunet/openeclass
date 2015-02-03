@@ -536,7 +536,7 @@ if ($is_editor) {
     $sql = Database::get()->queryArray($query, $course_id);
     $total_cunits = count($sql);    
     if ($total_cunits > 0) {        
-        $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'><ul class='boxlist'>";
+        $cunits_content .= "";
         $count_index = 0;
         foreach ($sql as $cu) {
             if ($cu->visible == 1) {
@@ -558,7 +558,7 @@ if ($is_editor) {
             } else {
                 $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
             }
-            $cunits_content .= "<li class='list-item contentbox'>
+            $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'>
                                     <div class='item-content'>
                                         <div class='item-header'>
                                             <h4 class='item-title'>$href</h4>";
@@ -613,9 +613,8 @@ if ($is_editor) {
                                             $cu->comments
                                         </div>			
                                     </div>";
-            $cunits_content .= "</li>";            
+            $cunits_content .= "</div></div></div>";            
         }
-        $cunits_content .= "</ul></div></div></div>";
     } else {
         $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
     }
@@ -652,7 +651,7 @@ if (!$alter_layout) {
         }
             
         $tool_content .= "</div></div>";
-        $tool_content .= "<div class='row'>
+        $tool_content .= "<div class='row boxlist no-list'>
             $cunits_content
         </div>";
     $tool_content .= "</div>";
@@ -669,17 +668,21 @@ Calendar_Events::get_calendar_settings();
 $user_personal_calendar = Calendar_Events::small_month_calendar($day, $month, $year);
 //END - Get personal calendar
 
-$tool_content .="<div class='row'>
-                <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langAnnouncements</h3>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            <ul class='tablelist'>" . course_announcements() . "
-                            </ul>
+$tool_content .="<div class='row'>";
+        // display open course level if exist
+            if (isset($level) && !empty($level)) {
+                $tool_content .= "
+                    <div class='col-md-$cunits_sidebar_subcolumns'>
+                        <h3 class='content-title'>$langOpenCourseShort</h3>
+                        <div class='panel'>
+                            <div class='panel-body'>
+                                $opencourses_level
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class='col-md-$cunits_sidebar_subcolumns'>
+                ";
+            }
+                $tool_content .= "<div class='col-md-$cunits_sidebar_subcolumns'>
                     <h3 class='content-title'>$langCalendar</h3>
                     <div class='panel'>
                         <div class='panel-body'>
@@ -706,24 +709,19 @@ $tool_content .="<div class='row'>
                             </div>
                         </div>
                     </div>
-                </div>";
-        // display open course level if exist
-        if (isset($level) && !empty($level)) {
-            $tool_content .= "
-                <div class='col-md-$cunits_sidebar_subcolumns'>
-                    <h3 class='content-title'>$langOpenCourseShort</h3>
-                    <div class='panel'>
-                        <div class='panel-body'>
-                            $opencourses_level
-                        </div>
-                    </div>
                 </div>
-            ";
-        }
-$tool_content .= "                
-           </div>
-           </div>
-    </div>";
+                <div class='col-md-$cunits_sidebar_subcolumns'>
+                                <h3 class='content-title'>$langAnnouncements</h3>
+                                <div class='panel'>
+                                    <div class='panel-body'>
+                                        <ul class='tablelist'>" . course_announcements() . "
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                       </div>
+                       </div>
+                </div>";
 
 draw($tool_content, 2, null, $head_content);
 

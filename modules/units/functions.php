@@ -47,7 +47,8 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
         }
-        $tool_content .= "<div class='alert alert-success'>$langResourceUnitModified</div>";
+        Session::Messages($langResourceUnitModified, 'alert-success');
+        redirect_to_home_page('modules/units/?course=' . $course_code . '&id=' . $id);
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
         $res_id = intval($_GET['del']);
         if ($id = check_admin_unit_resource($res_id)) {
@@ -112,7 +113,7 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resources($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources;
+    global $tool_content, $max_resource_id, $langAvailableUnitResources, $is_editor;
     
     $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
@@ -120,7 +121,6 @@ function show_resources($unit_id) {
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<th colspan='2'>$langAvailableUnitResources</th><th>".icon('fa-gears')."</th>";
         foreach ($req as $info) {
             $info->comments = standard_text_escape($info->comments);
             show_resource($info);
@@ -143,7 +143,7 @@ function show_resource($info) {
 
     if ($info->visible == 0 and ! $is_editor) {
         return;
-    }
+    }    
     switch ($info->type) {
         case 'doc':
             $tool_content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
@@ -159,6 +159,7 @@ function show_resource($info) {
             break;
         case 'video':
         case 'videolink':
+        case 'videolinks':   // old table name. keep it for backward compatibility
             $tool_content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'videolinkcategory':                    
@@ -373,10 +374,13 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility) {
     global $is_editor, $course_id, $tool_content, $langInactiveModule;
 
+    if ($table == 'videolinks') {
+        $table = 'videolink';  // ugly hack for backward compatibility
+    }
     $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
     if (!$module_visible and ! $is_editor) {
         return '';
-    }
+    }    
     $comment_box = $class_vis = $imagelink = $link = '';
     $class_vis = ($visibility == 0 or ! $module_visible) ?
             ' class="not_visible"' : ' ';

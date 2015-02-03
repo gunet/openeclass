@@ -1109,6 +1109,29 @@ ul.tablelist
     @include transition(all $transition-time linear);
   }
 }
+.boxlist.no-list{
+    .panel{
+        border: none;
+    }
+    .item-side{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        .btn-group a{
+            border-top: none !important;
+        }
+        .btn-group a:last-child{
+            border-right: none !important;
+        }
+        .btn-group a:first-child{
+            border-top-left-radius: 0px !important;
+        }
+        .btn-group a:last-child{
+            border-top-right-radius: 0px !important;
+            border-bottom-right-radius: 0px !important;
+        }
+    }
+}
 
 
 
@@ -1854,11 +1877,18 @@ ul.front-announcements, .single_announcement
     padding-left: 0px;
     li{
         padding: 15px 0;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid #ddd;
         a:hover{
             text-decoration: none;
         }
-    }.announcement-title{
+    }
+    li:first-child{
+        padding-top: 0px;
+    }
+    li:last-child{
+        padding-bottom: 0px !important;
+    }
+    .announcement-title{
             font-weight: bold;
             font-size: 15px;
         }

@@ -114,36 +114,41 @@ if ($total_categories > 0) {
             $icon = toggle_icon($action_notify);
         }
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='odd'>
-		<th colspan='5'><b>$cat_title</b></th>
-		<th class='option-btn-cell text-center'>";
+        $tool_content .= "<tr>
+		<th colspan='6'><b>$cat_title</b><div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
                 'title' => $langNewForum,
                 'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
-                'icon' => 'fa-plus-circle'
+                'icon' => 'fa-plus-circle',
+                'level' => "primary"
             ),
             array('title' => $langModify,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
-                'icon' => 'fa-edit'),
+                'icon' => 'fa-edit',
+                'level' => "primary"
+            ),
             array('title' => $langDelete,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
                 'icon' => 'fa-times',
                 'class' => 'delete',
-                'confirm' => $langConfirmDelete)
+                'confirm' => $langConfirmDelete
+            )
         );
         $dyntools[] = array('title' => $langNotify,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
-            'icon' => 'fa-envelope');
-        $tool_content .= action_button($dyntools);
+            'icon' => 'fa-envelope',
+            'level' => 'primary'
+        );
+        $tool_content .= action_button($dyntools)."</div>";
 
         $tool_content .= "<tr>
 		<td colspan='2'>$langForums</td>
 		<td class='text-center'>$langSubjects</td>
 		<td class='text-center'>$langPosts</td>
 		<td class='text-center'>$langLastPost</td>
-		<td class='text-center option-btn-cell'>" . icon('fa-gears') . "</td>
+		<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
 		</tr>";
 
         // display forum topics

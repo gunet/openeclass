@@ -507,32 +507,32 @@ if ($is_editor) {
 } // end: teacher only
 
 if (isset($_GET['an_id'])) {
-            $pageName = $row->title;
-            $tool_content .= action_bar(array(
-                array('title' => $langModify,
-                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
-                      'icon' => 'fa-edit',
-                      'level' => 'primary-label',
-                       'show' => $is_editor),
-                array('title' => $langDelete,
-                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
-                      'icon' => 'fa-times',
-                      'level' => 'primary',
-                      'confirm' => $langSureToDelAnnounce,
-                      'show' => $is_editor),
-                array('title' => $langBack,
-                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
-                      'icon' => 'fa-replay',
-                      'level' => 'primary-label')));
-        } else {
-            $tool_content .= action_bar(array(
-                array('title' => $langAddAnn,
-                      'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
-                      'icon' => 'fa-plus-circle',
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-success',
-                      'show' => $is_editor)));
-        }
+    $pageName = $row->title;
+    $tool_content .= action_bar(array(
+        array('title' => $langModify,
+              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code . "&amp;modify=$row->id",
+              'icon' => 'fa-edit',
+              'level' => 'primary-label',
+               'show' => $is_editor),
+        array('title' => $langDelete,
+              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
+              'icon' => 'fa-times',
+              'level' => 'primary',
+              'confirm' => $langSureToDelAnnounce,
+              'show' => $is_editor),
+        array('title' => $langBack,
+              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
+              'icon' => 'fa-replay',
+              'level' => 'primary-label')));
+    } elseif (!isset($_GET['modify'])) {
+        $tool_content .= action_bar(array(
+            array('title' => $langAddAnn,
+                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
+                  'icon' => 'fa-plus-circle',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success',
+                  'show' => $is_editor)));
+    }
     /* display announcements */
     if (isset($_GET['an_id'])) {        
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
