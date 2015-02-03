@@ -509,20 +509,17 @@ else {
                     </fieldset>    
                 </div>
             </div>";
-        if ($language == "el") {
-            $grSel = "selected";
-            $enSel = "";
-        } else {
-            $grSel = "";
-            $enSel = "selected";
-        }    
         $active_ui_languages = explode(' ', get_config('active_ui_languages'));
         $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
         $sel = array();
+        $selectable_langs = array();
         $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
         foreach ($language_codes as $langcode => $langname) {
             if (in_array($langcode, $langdirs)) {
                 $loclangname = $langNameOfLang[$langname];
+                if (in_array($langcode, $active_ui_languages)) {
+                    $selectable_langs[$langcode] = $loclangname;
+                }
                 $checked = in_array($langcode, $active_ui_languages) ? ' checked' : '';
                 $sel[] = "<div class='checkbox'>
                             <label>
@@ -541,12 +538,10 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                     <fieldset>
                         <div class='form-group'>
                            <label for='default_language' class='col-sm-3 control-label'>$langMainLang: </label>
-                           <div class='col-sm-9'>
-                                <select class='form-control' name='default_language' id='default_language'>
-                                    <option value='el' $grSel>$langGreek</option>
-                                    <option value='en' $enSel>$langEnglish</option>
-                                </select>                                
-                           </div>
+                           <div class='col-sm-9'>" .
+                               selection($selectable_langs, 'default_language', get_config('language'),
+                                         "class='form-control' id='default_language'") .
+                           "</div>
                         </div> 
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langSupportedLanguages:</label>
