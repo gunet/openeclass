@@ -18,6 +18,8 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
+require_once 'include/course_settings.php';
+
 /**
  * Inject code for report flag icon
  * @param string $rtype
@@ -175,7 +177,7 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
  */
 function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
     
-    if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) != 1) {
+    if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) != 1) { // abuse report disabled for course
         return false;
     } elseif ($is_editor) { //do not show for editor
         return false;
@@ -186,15 +188,30 @@ function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
         if ($result->c != 0) {
             return false;
         }
-        //check for each resource type if user is author
+        
+        //check for each resource type if resource exists and user is author
         if ($rtype == 'comment') {
-            $result = Database::get()->querySingle("SELECT COUNT(`id`) AS c FROM `comments` WHERE `id` = ?d AND `user_id` = ?d", $rid, $_SESSION['uid']);
-            if ($result->c != 0) {
+            $result = Database::get()->querySingle("SELECT `user_id` FROM `comments` WHERE `id` = ?d", $rid);
+            if ($result) {
+                if ($result->user_id == $_SESSION['uid']) {
+                    return false;
+                }
+            } else {
                 return false;
             }
+        } elseif ($rtype == 'forum_post') {
+            $result = Database::get()->querySingle("SELECT `poster_id` FROM `forum_post` WHERE `id` = ?d", $rid);
+            if ($result) {
+                if ($result->poster_id == $_SESSION['uid']) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else { //unknown rtype
+            return false;
         }
     }
     
     return true;
-
 }

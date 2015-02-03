@@ -4361,6 +4361,9 @@ $langAbuseReportDis = 'Απενεργοποιημένη αναφορά κατά�
 $langAbuseReportCat = 'Είδος αναφοράς κατάχρησης';
 $langSpam = 'Spam';
 $langRudeness = 'Αγένεια';
+$langAbuseReportCatError = 'Δεν επιλέξατε είδος αναφοράς κατάχρησης';
+$langAbuseReportMsgError = 'Πρέπει να δώσετε αιτιολογία για να καταχωρήσετε μια αναφορά κατάχρησης';
+$langAbuseReportSaveSuccess = 'Η αποστολή της αναφοράς προς τους διαχειριστές του μαθήματος έγινε επιτυχώς';
  
 /* * ******************************************
   Theme Options
