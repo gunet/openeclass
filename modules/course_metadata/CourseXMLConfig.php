@@ -350,6 +350,15 @@ class CourseXMLConfig {
         'course_confirmCurriculum', 'course_confirmVideolectures',
         'course_language_el', 'course_language_en'
     );
+    
+    /**
+     * Special case mandatory HTML Form fields (mandatory view only).
+     * 
+     * @var array
+     */
+    public static $asteriskedFields = array(
+        'course_unit_title', 'course_unit_description'
+    );
 
     /**
      * Multiple enumartion HTML Form fields.

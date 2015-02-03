@@ -116,9 +116,9 @@
     
     <numberOfUnits></numberOfUnits>
     <unit>
-        <title lang="el"></title>
-        <description lang="el"></description>
-        <keywords lang="el"></keywords>
+        <title></title>
+        <description></description>
+        <keywords></keywords>
         <material>
             <notes></notes>
             <slides></slides>
