@@ -28,10 +28,17 @@ $pageName = $langAdmin;
 define('HIDE_TOOL_TITLE', 1);
 
 // Construct a table with platform identification info
+$tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "javascript:window.histrory.back();",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')),false);
 $tool_content .= "
-    <div class='row margin-top-fat'>
+    <div class='row'>
         <div class='col-md-12'>
-            <div class='alert alert-info'>$langOnlineUsers: <b>" . getOnlineUsers() . "</b></div>
+        <div class='panel'><div class='panel-body'>
+            $langOnlineUsers : <b>" . getOnlineUsers() . "</b>
+                </div></div>
         </div>
     </div>
     <div class='row'>
