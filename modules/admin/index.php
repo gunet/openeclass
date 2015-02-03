@@ -30,7 +30,7 @@ define('HIDE_TOOL_TITLE', 1);
 // Construct a table with platform identification info
 $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "javascript:window.histrory.back();",
+            'url' => "$urlAppend/main/portfolio.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
 $tool_content .= "
