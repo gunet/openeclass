@@ -557,7 +557,7 @@ if ($can_upload) {
                                              WHERE $group_sql AND
                                                    path=?s", $commentPath);
         if ($res) {
-            $file_language = validate_language_code($_POST['file_language'], $language);
+            $file_language = $session->validate_language_code($_POST['file_language'], $language);
             Database::get()->query("UPDATE document SET
                                                 comment = ?s,
                                                 category = ?d,
