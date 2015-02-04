@@ -154,7 +154,7 @@ function getUserAnnouncements($lesson_id, $type = '') {
                         ORDER BY announcement.`date` DESC $sql_append", $lesson_id, $last_month, MODULE_ID_ANNOUNCE);
     if ($q) { // if announcements exist
         foreach ($q as $ann) {
-            $course_title = q(ellipsize($ann->course_title, 30));
+            $course_title = q(ellipsize($ann->course_title, 80));
             $ann_url = $urlAppend . 'modules/announcements/?course=' . $ann->code . '&amp;an_id=' . $ann->id;
             $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
             $ann_content .= "
