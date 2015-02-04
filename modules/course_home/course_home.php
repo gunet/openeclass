@@ -65,7 +65,10 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 ModalBoxHelper::loadModalBox();
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
 <script type='text/javascript'>
-    $(document).ready(function() {            
+    $(document).ready(function() {  
+    
+        
+
             $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });"
 //Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
@@ -134,11 +137,12 @@ if(count($res)>0){
     }
     $course_info_btn = "
             <div class='btn-group' role='group'>
-              <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false' style='border-top-right-radius:0px;border-bottom-right-radius:0px;'>
+              <button type='button' class='btn btn-default btn-sm dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
                 $langCourseDescription
                 <span class='caret'></span>
+                <span class='sr-only'>Toggle Dropdown</span>
               </button>
-              <ul class='dropdown-menu' role='menu'>
+              <ul class='dropdown-menu pull-right' role='menu'>
                 $course_info_extra
               </ul>
             </div>";    
@@ -476,33 +480,28 @@ if ($course_info->home_layout == 3) {
                 $license_holder
             </div>";
    $horizontal_info_row = '';
-   $main_content_cols = 'col-md-7 col-sm-7';
+   $main_content_cols = 'col-sm-7';
 }
 $edit_link = "";
 if ($is_editor) {
     $edit_link = "
-    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' class='btn btn-default' style='border-top-left-radius:0px;border-top-right-radius:0px;border-bottom-right-radius:0px;'>
-        <i class='fa fa-edit space-before-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langEdit'></i> $langEdit
-    </a>";
-}
-if (!empty($edit_link) || !empty($course_info_btn)) {
-    $action_buttons = "
-                    <div class='btn-group pull-right' role='group' aria-label='...'>
-                      $edit_link
-                      $course_info_btn
-                    </div>
-                    <div class='clearfix'></div>";
+    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$langCourseInformationText'><i class='pull-left fa fa-edit fa'></i></a>";
 } else {
-    $action_buttons = "";
+    $edit_link = " ";
 }
 $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
             <div class='panel panel-default'>
-                $action_buttons
+                
                 <div class='panel-body'>
                             $left_column
                             <div class='col-xs-12 $main_content_cols'>
+                                <div class='course-info-title clearfix'>
+                                <h4 class='pull-left'>$langCourseDescriptionShort</h4><div class='pull-left edit-course-title'>$edit_link</div><div class='info-course-btn pull-right'>
+                      $course_info_btn
+                    </div>
+                            </div>
                                 <div class=''>$main_content</div>
                             </div>
                             $horizontal_info_row

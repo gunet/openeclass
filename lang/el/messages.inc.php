@@ -280,6 +280,7 @@ $langCourseDelConfirm2 = "Θέλετε σίγουρα να διαγράψετε 
 $langNoticeDel = "ΣΗΜΕΙΩΣΗ: Η διαγραφή του μαθήματος θα διαγράψει επίσης τους εγγεγραμμένους " . $langsOfStudentss . " από το μάθημα, την αντιστοιχία του μαθήματος στη $langsFaculty, καθώς και όλο το υλικό του μαθήματος.";
 
 // editcours
+$langCourseInformationText = "Επεξεργασία περιγραφής μαθήματος";
 $langCourseEdit = "Επεξεργασία Μαθήματος";
 $langCourseInfo = "Ρυθμίσεις";
 $langCourseImage = "Φωτογραφία Μαθήματος";
@@ -799,6 +800,7 @@ $langInfo2Say = "Πληροφορία για τους " . $langsOfStudentss;
 $langAddCat = "Κατηγορία";
 $langBackAndForget = "Ακύρωση και επιστροφή";
 $langBlockDeleted = "Η περιγραφή διαγράφηκε!";
+$langCourseDescriptionShort = "Περιγραφή";
 
 $titreBloc = array(
     'Περιεχόμενο μαθήματος',
@@ -2053,7 +2055,7 @@ $langBrowserCannotSeeFrames = "Ο browser σας δεν αναγνωρίζει f
 $langChangeRaw = "Αλλαγή του ελάχιστου αρχικού σημείου για να περάσει αυτή η ενότητα (ποσοστό): ";
 $langChat = "Κουβεντούλα";
 $langConfirmYourChoice = "Παρακαλώ επιβεβαιώστε την επιλογή σας";
-$langCourseDescription = "Πληροφορίες Μαθήματος";
+$langCourseDescription = "Πληροφορίες";
 $langCourseDescriptionAsModule = "Χρήση Πληροφοριών Μαθήματος";
 $langCourseDescriptionAsModuleLabel = "Πληροφοριών Μαθήματος";
 $langCourseHome = "Αρχική σελίδα μαθήματος";
