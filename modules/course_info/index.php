@@ -357,7 +357,7 @@ if (isset($_POST['submit'])) {
             if ($noWeeklyMessage) {
                 Session::Messages($langCourseWeeklyFormatNotice);
             } else {
-                Session::Messages($langModifDone.". <a href='{$urlServer}courses/$course_code/index.php'>$langBackCourse</a>",'alert-success');
+                Session::Messages($langModifDone,'alert-success');
             }
             
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
@@ -368,6 +368,10 @@ if (isset($_POST['submit'])) {
         array('title' => $langBackupCourse,
             'url' => "archive_course.php?course=$course_code",
             'icon' => 'fa-archive',
+            'level' => 'primary-label'),
+        array('title' => $langBack,
+            'url' => "{$urlServer}courses/$course_code/index.php",
+            'icon' => 'fa-reply',
             'level' => 'primary-label')
     );
     
