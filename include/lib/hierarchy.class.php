@@ -476,9 +476,9 @@ class Hierarchy {
             // valid HTML requires ids starting with letters.
             // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2)
             if ($xmlout) {
-                $out .= "<item id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><content><name " . $class . ">" . $value . $valcode . '<\/name><\/content><\/item>';
+                $out .= "<item id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><content><name " . $class . ">" . q($value . $valcode) . '<\/name><\/content><\/item>';
             } else {
-                $out .= "<li id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><a href='#' " . $class . ">" . $value . $valcode . "</a></li>" . "\n";
+                $out .= "<li id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><a href='#' " . $class . ">" . q($value . $valcode) . "</a></li>" . "\n";
             }
 
             $i++;
