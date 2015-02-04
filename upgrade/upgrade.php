@@ -963,17 +963,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // Rename table `annonces` to `announcements`
         if (!DBHelper::tableExists('announcement')) {
+            if (DBHelper::indexExists('annonces', 'annonces')) {
+                Database::get()->query("DROP INDEX annonces");
+            }
             Database::get()->query("RENAME TABLE annonces TO announcement");
             Database::get()->query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
-            Database::get()->query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");
+            Database::get()->query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");            
             Database::get()->query("ALTER TABLE announcement CHANGE `contenu` `content` TEXT,
                                        CHANGE `temps` `date` DATETIME,
                                        CHANGE `cours_id` `course_id` INT(11),
                                        CHANGE `ordre` `order` MEDIUMINT(11),
                                        CHANGE `visibility` `visible` TINYINT(4) DEFAULT 0,
                                        ADD `start_display` DATE NOT NULL DEFAULT '2014-01-01',
-                                       ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31',
-                                       DROP INDEX annonces");
+                                       ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31'");
         } else {
             Database::get()->query("ALTER TABLE announcement
                                        ADD `start_display` NOT NULL DATE DEFAULT '2014-01-01',
@@ -2020,6 +2022,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     // Rename table `cours` to `course` and `cours_user` to `course_user`
     if (!DBHelper::tableExists('course')) {
+        
+        if (DBHelper::indexExists('cours', 'cours')) {
+            Database::get()->query("DROP INDEX cours");
+        }
+        
         DBHelper::fieldExists('cours', 'expand_glossary') or
                 Database::get()->query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         DBHelper::fieldExists('cours', 'glossary_index') or
@@ -2051,8 +2058,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                              CHANGE `expand_glossary` `glossary_expand` BOOL NOT NULL DEFAULT 0,
                                              ADD `view_type` VARCHAR(255) NOT NULL DEFAULT 'units',
                                              ADD `start_date` DATE NOT NULL default '0000-00-00',
-                                             ADD `finish_date` DATE NOT NULL default '0000-00-00',
-                                             DROP INDEX cours");
+                                             ADD `finish_date` DATE NOT NULL default '0000-00-00'");
         Database::get()->queryFunc("SELECT DISTINCT lang from course", function ($old_lang) {
             Database::get()->query("UPDATE course SET lang = ?s WHERE lang = ?s", langname_to_code($old_lang->lang), $old_lang->lang);
         });
