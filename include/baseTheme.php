@@ -225,6 +225,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 if (!$group_opened and
                     ($current_module_dir == '/' or
                     $current_module_dir == 'course_home' or
+                    $current_module_dir == 'units' or
                     $current_module_dir == 'main/portfolio.php')) {
                     $t->set_var('GROUP_CLASS', get_theme_class('group_active'));
                     $group_opened = true;
