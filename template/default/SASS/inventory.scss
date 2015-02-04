@@ -1877,7 +1877,7 @@ td.option-btn-cell{
         font-size: 16px;
         padding: 0px;
         margin: 0px;
-        font-weight: bold;
+        color: #666;
     }
 
     .edit-course-title{
@@ -1885,6 +1885,11 @@ td.option-btn-cell{
         i{
             font-size: 16px;
             line-height: 30px;
+            color : #666;
+            text-decoration: none;
+        }
+        i:hover{
+            color: #4DA1E4;
         }
     }
 }
