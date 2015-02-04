@@ -514,16 +514,16 @@ if (isset($_GET['an_id'])) {
               'icon' => 'fa-edit',
               'level' => 'primary-label',
                'show' => $is_editor),
+        array('title' => $langBack,
+              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'),
         array('title' => $langDelete,
               'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
               'icon' => 'fa-times',
               'level' => 'primary',
               'confirm' => $langSureToDelAnnounce,
-              'show' => $is_editor),
-        array('title' => $langBack,
-              'url' => $_SERVER['SCRIPT_NAME'] . "?course=" . $course_code,
-              'icon' => 'fa-replay',
-              'level' => 'primary-label')));
+              'show' => $is_editor),));
     } elseif (!isset($_GET['modify'])) {
         $tool_content .= action_bar(array(
             array('title' => $langAddAnn,
