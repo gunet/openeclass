@@ -19,7 +19,7 @@ require_once 'include/lib/multimediahelper.class.php';
  */
 function process_actions() {
     global $tool_content, $id, $langResourceCourseUnitDeleted, $langResourceUnitModified,
-    $course_id, $course_code, $webDir;
+    $course_id, $course_code, $webDir, $head_content, $langBack, $urlAppend ;
 
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
@@ -27,8 +27,15 @@ function process_actions() {
 
     if (isset($_REQUEST['edit'])) {        
         $res_id = intval($_GET['edit']);
-        if ($id = check_admin_unit_resource($res_id)) {            
+        if ($id = check_admin_unit_resource($res_id)) { 
+            $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "{$urlAppend}modules/units/index.php?course=$course_code&amp;id=$id",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
             $tool_content .= edit_res($res_id);
+            draw($tool_content, 2, null, $head_content);
+            exit;
         }
     } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
         $res_id = intval($_REQUEST['resource_id']);
