@@ -1326,8 +1326,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `active` INT(11) NOT NULL DEFAULT 0,
-                            `description` MEDIUMTEXT DEFAULT NULL,
-                            `end_message` MEDIUMTEXT DEFAULT NUll,
+                            `description` MEDIUMTEXT NULL DEFAULT NULL,
+                            `end_message` MEDIUMTEXT NULL DEFAULT NUll,
                             `anonymized` INT(1) NOT NULL DEFAULT 0)
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
@@ -2509,6 +2509,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
             }
         }
+        
+        // loosen poll schema, mediumtext columns can be allowed to be null    
+        Database::get()->query("ALTER TABLE `poll` CHANGE `description` `description` MEDIUMTEXT NULL DEFAULT NULL");
+        Database::get()->query("ALTER TABLE `poll` CHANGE `end_message` `end_message` MEDIUMTEXT NULL DEFAULT NULL");
+        
         set_config('theme', 'default');
         set_config('theme_options_id', 0);
     }
