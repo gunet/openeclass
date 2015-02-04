@@ -2117,7 +2117,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     }
 
     // // ----------------------------------
-    // creation of indexes
+    // creation of indices
     // ----------------------------------
     updateInfo(-1, $langIndexCreation);
 
@@ -2457,6 +2457,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
+        
+        if (DBHelper::fieldExists('course_user', 'team')) {
+            Database::get()->query('ALTER TABLE `course_user` DROP COLUMN `team`');
+        }
+        
         Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
                                 `name` VARCHAR(300) NOT NULL,
