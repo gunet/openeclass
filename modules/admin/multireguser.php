@@ -234,7 +234,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
 
     if ($status == 1) {
         $message = $profsuccess;
-        $type_message = $langAsProf;
+        $type_message = ' ' . $langAsProf;
     } else {
         $message = $usersuccess;
         $type_message = '';
@@ -266,7 +266,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $emailbody = "
 $langDestination $givenname $surname
 
-$langYouAreReg $siteName $type_message, $langSettings $uname
+$langYouAreReg $siteName$type_message $langSettings $uname
 $langPass : $password
 $langAddress $siteName $langIs: $urlServer
 $langProblem
