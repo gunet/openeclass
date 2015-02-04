@@ -1326,8 +1326,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                             `active` INT(11) NOT NULL DEFAULT 0,
-                            `description` MEDIUMTEXT NOT NULL,
-                            `end_message` MEDIUMTEXT NOT NUll,
+                            `description` MEDIUMTEXT DEFAULT NULL,
+                            `end_message` MEDIUMTEXT DEFAULT NUll,
                             `anonymized` INT(1) NOT NULL DEFAULT 0)
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
