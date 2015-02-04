@@ -164,7 +164,7 @@ if ($course_info->description) {
     </div>
     ";
 } else {
-    $main_content .= "<p>$langThisCourseDescriptionIsEmpty</p>";
+    $main_content .= "<p class='not_visible'> - $langThisCourseDescriptionIsEmpty - </p>";
 }
 if (!empty($keywords)) {
     $main_content .= "<p id='keywords'><b>$langCourseKeywords</b> $keywords</p>";
