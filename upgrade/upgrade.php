@@ -964,7 +964,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // Rename table `annonces` to `announcements`
         if (!DBHelper::tableExists('announcement')) {
             if (DBHelper::indexExists('annonces', 'annonces')) {
-                Database::get()->query("DROP INDEX annonces");
+                Database::get()->query("ALTER TABLE annonces DROP INDEX annonces");
             }
             Database::get()->query("RENAME TABLE annonces TO announcement");
             Database::get()->query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
@@ -2024,7 +2024,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (!DBHelper::tableExists('course')) {
         
         if (DBHelper::indexExists('cours', 'cours')) {
-            Database::get()->query("DROP INDEX cours");
+            Database::get()->query("ALTER TABLE cours DROP INDEX cours");
         }
         
         DBHelper::fieldExists('cours', 'expand_glossary') or
