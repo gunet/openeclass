@@ -85,8 +85,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyPersoDeadlines,
         $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
-        $langPersonalisedBriefcase, $langSearch, $langUser,
-        $langUserBriefcase, $langUserHeader, $language,
+        $langPortfolio, $langSearch, $langUser,
+        $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
@@ -300,8 +300,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('SECTION_TITLE', $langAdmin);
         $sectionName = $langAdmin;
     } elseif ($menuTypeID > 0 and $menuTypeID < 3) {
-        $t->set_var('SECTION_TITLE', $langUserBriefcase);
-        $sectionName = $langUserBriefcase;
+        $t->set_var('SECTION_TITLE', $langUserPortfolio);
+        $sectionName = $langUserPortfolio;
     } else {
         $t->set_var('SECTION_TITLE', $langEclass);
         $sectionName = $langEclass;
@@ -370,7 +370,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         // Breadcrumb first entry (home / portfolio)
         if ($status != USER_GUEST) {
             if (isset($_SESSION['uid'])) {
-                $t->set_var('BREAD_TEXT', $langPersonalisedBriefcase);
+                $t->set_var('BREAD_TEXT', '<i class="fa fa-home"></i> ' . $langPortfolio);
                 $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');
             } else {
                 $t->set_var('BREAD_TEXT', $langHomePage);
@@ -590,6 +590,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'toolTitleBlock', 'toolTitleBlockVar');
         $t->set_var('toolTitleBlockVar', '');
     }
+
+    $t->set_var('EXTRA_FOOTER_CONTENT', get_config('extra_footer_content'));
 
     //	At this point all variables are set and we are ready to send the final output
     //	back to the browser

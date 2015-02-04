@@ -27,7 +27,7 @@ $addon = '';
 
 if (!in_array($language, array('el', 'en'))) {
     $language = 'en';
-    $addon = "($langOnlyInEnglish)";
+    $addon = " ($langOnlyInEnglish)";
 }
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
@@ -55,7 +55,7 @@ $tool_content .= "<table class='table table-striped table-bordered table-hover'>
   </tr>
 </table>";
 
-$tool_content .= "<br><p class='tool_title'>$langTutorials $langOfTeacher $addon";
+$tool_content .= "<br><p class='tool_title'>$langTeacherTutorials$addon";
 
 $tool_content .= "</p><table class='table table-striped table-bordered table-hover'>
   <tr>
@@ -68,7 +68,7 @@ $tool_content .= "</p><table class='table table-striped table-bordered table-hov
   </tr>
   <tr>
     <th width='16'>".icon('fa-globe')."</th>
-    <td>" . manlink($langPersonalisedBriefcase, 'portfolio_management', $language) . "</a></td>
+    <td>" . manlink($langUserPortfolio, 'portfolio_management', $language) . "</a></td>
   </tr>
   <tr>
     <th width='16'>".icon('fa-globe')."</th>
@@ -84,7 +84,7 @@ $tool_content .= "</p><table class='table table-striped table-bordered table-hov
   </tr>
 </table>";
 
-$tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfStudent $addon</p>
+$tool_content .= "<br /><p class='tool_title'>$langStudentTutorials$addon</p>
 <table class='table table-striped table-bordered table-hover'>
   <tr>
     <th width='16'>".icon('fa-globe')."</th>
@@ -92,7 +92,7 @@ $tool_content .= "<br /><p class='tool_title'>$langTutorials $langOfStudent $add
   </tr>
   <tr>
     <th width='16'>".icon('fa-globe')."</th>
-   <td>" . manlink($langPersonalisedBriefcase, 'personal_portfolio', $language) . "</a></td>
+   <td>" . manlink($langUserPortfolio, 'personal_portfolio', $language) . "</a></td>
   </tr>
   <tr>
     <th width='16'>".icon('fa-globe')."</th>

@@ -141,14 +141,15 @@ $langOpenRequests = "Ανοικτές αιτήσεις " . $langsOfTeachers;
 $langNoOpenRequests = "Δεν βρέθηκαν ανοικτές αιτήσεις " . $langsOfTeachers;
 $langInfoAdmin = "Ενημερωτικά Στοιχεία για τον Διαχειριστή";
 $langLastLesson = "Τελευταίο μάθημα που δημιουργήθηκε:";
-$langLastProf = "Τελευταία εγγραφή " . $langsOfTeacher . ":";
-$langLastStud = "Τελευταία εγγραφή " . $langsOfStudent . ":";
+$langLastProf = "Τελευταία εγγραφή $langsOfTeacher:";
+$langLastStud = "Τελευταία εγγραφή $langsOfStudent:";
 $langLastStudNone = "Δεν υπάρχουν εγγραφές";
 $langAfterLastLogin = "Μετά την τελευταία σας είσοδο έχουν εγγραφεί στην πλατφόρμα:";
 $langAfterLastLoginInfo = "Στοιχεία μετά την τελευταία σας είσοδο:";
 $langOtherActions = "Άλλες Ενέργειες";
 $langTutorialDesc = "Επίσης, στον παρακάτω σύνδεσμο, θα βρείτε χρήσιμους οδηγούς λειτουργίας και διαχείρισης της πλατφόρμας Open eClass με πρακτικά παραδείγματα που διευκολύνουν τόσο τους εκπαιδευτές και τους εκπαιδευόμενους όσο και τους υπεύθυνους διαχειριστές. Οι οδηγοί αυτοί είναι διαθέσιμοι σε 3 διαφορετικές μορφές: α) εικονογραφημένοι οδηγοί, β) βιντεοπαρουσιάσεις και γ) SCORM Packages.";
-$langTutorial = "Χρήσιμοι Οδηγοί";
+$langTeacherTutorials = "Χρήσιμοι Οδηγοί $langsOfTeacher";
+$langStudentTutorials = "Χρήσιμοι Οδηγοί $langsOfStudent";
 $langIndexInfo = "Ενημερωτικά στοιχεία για το Ευρετήριο";
 $langIndexNumDocs = "Αριθμός Εγγράφων στο Ευρετήριο";
 $langIndexIsOptimized = "Είναι βελτιστοποιημένο;";
@@ -157,6 +158,7 @@ $langReindex = "Αναδημιουργία ευρετηρίου";
 $langCronInfo = "Ενημερωτικά στοιχεία για τις προγραμματισμένες εργασίες";
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
+$langExternalTools = 'Εξωτερικά εργαλεία';
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
@@ -843,7 +845,7 @@ $langDelCourse = "Διαγραφή του μαθήματος";
 $langDelUsers = "Διαγραφή χρηστών";
 $langDelUser = "Διαγραφή χρήστη";
 $langCourseTitle = "Τίτλος Μαθήματος";
-$langDescription = "Περιγραφή";
+$langDescription = "Πληροφορίες";
 $langConfidentiality = "Πρόσβαση στο μάθημα";
 $langPrivOpen = "Ελεύθερη Πρόσβαση (με εγγραφή) σε όσους διαθέτουν λογαριασμό στην πλατφόρμα";
 $langPrivOpenShort = "Ελεύθερη (με εγγραφή)";
@@ -3219,8 +3221,8 @@ $langWarnShibUser = "
         <b>Προειδοποίηση:</b> Επειδή η πιστοποίησή σας έγινε μέσω Shibboleth δεν έχετε αποσυνδεθεί από την πλατφόρμα!
         <br>Για να αποσυνδεθείτε θα πρέπει να κλείσετε τον browser σας.</p>";
 
-$langUserBriefcase = "Χαρτοφυλάκιο χρήστη";
-$langPersonalisedBriefcase = "Προσωπικό Χαρτοφυλάκιο";
+$langUserPortfolio = "Χαρτοφυλάκιο χρήστη";
+$langPortfolio = "Χαρτοφυλάκιο";
 $langAdvancedSearch = "Σύνθετη αναζήτηση";
 $langTitle = "Τίτλος";
 $langType = "Τύπος";
