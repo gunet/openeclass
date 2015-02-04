@@ -60,7 +60,7 @@ if (isset($_GET['mid'])) {
                             array('title' => $langDelete,
                                     'url' => 'javascript:void(0)',
                                     'icon' => 'fa-times',
-                                    'button-class' => 'delete_in',
+                                    'button-class' => 'delete_in_inner',
                                     'link-attrs' => "data-id='$msg->id'")
                         ));
         $recipients = '';
@@ -265,6 +265,28 @@ $out .=         "
                     $("#in_msg_body").find("a").addClass("outtabs");
                     
                     $(document).off( "click",".delete_in");
+
+                    $(document).on( "click",".delete_in_inner", function (e) {
+                         e.preventDefault();
+                         var id = $(this).data("id");
+                         var string = "mid="+id;
+                         bootbox.confirm("'.$langConfirmDelete.'", function(result) {                       
+                         if(result) {
+                             $.ajax({
+                              type: "POST",
+                              url: "ajax_handler.php",
+                              datatype: "json",
+                              data: string,
+                              success: function(){
+                                 $("#del_msg").html("<p class=\"alert alert-success\">'.$langMessageDeleteSuccess.'</p>");
+                                 $(".alert-success").delay(3000).fadeOut(1500);
+                                 $("#msg_area").remove();
+                              }});
+                         }              
+                        });
+                      });
+
+
                     $(".delete").click(function() {
                       if (confirm("' . $langConfirmDelete . '")) {
                         var rowContainer = $(this).parent().parent();
@@ -351,7 +373,7 @@ $out .=         "
                         }
                     }
                  }).fnSetFilteringDelay(1000);
-
+                 $(document).off( 'click','.delete_in_inner');
                  $(document).on( 'click','.delete_in', function (e) {
                      e.preventDefault();
                      var id = $(this).data('id');

@@ -437,7 +437,7 @@ if ($course_info->home_layout == 3) {
                 "<div class='col-xs-12'>
                     <hr class='margin-top-fat margin-bottom-fat'>
                 </div>
-                <div class='col-xs-12 well'>
+                <div class='col-xs-12 form-wrapper'>
                 <div class='row'>
                 <div class='col-xs-8'>              
                      $bar_content
@@ -469,7 +469,7 @@ if ($course_info->home_layout == 3) {
                 <hr class='col-xs-12 margin-top-fat margin-bottom-fat'>";
    }
     $left_column .= "
-                <div class='col-xs-12 well'>              
+                <div class='col-xs-12 form-wrapper'>              
                      $bar_content
                      $bar_content_2
                 </div>               
