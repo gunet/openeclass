@@ -256,8 +256,8 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $id = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email,
                  status, registered_at, expires_at, lang, am, phone,
-                 email_public, phone_public, am_public, description, whitelist)
-                VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'','')"
+                 email_public, phone_public, am_public, description, verified_mail, whitelist)
+                VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'',".EMAIL_VERIFIED.",'')"
                     , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
     $user->refresh($id, $departments);
     $telephone = get_config('phone');
