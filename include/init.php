@@ -175,13 +175,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_departmentmanage_user = false;
 }
 
-if (!isset($_SESSION['theme'])) {
-    $_SESSION['theme'] = get_config('theme');
-}
-if (empty($_SESSION['theme']) or !is_readable("template/$_SESSION[theme]/theme.html")) {
-    $_SESSION['theme'] = 'default';
-}
-$theme = $_SESSION['theme'];
+$theme = $_SESSION['theme'] = 'default';
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
 if (file_exists("template/$theme/settings.php")) {
     require_once "template/$theme/settings.php";
