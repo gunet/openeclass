@@ -684,7 +684,7 @@ if ($is_editor) {
         $checkForAssNumber = count($checkForAss);        
         
         if ($checkForAssNumber > 0) {            
-            $tool_content .= "<div class='row'><div class='col-sm-12><div class='table-responsive'>";
+            $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>";
             $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
