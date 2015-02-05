@@ -69,9 +69,7 @@ if (isset($language)) {
     }
     $session = new Session();
     $uid = $session->user_id;    
-    if (!isset($active_ui_languages)) {
-        $active_ui_languages = array('el');
-    }
+    $session->active_ui_languages = array($language);
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
     }
@@ -89,7 +87,6 @@ if (isset($language)) {
     $uid = $session->user_id;
     $language = $session->language;    
 }
-
 //Initializing Valitron (form validation library)
 require_once 'include/Valitron/Validator.php';
 use Valitron\Validator as V;
@@ -109,7 +106,9 @@ if (isset($_SESSION['flash_new'])) {
     unset($_SESSION['flash_new']);
 }
 
-$session = new Session();
+if (!isset($session)) {
+    $session = new Session();
+}
 $uid = $session->user_id;
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
