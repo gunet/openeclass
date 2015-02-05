@@ -32,8 +32,8 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/units/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-$pageName = $langEditCourseProgram;
-$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
+$toolName = $langEditCourseProgram;
+$pageName = $langCourseProgram;
 
 $course = Database::get()->querySingle('SELECT description, home_layout, course_image FROM course WHERE id = ?d', $course_id);
 
@@ -92,6 +92,7 @@ if (isset($course->course_image)) {
 } else {
    $course_image = "<input type='file' name='course_image' id='course_image'>"; 
 }
+
 
 $tool_content = action_bar(array(
         array(
