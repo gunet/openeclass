@@ -32,6 +32,7 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/course_settings.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
+require_once 'modules/abuse_report/abuse_report.php';
 
 ModalBoxHelper::loadModalBox();
 
@@ -331,8 +332,18 @@ foreach ($result as $myrow) {
             'url' => "reply.php?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;parent_post=$myrow->id",
             'icon' => 'fa-reply');
     }
+    if (abuse_report_show_flag('forum_post', $myrow->id, $course_id, $is_editor)) {
+        $flag_arr = abuse_report_action_button_flag('forum_post', $myrow->id, $course_id);
+        
+        $dyntools[] = $flag_arr[0]; //action button option
+        $report_modal = $flag_arr[1]; //modal html code
+    }
     if (!empty($dyntools)) {
-        $tool_content .= "<td valign='center'>" . action_button($dyntools) . "</td>";
+        if (isset($report_modal)) {
+            $tool_content .= "<td valign='center'>" . action_button($dyntools) . $report_modal . "</td>";
+        } else {
+            $tool_content .= "<td valign='center'>" . action_button($dyntools) . "</td>";
+        }
     }
     $tool_content .= "</tr>";
     $count++;
