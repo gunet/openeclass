@@ -622,23 +622,21 @@ if ($is_editor) {
             <div class='col-sm-12'>
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <fieldset>
-                            <div class='form-group'><label class='col-xs-12'>$langRefreshList<small class='help-block'>($langAttendanceInfoForUsers)</small></label></div>
-                            <div class='form-group'>
-                                <div class='col-sm-12'>
-                                    <select name='usersLimit' class='form-control'>                
-                                        <option value='1'>$langAttendanceActiveUsers6</option>
-                                        <option value='2'>$langAttendanceActiveUsers3</option>
-                                        <option value='3'>$langAttendanceActiveUsersAll</option>
-                                    </select>
-                                </div>
+                        <div class='form-group'><label class='col-xs-12'>$langRefreshList<small class='help-block'>($langAttendanceInfoForUsers)</small></label></div>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <select name='usersLimit' class='form-control'>                
+                                    <option value='1'>$langAttendanceActiveUsers6</option>
+                                    <option value='2'>$langAttendanceActiveUsers3</option>
+                                    <option value='3'>$langAttendanceActiveUsersAll</option>
+                                </select>
                             </div>
-                            <div class='form-group'>
-                                <div class='col-sm-12'>
-                                    <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
-                                </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-12'>
+                                <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
                             </div>
-                        </fieldset>
+                        </div>
                     </form>
                 </div>
             </div>

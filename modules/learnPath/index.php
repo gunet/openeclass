@@ -255,7 +255,7 @@ if ($is_editor) {
                             'icon' => 'fa-reply',
                             'level' => 'primary-label'
                         )
-                    ));
+                    ),false);
                     $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <fieldset>
                         <div class='form-group'>

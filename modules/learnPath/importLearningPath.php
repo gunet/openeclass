@@ -1082,7 +1082,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             array('title' => $langBack,
                 'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
+                'level' => 'primary-label')),false) ;
 } else { // if method == 'post'
     // don't display the form if user already sent it
     /* --------------------------------------
@@ -1099,7 +1099,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                             'icon' => 'fa-reply',
                             'level' => 'primary-label'
                         )
-                    ));
+                    ),false);
             $tool_content .= "</div>
         </div>
     ";
@@ -1157,7 +1157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
 
 
     $tool_content .= "\n<div class=\"fileman\">";
-    $tool_content .= "\n<form action='importFromDocument.php?course=$course_code' method='post'>";
+    $tool_content .= "\n<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
     $tool_content .= "\n  <fieldset><legend>$langLearningPathImportFromDocuments</legend>";
     $tool_content .= "\n  <table width=\"100%\" class=\"tbl_alt_bordless\">";
     $tool_content .= "\n  <tbody>";
@@ -1229,6 +1229,11 @@ EOF;
             $tool_content .= "<td><div align='center'>$size</div></td><td><div align='center'>$date</div></td></tr>";
         }
 
+        $tool_content .= "\n  <tr class='nobrd' style='height:10px;'>";
+        $tool_content .= "\n    <td colspan='2'></td>";
+        $tool_content .= "\n    <td colspan='3' class='right'></td>";
+        $tool_content .= "\n  </tr>";
+        
         $tool_content .= "\n  <tr class='nobrd'>";
         $tool_content .= "\n    <td colspan='2'></td>";
         $tool_content .= "\n    <td colspan='3' class='right'><input class='btn btn-primary' type='submit' value='" . $langImport . "'></td>";
