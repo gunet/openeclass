@@ -97,6 +97,10 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function delete() {
+        //delete abuse reports for this comment first
+        $sql = 'DELETE FROM `abuse_report` WHERE `rid` = ?d AND `rtype` = ?s';
+        Database::get()->query($sql, $this->id, 'comment');
+        
         $sql = 'DELETE FROM `comments` WHERE `id` = ?d';
         $numrows = Database::get()->query($sql, $this->id)->affectedRows;
         if ($numrows == 1) {
