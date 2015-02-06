@@ -69,9 +69,7 @@ if (isset($language)) {
     }
     $session = new Session();
     $uid = $session->user_id;    
-    if (!isset($active_ui_languages)) {
-        $active_ui_languages = array('el');
-    }
+    $session->active_ui_languages = array($language);
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
     }
@@ -89,7 +87,6 @@ if (isset($language)) {
     $uid = $session->user_id;
     $language = $session->language;    
 }
-
 //Initializing Valitron (form validation library)
 require_once 'include/Valitron/Validator.php';
 use Valitron\Validator as V;
@@ -109,7 +106,9 @@ if (isset($_SESSION['flash_new'])) {
     unset($_SESSION['flash_new']);
 }
 
-$session = new Session();
+if (!isset($session)) {
+    $session = new Session();
+}
 $uid = $session->user_id;
 // construct $urlAppend from $urlServer
 $urlAppend = preg_replace('|^https?://[^/]+/|', '/', $urlServer);
@@ -176,13 +175,7 @@ if (isset($_SESSION['is_admin']) and $_SESSION['is_admin']) {
     $is_departmentmanage_user = false;
 }
 
-if (!isset($_SESSION['theme'])) {
-    $_SESSION['theme'] = get_config('theme');
-}
-if (empty($_SESSION['theme']) or !is_readable("template/$_SESSION[theme]/theme.html")) {
-    $_SESSION['theme'] = 'default';
-}
-$theme = $_SESSION['theme'];
+$theme = $_SESSION['theme'] = 'default';
 $themeimg = $urlAppend . 'template/' . $theme . '/img';
 if (file_exists("template/$theme/settings.php")) {
     require_once "template/$theme/settings.php";

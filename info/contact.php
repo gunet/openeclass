@@ -29,7 +29,7 @@ $Institution = q(get_config('institution'));
 $phone = q(get_config('phone'));
 $fax = q(get_config('fax'));
 $phonemessage = empty($phone) ? "<label>$langPhone:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langPhone:&nbsp;</label>$phone<br>";
-$faxmessage = empty($fax) ? "<label>$langFax</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langFax</label>$fax<br>";
+$faxmessage = empty($fax) ? "<label>$langFax</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langFax&nbsp;</label>$fax<br>";
 $emailhelpdesk = get_config('email_helpdesk');
 $emailhelpdesk = empty($emailhelpdesk) ? "<label>$langEmail:</label> <span class='not_visible'> - $langProfileNotAvailable - </span><br>" : "<label>$langEmail: </label>&nbsp;<a href='mailto:$emailhelpdesk'>".str_replace('@', ' &lt;at> ', $emailhelpdesk)."</a>";       
 
@@ -44,8 +44,7 @@ $tool_content .= "<div class='row'>
                     <div class='col-xs-12'>
                         <div class='panel'>
                             <div class='panel-body'>
-                                <label>$langPostMail&nbsp;</label>$Institution<br> $postaddress $phonemessage $faxmessage $emailhelpdesk
-                                
+                                <label>$langPostMail&nbsp;</label>$Institution<br> $postaddress<br> $phonemessage $faxmessage $emailhelpdesk                                
                             </div>
                         </div>
                     </div>

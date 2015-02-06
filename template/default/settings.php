@@ -37,7 +37,7 @@ function template_callback($template, $menuTypeID, $embed)
     global $uid, $session, $native_language_names_init, $course_id, $professor,
            $modules, $admin_modules, $theme_settings;
 
-    if ($uid) {
+    if ($uid and !defined('UPGRADE')) {
         if (!$embed) {
             $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
         }
@@ -64,7 +64,6 @@ function template_callback($template, $menuTypeID, $embed)
                 $template->parse('sideBarCourse', 'sideBarCourseBlock', true);
                 $counter++;
             }, $uid);
-
 
     } else {
         $template->set_block('mainBlock', 'LoggedInBlock', 'delete');

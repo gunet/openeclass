@@ -305,17 +305,23 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
 
 // Translate uid to givenname , surname, fullname or nickname
 function uid_to_name($uid, $name_type = 'fullname') {
+    global $langAnonymous, $langUser;
     if ($name_type == 'fullname') {
-        return Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?d", $uid)->fullname;
+        $user = Database::get()->querySingle("SELECT CONCAT(surname, ' ', givenname) AS fullname FROM user WHERE id = ?d", $uid);
     } elseif ($name_type == 'givenname') {
-        return Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d", $uid)->givenname;
+        $user = Database::get()->querySingle("SELECT givenname FROM user WHERE id = ?d", $uid);
     } elseif ($name_type == 'surname') {
-        return Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d", $uid)->surname;
+        $user = Database::get()->querySingle("SELECT surname FROM user WHERE id = ?d", $uid);
     } elseif ($name_type == 'username') {
-        return Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", $uid)->username;
+        $user = Database::get()->querySingle("SELECT username FROM user WHERE id = ?d", $uid);
     } else {
-        return false;
+        $user = false;
     }
+    if ($user) {
+        return $user->{$name_type};
+    } else {
+        return "$langAnonymous $langUser";
+    }  
 }
 
 

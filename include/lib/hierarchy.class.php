@@ -476,9 +476,9 @@ class Hierarchy {
             // valid HTML requires ids starting with letters.
             // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2)
             if ($xmlout) {
-                $out .= "<item id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><content><name " . $class . ">" . $value . $valcode . '<\/name><\/content><\/item>';
+                $out .= "<item id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><content><name " . $class . ">" . q($value . $valcode) . '<\/name><\/content><\/item>';
             } else {
-                $out .= "<li id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><a href='#' " . $class . ">" . $value . $valcode . "</a></li>" . "\n";
+                $out .= "<li id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><a href='#' " . $class . ">" . q($value . $valcode) . "</a></li>" . "\n";
             }
 
             $i++;
@@ -1035,9 +1035,10 @@ jContent;
      * @param  array    $nodes         - The node ids whose children we want to navigate to
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
+     * @param  bool     $showEmpty     - Whether to display nodes with count == 0
      * @return string   $ret           - The returned HTML output
      */
-    public function buildNodesNavigationHtml($nodes, $url, $countCallback = null) {
+    public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $showEmpty = true) {
         global $langAvCours, $langAvCourses;
 
         $ret = '';
@@ -1057,12 +1058,6 @@ jContent;
             asort($nodenames);
 
             foreach ($nodenames as $key => $value) {
-                $ret .= "<tr><td><a href='$url.php?fc=" . intval($key) . "'>" .
-                        q($value) . "</a>&nbsp;&nbsp;<small>";
-                if (strlen(q($nodecodes[$key])) > 0) {
-                    $ret .= "(" . q($nodecodes[$key]) . ")";
-                }
-
                 $count = 0;
                 foreach ($this->buildSubtrees(array(intval($key))) as $subnode) {
                     if ($countCallback !== null && is_callable($countCallback)) {
@@ -1076,7 +1071,16 @@ jContent;
                     }
                 }
 
-                $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
+                if ($showEmpty or $count > 0) {
+                    $ret .= "<tr><td><a href='$url.php?fc=" . intval($key) . "'>" .
+                            q($value) . "</a>&nbsp;&nbsp;<small>";
+                    if (strlen(q($nodecodes[$key])) > 0) {
+                        $ret .= "(" . q($nodecodes[$key]) . ")";
+                    }
+
+                    $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" .
+                        ($count == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
+                }
             }
             $ret .= "</table>";
         }
@@ -1090,9 +1094,10 @@ jContent;
      * @param  int      $depid         - The node's id whose children we want to navigate to
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
+     * @param  bool     $showEmpty     - Whether to display nodes with count == 0
      * @return string   $ret           - The returned HTML output
      */
-    public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null) {
+    public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
         // select subnodes of the next depth level
         $res = Database::get()->queryArray("SELECT node.id FROM " . $this->dbtable . " AS node
                 LEFT OUTER JOIN " . $this->dbtable . " AS parent ON parent.lft =
@@ -1107,7 +1112,7 @@ jContent;
                 $nodes[] = $node->id;
             }
 
-            return $this->buildNodesNavigationHtml($nodes, $url, $countCallback);
+            return $this->buildNodesNavigationHtml($nodes, $url, $countCallback, $showEmpty);
         } else {
             return "";
         }

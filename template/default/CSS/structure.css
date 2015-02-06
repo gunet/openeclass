@@ -846,43 +846,43 @@ div.login-form .btn.btn-login:hover {
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 /* No breakpoints bellow 1366 or smth */
 @media (max-width: 1339px) {
-  /* line 754, ../SASS/structure.scss */
+  /* line 743, ../SASS/structure.scss */
   body > .container {
     width: 100%;
   }
 }
 @media (min-width: 1340px) {
-  /* line 760, ../SASS/structure.scss */
+  /* line 749, ../SASS/structure.scss */
   .container {
     width: 1340px;
   }
 }
 @media (min-width: 992px) {
-  /* line 766, ../SASS/structure.scss */
+  /* line 755, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 }
 @media (max-width: 992px) {
-  /* line 773, ../SASS/structure.scss */
+  /* line 762, ../SASS/structure.scss */
   body > .container {
     padding: 0;
     margin: 0;
   }
 
-  /* line 777, ../SASS/structure.scss */
+  /* line 766, ../SASS/structure.scss */
   #leftnav .panel a.list-group-item,
   #leftnav .panel .panel-heading .panel-title {
     text-align: left;
   }
 
-  /* line 781, ../SASS/structure.scss */
+  /* line 770, ../SASS/structure.scss */
   .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 785, ../SASS/structure.scss */
+  /* line 774, ../SASS/structure.scss */
   #main-content,
   #header.navbar .navbar-nav > li:last-child > a,
   .navbar-default, .footer {

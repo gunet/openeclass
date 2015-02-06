@@ -214,7 +214,7 @@ class CourseXMLElement extends SimpleXMLElement {
         } else {
             $fieldStart .= q($keyLbl . $lang);
         }
-        if (in_array($fullKey, CourseXMLConfig::$mandatoryFields)) {
+        if (in_array($fullKey, CourseXMLConfig::$mandatoryFields) || in_array($fullKey, CourseXMLConfig::$asteriskedFields)) {
             $fieldStart .= "(<span style='color:red'>*</span>)";
         }        
         $fieldStart .= ":</label><div class='col-sm-9'>";
@@ -786,10 +786,10 @@ class CourseXMLElement extends SimpleXMLElement {
         }
         // check each unit title and description
         for ($i = 0; $i < intval($data['course_numberOfUnits']); $i++) {
-            if (!isset($data['course_unit_title_el'][$i]) || empty($data['course_unit_title_el'][$i])) {
+            if (!isset($data['course_unit_title'][$i]) || empty($data['course_unit_title'][$i])) {
                 return false;
             }
-            if (!isset($data['course_unit_description_el'][$i]) || empty($data['course_unit_description_el'][$i])) {
+            if (!isset($data['course_unit_description'][$i]) || empty($data['course_unit_description'][$i])) {
                 return false;
             }
         }
@@ -1297,9 +1297,9 @@ class CourseXMLElement extends SimpleXMLElement {
         $unitsCount = 0;
         DataBase::get()->queryFunc("SELECT title, comments 
                                       FROM course_units
-                                     WHERE visible > 0 AND course_id = ?d", function($unit) use (&$data, &$unitsCount, $clang) {
-            $data['course_unit_title_' . $clang][$unitsCount] = $unit->title;
-            $data['course_unit_description_' . $clang][$unitsCount] = strip_tags($unit->comments);
+                                     WHERE visible > 0 AND course_id = ?d", function($unit) use (&$data, &$unitsCount) {
+            $data['course_unit_title'][$unitsCount] = $unit->title;
+            $data['course_unit_description'][$unitsCount] = strip_tags($unit->comments);
             $unitsCount++; // also serves as array index, starting from 0
         }, $courseId);
         $data['course_numberOfUnits'] = $unitsCount;

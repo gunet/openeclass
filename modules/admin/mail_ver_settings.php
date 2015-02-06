@@ -59,7 +59,7 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
     if ($old_mail_ver != $new_mail_ver) {
         $old_mail_ver = intval($old_mail_ver);
         $new_mail_ver = intval($new_mail_ver);
-        $count = Database::get()->query("UPDATE `user` set verified_mail=?s WHERE verified_mail=?s AND user_id!=1", $new_mail_ver, $old_mail_ver)->affectedRows;
+        $count = Database::get()->query("UPDATE `user` set verified_mail=?s WHERE verified_mail=?s AND id != 1", $new_mail_ver, $old_mail_ver)->affectedRows;
         if ($count > 0) {
             $user = ($count == 1) ? $langOfUser : $langUsersS;
             $tool_content .= "<div class='alert alert-success'>$langMailVerificationChanged {$m['from']} «{$mail_ver_data[$old_mail_ver]}» {$m['in']} «{$mail_ver_data[$new_mail_ver]}» {$m['in']} $count $user</div>";
@@ -125,7 +125,7 @@ else {
     } else {
         $sub = NULL;
     }
-    $c = Database::get()->querySingle("SELECT count(*) as cnt FROM user WHERE verified_mail = $sub;")->cnt;
+    $c = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user WHERE verified_mail = $sub;")->cnt;
 
     if (isset($sub)) {
         $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' name='mail_verification_change' method='post' action='$_SERVER[SCRIPT_NAME]'>

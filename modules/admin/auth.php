@@ -35,11 +35,14 @@ $auth = isset($_GET['auth']) ? $_GET['auth'] : '';
 $active = isset($_GET['active']) ? $_GET['active'] : '';
 
 if (!empty($auth) and ! empty($active)) {
-    $s = get_auth_settings($auth);    
+    $s = get_auth_settings($auth);        
     $settings = $s['auth_settings'];
-
     switch ($active) {
-        case 'yes': $q = empty($settings) ? 0 : 1;
+        case 'yes': if ($auth == 1) { // eclass method has no settings
+                        $q = 1;
+                    } else {
+                        $q = empty($settings) ? 0 : 1;
+                    }
             break;
         case 'no': $q = 0;
             break;
@@ -74,7 +77,7 @@ if (empty($auth)) {
     }
     $tool_content .= "</div>";
 } else {
-    if (empty($settings)) {
+    if (empty($settings) and $auth != 1) {
         $tool_content .= "<div class='alert alert-danger'>$langErrActiv $langActFailure</div>";
     } else {
         if ($active == 'yes') {
@@ -89,7 +92,7 @@ if (empty($auth)) {
     }
 }
 
-$tool_content .= "<table class='table-default'>";
+$tool_content .= "<div class='table-responsive'><table class='table-default'>";
 $tool_content .= "<th>$langAllAuthTypes</th><th class='text-center'>".icon('fa-gears', $langActions)."</th>";
 foreach ($auth_ids as $auth_id => $auth_name) {
         $tool_content .= "<tr><td>".  strtoupper($auth_name).":</td><td class='option-btn-cell'>";
@@ -106,11 +109,12 @@ foreach ($auth_ids as $auth_id => $auth_name) {
                 array('title' => $activation_title,
                       'url' => $activation_url,
                       'icon' => $activation_icon),
-                array('title' => $langAuthSettings,                      
+                array('title' => $langAuthSettings,
                       'url' => "auth_process.php?auth=$auth_id",
-                      'icon' => 'fa-gear')));
+                      'icon' => 'fa-gear',
+                      'show' => $auth_id != 1)));
         $tool_content .= "</td><tr>";
 }
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 
 draw($tool_content, 3);

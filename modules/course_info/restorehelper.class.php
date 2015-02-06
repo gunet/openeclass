@@ -212,6 +212,34 @@ class RestoreHelper {
         $to_int = function($value) {
             return intval($value);
         };
+        $poll_qtype = function($value) {
+            if (is_int($value)) {
+                return $value;
+            }
+            
+            $ret = 4;
+            switch($value) {
+                case 'single':
+                    $ret = 1;
+                    break;
+                case 'fill':
+                    $ret = 2;
+                    break;
+                case 'multiple':
+                    $ret = 3;
+                    break;
+                case 'label':
+                    $ret = 4;
+                    break;
+                case 'scale':
+                    $ret = 5;
+                    break;
+                default:
+                    $ret = 4;
+                    break;
+            }
+            return $ret;
+        };
         $this->values = array();
         // syntax is: [new table][old field]
         $this->values[self::STYLE_2X]['announcement']['visibility'] = $visibility;
@@ -222,14 +250,29 @@ class RestoreHelper {
         $this->values[self::STYLE_2X]['course_units']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['unit_resources']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['forum_category']['cat_order'] = $to_int;
+        $this->values[self::STYLE_2X]['poll_question']['qtype'] = $poll_qtype;
         
-        $this->values[self::STYLE_3X]['lp_module']['contentType'] = function($value) {
+        // data consistency for contentType
+        $lp_module_contentType = function($value) {
             if ($value === '') {
                 return 'SCORM';
             } else {
                 return $value;
             }
         };
+        $this->values[self::STYLE_2X]['lp_module']['contentType'] = $lp_module_contentType;
+        $this->values[self::STYLE_3X]['lp_module']['contentType'] = $lp_module_contentType;
+        
+        // data consistency for res_id
+        $unit_resources_res_id = function($value) {
+            if (is_int((value))) {
+                return $value;
+            } else {
+                return 0;
+            }
+        };
+        $this->values[self::STYLE_2X]['unit_resources']['res_id'] = $unit_resources_res_id;
+        $this->values[self::STYLE_3X]['unit_resources']['res_id'] = $unit_resources_res_id;
     }
     
     private function populateTypes() {

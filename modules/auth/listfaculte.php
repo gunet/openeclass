@@ -24,11 +24,13 @@ require_once 'include/lib/hierarchy.class.php';
 
 $redirectUrl = "modules/auth/opencourses.php?fc=";
 $countCallback = null;
+$showEmpty = true;
 
 if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
     require_once 'modules/course_metadata/CourseXML.php';
     $redirectUrl = "modules/course_metadata/opencourses.php?fc=";
     $countCallback = CourseXMLElement::getCountCallback();
+    $showEmpty = false;
     // exit if feature disabled
     if (!get_config('opencourses_enable')) {
         header("Location: {$urlServer}");
@@ -53,7 +55,7 @@ if (count($roots) <= 0) {
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback);
+    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, $showEmpty);
 }
 
 

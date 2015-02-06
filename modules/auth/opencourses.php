@@ -24,10 +24,12 @@ require_once 'include/lib/hierarchy.class.php';
 
 $countCallback = null;
 $isInOpenCoursesMode = (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA');
+$showEmpty = true;
 
 if ($isInOpenCoursesMode) {
     require_once 'modules/course_metadata/CourseXML.php';
     $countCallback = CourseXMLElement::getCountCallback();
+    $showEmpty = false;
     // exit if feature disabled
     if (!get_config('opencourses_enable')) {
         header("Location: {$urlServer}");
@@ -86,7 +88,7 @@ $tool_content .= "<table class='table-default'>
                     </tr>
                   </table>";
 
-$tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback);
+$tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
 
 $queryCourseIds = '';
 $queryExtraSelect = '';

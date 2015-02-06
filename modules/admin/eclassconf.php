@@ -181,8 +181,6 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
 </script>
 EOF;
 
-$available_themes = active_subdirs("$webDir/template", 'theme.html');
-
 define('MONTHS', 30 * 24 * 60 * 60);
 
 // schedule indexing if necessary
@@ -274,8 +272,7 @@ if (isset($_POST['submit'])) {
         'group_quota' => true,
         'video_quota' => true,
         'dropbox_quota' => true,
-        'max_glossary_terms' => true,
-        'theme' => true,
+        'max_glossary_terms' => true,        
         'case_insensitive_usernames' => true,
         'course_multidep' => true,
         'user_multidep' => true,
@@ -305,8 +302,7 @@ if (isset($_POST['submit'])) {
         'opencourses_enable' => true);
 
     register_posted_variables($config_vars, 'all', 'intval');
-    $_SESSION['theme'] = $theme = $available_themes[$theme];
-
+    
     if ($GLOBALS['opencourses_enable'] == 1) {
         $GLOBALS['course_metadata'] = 1;
     }
@@ -410,7 +406,7 @@ else {
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formpostaddress' class='col-sm-2 control-label'>$langPostMail:</label>
+                           <label for='formpostaddress' class='col-sm-2 control-label'>$langPostMail</label>
                            <div class='col-sm-10'>
                                <textarea class='form-control' name='formpostaddress' id='formpostaddress'>" . q(get_config('postaddress')) . "</textarea>
                            </div>
@@ -422,7 +418,7 @@ else {
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='formfax' class='col-sm-2 control-label'>$langFax:</label>
+                           <label for='formfax' class='col-sm-2 control-label'>$langFax</label>
                            <div class='col-sm-10'>
                                <input class='FormData_InputText form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
                            </div>
@@ -509,20 +505,17 @@ else {
                     </fieldset>    
                 </div>
             </div>";
-        if ($language == "el") {
-            $grSel = "selected";
-            $enSel = "";
-        } else {
-            $grSel = "";
-            $enSel = "selected";
-        }    
         $active_ui_languages = explode(' ', get_config('active_ui_languages'));
         $langdirs = active_subdirs($webDir . '/lang', 'messages.inc.php');
         $sel = array();
+        $selectable_langs = array();
         $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
         foreach ($language_codes as $langcode => $langname) {
             if (in_array($langcode, $langdirs)) {
                 $loclangname = $langNameOfLang[$langname];
+                if (in_array($langcode, $active_ui_languages)) {
+                    $selectable_langs[$langcode] = $loclangname;
+                }
                 $checked = in_array($langcode, $active_ui_languages) ? ' checked' : '';
                 $sel[] = "<div class='checkbox'>
                             <label>
@@ -541,25 +534,17 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                     <fieldset>
                         <div class='form-group'>
                            <label for='default_language' class='col-sm-3 control-label'>$langMainLang: </label>
-                           <div class='col-sm-9'>
-                                <select class='form-control' name='default_language' id='default_language'>
-                                    <option value='el' $grSel>$langGreek</option>
-                                    <option value='en' $enSel>$langEnglish</option>
-                                </select>                                
-                           </div>
+                           <div class='col-sm-9'>" .
+                               selection($selectable_langs, 'default_language', get_config('language'),
+                                         "class='form-control' id='default_language'") .
+                           "</div>
                         </div> 
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langSupportedLanguages:</label>
                             <div class='col-sm-9'>            
                             " . implode(' ', $sel) . "
                             </div>
-                        </div>
-                        <div class='form-group'>
-                           <label for='theme' class='col-sm-3 control-label'>$langThemes: </label>
-                           <div class='col-sm-9'>
-                                " . selection($available_themes, 'theme', array_search($theme, $available_themes), "class='form-control' id='theme'") . "                               
-                           </div>
-                        </div>
+                        </div>                        
                         <div class='form-group'>
                            <label for='theme' class='col-sm-3 control-label'>$lang_login_form: </label>
                            <div class='col-sm-9'>
