@@ -60,7 +60,7 @@ $dialogBox = "";
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPath);
 $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], "name" => $langAdm);
-$pageName = $langInsertMyLinkToolName;
+$toolName = $langInsertMyLinkToolName;
 
 $iterator = 1;
 
@@ -108,8 +108,7 @@ while ($iterator <= $_POST['maxLinkForm']) {
 				(`learnPath_id`, `module_id`, `specificComment`, `rank`, `lock`, `visible`)
 				VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
 
-            $dialogBox .= q($row->title) . " : " . $langLinkInsertedAsModule . "<br />";
-            $style = "success";
+            $dialogBox .= "<div class='alert alert-success'>".q($row->title) . " : " . $langLinkInsertedAsModule . "</div>";
         } else {
             // check if this is this LP that used this document as a module
             $sql = "SELECT COUNT(*) AS count FROM `lp_rel_learnPath_module` AS LPM,
@@ -133,30 +132,18 @@ while ($iterator <= $_POST['maxLinkForm']) {
 					(`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
 					VALUES (?d, ?d, '', ?d,'OPEN', 1)", $_SESSION['path_id'], $thisLinkModule->module_id, $order);
 
-                $dialogBox .= q($row->title) . " : " . $langLinkInsertedAsModule . "<br />";
-                $style = "success";
+                $dialogBox .= "<div class='alert alert-success'>".q($row->title) . " : " . $langLinkInsertedAsModule . "</div>";                
             } else {
-                $dialogBox .= q($row->title) . " : " . $langLinkAlreadyUsed . "<br />";
-                $style = "caution";
+                $dialogBox .= "<div class='alert alert-warning'>".q($row->title) . " : " . $langLinkAlreadyUsed . "</div>";
             }
         }
     }
     $iterator++;
 }
 
-if (isset($dialogBox) && $dialogBox != "") {
-    $tool_content .= "<table width=\"99%\"><tr>";
-    $tool_content .= disp_message_box($dialogBox, $style);
-    $tool_content .= "</td></tr></table>";
-    $tool_content .= "<br />";
+if (isset($dialogBox) && $dialogBox != "") {    
+    $tool_content .= $dialogBox;
 }
-
-$tool_content .= showlinks();
-//$tool_content .= "<br />";
-//$tool_content .= disp_tool_title($langPathContentTitle);
-//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
-// display list of modules used by this learning path
-//$tool_content .= display_path_content();
 
 $tool_content .= 
          action_bar(array(
@@ -164,40 +151,52 @@ $tool_content .=
                 'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'))) ;
+$tool_content .= showlinks();
+//$tool_content .= "<br />";
+//$tool_content .= disp_tool_title($langPathContentTitle);
+//$tool_content .= '<a href="learningPathAdmin.php?course=$course_code">&lt;&lt;&nbsp;'.$langBackToLPAdmin.'</a>';
+// display list of modules used by this learning path
+//$tool_content .= display_path_content();
+
 
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief display links
+ * @global type $langName
+ * @global type $langSelection
+ * @global type $langAddModulesButton
+ * @global type $course_id
+ * @global type $course_code
+ * @global type $themeimg
+ * @return string
+ */
 function showlinks() {
-    global $langName, $langSelection, $langAddModulesButton, $course_id, $course_code, $themeimg;
+    global $langName, $langSelection, $langAddModulesButton, $course_id, $course_code;
 
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d ORDER BY `order` DESC", $course_id);
 
-    $output = "
-<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                      <table width='100%' class='tbl_alt'>
-
+    $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                      <table class='table-default'>
                       <tr>
-                        <th colspan='2'>$langName</th>
+                        <th>$langName</th>
                         <th width='50'>$langSelection</th>
                       </tr>
-
                       <tbody>";
     $i = 1;
     foreach ($result as $myrow) {
         $output .= "
-                <tr>
-                <td width='1' valign='top'><img src='$themeimg/links_on.png' border='0'></td>
+                <tr>                
                 <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=" . $myrow->id . "&amp;link_url=" . urlencode($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>
-                <br />
-                <small class='comments'>" . q($myrow->description) . "</small></td>";
-        $output .= "
-                <td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
+                <br>
+                <small class='comments'>" . $myrow->description . "</small></td>";
+        $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
                 </tr>";
         $i++;
     }
     $output .= "
         <tr>
-        <th colspan='3'>
+        <th colspan='2'>
                 <div align='right'>
                 <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
                 <input class='btn btn-primary' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
