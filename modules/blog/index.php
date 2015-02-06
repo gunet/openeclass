@@ -21,13 +21,13 @@
 $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Blog';
-require_once '../comments/class.comment.php';
-require_once '../comments/class.commenting.php';
-require_once '../rating/class.rating.php';
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'class.blog.php';
 require_once 'class.blogpost.php';
-require_once 'include/course_settings.php';
+require_once 'modules/comments/class.comment.php';
+require_once 'modules/comments/class.commenting.php';
+require_once 'modules/rating/class.rating.php';
 require_once 'modules/sharing/sharing.php';
 
 define ('RSS', 'modules/blog/rss.php?course='.$course_code);
