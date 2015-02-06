@@ -540,18 +540,16 @@ if ($is_editor) {
                 $actNumber = count($result);
 
                 if ($actNumber > 0) {
-                    $tool_content .= "<h4>" . display_user($userID) . "</h4>";
+                    $tool_content .= "<h5>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</h5>";
                     $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                                       <table class='table-default'>";
-                    $tool_content .= "<tr><th  colspan='2'>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
+                    $tool_content .= "<tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
                     $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
                     $tool_content .= "</tr>";
                 } else {
                     $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langGradebookNoActMessage2</a> $langGradebookNoActMessage3</p>\n";
                 }
-                //ui counter
-                $k = 0;
-
+                
                 if ($result){
                     foreach ($result as $activity) {
                         //check if there is auto mechanism
@@ -577,15 +575,7 @@ if ($is_editor) {
                         $content = standard_text_escape($activity->description);
                         $d = strtotime($activity->date);
 
-                        if ($k % 2 == 0) {
-                            $tool_content .= "<tr class='even'>";
-                        } else {
-                            $tool_content .= "<tr class='odd'>";
-                        }
-
-                        $tool_content .= "<td width='16' valign='top'>
-                            <img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
-                            <td><b>";
+                        $tool_content .= "<tr><td><b>";
 
                         if (empty($activity->title)) {
                             $tool_content .= $langAnnouncementNoTille;
@@ -611,32 +601,24 @@ if ($is_editor) {
                             $tool_content .= "<td class='smaller'>$langGradebookActAttend</td>";
                         }
                         $tool_content .= "<td width='' class='text-center'>" . $activity->weight . "%</td>";
-                        @$tool_content .= "<td  class='text-center'>
+                        @$tool_content .= "<td class='text-center'>
                         <input style='width:30px' type='text' value='".$userGrade."' name='" . $activity->id . "'"; //SOS 4 the UI!!
                         $tool_content .= ">
                         <input type='hidden' value='" . $userID . "' name='userID'>    
                         </td>";
-                        $k++;
                     } // end of while
                 }
-                $tool_content .= "<tr><td colspan=7 class='right'><input type='submit' name='bookUser' value='$langGradebookBooking' /></td></tr>";
-                
-                $tool_content .= "<tr><td colspan=7 >". $langGradebookGrade . ":" . userGradeTotal($gradebook_id, $userID);
-                
+                $tool_content .= "</tr></table>";                
+                $tool_content .= "<div class='pull-right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langGradebookBooking'></div>";
+                                                
                 if(userGradeTotal($gradebook_id, $userID) > $gradebook_range){
                     $tool_content .= "<br>" . $langGradebookOutRange;
                 }
-                
-                $tool_content .= "</td></tr>";
-                $tool_content .= "<tr><td colspan=7 class='smaller'>" . $langGradebookUpToDegree . $gradebook_range . "</td></tr></table></form>";
-
+                $tool_content .= "<span class='help-block'><small>" . $langGradebookUpToDegree . $gradebook_range . "</small></span>";
             } else {
-                $tool_content .="<div class='alert alert-success'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
+                $tool_content .= "<div class='alert alert-success'>$langGradeNoBookAlert " . weightleft($gradebook_id, 0) . "%</div>";
             }
-        } else {            
-        //========================
-        //show all the students
-        //========================        
+        } else {  // display all students                   
             $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, 
                                                                 gradebook_users.uid as userID,                                                             
                                                                 user.am as am, course_user.reg_date as reg_date 
@@ -645,10 +627,8 @@ if ($is_editor) {
                                                         AND gradebook_users.uid = user.id 
                                                         AND `user`.id = `course_user`.`user_id` 
                                                         AND `course_user`.`course_id` = ?d", $gradebook_id, $course_id);            
-            if (count($resultUsers)> 0) {
-                //table to display the users
-                $tool_content .= "
-                <table id='users_table{$course_id}' class='table-default custom_list_order'>
+            if (count($resultUsers)> 0) {                
+                $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
                     <thead>
                         <tr>
                           <th width='1'>$langID</th>
