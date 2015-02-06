@@ -113,7 +113,7 @@ Class Commenting {
                 $post_actions .='</div>';
             } else {
                 if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
-                    $post_actions .= '<div class="pull-right">'.abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)).'</div>';
+                    $post_actions = '<div class="pull-right">'.abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)).'</div>';
                 } else {
                     $post_actions = '';
                 }
