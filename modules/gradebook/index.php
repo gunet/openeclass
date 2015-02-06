@@ -206,7 +206,7 @@ if ($is_editor) {
     //EDIT: edit range
     if (isset($_POST['submitGradebookRange'])) {
         $gradebook_range = intval($_POST['degreerange']);
-        if($gradebook_range == 10 || $gradebook_range == 100 || $gradebook_range == 5){
+        if ($gradebook_range == 10 or $gradebook_range == 100 or $gradebook_range == 5 or $gradebook_range == 20) {
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
             Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/gradebook/index.php");
@@ -241,8 +241,7 @@ if ($is_editor) {
     //FORM: new activity (or edit) form to gradebook module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
 
-        $tool_content .= "
-            
+        $tool_content .= "            
             <div class='row'>
                 <div class='col-sm-12'>
                     <div class='form-wrapper'>                    
@@ -761,7 +760,11 @@ if ($is_editor) {
                                         if (isset($gradebook_range) and $gradebook_range == 10) {
                                             $tool_content .= " selected ";
                                         }
-                                        $tool_content .= ">0-10</option><option value=5";
+                                        $tool_content .= ">0-10</option><option value=20";
+                                        if (isset($gradebook_range) and $gradebook_range == 20) {
+                                            $tool_content .= " selected ";
+                                        }
+                                        $tool_content .= ">0-20</option><option value=5";
                                         if (isset($gradebook_range) and $gradebook_range == 5) {
                                             $tool_content .= " selected ";
                                         }
@@ -933,42 +936,41 @@ if ($is_editor) {
     }
 
     //DISPLAY - EDIT DB: insert grades for each activity
-    elseif (isset($_GET['ins'])){
-
+    elseif (isset($_GET['ins'])) {
         $actID = intval($_GET['ins']);
-
-        //record booking
-        if(isset($_POST['bookUsersToAct'])){                        
-
-            //get all the active users 
-            $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
-
-            if ($activeUsers){                
-                foreach ($activeUsers as $result) {
-                    
-                    $userInp = intval(@$_POST[$result->userID]); //get the record from the teacher (input name is the user id)    
-                    
-                    // //check if there is record for the user for this activity
-                    $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $result->userID);
-                    
-                    if($checkForBook->count){                        
-                        //update
-                        Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d ", $userInp, $checkForBook->id);
-                    }else{                        
-                        //insert
-                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", $result->userID, $actID, $userInp, '');
+        $error = false;        
+        if (isset($_POST['bookUsersToAct'])) {        
+                //get all the active users 
+                $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+                if ($activeUsers) {
+                    foreach ($activeUsers as $result) {
+                        $userInp = @$_POST[$result->userID]; //get the record from the teacher (input name is the user id)                        
+                        $v = new Valitron\Validator($_POST);
+                        $v->rule('numeric', $result->userID);
+                        $v->rule('min', $result->userID, 0);
+                        $v->rule('max', $result->userID, $gradebook_range);
+                        if ($v->validate()) {
+                            // //check if there is record for the user for this activity
+                            $checkForBook = Database::get()->querySingle("SELECT COUNT(id) as count, id FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $result->userID);                    
+                            if ($checkForBook->count) { // update
+                                Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d ", $userInp, $checkForBook->id);
+                            } else { // insert
+                                Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", $result->userID, $actID, $userInp, '');
+                            }
+                        } else {
+                            @Session::Messages($langFormErrors)->Errors($v->errors());
+                            $error = true;
+                        }
+                    }
+                    if (!$error) {
+                        $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
+                        $tool_content .= $message . "<br/>";
                     }
                 }
-                
-                $message = "<p class='success'>$langGradebookEdit</p>";
-                $tool_content .= $message . "<br/>";
-            }
-        }
+            }        
 
-        //display the form and the list
-        
-        $result = Database::get()->querySingle("SELECT * FROM gradebook_activities  WHERE id = ?d", $actID);
-        
+        //display the form and the list        
+        $result = Database::get()->querySingle("SELECT * FROM gradebook_activities  WHERE id = ?d", $actID);        
         $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
 
         //show all the students
@@ -1012,7 +1014,6 @@ if ($is_editor) {
                         $tool_content .= "<td class='text-center'>
                             <input type='text' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
-
                             $q = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
                             if(isset($q->grade)) {
                                 $tool_content .= " value = '$q->grade'";
@@ -1020,11 +1021,9 @@ if ($is_editor) {
                                 $tool_content .= " value = ''";
                             }
 
-                        $tool_content .= "><input type='hidden' value='" . $actID . "' name='actID'>
-                        </td>";   
-                        $tool_content .= "
-                    </tr>";
-            }
+                        $tool_content .= "><input type='hidden' value='" . $actID . "' name='actID'></td>";
+                        $tool_content .= "</tr>";                        
+                }
             $tool_content .= "</tbody></table> <input type='submit' class='btn btn-default' name='bookUsersToAct' value='$langGradebookBooking' /></form>";
         }
         $showGradebookActivities = 0;
