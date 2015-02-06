@@ -721,23 +721,22 @@ if ($is_editor) {
             <div class='col-sm-12'>
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <fieldset>
-                        <div class='form-group'><label class='col-sm-offset-1'>$langRefreshList</label><small class='help-block'>($langGradebookInfoForUsers)</small></div>                            
-                            <div class='form-group'>
-                                <div class='col-sm-12'>
-                                    <select name='usersLimit' class='form-control'>                
-                                        <option value='1'>$langAttendanceActiveUsers6</option>
-                                        <option value='2'>$langAttendanceActiveUsers3</option>
-                                        <option value='3'>$langAttendanceActiveUsersAll</option>
-                                    </select>
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langRefreshList<small class='help-block'>($langGradebookInfoForUsers)</small></label></div>                            
+                                <div class='form-group'>
+                                    <div class='col-xs-12'>
+                                        <select name='usersLimit' class='form-control'>                
+                                            <option value='1'>$langAttendanceActiveUsers6</option>
+                                            <option value='2'>$langAttendanceActiveUsers3</option>
+                                            <option value='3'>$langAttendanceActiveUsersAll</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class='form-group'>
-                                <div class='col-sm-10'>
-                                    <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
+                                <div class='form-group'>
+                                    <div class='col-xs-12'>
+                                        <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
+                                    </div>
                                 </div>
-                            </div>
-                        </fieldset>
                     </form>
                 </div>
             </div>
@@ -753,9 +752,9 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <fieldset>
-                        <div class='form-group'><label class='col-sm-offset-1'>$langGradebookRange</label></div>                            
+                        <div class='form-group'><label class='col-xs-12'>$langGradebookRange</label></div>                            
                             <div class='form-group'>
-                                <div class='col-sm-10'>
+                                <div class='col-xs-12'>
                                     <select name='degreerange' class='form-control'><option value=10";
                                         if (isset($gradebook_range) and $gradebook_range == 10) {
                                             $tool_content .= " selected ";
@@ -776,7 +775,7 @@ if ($is_editor) {
                             $tool_content .= "</div>
                             </div>
                             <div class='form-group'>
-                                <div class='col-sm-12'>
+                                <div class='col-xs-12'>
                                     <input class='btn btn-primary' type='submit' name='submitGradebookRange' value='$langGradebookUpdate'>
                                 </div>
                             </div>
