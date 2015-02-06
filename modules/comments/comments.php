@@ -19,10 +19,11 @@
 * ======================================================================== */
 $require_current_course = TRUE;
 
-require_once 'class.comment.php';
-require_once 'class.commenting.php';
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
+require_once 'class.comment.php';
+require_once 'class.commenting.php';
+
 
 if ($_POST['rtype'] == 'blogpost') {
     $setting_id = SETTING_BLOG_COMMENT_ENABLE;
