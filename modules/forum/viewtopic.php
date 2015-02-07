@@ -90,6 +90,9 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     $this_post_time = $myrow->post_time;
     $this_post_author = $myrow->poster_id;
 
+    //delete abuse reports for this post
+    Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');
+    
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 

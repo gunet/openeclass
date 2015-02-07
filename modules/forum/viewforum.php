@@ -137,6 +137,8 @@ if (($is_editor) and isset($_GET['topicdel'])) {
     $post_authors = array();
     foreach ($sql as $r) {
         $post_authors[] = $r->poster_id;
+        //delete abuse_reports for forum_posts
+        Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $r->id, 'forum_post');
         Database::get()->query("DELETE FROM forum_post WHERE id = $r->id");
     }
     $post_authors = array_unique($post_authors);
