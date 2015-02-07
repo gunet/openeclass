@@ -4362,11 +4362,11 @@ $langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμο�
 $langAbuseReport = 'Αναφορά κατάχρησης';
 $langAbuseReportEn = 'Ενεργοποιημένη αναφορά κατάχρησης';
 $langAbuseReportDis = 'Απενεργοποιημένη αναφορά κατάχρησης';
-$langAbuseReportCat = 'Είδος αναφοράς κατάχρησης';
+$langAbuseReportCat = 'Αιτία αναφοράς κατάχρησης';
 $langSpam = 'Spam';
 $langRudeness = 'Αγένεια';
-$langAbuseReportCatError = 'Δεν επιλέξατε είδος αναφοράς κατάχρησης';
-$langAbuseReportMsgError = 'Πρέπει να δώσετε αιτιολογία για να καταχωρήσετε μια αναφορά κατάχρησης';
+$langAbuseReportCatError = 'Δεν επιλέξατε αιτία για την αναφορά κατάχρησης';
+$langAbuseReportMsgError = 'Πρέπει να συμπληρώσετε ένα μήνυμα αιτιολόγησης για να καταχωρήσετε μια αναφορά κατάχρησης';
 $langAbuseReportSaveSuccess = 'Η αποστολή της αναφοράς προς τους διαχειριστές του μαθήματος έγινε επιτυχώς';
  
 /* * ******************************************
