@@ -39,9 +39,12 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
     		   	                      type: "POST",
 			                          url: "'.$urlServer.'modules/abuse_report/process_report.php",
 			                          data: $("form#abuse_form_'.$rtype.'_'.$rid.'").serialize(),
-        		                      success: function(msg){
-					                      $("#abuse_modal_body_'.$rtype.'_'.$rid.'").html(msg);
-					                      $("#abuse_submit_'.$rtype.'_'.$rid.'").hide();
+			                          dataType: "json",
+        		                      success: function(data){
+					                      $("#abuse_modal_body_'.$rtype.'_'.$rid.'").html(data[1]);
+					                      if (data[0] != "fail") {
+					                          $("#abuse_submit_'.$rtype.'_'.$rid.'").hide();
+					                      }
  		                              },
 			                          error: function(){
 				                          alert("'.$langError.'");
@@ -109,9 +112,12 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
     		   	                      type: "POST",
 			                          url: "'.$urlServer.'modules/abuse_report/process_report.php",
 			                          data: $("form#abuse_form_'.$rtype.'_'.$rid.'").serialize(),
-        		                      success: function(msg){
-					                      $("#abuse_modal_body_'.$rtype.'_'.$rid.'").html(msg);
-					                      $("#abuse_submit_'.$rtype.'_'.$rid.'").hide();
+			                          dataType: "json",
+        		                      success: function(data){
+					                      $("#abuse_modal_body_'.$rtype.'_'.$rid.'").html(data[1]);
+					                      if (data[0] != "fail") {
+					                          $("#abuse_submit_'.$rtype.'_'.$rid.'").hide();
+					                      }
  		                              },
 			                          error: function(){
 				                          alert("'.$langError.'");

@@ -25,16 +25,19 @@ $rtype = $_POST['rtype'];
 $rid = intval($_POST['rid']);
 $cid = intval($_POST['cid']);
 $reason = $_POST['abuse_report_reason'];
-$msg = $_POST['abuse_report_msg'];
+$msg = trim($_POST['abuse_report_msg']);
 
 if (empty($rtype) OR empty($rid) OR empty($cid)) {
     exit;
 }
 
 if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
+
+    $response = array();    
     
     if(empty($reason)) {
-        $response = '<p class="text-danger">'.$langAbuseReportCatError.'</p><form id="abuse_form_'.$rtype.'_'.$rid.'">
+        $response[0] = 'fail';
+        $response[1] = '<p class="text-danger">'.$langAbuseReportCatError.'</p><form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
                                       <div class="form-group has-error">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
@@ -53,7 +56,8 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
 		                         </fieldset>
 		                     </form>';
     } elseif (empty($msg)) {
-        $response = '<p class="text-danger">'.$langAbuseReportMsgError.'</p><form id="abuse_form_'.$rtype.'_'.$rid.'">
+        $response[0] = 'fail';
+        $response[1] = '<p class="text-danger">'.$langAbuseReportMsgError.'</p><form id="abuse_form_'.$rtype.'_'.$rid.'">
 		                         <fieldset>
                                       <div class="form-group">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
@@ -75,8 +79,9 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         Database::get()->query("INSERT INTO abuse_report (rid, rtype, course_id, reason, message, timestamp, user_id)
             VALUES (?d, ?s, ?d, ?s, ?s, UNIX_TIMESTAMP(NOW()), ?d)", $rid, $rtype, $cid, $reason, $msg, $uid);
         
-        $response = '<p class="text-success">'.$langAbuseReportSaveSuccess.'</p>';
+        $response[0] = 'succes';
+        $response[1] = '<p class="text-success">'.$langAbuseReportSaveSuccess.'</p>';
     }
     
-    echo $response;
+    echo json_encode($response);
 }
