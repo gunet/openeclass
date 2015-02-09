@@ -493,19 +493,22 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
     if ($count_video[0] > 0 or $count_video_links[0] > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
             <tr><th>$langVideoDirectory</th>
-            <th class='text-center'>$langDate</th>
-            <th class='text-center'>" . icon('fa-gears') . "</th>";        
-        $tool_content .= "</tr>";
+            <th class='text-center'>$langDate</th>";
+            
+            if ($is_editor) {
+                $tool_content .= "<th class='text-center'>" . icon('fa-gears');
+            }
+        $tool_content .= "</th></tr>";
         //display uncategorized links
         showlinksofcategory();
 
         if ($num_of_categories > 0) { // categories found ?
-            $tool_content .= "<tr><th colspan='2'>$langCatVideoDirectory</th>
-                <td class='text-center'>" .
-                ($expand_all?
+            $tool_content .= "<tr><th colspan='2'>".($expand_all?
                     icon('fa-folder-open', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
-                    icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1")) .
-                "</td></tr>";
+                    icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1"))."&nbsp;$langCatVideoDirectory</th>";
+                 if ($is_editor) {
+                    $tool_content .= "<td></td>";
+                    }
             $resultcategories = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
             foreach ($resultcategories as $myrow) {
                 $description = standard_text_escape($myrow->description);
@@ -523,8 +526,9 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                 if (!empty($description)) {
                         $tool_content .= '<br>' . $description;
                 }
-                $tool_content .= "</th><td class='option-btn-cell'>";
+                $tool_content .= "</th>";
                 if ($is_editor) {
+                    $tool_content .= "<td class='option-btn-cell'>";
                     $tool_content .= action_button(array(
                         array('title' => $langDelete,
                               'icon' => 'fa-times',
@@ -534,8 +538,10 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                         array('title' => $langModify,
                               'icon' => 'fa-edit',
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")));
+                
+                    $tool_content .= '</td>';
                 }
-                $tool_content .= '</td></tr>';
+                $tool_content .= '</tr>';
                 if ($expand_all or (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id)) {
                     showlinksofcategory($myrow->id);
                 }
@@ -743,10 +749,12 @@ function showlinksofcategory($cat_id = 0) {
                             $tool_content .= ($emit? ', ': '') . "$langpublisher: " . q($myrow->publisher);
                         }
                     }
-                    $tool_content .= '</small>';
+                    $tool_content .= "</small></td>
+                            <td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) .
+                    "</td>";
                 }
-                $tool_content .= "</td><td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) .
-                    "</td><td class='option-btn-cell'>" .
+                if ($is_editor) {
+                   $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langDelete,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table",
@@ -769,7 +777,9 @@ function showlinksofcategory($cat_id = 0) {
                                        ($myrow->public? 'limited=1': 'public=1'),
                               'icon' => $myrow->public? 'fa-unlock': 'fa-lock',
                               'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN))) .
-                    "</td></tr>";
+                    "</td>"; 
+                }
+                $tool_content .= "</tr>";
             } // end of check resource access
         } // foreach row
     } // foreach table
