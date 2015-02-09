@@ -29,7 +29,7 @@ require_once 'include/course_settings.php';
  */
 function abuse_report_icon_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $urlServer, $langClose, $langSend, $langError, 
-    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness;
+    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
     
     load_js('jquery');
     $head_content .= '<script>
@@ -68,8 +68,9 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
                                       <div class="form-group">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
                                           <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
+                                              <option value="rudeness">'.$langRudeness.'</option>
                                               <option value="spam">'.$langSpam.'</option>
-                                              <option value="rudeness">'.$langRudeness.'</option>    
+                                              <option value="other">'.$langOther.'</option>    
                                           </select>
                                       </div>
                                       <div class="form-group">
@@ -102,7 +103,7 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
  */
 function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $urlServer, $langClose, $langSend, $langError,
-    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness;
+    $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
     
     load_js('jquery');
     $head_content .= '<script>
@@ -147,8 +148,9 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
                                       <div class="form-group">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
                                           <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
-                                              <option value="spam">'.$langSpam.'</option>
                                               <option value="rudeness">'.$langRudeness.'</option>
+                                              <option value="spam">'.$langSpam.'</option>
+                                              <option value="other">'.$langOther.'</option>
                                           </select>
                                       </div>
                                       <div class="form-group">
