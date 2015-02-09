@@ -185,6 +185,11 @@ function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
  */
 function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
     
+    global $uid;
+    if ($uid == 0) { //do not show for not logged in users
+        return false;
+    }
+
     if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) != 1) { // abuse report disabled for course
         return false;
     } elseif ($is_editor) { //do not show for editor

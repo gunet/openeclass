@@ -87,7 +87,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         foreach ($res as $r) {
             $editors[] = $r->user_id;
         }
-        $pm = new Msg($uid, $cid, $langAbuseReport, $langAbuseReportPMBody, $editors);
+        $pm = new Msg($uid, 0, $langAbuseReport, $langAbuseReportPMBody, $editors);
         
         $response[0] = 'succes';
         $response[1] = '<p class="text-success">'.$langAbuseReportSaveSuccess.'</p>';
