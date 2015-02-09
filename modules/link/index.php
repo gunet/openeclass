@@ -302,7 +302,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
         }
         if ($aantalcategories > 0) {
            $tool_content .= "<tr><th>";
-           if (isset ($_GET['urlview']) and abs($_GET['urlview']) == 0) {
+           if (isset($urlview) and abs($urlview) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params."'>" .icon('fa-folder', $showall)."</a>";
             } else {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params."'>" .icon('fa-folder-open', $shownone)."</a>";
@@ -312,6 +312,9 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 $tool_content .= "<th></th>";
             }
             $tool_content .= "</tr>";
+        }
+        if ($urlview === '') {
+            $urlview = str_repeat('0', $aantalcategories);
         }
         $i = 0;
         foreach ($resultcategories as $myrow) {
