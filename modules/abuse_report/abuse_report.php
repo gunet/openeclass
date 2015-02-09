@@ -197,7 +197,7 @@ function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
     } else {
         //check if there is already a report for this resource from this user
         $result = Database::get()->querySingle("SELECT COUNT(`id`) AS c FROM `abuse_report` WHERE `rtype` = ?s 
-                AND `rid` = ?d AND `user_id` = ?d AND `course_id` = ?d", $rtype, $rid, $_SESSION['uid'], $course_id);
+                AND `rid` = ?d AND `user_id` = ?d", $rtype, $rid, $_SESSION['uid']);
         if ($result->c != 0) {
             return false;
         }
