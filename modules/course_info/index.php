@@ -353,6 +353,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['c_radio'])) {
                 setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
             }
+            if (isset($_POST['ar_radio'])) {
+                setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
+            }
             
             if ($noWeeklyMessage) {
                 Session::Messages($langCourseWeeklyFormatNotice);
@@ -361,9 +364,6 @@ if (isset($_POST['submit'])) {
             }
             
             redirect_to_home_page("modules/course_info/index.php?course=$course_code");
-        }
-        if (isset($_POST['ar_radio'])) {
-            setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
         }
     }
 } else {
@@ -488,11 +488,11 @@ if (isset($_POST['submit'])) {
     }
     // ABUSE REPORT
     if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) == 1) {
-        $checkDis = "";
-        $checkEn = "checked ";
+        $checkAbuseReportDis = "";
+        $checkAbuseReportEn = "checked ";
     } else {
-        $checkDis = "checked ";
-        $checkEn = "";
+        $checkAbuseReportDis = "checked ";
+        $checkAbuseReportEn = "";
     }    
     $tool_content .= "<div class='form-wrapper'>
 	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
@@ -704,12 +704,12 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='1' name='ar_radio' $checkEn> $langAbuseReportEn
+                            <input type='radio' value='1' name='ar_radio' $checkAbuseReportEn> $langAbuseReportEn
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='ar_radio' $checkDis> $langAbuseReportDis                    
+                            <input type='radio' value='0' name='ar_radio' $checkAbuseReportDis> $langAbuseReportDis                    
                       </label>
                     </div>                   
                 </div>                    
