@@ -3756,6 +3756,7 @@ $langRudeness = 'Rudeness';
 $langAbuseReportCatError = 'You did not select a reason for this abuse report';
 $langAbuseReportMsgError = 'You have to complete a justification message in order to submit an abuse report';
 $langAbuseReportSaveSuccess = 'The abuse report was succesfully sent to the course administrators';
+$langAbuseReportPMBody = 'I have just submitted an abuse report';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';

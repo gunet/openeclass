@@ -20,6 +20,7 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/abuse_report/abuse_report.php';
+require_once 'modules/dropbox/class.msg.php';
 
 $rtype = $_POST['rtype'];
 $rid = intval($_POST['rid']);
@@ -78,6 +79,15 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
     } else {
         Database::get()->query("INSERT INTO abuse_report (rid, rtype, course_id, reason, message, timestamp, user_id)
             VALUES (?d, ?s, ?d, ?s, ?s, UNIX_TIMESTAMP(NOW()), ?d)", $rid, $rtype, $cid, $reason, $msg, $uid);
+        
+        //send PM to course editors
+        $res = Database::get()->queryArray("SELECT user_id FROM course_user 
+                WHERE course_id = ?d AND (status = ?d OR editor = ?d)", $cid, 1, 1);
+        $editors = array();
+        foreach ($res as $r) {
+            $editors[] = $r->user_id;
+        }
+        $pm = new Msg($uid, $cid, $langAbuseReport, $langAbuseReportPMBody, $editors);
         
         $response[0] = 'succes';
         $response[1] = '<p class="text-success">'.$langAbuseReportSaveSuccess.'</p>';
