@@ -187,33 +187,37 @@ if (!empty($message)) {
     $tool_content .= $message;
 }
 
-$tool_content .= "<div id='operations_container'>" .
-        action_bar(array(
+      $tool_content .=  action_bar(array(
             array('title' => $langGroupThisSpace,
                 'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
                 'icon' => 'fa-users',
                 'level' => 'primary-label'),
+            array(
+                'title' => $langBack,
+                'level' => 'primary-label',
+                'icon' => 'fa-reply',
+                'url' => "index.php?course=$course_code"
+                 ),
             array('title' => $langAddTutors,
                 'url' => "../user/?course=$course_code",
                 'icon' => 'fa-folder',
-                'level' => 'primary'),
-        )) .
-        "</div>";
+                'level' => 'primary')
+        ));
 
 $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
         <fieldset>    
         <div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupName:</label>
-              <div class='col-sm-10'><input type=text name='name' size=40 value='$tool_content_group_name' /></div>
+              <div class='col-sm-10'><input class='form-control' type=text name='name' size=40 value='$tool_content_group_name' /></div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langDescription $langOptional:</label>
-          <div class='col-sm-10'><textarea name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
+          <div class='col-sm-10'><textarea class='form-control' name='description' rows='2' cols='60'>$tool_content_group_description</textarea></div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langMax $langGroupPlacesThis:</label>
-          <div class='col-sm-10'><input type=text name='maxStudent' size=2 value='$tool_content_max_student'></div>
+          <div class='col-sm-10'><input class='form-control' type=text name='maxStudent' size=2 value='$tool_content_max_student'></div>
         </div>
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langGroupTutor:</label>
@@ -248,9 +252,11 @@ $tool_content .= "<div class='form-wrapper'>
           </table>
       </div>
     </div>
-    <div class='col-sm-10 col-sm-offset-3'>      
+    <div class='group-control'>
+    <div class='col-sm-10 col-sm-offset-2'>      
       <input class='btn btn-primary' type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\">
-    </div>    
+    </div>  
+    </div>
     </fieldset>
     </form>
 </div>";

@@ -68,8 +68,7 @@ if (isset($regDone)) {
     $tool_content .= "$message&nbsp;";
 }
 
-$tool_content .= "<div id='operations_container'>" .
-        action_bar(array(
+$tool_content .= action_bar(array(
             array('title' => $langEditGroup,
                 'url' => "group_edit.php?course=$course_code&amp;group_id=$group_id",
                 'icon' => 'fa-edit',
@@ -100,8 +99,13 @@ $tool_content .= "<div id='operations_container'>" .
                 'icon' => 'fa-envelope',
                 'level' => 'primary',
                 'show' => $is_editor or $is_tutor),
-        )) .
-        "</div>";
+            array(
+                'title' => $langBack,
+                'level' => 'primary-label',
+                'icon' => 'fa-reply',
+                'url' => "index.php?course=$course_code"
+            )
+        ));
 
 $tool_content .= "<div class='table-responsive'><table class='table-default'>
     <tr><th class='text-left' width='180'>$langGroupName:</th>

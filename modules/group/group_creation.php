@@ -59,9 +59,11 @@ $tool_content .= "
               <input name='group_max' type='text' class='form-control' id='group_max' value='8' placeholder='$langNewGroupMembers'> &nbsp;$langMax $langPlaces
             </div>
         </div>
+        <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-2'>
             <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
             <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+        </div>
         </div>
         </fieldset>
         </form>

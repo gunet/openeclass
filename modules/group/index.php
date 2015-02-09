@@ -303,9 +303,7 @@ if ($is_editor) {
     
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $num_of_groups = count($groupSelect);
-    $tool_content .= "
-        <div id='operations_container'>" .
-            action_bar(array(
+    $tool_content .= action_bar(array(
                 array('title' => $langCreate,
                     'url' => "group_creation.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
@@ -334,8 +332,7 @@ if ($is_editor) {
                     'class' => 'delete',
                     'confirm' => $langEmtpyGroups,
                     'confirm_title' => $langEmtpyGroupsAll,
-                    'show' => $num_of_groups > 0))) .
-            "</div>";
+                    'show' => $num_of_groups > 0)));
     
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $myIterator = 0;

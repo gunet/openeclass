@@ -927,10 +927,12 @@ function show_edit_assignment($id) {
                 </tr>
                 </table>
             </div>
+            <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <input type='submit' class='btn btn-primary' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" />
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-            </div>                             
+            </div> 
+            </div>
     </fieldset>
     </form></div>";
 }
