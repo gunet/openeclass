@@ -272,7 +272,7 @@ if ($is_editor) {
                       </div>            
                       <div class='form-group'>
                         <div class='col-sm-offset-2 col-sm-10'>
-                            <input type='button' class='btn btn-default' id='submitbtn' name='submitbtn' value='$langAddModify'>
+                            <input type='button' class='btn btn-primary' id='submitbtn' name='submitbtn' value='$langAddModify'>
                         </div>
                       </div>                
             </form></div>";
