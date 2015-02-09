@@ -331,9 +331,9 @@ if ($is_editor) {
                                     $tool_content .= "
                                         /></div>";
                                 }
-                                $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+                                $tool_content .= "<div class='form-group'><div class='col-sm-10 col-sm-offset-2'>
                                                 <input class='btn btn-primary' type='submit' name='submitGradebookActivity' value='$langAdd' />
-                                            </div>";
+                                            </div></div>";
                                 if (isset($_GET['modify'])) {
                                     $tool_content .= "<input type='hidden' name='id' value='" . $gradebookActivityToModify . "' />";
                                 }else{
@@ -862,11 +862,9 @@ if ($is_editor) {
                         . "<td><div class='smaller'><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div></td>"
                         . "<td>" . $content . "</td>";
 
-                $tool_content .= "<td class='text-center option-btn-cell'>".  action_button(array(
-                    array('title' => $langAdd,
-                          'icon' => 'fa-plus',
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2")));
-            } // end of while        
+                $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
+                } 
+// end of while        
             $tool_content .= "</td></tr></table></div></div></div>";
         } else {
             $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessageExe4</div>";
