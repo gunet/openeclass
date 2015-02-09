@@ -157,7 +157,7 @@ $head_content .= "<script type='text/javascript'>
                ],
                 'fnDrawCallback': function( oSettings ) {
                     popover_init();
-                    $('#ann_table8_filter label input').attr({
+                    $('#ann_table{$course_id}_filter label input').attr({
                           class : 'form-control input-sm',
                           placeholder : '$langSearch...'
                         });
@@ -249,7 +249,7 @@ $head_content .= "<script type='text/javascript'>
                 });
             });
             $('.success').delay(3000).fadeOut(1500);
-            $('.dataTables_filter input').attr('placeholder', '$langTitle');
+            
         });
         </script>";
 }
@@ -536,7 +536,7 @@ if (isset($_GET['an_id'])) {
         $tool_content .= "</div></div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
-        $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table table-bordered' width='100%'>";
+        $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table-default'>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
         if ($is_editor) {
