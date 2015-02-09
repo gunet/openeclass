@@ -74,7 +74,7 @@ if ($is_editor) {
                                'icon' => 'fa-reply',
                                'level' => 'primary-label',
                                'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
-    ));
+    ),false);
     if ($action == "settings") {
         if (isset($_POST['submitSettings'])) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
@@ -208,7 +208,7 @@ if ($is_editor) {
                                 </div>
                             </fieldset>
                             <div class='form-group'>
-                                <div class='col-sm-10 col-sm-offset-2'>
+                                <div class='col-sm-9 col-sm-offset-3'>
                                   <input type='submit' class='btn btn-primary' name='submitSettings' value='$langSubmit'>
                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
                                 </div>

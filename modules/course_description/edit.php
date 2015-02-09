@@ -91,9 +91,11 @@ $tool_content .= "
             " . @rich_text_editor('editComments', 4, 20, $comments) . "
             </div>
         </div>
+        <div class='form-group'>
         <div class='col-sm-10 col-sm-offset-2'>
             <input class='btn btn-primary' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "'>
             <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+        </div>
         </div>
   </fieldset>
   </form></div></div></div>";

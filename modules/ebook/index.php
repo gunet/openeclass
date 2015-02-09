@@ -89,7 +89,7 @@ if ($is_editor) {
                       <input type='file' name='file' id='fileUpload'> 
                     </div>
                 </div>
-                <div class='row'>
+                <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2 '>
                         <input type='submit' class='btn btn-primary' name='submit' value='$langSend' />
                         <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>      
