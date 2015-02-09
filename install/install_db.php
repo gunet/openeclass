@@ -785,7 +785,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
                 `reason` VARCHAR(50) NOT NULL DEFAULT '',
                 `message` TEXT NOT NULL,
                 `timestamp` INT(11) NOT NULL DEFAULT 0,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`),
+                INDEX `abuse_report_index_2` (`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
