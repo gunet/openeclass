@@ -46,10 +46,6 @@ $ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
 $sharing_allowed = is_sharing_allowed($course_id); 
 $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
 
-if ($comments_enabled == 1) {
-    commenting_add_js(); //add js files needed for comments
-}
-
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
 
@@ -414,11 +410,8 @@ if ($action == "showPost") {
                             </div>
                         </div>";
         
-
-        
-
-        
         if ($comments_enabled) {
+            commenting_add_js(); //add js files needed for comments
             $comm = new Commenting('blogpost', $post->getId());
             $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
         }
