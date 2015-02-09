@@ -74,7 +74,7 @@ define('LEARNINGPATHMODULE_', 4);
  */
 
 function commentBox($type, $mode) {
-    global $is_editor, $themeimg, $langModify, $langSubmit,
+    global $is_editor, $langModify, $langSubmit,
     $langAdd, $langConfirmYourChoice, $langDefaultLearningPathComment,
     $langDefaultModuleComment, $langDefaultModuleAddedComment, $langDelete, $course_code,
     $course_id;
@@ -173,15 +173,15 @@ function commentBox($type, $mode) {
             }
         } else {
             // display comment
-            $output .= q($currentComment);
+            $output .= $currentComment;
             // display edit and delete links if user as the right to see it
             if ($is_editor) {
-                $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">' . "\n"
-                        . "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' />"
-                        . '</a>' . "\n"
+                $output .= '&nbsp;&nbsp;&nbsp;'
+                        . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "")
+                        . '</a>' . ""
                         . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=del' . $col_name . '" '
                         . ' onclick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmYourChoice) . '\')) return false;">' . "\n"
-                        . "<img src='$themeimg/delete.png' alt='$langDelete' title='$langDelete' /></a>\n";
+                        . icon('fa-times', $langDelete)."</a>";
             }
         }
     }
@@ -203,7 +203,7 @@ function commentBox($type, $mode) {
 
 function nameBox($type, $mode, $formlabel = FALSE) {
     // globals
-    global $is_editor, $themeimg, $langModify, $langOk, $langErrorNameAlreadyExists, $course_code, $course_id;
+    global $is_editor, $langModify, $langErrorNameAlreadyExists, $course_code, $course_id;
 
     // $dsp will be set 'true' if the comment has to be displayed
     $dsp = FALSE;
@@ -254,7 +254,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
                 // $output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
                 $output .= '<input type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '" / class="FormData_InputText">' . "\n"
                         . '        <input type="hidden" name="cmd" value="updateName" />' . "\n"
-                        . '        <input type="submit" value="' . $langOk . '" />' . "\n"
+                        . '        <input type="submit" value="' . $langModify . '" />' . "\n"
                         . '      </form>';
             }
         }
@@ -273,8 +273,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
         $output .= q($currentName);
 
         if ($is_editor) {
-            $output .= '&nbsp;&nbsp;&nbsp;<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName">'
-                    . "<img src='$themeimg/edit.png' alt='$langModify' title='$langModify' /></a>\n";
+            $output .= '&nbsp;&nbsp;&nbsp;'.icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=updateName');
         }
     }
 
@@ -533,26 +532,26 @@ function get_learnPath_progress($lpid, $lpUid) {
  * @author Lederer Guillaume <led@cerdecam.be>
  */
 function display_my_exercises($dialogBox, $style) {
-    global $langAddModulesButton, $langExercise, $langNoEx, $themeimg, $langSelection, $course_code, $course_id;
-    $output = "";
+    
+    global $langAddModulesButton, $langExercise, $langNoEx, $langSelection, $course_code, $course_id;
 
-    $output .= '<!-- display_my_exercises output -->' . "\n\n";
+    $output = "";    
     /* --------------------------------------
       DIALOG BOX SECTION
       -------------------------------------- */
     if (!empty($dialogBox)) {
         $output .= disp_message_box($dialogBox, $style) . '<br />' . "\n";
     }
-    $output .= '    <form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n";
-    $output .= '    <table width="99%" class="tbl_alt">' . "\n"
-            . '    <tr>' . "\n"
-            . '      <th><div align="left">'
+    $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n";
+    $output .= '<table class="table-default">' . "\n"
+            . '<tr>' . ""
+            . '<th><div align="left">'
             . $langExercise
             . '</div></th>' . "\n"
-            . '      <th width="10"><div align="center">'
+            . '<th width="10"><div align="center">'
             . $langSelection
             . '</div></th>' . "\n"
-            . '    </tr>' . "\n";
+            . '</tr>';
 
     // Display available modules
     $atleastOne = FALSE;
@@ -563,60 +562,50 @@ function display_my_exercises($dialogBox, $style) {
             ORDER BY `title`, `id`";
     $exercises = Database::get()->queryArray($sql, $course_id);
 
-    if (is_array($exercises) && !empty($exercises)) {
-        $ind = 1;
-        foreach ($exercises as $exercise) {
-            if ($ind % 2 == 0) {
-                $style = 'class="even"';
-            } else {
-                $style = 'class="odd"';
-            }
+    if (is_array($exercises) && !empty($exercises)) {        
+        foreach ($exercises as $exercise) {            
 
-            $output .= '    <tr ' . $style . '>' . "\n"
-                    . '      <td align="left">'
+            $output .= '<tr>' 
+                    . '<td align="left">'
                     . '<label for="check_' . $exercise->id . '" >'
-                    . '<img src="' . $themeimg . '/exercise_on.png" alt="' . $langExercise . '" title="' . $langExercise . '" />&nbsp;'
+                    . icon('fa-pencil-square-o', $langExercise) .'&nbsp;'
                     . q($exercise->title)
                     . '</label>'
-                    . '<br />' . "\n";
+                    . '<br />';
             // COMMENT
             if (!empty($exercise->description)) {
-                $output .= '      <span class="comments">' . standard_text_escape($exercise->description) . '</span>'
-                        . '</td>' . "\n";
+                $output .= '<span class="comments">' . standard_text_escape($exercise->description) . '</span>'
+                        . '</td>';
             } else {
-                $output .= '</td>' . "\n";
+                $output .= '</td>';
             }
-            $output .= '      <td align="center">'
+            $output .= '<td align="center">'
                     . '<input type="checkbox" name="check_' . $exercise->id . '" id="check_' . $exercise->id . '" value="' . $exercise->id . '" />'
-                    . '</td>' . "\n"
-                    . '    </tr>' . "\n";
+                    . '</td>'
+                    . '</tr>';
 
-            $atleastOne = true;
-            $ind++;
-        }//end while another module to display
-        //$output .= '    </tbody>'."\n";
+            $atleastOne = true;            
+        }//end while another module to display        
     }
 
     if (!$atleastOne) {
-        $output .= '    <tr>' . "\n"
-                . '      <td colspan="2" align="center">'
+        $output .= '<tr>'
+                . '<td colspan="2" align="center">'
                 . $langNoEx
-                . '</td>' . "\n"
-                . '    </tr>' . "\n";
+                . '</td>'
+                . '</tr>';
     }
 
     // Display button to add selected modules
 
     if ($atleastOne) {
-        $output .= '    <tr>' . "\n"
-                . '      <th colspan="2"><div class="right">'
-                . '<input type="submit" name="insertExercise" value="' . $langAddModulesButton . '" />'
-                . '</div></th>' . "\n"
-                . '    </tr>' . "\n";
+        $output .= '<tr>'
+                . '<th colspan="2"><div class="pull-right">'
+                . '<input class="btn btn-primary" type="submit" name="insertExercise" value="'.$langAddModulesButton.'">'                
+                . '</div></th>'
+                . '</tr>';
     }
-    $output .= '    </table>' . "\n\n"
-            . '    </form>' . "\n\n"
-            . '    <!-- end of display_my_exercises output -->' . "\n";
+    $output .= '</table></form>';            
 
     return $output;
 }
@@ -671,9 +660,9 @@ function display_my_documents($dialogBox, $style) {
     /* CURRENT DIRECTORY */
     if ($curDirName) {
         $output .= '
-        <table width="99%" class="tbl">
+        <table class="table-default">
         <tr>
-          <td width="1" class="right"><img src="' . $themeimg . '/folder_open.png" vspace="2" hspace="5" alt="" /></td>
+          <td width="1" class="right">'.icon('fa-folder-o').'</td>
           <td>' . $langDirectory . ': <b>' . $dspCurDirName . '</b></td>';
         /* GO TO PARENT DIRECTORY */
         if ($curDirName) /* if the $curDirName is empty, we're in the root point
@@ -770,10 +759,10 @@ function display_my_documents($dialogBox, $style) {
 
         $output .= '
     <tr>
-      <th colspan="' . $colspan . '"><div class="right">
+      <th colspan="' . $colspan . '"><div class="pull-right">
         <input type="hidden" name="openDir" value="' . $curDirPath . '" />
         <input type="hidden" name="maxDocForm" value ="' . $iterator . '" />
-        <input type="submit" name="submitInsertedDocument" value="' . $langAddModulesButton . '" /></div>
+        <input class="btn btn-primary" type="submit" name="submitInsertedDocument" value="'.$langAddModulesButton.'">        
       </th>
     </tr>';
     } // end if ( $fileList)
@@ -781,8 +770,7 @@ function display_my_documents($dialogBox, $style) {
         $output .= '<tr><td colspan="4">&nbsp;</td></tr>';
     }
 
-    $output .= '</table></form>
-    <!-- end of display_my_documents output -->' . "\n";
+    $output .= '</table></form>';
 
     return $output;
 }

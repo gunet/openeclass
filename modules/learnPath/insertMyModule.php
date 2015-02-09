@@ -67,12 +67,18 @@ EOF;
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPath);
 $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], "name" => $langAdm);
-$pageName = $langInsertMyModulesTitle;
+$toolName = $langInsertMyModulesTitle;
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
+
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 // 1)  We select first the modules that must not be displayed because
 // as they are already in this learning path
-
 function buildRequestModules() {
     global $course_id;
 
@@ -143,29 +149,21 @@ if (isset($_REQUEST['cmdglobal']) && ($_REQUEST['cmdglobal'] == 'add')) {
 
 $result = Database::get()->queryArray(buildRequestModules());
 
-$tool_content .= '    <form name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n\n";
-$tool_content .= '    <table width="100%" class="tbl_alt">' . "\n"
-        . '    <tr>' . "\n"
-        . '      <th><div align="left">'
-        . $langLearningModule
-        . '</div></th>' . "\n"
-        . '      <th width="10"><div align="center">'
+$tool_content .= '<form name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n\n";
+$tool_content .= '<table class="table-default">'
+        . '<tr>'
+        . '<th class="text-left">'.$langLearningModule.'</th>'
+        . '<th width="10"><div align="center">'
         . $langSelection
-        . '</div></th>' . "\n"
-        . '    </tr>' . "\n";
+        . '</div></th>'
+        . '</tr>';
 
 // Display available modules
 
-
 $atleastOne = FALSE;
 
-$ind = 1;
+
 foreach ($result as $list) {
-    if ($ind % 2 == 0) {
-        $style = 'class="even"';
-    } else {
-        $style = 'class="odd"';
-    }
 
     //CHECKBOX, NAME, RENAME, COMMENT
     if ($list->contentType == CTEXERCISE_) {
@@ -182,58 +180,48 @@ foreach ($result as $list) {
 
     $contentType_alt = selectAlt($list->contentType);
 
-    $tool_content .= '    <tr ' . $style . '>' . "\n"
-            . '      <td align="left">' . "\n"
-            . '        <label for="check_' . $list->module_id . '" >' . icon($moduleImg, $contentType_alt) . '&nbsp;<b>' . $list->name . '</b></label>' . "\n";
+    $tool_content .= '<tr>' . "\n"
+            . '<td align="left">' . "\n"
+            . '<label for="check_' . $list->module_id . '" >' . icon($moduleImg, $contentType_alt) . '&nbsp;<b>' . $list->name . '</b></label>' . "\n";
 
     // COMMENT
     if ($list->comment != null) {
-        $tool_content .= '     <br /> <br />' . "\n"
-                . '        <em>' . $langComments . '</em>: <br />' . $list->comment . '' . "\n";
+        $tool_content .= '<br /> <br />' . "\n"
+                . '<em>' . $langComments . '</em>: <br />' . $list->comment . '' . "\n";
     }
-    $tool_content .= '      </td>' . "\n"
-            . '      <td align="center">' . "\n"
-            . '        <input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">' . "\n"
-            . '      </td>' . "\n"
-            . '    </tr>' . "\n";
+    $tool_content .= '</td>'
+            . '<td align="center">'
+            . '<input type="checkbox" name="check_' . $list->module_id . '" id="check_' . $list->module_id . '">' . "\n"
+            . '</td>'
+            . '</tr>';
 
     $atleastOne = TRUE;
-
-    $ind++;
 }//end while another module to display
-//$tool_content .= '    </tbody>'."\n".'    <tfoot>'."\n";
 
 if (!$atleastOne) {
-    $tool_content .= '    <tr>' . "\n"
-            . '      <td colspan="2" align="center">'
+    $tool_content .= '<tr>'
+            . '<td colspan="2" align="center">'
             . $langNoMoreModuleToAdd
-            . '</td>' . "\n"
-            . '    </tr>' . "\n";
+            . '</td>'
+            . '</tr>';
 }
 
 // Display button to add selected modules
 
 if ($atleastOne) {
-    $tool_content .= '    <tr>' . "\n"
-            . '      <th colspan="2"><div align="right">' . "\n"
-            . '        <input class="btn btn-primary" type="submit" value="' . $langReuse . '" />' . "\n"
-            . '        <input type="hidden" name="cmdglobal" value="add"></div>' . "\n"
-            . '      </th>' . "\n"
-            . '    </tr>' . "\n";
+    $tool_content .= '<tr>'
+            . '<th colspan="2"><div align="right">' . "\n"
+            . '<input class="btn btn-primary" type="submit" value="' . $langReuse . '" />' . "\n"
+            . '<input type="hidden" name="cmdglobal" value="add"></div>' . ""
+            . '</th>'
+            . '</tr>';
 }
 
-$tool_content .= "\n" . '    </table>' . "\n" . '    </form>';
+$tool_content .= "</table></form>";
 
-$tool_content .= 
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
 //####################################################################################\\
 //################################## MODULES LIST ####################################\\
 //####################################################################################\\
-//$tool_content .= "<br />";
 // display subtitle
 //$tool_content .= disp_tool_title($langPathContentTitle);
 // display back link to return to the LP administration
