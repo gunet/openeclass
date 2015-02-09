@@ -432,7 +432,7 @@ if (isset($_POST['submit'])) {
 
     //Sharing options    
     if (!is_sharing_allowed($course_id)) {
-        $radio_dis = ' disabled';
+        $sharing_radio_dis = ' disabled';
         if (!get_config('enable_social_sharing_links')) {
             $sharing_dis_label = $langSharingDisAdmin;
         }
@@ -440,7 +440,7 @@ if (isset($_POST['submit'])) {
             $sharing_dis_label = $langSharingDisCourse;
         }        
     } else {
-        $radio_dis = '';
+        $sharing_radio_dis = '';
         $sharing_dis_label = '';
     }
 
@@ -461,27 +461,27 @@ if (isset($_POST['submit'])) {
     }
     //ANONYMOUS USER RATING
     if (course_status($course_id) != COURSE_OPEN) {
-        $radio_dis = ' disabled';
-        $rating_dis_label = $langRatingAnonDisCourse;
+        $anon_rating_radio_dis = ' disabled';
+        $anon_rating_dis_label = $langRatingAnonDisCourse;
     } else {
-        $radio_dis = '';
-        $rating_dis_label = '';
+        $anon_rating_radio_dis = '';
+        $anon_rating_dis_label = '';
     }
 
     if (setting_get(SETTING_COURSE_ANONYMOUS_RATING_ENABLE, $course_id) == 1) {
-        $checkDis = '';
-        $checkEn = 'checked ';
+        $checkAnonRatingDis = '';
+        $checkAnonRatingEn = 'checked ';
     } else {
-        $checkDis = 'checked ';
-        $checkEn = '';
+        $checkAnonRatingDis = 'checked ';
+        $checkAnonRatingEn = '';
     }
     // USER COMMENTS
     if (setting_get(SETTING_COURSE_COMMENT_ENABLE, $course_id) == 1) {
-        $checkDis = "";
-        $checkEn = "checked ";
+        $checkCommentDis = "";
+        $checkCommentEn = "checked ";
     } else {
-        $checkDis = "checked ";
-        $checkEn = "";
+        $checkCommentDis = "checked ";
+        $checkCommentEn = "";
     }    
     $tool_content .= "<div class='form-wrapper'>
 	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
@@ -631,12 +631,12 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='1' name='s_radio' $checkSharingEn $radio_dis> $langSharingEn
+                            <input type='radio' value='1' name='s_radio' $checkSharingEn $sharing_radio_dis> $langSharingEn
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='s_radio' $checkSharingDis $radio_dis> $langSharingDis
+                            <input type='radio' value='0' name='s_radio' $checkSharingDis $sharing_radio_dis> $langSharingDis
                             <span class='help-block'><small>$sharing_dis_label</small></span>                                
                       </label>
                     </div>                  
@@ -662,13 +662,13 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='1' name='ran_radio' $checkEn $radio_dis> $langRatingAnonEn
+                            <input type='radio' value='1' name='ran_radio' $checkAnonRatingEn $anon_rating_radio_dis> $langRatingAnonEn
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='ran_radio' $checkDis $radio_dis> $langRatingAnonDis
-                            <span class='help-block'><small>$rating_dis_label</small></span>     
+                            <input type='radio' value='0' name='ran_radio' $checkAnonRatingDis $anon_rating_radio_dis> $langRatingAnonDis
+                            <span class='help-block'><small>$anon_rating_dis_label</small></span>     
                       </label>
                     </div>                   
                 </div>                    
@@ -678,12 +678,12 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='1' name='c_radio' $checkEn> $langCommentsEn
+                            <input type='radio' value='1' name='c_radio' $checkCommentEn> $langCommentsEn
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                            <input type='radio' value='0' name='c_radio' $checkDis> $langCommentsDis                    
+                            <input type='radio' value='0' name='c_radio' $checkCommentDis> $langCommentsDis                    
                       </label>
                     </div>                   
                 </div>                    
