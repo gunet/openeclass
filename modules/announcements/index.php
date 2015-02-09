@@ -495,11 +495,13 @@ if ($is_editor) {
             <label for='From' class='col-sm-2 control-label'>$langUntil:</label>
             <div class='col-sm-10'><input class='form-control' type='text' name='enddate' id='enddate' value='$showUntil'></div>
         </div>
+        <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>
             <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='".q($langAdd)."' />
             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-        </div>  
+        </div>
         <input type='hidden' name='id' value='$AnnouncementToModify'>
+        </div>
         </fieldset>
         </form>
         </div>";
@@ -524,14 +526,6 @@ if (isset($_GET['an_id'])) {
               'level' => 'primary',
               'confirm' => $langSureToDelAnnounce,
               'show' => $is_editor),));
-    } elseif (!isset($_GET['modify'])) {
-        $tool_content .= action_bar(array(
-            array('title' => $langAddAnn,
-                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
-                  'icon' => 'fa-plus-circle',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success',
-                  'show' => $is_editor)));
     }
     /* display announcements */
     if (isset($_GET['an_id'])) {        
