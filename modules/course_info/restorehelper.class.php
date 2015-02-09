@@ -265,7 +265,7 @@ class RestoreHelper {
         
         // data consistency for res_id
         $unit_resources_res_id = function($value) {
-            if (is_int((value))) {
+            if (is_int($value)) {
                 return $value;
             } else {
                 return 0;

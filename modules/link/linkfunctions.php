@@ -80,7 +80,7 @@ function showlinksofcategory($catid) {
         }
         $tool_content .= "</td>";
         $tool_content .= "<td class='option-btn-cell'>";
-        if ($is_editor && !$is_in_tinymce) {            
+        if ($is_editor && !$is_in_tinymce) {   
             $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
             if (isset($category)) {
                 $editlink .= "&amp;category=$category";
@@ -95,13 +95,17 @@ function showlinksofcategory($catid) {
                       'icon' => 'fa-edit',
                       'url' => $editlink),
                 array('title' => $langUp,
+                      'level' => 'primary',
                       'icon' => 'fa-arrow-up',
+                      'disabled' => $i == 1,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id",
-                      'show' => $i != 1),
+                      ),
                 array('title' => $langDown,
+                      'level' => 'primary',
                       'icon' => 'fa-arrow-down',
+                      'disabled' => $i >= $numberoflinks,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id",
-                      'show' => $i < $numberoflinks)
+                      )
             ));
         } else {
             $tool_content .= "&nbsp;";
@@ -142,13 +146,15 @@ function showcategoryadmintools($categoryid) {
                       'icon' => 'fa-edit',
                       'url' => "$basecaturl" . "action=editcategory"),
                 array('title' => $langUp,
+                      'level' => 'primary',
                       'icon' => 'fa-arrow-up',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid",
-                      'show' => $catcounter != 1),
+                      'disabled' => $catcounter == 0,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid",),
                  array('title' => $langDown,
+                       'level' => 'primary',
                        'icon' => 'fa-arrow-down',
-                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid",
-                       'show' => $catcounter < $aantalcategories)
+                       'disabled' => '$catcounter  $aantalcategories',
+                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid" )
                 ));           
     $catcounter++;
 }

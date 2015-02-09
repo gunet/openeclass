@@ -221,9 +221,11 @@ if ($is_editor) {
             </select>
             </div>
         </div>
-        <div class='col-sm-offset-2 col-sm-10'>
+        <div class='form-group'>
+        <div class='col-sm-10 col-sm-offset-2'>
             <input type='submit' class='btn btn-primary' name='submitLink' value='$submit_label' />
             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+        </div>
         </div>
         </fieldset>
         </form>
@@ -252,11 +254,13 @@ if ($is_editor) {
                             <div class='col-sm-10'>
                                 <textarea class='form-control' rows='5' name='description'>$form_description</textarea>
                             </div>
-                        </div>                        
-                            <div class='col-sm-offset-2 col-sm-10'>
+                        </div>  
+                        <div class='form-group'>
+                            <div class='col-sm-10 col-sm-offset-2'>
                                 <input type='submit' class='btn btn-primary' name='submitCategory' value='$form_legend' />
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-                            </div>                        
+                            </div>
+                        </div>
                         </fieldset>
                     </form>
                 </div>";
