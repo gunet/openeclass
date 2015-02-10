@@ -106,6 +106,7 @@ function getSidebarMessages() {
 
 $json_obj = array(
     'messages' => getSidebarMessages(),
-    'notifications' => getSidebarNotifications()
+    'notifications' => getSidebarNotifications(),
+    'langNotificationsExist' => $langNotificationsExist,
 );
 echo json_encode($json_obj, JSON_UNESCAPED_UNICODE);

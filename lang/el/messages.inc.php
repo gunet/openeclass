@@ -2429,6 +2429,7 @@ $langTopicAnswer = "Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink = "Έγγραφα ομάδας ";
 $langNotify = "Ειδοποίηση μέσω email αν σταλούν απαντήσεις";
 $langNotifyActions = "Ειδοποιήσεις";
+$langNotificationsExist = 'Υπάρχουν ειδοποιήσεις';
 $langGoToPage = "Μετάβαση στη σελίδα";
 $langClick = "Κάντε κλικ";
 $langSubjectNotify = "Ειδοποίηση για νέο μήνυμα";

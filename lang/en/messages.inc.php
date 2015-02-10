@@ -1429,6 +1429,7 @@ $langTopicAnswer = "Topic Answer";
 $langGroupDocumentsLink = "Documents of the group ";
 $langNotify = "Notification via email if replies are posted";
 $langNotifyActions = "Notifications";
+$langNotificationsExist= 'Notifications exist';
 $langGoToPage = "Go to page";
 $langClick = "Click here";
 $langSubjectNotify = "New forum message notification";
