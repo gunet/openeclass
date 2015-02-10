@@ -285,6 +285,11 @@ elseif (isset($_GET['forumcatdel'])) {
         foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
             $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+            //delete forum posts ratings first
+            Database::get()->query("DELETE rating FROM rating INNER JOIN forum_post on rating.rid = forum_post.id
+                                    WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
+                                    WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
             
@@ -320,6 +325,11 @@ elseif (isset($_GET['forumgodel'])) {
         foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
             $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+            //delete forum posts ratings first
+            Database::get()->query("DELETE rating FROM rating INNER JOIN forum_post on rating.rid = forum_post.id
+                                    WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
+                                    WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
             

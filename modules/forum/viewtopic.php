@@ -89,6 +89,9 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     $this_post_time = $myrow->post_time;
     $this_post_author = $myrow->poster_id;
 
+    //delete forum posts rating first
+    Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $post_id);
+    Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $post_id);
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
 
