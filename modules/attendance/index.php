@@ -304,7 +304,7 @@ if ($is_editor) {
                     foreach($checkForExerGradeUsers as $checkForExerGradeResultUser){
                         $checkForAsAttend = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE uid = ?d AND assignment_id = ?d", $checkForExerGradeResultUser->uid, $module_auto_id);
                         if($checkForAsAttend){                            
-                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1", $sql->lastInsertID, $checkForExerGradeResultUser->uid);
+                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1, comments = ''", $sql->lastInsertID, $checkForExerGradeResultUser->uid);
                         }
                     }
                 }
@@ -332,14 +332,14 @@ if ($is_editor) {
                     foreach($checkForExerGradeUsers as $checkForExerGradeResultUser){
                         $checkForExerAttend = Database::get()->querySingle("SELECT uid FROM exercise_user_record WHERE uid = ?d AND attempt_status = " . ATTEMPT_COMPLETED . " AND eid = ?d", $checkForExerGradeResultUser->uid, $module_auto_id);
                         if($checkForExerAttend){
-                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1", $lastInsertID, $checkForExerGradeResultUser->uid);
+                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1, comments = ''", $lastInsertID, $checkForExerGradeResultUser->uid);
                         }
                     }
                 }
             }
         }
         
-        Session::Messages("Ok","alert-success");
+        Session::Messages($langAttendanceSucInsert,"alert-success");
         redirect_to_home_page("modules/attendance/index.php");
         $showAttendanceActivities = 1;
     }
