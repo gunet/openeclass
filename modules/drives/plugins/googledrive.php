@@ -91,9 +91,9 @@ final class GoogleDrive extends CloudDrive {
     private function getCloudFile($file) {
         $name = $file['title'];
         if (strpos($file['mimeType'], '.folder') !== false) {
-            return new CloudFile($name, $file['selfLink'], true, null);
+            return new CloudFile($name, $file['selfLink'], true, null, $this->getName());
         } else {
-            return new CloudFile($name, $file['webContentLink'], false, null);
+            return new CloudFile($name, $file['webContentLink'], false, null, $this->getName());
         }
     }
 

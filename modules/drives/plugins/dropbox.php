@@ -95,7 +95,7 @@ final class DropBox extends CloudDrive {
             $pathsize++;
         foreach ($metadata['contents'] as $file) {
             $path = $file['path'];
-            $files[] = new CloudFile(substr($path, -(strlen($path) - $pathsize)), $file['path'], $file['is_dir'], $file['bytes']);
+            $files[] = new CloudFile(substr($path, -(strlen($path) - $pathsize)), $file['path'], $file['is_dir'], $file['bytes'], $this->getName());
         }
         return $files;
     }

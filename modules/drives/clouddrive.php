@@ -31,7 +31,7 @@ final class CloudDriveManager {
     public static $DRIVENAMES = array("GoogleDrive", "OneDrive", "Dropbox");
 
     const DRIVE = "clouddrive";
-    const FILEPENDING = "pendingurl";
+    const FILEPENDING = "pendingcloud";
 
     private static $DRIVES = null;
 
@@ -83,12 +83,15 @@ final class CloudDriveManager {
     }
 
     public static function getSessionDrive() {
-        $drive_name = isset($_GET[CloudDriveManager::DRIVE]) ? $_GET[CloudDriveManager::DRIVE] : null;
-        if ($drive_name == null) {
+        return CloudDriveManager::getDrive($drive_name = isset($_GET[CloudDriveManager::DRIVE]) ? $_GET[CloudDriveManager::DRIVE] : null);
+    }
+
+    public static function getDrive($drivename) {
+        if ($drivename == null) {
             die("Error while retrieving cloud connectivity");
         }
         foreach (CloudDriveManager::getValidDrives() as $drive) {
-            if ($drive->getName() == $drive_name)
+            if ($drive->getName() == $drivename)
                 return $drive;
         }
         return null;
@@ -169,15 +172,22 @@ abstract class CloudDrive {
 final class CloudFile {
 
     private $name;
-    private $downloadURL;
+    private $id;
     private $isFolder;
     private $size;
+    private $drivename;
 
-    public function __construct($name, $downloadURL, $isFolder, $size) {
+    public function __construct($name, $id, $isFolder, $size, $drivename) {
         $this->name = $name;
-        $this->downloadURL = $downloadURL;
+        $this->id = $id;
         $this->isFolder = $isFolder;
         $this->size = $size;
+        $this->drivename = $drivename;
+    }
+
+    public static function fromJSON($json) {
+        $values = json_decode($json);
+        return new CloudFile($values->name, $values->id, false, $values->size, $values->drivename);
     }
 
     public function isFolder() {
@@ -188,12 +198,20 @@ final class CloudFile {
         return $this->name;
     }
 
-    public function downloadURL() {
-        return $this->downloadURL;
+    public function id() {
+        return $this->id;
     }
 
     public function size() {
         return $this->size;
+    }
+
+    public function drive() {
+        return CloudDriveManager::getDrive($this->drivename);
+    }
+
+    public function toJSON() {
+        return json_encode(array('name' => $this->name, 'id' => $this->id, 'size' => $this->size, 'drivename' => $this->drivename));
     }
 
 }

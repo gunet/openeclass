@@ -92,9 +92,9 @@ final class OneDrive extends CloudDrive {
         $name = $file->name;
         $id = $file->id;
         if (strcmp(substr($id, 0, 5), "file.") == 0) {
-            return new CloudFile($name, $file->source, false, null);
+            return new CloudFile($name, $file->source, false, null, $this->getName());
         } else {
-            return new CloudFile($name, $id, true, null);
+            return new CloudFile($name, $id, true, null, $this->getName());
         }
     }
 
