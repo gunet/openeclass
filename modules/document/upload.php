@@ -29,6 +29,7 @@ if (!defined('COMMON_DOCUMENTS')) {
 }
 require_once '../../include/baseTheme.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/drives/clouddrive.php';
 
 $toolName = $langDoc;
 
@@ -38,34 +39,47 @@ if (isset($_GET['uploadPath'])) {
     $uploadPath = '';
 }
 
-if ($can_upload) {    
-    if (isset($_GET['ext'])) {
+if ($can_upload) {
+    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
+    $pendingCloudUpload = CloudDriveManager::getFileUploadPending();
+
+    if ($pendingCloudUpload) {
+        $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
+        $pageName = $langDownloadFile;
+        $fileinput = "
+        <div class='form-group'>
+          <label for='fileCloudName' class='col-sm-2 control-label'>$langCloudFile</label>
+          <div class='col-sm-10'>
+            <input type='hidden' class='form-control' id='fileCloudURL' name='fileCloudURL' value='$pendingCloudUpload'>
+            <input type='text' class='form-control' name='fileCloudName' value='" . $pendingCloudUpload . "' readonly>
+          </div>
+        </div>";
+    } else if (isset($_GET['ext'])) {
         $group_hidden_input .= "<input type='hidden' name='ext' value='true'>";
         $pageName = $langExternalFile;
-        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
         $fileinput = "
         <div class='form-group'>
           <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
           <div class='col-sm-10'>
-            <input type='text' class='form-control' id='fileURL' name='fileURL'>
+            <input type='text' class='form-control' id='fileURL' name='fileURL' value='sss'>
           </div>
         </div>";
     } else {
         $pageName = $langDownloadFile;
-        $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
         $fileinput = "
         <div class='form-group'>
           <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile</label>
           <div class='col-sm-10'>
-            <input type='file' id='userFile' name='userFile'>
+            " . CloudDriveManager::renderAsButtons() . "
+            <span class=\"btn btn-default btn-file\"> <input type='file' id='userFile' name='userFile'></span>
           </div>
         </div>";
     }
     $tool_content .= action_bar(array(
-                    array('title' => $langBack,
-                          'url' => "index.php?course=$course_code",
-                          'icon' => 'fa-reply',
-                          'level' => 'primary-label')));
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
     $tool_content .= "
         <div class='row'>
             <div class='col-md-12'>
@@ -161,7 +175,7 @@ if ($can_upload) {
         </div>
       </div>";
 
-      if (!isset($_GET['ext'])) {
+    if (!isset($_GET['ext'])) {
         $tool_content .= "
         <div class='form-group'>
           <label for='inputFileCompression' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langUncompress</label>
@@ -173,7 +187,7 @@ if ($can_upload) {
         </div>";
     }
 
-      $tool_content .= "
+    $tool_content .= "
       <div class='form-group'>
         <label for='inputFileReplaceSameName' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langReplaceSameName</label>
         <div class='col-md-1 col-sm-1 col-xs-2'>
@@ -184,8 +198,8 @@ if ($can_upload) {
       </div>      
 
 <div class='infotext-sm margin-bottom-thin'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
-    
-  $tool_content .= "
+
+    $tool_content .= "
       <div class='form-group'>
         <div class='col-sm-offset-5 col-sm-12'>
           <button type='submit' class='btn btn-primary'>
