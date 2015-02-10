@@ -439,7 +439,8 @@ elseif (isset($_GET['forumgodel'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
         <div class='form-group'>
-            <div class='col-sm-10'>
+            <label class='col-sm-3'>$langForumPostRating:</label>
+            <div class='col-sm-9'>
                 <div class='radio'>
                     <label><input type='radio' value='1' name='r_radio' $checkEn/>$langRatingEn</label>
                 </div>
@@ -449,7 +450,7 @@ elseif (isset($_GET['forumgodel'])) {
             </div>
         </div>
         <div class='form-group'>
-            <div class='col-sm-11 col-sm-offset-1'>
+            <div class='col-sm-9 col-sm-offset-3'>
                 <input class='btn btn-primary' type='submit' name='submitSettings' value='$langSubmit'>
             </div>
         </div>

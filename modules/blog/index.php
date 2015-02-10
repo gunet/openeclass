@@ -158,7 +158,7 @@ if ($is_editor) {
                             </fieldset>
                             <fieldset>
                                 <div class='form-group'>
-                                    <label class='col-sm-3'>$langCommenting</label>
+                                    <label class='col-sm-3'>$langBlogCommenting</label>
                                     <div class='col-sm-9'>    
                                         <div class='radio'>
                                             <label>
@@ -173,7 +173,7 @@ if ($is_editor) {
                                     </div>
                                 </div>                            
                                 <div class='form-group'>
-                                    <label class='col-sm-3'>$langRating:</label>
+                                    <label class='col-sm-3'>$langBlogRating:</label>
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
@@ -188,7 +188,7 @@ if ($is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <label class='col-sm-3'>$langSharing:</label>
+                                    <label class='col-sm-3'>$langBlogSharing:</label>
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>

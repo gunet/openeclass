@@ -627,7 +627,7 @@ if (isset($_POST['submit'])) {
                 <div class='col-sm-10'>" . lang_select_options('localize', 'class="form-control"') . "</div>	        
 	    </div>
             <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langSharing:</label>
+                <label class='col-sm-2 control-label'>$langCourseSharing:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
@@ -643,7 +643,7 @@ if (isset($_POST['submit'])) {
                 </div>                    
             </div>
             <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langRating:</label>
+                <label class='col-sm-2 control-label'>$langCourseRating:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
@@ -658,7 +658,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
             <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langAnonymousRating:</label>
+                <label class='col-sm-2 control-label'>$langCourseAnonymousRating:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
@@ -674,7 +674,7 @@ if (isset($_POST['submit'])) {
                 </div>                    
             </div>
             <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langCommenting:</label>
+                <label class='col-sm-2 control-label'>$langCourseCommenting:</label>
                 <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
