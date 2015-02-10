@@ -247,15 +247,13 @@ function nameBox($type, $mode, $formlabel = FALSE) {
                     FROM `" . $tbl_name . "`
                     WHERE " . $where_cond . " AND `course_id` = ?d", $course_id)->name;
 
-            $output .= '
-      <form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n";
+            $output .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n";
 
-            if ($formlabel != FALSE) {
-                // $output .= '<label for="newLabel">'.$formlabel.'</label>&nbsp;&nbsp;';
+            if ($formlabel != FALSE) {                
                 $output .= '<input type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '" / class="FormData_InputText">' . "\n"
-                        . '        <input type="hidden" name="cmd" value="updateName" />' . "\n"
-                        . '        <input type="submit" value="' . $langModify . '" />' . "\n"
-                        . '      </form>';
+                        . '<input type="hidden" name="cmd" value="updateName" />' . ""
+                        . '<input class="btn btn-primary" type="submit" value="' . $langModify . '" />' . ""
+                        . '</form>';
             }
         }
     }
@@ -295,21 +293,21 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
 function selectImage($contentType) {
 
-    $imgList[CTDOCUMENT_] = "docs_on.png";
-    $imgList[CTCLARODOC_] = "clarodoc.gif";
-    $imgList[CTEXERCISE_] = "exercise_on.png";
-    $imgList[CTSCORM_] = "scorm.png";
-    $imgList[CTSCORMASSET_] = "scorm.png";
-    $imgList[CTLINK_] = "links_on.png";
-    $imgList[CTCOURSE_DESCRIPTION_] = "description_on.png";
-    $imgList[CTMEDIA_] = "videos_on.png";
-    $imgList[CTMEDIALINK_] = "videos_on.png";
+    $imgList[CTDOCUMENT_] = "fa-folder-open-o";
+    $imgList[CTCLARODOC_] = "fa-folder-open-o";
+    $imgList[CTEXERCISE_] = "fa-pencil-square-o";
+    $imgList[CTSCORM_] = "fa-pencil-square-o";
+    $imgList[CTSCORMASSET_] = "fa-pencil-square-o";
+    $imgList[CTLINK_] = "fa-link";
+    $imgList[CTCOURSE_DESCRIPTION_] = "fa-info-circle";
+    $imgList[CTMEDIA_] = "fa-film";
+    $imgList[CTMEDIALINK_] = "fa-film";
 
     if (array_key_exists($contentType, $imgList)) {
         return $imgList[$contentType];
     }
 
-    return "docs_on.png";
+    return "fa-folder-open-o";
 }
 
 /*

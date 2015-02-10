@@ -54,22 +54,12 @@ require_once 'include/lib/multimediahelper.class.php';
 ModalBoxHelper::loadModalBox();
 
 $body_action = '';
-$head_content .= "
-<script type='text/javascript'>
-function confirmation(name) {
-        if (confirm(\"" . clean_str_for_javascript($langAreYouSureDeleteModule) . " \"+ name)) {
-                return true;
-        } else {
-                return false;
-        }
-}
-</script>";
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
-$pageName = $langLearningObjectsInUse;
+$toolName = $langLearningObjectsInUse;
 
 // display use explication text
-$tool_content .= "<p>$langUseOfPool</p><br />";
+$tool_content .= "<div class='alert alert-info'>$langUseOfPool</div>";
 
 // HANDLE COMMANDS:
 $cmd = ( isset($_REQUEST['cmd']) && is_string($_REQUEST['cmd']) ) ? (string) $_REQUEST['cmd'] : '';
@@ -78,7 +68,7 @@ switch ($cmd) {
     // MODULE DELETE
     case "eraseModule" :
         if (isset($_GET['cmdid']) && is_numeric($_GET['cmdid'])) {
-            // used to physically delete the module  from server
+            // used to physically delete the module from server
             require_once "include/lib/fileManageLib.inc.php";
 
             $moduleDir = "/courses/" . $course_code . "/modules";
@@ -98,10 +88,9 @@ switch ($cmd) {
 				AND `course_id` = ?d", $_GET['cmdid'], $course_id);
 
             //delete all user progression concerning this module
-            $sql = "DELETE FROM `lp_user_module_progress` WHERE 1=0 ";
-
+            $sql = "DELETE FROM `lp_user_module_progress` WHERE 1=0 ";            
             foreach ($result as $list) {
-                $sql .= " OR `learnPath_module_id`=" . intval($list['learnPath_module_id']);
+                $sql .= " OR `learnPath_module_id`=" . intval($list->learnPath_module_id);
             }
             Database::get()->query($sql);
 
@@ -121,12 +110,11 @@ switch ($cmd) {
 
             $tool_content .= disp_message_box("
                         <form method='post' name='rename' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-
-                        <table width='100%' class='tbl'>
+                        <table width='100%' class='table-default'>
                         <tr>
-                        <td class=\"odd\" width=\"160\"><label for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
+                        <td width=\"160\"><label for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
                         <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
-                                <input type=\"submit\" value=\"" . $langImport . "\" name=\"submit\">
+                                <input class='btn btn-primary' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
                                 <input type=\"hidden\" name=\"cmd\" value=\"exRename\">
                                 <input type=\"hidden\" name=\"module_id\" value=\"" . (int) $_GET['module_id'] . "\">
                         </td>
@@ -174,7 +162,7 @@ switch ($cmd) {
                     AND `course_id` = ?d", $_GET['module_id'], $course_id);
             if ($comment && $comment->comment) {
                 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
-                    <table width='99%' class='tbl'>
+                    <table class='table-default'>
                     <tr><th class='left' colspan='2'>$langComments:</th></tr>
                     <tr><td colspan='2'>" . rich_text_editor('comment', 2, 60, $comment->comment) . "
                     <input type='hidden' name='cmd' value='exComment'>
@@ -182,17 +170,17 @@ switch ($cmd) {
                     </td></tr>
                     <tr><td><input class='btn btn-primary' type='submit' value='$langImport'>
                     </td></tr></table>
-                    </form><br />";
+                    </form>";
             } else {
                 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>\n"
-                        . '<table><tr><td valign="top">' . "\n"
+                        . '<table class="table-default"><tr><td>' . ""
                         . rich_text_editor('comment', 2, 30, '')
                         . "</td></tr></table>\n"
                         . "<input type='hidden' name='cmd' value='exComment'>\n"
                         . "<input type='hidden' name='module_id' value='$module_id'>\n"
                         . "<input class='btn btn-primary' type='submit' value='$langOk'>\n"
-                        . "<br /><br />\n"
-                        . "</form>\n";
+                        . "<br /><br />"
+                        . "</form>";
             }
         } // else no module_id
         break;
@@ -224,43 +212,47 @@ $atleastOne = false;
 
 $num_results = count($result);
 
-if (!$num_results == 0) {
-    $tool_content .= "
-        <table width=\"100%\" class=\"tbl_alt\">
-        <tr>
-        <th colspan=\"2\">" . $langLearningObjects . "</th>
-        <th width=\"65\">" . $langTools . "</th>
-        </tr>\n";
-}
+
 // Display modules of the pool of this course
 
-$ind = 1;
-foreach ($result as $list) {
-    if ($ind % 2 == 0) {
-        $style = 'class="odd"';
-    } else {
-        $style = 'class="even"';
-    }
+if (!$num_results == 0) {
+    $tool_content .= "<table class=\"table-default\">
+        <tr>
+        <th colspan='2'>" . $langLearningObjects . "</th>
+        <th class='text-center'>" . icon('fa-gears') . "</th>
+        </tr>";
+}
+
+foreach ($result as $list) {    
 
     //DELETE , RENAME, COMMENT
 
     $contentType_img = selectImage($list->contentType);
     $contentType_alt = selectAlt($list->contentType);
-    $tool_content .= "
-    <tr $style>
-      <td align=\"left\" width=\"1%\" valign=\"top\"><img src=\"" . $themeimg . '/' . $contentType_img . "\" alt=\"" . $contentType_alt . "\" title=\"" . $contentType_alt . "\" /></td>
-      <td align=\"left\"><b>" . q($list->name) . "</b>";
+    $tool_content .= "<tr><td width='1'>".icon($contentType_img, $contentType_alt)."</td>
+      <td class='text-left'><b>" . q($list->name) . "</b>";
 
     if ($list->comment) {
         $tool_content .= "<br /><small style=\"color: #a19b99;\"><b>$langComments</b>: " . $list->comment . "</small>";
     }
 
-    $tool_content .= "</td>
-      <td><a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=eraseModule&amp;cmdid=" . $list->module_id . "\" onClick=\"return confirmation('" . clean_str_for_javascript($list->name . ': ' . $langUsedInLearningPaths . $list->timesUsed) . "');\"><img src=\"" . $themeimg . "/delete.png\" border=\"0\" alt=\"" . $langDelete . "\" title=\"" . $langDelete . "\" /></a>&nbsp;&nbsp;<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=rqRename&amp;module_id=" . $list->module_id . "\"><img src=\"" . $themeimg . "/rename.png\" border=0 alt=\"$langRename\" title=\"$langRename\" /></a>&nbsp;&nbsp;<a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=rqComment&amp;module_id=" . $list->module_id . "\"><img src=\"" . $themeimg . "/comment_edit.png\" border=0 alt=\"$langComment\" title=\"$langComment\" /></a></td>\n";
-    $tool_content .= "    </tr>";
-
+    $tool_content .= "</td><td class='option-btn-cell'>";
+    $tool_content .= action_button(array(
+                array('title' => $langDelete,
+                      'icon' => 'fa-times',
+                      'class' => 'delete',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=eraseModule&amp;cmdid=$list->module_id",
+                      'confirm' => "$langConfirmDelete"),
+                array('title' => $langRename,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqRename&amp;module_id=$list->module_id",
+                      'icon' => 'fa-repeat'),
+                array('title' => $langComments,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqComment&amp;module_id=$list->module_id",
+                      'icon' => 'fa-comment-o')
+                    ));          
+    $tool_content .= "</td></tr>";
     $atleastOne = true;
-    $ind++;
+    
 } //end while another module to display
 
 $tool_content .= "</table>";
