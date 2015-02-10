@@ -37,10 +37,6 @@ final class GoogleDrive extends CloudDrive {
         }
     }
 
-    public function isPresent() {
-        return true;
-    }
-
     public function getDisplayName() {
         return "GoogleDrive";
     }

@@ -40,10 +40,6 @@ final class OneDrive extends CloudDrive {
         return "OneDrive";
     }
 
-    public function isPresent() {
-        return true;
-    }
-
     public function isAuthorized() {
         $token = $this->getAuthorizeToken();
         if (!$token)

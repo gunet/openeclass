@@ -45,10 +45,6 @@ final class DropBox extends CloudDrive {
         return "Dropbox";
     }
 
-    public function isPresent() {
-        return true;
-    }
-
     public function isAuthorized() {
         $token = $this->getAuthorizeToken();
         if (!$token)

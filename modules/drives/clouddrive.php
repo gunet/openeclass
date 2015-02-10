@@ -133,7 +133,10 @@ abstract class CloudDrive {
     }
 
     private function getConfig($key) {
-        return Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = ?s", "drive_" . $this->getName() . "_" . $key)->value;
+        $value = Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = ?s", "drive_" . $this->getName() . "_" . $key);
+        if ($value)
+            return $value->value;
+        return null;
     }
 
     protected function getClientID() {
@@ -148,9 +151,11 @@ abstract class CloudDrive {
         return $this->getConfig("redirect");
     }
 
-    public abstract function getDisplayName();
+    public function isPresent() {
+        return ($this->getClientID() && $this->getSecret() && $this->getRedirect());
+    }
 
-    public abstract function isPresent();
+    public abstract function getDisplayName();
 
     public abstract function isAuthorized();
 
