@@ -594,6 +594,7 @@ $langAlertTitle = "Please fill the course title!";
 $langAlertProf = "Please fill the course " . $langsTeacher . "!";
 $langUpload = "Upload";
 $langDownloadFile = "Upload file";
+$langCloudFile = "Cloud file";
 $langPathUploadFile = "File path";
 $langCreateDir = "Create directory";
 $langName = "First Name";
