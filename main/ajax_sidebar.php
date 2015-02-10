@@ -33,7 +33,7 @@ require_once 'main/notifications/notifications.inc.php';
 header('Content-Type: application/json; charset=UTF-8');
 
 function getSidebarNotifications() {
-    global $modules, $admin_modules, $theme_settings;
+    global $modules, $admin_modules, $theme_settings, $urlAppend;
 
     $notifications_html = array();
     if (isset($_GET['courseIDs']) and count($_GET['courseIDs'])) {
@@ -42,6 +42,7 @@ function getSidebarNotifications() {
         foreach ($_GET['courseIDs'] as $id) {
             $t->set_var('sideBarCourseNotify', '');
             $notifications = get_course_notifications($id);
+            $course_code = course_id_to_code($id);
             foreach ($notifications as $n) {
                 $modules_array = (isset($modules[$n->module_id]))? $modules: $admin_modules;
                 if (isset($modules_array[$n->module_id]) &&
@@ -49,6 +50,9 @@ function getSidebarNotifications() {
                     isset($theme_settings['icon_map'][$modules_array[$n->module_id]['image']])) {
                     $t->set_var('sideBarCourseNotifyIcon', $theme_settings['icon_map'][$modules_array[$n->module_id]['image']]);
                     $t->set_var('sideBarCourseNotifyCount', $n->notcount);
+                    $t->set_var('sideBarCourseNotifyTitle', q($modules_array[$n->module_id]['title']));
+                    $t->set_var('sideBarCourseNotifyURL', $urlAppend . 'modules/' . $modules[$n->module_id]['link'] .
+                                                    '/?course=' . $course_code);
                     $t->parse('sideBarCourseNotify', 'sideBarCourseNotifyBlock', true);
                 }
             }

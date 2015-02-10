@@ -235,6 +235,7 @@ $(document).ready(function () {
                         $(".lesson-notifications").each(function () {
                             $(this).html(data.notifications[$(this).data('id')]);
                         });
+                        tooltip_init();
                     }
                 });
             }
