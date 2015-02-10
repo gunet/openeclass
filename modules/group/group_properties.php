@@ -124,9 +124,11 @@ $tool_content .= "
                     </div>                    
                 </div>
             </div>
+            <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input type='submit' class='btn btn-primary' name='properties' value='$langModify'>
                 <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+            </div>
             </div>
         </fieldset>
         </form>

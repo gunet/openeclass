@@ -998,9 +998,9 @@ $langAttendanceBook = "Καταχώρηση παρουσιών";
 $langAttendanceBooking = "Καταχώρηση";
 $langAttendanceUpdate = "Ενημέρωση";
 $langAttendanceEdit = "Επιτυχής αλλαγή";
-$langAttendanceSucInsert = "Επιτυχής εισαγωγή δραστηριότητας";
+$langAttendanceSucInsert = "Η δραστηριότητα προστέθηκε";
 $langAttendanceLimit = "Επιτυχής ενημέρωση αριθμού παρουσιών";
-$langAttendanceDel = "Επιτυχής διαγραφή δραστηριότητας";
+$langAttendanceDel = "H δρσστηριότητα διαγράφηκε";
 $langAttendanceUsers = "Επιτυχής ενημέρωση αριθμού $langsOfStudents.";
 $langAttendanceDelFailure = "Δεν υπάρχει η δραστηριότητα που προσπαθείτε να διαγράψετε";
 $langAttendanceNewBookRecord = "Θα πρέπει να κάνετε κλικ στο καταχώρηση για να δημιουργηθεί καρτέλα παρουσιολογίου για το χρήστη";
@@ -1179,7 +1179,8 @@ $langMultiCourseCreated = 'το μάθημα δημιουργήθηκε';
  * **************************************************** */
 $langUpload = "Ανέβασμα";
 $langDownloadFile = "Ανέβασμα αρχείου";
-$langPathUploadFile = "Εντοπισμός θέσης του αρχείου στον Η/Υ σας (τοπικά)";
+$langCloudFile = "Δικτυακό αρχείο";
+$langPathUploadFile = "Εντοπισμός θέσης του αρχείου";
 $langCreateDir = "Δημιουργία καταλόγου";
 $langCreateDoc='Δημιουργία εγγράφου';
 $langEditDoc='Επεξεργασία εγγράφου';
@@ -2131,7 +2132,7 @@ $langInsertMyLinkToolName = "Εισαγωγή συνδέσμου";
 $langInsertMyMediaToolName = "Εισαγωγή πολυμέσου";
 $langInsertMyModuleToolName = "Εισαγωγή ενότητας";
 $langInsertMyModulesTitle = "Επαναχρησιμοποίηση ενότητας του μαθήματος";
-$langInsertNewModuleName = "Εισαγωγή νέου ονόματος";
+$langInsertNewModuleName = "Νέο όνομα";
 $langInstalled = "Η γραμμή μάθησης έχει εισαχθεί με επιτυχία.";
 $langIntroLearningPath = "Χρησιμοποήστε αυτό το εργαλείο για να παράσχετε στους " . $langsOfStudentss . " μια γραμμή μάθησης μεταξύ εγγράφων, ασκήσεων, σελίδες HTML, συνδέσεις κ.λπ.<br /><br />Εάν επιθυμείτε να παρουσιάσετε στους " . $langsOfStudentss . " τη γραμμή μάθησής σας, κάντε κλικ παρακάτω.<br />";
 $langLINKTypeDesc = "Σύνδεσμος";
@@ -2428,6 +2429,7 @@ $langTopicAnswer = "Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink = "Έγγραφα ομάδας ";
 $langNotify = "Ειδοποίηση μέσω email αν σταλούν απαντήσεις";
 $langNotifyActions = "Ειδοποιήσεις";
+$langNotificationsExist = 'Υπάρχουν ειδοποιήσεις';
 $langGoToPage = "Μετάβαση στη σελίδα";
 $langClick = "Κάντε κλικ";
 $langSubjectNotify = "Ειδοποίηση για νέο μήνυμα";
@@ -4184,7 +4186,7 @@ $langCMeta['healthsci'] = "Επιστήμες Υγείας";
 $langCMeta['veterin'] = "Κτηνιατρική";
 $langCMeta['hcare'] = "Επαγγέλματα Υγείας";
 $langCMeta['medbio'] = "Ιατρική Βιοτεχνολογία";
-$langCMeta['physedu'] = "Επιστήμες Ανθρώπινης Κίνησης και Ποιότητας Ζωής";
+$langCMeta['physedu'] = "Επιστήμες Φυσικής Αγωγής και Ποιότητας Ζωής";
 $langCMeta['fnscie'] = "Επιστήμες Τροφίμων και Διατροφής";
 $langCMeta['otherhum'] = "Άλλες Ανθρωπιστικές Επιστήμες";
 $langCMeta['hisarch'] = "Ιστορία και Αρχαιολογία";
@@ -4308,7 +4310,7 @@ $langBlogPostNotAllowedCreate = "Δεν έχετε δικαίωμα δημιου
 $langBlogPostNotAllowedDel = "Δεν έχετε δικαίωμα διαγραφής της ανάρτησης";
 $langBlogPostNotAllowedEdit = "Δεν έχετε δικαίωμα επεξεργασίας της ανάρτησης";
 $langReturnBlog = "Επιστροφή στο ιστολόγιο";
-$langBlogPerm = "Δικαιώματα σύνταξης";
+$langBlogPerm = "Δικαιώματα σύνταξης αναρτήσεων ιστολογίου";
 $langBlogPermStudents = "Ο καθηγητής και οι μαθητές έχουν δικαίωμα σύνταξης";
 $langBlogPermTeacher = "Ο καθηγητής μόνο έχει δικαίωμα σύνταξης";
 
@@ -4325,21 +4327,24 @@ $langCommentsSaveFail = "Η αποθήκευση του σχολίου απέτ�
 $langCommentsNewNoPerm = "Δεν έχετε δικαίωμα δημιουργίας σχολίου";
 $langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής του σχολίου";
 $langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";
-$langCommenting = "Σχολιασμός";
+$langCourseCommenting = "Σχολιασμός στην αρχική σελίδα του μαθήματος";
+$langBlogCommenting = "Σχολιασμός αναρτήσεων ιστολογίου";
 $langCommentsEn = "Ενεργοποιημένος σχολιασμός";
 $langCommentsDis = "Απενεργοποιημένος σχολιασμός";
 
 /* * ***********************************************************
  * rating
  * ************************************************************ */
-$langRating = "Αξιολόγηση";
+$langCourseRating = "Αξιολόγηση μαθήματος";
+$langForumPostRating = "Αξιολόγηση αναρτήσεων περιοχών συζητήσεων";
+$langBlogRating = "Αξιολόγηση αναρτήσεων ιστολογίου";
 $langRatingEn = "Ενεργοποιημένη αξιολόγηση";
 $langRatingDis = "Απενεργοποιημένη αξιολόγηση";
 $langUserHasRated = "Έχετε υποβάλει την αξιολόγησή σας";
 $langRatingAverage = "Μέση Βαθμολογία: ";
 $langRatingVote = " αξιολόγηση";
 $langRatingVotes = " αξιολογήσεις";
-$langAnonymousRating = "Αξιολόγηση από ανώνυμους χρήστες";
+$langCourseAnonymousRating = "Αξιολόγηση μαθήματος από ανώνυμους χρήστες";
 $langRatingAnonEn = "Επιτρέπεται η αξιολόγηση ";
 $langRatingAnonDis = "Δεν επιτρέπεται η αξιολόγηση";
 $langRatingAnonDisCourse = "Η αξιολόγηση από ανώνυμους χρήστες είναι απενεργοποιημένη για μαθήματα με μη ελεύθερη πρόσβαση χωρίς εγγραφή.";
@@ -4348,7 +4353,8 @@ $langRateIt = "Αξιολόγησέ το!";
 /* * ***********************************************************
  * sharing
  * ************************************************************ */
-$langSharing = "Διαμοιρασμός σε κοινωνικά δίκτυα";
+$langCourseSharing = "Διαμοιρασμός σελίδας μαθήματος σε κοινωνικά δίκτυα";
+$langBlogSharing = "Διαμοιρασμός αναρτήσεων ιστολογίου σε κοινωνικά δίκτυα";
 $langSharingEn = "Ενεργοποιημένος διαμοιρασμός";
 $langSharingDis = "Απενεργοποιημένος διαμοιρασμός";
 $langShare = "Μοιράσου το";

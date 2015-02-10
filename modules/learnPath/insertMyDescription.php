@@ -43,10 +43,16 @@ require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 $navigation[] = array("url" => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], "name" => $langAdm);
-$pageName = $langInsertMyDescToolName;
+$toolName = $langInsertMyDescToolName;
+
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 
 /* ====================================== */
-
 // TODO: check if course description is already in the pool of modules
 // and if it is, use that instead of adding it as new
 // SQL Checks
@@ -105,14 +111,9 @@ if (!$thisDocumentModule) {
 			VALUES (?d, ?d, ?d, 'OPEN', 1, '')", $_SESSION['path_id'], $thisDocumentModule->module_id, $order);
     }
 }
-$tool_content = "<table width='100%' class='tbl'><tr><td class='alert alert-success'>";
 
+$tool_content = "<div class='alert alert-success'>";
 $tool_content .= disp_tool_title($langLinkInsertedAsModule);
-$tool_content .= "</td></tr></table>";
-$tool_content .= 
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
+$tool_content .= "</div>";
+
 draw($tool_content, 2);

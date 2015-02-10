@@ -64,7 +64,7 @@ require_once 'include/log.php';
 $style = "";
 
 if (!add_units_navigation(TRUE)) {
-    $pageName = $langLearningPaths;
+    $toolName = $langLearningPaths;
 }
 
 if (isset($_GET['cmd']) and $_GET['cmd'] == 'export' and isset($_GET['path_id']) and is_numeric($_GET['path_id']) and $is_editor) {

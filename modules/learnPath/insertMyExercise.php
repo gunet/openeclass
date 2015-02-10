@@ -64,7 +64,13 @@ EOF;
 $messBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . intval($_SESSION['path_id']), 'name' => $langAdm);
-$pageName = $langInsertMyExerciseToolName;
+$toolName = $langInsertMyExerciseToolName;
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 
 // see checked exercises to add
 $resultex = Database::get()->queryArray("SELECT * FROM exercise WHERE course_id = ?d AND active = 1", $course_id);
@@ -152,7 +158,7 @@ foreach ($resultex as $listex) {
     } // end if request
 } //end while
 
-$tool_content .= "<table width='100%' class='tbl_alt'>";
+$tool_content .= "<table class='table-default'>";
 $tool_content .= $messBox;
 $tool_content .= "</table><br />";
 
@@ -165,12 +171,6 @@ $tool_content .= display_my_exercises("", "");
 // display list of modules used by this learning path
 //$tool_content .= display_path_content();
 
-$tool_content .= 
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
 
 draw($tool_content, 2, null, $head_content);
 

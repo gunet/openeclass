@@ -24,6 +24,7 @@ $require_help = true;
 $helpTopic = 'Gradebook';
 
 require_once '../../include/baseTheme.php';
+require_once 'modules/gradebook/functions.php';
 
 //Module name
 $pageName = $langGradebook;
@@ -44,7 +45,7 @@ if (count($courses) > 0) {
         $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);        
         if ($gradebook) {            
             $gradebook_id = $gradebook->id;
-            $grade = userGradeTotal($gradebook_id, $userID, $code);
+            $grade = userGradeTotal($gradebook_id, $userID, $code, true);
             if ($grade) {
                 $content = true;
                 $grade_content .= "<tr><td>".$course1->title."</td>
@@ -62,28 +63,6 @@ if (count($courses) > 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoGradebook</div>";
 }
 
-
-/**
- * @brief get total number of user attend in a course gradebook
- * @param type $gradebook_id
- * @param type $userID
- * @return string
- */
-function userGradeTotal ($gradebook_id, $userID, $course_code) {
-    
-    $visible = 1;
-    
-    $userGradeTotal = Database::get()->querySingle("SELECT SUM(grade * weight) AS count FROM gradebook_book, gradebook_activities
-                                        WHERE gradebook_book.uid = ?d AND  gradebook_book.gradebook_activity_id = gradebook_activities.id 
-                                        AND gradebook_activities.gradebook_id = ?d 
-                                        AND gradebook_activities.visible = ?d", $userID, $gradebook_id, $visible)->count;
-
-    if ($userGradeTotal) {
-        return round($userGradeTotal/100, 2);
-    } else {
-        return false;
-    }
-}
 
 draw($tool_content, 1, null, $head_content);
 

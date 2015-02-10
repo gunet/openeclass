@@ -587,13 +587,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             restore_table($restoreThis, 'rating', array('delete' => array('rate_id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map,
+            'map_function_data' => array($blog_map, $forum_post_map,
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
         if (file_exists("$restoreThis/rating_cache")) {
             restore_table($restoreThis, 'rating_cache', array('delete' => array('rate_cache_id'),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map,
+            'map_function_data' => array($blog_map, $forum_post_map,
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
         
@@ -1090,12 +1090,14 @@ function unit_map_function(&$data, $maps) {
 }
 
 function ratings_map_function(&$data, $maps) {
-    list($blog_post_map, $course_id) = $maps;
+    list($blog_post_map, $forum_post_map, $course_id) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
         $data['rid'] = $course_id;
+    } elseif ($rtype == 'forum_post') {
+        $data['rid'] = $forum_post_map[$data['rid']];
     }
     return true;
 }

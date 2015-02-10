@@ -116,7 +116,7 @@ if (isset($_POST['submit'])) {
             array('title' => $langBack,
                   'url' => "index.php?course=$course_code",
                   'icon' => 'fa-reply',
-                  'level' => 'primary'
+                  'level' => 'primary-label'
                  )));
         
     $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langToolManagement);
@@ -127,18 +127,20 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='link' class='col-sm-2 control-label'>$langLink:</label>
                 <div class='col-sm-10'>
-                    <input id='link' type='text' name='link' size='50' value='http://'>
+                    <input id='link' class='form-control' type='text' name='link' size='50' value='http://'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for-'name_link' class='col-sm-2 control-label'>$langLinkName:</label>
                 <div class='col-sm-10'>
-                    <input type='Text' name='name_link' size='50'>
+                    <input class='form-control' type='text' name='name_link' size='50'>
                 </div>              
             </div>
+            <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
               <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
-            </div>            
+            </div>  
+            </div>
             </fieldset>
             </form>
           </div>";

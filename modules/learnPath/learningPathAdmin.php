@@ -358,8 +358,9 @@ if (isset($sortDirection) && $sortDirection) {
     }
 }
 
-$tool_content .="<fieldset><legend>$langLearningPathData</legend><table class='table-default'>";
 
+$tool_content .= "<br><div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathData</h3></div>";
+$tool_content .= "<table class='table-default'>";
 
 //############################ LEARNING PATH NAME BOX ################################\\
 $tool_content .="<tr><th width='70'>$langTitle:</th>";
@@ -375,7 +376,7 @@ $tool_content .= "</td></tr>";
 //############################ LEARNING PATH COMMENT BOX #############################\\
 $tool_content .="
     <tr>
-      <th width=\"90\">$langComments:</th>
+      <th width='90'>$langComments:</th>
       <td>";
 if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
@@ -385,25 +386,20 @@ if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, DISPLAY_);
 }
 
-$tool_content .= "</td>
-    </tr>
-    </table>
-    </fieldset>
-    <fieldset>
-    <legend>$langLearningPathConfigure</legend>
-    <table class='table-default'>";
+$tool_content .= "</td></tr></table></div>";
+$tool_content .= "<div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathConfigure</h3></div>";
+$tool_content .= "<table class='table-default'>";
 
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-    $tool_content .= "
-    <tr>
-      <th width=\"200\">$langLabel:</th>
+    $tool_content .= " <tr>
+      <th width='200'>$langLabel:</th>
       <td>
-        <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">
-          <label for=\"newLabel\">" . $langNewLabel . ": </label>&nbsp;
-          <input type=\"text\" name=\"newLabel\" id=\"newLabel\" maxlength=\"255\" / size=\"30\" >
-          <input type=\"hidden\" name=\"cmd\" value=\"createLabel\" />
-          <input type=\"submit\" value=\"" . $langCreate . "\" />
+        <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
+          <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
+          <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
+          <input type='hidden' name='cmd' value='createLabel' />
+          <input class='btn btn-primary' type='submit' value='" . $langCreate . "' />
         </form>
       </td>
     </tr>";
@@ -413,7 +409,6 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
 // --------------- learning path course admin links ------------------------------
 
 if (!isset($displayCreateLabelForm)) {
-
     $tool_content .="
     <tr>
       <th width=\"200\">$langLabel:</th>
@@ -439,9 +434,7 @@ $tool_content .="
       </td>
     </tr>";
 
-$tool_content .="
-    </table>
-    </fieldset>";
+$tool_content .= "</table></div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "
@@ -471,10 +464,7 @@ if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= $dialogBox;
 }
 
-
-$tool_content .="
-     <p class='sub_title1'>$langLearningPathStructure:</p>
-     ";
+$tool_content .= "<div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathStructure</h3></div>";
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`
@@ -533,46 +523,34 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 // -------------------------- learning path list header ----------------------------
-$tool_content .="
-    <div class='table-responsive'>
-    <table class=\"table-default\">
+$tool_content .= "<div class='table-responsive'>
+    <table class='table-default'>
     <tr>
-      <th colspan=\"" . ($maxDeep + 1) . "\"><div align=\"left\">&nbsp;" . $langContents . "</div></th>
-      <th><div align=\"center\">" . icon('fa-gears') . "</div></th>
+      <th class='text-left' colspan=\"" . ($maxDeep + 1) . "\">&nbsp;" . $langContents . "</th>
+      <th class='text-center'>" . icon('fa-gears') . "</th>
     </tr>";
 
 // -------------------- LEARNING PATH LIST DISPLAY ---------------------------------
-$ind = 1;
 foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
     if ($module['visible'] == 0) {
         if ($is_editor) {
-            $style = " class='invisible'";
-            $image_bullet = "off";
+            $style = " class='not_visible'";            
         } else {
             continue; // skip the display of this file
         }
     } else {
-        $style = "";
-        $image_bullet = "on"; // to be revised as it not used in font awsome
+        $style = "";        
     }
     $spacingString = "";
     for ($i = 0; $i < $module['children']; $i++) {
-        $spacingString .= "
-      <td width='5'>&nbsp;</td>";
+        $spacingString .= "<td width='5'>&nbsp;</td>";
     }
 
     $colspan = $maxDeep - $module['children'] + 1;
-
-    if ($ind % 2 == 0) {
-        $classvis = 'class="even"';
-    } else {
-        $classvis = 'class="odd"';
-    }
-
-
+   
     $tool_content .= "
-    <tr $classvis " . $style . ">" . $spacingString . "
+    <tr " . $style . ">" . $spacingString . "
       <td colspan=\"" . $colspan . "\">&nbsp;&nbsp;&nbsp;";
 
     if ($module['contentType'] == CTLABEL_) { // chapter head
@@ -651,12 +629,8 @@ foreach ($flatElementList as $module) {
                     'disabled' => !$module['down'])                
             )) .
             "</td>";
-
-
-    $tool_content .= "</tr>";
-
-    $ind++;
+    $tool_content .= "</tr>";   
 } // end of foreach
 
-$tool_content .= "</table></div><br>";
+$tool_content .= "</table></div></div>";
 draw($tool_content, 2, null, $head_content, $body_action);

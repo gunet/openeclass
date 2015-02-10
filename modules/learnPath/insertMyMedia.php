@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -36,7 +36,13 @@ $dialogBox = '';
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
-$pageName = $langInsertMyMediaToolName;
+$toolName = $langInsertMyMediaToolName;
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 
 ModalBoxHelper::loadModalBox(true);
 $head_content .= <<<EOF
@@ -91,7 +97,7 @@ while ($iterator <= $_POST['maxMediaForm']) {
                 $style = "success";
             } else {
                 $dialogBox .= q($video->title) . " : " . $langMediaAlreadyUsed . "<br />";
-                $style = "caution";
+                $style = "warning";
             }
         } else {
             create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
@@ -132,7 +138,7 @@ while ($iterator <= $_POST['maxMediaForm']) {
                 $style = "success";
             } else {
                 $dialogBox .= q($videolink->title) . " : " . $langMediaAlreadyUsed . "<br />";
-                $style = "caution";
+                $style = "warning";
             }
         } else {
             create_new_module($videolink->title, $videolink->description, $videolink->url, CTMEDIALINK_);
@@ -141,38 +147,36 @@ while ($iterator <= $_POST['maxMediaForm']) {
             $style = "success";
         }
     }
-
     $iterator++;
 }
 
 
 
 if (isset($dialogBox) && $dialogBox != "") {
-    $tool_content .= "<table width=\"99%\"><tr>";
-    $tool_content .= disp_message_box($dialogBox, $style);
-    $tool_content .= "</td></tr></table>";
-    $tool_content .= "<br />";
+    $tool_content .= "<div class='alert alert-$style'>$dialogBox</div>";    
 }
 
 $tool_content .= showmedia();
-$tool_content .= 
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
 draw($tool_content, 2, null, $head_content);
 
+/**
+ * @brief display multimedia files
+ * @global type $langName
+ * @global type $langSelection
+ * @global type $langAddModulesButton
+ * @global type $course_code
+ * @return string
+ */
 function showmedia() {
-    global $langName, $langSelection, $langAddModulesButton, $course_code, $themeimg;
+    global $langName, $langSelection, $langAddModulesButton, $course_code;
 
     $sqlMedia = "SELECT * FROM video WHERE visible = 1 ORDER BY title";
     $sqlMediaLinks = "SELECT * FROM videolink WHERE visible = 1 ORDER BY title";
 
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-               <table width='100%' class='tbl_alt'>
+               <table width='100%' class='table-default'>
                <tr>
-               <th colspan='2'>$langName</th>
+               <th>$langName</th>
                <th width='50'>$langSelection</th>
                </tr>
                <tbody>";
@@ -182,8 +186,7 @@ function showmedia() {
     foreach ($resultMedia as $myrow) {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
-        $output .= "<tr>
-                    <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
+        $output .= "<tr>                    
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
@@ -195,8 +198,7 @@ function showmedia() {
     $resultMediaLinks = Database::get()->queryArray($sqlMediaLinks);
     foreach ($resultMediaLinks as $myrow) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
-        $output .= "<tr>
-                    <td width='1' valign='top'><img src='$themeimg/arrow.png' border='0'></td>
+        $output .= "<tr>                    
                     <td align='left' valign='top'>" . MultimediaHelper::chooseMedialinkAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
@@ -217,6 +219,14 @@ function showmedia() {
     return $output;
 }
 
+/**
+ * @brief create new lp module
+ * @global type $course_id
+ * @param type $title
+ * @param type $description
+ * @param type $path
+ * @param type $contentType
+ */
 function create_new_module($title, $description, $path, $contentType) {
     global $course_id;
 
@@ -243,6 +253,10 @@ function create_new_module($title, $description, $path, $contentType) {
             VALUES (?d, ?d, '', ?d, 'OPEN', 1)", $_SESSION['path_id'], $insertedModule_id, $order);
 }
 
+/**
+ * @brief reuse lp module
+ * @param type $module_id
+ */
 function reuse_module($module_id) {
     // determine the default order of this Learning path
     $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max FROM `lp_rel_learnPath_module`")->max);

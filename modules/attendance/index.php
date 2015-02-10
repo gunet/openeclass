@@ -183,7 +183,8 @@ if ($is_editor) {
                   'level' => 'primary-label'),
             array('title' => $langUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
-                  'icon' => 'fa fa-users'),
+                  'icon' => 'fa fa-users',
+                  'level' => 'primary-label'),
             array('title' => $langGradebookAddActivity,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
                   'icon' => 'fa fa-plus'),
@@ -304,7 +305,7 @@ if ($is_editor) {
                     foreach($checkForExerGradeUsers as $checkForExerGradeResultUser){
                         $checkForAsAttend = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE uid = ?d AND assignment_id = ?d", $checkForExerGradeResultUser->uid, $module_auto_id);
                         if($checkForAsAttend){                            
-                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1", $sql->lastInsertID, $checkForExerGradeResultUser->uid);
+                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1, comments = ''", $sql->lastInsertID, $checkForExerGradeResultUser->uid);
                         }
                     }
                 }
@@ -332,14 +333,14 @@ if ($is_editor) {
                     foreach($checkForExerGradeUsers as $checkForExerGradeResultUser){
                         $checkForExerAttend = Database::get()->querySingle("SELECT uid FROM exercise_user_record WHERE uid = ?d AND attempt_status = " . ATTEMPT_COMPLETED . " AND eid = ?d", $checkForExerGradeResultUser->uid, $module_auto_id);
                         if($checkForExerAttend){
-                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1", $lastInsertID, $checkForExerGradeResultUser->uid);
+                            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = ?d, uid = ?d, attend = 1, comments = ''", $lastInsertID, $checkForExerGradeResultUser->uid);
                         }
                     }
                 }
             }
         }
         
-        Session::Messages("Ok","alert-success");
+        Session::Messages($langAttendanceSucInsert,"alert-success");
         redirect_to_home_page("modules/attendance/index.php");
         $showAttendanceActivities = 1;
     }
@@ -505,9 +506,9 @@ if ($is_editor) {
                     if ($activ->module_auto_id) {
                         $tool_content .= "<td class='smaller'>$langAttendanceActCour";
                         if ($activ->auto) {
-                            $tool_content .= "<br>($langAttendanceInsAut)";
+                            $tool_content .= "<small class='help-block'>($langAttendanceInsAut)</small>";
                         } else {
-                            $tool_content .= "<br>($langAttendanceInsMan)";
+                            $tool_content .= "<small class='help-block'>($langAttendanceInsMan)</small>";
                         }
                         $tool_content .= "</td>";
                     } else {
@@ -868,9 +869,9 @@ if ($is_editor) {
                 $d = strtotime($announce->date);
                 $tool_content .= "<tr><td>";
                  if (empty($announce->title)) {
-                    $tool_content .= $langAnnouncementNoTille;
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id'>$langGradebookNoTitle</a>";
                 } else {
-                    $tool_content .= q($announce->title);
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id'>".q($announce->title)."</a>";
                 }
                 $tool_content .= "</td>
                         <td>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . " ($langHour: " . ucfirst(date('H:i', $d)) . ")</td>";
@@ -882,26 +883,22 @@ if ($is_editor) {
                             $tool_content .= $langAssignment;
                     }
                     if($announce->auto){
-                        $tool_content .= "<br>($langAttendanceInsAut)";
+                        $tool_content .= "<small class='help-block'>($langAttendanceInsAut)</small>";
                     } else {
-                        $tool_content .= "<br>($langAttendanceInsMan)";
+                        $tool_content .= "<small class='help-block'>($langAttendanceInsMan)</small>";
                     }                 
                 } else {
                     $tool_content .= $langAttendanceActivity;
                 }
                 $tool_content .= "</td>";
                 $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
-                $tool_content .= "<td class='text-center option-btn-cell'>".
-                        
+                $tool_content .= "<td class='text-center option-btn-cell'>".                        
                         action_button(array(
                                     array('title' => $langDelete,
                                         'icon' => 'fa-times',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
                                         'confirm' => $langConfirmDelete,
-                                        'class' => 'delete'),
-                                    array('title' => $langAttendanceBook,
-                                        'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"),
+                                        'class' => 'delete'),                                    
                                     array('title' => $langModify,
                                         'icon' => 'fa-edit',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"

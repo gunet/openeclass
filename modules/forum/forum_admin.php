@@ -285,9 +285,14 @@ elseif (isset($_GET['forumcatdel'])) {
         foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
             $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+            //delete forum posts ratings first
+            Database::get()->query("DELETE rating FROM rating INNER JOIN forum_post on rating.rid = forum_post.id
+                                    WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
+                                    WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             //delete abuse reports for forum posts belonging to this topic
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
-                            WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
             
@@ -325,7 +330,12 @@ elseif (isset($_GET['forumgodel'])) {
             $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
             //delete abuse reports of posts belonging to the topic
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
-                            WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            //delete forum posts ratings first
+            Database::get()->query("DELETE rating FROM rating INNER JOIN forum_post on rating.rid = forum_post.id
+                                    WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
+                                    WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
             
@@ -445,7 +455,8 @@ elseif (isset($_GET['forumgodel'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;settings=yes' method='post'>
         <fieldset>
         <div class='form-group'>
-            <div class='col-sm-10'>
+            <label class='col-sm-3'>$langForumPostRating:</label>
+            <div class='col-sm-9'>
                 <div class='radio'>
                     <label><input type='radio' value='1' name='r_radio' $checkEn/>$langRatingEn</label>
                 </div>
@@ -455,7 +466,7 @@ elseif (isset($_GET['forumgodel'])) {
             </div>
         </div>
         <div class='form-group'>
-            <div class='col-sm-11 col-sm-offset-1'>
+            <div class='col-sm-9 col-sm-offset-3'>
                 <input class='btn btn-primary' type='submit' name='submitSettings' value='$langSubmit'>
             </div>
         </div>

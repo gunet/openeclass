@@ -233,8 +233,13 @@ $(document).ready(function () {
                         }
                         $("ul.sidebar-mymessages").html(data.messages);
                         $(".lesson-notifications").each(function () {
-                            $(this).html(data.notifications[$(this).data('id')]);
+                            var id = $(this).data('id');
+                            if (data.notifications[id]) {
+                                $(this).html(data.notifications[id]);
+                                $(this).closest('.panel').find('i.lesson-title-caret').removeClass('fa-caret-down').addClass('fa-bell alert-info').attr('rel', 'tooltip').attr('title', data.langNotificationsExist);
+                            }
                         });
+                        tooltip_init();
                     }
                 });
             }

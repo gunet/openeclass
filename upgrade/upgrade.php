@@ -2412,12 +2412,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             upgrade_course_2_10($row->code, $row->id);
         }
         if (version_compare($oldversion, '2.11', '<')) {
-            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.10");
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 2.11");
             upgrade_course_2_11($row->code);
         }
         if (version_compare($oldversion, '3.0b2', '<')) {
-            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0");
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0b2");
             upgrade_course_3_0($row->code, $row->id);
+        }
+        if (version_compare($oldversion, '3.0rc2', '<')) {
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0rc2");
+            upgrade_course_3_0_rc2($row->code, $row->id);
         }
         $i++;
     }

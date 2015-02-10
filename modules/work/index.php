@@ -571,8 +571,10 @@ function new_assignment() {
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
             </div>
+            <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
                 <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
+            </div>
             </div>
             <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
@@ -681,10 +683,12 @@ function new_assignment() {
                     </tr>
                 </table>
             </div>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <input type='submit' class='btn btn-primary' name='new_assign' value='$langAdd' onclick=\"selectAll('assignee_box',true)\" />
-                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-            </div>                   
+            <div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input type='submit' class='btn btn-primary' name='new_assign' value='$langAdd' onclick=\"selectAll('assignee_box',true)\" />
+                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                </div>
+            </div>
         </fieldset>
         </form></div></div></div>";    
 }
@@ -808,9 +812,10 @@ function show_edit_assignment($id) {
             </div>";
     }
     
-    $tool_content .= "
+    $tool_content .= "<div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
                 <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
+            </div>
             </div>
             <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
@@ -922,10 +927,12 @@ function show_edit_assignment($id) {
                 </tr>
                 </table>
             </div>
+            <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <input type='submit' class='btn btn-primary' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" />
                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-            </div>                             
+            </div> 
+            </div>
     </fieldset>
     </form></div>";
 }

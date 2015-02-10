@@ -76,7 +76,14 @@ $baseWorkDir = $webDir . $courseDir;
 $InfoBox = '';
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPath);
 $navigation[] = array('url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'], 'name' => $langAdm);
-$pageName = $langInsertMyDocToolName;
+$toolName = $langInsertMyDocToolName;
+
+$tool_content .= 
+         action_bar(array(
+            array('title' => $langBack,
+                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'))) ;
 
 // FUNCTION NEEDED TO BUILD THE QUERY TO SELECT THE MODULES THAT MUST BE AVAILABLE
 // 1)  We select first the modules that must not be displayed because
@@ -163,7 +170,7 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                 $addedDoc = $filenameDocument;
                 $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";
                 $style = "success";
-                $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
+                $tool_content .= "<table class='table-default'><tr>";
                 $tool_content .= disp_message_box($InfoBox, $style);
                 $tool_content .= "</td></tr></table>";
                 $tool_content .= "<br />";
@@ -177,31 +184,25 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                           AND A.`path` = ?s
                           AND LPM.`learnPath_id` = ?d
                           AND M.`course_id` = ?d";
-                $num = Database::get()->querySingle($sql, $insertDocument, $_SESSION['path_id'], $course_id)->count;
-                if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
-                    // determine the default order of this Learning path
-                    $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
-                            FROM `lp_rel_learnPath_module`
-                            WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
-                    
-                    // finally : insert in learning path
-                    Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
-                            (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
-                            VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
-                    $addedDoc = $filenameDocument;
-                    $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";
-                    $style = "success";
-                    $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
-                    $tool_content .= disp_message_box($InfoBox, $style);
-                    $tool_content .= "</td></tr></table>";
-                    $tool_content .= "<br />";
+                @$num = Database::get()->querySingle($sql, $insertDocument, $_SESSION['path_id'], $course_id)->count;
+                if ($num) {
+                    if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
+                        // determine the default order of this Learning path
+                        $order = 1 + intval(Database::get()->querySingle("SELECT MAX(`rank`) AS max
+                                FROM `lp_rel_learnPath_module`
+                                WHERE `learnPath_id` = ?d", $_SESSION['path_id'])->max);
+
+                        // finally : insert in learning path
+                        Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
+                                (`learnPath_id`, `module_id`, `specificComment`, `rank`,`lock`, `visible`)
+                                VALUES (?d, ?d, ?s, ?d, 'OPEN', 1)", $_SESSION['path_id'], $thisDocumentModule->module_id, $langDefaultModuleAddedComment, $order);
+                        $addedDoc = $filenameDocument;
+                        $InfoBox = $addedDoc . " " . $langDocInsertedAsModule . "<br />";                    
+                        $tool_content .= "<div class='alert alert-success'>$InfoBox</div>";                    
+                    }
                 } else {
-                    $InfoBox = "<b>$filenameDocument</b>: " . $langDocumentAlreadyUsed . "<br />";
-                    $style = "caution";
-                    $tool_content .= "<table width=\"99%\" class=\"tbl\"><tr>";
-                    $tool_content .= disp_message_box($InfoBox, $style);
-                    $tool_content .= "</td></tr></table>";
-                    $tool_content .= "<br />";
+                    $InfoBox = "<b>$filenameDocument</b>: " . $langDocumentAlreadyUsed . "<br />";                    
+                    $tool_content .= "<div class='alert alert-warning'>$InfoBox</div>";
                 }
             }
         }
@@ -322,15 +323,8 @@ if ($fileList) {
 closedir($handle);
 unset($attribute);
 
-
 // display list of available documents
 $tool_content .= display_my_documents($dialogBox, $style);
-$tool_content .= 
-         action_bar(array(
-            array('title' => $langBack,
-                'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'],
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'))) ;
 
 //################################## MODULES LIST ####################################\\
 //$tool_content .= "<br />";

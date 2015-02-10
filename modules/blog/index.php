@@ -46,10 +46,6 @@ $ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
 $sharing_allowed = is_sharing_allowed($course_id); 
 $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
 
-if ($comments_enabled == 1) {
-    commenting_add_js(); //add js files needed for comments
-}
-
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
 
@@ -74,7 +70,7 @@ if ($is_editor) {
                                'icon' => 'fa-reply',
                                'level' => 'primary-label',
                                'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
-    ));
+    ),false);
     if ($action == "settings") {
         if (isset($_POST['submitSettings'])) {
             setting_set(SETTING_BLOG_STUDENT_POST, $_POST['1_radio'], $course_id);
@@ -162,7 +158,7 @@ if ($is_editor) {
                             </fieldset>
                             <fieldset>
                                 <div class='form-group'>
-                                    <label class='col-sm-3'>$langCommenting</label>
+                                    <label class='col-sm-3'>$langBlogCommenting</label>
                                     <div class='col-sm-9'>    
                                         <div class='radio'>
                                             <label>
@@ -177,7 +173,7 @@ if ($is_editor) {
                                     </div>
                                 </div>                            
                                 <div class='form-group'>
-                                    <label class='col-sm-3'>$langRating:</label>
+                                    <label class='col-sm-3'>$langBlogRating:</label>
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
@@ -192,7 +188,7 @@ if ($is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <label class='col-sm-3'>$langSharing:</label>
+                                    <label class='col-sm-3'>$langBlogSharing:</label>
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
@@ -208,7 +204,7 @@ if ($is_editor) {
                                 </div>
                             </fieldset>
                             <div class='form-group'>
-                                <div class='col-sm-10 col-sm-offset-2'>
+                                <div class='col-sm-9 col-sm-offset-3'>
                                   <input type='submit' class='btn btn-primary' name='submitSettings' value='$langSubmit'>
                                   <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
                                 </div>
@@ -414,11 +410,8 @@ if ($action == "showPost") {
                             </div>
                         </div>";
         
-
-        
-
-        
         if ($comments_enabled) {
+            commenting_add_js(); //add js files needed for comments
             $comm = new Commenting('blogpost', $post->getId());
             $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
         }
