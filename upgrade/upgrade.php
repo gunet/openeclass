@@ -2470,7 +2470,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         
         if (DBHelper::fieldExists('course_user', 'team')) {
             Database::get()->query('ALTER TABLE `course_user` DROP COLUMN `team`');
+        }                
+        if (!DBHelper::fieldExists('exercise_question', 'difficulty')) {
+            Database::get()->query("ALTER table `exercise_question` ADD difficulty INT(1) DEFAULT 0");
         }
+        if (!DBHelper::fieldExists('exercise_question', 'category')) {
+            Database::get()->query("ALTER table `exercise_question` ADD category INT(11) DEFAULT 0");
+        }
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question_cats` (
+                            `question_cat_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `question_cat_name` VARCHAR(300) NOT NULL,
+                            `course_id` INT(11) NOT NULL)
+                            $charset_spec");
         
         Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
