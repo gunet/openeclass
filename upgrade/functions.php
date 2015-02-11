@@ -435,8 +435,9 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
 
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `category` + $videolinkcatid_offset, `creator`,
-                               `publisher`, `date`, `visible`, `public` FROM videolinks ORDER by id") != null) && $ok;
+                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
+                               COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
+                               `date`, `visible`, `public` FROM videolinks ORDER by id") != null) && $ok;
         
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                             SET res_id = res_id + $linkid_offset
@@ -925,7 +926,7 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
                                 assignment_submit.submission_date, assignment_submit.submission_ip,
                                 assignment_submit.file_path, assignment_submit.file_name,
                                 assignment_submit.comments,
-                                CAST(NULLIF(assignment_submit.grade, '') AS DECIMAL(10,2)), 
+                                CAST(REPLACE(NULLIF(assignment_submit.grade, ''), ',', '.') AS DECIMAL(10,2)), 
                                 assignment_submit.grade_comments,
                                 assignment_submit.grade_submission_date, assignment_submit.grade_submission_ip,
                                 assignment_submit.group_id
