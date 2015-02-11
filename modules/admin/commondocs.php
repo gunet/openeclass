@@ -24,4 +24,7 @@
  * @brief Admin form for uploading common documents (e.g. shared docs among all courses)
  */
 define('COMMON_DOCUMENTS', TRUE);
+if (isset($_GET['embedtype']) and isset($_GET['course'])) {
+    $require_current_course = true;
+}
 require_once '../document/index.php';

@@ -745,7 +745,7 @@ function pickerMenu() {
     /* link for common documents */
     if (get_config('enable_common_docs')) {
         array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
-        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' . $params));
+        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php' . $params));
         array_push($sideMenuImg, 'docs.png');
     }
 

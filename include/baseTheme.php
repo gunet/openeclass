@@ -731,7 +731,7 @@ function module_path($path) {
         }
     }
 
-    $path = preg_replace('/\?[a-zA-Z0-9=&]+$/', '', $path);
+    $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlSecure, $urlAppend, 'index.php'),
                         array('/', '/', '/', ''), $path);
     if (strpos($path, '/course_info/restore_course.php') !== false) {
