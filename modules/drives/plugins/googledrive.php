@@ -97,4 +97,16 @@ final class GoogleDrive extends CloudDrive {
         }
     }
 
+    public function store($cloudfile, $path) {
+        try {
+            $fout = fopen($path, "w+b");
+            header('Location: ' . $cloudfile->id());
+            fclose($fout);
+            die(0);
+            return true;
+        } catch (Exception $ex) {
+            return false;
+        }
+    }
+
 }

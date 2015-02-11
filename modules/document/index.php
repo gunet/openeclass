@@ -173,7 +173,7 @@ if ($can_upload) {
     $action_message = $dialogBox = '';
     if (isset($_POST['fileCloudInfo'])) {
         $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
-//        print_r($cloudfile->drive());
+        $cloudfile->storeToLocalFile("/tmp/outfile");
     } else if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
         validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
         $extra_path = '';

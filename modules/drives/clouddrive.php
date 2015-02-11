@@ -167,6 +167,8 @@ abstract class CloudDrive {
     public abstract function authorize($callbackToken);
 
     public abstract function getFiles($dir);
+
+    public abstract function store($cloudfile, $path);
 }
 
 final class CloudFile {
@@ -208,6 +210,10 @@ final class CloudFile {
 
     public function drive() {
         return CloudDriveManager::getDrive($this->drivename);
+    }
+
+    public function storeToLocalFile($file) {
+        return $this->drive()->store($this, $file);
     }
 
     public function toJSON() {
