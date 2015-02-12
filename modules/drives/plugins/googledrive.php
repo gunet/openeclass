@@ -32,7 +32,8 @@ final class GoogleDrive extends CloudDrive {
             $client->setClientId($this->getClientID());
             $client->setClientSecret($this->getSecret());
             $client->setRedirectUri($this->getRedirect());
-            $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
+            $client->addScope(Google_Service_Drive::DRIVE);
+//            $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
             $this->client = $client;
         }
     }
@@ -93,7 +94,7 @@ final class GoogleDrive extends CloudDrive {
         if (strpos($file['mimeType'], '.folder') !== false) {
             return new CloudFile($name, $file['selfLink'], true, null, $this->getName());
         } else {
-            return new CloudFile($name, $file['webContentLink'], false, null, $this->getName());
+            return new CloudFile($name, $file->getDownloadURL(), false, null, $this->getName());
         }
     }
 

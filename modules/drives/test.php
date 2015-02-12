@@ -22,11 +22,5 @@
 session_start();
 require_once 'clouddrive.php';
 
-$drive = new Dropbox();
-//foreach ($drive->getFiles("") as $file) {
-//    print_r($file);
-//}
-
-$dbxClient = new Dropbox\Client($drive->getAuthorizeToken(), "PHP-Example/1.0");
-$accountInfo = $dbxClient->getAccountInfo();
-print_r($accountInfo);
+$drive = new GoogleDrive();
+print_r($drive->getFiles(""));

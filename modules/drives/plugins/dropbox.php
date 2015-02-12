@@ -104,7 +104,7 @@ final class DropBox extends CloudDrive {
         try {
             $fout = fopen($path, "w+b");
             $dbxClient = new dbx\Client($this->getAuthorizeToken(), Dropbox::CLIENT);
-            $fileMetadata = $dbxClient->getFile($cloudfile->id() . "d", $fout);
+            $fileMetadata = $dbxClient->getFile($cloudfile->id(), $fout);
             fclose($fout);
             return !is_null($fileMetadata);
         } catch (Exception $ex) {

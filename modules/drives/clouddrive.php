@@ -158,6 +158,39 @@ abstract class CloudDrive {
         return ($this->getClientID() && $this->getSecret() && $this->getRedirect());
     }
 
+    protected function downloadToFile($url, $filename, $post = null) {
+        $fout = fopen($filename, "w+b");
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        if ($post)
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
+        curl_setopt($ch, CURLOPT_FILE, $fout);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        fclose($fout);
+        return $result;
+    }
+
+    protected function downloadToOutput($url, $post = null) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        if ($post)
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+    public function store($cloudfile, $path) {
+        $this->downloadToFile($cloudfile->id(), $path);
+    }
+
     public abstract function getDisplayName();
 
     public abstract function isAuthorized();
@@ -167,8 +200,6 @@ abstract class CloudDrive {
     public abstract function authorize($callbackToken);
 
     public abstract function getFiles($dir);
-
-    public abstract function store($cloudfile, $path);
 }
 
 final class CloudFile {

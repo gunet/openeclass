@@ -77,27 +77,8 @@ final class OneDrive extends CloudDrive {
         return $files;
     }
 
-    public function store($cloudfile, $path) {
-        try {
-            $fout = fopen($path, "w+b");
-            header('Location: ' . $cloudfile->id());
-            fclose($fout);
-            die(0);
-            return true;
-        } catch (Exception $ex) {
-            return false;
-        }
-    }
-
     private function retrieve($get, $post = null) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $get);
-        if ($post)
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = json_decode(curl_exec($ch));
-        curl_close($ch);
-        return $result;
+        return json_decode($this->downloadToOutput($get, $post));
     }
 
     private function getCloudFile($file) {
