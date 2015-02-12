@@ -380,7 +380,8 @@ elseif (isset($_POST['install6'])) {
         exit();
     }
     $mysqlMainDb = $dbNameForm;
-    $active_ui_languages = implode(' ', active_subdirs('../lang', 'messages.inc.php'));
+    //$active_ui_languages = implode(' ', active_subdirs('../lang', 'messages.inc.php'));
+    $active_ui_languages = 'el en';
 
     // create main database
     require 'install_db.php';
