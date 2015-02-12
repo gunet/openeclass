@@ -31,6 +31,8 @@ require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
+$display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
+
 $tree = new Hierarchy();
 $userObj = new User();
 
@@ -113,7 +115,7 @@ if (!isset($_POST['submit'])) {
                 <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
                 <div class='col-sm-10'>
                     <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
-                </div>      
+                </div>
             </div>
             <div class='form-group'>
               <label for='UserPass2' class='col-sm-2 control-label'>$langConfirmation:</label>
@@ -153,8 +155,8 @@ if (!isset($_POST['submit'])) {
             $tool_content .= lang_select_options('localize', "class='form-control'");
             $tool_content .= "</div>
             </div>";
-            if (get_config("display_captcha")) {                
-                $tool_content .= "<div class='form-group'>                    
+            if ($display_captcha) {
+                $tool_content .= "<div class='form-group'>
                       <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
                       <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
                       <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
@@ -166,7 +168,7 @@ if (!isset($_POST['submit'])) {
         </fieldset>
       </form>
       </div>";
-      
+
 } else {
     if (get_config('email_required')) {
         $email_arr_value = true;
@@ -204,7 +206,7 @@ if (!isset($_POST['submit'])) {
         if ($username_check) {
             $registration_errors[] = $langUserFree;
         }
-        if (get_config('display_captcha')) {
+        if ($display_captcha) {
             // captcha check
             require_once 'include/securimage/securimage.php';
             $securimage = new Securimage();
@@ -233,12 +235,12 @@ if (!isset($_POST['submit'])) {
         $password = unescapeSimple($password);
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
-        
+
         $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                                  status, am, phone, registered_at, expires_at,
                                  lang, verified_mail, whitelist, description)
                       VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
-                              " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, $verified_mail, '', '')", 
+                              " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, $verified_mail, '', '')",
                             $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
         $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, $departments);
@@ -274,19 +276,19 @@ if (!isset($_POST['submit'])) {
             $user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
         }
         // login user
-        else {            
+        else {
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
             $uid = $myrow->id;
             $surname = $myrow->surname;
             $givenname = $myrow->givenname;
-        
+
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                              VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, $_SERVER['REMOTE_ADDR']);
             $_SESSION['uid'] = $uid;
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname_form;
             $_SESSION['surname'] = $surname_form;
-            $_SESSION['uname'] = $uname;            
+            $_SESSION['uname'] = $uname;
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
         // user msg

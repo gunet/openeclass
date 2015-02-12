@@ -359,6 +359,14 @@ else {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
     
+    if (!function_exists('imagettfbbox')) {
+        $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
+        $message_display_captcha = $disable_display_captcha = '';
+    } else {
+        $cbox_display_captcha = '';
+        $disable_display_captcha = 'disabled';
+        $message_display_captcha = '<div>' . $lang_display_captcha_unsupported . '</div>';
+    }
     $tool_content .= "
 <div class='row'>
     <div class='col-sm-9'>
@@ -502,6 +510,15 @@ else {
                                 <input type='text' class='form-control' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='" . intval(get_config('account_duration') / MONTHS) . "'>
                            </div>
                         </div>                         
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$lang_display_captcha_label:</label>
+                            <div class='checkbox col-sm-9'>
+                                <label>
+                                    <input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha $disable_display_captcha>
+                                    $lang_display_captcha
+                                </label>$message_display_captcha
+                            </div>
+                        </div>
                     </fieldset>    
                 </div>
             </div>";
@@ -678,7 +695,6 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_email_required = get_config('email_required') ? 'checked' : '';
     $cbox_email_verification_required = get_config('email_verification_required') ? 'checked' : '';
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
-    $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
     $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';
@@ -722,12 +738,6 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                     <label>
                                         <input type='checkbox' name='am_required' value='1' $cbox_am_required>
                                         $lang_am_required
-                                    </label>
-                                </div>
-                                <div class='checkbox'>
-                                    <label>
-                                        <input type='checkbox' name='display_captcha' value='1' $cbox_display_captcha>
-                                        $lang_display_captcha
                                     </label>
                                 </div>
                                 <div class='checkbox'>

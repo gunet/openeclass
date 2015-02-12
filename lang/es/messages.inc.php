@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-02-12 11:04:27
+// Generated 2015-02-12 12:20:38
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -2430,7 +2430,7 @@ $lang_am_required = "$langsOfStudent ID is required during registration";
 $lang_dropbox_allow_student_to_student = "Allow course messages exchange between $langsOfStudents in 'Dropbox'";
 $lang_dont_display_login_form = "Don't display login form in platform home page";
 $lang_block_username_change = "Don't allow users to change their 'username'";
-$lang_display_captcha = "Display captcha during users registration";
+$lang_display_captcha = "Display security code during user registration";
 $lang_insert_xml_metadata = "Insert xml metadata in 'Documents' according to LOM specification";
 $langPossibleReasons = 'Possible reasons';
 $langTroubleshooting = 'Troubleshooting';
@@ -3829,3 +3829,5 @@ $langBlogRating = "Blog posts rating";
 $langCourseAnonymousRating = "Course rating by anonymous users";
 $langCourseSharing = "Course home page sharing in social networks";
 $langBlogSharing = "Blog post sharing in social networks";
+$lang_display_captcha_label = "Security Code (CAPTCHA)";
+$lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';

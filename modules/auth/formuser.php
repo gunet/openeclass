@@ -36,6 +36,9 @@ $pageName = $prof ? $langReqRegProf : $langUserRequest;
 $user_registration = get_config('user_registration');
 $eclass_prof_reg = get_config('eclass_prof_reg');
 $eclass_stud_reg = get_config('eclass_stud_reg'); // student registration via eclass
+
+$display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
+
 // security check
 if (!$user_registration) {
     $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
@@ -92,7 +95,7 @@ if (user_app_exists($username)) {
     $all_set = false;
 }
 
-if (get_config("display_captcha")) {
+if ($display_captcha) {
     // captcha check
     include 'include/securimage/securimage.php';
     $securimage = new Securimage();
@@ -125,7 +128,7 @@ if ($all_set) {
 			state = 1, status = $status,
 			verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
 			comment = ?s, lang = ?s, request_ip = ?s",
-            $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);   
+            $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
     $request_id = $res->lastInsertID;
 
     // email does not need verification -> mail helpdesk
@@ -181,7 +184,7 @@ if ($all_set) {
     } else {
         $am_text = $langOptional;
     }
-    
+
     if ($prof) {
         $langUserData = $langInfoProfReq;
         $phone_star = $langCompulsory;
@@ -189,7 +192,7 @@ if ($all_set) {
         $langUserData = $langInfoStudReq;
         $phone_star = $langOptional;
     }
-        
+
     $tool_content .= action_bar(array(
                     array('title' => $langBack,
                         'url' => "{$urlAppend}modules/auth/registration.php",
@@ -199,16 +202,16 @@ if ($all_set) {
     $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
         <input type='hidden' name='p' value='$prof'>
-        <fieldset>          
+        <fieldset>
         <div class='form-group'>
             <label for='Name' class='col-sm-2 control-label'>$langName:</label>
-            <div class='col-sm-10'>                       
+            <div class='col-sm-10'>
                 <input class='form-control' type='text' name='givenname' value='" . q($givenname) . "' size='30' maxlength='60' placeholder='$langName'></td>
             </div>
         </div>
         <div class='form-group'>
             <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
-            <div class='col-sm-10'>  
+            <div class='col-sm-10'>
                 <input class='form-control' type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='60' placeholder='$langSurname'>
             </div>
         </div>
@@ -219,7 +222,7 @@ if ($all_set) {
             </div>
         </div>
         <div class='form-group'>
-            <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>            
+            <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
             <div class='col-sm-10'>
                 <input class='form-control' type='text' name='username' size='30' maxlength='50' value='" . q($username) . "' placeholder='$langUserNotice'>
             </div>
@@ -230,7 +233,7 @@ if ($all_set) {
                 <input class='form-control' type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100' placeholder='$langCompulsory'>
             </div>
         </div>";
-    if (!$prof) {        
+    if (!$prof) {
         $tool_content .= "<div class='form-group'>
                 <label for='ProfEmail' class='col-sm-2 control-label'>$langAm:</label>
                 <div class='col-sm-10'>
@@ -246,7 +249,7 @@ if ($all_set) {
             </div>
             <div class='form-group'>
                 <label for='ProfComments' class='col-sm-2 control-label'>$langFaculty:</label>
-            <div class='col-sm-10'>";            
+            <div class='col-sm-10'>";
         list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
@@ -256,14 +259,14 @@ if ($all_set) {
               <div class='col-sm-10'>";
         $tool_content .= lang_select_options('localize', "class='form-control'");
         $tool_content .= "</div></div>";
-    if (get_config("display_captcha")) {        
-        $tool_content .= "<div class='form-group'>                    
+    if ($display_captcha) {
+        $tool_content .= "<div class='form-group'>
                       <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
                       <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
                       <div class='col-sm-10'><input class='form-control' type='text' name='captcha_code' maxlength='6'/></div>
-                    </div>";        
+                    </div>";
     }
-    
+
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
                     </div>
