@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-01-27 12:44:13
+// Generated 2015-02-12 11:04:27
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -97,7 +97,6 @@ $langAfterLastLogin = "Después de tu última conexión, han sido registrados:";
 $langAfterLastLoginInfo = "Datos después de su última conexión";
 $langOtherActions = "Otras Acciones";
 $langTutorialDesc = "También, en el enlace inferior, puedes encontrar tutoriales útiles para usar y administrar la Plataforma Open eClass con prácticos ejemplos. Estos tutoriales están disponibles en tres formatos diferentes: a) tutoriales con imágenes, b) presentaciones en vídeo, c) paquetes SCORM.";
-$langTutorial = "Tutoriales de la Plataforma";
 $langNbProf = "Número de ".$langsTeachers."";
 $langNbStudents = "Número de ".$langsStudents."";
 $langNbLogin = "Número de conexiones";
@@ -1935,8 +1934,8 @@ $langCheckAdmin = "<p><b>Tu acción requiere privilegios de administrador. </b><
 $langCheckGuest = "<p><b>La acción que estás intentando ejecutar no es posible con los privilegios de usuario invitado. </b><br/> Por motivos de seguridad el sistema te ha redireccioando automáticamente a la página de inicio para volver a inscribirte.</p>";
 $langCheckPublicTools = "<p><b>Has intentado tener acceso a un módulo de lección inactivo. </b><br/> Por motivos de seguridad el sistema te ha redireccionado automáticamente a la página de inicio para inscribirte de nuevo.</p>";
 $langWarnShibUser = "<p><b>Warning:</b> Beacause you have been authenticated via Shibboleth you have not logged-out!<br>To log-out, you have to close your browser.</p>";
-$langUserBriefcase = "Porfolio del usuario";
-$langPersonalisedBriefcase = "Porfolio personalizado";
+$langUserPortfolio = "Porfolio del usuario";
+$langPortfolio = "Porfolio personalizado";
 $langAdvancedSearch = "Búsqueda avanzada";
 $langTitle = "Título";
 $langType = "Tipo";
@@ -2292,7 +2291,6 @@ $langInsertWiki = 'wiki';
 $langCourseAnnouncements = "Course Announcements";
 $langBasicOptions = "Basic Options";
 $langUserOptions = "User Options";
-$langTutorials = "Tutorials";
 $langTut = "Tutorial";
 $langScormVideo = "Scorm Video";
 $langIntroToCourse = "Introduction to Course";
@@ -3637,7 +3635,7 @@ $langCMeta['engecon'] = "Engineering Economics and Management";
 $langCMeta['infoscie'] = "Science of Information";
 $langCMeta['anthro'] = "Anthropology";
 $langCMeta['hcare'] = "Health Care";
-$langCMeta['physedu'] = "Science of Human Movement and Quality of Life";
+$langCMeta['physedu'] = "Science of Physical Education and Quality of Life";
 $langCMeta['fnscie'] = "Food Sciences and Nutrition";
 $langCMeta['otherinddep'] = "Other Independent Departments";
 $langCMeta['milit'] = "Military Departments";
@@ -3692,7 +3690,7 @@ $langBlogPostNotAllowedCreate = "You don't have permission to create a blog post
 $langBlogPostNotAllowedDel = "You don't have permission to delete the blog post";
 $langBlogPostNotAllowedEdit = "You don't have permission to edit the blog post";
 $langReturnBlog = "Return to blog";
-$langBlogPerm = "Authoring permissions";
+$langBlogPerm = "Blog post authoring permissions";
 $langBlogPermStudents = "Teacher and students are allowed to author";
 $langBlogPermTeacher = "Only teacher is allowed to author";
 $langCommentsDelConfirm = "Are you sure you want to delete the comment?";
@@ -3770,7 +3768,7 @@ $langSaveAs = 'Save as ...';
 $langTheFieldIsRequired = 'The field is required.';
 $langCourseImage = "Course Image";
 $langCourseLayout = "Layout";
-$langCourseLayout1 = "2 Columns (default)";
+$langCourseLayout1 = "2 Columns, With Image (default)";
 $langCourseLayout2 = "2 Columns, No Image";
 $langCourseLayout3 = "Full Width";
 $langCloneCourse = "Clone this course";
@@ -3811,3 +3809,23 @@ $langNationalOpenCourses = "National Open Courses Portal";
 $langEnterNote = "Enter note";
 $langAttemptWasCanceled = "The attempt was canceled.";
 $langNoUnits = "No course units";
+$langExternalTools = 'External tools';
+$langTeacherTutorials = "$langTeacher Tutorials";
+$langStudentTutorials = "$langStudent Tutorials";
+$langCourseInformationText = "Edit Course Description";
+$langCourseDescriptionShort = "Description";
+$langCloudFile = "Cloud File";
+$langAllMessages = "all messages";
+$langHierarchyTestDepartment = 'Example Department';
+$langHierarchyTestCategory = 'Example Category';
+$langHierarchyTestSubCategory = 'Subcategory';
+$langNotificationsExist = 'Notifications Available';
+$langAllNotes = "All notes";
+$langCourseCommenting = "Comments in course home page";
+$langBlogCommenting = "Comments in blog posts";
+$langCourseRating = "Course rating";
+$langForumPostRating = "Forum post rating";
+$langBlogRating = "Blog posts rating";
+$langCourseAnonymousRating = "Course rating by anonymous users";
+$langCourseSharing = "Course home page sharing in social networks";
+$langBlogSharing = "Blog post sharing in social networks";
