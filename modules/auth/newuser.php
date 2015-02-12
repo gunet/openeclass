@@ -83,6 +83,11 @@ if (!isset($_POST['submit'])) {
     } else {
         $am_message = $langOptional;
     }
+    $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                        'url' => "{$urlAppend}modules/auth/registration.php",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label')), false);
     @$tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
             <fieldset>

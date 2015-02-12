@@ -190,6 +190,11 @@ if ($all_set) {
         $phone_star = $langOptional;
     }
         
+    $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                        'url' => "{$urlAppend}modules/auth/registration.php",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label')), false);
     $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
     $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
@@ -198,45 +203,45 @@ if ($all_set) {
         <div class='form-group'>
             <label for='Name' class='col-sm-2 control-label'>$langName:</label>
             <div class='col-sm-10'>                       
-                <input type='text' name='givenname' value='" . q($givenname) . "' size='30' maxlength='60' placeholder='$langName'></td>
+                <input class='form-control' type='text' name='givenname' value='" . q($givenname) . "' size='30' maxlength='60' placeholder='$langName'></td>
             </div>
         </div>
         <div class='form-group'>
             <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
             <div class='col-sm-10'>  
-                <input type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='60' placeholder='$langSurname'>
+                <input class='form-control' type='text' name='surname' value='" . q($surname) . "' size='30' maxlength='60' placeholder='$langSurname'>
             </div>
         </div>
         <div class='form-group'>
             <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
             <div class='col-sm-10'>
-                <input type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20' placeholder='$phone_star'>
+                <input class='form-control' type='text' name='userphone' value='" . q($userphone) . "' size='20' maxlength='20' placeholder='$phone_star'>
             </div>
         </div>
         <div class='form-group'>
             <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>            
             <div class='col-sm-10'>
-                <input type='text' name='username' size='30' maxlength='50' value='" . q($username) . "' placeholder='$langUserNotice'>
+                <input class='form-control' type='text' name='username' size='30' maxlength='50' value='" . q($username) . "' placeholder='$langUserNotice'>
             </div>
         </div>
         <div class='form-group'>
             <label for='ProfEmail' class='col-sm-2 control-label'>$langProfEmail:</label>
             <div class='col-sm-10'>
-                <input type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100' placeholder='$langCompulsory'>
+                <input class='form-control' type='text' name='usermail' value='" . q($usermail) . "' size='30' maxlength='100' placeholder='$langCompulsory'>
             </div>
         </div>";
     if (!$prof) {        
         $tool_content .= "<div class='form-group'>
                 <label for='ProfEmail' class='col-sm-2 control-label'>$langAm:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
+                    <input class='form-control' type='text' name='am' value='" . q($am) . "' size='20' maxlength='20' placeholder='$am_text'>
                 </div>
             </div>";
     }
     $tool_content .= "<div class='form-group'>
             <label for='ProfComments' class='col-sm-2 control-label'>$langComments:</label>
                 <div class='col-sm-10'>
-                    <textarea name='usercomment' cols='30' rows='4' placeholder='$profreason'>" . q($usercomment) . "</textarea>
+                    <textarea class='form-control' name='usercomment' cols='30' rows='4' placeholder='$profreason'>" . q($usercomment) . "</textarea>
                 </div>
             </div>
             <div class='form-group'>
@@ -255,7 +260,7 @@ if ($all_set) {
         $tool_content .= "<div class='form-group'>                    
                       <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
                       <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
-                      <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
+                      <div class='col-sm-10'><input class='form-control' type='text' name='captcha_code' maxlength='6'/></div>
                     </div>";        
     }
     
