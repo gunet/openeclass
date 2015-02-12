@@ -4310,6 +4310,8 @@ class Google_Service_YouTube_Channel extends Google_Model
   protected $invideoPromotionType = 'Google_Service_YouTube_InvideoPromotion';
   protected $invideoPromotionDataType = '';
   public $kind;
+  protected $localizationsType = 'Google_Service_YouTube_ChannelLocalization';
+  protected $localizationsDataType = 'map';
   protected $snippetType = 'Google_Service_YouTube_ChannelSnippet';
   protected $snippetDataType = '';
   protected $statisticsType = 'Google_Service_YouTube_ChannelStatistics';
@@ -4391,6 +4393,14 @@ class Google_Service_YouTube_Channel extends Google_Model
   public function getKind()
   {
     return $this->kind;
+  }
+  public function setLocalizations($localizations)
+  {
+    $this->localizations = $localizations;
+  }
+  public function getLocalizations()
+  {
+    return $this->localizations;
   }
   public function setSnippet(Google_Service_YouTube_ChannelSnippet $snippet)
   {
@@ -4798,6 +4808,36 @@ class Google_Service_YouTube_ChannelListResponse extends Google_Collection
   }
 }
 
+class Google_Service_YouTube_ChannelLocalization extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $description;
+  public $title;
+
+
+  public function setDescription($description)
+  {
+    $this->description = $description;
+  }
+  public function getDescription()
+  {
+    return $this->description;
+  }
+  public function setTitle($title)
+  {
+    $this->title = $title;
+  }
+  public function getTitle()
+  {
+    return $this->title;
+  }
+}
+
+class Google_Service_YouTube_ChannelLocalizations extends Google_Model
+{
+}
+
 class Google_Service_YouTube_ChannelSection extends Google_Model
 {
   protected $internal_gapi_mappings = array(
@@ -4993,6 +5033,7 @@ class Google_Service_YouTube_ChannelSettings extends Google_Collection
   protected $collection_key = 'featuredChannelsUrls';
   protected $internal_gapi_mappings = array(
   );
+  public $defaultLanguage;
   public $defaultTab;
   public $description;
   public $featuredChannelsTitle;
@@ -5007,6 +5048,14 @@ class Google_Service_YouTube_ChannelSettings extends Google_Collection
   public $unsubscribedTrailer;
 
 
+  public function setDefaultLanguage($defaultLanguage)
+  {
+    $this->defaultLanguage = $defaultLanguage;
+  }
+  public function getDefaultLanguage()
+  {
+    return $this->defaultLanguage;
+  }
   public function setDefaultTab($defaultTab)
   {
     $this->defaultTab = $defaultTab;
@@ -5109,13 +5158,24 @@ class Google_Service_YouTube_ChannelSnippet extends Google_Model
 {
   protected $internal_gapi_mappings = array(
   );
+  public $defaultLanguage;
   public $description;
+  protected $localizedType = 'Google_Service_YouTube_ChannelLocalization';
+  protected $localizedDataType = '';
   public $publishedAt;
   protected $thumbnailsType = 'Google_Service_YouTube_ThumbnailDetails';
   protected $thumbnailsDataType = '';
   public $title;
 
 
+  public function setDefaultLanguage($defaultLanguage)
+  {
+    $this->defaultLanguage = $defaultLanguage;
+  }
+  public function getDefaultLanguage()
+  {
+    return $this->defaultLanguage;
+  }
   public function setDescription($description)
   {
     $this->description = $description;
@@ -5123,6 +5183,14 @@ class Google_Service_YouTube_ChannelSnippet extends Google_Model
   public function getDescription()
   {
     return $this->description;
+  }
+  public function setLocalized(Google_Service_YouTube_ChannelLocalization $localized)
+  {
+    $this->localized = $localized;
+  }
+  public function getLocalized()
+  {
+    return $this->localized;
   }
   public function setPublishedAt($publishedAt)
   {
@@ -6702,6 +6770,23 @@ class Google_Service_YouTube_InvideoTiming extends Google_Model
   }
 }
 
+class Google_Service_YouTube_LanguageTag extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $value;
+
+
+  public function setValue($value)
+  {
+    $this->value = $value;
+  }
+  public function getValue()
+  {
+    return $this->value;
+  }
+}
+
 class Google_Service_YouTube_LiveBroadcast extends Google_Model
 {
   protected $internal_gapi_mappings = array(
@@ -7336,6 +7421,8 @@ class Google_Service_YouTube_LocalizedProperty extends Google_Collection
   protected $internal_gapi_mappings = array(
   );
   public $default;
+  protected $defaultLanguageType = 'Google_Service_YouTube_LanguageTag';
+  protected $defaultLanguageDataType = '';
   protected $localizedType = 'Google_Service_YouTube_LocalizedString';
   protected $localizedDataType = 'array';
 
@@ -7347,6 +7434,14 @@ class Google_Service_YouTube_LocalizedProperty extends Google_Collection
   public function getDefault()
   {
     return $this->default;
+  }
+  public function setDefaultLanguage(Google_Service_YouTube_LanguageTag $defaultLanguage)
+  {
+    $this->defaultLanguage = $defaultLanguage;
+  }
+  public function getDefaultLanguage()
+  {
+    return $this->defaultLanguage;
   }
   public function setLocalized($localized)
   {
@@ -8898,6 +8993,8 @@ class Google_Service_YouTube_Video extends Google_Model
   public $kind;
   protected $liveStreamingDetailsType = 'Google_Service_YouTube_VideoLiveStreamingDetails';
   protected $liveStreamingDetailsDataType = '';
+  protected $localizationsType = 'Google_Service_YouTube_VideoLocalization';
+  protected $localizationsDataType = 'map';
   protected $monetizationDetailsType = 'Google_Service_YouTube_VideoMonetizationDetails';
   protected $monetizationDetailsDataType = '';
   protected $playerType = 'Google_Service_YouTube_VideoPlayer';
@@ -8983,6 +9080,14 @@ class Google_Service_YouTube_Video extends Google_Model
   public function getLiveStreamingDetails()
   {
     return $this->liveStreamingDetails;
+  }
+  public function setLocalizations($localizations)
+  {
+    $this->localizations = $localizations;
+  }
+  public function getLocalizations()
+  {
+    return $this->localizations;
   }
   public function setMonetizationDetails(Google_Service_YouTube_VideoMonetizationDetails $monetizationDetails)
   {
@@ -9856,6 +9961,36 @@ class Google_Service_YouTube_VideoLiveStreamingDetails extends Google_Model
   }
 }
 
+class Google_Service_YouTube_VideoLocalization extends Google_Model
+{
+  protected $internal_gapi_mappings = array(
+  );
+  public $description;
+  public $title;
+
+
+  public function setDescription($description)
+  {
+    $this->description = $description;
+  }
+  public function getDescription()
+  {
+    return $this->description;
+  }
+  public function setTitle($title)
+  {
+    $this->title = $title;
+  }
+  public function getTitle()
+  {
+    return $this->title;
+  }
+}
+
+class Google_Service_YouTube_VideoLocalizations extends Google_Model
+{
+}
+
 class Google_Service_YouTube_VideoMonetizationDetails extends Google_Model
 {
   protected $internal_gapi_mappings = array(
@@ -10095,8 +10230,12 @@ class Google_Service_YouTube_VideoSnippet extends Google_Collection
   public $categoryId;
   public $channelId;
   public $channelTitle;
+  protected $defaultLanguageType = 'Google_Service_YouTube_LanguageTag';
+  protected $defaultLanguageDataType = '';
   public $description;
   public $liveBroadcastContent;
+  protected $localizedType = 'Google_Service_YouTube_VideoLocalization';
+  protected $localizedDataType = '';
   public $publishedAt;
   public $tags;
   protected $thumbnailsType = 'Google_Service_YouTube_ThumbnailDetails';
@@ -10128,6 +10267,14 @@ class Google_Service_YouTube_VideoSnippet extends Google_Collection
   {
     return $this->channelTitle;
   }
+  public function setDefaultLanguage(Google_Service_YouTube_LanguageTag $defaultLanguage)
+  {
+    $this->defaultLanguage = $defaultLanguage;
+  }
+  public function getDefaultLanguage()
+  {
+    return $this->defaultLanguage;
+  }
   public function setDescription($description)
   {
     $this->description = $description;
@@ -10143,6 +10290,14 @@ class Google_Service_YouTube_VideoSnippet extends Google_Collection
   public function getLiveBroadcastContent()
   {
     return $this->liveBroadcastContent;
+  }
+  public function setLocalized(Google_Service_YouTube_VideoLocalization $localized)
+  {
+    $this->localized = $localized;
+  }
+  public function getLocalized()
+  {
+    return $this->localized;
   }
   public function setPublishedAt($publishedAt)
   {
