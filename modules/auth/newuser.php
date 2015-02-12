@@ -89,49 +89,49 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='Name' class='col-sm-2 control-label'>$langName:</label>
                 <div class='col-sm-10'>
-                  <input type='text' name='givenname_form' size='30' maxlength='50' value='" . q($_GET['givenname_form']) . "' placeholder='$langName'>
+                  <input class='form-control' type='text' name='givenname_form' size='30' maxlength='50' value='" . q($_GET['givenname_form']) . "' placeholder='$langName'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='surname_form' size='30' maxlength='100' value='" . q($_GET['surname_form']) . "' placeholder='$langSurname'>
+                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value='" . q($_GET['surname_form']) . "' placeholder='$langSurname'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='uname' value='" . q($_GET['uname']) . "' size='30' maxlength='30'  autocomplete='off' placeholder='$langUserNotice'>
+                    <input class='form-control' type='text' name='uname' value='" . q($_GET['uname']) . "' size='30' maxlength='30'  autocomplete='off' placeholder='$langUserNotice'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
                 <div class='col-sm-10'>
-                    <input type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
+                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
                 </div>      
             </div>
             <div class='form-group'>
               <label for='UserPass2' class='col-sm-2 control-label'>$langConfirmation:</label>
                 <div class='col-sm-10'>
-                    <input type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
+                    <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='email' size='30' maxlength='100' value='" . q($_GET['email']) . "' placeholder='$email_message'>
+                    <input class='form-control' type='text' name='email' size='30' maxlength='100' value='" . q($_GET['email']) . "' placeholder='$email_message'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='am' size='20' maxlength='20' value='" . q($_GET['am']) . "' placeholder='$am_message'>
+                    <input class='form-control' type='text' name='am' size='20' maxlength='20' value='" . q($_GET['am']) . "' placeholder='$am_message'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='phone' size='20' maxlength='20' value='" . q($_GET['phone']) . "' placeholder = '$langOptional'>
+                    <input class='form-control' type='text' name='phone' size='20' maxlength='20' value='" . q($_GET['phone']) . "' placeholder = '$langOptional'>
                 </div>
             </div>
             <div class='form-group'>
