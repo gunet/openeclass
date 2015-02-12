@@ -359,7 +359,7 @@ else {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
     
-    if (!function_exists('imagettfbbox')) {
+    if (function_exists('imagettfbbox')) {
         $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
         $message_display_captcha = $disable_display_captcha = '';
     } else {
