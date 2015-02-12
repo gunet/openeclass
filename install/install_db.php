@@ -930,74 +930,16 @@ $db->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
     VALUES ('', ?s, 1, 68)", $institutionForm);
 
 $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA', 'Τμήμα 1', '10', '100', '2', '23', true, true)");
+    VALUES ('TMA', ?s, '10', '100', 2, 23, true, true)", $langHierarchyTestDepartment);
 $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMAPRE', 'Προπτυχιακό Πρόγραμμα Σπουδών', '10', '100', '3', '20', true, true)");
+    VALUES ('TMAPRE', ?s, '10', '100', 3, 20, true, true)", $langHierarchyTestCategory . ' 1');
 $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA1', '1ο εξάμηνο', '10', '100', '4', '5', true, true)");
+    VALUES ('TMA1', ?s, '10', '100', 4, 5, true, true)", $langHierarchyTestSubCategory . ' 1');
 $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA2', '2ο εξάμηνο', '10', '100', '6', '7', true, true)");
+    VALUES ('TMA2', ?s, '10', '100', 6, 7, true, true)", $langHierarchyTestSubCategory . ' 2');
 $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA3', '3ο εξάμηνο', '10', '100', '8', '9', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA4', '4ο εξάμηνο', '10', '100', '10', '11', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA5', '5ο εξάμηνο', '10', '100', '12', '13', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA6', '6ο εξάμηνο', '10', '100', '14', '15', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA7', '7ο εξάμηνο', '10', '100', '16', '17', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMA8', '8ο εξάμηνο', '10', '100', '18', '19', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMAPOST', 'Μεταπτυχιακό Πρόγραμμα Σπουδών', '10', '100', '21', '22', true, true)");
+    VALUES ('TMAPOST', ?s, '10', '100', '21', '22', true, true)", $langHierarchyTestCategory . ' 2');
 
-
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB', 'Τμήμα 2', '20', '100', '24', '45', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMBPRE', 'Προπτυχιακό Πρόγραμμα Σπουδών', '20', '100', '25', '42', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB1', '1ο εξάμηνο', '20', '100', '26', '27', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB2', '2ο εξάμηνο', '20', '100', '28', '29', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB3', '3ο εξάμηνο', '20', '100', '30', '31', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB4', '4ο εξάμηνο', '20', '100', '32', '33', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB5', '5ο εξάμηνο', '20', '100', '34', '35', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB6', '6ο εξάμηνο', '20', '100', '36', '37', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB7', '7ο εξάμηνο', '20', '100', '38', '39', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMB8', '8ο εξάμηνο', '20', '100', '40', '41', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMBPOST', 'Μεταπτυχιακό Πρόγραμμα Σπουδών', '20', '100', '43', '44', true, true)");
-
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC', 'Τμήμα 3', '30', '100', '46', '67', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMCPRE', 'Προπτυχιακό Πρόγραμμα Σπουδών', '30', '100', '47', '64', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC1', '1ο εξάμηνο', '30', '100', '48', '49', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC2', '2ο εξάμηνο', '30', '100', '50', '51', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC3', '3ο εξάμηνο', '30', '100', '52', '53', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC4', '4ο εξάμηνο', '30', '100', '54', '55', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC5', '5ο εξάμηνο', '30', '100', '56', '57', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC6', '6ο εξάμηνο', '30', '100', '58', '59', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC7', '7ο εξάμηνο', '30', '100', '60', '61', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMC8', '8ο εξάμηνο', '30', '100', '62', '63', true, true)");
-$db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
-    VALUES ('TMCPOST', 'Μεταπτυχιακό Πρόγραμμα Σπουδών', '30', '100', '65', '66', true, true)");
 
 $db->query("CREATE TABLE IF NOT EXISTS `course_department` (
                 `id` int(11) NOT NULL auto_increment PRIMARY KEY,
