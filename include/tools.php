@@ -266,6 +266,10 @@ function loggedInMenu() {
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
 
+    array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
+    array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
+    array_push($sideMenuImg, "fa-bullhorn");
+    
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
     array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
     array_push($sideMenuImg, "fa-calendar");

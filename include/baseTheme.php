@@ -268,12 +268,17 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);
         $t->set_var('NOTES_LINK', $urlServer . 'main/notes/index.php');
         $t->set_var('LANG_STATS', $GLOBALS['langMyStats']);
-        $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");        
+        $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");
         $t->set_var('LANG_LOGOUT', $langLogout);
         $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
         $t->set_var('MY_COURSES', $GLOBALS['langMyCoursesSide']);
         $t->set_var('MY_MESSAGES', $GLOBALS['langNewMyMessagesSide']);
+        $t->set_var('LANG_ANNOUNCEMENTS', $GLOBALS['langMyAnnouncements']);
+        $t->set_var('ANNOUNCEMENTS_LINK', $urlServer . "modules/announcements/myannouncements.php");
         $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
+        $t->set_var('langSave', $GLOBALS['langSave']);
+        $t->set_var('langAllNotes', $GLOBALS['langAllNotes']);
+        $t->set_var('langAllMessages', $GLOBALS['langAllMessages']);
         $t->set_var('langNoteTitle', $langNoteTitle);
         $t->set_var('langEnterNote', $langEnterNote);
         $t->set_var('langFieldsRequ', $langFieldsRequ);

@@ -89,10 +89,13 @@
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><i class="fa fa-user"></i>{%LANG_PROFILE%}</a>
-                                    </li>                                        
+                                    </li>                                       
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><i class="fa fa-envelope-o"></i>{%LANG_MESSAGES%}</a>
-                                    </li>                                    
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%ANNOUNCEMENTS_LINK%}"><i class="fa fa-bullhorn"></i>{%LANG_ANNOUNCEMENTS%}</a>
+                                    </li>
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%AGENDA_LINK%}"><i class="fa fa-calendar"></i>{%LANG_AGENDA%}</a>
                                     </li>
@@ -318,7 +321,7 @@
                                     <ul class="sidebar-mymessages">
                                     </ul>
                                     <div style="padding-top: 5px; border-top: 1px solid #ccc; margin-top: 15px;">
-                                        <a class="goto" href="{%MESSAGES_LINK%}">All messages</a>
+                                        <a class="goto" href="{%MESSAGES_LINK%}">{%langAllMessages%}</a>
                                     </div>
                                 </div>
                             </div>
@@ -343,8 +346,8 @@
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
                                         <textarea id="text-note" class="form-control" rows="6" placeholder="{%langEnterNote%}..."></textarea>
                                     </div>
-                                    <button id="save_note" data-label="Save" class="btn btn-default btn-xs">Save</button>
-                                    <a class="goto" href="{%NOTES_LINK%}">All notes</a>
+                                    <button id="save_note" data-label="Save" class="btn btn-default btn-xs">{%langSave%}</button>
+                                    <a class="goto" href="{%NOTES_LINK%}">{%langAllNotes%}</a>
                                 </div>
                             </div>
                         </div>

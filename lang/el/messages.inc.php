@@ -19,9 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* * *******************************************
- * about.php
- * ******************************************* */
 
 $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και υποστηρίζει την Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης στο <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Έκδοση";
@@ -830,7 +827,6 @@ $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
-$langAddToMyNotes = 'Οι σημειώσεις μου';
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
 
 
@@ -1388,6 +1384,7 @@ $langDropboxFreeSpaceConfirm = "Αυτή η ενέργεια θα διαγράψ
 $langDropboxFreeSpaceSuccess = "Απελευθερώθηκαν επιτυχώς %s ΜΒ χώρου!";
 $langDropboxNoMessage = "Δεν υπάρχουν πρόσφατα μηνύματα";
 $langDropboxMassDelete = 'Διαγραφή όλων των μηνυμάτων';
+$langAllMessages = "όλα τα μηνύματα";
 
 /* * ********************************************************
  * exercise
@@ -1857,7 +1854,7 @@ $langNoCourses = "Δεν υπάρχουν μαθήματα";
 $langCourseCreate = "Δημιουργία Μαθήματος";
 $langCreationDate = "Ημερομηνία δημιουργίας";
 $langMyAgenda = "Το ημερολόγιό μου";
-$langMyAnnouncements = "Οι Ανακοινώσεις μου";
+$langMyAnnouncements = "Οι ονακοινώσεις μου";
 $langAdminTool = "Διαχείριση Πλατφόρμας";
 $langPass = "Συνθηματικό (password)";
 $langHelp = "Βοήθεια";
@@ -3843,6 +3840,7 @@ $langSelectFromMenu = "Επιλέξτε...";
 $langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
 $langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
 $langNoteSaved = "Αποθηκεύτηκε επιτυχώς";
+$langAllNotes = "Όλες οι σημειώσεις";
 
 /* * ******************************************
   Personal calendar
