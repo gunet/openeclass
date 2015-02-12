@@ -173,7 +173,7 @@ function showcategoryadmintools($categoryid) {
  * @return type
  */
 function submit_link() {
-    global $course_id, $langLinkMod, $langLinkAdded,
+    global $course_id, $langLinkMod, $langLinkAdded, $course_code,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
 
     register_posted_variables(array('urllink' => true,
