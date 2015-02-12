@@ -526,6 +526,14 @@ if (isset($_GET['an_id'])) {
               'level' => 'primary',
               'confirm' => $langSureToDelAnnounce,
               'show' => $is_editor),));
+    } elseif (!isset($_GET['modify'])) {
+        $tool_content .= action_bar(array(
+            array('title' => $langAddAnn,
+                  'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
+                  'icon' => 'fa-plus-circle',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success',
+                  'show' => $is_editor)));
     }
     /* display announcements */
     if (isset($_GET['an_id'])) {        
