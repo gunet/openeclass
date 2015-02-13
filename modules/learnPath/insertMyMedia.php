@@ -168,11 +168,8 @@ draw($tool_content, 2, null, $head_content);
  * @return string
  */
 function showmedia() {
-    global $langName, $langSelection, $langAddModulesButton, $course_code;
-
-    $sqlMedia = "SELECT * FROM video WHERE visible = 1 ORDER BY title";
-    $sqlMediaLinks = "SELECT * FROM videolink WHERE visible = 1 ORDER BY title";
-
+    global $langName, $langSelection, $langAddModulesButton, $course_code, $course_id;
+        
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                <table width='100%' class='table-default'>
                <tr>
@@ -182,12 +179,12 @@ function showmedia() {
                <tbody>";
 
     $i = 1;
-    $resultMedia = Database::get()->queryArray($sqlMedia);
+    $resultMedia = Database::get()->queryArray("SELECT * FROM video WHERE visible = 1 AND course_id = ?d ORDER BY title", $course_id);
     foreach ($resultMedia as $myrow) {
         $vObj = MediaResourceFactory::initFromVideo($myrow);
 
         $output .= "<tr>                    
-                    <td align='left' valign='top'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
+                    <td align='text-left'>" . MultimediaHelper::chooseMediaAhref($vObj) . "
                     <br />
                     <small class='comments'>" . q($myrow->description) . "</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertMedia_" . $i . "' id='insertMedia_" . $i . "' value='" . $myrow->id . "' /></div></td></tr>";
@@ -195,7 +192,7 @@ function showmedia() {
     }
 
     $j = 1;
-    $resultMediaLinks = Database::get()->queryArray($sqlMediaLinks);
+    $resultMediaLinks = Database::get()->queryArray("SELECT * FROM videolink WHERE visible = 1 AND course_id = ?d ORDER BY title", $course_id);
     foreach ($resultMediaLinks as $myrow) {
         $vObj = MediaResourceFactory::initFromVideoLink($myrow);
         $output .= "<tr>                    
