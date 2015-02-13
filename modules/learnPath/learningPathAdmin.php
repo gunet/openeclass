@@ -428,7 +428,7 @@ $tool_content .= "$langAdd: <a href=\"insertMyDoc.php?course=$course_code\" titl
       </td>
     </tr>";
 
-$tool_content .="
+$tool_content .= "
     <tr>
       <td>$langReuse: <a href=\"insertMyModule.php?course=$course_code\" title=\"$langModuleOfMyCourse\">" . $langModuleOfMyCourse . "</a>
       </td>
@@ -437,8 +437,7 @@ $tool_content .="
 $tool_content .= "</table></div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
-    $dialogBox = "
-    <table class=\"table-default\">
+    $dialogBox = "<table class=\"table-default\">
     <tr>
       <th>" . $langMove . ":</th>
       <td>
@@ -479,7 +478,7 @@ $sql = "SELECT M.*, LPM.*, A.`path`
 $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 if (count($result) == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
+    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div></div>";
     draw($tool_content, 2, null, $head_content, $body_action);
     exit();
 }
@@ -523,8 +522,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 // -------------------------- learning path list header ----------------------------
-$tool_content .= "<div class='table-responsive'>
-    <table class='table-default'>
+$tool_content .= "<table class='table-default'>
     <tr>
       <th class='text-left' colspan=\"" . ($maxDeep + 1) . "\">&nbsp;" . $langContents . "</th>
       <th class='text-center'>" . icon('fa-gears') . "</th>
@@ -632,5 +630,5 @@ foreach ($flatElementList as $module) {
     $tool_content .= "</tr>";   
 } // end of foreach
 
-$tool_content .= "</table></div></div>";
+$tool_content .= "</table></div>";
 draw($tool_content, 2, null, $head_content, $body_action);
