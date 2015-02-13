@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-02-12 12:20:38
+// Generated 2015-02-13 09:57:51
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -2541,7 +2541,7 @@ $langDisableEclassStudRegYes = "$langStudents cannot being registered via platfo
 $langDisableEclassProfRegYes = "$langsTeachers cannon registered via platform";
 $langDisableEclassStudRegNo = "$langsStudents are being registered via platform";
 $langDisableEclassProfRegNo = "$langsTeachers are being registered via platform";
-$langcas_ssout = "CAS Single Sign Out Activation";
+$langcas_ssout = "Enable CAS Single Sign Out";
 $langEclassThemes = "Platform Theme";
 $langThemes = "Theme Selection";
 $langOtherOptions = "Other Options";
@@ -3831,3 +3831,4 @@ $langCourseSharing = "Course home page sharing in social networks";
 $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
+$langAddGUser = "Add Guest User";

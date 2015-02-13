@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2015-02-12 12:20:42
+// Generated 2015-02-13 09:57:55
 
 $langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -3743,3 +3743,4 @@ $langCourseSharing = "Course home page sharing in social networks";
 $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
+$langAddGUser = "Add Guest User";

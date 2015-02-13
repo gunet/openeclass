@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-02-12 12:20:38
+// Generated 2015-02-13 09:57:50
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -214,8 +214,8 @@ $langSearch = "Search";
 $langCourseStatusChangedSuccess = "Course type changed successfully!";
 $langCourseStatusChange = "Change course type";
 $langMethods = "Activated Authentication Modes:";
-$langActivate = "Activation";
-$langDeactivate = "Inactivation";
+$langActivate = "Activate";
+$langDeactivate = "Deactivate";
 $langChooseAuthMethod = "Select the user authentication Method and define its method settings";
 $langConnYes = "Successful Connection!";
 $langConnNo = "The connection does not work properly!";
@@ -1397,7 +1397,7 @@ $langMyPersoDeadlines = "MY DEADLINES";
 $langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
 $langMyPersoDocs = "MY LATEST DOCUMENTS";
 $langMyPersoAgenda = "MY AGENDA";
-$langMyPersoForum = "MY FORUMS - LATEST SUBMISSION";
+$langMyPersoForum = "My Forums (latest submissions)";
 $langAssignment = "Assignment";
 $langDeadline = "Deadline";
 $langNoEventsExist = "No events exist";
@@ -1440,7 +1440,7 @@ $langBodyTopicNotify = "A new reply has been posted";
 $langBodyCatNotify = "A new forum has been added";
 $langOfForum = "of forum";
 $langSubjects = "Topics";
-$langPosts = "Postgraduate";
+$langPosts = "Posts";
 $langMessage = "When you remove the test forum, it will remove all messages in that forum too.";
 $langMessages = "Messages";
 $langAllOfThem = "all";
@@ -1656,7 +1656,7 @@ $langIfYouWantToAddManyUsers = "If you want to add a list of users in
             your course, please contact your web administrator.";
 $langLastVisits = "My last visits";
 $langLastUserVisits = "Last Visits of User ";
-$langDumpUser = "User List:";
+$langDumpUser = 'Extract to Excel file';
 $langCsv = "csv:";
 $langcsvenc1 = "windows ((windows-1253)";
 $langcsvenc2 = "unicode (UTF-8)";
@@ -1726,8 +1726,8 @@ $langUserAccountInfo2 = 'New Account Registration&nbsp;';
 $langUserAccountInfo3 = 'Alternative Selection';
 $langNewAccount = 'New Account';
 $langNewAccountActivation = 'Account Activation';
-$langNewUserAccountActivation = $langStudent . 'Account Activation';
-$langNewProfAccountActivation = $langTeacher . 'Account Activation';
+$langNewUserAccountActivation = $langStudent . ' Account Activation';
+$langNewProfAccountActivation = $langTeacher . ' Account Activation';
 $langNewAccountActivation1 = '(existing account)';
 $langUserExistingAccount = 'Login';
 $langDateRequest = "Date of Request";
@@ -2560,7 +2560,7 @@ $langDisableEclassStudRegYes = "$langStudents cannot being registered via platfo
 $langDisableEclassProfRegYes = "$langsTeachers cannon registered via platform";
 $langDisableEclassStudRegNo = "$langsStudents are being registered via platform";
 $langDisableEclassProfRegNo = "$langsTeachers are being registered via platform";
-$langcas_ssout = "CAS Single Sign Out Activation";
+$langcas_ssout = "Enable CAS Single Sign Out";
 $langEclassThemes = "Platform Theme";
 $langThemes = "Theme Selection";
 $langOtherOptions = "Other Options";
@@ -3850,3 +3850,4 @@ $langCourseSharing = "Course home page sharing in social networks";
 $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
+$langAddGUser = "Add Guest User";
