@@ -2541,8 +2541,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
         
         // loosen poll schema, mediumtext columns can be allowed to be null    
-        Database::get()->query("ALTER TABLE `poll` CHANGE `description` `description` MEDIUMTEXT NULL DEFAULT NULL");
-        Database::get()->query("ALTER TABLE `poll` CHANGE `end_message` `end_message` MEDIUMTEXT NULL DEFAULT NULL");
+        if (DBHelper::fieldExists('poll', 'description')) { 
+            Database::get()->query("ALTER TABLE `poll` CHANGE `description` `description` MEDIUMTEXT NULL DEFAULT NULL");
+        } else {
+            Database::get()->query("ALTER TABLE `poll` ADD `description` MEDIUMTEXT NULL DEFAULT NULL");
+        }
+        if (DBHelper::fieldExists('poll', 'end_message')) { 
+            Database::get()->query("ALTER TABLE `poll` CHANGE `end_message` `end_message` MEDIUMTEXT NULL DEFAULT NULL");
+        } else {
+            Database::get()->query("ALTER TABLE `poll` ADD `end_message` MEDIUMTEXT NULL DEFAULT NULL");
+        }
         
         set_config('theme', 'default');
         set_config('theme_options_id', 0);

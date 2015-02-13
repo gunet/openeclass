@@ -260,19 +260,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group'>
-              <label for='PollAnonymized' class='col-sm-2 control-label'>$langPollAnonymize : </label>
+              <label for='PollAnonymized' class='col-sm-2 control-label'>$langPollAnonymize:</label>
               <div class='col-sm-10'>
                 <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '')."> 
               </div>
             </div>            
             <div class='form-group'>
-              <label for='PollDescription' class='col-sm-2 control-label'>$langDescription :</label>
+              <label for='PollDescription' class='col-sm-2 control-label'>$langDescription:</label>
               <div class='col-sm-10'>
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
             </div> 
             <div class='form-group'>
-              <label for='PollEndMessage' class='col-sm-2 control-label'>$langPollEndMessage : </label>
+              <label for='PollEndMessage' class='col-sm-2 control-label'>$langPollEndMessage:</label>
               <div class='col-sm-10'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
