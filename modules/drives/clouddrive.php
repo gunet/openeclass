@@ -35,11 +35,13 @@ final class CloudDriveManager {
 
     private static $DRIVES = null;
 
+    /**
+     * @return CloudDrive
+     */
     public static function getValidDrives() {
         if (CloudDriveManager::$DRIVES == null) {
             $drives = array();
             foreach (CloudDriveManager::$DRIVENAMES as $driveName) {
-                require_once 'plugins/' . strtolower($driveName) . '.php';
                 $drive = new $driveName();
                 if ($drive->isPresent()) {
                     $drives[] = $drive;

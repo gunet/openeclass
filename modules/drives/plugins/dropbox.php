@@ -42,7 +42,7 @@ final class DropBox extends CloudDrive {
     }
 
     public function getDisplayName() {
-        return "Dropbox";
+        return "DropBox";
     }
 
     public function isAuthorized() {
