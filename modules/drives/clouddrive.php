@@ -135,7 +135,7 @@ abstract class CloudDrive {
         return CloudDriveManager::DRIVE . "=" . $this->getName();
     }
 
-    private function getConfig($key) {
+    protected function getConfig($key) {
         $value = Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = ?s", "drive_" . $this->getName() . "_" . $key);
         if ($value)
             return $value->value;
@@ -159,19 +159,25 @@ abstract class CloudDrive {
     }
 
     protected function downloadToFile($url, $filename, $post = null) {
-        $fout = fopen($filename, "w+b");
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        if ($post)
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
-        curl_setopt($ch, CURLOPT_FILE, $fout);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        fclose($fout);
-        return $result;
+        try {
+            $fout = fopen($filename, "w+b");
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            if ($post)
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
+            curl_setopt($ch, CURLOPT_FILE, $fout);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            fclose($fout);
+        } catch (Exception $ex) {
+            return CloudDriveResponse::FILE_NOT_SAVED;
+        }
+        if ($result)
+            return CloudDriveResponse::OK;
+        return CloudDriveResponse::FILE_NOT_FOUND;
     }
 
     protected function downloadToOutput($url, $post = null) {
@@ -187,9 +193,7 @@ abstract class CloudDrive {
         return $result;
     }
 
-    public function store($cloudfile, $path) {
-        $this->downloadToFile($cloudfile->id(), $path);
-    }
+    public abstract function store($cloudfile, $path);
 
     public abstract function getDisplayName();
 
@@ -250,5 +254,14 @@ final class CloudFile {
     public function toJSON() {
         return json_encode(array('name' => $this->name, 'id' => $this->id, 'size' => $this->size, 'drivename' => $this->drivename));
     }
+
+}
+
+class CloudDriveResponse {
+
+    const OK = 0;
+    const FILE_NOT_FOUND = 1;
+    const FILE_NOT_SAVED = 2;
+    const AUTHORIZATION_ERROR = 3;
 
 }

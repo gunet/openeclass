@@ -91,4 +91,10 @@ final class OneDrive extends CloudDrive {
         }
     }
 
+    public function store($cloudfile, $path) {
+        if (!$this->isAuthorized())
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
+        return $this->downloadToFile($cloudfile->id(), $path);
+    }
+
 }

@@ -32,8 +32,8 @@ final class GoogleDrive extends CloudDrive {
             $client->setClientId($this->getClientID());
             $client->setClientSecret($this->getSecret());
             $client->setRedirectUri($this->getRedirect());
+//            $client->setApplicationName("Open eClass");
             $client->addScope(Google_Service_Drive::DRIVE);
-//            $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
             $this->client = $client;
         }
     }
@@ -98,15 +98,28 @@ final class GoogleDrive extends CloudDrive {
         }
     }
 
+    /**
+     * 
+     * @param CloudFile $cloudfile
+     * @param type $path
+     * @return type
+     */
     public function store($cloudfile, $path) {
-        try {
-            $fout = fopen($path, "w+b");
-            header('Location: ' . $cloudfile->id());
-            fclose($fout);
-            die(0);
-            return true;
-        } catch (Exception $ex) {
-            return false;
+        if (!$this->isAuthorized())
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
+        $request = new Google_Http_Request($cloudfile->id(), 'GET', null, null);
+        $httpRequest = $this->client->getAuth()->authenticatedRequest($request);
+        if ($httpRequest->getResponseHttpCode() == 200) {
+            try {
+                $fout = fopen($path, "w+b");
+                file_put_contents($path, $httpRequest->getResponseBody());
+                fclose($fout);
+                return CloudDriveResponse::OK;
+            } catch (Exception $ex) {
+                return CloudDriveResponse::FILE_NOT_SAVED;
+            }
+        } else {
+            return CloudDriveResponse::FILE_NOT_FOUND;
         }
     }
 

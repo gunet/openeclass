@@ -101,14 +101,18 @@ final class DropBox extends CloudDrive {
     }
 
     public function store($cloudfile, $path) {
+        if (!$this->isAuthorized())
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
         try {
             $fout = fopen($path, "w+b");
             $dbxClient = new dbx\Client($this->getAuthorizeToken(), Dropbox::CLIENT);
             $fileMetadata = $dbxClient->getFile($cloudfile->id(), $fout);
             fclose($fout);
-            return !is_null($fileMetadata);
+            if (is_null($fileMetadata))
+                return CloudDriveResponse::FILE_NOT_FOUND;
+            return CloudDriveResponse::OK;
         } catch (Exception $ex) {
-            return false;
+            return CloudDriveResponse::FILE_NOT_SAVED;
         }
     }
 
