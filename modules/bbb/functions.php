@@ -196,12 +196,11 @@ function new_bbb_session() {
 }
 
 /**
- * @brief insert scheduled session data into database
- * @global type $tool_content
+ * @brief insert scheduled session data into database 
  * @global type $langBBBAddSuccessful
  * @global type $langBBBScheduledSession
  * @global type $langBBBScheduleSessionInfo
- * @global type $langBBBScheduleSessionInfo2
+ * @global type $langBBBScheduleSessionInfoJoin
  * @param type $course_id
  * @param type $title
  * @param type $desc
@@ -213,9 +212,8 @@ function new_bbb_session() {
  * @param type $external_users
  */
 function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
-{
-    global $tool_content;
-    global $langBBBScheduledSession, $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2;
+{    
+    global $langBBBScheduledSession, $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin;
 
     // Groups of participants per session
     $r_group = "";
@@ -237,7 +235,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             break;
     }
     
-    Database::get()->querySingle("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record,sessionUsers)"
+    $q = Database::get()->query("INSERT INTO bbb_session (course_id,title,description,start_date,public,active,running_at,meeting_id,mod_pw,att_pw,unlock_interval,external_users,participants,record,sessionUsers)"
         . " VALUES (?d,?s,?s,?t,?s,?s,'1',?s,?s,?s,?d,?s,?s,?s,?d)", $course_id, $title, $desc, $start_session, $type, $status, generateRandomString(), generateRandomString(), generateRandomString(), $minutes_before, $external_users,$r_group,$record,$sessionUsers);
     
 
@@ -259,13 +257,24 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             }
         }
         if(count($recipients)>0)
-        {
+        {            
             $emailsubject = $langBBBScheduledSession;
             $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session);
-            $emailcontent = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session);
-            
+            $emailcontent = $emailbody;            
             //Notify course users for new bbb session
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
+        }
+        //Notify external users for new bbb session
+        if (isset($external_users)) {
+            $recipients = explode(',', $external_users);
+            $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
+            foreach ($recipients as $row) {
+                $bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
+                $emailsubject = $langBBBScheduledSession;
+                $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
+                $emailcontent = $emailbody;
+                send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
+            }            
         }
     }
     
@@ -286,7 +295,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
  * @global type $course_id
  * @global type $langBBBScheduleSessionInfo
  * @global type $langBBBScheduledSession
- * @global type $langBBBScheduleSessionInfo2
+ * @global type $langBBBScheduleSessionInfoJoin
  * @param type $session_id
  * @param type $title
  * @param type $desc
@@ -299,8 +308,8 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
  */
 function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
-    global $tool_content, $course_id;
-    global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2 ;
+    global $course_id;
+    global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin;
 
     // Groups of participants per session
     $r_group = "";
@@ -342,13 +351,27 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
         if(count($recipients)>0)
         {
             $emailsubject = $langBBBScheduledSession;
-            $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session);
-            $emailcontent = $langBBBScheduleSessionInfo . " \"" .q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session);
-            
+            $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "";
+            $emailcontent = $emailbody;
             //Notify course users for new bbb session
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
         }
+        
+        //Notify external users for new bbb session
+        if (isset($external_users)) {
+            $recipients = explode(',', $external_users);
+            $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $_GET['id']);                        
+            foreach ($recipients as $row) {
+                $bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');                              
+                $emailsubject = $langBBBScheduledSession;
+                $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
+                $emailcontent = $emailbody;
+                send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
+            }            
+        }               
     }
+    
+    
     
     $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
@@ -584,7 +607,6 @@ function bbb_session_details() {
                               <th class = 'text-center'>$langNewBBBSessionType</th>
                               <th class = 'text-center'>".icon('fa-gears')."</th>
                           </tr>";
-        $k = 0;
 
         foreach ($result as $row) {    
                 // Get participants groups
@@ -667,12 +689,14 @@ function bbb_session_details() {
                 $tool_content .= "</tr>";
             }        
         $tool_content .= "</table></div></div></div>";
-        if(get_total_bbb_servers()=='0')
+        if (get_total_bbb_servers() == '0')
         {
-            if($is_editor) {$tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";}
-            else {$tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";}
-        }
-        
+            if ($is_editor) {
+                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";                
+            } else {
+                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";                
+            }
+        }        
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoBBBSesssions</div>";
     }
@@ -933,8 +957,8 @@ function bbb_join_user($meeting_id, $att_pw, $surname, $name){
         'webVoiceConf' => ''	// OPTIONAL - string
     );
     // Get the URL to join meeting:
-    $result = $bbb->getJoinMeetingURL($joinParams);       
-
+    $result = $bbb->getJoinMeetingURL($joinParams);    
+    
     return $result;
 }
 
