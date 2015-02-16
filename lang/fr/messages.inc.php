@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-02-13 09:57:56
+// Generated 2015-02-16 13:15:51
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -358,7 +358,7 @@ $langAddModify = "Ajouter / Modifier";
 $langAddIntro = "Ajouter un texte introductif";
 $langBackList = "Retour à la liste";
 $langEvents = "Événements";
-$langAgenda = "Agenda";
+$langAgenda = "Calendar";
 $langDay = "Jour";
 $langMonth = "Mois";
 $langYear = "Année";

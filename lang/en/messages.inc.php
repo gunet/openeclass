@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-02-13 09:57:50
+// Generated 2015-02-16 13:15:46
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -329,7 +329,7 @@ $langAddModify = "Add / Modify";
 $langAddIntro = "Add introductory text";
 $langBackList = "Return to the list";
 $langEvents = "Events";
-$langAgenda = "Agenda";
+$langAgenda = "Calendar";
 $langDay = "Day";
 $langMonth = "Month";
 $langYear = "Year";
@@ -496,7 +496,7 @@ $langRefreshInfo_A = "Choose the appropriate actions";
 $langUserDelCourse = "Delete users from course";
 $langUserDelNotice = "Notice: Users will not unregistered from other courses";
 $langAnnouncesDel = "Delete course announcements";
-$langAgendaDel = "Delete course agenda data";
+$langAgendaDel = "Delete course calendar data";
 $langHideDocuments = "Hide course documents";
 $langHideWork = "Hide course assignments";
 $langSubmitActions = "Submit Actions";
@@ -504,7 +504,7 @@ $langOptions = "Options";
 $langRefreshSuccess = "The lesson refresh operation was successful. The following actions took place:";
 $langUsersDeleted = "Users deleted from course";
 $langAnnDeleted = "Announcements deleted from course";
-$langAgendaDeleted = "Agenda data deleted from course";
+$langAgendaDeleted = "Calendar data deleted from course";
 $langWorksDeleted = "Assignments deleted";
 $langDocsDeleted = "Documents deleted";
 $langContactProf = "Contact $langTeachers";
@@ -1396,7 +1396,7 @@ $langMyPersoLessons = "MY COURSES";
 $langMyPersoDeadlines = "MY DEADLINES";
 $langMyPersoAnnouncements = "MY ANNOUNCEMENTS";
 $langMyPersoDocs = "MY LATEST DOCUMENTS";
-$langMyPersoAgenda = "MY AGENDA";
+$langMyPersoAgenda = "My Calendar";
 $langMyPersoForum = "My Forums (latest submissions)";
 $langAssignment = "Assignment";
 $langDeadline = "Deadline";
