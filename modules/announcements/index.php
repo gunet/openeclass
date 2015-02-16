@@ -540,6 +540,7 @@ if (isset($_GET['an_id'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
         $tool_content .= "<div class='panel'>";
         $tool_content .= "<div class='panel-body'>";
+        $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
         $tool_content .= $row->content;
         $tool_content .= "</div></div>";
     }
