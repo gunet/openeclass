@@ -159,14 +159,13 @@ if ($u) {
                         <input type='text' name='fname' size='50' value='" . q($info->givenname) . "'>
                         </div>
                    </div>";
-
-        if (!in_array($info->password, $auth_ids)) {
             $tool_content .= "<div class='form-group'>
-                     <label class='col-sm-2 control-label'>$langUsername</label>
-                     <div class='col-sm-10'>
-                        <input type='text' name='username' size='50' value='" . q($info->username) . "'>
-                        </div>
-                    </div>";
+                     <label class='col-sm-2 control-label'>$langUsername</label>";
+        if (!in_array($info->password, $auth_ids)) {
+            $tool_content .= "<div class='col-sm-10'>
+                            <input type='text' name='username' size='50' value='" . q($info->username) . "'>
+                        </div>";
+                    
         } else {    // means that it is external auth method, so the user cannot change this password
             switch ($info->password) {
                 case "pop3": $auth = 2;
@@ -185,11 +184,11 @@ if ($u) {
                     break;
             }
             $auth_text = get_auth_info($auth);
-            $tool_content .= "<div class='form-group'>
-                <label class='col-sm-2 control-label'>$langUsername</label>
-                <div class='col-sm-10'><b>" . q($info->username) . "</b> [" . $auth_text . "] <input type='hidden' name='username' value=" . q($info->username) . "></div>
-                </div></div>";
+            $tool_content .= "<div class='col-sm-10'>
+                                <label>" . q($info->username) . "</label> [" . $auth_text . "] <input type='hidden' name='username' value=" . q($info->username) . ">
+                            </div>";
         }
+        $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>
           <label class='col-sm-2 control-label'>e-mail</label>
           <div class='col-sm-10'><input type='text' name='email' size='50' value='" . q(mb_strtolower(trim($info->email))) . "' /></div>

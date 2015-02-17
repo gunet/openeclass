@@ -43,15 +43,13 @@ $userObj = new User();
 
 load_js('jstree');
 
-
 $auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : '';
 
 $msg = "$langProfReg (" . (get_auth_info($auth)) . ")";
 
-$pageName = $msg;
+$toolName = $msg;
 $navigation[] = array("url" => "../admin/index.php", "name" => $langAdmin);
 $navigation[] = array("url" => "../admin/listreq.php", "name" => $langOpenProfessorRequests);
-$tool_content = "";
 
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 // professor registration
@@ -96,10 +94,10 @@ if ($submit) {
     $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
     $sql = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email, status,
-                                                    am, registered_at, expires_at, lang, verified_mail)
+                                                    am, registered_at, expires_at, lang, verified_mail, description, whitelist)
                                 VALUES (?s, ?s, ?s, ?s, ?s, 1, ?s, 
                                 " . DBHelper::timeAfter() . ",
-                                " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d)", 
+                                " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d, '', '')", 
                     $ps, $pn, $pu, $password, $pe, $comment, $lang, $verified_mail);
 
     $last_id = $sql->lastInsertID;
@@ -136,15 +134,25 @@ if ($submit) {
     // if not submit then display the form
     if (isset($_GET['id'])) { // if we come from prof request
         $id = intval($_GET['id']);
-        // display actions toolbar
-        $tool_content .= "<div id='operations_container'>
-		<ul id='opslist'>
-		<li><a href='../admin/listreq.php?id=$id&amp;close=1' onclick='return confirmation();'>$langClose</a></li>
-		<li><a href='../admin/listreq.php?id=$id&amp;close=2'>$langRejectRequest</a></li>";
-        if (isset($_GET['id'])) {
-                $tool_content .= "<li><a href='../admin/listreq.php'>$langBackRequests</a>";
-        }
-        $tool_content .= "</ul></div>";
+        
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "../admin/index.php",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label'),
+            array('title' => $langBackRequests,
+                  'url' => "../admin/listreq.php",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary'),
+            array('title' => $langRejectRequest,
+                  'url' => "../admin/listreq.php?id=$_GET[id]&amp;close=2",
+                  'icon' => 'fa-ban',
+                  'level' => 'primary'),
+            array('title' => $langClose,
+                  'url' => "../admin/listreq.php?id=$_GET[id]&amp;close=1",
+                  'icon' => 'fa-close',
+                  'level' => 'primary')));
+                        
         $res = Database::get()->querySingle("SELECT givenname, surname, username, email,
                                                     faculty_id, comment, lang, date_open, phone, am, verified_mail 
                                                     FROM user_request WHERE id = ?d", $id);
@@ -161,68 +169,77 @@ if ($submit) {
         $pdate = nice_format(date('Y-m-d', strtotime($res->date_open)));
     }
 
-    @$tool_content .= "
-      <form action='$_SERVER[SCRIPT_NAME]' method='post'>
-      <fieldset>
-      <legend>$langNewProf</legend>
-	<table width='100%' class='tbl'>
-	<tr>
-	<th class='left' width='180'><b>" . $langSurname . "</b></th>
-	<td>" . q($ps) . "<input type='hidden' name='ps' value='" . q($ps) . "'></td>
-	</tr>
-	<tr>
-	<th class='left'><b>$langName</b></th>
-	<td>" . q($pn) . "<input type='hidden' name='pn' value='" . q($pn) . "'></td>
-	</tr>
-	<tr>
-	<th class='left'><b>$langUsername</b></th>
-	<td>" . q($pu) . "<input type='hidden' name='pu' value='" . q($pu) . "'></td>
-	</tr>
-	<tr>
-	<th class='left'><b>$langEmail</b></th>
-	<td>" . q($pe) . "<input type='hidden' name='pe' value='" . q($pe) . "' ></td>
-	</tr>
-	<tr>
-	<th class='left'><b>$langEmailVerified</b></th>
-	<td>";
-
-    $verified_mail_data = array();
-    $verified_mail_data[0] = $m['pending'];
-    $verified_mail_data[1] = $langYes;
-    $verified_mail_data[2] = $langNo;
-
-    $tool_content .= selection($verified_mail_data, "verified_mail", $pvm);
-
-    $tool_content .= "</td>
-	</tr>
-	<tr>
-	<th class='left'>$langFaculty</th>
-	<td>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
-    $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</td></tr>";
-    $tool_content .= "<tr><th class='left'>$langLanguage</th><td>";
-    $tool_content .= lang_select_options('language', '', $lang);
-    $tool_content .= "</td></tr>";
-    $tool_content .= "<tr><th class='left'><b>$langPhone</b></th>
-	<td>" . @q($pphone) . "&nbsp;</td></tr>
-	<tr>
-	<th class='left'><b>$langComments</b></th>
-	<td>" . @q($pcom) . "&nbsp;</td>
-	</tr>
-	<tr>
-	<th class='left'><b>$langDate</b></th>
-	<td>" . @q($pdate) . "&nbsp;</td>
-	</tr>
-	<tr><th>&nbsp;</th>
-	<td><input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' >
-	<input type='hidden' name='auth' value='$auth' >
-	</td></tr>
-	</table>
+    $tool_content .= "<div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
+        <fieldset>
+        <div class='form-group'>
+        <label for='Sur' class='col-sm-2 control-label'>$langSurname:</label>
+            <div class='col-sm-10'>" .q($ps) ."
+                <input type='hidden' name='ps' value='" . q($ps) . "'>              
+            </div>
+        </div>
+        <div class='form-group'>
+        <label for='Name' class='col-sm-2 control-label'>$langName:</label>
+            <div class='col-sm-10'>" .q($pn) ."
+                <input type='hidden' name='pn' value='" . q($pn) . "'>              
+            </div>            
+        </div>
+        <div class='form-group'>
+        <label for='Username' class='col-sm-2 control-label'>$langUsername:</label>
+            <div class='col-sm-10'>" . q($pu) . "
+                <input type='hidden' name='pu' value='" . q($pu) . "'>                
+            </div>
+        </div>        
+        <div class='form-group'>
+        <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
+            <div class='col-sm-10'>" . q($pe) . "
+                <input type='hidden' name='pe' value='" . q($pe) . "'>
+            </div>
+        </div>
+	<div class='form-group'>
+          <label for='emailverified' class='col-sm-2 control-label'>$langEmailVerified:</label>
+            <div class='col-sm-10'>";
+        $verified_mail_data = array();        
+        $verified_mail_data[0] = $m['pending'];
+        $verified_mail_data[1] = $langYes;
+        $verified_mail_data[2] = $langNo;
+        if (isset($pvm)) {
+            $tool_content .= selection($verified_mail_data, "verified_mail_form", $pvm, "class='form-control'");
+        } else {
+            $tool_content .= selection($verified_mail_data, "verified_mail_form", '', "class='form-control'");
+        }
+        $tool_content .= "</div></div>";          	
+        $tool_content .= "<div class='form-group'>
+        <label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>
+            <div class='col-sm-10'>";           
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $pt, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
+        $head_content .= $js;
+        $tool_content .= $html;
+        $tool_content .= "</div></div>";
+        $tool_content .= "<div class='form-group'>
+            <label for='lang' class='col-sm-2 control-label'>$langLanguage:</label>
+            <div class='col-sm-10'>";
+        $tool_content .= lang_select_options('language', "class='form-control'", $lang);
+        $tool_content .= "</div></div>";            
+        $tool_content .= "<div class='form-group'>
+            <label for='phone' class='col-sm-2 control-label'>$langPhone:</label>
+                <div class='col-sm-10'>            
+                    <input class='form-control' id='phone' type='text' name='phone' value='" . q($pphone) . "' placeholder='$langPhone'>
+                </div>
+            </div>
+        <div class='form-group'>
+            <label for='comments' class='col-sm-2 control-label'>$langComments</label>
+                <div class='col-sm-10'>" . q($pcom) . "</div>
+            </div>
+	<div class='form-group'><label for='date' class='col-sm-2 control-label'>$langDate</label>
+                                <div class='col-sm-10'>" . q($pdate) . "</div></div>        
+	<div class='col-sm-offset-2 col-sm-10'>
+            <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+        </div>		
+	<input type='hidden' name='auth' value='$auth' >	
 	<input type='hidden' name='rid' value='" . @$id . "'>
       </fieldset>
-      </form>";
-    $tool_content .= "<p align='right'><a href='../admin/index.php'>$langBack</a></p>";
+    </form>
+    </div>";    
 }
 draw($tool_content, 3, null, $head_content);
