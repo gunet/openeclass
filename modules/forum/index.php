@@ -71,6 +71,7 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
     } else {
         Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, cat_id = ?d, notify_sent = 1, course_id = ?d", $uid, $cat_id, $course_id);
     }
+    redirect("index.php?course=$course_code");
 } elseif (isset($_GET['forumnotify'])) { // modify forum notification
     if (isset($_GET['forum_id'])) {
         $forum_id = $_GET['forum_id'];
@@ -82,6 +83,7 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
     } else {
         Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, forum_id = ?d, notify_sent = 1, course_id = ?d", $uid, $forum_id, $course_id);
     }
+    redirect("index.php?course=$course_code");
 }
 
 /*
@@ -104,14 +106,14 @@ if ($total_categories > 0) {
                                                         WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $uid, $catNum, $course_id);
         if ($sql) {
             $action_notify = $sql->notify_sent;
+        } else {
+            $action_notify = FALSE;
         }
 
         if (!isset($action_notify)) {
             $link_notify = FALSE;
-            $icon = '_off';
         } else {
             $link_notify = toggle_link($action_notify);
-            $icon = toggle_icon($action_notify);
         }
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr>
@@ -139,7 +141,8 @@ if ($total_categories > 0) {
         $dyntools[] = array('title' => $langNotify,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
             'icon' => 'fa-envelope',
-            'level' => 'primary'
+            'level' => 'primary',
+            'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
         );
         $tool_content .= action_button($dyntools)."</div>";
 
@@ -200,7 +203,17 @@ if ($total_categories > 0) {
                     //  - forum doesn't belong to group
                     //  - forum belongs to group and group forums are enabled and
                     //     - user is member of group
+                    $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+								WHERE user_id = ?d
+								AND forum_id = ?d
+								AND course_id = ?d", $uid, $forum_id, $course_id);
+                    if ($forum_action_notify) {
+                        $forum_action_notify = $forum_action_notify->notify_sent;
+                    } else {
+                        $forum_action_notify = FALSE;
+                    }                    
                     if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
+                        if ($forum_action_notify) $tool_content .= "<span class='pull-right label label-primary' rel='tooltip' data-placement='bottom' title='".q($langNotify)."'><i class='fa fa-envelope'></i></span>";
                         $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member . "</div>";
@@ -221,19 +234,11 @@ if ($total_categories > 0) {
                     } else {
                         $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
                     }
-                    $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-								WHERE user_id = ?d
-								AND forum_id = ?d
-								AND course_id = ?d", $uid, $forum_id, $course_id);
-                    if ($forum_action_notify) {
-                        $forum_action_notify = $forum_action_notify->notify_sent;
-                    }
+
                     if (!isset($forum_action_notify)) {
                         $forum_link_notify = false;
-                        $forum_icon = '_off';
                     } else {
                         $forum_link_notify = toggle_link($forum_action_notify);
-                        $forum_icon = toggle_icon($forum_action_notify);
                     }
                     $tool_content .= "<td class='option-btn-cell'>";
 
