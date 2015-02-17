@@ -88,7 +88,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langPortfolio, $langSearch, $langUser,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
-        $require_current_course, $require_help, $siteName, $siteName,
+        $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
         $theme_settings, $language, $saved_is_editor,
@@ -505,7 +505,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('LANG_SEARCH', $langSearch);
 
     // display role switch button if needed
-    if (isset($require_current_course) and ($is_editor or (isset($saved_is_editor) and $saved_is_editor))) {
+    if (isset($require_current_course) and
+        ($is_editor or (isset($saved_is_editor) and $saved_is_editor)) and
+        !(isset($require_course_admin) and $require_course_admin) and
+        !(isset($require_editor) and $require_editor)) {
         if ($is_editor) {
             $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewEnable);
         } else {
