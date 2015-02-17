@@ -1426,6 +1426,7 @@ $langTopicData = "Topic elements";
 $langTopicAnswer = "Topic Answer";
 $langGroupDocumentsLink = "Documents of the group ";
 $langNotify = "Notification via email if replies are posted";
+$langStopNotify = "Stop notification via email if replies are posted";
 $langNotifyActions = "Notifications";
 $langGoToPage = "Go to page";
 $langClick = "Click here";
