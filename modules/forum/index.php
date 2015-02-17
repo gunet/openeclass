@@ -138,7 +138,7 @@ if ($total_categories > 0) {
                 'confirm' => $langConfirmDelete
             )
         );
-        $dyntools[] = array('title' => $langNotify,
+        $dyntools[] = array('title' => $action_notify ? $langStopNotify : $langNotify,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
             'icon' => 'fa-envelope',
             'level' => 'primary',
@@ -252,7 +252,7 @@ if ($total_categories > 0) {
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete)
                     );
-                    $dyntools[] = array('title' => $langNotify,
+                    $dyntools[] = array('title' => $forum_action_notify ? $langStopNotify : $langNotify,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
                         'icon' => 'fa-envelope');
                     $tool_content .= action_button($dyntools);
