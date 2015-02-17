@@ -664,7 +664,14 @@ function bbb_session_details() {
 
     $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s ORDER BY id DESC", $course_id);
 
-    if (($result)) {
+    if (get_total_bbb_servers() == '0')
+        {
+            if ($is_editor) {
+                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";                
+            } else {
+                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";                
+            }
+    }elseif (($result)) {
         if (!$is_editor) {
             $tool_content .= "<div class='alert alert-info'><label>$langNote</label>:<br>$langBBBNoteEnableJoin</div>";
         }    
