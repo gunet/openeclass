@@ -911,7 +911,7 @@ if (!class_exists('Exercise')):
                                     $clone_course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
                                     $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;        
             if ($clone_course_id != $course_id) { // copy questions to new course question_pool
-                $maxId = Database::get()->querySingle("SELECT MAX(id) AS maxId
+                $maxId = Database::get()->querySingle("SELECT COALESCE(MAX(id), 0) AS maxId
                                             FROM exercise_question WHERE course_id = ?d", $clone_course_id);
                 Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
                                             SELECT ?d, question, description, weight, q_position, type, difficulty, 0
