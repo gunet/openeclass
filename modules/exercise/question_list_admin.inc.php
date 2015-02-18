@@ -177,12 +177,14 @@ $head_content .= "
                 initAjaxSelect();
            
     });
-    $('.warnLink').on('click', function(e){
-          var modifyAllLink = $(this).attr('href');
-          var modifyOneLink = modifyAllLink.concat('&clone=true');
-          $('a#modifyAll').attr('href', modifyAllLink);
-          $('a#modifyOne').attr('href', modifyOneLink); 
-    });  
+    $('[data-toggle=\"popover\"]').on('shown.bs.popover', function () {
+        $('.warnLink').on('click', function(e){
+              var modifyAllLink = $(this).attr('href');
+              var modifyOneLink = modifyAllLink.concat('&clone=true');
+              $('a#modifyAll').attr('href', modifyAllLink);
+              $('a#modifyOne').attr('href', modifyOneLink); 
+        });
+    });
   });
 </script>
 ";
