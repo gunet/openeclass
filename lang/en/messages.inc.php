@@ -1306,6 +1306,7 @@ $langAllCategoryDeleted = "All categories and all links have been deleted";
 $langGiveURL = "Please give the link URL";
 $langGiveCategoryName = "Please give the category name";
 $langNoCategory = "No category";
+$langNoLinkInCategory = "There are no links in this category";
 $langCategorisedLinks = "Categorised links";
 $showall = "Show all";
 $shownone = "Show none";

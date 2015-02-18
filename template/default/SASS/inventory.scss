@@ -1732,6 +1732,24 @@ th.forum_td:first-child{
 {
     font-size: 16px;
 }
+table.nocategory-links td.nocategory-link, table.category-links td.nocategory-link{
+    padding: 15px 25px;
+}
+table.category-links th.category-link{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    
+    span.link-description{
+        padding-left: 17px;
+        font-size: 14px;
+        color: #666;
+        font-weight: normal;
+    }
+}
+table.category-links td.category-link{
+    padding: 15px 20px;
+    
+}
 #Frame
 {
     padding: 0 0;
