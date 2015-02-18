@@ -1746,6 +1746,11 @@ table.category-links th.category-link{
         font-weight: normal;
     }
 }
+.open-category, .open-category:hover
+{
+    color: #333;
+    text-decoration: none;
+}
 table.category-links td.category-link{
     padding: 15px 20px;
     

@@ -1307,6 +1307,7 @@ $langGiveURL = "Please give the link URL";
 $langGiveCategoryName = "Please give the category name";
 $langNoCategory = "No category";
 $langNoLinkInCategory = "There are no links in this category";
+$langNoLinkCategories = "There are no link categories";
 $langCategorisedLinks = "Categorised links";
 $showall = "Show all";
 $shownone = "Show none";

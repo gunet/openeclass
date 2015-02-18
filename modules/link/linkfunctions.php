@@ -152,7 +152,7 @@ function showcategoryadmintools($categoryid) {
                  array('title' => $langDown,
                        'level' => 'primary',
                        'icon' => 'fa-arrow-down',
-                       'disabled' => '$catcounter  $aantalcategories',
+                       'disabled' => $catcounter == $aantalcategories-1,
                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid" )
                 ));           
     $catcounter++;

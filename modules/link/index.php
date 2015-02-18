@@ -305,7 +305,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
-            $tool_content .= "<tr><td class='text-left not_visible'> - $langNoLinkInCategory - </td><td></td><tr>";
+            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td><td></td><tr>";
         }
         $tool_content .= "</table></div></div></div>";
         
@@ -327,11 +327,26 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
+        } else {
+            $tool_content .= "<tr><th>";
+           
+            $tool_content .= "$langCategorisedLinks&nbsp;";
+            if (isset($urlview) and abs($urlview) == 0) {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params."'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
+            } else {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params."'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
+            }$tool_content .= "</th>";
+            if ($is_editor) {
+                $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+            }
+            $tool_content .= "</tr>";
+             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkCategories - </td><td></td><tr>";
         }
         if ($urlview === '') {
             $urlview = str_repeat('0', $aantalcategories);
         }
         $i = 0;
+        $catcounter = 0;
         foreach ($resultcategories as $myrow) {
             if (empty($urlview)) {
                 // No $view set in the url, thus for each category link it should be all zeros except it's own
@@ -346,8 +361,8 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
             if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
-                $tool_content .= "<tr><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params'>" . q($myrow->name) . "</a>";
+                $tool_content .= "<tr><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params' class='open-category'>" . q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
@@ -363,10 +378,10 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 $tool_content .= "</tr>";
                 showlinksofcategory($myrow->id);
             } else {            
-                $tool_content .= "<tr><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)."
-                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
+                $tool_content .= "<tr><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)."&nbsp;
+                              <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" ;
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
-                $tool_content .= $tinymce_params . "'>" . q($myrow->name) . "</a>";
+                $tool_content .= $tinymce_params . "' class='open-category'>" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span</th>";
