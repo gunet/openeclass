@@ -212,12 +212,12 @@ if (count($result) > 0) { // topics found
     $tool_content .= "<div class='table-responsive'>
 	<table class='table-default'>
 	<tr>
-	  <th colspan='2'>&nbsp;$langSubject</th>
-	  <th width='70' class='text-center'>$langAnswers</th>
-	  <th width='150' class='text-center'>$langSender</th>
-	  <th width='80' class='text-center'>$langSeen</th>
-	  <th width='190' class='text-center'>$langLastMsg</th>
-	  <th width='80' class='text-center'>" . icon('fa-gears') . "</th>
+	  <th class='forum_td'>&nbsp;$langSubject</th>
+	  <th class='text-center forum_td'>$langAnswers</th>
+	  <th class='text-center forum_td'>$langSender</th>
+	  <th class='text-center forum_td'>$langSeen</th>
+	  <th class='text-center forum_td'>$langLastMsg</th>
+	  <th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
 	</tr>";    
     foreach ($result as $myrow) {        
         $replies = $myrow->num_replies;
@@ -242,8 +242,7 @@ if (count($result) > 0) { // topics found
             } else {
                 $image = icon('fa-comments');
             }
-        }
-        $tool_content .= "<td class='text-center'>".$image."</td>";        
+        }        
         if ($replies > $posts_per_page) {
             $total_reply_pages = ceil($replies / $posts_per_page);
             $pagination .= "<strong class='pagination'><span>".icon('fa-arrow-circle-right')."";
@@ -256,7 +255,7 @@ if (count($result) > 0) { // topics found
             }
             $pagination .= "&nbsp;</span></strong>";
         }
-        $tool_content .= "<td><a href='$topiclink'><b>" . q($topic_title) . "</b></a>$pagination</td>";
+        $tool_content .= "<td>$image <a href='$topiclink'><b>" . q($topic_title) . "</b></a>$pagination</td>";
         $tool_content .= "<td class='text-center'>$replies</td>";
         $tool_content .= "<td class='text-center'>" . q(uid_to_name($myrow->poster_id)) . "</td>";
         $tool_content .= "<td class='text-center'>$myrow->num_views</td>";
@@ -273,7 +272,7 @@ if (count($result) > 0) { // topics found
             $topic_link_notify = toggle_link($topic_action_notify);
             $topic_icon = toggle_icon($topic_action_notify);
         }
-        $tool_content .= "<td>";
+        $tool_content .= "<td class='text-center option-btn-cell'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array('title' => $langModify,

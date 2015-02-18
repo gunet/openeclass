@@ -636,6 +636,7 @@ $langCreatorEmail = "Author's email";
 $langFormat = "Format";
 $langSubject = "Subject";
 $langAuthor = "Author";
+$langUserForum = "User";
 $langCopyrighted = "Copyright";
 $langCopyrightedFree = "Free";
 $langCopyrightedNotFree = "Protected";

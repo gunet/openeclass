@@ -1233,6 +1233,7 @@ $langCreatorEmail = "Ηλ. Διεύθυνση Συγγραφέα";
 $langFormat = "Τύπος-Κατηγορία";
 $langSubject = "Θέμα";
 $langAuthor = "Συγγραφέας";
+$langUserForum = "Μέλος";
 $langCopyrighted = "Πνευματικά Δικαιώματα";
 $langCopyrightedFree = "Ελεύθερο δικαιωμάτων";
 $langCopyrightedNotFree = "Προστατεύονται όλα τα δικαιώματα";

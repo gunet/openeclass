@@ -116,8 +116,8 @@ if ($total_categories > 0) {
             $link_notify = toggle_link($action_notify);
         }
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr>
-		<th colspan='6'><b>$cat_title</b><div class='pull-right'>";
+        $tool_content .= "
+		<caption><b>$cat_title</b><div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
@@ -144,14 +144,14 @@ if ($total_categories > 0) {
             'level' => 'primary',
             'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
         );
-        $tool_content .= action_button($dyntools)."</div>";
+        $tool_content .= action_button($dyntools)."</div></caption>";
 
         $tool_content .= "<tr>
-		<td colspan='2'>$langForums</td>
-		<td class='text-center'>$langSubjects</td>
-		<td class='text-center'>$langPosts</td>
-		<td class='text-center'>$langLastPost</td>
-		<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
+		<td class='forum_td'>$langForums</td>
+		<td class='text-center forum_td'>$langSubjects</td>
+		<td class='text-center forum_td'>$langPosts</td>
+		<td class='text-center forum_td'>$langLastPost</td>
+		<th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
 		</tr>";
 
         // display forum topics
@@ -182,7 +182,6 @@ if ($total_categories > 0) {
                     } else {
                         $tool_content .= "<td>".icon('fa-comments')."</td>";
                     }*/
-                    $tool_content .= "<td>".icon('fa-comments')."</td>";
                     $forum_name = q($forum_data->name);
                     if ($forum_data->poster_id) {
                         $last_user_post = uid_to_name($forum_data->poster_id);
@@ -229,7 +228,7 @@ if ($total_categories > 0) {
                         $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;
                                                 <a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
 						".icon('fa-comment-o', $langLastPost)."
-						</a>
+						</a><br>
 						$human_last_post_time</span></td>";
                     } else {
                         $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";

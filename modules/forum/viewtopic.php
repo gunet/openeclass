@@ -247,10 +247,10 @@ if ($paging and $total > $posts_per_page) {
 
 $tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
     <tr>
-      <th width='220'>$langAuthor</th>
+      <th width='220'>$langUserForum</th>
       <th>$langMessage</th>";
 if ($is_editor || $topic_locked != 1) {
-    $tool_content .= "<th width='60' class='text-center'>" . icon('fa-gears') . "</th>";
+    $tool_content .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
 }
 $tool_content .= "</tr>";
 
@@ -312,8 +312,8 @@ foreach ($result as $myrow) {
 
     $tool_content .= "<td>
 	  <div>
-	    <a name='".$myrow->id."'></a>".$anchor_link;
-	$tool_content .= "<b>$langSent: </b>" . $myrow->post_time . "<br>$postTitle
+	    <span class='pull-right forum-anchor-link'><a name='".$myrow->id."'></a>".$anchor_link."</span>";
+	$tool_content .= "$postTitle<br><b>$langSent: </b>" . $myrow->post_time . "
 	  </div>
 	  <br />$message<br />" . $parent_post_link . $rate_str . "
 	</td>";
