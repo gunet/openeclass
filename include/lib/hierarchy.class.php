@@ -265,7 +265,7 @@ class Hierarchy {
      * @return string         - The (unserialized) node's name
      */
     public function getNodeName($key, $useKey = 'id') {
-        if ($key === null || $key <= 0) {
+        if ($key === null || intval($key) <= 0) {
             return null;
         }
         
@@ -551,7 +551,7 @@ class Hierarchy {
      * @return string $js              - The returned JS code
      */
     private function buildJSNodePicker($options) {
-        global $themeimg, $langCancel, $langSelect, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
+        global $urlAppend, $langEmptyNodeSelect, $langEmptyAddNode, $langNodeDel;
 
         $params = $options['params'];
         $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
@@ -585,23 +585,36 @@ $(document).ready(function() {
                 
     $( "#treeModalSelect" ).click(function() {
         var newnode = $( "#js-tree" ).jstree("get_selected");
-        
-        if (!newnode.length) {
-            alert("$langEmptyNodeSelect");
-        } else {
-            countnd += 1;
-            $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
-                                 + '<input type="hidden" $params value="' + newnode.attr("id").substring(2) + '" />'
-                                 + newnode.children("a").text()
-                                 + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><i class="fa fa-times" data-toggle="tooltip" data-original-title="$langNodeDel" rel="tooltip" data-placement="top" title="$langNodeDel"><\/i><\/a>'
-                                 + '<\/p>');
+        var newnodeid = newnode.attr("id").substring(2);
+        var newnodename = newnode.children("a").text();
+                
+        jQuery.getJSON('{$urlAppend}modules/hierarchy/nodefullpath.php', {nodeid : newnodeid})
+        .done(function(data) {
+            if (data.nodefullpath !== undefined && data.nodefullpath.length > 0) {
+                newnodename = data.nodefullpath;
+            }
+        })
+//        .fail(function(jqxhr, textStatus, error) {
+//            // console.debug("jqxhr Request Failed: " + textStatus + ', ' + error);
+//        })
+        .always(function(dataORjqXHR, textStatus, jqXHRORerrorThrown) {
+            if (!newnode.length) {
+                alert("$langEmptyNodeSelect");
+            } else {
+                countnd += 1;
+                $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
+                                     + '<input type="hidden" $params value="' + newnodeid + '" />'
+                                     + newnodename
+                                     + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><i class="fa fa-times" data-toggle="tooltip" data-original-title="$langNodeDel" rel="tooltip" data-placement="top" title="$langNodeDel"><\/i><\/a>'
+                                     + '<\/p>');
 
-            $( "#dialog-set-value" ).val( newnode.children("a").text() );
-            $( "#dialog-set-key" ).val(newnode.attr("id").substring(2));
-            document.getElementById('dialog-set-key').onchange();
+                $( "#dialog-set-value" ).val(newnodename);
+                $( "#dialog-set-key" ).val(newnodeid);
+                document.getElementById('dialog-set-key').onchange();
 
-            $( "#treeModal" ).modal( "hide" );
-        }
+                $( "#treeModal" ).modal( "hide" );
+            }
+        });
     });
 
     $( "#js-tree" ).jstree({
@@ -648,10 +661,11 @@ jContent;
             priorityA = this._get_node(a).attr("tabindex");
             priorityB = this._get_node(b).attr("tabindex");
 
-            if (priorityA == priorityB)
-                return this.get_text(a) > this.get_text(b) ? 1 : -1;
-            else
-                return priorityA < priorityB ? 1 : -1;
+            if (priorityA == priorityB) {
+                return (this.get_text(a) > this.get_text(b)) ? 1 : -1;
+            } else {
+                return (priorityA < priorityB) ? 1 : -1;
+            }
         }
     });
 
@@ -739,7 +753,7 @@ jContent;
                 if (isset($tree_array[$defs[0]])) {
                     $def = $tree_array[$defs[0]];
                 } else {
-                    $def = $this->getNodeName($defs[0], $useKey);
+                    $def = $this->getFullPath($defs[0], true, '', $useKey);
                 }
             }
             else {
@@ -900,19 +914,20 @@ jContent;
     /**
      * Get a node's full breadcrump-style path
      *
-     * @param  int     $nodeid    - the node's id whose full path we want
+     * @param  int     $key       - The db query search pattern
      * @param  boolean $skipfirst - whether the first parent is ommited from the resulted full path or not
      * @param  string  $href      - If provided (and not left empty or null), then the breadcrump is clickable towards the provided href with the node's id appended to it
+     * @param  string  $useKey    - Match against either the id or the lft during the db query
      * @return string  $ret       - The return HTML output
      */
-    public function getFullPath($nodeid, $skipfirst = true, $href = '') {
+    public function getFullPath($key, $skipfirst = true, $href = '', $useKey = 'id') {
         $ret = "";
 
-        if ($nodeid == null) {
+        if ($key === null || intval($key) <= 0) {
             return $ret;
         }
 
-        $node = Database::get()->querySingle("SELECT * FROM $this->dbtable WHERE id = ?d", $nodeid);
+        $node = Database::get()->querySingle("SELECT name, lft, rgt FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
         if (!$node) {
             return $ret;
         }

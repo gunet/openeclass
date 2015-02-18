@@ -192,8 +192,9 @@ if (!isset($_POST['submit'])) {
     if (!isset($_POST['department'])) {
         $departments = array();
         $missing = false;
-    } else
+    } else {
         $departments = $_POST['department'];
+    }
 
     $registration_errors = array();
     // check if there are empty fields

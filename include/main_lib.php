@@ -699,29 +699,6 @@ function imap_literal($s) {
     return "{" . strlen($s) . "}\r\n$s";
 }
 
-
-/**
- * @brief returns the name of a faculty given its code or its name
- * @param type $id
- * @return boolean
- */
-function find_faculty_by_id($id) {
-    
-    $req = Database::get()->querySingle("SELECT name FROM hierarchy WHERE id = ?d", $id);
-    if ($req) {        
-        $fac = $req->name;
-        return $fac;
-    } else {        
-        $req = Database::get()->querySingle("SELECT name FROM hierarchy WHERE name = ?s" , $id);        
-        if ($req) {
-            $fac = $req->name;
-            return $fac;
-        }
-    }
-    return false;
-}
-
-
 /**
  * @brief Returns next available code for a new course in faculty with id $fac
  * @param type $fac

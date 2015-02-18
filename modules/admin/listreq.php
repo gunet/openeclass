@@ -169,7 +169,7 @@ if (!empty($show) and $show == 'closed') {
             $tool_content .= "<tr>";
             $tool_content .= '<td>' . q($req->givenname) . "&nbsp;" . q($req->surname) . "";
             $tool_content .= '<td>' . q($req->username) . '</td>';
-            $tool_content .= '<td>' . hierarchy::unserializeLangField(find_faculty_by_id($req->faculty_id)) . '</td>';
+            $tool_content .= '<td>' . $tree->getFullPath($req->faculty_id) . '</td>';
             $tool_content .= "<td align='center'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
             $tool_content .= "<td align='center'>
@@ -204,7 +204,7 @@ if (!empty($show) and $show == 'closed') {
             $tool_content .= "<tr>";
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
             $tool_content .= "<td>" . q($req->username) . "&nbsp;</td>";
-            $tool_content .= "<td>" . hierarchy::unserializeLangField(find_faculty_by_id($req->faculty_id)) . "</td>";
+            $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
             $tool_content .= "<td align='center'>
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
             $tool_content .= "<td align='center'>
@@ -316,7 +316,7 @@ else {
         foreach ($sql as $req) {                        
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
             $tool_content .= "<td>" . q($req->username) . "</td>";
-            $tool_content .= "<td>" . hierarchy::unserializeLangField(find_faculty_by_id($req->faculty_id)) . "</td>";
+            $tool_content .= "<td>" . $tree->getFullPath($req->faculty_id) . "</td>";
             $tool_content .= "<td class='text-center'>
                                 <small>" . nice_format(date('Y-m-d', strtotime($req->date_open))) . "</small></td>";
             $tool_content .= "<td class='option_btn_cell'>";
