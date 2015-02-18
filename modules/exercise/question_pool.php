@@ -35,9 +35,9 @@ $head_content .= "
 <script>
   $(function() {
     $('.warnLink').click( function(e){
-          var modidyAllLink = $(this).attr('href');
-          var modifyOneLink = modidyAllLink.concat('&clone=true');
-          $('a#modifyAll').attr('href', modidyAllLink);
+          var modifyAllLink = $(this).attr('href');
+          var modifyOneLink = modifyAllLink.concat('&clone=true');
+          $('a#modifyAll').attr('href', modifyAllLink);
           $('a#modifyOne').attr('href', modifyOneLink); 
     });
   });

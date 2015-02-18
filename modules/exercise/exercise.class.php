@@ -886,9 +886,13 @@ if (!class_exists('Exercise')):
          */
         function duplicate() {
             global $langCopy2, $course_id;
+
             $clone_course_id = $_POST['clone_to_course_id'];
+            if (!check_editor(null, $clone_course_id)) {
+                forbidden();
+            }
             $id = $this->id;
-            $exercise = $this->exercise.(($clone_course_id == $course_id)? " ($langCopy2)" : "");
+            $exercise = $this->exercise.(($clone_course_id == $course_id)? " ($langCopy2)" : '');
             $description = standard_text_escape($this->description);
             $type = $this->type;
             $startDate = $this->startDate;
@@ -907,10 +911,15 @@ if (!class_exists('Exercise')):
                                     $clone_course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
                                     $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;        
             if ($clone_course_id != $course_id) { // copy questions to new course question_pool
+                $maxId = Database::get()->querySingle("SELECT MAX(id) AS maxId
+                                            FROM exercise_question WHERE course_id = ?d", $clone_course_id);
                 Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
                                             SELECT ?d, question, description, weight, q_position, type, difficulty, 0
-                                              FROM `exercise_question`
-                                             WHERE course_id = ?d", $clone_course_id, $course_id);                
+                                                FROM `exercise_question`
+                                                   WHERE course_id = ?d AND
+                                                         id IN (SELECT question_id FROM exercise_with_questions
+                                                                   WHERE exercise_id = ?d)",
+                                        $clone_course_id, $course_id, $id);
             }
             if ($clone_course_id == $course_id) { //add question to exercise
                 Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
@@ -919,7 +928,8 @@ if (!class_exists('Exercise')):
                                          WHERE exercise_id = ?d", $clone_id, $id);
             } else { // add copied questions to exercise 
                 Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
-                                        SELECT id, ?d FROM `exercise_question` WHERE course_id = ?d", $clone_id, $clone_course_id);
+                                        SELECT id, ?d FROM `exercise_question`
+                                             WHERE course_id = ?d AND id > ?d", $clone_id, $clone_course_id, $maxId);
             }
         }        
 

@@ -546,16 +546,23 @@ function check_guest($id = FALSE) {
  * @global type $course_id
  * @return boolean
  */
-function check_editor($id = NULL) {
-    global $uid, $course_id;
-    if(isset($id)) {
-        $uid = $id;
+function check_editor($user_id = null, $cid = null) {
+    global $uid, $course_id, $is_admin;
+
+    if ($is_admin) {
+        return true;
     }
-    if (isset($uid) and $uid) {
-        $s = Database::get()->querySingle("SELECT editor FROM course_user
+    if (!isset($user_id) and isset($uid)) {
+        $user_id = $uid;
+    }
+    if (!isset($cid) and isset($course_id)) {
+        $cid = $course_id;
+    }
+    if (isset($uid) and $uid and isset($cid)) {
+        $s = Database::get()->querySingle("SELECT status, editor FROM course_user
                                         WHERE user_id = ?d AND
-                                        course_id = ?d", $uid, $course_id);
-        if ($s and $s->editor == 1) {
+                                        course_id = ?d", $user_id, $cid);
+        if ($s and ($s->status == USER_TEACHER or $s->editor == 1)) {
             return true;
         } else {
             return false;
@@ -2692,7 +2699,10 @@ function crypto_rand_secure($min = null, $max = null) {
  * @brief returns HTTP 403 status code 
  * @param type $path
  */
-function forbidden($path) {
+function forbidden($path = '') {
+    if (empty($path)) {
+        $path = $_SERVER['SCRIPT_NAME'];
+    }
     header("HTTP/1.0 403 Forbidden");
     echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
     '<title>403 Forbidden</title></head><body>',
