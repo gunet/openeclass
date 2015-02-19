@@ -37,35 +37,33 @@ $pageName = $langGroupInfo;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 require_once 'group_functions.php';
 
+if (!$uid or !$courses[$course_code]) {
+    forbidden();
+}
+
 initialize_group_id();
 initialize_group_info($group_id);
 
 if (isset($_GET['selfReg'])) {
-    if (isset($uid) and ! $is_member and $status != USER_GUEST) {
-        if ($max_members == 0 or $member_count < $max_members) {
-            $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
-            $group = gid_to_name($group_id);
-            Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
-                'uid' => $uid,
-                'name' => $group));
+    if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) {
+        $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
+        $group = gid_to_name($group_id);
+        Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
+            'uid' => $uid,
+            'name' => $group));
 
-            $message = "<font color=red>$langGroupNowMember</font>";
-            $regDone = $is_member = true;
-        }
+        Session::Messages($langGroupNowMember, 'alert-success');
+        redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
     } else {
         $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
         draw($tool_content, 2);
         exit;
     }
 }
-if (!$is_member and ! $is_editor and ( !$self_reg or $member_count >= $max_members)) {
-    $tool_content .= $langForbidden;
+if (!$is_member and !$is_editor) {
+    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
     draw($tool_content, 2);
     exit;
-}
-
-if (isset($regDone)) {
-    $tool_content .= "$message&nbsp;";
 }
 
 $tool_content .= action_bar(array(

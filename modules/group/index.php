@@ -51,6 +51,10 @@ unset($message);
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
+if (!$uid or !$courses[$course_code]) {
+    forbidden();
+}
+
 initialize_group_info();
 $user_groups = user_group_info($uid, $course_id);
 

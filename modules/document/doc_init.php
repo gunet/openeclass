@@ -29,6 +29,9 @@ if (defined('GROUP_DOCUMENTS')) {
     $subsystem = GROUP;
     initialize_group_id();
     initialize_group_info($group_id);
+    if (!$uid or !($is_member or $can_upload)) {
+        forbidden();
+    }
     $subsystem_id = $group_id;
     $groupset = "group_id=$group_id&amp;";
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $groupset;
