@@ -305,9 +305,12 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
-            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td><td></td><tr>";
+            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>";
+            if ($is_editor) {
+                $tool_content .= "<td></td>";
+            }
         }
-        $tool_content .= "</table></div></div></div>";
+        $tool_content .= "</tr></table></div></div></div>";
         
         $tool_content .= "
             <div class='row'>
