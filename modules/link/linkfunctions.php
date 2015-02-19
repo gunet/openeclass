@@ -73,7 +73,7 @@ function showlinksofcategory($catid) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
         $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
-                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "</a>&nbsp;&nbsp;<i class='fa fa-external-link'></i>";
+                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }

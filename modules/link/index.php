@@ -300,7 +300,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
             $tool_content .= "</tr>";
             showlinksofcategory(0);        
         } else {
-            $tool_content .= "<tr><th class='text-left link-category-title'>$langNoCategory</th>";
+            $tool_content .= "<tr class='link-category-title'><th class='text-left link-category-title'>$langNoCategory</th>";
             if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
