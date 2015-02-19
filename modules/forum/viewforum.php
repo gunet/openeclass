@@ -245,7 +245,7 @@ if (count($result) > 0) { // topics found
         }        
         if ($replies > $posts_per_page) {
             $total_reply_pages = ceil($replies / $posts_per_page);
-            $pagination .= "<strong class='pagination'><span>".icon('fa-arrow-circle-right')."";
+            $pagination .= "<strong class='pagination'><span>&nbsp;".icon('fa-arrow-circle-right')." ";
             add_topic_link(0, $total_reply_pages);
             if ($total_reply_pages > PAGINATION_CONTEXT + 1) {
                 $pagination .= "&nbsp;...&nbsp;";
