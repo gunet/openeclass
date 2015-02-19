@@ -1125,7 +1125,7 @@ $admin_uid = $db->query("INSERT INTO `user`
      `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, " . DBHelper::timeAfter() . ", " .
         DBHelper::timeAfter(5*365*24*60*60) . ", ?d, ?s, ?s)",
-    $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, 1, $lang,
+    $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1,
         '*,,', 'Administrator')->lastInsertID;
 $db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
     VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
