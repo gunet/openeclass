@@ -33,9 +33,9 @@ if (isset($_GET['page'])) {
 // selects $limitReportsPage reports at the same time
 $from = $page * $limitReportsPage;
 
-$result = Database::get()->queryArray("SELECT * FROM abuse_report WHERE course_id = ?d ORDER BY timestamp DESC LIMIT ?d, ?d", $course_id, $from, $limitReportsPage);
+$result = Database::get()->queryArray("SELECT * FROM abuse_report WHERE course_id = ?d AND status = ?d ORDER BY timestamp DESC LIMIT ?d, ?d", $course_id, 1, $from, $limitReportsPage);
 //Number of all reports for this course
-$total_reports = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
+$total_reports = Database::get()->querySingle("SELECT COUNT(*) as count FROM abuse_report WHERE course_id = ?d AND status = ?d", $course_id, 1)->count;
 //Number of reports for current page
 $nbrReports = count($result);
 

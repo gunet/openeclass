@@ -77,8 +77,8 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
 		                         </fieldset>
 		                     </form>';
     } else {
-        Database::get()->query("INSERT INTO abuse_report (rid, rtype, course_id, reason, message, timestamp, user_id)
-            VALUES (?d, ?s, ?d, ?s, ?s, UNIX_TIMESTAMP(NOW()), ?d)", $rid, $rtype, $cid, $reason, $msg, $uid);
+        Database::get()->query("INSERT INTO abuse_report (rid, rtype, course_id, reason, message, timestamp, user_id, status)
+            VALUES (?d, ?s, ?d, ?s, ?s, UNIX_TIMESTAMP(NOW()), ?d, ?d)", $rid, $rtype, $cid, $reason, $msg, $uid, 1);
         
         //send PM to course editors
         $res = Database::get()->queryArray("SELECT user_id FROM course_user 

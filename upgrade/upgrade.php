@@ -1269,8 +1269,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `message` TEXT NOT NULL,
                             `timestamp` INT(11) NOT NULL DEFAULT 0,
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                            INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`),
-                            INDEX `abuse_report_index_2` (`course_id`)) $charset_spec");
+                            `status` TINYINT(1) NOT NULL DEFAULT 1,
+                            INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
+                            INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
