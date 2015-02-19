@@ -61,19 +61,19 @@ function showlinksofcategory($catid) {
     global $is_editor, $course_id, $urlview, $tool_content,
     $urlServer, $course_code,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
-    $langModify, $is_in_tinymce;
+    $langModify, $is_in_tinymce, $links_num;
 
     $tool_content .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `link`
                                    WHERE course_id = ?d AND category = ?d
                                    ORDER BY `order`", $course_id, $catid);
     $numberoflinks = count($result);
-    $i = 1;
+    $links_num = 1;
     foreach ($result as $myrow) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
         $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
-                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link'></i></a>";
+                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "</a>&nbsp;&nbsp;<i class='fa fa-external-link'></i>";
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }
@@ -97,13 +97,13 @@ function showlinksofcategory($catid) {
                 array('title' => $langUp,
                       'level' => 'primary',
                       'icon' => 'fa-arrow-up',
-                      'disabled' => $i == 1,
+                      'disabled' => $links_num == 1,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id",
                       ),
                 array('title' => $langDown,
                       'level' => 'primary',
                       'icon' => 'fa-arrow-down',
-                      'disabled' => $i >= $numberoflinks,
+                      'disabled' => $links_num >= $numberoflinks,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id",
                       )
             ));
@@ -111,7 +111,7 @@ function showlinksofcategory($catid) {
         }
         
         $tool_content .= "</tr>";
-        $i++;
+        $links_num++;
     }
 }
 
