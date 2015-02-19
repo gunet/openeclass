@@ -66,6 +66,7 @@ function template_callback($template, $menuTypeID, $embed)
         }
     } else {
         $template->set_block('mainBlock', 'LoggedInBlock', 'delete');
+        $template->set_block('mainBlock', 'sideBarBlock', 'delete');
     }
 
     if (!$embed) {
@@ -78,7 +79,7 @@ function template_callback($template, $menuTypeID, $embed)
 
     if ($menuTypeID != 2) {
         $lang_select = "<li class='dropdown'>
-          <a href='#' class='dropdown-toggle' type='button' id='dropdownMenuLang' data-toggle='dropdown'>
+          <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
               <i class='fa fa-globe'></i>
           </a>
           <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
