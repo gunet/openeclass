@@ -276,6 +276,7 @@ if (isset($_GET['down'])) {
 } elseif (isset($_GET['cup'])) {
     move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $course_id");
 }
+$display_tools = $is_editor && !$is_in_tinymce;
 if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory'))) {
     $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d", $course_id)->cnt;
 
@@ -294,19 +295,19 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 <table class='table-default nocategory-links'>";
         if ($numberofzerocategory !== 0) {
             $tool_content .= "<tr class='link-category-title'><th class='text-left'>$langNoCategory</th>";
-            if ($is_editor) {
+            if ($display_tools) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             showlinksofcategory(0);        
         } else {
             $tool_content .= "<tr class='link-category-title'><th class='text-left link-category-title'>$langNoCategory</th>";
-            if ($is_editor) {
+            if ($display_tools) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>";
-            if ($is_editor) {
+            if ($display_tools) {
                 $tool_content .= "<td></td>";
             }
         }
@@ -325,8 +326,9 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                     $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params."'>" .icon('fa-folder', $showall)."</a>";
             } else {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params."'>" .icon('fa-folder-open', $shownone)."</a>";
-            }$tool_content .= "</th>";
-            if ($is_editor) {
+            }
+            $tool_content .= "</th>";
+            if ($display_tools) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
@@ -339,7 +341,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
             } else {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params."'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
             }$tool_content .= "</th>";
-            if ($is_editor) {
+            if ($display_tools) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
@@ -372,7 +374,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                     $tool_content .= "</th>";
                 }
                 
-                if ($is_editor && !$is_in_tinymce) {
+                if ($display_tools) {
                     $tool_content .= "<td class='option-btn-cell'>";
                     showcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
@@ -398,7 +400,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                     $tool_content .= "</th>";
                 }
                 
-                if ($is_editor && !$is_in_tinymce) {    
+                if ($display_tools) {    
                     $tool_content .= "<td class='option-btn-cell'>";
                     showcategoryadmintools($myrow->id);      
                     $tool_content .= "</td>";
