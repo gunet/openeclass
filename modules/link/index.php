@@ -293,14 +293,14 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>";
         if ($numberofzerocategory !== 0) {
-            $tool_content .= "<tr><th class='text-left'>$langNoCategory</th>";
+            $tool_content .= "<tr class='link-category-title'><th class='text-left'>$langNoCategory</th>";
             if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             showlinksofcategory(0);        
         } else {
-            $tool_content .= "<tr><th class='text-left'>$langNoCategory</th>";
+            $tool_content .= "<tr><th class='text-left link-category-title'>$langNoCategory</th>";
             if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
@@ -315,7 +315,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 <div class='table-responsive'>
                 <table class='table-default category-links'>";
         if ($aantalcategories > 0) {
-           $tool_content .= "<tr><th>";
+           $tool_content .= "<tr class='link-category-title'><th>";
            
             $tool_content .= "$langCategorisedLinks&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
@@ -361,7 +361,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
             if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
-                $tool_content .= "<tr><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
                             <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params' class='open-category'>" . q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
@@ -384,7 +384,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 }
                 
             } else {            
-                $tool_content .= "<tr><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)."&nbsp;
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)."&nbsp;
                               <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" ;
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
                 $tool_content .= $tinymce_params . "' class='open-category'>" . q($myrow->name) . "</a>";
