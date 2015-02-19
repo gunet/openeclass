@@ -2506,6 +2506,7 @@ $langForumDefaultCat = "Γενικές Περιοχές Συζητήσεων";
 $langEditTopic = "Τροποποίηση θέματος";
 $langChangeTopicForum = "Αλλαγή περιοχής συζητήσεων";
 $langTopicDataChanged = "Το θέμα τροποποιήθηκε επιτυχώς";
+$langForumPost = "Μήνυμα περιοχής συζητήσεων";
 $langForumPostReply = "Απάντηση σε αυτό το μήνυμα";
 $langForumPostParent = "Αυτό το μήνυμα είναι απάντηση στο μήνυμα ";
 $langForumPostParentDel = "Αυτό το μήνυμα είναι απάντηση σε ένα μήνυμα που έχει διαγραφεί.";
@@ -4366,6 +4367,7 @@ $langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμο�
  * Abuse Report
  * ************************************************************ */
 $langAbuseReport = 'Αναφορά κατάχρησης';
+$langAbuseReports = 'Αναφορές κατάχρησης';
 $langAbuseReportEn = 'Ενεργοποιημένη αναφορά κατάχρησης';
 $langAbuseReportDis = 'Απενεργοποιημένη αναφορά κατάχρησης';
 $langAbuseReportCat = 'Αιτία αναφοράς κατάχρησης';
@@ -4375,6 +4377,14 @@ $langAbuseReportCatError = 'Δεν επιλέξατε αιτία για την �
 $langAbuseReportMsgError = 'Πρέπει να συμπληρώσετε ένα μήνυμα αιτιολόγησης για να καταχωρήσετε μια αναφορά κατάχρησης';
 $langAbuseReportSaveSuccess = 'Η αποστολή της αναφοράς προς τους διαχειριστές του μαθήματος έγινε επιτυχώς';
 $langAbuseReportPMBody = 'Μόλις καταχώρησα μια αναφορά κατάχρησης';
+$langNoAbuseReports = 'Δεν υπάρχουν αναφορές κατάχρησης γι\' αυτό το μάθημα';
+$langAbuseResourceType = 'Τύπος περιεχομένου';
+$langAbuseReportClose = 'Κλείσιμο αναφοράς';
+$langVisitReportedResource = 'Μετάβαση στο αναφερόμενο περιεχόμενο';
+$langEditReportedResource = 'Επεξεργασία αναφερόμενου περιεχομένου';
+$langDeleteReportedResource = 'Διαγραφή αναφερόμενου περιεχομένου';
+$langConfirmAbuseReportClose = '';
+$langConfirmDeleteReportedResource = '';
  
 /* * ******************************************
   Theme Options

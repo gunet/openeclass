@@ -381,6 +381,7 @@ $admin_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'users'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'usage'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
+    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
 );
 
 // modules which can't be enabled or disabled

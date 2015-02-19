@@ -29,6 +29,7 @@ $theme_settings = array(
         'usage' => 'fa-cogs',
         'attendance' => 'fa-check-square-o',
         'gradebook' => 'fa-sort-numeric-desc',
+        'abuse' => 'fa-flag',
     ),
 );
 
