@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 $topics_per_page = 10;
-$posts_per_page = 10;
+$posts_per_page = 20;
 $hot_threshold = 30;
 
 define('PAGINATION_CONTEXT', 3);
