@@ -2178,10 +2178,10 @@ function profile_image($uid, $size, $class=null) {
     // makes $class argument optional
     $class_attr = ($class == null)?'':"class='".q($class)."'";
     
+    $name = ($uid > 0) ? q(trim(uid_to_name($uid))) : '';
     if ($uid > 0 and file_exists("courses/userimg/${uid}_$size.jpg")) {
-        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='" . q(uid_to_name($uid)) . "'>";
+        return "<img src='${urlServer}courses/userimg/${uid}_$size.jpg' $class_attr title='$name' alt='$name'>";
     } else {
-        $name = ($uid > 0) ? q(uid_to_name($uid)) : '';
         return "<img src='$themeimg/default_$size.jpg' $class_attr title='$name' alt='$name'>";
     }
 }
