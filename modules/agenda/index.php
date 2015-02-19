@@ -290,6 +290,11 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                   'level' => 'primary-label',
                   'button-class' => 'btn-success',
                   'show' => $is_editor),
+            array('title' => $langListAll,
+                      'url' => "javascript:void(0)",
+                      'icon' => 'fa-list',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-default listviewbtn'),
             array('title' => $langiCalExport,
                   'url' => "icalendar.php?c=$course_id",
                   'icon' => 'fa-calendar',
@@ -314,7 +319,6 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                                         <button class="btn btn-default btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
                                         <button class="btn btn-default btn-sm" data-calendar-view="week">' . $langWeek . '</button>
                                         <button class="btn btn-default btn-sm" data-calendar-view="day">' . $langDay . '</button>
-                                        <button class="btn btn-default btn-sm" id="listviewbtn">' . $langListAll . '</button>
                                 </div>
                             </div>
                             <h4></h4>
@@ -358,8 +362,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                 $("#bootstrapcalendar").show();
             });
 
-        $("#listviewbtn").click(function() {
-            $("#listviewbtn").addClass("active");
+        $(".listviewbtn").click(function() {
             $(".btn-group button").removeClass("active");
             $("#bootstrapcalendar").hide();
             $("#raweventlist").show();
