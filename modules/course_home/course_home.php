@@ -752,7 +752,7 @@ function course_announcements() {
                 $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
                 $ann_content .= "<li class='list-item'>
-                                    <span class='item-wholeline'><a href='$ann_url'><div class='text-title'>" . q(ellipsize($ann->title, 60)) ."</div></a>$ann_date</span>
+                                    <span class='item-wholeline'><div class='text-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";
             }
             return $ann_content;

@@ -2727,7 +2727,7 @@ function action_bar($options, $page_title_flag = true) {
     $out_primary = $out_secondary = array();
     $i=0;
     $page_title = "";
-    if (isset($pageName) && $page_title_flag) {
+    if (isset($pageName) and !empty($pageName) and $page_title_flag) {
         $page_title = "<div class='pull-left' style='padding-top:15px;'><h4>".q($pageName)."</h4></div>";
     }    
     foreach (array_reverse($options) as $option) {
