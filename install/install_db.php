@@ -1123,7 +1123,7 @@ $password_encrypted = $hasher->HashPassword($passForm);
 $admin_uid = $db->query("INSERT INTO `user`
     (`givenname`, `surname`, `username`, `password`, `email`, `status`, `lang`,
      `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
-    VALUES (?s, ?s, ?s, ?s, ?s, ?d, " . DBHelper::timeAfter() . ", " .
+    VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, " . DBHelper::timeAfter() . ", " .
         DBHelper::timeAfter(5*365*24*60*60) . ", ?d, ?s, ?s)",
     $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, 1, $lang,
         '*,,', 'Administrator')->lastInsertID;
