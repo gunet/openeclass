@@ -19,9 +19,6 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-/* * *******************************************
- * about.php
- * ******************************************* */
 
 $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και υποστηρίζει την Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης στο <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Έκδοση";
@@ -552,7 +549,7 @@ $langAddModify = "Προσθήκη / Αλλαγή";
 $langAddIntro = "Προσθήκη Εισαγωγικού Κειμένου";
 $langBackList = "Επιστροφή στον κατάλογο";
 $langEvents = "Γεγονότα";
-$langAgenda = "Ατζέντα";
+$langAgenda = "Ημερολόγιο";
 $langDay = "Μέρα";
 $langMonth = "Μήνας";
 $langYear = "Έτος";
@@ -830,7 +827,6 @@ $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
-$langAddToMyNotes = 'Οι σημειώσεις μου';
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
 
 
@@ -877,7 +873,7 @@ $langRefreshInfo_A = "Επιλέξτε ποιες ενέργειες θέλετ�
 $langUserDelCourse = "Διαγραφή χρηστών από το μάθημα";
 $langUserDelNotice = "Σημ.: Οι χρήστες δεν θα διαγραφούν από άλλα μαθήματα";
 $langAnnouncesDel = "Διαγραφή ανακοινώσεων του μαθήματος";
-$langAgendaDel = "Διαγραφή εγγραφών από την ατζέντα του μαθήματος";
+$langAgendaDel = "Διαγραφή εγγραφών από το ημερολόγιο του μαθήματος";
 $langHideDocuments = "Απόκρυψη των εγγράφων του μαθήματος";
 $langHideWork = "Απόκρυψη των εργασιών του μαθήματος";
 $langDelAllWorkSubs = "Διαγραφή των υποβολών των εργασιών του μαθήματος";
@@ -886,7 +882,7 @@ $langOptions = "Επιλογές";
 $langRefreshSuccess = "Η ανανέωση του μαθήματος ήταν επιτυχής. Εκτελέστηκαν οι ακόλουθες ενέργειες:";
 $langUsersDeleted = "Οι χρήστες διαγράφηκαν από το μάθημα";
 $langAnnDeleted = "Οι ανακοινώσεις διαγράφηκαν από το μάθημα";
-$langAgendaDeleted = "Οι εγγραφές της ατζέντας διαγράφηκαν από το μάθημα";
+$langAgendaDeleted = "Οι εγγραφές του ημερολογίου διαγράφτηκαν από το μάθημα";
 $langWorksDeleted = "Οι εργασίες απενεργοποιήθηκαν";
 $langDocsDeleted = "Τα έγγραφα απενεργοποιήθηκαν";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
@@ -1000,7 +996,7 @@ $langAttendanceUpdate = "Ενημέρωση";
 $langAttendanceEdit = "Επιτυχής αλλαγή";
 $langAttendanceSucInsert = "Η δραστηριότητα προστέθηκε";
 $langAttendanceLimit = "Επιτυχής ενημέρωση αριθμού παρουσιών";
-$langAttendanceDel = "H δρσστηριότητα διαγράφηκε";
+$langAttendanceDel = "H δραστηριότητα διαγράφηκε";
 $langAttendanceUsers = "Επιτυχής ενημέρωση αριθμού $langsOfStudents.";
 $langAttendanceDelFailure = "Δεν υπάρχει η δραστηριότητα που προσπαθείτε να διαγράψετε";
 $langAttendanceNewBookRecord = "Θα πρέπει να κάνετε κλικ στο καταχώρηση για να δημιουργηθεί καρτέλα παρουσιολογίου για το χρήστη";
@@ -1237,6 +1233,7 @@ $langCreatorEmail = "Ηλ. Διεύθυνση Συγγραφέα";
 $langFormat = "Τύπος-Κατηγορία";
 $langSubject = "Θέμα";
 $langAuthor = "Συγγραφέας";
+$langUserForum = "Μέλος";
 $langCopyrighted = "Πνευματικά Δικαιώματα";
 $langCopyrightedFree = "Ελεύθερο δικαιωμάτων";
 $langCopyrightedNotFree = "Προστατεύονται όλα τα δικαιώματα";
@@ -1388,6 +1385,7 @@ $langDropboxFreeSpaceConfirm = "Αυτή η ενέργεια θα διαγράψ
 $langDropboxFreeSpaceSuccess = "Απελευθερώθηκαν επιτυχώς %s ΜΒ χώρου!";
 $langDropboxNoMessage = "Δεν υπάρχουν πρόσφατα μηνύματα";
 $langDropboxMassDelete = 'Διαγραφή όλων των μηνυμάτων';
+$langAllMessages = "όλα τα μηνύματα";
 
 /* * ********************************************************
  * exercise
@@ -1857,7 +1855,7 @@ $langNoCourses = "Δεν υπάρχουν μαθήματα";
 $langCourseCreate = "Δημιουργία Μαθήματος";
 $langCreationDate = "Ημερομηνία δημιουργίας";
 $langMyAgenda = "Το ημερολόγιό μου";
-$langMyAnnouncements = "Οι Ανακοινώσεις μου";
+$langMyAnnouncements = "Οι ανακοινώσεις μου";
 $langAdminTool = "Διαχείριση Πλατφόρμας";
 $langPass = "Συνθηματικό (password)";
 $langHelp = "Βοήθεια";
@@ -2004,7 +2002,9 @@ $lang_dropbox_allow_personal_messages = "Να επιτρέπεται η αντα
 $lang_login_form = "Οθόνη Σύνδεσης";
 $lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα η οθόνη σύνδεσης";
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
-$lang_display_captcha = "Να εμφανίζεται κωδικός ασφαλείας κατά την εγγραφή των χρηστών";
+$lang_display_captcha = "Εμφάνιση κωδικού ασφαλείας κατά την εγγραφή χρηστών";
+$lang_display_captcha_label = "Κωδικός ασφαλείας (CAPTCHA)";
+$lang_display_captcha_unsupported = 'Για την ενεργοποίηση του κωδικού ασφαλείας, απαιτείται υποστήριξη γραμματοσειρών TrueType (TTF) από τη βιβλιοθήκη GD της PHP';
 $lang_insert_xml_metadata = "Μετασχολιασμός αρχείων υποσυστήματος «Έγγραφα» σύμφωνα με το πρότυπο LOM";
 $lang_enable_mobileapi = "Να επιτρέπεται η επικοινωνία με κινητές συσκευές (smartphones/tablets)";
 $lang_course_multidep = "Να επιτρέπεται τα μαθήματα να ανήκουν σε πολλά τμήματα-σχολές";
@@ -2021,7 +2021,9 @@ $langDefaultAdminName = 'Διαχειριστής Πλατφόρμας';
 $langDefaultInstitutionName = 'Ακαδημαϊκό Διαδίκτυο GUNet';
 $lang_course_metadata = "Μετασχολιασμός Μαθημάτων";
 $lang_opencourses_enable = "Υποστήριξη GUnet Open Courses";
-
+$langHierarchyTestDepartment = 'Δοκιμαστικό Τμήμα';
+$langHierarchyTestCategory = 'Δοκιμαστική Κατηγορία';
+$langHierarchyTestSubCategory = 'Υποκατηγορία';
 
 /* * ******************************************************
  * learnpath.php
@@ -2274,7 +2276,9 @@ $langAllCategoryDeleted = "Όλες οι κατηγορίες και όλοι ο
 $langGiveURL = "Δώστε το URL του συνδέσμου";
 $langGiveCategoryName = "Όνομα κατηγορίας";
 $langNoCategory = "Γενικοί σύνδεσμοι";
-$langCategorisedLinks = "Κατηγοριοποιημένοι σύνδεσμοι";
+$langNoLinkInCategory = "Δεν υπάρχουν σύνδεσμοι σε αυτή την κατηγορία";
+$langNoLinkCategories = "Δεν υπάρχουν κατηγορίες συνδέσμων";
+$langCategorisedLinks = "Κατηγορίες συνδέσμων";
 $showall = "Εμφάνιση";
 $shownone = "Απόκρυψη";
 $langProfNoLinksExist = "Μπορείτε να χρησιμοποιήσετε τις λειτουργίες του εργαλείου για να προσθέσετε συνδέσμους.";
@@ -2391,7 +2395,7 @@ $langMyPersoDeadlines = "Οι διορίες μου";
 $langMyPersoAnnouncements = "Οι τελευταίες μου ανακοινώσεις";
 $langMyPersoDocs = "Τα τελευταία μου έγγραφα";
 $langMyPersoMessages = "Τα τελευταία μου μηνύματα";
-$langMyPersoAgenda = "Η ατζέντα μου";
+$langMyPersoAgenda = "Το ημερολόγιό μου";
 $langMyPersoForum = "Οι συζητήσεις μου (τελευταίες αποστολές)";
 $langAssignment = "Εργασία";
 $langDeadline = "Λήξη";
@@ -2428,6 +2432,7 @@ $langTopicData = "Στοιχεία θέματος";
 $langTopicAnswer = "Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink = "Έγγραφα ομάδας ";
 $langNotify = "Ειδοποίηση μέσω email αν σταλούν απαντήσεις";
+$langStopNotify = "Απενεργοποίηση ειδοποίησης μέσω email αν σταλούν απαντήσεις";
 $langNotifyActions = "Ειδοποιήσεις";
 $langNotificationsExist = 'Υπάρχουν ειδοποιήσεις';
 $langGoToPage = "Μετάβαση στη σελίδα";
@@ -2722,6 +2727,7 @@ $langAddManyUsers = "Προσθήκη πολλών χρηστών";
 $langOneUser = "ενός χρήστη";
 $langManyUsers = "πολλών χρηστών";
 $langGUser = "χρήστη επισκέπτη";
+$langAddGUser = "Προσθήκη χρήστη επισκέπτη";
 $langNoUsersFound = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε ή ο χρήστης υπάρχει ήδη στο μάθημά σας.";
 $langNoUsersFound2 = "Δε βρέθηκε κανένας χρήστης με τα στοιχεία που δώσατε";
 $langRegister = "Εγγραφή";
@@ -2782,10 +2788,10 @@ $langIfYouWantToAddManyUsers = "Αν θέλετε να προσθέσετε έν
 $langCourse = "Μάθημα";
 $langLastVisits = "Οι τελευταίες μου επισκέψεις";
 $langLastUserVisits = "Οι τελευταίες επισκέψεις του χρήστη ";
-$langDumpUser = "Κατάλογος χρηστών ";
+$langDumpUser = "Εξαγωγή σε Excel";
 $langCsv = "αρχείο csv";
-$langcsvenc1 = "windows (windows-1253)";
-$langcsvenc2 = "unicode (UTF-8)";
+$langcsvenc1 = "κωδικοποίηση windows-1253";
+$langcsvenc2 = "κωδικοποίηση UTF-8";
 $langFieldsMissing = "Αφήσατε κάποια από τα υποχρεωτικά πεδία κενά!";
 $langFillAgain = "Παρακαλούμε ξανασυμπληρώστε την";
 $langFillAgainLink = "αίτηση";
@@ -3844,6 +3850,7 @@ $langSelectFromMenu = "Επιλέξτε...";
 $langSureToDelNote = "Θέλετε σίγουρα να διαγραφεί η σημείωση;";
 $langSureToDelNoteAll = "Θέλετε σίγουρα να διαγραφούν όλες οι σημειώσεις;";
 $langNoteSaved = "Αποθηκεύτηκε επιτυχώς";
+$langAllNotes = "Όλες οι σημειώσεις";
 
 /* * ******************************************
   Personal calendar
@@ -4250,7 +4257,7 @@ $langBBBMinutesBefore = "λεπτά νωρίτερα από την προγρα�
 $langBBBScheduledSession = "Προγραμματισμός τηλεσυνεργασίας";
 $langBBBScheduleSessionInfo = "Η τηλεσυνεργασία με τίτλο ";
 $langBBBScheduleSessionInfo2 = "προγραμματίστηκε για τις ";
-$langBBBScheduleSessionInfoJoin = "Συνδεθείτε στο περιβάλλον του μαθήματος για να την παρακολουθήσετε κάνοντας κλικ εδώ ";
+$langBBBScheduleSessionInfoJoin = "Συνδεθείτε για να την παρακολουθήσετε κάνοντας κλικ εδώ ";
 
 $langBBBNotServerAvailableStudent = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον εκπαιδευτή του μαθήματος.";
 $langBBBNotServerAvailableTeacher = "Η εξυπηρέτηση τηλεσυνεργασιών δεν είναι δυνατή. Επικοινωνήστε με τον διαχειριστή της πλατφόρμας.";

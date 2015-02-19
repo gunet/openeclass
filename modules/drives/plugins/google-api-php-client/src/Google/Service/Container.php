@@ -466,6 +466,7 @@ class Google_Service_Container_Cluster extends Google_Model
   protected $nodeConfigDataType = '';
   public $nodeRoutingPrefixSize;
   public $numNodes;
+  public $selfLink;
   public $servicesIpv4Cidr;
   public $status;
   public $statusMessage;
@@ -559,6 +560,14 @@ class Google_Service_Container_Cluster extends Google_Model
   public function getNumNodes()
   {
     return $this->numNodes;
+  }
+  public function setSelfLink($selfLink)
+  {
+    $this->selfLink = $selfLink;
+  }
+  public function getSelfLink()
+  {
+    return $this->selfLink;
   }
   public function setServicesIpv4Cidr($servicesIpv4Cidr)
   {
@@ -714,11 +723,14 @@ class Google_Service_Container_MasterAuth extends Google_Model
   }
 }
 
-class Google_Service_Container_NodeConfig extends Google_Model
+class Google_Service_Container_NodeConfig extends Google_Collection
 {
+  protected $collection_key = 'serviceAccounts';
   protected $internal_gapi_mappings = array(
   );
   public $machineType;
+  protected $serviceAccountsType = 'Google_Service_Container_ServiceAccount';
+  protected $serviceAccountsDataType = 'array';
   public $sourceImage;
 
 
@@ -729,6 +741,14 @@ class Google_Service_Container_NodeConfig extends Google_Model
   public function getMachineType()
   {
     return $this->machineType;
+  }
+  public function setServiceAccounts($serviceAccounts)
+  {
+    $this->serviceAccounts = $serviceAccounts;
+  }
+  public function getServiceAccounts()
+  {
+    return $this->serviceAccounts;
   }
   public function setSourceImage($sourceImage)
   {
@@ -750,6 +770,7 @@ class Google_Service_Container_Operation extends Google_Model
   public $selfLink;
   public $status;
   public $target;
+  public $targetLink;
   public $zone;
 
 
@@ -801,6 +822,14 @@ class Google_Service_Container_Operation extends Google_Model
   {
     return $this->target;
   }
+  public function setTargetLink($targetLink)
+  {
+    $this->targetLink = $targetLink;
+  }
+  public function getTargetLink()
+  {
+    return $this->targetLink;
+  }
   public function setZone($zone)
   {
     $this->zone = $zone;
@@ -808,5 +837,32 @@ class Google_Service_Container_Operation extends Google_Model
   public function getZone()
   {
     return $this->zone;
+  }
+}
+
+class Google_Service_Container_ServiceAccount extends Google_Collection
+{
+  protected $collection_key = 'scopes';
+  protected $internal_gapi_mappings = array(
+  );
+  public $email;
+  public $scopes;
+
+
+  public function setEmail($email)
+  {
+    $this->email = $email;
+  }
+  public function getEmail()
+  {
+    return $this->email;
+  }
+  public function setScopes($scopes)
+  {
+    $this->scopes = $scopes;
+  }
+  public function getScopes()
+  {
+    return $this->scopes;
   }
 }

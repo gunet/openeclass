@@ -35,9 +35,13 @@ $navigation[] = array(
             'url' => "index.php?course=$course_code", 
             'name' => $langQuestionnaire
         );
+
+if (isset($_GET['pid'])) {
+    $pid = intval($_GET['pid']);
+}
+
 if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {   
     $pqid = isset($_GET['moveUp']) ? intval($_GET['moveUp']) : intval($_GET['moveDown']);
-    $pid = intval($_GET['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
     if(!$poll){        
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -65,7 +69,6 @@ if (isset($_POST['submitPoll'])) {
         $PollEndMessage = purify($_POST['PollEndMessage']);    
         $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;   
         if(isset($_GET['pid'])) {
-            $pid = intval($_GET['pid']);
             Database::get()->query("UPDATE poll SET name = ?s,
                     start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $course_id, $pid);
             Session::Messages($langPollEdited, 'alert-success');
@@ -80,8 +83,7 @@ if (isset($_POST['submitPoll'])) {
     } else {
         // Errors
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        if(isset($_GET['pid'])) {
-            $pid = intval($_GET['pid']); 
+        if (isset($_GET['pid'])) {
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid&modifyPoll=yes");
         } else {        
             redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&newPoll=yes");
@@ -103,7 +105,6 @@ if (isset($_POST['submitQuestion'])) {
     if($v->validate()) {    
         $question_text = $_POST['questionName'];
         $qtype = $_POST['answerType'];    
-        $pid = intval($_GET['pid']);  
         if(isset($_GET['modifyQuestion'])) {
             $pqid = intval($_GET['modifyQuestion']);
             $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
@@ -142,7 +143,6 @@ if (isset($_POST['submitQuestion'])) {
 }
 if (isset($_POST['submitAnswers'])) {
     $pqid = intval($_GET['modifyAnswers']); 
-    $pid = intval($_GET['pid']);
     $question = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
     if(!$question){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -163,7 +163,6 @@ if (isset($_POST['submitAnswers'])) {
 }
 if (isset($_GET['deleteQuestion'])) {
     $pqid = intval($_GET['deleteQuestion']);    
-    $pid = intval($_GET['pid']);  
     $poll = Database::get()->querySingle("SELECT * FROM poll_question WHERE pid = ?d and pqid = ?d", $pid,$pqid);
     if(!$poll){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -174,7 +173,6 @@ if (isset($_GET['deleteQuestion'])) {
     redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
 }
 if (isset($_GET['pid'])) {
-    $pid = intval($_GET['pid']);
     $poll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
     if(!$poll){
         redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
@@ -260,19 +258,19 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group'>
-              <label for='PollAnonymized' class='col-sm-2 control-label'>$langPollAnonymize : </label>
+              <label for='PollAnonymized' class='col-sm-2 control-label'>$langPollAnonymize:</label>
               <div class='col-sm-10'>
                 <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '')."> 
               </div>
             </div>            
             <div class='form-group'>
-              <label for='PollDescription' class='col-sm-2 control-label'>$langDescription :</label>
+              <label for='PollDescription' class='col-sm-2 control-label'>$langDescription:</label>
               <div class='col-sm-10'>
                 ".rich_text_editor('PollDescription', 4, 52, $PollDescription)."
               </div>
             </div> 
             <div class='form-group'>
-              <label for='PollEndMessage' class='col-sm-2 control-label'>$langPollEndMessage : </label>
+              <label for='PollEndMessage' class='col-sm-2 control-label'>$langPollEndMessage:</label>
               <div class='col-sm-10'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>

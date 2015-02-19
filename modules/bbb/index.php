@@ -166,7 +166,7 @@ elseif(isset($_GET['choice']))
             #check if there is any record-capable bbb server. Otherwise notify users
             if($_GET['record']=='true' && Database::get()->querySingle("SELECT count(*) count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
             {
-                $tool_content .= "<div class='alert alert-info'>$langBBBNoServerForRecording</div>";
+                $tool_content .= "<div class='alert alert-warning'>$langBBBNoServerForRecording</div>";
                 break;
             }
             if(bbb_session_running($_GET['meeting_id']) == false)
@@ -186,11 +186,12 @@ elseif(isset($_GET['choice']))
 
                 if( ($c->sessionUsers > 0) && ($c->sessionUsers < get_meeting_users($serv->server_key,$serv->api_url,$_GET['meeting_id'],$sess->mod_pw)))
                 {
-                    $tool_content .= "<p class='noteit'><b>$langNote</b>:<br />$langBBBMaxUsersJoinError</p>";
+                    $tool_content .= "<div class='alert alert-warning'>$langBBBMaxUsersJoinError</div>";
                     break;
+                }                
+                else {
+                    header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
                 }
-                else
-                header('Location: ' . bbb_join_user($_GET['meeting_id'],$_GET['att_pw'],$_SESSION['surname'],$_SESSION['givenname']));
             }
             break;
         case 'import_video':

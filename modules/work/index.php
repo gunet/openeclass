@@ -1192,7 +1192,7 @@ function show_student_assignment($id) {
 }
 
 function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
-    global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid, $is_member,
+    global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid,
     $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $course_code, $langBack, $is_editor, $langCancel;
     
     $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $id)->max_grade;
@@ -1968,13 +1968,13 @@ function submit_grades($grades_id, $grades, $email = false) {
 
 // functions for downloading
 function send_file($id, $file_type) {
-    global $course_code, $uid, $is_editor;
+    global $course_code, $uid, $is_editor, $courses;
     if (isset($file_type)) {
         $info = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-        if (count($info)==0) {
-            return false;
-        }
-        if (!($is_editor || $GLOBALS['is_member'])) {
+        // don't show file if: assignment nonexistent, not editor, not active assignment, module not visible
+        if (count($info) == 0 or
+            !($is_editor or
+              ($info->active and visible_module(MODULE_ID_ASSIGN)))) {
             return false;
         }        
         send_file_to_client("$GLOBALS[workPath]/admin_files/$info->file_path", $info->file_name, null, true);

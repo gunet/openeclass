@@ -29,6 +29,7 @@ $next = isset($_GET['next']) ?
         ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>") :
         '';
 
+$pageName = $langUserLogin;
 $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => "$urlServer",
@@ -39,11 +40,6 @@ $tool_content .= action_bar(array(
 $tool_content .= "<div class='form-wrapper login-form-page'>
         <form class='form-horizontal' role='form' action='$urlSecure' method='post'>
   $next
-      <div class='row'>
-      <div class='col-sm-8'>
- <legend>$langUserLogin</legend>
-     </div>
-     </div>
     <div class='form-group'>       
         <div class='col-sm-8'>
             <input class='form-control' name='uname' placeholder='$langUsername'>

@@ -137,12 +137,13 @@ if ($u) {
             array('title' => $langDelUser,
                 'url' => "deluser.php?u=$u",
                 'icon' => 'fa-times',
-                'level' => 'primary'),            
+                'level' => 'primary',
+                'show' => $u > 1),            
             array('title' => $langBack,
                 'url' => "listusers.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary')
-        ));                              
+        ));                             
                
         $tool_content .= "<div class='form-wrapper'>
                     <form class='form-horizontal' role='form' name='edituser' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();'>
@@ -159,14 +160,13 @@ if ($u) {
                         <input type='text' name='fname' size='50' value='" . q($info->givenname) . "'>
                         </div>
                    </div>";
-
-        if (!in_array($info->password, $auth_ids)) {
             $tool_content .= "<div class='form-group'>
-                     <label class='col-sm-2 control-label'>$langUsername</label>
-                     <div class='col-sm-10'>
-                        <input type='text' name='username' size='50' value='" . q($info->username) . "'>
-                        </div>
-                    </div>";
+                     <label class='col-sm-2 control-label'>$langUsername</label>";
+        if (!in_array($info->password, $auth_ids)) {
+            $tool_content .= "<div class='col-sm-10'>
+                            <input type='text' name='username' size='50' value='" . q($info->username) . "'>
+                        </div>";
+                    
         } else {    // means that it is external auth method, so the user cannot change this password
             switch ($info->password) {
                 case "pop3": $auth = 2;
@@ -185,11 +185,11 @@ if ($u) {
                     break;
             }
             $auth_text = get_auth_info($auth);
-            $tool_content .= "<div class='form-group'>
-                <label class='col-sm-2 control-label'>$langUsername</label>
-                <div class='col-sm-10'><b>" . q($info->username) . "</b> [" . $auth_text . "] <input type='hidden' name='username' value=" . q($info->username) . "></div>
-                </div></div>";
+            $tool_content .= "<div class='col-sm-10'>
+                                <label>" . q($info->username) . "</label> [" . $auth_text . "] <input type='hidden' name='username' value=" . q($info->username) . ">
+                            </div>";
         }
+        $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>
           <label class='col-sm-2 control-label'>e-mail</label>
           <div class='col-sm-10'><input type='text' name='email' size='50' value='" . q(mb_strtolower(trim($info->email))) . "' /></div>
@@ -308,19 +308,25 @@ if ($u) {
                         $tool_content .= $langVisitor;
                     }
                     $tool_content .= "</td><td class='text-center'>" .
-                            icon('fa-ban', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>\n";
+                            icon('fa-ban', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>";
                 }                
             }
             $tool_content .= "</table></div>";
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langNoStudentParticipation</div>";
-            if ($u > 1) {
-                $tool_content .= "<p class='btn btn-danger'><a href='unreguser.php?u=$u'>$langDelete</a></p>";
-            } else {
-                $tool_content .= "<div class='alert alert-danger'>$langCannotDeleteAdmin</div>";
-            }
+            $tool_content .= "<div class='alert alert-danger'>$langNoStudentParticipation</div>";            
         }
     } else { // if the form was submitted then update user
+    
+        $tool_content .= action_bar(array(
+                        array('title' => $langBack,
+                              'url' => "listusers.php",
+                              'icon' => 'fa-reply',
+                              'level' => 'primary-label'),
+                        array('title' => $langBackAdmin,
+                              'url' => "index.php",
+                              'icon' => 'fa-reply',
+                              'level' => 'primary-label')));                        
+    
         // get the variables from the form and initialize them
         $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
         $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
@@ -361,11 +367,12 @@ if ($u) {
         }
         
         if ($registered_at > $user_expires_at) {            
-            $tool_content .= "<center><br /><b>$langExpireBeforeRegister<br /><br />
-                    <a href='edituser.php?u=$u'>$langAgain</a></b><br />";
+            $tool_content .= "<div class='alert alert-warning'>$langExpireBeforeRegister<br>
+                    <a href='edituser.php?u=$u'>$langAgain</a></div>";
         } else {
-            if ($u == 1)
+            if ($u == 1) {
                 $departments = array();
+            }
 
             // email cannot be verified if there is no mail saved
             if (empty($email) and $verified_mail) {
@@ -401,14 +408,13 @@ if ($u) {
                                     whitelist = ?s
                           WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
             if ($qry->affectedRows > 0) {
-                    $tool_content .= "<center><br /><b>$langSuccessfulUpdate</b><br /><br />";                
+                    $tool_content .= "<div class='alert alert-info'>$langSuccessfulUpdate</div>";
             } else {                                                
-                    $tool_content .= "<center><br /><b>$langUpdateNoChange</b><br /><br />";                
-            }
-            $tool_content .= "<a href='listusers.php'>$langBack</a></center>";
+                    $tool_content .= "<div class='alert alert-warning'>$langUpdateNoChange</div>";               
+            }            
         }
     }
 } else {
-    $tool_content .= "<h3>$langError</h3><p><a href='listcours.php'>$back</p>";
+    $tool_content .= "<div class='alert alert-danger'>$langError <a href='listcours.php'>$back</a></div>";
 }
 draw($tool_content, 3, null, $head_content);

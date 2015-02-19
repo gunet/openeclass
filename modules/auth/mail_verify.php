@@ -31,7 +31,9 @@
 $mail_ver_excluded = true;
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
+require_once 'include/lib/hierarchy.class.php';
 $pageName = $langMailVerify;
+$tree = new Hierarchy();
 
 $code = (isset($_GET['h']) && ctype_xdigit($_GET['h'])) ? $_GET['h'] : NULL;
 $req_id = (isset($_GET['rid']) && is_numeric($_GET['rid'])) ? intval($_GET['rid']) : NULL;
@@ -64,7 +66,7 @@ if (!empty($code) and (!empty($u_id) or !empty($req_id))) {
                 // update user's application
                 if (!empty($req_id) and ($verified_mail !== 1)) {
                     Database::get()->query("UPDATE user_request SET verified_mail = 1 WHERE id = ?d", $req_id);
-                    $department = find_faculty_by_id($res->faculty_id);
+                    $department = $tree->getFullPath($res->faculty_id);
                     $prof = isset($res->status) && intval($res->status) === 1 ? 1 : NULL;
                     $givenname = $res->givenname;
                     $surname = $res->surname;

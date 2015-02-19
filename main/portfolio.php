@@ -242,7 +242,7 @@ $tool_content .= "
                     <div class='col-xs-8 col-sm-5'>
                         <h4>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
                         <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>". claro_format_locale_date($dateFormatLong, strtotime($userdata->registered_at))."</span><br>
-                        <span class='tag'>$langProfileLastVisit : <span><span class='tag-value'>". claro_format_locale_date($dateFormatLong, strtotime($lastVisit[0]->when))."</span>
+                        <span class='tag'>$langProfileLastVisit : </span><span class='tag-value'>". claro_format_locale_date($dateFormatLong, strtotime($lastVisit[0]->when))."</span>
                     </div>
                     <div class='col-xs-12 col-sm-5'>
                         <ul class='list-group'>

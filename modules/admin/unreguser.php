@@ -28,7 +28,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$pageName = $langUnregUser;
+$toolName = $langUnregUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // get the incoming values and initialize them
@@ -36,27 +36,43 @@ $u = isset($_GET['u']) ? intval($_GET['u']) : false;
 $c = isset($_GET['c']) ? intval($_GET['c']) : false;
 $doit = isset($_GET['doit']);
 
-if (isDepartmentAdmin())
+if (isset($doti)) {
+    $tool_content .= action_bar(array(    
+        array('title' => $langBackAdmin,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
+} else {
+    $tool_content .= action_bar(array(
+        array('title' => $langBack,
+              'url' => "edituser.php?u=$u",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'),
+        array('title' => $langBackAdmin,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
+}
+
+if (isDepartmentAdmin()) {
     validateUserNodes(intval($u), true);
+}
 
 $u_account = $u ? q(uid_to_name($u, 'username')) : '';
 $u_realname = $u ? q(uid_to_name($u)) : '';
 $userdata = user_get_data($u);
 $u_status = $userdata->status;
 
-
 if (!$doit) {
     if ($u_account && $c) {
-        $tool_content .= "<p class='title1'>$langConfirmDelete</p>
-        <div class='alert alert-warning'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
+        $tool_content .= "<div class='alert alert-warning'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em>
     	$langConfirmDeleteQuestion2 <em>" . q(course_id_to_title($c)) . "</em>
         </div>
-        <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></p>";
+        <div class='col-sm-offset-5 btn btn-primary'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;c=$c&amp;doit=yes'>$langDelete</a></div>";
     } else {
-        $tool_content .= "<p>$langErrorUnreguser</p>";
+        $tool_content .= "<div class='alert alert-danger'>$langErrorUnreguser</div>";
     }
-
-    $tool_content .= "<div class='right'><a href='edituser.php?u=$u'>$langBack</a></div><br/>";
+   
 } else {
     if ($c and $u) {
         $q = Database::get()->query("DELETE from course_user WHERE user_id = ?d AND course_id = ?d", $u, $c);
@@ -64,17 +80,16 @@ if (!$doit) {
             Database::get()->query("DELETE FROM group_members
                             WHERE user_id = ?d AND
                             group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
-            $tool_content .= "<p>$langUserWithId $u $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></p>\n";
+            $tool_content .= "<div class='alert alert-info'>$langUserWithId $u $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></div>";
             $m = 1;
         }
     } else {
-        $tool_content .= $langErrorDelete;
+        $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
     }
-    $tool_content .= "<br />&nbsp;";
+    $tool_content .= "<br>&nbsp;";
     if ((isset($m)) && (!empty($m))) {
-        $tool_content .= "<br /><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
-    }
-    $tool_content .= "<a href='index.php'>$langBackAdmin</a>.<br />\n";
+        $tool_content .= "<br><a href='edituser.php?u=$u'>$langEditUser $u_account</a>&nbsp;&nbsp;&nbsp;";
+    }    
 }
 
 draw($tool_content, 3);

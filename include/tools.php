@@ -266,6 +266,10 @@ function loggedInMenu() {
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
 
+    array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
+    array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
+    array_push($sideMenuImg, "fa-bullhorn");
+    
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
     array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
     array_push($sideMenuImg, "fa-calendar");
@@ -745,7 +749,7 @@ function pickerMenu() {
     /* link for common documents */
     if (get_config('enable_common_docs')) {
         array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
-        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php/' . $params));
+        array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php' . $params));
         array_push($sideMenuImg, 'docs.png');
     }
 

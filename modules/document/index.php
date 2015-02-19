@@ -49,6 +49,7 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'include/log.php';
+require_once 'modules/drives/clouddrive.php';
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
@@ -170,7 +171,9 @@ if ($can_upload) {
      * ******************************************************************** */
 
     $action_message = $dialogBox = '';
-    if (isset($_POST['fileCloudURL'])) {
+    if (isset($_POST['fileCloudInfo'])) {
+        $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
+        $cloudfile->storeToLocalFile("/tmp/outfile");
     } else if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
         validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
         $extra_path = '';

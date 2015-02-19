@@ -49,7 +49,7 @@ function popover_init() {
     });
 }
 function tooltip_init() {
-    $('[rel=tooltip]').tooltip({container: 'body'});
+    $('[data-toggle=tooltip]').tooltip({container: 'body'});
 }
 function sidebar_reset() {
 

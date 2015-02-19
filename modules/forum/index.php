@@ -71,6 +71,7 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
     } else {
         Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, cat_id = ?d, notify_sent = 1, course_id = ?d", $uid, $cat_id, $course_id);
     }
+    redirect("index.php?course=$course_code");
 } elseif (isset($_GET['forumnotify'])) { // modify forum notification
     if (isset($_GET['forum_id'])) {
         $forum_id = $_GET['forum_id'];
@@ -82,6 +83,7 @@ if (isset($_GET['forumcatnotify'])) { // modify forum category notification
     } else {
         Database::get()->query("INSERT INTO forum_notify SET user_id = ?d, forum_id = ?d, notify_sent = 1, course_id = ?d", $uid, $forum_id, $course_id);
     }
+    redirect("index.php?course=$course_code");
 }
 
 /*
@@ -104,18 +106,18 @@ if ($total_categories > 0) {
                                                         WHERE user_id = ?d AND cat_id = ?d AND course_id = ?d", $uid, $catNum, $course_id);
         if ($sql) {
             $action_notify = $sql->notify_sent;
+        } else {
+            $action_notify = FALSE;
         }
 
         if (!isset($action_notify)) {
             $link_notify = FALSE;
-            $icon = '_off';
         } else {
             $link_notify = toggle_link($action_notify);
-            $icon = toggle_icon($action_notify);
         }
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr>
-		<th colspan='6'><b>$cat_title</b><div class='pull-right'>";
+        $tool_content .= "
+		<caption><b>$cat_title</b><div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
@@ -136,19 +138,20 @@ if ($total_categories > 0) {
                 'confirm' => $langConfirmDelete
             )
         );
-        $dyntools[] = array('title' => $langNotify,
+        $dyntools[] = array('title' => $action_notify ? $langStopNotify : $langNotify,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
             'icon' => 'fa-envelope',
-            'level' => 'primary'
+            'level' => 'primary',
+            'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
         );
-        $tool_content .= action_button($dyntools)."</div>";
+        $tool_content .= action_button($dyntools)."</div></caption>";
 
         $tool_content .= "<tr>
-		<td colspan='2'>$langForums</td>
-		<td class='text-center'>$langSubjects</td>
-		<td class='text-center'>$langPosts</td>
-		<td class='text-center'>$langLastPost</td>
-		<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>
+		<td class='forum_td'>$langForums</td>
+		<td class='text-center forum_td'>$langSubjects</td>
+		<td class='text-center forum_td'>$langPosts</td>
+		<td class='text-center forum_td'>$langLastPost</td>
+		<th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
 		</tr>";
 
         // display forum topics
@@ -179,7 +182,6 @@ if ($total_categories > 0) {
                     } else {
                         $tool_content .= "<td>".icon('fa-comments')."</td>";
                     }*/
-                    $tool_content .= "<td>".icon('fa-comments')."</td>";
                     $forum_name = q($forum_data->name);
                     if ($forum_data->poster_id) {
                         $last_user_post = uid_to_name($forum_data->poster_id);
@@ -200,7 +202,17 @@ if ($total_categories > 0) {
                     //  - forum doesn't belong to group
                     //  - forum belongs to group and group forums are enabled and
                     //     - user is member of group
+                    $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+								WHERE user_id = ?d
+								AND forum_id = ?d
+								AND course_id = ?d", $uid, $forum_id, $course_id);
+                    if ($forum_action_notify) {
+                        $forum_action_notify = $forum_action_notify->notify_sent;
+                    } else {
+                        $forum_action_notify = FALSE;
+                    }                    
                     if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
+                        if ($forum_action_notify) $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='".q($langNotify)."'><i class='fa fa-envelope'></i></span>";
                         $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member . "</div>";
@@ -216,24 +228,16 @@ if ($total_categories > 0) {
                         $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;
                                                 <a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
 						".icon('fa-comment-o', $langLastPost)."
-						</a>
+						</a><br>
 						$human_last_post_time</span></td>";
                     } else {
                         $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
                     }
-                    $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-								WHERE user_id = ?d
-								AND forum_id = ?d
-								AND course_id = ?d", $uid, $forum_id, $course_id);
-                    if ($forum_action_notify) {
-                        $forum_action_notify = $forum_action_notify->notify_sent;
-                    }
+
                     if (!isset($forum_action_notify)) {
                         $forum_link_notify = false;
-                        $forum_icon = '_off';
                     } else {
                         $forum_link_notify = toggle_link($forum_action_notify);
-                        $forum_icon = toggle_icon($forum_action_notify);
                     }
                     $tool_content .= "<td class='option-btn-cell'>";
 
@@ -247,7 +251,7 @@ if ($total_categories > 0) {
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete)
                     );
-                    $dyntools[] = array('title' => $langNotify,
+                    $dyntools[] = array('title' => $forum_action_notify ? $langStopNotify : $langNotify,
                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
                         'icon' => 'fa-envelope');
                     $tool_content .= action_button($dyntools);

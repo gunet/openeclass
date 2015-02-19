@@ -276,17 +276,17 @@ $head_content .= "
                             value: row_id
                           },
                           success: function(data){
-                            var num_page_records = oTable.fnGetData().length;
-                            var per_page = oTable.fnPagingInfo().iLength;
-                            var page_number = oTable.fnPagingInfo().iPage;
-                            if(num_page_records==1){
+                            var info = oTable.page.info();
+                            var per_page = info.length;
+                            var page_number = info.page;
+                            if(info.recordsDisplay % info.length == 1){
                                 if(page_number!=0) {
                                     page_number--;
                                 }
                             }
                             $('#tool_title').after('<p class=\"success\">$langUserDeleted</p>');
                             $('.success').delay(3000).fadeOut(1500);    
-                            oTable.fnPageChange(page_number);
+                            oTable.page(page_number).draw(false);
                           },
                           error: function(xhr, textStatus, error){
                               console.log(xhr.statusText);
@@ -369,25 +369,22 @@ $tool_content .=
                 'icon' => 'fa-plus-circle',
                 'button-class' => 'btn-success',
                 'level' => 'primary-label'),
-            array('title' => $langGUser,
+            array('title' => $langAddGUser,
                 'url' => "guestuser.php?course=$course_code",
-                'icon' => 'fa-plane',
-                'level' => 'primary'),
+                'icon' => 'fa-plane'),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
-                'icon' => 'fa-users',
-                'level' => 'primary'),
+                'icon' => 'fa-users'),
+            array('title' => "$langDumpUser ( $langcsvenc1 )",
+                'url' => "dumpuser.php?course=$course_code",
+                'icon' => 'fa-file-archive-o'),
+            array('title' => "$langDumpUser ( $langcsvenc2 )",
+                'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
+                'icon' => 'fa-file-archive-o'),
             array('title' => $langDelUsers,
                 'url' => "../course_info/refresh_course.php?course=$course_code",
                 'icon' => 'fa-times',
-                'button-class' => 'btn-danger',
-                'level' => 'primary'),
-            array('title' => "$langDumpUser ($langCsv $langcsvenc1)",
-                'url' => "dumpuser.php?course=$course_code",
-                'icon' => 'fa-file-archive-o'),
-            array('title' => "$langDumpUser ($langCsv $langcsvenc2)",
-                'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
-                'icon' => 'fa-file'),
+                'button-class' => 'btn-danger')
         ));
 
 

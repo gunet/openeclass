@@ -770,6 +770,10 @@ class Google_Service_Books extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'reason' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'source' => array(
                   'location' => 'query',
                   'type' => 'string',
@@ -849,6 +853,10 @@ class Google_Service_Books extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                   'required' => true,
+                ),
+                'reason' => array(
+                  'location' => 'query',
+                  'type' => 'string',
                 ),
                 'source' => array(
                   'location' => 'query',
@@ -2011,6 +2019,8 @@ class Google_Service_Books_MylibraryBookshelves_Resource extends Google_Service_
    * @param string $volumeId ID of volume to add.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string reason The reason for which the book is added to the
+   * library.
    * @opt_param string source String to identify the originator of this request.
    */
   public function addVolume($shelf, $volumeId, $optParams = array())
@@ -2094,6 +2104,8 @@ class Google_Service_Books_MylibraryBookshelves_Resource extends Google_Service_
    * @param string $volumeId ID of volume to remove.
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string reason The reason for which the book is removed from the
+   * library.
    * @opt_param string source String to identify the originator of this request.
    */
   public function removeVolume($shelf, $volumeId, $optParams = array())
@@ -4780,6 +4792,7 @@ class Google_Service_Books_OffersItems extends Google_Collection
   protected $internal_gapi_mappings = array(
   );
   public $artUrl;
+  public $gservicesKey;
   public $id;
   protected $itemsType = 'Google_Service_Books_OffersItemsItems';
   protected $itemsDataType = 'array';
@@ -4792,6 +4805,14 @@ class Google_Service_Books_OffersItems extends Google_Collection
   public function getArtUrl()
   {
     return $this->artUrl;
+  }
+  public function setGservicesKey($gservicesKey)
+  {
+    $this->gservicesKey = $gservicesKey;
+  }
+  public function getGservicesKey()
+  {
+    return $this->gservicesKey;
   }
   public function setId($id)
   {
@@ -6111,6 +6132,7 @@ class Google_Service_Books_VolumeVolumeInfo extends Google_Collection
   public $publisher;
   public $ratingsCount;
   public $readingModes;
+  public $samplePageCount;
   public $subtitle;
   public $title;
 
@@ -6274,6 +6296,14 @@ class Google_Service_Books_VolumeVolumeInfo extends Google_Collection
   public function getReadingModes()
   {
     return $this->readingModes;
+  }
+  public function setSamplePageCount($samplePageCount)
+  {
+    $this->samplePageCount = $samplePageCount;
+  }
+  public function getSamplePageCount()
+  {
+    return $this->samplePageCount;
   }
   public function setSubtitle($subtitle)
   {

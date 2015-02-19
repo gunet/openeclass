@@ -31,15 +31,17 @@ final class CloudDriveManager {
     public static $DRIVENAMES = array("GoogleDrive", "OneDrive", "Dropbox");
 
     const DRIVE = "clouddrive";
-    const FILEPENDING = "pendingurl";
+    const FILEPENDING = "pendingcloud";
 
     private static $DRIVES = null;
 
+    /**
+     * @return CloudDrive
+     */
     public static function getValidDrives() {
         if (CloudDriveManager::$DRIVES == null) {
             $drives = array();
             foreach (CloudDriveManager::$DRIVENAMES as $driveName) {
-                require_once 'plugins/' . strtolower($driveName) . '.php';
                 $drive = new $driveName();
                 if ($drive->isPresent()) {
                     $drives[] = $drive;
@@ -83,12 +85,15 @@ final class CloudDriveManager {
     }
 
     public static function getSessionDrive() {
-        $drive_name = isset($_GET[CloudDriveManager::DRIVE]) ? $_GET[CloudDriveManager::DRIVE] : null;
-        if ($drive_name == null) {
+        return CloudDriveManager::getDrive($drive_name = isset($_GET[CloudDriveManager::DRIVE]) ? $_GET[CloudDriveManager::DRIVE] : null);
+    }
+
+    public static function getDrive($drivename) {
+        if ($drivename == null) {
             die("Error while retrieving cloud connectivity");
         }
         foreach (CloudDriveManager::getValidDrives() as $drive) {
-            if ($drive->getName() == $drive_name)
+            if ($drive->getName() == $drivename)
                 return $drive;
         }
         return null;
@@ -132,8 +137,11 @@ abstract class CloudDrive {
         return CloudDriveManager::DRIVE . "=" . $this->getName();
     }
 
-    private function getConfig($key) {
-        return Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = ?s", "drive_" . $this->getName() . "_" . $key)->value;
+    protected function getConfig($key) {
+        $value = Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = ?s", "drive_" . $this->getName() . "_" . $key);
+        if ($value)
+            return $value->value;
+        return null;
     }
 
     protected function getClientID() {
@@ -148,9 +156,48 @@ abstract class CloudDrive {
         return $this->getConfig("redirect");
     }
 
-    public abstract function getDisplayName();
+    public function isPresent() {
+        return ($this->getClientID() && $this->getSecret() && $this->getRedirect());
+    }
 
-    public abstract function isPresent();
+    protected function downloadToFile($url, $filename, $post = null) {
+        try {
+            $fout = fopen($filename, "w+b");
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            if ($post)
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
+            curl_setopt($ch, CURLOPT_FILE, $fout);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            fclose($fout);
+        } catch (Exception $ex) {
+            return CloudDriveResponse::FILE_NOT_SAVED;
+        }
+        if ($result)
+            return CloudDriveResponse::OK;
+        return CloudDriveResponse::FILE_NOT_FOUND;
+    }
+
+    protected function downloadToOutput($url, $post = null) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        if ($post)
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+    public abstract function store($cloudfile, $path);
+
+    public abstract function getDisplayName();
 
     public abstract function isAuthorized();
 
@@ -164,15 +211,22 @@ abstract class CloudDrive {
 final class CloudFile {
 
     private $name;
-    private $downloadURL;
+    private $id;
     private $isFolder;
     private $size;
+    private $drivename;
 
-    public function __construct($name, $downloadURL, $isFolder, $size) {
+    public function __construct($name, $id, $isFolder, $size, $drivename) {
         $this->name = $name;
-        $this->downloadURL = $downloadURL;
+        $this->id = $id;
         $this->isFolder = $isFolder;
         $this->size = $size;
+        $this->drivename = $drivename;
+    }
+
+    public static function fromJSON($json) {
+        $values = json_decode($json);
+        return new CloudFile($values->name, $values->id, false, $values->size, $values->drivename);
     }
 
     public function isFolder() {
@@ -183,12 +237,33 @@ final class CloudFile {
         return $this->name;
     }
 
-    public function downloadURL() {
-        return $this->downloadURL;
+    public function id() {
+        return $this->id;
     }
 
     public function size() {
         return $this->size;
     }
+
+    public function drive() {
+        return CloudDriveManager::getDrive($this->drivename);
+    }
+
+    public function storeToLocalFile($file) {
+        return $this->drive()->store($this, $file);
+    }
+
+    public function toJSON() {
+        return json_encode(array('name' => $this->name, 'id' => $this->id, 'size' => $this->size, 'drivename' => $this->drivename));
+    }
+
+}
+
+class CloudDriveResponse {
+
+    const OK = 0;
+    const FILE_NOT_FOUND = 1;
+    const FILE_NOT_SAVED = 2;
+    const AUTHORIZATION_ERROR = 3;
 
 }

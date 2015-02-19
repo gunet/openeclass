@@ -31,6 +31,8 @@ require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 
+$display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
+
 $tree = new Hierarchy();
 $userObj = new User();
 
@@ -83,55 +85,60 @@ if (!isset($_POST['submit'])) {
     } else {
         $am_message = $langOptional;
     }
+    $tool_content .= action_bar(array(
+                    array('title' => $langBack,
+                        'url' => "{$urlAppend}modules/auth/registration.php",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label')), false);
     @$tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
             <fieldset>
             <div class='form-group'>
                 <label for='Name' class='col-sm-2 control-label'>$langName:</label>
                 <div class='col-sm-10'>
-                  <input type='text' name='givenname_form' size='30' maxlength='50' value='" . q($_GET['givenname_form']) . "' placeholder='$langName'>
+                  <input class='form-control' type='text' name='givenname_form' size='30' maxlength='50' value='" . q($_GET['givenname_form']) . "' placeholder='$langName'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='surname_form' size='30' maxlength='100' value='" . q($_GET['surname_form']) . "' placeholder='$langSurname'>
+                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value='" . q($_GET['surname_form']) . "' placeholder='$langSurname'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='uname' value='" . q($_GET['uname']) . "' size='30' maxlength='30'  autocomplete='off' placeholder='$langUserNotice'>
+                    <input class='form-control' type='text' name='uname' value='" . q($_GET['uname']) . "' size='30' maxlength='30'  autocomplete='off' placeholder='$langUserNotice'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
                 <div class='col-sm-10'>
-                    <input type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
-                </div>      
+                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
+                </div>
             </div>
             <div class='form-group'>
               <label for='UserPass2' class='col-sm-2 control-label'>$langConfirmation:</label>
                 <div class='col-sm-10'>
-                    <input type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
+                    <input class='form-control' type='password' name='password' size='30' maxlength='30' autocomplete='off'/>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='email' size='30' maxlength='100' value='" . q($_GET['email']) . "' placeholder='$email_message'>
+                    <input class='form-control' type='text' name='email' size='30' maxlength='100' value='" . q($_GET['email']) . "' placeholder='$email_message'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='am' size='20' maxlength='20' value='" . q($_GET['am']) . "' placeholder='$am_message'>
+                    <input class='form-control' type='text' name='am' size='20' maxlength='20' value='" . q($_GET['am']) . "' placeholder='$am_message'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
                 <div class='col-sm-10'>
-                    <input type='text' name='phone' size='20' maxlength='20' value='" . q($_GET['phone']) . "' placeholder = '$langOptional'>
+                    <input class='form-control' type='text' name='phone' size='20' maxlength='20' value='" . q($_GET['phone']) . "' placeholder = '$langOptional'>
                 </div>
             </div>
             <div class='form-group'>
@@ -148,8 +155,8 @@ if (!isset($_POST['submit'])) {
             $tool_content .= lang_select_options('localize', "class='form-control'");
             $tool_content .= "</div>
             </div>";
-            if (get_config("display_captcha")) {                
-                $tool_content .= "<div class='form-group'>                    
+            if ($display_captcha) {
+                $tool_content .= "<div class='form-group'>
                       <div class='col-sm-offset-2 col-sm-10'><img id='captcha' src='{$urlAppend}include/securimage/securimage_show.php' alt='CAPTCHA Image' /></div><br>
                       <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
                       <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
@@ -161,7 +168,7 @@ if (!isset($_POST['submit'])) {
         </fieldset>
       </form>
       </div>";
-      
+
 } else {
     if (get_config('email_required')) {
         $email_arr_value = true;
@@ -185,8 +192,9 @@ if (!isset($_POST['submit'])) {
     if (!isset($_POST['department'])) {
         $departments = array();
         $missing = false;
-    } else
+    } else {
         $departments = $_POST['department'];
+    }
 
     $registration_errors = array();
     // check if there are empty fields
@@ -199,7 +207,7 @@ if (!isset($_POST['submit'])) {
         if ($username_check) {
             $registration_errors[] = $langUserFree;
         }
-        if (get_config('display_captcha')) {
+        if ($display_captcha) {
             // captcha check
             require_once 'include/securimage/securimage.php';
             $securimage = new Securimage();
@@ -228,12 +236,12 @@ if (!isset($_POST['submit'])) {
         $password = unescapeSimple($password);
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
-        
+
         $q1 = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email,
                                  status, am, phone, registered_at, expires_at,
                                  lang, verified_mail, whitelist, description)
                       VALUES (?s, ?s, ?s, '$password_encrypted', ?s, " . USER_STUDENT . ", ?s, ?s, " . DBHelper::timeAfter() . ",
-                              " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, $verified_mail, '', '')", 
+                              " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, $verified_mail, '', '')",
                             $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
         $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, $departments);
@@ -269,19 +277,19 @@ if (!isset($_POST['submit'])) {
             $user_msg .= "$langMailVerificationSuccess: <strong>$email</strong>";
         }
         // login user
-        else {            
+        else {
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
             $uid = $myrow->id;
             $surname = $myrow->surname;
             $givenname = $myrow->givenname;
-        
+
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
                              VALUES (?d, ?s, NOW(), 'LOGIN')", $uid, $_SERVER['REMOTE_ADDR']);
             $_SESSION['uid'] = $uid;
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname_form;
             $_SESSION['surname'] = $surname_form;
-            $_SESSION['uname'] = $uname;            
+            $_SESSION['uname'] = $uname;
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
         // user msg

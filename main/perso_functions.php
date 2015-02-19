@@ -159,17 +159,15 @@ function getUserAnnouncements($lesson_id, $type = '') {
             $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
             $ann_content .= "
             <li class='list-item'>
-                <span class='item-wholeline'>
-                    <a href='$ann_url'>
+                <div class='item-wholeline'>
                         <div class='text-title'>
-                            " . q(ellipsize($ann->title, 60)) ."
+                            <a href='$ann_url'>" . q(ellipsize($ann->title, 60)) . "</a>
                         </div>
-                    </a>
-                    
+
                     <div class='text-grey'>$course_title</div>
                     
                     <div>$ann_date</div>
-                </span>
+                </div>
             </li>";
         }
         return $ann_content;
@@ -446,13 +444,13 @@ function getUserMessages() {
         }
         $message_date = claro_format_locale_date($dateFormatLong, $message->timestamp);
         $message_content .= "<li class='list-item'>
-                            <span class='item-wholeline'>                                    
-                                <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
-                                    <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .q($message->subject)."</a>
-                                </div>                                    
-                                <div class='text-grey'>$course_title</div>
-                                <div>$message_date</div>
-                                </span>
+                                <div class='item-wholeline'>                                    
+                                    <div class='text-title'>$langFrom ".display_user($message->author_id, false, false).":
+                                        <a href='{$urlServer}modules/dropbox/index.php?mid=$message->id'>" .q($message->subject)."</a>
+                                    </div>                                    
+                                    <div class='text-grey'>$course_title</div>
+                                    <div>$message_date</div>
+                                </div>
                             </li>";
     }    
     return $message_content;

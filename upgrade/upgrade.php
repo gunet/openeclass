@@ -73,7 +73,7 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 $fromadmin = !isset($_POST['submit_upgrade']);
 
 if (!isset($_POST['submit2']) and ! $command_line) {
-    if (!is_admin($_POST['login'], $_POST['password'])) {
+    if (!is_admin(@$_POST['login'], @$_POST['password'])) {
         $tool_content .= "<div class='alert alert-warning'>$langUpgAdminError</div>
             <center><a href='index.php'>$langBack</a></center>";
         draw($tool_content, 0);
@@ -100,6 +100,7 @@ if (!DBHelper::fieldExists('user', 'id')) {
     Database::get()->query("UPDATE user
                         SET registered_at = FROM_UNIXTIME(ts_registered_at),
                             expires_at = FROM_UNIXTIME(ts_expires_at)");
+    Database::get()->query("UPDATE user SET email = '' WHERE email IS NULL");
     Database::get()->query("ALTER TABLE user
                         CHANGE user_id id INT(11) NOT NULL AUTO_INCREMENT,
                         CHANGE nom surname VARCHAR(100) NOT NULL DEFAULT '',
@@ -254,7 +255,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 ';
         $fp = @fopen('config/config.php', 'w');
         if (!$fp) {
-            die($langConfigError3);
+            updateInfo(0.01, $langConfigError3);
+            exit;
         }
         fwrite($fp, $new_conf);
         fclose($fp);
@@ -870,7 +872,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'blog_post', 'comments', 'rating', 'rating_cache', 'abuse_report', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
-                if (Database::get()->query("SELECT COUNT(*) as value FROM `$table_name`")->value > 0) {
+                if (Database::get()->querySingle("SELECT COUNT(*) FROM `$table_name`") > 0) {
                     echo "Warning: Database inconsistent - table '$table_name' already",
                     " exists in $mysqlMainDb - renaming it to 'old_$table_name'<br>\n";
                     Database::get()->query("RENAME TABLE `$table_name` TO `old_$table_name`");
@@ -978,8 +980,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                        ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31'");
         } else {
             Database::get()->query("ALTER TABLE announcement
-                                       ADD `start_display` NOT NULL DATE DEFAULT '2014-01-01',
-                                       ADD `stop_display` NOT NULL DATE DEFAULT '2094-12-31'");
+                                       ADD `start_display` DATE NOT NULL DEFAULT '2014-01-01',
+                                       ADD `stop_display` DATE NOT NULL DEFAULT '2094-12-31'");
         }
 
         // create forum tables
@@ -1700,14 +1702,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 $lft = 2 + 8 * $i;
                 $rgt = $lft + 7;
                 Database::get()->query("INSERT INTO `hierarchy` (id, code, name, number, generator, lft, rgt, allow_course, allow_user)
-                                VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?d, true, true)", $r->id, $r->code, $r->name, $r->number, $r->generator, $lft, $rgt);
+                                VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?d, false, true)", $r->id, $r->code, $r->name, $r->number, $r->generator, $lft, $rgt);
 
                 Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                                VALUES (?d, ?s, ?s, ?d, ?d, true, true)", ( ++$max), $r->code, $langpre, ($lft + 1), ($lft + 2));
+                                VALUES (?d, ?s, ?s, ?d, ?d, true, false)", ( ++$max), $r->code, $langpre, ($lft + 1), ($lft + 2));
                 Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                                VALUES (?d, ?s, ?s, ?d, ?d, true, true)", ( ++$max), $r->code, $langpost, ($lft + 3), ($lft + 4));
+                                VALUES (?d, ?s, ?s, ?d, ?d, true, false)", ( ++$max), $r->code, $langpost, ($lft + 3), ($lft + 4));
                 Database::get()->query("INSERT INTO `hierarchy` (id, code, name, lft, rgt, allow_course, allow_user)
-                                VALUES (?d, ?s, ?s, ?d, ?d, true, true)", ( ++$max), $r->code, $langother, ($lft + 5), ($lft + 6));
+                                VALUES (?d, ?s, ?s, ?d, ?d, true, false)", ( ++$max), $r->code, $langother, ($lft + 5), ($lft + 6));
                 $i++;
             });
 
@@ -2482,7 +2484,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         
         if (DBHelper::fieldExists('course_user', 'team')) {
             Database::get()->query('ALTER TABLE `course_user` DROP COLUMN `team`');
+        }                
+        if (!DBHelper::fieldExists('exercise_question', 'difficulty')) {
+            Database::get()->query("ALTER table `exercise_question` ADD difficulty INT(1) DEFAULT 0");
         }
+        if (!DBHelper::fieldExists('exercise_question', 'category')) {
+            Database::get()->query("ALTER table `exercise_question` ADD category INT(11) DEFAULT 0");
+        }
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_question_cats` (
+                            `question_cat_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `question_cat_name` VARCHAR(300) NOT NULL,
+                            `course_id` INT(11) NOT NULL)
+                            $charset_spec");
         
         Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2511,24 +2524,45 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('course', 'course_image')) {
             Database::get()->query("ALTER TABLE course ADD course_image VARCHAR(400) NULL");
         }
+
         // Move course description from unit_resources to new course.description field
+        $moveDesc = false;
         if (!DBHelper::fieldExists('course', 'description')) {
             Database::get()->query("ALTER TABLE course ADD description MEDIUMTEXT NOT NULL");
+            $moveDesc = true;
+        }
+        if (!$moveDesc) {
+            // Check if descriptions need to be moved
+            $descCount = Database::get()->querySingle("SELECT COUNT(*) AS descCount
+                FROM course_units, unit_resources
+                WHERE unit_resources.comments <> '' AND
+                      course_units.id = unit_resources.unit_id AND
+                      course_units.`order` = -1 AND
+                      unit_resources.res_id = -1")->descCount;
+            $moveDesc = ($descCount > 0);
+        }
+        if ($moveDesc) {
             $result = Database::get()->query("UPDATE course, course_units, unit_resources
                 SET course.description = unit_resources.comments
                 WHERE course.id = course_units.course_id AND
                       course_units.id = unit_resources.unit_id AND
                       course_units.`order` = -1 AND
                       unit_resources.res_id = -1");
-            if ($result->affectedRows) {
-                Database::get()->query("DELETE FROM unit_resources WHERE res_id = -1");
-                Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
-            }
         }
+        Database::get()->query("DELETE FROM unit_resources WHERE res_id = -1");
+        Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
         
         // loosen poll schema, mediumtext columns can be allowed to be null    
-        Database::get()->query("ALTER TABLE `poll` CHANGE `description` `description` MEDIUMTEXT NULL DEFAULT NULL");
-        Database::get()->query("ALTER TABLE `poll` CHANGE `end_message` `end_message` MEDIUMTEXT NULL DEFAULT NULL");
+        if (DBHelper::fieldExists('poll', 'description')) { 
+            Database::get()->query("ALTER TABLE `poll` CHANGE `description` `description` MEDIUMTEXT NULL DEFAULT NULL");
+        } else {
+            Database::get()->query("ALTER TABLE `poll` ADD `description` MEDIUMTEXT NULL DEFAULT NULL");
+        }
+        if (DBHelper::fieldExists('poll', 'end_message')) { 
+            Database::get()->query("ALTER TABLE `poll` CHANGE `end_message` `end_message` MEDIUMTEXT NULL DEFAULT NULL");
+        } else {
+            Database::get()->query("ALTER TABLE `poll` ADD `end_message` MEDIUMTEXT NULL DEFAULT NULL");
+        }
         
         set_config('theme', 'default');
         set_config('theme_options_id', 0);

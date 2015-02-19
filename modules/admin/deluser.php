@@ -22,8 +22,14 @@
 
 $require_usermanage_user = TRUE;
 include '../../include/baseTheme.php';
-$pageName = $langUnregUser;
+$toolName = $langUnregUser;
 $navigation[] = array("url" => "index.php", "name" => $langAdmin);
+
+$tool_content .= action_bar(array(    
+        array('title' => $langBackAdmin,
+              'url' => "index.php",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
 
 // get the incoming values and initialize them
 $u = isset($_GET['u']) ? intval($_GET['u']) : false;
@@ -45,16 +51,14 @@ if (!$doit) {
     }    
 } else {
     if ($u == 1) {
-        $tool_content .= $langTryDeleteAdmin;
+        $tool_content .= "<div class='alert alert-danger'>$langTryDeleteAdmin</div>";
     } else {
         $success = deleteUser($u, true);
         if ($success === true) {
-            $tool_content .= "<p>$langUserWithId $u $langWasDeleted.</p>";
+            $tool_content .= "<div class='alert alert-info'>>$langUserWithId $u $langWasDeleted.</div>";
         } else {
-            $tool_content .= "<p>$langErrorDelete</p>";
+            $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
         }
     }    
 }
-
-$tool_content .= "<div class='right'><a href='index.php'>$langBackAdmin</a></div><br/>";
 draw($tool_content, 3);

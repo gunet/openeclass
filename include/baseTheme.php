@@ -88,7 +88,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langPortfolio, $langSearch, $langUser,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
-        $require_current_course, $require_help, $siteName, $siteName,
+        $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
         $theme_settings, $language, $saved_is_editor,
@@ -268,12 +268,17 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);
         $t->set_var('NOTES_LINK', $urlServer . 'main/notes/index.php');
         $t->set_var('LANG_STATS', $GLOBALS['langMyStats']);
-        $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");        
+        $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");
         $t->set_var('LANG_LOGOUT', $langLogout);
         $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
         $t->set_var('MY_COURSES', $GLOBALS['langMyCoursesSide']);
         $t->set_var('MY_MESSAGES', $GLOBALS['langNewMyMessagesSide']);
+        $t->set_var('LANG_ANNOUNCEMENTS', $GLOBALS['langMyAnnouncements']);
+        $t->set_var('ANNOUNCEMENTS_LINK', $urlServer . "modules/announcements/myannouncements.php");
         $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
+        $t->set_var('langSave', $GLOBALS['langSave']);
+        $t->set_var('langAllNotes', $GLOBALS['langAllNotes']);
+        $t->set_var('langAllMessages', $GLOBALS['langAllMessages']);
         $t->set_var('langNoteTitle', $langNoteTitle);
         $t->set_var('langEnterNote', $langEnterNote);
         $t->set_var('langFieldsRequ', $langFieldsRequ);
@@ -330,14 +335,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $mod_activation = "
 
                 <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                    <i class='fa fa-minus-square tiny-icon tiny-icon-red' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
+                    <i class='fa fa-minus-square tiny-icon tiny-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
                     </a>";
             } else {
                 $message = $langActivate;
                 $mod_activation = "
 
                 <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                    <i class='fa fa-check-square tiny-icon tiny-icon-green' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
+                    <i class='fa fa-check-square tiny-icon tiny-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
                     </a>";
             }
         }
@@ -500,7 +505,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('LANG_SEARCH', $langSearch);
 
     // display role switch button if needed
-    if (isset($require_current_course) and ($is_editor or (isset($saved_is_editor) and $saved_is_editor))) {
+    if (isset($require_current_course) and
+        ($is_editor or (isset($saved_is_editor) and $saved_is_editor)) and
+        !(isset($require_course_admin) and $require_course_admin) and
+        !(isset($require_editor) and $require_editor)) {
         if ($is_editor) {
             $t->set_var('STUDENT_VIEW_TITLE', $langStudentViewEnable);
         } else {
@@ -533,7 +541,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $help_link_icon = "
 
         <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\">
-            <i class='fa fa-question-circle tiny-icon' rel='tooltip' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
+            <i class='fa fa-question-circle tiny-icon' data-toggle='tooltip' data-placement='top' title='$langHelp'></i>
         </a>";
 
         $t->set_var('HELP_LINK_ICON', $help_link_icon);
@@ -557,7 +565,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('RSS_LINK_ICON', "
 
             <a href='$urlAppend" . RSS . "'>
-                <i class='fa fa-rss-square tiny-icon tiny-icon-rss' rel='tooltip' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
+                <i class='fa fa-rss-square tiny-icon tiny-icon-rss' data-toggle='tooltip' data-placement='top' title='RSS Feed'></i>
             </a>
 
 
@@ -731,7 +739,7 @@ function module_path($path) {
         }
     }
 
-    $path = preg_replace('/\?[a-zA-Z0-9=&]+$/', '', $path);
+    $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlSecure, $urlAppend, 'index.php'),
                         array('/', '/', '/', ''), $path);
     if (strpos($path, '/course_info/restore_course.php') !== false) {

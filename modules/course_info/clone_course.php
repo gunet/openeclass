@@ -39,7 +39,6 @@ $treeObj = new Hierarchy();
 $_POST['restoreThis'] = null; // satisfy course_details_form()
 
 if (isset($_POST['create_restored_course'])) {
-    $tool_content = "posted";
     $currentCourseCode = $course_code;
     $success = doArchive($course_id, $course_code);
     

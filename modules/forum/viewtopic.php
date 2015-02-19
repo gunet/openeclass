@@ -183,12 +183,6 @@ if ($topic_locked == 1) {
 
 if ($paging and $total > $posts_per_page) {
     $times = 1;
-    $tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
-	<tr>
-          <td width='50%' align='left'>
-	  <span class='row'><strong class='pagination'>
-	  <span>";
-
     if (isset($post_id)) {
         $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM forum_post WHERE topic_id = ?d AND post_time <= ?t", $topic, $myrow->post_time);
         $num = $result->c;
@@ -202,58 +196,56 @@ if ($paging and $total > $posts_per_page) {
     }
 
     $last_page = $start - $posts_per_page;
-    $tool_content .= "$langPages: ";
-
+    if (isset($start) && $start > 0) {
+        $pagination_btns = "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'><span aria-hidden='true'>&laquo;</span></a></li>";
+    } else {
+        $pagination_btns = "<li class='disabled'><a href='#'><span aria-hidden='true'>&laquo;</span></a></li>";
+    }    
     for ($x = 0; $x < $total; $x += $posts_per_page) {
-        if ($times != 1) {
-            $tool_content .= "<span class='page-sep'>,</span>";
-        }
         if ($start && ($start == $x)) {
-            $tool_content .= "" . $times;
+            $pagination_btns .= "<li class='active'><a href='#'>$times</a></li>";
         } else if ($start == 0 && $x == 0) {
-            $tool_content .= "1";
+            $pagination_btns .= "<li class='active'><a href='#'>1</a></li>";
         } else {
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a>";
+            $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a></li>";
         }
         $times++;
     }
-
-    $tool_content .= "</span></strong></span></td>
-	<td align='right'>
-	<span class='pages'>";
-    if (isset($start) && $start > 0) {
-        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
-    } else {
-        $start = 0;
-    }
     if (($start + $posts_per_page) < $total) {
         $next_page = $start + $posts_per_page;
-        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
-    }
-    $tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a></span>
-	</td>
-	</tr>
-	</table></div>";
+        $pagination_btns .= "<li><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'><span aria-hidden='true'>&raquo;</span></a></li>";
+    } else {
+        $pagination_btns .= "<li class='disabled'><a href='#'><span aria-hidden='true'>&raquo;</span></a></li>";
+    }      
+    $tool_content .= "
+        <nav>
+            <ul class='pagination'>
+            $pagination_btns
+            </ul>
+            <div class='pull-right'>
+                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
+            </div>
+          </nav>
+        ";
 } else {
     if ($total > $posts_per_page) {
-        $tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
-    	<tr>
-    	<td width='60%' class='text-left'>
-    	<span class='row'><strong class='pagination'>&nbsp;</strong></span></td>
-    	<td align='right'>";
-        $tool_content .= "<span class='pages'>
-		&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
-		</span>";
-        $tool_content .= "</td></tr></table></div>";
+        $tool_content .= "
+        <div class='clearfix margin-bottom-fat'>
+          <nav>  
+            <div class='pull-right'>
+                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
+            </div>
+          </nav>
+        </div>";
     }
 }
 
 $tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
     <tr>
-      <th width='220'>$langAuthor</th>
+      <th width='220'>$langUserForum</th>
       <th>$langMessage</th>";
 if ($is_editor || $topic_locked != 1) {
-    $tool_content .= "<th width='60' class='text-center'>" . icon('fa-gears') . "</th>";
+    $tool_content .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
 }
 $tool_content .= "</tr>";
 
@@ -315,8 +307,8 @@ foreach ($result as $myrow) {
 
     $tool_content .= "<td>
 	  <div>
-	    <a name='".$myrow->id."'></a>".$anchor_link;
-	$tool_content .= "<b>$langSent: </b>" . $myrow->post_time . "<br>$postTitle
+	    <span class='pull-right forum-anchor-link'><a name='".$myrow->id."'></a>".$anchor_link."</span>";
+	$tool_content .= "$postTitle<br><b>$langSent: </b>" . $myrow->post_time . "
 	  </div>
 	  <br />$message<br />" . $parent_post_link . $rate_str . "
 	</td>";
@@ -360,55 +352,26 @@ Database::get()->query("UPDATE forum_topic SET num_views = num_views + 1
 $tool_content .= "</table></div>";
 
 if ($paging and $total > $posts_per_page) {
-    $times = 1;
-    $tool_content .= "<div class='table-responsive'><table class='table-default'>
-	<tr>
-	<td width='50%'>
-	<span class='row'><strong class='pagination'><span>";
-
-    $last_page = $start - $posts_per_page;
-    $tool_content .= "$langPages: ";
-
-    for ($x = 0; $x < $total; $x += $posts_per_page) {
-        if ($times != 1) {
-            $tool_content .= "<span class='page-sep'>,</span>";
-        }
-        if ($start && ($start == $x)) {
-            $tool_content .= "" . $times;
-        } else if ($start == 0 && $x == 0) {
-            $tool_content .= "1";
-        } else {
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$x'>$times</a>";
-        }
-        $times++;
-    }
-    $tool_content .= "</span></strong></span></td>
-	<td><span class='pages'>";
-    if (isset($start) && $start > 0) {
-        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$last_page'>$langPreviousPage</a>&nbsp;|";
-    } else {
-        $start = 0;
-    }
-    if (($start + $posts_per_page) < $total) {
-        $next_page = $start + $posts_per_page;
-        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=$next_page'>$langNextPage</a>&nbsp;|";
-    }
-    $tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
-	</span>
-	</td></tr></table></div>";
+    $tool_content .= "
+        <nav>
+            <ul class='pagination'>
+            $pagination_btns
+            </ul>
+            <div class='pull-right'>
+                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;all=true'>$langAllOfThem</a>
+            </div>
+          </nav>
+        ";    
 } else {
-    $tool_content .= "<div class='table-responsive'><table class='table-responsive'>
-	<tr>
-	<td width='60%' align='left'>
-	<span class='row'><strong class='pagination'>&nbsp;</strong>
-	</span></td>
-	<td align='right'>
-	<span class='pages'>";
     if ($total > $posts_per_page) {
-        $tool_content .= "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>";
-    } else {
-        $tool_content .= '&nbsp;';
+        $tool_content .= "
+        <div class='clearfix margin-bottom-fat'>
+          <nav>  
+            <div class='pull-right'>
+                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;topic=$topic&amp;forum=$forum&amp;start=0'>$langPages</a>
+            </div>
+          </nav>
+        </div>";
     }
-    $tool_content .= "</span></td></tr></table></div>";
 }
 draw($tool_content, 2, null, $head_content);

@@ -61,20 +61,19 @@ function showlinksofcategory($catid) {
     global $is_editor, $course_id, $urlview, $tool_content,
     $urlServer, $course_code,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
-    $langModify, $is_in_tinymce;
+    $langModify, $is_in_tinymce, $links_num;
 
     $tool_content .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `link`
                                    WHERE course_id = ?d AND category = ?d
                                    ORDER BY `order`", $course_id, $catid);
     $numberoflinks = count($result);
-    $i = 1;
+    $links_num = 1;
     foreach ($result as $myrow) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
-        $num_merge_cols = 1;
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "<td colspan='$num_merge_cols'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
-                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "</a>";
+        $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
+                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }
@@ -98,13 +97,13 @@ function showlinksofcategory($catid) {
                 array('title' => $langUp,
                       'level' => 'primary',
                       'icon' => 'fa-arrow-up',
-                      'disabled' => $i == 1,
+                      'disabled' => $links_num == 1,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id",
                       ),
                 array('title' => $langDown,
                       'level' => 'primary',
                       'icon' => 'fa-arrow-down',
-                      'disabled' => $i >= $numberoflinks,
+                      'disabled' => $links_num >= $numberoflinks,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id",
                       )
             ));
@@ -112,7 +111,7 @@ function showlinksofcategory($catid) {
         }
         
         $tool_content .= "</tr>";
-        $i++;
+        $links_num++;
     }
 }
 
@@ -153,7 +152,7 @@ function showcategoryadmintools($categoryid) {
                  array('title' => $langDown,
                        'level' => 'primary',
                        'icon' => 'fa-arrow-down',
-                       'disabled' => '$catcounter  $aantalcategories',
+                       'disabled' => $catcounter == $aantalcategories-1,
                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid" )
                 ));           
     $catcounter++;
@@ -173,7 +172,7 @@ function showcategoryadmintools($categoryid) {
  * @return type
  */
 function submit_link() {
-    global $course_id, $langLinkMod, $langLinkAdded,
+    global $course_id, $langLinkMod, $langLinkAdded, $course_code,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
 
     register_posted_variables(array('urllink' => true,

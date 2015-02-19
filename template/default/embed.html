@@ -1,6 +1,6 @@
 <!-- BEGIN mainBlock -->
 <!DOCTYPE HTML>
-<html>
+<html style="height: 100%;">
 <head>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -49,14 +49,14 @@
 
 </head>
 
-<body>
-	<div class="container">
+<body style="height: 100%;">
+    <div class="container" style="height: 100%;">
 
         <!-- LeftNav & Main Content Section -->
 
-        <div class="row" id="Frame">
-            <div id="background-cheat" class="col-xs-10 col-xs-push-2"></div>
-            <div id="main-content" class="col-xs-10 col-xs-push-2">
+        <div class="row" id="Frame" style="height: 100%;">
+            <div id="background-cheat" class="col-xs-10 col-xs-push-2" style="height: 100%;"></div>
+            <div id="main-content" class="col-xs-10 col-xs-push-2" style="height: 100%; overflow: scroll;">
                 <div class="row row-main">
                     <div class="col-md-12 add-gutter">
 
@@ -68,7 +68,7 @@
                 </div>
             </div>
             <!-- BEGIN leftNavBlock -->
-            <div id="leftnav" class="col-xs-2 col-xs-pull-10 sidebar {%leftNavClass%} embeded">
+            <div id="leftnav" class="col-xs-2 col-xs-pull-10 sidebar {%leftNavClass%} embeded" style="top: 0px; height: 100%; overflow: visible;">
                 
                 <div class="panel-group" id="sidebar-accordion">                   
                     <!-- BEGIN leftNavCategoryBlock -->
@@ -100,121 +100,9 @@
                 </div>
             </div>
             <!-- END leftNavBlock -->
-            <!-- BEGIN sideBarBlock -->
-            <div id="sidebar-container">
-                <aside id="sidebar" class="outer">
-                    <div class="panel-group outerpanel" id="accordion-right-parent">
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseCourses">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-list-alt"></i><span class="txt" >{%MY_COURSES%}</span>
-                                </h4>
-                            </div>
-                            <div id="collapseCourses" class="panel-collapse collapse side-list">
-                                <div class="panel-body">
-                                    <div class="panel-group innerpanel" id="accordion-right">
-                                        <!-- BEGIN sideBarCourseBlock -->
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right" data-target="#collapse{%sideBarCollapseId%}-right">
-                                                <div class="panel-title lesson-title">
-                                                    <a href="{%sideBarCourseURL%}">{%sideBarCourseTitle%}</a><i class="fa fa-caret-down"></i>
-                                                </div>
-                                            </div>
-                                            <div id="collapse{%sideBarCollapseId%}-right" class="panel-collapse collapse">
-                                                <div class="panel-body">
-                                                    <ul>
-                                                        <!--<li class="lesson-id">ID: <a href="{%sideBarCourseURL%}">{%sideBarCourseCode%}</a></li>-->
-                                                        <li class="lesson-professor">{%sideBarCourseProf%}</li>
-                                                        <li class="lesson-notifications">
-                                                            <!-- BEGIN sideBarCourseNotifyBlock -->
-                                                            <span class="item"><i class="fa {%sideBarCourseNotifyIcon%}"></i><span class="count">{%sideBarCourseNotifyCount%}</span></span>
-                                                            <!-- END sideBarCourseNotifyBlock -->
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- END sideBarCourseBlock -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseMessages">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-envelope"></i><span class="txt">{%MY_MESSAGES%}</span>
-                                </h4>
-                            </div>
-                            <div id="collapseMessages" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                        <input class="recipients-input" type="text" placeholder="Recipients...">
-                                    </div>
-                                    <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                                        <textarea placeholder="Message..."></textarea>
-                                    </div>
-                                    <button data-label="Send" class="btn btn-default-eclass btn-sm">SAVE</button>
-                                    <a class="goto" href="#">All messages</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel panel-default">
-                            <div class="panel-heading" data-toggle="collapse" data-parent="#accordion-right-parent" data-target="#collapseNotices">
-                                <h4 class="panel-title title">
-                                    <i class="fa fa-pencil"></i><span class="txt">{%QUICK_NOTES%}</span>
-                                </h4>
-                            </div>
-                            <div id="collapseNotices" class="panel-collapse collapse">
-                                <div class="panel-body">
-                                    <div class="input-parent input-group">
-                                        <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
-                                        <textarea placeholder="Type a note..."></textarea>
-                                    </div>
-                                    <button data-label="Save" class="btn btn-default-eclass btn-sm">SAVE</button>
-                                    <a class="goto" href="#">All notes</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </aside>
-            </div>
-
-            <!-- END sideBarBlock -->
         </div>
 
     </div>
-    <!-- BEGIN modalWindowBlock -->
-        <!-- Dialog show event handler -->
-        <script type='text/javascript'>
-          $('.confirmAction').on('click', function(e){
-                var message = $(this).attr('data-message');
-                var title = $(this).attr('data-title');
-                var cancel_text = $(this).attr('data-cancel-txt');
-                var action_text = $(this).attr('data-action-txt');
-                var action_btn_class = $(this).attr('data-action-class');
-                var form = $(this).closest('form');
-                bootbox.dialog({
-                 message: message,
-                 title: title,
-                 buttons: {
-                   cancel_btn: {
-                     label: cancel_text,
-                     className: "btn-default"
-                   },
-                   action_btn: {
-                     label: action_text,
-                     className: action_btn_class,
-                     callback: function() {
-                       form.submit();
-                     }
-                   }
-                 }
-               });
-          });
-        </script>
-    <!-- END modalWindowBlock -->
 </body>
 </html>
 <!-- END mainBlock -->

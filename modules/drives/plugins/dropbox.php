@@ -42,11 +42,7 @@ final class DropBox extends CloudDrive {
     }
 
     public function getDisplayName() {
-        return "Dropbox";
-    }
-
-    public function isPresent() {
-        return true;
+        return "DropBox";
     }
 
     public function isAuthorized() {
@@ -99,9 +95,25 @@ final class DropBox extends CloudDrive {
             $pathsize++;
         foreach ($metadata['contents'] as $file) {
             $path = $file['path'];
-            $files[] = new CloudFile(substr($path, -(strlen($path) - $pathsize)), $file['path'], $file['is_dir'], $file['bytes']);
+            $files[] = new CloudFile(substr($path, -(strlen($path) - $pathsize)), $file['path'], $file['is_dir'], $file['bytes'], $this->getName());
         }
         return $files;
+    }
+
+    public function store($cloudfile, $path) {
+        if (!$this->isAuthorized())
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
+        try {
+            $fout = fopen($path, "w+b");
+            $dbxClient = new dbx\Client($this->getAuthorizeToken(), Dropbox::CLIENT);
+            $fileMetadata = $dbxClient->getFile($cloudfile->id(), $fout);
+            fclose($fout);
+            if (is_null($fileMetadata))
+                return CloudDriveResponse::FILE_NOT_FOUND;
+            return CloudDriveResponse::OK;
+        } catch (Exception $ex) {
+            return CloudDriveResponse::FILE_NOT_SAVED;
+        }
     }
 
 }

@@ -166,10 +166,8 @@ function commentBox($type, $mode) {
         if (empty($currentComment)) {
             // if no comment and user is admin : display link to add a comment
             if ($is_editor) {
-                $output .= '' . "\n"
-                        . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">' . "\n"
-                        . $langAdd . '</a>' . "\n"
-                ;
+                $output .= '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . '">'
+                    . $langAdd . '</a>';
             }
         } else {
             // display comment
@@ -177,8 +175,7 @@ function commentBox($type, $mode) {
             // display edit and delete links if user as the right to see it
             if ($is_editor) {
                 $output .= '&nbsp;&nbsp;&nbsp;'
-                        . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "")
-                        . '</a>' . ""
+                        . icon('fa-edit', $langModify, $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=update' . $col_name . "")                        
                         . '<a href="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=del' . $col_name . '" '
                         . ' onclick="javascript:if(!confirm(\'' . clean_str_for_javascript($langConfirmYourChoice) . '\')) return false;">' . "\n"
                         . icon('fa-times', $langDelete)."</a>";

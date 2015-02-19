@@ -180,7 +180,7 @@ class CourseXMLElement extends SimpleXMLElement {
 
         // init vars
         $keyLbl = (isset($GLOBALS['langCMeta'][$fullKey])) ? $GLOBALS['langCMeta'][$fullKey] : $fullKey;
-        $helptitle = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? "rel='tooltip' data-toggle='tooltip' title='" . $GLOBALS['langCMeta']['help_' . $fullKey] . "'" : '';
+        $helptitle = (isset($GLOBALS['langCMeta']['help_' . $fullKey])) ? " data-toggle='tooltip' title='" . q($GLOBALS['langCMeta']['help_' . $fullKey]) . "'" : '';
         $fullKeyNoLang = $fullKey;
         $sameAsCourseLang = false;
         $lang = '';

@@ -485,7 +485,7 @@ if ($course_info->home_layout == 3) {
 $edit_link = "";
 if ($is_editor) {
     $edit_link = "
-    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$langCourseInformationText'><i class='pull-left fa fa-edit fa'></i></a>";
+    <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' data-toggle='tooltip' data-placement='top' title='$langCourseInformationText'><i class='pull-left fa fa-edit fa'></i></a>";
 } else {
     $edit_link = " ";
 }
@@ -645,8 +645,7 @@ if (!$alter_layout) {
             
         if ($is_editor and $course_info->view_type == 'units') {            
             $link = "{$urlServer}modules/units/info.php?course=$course_code";
-            $linktitle = $langAddUnit;
-            $tool_content .= "<a href='$link' class='pull-left add-unit-btn' rel='tooltip' data-toggle='tooltip' data-placement='top' title ='$linktitle'>
+            $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
                                 <i class='fa fa-plus-circle'></i>
                             </a>";           
         }
@@ -753,7 +752,7 @@ function course_announcements() {
                 $ann_url = $urlAppend . "modules/announcements/?course=$course_code&amp;an_id=" . $ann->id;
                 $ann_date = claro_format_locale_date($dateFormatLong, strtotime($ann->date));
                 $ann_content .= "<li class='list-item'>
-                                    <span class='item-wholeline'><a href='$ann_url'><div class='text-title'>" . q(ellipsize($ann->title, 60)) ."</div></a>$ann_date</span>
+                                    <span class='item-wholeline'><div class='text-title'><a href='$ann_url'>" . q(ellipsize($ann->title, 60)) ."</a></div>$ann_date</span>
                                 </li>";
             }
             return $ann_content;

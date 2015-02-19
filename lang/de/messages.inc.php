@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2015-01-27 12:44:18
+// Generated 2015-02-16 13:15:50
 
 $langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -97,7 +97,6 @@ $langAfterLastLogin = "Nach Ihrem letzten Einwahlvorgang, haben sich registriert
 $langAfterLastLoginInfo = "Daten nach Ihrem letzten Einwahlvorgang";
 $langOtherActions = "Andere Aktionen";
 $langTutorialDesc = "Zusätzlich befinden sich im untenstehenden Link nützliche Tutorien zur Benutzung und Verwaltung der Open eClass Plattform mit praktischen Beispielen. Diese Tutorien sind in drei verschiedenen Versionen verfügbar: a) Tutorien mit Bildern, b) Videopräsentationen und c) SCORM Packages";
-$langTutorial = "Plattform Tutorien";
 $langNbProf = "Anzahl von ".$langsTeachers."";
 $langNbStudents = "Anzahl von ".$langsStudents."";
 $langNbLogin = "Anzahl von Einwahlvorgängen";
@@ -314,7 +313,7 @@ $langAddModify = "Hinzufügen / Ändern";
 $langAddIntro = "Hinzufügen von einführendem Text";
 $langBackList = "Zurück zum Katalog";
 $langEvents = "Ereignisse";
-$langAgenda = "Agenda";
+$langAgenda = "Calendar";
 $langDay = "Tag";
 $langMonth = "Monat";
 $langYear = "Jahr";
@@ -1873,8 +1872,8 @@ $langCheckAdmin = "<p class='caution'><b> Die Aktion, die Sie ausführen möchte
 $langCheckGuest = "<p class='caution'><b> Die Aktion, die Sie ausführen wollten, kann nicht mit Gast Benutzer Rechten ausgeführt werden. </b><br/> Aus Sicherheitsgründen hat Sie das System automatisch zur Startseite weitergeleitet, damit Sie sich einloggen.</p>";
 $langCheckPublicTools = "<p class='caution'><b> Sie haben versucht, auf ein inaktives Modul zuzugreifen.</b><br/> Aus Sicherheitsgründen hat Sie das System automatisch zur Startseite weitergeleitet, damit Sie sich einloggen.</p>";
 $langWarnShibUser = "<p><b>Warnung:</b> Da Sie mittels Shibboleth authentifiziert worden sind, haben Sie sich noch nicht von der Plattform abgemeldet (noch nicht logged-out). Sie müssen Ihren Web-Browser schliessen, um sich abzumelden.";
-$langUserBriefcase = "Benutzer Portfolio";
-$langPersonalisedBriefcase = "Personalisiertes Portfolio";
+$langUserPortfolio = "Benutzer Portfolio";
+$langPortfolio = "Personalisiertes Portfolio";
 $langAdvancedSearch = "Fortgeschrittene Suche";
 $langTitle = "Titel";
 $langType = "Typ";
@@ -2218,7 +2217,6 @@ $langInsertWiki = 'Wiki';
 $langCourseAnnouncements = "Ankündigungen des Kurses";
 $langBasicOptions = "Grundlegende Optionen";
 $langUserOptions = "Optionen der Benutzer";
-$langTutorials = "Tutorien";
 $langTut = "Tutorium";
 $langScormVideo = "Scorm Video";
 $langIntroToCourse = "Einleitung zum Kurs";
@@ -3549,7 +3547,7 @@ $langCMeta['engecon'] = "Engineering Economics and Management";
 $langCMeta['infoscie'] = "Science of Information";
 $langCMeta['anthro'] = "Anthropology";
 $langCMeta['hcare'] = "Health Care";
-$langCMeta['physedu'] = "Science of Human Movement and Quality of Life";
+$langCMeta['physedu'] = "Science of Physical Education and Quality of Life";
 $langCMeta['fnscie'] = "Food Sciences and Nutrition";
 $langCMeta['otherinddep'] = "Other Independent Departments";
 $langCMeta['milit'] = "Military Departments";
@@ -3604,7 +3602,7 @@ $langBlogPostNotAllowedCreate = "You don't have permission to create a blog post
 $langBlogPostNotAllowedDel = "You don't have permission to delete the blog post";
 $langBlogPostNotAllowedEdit = "You don't have permission to edit the blog post";
 $langReturnBlog = "Return to blog";
-$langBlogPerm = "Authoring permissions";
+$langBlogPerm = "Blog post authoring permissions";
 $langBlogPermStudents = "Teacher and students are allowed to author";
 $langBlogPermTeacher = "Only teacher is allowed to author";
 $langCommentsDelConfirm = "Are you sure you want to delete the comment?";
@@ -3682,7 +3680,7 @@ $langSaveAs = 'Save as ...';
 $langTheFieldIsRequired = 'The field is required.';
 $langCourseImage = "Course Image";
 $langCourseLayout = "Layout";
-$langCourseLayout1 = "2 Columns (default)";
+$langCourseLayout1 = "2 Columns, With Image (default)";
 $langCourseLayout2 = "2 Columns, No Image";
 $langCourseLayout3 = "Full Width";
 $langCloneCourse = "Clone this course";
@@ -3723,3 +3721,26 @@ $langNationalOpenCourses = "National Open Courses Portal";
 $langEnterNote = "Enter note";
 $langAttemptWasCanceled = "The attempt was canceled.";
 $langNoUnits = "No course units";
+$langExternalTools = 'External tools';
+$langTeacherTutorials = "$langTeacher Tutorials";
+$langStudentTutorials = "$langStudent Tutorials";
+$langCourseInformationText = "Edit Course Description";
+$langCourseDescriptionShort = "Description";
+$langCloudFile = "Cloud File";
+$langAllMessages = "all messages";
+$langHierarchyTestDepartment = 'Example Department';
+$langHierarchyTestCategory = 'Example Category';
+$langHierarchyTestSubCategory = 'Subcategory';
+$langNotificationsExist = 'Notifications Available';
+$langAllNotes = "All notes";
+$langCourseCommenting = "Comments in course home page";
+$langBlogCommenting = "Comments in blog posts";
+$langCourseRating = "Course rating";
+$langForumPostRating = "Forum post rating";
+$langBlogRating = "Blog posts rating";
+$langCourseAnonymousRating = "Course rating by anonymous users";
+$langCourseSharing = "Course home page sharing in social networks";
+$langBlogSharing = "Blog post sharing in social networks";
+$lang_display_captcha_label = "Security Code (CAPTCHA)";
+$lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
+$langAddGUser = "Add Guest User";

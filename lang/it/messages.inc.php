@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2015-01-27 12:44:20
+// Generated 2015-02-16 13:15:52
 
 $langCourse = "Corso";
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
@@ -97,7 +97,6 @@ $langAfterLastLogin = "Dopo il tuo ultimo login, sono registrati nella piattafor
 $langAfterLastLoginInfo = "Dati dopo il tuo ultimo login:";
 $langOtherActions = "Altre azioni";
 $langTutorialDesc = "Inoltre, cliccando sul link quaggiù, troverete delle guide utili che riguardano all' utilizzo ed alla gestione della piattaforma Open eClass con esempi pratici che  facilitano entrambi gli studenti e i gestori. Le guide sono disponibili in 3 diversi formati: a) guide illustrate, b) proiezioni di video e c) pacchetti SCORM.";
-$langTutorial = "Guide della Piattaforma";
 $langNbProf = "Numero ".$langsOfTeachers;
 $langNbStudents = "Numero ".$langsOfStudents;
 $langNbLogin = "Numero di login";
@@ -326,7 +325,7 @@ $langAddModify = "Aggiungere / Modificare";
 $langAddIntro = "Aggiungere testo introduttivo";
 $langBackList = "Ritornare all'elenco";
 $langEvents = "Eventi";
-$langAgenda = "Agenda";
+$langAgenda = "Calendar";
 $langDay = "Giorno";
 $langMonth = "Mese";
 $langYear = "Anno";
@@ -1926,8 +1925,8 @@ $langCheckPublicTools = "
 $langWarnShibUser = "
         <b>Avviso:</b> Perché la tua certificazione è effettuata tramite Shibboleth, non sei scollegato dalla piattaforma!
         <br>Per scollegarti dovresti chiudere il tuo browser.";
-$langUserBriefcase = "Portfolio Utente";
-$langPersonalisedBriefcase = "Portfolio Personale";
+$langUserPortfolio = "Portfolio Utente";
+$langPortfolio = "Portfolio Personale";
 $langAdvancedSearch = "Ricerca avanzata";
 $langTitle = "Titolo";
 $langType = "Tipo";
@@ -2272,7 +2271,6 @@ $langInsertWiki = "wiki";
 $langCourseAnnouncements = "Annunci del corso";
 $langBasicOptions = "Opzioni di base";
 $langUserOptions = "Opzioni utente";
-$langTutorials = "Guide";
 $langTut = "Guida";
 $langScormVideo = "Presentazione video";
 $langIntroToCourse = "Introduzione al Corso";
@@ -3622,7 +3620,7 @@ $langCMeta['engecon'] = "Engineering Economics and Management";
 $langCMeta['infoscie'] = "Science of Information";
 $langCMeta['anthro'] = "Anthropology";
 $langCMeta['hcare'] = "Health Care";
-$langCMeta['physedu'] = "Science of Human Movement and Quality of Life";
+$langCMeta['physedu'] = "Science of Physical Education and Quality of Life";
 $langCMeta['fnscie'] = "Food Sciences and Nutrition";
 $langCMeta['otherinddep'] = "Other Independent Departments";
 $langCMeta['milit'] = "Military Departments";
@@ -3677,7 +3675,7 @@ $langBlogPostNotAllowedCreate = "You don't have permission to create a blog post
 $langBlogPostNotAllowedDel = "You don't have permission to delete the blog post";
 $langBlogPostNotAllowedEdit = "You don't have permission to edit the blog post";
 $langReturnBlog = "Return to blog";
-$langBlogPerm = "Authoring permissions";
+$langBlogPerm = "Blog post authoring permissions";
 $langBlogPermStudents = "Teacher and students are allowed to author";
 $langBlogPermTeacher = "Only teacher is allowed to author";
 $langCommentsDelConfirm = "Are you sure you want to delete the comment?";
@@ -3755,7 +3753,7 @@ $langSaveAs = 'Save as ...';
 $langTheFieldIsRequired = 'The field is required.';
 $langCourseImage = "Course Image";
 $langCourseLayout = "Layout";
-$langCourseLayout1 = "2 Columns (default)";
+$langCourseLayout1 = "2 Columns, With Image (default)";
 $langCourseLayout2 = "2 Columns, No Image";
 $langCourseLayout3 = "Full Width";
 $langCloneCourse = "Clone this course";
@@ -3796,3 +3794,26 @@ $langNationalOpenCourses = "National Open Courses Portal";
 $langEnterNote = "Enter note";
 $langAttemptWasCanceled = "The attempt was canceled.";
 $langNoUnits = "No course units";
+$langExternalTools = 'External tools';
+$langTeacherTutorials = "$langTeacher Tutorials";
+$langStudentTutorials = "$langStudent Tutorials";
+$langCourseInformationText = "Edit Course Description";
+$langCourseDescriptionShort = "Description";
+$langCloudFile = "Cloud File";
+$langAllMessages = "all messages";
+$langHierarchyTestDepartment = 'Example Department';
+$langHierarchyTestCategory = 'Example Category';
+$langHierarchyTestSubCategory = 'Subcategory';
+$langNotificationsExist = 'Notifications Available';
+$langAllNotes = "All notes";
+$langCourseCommenting = "Comments in course home page";
+$langBlogCommenting = "Comments in blog posts";
+$langCourseRating = "Course rating";
+$langForumPostRating = "Forum post rating";
+$langBlogRating = "Blog posts rating";
+$langCourseAnonymousRating = "Course rating by anonymous users";
+$langCourseSharing = "Course home page sharing in social networks";
+$langBlogSharing = "Blog post sharing in social networks";
+$lang_display_captcha_label = "Security Code (CAPTCHA)";
+$lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
+$langAddGUser = "Add Guest User";

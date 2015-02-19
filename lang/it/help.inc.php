@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2015-01-27 12:44:20
+// Generated 2015-02-12 11:04:34
 
 $langCourseAccessHelp = "<ul> 
 <li><b><img src='$themeimg/lock_open.png' width=16 height=16>Corso aperto</b>. Questo modo di accesso consente l' Accesso Libero (senza registrazione) alla Home Page del corso, e senza richiedere una password.</li> 

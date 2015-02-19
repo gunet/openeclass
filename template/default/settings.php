@@ -41,33 +41,33 @@ function template_callback($template, $menuTypeID, $embed)
     if ($uid and !defined('UPGRADE')) {
         if (!$embed) {
             $template->set_block('mainBlock', 'LoggedOutBlock', 'delete');
+            $template->set_block('mainBlock', 'sideBarCourseBlock', 'sideBarCourse');
+            $template->set_block('sideBarCourseBlock', 'sideBarCourseNotifyBlock', 'sideBarCourseNotify');
+
+            // Save sideBarCourseNotifyBlock in session for use in AJAX callback
+            $_SESSION['template']['sideBarCourseNotifyBlock'] = trim($template->get_var('sideBarCourseNotifyBlock'));
+
+            // FIXME: smarter selection of courses for sidebar
+            Database::get()->queryFunc("SELECT id, code, title, prof_names, public_code
+                FROM course, course_user
+                WHERE course.id = course_id AND user_id = ?d
+                ORDER BY reg_date DESC", function ($c) use ($template, $modules, $admin_modules, $theme_settings) {
+                    global $urlAppend;
+                    static $counter = 1;
+
+                    $template->set_var('sideBarCollapseId', $counter);
+                    $template->set_var('sideBarCourseURL', $urlAppend . 'courses/' . $c->code . '/');
+                    $template->set_var('sideBarCourseTitle', q($c->title));
+                    $template->set_var('sideBarCourseCode', q($c->public_code));
+                    $template->set_var('sideBarCourseID', q($c->id));
+                    $template->set_var('sideBarCourseProf', q($c->prof_names));
+                    $template->parse('sideBarCourse', 'sideBarCourseBlock', true);
+                    $counter++;
+                }, $uid);
         }
-        $template->set_block('mainBlock', 'sideBarCourseBlock', 'sideBarCourse');
-        $template->set_block('sideBarCourseBlock', 'sideBarCourseNotifyBlock', 'sideBarCourseNotify');
-
-        // Save sideBarCourseNotifyBlock in session for use in AJAX callback
-        $_SESSION['template']['sideBarCourseNotifyBlock'] = trim($template->get_var('sideBarCourseNotifyBlock'));
-        
-        // FIXME: smarter selection of courses for sidebar
-        Database::get()->queryFunc("SELECT id, code, title, prof_names, public_code
-            FROM course, course_user
-            WHERE course.id = course_id AND user_id = ?d
-            ORDER BY reg_date DESC", function ($c) use ($template, $modules, $admin_modules, $theme_settings) {
-                global $urlAppend;
-                static $counter = 1;
-
-                $template->set_var('sideBarCollapseId', $counter);
-                $template->set_var('sideBarCourseURL', $urlAppend . 'courses/' . $c->code . '/');
-                $template->set_var('sideBarCourseTitle', q($c->title));
-                $template->set_var('sideBarCourseCode', q($c->public_code));
-                $template->set_var('sideBarCourseID', q($c->id));
-                $template->set_var('sideBarCourseProf', q($c->prof_names));
-                $template->parse('sideBarCourse', 'sideBarCourseBlock', true);
-                $counter++;
-            }, $uid);
-
     } else {
         $template->set_block('mainBlock', 'LoggedInBlock', 'delete');
+        $template->set_block('mainBlock', 'sideBarBlock', 'delete');
     }
 
     if (!$embed) {
@@ -80,7 +80,7 @@ function template_callback($template, $menuTypeID, $embed)
 
     if ($menuTypeID != 2) {
         $lang_select = "<li class='dropdown'>
-          <a href='#' class='dropdown-toggle' type='button' id='dropdownMenuLang' data-toggle='dropdown'>
+          <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
               <i class='fa fa-globe'></i>
           </a>
           <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";

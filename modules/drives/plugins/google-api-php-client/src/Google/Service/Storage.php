@@ -216,6 +216,10 @@ class Google_Service_Storage extends Google_Service
                   'location' => 'query',
                   'type' => 'string',
                 ),
+                'predefinedDefaultObjectAcl' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
               ),
             ),'list' => array(
               'path' => 'b',
@@ -227,6 +231,10 @@ class Google_Service_Storage extends Google_Service
                   'required' => true,
                 ),
                 'pageToken' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'prefix' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -248,7 +256,15 @@ class Google_Service_Storage extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'projection' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'ifMetagenerationMatch' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'predefinedDefaultObjectAcl' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -257,10 +273,6 @@ class Google_Service_Storage extends Google_Service
                   'type' => 'string',
                 ),
                 'ifMetagenerationNotMatch' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'projection' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -274,7 +286,15 @@ class Google_Service_Storage extends Google_Service
                   'type' => 'string',
                   'required' => true,
                 ),
+                'projection' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
                 'ifMetagenerationMatch' => array(
+                  'location' => 'query',
+                  'type' => 'string',
+                ),
+                'predefinedDefaultObjectAcl' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -283,10 +303,6 @@ class Google_Service_Storage extends Google_Service
                   'type' => 'string',
                 ),
                 'ifMetagenerationNotMatch' => array(
-                  'location' => 'query',
-                  'type' => 'string',
-                ),
-                'projection' => array(
                   'location' => 'query',
                   'type' => 'string',
                 ),
@@ -1109,6 +1125,8 @@ class Google_Service_Storage_Buckets_Resource extends Google_Service_Resource
    * @opt_param string projection Set of properties to return. Defaults to noAcl,
    * unless the bucket resource specifies acl or defaultObjectAcl properties, when
    * it defaults to full.
+   * @opt_param string predefinedDefaultObjectAcl Apply a predefined set of
+   * default object access controls to this bucket.
    * @return Google_Service_Storage_Bucket
    */
   public function insert($project, Google_Service_Storage_Bucket $postBody, $optParams = array())
@@ -1126,6 +1144,8 @@ class Google_Service_Storage_Buckets_Resource extends Google_Service_Resource
    *
    * @opt_param string pageToken A previously-returned page token representing
    * part of the larger set of results to view.
+   * @opt_param string prefix Filter results to buckets whose names begin with
+   * this prefix.
    * @opt_param string projection Set of properties to return. Defaults to noAcl.
    * @opt_param string maxResults Maximum number of buckets to return.
    * @return Google_Service_Storage_Buckets
@@ -1144,15 +1164,17 @@ class Google_Service_Storage_Buckets_Resource extends Google_Service_Resource
    * @param Google_Bucket $postBody
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string projection Set of properties to return. Defaults to full.
    * @opt_param string ifMetagenerationMatch Makes the return of the bucket
    * metadata conditional on whether the bucket's current metageneration matches
    * the given value.
+   * @opt_param string predefinedDefaultObjectAcl Apply a predefined set of
+   * default object access controls to this bucket.
    * @opt_param string predefinedAcl Apply a predefined set of access controls to
    * this bucket.
    * @opt_param string ifMetagenerationNotMatch Makes the return of the bucket
    * metadata conditional on whether the bucket's current metageneration does not
    * match the given value.
-   * @opt_param string projection Set of properties to return. Defaults to full.
    * @return Google_Service_Storage_Bucket
    */
   public function patch($bucket, Google_Service_Storage_Bucket $postBody, $optParams = array())
@@ -1169,15 +1191,17 @@ class Google_Service_Storage_Buckets_Resource extends Google_Service_Resource
    * @param Google_Bucket $postBody
    * @param array $optParams Optional parameters.
    *
+   * @opt_param string projection Set of properties to return. Defaults to full.
    * @opt_param string ifMetagenerationMatch Makes the return of the bucket
    * metadata conditional on whether the bucket's current metageneration matches
    * the given value.
+   * @opt_param string predefinedDefaultObjectAcl Apply a predefined set of
+   * default object access controls to this bucket.
    * @opt_param string predefinedAcl Apply a predefined set of access controls to
    * this bucket.
    * @opt_param string ifMetagenerationNotMatch Makes the return of the bucket
    * metadata conditional on whether the bucket's current metageneration does not
    * match the given value.
-   * @opt_param string projection Set of properties to return. Defaults to full.
    * @return Google_Service_Storage_Bucket
    */
   public function update($bucket, Google_Service_Storage_Bucket $postBody, $optParams = array())

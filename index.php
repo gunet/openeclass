@@ -165,7 +165,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                         <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
                                     </div>
                                     <div class='form-group'>
-                                        <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp&nbsp<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                        <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
                                     </div>
                                     <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                                 </form>
@@ -274,7 +274,7 @@ if ($uid AND !isset($_GET['logout'])) {
             <div class='panel' id='openeclass-banner'>
                 <div class='panel-body'>
                     <a href='http://www.openeclass.org/' target='_blank'>
-                        <img class='img-responsive center-block' src='$themeimg/open_eclass_banner.png'>
+                        <img class='img-responsive center-block' src='$themeimg/open_eclass_banner.png' alt=''>
                     </a>
                 </div>
             </div>";

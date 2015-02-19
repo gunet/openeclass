@@ -40,10 +40,6 @@ final class OneDrive extends CloudDrive {
         return "OneDrive";
     }
 
-    public function isPresent() {
-        return true;
-    }
-
     public function isAuthorized() {
         $token = $this->getAuthorizeToken();
         if (!$token)
@@ -82,24 +78,23 @@ final class OneDrive extends CloudDrive {
     }
 
     private function retrieve($get, $post = null) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $get);
-        if ($post)
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = json_decode(curl_exec($ch));
-        curl_close($ch);
-        return $result;
+        return json_decode($this->downloadToOutput($get, $post));
     }
 
     private function getCloudFile($file) {
         $name = $file->name;
         $id = $file->id;
         if (strcmp(substr($id, 0, 5), "file.") == 0) {
-            return new CloudFile($name, $file->source, false, null);
+            return new CloudFile($name, $file->source, false, null, $this->getName());
         } else {
-            return new CloudFile($name, $id, true, null);
+            return new CloudFile($name, $id, true, null, $this->getName());
         }
+    }
+
+    public function store($cloudfile, $path) {
+        if (!$this->isAuthorized())
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
+        return $this->downloadToFile($cloudfile->id(), $path);
     }
 
 }

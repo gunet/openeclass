@@ -32,13 +32,10 @@ final class GoogleDrive extends CloudDrive {
             $client->setClientId($this->getClientID());
             $client->setClientSecret($this->getSecret());
             $client->setRedirectUri($this->getRedirect());
-            $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
+//            $client->setApplicationName("Open eClass");
+            $client->addScope(Google_Service_Drive::DRIVE);
             $this->client = $client;
         }
-    }
-
-    public function isPresent() {
-        return true;
     }
 
     public function getDisplayName() {
@@ -95,9 +92,34 @@ final class GoogleDrive extends CloudDrive {
     private function getCloudFile($file) {
         $name = $file['title'];
         if (strpos($file['mimeType'], '.folder') !== false) {
-            return new CloudFile($name, $file['selfLink'], true, null);
+            return new CloudFile($name, $file['selfLink'], true, null, $this->getName());
         } else {
-            return new CloudFile($name, $file['webContentLink'], false, null);
+            return new CloudFile($name, $file->getDownloadURL(), false, null, $this->getName());
+        }
+    }
+
+    /**
+     * 
+     * @param CloudFile $cloudfile
+     * @param type $path
+     * @return type
+     */
+    public function store($cloudfile, $path) {
+        if (!$this->isAuthorized())
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
+        $request = new Google_Http_Request($cloudfile->id(), 'GET', null, null);
+        $httpRequest = $this->client->getAuth()->authenticatedRequest($request);
+        if ($httpRequest->getResponseHttpCode() == 200) {
+            try {
+                $fout = fopen($path, "w+b");
+                file_put_contents($path, $httpRequest->getResponseBody());
+                fclose($fout);
+                return CloudDriveResponse::OK;
+            } catch (Exception $ex) {
+                return CloudDriveResponse::FILE_NOT_SAVED;
+            }
+        } else {
+            return CloudDriveResponse::FILE_NOT_FOUND;
         }
     }
 

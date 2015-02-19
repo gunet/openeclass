@@ -33,16 +33,17 @@ require_once 'imsqtilib.php';
 
 $head_content .= "
 <script>
-  $(function() {
-    $('.warnLink').click( function(e){
-          var modidyAllLink = $(this).attr('href');
-          var modifyOneLink = modidyAllLink.concat('&clone=true');
-          $('a#modifyAll').attr('href', modidyAllLink);
-          $('a#modifyOne').attr('href', modifyOneLink); 
+$(function() {
+    $('[data-toggle=\"popover\"]').on('shown.bs.popover', function () {
+          $('.warnLink').click( function(e){
+                var modifyAllLink = $(this).attr('href');
+                var modifyOneLink = modifyAllLink.concat('&clone=true');
+                $('a#modifyAll').attr('href', modifyAllLink);
+                $('a#modifyOne').attr('href', modifyOneLink); 
+          });
     });
-  });
-</script>
-";
+});
+</script>";
 $tool_content .= "<div id='dialog' style='display:none;'>$langUsedInSeveralExercises</div>";
 
 $pageName = $langQuestionPool;

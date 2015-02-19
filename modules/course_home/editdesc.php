@@ -86,7 +86,7 @@ $layout = $course->home_layout;
 
 if (isset($course->course_image)) {
     $course_image = "
-        <img src='{$urlAppend}courses/$course_code/image/$course->course_image' style='max-height:100px;max-width:150px;'> &nbsp&nbsp<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=true'>$langDelete</a>
+        <img src='{$urlAppend}courses/$course_code/image/$course->course_image' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=true'>$langDelete</a>
         <input type='hidden' name='course_image' value='$course->course_image'>
     ";
 } else {

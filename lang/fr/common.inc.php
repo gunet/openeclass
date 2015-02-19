@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-01-27 12:44:19
+// Generated 2015-02-12 11:04:33
 
 $langEclass = "Open eClass - Plateforme de Télé-enseignement Asynchrone"
 ;
