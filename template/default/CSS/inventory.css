@@ -1886,12 +1886,12 @@ table.category-links th.category-link span.link-description {
 
 /* line 1753, ../SASS/inventory.scss */
 table.nocategory-links tr.link-category-title, table.category-links tr.link-category-title {
-  background-color: #d9d9d9;
+  background-color: #dfdfdf;
 }
 
 /* line 1756, ../SASS/inventory.scss */
 table.category-links tr.link-subcategory-title {
-  background-color: #eeeeee;
+  background-color: #efefef;
 }
 
 /* line 1759, ../SASS/inventory.scss */
