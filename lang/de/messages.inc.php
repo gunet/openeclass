@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2015-02-16 13:15:50
+// Generated 2015-02-19 15:55:41
 
 $langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -2217,6 +2217,7 @@ $langInsertWiki = 'Wiki';
 $langCourseAnnouncements = "Ankündigungen des Kurses";
 $langBasicOptions = "Grundlegende Optionen";
 $langUserOptions = "Optionen der Benutzer";
+$langTutorials = "Tutorials";
 $langTut = "Tutorium";
 $langScormVideo = "Scorm Video";
 $langIntroToCourse = "Einleitung zum Kurs";
@@ -3744,3 +3745,7 @@ $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
 $langAddGUser = "Add Guest User";
+$langUserForum = "User";
+$langStopNotify = "Stop notification via email if replies are posted";
+$langNoLinkInCategory = "There are no links in this category";
+$langNoLinkCategories = "There are no link categories";

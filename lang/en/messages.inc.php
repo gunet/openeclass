@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-02-16 13:15:46
+// Generated 2015-02-19 15:55:36
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -636,7 +636,6 @@ $langCreatorEmail = "Author's email";
 $langFormat = "Format";
 $langSubject = "Subject";
 $langAuthor = "Author";
-$langUserForum = "User";
 $langCopyrighted = "Copyright";
 $langCopyrightedFree = "Free";
 $langCopyrightedNotFree = "Protected";
@@ -1306,9 +1305,7 @@ $langAllCategoryDeleted = "All categories and all links have been deleted";
 $langGiveURL = "Please give the link URL";
 $langGiveCategoryName = "Please give the category name";
 $langNoCategory = "No category";
-$langNoLinkInCategory = "There are no links in this category";
-$langNoLinkCategories = "There are no link categories";
-$langCategorisedLinks = "Categorised links";
+$langCategorisedLinks = "Link Categories";
 $showall = "Show all";
 $shownone = "Show none";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
@@ -1429,7 +1426,6 @@ $langTopicData = "Topic elements";
 $langTopicAnswer = "Topic Answer";
 $langGroupDocumentsLink = "Documents of the group ";
 $langNotify = "Notification via email if replies are posted";
-$langStopNotify = "Stop notification via email if replies are posted";
 $langNotifyActions = "Notifications";
 $langGoToPage = "Go to page";
 $langClick = "Click here";
@@ -2314,6 +2310,7 @@ $langInsertWiki = 'wiki';
 $langCourseAnnouncements = "Course Announcements";
 $langBasicOptions = "Basic Options";
 $langUserOptions = "User Options";
+$langTutorials = "Tutorials";
 $langTut = "Tutorial";
 $langScormVideo = "Scorm Video";
 $langIntroToCourse = "Introduction to Course";
@@ -3855,3 +3852,7 @@ $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
 $langAddGUser = "Add Guest User";
+$langUserForum = "User";
+$langStopNotify = "Stop notification via email if replies are posted";
+$langNoLinkInCategory = "There are no links in this category";
+$langNoLinkCategories = "There are no link categories";
