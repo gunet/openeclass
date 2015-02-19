@@ -103,7 +103,7 @@ if ($q && count($q) > 0) {
                 ) ."</div>";
         }
         $tool_content .= "  
-              <h3 class='panel-title'>$row->title ".($row->visible && $is_editor ? "&nbsp;<span rel='tooltip' data-original-title='$langSeenToCourseHome' data-placement='bottom' class='label label-primary'><i class='fa fa-eye'></i></span>" : "")."</h3>      
+              <h3 class='panel-title'>$row->title ".($row->visible && $is_editor ? "&nbsp;<span data-original-title='$langSeenToCourseHome' data-toggle='tooltip' data-placement='bottom' class='label label-primary'><i class='fa fa-eye'></i></span>" : "")."</h3>      
               </div>
               <div class='panel-body'>"
                 .handleType($row->type)."<br><br>"

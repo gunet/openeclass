@@ -212,7 +212,7 @@ if ($total_categories > 0) {
                         $forum_action_notify = FALSE;
                     }                    
                     if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
-                        if ($forum_action_notify) $tool_content .= "<span class='pull-right label label-primary' rel='tooltip' data-placement='bottom' title='".q($langNotify)."'><i class='fa fa-envelope'></i></span>";
+                        if ($forum_action_notify) $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='".q($langNotify)."'><i class='fa fa-envelope'></i></span>";
                         $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member . "</div>";

@@ -181,7 +181,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = $langFrom . " " . nice_format($q->start_week) . " $langUntil " .nice_format($q->finish_week);
-        $link[$i] = "<div class='$page_btn'><a class='btn-default-eclass place-at-toolbox' title='$q_title' rel='tooltip' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a></div>";
+        $link[$i] = "<div class='$page_btn'><a class='btn-default-eclass place-at-toolbox' title='$q_title' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a></div>";
     } else {
         $link[$i] = '&nbsp;';
     }

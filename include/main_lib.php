@@ -2766,20 +2766,20 @@ function action_bar($options, $page_title_flag = true) {
         if ($level == 'primary-label') {
             array_unshift($out_primary,
                 "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " data-placement='bottom' data-toggle='tooltip' " .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon] space-after-icon'></i>" .
                 "<span class='hidden-xs'>$title</span></a>$form_end");
         } elseif ($level == 'primary') {
             array_unshift($out_primary,
                 "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' rel='tooltip'" .
+                " data-placement='bottom' data-toggle='tooltip' " .
                 " title='$title'$link_attrs>" .
                 "<i class='fa $option[icon]'></i></a>$form_end");
         } else {
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$button_class$confirm_modal_class'" . $href .
-                " title='$title'$link_attrs>" .
+                " $link_attrs>" .
                 "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
         }
         $i++;
@@ -2852,7 +2852,7 @@ function action_button($options) {
             $icon_class .= " " . $option['icon-class'];
         }
         if (isset($option['confirm'])) {
-            $title = isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete;
+            $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
             $icon_class .= " confirmAction' data-title='$title' data-message='" .
                 q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
@@ -2869,9 +2869,9 @@ function action_button($options) {
         }        
         
         if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon'></i>$option[title]</a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon'></i>" . q($option['title']) . "</a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' rel='tooltip' title='$option[title]' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }        
@@ -2906,34 +2906,9 @@ function removeGetVar($url, $varname) {
     return $urlpart . '?' . $newqs;
 }
 
-//function setOpenCoursesExtraHTML() {
-//    global $urlAppend, $openCoursesExtraHTML,
-//        $langOpenCoursesShort, $langListOpenCoursesShort,
-//        $langNumOpenCourseBanner, $langNumOpenCoursesBanner;
-//    $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
-//    if ($openCoursesNum > 0) {
-//        $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
-//        $openCoursesExtraHTML = "
-//            <div class='inner_opencourses'>
-//                <span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>
-//                <a class='clearfix' href='$openFacultiesUrl'>
-//                    <span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>
-//                    <div class='row num_sub_wrapper center-block clearfix'>
-//                        <div class='col-xs-6 col-md-4 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
-//                        <div class='col-xs-6 col-md-8'>
-//                        <div class='pull-left'>
-//                            <span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span>
-//                            <span class='opencourse_triangle'></span>
-//                            </div>
-//                        </div>
-//                    </div>
-//                </a>
-//            </div>";
-//    }
-//}
 
 function setOpenCoursesExtraHTML() {
-    global $urlAppend, $openCoursesExtraHTML,
+    global $urlAppend, $openCoursesExtraHTML, $langListOpenCourses,
         $langOpenCoursesShort, $langListOpenCoursesShort,
         $langNumOpenCourseBanner, $langNumOpenCoursesBanner, $themeimg;
     $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
@@ -2941,24 +2916,24 @@ function setOpenCoursesExtraHTML() {
         $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
         $openCoursesExtraHTML = "
             <div class='inner_opencourses'>
-                <!--<span class='opencourse_header'>" . q($langOpenCoursesShort) . "</span>-->
                 <div class='row'>
                     <div class='col-xs-6 col-xs-offset-3 col-md-12 col-md-offset-0'>
-                        <img class='img-responsive center-block' src='".$themeimg."/banner_open_courses.png' />
+                        <img class='img-responsive center-block' src='$themeimg/banner_open_courses.png' alt='".q($langListOpenCourses)."'>
                     </div>
                 </div>
                 <div class='clearfix'>
-                    <!--<span class='opencourse_link'>".q($langListOpenCoursesShort)."</span>-->
                     <div class='row num_sub_wrapper center-block clearfix'>
                         <div class='col-xs-6 col-md-5 opencourse_num'><div class='pull-right'>$openCoursesNum</div></div>
                         <div class='col-xs-6 col-md-7 opencourse_num_text'>
-                        <a target='_blank' href='$openFacultiesUrl'>
-                        <div class='pull-left'>
-                            <span class='opencourse_sub'>".(($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner)."</span>
-                            <span class='opencourse_triangle'></span>
+                            <a target='_blank' href='$openFacultiesUrl'>
+                            <div class='pull-left'>
+                                <span class='opencourse_sub'>" .
+                                    (($openCoursesNum == 1)? $langNumOpenCourseBanner: $langNumOpenCoursesBanner) . "
+                                </span>
+                                <span class='opencourse_triangle'></span>
                             </div>
+                            </a>
                         </div>
-                        </a>
                     </div>
                 </div>
             </div>";
