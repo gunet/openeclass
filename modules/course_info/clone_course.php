@@ -67,7 +67,14 @@ if (isset($_POST['create_restored_course'])) {
         }
     }
 } else {
-    $tool_content = course_details_form($public_code, $currentCourseName, $titulaires, $currentCourseLanguage, null, $visible, '', null);
+    $desc = Database::get()->querySingle("SELECT description FROM course WHERE id = ?d", $course_id)->description;
+    $old_deps = array();
+    Database::get()->queryFunc("SELECT department FROM course_department WHERE course = ?d",
+        function ($dep) use ($treeObj, &$old_deps) {
+            $old_deps[] = array('name' => $treeObj->getFullPath($dep->department));
+        }, $course_id);
+
+    $tool_content = course_details_form($public_code, $currentCourseName, $titulaires, $currentCourseLanguage, null, $visible, $desc, $old_deps);
 }
 
 load_js('jstree');
