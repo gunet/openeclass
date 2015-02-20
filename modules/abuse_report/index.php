@@ -82,37 +82,74 @@ if (!$nbrReports) {
             <th>$langAbuseResourceType</th>
             <th>$langContent</th>
             <th>$langUser</th>
+            <th>$langDate</th>
             <th class='text-center'>".icon('fa-gears')."</th>
           </tr>";
     
     foreach ($result as $report) {
         
-        $options = action_button(array(
-                       array('title' => $langAbuseReportClose,
-                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
-                             'icon' => 'fa-archive',
-                             'confirm' => $langConfirmAbuseReportClose,
-                             'confirm_title' => $langAbuseReportClose,
-                             'confirm_button' => $langClose),
-                       array('title' => $langVisitReportedResource,
-                             'url' => "",
-                             'icon' => 'fa-external-link'),
-                       array('title' => $langEditReportedResource,
-                             'url' => "",
-                             'icon' => 'fa-edit'),
-                       array('title' => $langDeleteReportedResource,
-                             'url' => "",
-                             'icon' => 'fa-times',
-                             'class' => 'delete',
-                             'confirm' => $langConfirmDeleteReportedResource),
-                   ));
+        if ($report->rtype == 'comment') {
+            $res = Database::get()->querySingle("SELECT content FROM comments WHERE id = ?d", $report->rid);
+            $content = q($res->content);
+            
+            $res = Database::get()->querySingle("SELECT rid, rtype FROM comments WHERE id = ?d", $report->rid);
+            $comm_rid = $res->rid;
+            $comm_rtype = $res->rtype;
+            if ($comm_rtype == 'blogpost') {
+                $visiturl = $urlServer."modules/blog/index.php?course=".$course_code."&action=showPost&pId=".$comm_rid."#comments_title";
+            } elseif ($comm_rtype == 'course') {
+                $visiturl = $urlServer."courses/".$course_code;
+            }
+            
+            $options = action_button(array(
+                           array('title' => $langAbuseReportClose,
+                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
+                                 'icon' => 'fa-archive',
+                                 'confirm' => $langConfirmAbuseReportClose,
+                                 'confirm_title' => $langAbuseReportClose,
+                                 'confirm_button' => $langClose),
+                           array('title' => $langVisitReportedResource,
+                                 'url' => $visiturl,
+                                 'icon' => 'fa-external-link'),
+                       ));
+        } elseif ($report->rtype == 'forum_post') {
+            $res = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $report->rid);
+            $content = mathfilter($res->post_text, 12, "../../courses/mathimg/");
+            
+            $res = Database::get()->querySingle("SELECT t.id, t.forum_id FROM forum_post as p, forum_topic as t
+                        WHERE p.topic_id = t.id AND p.id = ?d", $report->rid);
+            $visiturl = $urlServer."modules/forum/viewtopic.php?course=".$course_code."&topic=".$res->id."&forum=".$res->forum_id."&post_id=".$report->rid."#".$report->rid;
+            $editurl = $urlServer."modules/forum/editpost.php?course=".$course_code."&topic=".$res->id."&forum=".$res->forum_id."&post_id=".$report->rid;
+            $deleteurl = $urlServer."modules/forum/viewtopic.php?course=".$course_code."&topic=".$res->id."&forum=".$res->forum_id."&post_id=".$report->rid."&delete=on";
+            
+            $options = action_button(array(
+                           array('title' => $langAbuseReportClose,
+                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
+                                 'icon' => 'fa-archive',
+                                 'confirm' => $langConfirmAbuseReportClose,
+                                 'confirm_title' => $langAbuseReportClose,
+                                 'confirm_button' => $langClose),
+                           array('title' => $langVisitReportedResource,
+                                 'url' => $visiturl,
+                                 'icon' => 'fa-external-link'),
+                           array('title' => $langEditReportedResource,
+                                 'url' => $editurl,
+                                 'icon' => 'fa-edit'),
+                           array('title' => $langDeleteReportedResource,
+                                 'url' => $deleteurl,
+                                 'icon' => 'fa-times',
+                                 'class' => 'delete',
+                                 'confirm' => $langConfirmDeleteReportedResource),
+                       ));
+        }
         
         $tool_content .= "<tr>
                             <td>".$reports_cats[$report->reason]."</td>
                             <td>".q($report->message)."</td>
                             <td>".$resource_types[$report->rtype]."</td>
-                            <td></td>
-                            <td>".display_user($report->user_id)."</td>                                    
+                            <td>".$content."</td>
+                            <td>".display_user($report->user_id)."</td>
+                            <td>".nice_format(date('Y-m-d H:i:s', $report->timestamp), true)."</td>                                    
                             <td class='option-btn-cell'>".$options."</td>
                           </tr>";
     }

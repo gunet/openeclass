@@ -4391,7 +4391,7 @@ $langVisitReportedResource = 'Μετάβαση στο αναφερόμενο π�
 $langEditReportedResource = 'Επεξεργασία αναφερόμενου περιεχομένου';
 $langDeleteReportedResource = 'Διαγραφή αναφερόμενου περιεχομένου';
 $langConfirmAbuseReportClose = 'Είστε σίγουροι ότι θέλετε να χαρακτηρίσετε αυτή την αναφορά ως επιλυμένη;';
-$langConfirmDeleteReportedResource = '';
+$langConfirmDeleteReportedResource = 'Είστε σίγουροι ότι θέλετε να διαγράψετε το αναφερόμενο περιεχόμενο;';
 $langCloseReportSuccess = 'Η αναφορά χαρακτηρίστηκε ως επιλυμένη.';
  
 /* * ******************************************
