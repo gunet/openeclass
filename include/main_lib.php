@@ -2798,7 +2798,7 @@ function action_bar($options, $page_title_flag = true) {
                   </ul>";
     }
     if ($out && $i!=0) {
-        return "<div class='row'>
+        return "<div class='row action_bar'>
                     <div class='col-sm-12 clearfix'>
                         $page_title
                         <div class='margin-top-thin margin-bottom-fat pull-right'>

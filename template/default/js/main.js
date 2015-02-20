@@ -61,6 +61,14 @@ $(document).ready(function () {
     animate_btn();
     tooltip_init();
     popover_init();
+    
+    // Action Bar Placeholder
+    $action_bar = $('.action_bar').length;
+    console.log($action_bar);
+    if( !$action_bar ) {
+        $('.action_bar_holder').attr({style:'height: 64px; display:block'});
+    }
+    
     $('body').on('click', 'a.disabled', function(e) {
         e.preventDefault();
     });
