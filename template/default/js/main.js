@@ -63,9 +63,9 @@ $(document).ready(function () {
     popover_init();
     
     // Action Bar Placeholder
-    $action_bar = $('.action_bar').length;
-    if( !$action_bar ) {
-        $('.action_bar_holder').attr({style:'height: 24px; display:block'});
+    var action_bar = $('.action_bar').length;
+    if( !action_bar ) {
+        $('div.title-row').css('margin-bottom','24px');
     }
     
     $('body').on('click', 'a.disabled', function(e) {
