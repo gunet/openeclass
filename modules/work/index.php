@@ -1836,7 +1836,7 @@ function show_assignments() {
                   'button-class' => 'btn-success',
                   'icon' => 'fa-plus-circle',
                   'level' => 'primary-label')  
-            ));
+            ),false);
 
     if (count($result)>0) {
         $tool_content .= "
