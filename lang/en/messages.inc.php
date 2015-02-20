@@ -2408,6 +2408,7 @@ $langEBookAdmin = "E-book administration";
 $langFileAdmin = "File administration";
 $langInCourses = "In course";
 $langOfSite = "of platform";
+$langResourceBrowser = 'Resource Browser';
 $langElaboration = "Edit";
 $langStudentsOnly = "only in " . $langsOfStudentss . "";
 $langChangeUserAs = 'Login as';

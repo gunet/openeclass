@@ -38,7 +38,7 @@ $langOperation = "Λειτουργία";
 $langContactInfo = "Στοιχεία επικοινωνίας";
 $langInCourses = "Στο μάθημα";
 $langOfSite = "της πλατφόρμας";
-
+$langResourceBrowser = 'Αναζήτηση πόρων';
 
 #For the logged-out user:
 $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
