@@ -23,6 +23,20 @@ $require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
 
+if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
+    if (isset($_GET['report'])) {
+        $id = intval($_GET['report']);
+        //check if user has right to close report
+        $res = Database::get()->querySingle("SELECT id FROM abuse_report WHERE id = ?d
+                    AND course_id = ?d", $id, $course_id);
+        if ($res) { //if report id actually belongs to this course then the editor may close it
+            Database::get()->query("UPDATE abuse_report SET status = ?d WHERE id = ?d", 0, $id);
+            Session::Messages($langCloseReportSuccess, 'alert-success');
+            redirect_to_home_page("modules/abuse_report/index.php?course=$course_code");
+        }
+    }
+}
+
 // maximum number of reports on a page
 $limitReportsPage = 15;
 if (isset($_GET['page'])) {
@@ -66,6 +80,7 @@ if (!$nbrReports) {
             <th>$langAbuseReportCat</th>
             <th>$langMessage</th>
             <th>$langAbuseResourceType</th>
+            <th>$langContent</th>
             <th>$langUser</th>
             <th class='text-center'>".icon('fa-gears')."</th>
           </tr>";
@@ -76,7 +91,9 @@ if (!$nbrReports) {
                        array('title' => $langAbuseReportClose,
                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
                              'icon' => 'fa-archive',
-                             'confirm' => $langConfirmAbuseReportClose),
+                             'confirm' => $langConfirmAbuseReportClose,
+                             'confirm_title' => $langAbuseReportClose,
+                             'confirm_button' => $langClose),
                        array('title' => $langVisitReportedResource,
                              'url' => "",
                              'icon' => 'fa-external-link'),
@@ -94,6 +111,7 @@ if (!$nbrReports) {
                             <td>".$reports_cats[$report->reason]."</td>
                             <td>".q($report->message)."</td>
                             <td>".$resource_types[$report->rtype]."</td>
+                            <td></td>
                             <td>".display_user($report->user_id)."</td>                                    
                             <td class='option-btn-cell'>".$options."</td>
                           </tr>";

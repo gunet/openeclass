@@ -4390,8 +4390,9 @@ $langAbuseReportClose = 'Κλείσιμο αναφοράς';
 $langVisitReportedResource = 'Μετάβαση στο αναφερόμενο περιεχόμενο';
 $langEditReportedResource = 'Επεξεργασία αναφερόμενου περιεχομένου';
 $langDeleteReportedResource = 'Διαγραφή αναφερόμενου περιεχομένου';
-$langConfirmAbuseReportClose = '';
+$langConfirmAbuseReportClose = 'Είστε σίγουροι ότι θέλετε να χαρακτηρίσετε αυτή την αναφορά ως επιλυμένη;';
 $langConfirmDeleteReportedResource = '';
+$langCloseReportSuccess = 'Η αναφορά χαρακτηρίστηκε ως επιλυμένη.';
  
 /* * ******************************************
   Theme Options
