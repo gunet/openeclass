@@ -1484,6 +1484,8 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM dropbox_index WHERE recipient_id = ?d", $u);
             Database::get()->query("DELETE FROM dropbox_msg WHERE author_id = ?d", $u);
             Database::get()->query("DELETE FROM exercise_user_record WHERE uid = ?d", $u);
+            Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.poster_id = ?d", 'forum_post', $u);
             Database::get()->query("DELETE FROM forum_notify WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_post WHERE poster_id = ?d", $u);
             Database::get()->query("DELETE FROM forum_topic WHERE poster_id = ?d", $u);
@@ -1500,6 +1502,8 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM user_department WHERE user = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages WHERE owner_id = ?d", $u);
             Database::get()->query("DELETE FROM wiki_pages_content WHERE editor_id = ?d", $u);
+            Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN comments ON abuse_report.rid = comments.id
+                                    WHERE abuse_report.rtype = ?s AND comments.user_id = ?d", 'comment', $u);
             Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM abuse_report WHERE user_id = ?d", $u);
