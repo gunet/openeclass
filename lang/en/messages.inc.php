@@ -3759,7 +3759,13 @@ $langRudeness = 'Rudeness';
 $langAbuseReportCatError = 'You did not select a reason for this abuse report';
 $langAbuseReportMsgError = 'You have to complete a justification message in order to submit an abuse report';
 $langAbuseReportSaveSuccess = 'The abuse report was succesfully sent to the course administrators. They were informed with a message sent via the Messages subsystem.';
-$langAbuseReportPMBody = 'I have just submitted an abuse report for "%s"';
+$langAbuseReportPMBody = 'I have just sumbitted an abuse report for %s. <br/>
+<b>Reason:</b><br/> %s <br/>
+<b>Justification:</b><br/> %s <br/>
+<b>Content:</b><br/> %s <br/>
+<a class="outtabs" href="%s">Go to content</a>';
+$langAComment = 'a comment';
+$langAForumPost = 'a forum post';
 $langNoAbuseReports = 'There are no abuse reports for this course';
 $langAbuseResourceType = 'Content type';
 $langAbuseReportClose = 'Close report';

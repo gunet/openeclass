@@ -97,29 +97,32 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $editors[] = $r->user_id;
         }
         
-        $resource_types = array('comment' => $langComment,
-                                'forum_post' => $langForumPost);
-        
-        //build url depending on resource type
+        //build variables depending on resource type
         if ($rtype == 'forum_post') {
-            $res = Database::get()->querySingle("SELECT t.id, t.forum_id FROM forum_post as p, forum_topic as t 
+            $res = Database::get()->querySingle("SELECT p.post_text, t.id, t.forum_id FROM forum_post as p, forum_topic as t 
                         WHERE p.topic_id = t.id AND p.id = ?d", $rid);
             $url = $urlServer."modules/forum/viewtopic.php?course=".course_id_to_code($cid).
                 "&topic=".$res->id."&forum=".$res->forum_id."&post_id=".$rid."#".$rid;
+            $content_type = $langAForumPost;
+            $content = mathfilter($res->post_text, 12, "../../courses/mathimg/");
         } elseif ($rtype == 'comment') {
-            $res = Database::get()->querySingle("SELECT rid, rtype FROM comments WHERE id = ?d", $rid);
+            $res = Database::get()->querySingle("SELECT rid, rtype, content FROM comments WHERE id = ?d", $rid);
             $comm_rid = $res->rid;
             $comm_rtype = $res->rtype;
             if ($comm_rtype == 'blogpost') {
                 $url = $urlServer."modules/blog/index.php?course=".course_id_to_code($cid).
                     "&action=showPost&pId=".$comm_rid."#comments_title";
+                
             } elseif ($comm_rtype == 'course') {
                 $url = $urlServer."courses/".course_id_to_code($comm_rid);
             }
-            
+            $content_type = $langAComment;
+            $content = q($res->content);
         }
         
-        $pm = new Msg($uid, $cid, $langAbuseReport, $langAbuseReportPMBody, $editors);
+        $msg_body = sprintf($langAbuseReportPMBody, $content_type, q($reason), q($msg), $content, $url);
+        
+        $pm = new Msg($uid, $cid, $langAbuseReport, $msg_body, $editors);
         
         $response[0] = 'succes';
         $response[1] = '<p class="text-success">'.$langAbuseReportSaveSuccess.'</p>';
