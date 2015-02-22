@@ -2654,10 +2654,9 @@ function copyright_info($cid, $noImg=1) {
             $link_suffix = '';
         }
     }
-    if($noImg==1){
-    $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'>
-            <img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
-    }else if($noImg==0){
+    if ($noImg == 1) {
+        $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'><img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
+    } else if ($noImg == 0) {
         $link = "";
     }
 
