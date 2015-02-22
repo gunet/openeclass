@@ -246,12 +246,15 @@ else {
         //display available BBB servers
         $tool_content .= action_bar(array(
             array('title' => $langAddBBBServer,
-                  'url' => "bbbmoduleconf.php?add_server",
-                  'icon' => 'fa-plus-circle',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success'),
-            ));
-        
+                'url' => "bbbmoduleconf.php?add_server",
+                'icon' => 'fa-plus-circle',
+                'level' => 'primary-label',
+                'button-class' => 'btn-success'),
+            array('title' => $langBack,
+                'url' => "extapp.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
+
         $q = Database::get()->queryArray("SELECT * FROM bbb_servers");
         if (count($q)>0) {
             $tool_content .= "<div class='table-responsive'>";

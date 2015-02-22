@@ -4215,6 +4215,7 @@ $langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlu
 $langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
 $langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlueButton";
 $langNoAvailableBBBServers = "Δεν υπάρχουν διαθέσιμοι εξυπηρετητές BigBlueButton";
+$langExtAppConfig = 'Ρυθμίσεις εξωτερικών προγραμμάτων';
 $langBBBConfig = 'Ρυθμίσεις BigBlueButton';
 $langBBBEnabled = 'Διαθέσιμος';
 $langBBBOptions = 'Τροποποίηση';

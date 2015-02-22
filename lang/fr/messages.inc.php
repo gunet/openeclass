@@ -3482,6 +3482,7 @@ $langAddBBBServer = "Add server";
 $langAddBBBServerInfo = "New BigBlueButton server info";
 $langUpdateBBBServer = "BigBlueButton server info";
 $langAvailableBBBServers = "There are no available BigBlueButton servers";
+$langExtAppConfig = 'External program configuration';
 $langBBBConfig = 'BigBlueButton settings';
 $langBBBEnabled = 'Available';
 $langBBBOptions = 'Edit';

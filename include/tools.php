@@ -542,8 +542,8 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
         array_push($sideMenuImg, "arrow.png");
-        array_push($sideMenuText, $GLOBALS['langBBBConfig']);
-        array_push($sideMenuLink, "../admin/bbbmoduleconf.php");
+        array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
+        array_push($sideMenuLink, "../admin/extapp.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
