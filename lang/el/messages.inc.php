@@ -4233,8 +4233,8 @@ $langNewBBBSessionInfo = "Στοιχεία νέας τηλεσυνεργασία
 $langNewBBBSessionStart = "Έναρξη τηλεσυνεργασίας";
 $langNewBBBSessionDesc = "Σύντομη περιγραφή τηλεσυνεργασίας";
 $langNewBBBSessionType = "Είδος τηλεσυνεργασίας";
-$langNewBBBSessionPublic = "Δημόσια προς τρίτους";
-$langNewBBBSessionPrivate = "Ιδιωτική";
+$langNewBBBSessionPublic = "Μπορούν να συμμετάσχουν όλοι οι εγγεγραμμένοι χρήστες της πλατφόρμας (εκπαιδευόμενοι άλλων μαθημάτων)";
+$langNewBBBSessionPrivate = "Μπορούν να συμμετάσχουν μόνο οι εγγεγραμμένοι χρήστες του μαθήματος";
 $langBBBSessionJoin = "Σύνδεση";
 
 $langBBBUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
