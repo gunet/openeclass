@@ -346,18 +346,18 @@ if ($is_editor) {
 $where = '';
 $terms = array();
 if (isset($_GET['edit'])) {
-    $where = "AND glossary.id = ?d";
+    $where = "AND id = ?d";
     $terms[] = intval($id);
 } elseif (isset($_GET['id'])) {
     $navigation[] = array('url' => $base_url,
         'name' => $langGlossary);
-    $where = "AND glossary.id = ?d";
+    $where = "AND id = ?d";
     $terms[] = intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
-    $where = "AND glossary.term LIKE ?s";
+    $where = "AND term LIKE ?s";
     $terms[] = $_GET['prefix'] . '%';
 } elseif ($glossary_index and ! $cat_id and count($prefixes) > 1) {
-    $where = "AND glossary.term LIKE ?s";
+    $where = "AND term LIKE ?s";
     $terms[] = $prefixes[0] . '%';
 }
 
@@ -378,16 +378,14 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     if ($cat_id) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
         $pageName = q($categories[$cat_id]);
-        $where .= " AND glossary.category_id = $cat_id";
+        $where .= " AND category_id = $cat_id";
     }
-    $sql = Database::get()->queryArray("SELECT glossary.id AS id, glossary.term AS term, glossary.definition AS definition, glossary.url AS url, glossary.notes AS notes, glossary.category_id AS category_id, glossary_category.name AS category
-                            FROM glossary 
-                            LEFT JOIN glossary_category ON glossary.category_id=glossary_category.id
-                            WHERE glossary.course_id = ?d $where
+    $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
+                            FROM glossary WHERE course_id = ?d $where
                             GROUP BY term
                             ORDER BY term", $course_id, $terms);
     if (count($sql) > 0) {
-        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<div class='table-responsive glossary-categories'>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr>
                      <th class='text-left'>$langGlossaryTerm</th>
@@ -401,20 +399,20 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                 $pageName = q($g->term);
             }        
             if (!empty($g->url)) {
-                $urllink = "<div><span class='smaller'>(<a href='" . q($g->url) .
-                        "' target='_blank'>" . q($g->url) . "</a>)</span></div>";
+                $urllink = "<div><span class='term-url'><a href='" . q($g->url) .
+                        "' target='_blank'>" . q($g->url) . "&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></span></div>";
             } else {
                 $urllink = '';
             }
 
             if (!empty($g->category_id)) {
-                $cat_descr = "<span class='smaller'>$langCategory: <a href='$base_url&amp;cat=$g->category_id'>" . q($categories[$g->category_id]) . "</a></span>";
+                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat=$g->category_id'>" . q($categories[$g->category_id]) . "</a></span>";
             } else {
                 $cat_descr = '';
             }
 
             if (!empty($g->notes)) {
-                $urllink .= "<br>" . standard_text_escape($g->notes);
+                $urllink .= "<br>". standard_text_escape($g->notes);
             }
 
             if (!empty($g->definition)) {
@@ -424,7 +422,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             $tool_content .= "<tr>
-                     <td width='150'><a href='$base_url&amp;id=$g->id'>".q($g->term)."<div class='invisible'>$cat_descr</div></td>
+                     <td width='150'><strong><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
                      <td><em>$definition_data</em>$urllink</td>";
 
             if ($is_editor) {
@@ -445,7 +443,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
         }
         $tool_content .= "</table></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
+        $tool_content .= "<br><div class='alert alert-warning'>$langNoResult</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

@@ -1751,10 +1751,10 @@ table.category-links th.category-link{
     }
 }
 table.nocategory-links tr.link-category-title, table.category-links tr.link-category-title{
-    background-color: #dfdfdf;
+    background-color: #eaeaea;
 }
 table.category-links tr.link-subcategory-title{
-    background-color: #efefef;
+    background-color: #f3f3f3;
 }
 .open-category, .open-category:hover
 {
@@ -1875,6 +1875,17 @@ table.category-links td.category-link{
     }
     a:hover{
         text-decoration:none;
+    }
+}
+div.glossary-categories{
+    a:hover{
+        text-decoration:none;
+    }
+    th{
+        background-color: #e3e3e3;
+    }
+    td.space-left{
+        padding-left: 25px;
     }
 }
 .panel.opencourses-national{

@@ -182,7 +182,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
 
     if ($q and count($q)) {    
             $tool_content .= "
-        <div class='table-responsive'>    
+        <div class='table-responsive glossary-categories'>    
             <table class='table-default'>
                 <tr><th class='text-left'>$langName</th>" .
              ($is_editor ? "<th class='text-center'>" . icon('fa-gears') . "</th>" : '') . "
@@ -194,7 +194,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
             } else {
                 $desc = '';
             }        
-            $tool_content .= "<tr><td><a href='$base_url&amp;cat=$cat->id'>" . q($cat->name) . "</a>$desc</td>";                       
+            $tool_content .= "<tr><td class='space-left'><a href='$base_url&amp;cat=$cat->id'><strong>" . q($cat->name) . "</strong></a><small><span class='text-muted'>$desc</span></small></td>";                       
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
@@ -213,7 +213,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
         }
         $tool_content .= "</table></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
+        $tool_content .= "<br><br><br><div class='alert alert-warning'>$langNoResult</div>";
     }
 }
 
