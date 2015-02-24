@@ -400,7 +400,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }        
             if (!empty($g->url)) {
                 $urllink = "<div><span class='term-url'><a href='" . q($g->url) .
-                        "' target='_blank'>" . q($g->url) . "&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></span></div>";
+                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></span></div>";
             } else {
                 $urllink = '';
             }

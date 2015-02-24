@@ -1135,6 +1135,7 @@ $langCreateCourseGroups = "Ομάδες Χρηστών";
 $langCatagoryMain = "Αρχή";
 $langCatagoryGroup = "Συζητήσεις Ομάδων χρηστών";
 $langNoGroup = "Δεν έχουν οριστεί ομάδες χρηστών";
+$langGroupMembersNum = "Μέλη";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "(Σημ.) μπορείτε να αλλάξετε διάφορες ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";

@@ -320,8 +320,6 @@ if ($is_editor) {
                 array('title' => $langDeleteGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
                     'icon' => 'fa-times',
-                    'level' => 'primary',
-                    'button-class' => 'btn-danger',
                     'confirm' => $langDeleteGroupAllWarn,
                     'show' => $num_of_groups > 0),
                 array('title' => $langFillGroupsAll,
@@ -332,7 +330,6 @@ if ($is_editor) {
                 array('title' => $langEmtpyGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes",
                     'icon' => 'fa-trash',
-                    'level' => 'primary',
                     'class' => 'delete',
                     'confirm' => $langEmtpyGroups,
                     'confirm_title' => $langEmtpyGroupsAll,
@@ -349,7 +346,7 @@ if ($is_editor) {
                 <tr>
                   <th>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>
-                  <th width='30'>$langRegistered</th>
+                  <th width='30'>$langGroupMembersNum</th>
                   <th width='30'>$langMax</th>
                   <th class='text-center'>".icon('fa-gears', $langActions)."</th>
                 </tr>";

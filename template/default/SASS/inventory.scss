@@ -1266,16 +1266,6 @@ ul.tablelist
 
 
 
-
-
-
-
-
-
-
-
-
-
 /* DROPDOWN */
 /*
 .button.dropdown.opened{
@@ -1886,6 +1876,25 @@ div.glossary-categories{
     }
     td.space-left{
         padding-left: 25px;
+    }
+}
+div.group-space{
+    .row{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .row.hr-seperator{
+        margin-top: 15px;
+        padding-bottom: 15px;
+        hr{
+            margin-top: 9px;
+            padding-top: 1px;
+            padding-bottom: 1px;
+        }
+    }
+    .list-header{
+        background-color: #eeeeee;
+        color: #777777;
     }
 }
 .panel.opencourses-national{

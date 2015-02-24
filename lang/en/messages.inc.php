@@ -569,6 +569,7 @@ $langGoogle = "Quick and powerfull search engine";
 $langIntroductionText = "This is the introduction text of your course. To replace it by your own text, click below on <b>modify</b>.";
 $langJustCreated = "You just created the course titled ";
 $langCreateCourseGroups = "Groups";
+$langGroupMembersNum = "Members";
 $langCatagoryMain = "Main";
 $langCatagoryGroup = "Groups forums";
 $langNoGroup = "There are no user groups defined";
