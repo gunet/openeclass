@@ -122,7 +122,7 @@ $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, 
                       ORDER BY user.surname, user.givenname", $group_id);
 foreach ($q as $user) {
     if ($user->is_tutor) {
-        $tutors[] = display_user($user->id, true);
+        $tutors[] = display_user($user->id, true, false);
     } else {
         $members[] = $user;
     }
