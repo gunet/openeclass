@@ -22,14 +22,40 @@ $require_current_course = true;
 $require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
 
 if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
     if (isset($_GET['report'])) {
         $id = intval($_GET['report']);
         //check if user has right to close report
-        $res = Database::get()->querySingle("SELECT id FROM abuse_report WHERE id = ?d
+        $res = Database::get()->querySingle("SELECT * FROM abuse_report WHERE id = ?d
                     AND course_id = ?d", $id, $course_id);
         if ($res) { //if report id actually belongs to this course then the editor may close it
+            
+            $rtype = $res->rtype;
+            $rid = $res->rid;
+            $user_id = $res->user_id;
+            $reason = $res->reason;
+            $message = $res->message;
+            
+            if ($rtype == 'comment') {
+                $res = Database::get()->querySingle("SELECT content FROM comments WHERE id = ?d", $rid);
+                $rcontent = $res->content;
+            } elseif ($rtype == 'forum_post') {
+                $res = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $rid);
+                $rcontent = $res->post_text;
+            }
+            
+            Log::record($course_id, MODULE_ID_ABUSE_REPORT, LOG_MODIFY,
+                    array('id' => $id,
+                          'user_id' => $user_id,
+                          'reason' => $reason,
+                          'message' => $message,
+                          'rtype' => $rtype,
+                          'rid' => $rid,
+                          'rcontent' => $rcontent
+                    ));
+            
             Database::get()->query("UPDATE abuse_report SET status = ?d WHERE id = ?d", 0, $id);
             Session::Messages($langCloseReportSuccess, 'alert-success');
             redirect_to_home_page("modules/abuse_report/index.php?course=$course_code");

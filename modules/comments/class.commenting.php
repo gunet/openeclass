@@ -18,6 +18,7 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
+require_once 'include/log.php';
 require_once 'modules/abuse_report/abuse_report.php';
 
 /**
@@ -179,6 +180,24 @@ Class Commenting {
      * @return boolean
      */
     public static function deleteComments($rtype, $rid) {
+        //delete abuse reports for these comments and log these actions before
+        $comms = Database::get()->queryArray("SELECT id, content FROM `comments` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
+        foreach ($comms as $c) {
+            $reps = Database::get()->queryArray("SELECT * FROM abuse_report WHERE rtype = ?s AND rid = ?d", 'comment', $c->id);
+            foreach ($reps as $r) {
+                Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                    array('id' => $r->id,
+                          'user_id' => $r->user_id,
+                          'reason' => $r->reason,
+                          'message' => $r->message,
+                          'rtype' => 'comment',
+                          'rid' => $c->id,
+                          'rcontent' => $c->comment
+                    ));
+            }
+            Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $c->id, 'comment');
+        }
+        
         Database::get()->query("DELETE FROM `comments` WHERE `rtype`=?s AND `rid`=?d", $rtype, $rid);
     }
     

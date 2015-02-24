@@ -18,6 +18,8 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
+require_once 'include/log.php';
+
 /**
  * This class represents a comment
 */
@@ -97,7 +99,19 @@ Class Comment {
      * @return boolean true on success, false on failure
      */
     public function delete() {
-        //delete abuse reports for this comment first
+        //delete abuse reports for this comment first and log action
+        $res = Database::get()->queryArray("SELECT * FROM abuse_report WHERE `rid` = ?d AND `rtype` = ?s", $this->id, 'comment');
+        foreach ($res as $r) {
+            Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                array('id' => $r->id,
+                      'user_id' => $r->user_id,
+                      'reason' => $r->reason,
+                      'message' => $r->message,
+                      'rtype' => 'comment',
+                      'rid' => $this->id,
+                      'rcontent' => $this->getContent()
+                     ));
+        } 
         $sql = 'DELETE FROM `abuse_report` WHERE `rid` = ?d AND `rtype` = ?s';
         Database::get()->query($sql, $this->id, 'comment');
         

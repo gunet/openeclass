@@ -80,13 +80,22 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         $id = Database::get()->query("INSERT INTO abuse_report (rid, rtype, course_id, reason, message, timestamp, user_id, status)
             VALUES (?d, ?s, ?d, ?s, ?s, UNIX_TIMESTAMP(NOW()), ?d, ?d)", $rid, $rtype, $cid, $reason, $msg, $uid, 1)->lastInsertID;
         
+        if ($rtype == 'comment') {
+            $res = Database::get()->querySingle("SELECT content FROM comments WHERE id = ?d", $rid);
+            $rcontent = $res->content;
+        } elseif ($rtype == 'forum_post') {
+            $res = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $rid);
+            $rcontent = $res->post_text;
+        }
+        
         Log::record($cid, MODULE_ID_ABUSE_REPORT, LOG_INSERT,
                     array('id' => $id,
                           'user_id' => $uid,
                           'reason' => $reason,
                           'message' => $msg,
                           'rtype' => $rtype,
-                          'rid' => $rid
+                          'rid' => $rid,
+                          'rcontent' => $rcontent
                     ));
         
         //send PM to course editors

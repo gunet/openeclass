@@ -30,6 +30,7 @@ require_once 'modules/forum/functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/course_settings.php';
+require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/abuse_report/abuse_report.php';
@@ -58,7 +59,7 @@ if (isset($_GET['topic'])) {
 }
 if (isset($_GET['post_id'])) {//needed to find post page for anchors
     $post_id = intval($_GET['post_id']);
-    $myrow = Database::get()->querySingle("SELECT f.id, f.name, p.post_time, p.poster_id, t.locked FROM forum f, forum_topic t, forum_post p
+    $myrow = Database::get()->querySingle("SELECT f.id, f.name, p.post_time, p.poster_id, p.post_text, t.locked FROM forum f, forum_topic t, forum_post p
             WHERE f.id = ?d
             AND t.id = ?d
             AND p.id = ?d
@@ -93,7 +94,19 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
     //delete forum posts rating first
     Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $post_id);
     Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $post_id);
-    //delete abuse reports for this post
+    //delete abuse reports for this post and log actions
+    $res = Database::get()->queryArray("SELECT * FROM abuse_report WHERE `rid` = ?d AND `rtype` = ?s", $post_id, 'forum_post');
+    foreach ($res as $r) {
+        Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+            array('id' => $r->id,
+                  'user_id' => $r->user_id,
+                  'reason' => $r->reason,
+                  'message' => $r->message,
+                  'rtype' => 'forum_post',
+                  'rid' => $post_id,
+                  'rcontent' => $myrow->post_text
+        ));
+    }
     Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');   
     Database::get()->query("DELETE FROM forum_post WHERE id = ?d", $post_id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_FORUMPOST, $post_id);
