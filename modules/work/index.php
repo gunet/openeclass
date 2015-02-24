@@ -445,7 +445,7 @@ function submit_work($id, $on_behalf_of = null) {
         $secret = work_secret($id);
         $ext = get_file_extension($_FILES['userfile']['name']);
         $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-        
+
         if (!isset($on_behalf_of)) {
             $msg1 = delete_submissions_by_uid($user_id, -1, $id);
             if ($group_sub) {
@@ -1794,7 +1794,7 @@ function show_student_assignments() {
                     if (isset($sub->group_id)) { // if is a group assignment
                         $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
-                                "$m[ofgroup] " . gid_to_name($sub['group_id']) . "</a>)</div>";
+                                "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
                     }
                     $tool_content .= icon('fa-check-square-o', $m['yes'])."<br>";
                 }
