@@ -192,7 +192,7 @@ if ($is_editor) {
                 
         } elseif (isset($_REQUEST['fill'])) {
                 $resGroups = db_query("SELECT id, max_members -
-                                                      (SELECT count(*) from group_members WHERE group_members.group_id = id)
+                                                      (SELECT count(*) from group_members WHERE group_members.group_id = id AND is_tutor = 0)
                                                   AS remaining
                                               FROM `group` WHERE course_id = $cours_id ORDER BY id");
                 while (list($idGroup, $places) = mysql_fetch_row($resGroups)) {
@@ -274,7 +274,7 @@ if ($is_editor) {
                                       cu.tutor = 0 AND
                                       u.user_id NOT IN (SELECT user_id FROM group_members, `group`
                                                                        WHERE `group`.id = group_members.group_id AND
-                                                                       `group`.course_id = $cours_id)"));
+                                                                       `group`.course_id = $cours_id AND is_tutor = 0)"));
 
         $registered_students = $total_students - $unregistered_students;
 
