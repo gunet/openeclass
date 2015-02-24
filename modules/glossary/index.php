@@ -346,18 +346,18 @@ if ($is_editor) {
 $where = '';
 $terms = array();
 if (isset($_GET['edit'])) {
-    $where = "AND id = ?d";
+    $where = "AND glossary.id = ?d";
     $terms[] = intval($id);
 } elseif (isset($_GET['id'])) {
     $navigation[] = array('url' => $base_url,
         'name' => $langGlossary);
-    $where = "AND id = ?d";
+    $where = "AND glossary.id = ?d";
     $terms[] = intval($_GET['id']);
 } elseif (isset($_GET['prefix'])) {
-    $where = "AND term LIKE ?s";
+    $where = "AND glossary.term LIKE ?s";
     $terms[] = $_GET['prefix'] . '%';
 } elseif ($glossary_index and ! $cat_id and count($prefixes) > 1) {
-    $where = "AND term LIKE ?s";
+    $where = "AND glossary.term LIKE ?s";
     $terms[] = $prefixes[0] . '%';
 }
 
@@ -378,10 +378,12 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     if ($cat_id) {
         $navigation[] = array('url' => $base_url, 'name' => $langGlossary);
         $pageName = q($categories[$cat_id]);
-        $where .= " AND category_id = $cat_id";
+        $where .= " AND glossary.category_id = $cat_id";
     }
-    $sql = Database::get()->queryArray("SELECT id, term, definition, url, notes, category_id
-                            FROM glossary WHERE course_id = ?d $where
+    $sql = Database::get()->queryArray("SELECT glossary.id AS id, glossary.term AS term, glossary.definition AS definition, glossary.url AS url, glossary.notes AS notes, glossary.category_id AS category_id, glossary_category.name AS category
+                            FROM glossary 
+                            LEFT JOIN glossary_category ON glossary.category_id=glossary_category.id
+                            WHERE glossary.course_id = ?d $where
                             GROUP BY term
                             ORDER BY term", $course_id, $terms);
     if (count($sql) > 0) {
@@ -422,7 +424,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             $tool_content .= "<tr>
-                     <th width='150'><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a> <div class='invisible'>$cat_descr</div></th>
+                     <td width='150'><a href='$base_url&amp;id=$g->id'>".q($g->term)."<div class='invisible'>$cat_descr</div></td>
                      <td><em>$definition_data</em>$urllink</td>";
 
             if ($is_editor) {
