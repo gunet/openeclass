@@ -3764,6 +3764,11 @@ $langAbuseReportPMBody = 'I have just sumbitted an abuse report for %s. <br/>
 <b>Justification:</b><br/> %s <br/>
 <b>Content:</b><br/> %s <br/>
 <a class="outtabs" href="%s">Go to content</a>';
+$langAbuseReportClosePMBody = 'I have just closed an abuse report for %s. <br/>
+<b>Reason:</b><br/> %s <br/>
+<b>Justification:</b><br/> %s <br/>
+<b>Content:</b><br/> %s <br/>
+<a class="outtabs" href="%s">Go to content</a>';
 $langAComment = 'a comment';
 $langAForumPost = 'a forum post';
 $langNoAbuseReports = 'There are no abuse reports for this course';

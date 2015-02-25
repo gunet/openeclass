@@ -4388,6 +4388,11 @@ $langAbuseReportPMBody = 'Μόλις καταχώρησα μια αναφορά 
 <b>Αιτιολογία:</b><br/> %s <br/>
 <b>Περιεχόμενο:</b><br/> %s <br/>
 <a class="outtabs" href="%s">Μετάβαση στο περιεχόμενο</a>';
+$langAbuseReportClosePMBody = 'Μόλις έκλεισα μια αναφορά κατάχρησης για %s. <br/>
+<b>Αιτία:</b><br/> %s <br/>
+<b>Αιτιολογία:</b><br/> %s <br/>
+<b>Περιεχόμενο:</b><br/> %s <br/>
+<a class="outtabs" href="%s">Μετάβαση στο περιεχόμενο</a>';
 $langAComment = 'ένα σχόλιο';
 $langAForumPost = 'μια ανάρτηση περιοχών συζητήσεων';
 $langNoAbuseReports = 'Δεν υπάρχουν αναφορές κατάχρησης γι\' αυτό το μάθημα';

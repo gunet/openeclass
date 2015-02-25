@@ -23,6 +23,7 @@ $require_course_admin = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
+require_once 'modules/dropbox/class.msg.php';
 
 $pageName = $langAbuseReports;
 
@@ -41,11 +42,27 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
             $message = $res->message;
             
             if ($rtype == 'comment') {
-                $res = Database::get()->querySingle("SELECT content FROM comments WHERE id = ?d", $rid);
-                $rcontent = $res->content;
+                $result = Database::get()->querySingle("SELECT rid, rtype, content FROM comments WHERE id = ?d", $rid);
+                $comm_rid = $result->rid;
+                $comm_rtype = $result->rtype;
+                if ($comm_rtype == 'blogpost') {
+                    $url = $urlServer."modules/blog/index.php?course=".$course_code.
+                    "&action=showPost&pId=".$comm_rid."#comments_title";
+                
+                } elseif ($comm_rtype == 'course') {
+                    $url = $urlServer."courses/".$course_code;
+                }
+                $content_type = $langAComment;
+                $content = q($result->content);
+                $rcontent = $result->content;
             } elseif ($rtype == 'forum_post') {
-                $res = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $rid);
-                $rcontent = $res->post_text;
+                $result = Database::get()->querySingle("SELECT p.post_text, t.id, t.forum_id FROM forum_post as p, forum_topic as t
+                        WHERE p.topic_id = t.id AND p.id = ?d", $rid);
+                $url = $urlServer."modules/forum/viewtopic.php?course=".$course_code.
+                "&topic=".$result->id."&forum=".$result->forum_id."&post_id=".$rid."#".$rid;
+                $content_type = $langAForumPost;
+                $content = mathfilter($result->post_text, 12, "../../courses/mathimg/");
+                $rcontent = $result->post_text;
             }
             
             Log::record($course_id, MODULE_ID_ABUSE_REPORT, LOG_MODIFY,
@@ -60,6 +77,21 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                     ));
             
             Database::get()->query("UPDATE abuse_report SET status = ?d WHERE id = ?d", 0, $id);
+            
+            //send PM to user that created the report and other course editors
+            $result = Database::get()->queryArray("SELECT user_id FROM course_user
+                WHERE course_id = ?d AND (status = ?d OR editor = ?d) AND user_id <> ?d", $course_id, 1, 1, $uid);
+            $recipients = array();
+            $recipients[] = $user_id;
+            foreach ($result as $r) {
+                $recipients[] = $r->user_id;
+            }
+            
+            
+            $msg_body = sprintf($langAbuseReportClosePMBody, $content_type, q($reason), q($message), $content, $url);
+            
+            $pm = new Msg($uid, $course_id, $langMsgRe.$langAbuseReport, $msg_body, $recipients);
+            
             Session::Messages($langCloseReportSuccess, 'alert-success');
             redirect_to_home_page("modules/abuse_report/index.php?course=$course_code");
         }
