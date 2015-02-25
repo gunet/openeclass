@@ -294,14 +294,14 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>";
         if ($numberofzerocategory !== 0) {
-            $tool_content .= "<tr class='link-category-title'><th class='text-left'>$langNoCategory</th>";
+            $tool_content .= "<tr class='list-header'><th class='text-left'>$langNoCategory</th>";
             if ($display_tools) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             showlinksofcategory(0);        
         } else {
-            $tool_content .= "<tr class='link-category-title'><th class='text-left link-category-title'>$langNoCategory</th>";
+            $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langNoCategory</th>";
             if ($display_tools) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
@@ -319,7 +319,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 <div class='table-responsive'>
                 <table class='table-default category-links'>";
         if ($aantalcategories > 0) {
-           $tool_content .= "<tr class='link-category-title'><th>";
+           $tool_content .= "<tr class='list-header'><th>";
            
             $tool_content .= "$langCategorisedLinks&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
