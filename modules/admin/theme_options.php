@@ -443,7 +443,7 @@ if (isset($_POST['optionsSave'])) {
             </div>                                  
             <div class='form-group'>
                 <div class='col-sm-9 col-sm-offset-3'>
-                    ".($active_theme ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
+                    ".($theme_id ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
                     <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>    
                 </div>
             </div>        
