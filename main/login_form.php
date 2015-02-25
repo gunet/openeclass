@@ -10,19 +10,20 @@ if (isset($_SESSION['uid'])) {
 
 $warning = '';
 $login_user = FALSE;
-
+$shibboleth_link = $cas_link = "";
+// check for shibboleth
 $shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'");
-if ($shibactive->auth_default == 1) {
-    $shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
-} else {
-    $shibboleth_link = "";
+if ($shibactive) {
+    if ($shibactive->auth_default == 1) {
+        $shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
+    } 
 }
-
+// check for CAS
 $casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'");
-if ($casactive->auth_default == 1) {
-    $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
-} else {
-    $cas_link = "";
+if ($casactive) {
+    if ($casactive->auth_default == 1) {
+        $cas_link = "<a href='{$urlServer}secure/cas.php'>$langViaCAS</a><br />";
+    }
 }
 
 $next = isset($_GET['next']) ?
