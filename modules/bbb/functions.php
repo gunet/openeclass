@@ -857,7 +857,13 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
     $users_to_join = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user, user
                                 WHERE course_user.course_id = ?d AND course_user.user_id = user.id", $course_id)->count;
     //Algorithm to select BBB server GOES HERE ...
-    $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
+    if($record=='true')
+    {
+        $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
+    }else
+    {
+        $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY weight ASC",$record);
+    }
 
     if ($query) {
         foreach ($query as $row) {
