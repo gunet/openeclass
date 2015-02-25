@@ -172,7 +172,7 @@ $tool_content .= "  <div class='row hr-seperator'>
 if (count($members) > 0) {    
     foreach ($members as $member) {
         $user_group_description = $member->description;        
-        $tool_content .= "<li class='list-group-item'><div class='row'><div class='col-xs-4'>" . display_user($member->id, false, false);
+        $tool_content .= "<li class='list-group-item'><div class='row'><div class='col-xs-4'>" . display_user($member->id, false, true);
         if ($user_group_description) {
             $tool_content .= "<br />" . q($user_group_description);
         }

@@ -1892,11 +1892,12 @@ div.group-space{
             padding-bottom: 1px;
         }
     }
-    .list-header{
-        background-color: #eeeeee;
-        color: #777777;
-    }
+    
 }
+.list-header{
+        background-color: #eeeeee !important;
+        color: #777777 !important;
+    }
 .panel.opencourses-national{
 
     min-height: 2px;

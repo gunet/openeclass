@@ -3385,8 +3385,8 @@ $langdate = "Ημερομηνία";
 $langNoVideo = "Δεν υπάρχουν διαθέσιμα πολυμεσικά αρχεία";
 $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το αρχείο σας";
 $langColorboxCurrent = "πολυμέσο {current} από {total}";
-$langVideoDirectory = "Πολυμεσικά αρχεία";
-$langCatVideoDirectory = "Κατηγοριοποιημένα πολυμεσικά αρχεία";
+$langVideoDirectory = "Γενικά πολυμεσικά αρχεία";
+$langCatVideoDirectory = "Κατηγορίες πολυμεσικών αρχείων";
 $langCatVideoDirectoryCreated = "Η κατηγορία προστέθηκε";
 
 /* * ***********************************************************

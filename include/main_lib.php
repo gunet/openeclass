@@ -287,7 +287,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
         $print_email = $print_email && !empty($email);
     }
     if ($icon) {
-        $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
+        $icon = profile_image($user->id, IMAGESIZE_SMALL, 'img-circle') . '&nbsp;';
     }
     
     if (!empty($class)) {

@@ -343,7 +343,7 @@ if ($is_editor) {
         $tool_content .= "<br />
                 <div class='table-responsive'>
                 <table class='table-default'>
-                <tr>
+                <tr class='list-header'>
                   <th>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>
                   <th width='30'>$langGroupMembersNum</th>
@@ -390,13 +390,14 @@ if ($is_editor) {
     if (count($q) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                <tr>
+        $tool_content .= "<div class='table-responsive'>
+            <table class='table-default'>
+                <tr class='list-header'>
                   <th class='text-left'>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>";
         $tool_content .= "<th width='50'>$langRegistration</th>";
 
-        $tool_content .= "<th width='50'>$langRegistered</th><th width='50'>$langMax</th></tr>";
+        $tool_content .= "<th width='50'>$langGroupMembersNum</th><th width='50'>$langMax</th></tr>";
         foreach ($q as $row) {
             $group_id = $row->id;
             initialize_group_info($group_id);

@@ -408,7 +408,7 @@ hContent;
                 </div></div></div>";
         }
 
-    // ------------------- if no submit -----------------------
+    // ------------------- if no submit -----------------------f
     if (isset($_GET['id']) and isset($_GET['table_edit']))  {
             $id = $_GET['id'];
             $table_edit = select_table($_GET['table_edit']);                        
@@ -491,24 +491,37 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
 
     $expand_all = isset($_GET['d']) && $_GET['d'] == '1';
     if ($count_video[0] > 0 or $count_video_links[0] > 0) {
-        $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'><table class='table-default'>
-            <tr><th>$langVideoDirectory</th>
-            <th class='text-center'>$langDate</th>";
+        $tool_content .= " <div class='row'>
+                                <div class='col-sm-12'>
+                                    <div class='table-responsive'>
+                                        <table class='table-default nocategory-links'>
+                                            <tr class='list-header'>
+                                                <th>$langVideoDirectory</th>
+                                                <th class='text-center' style='width:100px'>$langDate</th>";
             
-            if ($is_editor) {
-                $tool_content .= "<th class='text-center'>" . icon('fa-gears');
-            }
-        $tool_content .= "</th></tr>";
+                            if ($is_editor) {
+                                $tool_content .= "<th class='text-center'>" . icon('fa-gears');
+                            }
+                                    $tool_content .= "</th>
+                                            </tr>";
         //display uncategorized links
         showlinksofcategory();
+        $tool_content .="</table></div></div></div>";
+        
+        $tool_content .= "  <div class='row'>
+                                <div class='col-sm-12'>
+                                    <div class='table-responsive'>
+                                        <table class='table-default category-links'>
+                                            ";
 
         if ($num_of_categories > 0) { // categories found ?
-            $tool_content .= "<tr><th colspan='2'>".($expand_all?
+            $tool_content .= "<tr class='list-header'><th>$langCatVideoDirectory&nbsp;&nbsp;&nbsp;".($expand_all?
                     icon('fa-folder-open', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
-                    icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1"))."&nbsp;$langCatVideoDirectory</th>";
+                    icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1"))."</th>
+                    <th class='text-center' style='width:100px;'>$langDate</th>";
                  if ($is_editor) {
-                    $tool_content .= "<td></td>";
-                    }
+                                $tool_content .= "<th class='text-center'>" . icon('fa-gears');
+                            }
             $resultcategories = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
             foreach ($resultcategories as $myrow) {
                 $description = standard_text_escape($myrow->description);
@@ -517,14 +530,14 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                 } else {
                     $folder_icon = icon('fa-folder-o', $showall);
                 }
-                $tool_content .= "<tr><th colspan='2'>$folder_icon ";
+                $tool_content .= "<tr class='link-subcategory-title'><th class='category-link' colspan='2'>$folder_icon ";
                 if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>".q($myrow->name)."</a>";
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='open-category'>".q($myrow->name)."</a>";
                 } else {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id'>".q($myrow->name)."</a>";
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id' class='open-category'>".q($myrow->name)."</a>";
                 }
                 if (!empty($description)) {
-                        $tool_content .= '<br>' . $description;
+                        $tool_content .= "<br><span class='link-description'>".$description."</span>";
                 }
                 $tool_content .= "</th>";
                 if ($is_editor) {
@@ -734,7 +747,7 @@ function showlinksofcategory($cat_id = 0) {
                         exit;
                 }
                 $row_class = !$myrow->visible ? "class='not_visible'" : "";
-                $tool_content .= "<tr $row_class><td>". $link_href;
+                $tool_content .= "<tr $row_class><td class='nocategory-link'>". $link_href;
                 if (!$is_in_tinymce and (!empty($myrow->creator) or !empty($myrow->publisher))) {
                     $tool_content .= '<br><small>';
                     if ($myrow->creator == $myrow->publisher) {
