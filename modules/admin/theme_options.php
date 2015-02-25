@@ -38,49 +38,42 @@ $defaults = array(
                 "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement")        
             );
-    
+
+$active_theme = get_config('theme_options_id');
+$preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
+$theme_id = isset($preview_theme) ? $preview_theme : $active_theme;
 if (isset($_GET['reset_theme_options'])) {
-    $theme_options_sets = Database::get()->queryArray("SELECT * FROM theme_options");
-    foreach ($theme_options_sets as $theme_options) {
-        $theme_options_styles = unserialize($theme_options->styles);
-        if (isset($theme_options_styles['custom_logo'])) {
-           $theme_options_styles['imageUpload'] = $theme_options_styles['custom_logo'];
-           unset($theme_options_styles['custom_logo']);           
-        }
-        if (isset($theme_options_styles['custom_logo_small'])) {
-           $theme_options_styles['imageUploadSmall'] = $theme_options_styles['custom_logo_small'];
-           unset($theme_options_styles['custom_logo_small']);              
-        }
-        unset($theme_options_styles['optionsSave']);
-        $serialized_data = serialize($theme_options_styles);
-        Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_options->id);
-    }
-    $theme_options_styles = unserialize($theme_options->styles);    
+    unset($_SESSION['theme_options_id']);
+    redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_GET['delete_image'])) {
-        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
         $logo_type = $_GET['delete_image'];
         unlink("$webDir/template/$theme/img/$theme_options_styles[$logo_type]");
         unset($theme_options_styles[$logo_type]);
         $serialized_data = serialize($theme_options_styles);
-        Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
+        Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
         redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_POST['optionsSave'])) {
     upload_images();
     clear_default_settings();
     $serialized_data = serialize($_POST);
-    Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, get_config('theme_options_id'));
+    Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_GET['delThemeId'])) {
-    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
+    $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
     $theme_options_styles = unserialize($theme_options->styles);
     @unlink("$webDir/template/$theme/img/$theme_options_styles[imageUpload]");
     @unlink("$webDir/template/$theme/img/$theme_options_styles[imageUploadSmall]");
     @unlink("$webDir/template/$theme/img/$theme_options_styles[bgImage]");
-    Database::get()->query("DELETE FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
-    Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", 0, 'theme_options_id');
+    Database::get()->query("DELETE FROM theme_options WHERE id = ?d", $theme_id);
+    if($_GET['delThemeId'] == $active_theme) {
+        Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", 0, 'theme_options_id');
+    } else {
+        unset($_SESSION['theme_options_id']);
+    }
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
@@ -89,10 +82,19 @@ if (isset($_POST['optionsSave'])) {
     upload_images(); //upload new images
     $serialized_data = serialize($_POST);
     $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options_name, $serialized_data)->lastInsertID;
-    Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $theme_options_id, 'theme_options_id');
+    $_SESSION['theme_options_id'] = $theme_options_id;
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['active_theme_options'])) {
-    Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $_POST['active_theme_options'], 'theme_options_id');
+    if (isset($_POST['preview'])){
+        if ($_POST['active_theme_options'] == $active_theme) {
+            unset($_SESSION['theme_options_id']);
+        } else {
+            $_SESSION['theme_options_id'] = $_POST['active_theme_options'];
+        }
+    } else {
+        Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", $_POST['active_theme_options'], 'theme_options_id');
+        unset($_SESSION['theme_options_id']);
+    }
     redirect_to_home_page('modules/admin/theme_options.php');     
 } else {
     $pageName = $langThemeSettings;
@@ -144,8 +146,34 @@ if (isset($_POST['optionsSave'])) {
             })
             $('select.form-submit').change(function ()
             {
-                $(this).closest('form').submit();
-            });        
+                var cur_val = $(this).val();
+                if (cur_val == '$active_theme') {
+                    $('a#theme_enable').addClass('hidden');
+                    $('a#theme_preview').addClass('hidden');
+                } else {
+                    $('a#theme_enable').removeClass('hidden');
+                    if (cur_val != '$preview_theme') {
+                        $('a#theme_preview').removeClass('hidden');
+                    }
+                }
+                if (cur_val == '$preview_theme') $('a#theme_preview').addClass('hidden');
+                if (cur_val == 0) {
+                    $('a#theme_delete').addClass('hidden');
+                } else {
+                    $('a#theme_delete').removeClass('hidden');
+                }                
+            });            
+            $('a.theme_enable').click(function (e)
+            {
+                e.preventDefault();
+                $('#theme_selection').submit();
+            });
+            $('a#theme_preview').click(function (e)
+            {
+                e.preventDefault();
+                $('#theme_selection').append('<input type=\"hidden\" name=\"preview\">');
+                $('#theme_selection').submit();
+            });
             $('.colorpicker').spectrum({
             preferredFormat: 'rgb',
                 showAlpha: true,
@@ -165,28 +193,26 @@ if (isset($_POST['optionsSave'])) {
     foreach ($all_themes as $row) {
         $themes_arr[$row->id] = $row->name;
     }
-    
-    if (get_config('theme_options_id')) {
-        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
+
+    if ($theme_id) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
     }
     initialize_settings();
-    
-    $delete_btn = (get_config('theme_options_id')) 
-            ? 
-            "<form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=".get_config('theme_options_id')."'>
-                <div class='form-group'>
-                    <div class='col-sm-9 col-sm-offset-3'>
-                        <a class='confirmAction btn btn-danger btn-xs' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
-                    </div>
-                </div>
-            </form>"
-            : "";
+    $activate_class = isset($preview_theme) ? '' : ' hidden';
+    $activate_btn = "<a href='#' class='theme_enable btn btn-success btn-xs$activate_class' id='theme_enable'>$langActivate</a>";
+    $preview_class = ' hidden';
+    $preview_btn = "<a href='#' class='btn btn-primary btn-xs$preview_class' id='theme_preview'>$langSee</a>";
+    $del_class = ($theme_id != 0) ? "" : " hidden";
+    $delete_btn = "
+                    <form class='form-inline' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
+                        <a class='confirmAction btn btn-danger btn-xs$del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
+                    </form>";
     if (isset($theme_options_styles['imageUpload'])) {
         $logo_field = "
             <img src='$themeimg/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
             <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
-        ";
+        ";    
     } else {
        $logo_field = "<input type='file' name='imageUpload' id='imageUpload'>"; 
     }
@@ -214,22 +240,52 @@ if (isset($_POST['optionsSave'])) {
     } else {
        $login_image_field = "<input type='file' name='loginImg' id='loginImg'>"; 
     }
+
+    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "$urlAppend/modules/admin/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
+    if (isset($preview_theme)) {
+        $tool_content .= "
+                <div class='alert alert-warning'>
+                    <div class='row'>
+                        <div class='col-sm-9'>
+                            $langPreviewState &nbsp;".$themes_arr[$preview_theme].".
+                        </div>
+                        <div class='col-sm-3'>
+                            <a href='#' class='theme_enable btn btn-success btn-xs'>$langActivate</a> &nbsp; <a href='theme_options.php?reset_theme_options=true' class='btn btn-default btn-xs'>$langLeave</a>
+                        </div>
+                    </div>
+                </div>    
+                ";
+    }    
     @$tool_content .= "
     <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+        <div class='row margin-bottom-fat'>
+            <div class='col-sm-3 text-right'>
+                <strong>$langActiveTheme:</strong>
+            </div>
+            <div class='col-sm-9'>
+            ".$themes_arr[$active_theme]."
+            </div>
+        </div>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' id='theme_selection'>
             <div class='form-group'>
-                <label for='bgColor' class='col-sm-3 control-label'>$langActiveThemeSettings:</label>
+                <label for='bgColor' class='col-sm-3 control-label'>$langAvailableThemes:</label>
                 <div class='col-sm-9'>
-                    ".  selection($themes_arr, 'active_theme_options', get_config('theme_options_id'), 'class="form-control form-submit"')."
+                    ".  selection($themes_arr, 'active_theme_options', $theme_id, 'class="form-control form-submit"')."
                 </div>
             </div>
         </form>
-        $delete_btn
+        <div class='form-group margin-bottom-fat'>
+            <div class='col-sm-9 col-sm-offset-3'>
+                $activate_btn
+                $preview_btn  
+                $delete_btn
+            </div>
+        </div>
     </div>
     <div class='form-wrapper'>
         <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
@@ -325,7 +381,7 @@ if (isset($_POST['optionsSave'])) {
                 </div> 
             </div>
             <div class='form-group'>
-                <label for='loginImg' class='col-sm-3 control-label'>Banner Open eClass Οθόνης Σύνδεσης:</label>
+                <label for='loginImg' class='col-sm-3 control-label'>$langLoginBanner:</label>
                 <div class='col-sm-9'>
                       <div class='checkbox'>
                         <label>
@@ -387,8 +443,8 @@ if (isset($_POST['optionsSave'])) {
             </div>                                  
             <div class='form-group'>
                 <div class='col-sm-9 col-sm-offset-3'>
-                    ".(get_config('theme_options_id') ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
-                    <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='Αποθήκευση ως ...'>    
+                    ".($active_theme ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
+                    <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>    
                 </div>
             </div>        
         </form>

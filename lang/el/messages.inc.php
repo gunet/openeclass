@@ -4375,7 +4375,9 @@ $langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμο�
   Theme Options
  * ***************************************** */
 $langThemeSettings = 'Ρυθμίσεις Θέματος';
-$langActiveThemeSettings = 'Ενεργές Ρυθμίσεις Θέματος';
+$langActiveTheme = 'Ενεργό Θέμα';
+$langPreviewState = 'Βρίσκετε σε κατάσταση προεπισκόπησης του θέματος';
+$langAvailableThemes = 'Διαθέσιμα Θέματα';
 $langDefaultThemeSettings = 'Open eClass Default';
 $langThemeSettingsDelete = 'Είστε σίγουρος ότι θέλετε να διαγράψετε την συγκεκριμένη ομάδα ρυθμίσεων θέματος?';
 $langThemeSettingsName = "Όνομα Ρυθμίσεων Θέματος";
@@ -4401,7 +4403,8 @@ $langNavSettings = 'Ρυθμίσεις Μενού Πλοήγησης';
 $langSaveAs = 'Αποθήκευση ως ...';
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
-$langLoginImgPlacementSmall = "Μικρή (δεξιά στοίχιση)";
+$langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";
+$langLoginImgPlacementSmall = "Μικρή (αριστερή στοίχιση)";
 $langLoginImgPlacementFull = "Πλήρους Πλάτους (πλάτος: 1091px, ύψος: 315px)";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 

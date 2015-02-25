@@ -448,8 +448,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     // Add Theme Options styles
     $t->set_var('logo_img', 'eclass-new-logo.png');
     $t->set_var('logo_img_small', 'logo_eclass_small.png');
-    if (get_config('theme_options_id')) {
-        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", get_config('theme_options_id'));
+    $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
+    if ($theme_id) {
+        $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
