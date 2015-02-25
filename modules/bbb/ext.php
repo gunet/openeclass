@@ -37,7 +37,15 @@ $mod_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_
 $title = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->title;
 $att_pw = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->att_pw;
 $record = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->record;
+$start_date = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->start_date;
+$active = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->active;
+$unlock_interval = Database::get()->querySingle("SELECT * FROM bbb_session WHERE meeting_id=?s",$_GET['meeting_id'])->unlock_interval;
 
+if ($active<>'1' || date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))> $unlock_interval || get_total_bbb_servers()=='0' )
+{
+    echo $langBBBNoteEnableJoin;
+    exit;
+}
 if(bbb_session_running($_GET['meeting_id']) == false)
 {
     //echo $title;
