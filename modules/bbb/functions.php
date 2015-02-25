@@ -307,7 +307,8 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             $recipients = explode(',', $external_users);
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
             foreach ($recipients as $row) {
-                $bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
+                //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=".$q->meeting_id."&username=".$row;
                 $emailsubject = $langBBBScheduledSession;
                 $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
                 $emailcontent = $emailbody;
@@ -417,7 +418,8 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             $recipients = explode(',', $external_users);
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $_GET['id']);                        
             foreach ($recipients as $row) {
-                $bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');                              
+                //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');                              
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=".$q->meeting_id."&username=".$row;
                 $emailsubject = $langBBBScheduledSession;
                 $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
                 $emailcontent = $emailbody;
