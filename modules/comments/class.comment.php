@@ -109,7 +109,8 @@ Class Comment {
                       'message' => $r->message,
                       'rtype' => 'comment',
                       'rid' => $this->id,
-                      'rcontent' => $this->getContent()
+                      'rcontent' => $this->getContent(),
+                      'status' => $r->status
                      ));
         } 
         $sql = 'DELETE FROM `abuse_report` WHERE `rid` = ?d AND `rtype` = ?s';

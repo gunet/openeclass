@@ -192,7 +192,8 @@ Class Commenting {
                           'message' => $r->message,
                           'rtype' => 'comment',
                           'rid' => $c->id,
-                          'rcontent' => $c->comment
+                          'rcontent' => $c->comment,
+                          'status' => $r->status
                     ));
             }
             Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $c->id, 'comment');

@@ -53,7 +53,8 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                           'message' => $message,
                           'rtype' => $rtype,
                           'rid' => $rid,
-                          'rcontent' => $rcontent
+                          'rcontent' => $rcontent,
+                          'status' => 0
                     ));
             
             Database::get()->query("UPDATE abuse_report SET status = ?d WHERE id = ?d", 0, $id);

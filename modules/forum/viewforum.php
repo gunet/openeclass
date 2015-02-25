@@ -148,7 +148,8 @@ if (($is_editor) and isset($_GET['topicdel'])) {
                      'message' => $res->message,
                      'rtype' => 'forum_post',
                      'rid' => $r->id,
-                     'rcontent' => $r->post_text
+                     'rcontent' => $r->post_text,
+                     'status' => $res->status
             ));
         }
         Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $r->id, 'forum_post');

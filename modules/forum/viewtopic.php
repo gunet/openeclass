@@ -104,7 +104,8 @@ if (isset($_GET['delete']) && isset($post_id) && $is_editor) {
                   'message' => $r->message,
                   'rtype' => 'forum_post',
                   'rid' => $post_id,
-                  'rcontent' => $myrow->post_text
+                  'rcontent' => $myrow->post_text,
+                  'status' => $r->status
         ));
     }
     Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $post_id, 'forum_post');   
