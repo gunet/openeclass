@@ -862,7 +862,7 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
         $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
     }else
     {
-        $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY weight ASC",$record);
+        $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY weight ASC");
     }
 
     if ($query) {
