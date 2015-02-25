@@ -24,6 +24,8 @@ $require_course_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 
+$pageName = $langAbuseReports;
+
 if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
     if (isset($_GET['report'])) {
         $id = intval($_GET['report']);
