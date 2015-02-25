@@ -2777,7 +2777,7 @@ function action_bar($options, $page_title_flag = true) {
                 "<i class='fa $option[icon]'></i></a>$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$button_class$confirm_modal_class'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class'" . $href .
                 " $link_attrs>" .
                 "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
         }
