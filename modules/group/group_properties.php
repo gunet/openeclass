@@ -60,8 +60,8 @@ $tool_content .= "
     <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
             <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
-                <div class='col-xs-10'>             
+            <label class='col-sm-3 control-label'>$langGroupStudentRegistrationType:</label>
+                <div class='col-xs-9'>             
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='self_reg' value='1'$checked[self_reg]>
@@ -75,21 +75,10 @@ $tool_content .= "
                       </label>
                     </div>                    
                 </div>
-            </div>
+            </div>        
             <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langGroupForum:</label>
-                <div class='col-xs-10'>             
-                    <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='has_forum' value='1'$checked[has_forum]>
-                        $langGroupAllowMultipleRegistration
-                      </label>
-                    </div>                    
-                </div>
-            </div>           
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langPrivate_1:</label>
-                <div class='col-sm-10'>            
+                <label class='col-sm-3 control-label'>$langPrivate_1:</label>
+                <div class='col-sm-9'>            
                     <div class='radio'>
                       <label>
                         <input type='radio' name='private_forum' value='1' checked=''$checked[private_forum_yes]>
@@ -105,8 +94,18 @@ $tool_content .= "
                 </div>
             </div>
             <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langDoc:</label>
-                <div class='col-xs-10'>             
+            <label class='col-sm-3 control-label'>$langGroupForum:</label>
+                <div class='col-xs-9'>             
+                    <div class='checkbox'>
+                      <label>
+                        <input type='checkbox' name='has_forum' value='1'$checked[has_forum]>
+                      </label>
+                    </div>                    
+                </div>
+            </div>   
+            <div class='form-group'>
+            <label class='col-sm-3 control-label'>$langDoc:</label>
+                <div class='col-xs-9'>             
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='documents' value='1'$checked[documents]>
@@ -115,8 +114,8 @@ $tool_content .= "
                 </div>
             </div>  
             <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langWiki:</label>
-                <div class='col-xs-10'>             
+            <label class='col-sm-3 control-label'>$langWiki:</label>
+                <div class='col-xs-9'>             
                     <div class='checkbox'>
                       <label>
                         <input type='checkbox' name='wiki' value='1'$checked[wiki]>
@@ -125,7 +124,7 @@ $tool_content .= "
                 </div>
             </div>
             <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2'>
+            <div class='col-sm-9 col-sm-offset-3'>
                 <input type='submit' class='btn btn-primary' name='properties' value='$langModify'>
                 <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
             </div>
