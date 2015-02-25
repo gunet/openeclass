@@ -340,7 +340,7 @@ if ($is_editor) {
     $num_of_groups = count($groupSelect);
     // groups list
     if ($num_of_groups > 0) {
-        $tool_content .= "<br />
+        $tool_content .= "
                 <div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
