@@ -117,7 +117,7 @@ if ($total_categories > 0) {
         }
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "
-		<caption><b>$cat_title</b><div class='pull-right'>";
+		<tr class='list-header'><td colspan='8'><b>$cat_title</b><div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
@@ -144,12 +144,12 @@ if ($total_categories > 0) {
             'level' => 'primary',
             'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
         );
-        $tool_content .= action_button($dyntools)."</div></caption>";
+        $tool_content .= action_button($dyntools)."</div></td></tr>";
 
         $tool_content .= "<tr>
 		<td class='forum_td'>$langForums</td>
-		<td class='text-center forum_td'>$langSubjects</td>
-		<td class='text-center forum_td'>$langPosts</td>
+		<td class='text-center forum_td' width='100'>$langSubjects</td>
+		<td class='text-center forum_td' width='100'>$langPosts</td>
 		<td class='text-center forum_td'>$langLastPost</td>
 		<th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
 		</tr>";
