@@ -37,22 +37,23 @@ $shouldUpdate = isset($_GET['update']);
 $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null);
 
 if ($appName) {
+    $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
     $app = ExtAppManager::getApp($appName);
+    $pageName = $langModify . ' ' . $app->getDisplayName();
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "extapp.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
-    $tool_content .= "<h4>" . $langModify . " " . $app->getDisplayName() . "</h4>\n";
+              'url' => 'extapp.php',
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')));
 
     if ($shouldUpdate) {
         $result = $app->storeParams();
         if ($result) {
-            $tool_content .= "<div class='alert alert-danger'>$result</div>";
-            $shouldEdit = true;
+            Session::Messages($result, 'alert-danger');
         } else {
-            $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
+            Session::Messages($langFileUpdatedSuccess, 'alert-success');
         }
+        redirect_to_home_page('modules/admin/extapp.php?edit=' . $appName);
     }
     if ($shouldEdit) {
         $tool_content .= "\n<div class='form-wrapper'>\n";
@@ -80,6 +81,5 @@ if ($appName) {
         <input class='btn btn-info' type='submit' value='BigBlueButton'>
     </form><p>\n";
 }
-
 
 draw($tool_content, 3, null, $head_content);
