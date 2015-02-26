@@ -865,61 +865,59 @@ function shib_cas_login($type) {
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }
-    $r = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
+    $info = Database::get()->querySingle("SELECT id, surname, username, password, givenname, status, email, lang, verified_mail
 						FROM user WHERE username $sqlLogin", $uname);
 
-    if ($r) {
+    if ($info) {
         // if user found
-        foreach ($r as $info) {        
-            if ($info->password != $type) {
-                // has different auth method - redirect to home page
-                unset($_SESSION['shib_uname']);
-                unset($_SESSION['shib_email']);
-                unset($_SESSION['shib_surname']);
-                unset($_SESSION['cas_uname']);
-                unset($_SESSION['cas_email']);
-                unset($_SESSION['cas_surname']);
-                unset($_SESSION['cas_givenname']);
-                Session::Messages($langUserAltAuth, 'alert-danger');
-                redirect_to_home_page();
-            } else {
-                // don't force email address from CAS/Shibboleth.
-                // user might prefer a different one
-                if (!empty($info->email)) {
-                    $email = $info->email;
-                }
-                if (!empty($info->status)) {
-                    $status = $info->status;
-                }
-                // update user information                
-                Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s
+        if ($info->password != $type) {
+            // has different auth method - redirect to home page
+            unset($_SESSION['shib_uname']);
+            unset($_SESSION['shib_email']);
+            unset($_SESSION['shib_surname']);
+            unset($_SESSION['cas_uname']);
+            unset($_SESSION['cas_email']);
+            unset($_SESSION['cas_surname']);
+            unset($_SESSION['cas_givenname']);
+            Session::Messages($langUserAltAuth, 'alert-danger');
+            redirect_to_home_page();
+        } else {
+            // don't force email address from CAS/Shibboleth.
+            // user might prefer a different one
+            if (!empty($info->email)) {
+                $email = $info->email;
+            }
+            if (!empty($info->status)) {
+                $status = $info->status;
+            }
+            // update user information                
+            Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s
                                         WHERE id = ?d", $surname, $givenname, $email, $info->id);
-                // check for admin privileges
-                $admin_rights = get_admin_rights($info->id);
-                if ($admin_rights == ADMIN_USER) {
-                    $is_active = 1;   // admin user is always active
-                    $_SESSION['is_admin'] = 1;
-                    $is_admin = 1;
-                } elseif ($admin_rights == POWER_USER) {
-                    $_SESSION['is_power_user'] = 1;
-                    $is_power_user = 1;
-                } elseif ($admin_rights == USERMANAGE_USER) {
-                    $_SESSION['is_usermanage_user'] = 1;
-                    $is_usermanage_user = 1;
-                } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
-                    $_SESSION['is_departmentmanage_user'] = 1;
-                    $is_departmentmanage_user = 1;
-                }
-                $_SESSION['uid'] = $info->id;                
-                if (isset($_SESSION['langswitch'])) {
-                    $language = $_SESSION['langswitch'];
-                } else {
-                    $language = $info->lang;
-                }
+            // check for admin privileges
+            $admin_rights = get_admin_rights($info->id);
+            if ($admin_rights == ADMIN_USER) {
+                $is_active = 1;   // admin user is always active
+                $_SESSION['is_admin'] = 1;
+                $is_admin = 1;
+            } elseif ($admin_rights == POWER_USER) {
+                $_SESSION['is_power_user'] = 1;
+                $is_power_user = 1;
+            } elseif ($admin_rights == USERMANAGE_USER) {
+                $_SESSION['is_usermanage_user'] = 1;
+                $is_usermanage_user = 1;
+            } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
+                $_SESSION['is_departmentmanage_user'] = 1;
+                $is_departmentmanage_user = 1;
+            }
+            $_SESSION['uid'] = $info->id;                
+            if (isset($_SESSION['langswitch'])) {
+                $language = $_SESSION['langswitch'];
+            } else {
+                $language = $info->lang;
             }
         }
     } elseif ($autoregister and !get_config('am_required')) {
-        // else create him automatically
+        // if user not found and autoregister enabled, create user
         if (get_config('email_verification_required')) {
             $verified_mail = 0;
             $_SESSION['mail_verification_required'] = 1;
@@ -927,11 +925,13 @@ function shib_cas_login($type) {
             $verified_mail = 2;
         }
 
-        $_SESSION['uid'] = Database::get()->query("INSERT INTO user SET surname = ?, givenname = ?, password = ?, 
-                                       username = ?s, email = ?s, status = ?d, lang = 'el', 
-                                       registered_at = " . DBHelper::timeAfter() . ",  expires_at = " .
-                DBHelper::timeAfter(get_config('account_duration')) . ", whitelist = ''", $surname, $givenname, $type, $uname, $email, USER_STUDENT)->lastInsertID;
-        $language = $_SESSION['langswitch'] = 'el';
+        $_SESSION['uid'] = Database::get()->query("INSERT INTO user
+                    SET surname = ?s, givenname = ?s, password = ?s,
+                        username = ?s, email = ?s, status = ?d, lang = ?s, 
+                        registered_at = " . DBHelper::timeAfter() . ",
+                        expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
+                        whitelist = ''",
+                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language)->lastInsertID;
     } else {
         // user not registered, automatic registration disabled
         // redirect to registration screen
