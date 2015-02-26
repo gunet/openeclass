@@ -19,19 +19,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-$require_login = TRUE;
-if(isset($_GET['course'])) {//course messages
-    $require_current_course = TRUE;
-} else {//personal messages
-    $require_current_course = FALSE;
+$require_login = true;
+if (isset($_GET['course'])) { //course messages
+    $require_current_course = true;
+} else { //personal messages
+    $require_current_course = false;
 }
-$guest_allowed = FALSE;
-$require_help = TRUE;
+$guest_allowed = false;
+$require_help = true;
 $helpTopic = 'Dropbox';
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+
+if ($is_admin and $require_current_course) {
+    $require_course_admin = true; // hide role switcher
+}
 
 $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
 
