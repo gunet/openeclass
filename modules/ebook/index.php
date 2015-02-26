@@ -126,7 +126,7 @@ if (!$q) {
 } else {
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'>
-     <tr>
+     <tr class='list-header'>
        <th class = 'text-left'>$langEBook</th>" .
             ($is_editor ?
                     "<th width='70' class='text-center'>".icon('fa-gears')."</th>" :

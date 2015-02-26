@@ -387,7 +387,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
     if (count($sql) > 0) {
         $tool_content .= "<div class='table-responsive glossary-categories'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr>
+        $tool_content .= "<tr class='list-header'>
                      <th class='text-left'>$langGlossaryTerm</th>
                      <th class='text-left'>$langGlossaryDefinition</th>";
         if ($is_editor) {
