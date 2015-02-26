@@ -117,7 +117,7 @@ if ($total_categories > 0) {
         }
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "
-		<tr class='list-header'><td colspan='8'><b>$cat_title</b><div class='pull-right'>";
+		<tr class='list-header'><td colspan='8'><b>$langCategory : $cat_title</b><div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
