@@ -52,6 +52,7 @@ if (isset($_SESSION['givenname'])) {
 }
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+$display_tools = $is_editor && !$is_in_tinymce;
 $menuTypeID = ($is_in_tinymce) ? 5: 2;
 list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter']))
         ? select_proper_filters($_REQUEST['docsfilter'])
@@ -59,12 +60,12 @@ list($filterv, $filterl, $compatiblePlugin) = (isset($_REQUEST['docsfilter']))
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
-    
+
     load_js('jquery-' . JQUERY_VERSION . '.min');
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
-if($is_editor) {
+if($display_tools) {
         load_js('tools.js');
         ModalBoxHelper::loadModalBox(true);
         $head_content .= <<<hContent
@@ -94,7 +95,7 @@ function checkrequired(which, entry) {
 hContent;
 
     if (!$is_in_tinymce and (!isset($_GET['showQuota']))) {
-        if (!isset($_GET['form_input']) and (!isset($_GET['action'])) and (!isset($_GET['table_edit']))) {            
+        if (!isset($_GET['form_input']) and (!isset($_GET['action'])) and (!isset($_GET['table_edit']))) {
             $tool_content .= action_bar(array(
                 array('title' => $langAddV,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file",
@@ -121,7 +122,7 @@ hContent;
             }
             if (isset($_GET['id']) and isset($_GET['table_edit']))  {
                 $pageName = $langModify;
-            }            
+            }
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -129,7 +130,7 @@ hContent;
                       'level' => 'primary-label')));
         }
     }
-        
+
     $diskQuotaVideo = Database::get()->querySingle("SELECT video_quota FROM course WHERE code=?s", $course_code)->video_quota;
     $updir = "$webDir/video/$course_code"; //path to upload directory
     $diskUsed = dir_total_space($updir);
@@ -161,7 +162,7 @@ hContent;
      * display form for add / edit category
      */
     if (isset($_GET['action'])) {
-        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);        
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
         $tool_content .=  "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
         if ($_GET['action'] == 'editcategory') {
@@ -218,7 +219,7 @@ hContent;
                                 category = ?d
                              WHERE id = ?d",
                             $_POST['title'], $_POST['description'], $_POST['creator'], $_POST['publisher'], $_POST['selectcategory'], $id);
-            } elseif ($table == 'videolink') {                
+            } elseif ($table == 'videolink') {
                 Database::get()->query("UPDATE videolink
                         SET url = ?s,
                             title = ?s,
@@ -246,7 +247,7 @@ hContent;
     }
     if (isset($_POST['add_submit'])) {  // add
             if(isset($_POST['URL'])) { // add videolink
-                    $url = $_POST['URL'];                    
+                    $url = $_POST['URL'];
                     if ($_POST['title'] == '') {
                         $title = $url;
                     } else {
@@ -262,7 +263,7 @@ hContent;
                                                                                 'url' => canonicalize_url($url),
                                                                                 'title' => $title,
                                                                                 'description' => $txt_description));
-                    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div>";                
+                    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div>";
             } else {  // add video
                     if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 
@@ -333,9 +334,9 @@ hContent;
                     delete_video($_GET['id'], $table);
                 }
                 $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
-        } elseif (isset($_GET['form_input'])) { // display video form                              
+        } elseif (isset($_GET['form_input'])) { // display video form
                 $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-                
+
                 $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
                 if ($_GET['form_input'] == 'file') {
                     $tool_content .= "<form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">";
@@ -345,7 +346,7 @@ hContent;
                 $tool_content .= "<fieldset>";
                 if ($_GET['form_input'] == 'file') {
                         $tool_content .= "<div class='form-group'>
-                            <label for='FileName' class='col-sm-2 control-label'>$langWorkFile:</label>                
+                            <label for='FileName' class='col-sm-2 control-label'>$langWorkFile:</label>
                             <input type='hidden' name='id' value=''>
                             <div class='col-sm-10'><input type='file' name='userFile'></div>
                         </div>";
@@ -390,14 +391,14 @@ hContent;
                     </div>
                 </div>";
                 if ($_GET['form_input'] == 'file') {
-                    $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>                
+                    $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                         <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langUpload) . "'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div></div>";
                 } else {
                     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                         <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langAdd) . "'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div></div>";
                 }
                 $tool_content .= "</fieldset>";
@@ -411,9 +412,9 @@ hContent;
     // ------------------- if no submit -----------------------f
     if (isset($_GET['id']) and isset($_GET['table_edit']))  {
             $id = $_GET['id'];
-            $table_edit = select_table($_GET['table_edit']);                        
+            $table_edit = select_table($_GET['table_edit']);
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-            
+
             $myrow = Database::get()->querySingle("SELECT * FROM $table_edit WHERE course_id = ?d AND id = ?d ORDER BY title", $course_id, $id);
 
             $id = $myrow->id;
@@ -423,7 +424,7 @@ hContent;
             $creator = $myrow->creator;
             $publisher = $myrow->publisher;
             $category = $myrow->category;
-            
+
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">
                 <fieldset>";
@@ -432,11 +433,11 @@ hContent;
                     <label for='Url' class='col-sm-2 control-label'>$langURL:</label>
                         <input type='hidden' name='id' value=''>
                         <div class='col-sm-10'><input type='text' name='url' value = '" . q($url) . "'></div>
-                    </div>";                      
+                    </div>";
             } elseif ($table_edit == 'video') {
                     $tool_content .= "<input type='hidden' name='url' value='" . q($url) . "'>";
-            }            
-            $tool_content .= "<div class='form-group'>                
+            }
+            $tool_content .= "<div class='form-group'>
                   <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
                   <div class='col-sm-10'><input class='form-control' type='text' name='title' value= '" . q($title) . "'></div>
                 </div>
@@ -472,7 +473,7 @@ hContent;
                         <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langModify) . "'>
                         <input type='hidden' name='id' value='$id'>
                         <input type='hidden' name='table' value='$table_edit'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div>
                 </div>
                 </fieldset>
@@ -498,30 +499,31 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                                             <tr class='list-header'>
                                                 <th>$langVideoDirectory</th>
                                                 <th class='text-center' style='width:100px'>$langDate</th>";
-            
-                            if ($is_editor) {
-                                $tool_content .= "<th class='text-center'>" . icon('fa-gears');
-                            }
-                                    $tool_content .= "</th>
-                                            </tr>";
+
+        if ($display_tools) {
+            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . '</th>';
+        }
+        $tool_content .= "</tr>";
+
         //display uncategorized links
         showlinksofcategory();
         $tool_content .="</table></div></div></div>";
-        
-        $tool_content .= "  <div class='row'>
-                                <div class='col-sm-12'>
-                                    <div class='table-responsive'>
-                                        <table class='table-default category-links'>
-                                            ";
+
+        $tool_content .= "<div class='row'>
+                              <div class='col-sm-12'>
+                                  <div class='table-responsive'>
+                                      <table class='table-default category-links'>";
 
         if ($num_of_categories > 0) { // categories found ?
             $tool_content .= "<tr class='list-header'><th>$langCatVideoDirectory&nbsp;&nbsp;&nbsp;".($expand_all?
                     icon('fa-folder-open', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
                     icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1"))."</th>
                     <th class='text-center' style='width:100px;'>$langDate</th>";
-                 if ($is_editor) {
-                                $tool_content .= "<th class='text-center'>" . icon('fa-gears');
-                            }
+            if ($display_tools) {
+                $tool_content .= "<th class='text-center'>" . icon('fa-gears') . '</th>';
+            }
+            $tool_content .= '</tr>';
+
             $resultcategories = Database::get()->queryArray("SELECT * FROM `video_category` WHERE course_id = ?d ORDER BY name", $course_id);
             foreach ($resultcategories as $myrow) {
                 $description = standard_text_escape($myrow->description);
@@ -530,17 +532,23 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                 } else {
                     $folder_icon = icon('fa-folder-o', $showall);
                 }
-                $tool_content .= "<tr class='link-subcategory-title'><th class='category-link' colspan='2'>$folder_icon ";
-                if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='open-category'>".q($myrow->name)."</a>";
+                $colspan = $display_tools? " colspan='2'": '';
+                $tool_content .= "<tr class='link-subcategory-title'><th class='category-link'$colspan>$folder_icon ";
+                if (isset($_REQUEST['embedtype'])) {
+                    $embedParam = '&amp;embedtype=' . q($_REQUEST['embedtype']);
                 } else {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id' class='open-category'>".q($myrow->name)."</a>";
+                    $embedParam = '';
+                }
+                if (isset($_GET['cat_id']) and $_GET['cat_id'] == $myrow->id) {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code$embedParam' class='open-category'>".q($myrow->name)."</a>";
+                } else {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cat_id=$myrow->id$embedParam' class='open-category'>".q($myrow->name)."</a>";
                 }
                 if (!empty($description)) {
                         $tool_content .= "<br><span class='link-description'>".$description."</span>";
                 }
                 $tool_content .= "</th>";
-                if ($is_editor) {
+                if ($display_tools) {
                     $tool_content .= "<td class='option-btn-cell'>";
                     $tool_content .= action_button(array(
                         array('title' => $langDelete,
@@ -551,7 +559,7 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                         array('title' => $langModify,
                               'icon' => 'fa-edit',
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")));
-                
+
                     $tool_content .= '</td>';
                 }
                 $tool_content .= '</tr>';
@@ -707,7 +715,7 @@ function delete_video_category($id)
 function showlinksofcategory($cat_id = 0) {
 
     global $course_id, $is_in_tinymce, $themeimg, $tool_content, $is_editor, $course_code;
-    global $langDelete, $langVisible, $langConfirmDelete;
+    global $langDelete, $langVisible, $langConfirmDelete, $display_tools;
     global $langPreview, $langSave, $langResourceAccess, $langResourceAccess, $langModify;
     global $filterv, $filterl, $compatiblePlugin, $langcreator, $langpublisher;
 
@@ -726,7 +734,7 @@ function showlinksofcategory($cat_id = 0) {
 
     $i = 0;
     foreach($results as $table => $result) {
-        foreach ($result as $myrow) {  
+        foreach ($result as $myrow) {
             $myrow->course_id = $course_id;
             if (resource_access($myrow->visible, $myrow->public) || $is_editor) {
                 switch($table) {
@@ -766,7 +774,7 @@ function showlinksofcategory($cat_id = 0) {
                             <td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) .
                     "</td>";
                 }
-                if ($is_editor) {
+                if ($display_tools) {
                    $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
                         array('title' => $langDelete,
@@ -790,7 +798,7 @@ function showlinksofcategory($cat_id = 0) {
                                        ($myrow->public? 'limited=1': 'public=1'),
                               'icon' => $myrow->public? 'fa-unlock': 'fa-lock',
                               'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN))) .
-                    "</td>"; 
+                    "</td>";
                 }
                 $tool_content .= "</tr>";
             } // end of check resource access
