@@ -115,9 +115,9 @@ if ($total_categories > 0) {
         } else {
             $link_notify = toggle_link($action_notify);
         }
-        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<div class='table-responsive' style='margin-bottom:30px;'><table class='table-default'>";
         $tool_content .= "
-		<tr class='list-header'><td colspan='8'><b>$langCategory : $cat_title</b><div class='pull-right'>";
+		<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
@@ -144,9 +144,9 @@ if ($total_categories > 0) {
             'level' => 'primary',
             'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
         );
-        $tool_content .= action_button($dyntools)."</div></td></tr>";
+        $tool_content .= action_button($dyntools)."</div></caption>";
 
-        $tool_content .= "<tr>
+        $tool_content .= "<tr class='list-header'>
 		<td class='forum_td'>$langForums</td>
 		<td class='text-center forum_td' width='100'>$langSubjects</td>
 		<td class='text-center forum_td' width='100'>$langPosts</td>
@@ -258,12 +258,12 @@ if ($total_categories > 0) {
                 }
             } else {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td colspan='6' class='alert2'>$langNoForumsCat</td>";
+                $tool_content .= "<td colspan='6' class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>";
                 $tool_content .= "</tr>";
                 break;
             }
         }
-        $tool_content .= "</table>";
+        $tool_content .= "</table></div>";
     }
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langNoForums</div>";
