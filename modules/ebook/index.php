@@ -91,8 +91,7 @@ if ($is_editor) {
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2 '>
-                        <input type='submit' class='btn btn-primary' name='submit' value='$langSend' />
-                        <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>      
+                        <input type='submit' class='btn btn-primary' name='submit' value='$langSend' />     
                     </div>
                 </div>                         
             </form>
@@ -123,7 +122,7 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
 
 if (!$q) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
-} else {
+} else if(!isset($_GET['create'])){
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'>
      <tr class='list-header'>
