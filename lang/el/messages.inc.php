@@ -4404,6 +4404,9 @@ $langDeleteReportedResource = 'Διαγραφή αναφερόμενου περ�
 $langConfirmAbuseReportClose = 'Είστε σίγουροι ότι θέλετε να χαρακτηρίσετε αυτή την αναφορά ως επιλυμένη;';
 $langConfirmDeleteReportedResource = 'Είστε σίγουροι ότι θέλετε να διαγράψετε το αναφερόμενο περιεχόμενο;';
 $langCloseReportSuccess = 'Η αναφορά χαρακτηρίστηκε ως επιλυμένη.';
+$langAbuseReportStatus = 'Κατάσταση αναφοράς';
+$langAbuseReportOpen = 'Ανοιχτή αναφορά';
+$langAbuseReportClosed = 'Κλειστή αναφορά';
  
 /* * ******************************************
   Theme Options

@@ -95,7 +95,8 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
                           'message' => $msg,
                           'rtype' => $rtype,
                           'rid' => $rid,
-                          'rcontent' => $rcontent
+                          'rcontent' => $rcontent,
+                          'status' => 1
                     ));
         
         //send PM to course editors

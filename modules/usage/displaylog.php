@@ -167,8 +167,12 @@ if ($u_module_id == MODULE_ID_USERS) {
 if ($u_module_id == MODULE_ID_TOOLADMIN) {
     $extra = 'selected';
 }
+if ($u_module_id == MODULE_ID_ABUSE_REPORT) {
+    $extra = 'selected';
+}
 $tool_content .= "<option value = " . MODULE_ID_USERS . " $extra>$langAdminUsers</option>";
 $tool_content .= "<option value = " . MODULE_ID_TOOLADMIN . " $extra>$langExternalLinks</option>";
+$tool_content .= "<option value = " . MODULE_ID_ABUSE_REPORT . " $extra>$langAbuseReport</option>";
 $tool_content .= "</select></div></div>";
 $tool_content .= '<div class="form-group">
         <label class="col-sm-2 control-label">' . $langLogTypes . ':</label>        
