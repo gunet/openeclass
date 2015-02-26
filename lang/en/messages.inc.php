@@ -1432,6 +1432,7 @@ $langGoToPage = "Go to page";
 $langClick = "Click here";
 $langSubjectNotify = "New forum message notification";
 $langNewForumNotify = "New forum topic notification";
+$langNoForumTopic = "There are no forum topics";
 $langCatNotify = "New forum notification";
 $langInForum = "in topic";
 $langInForums = "in forum";

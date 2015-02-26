@@ -1875,6 +1875,13 @@ div.glossary-categories{
         padding-left: 25px;
     }
 }
+a.action-btn-link{
+    color: #23527c;
+}
+a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited{
+    text-decoration: none;
+    cursor: pointer;
+}
 div.group-space{
     .row{
         padding-top: 5px;

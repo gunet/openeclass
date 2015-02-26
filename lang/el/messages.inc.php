@@ -2520,6 +2520,7 @@ $langLockTopic = "Κλείδωμα θέματος";
 $langUnlockTopic = "Ξεκλείδωμα θέματος";
 $langLockedTopic = "To θέμα κλειδώθηκε επιτυχώς";
 $langUnlockedTopic = "To θέμα ξεκλειδώθηκε επιτυχώς";
+$langNoForumTopic = "Δεν υπάρχουν περιοχές συζητήσεων";
 
 /* * ***************************************************************
  * questionnaire.php

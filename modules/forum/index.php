@@ -155,6 +155,7 @@ if ($total_categories > 0) {
 		</tr>";
 
         // display forum topics
+        if($forum_row) {
         foreach ($forum_row as $forum_data) {
             unset($last_post);
             $cat_id = $cat_row->id;
@@ -262,6 +263,9 @@ if ($total_categories > 0) {
                 $tool_content .= "</tr>";
                 break;
             }
+        }
+        } else {
+            $tool_content .= "<tr><td colspan='8' class='text-center'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
         }
         $tool_content .= "</table></div>";
     }

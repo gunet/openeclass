@@ -128,7 +128,7 @@ if (!$q) {
      <tr class='list-header'>
        <th class = 'text-left'>$langEBook</th>" .
             ($is_editor ?
-                    "<th width='70' class='text-center'>".icon('fa-gears')."</th>" :
+                    "<th class='text-center option-btn-cell'>".icon('fa-gears')."</th>" :
                     '<th>&nbsp;</th>') . "
      </tr>";
 
@@ -144,7 +144,7 @@ if (!$q) {
         $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
         $tool_content .= "<tr class = '$vis_class'>
                 <td>$title_link</td>
-                 <td>".
+                 <td class='option-btn-cell'>".
                    tools($r->id, $k, $num, $r->visible) . 
                 "</td></tr>";
         $k++;
