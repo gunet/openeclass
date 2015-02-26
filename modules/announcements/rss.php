@@ -79,7 +79,7 @@ Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %
 		FROM announcement WHERE course_id = ?d AND visible = 1 ORDER BY `order` DESC", function($r) use ($code, $urlServer) {
     echo "<item>";
     echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
-    echo "<link>{$urlServer}modules/announcements/announcements.php?an_id=" . $r->id . "&amp;c=" . urlencode($code) . "</link>";
+    echo "<link>{$urlServer}modules/announcements/index.php?an_id=" . $r->id . "&amp;c=" . urlencode($code) . "</link>";
     echo "<description>" . htmlspecialchars($r->content, ENT_NOQUOTES) . "</description>";
     echo "<pubDate>" . $r->dateformat . "</pubDate>";
     echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
