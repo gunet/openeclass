@@ -245,7 +245,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langOk, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj;
+    $langNone, $langOldValue, $treeObj, $langBack, $course_code;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
@@ -269,7 +269,12 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     if (isset($GLOBALS['course_code'])) {
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
-    return "
+    $action_btn = action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+    return $action_btn."
         <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>  
                 <div class='row'>
                 <div class='col-md-12'>
