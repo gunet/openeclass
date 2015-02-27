@@ -41,7 +41,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $basedir = $webDir . '/courses/' . $course_code . '/group/' . $secret_directory;
     $can_upload = $can_upload || $is_member;
     $pageName = $langGroupDocumentsLink;
-    $navigation[] = array('url' => $urlAppend . 'modules/group/group.php?course=' . $course_code, 'name' => $langGroups);
+    $navigation[] = array('url' => $urlAppend . 'modules/group/index.php?course=' . $course_code, 'name' => $langGroups);
     $navigation[] = array('url' => $urlAppend . 'modules/group/group_space.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => q($group_name));
 } elseif (defined('EBOOK_DOCUMENTS')) {
     if (isset($_REQUEST['ebook_id'])) {
