@@ -74,7 +74,7 @@ if ($appName) {
     }
 } else {
     $tool_content .="<table class=\"table-default dataTable no-footer\">\n";
-    $tool_content.="<thead><td colspan=\"2\">Εφαρμογή</td><td>Περιγραφή</td></thead>\n";
+    $tool_content.="<thead class='list-header'><td colspan=\"2\">Εφαρμογή</td><td>Περιγραφή</td></thead>\n";
     $tool_content.="\n";
     foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>\n";
