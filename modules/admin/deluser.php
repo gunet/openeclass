@@ -55,7 +55,7 @@ if (!$doit) {
     } else {
         $success = deleteUser($u, true);
         if ($success === true) {
-            $tool_content .= "<div class='alert alert-info'>>$langUserWithId $u $langWasDeleted.</div>";
+            $tool_content .= "<div class='alert alert-info'>$langUserWithId $u $langWasDeleted.</div>";
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
         }

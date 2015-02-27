@@ -491,7 +491,7 @@ function user_info_form() {
                 </div>
             </div>";        
     }
-    if (isset($phone_required)) {
+    if ($prof) {
         $phone_message = $langCompulsory;
     } else {
         $phone_message = $langOptional;
