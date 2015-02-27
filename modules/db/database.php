@@ -23,6 +23,7 @@
 define("DB_TYPE", "MYSQL");
 
 require_once 'dbhelper.php';
+require_once realpath(dirname(__FILE__)) . '/../admin/debug.php';
 
 final class DBResult {
 

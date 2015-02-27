@@ -21,6 +21,7 @@
  */
 
 require_once 'genericrequiredparam.php';
+require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 abstract class CloudDriveApp extends ExtApp {
 
@@ -48,7 +49,7 @@ abstract class CloudDriveApp extends ExtApp {
     }
 
     protected function getBaseURL() {
-        return get_config("base_url");
+        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
     }
 
     protected abstract function getURLDefaultValue();
