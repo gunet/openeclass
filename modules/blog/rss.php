@@ -57,8 +57,11 @@ $title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course
 $lastbuilddateobj = Database::get()->querySingle("SELECT DATE_FORMAT(`time`,'%a, %d %b %Y %T +0300') AS dateformat
                 FROM blog_post WHERE course_id = ?d
                 ORDER BY `time` DESC", $course_id);
+
 if (is_object($lastbuilddateobj)) {
     $lastbuilddate = $lastbuilddateobj->dateformat;
+} else {
+    $lastbuilddate = '';
 }
     
 header("Content-Type: application/xml;");

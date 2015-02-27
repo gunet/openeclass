@@ -62,6 +62,8 @@ $q = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y %T +0
                 ORDER BY `order` DESC", $course_id);
 if ($q) {
     $lastbuilddate = $q->dateformat;
+} else {
+    $lastbuilddate = '';
 }
 
 header("Content-Type: application/xml;");
