@@ -2555,8 +2555,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         set_config('theme', 'default');
         set_config('theme_options_id', 0);
         
-        // check old course licenses
+        // delete stale course licenses (if exist)
         Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
+        // delete stale course units entries from course modules (27 -> MODULE_ID_UNITS)
+        Database::get()->query("DELETE FROM course_module WHERE module_id = 27");
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
