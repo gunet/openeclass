@@ -544,7 +544,12 @@ function edit_bbb_session($session_id) {
                         <div class='col-sm-10'>
                                 <div class='radio'>
                                   <label>
-                                    <input type='radio' id='user_button' name='record' value='1' ".(($record==1) ? "checked" : "").">
+                                    <input type='radio' id='user_button' name='record' value='1' ".(($record==1) ? "checked" : "");
+                                    if(Database::get()->querySingle("SELECT count(*) count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
+                                    {
+                                        $tool_content .=" disabled";
+                                    }
+                                    $tool_content.=">
                                     $langBBBRecordTrue
                                   </label>
                                 </div>
