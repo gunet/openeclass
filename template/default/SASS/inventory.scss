@@ -1801,6 +1801,20 @@ table.category-links td.category-link{
 .checkbox-padding{
     padding-right: 15px;
 }
+div.row.oc-metedata-list{
+    ul li:first-child{
+        padding-left: 10px;
+    }
+    ul li{
+        padding-left: 25px;
+        .badge.valid{
+            background-color: green;
+        }
+        .badge.not-valid{
+            background-color: red;
+        }
+    }
+}
 .mobile-apps{
     .col-xs-6:first-child{
         padding-right: 7px;
