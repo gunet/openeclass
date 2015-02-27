@@ -355,17 +355,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
     $r_group = "";
     if (isset($_POST['groups'])) {
         foreach ($_POST['groups'] as $group) {
-            if (preg_match('/^_/', $group)) { // find group users
-                $g_id = intval((substr($group, 1, strlen($group))));
-                $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = $g_id");
-                if ($q) {                    
-                    foreach ($q as $row) {                        
-                        $r_group .= "'$row->user_id'" .',';
-                    }
-                }
-            } else {
-                $r_group .= "'$group'" .',';
-            }
+           $r_group .= "'$group'" .',';
         }
     }
             
@@ -518,7 +508,12 @@ function edit_bbb_session($session_id) {
                         $res = Database::get()->queryArray($sql, $course_code);                        
                         foreach ($res as $r) {
                             if(isset($r->id)) {
-                                $tool_content .= "<option value= '_$r->id'>" . q($r->name) . "</option>";                        
+                                $tool_content .= "<option value= '_$r->id'";
+                                if(in_array(("'_".$r->id."'"),$r_group))
+                                {
+                                    $tool_content .=" selected";
+                                }
+                                $tool_content .=">" . q($r->name) . "</option>";                        
                             }
                         }
                         //select all users from this course except yourself
@@ -532,7 +527,12 @@ function edit_bbb_session($session_id) {
                         $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);                       
                         foreach ($res as $r) {
                             if(isset($r->user_id)) {
-                                $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . " (".q($r->username).")</option>";                        
+                                $tool_content .= "<option value=" . $r->user_id . "";
+                                if(in_array(("'".$r->user_id."'"),$r_group))
+                                {
+                                    $tool_content .=" selected";
+                                }
+                                $tool_content .=">" . q($r->name) . " (".q($r->username).")</option>";                        
                             }
                         }
                         
