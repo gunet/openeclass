@@ -177,7 +177,7 @@ if ($can_upload) {
     if (!isset($_GET['ext'])) {
         $tool_content .= "
         <div class='form-group'>
-          <div class='col-xs-offset-2 col-xs-10'>
+          <div class='col-sm-offset-2 col-sm-10'>
             <span class='checkbox-padding'>
                 <input type='checkbox' name='uncompress' value='1'>
             </span>
@@ -188,7 +188,7 @@ if ($can_upload) {
 
     $tool_content .= "
       <div class='form-group'>
-        <div class='col-xs-offset-2 col-xs-10'>
+        <div class='col-sm-offset-2 col-sm-10'>
           <span class='checkbox-padding'>
               <input type='checkbox' name='replace' value='1'>
           </span>
@@ -197,7 +197,7 @@ if ($can_upload) {
       </div>      
 
     <div class='row'>
-        <div class='infotext-sm col-xs-offset-2 col-xs-10 margin-bottom-fat'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+        <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
     
     $tool_content .= "
