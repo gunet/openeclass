@@ -35,10 +35,11 @@ $defaults = array(
                 "rgba(238,238,238,1)" => array('leftSubMenuHoverFontColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "repeat" => array('bgType'),
+                "boxed" => array('containerType'),
                 "rgba(0,155,207,1)" => array('loginJumbotronRadialBgColor'),
                 "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement"),
-                "1340" => array('fluidContainerWidth')
+                "" => array('fluidContainerWidth')
             );
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
@@ -164,8 +165,20 @@ if (isset($_POST['optionsSave'])) {
     <script>
         $(function(){
             $('#fluidContainerWidth').slider({
+                tooltip: 'hide',
                 formatter: function(value) {
-                    return value + 'px';
+                    $('#pixelCounter').text(value + 'px');
+                }
+            });
+            $('input[name=\'containerType\']').change(function(){
+                if($(this).val()=='fluid') {
+                    $('#fluidContainerWidth').slider('enable');
+                    $('#fluidContainerWidth').prop('disabled', false);
+                    $('#fluidContainerWidth').closest('.form-group').removeClass('hidden');
+                } else {
+                    $('#fluidContainerWidth').slider('disable');
+                    $('#fluidContainerWidth').prop('disabled', true);
+                    $('#fluidContainerWidth').closest('.form-group').addClass('hidden');
                 }
             });
             $('.uploadTheme').click(function (e)
@@ -416,9 +429,27 @@ $tool_content .= "
     <div role='tabpanel' class='tab-pane in active fade' id='generalsetting'>
         <div class='form-wrapper'>
             <div class='form-group'>
+                <label class='col-sm-3 control-label'>$langLayout:</label>
+                <div class='form-inline col-sm-9'>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='containerType' value='boxed' ".(($theme_options_styles['containerType'] == 'boxed')? 'checked' : '').">
+                          $langBoxed &nbsp; 
+                        </label>
+                      </div>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='containerType' value='fluid' ".(($theme_options_styles['containerType'] == 'fluid')? 'checked' : '').">
+                          $langFluid &nbsp;
+                        </label>
+                      </div>                                
+                </div>                
+            </div>        
+            <div class='form-group".(($theme_options_styles['containerType'] == 'boxed')? ' hidden' : '')."'>
                 <label for='fluidContainerWidth' class='col-sm-3 control-label'>$langFluidContainerWidth:</label>
                 <div class='col-sm-9'>
-                    <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]'>
+                    <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]' ".(($theme_options_styles['containerType'] == 'boxed')? ' disabled' : '').">
+                    <span style='margin-left:10px;' id='pixelCounter'></span>
                 </div>
             </div>                        
             <div class='form-group'>
