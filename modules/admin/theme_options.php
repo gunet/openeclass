@@ -38,7 +38,7 @@ $defaults = array(
                 "rgba(0,155,207,1)" => array('loginJumbotronRadialBgColor'),
                 "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement"),
-                "1340" => array('containerWidth')
+                "1340" => array('fluidContainerWidth')
             );
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
@@ -163,7 +163,7 @@ if (isset($_POST['optionsSave'])) {
     $head_content .= "
     <script>
         $(function(){
-            $('#containerWidth').slider({
+            $('#fluidContainerWidth').slider({
                 formatter: function(value) {
                     return value + 'px';
                 }
@@ -416,9 +416,9 @@ $tool_content .= "
     <div role='tabpanel' class='tab-pane in active fade' id='generalsetting'>
         <div class='form-wrapper'>
             <div class='form-group'>
-                <label for='containerWidth' class='col-sm-3 control-label'>$langContainerWidth:</label>
+                <label for='fluidContainerWidth' class='col-sm-3 control-label'>$langFluidContainerWidth:</label>
                 <div class='col-sm-9'>
-                    <input id='containerWidth' name='containerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1890' data-slider-step='10' data-slider-value='$theme_options_styles[containerWidth]'>
+                    <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]'>
                 </div>
             </div>                        
             <div class='form-group'>

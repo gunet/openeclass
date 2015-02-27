@@ -448,6 +448,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     // Add Theme Options styles
     $t->set_var('logo_img', $themeimg.'/eclass-new-logo.png');
     $t->set_var('logo_img_small', $themeimg.'/logo_eclass_small.png');
+    $t->set_var('container', 'container');
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
@@ -471,8 +472,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             $styles_str .= ".jumbotron.jumbotron-login {  background-size: cover, cover; background-position: 0% 0%;}";
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
-        if (isset($theme_options_styles['containerWidth'])){
-            $styles_str .= "@media (min-width: $theme_options_styles[containerWidth]px){.container {width: $theme_options_styles[containerWidth]px;}}";
+        if (isset($theme_options_styles['fluidContainerWidth'])){
+            $t->set_var('container', 'container-fluid');
+            $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
         }
         if (isset($theme_options_styles['openeclassBanner'])){
              $styles_str .= "#openeclass-banner {display: none;}";

@@ -14,6 +14,10 @@
 #btn-search{
     @include button-variant(white, #232C3A, #111111);
 }
+.container-fluid {
+    padding: 0px;
+    max-width: 1920px;
+}
 //Input file global fix
 input[type="file"] {
     padding-top: 7px;
