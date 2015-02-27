@@ -25,7 +25,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
 require_once 'modules/dropbox/class.msg.php';
 
-$pageName = $langAbuseReports;
+$toolName = $langAbuseReports;
 
 if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
     if (isset($_GET['report'])) {
