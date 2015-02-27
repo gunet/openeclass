@@ -392,10 +392,21 @@ if (isset($_POST['optionsSave'])) {
                 $delete_btn
             </div>
         </div>
-    </div>
-    <div class='form-wrapper'>
-        <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
-            <h3>$langGeneralSettings</h3>
+    </div>";
+$tool_content .= "     
+<div role='tabpanel'>
+
+  <!-- Nav tabs -->
+  <ul class='nav nav-tabs' role='tablist'>
+    <li role='presentation' class='active'><a href='#generalsetting' aria-controls='generalsetting' role='tab' data-toggle='tab'>$langGeneralSettings</a></li>
+    <li role='presentation'><a href='#navsettings' aria-controls='navsettings' role='tab' data-toggle='tab'>$langNavSettings</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <form id='theme_options_form' class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' enctype='multipart/form-data' method='post'>
+  <div class='tab-content'>
+    <div role='tabpanel' class='tab-pane in active fade' id='generalsetting'>
+        <div class='form-wrapper'>
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-3 control-label'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-9'>
@@ -496,9 +507,11 @@ if (isset($_POST['optionsSave'])) {
                         </label>
                       </div>                   
                 </div>
-            </div>            
-            <hr>
-            <h3>$langNavSettings</h3>            
+            </div>
+        </div>
+    </div>
+    <div role='tabpanel' class='tab-pane fade' id='navsettings'>
+        <div class='form-wrapper'>
             <div class='form-group'>
               <label for='leftNavBgColor' class='col-sm-3 control-label'>$langBgColor:</label>
               <div class='col-sm-9'>
@@ -546,17 +559,21 @@ if (isset($_POST['optionsSave'])) {
               <div class='col-sm-9'>
                 <input name='leftSubMenuHoverBgColor' type='text' class='form-control colorpicker' id='leftSubMenuHoverBgColor' value='$theme_options_styles[leftSubMenuHoverBgColor]'>
               </div>
-            </div>                                  
-            <div class='form-group'>
-                <div class='col-sm-9 col-sm-offset-3'>
-                    ".($theme_id ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
-                    <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
-                    ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
-                </div>
-            </div>        
-        </form>
+            </div>                                       
+        </div>
     </div>
-    ";
+    <div role='tabpanel' class='tab-pane' id='messages'>...</div>
+    <div role='tabpanel' class='tab-pane' id='settings'>...</div>
+  </div>
+    <div class='form-group'>
+        <div class='col-sm-9 col-sm-offset-3'>
+            ".($theme_id ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
+            <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
+            ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
+        </div>
+    </div>     
+</form>
+</div>";    
 }
 
 function clear_default_settings() {
