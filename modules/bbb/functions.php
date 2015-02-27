@@ -713,7 +713,7 @@ function bbb_session_details() {
 
                 if ($is_editor) {
                     // If there no available bbb servers, disable join link. Otherwise, enable    
-                    if(get_total_bbb_servers()=='0')
+                    if(get_total_bbb_servers()=='0' || date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440 )
                     {
                         $tool_content .= "
                         <td>".q($title)."</td>";
