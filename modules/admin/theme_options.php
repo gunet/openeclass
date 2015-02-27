@@ -37,7 +37,8 @@ $defaults = array(
                 "repeat" => array('bgType'),
                 "rgba(0,155,207,1)" => array('loginJumbotronRadialBgColor'),
                 "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
-                "small-right" => array("loginImgPlacement")        
+                "small-right" => array("loginImgPlacement"),
+                "1380" => array('containerWidth')
             );
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
@@ -105,7 +106,7 @@ if (isset($_POST['import'])) {
                 @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
                 recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
-                Session::Messages('Το θέμα εγκαταστάθηκε με επιτυχία');
+                Session::Messages($langThemeInstalled);
             }
         }
     } else {
@@ -157,9 +158,15 @@ if (isset($_POST['optionsSave'])) {
     $pageName = $langThemeSettings;
     $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
     load_js('spectrum');
+    load_js('bootstrap-slider');
     $head_content .= "
     <script>
         $(function(){
+            $('#containerWidth').slider({
+                formatter: function(value) {
+                    return value + 'px';
+                }
+            });
             $('.uploadTheme').click(function (e)
             {
                 e.preventDefault();
@@ -407,6 +414,12 @@ $tool_content .= "
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane in active fade' id='generalsetting'>
         <div class='form-wrapper'>
+            <div class='form-group'>
+                <label for='containerWidth' class='col-sm-3 control-label'>$langContainerWidth:</label>
+                <div class='col-sm-9'>
+                    <input id='containerWidth' name='containerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[containerWidth]'>
+                </div>
+            </div>                        
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-3 control-label'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-9'>
