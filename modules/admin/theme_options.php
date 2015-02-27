@@ -38,7 +38,7 @@ $defaults = array(
                 "rgba(0,155,207,1)" => array('loginJumbotronRadialBgColor'),
                 "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement"),
-                "1380" => array('containerWidth')
+                "1340" => array('containerWidth')
             );
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
@@ -136,6 +136,7 @@ if (isset($_POST['optionsSave'])) {
     $theme_options_name = $_POST['themeOptionsName'];
     $new_theme_id = Database::get()->query("INSERT INTO theme_options (name) VALUES(?s)", $theme_options_name)->lastInsertID;
     clear_default_settings();
+    
     clone_images(); //clone images
     upload_images(); //upload new images
     $serialized_data = serialize($_POST);
