@@ -47,5 +47,13 @@ abstract class CloudDriveApp extends ExtApp {
         return "Διεύθυνση επιστροφής";
     }
 
+    public function getShortDescription() {
+        return "Short description about " . $this->getDisplayName();
+    }
+
+    public function getLongDescription() {
+        return "Long description about " . $this->getDisplayName();
+    }
+
     protected abstract function getURLDefaultValue();
 }

@@ -42,9 +42,9 @@ if ($appName) {
     $pageName = $langModify . ' ' . $app->getDisplayName();
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'url' => 'extapp.php',
-              'icon' => 'fa-reply',
-              'level' => 'primary-label')));
+            'url' => 'extapp.php',
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
 
     if ($shouldUpdate) {
         $result = $app->storeParams();
@@ -70,16 +70,27 @@ if ($appName) {
         $tool_content .= "      <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>\n";
         $tool_content .= "    </fieldset>\n";
         $tool_content .= "  </form>\n</div>\n";
+        $tool_content.=$app->getLongDescription();
     }
 } else {
+    $tool_content .="<table class=\"table-default dataTable no-footer\">\n";
+    $tool_content.="<thead><td colspan=\"2\">Εφαρμογή</td><td>Περιγραφή</td></thead>\n";
+    $tool_content.="\n";
     foreach (ExtAppManager::getApps() as $app) {
-        $tool_content .= "    <p><form method='post' action='extapp.php?edit=" . $app->getName() . "'>
-        <input class='btn btn-info' type='submit' value='" . $app->getDisplayName() . "'>
-    </form></p>\n";
+        $tool_content .="<tr>\n";
+        // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
+        $tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
+        $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>" . $app->getDisplayName() . "</a></td>\n";
+        $tool_content .= "<td>" . $app->getShortDescription() . "</td>\n";
+        $tool_content .="</tr>\n";
     }
-    $tool_content .= "    <p><form method='post' action='bbbmoduleconf.php'>
-        <input class='btn btn-info' type='submit' value='BigBlueButton'>
-    </form><p>\n";
+    $tool_content .="<tr>\n";
+    $tool_content .= "<td style=\"width:90px;\"><a href=\"bbbmoduleconf.php\"'><img height=\"50\" width=\"89\" src=\"../../template/icons/bigbluebutton.png\"/></a></td>\n";
+    $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"bbbmoduleconf.php\"'>BigBlueButton</a></td>\n";
+    $tool_content .= "<td></td>\n";
+    $tool_content .="</tr>\n";
+
+    $tool_content.="</table>\n";
 }
 
 draw($tool_content, 3, null, $head_content);
