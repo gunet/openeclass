@@ -1715,7 +1715,7 @@ tinymce.init({
     $filebrowser
 
     // Toolbar options
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eclmedia code',
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
