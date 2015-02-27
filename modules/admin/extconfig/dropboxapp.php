@@ -28,4 +28,8 @@ class DropBoxApp extends CloudDriveApp {
         return "DropBox";
     }
 
+    protected function getURLDefaultValue() {
+        return $this->getBaseURL() . "modules/drives/plugins/dropbox_callback.php";
+    }
+
 }

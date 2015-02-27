@@ -29,9 +29,9 @@ class GenericParam extends ExtParam {
 
     private $app;
 
-    public function __construct($app, $display, $name) {
+    public function __construct($app, $display, $name, $defaultValue = "") {
         $this->app = $app;
-        parent::__construct($display, $name);
+        parent::__construct($display, $name, $defaultValue);
     }
 
     protected function retrieveValue() {

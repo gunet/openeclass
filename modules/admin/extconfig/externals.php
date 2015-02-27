@@ -90,7 +90,7 @@ abstract class ExtApp {
         foreach ($this->getParams() as $param) {
             $name = $param->name();
             $val = isset($_POST[$name]) ? $_POST[$name] : "";
-            $param->set_value($val);
+            $param->setValue($val);
         }
         if (($response = $this->validateApp()))
             return $response;
@@ -117,14 +117,16 @@ abstract class ExtParam {
     private $display;
     private $name;
     private $value;
+    private $defaultValue;
 
     const TYPE_STRING = 0;
     const TYPE_BOOLEAN = 1;
 
-    function __construct($display, $name) {
+    function __construct($display, $name, $defaultValue = "") {
         $this->display = $display;
         $this->name = $name;
         $this->value = ExtParam::$UNSET;
+        $this->defaultValue = $defaultValue;
     }
 
     function display() {
@@ -137,11 +139,13 @@ abstract class ExtParam {
 
     function value() {
         if ($this->value === ExtParam::$UNSET)
-            $this->set_value($this->retrieveValue());
+            $this->setValue($this->retrieveValue());
+        if ($this->value == "")
+            $this->value = $this->defaultValue;
         return $this->value;
     }
 
-    function set_value($value) {
+    function setValue($value) {
         $this->value = $value;
     }
 

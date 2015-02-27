@@ -42,4 +42,8 @@ class GoogleDriveApp extends CloudDriveApp {
         return "<b>Αδυναμία εύρεσης αρχείου κλειδιού.</b><br/>Προκειμένου να λειτουργήσει η αποθήκευση αρχείων από το GoogleDrive, είναι απαραίτητη η ύπαρξη του αρχείου κλειδιού. Αυτό πρέπει να τοποθετηθεί στη θέση '" . $keyPath . "'. Το αρχείο αυτό λείπει.";
     }
 
+    protected function getURLDefaultValue() {
+        return $this->getBaseURL() . "modules/drives/popup.php?clouddrive=googledrive";
+    }
+
 }

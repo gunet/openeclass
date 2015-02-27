@@ -30,9 +30,26 @@ abstract class CloudDriveApp extends ExtApp {
 
     public function __construct() {
         $drivename = $this->getName();
-        $this->registerParam(new GenericRequiredParam($drivename, "Κωδικός εφαρμογής", CloudDriveApp::CLIENTID));
-        $this->registerParam(new GenericRequiredParam($drivename, "Κλειδί εφαρμογής", CloudDriveApp::SECRET));
-        $this->registerParam(new GenericRequiredParam($drivename, "Διεύθυνση επιστροφής", CloudDriveApp::REDIRECT));
+        $this->registerParam(new GenericRequiredParam($drivename, $this->getAppParamName(), CloudDriveApp::CLIENTID));
+        $this->registerParam(new GenericRequiredParam($drivename, $this->getKeyParamName(), CloudDriveApp::SECRET));
+        $this->registerParam(new GenericRequiredParam($drivename, $this->getURLParamName(), CloudDriveApp::REDIRECT, $this->getURLDefaultValue()));
     }
 
+    protected function getAppParamName() {
+        return "Κωδικός εφαρμογής";
+    }
+
+    protected function getKeyParamName() {
+        return "Κλειδί εφαρμογής";
+    }
+
+    protected function getURLParamName() {
+        return "Διεύθυνση επιστροφής";
+    }
+
+    protected function getBaseURL() {
+        return get_config("base_url");
+    }
+
+    protected abstract function getURLDefaultValue();
 }

@@ -28,4 +28,8 @@ class OneDriveApp extends CloudDriveApp {
         return "OneDrive";
     }
 
+    protected function getURLDefaultValue() {
+        return $this->getBaseURL() . "modules/drives/plugins/onedrive_callback.php";
+    }
+
 }
