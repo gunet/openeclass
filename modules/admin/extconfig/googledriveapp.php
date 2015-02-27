@@ -24,8 +24,22 @@ require_once 'clouddriveapp.php';
 
 class GoogleDriveApp extends CloudDriveApp {
 
+    const EMAIL = "email";
+
+    public function __construct() {
+        parent::__construct();
+        $this->registerParam(new GenericRequiredParam($this->getName(), "e-mail εγκατάστασης", GoogleDriveApp::EMAIL));
+    }
+
     public function getDisplayName() {
         return "GoogleDrive";
+    }
+
+    public function validateApp() {
+        $keyPath = realpath(dirname(__FILE__) . "/../../drives/plugins") . "/googledrive_key.p12";
+        if (file_exists($keyPath))
+            return null;
+        return "<b>Αδυναμία εύρεσης αρχείου κλειδιού.</b><br/>Προκειμένου να λειτουργήσει η αποθήκευση αρχείων από το GoogleDrive, είναι απαραίτητη η ύπαρξη του αρχείου κλειδιού. Αυτό πρέπει να τοποθετηθεί στη θέση '" . $keyPath . "'. Το αρχείο αυτό λείπει.";
     }
 
 }
