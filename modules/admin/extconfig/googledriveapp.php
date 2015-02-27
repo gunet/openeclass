@@ -46,4 +46,16 @@ class GoogleDriveApp extends CloudDriveApp {
         return $this->getBaseURL() . "modules/drives/popup.php?clouddrive=googledrive";
     }
 
+    protected function getAppParamName() {
+        return "Client ID";
+    }
+
+    protected function getKeyParamName() {
+        return "Client secret";
+    }
+
+    protected function getURLParamName() {
+        return "Redirect URIs";
+    }
+
 }

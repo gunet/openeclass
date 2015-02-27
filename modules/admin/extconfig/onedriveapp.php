@@ -32,4 +32,12 @@ class OneDriveApp extends CloudDriveApp {
         return $this->getBaseURL() . "modules/drives/plugins/onedrive_callback.php";
     }
 
+    protected function getAppParamName() {
+        return "Client ID";
+    }
+
+    protected function getKeyParamName() {
+        return " Client secret";
+    }
+
 }

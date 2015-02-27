@@ -32,4 +32,16 @@ class DropBoxApp extends CloudDriveApp {
         return $this->getBaseURL() . "modules/drives/plugins/dropbox_callback.php";
     }
 
+    protected function getAppParamName() {
+        return "App key";
+    }
+
+    protected function getKeyParamName() {
+        return "App secret";
+    }
+
+    protected function getURLParamName() {
+        return "Redirect URIs";
+    }
+
 }

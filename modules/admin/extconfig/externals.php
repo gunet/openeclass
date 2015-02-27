@@ -22,6 +22,7 @@
 
 foreach (ExtAppManager::$AppNames as $appName)
     require_once strtolower($appName) . '.php';
+require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
 
 class ExtAppManager {
 
@@ -108,7 +109,24 @@ abstract class ExtApp {
         return null;
     }
 
+    protected function getBaseURL() {
+        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
+    }
+
     public abstract function getDisplayName();
+
+    public function getShortDescription() {
+        return "";
+    }
+
+    public function getLongDescription() {
+        return $this->getShortDescription();
+    }
+
+    public function getAppIcon() {
+        return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";
+    }
+
 }
 
 abstract class ExtParam {
