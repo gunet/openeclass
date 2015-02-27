@@ -352,6 +352,7 @@ if ($is_valid) {
         // email does not need verification -> mail helpdesk
         if (!$email_verification_required) {
             $emailAdministrator = get_config('email_sender');
+            $emailhelpdesk = get_config('email_helpdesk');
             // send email
             $MailMessage = $mailbody1 . $mailbody2 . "$givenname_form $surname_form\n\n" . $mailbody3
                     . $mailbody4 . $mailbody5 . "$mailbody6\n\n" . "$langFaculty: " . $tree->getFullPath($depid) . "
@@ -490,7 +491,7 @@ function user_info_form() {
                 </div>
             </div>";        
     }
-    if (isset($phone_required)) {
+    if ($prof) {
         $phone_message = $langCompulsory;
     } else {
         $phone_message = $langOptional;

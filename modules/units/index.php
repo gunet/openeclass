@@ -180,7 +180,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<div class='$page_btn'><a class='btn-default-eclass place-at-toolbox' title='$q_title' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1 $q_title $arrow2</a></div>";
+        $link[$i] = "<div class='$page_btn'><a title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a></div>";
     } else {
         $link[$i] = '&nbsp;';
     }
@@ -188,7 +188,7 @@ foreach (array('previous', 'next') as $i) {
 
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='toolbox whole-row'>";
+        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>";
         
     $tool_content .= "
         ". $link['previous'] ."
@@ -201,7 +201,7 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
 
 $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
-        <h4 class='text-center'>$pageName</h4>
+        
       </div>
     </div>";
 
@@ -209,6 +209,9 @@ if (!empty($comments)) {
     $tool_content .= "<div class='row'>
       <div class='col-md-12'>
         <div class='panel padding'>
+        <div class='margin-bottom-fat'>
+        <h4 class='text-center'>$pageName</h4>
+            </div>
               $comments
         </div>
       </div>
@@ -225,11 +228,12 @@ $tool_content .= "
   </div>
 </div>";
 
-$tool_content .= "<div class='form-wrapper'>";
+$tool_content .= "<div class='row'>
+        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>";
 $tool_content .= "<form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
-              <div class='form-group'>
-              <label class='col-sm-4 control-label'>$langCourseUnits</label>
-              <div class='col-sm-8'>
+              <div class='form-group' style='margin-bottom:0px;'>
+              <label class='col-sm-7 control-label'>$langCourseUnits</label>
+              <div class='col-sm-5'>
               <select name='id' class='form-control' onChange='document.unitselect.submit();'>";
               $q = Database::get()->queryArray("SELECT id, title FROM course_units
                            WHERE course_id = ?d AND `order` > 0
@@ -238,10 +242,10 @@ $tool_content .= "<form class='form-horizontal' name='unitselect' action='" . $u
             foreach ($q as $info) {
                 $selected = ($info->id == $id) ? ' selected ' : '';
                 $tool_content .= "<option value='$info->id'$selected>" .
-                        htmlspecialchars(ellipsize($info->title, 40)) .
+                        htmlspecialchars(ellipsize($info->title, 50)) .
                             '</option>';
             }
 $tool_content .= "</select></div></div>
-      </form></div>";
+      </form></div></div></div>";
 
 draw($tool_content, 2, null, $head_content);

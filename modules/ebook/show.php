@@ -255,22 +255,15 @@ $t->pparse('Output', 'page');
 
 /**
  * 
- * @global type $basedir
- * @global type $uid
+ * @global type $basedir 
  * @param type $file_path
  * @param type $initial_path
  */
 function send_file_by_url_file_path($file_path, $initial_path = '') {
-    global $basedir, $uid;
+    global $basedir;
 
     $path_components = explode('/', str_replace('//', chr(1), $file_path));
     $file_info = public_path_to_disk_path($path_components, $initial_path);
-
-    $valid = ($uid) ? true : token_validate($file_info->path, $_GET['token'], 30);
-    if (!$valid) {
-        header("Location: ${urlServer}");
-        exit();
-    }
 
     if (!send_file_to_client($basedir . $file_info->path, $file_info->filename, null, false)) {
         not_found($file_path);

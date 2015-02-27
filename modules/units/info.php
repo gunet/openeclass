@@ -58,7 +58,7 @@ if (isset($_GET['next'])) {
 }
 $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "$urlAppend/courses/$course_code",
+            'url' => "${urlServer}courses/$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
 $tool_content .= "<div class='form-wrapper'>

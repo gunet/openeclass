@@ -114,7 +114,8 @@ a
 
 
 #header_section, #footer_section{
-    padding: 0 15px;
+    padding: 0px;
+    margin: 0px;
 }
 #header_section > div, #footer_section > div{
     padding: 0px;
@@ -1266,16 +1267,6 @@ ul.tablelist
 
 
 
-
-
-
-
-
-
-
-
-
-
 /* DROPDOWN */
 /*
 .button.dropdown.opened{
@@ -1751,10 +1742,10 @@ table.category-links th.category-link{
     }
 }
 table.nocategory-links tr.link-category-title, table.category-links tr.link-category-title{
-    background-color: #dfdfdf;
+    background-color: #eaeaea;
 }
 table.category-links tr.link-subcategory-title{
-    background-color: #efefef;
+    background-color: #f3f3f3;
 }
 .open-category, .open-category:hover
 {
@@ -1807,7 +1798,9 @@ table.category-links td.category-link{
 .small-logo{
     padding-left: 10px !important;
 }
-
+.checkbox-padding{
+    padding-right: 15px;
+}
 .mobile-apps{
     .col-xs-6:first-child{
         padding-right: 7px;
@@ -1877,6 +1870,47 @@ table.category-links td.category-link{
         text-decoration:none;
     }
 }
+div.glossary-categories{
+    a:hover{
+        text-decoration:none;
+    }
+    td.space-left{
+        padding-left: 25px;
+    }
+}
+a.action-btn-link{
+    color: #23527c;
+}
+a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited{
+    text-decoration: none;
+    cursor: pointer;
+}
+div.group-space{
+    .row{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    .row.hr-seperator{
+        margin-top: 15px;
+        padding-bottom: 15px;
+        hr{
+            margin-top: 9px;
+            padding-top: 1px;
+            padding-bottom: 1px;
+        }
+    }
+    
+}
+.unit-pagination{
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 7px 7px;
+    margin-bottom: 10px;
+}
+.list-header{
+        background-color: #eeeeee !important;
+        color: #777777 !important;
+    }
 .panel.opencourses-national{
 
     min-height: 2px;

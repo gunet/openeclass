@@ -445,7 +445,7 @@ function submit_work($id, $on_behalf_of = null) {
         $secret = work_secret($id);
         $ext = get_file_extension($_FILES['userfile']['name']);
         $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-        
+
         if (!isset($on_behalf_of)) {
             $msg1 = delete_submissions_by_uid($user_id, -1, $id);
             if ($group_sub) {
@@ -1449,8 +1449,8 @@ function sort_link($title, $opt, $attrib = '') {
     global $tool_content, $course_code;
     $i = '';
     if (isset($_REQUEST['id'])) {
-        $i = "&id=$_REQUEST[id]";
-    }
+        $i = "&id=$_REQUEST[id]"; 
+   }
     if (@($_REQUEST['sort'] == $opt)) {
         if (@($_REQUEST['rev'] == 1)) {
             $r = 0;
@@ -1543,7 +1543,7 @@ function show_assignment($id, $display_graph_results = false) {
                         <p>$num_of_submissions</p>
                         <div class='table-responsive'>    
                         <table class='table-default'>
-                        <tr>
+                        <tr class='list-header'>
                       <th width='3'>&nbsp;</th>";
             sort_link($m['username'], 'username');
             sort_link($m['am'], 'am');
@@ -1564,18 +1564,14 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 $uid_2_name = display_user($row->uid);
                 $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $row->uid)->am;
-                if ($i % 2 == 1) {
-                    $row_color = "class='even'";
-                } else {
-                    $row_color = "class='odd'";
-                }
+                
                 $filelink = empty($row->file_name) ? '&nbsp;' :
                         ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
                         q($row->file_name) . "</a>");
                 
                 $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
                 $tool_content .= "
-                                <tr $row_color>
+                                <tr>
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
                                 <td>${uid_2_name}</td>
                                 <td width='85'>" . q($stud_am) . "</td>
@@ -1589,7 +1585,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 <div align='center'><input type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'></div>
                                 </td>
                                 </tr>
-                                <tr $row_color>
+                                <tr>
                                 <td colspan='5'>
                                 <div>$subContentGroup</div>";
                 if (trim($row->comments != '')) {
@@ -1672,17 +1668,13 @@ function show_non_submitted($id) {
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive'>    
                             <table class='sortable'>
-                            <tr>
+                            <tr class='list-header'>
                           <th width='3'>&nbsp;</th>";
                 sort_link($langGroup, 'username');
                 $tool_content .= "</tr>";
                 $i=1;
                 foreach ($groups as $row => $value){
-                    if ($i % 2 == 1) {
-                        $row_color = "class='even'";
-                    } else {
-                        $row_color = "class='odd'";
-                    }
+                    
                     $tool_content .= "<tr>
                             <td>$i.</td>
                             <td><a href='../group/group_space.php?course=$course_code&amp;group_id=$row'>$value</a></td>
@@ -1711,18 +1703,13 @@ function show_non_submitted($id) {
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive'>
                             <table class='table-default'>
-                            <tr>
+                            <tr class='list-header'>
                           <th width='3'>&nbsp;</th>";
                 sort_link($m['username'], 'username');
                 sort_link($m['am'], 'am');
                 $tool_content .= "</tr>";
                 $i=1;
                 foreach ($users as $row => $value){
-                    if ($i % 2 == 1) {
-                        $row_color = "class='even'";
-                    } else {
-                        $row_color = "class='odd'";
-                    }
                     $tool_content .= "<tr>
                     <td>$i.</td>
                     <td>".display_user($row)."</td>
@@ -1763,7 +1750,7 @@ function show_student_assignments() {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
-                                  <tr>
+                                  <tr class='list-header'>
                                       <th>$m[title]</th>
                                       <th class='text-center'>$m[deadline]</th>
                                       <th class='text-center'>$m[submitted]</th>
@@ -1794,7 +1781,7 @@ function show_student_assignments() {
                     if (isset($sub->group_id)) { // if is a group assignment
                         $tool_content .= "<div style='padding-bottom: 5px;padding-top:5px;font-size:9px;'>($m[groupsubmit] " .
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
-                                "$m[ofgroup] " . gid_to_name($sub['group_id']) . "</a>)</div>";
+                                "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
                     }
                     $tool_content .= icon('fa-check-square-o', $m['yes'])."<br>";
                 }
@@ -1836,14 +1823,14 @@ function show_assignments() {
                   'button-class' => 'btn-success',
                   'icon' => 'fa-plus-circle',
                   'level' => 'primary-label')  
-            ));
+            ),false);
 
     if (count($result)>0) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'>
                     <div class='table-responsive'>
                     <table class='table-default'>
-                    <tr>
+                    <tr class='list-header'>
                       <th>$m[title]</th>
                       <th class='text-center'>$m[subm]</th>
                       <th class='text-center'>$m[nogr]</th>

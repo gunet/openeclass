@@ -23,6 +23,7 @@ $path = realpath(dirname(__FILE__));
 require_once $path . '/../../config/config.php';
 require_once $path . '/../../modules/admin/debug.php';
 require_once $path . '/../db/database.php';
+require_once $path . '/../admin/extconfig/externals.php';
 foreach (CloudDriveManager::$DRIVENAMES as $driveName)
     require_once 'plugins/' . strtolower($driveName) . '.php';
 
@@ -44,7 +45,7 @@ final class CloudDriveManager {
             foreach (CloudDriveManager::$DRIVENAMES as $driveName) {
                 $drive = new $driveName();
                 if ($drive->isPresent()) {
-                    $drives[] = $drive;
+                    $drives[$drive->getName()] = $drive;
                 }
             }
             CloudDriveManager::$DRIVES = $drives;
@@ -92,11 +93,8 @@ final class CloudDriveManager {
         if ($drivename == null) {
             die("Error while retrieving cloud connectivity");
         }
-        foreach (CloudDriveManager::getValidDrives() as $drive) {
-            if ($drive->getName() == $drivename)
-                return $drive;
-        }
-        return null;
+        $drives = CloudDriveManager::getValidDrives();
+        return $drives[$drivename];
     }
 
     public static function getFileUploadPending() {
@@ -106,6 +104,11 @@ final class CloudDriveManager {
 }
 
 abstract class CloudDrive {
+
+    /**
+     * @var ExtApp 
+     */
+    private $extapp;
 
     protected function getCallbackName() {
         return "code";
@@ -137,23 +140,23 @@ abstract class CloudDrive {
         return CloudDriveManager::DRIVE . "=" . $this->getName();
     }
 
-    protected function getConfig($key) {
-        $value = Database::get()->querySingle("SELECT `value` FROM `config` WHERE `key` = ?s", "drive_" . $this->getName() . "_" . $key);
-        if ($value)
-            return $value->value;
-        return null;
+    protected function getExtApp() {
+        if (!$this->extapp) {
+            $this->extapp = ExtAppManager::getApp($this->getName());
+        }
+        return $this->extapp;
     }
 
     protected function getClientID() {
-        return $this->getConfig("clientid");
+        return $this->getExtApp()->getParam(CloudDriveApp::CLIENTID)->value();
     }
 
     protected function getSecret() {
-        return $this->getConfig("secret");
+        return $this->getExtApp()->getParam(CloudDriveApp::SECRET)->value();
     }
 
     protected function getRedirect() {
-        return $this->getConfig("redirect");
+        return $this->getExtApp()->getParam(CloudDriveApp::REDIRECT)->value();
     }
 
     public function isPresent() {

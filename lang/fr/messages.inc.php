@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-02-16 13:15:51
+// Generated 2015-02-19 15:55:42
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -2456,6 +2456,7 @@ $langInsertWiki = 'wiki';
 $langCourseAnnouncements = "Annonces du cours";
 $langBasicOptions = "Options de base";
 $langUserOptions = "Options de l'utilisateur";
+$langTutorials = "Tutorials";
 $langTut = "Tutoriel";
 $langScormVideo = "Présentation vidéo";
 $langIntroToCourse = "Introduction au cours"
@@ -3481,6 +3482,7 @@ $langAddBBBServer = "Add server";
 $langAddBBBServerInfo = "New BigBlueButton server info";
 $langUpdateBBBServer = "BigBlueButton server info";
 $langAvailableBBBServers = "There are no available BigBlueButton servers";
+$langExtAppConfig = 'External program configuration';
 $langBBBConfig = 'BigBlueButton settings';
 $langBBBEnabled = 'Available';
 $langBBBOptions = 'Edit';
@@ -3956,11 +3958,15 @@ $langBBBGetUsersError = "Unable to retrieve teleconference information ";
 $langBBBCreationRoomError = "Unable to create a room on the teleconference server";
 $langBBBImportRecordingsNo = "Unable to import to multimedia because recording is disabled.";
 $langThemeSettings = 'Theme Settings';
-$langActiveThemeSettings = 'Active Theme Settings';
+$langActiveTheme = 'Active Theme';
+$langPreviewState = 'You are in a preview state of theme';
+$langThemeInstalled = 'Theme was successfully installed';
+$langAvailableThemes = 'Available Themes';
 $langDefaultThemeSettings = 'Open eClass Default';
-$langThemeSettingsDelete = 'Are you sure you want to delete this theme settings group?';
-$langThemeSettingsName = "Theme Options Name";
+$langThemeSettingsDelete = 'Are you sure you want to delete this theme?';
+$langThemeSettingsName = "Theme Name";
 $langGeneralSettings = 'General Settings';
+$langContainerWidth = 'Container Width';
 $langLogo = 'Logo';
 $langLogoNormal = "(Normal)";
 $langLogoSmall = "(Small displays)";
@@ -3995,6 +4001,7 @@ $langAvailableUnitResources = "Educational Resource";
 $langNoteSaved = "Submitted successfully";
 $langLoginBgGradient = "Login screen background gradient";
 $langLoginImg = "Login screen image";
+$langLoginBanner = "Login Screen Open eClass Banner";
 $langThemeOptionsName = "Theme Options Name";
 $langMyCoursesSide = 'My Courses';
 $langMyMessagesSide = 'My Messages';
@@ -4011,7 +4018,7 @@ $lang_allow_teacher_clone_course = "Allow $langsTeachers to clone courses";
 $langSeenToCourseHome = "Visible at course home page";
 $langRemoveFromCourseHome = "Remove from course home page";
 $langNoAvailableBBBServers = "No BigBlueButton servers available";
-$langLoginImgPlacementSmall = "Small (right alignment)";
+$langLoginImgPlacementSmall = "Small (left alignment)";
 $langLoginImgPlacementFull = "Full Width (width: 1091px, height: 315px)";
 $langNewMyMessagesSide = 'New Messages';
 $langNumOpenCoursesBanner = "open<br>courses";
@@ -4044,3 +4051,7 @@ $langBlogSharing = "Blog post sharing in social networks";
 $lang_display_captcha_label = "Security Code (CAPTCHA)";
 $lang_display_captcha_unsupported = 'To enable the security code, the PHP GD library needs TrueType font (TTF) support';
 $langAddGUser = "Add Guest User";
+$langUserForum = "User";
+$langStopNotify = "Stop notification via email if replies are posted";
+$langNoLinkInCategory = "There are no links in this category";
+$langNoLinkCategories = "There are no link categories";

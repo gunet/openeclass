@@ -107,6 +107,14 @@ final class GoogleDrive extends CloudDrive {
     public function store($cloudfile, $path) {
         if (!$this->isAuthorized())
             return CloudDriveResponse::AUTHORIZATION_ERROR;
+        $key = file_get_contents(realpath(dirname(__FILE__)) . "/googledrive_key.p12");
+        if (!$key)
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
+        $email = $this->getExtApp()->getParam(GoogleDriveApp::EMAIL)->value();
+        $cred = new Google_Auth_AssertionCredentials($email, array(Google_Service_Drive::DRIVE), $key);
+        $this->client->setAssertionCredentials($cred);
+        $cred->sub = $email;
+
         $request = new Google_Http_Request($cloudfile->id(), 'GET', null, null);
         $httpRequest = $this->client->getAuth()->authenticatedRequest($request);
         if ($httpRequest->getResponseHttpCode() == 200) {

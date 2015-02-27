@@ -51,6 +51,10 @@ unset($message);
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
+if (!$uid or !$courses[$course_code]) {
+    forbidden();
+}
+
 initialize_group_info();
 $user_groups = user_group_info($uid, $course_id);
 
@@ -316,8 +320,6 @@ if ($is_editor) {
                 array('title' => $langDeleteGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
                     'icon' => 'fa-times',
-                    'level' => 'primary',
-                    'button-class' => 'btn-danger',
                     'confirm' => $langDeleteGroupAllWarn,
                     'show' => $num_of_groups > 0),
                 array('title' => $langFillGroupsAll,
@@ -328,7 +330,6 @@ if ($is_editor) {
                 array('title' => $langEmtpyGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes",
                     'icon' => 'fa-trash',
-                    'level' => 'primary',
                     'class' => 'delete',
                     'confirm' => $langEmtpyGroups,
                     'confirm_title' => $langEmtpyGroupsAll,
@@ -339,13 +340,13 @@ if ($is_editor) {
     $num_of_groups = count($groupSelect);
     // groups list
     if ($num_of_groups > 0) {
-        $tool_content .= "<br />
+        $tool_content .= "
                 <div class='table-responsive'>
                 <table class='table-default'>
-                <tr>
+                <tr class='list-header'>
                   <th>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>
-                  <th width='30'>$langRegistered</th>
+                  <th width='30'>$langGroupMembersNum</th>
                   <th width='30'>$langMax</th>
                   <th class='text-center'>".icon('fa-gears', $langActions)."</th>
                 </tr>";
@@ -389,13 +390,14 @@ if ($is_editor) {
     if (count($q) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {
-        $tool_content .= "<div class='table-responsive'><table class='table-default'>
-                <tr>
+        $tool_content .= "<div class='table-responsive'>
+            <table class='table-default'>
+                <tr class='list-header'>
                   <th class='text-left'>$langGroupName</th>
                   <th width='250'>$langGroupTutor</th>";
         $tool_content .= "<th width='50'>$langRegistration</th>";
 
-        $tool_content .= "<th width='50'>$langRegistered</th><th width='50'>$langMax</th></tr>";
+        $tool_content .= "<th width='50'>$langGroupMembersNum</th><th width='50'>$langMax</th></tr>";
         foreach ($q as $row) {
             $group_id = $row->id;
             initialize_group_info($group_id);

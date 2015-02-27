@@ -129,17 +129,22 @@ $exerciseAllowedAttempts = $objExercise->selectAttemptsAllowed();
 $exercisetotalweight = $objExercise->selectTotalWeighting();
 
 $temp_CurrentDate = $recordStartDate = time();
-$exercise_StartDate = strtotime($objExercise->selectStartDate());
-$exercise_EndDate = strtotime($objExercise->selectEndDate());
+$exercise_StartDate = new DateTime($objExercise->selectStartDate());
+$exercise_EndDate = new DateTime($objExercise->selectEndDate());
 
 //exercise has ended or hasn't been enabled yet due to declared dates
-if (($temp_CurrentDate < $exercise_StartDate) || ($temp_CurrentDate >= $exercise_EndDate)) {
+if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) {
     //if that happens during an active attempt
     if(isset($_SESSION['exerciseUserRecordID'][$exerciseId])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $record_end_date = date('Y-m-d H:i:s', time());
-        $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-        $totalWeighting = $objExercise->selectTotalWeighting();
+        $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
+        if ($objExercise->isRandom()) {
+            $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
+                                          SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
+        } else {
+            $totalWeighting = $objExercise->selectTotalWeighting();
+        }      
         $objExercise->save_unanswered();
         $unmarked_free_text_nbr = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_answer_record WHERE weight IS NULL AND eurid = ?d", $eurid)->count;
         $attempt_status = ($unmarked_free_text_nbr > 0) ? ATTEMPT_PENDING : ATTEMPT_COMPLETED;        
@@ -261,8 +266,14 @@ if (isset($_POST['formSent'])) {
         }              
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $record_end_date = date('Y-m-d H:i:s', time());
-        $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-        $totalWeighting = $objExercise->selectTotalWeighting();
+        $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
+        if ($objExercise->isRandom()) {
+            $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
+                                          SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
+        } else {
+            $totalWeighting = $objExercise->selectTotalWeighting();
+        }        
+
         //If time expired in sequential exercise we must add to the DB the non-given answers
         // to the questions the student didn't had the time to answer
         if (isset($time_expired) && $time_expired && $exerciseType == 2) {
@@ -293,8 +304,13 @@ if (isset($_POST['formSent'])) {
     if (isset($_POST['buttonSave']) && $exerciseTempSave) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
         $secs_remaining = $_POST['secsRemaining'];
-        $totalScore = Database::get()->querySingle("SELECT SUM(weight) FROM exercise_answer_record WHERE eurid = ?d", $eurid);
-        $totalWeighting = $objExercise->selectTotalWeighting();
+        $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
+        if ($objExercise->isRandom()) {
+            $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
+                                          SELECT question_id FROM exercise_answer_record WHERE eurid = ?d)", $eurid)->weight;
+        } else {
+            $totalWeighting = $objExercise->selectTotalWeighting();
+        }      
         //if we are currently in a previously paused attempt (so this is not the first pause), unanswered are already saved in the DB and they onky need an update
         if (!$paused_attempt) {
             $objExercise->save_unanswered(0); //passing 0 to save like unanswered

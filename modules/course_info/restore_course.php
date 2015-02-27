@@ -98,11 +98,14 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $hierarchy = get_serialized_file('hierarchy');
         $course_units = get_serialized_file('course_units');
         $unit_resources = get_serialized_file('unit_resources');
-        $description = '';
-        if (($unit_data = search_table_dump($course_units, 'order', -1))) {
+        if (isset($data['description'])) {
+            $description = $data['description'];
+        } elseif (($unit_data = search_table_dump($course_units, 'order', -1))) {
             if (($resource_data = search_table_dump($unit_resources, 'order', -1))) {
                 $description = purify($resource_data['comments']);
             }
+        } else {
+            $description = '';
         }
         $tool_content = course_details_form($data['public_code'], $data['title'], $data['prof_names'], $data['lang'], null, $data['visible'], $description, $hierarchy);
     } elseif (($data = get_serialized_file('cours'))) {

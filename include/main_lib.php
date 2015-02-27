@@ -288,7 +288,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
         $print_email = $print_email && !empty($email);
     }
     if ($icon) {
-        $icon = profile_image($user->id, IMAGESIZE_SMALL, true) . '&nbsp;';
+        $icon = profile_image($user->id, IMAGESIZE_SMALL, 'img-circle') . '&nbsp;';
     }
     
     if (!empty($class)) {
@@ -453,7 +453,7 @@ function group_secret($gid) {
  */
 function selection($entries, $name, $default = '', $extra = '') {
     $retString = "";
-    $retString .= "\n<select name='$name' $extra>\n";
+    $retString .= "\n<select class='form-control' name='$name' $extra>\n";
     foreach ($entries as $value => $label) {
         if (isset($default) && ($value == $default)) {
             $retString .= "<option selected value='" . htmlspecialchars($value) . "'>" .
@@ -1624,7 +1624,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -1687,7 +1687,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
 function openDocsPicker(field_name, url, type, win) {
     tinymce.activeEditor.windowManager.open({
         file: '$url' + type,
-        title: 'Resources Browser',
+        title: '".js_escape($langResourceBrowser)."',
         width: 800,
         height: 600,
         resizable: 'yes',
@@ -1722,7 +1722,7 @@ tinymce.init({
     $filebrowser
 
     // Toolbar options
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image eclmedia code',
+    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
@@ -2661,10 +2661,9 @@ function copyright_info($cid, $noImg=1) {
             $link_suffix = '';
         }
     }
-    if($noImg==1){
-    $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'>
-            <img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
-    }else if($noImg==0){
+    if ($noImg == 1) {
+        $link = "<a href='" . $license[$lic]['link'] . "$link_suffix'><img src='$themeimg/" . $license[$lic]['image'] . ".png' title='" . $license[$lic]['title'] . "' alt='" . $license[$lic]['title'] . "' /></a><br>";
+    } else if ($noImg == 0) {
         $link = "";
     }
 
@@ -2785,7 +2784,7 @@ function action_bar($options, $page_title_flag = true) {
                 "<i class='fa $option[icon]'></i></a>$form_end");
         } else {
             array_unshift($out_secondary,
-                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$button_class$confirm_modal_class'" . $href .
+                "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class'" . $href .
                 " $link_attrs>" .
                 "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
         }
@@ -2805,7 +2804,7 @@ function action_bar($options, $page_title_flag = true) {
                   </ul>";
     }
     if ($out && $i!=0) {
-        return "<div class='row'>
+        return "<div class='row action_bar'>
                     <div class='col-sm-12 clearfix'>
                         $page_title
                         <div class='margin-top-thin margin-bottom-fat pull-right'>
@@ -2912,7 +2911,21 @@ function removeGetVar($url, $varname) {
     $newqs = http_build_query($qsvars);
     return $urlpart . '?' . $newqs;
 }
-
+function recurse_copy($src,$dst) { 
+    $dir = opendir($src); 
+    @mkdir($dst); 
+    while(false !== ( $file = readdir($dir)) ) { 
+        if (( $file != '.' ) && ( $file != '..' )) { 
+            if ( is_dir($src . '/' . $file) ) { 
+                recurse_copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+            else { 
+                copy($src . '/' . $file,$dst . '/' . $file); 
+            } 
+        } 
+    } 
+    closedir($dir); 
+} 
 
 function setOpenCoursesExtraHTML() {
     global $urlAppend, $openCoursesExtraHTML, $langListOpenCourses,

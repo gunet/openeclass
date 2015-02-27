@@ -319,7 +319,7 @@ $out .=         "
     
     $out .= "<table id='inbox_table' class='table-default'>
                   <thead>
-                    <tr>
+                    <tr class='list-header'>
                       <th>$langSubject</th>";
     if ($course_id == 0) {        
         $out .= "    <th>$langCourse</th>";

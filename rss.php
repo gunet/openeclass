@@ -29,7 +29,11 @@ $result = Database::get()->querySingle("SELECT DATE_FORMAT(`date`,'%a, %d %b %Y 
 		FROM admin_announcement
 		WHERE visible = 1 AND lang = ?s
 		ORDER BY `date` DESC", $language);
-$lastbuilddate = $result->dateformat;
+if ($result) {
+    $lastbuilddate = $result->dateformat;
+} else {
+    $lastbuilddate = '';
+}
 
 header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
@@ -46,14 +50,15 @@ $sql = Database::get()->queryArray("SELECT id, title, body, DATE_FORMAT(`date`,'
 		FROM admin_announcement
 		WHERE visible = 1 AND lang = ?s
 		ORDER BY `date` DESC", $language);
-
-foreach ($sql as $r) {
-    echo "<item>";
-    echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
-    echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r->id . "</link>";
-    echo "<description>" . htmlspecialchars($r->body, ENT_NOQUOTES) . "</description>";
-    echo "<pubDate>" . $r->dateformat . "</pubDate>";
-    echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
-    echo "</item>";
+if ($sql) {
+    foreach ($sql as $r) {
+        echo "<item>";
+        echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
+        echo "<link>" . $urlServer . "modules/announcements/main_ann.php?aid=" . $r->id . "</link>";
+        echo "<description>" . htmlspecialchars($r->body, ENT_NOQUOTES) . "</description>";
+        echo "<pubDate>" . $r->dateformat . "</pubDate>";
+        echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
+        echo "</item>";
+    }
 }
 echo "</channel></rss>";

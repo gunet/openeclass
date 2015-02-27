@@ -210,9 +210,9 @@ if (count($exercise_question_ids)>0){
               </td>
             </tr>";
         if (file_exists($picturePath . '/quiz-' . $row->question_id)) {
-            $tool_content .= "here
+            $tool_content .= "
                       <tr class='even'>
-                        <td class='text-center' colspan='${colspan}'><img src='../../" . ${'picturePath'} . "/quiz-" . ${'questionId'} . "'></td>
+                        <td class='text-center' colspan='${colspan}'><img src='../../" . ${'picturePath'} . "/quiz-" . $row->question_id . "'></td>
                       </tr>";
         }
         $questionScore = 0;

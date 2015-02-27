@@ -83,7 +83,9 @@ $tool_content .= '<div class="form-group">
     <label class="col-sm-2 control-label">' . $langInterval . ':</label>
      <div class="col-sm-10"><select name="u_interval" class="form-control">' . $statsIntervalOptions . '</select></div>
   </div>
-  <div class="col-sm-offset-2 col-sm-10">
-    <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
     </div>
+  </div>
 </form></div>';

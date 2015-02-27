@@ -542,8 +542,8 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
         array_push($sideMenuImg, "arrow.png");
-        array_push($sideMenuText, $GLOBALS['langBBBConfig']);
-        array_push($sideMenuLink, "../admin/bbbmoduleconf.php");
+        array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
+        array_push($sideMenuLink, "../admin/extapp.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
@@ -584,9 +584,9 @@ function adminMenu() {
  * @return array
  */
 function lessonToolsMenu() {
-    global $uid, $is_editor, $is_course_admin;
-    global $course_code, $langAdministrationTools, $langExternalLinks;
-    global $modules, $admin_modules, $urlAppend;
+    global $uid, $is_editor, $is_course_admin, $courses,
+           $course_code, $langAdministrationTools, $langExternalLinks,
+           $modules, $admin_modules, $urlAppend;
 
     $sideMenuGroup = array();
     $sideMenuSubGroup = array();
@@ -632,6 +632,9 @@ function lessonToolsMenu() {
 
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;
+            if ($mid == MODULE_ID_GROUPS and !$courses[$course_code]) {
+                continue;
+            }
             if ($mid == MODULE_ID_DROPBOX) {
                 require_once 'modules/dropbox/class.mailbox.php';
 

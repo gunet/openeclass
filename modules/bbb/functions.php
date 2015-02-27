@@ -122,7 +122,12 @@ function new_bbb_session() {
             <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='user_button' name='record' value='1'>
+                        <input type='radio' id='user_button' name='record' value='1'";
+                        if(Database::get()->querySingle("SELECT count(*) count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
+                        {
+                            $tool_content .=" disabled";
+                        }
+                        $tool_content .=">
                         $langBBBRecordTrue
                       </label>
                     </div>
@@ -302,7 +307,8 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             $recipients = explode(',', $external_users);
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
             foreach ($recipients as $row) {
-                $bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
+                //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=".$q->meeting_id."&username=".$row;
                 $emailsubject = $langBBBScheduledSession;
                 $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
                 $emailcontent = $emailbody;
@@ -349,17 +355,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
     $r_group = "";
     if (isset($_POST['groups'])) {
         foreach ($_POST['groups'] as $group) {
-            if (preg_match('/^_/', $group)) { // find group users
-                $g_id = intval((substr($group, 1, strlen($group))));
-                $q = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = $g_id");
-                if ($q) {                    
-                    foreach ($q as $row) {                        
-                        $r_group .= "'$row->user_id'" .',';
-                    }
-                }
-            } else {
-                $r_group .= "'$group'" .',';
-            }
+           $r_group .= "'$group'" .',';
         }
     }
             
@@ -412,7 +408,8 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             $recipients = explode(',', $external_users);
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $_GET['id']);                        
             foreach ($recipients as $row) {
-                $bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');                              
+                //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');                              
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=".$q->meeting_id."&username=".$row;
                 $emailsubject = $langBBBScheduledSession;
                 $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
                 $emailcontent = $emailbody;
@@ -511,7 +508,12 @@ function edit_bbb_session($session_id) {
                         $res = Database::get()->queryArray($sql, $course_code);                        
                         foreach ($res as $r) {
                             if(isset($r->id)) {
-                                $tool_content .= "<option value= '_$r->id'>" . q($r->name) . "</option>";                        
+                                $tool_content .= "<option value= '_$r->id'";
+                                if(in_array(("'_".$r->id."'"),$r_group))
+                                {
+                                    $tool_content .=" selected";
+                                }
+                                $tool_content .=">" . q($r->name) . "</option>";                        
                             }
                         }
                         //select all users from this course except yourself
@@ -525,7 +527,12 @@ function edit_bbb_session($session_id) {
                         $res = Database::get()->queryArray($sql, $course_id, USER_GUEST, $uid);                       
                         foreach ($res as $r) {
                             if(isset($r->user_id)) {
-                                $tool_content .= "<option value=" . $r->user_id . ">" . q($r->name) . " (".q($r->username).")</option>";                        
+                                $tool_content .= "<option value=" . $r->user_id . "";
+                                if(in_array(("'".$r->user_id."'"),$r_group))
+                                {
+                                    $tool_content .=" selected";
+                                }
+                                $tool_content .=">" . q($r->name) . " (".q($r->username).")</option>";                        
                             }
                         }
                         
@@ -537,7 +544,12 @@ function edit_bbb_session($session_id) {
                         <div class='col-sm-10'>
                                 <div class='radio'>
                                   <label>
-                                    <input type='radio' id='user_button' name='record' value='1' ".(($record==1) ? "checked" : "").">
+                                    <input type='radio' id='user_button' name='record' value='1' ".(($record==1) ? "checked" : "");
+                                    if(Database::get()->querySingle("SELECT count(*) count FROM bbb_servers WHERE enabled='true' AND enable_recordings='true'")->count == 0)
+                                    {
+                                        $tool_content .=" disabled";
+                                    }
+                                    $tool_content.=">
                                     $langBBBRecordTrue
                                   </label>
                                 </div>
@@ -701,7 +713,7 @@ function bbb_session_details() {
 
                 if ($is_editor) {
                     // If there no available bbb servers, disable join link. Otherwise, enable    
-                    if(get_total_bbb_servers()=='0')
+                    if(get_total_bbb_servers()=='0' || date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440 )
                     {
                         $tool_content .= "
                         <td>".q($title)."</td>";
@@ -736,15 +748,15 @@ function bbb_session_details() {
                     $access='false';
                     foreach($myGroups as $mg)
                     {
-                        if(in_array($mg,$r_group)) { 
+                        if(in_array("'_".$mg->group_id."'",$r_group)) { 
                             $access='true';                            
                         }
                     }
-                    if(in_array("0",$r_group) || $access == 'true')
+                    if(in_array("'".$_SESSION['uid']."'",$r_group) || $access == 'true')
                     {
                         $tool_content .= "<td class='text-center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
-                        if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' )
+                        if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) < 1440 && get_total_bbb_servers()<>'0' )
                         {   
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>".q($title)."</a>";
                         } else {
@@ -852,7 +864,13 @@ function create_meeting($title, $meeting_id, $mod_pw, $att_pw, $record)
     $users_to_join = Database::get()->querySingle("SELECT COUNT(*) AS count FROM course_user, user
                                 WHERE course_user.course_id = ?d AND course_user.user_id = user.id", $course_id)->count;
     //Algorithm to select BBB server GOES HERE ...
-    $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
+    if($record=='true')
+    {
+        $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' AND enable_recordings=?s ORDER BY weight ASC",$record);
+    }else
+    {
+        $query = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY weight ASC");
+    }
 
     if ($query) {
         foreach ($query as $row) {

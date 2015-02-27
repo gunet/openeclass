@@ -241,18 +241,18 @@ $tool_content .= "
                     </div>
                     <div class='col-xs-8 col-sm-5'>
                         <h4>".q("$_SESSION[givenname] $_SESSION[surname]")."</h4>
-                        <span class='tag'>$langProfileMemberSince : </span><span class='tag-value'>". claro_format_locale_date($dateFormatLong, strtotime($userdata->registered_at))."</span><br>
-                        <span class='tag'>$langProfileLastVisit : </span><span class='tag-value'>". claro_format_locale_date($dateFormatLong, strtotime($lastVisit[0]->when))."</span>
+                        <span class='tag'>$langProfileMemberSince : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($userdata->registered_at))."</span><br>
+                        <span class='tag'>$langProfileLastVisit : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($lastVisit[0]->when))."</span>
                     </div>
                     <div class='col-xs-12 col-sm-5'>
                         <ul class='list-group'>
                             <li class='list-group-item'>
                               <span class='badge'>$student_courses_count</span>
-                              $langSumCoursesEnrolled
+                              <span class='text-muted'>$langSumCoursesEnrolled</span>
                             </li>
                             <li class='list-group-item'>
                               <span class='badge'>$teacher_courses_count</span>
-                              $langSumCoursesSupport
+                              <span class='text-muted'>$langSumCoursesSupport</span>
                             </li>
                         </ul>
                         <div class='quick-change-pwd'><a href='".$urlSecure."main/profile/password.php'>$langProfileQuickPassword</a></div>

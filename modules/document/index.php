@@ -171,12 +171,13 @@ if ($can_upload) {
      * ******************************************************************** */
 
     $action_message = $dialogBox = '';
+    $extra_path = '';
     if (isset($_POST['fileCloudInfo'])) {
         $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
-        $cloudfile->storeToLocalFile("/tmp/outfile");
+        $uploaded = true;
+        $fileName = $cloudfile->name();
     } else if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
         validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
-        $extra_path = '';
         $userFile = $_FILES['userFile']['tmp_name'];
         // check for disk quotas
         $diskUsed = dir_total_space($basedir);
@@ -213,7 +214,6 @@ if ($can_upload) {
         $components = explode('/', $extra_path);
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
-        $extra_path = '';
         $diskUsed = dir_total_space($basedir);
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
             $action_message .= "<div class='alert alert-danger'>$langNoSpace</div>";
@@ -263,7 +263,13 @@ if ($can_upload) {
         } else {
             $file_path = $uploadPath . '/' . $safe_fileName;
         }
-        if ($extra_path or (isset($userFile) and @copy($userFile, $basedir . $file_path))) {
+        $fileUploadOK = false;
+        if (isset($cloudfile)) {
+            $fileUploadOK = ($cloudfile->storeToLocalFile($basedir . $file_path) == CloudDriveResponse::OK);
+        } elseif (isset($userFile)) {
+            $fileUploadOK = @copy($userFile, $basedir . $file_path);
+        }
+        if ($extra_path or $fileUploadOK) {
             $vis = 1;
             $file_format = get_file_extension($fileName);
             $id = Database::get()->query("INSERT INTO document SET
@@ -1174,7 +1180,7 @@ if ($doc_count == 0) {
         <div class='col-md-12'>
                 <div class='table-responsive'>
                 <table class='table-default'>
-                    <tr>";
+                    <tr class='list-header'>";
     $tool_content .= "<th class='text-left' width='60'>" . headlink($langType, 'type') . '</th>' .
                      "<th class='text-left'>" . headlink($langName, 'name') . '</th>' .
                      "<th class='text-left'>$langSize</th>" .

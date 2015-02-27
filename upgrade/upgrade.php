@@ -638,7 +638,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         DBHelper::fieldExists('cours_user', 'reviewer') or
                 Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
         DBHelper::fieldExists('cours', 'course_license') or
-                Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '20' AFTER `course_addon`");
+                Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '0' AFTER `course_addon`");
 
         DBHelper::fieldExists("cours_user", "reviewer") or
                 Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
@@ -2567,6 +2567,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         
         set_config('theme', 'default');
         set_config('theme_options_id', 0);
+        
+        // delete stale course licenses (if exist)
+        Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
+        // delete stale course units entries from course modules (27 -> MODULE_ID_UNITS)
+        Database::get()->query("DELETE FROM course_module WHERE module_id = 27");
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");

@@ -188,20 +188,17 @@ if (!empty($message)) {
 }
 
       $tool_content .=  action_bar(array(
-            array('title' => $langGroupThisSpace,
-                'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
+            array('title' => $langAdminUsers,
+                'url' => "../user/?course=$course_code",
                 'icon' => 'fa-users',
                 'level' => 'primary-label'),
             array(
                 'title' => $langBack,
                 'level' => 'primary-label',
                 'icon' => 'fa-reply',
-                'url' => "index.php?course=$course_code"
-                 ),
-            array('title' => $langAddTutors,
-                'url' => "../user/?course=$course_code",
-                'icon' => 'fa-folder',
-                'level' => 'primary')
+                'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
+                
+                 )
         ));
 
 $tool_content .= "<div class='form-wrapper'>

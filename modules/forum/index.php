@@ -115,9 +115,9 @@ if ($total_categories > 0) {
         } else {
             $link_notify = toggle_link($action_notify);
         }
-        $tool_content .= "<table class='table-default'>";
+        $tool_content .= "<div class='table-responsive' style='margin-bottom:30px;'><table class='table-default'>";
         $tool_content .= "
-		<caption><b>$cat_title</b><div class='pull-right'>";
+		<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
             array(
@@ -146,15 +146,16 @@ if ($total_categories > 0) {
         );
         $tool_content .= action_button($dyntools)."</div></caption>";
 
-        $tool_content .= "<tr>
+        $tool_content .= "<tr class='list-header'>
 		<td class='forum_td'>$langForums</td>
-		<td class='text-center forum_td'>$langSubjects</td>
-		<td class='text-center forum_td'>$langPosts</td>
+		<td class='text-center forum_td' width='100'>$langSubjects</td>
+		<td class='text-center forum_td' width='100'>$langPosts</td>
 		<td class='text-center forum_td'>$langLastPost</td>
 		<th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
 		</tr>";
 
         // display forum topics
+        if($forum_row) {
         foreach ($forum_row as $forum_data) {
             unset($last_post);
             $cat_id = $cat_row->id;
@@ -258,12 +259,15 @@ if ($total_categories > 0) {
                 }
             } else {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td colspan='6' class='alert2'>$langNoForumsCat</td>";
+                $tool_content .= "<td colspan='6' class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>";
                 $tool_content .= "</tr>";
                 break;
             }
         }
-        $tool_content .= "</table>";
+        } else {
+            $tool_content .= "<tr><td colspan='8' class='text-center'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
+        }
+        $tool_content .= "</table></div>";
     }
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langNoForums</div>";

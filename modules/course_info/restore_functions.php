@@ -24,7 +24,7 @@
 function visibility_select($current) {
     global $langOpenCourse, $langRegCourse, $langClosedCourse, $langInactiveCourse;
 
-    $ret = "<select name='course_vis'>\n";
+    $ret = "<select class='form-control' name='course_vis'>\n";
     foreach (array($langOpenCourse => COURSE_OPEN,
             $langRegCourse => COURSE_REGISTRATION,
             $langClosedCourse => COURSE_CLOSED,
@@ -245,7 +245,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     $langCourseDescription, $langFaculty, $langCourseVis,
     $langTeacher, $langUsersWillAdd,
     $langOk, $langAll, $langsTeachers, $langMultiRegType,
-    $langNone, $langOldValue, $treeObj;
+    $langNone, $langOldValue, $treeObj, $langBack, $course_code;
 
     list($tree_js, $tree_html) = $treeObj->buildCourseNodePicker();
     if ($type) {
@@ -269,39 +269,90 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     if (isset($GLOBALS['course_code'])) {
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
-    return "<div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
-                <form action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
-                <table width='99%' class='tbl'><tbody>
-                   <tr><td>&nbsp;</td></tr>
-                   <tr><th>$langCourseCode:</th>
-                       <td><input type='text' name='course_code' value='" . q($code) . "' /></td></tr>
-                   <tr><th>$langLanguage:</th>
-                       <td>" . lang_select_options('course_lang') . "</td>
-                   <tr><th>$langTitle:</th>
-                       <td><input type='text' name='course_title' value='" . q($title) . "' size='50' /></td></tr>
-                   <tr><th>$langCourseDescription:</th>
-                       <td>" . rich_text_editor('desc', 10, 40, purify($desc)) . "</td></tr>
-                       <tr><th>$langFaculty:</th>
-                       <td>" . $tree_html . "<br>$langOldValue: <i> " . hierarchy::unserializeLangField($old_faculty) . "</i></td></tr>
-                   <tr><th>$langCourseVis:</th><td>" . visibility_select($vis) . "</td></tr>
-                   <tr><th>$langTeacher:</th>
-                       <td><input type='text' name='course_prof' value='" . q($prof) . "' size='50' /></td></tr>
-                   <tr><td>&nbsp;</td></tr>
-                   <tr><th>$langUsersWillAdd:</th>
-                       <td><input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
-                           <label for='add_users_all'>$langAll</label><br>
+    $action_btn = action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php?course=$course_code",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+    return $action_btn."
+        <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>  
+                <div class='row'>
+                <div class='col-md-12'>
+                <div class='form-wrapper' >
+                <form class='form-horizontal' role='form' action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
+                
+                    <div class='form-group'>
+                        <label for='course_code' class='col-sm-3 control-label'>$langCourseCode:</label>
+                        <div class='col-sm-9'>
+                            <input type='text' class='form-control' id='course_code' name='course_code' value='" . q($code) . "'>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='course_code' class='col-sm-3 control-label'>$langLanguage:</label>
+                        <div class='col-sm-9'>
+                            " . lang_select_options('course_lang') . "
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='course_title' class='col-sm-3 control-label'>$langTitle:</label>
+                        <div class='col-sm-9'>
+                            <input class='form-control' type='text' id='course_title' name='course_title' value='" . q($title) . "' />
+                        </div>
+                    </div>
+                    
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langCourseDescription:</label>
+                        <div class='col-sm-9'>
+                            " . rich_text_editor('course_desc', 10, 40, purify($desc)) . "
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langFaculty:</label>
+                        <div class='col-sm-9'>
+                            " . $tree_html . "<br>$langOldValue: <i> " . hierarchy::unserializeLangField($old_faculty) . "</i>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langCourseVis:</label>
+                        <div class='col-sm-9'>
+                            " . visibility_select($vis) . "
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label for='course_prof' class='col-sm-3 control-label'>$langTeacher:</label>
+                        <div class='col-sm-9'>
+                            <input class='form-control' type='text' id='course_prof' name='course_prof' value='" . q($prof) . "' size='50' />
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                    <label class='col-sm-3 control-label'>$langUsersWillAdd:</label>
+                        
+                        <div class='col-sm-9'>
+                            <input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
+                           $langAll<br>
                            <input type='radio' name='add_users' value='prof' id='add_users_prof'>
-                           <label for='add_users_prof'>$langsTeachers</label><br>
+                           $langsTeachers<br>
                            <input type='radio' name='add_users' value='none' id='add_users_none'>
-                           <label for='add_users_none'>$langNone</label></td></tr>
-                   <tr><th><label for='create_users'>$langMultiRegType:</label></th>
-                       <td><input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'></td></tr>
-                   <tr><td>&nbsp;</td></tr>
-                   <tr><td colspan='2'>
-                      <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
-                      <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' /></td></tr>
-                </tbody></table>
-                </form>";
+                           $langNone
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langMultiRegType:</label>
+                        <div class='col-sm-9'>
+                            <input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-offset-3 col-sm-9'>
+                        <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
+                      <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
+                          </div>
+                    </div>
+                </form>
+                </div>
+                </div>
+                </div>
+    ";
 }
 
 function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {

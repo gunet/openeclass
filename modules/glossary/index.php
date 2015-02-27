@@ -385,9 +385,9 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                             GROUP BY term
                             ORDER BY term", $course_id, $terms);
     if (count($sql) > 0) {
-        $tool_content .= "<div class='table-responsive'>";
+        $tool_content .= "<div class='table-responsive glossary-categories'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr>
+        $tool_content .= "<tr class='list-header'>
                      <th class='text-left'>$langGlossaryTerm</th>
                      <th class='text-left'>$langGlossaryDefinition</th>";
         if ($is_editor) {
@@ -399,20 +399,20 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                 $pageName = q($g->term);
             }        
             if (!empty($g->url)) {
-                $urllink = "<div><span class='smaller'>(<a href='" . q($g->url) .
-                        "' target='_blank'>" . q($g->url) . "</a>)</span></div>";
+                $urllink = "<div><span class='term-url'><a href='" . q($g->url) .
+                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></span></div>";
             } else {
                 $urllink = '';
             }
 
             if (!empty($g->category_id)) {
-                $cat_descr = "<span class='smaller'>$langCategory: <a href='$base_url&amp;cat=$g->category_id'>" . q($categories[$g->category_id]) . "</a></span>";
+                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat=$g->category_id'>" . q($categories[$g->category_id]) . "</a></span>";
             } else {
                 $cat_descr = '';
             }
 
             if (!empty($g->notes)) {
-                $urllink .= "<br>" . standard_text_escape($g->notes);
+                $urllink .= "<br>". standard_text_escape($g->notes);
             }
 
             if (!empty($g->definition)) {
@@ -422,7 +422,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             $tool_content .= "<tr>
-                     <th width='150'><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a> <div class='invisible'>$cat_descr</div></th>
+                     <td width='150'><strong><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
                      <td><em>$definition_data</em>$urllink</td>";
 
             if ($is_editor) {
@@ -443,7 +443,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
         }
         $tool_content .= "</table></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoResult</div>";
+        $tool_content .= "<br><div class='alert alert-warning'>$langNoResult</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

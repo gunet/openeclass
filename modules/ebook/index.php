@@ -91,8 +91,7 @@ if ($is_editor) {
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2 '>
-                        <input type='submit' class='btn btn-primary' name='submit' value='$langSend' />
-                        <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>      
+                        <input type='submit' class='btn btn-primary' name='submit' value='$langSend' />     
                     </div>
                 </div>                         
             </form>
@@ -123,13 +122,13 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
 
 if (!$q) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
-} else {
+} else if(!isset($_GET['create'])){
     $tool_content .= "<div class='table-responsive'>";
     $tool_content .= "<table class='table-default'>
-     <tr>
+     <tr class='list-header'>
        <th class = 'text-left'>$langEBook</th>" .
             ($is_editor ?
-                    "<th width='70' class='text-center'>".icon('fa-gears')."</th>" :
+                    "<th class='text-center option-btn-cell'>".icon('fa-gears')."</th>" :
                     '<th>&nbsp;</th>') . "
      </tr>";
 
@@ -145,7 +144,7 @@ if (!$q) {
         $warning = is_null($r->sid) ? " <i>($langInactive)</i>" : '';
         $tool_content .= "<tr class = '$vis_class'>
                 <td>$title_link</td>
-                 <td>".
+                 <td class='option-btn-cell'>".
                    tools($r->id, $k, $num, $r->visible) . 
                 "</td></tr>";
         $k++;

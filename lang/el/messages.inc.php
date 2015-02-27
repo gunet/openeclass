@@ -38,7 +38,7 @@ $langOperation = "Λειτουργία";
 $langContactInfo = "Στοιχεία επικοινωνίας";
 $langInCourses = "Στο μάθημα";
 $langOfSite = "της πλατφόρμας";
-
+$langResourceBrowser = 'Αναζήτηση πόρων';
 
 #For the logged-out user:
 $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
@@ -1135,6 +1135,7 @@ $langCreateCourseGroups = "Ομάδες Χρηστών";
 $langCatagoryMain = "Αρχή";
 $langCatagoryGroup = "Συζητήσεις Ομάδων χρηστών";
 $langNoGroup = "Δεν έχουν οριστεί ομάδες χρηστών";
+$langGroupMembersNum = "Μέλη";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "(Σημ.) μπορείτε να αλλάξετε διάφορες ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";
@@ -2404,7 +2405,7 @@ $langNoAssignmentsExist = "Δεν υπάρχουν εργασίες προς π�
 $langNoAnnouncementsExist = "Δεν υπάρχουν ανακοινώσεις";
 $langNoDocsExist = "Δεν υπάρχουν έγγραφα";
 $langNoPosts = "Δεν υπάρχουν αποστολές στις περιοχές συζητήσεων";
-$langNotEnrolledToLessons = "Δεν είστε εγγεγραμμένος/η σε μαθήματα";
+$langNotEnrolledToLessons = "Δεν έχετε εγγραφεί σε μαθήματα";
 $langMore = "περισσότερα";
 $langSender = "Αποστολέας";
 $langUnknown = "μη ορισμένη";
@@ -2520,6 +2521,7 @@ $langLockTopic = "Κλείδωμα θέματος";
 $langUnlockTopic = "Ξεκλείδωμα θέματος";
 $langLockedTopic = "To θέμα κλειδώθηκε επιτυχώς";
 $langUnlockedTopic = "To θέμα ξεκλειδώθηκε επιτυχώς";
+$langNoForumTopic = "Δεν υπάρχουν περιοχές συζητήσεων";
 
 /* * ***************************************************************
  * questionnaire.php
@@ -3385,8 +3387,8 @@ $langdate = "Ημερομηνία";
 $langNoVideo = "Δεν υπάρχουν διαθέσιμα πολυμεσικά αρχεία";
 $langEmptyVideoTitle = "Παρακαλώ πληκτρολογήστε ένα τίτλο για το αρχείο σας";
 $langColorboxCurrent = "πολυμέσο {current} από {total}";
-$langVideoDirectory = "Πολυμεσικά αρχεία";
-$langCatVideoDirectory = "Κατηγοριοποιημένα πολυμεσικά αρχεία";
+$langVideoDirectory = "Γενικά πολυμεσικά αρχεία";
+$langCatVideoDirectory = "Κατηγορίες πολυμεσικών αρχείων";
 $langCatVideoDirectoryCreated = "Η κατηγορία προστέθηκε";
 
 /* * ***********************************************************
@@ -3796,7 +3798,7 @@ $langGlossaryUrl = 'URL ορισμού';
 $langGlossaryExpand = 'Εμφάνιση ορισμών στις σελίδες του μαθήματος';
 $langGlossaryIndex = 'Αλφαβητικό ευρετήριο όρων';
 $langConfig = 'Ρυθμίσεις';
-$langGlossaryToCsv = "Όροι σε μορφή csv";
+$langGlossaryToCsv = "Εξαγωγή σε μορφή csv";
 $langGlossaryOverLimit = 'Το πλήθος όρων του γλωσσαρίου υπερβαίνει το όριο (%s), ως εκ τούτου οι ορισμοί των όρων δεν θα εμφανίζονται στις σελίδες του μαθήματος.';
 
 /* * ******************************************
@@ -4216,6 +4218,7 @@ $langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlu
 $langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
 $langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlueButton";
 $langNoAvailableBBBServers = "Δεν υπάρχουν διαθέσιμοι εξυπηρετητές BigBlueButton";
+$langExtAppConfig = 'Ρυθμίσεις εξωτερικών προγραμμάτων';
 $langBBBConfig = 'Ρυθμίσεις BigBlueButton';
 $langBBBEnabled = 'Διαθέσιμος';
 $langBBBOptions = 'Τροποποίηση';
@@ -4232,8 +4235,8 @@ $langNewBBBSessionInfo = "Στοιχεία νέας τηλεσυνεργασία
 $langNewBBBSessionStart = "Έναρξη τηλεσυνεργασίας";
 $langNewBBBSessionDesc = "Σύντομη περιγραφή τηλεσυνεργασίας";
 $langNewBBBSessionType = "Είδος τηλεσυνεργασίας";
-$langNewBBBSessionPublic = "Δημόσια προς τρίτους";
-$langNewBBBSessionPrivate = "Ιδιωτική";
+$langNewBBBSessionPublic = "Μπορούν να συμμετάσχουν όλοι οι εγγεγραμμένοι χρήστες της πλατφόρμας (εκπαιδευόμενοι άλλων μαθημάτων)";
+$langNewBBBSessionPrivate = "Μπορούν να συμμετάσχουν μόνο οι εγγεγραμμένοι χρήστες του μαθήματος";
 $langBBBSessionJoin = "Σύνδεση";
 
 $langBBBUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
@@ -4412,11 +4415,15 @@ $langAbuseReportClosed = 'Κλειστή αναφορά';
   Theme Options
  * ***************************************** */
 $langThemeSettings = 'Ρυθμίσεις Θέματος';
-$langActiveThemeSettings = 'Ενεργές Ρυθμίσεις Θέματος';
+$langActiveTheme = 'Ενεργό Θέμα';
+$langPreviewState = 'Βρίσκετε σε κατάσταση προεπισκόπησης του θέματος';
+$langThemeInstalled = 'Το θέμα εγκαταστάθηκε με επιτυχία';
+$langAvailableThemes = 'Διαθέσιμα Θέματα';
 $langDefaultThemeSettings = 'Open eClass Default';
-$langThemeSettingsDelete = 'Είστε σίγουρος ότι θέλετε να διαγράψετε την συγκεκριμένη ομάδα ρυθμίσεων θέματος?';
-$langThemeSettingsName = "Όνομα Ρυθμίσεων Θέματος";
+$langThemeSettingsDelete = 'Είστε σίγουρος ότι θέλετε να διαγράψετε το συγκεκριμένο θέμα?';
+$langThemeSettingsName = "Όνομα Θέματος";
 $langGeneralSettings = 'Γενικές Ρυθμίσεις';
+$langContainerWidth = 'Πλάτος Επιφάνειας Εργασίας';
 $langLogo = 'Λογότυπο';
 $langLogoNormal = "(Κανονικό)";
 $langLogoSmall = "(Για μικρές οθόνες)";
@@ -4438,7 +4445,8 @@ $langNavSettings = 'Ρυθμίσεις Μενού Πλοήγησης';
 $langSaveAs = 'Αποθήκευση ως ...';
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
-$langLoginImgPlacementSmall = "Μικρή (δεξιά στοίχιση)";
+$langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";
+$langLoginImgPlacementSmall = "Μικρή (αριστερή στοίχιση)";
 $langLoginImgPlacementFull = "Πλήρους Πλάτους (πλάτος: 1091px, ύψος: 315px)";
 $langThemeOptionsName = "Όνομα Ρυθμίσεων Θέματος";
 

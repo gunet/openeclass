@@ -199,7 +199,7 @@ if (isset($_GET['mid'])) {
     $out = "<div id='out_del_msg'></div><div id='outbox' class='table-responsive'>";
     $out .= "<table id='outbox_table' class='table-default'>
                <thead>
-                 <tr>
+                 <tr class='list-header'>
                     <th>$langSubject</th>";
     if ($course_id == 0) {
         $out .= "<th>$langCourse</th>";

@@ -366,7 +366,8 @@ if ($is_editor) {
                                                                      'content' => $txt_content));
 
         // send email
-        if ($send_mail) {            
+        if ($send_mail) {
+            $title = course_id_to_title($course_id);
             $recipients_emaillist = "";
             foreach($_POST['recipients'] as $re){
                 $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
