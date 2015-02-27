@@ -748,11 +748,11 @@ function bbb_session_details() {
                     $access='false';
                     foreach($myGroups as $mg)
                     {
-                        if(in_array($mg,$r_group)) { 
+                        if(in_array("'_".$mg->group_id."'",$r_group)) { 
                             $access='true';                            
                         }
                     }
-                    if(in_array("0",$r_group) || $access == 'true')
+                    if(in_array("'".$_SESSION['uid']."'",$r_group) || $access == 'true')
                     {
                         $tool_content .= "<td class='text-center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
