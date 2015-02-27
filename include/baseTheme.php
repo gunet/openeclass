@@ -472,7 +472,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
         if (isset($theme_options_styles['containerWidth'])){
-            $styles_str .= "@media (min-width: 1340px){.container {width: $theme_options_styles[containerWidth]px;}}";
+            $styles_str .= "@media (min-width: $theme_options_styles[containerWidth]px){.container {width: $theme_options_styles[containerWidth]px;}}";
         }
         if (isset($theme_options_styles['openeclassBanner'])){
              $styles_str .= "#openeclass-banner {display: none;}";

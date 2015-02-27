@@ -418,7 +418,7 @@ $tool_content .= "
             <div class='form-group'>
                 <label for='containerWidth' class='col-sm-3 control-label'>$langContainerWidth:</label>
                 <div class='col-sm-9'>
-                    <input id='containerWidth' name='containerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[containerWidth]'>
+                    <input id='containerWidth' name='containerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1890' data-slider-step='10' data-slider-value='$theme_options_styles[containerWidth]'>
                 </div>
             </div>                        
             <div class='form-group'>
