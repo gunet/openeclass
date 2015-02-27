@@ -35,7 +35,7 @@ require_once '../template/template.inc.php';
  * @param type $toolContent
  */
 function draw($toolContent, $options=null) {
-	global $urlServer, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
+	global $urlServer, $urlAppend, $langStep, $langStepTitle, $langTitleInstall, $langInstallProgress;
 
     if (!$options) {
         $options = array();
@@ -51,8 +51,8 @@ function draw($toolContent, $options=null) {
     $t->set_block('mainBlock', 'LoggedOutBlock', 'delete');
     $t->set_block('mainBlock', 'toolTitleBlock', 'delete');
     $t->set_block('mainBlock', 'statusSwitchBlock', 'delete');
-    $t->set_var('logo_img', 'logo_eclass.png');
-    $t->set_var('logo_img_small', 'logo_eclass_small.png');
+    $t->set_var('logo_img', '../template/default/img/logo_eclass.png');
+    $t->set_var('logo_img_small', '../template/default/img/logo_eclass_small.png');
     $t->set_var('template_base', '../template/default');
 
     if (isset($options['no-menu'])) {

@@ -446,8 +446,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
     
     // Add Theme Options styles
-    $t->set_var('logo_img', 'eclass-new-logo.png');
-    $t->set_var('logo_img_small', 'logo_eclass_small.png');
+    $t->set_var('logo_img', $themeimg.'/eclass-new-logo.png');
+    $t->set_var('logo_img_small', $themeimg.'/logo_eclass_small.png');
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
@@ -460,13 +460,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             } elseif(isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'fix') {
                 $background_type .= "background-size: 100% 100%;background-attachment: fixed;";
             }
-            $bg_image = isset($theme_options_styles['bgImage']) ? " url('$themeimg/theme_images/$theme_id/$theme_options_styles[bgImage]')" : "";
+            $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[bgImage]')" : "";
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
             $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
         }
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$themeimg/theme_images/$theme_id/$theme_options_styles[loginImg]'), $gradient_str }";
+        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[loginImg]'), $gradient_str }";
         if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
             $styles_str .= ".jumbotron.jumbotron-login {  background-size: cover, cover; background-position: 0% 0%;}";
         }
@@ -491,8 +491,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (!empty($theme_options_styles['leftMenuBgColor'])) $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
         if (!empty($theme_options_styles['leftMenuHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
         if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
-        if (isset($theme_options_styles['imageUpload'])) $t->set_var('logo_img', "theme_images/$theme_id/".$theme_options_styles['imageUpload']);        
-        if (isset($theme_options_styles['imageUploadSmall'])) $t->set_var('logo_img_small', "theme_images/$theme_id/".$theme_options_styles['imageUploadSmall']); 
+        if (isset($theme_options_styles['imageUpload'])) $t->set_var('logo_img', $urlAppend."courses/theme_data/$theme_id/".$theme_options_styles['imageUpload']);        
+        if (isset($theme_options_styles['imageUploadSmall'])) $t->set_var('logo_img_small', $urlAppend."courses/theme_data/$theme_id/".$theme_options_styles['imageUploadSmall']); 
       
         $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");        
     }

@@ -22,6 +22,7 @@
 
 // Check if user is administrator and if yes continue
 // Othewise exit with appropriate message
+
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
@@ -38,7 +39,6 @@ $defaults = array(
                 "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement")        
             );
-
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
 $theme_id = isset($preview_theme) ? $preview_theme : $active_theme;
@@ -50,32 +50,34 @@ if (isset($_GET['delete_image'])) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
         $logo_type = $_GET['delete_image'];
-        unlink("$webDir/template/$theme/img/theme_images/$theme_id/$theme_options_styles[$logo_type]");
+        unlink("$webDir/courses/theme_data/$theme_id/$theme_options_styles[$logo_type]");
         unset($theme_options_styles[$logo_type]);
         $serialized_data = serialize($theme_options_styles);
         Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
         redirect_to_home_page('modules/admin/theme_options.php');
 }
 if (isset($_GET['export'])) {
+        if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
         require_once 'include/pclzip/pclzip.lib.php';
         require_once 'include/lib/fileUploadLib.inc.php';
+        if(!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);        
         $theme_name = $theme_options->name;
 
         $styles = unserialize($theme_options->styles);
         $export_data = base64_encode(serialize($theme_options));
-        $export_data_file = 'template/default/theme_options.txt';
-        file_put_contents('template/default/theme_options.txt', $export_data);
-        $filename = "template/default/".replace_dangerous_char(greek_to_latin($theme_name)).".zip";
+        $export_data_file = 'courses/theme_data/theme_options.txt';
+        file_put_contents('courses/theme_data/theme_options.txt', $export_data);
+        $filename = "courses/theme_data/".replace_dangerous_char(greek_to_latin($theme_name)).".zip";
         
-        $file_list = array("template/default/theme_options.txt");
-        if (isset($styles['bgImage'])) array_push($file_list, "template/default/img/theme_images/$theme_id/$styles[bgImage]");
-        if (isset($styles['imageUpload'])) array_push($file_list, "template/default/img/theme_images/$theme_id/$styles[imageUpload]");
-        if (isset($styles['imageUploadSmall'])) array_push($file_list, "template/default/img/theme_images/$theme_id/$styles[imageUploadSmall]");
-        if (isset($styles['loginImg'])) array_push($file_list, "template/default/img/theme_images/$theme_id/$styles[loginImg]");
+        $file_list = array("courses/theme_data/theme_options.txt");
+        if (isset($styles['bgImage'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[bgImage]");
+        if (isset($styles['imageUpload'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUpload]");
+        if (isset($styles['imageUploadSmall'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[imageUploadSmall]");
+        if (isset($styles['loginImg'])) array_push($file_list, "courses/theme_data/$theme_id/$styles[loginImg]");
         
         $zip = new PclZip($filename);
-        $zip->create($file_list, PCLZIP_OPT_REMOVE_PATH, 'template/default');
+        $zip->create($file_list, PCLZIP_OPT_REMOVE_PATH, 'courses/theme_data');
         header("Content-Type: application/x-zip");
         header("Content-Disposition: attachment; filename=$filename");
         stop_output_buffering();
@@ -88,20 +90,21 @@ if (isset($_POST['import'])) {
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
         $file_name = $_FILES['themeFile']['name'];
-        if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "template/default/$file_name")) {
+        if(!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
+        if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
             require_once 'include/pclzip/pclzip.lib.php';
-            $archive = new PclZip("$webDir/template/default/$file_name");
-            if ($archive->extract(PCLZIP_OPT_PATH, 'template/default/temp') == 0) {
+            $archive = new PclZip("$webDir/courses/theme_data/$file_name");
+            if ($archive->extract(PCLZIP_OPT_PATH, 'courses/theme_data/temp') == 0) {
                 die("Error : ".$archive->errorInfo(true));
             } else {
-                unlink("$webDir/template/default/$file_name");
-                $base64_str = file_get_contents("$webDir/template/default/temp/theme_options.txt");
-                unlink("$webDir/template/default/temp/theme_options.txt");
+                unlink("$webDir/courses/theme_data/$file_name");
+                $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
+                unlink("$webDir/courses/theme_data/temp/theme_options.txt");
                 $theme_options = unserialize(base64_decode($base64_str));                
-                $theme_options_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
-                rename("$webDir/template/default/temp/img/theme_images/$theme_options->id", "$webDir/template/default/temp/img/theme_images/$theme_options_id");
-                recurse_copy("$webDir/template/default/temp","$webDir/template/default");
-                removeDir("$webDir/template/default/temp");
+                $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
+                @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
+                recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
+                removeDir("$webDir/courses/theme_data/temp");
                 Session::Messages('Το θέμα εγκαταστάθηκε με επιτυχία');
             }
         }
@@ -120,7 +123,7 @@ if (isset($_POST['optionsSave'])) {
     $theme_id = $_GET['delThemeId'];
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
     $theme_options_styles = unserialize($theme_options->styles);
-    @removeDir("$webDir/template/$theme/img/theme_images/$theme_id");
+    @removeDir("$webDir/courses/theme_data/$theme_id");
     Database::get()->query("DELETE FROM theme_options WHERE id = ?d", $theme_id);
     if($_GET['delThemeId'] == $active_theme) {
         Database::get()->query("UPDATE config SET value = ?d WHERE `key` = ?s", 0, 'theme_options_id');
@@ -307,7 +310,7 @@ if (isset($_POST['optionsSave'])) {
                     </form>";
     if (isset($theme_options_styles['imageUpload'])) {
         $logo_field = "
-            <img src='$themeimg/theme_images/$theme_id/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
+            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
             <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
         ";    
     } else {
@@ -315,7 +318,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "
-            <img src='$themeimg/theme_images/$theme_id/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
+            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
             <input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>
         ";
     } else {
@@ -323,7 +326,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
-            <img src='$themeimg/theme_images/$theme_id/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
+            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
             <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
         ";
     } else {
@@ -331,7 +334,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
-            <img src='$themeimg/theme_images/$theme_id/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
+            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
         ";
     } else {
@@ -548,7 +551,7 @@ if (isset($_POST['optionsSave'])) {
                 <div class='col-sm-9 col-sm-offset-3'>
                     ".($theme_id ? "<input class='btn btn-primary' name='optionsSave' type='submit' value='$langSave'>" : "")."
                     <input class='btn btn-success' name='optionsSaveAs' id='optionsSaveAs' type='submit' value='$langSaveAs'>
-                    <a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>
+                    ".($theme_id ? "<a class='btn btn-info' href='theme_options.php?export=true'>$langExport</a>" : "")."
                 </div>
             </div>        
         </form>
@@ -577,14 +580,14 @@ function initialize_settings() {
 }
 function clone_images() {
     global $webDir, $theme, $new_theme_id, $theme_id;
-    if(!is_dir("$webDir/template/$theme/img/theme_images/$new_theme_id")) {
-        mkdir("$webDir/template/$theme/img/theme_images/$new_theme_id", 0755);
+    if(!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
+        mkdir("$webDir/courses/theme_data/$new_theme_id", 0755);
     }     
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
-            if(copy("$webDir/template/$theme/img/theme_images/$theme_id/$image_name", "$webDir/template/$theme/img/theme_images/$new_theme_id/$image_name")){
+            if(copy("$webDir/courses/theme_data/$theme_id/$image_name", "$webDir/courses/theme_data/$new_theme_id/$image_name")){
                 $_POST[$image] = $image_name;
             }                
         }
@@ -592,8 +595,8 @@ function clone_images() {
 }
 function upload_images() {
     global $webDir, $theme, $theme_id;
-    if(!is_dir("$webDir/template/$theme/img/theme_images/$theme_id")) {
-        mkdir("$webDir/template/$theme/img/theme_images/$theme_id", 0755);
+    if(!is_dir("$webDir/courses/theme_data/$theme_id")) {
+        mkdir("$webDir/courses/theme_data/$theme_id", 0755);
     } 
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
@@ -601,13 +604,13 @@ function upload_images() {
             $file_name = $_FILES[$image]['name'];
             validateUploadedFile($file_name, 2);
             $i=0;
-            while (is_file("$webDir/template/$theme/img/theme_images/$theme_id/$file_name")) {
+            while (is_file("$webDir/courses/theme_data/$theme_id/$file_name")) {
                 $i++;
                 $name = pathinfo($file_name, PATHINFO_FILENAME);
                 $ext =  get_file_extension($file_name);
                 $file_name = "$name-$i.$ext";
             }
-            move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/template/$theme/img/theme_images/$theme_id/$file_name");
+            move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/courses/theme_data/$theme_id/$file_name");
             $_POST[$image] = $file_name;
         }
     }
