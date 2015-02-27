@@ -248,7 +248,7 @@ if (isset($_POST['optionsSave'])) {
                     }
                 });
             })
-            $('select.form-submit').change(function ()
+            $('select#theme_selection').change(function ()
             {
                 var cur_val = $(this).val();
                 if (cur_val == '$active_theme') {
