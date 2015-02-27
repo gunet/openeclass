@@ -756,7 +756,7 @@ function bbb_session_details() {
                     {
                         $tool_content .= "<td class='text-center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
-                        if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' )
+                        if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) < 1440 && get_total_bbb_servers()<>'0' )
                         {   
                             $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>".q($title)."</a>";
                         } else {
