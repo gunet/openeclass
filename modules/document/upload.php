@@ -70,8 +70,7 @@ if ($can_upload) {
         <div class='form-group'>
           <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile</label>
           <div class='col-sm-10'>
-            " . CloudDriveManager::renderAsButtons() . "
-            <span class=\"btn btn-default btn-file\"> <input type='file' id='userFile' name='userFile'></span>
+            " . CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
           </div>
         </div>";
     }
@@ -178,30 +177,32 @@ if ($can_upload) {
     if (!isset($_GET['ext'])) {
         $tool_content .= "
         <div class='form-group'>
-          <label for='inputFileCompression' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langUncompress</label>
-          <div class='col-md-1 col-sm-1 col-xs-2'>
-            <div class='checkbox pull-right'>
+          <div class='col-xs-offset-2 col-xs-10'>
+            <span class='checkbox-padding'>
                 <input type='checkbox' name='uncompress' value='1'>
-            </div>
-          </div>
+            </span>
+          <label for='inputFileCompression' class='control-label'>$langUncompress</label>
+              </div>
         </div>";
     }
 
     $tool_content .= "
       <div class='form-group'>
-        <label for='inputFileReplaceSameName' class='col-md-5 col-sm-5 col-xs-10 control-label'>$langReplaceSameName</label>
-        <div class='col-md-1 col-sm-1 col-xs-2'>
-          <div class='checkbox pull-right'>
+        <div class='col-xs-offset-2 col-xs-10'>
+          <span class='checkbox-padding'>
               <input type='checkbox' name='replace' value='1'>
-          </div>
+          </span>
+          <label for='inputFileReplaceSameName' class='control-label'>$langReplaceSameName</label>
         </div>
       </div>      
 
-<div class='infotext-sm margin-bottom-thin'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
-
+    <div class='row'>
+        <div class='infotext-sm col-xs-offset-2 col-xs-10 margin-bottom-fat'>$langNotRequired<br />$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+    </div>";
+    
     $tool_content .= "
       <div class='form-group'>
-        <div class='col-sm-offset-5 col-sm-12'>
+        <div class='col-xs-offset-2 col-xs-10'>
           <button type='submit' class='btn btn-primary'>
             <i class='fa fa-arrow-up space-after-icon'></i>
             $langUpload

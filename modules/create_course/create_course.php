@@ -240,11 +240,11 @@ if (!isset($_POST['create_course'])) {
             <div class='form-group'>
                 <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                 <div class='col-sm-10'>
-                  <input name='title' id='title' type='text' class='form-control' id='exerciseTitle' value='" . q($title) . "' placeholder='$langTitle'>
+                  <input name='title' id='title' type='text' class='form-control' value='" . q($title) . "' placeholder='$langTitle'>
                 </div>
             </div>
             <div class='form-group'>
-                <label for='dialog-set-value' class='col-sm-2 control-label'>$langFaculty:</label>
+                <label  class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>
                   $html
                 </div>
@@ -361,7 +361,7 @@ if (!isset($_POST['create_course'])) {
                 <div class='form-group'>
                     <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
                     <div class='col-sm-10'>
-                          <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' class='FormData_InputText' autocomplete='off'>
+                          <input class='form-control FormData_InputText' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
                     </div>
                 </div>
                 <div class='form-group'>

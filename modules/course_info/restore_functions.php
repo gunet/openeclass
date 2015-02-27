@@ -270,6 +270,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
     return "<div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>
+            <div class='form-wrapper' >
                 <form action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
                 <table width='99%' class='tbl'><tbody>
                    <tr><td>&nbsp;</td></tr>
@@ -301,7 +302,45 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                       <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' /></td></tr>
                 </tbody></table>
-                </form>";
+                </form>
+                </div>
+                
+                <div class='form-wrapper' >
+                <form action='$formAction' method='post' onsubmit='return validateNodePickerForm();' >
+                <table width='99%' class='tbl'><tbody>
+                   <tr><td>&nbsp;</td></tr>
+                   <tr><th>$langCourseCode:</th>
+                       <td><input type='text' name='course_code' value='" . q($code) . "' /></td></tr>
+                   <tr><th>$langLanguage:</th>
+                       <td>" . lang_select_options('course_lang') . "</td>
+                   <tr><th>$langTitle:</th>
+                       <td><input type='text' name='course_title' value='" . q($title) . "' size='50' /></td></tr>
+                   <tr><th>$langCourseDescription:</th>
+                       <td>" . rich_text_editor('course_desc', 10, 40, purify($desc)) . "</td></tr>
+                       <tr><th>$langFaculty:</th>
+                       <td>" . $tree_html . "<br>$langOldValue: <i> " . hierarchy::unserializeLangField($old_faculty) . "</i></td></tr>
+                   <tr><th>$langCourseVis:</th><td>" . visibility_select($vis) . "</td></tr>
+                   <tr><th>$langTeacher:</th>
+                       <td><input type='text' name='course_prof' value='" . q($prof) . "' size='50' /></td></tr>
+                   <tr><td>&nbsp;</td></tr>
+                   <tr><th>$langUsersWillAdd:</th>
+                       <td><input type='radio' name='add_users' value='all' id='add_users_all' checked='checked'>
+                           <label for='add_users_all'>$langAll</label><br>
+                           <input type='radio' name='add_users' value='prof' id='add_users_prof'>
+                           <label for='add_users_prof'>$langsTeachers</label><br>
+                           <input type='radio' name='add_users' value='none' id='add_users_none'>
+                           <label for='add_users_none'>$langNone</label></td></tr>
+                   <tr><th><label for='create_users'>$langMultiRegType:</label></th>
+                       <td><input type='checkbox' name='create_users' value='1' id='create_users' checked='checked'></td></tr>
+                   <tr><td>&nbsp;</td></tr>
+                   <tr><td colspan='2'>
+                      <input class='btn btn-primary' type='submit' name='create_restored_course' value='$langOk' />
+                      <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' /></td></tr>
+                </tbody></table>
+                </form>
+                </div>
+                
+";
 }
 
 function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
