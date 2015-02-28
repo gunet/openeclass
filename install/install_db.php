@@ -1431,7 +1431,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `conference` (
   `course_id` int(11) NOT NULL,
   `conf_description` text NOT NULL,
   `status` enum('active','inactive') DEFAULT NULL,
-  `start` datetime NOT NULL,
+  `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`conf_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
