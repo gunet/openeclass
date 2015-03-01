@@ -70,7 +70,7 @@ if (isset($_GET['add_conference'])) {
     $id = $_GET['delete_conference'];
     Database::get()->querySingle("DELETE FROM conference WHERE conf_id=?d", $id);
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
+    $tool_content .= "<div class='alert alert-success'>$langChatDeleted</div>";    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "index.php",
@@ -91,7 +91,7 @@ else if (isset($_POST['submit'])) {
         (?d,?s,?s)", $couse_id,$description,$status);
     }    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
+    $tool_content .= "<div class='alert alert-success'>$langNoteSaved</div>";
     // Display link to go back to index.php
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -141,7 +141,7 @@ else {
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
                     var chkValidator  = new Validator("confForm");
-                    chkValidator.addValidation("description","req","' . $langBBBServerAlertHostname . '");
+                    //chkValidator.addValidation("description","req","' . $langBBBServerAlertHostname . '");
                 //]]></script>';
                     
     } else {
@@ -160,7 +160,7 @@ else {
                 <thead>
                 <tr><th class = 'text-center'>$langDescr</th>
                     <th class = 'text-center'>Ενεργή κουβεντούλα</th>
-                    <th class = 'text-center'>Δημιουργήθηκε</th>";
+                    <th class = 'text-center'>$langStartDate</th>";
                     
             if($is_editor){
                 $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>"; 
@@ -191,7 +191,7 @@ else {
             }            	
             $tool_content .= "</table></div>";
         } else {
-             $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>";
+             $tool_content .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";
         }
     }
 }
