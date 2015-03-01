@@ -86,9 +86,9 @@ else if (isset($_POST['submit'])) {
                 status = ?s
                 WHERE conf_id =?d", $description, $status, $conf_id);
     } else {
-        $course_id = $_POST['couse_id'];
+        $course_id = $_POST['course_id'];
         Database::get()->querySingle("INSERT INTO conference (course_id,conf_description,status) VALUES
-        (?d,?s,?s)", $couse_id,$description,$status);
+        (?d,?s,?s)", $course_id,$description,$status);
     }    
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langNoteSaved</div>";
@@ -159,7 +159,7 @@ else {
             $tool_content .= "<table class='table-default'>
                 <thead>
                 <tr><th class = 'text-center'>$langDescr</th>
-                    <th class = 'text-center'>Ενεργή κουβεντούλα</th>
+                    <th class = 'text-center'>$langChatActive</th>
                     <th class = 'text-center'>$langStartDate</th>";
                     
             if($is_editor){
