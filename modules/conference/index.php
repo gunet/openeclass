@@ -23,6 +23,7 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
+$coursePath = $webDir . '/courses/';
 
 $toolName = $langChat;
 
@@ -69,6 +70,12 @@ if (isset($_GET['add_conference'])) {
 } else if (isset($_GET['delete_conference'])) {
     $id = $_GET['delete_conference'];
     Database::get()->querySingle("DELETE FROM conference WHERE conf_id=?d", $id);
+    $fileChatName = $coursePath . $course_code . '/'.$id.'_chat.txt';
+    $tmpArchiveFile = $coursePath . $course_code . '/'.$id.'_tmpChatArchive.txt';
+
+    unlink($fileChatName);
+    unlink($tmpArchiveFile);
+    
     // Display result message
     $tool_content .= "<div class='alert alert-success'>$langChatDeleted</div>";    
     $tool_content .= action_bar(array(
