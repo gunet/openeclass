@@ -453,7 +453,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
-        $urlThemeData = $urlAppend . '/courses/theme_data/' . $theme_id;
+        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
