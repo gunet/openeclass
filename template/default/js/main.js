@@ -51,7 +51,11 @@ function popover_init() {
     $('[data-toggle="popover"]').on('shown.bs.popover', function () {
         $('.popover').mousedown(function() {
             click_in_process = true;
-        });         
+        });
+        $('.popover').mouseup(function() {
+            click_in_process = false;
+            $(this).popover('hide');
+        });        
         act_confirm();
     });
    
