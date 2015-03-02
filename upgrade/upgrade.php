@@ -2555,7 +2555,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
 
         set_config('theme', 'default');
-        set_config('theme_options_id', 0);
+        set_config('theme_options_id', get_config('theme_options_id', 0));
 
         // delete stale course licenses (if exist)
         Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
