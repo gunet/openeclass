@@ -339,6 +339,18 @@ if ($is_editor) {
         } else {
             $stop_display = "0000-00-00";
         }
+        
+        if(isset($_POST['tags'])){
+            $tagsArray = explode(',', $_POST['tags']);
+            foreach($tagsArray as $tagItem){
+                //echo $tagItem;
+                //delete all the previous for this item, course
+                //insert all the new ones
+                
+                //if it is a number insert
+            }
+        }
+        
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
@@ -486,6 +498,14 @@ if ($is_editor) {
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>
+        
+        <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input type='text' class='form-control' name='tags' multiple class='form-control' id='tags'>
+            </div>
+        </div>
+
         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
         
         <div class='form-group'>
@@ -554,6 +574,9 @@ if (isset($_GET['an_id'])) {
         }
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
+    
+
+
 add_units_navigation(TRUE);
 load_js('select2');
 $head_content .= "<script type='text/javascript'>
@@ -571,7 +594,34 @@ $head_content .= "<script type='text/javascript'>
             e.preventDefault();
             var stringVal = [];
             $('#select-recipients').val(stringVal).trigger('change');
-        });         
+        });   
+        $('#tags').select2({
+        minimumInputLength: 2,
+                tags: true,
+                tokenSeparators: [', ', ' '],
+                createSearchChoice: function(term, data) {
+                  if ($(data).filter(function() {
+                    return this.text.localeCompare(term) === 0;
+                  }).length === 0) {
+                    return {
+                      id: term,
+                      text: term
+                    };
+                  }
+                },
+                ajax: {
+                    url: '../tags/feed.php',
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function(data, page) {
+                        return {results: data};
+                    }
+                }
+        });
     });
     </script>";
 draw($tool_content, 2, null, $head_content);

@@ -1440,6 +1440,20 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `styles` LONGTEXT NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
+#
+# table `tags`
+#
+$db->query("CREATE TABLE IF NOT EXISTS tags (
+    `id` MEDIUMINT(11) NOT NULL auto_increment,
+    `element_type` VARCHAR(255) NOT NULL DEFAULT '',
+    `element_id` MEDIUMINT(11) NOT NULL DEFAULT '',
+    `user_id` VARCHAR(255) NOT NULL DEFAULT '',
+    `tag` TEXT,
+    `date` DATE DEFAULT NULL,
+    `course_id` INT(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY (id)) $charset_spec");
+
+
 $theme_options = array(
   array('name' => 'Open Courses Atoms','styles' => 'a:11:{s:11:"imageUpload";s:25:"eclass-new-logo_atoms.png";s:7:"bgImage";s:36:"bcgr_lines_petrol_les saturation.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:18:"rgba(76,173,178,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:37:"OpenCourses_banner_Color_theme1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.64)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.71)";s:22:"leftMenuHoverFontColor";s:18:"rgba(64,121,146,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(67,142,158,1)";}'),
   array('name' => 'Open Courses Sketchy','styles' => 'a:12:{s:11:"imageUpload";s:27:"eclass-new-logo_sketchy.png";s:7:"bgImage";s:24:"Light_sketch_bcgr2-1.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:19:"rgba(155,128,106,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:27:"banner_Sketch_empty-1-2.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(37,37,37,0.91)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.83)";s:22:"leftMenuHoverFontColor";s:18:"rgba(146,100,64,1)";s:25:"leftMenuSelectedFontColor";s:18:"rgba(228,164,77,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(158,135,67,1)";}'),
