@@ -23,7 +23,6 @@
 $require_current_course = TRUE;
 $require_login = TRUE;
 require_once '../../include/baseTheme.php';
-$coursePath = $webDir . '/courses/';
 
 $toolName = $langChat;
 
@@ -70,14 +69,8 @@ if (isset($_GET['add_conference'])) {
 } else if (isset($_GET['delete_conference'])) {
     $id = $_GET['delete_conference'];
     Database::get()->querySingle("DELETE FROM conference WHERE conf_id=?d", $id);
-    $fileChatName = $coursePath . $course_code . '/'.$id.'_chat.txt';
-    $tmpArchiveFile = $coursePath . $course_code . '/'.$id.'_tmpChatArchive.txt';
-
-    unlink($fileChatName);
-    unlink($tmpArchiveFile);
-    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langChatDeleted</div>";    
+    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "index.php",
@@ -93,12 +86,12 @@ else if (isset($_POST['submit'])) {
                 status = ?s
                 WHERE conf_id =?d", $description, $status, $conf_id);
     } else {
-        $course_id = $_POST['course_id'];
+        $course_id = $_POST['couse_id'];
         Database::get()->querySingle("INSERT INTO conference (course_id,conf_description,status) VALUES
-        (?d,?s,?s)", $course_id,$description,$status);
+        (?d,?s,?s)", $couse_id,$description,$status);
     }    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langNoteSaved</div>";
+    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
     // Display link to go back to index.php
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -148,7 +141,7 @@ else {
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[
                     var chkValidator  = new Validator("confForm");
-                    //chkValidator.addValidation("description","req","' . $langBBBServerAlertHostname . '");
+                    chkValidator.addValidation("description","req","' . $langBBBServerAlertHostname . '");
                 //]]></script>';
                     
     } else {
@@ -166,8 +159,8 @@ else {
             $tool_content .= "<table class='table-default'>
                 <thead>
                 <tr><th class = 'text-center'>$langDescr</th>
-                    <th class = 'text-center'>$langChatActive</th>
-                    <th class = 'text-center'>$langStartDate</th>";
+                    <th class = 'text-center'>Ενεργή κουβεντούλα</th>
+                    <th class = 'text-center'>Δημιουργήθηκε</th>";
                     
             if($is_editor){
                 $tool_content .= "<th class = 'text-center'>".icon('fa-gears')."</th>"; 
@@ -198,7 +191,7 @@ else {
             }            	
             $tool_content .= "</table></div>";
         } else {
-             $tool_content .= "<div class='alert alert-warning'>$langNoChatAvailable</div>";
+             $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>";
         }
     }
 }
