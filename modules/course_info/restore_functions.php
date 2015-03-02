@@ -1178,7 +1178,7 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = intval($data['res_id']);
     } elseif ($type == 'video') {
         $data['res_id'] = $video_map[$data['res_id']];
-    } elseif ($type == 'videolink') {
+    } elseif ($type == 'videolink' || $type == 'videolinks') {
         $data['res_id'] = $videolink_map[$data['res_id']];
     } elseif ($type == 'lp') {
         $data['res_id'] = $lp_learnPath_map[$data['res_id']];
