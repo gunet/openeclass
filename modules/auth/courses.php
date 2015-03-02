@@ -129,6 +129,7 @@ if (isset($_POST['submit'])) {
                                   <li class='list-group-item list-header'><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
                                   </li>";
+        $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
         $tool_content .= "</ul></form>";
 
         if ($numofcourses > 0) {
@@ -218,10 +219,10 @@ function expanded_faculte($facid, $uid) {
         $myCourses[$course->course_id] = $course;
     }, intval($uid));
 
-    $retString .= $tree->buildDepartmentChildrenNavigationHtml($facid, 'courses');
+    
 
     $retString .= "\n    <div class='table-responsive'><table class='table-default'>";
-    $retString .= "\n    <tr>";
+    $retString .= "\n    <tr class='list-header'>";
     $retString .= "\n      <th width='50' align='center'>$langRegistration</th>";
     $retString .= "\n      <th>$langCourseCode</th>";
     $retString .= "\n      <th width='220'>$langTeacher</th>";
