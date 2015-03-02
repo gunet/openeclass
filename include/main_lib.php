@@ -1393,6 +1393,9 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM unit_resources WHERE unit_id IN
                          (SELECT id FROM course_units WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM course_units WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM course_weekly_view_activities WHERE course_weekly_view_id IN
+                                (SELECT id FROM course_weekly_view WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM course_weekly_view WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `blog_post` ON `comments`.`rid` = `blog_post`.`id` 
                             WHERE `comments`.`rtype` = ?s AND `blog_post`.`course_id` = ?d", 'blogpost', $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `blog_post` ON `rating`.`rid` = `blog_post`.`id`

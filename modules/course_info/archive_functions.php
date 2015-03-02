@@ -78,6 +78,9 @@ function doArchive($course_id, $course_code) {
         'course_units' => $sql_course,
         'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                     WHERE course_id = $course_id)",
+        'course_weekly_view' => $sql_course,
+        'course_weekly_view_activities' => "course_weekly_view_id IN (SELECT id FROM course_weekly_view 
+                                                                                WHERE course_id = $course_id)",
         'forum' => $sql_course,
         'forum_category' => $sql_course,
         'forum_topic' => "forum_id IN (SELECT id FROM forum

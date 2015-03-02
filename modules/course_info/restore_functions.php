@@ -401,15 +401,30 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         if (file_exists($course_file)) {
             $course_dataArr = unserialize(file_get_contents($course_file));
             $course_data = $course_dataArr[0];
-            Database::get()->query("UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
-                    . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d WHERE id = ?d", 
-                    $course_data[$restoreHelper->getField('course', 'keywords')], 
-                    floatval($course_data['doc_quota']), 
-                    floatval($course_data['video_quota']), 
-                    floatval($course_data['group_quota']), 
-                    floatval($course_data['dropbox_quota']), 
-                    intval($course_data[$restoreHelper->getField('course', 'glossary_expand')]), 
-                    intval($new_course_id));
+            // update course query
+            $upd_course_sql = "UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
+                            . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d ";
+            $upd_course_args = array(
+                $course_data[$restoreHelper->getField('course', 'keywords')], 
+                floatval($course_data['doc_quota']), 
+                floatval($course_data['video_quota']), 
+                floatval($course_data['group_quota']), 
+                floatval($course_data['dropbox_quota']), 
+                intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
+            );
+            // handle course weekly if exists
+            if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['finish_date'])) {
+                $upd_course_sql .= " , view_type = ?s, start_date = ?t, finish_date = ?t ";
+                array_push($upd_course_args, 
+                    $course_data['view_type'], 
+                    $course_data['start_date'], 
+                    $course_data['finish_date']
+                );
+            }
+            $upd_course_sql .= " WHERE id = ?d ";
+            array_push($upd_course_args, intval($new_course_id));
+            
+            Database::get()->query($upd_course_sql, $upd_course_args);
         }
 
         $userid_map = array();
@@ -806,10 +821,36 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 $lp_learnPath_map,
                 $wiki_map,
                 $assignments_map,
-                $exercise_map)), $url_prefix_map, $backupData, $restoreHelper);
+                $exercise_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        
+        // Weekly
+        $weekly_map = restore_table($restoreThis, 'course_weekly_view', array(
+            'set' => array('course_id' => $new_course_id), 
+            'return_mapping' => 'id'
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'course_weekly_view_activities', array(
+            'delete' => array('id'),
+            'map' => array('course_weekly_view_id' => $weekly_map),
+            'map_function' => 'unit_map_function',
+            'map_function_data' => array($document_map,
+                $link_category_map,
+                $link_map,
+                $ebook_map,
+                $ebook_section_map,
+                $ebook_subsection_map,
+                $video_map,
+                $videolink_map,
+                $lp_learnPath_map,
+                $wiki_map,
+                $assignments_map,
+                $exercise_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
 
-        restore_table($restoreThis, 'course_description', array('set' => array('course_id' => $new_course_id),
-            'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'course_description', array(
+            'set' => array('course_id' => $new_course_id),
+            'delete' => array('id')
+            ), $url_prefix_map, $backupData, $restoreHelper);
 
         removeDir($restoreThis);
 
