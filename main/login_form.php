@@ -62,9 +62,10 @@ $tool_content .= "</form>";
     $tool_content .= "<div class='alert alert-warning' role='alert'>$warning</div>";
         }
         
-        $tool_content .= "<div class='row'><div class='col-sm-8'><hr style='margin: 5px 0 10px;'></div></div>";
     if (!empty($shibboleth_link) or !empty($cas_link)) {
-     $tool_content .= "<div class='row'><div class='col-sm-8'>                
+     $tool_content .= "
+         <div class='row'><div class='col-sm-8'><hr style='margin: 5px 0 10px;'></div></div>
+         <div class='row'><div class='col-sm-8'>                
              <label>$langAlternateLogin:</label>
              <label>$shibboleth_link</label>
              <label>$cas_link</label>
