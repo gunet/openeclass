@@ -1426,20 +1426,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `idx_queue_async` (
     `resource_id` int(11) NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
-$db->query("CREATE TABLE IF NOT EXISTS `conference` (
-  `conf_id` int(11) NOT NULL AUTO_INCREMENT,
-  `course_id` int(11) NOT NULL,
-  `conf_description` text NOT NULL,
-  `status` enum('active','inactive') DEFAULT NULL,
-  `start` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`conf_id`)) $charset_spec");
-
 $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(300) NOT NULL,
     `styles` LONGTEXT NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
-
 $theme_options = array(
   array('name' => 'Open Courses Atoms','styles' => 'a:11:{s:11:"imageUpload";s:25:"eclass-new-logo_atoms.png";s:7:"bgImage";s:36:"bcgr_lines_petrol_les saturation.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:18:"rgba(76,173,178,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:37:"OpenCourses_banner_Color_theme1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.64)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.71)";s:22:"leftMenuHoverFontColor";s:18:"rgba(64,121,146,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(67,142,158,1)";}'),
   array('name' => 'Open Courses Sketchy','styles' => 'a:12:{s:11:"imageUpload";s:27:"eclass-new-logo_sketchy.png";s:7:"bgImage";s:24:"Light_sketch_bcgr2-1.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:19:"rgba(155,128,106,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:27:"banner_Sketch_empty-1-2.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(37,37,37,0.91)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.83)";s:22:"leftMenuHoverFontColor";s:18:"rgba(146,100,64,1)";s:25:"leftMenuSelectedFontColor";s:18:"rgba(228,164,77,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(158,135,67,1)";}'),
