@@ -1436,7 +1436,7 @@ foreach ($theme_options as $theme) {
     $db->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)", $theme['name'], $theme['styles']);
 }
 $_SESSION['theme'] = 'default';
-$webDir = '..'
+$webDir = '..';
 copyThemeImages();
 
 // create indices
