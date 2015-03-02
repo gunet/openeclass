@@ -2581,7 +2581,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     updateInfo(1, $langUpgradeSuccess);
     $logdate = date("Y-m-d_G:i:s");
 
-    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">Log output</a></div><p/>";
+    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
     if ($debug_error) {
         $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
     }
