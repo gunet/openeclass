@@ -1131,7 +1131,7 @@ jContent;
 
             return $this->buildNodesNavigationHtml($nodes, $url, $countCallback, $showEmpty);
         } else {
-            return "<li class='list-group-item not_visible text-center'> - $langNoCoursesAvailable - </li>";
+            return " ";
         }
     }
 

@@ -130,16 +130,13 @@ if (isset($_POST['submit'])) {
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
                                   </li>";
         $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
+        $subTrees = $tree->buildSubtrees(array($fc));
         $tool_content .= "</ul></form>";
 
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>";
-        } else {
-            $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
-            $subTrees = $tree->buildSubtrees(array($fc));
-            
-        }
+        } 
         
     } // end of else (department exists)
 }
@@ -275,7 +272,8 @@ function expanded_faculte($facid, $uid) {
                 $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
                 $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
             } else {
-                $retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
+                //$retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
+                $retString .= "<i class='fa fa-user'></i>";
             }
         } else { // display unregistered courses
             if (!empty($password) and ($mycours->visible == COURSE_REGISTRATION or $mycours->visible == COURSE_OPEN)) {

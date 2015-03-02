@@ -4440,3 +4440,5 @@ $langNumOpenCoursesBanner = "ανοικτά<br>μαθήματα";
 $langNumOpenCourseBanner = "ανοικτό<br>μάθημα";
 $langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";
 $langNationalOpenCourses = "Εθνικη πυλη ανοικτων μαθηματων";
+$langExtAppName = "Εφαρμογή";
+$langExtAppDescription = "Περιγραφή";

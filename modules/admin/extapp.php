@@ -74,16 +74,16 @@ if ($appName) {
     }
 } else {
     $tool_content .="<table class=\"table-default dataTable no-footer\">\n";
-    $tool_content.="<thead class='list-header'><td colspan=\"2\">Εφαρμογή</td><td>Περιγραφή</td></thead>\n";
+    $tool_content.="<thead class='list-header'><td colspan=\"2\">$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
     $tool_content.="\n";
-    foreach (ExtAppManager::getApps() as $app) {
+    /*foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>\n";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
         $tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
         $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>" . $app->getDisplayName() . "</a></td>\n";
         $tool_content .= "<td>" . $app->getShortDescription() . "</td>\n";
         $tool_content .="</tr>\n";
-    }
+    }*/
     $tool_content .="<tr>\n";
     $tool_content .= "<td style=\"width:90px;\"><a href=\"bbbmoduleconf.php\"'><img height=\"50\" width=\"89\" src=\"../../template/icons/bigbluebutton.png\"/></a></td>\n";
     $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"bbbmoduleconf.php\"'>BigBlueButton</a></td>\n";

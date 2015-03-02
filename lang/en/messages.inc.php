@@ -3868,3 +3868,5 @@ $langUserForum = "User";
 $langStopNotify = "Stop notification via email if replies are posted";
 $langNoLinkInCategory = "There are no links in this category";
 $langNoLinkCategories = "There are no link categories";
+$langExtAppName = "Application";
+$langExtAppDescription = "Description";
