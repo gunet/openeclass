@@ -1617,7 +1617,7 @@ ul.expandable{
 
 /* Datatables ---------------------------------------------------------*/
 .not_visible{
-    color: rgba(3,3,3,0.3);
+    color: rgba(3,3,3,0.3) !important;
     font-style: italic;        
 }
 tr.not_visible{

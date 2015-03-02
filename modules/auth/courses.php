@@ -125,10 +125,11 @@ if (isset($_POST['submit'])) {
             $tool_content .= $tree->buildRootsSelectForm($fc);
         }
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
-        $tool_content .= "<table class='table-default'>
-                                  <tr><th><a name='top'></a>$langFaculty: " .
+        $tool_content .= "<ul class='list-group'>
+                                  <li class='list-group-item list-header'><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
-                                  </th></tr></table><br />";
+                                  </li>";
+        $tool_content .= "</ul></form>";
 
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
@@ -136,11 +137,9 @@ if (isset($_POST['submit'])) {
         } else {
             $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
             $subTrees = $tree->buildSubtrees(array($fc));
-            if (count($subTrees) <= 1) { // is leaf
-                $tool_content .= "<br /><div class=alert1>$langNoCoursesAvailable</div>\n";
-            }
+            
         }
-        $tool_content .= "</form>";
+        
     } // end of else (department exists)
 }
 $tool_content .= "<script type='text/javascript'>$(course_list_init);

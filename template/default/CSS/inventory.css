@@ -1741,7 +1741,7 @@ ul.expandable.secondary-active {
 /* Datatables ---------------------------------------------------------*/
 /* line 1619, ../SASS/inventory.scss */
 .not_visible {
-  color: rgba(3, 3, 3, 0.3);
+  color: rgba(3, 3, 3, 0.3) !important;
   font-style: italic;
 }
 
