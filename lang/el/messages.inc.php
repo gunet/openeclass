@@ -461,7 +461,7 @@ $langAddSixMonths = "Προσθήκη διάρκειας λογαριασμού:
 
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";
-$langEclassConf = "Αρχείο ρυθμίσεων του $siteName";
+$langEclassConf = "Ρυθμίσεις πλατφόρμας";
 $langFileUpdatedSuccess = "Το αρχείο ρυθμίσεων τροποποιήθηκε με επιτυχία!";
 $langFileEdit = "Επεξεργασία αρχείου ρυθμίσεων (config.php)";
 $langFileError = "Το αρχείο config.php δεν μπόρεσε να διαβαστεί! Ελέγξτε τα δικαιώματα πρόσβασης.";
