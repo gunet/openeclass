@@ -36,17 +36,25 @@ function act_confirm() {
         });
     });
 }
+
 function popover_init() {
+    var click_in_process = false;
     var hidePopover = function () {
-        $(this).popover('hide');
+        if (!click_in_process) {
+            $(this).popover('hide');
+        }
     }
     , togglePopover = function () {
         $(this).popover('toggle');
     };
     $('[data-toggle="popover"]').popover().on('click', togglePopover).on('blur', hidePopover);
     $('[data-toggle="popover"]').on('shown.bs.popover', function () {
+        $('.popover').mousedown(function() {
+            click_in_process = true;
+        });         
         act_confirm();
     });
+   
 }
 function tooltip_init() {
     $('[data-toggle=tooltip]').tooltip({container: 'body'});
