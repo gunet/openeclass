@@ -74,7 +74,7 @@ if ($appName) {
     }
 } else {
     $tool_content .="<table class=\"table-default dataTable no-footer\">\n";
-    $tool_content.="<thead class='list-header'><td colspan=\"2\">$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
+    $tool_content.="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
     $tool_content.="\n";
     /*foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>\n";
@@ -85,9 +85,8 @@ if ($appName) {
         $tool_content .="</tr>\n";
     }*/
     $tool_content .="<tr>\n";
-    $tool_content .= "<td style=\"width:90px;\"><a href=\"bbbmoduleconf.php\"'><img height=\"50\" width=\"89\" src=\"../../template/icons/bigbluebutton.png\"/></a></td>\n";
-    $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"bbbmoduleconf.php\"'>BigBlueButton</a></td>\n";
-    $tool_content .= "<td></td>\n";
+    $tool_content .= "<td style=\"width:90px; padding: 20px;\"><a href=\"bbbmoduleconf.php\"'><img class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></td>\n";
+    $tool_content .= "<td style=\"padding: 20px;\"><p>Το υποσύστημα <b>Τηλεσυνεργασίας</b> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p><p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε «<b>Ρυθμίσεις</b>».</p></td>\n";
     $tool_content .="</tr>\n";
 
     $tool_content.="</table>\n";
