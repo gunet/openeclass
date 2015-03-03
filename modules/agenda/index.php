@@ -300,8 +300,12 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                   'icon' => 'fa-calendar',
                   'level' => 'primary')
         ));                        
-
-    $cal_content_list = event_list_view();
+    
+    if (isset($_GET['id'])) {
+       $cal_content_list = event_list_view($_GET['id']);
+    } else {
+        $cal_content_list = event_list_view();
+    }
     $tool_content .= ''
                 . '<div id="calendar_wrapper" class="row">
                     <div class="col-md-12">

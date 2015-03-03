@@ -482,23 +482,38 @@ require_once 'include/lib/references.class.php';
    }
    
    
-   function get_list_course_events($sens = 'ASC'){
+   function get_list_course_events($display = 'all', $sens = 'ASC') {
        global $is_editor, $course_id;
+       
+       $extra_sql = '';
+       if ($display != 'all') {
+           $extra_sql = "AND id = $display";
+       } 
        $result = array();
        if ($is_editor) {
-            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end FROM agenda WHERE course_id = ?d
-		ORDER BY start " . $sens, $course_id);
+            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible, recursion_period, recursion_end 
+                                    FROM agenda WHERE course_id = ?d $extra_sql
+                                ORDER BY start " . $sens, $course_id);
         } else {
-            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible FROM agenda WHERE course_id = ?d
-		AND visible = 1 ORDER BY start " . $sens, $course_id);
+            $result = Database::get()->queryArray("SELECT id, title, content, start, duration, visible 
+                                    FROM agenda WHERE course_id = ?d $extra_sql 
+                                AND visible = 1 ORDER BY start " . $sens, $course_id);
         }
         return $result;
 
    }
    
-    function event_list_view($sens = 'ASC'){
+   /***
+    * @brief call event_list for displaying events if exist
+    * @global type $langNoEvents
+    * @param type $display
+    * @param type $sens
+    * @return type
+    */
+    function event_list_view($display = 'all', $sens = 'ASC'){
         global $langNoEvents;
-        $events = get_list_course_events($sens);
+        
+        $events = get_list_course_events($display, $sens);
 
         if (count($events) > 0) {
             return event_list($events, $sens);
@@ -506,6 +521,7 @@ require_once 'include/lib/references.class.php';
             return "<p class='alert alert-warning text-center'>$langNoEvents</p>";
         }
     }
+    
     
     function event_list($events, $sens){
         global $course_code, $is_editor, $langEvents, $langCalendar, $langDateNow, $dateFormatLong, $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, $langModify, $langVisible;
