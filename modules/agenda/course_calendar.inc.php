@@ -529,11 +529,7 @@ require_once 'include/lib/references.class.php';
         $barMonth = '';
         $nowBarShowed = false;
         $eventlist = "<div class='table-responsive'><table class='table-default'>
-                          <tr><th class='left'>$langEvents</th>";
-        if ($is_editor) {
-            $eventlist .= "<th class='text-center option-btn-cell'>" . icon('fa-gears') . "</th>";
-        }
-        $eventlist .= "</tr>";
+                          ";
 
         foreach ($events as $myrow) {
             $content = standard_text_escape($myrow->content);
@@ -545,7 +541,7 @@ require_once 'include/lib/references.class.php';
                         $barMonth = date("m", time());
                         $eventlist .= "<tr>";
                         // current month
-                        $eventlist .= "<td colspan='2' class='monthLabel'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
+                        $eventlist .= "<td colspan='2' class='monthLabel list-header'><b>" . ucfirst(claro_format_locale_date("%B %Y", time())) . "</b></td>";
                         $eventlist .= "</tr>";
                     }
                     $nowBarShowed = TRUE;
@@ -558,8 +554,8 @@ require_once 'include/lib/references.class.php';
                 $barMonth = date("m", $d);
                 // month LABEL
                 $eventlist .= "<tr>";            
-                $eventlist .= "<td colspan='2' class='monthLabel'>";            
-                $eventlist .= "<div align='center'>" . $langCalendar . "&nbsp;<b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
+                $eventlist .= "<td colspan='2' class='monthLabel list-header'>";            
+                $eventlist .= "<div align='center'><b>" . ucfirst(claro_format_locale_date("%B %Y", $d)) . "</b></div></td>";
                 $eventlist .= "</tr>";
             }
 
@@ -571,12 +567,11 @@ require_once 'include/lib/references.class.php';
             }
             $eventlist .= "<tr $classvis>";
             if ($is_editor) {
-                $eventlist .= "<td>";
+                $eventlist .= "<td style='padding:15px;'>";
             } else {
-                $eventlist .= "<td colspan='2'>";
+                $eventlist .= "<td style='padding:15px;' colspan='2'>";
             }
 
-            $eventlist .= "<span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")";
             if ($myrow->duration != '') {
                 if ($myrow->duration == 1) {
                     $message = $langHour;
@@ -587,13 +582,14 @@ require_once 'include/lib/references.class.php';
             } else {
                 $msg = '';
             }
-            $eventlist .= "<br><b>";
             if ($myrow->title == '') {
                 $eventlist .= $langAgendaNoTitle;
             } else {
-                $eventlist .= q($myrow->title);
+                $eventlist .= "<strong>".q($myrow->title)."</strong> &nbsp;&nbsp;$msg";
             }
-            $eventlist .= " $msg $content</b></td>";
+            $eventlist .= "<div><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div>";
+            $eventlist .= "<br>";
+            $eventlist .= "<div class='text-muted'>$content</div></td>";
 
            if ($is_editor) {
                $eventlist .= "<td class='option-btn-cell'>";
