@@ -374,7 +374,7 @@ $admin_modules = array(
 
 // modules which can't be enabled or disabled
 $static_module_paths = array('user' => MODULE_ID_USERS,
-    'usage' => MODULE_ID_UNITS,
+    'usage' => MODULE_ID_USAGE,
     'course_info' => MODULE_ID_COURSEINFO,
     'course_tools' => MODULE_ID_TOOLADMIN,
     'units' => MODULE_ID_UNITS,
