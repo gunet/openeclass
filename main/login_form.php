@@ -39,7 +39,7 @@ $tool_content .= action_bar(array(
                                       'button-class' => 'btn-default')
                             ),false);
 $tool_content .= "<div class='form-wrapper login-form-page'>
-        <form class='form-horizontal' role='form' action='$urlSecure' method='post'>
+        <form class='form-horizontal' role='form' action='$urlServer' method='post'>
   $next
     <div class='form-group'>       
         <div class='col-sm-8'>

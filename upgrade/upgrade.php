@@ -235,10 +235,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
         set_config('base_url', $urlServer);
         set_config('default_language', $language);
-        set_config('active_ui_languages', implode(' ', $active_ui_languages));
-        if ($urlSecure != $urlServer) {
-            set_config('secure_url', $urlSecure);
-        }
+        set_config('active_ui_languages', implode(' ', $active_ui_languages));        
         set_config('phpMyAdminURL', $phpMyAdminURL);
         set_config('phpSysInfoURL', $phpSysInfoURL);
 
@@ -2561,6 +2558,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
         // delete stale course units entries from course modules (27 -> MODULE_ID_UNITS)
         Database::get()->query("DELETE FROM course_module WHERE module_id = 27");
+        // delete secure_url (aka $urlSecure) from table `config`
+        Database::get()->query("DELETE FROM config WHERE `key` = 'secure_url'");
+        
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");

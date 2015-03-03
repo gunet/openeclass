@@ -225,8 +225,8 @@ $desc_form = $myrow->description;
 $userLang = $myrow->lang;
 $icon = $myrow->has_icon;
 
-$sec = $urlSecure . 'main/profile/profile.php';
-$passurl = $urlSecure . 'main/profile/password.php';
+$sec = $urlServer . 'main/profile/profile.php';
+$passurl = $urlServer . 'main/profile/password.php';
 
 $tool_content .= 
         action_bar(array(

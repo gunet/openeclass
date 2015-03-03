@@ -54,7 +54,7 @@ if (isset($toolContent_ErrorExists)) {
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlSecure . "main/login_form.php?next=" . urlencode($next));
+        header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     } else {
         header("Location:" . $urlServer . "index.php");
     }
@@ -90,7 +90,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
-        $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
+        $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor,
         $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
 
@@ -287,7 +287,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     } else {
         if (!get_config('dont_display_login_form')) {
             $t->set_var('LANG_LOGOUT', $langLogin);
-            $t->set_var('LOGOUT_LINK', $urlSecure . 'main/login_form.php');
+            $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php');
         } else {
             $t->set_var('LOGOUT_LINK', '#');
         }
@@ -737,7 +737,7 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
  *
  */
 function module_path($path) {
-    global $urlAppend, $urlServer, $urlSecure;
+    global $urlAppend, $urlServer;
 
     if (strpos($path, 'modules/units/insert.php') !== false) {
         if (strpos($path, '&dir=') !== false) {
@@ -746,8 +746,8 @@ function module_path($path) {
     }
 
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
-    $path = str_replace(array($urlServer, $urlSecure, $urlAppend, 'index.php'),
-                        array('/', '/', '/', ''), $path);
+    $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
+                        array('/', '/', ''), $path);
     if (strpos($path, '/course_info/restore_course.php') !== false) {
         return 'course_info/restore_course.php';
     } elseif (strpos($path, '/info/') !== false) {

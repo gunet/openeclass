@@ -255,7 +255,7 @@ $tool_content .= "
                               <span class='text-muted'>$langSumCoursesSupport</span>
                             </li>
                         </ul>
-                        <div class='quick-change-pwd'><a href='".$urlSecure."main/profile/password.php'>$langProfileQuickPassword</a></div>
+                        <div class='quick-change-pwd'><a href='".$urlServer."main/profile/password.php'>$langProfileQuickPassword</a></div>
                     </div>
                 </div>
             </div>

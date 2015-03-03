@@ -63,12 +63,7 @@ hContent;
 
 check_uid();
 
-if (!isset($urlSecure)) {
-    $passurl = $urlServer . 'modules/admin/password.php';
-} else {
-    $passurl = $urlSecure . 'modules/admin/password.php';
-}
-
+$passurl = $urlServer . 'modules/admin/password.php';
 $tool_content .= action_bar(array(
             array('title' => $langBack,
                 'url' => "$_SERVER[SCRIPT_NAME]?userid=$_REQUEST[userid]",

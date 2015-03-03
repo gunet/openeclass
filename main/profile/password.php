@@ -66,7 +66,7 @@ $head_content .= <<<hContent
 </script>
 hContent;
 
-$passUrl = $urlSecure . 'main/profile/password.php';
+$passUrl = $urlServer . 'main/profile/password.php';
 $passLocation = 'Location: ' . $passUrl;
 
 if (isset($_POST['submit'])) {

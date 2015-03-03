@@ -125,7 +125,7 @@ if ($uid AND !isset($_GET['logout'])) {
     $shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'");
     if ($shibactive) {
 	    if ($shibactive->auth_default == 1) {
-     	   $shibboleth_link = "<a href='{$urlSecure}secure/index.php'>$langShibboleth</a><br />";
+     	   $shibboleth_link = "<a href='{$urlServer}secure/index.php'>$langShibboleth</a><br />";
 	    }
 	}
 
@@ -160,7 +160,7 @@ if ($uid AND !isset($_GET['logout'])) {
         if (!get_config('dont_display_login_form')) {
                         $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                             <h2>$langUserLogin</h2>
-                                <form  action='$urlSecure' method='post'>
+                                <form  action='$urlServer' method='post'>
                                     <div class='form-group'>
                                         <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
                                     </div>

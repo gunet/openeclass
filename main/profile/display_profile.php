@@ -61,7 +61,7 @@ if ($userdata) {
         $allow_password_change = true;
     }
     if ($uid == $id) {
-        $passurl = $urlSecure . 'main/profile/password.php';
+        $passurl = $urlServer . 'main/profile/password.php';
         $tool_content .= 
             action_bar(array(
                 array('title' => $langEditProfile,
