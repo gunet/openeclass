@@ -1976,11 +1976,11 @@ div.row.oc-metedata-list ul li {
 }
 /* line 1810, ../SASS/inventory.scss */
 div.row.oc-metedata-list ul li .badge.valid {
-  background-color: green;
+  background-color: #006400;
 }
 /* line 1813, ../SASS/inventory.scss */
 div.row.oc-metedata-list ul li .badge.not-valid {
-  background-color: red;
+  background-color: #ad2121;
 }
 
 /* line 1819, ../SASS/inventory.scss */
