@@ -20,9 +20,7 @@
  * ======================================================================== 
  */
 
-require_once 'oauthdrive.php';
-
-final class OneDrive extends OAuthDrive {
+final class WebDAV extends CloudDrive {
 
     private $client_id;
     private $redirect_url;

@@ -22,38 +22,17 @@
 
 require_once 'genericrequiredparam.php';
 
-abstract class CloudDriveApp extends ExtApp {
+class OwnCloudApp extends ExtApp {
 
-    const CLIENTID = "clientid";
-    const SECRET = "secret";
-    const REDIRECT = "redirect";
+    const URL = "url";
 
     public function __construct() {
         $drivename = $this->getName();
-        $this->registerParam(new GenericRequiredParam($drivename, $this->getAppParamName(), CloudDriveApp::CLIENTID));
-        $this->registerParam(new GenericRequiredParam($drivename, $this->getKeyParamName(), CloudDriveApp::SECRET));
-        $this->registerParam(new GenericRequiredParam($drivename, $this->getURLParamName(), CloudDriveApp::REDIRECT, $this->getURLDefaultValue()));
+        $this->registerParam(new GenericRequiredParam($drivename, "OwnCLoud URL", WebDAVApp::URL));
     }
 
-    protected function getAppParamName() {
-        return "Κωδικός εφαρμογής";
+    public function getDisplayName() {
+        return "OwnCloud";
     }
 
-    protected function getKeyParamName() {
-        return "Κλειδί εφαρμογής";
-    }
-
-    protected function getURLParamName() {
-        return "Διεύθυνση επιστροφής";
-    }
-
-    public function getShortDescription() {
-        return "Short description about " . $this->getDisplayName();
-    }
-
-    public function getLongDescription() {
-        return "Long description about " . $this->getDisplayName();
-    }
-
-    protected abstract function getURLDefaultValue();
 }

@@ -20,28 +20,40 @@
  * ======================================================================== 
  */
 
-require_once 'oauthdriveapp.php';
+require_once 'genericrequiredparam.php';
 
-class DropBoxApp extends OAuthDriveApp {
+abstract class OAuthDriveApp extends ExtApp {
 
-    public function getDisplayName() {
-        return "DropBox";
-    }
+    const CLIENTID = "clientid";
+    const SECRET = "secret";
+    const REDIRECT = "redirect";
 
-    protected function getURLDefaultValue() {
-        return $this->getBaseURL() . "modules/drives/plugins/dropbox_callback.php";
+    public function __construct() {
+        $drivename = $this->getName();
+        $this->registerParam(new GenericRequiredParam($drivename, $this->getAppParamName(), OAuthDriveApp::CLIENTID));
+        $this->registerParam(new GenericRequiredParam($drivename, $this->getKeyParamName(), OAuthDriveApp::SECRET));
+        $this->registerParam(new GenericRequiredParam($drivename, $this->getURLParamName(), OAuthDriveApp::REDIRECT, $this->getURLDefaultValue()));
     }
 
     protected function getAppParamName() {
-        return "App key";
+        return "Κωδικός εφαρμογής";
     }
 
     protected function getKeyParamName() {
-        return "App secret";
+        return "Κλειδί εφαρμογής";
     }
 
     protected function getURLParamName() {
-        return "Redirect URIs";
+        return "Διεύθυνση επιστροφής";
     }
 
+    public function getShortDescription() {
+        return "Short description about " . $this->getDisplayName();
+    }
+
+    public function getLongDescription() {
+        return "Long description about " . $this->getDisplayName();
+    }
+
+    protected abstract function getURLDefaultValue();
 }

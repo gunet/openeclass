@@ -20,24 +20,19 @@
  * ======================================================================== 
  */
 
-require_once 'oauthdriveapp.php';
+require_once 'genericrequiredparam.php';
 
-class OneDriveApp extends OAuthDriveApp {
+class FTPApp extends ExtApp {
+
+    const URL = "url";
+
+    public function __construct() {
+        $drivename = $this->getName();
+        $this->registerParam(new GenericRequiredParam($drivename, "FTP URL", WebDAVApp::URL));
+    }
 
     public function getDisplayName() {
-        return "OneDrive";
-    }
-
-    protected function getURLDefaultValue() {
-        return $this->getBaseURL() . "modules/drives/plugins/onedrive_callback.php";
-    }
-
-    protected function getAppParamName() {
-        return "Client ID";
-    }
-
-    protected function getKeyParamName() {
-        return " Client secret";
+        return "FTP";
     }
 
 }
