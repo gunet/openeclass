@@ -511,7 +511,7 @@ $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
 $langActionsExpireInterval = "Διάστημα διατήρησης στατιστικών";
 $langLogActions = "Καταγραφή ενεργειών";
 $langEnableCommonDocs = "Ενεργοποίηση λειτουργίας «Κοινόχρηστων Αρχείων»";
-
+$langEmailAnnounce = "Διεύθυνση κοινοποίησης ανακοινώσεων";
 
 // admin announcements
 $langAdminAn = "Ανακοινώσεις Διαχειριστή";
