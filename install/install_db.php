@@ -1446,7 +1446,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
 $db->query("CREATE TABLE IF NOT EXISTS tags (
     `id` MEDIUMINT(11) NOT NULL auto_increment,
     `element_type` VARCHAR(255) NOT NULL DEFAULT '',
-    `element_id` MEDIUMINT(11) NOT NULL DEFAULT '',
+    `element_id` MEDIUMINT(11) NOT NULL ,
     `user_id` VARCHAR(255) NOT NULL DEFAULT '',
     `tag` TEXT,
     `date` DATE DEFAULT NULL,

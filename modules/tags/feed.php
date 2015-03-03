@@ -40,9 +40,16 @@ $q = $_GET['q']="te";
 
 
 $tags = Database::get()->queryArray("SELECT id, tag FROM tags WHERE course_id = ?d AND tag LIKE ?s", $course_id, "%$q%");
-foreach($tags as $tag){
-    //echo $tag->tag;
-    $tags2[] = array("id"=>$tag->id, "text"=>$tag->tag);
+if($tags){
+    foreach($tags as $tag){
+        //echo $tag->tag;
+        //$tags2[] = array("id"=>$tag->id, "text"=>$tag->tag);
+        $tags2[] = array("text"=>$tag->tag);
+    }
+}else{
+    $tags2[] = array("text"=>"");
 }
+
+
 //echo $tags2;
 echo json_encode($tags2);

@@ -340,22 +340,21 @@ if ($is_editor) {
             $stop_display = "0000-00-00";
         }
         
-        if(isset($_POST['tags'])){
-            $tagsArray = explode(',', $_POST['tags']);
-            foreach($tagsArray as $tagItem){
-                //echo $tagItem;
-                //delete all the previous for this item, course
-                //insert all the new ones
-                
-                //if it is a number insert
-            }
-        }
-        
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
             $log_type = LOG_MODIFY;
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
+            
+            if (isset($_POST['tags'])) {
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //echo $tagItem;
+                    //delete all the previous for this item, course
+                    //insert all the new ones
+                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                }
+            }
         } else { // add new announcement
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
@@ -369,6 +368,16 @@ if ($is_editor) {
                                              start_display = ?t,
                                              stop_display = ?t", $newContent, $antitle, $course_id, $order, $start_display, $stop_display)->lastInsertID;
             $log_type = LOG_INSERT;
+            
+            if (isset($_POST['tags'])) {
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //echo $tagItem;
+                    //delete all the previous for this item, course
+                    //insert all the new ones
+                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                }
+            }
         }
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
