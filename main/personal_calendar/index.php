@@ -332,16 +332,17 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
         $tool_content .= "
         <div class='form-group'>
           <div class='col-sm-10 col-sm-offset-2'>
-               <input class='btn btn-primary' type='submit' name='submitEvent' value='$langAdd'>
+               <input class='btn btn-primary' type='submit' name='submitEvent' value='$langSubmit'>
                <a class='btn btn-default' href='index.php'>$langCancel</a>
           </div>
         </div>            
     </form>
-</div>
-    <form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
-        <a class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
-    </form>        
-   ";
+</div>";
+    if(isset($_GET['modify'])) {  
+        $tool_content .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
+                            <button class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</button>
+                        </form>";
+    }
 } else {    
     /* display actions toolbar */
     $tool_content .= 
@@ -362,8 +363,6 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
                         'icon' => 'fa-calendar',
                         'level' => 'primary'),
                 ));
-}
-
 
 /* display events */
 $day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
@@ -426,6 +425,7 @@ $tool_content .= '<div id="calendar_wrapper" class="row">
     });
 
     </script>';
+}
 
 add_units_navigation(TRUE);
 

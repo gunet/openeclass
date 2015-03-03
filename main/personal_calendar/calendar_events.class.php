@@ -451,13 +451,13 @@ class Calendar_Events {
      */
     public static function update_admin_event($eventid, $title, $start, $duration, $content, $visibility_level){
         global $uid, $is_admin, $langNotValidInput, $langNotAllowed;
-        if(!is_admin){
+        if(!$is_admin){
             return array('success'=>false,'message'=>$langNotAllowed);
         }
-        $d1 = DateTime::createFromFormat('Y-m-d H:i', $start);
-        $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $start);
+        $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
+        $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
         $title = trim($title);
-        if(empty($title) || !(($d1 && $d1->format('Y-m-d H:i') == $start) || ($d2 && $d2->format('Y-m-d H:i:s') == $start)))
+        if(empty($title) || !(($d1 && $d1->format('d-m-Y H:i') == $start) || ($d2 && $d2->format('d-m-Y H:i:s') == $start)))
         {
             return array('success'=>false, 'message'=>$langNotValidInput);
         }
@@ -469,7 +469,7 @@ class Calendar_Events {
                 . "content = ?s, "
                 . "visibility_level = ?d "
                 . "WHERE id = ?d",
-                $title, $start, $duration, purify($content), $visibility_level, $eventid);
+                $title, $d1->format('Y-m-d H:i'), $duration, purify($content), $visibility_level, $eventid);
 
         Log::record(0, MODULE_ID_ADMINCALENDAR, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
