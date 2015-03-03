@@ -347,10 +347,11 @@ if ($is_editor) {
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
             
             if (isset($_POST['tags'])) {
+                //delete all the previous for this item, course
+                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $id, $course_id);
                 $tagsArray = explode(',', $_POST['tags']);
                 foreach ($tagsArray as $tagItem) {
                     //echo $tagItem;
-                    //delete all the previous for this item, course
                     //insert all the new ones
                     Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
                 }
@@ -511,7 +512,7 @@ if ($is_editor) {
         <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
-                <input type='text' class='form-control' name='tags' multiple class='form-control' id='tags'>
+                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value='brown,red,green'>
             </div>
         </div>
 
@@ -572,6 +573,12 @@ if (isset($_GET['an_id'])) {
         $tool_content .= "<div class='panel-body'>";
         $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
         $tool_content .= $row->content;
+        
+        $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $row->id, $course_id);
+        $tool_content .= $langTags.": ";
+        foreach($tags_list as $tag){
+            $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
+        }
         $tool_content .= "</div></div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
@@ -584,7 +591,17 @@ if (isset($_GET['an_id'])) {
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
     
+    
 
+//initialize the tags
+$answer = "";
+if(isset($modify)){
+    $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $modify, $course_id);
+    foreach($tags_init as $tag){
+        $arrayTemp = "{id:\"".$tag->tag."\" , text:\"".$tag->tag."\"},";
+        $answer = $answer.$arrayTemp;
+    } 
+}
 
 add_units_navigation(TRUE);
 load_js('select2');
@@ -605,7 +622,7 @@ $head_content .= "<script type='text/javascript'>
             $('#select-recipients').val(stringVal).trigger('change');
         });   
         $('#tags').select2({
-        minimumInputLength: 2,
+                minimumInputLength: 2,
                 tags: true,
                 tokenSeparators: [', ', ' '],
                 createSearchChoice: function(term, data) {
@@ -631,6 +648,7 @@ $head_content .= "<script type='text/javascript'>
                     }
                 }
         });
+        $('#tags').select2('data', [".$answer."]);
     });
     </script>";
 draw($tool_content, 2, null, $head_content);

@@ -36,15 +36,14 @@ load_js('datatables');
 load_js('datatables_filtering_delay');
 
 
-$q = $_GET['q']="te";
+$q = $_GET['q'];
 
 
 $tags = Database::get()->queryArray("SELECT id, tag FROM tags WHERE course_id = ?d AND tag LIKE ?s", $course_id, "%$q%");
 if($tags){
     foreach($tags as $tag){
-        //echo $tag->tag;
-        //$tags2[] = array("id"=>$tag->id, "text"=>$tag->tag);
-        $tags2[] = array("text"=>$tag->tag);
+        $tags2[] = array("id"=>$tag->tag, "text"=>$tag->tag);
+        //$tags2[] = array("text"=>$tag->tag);
     }
 }else{
     $tags2[] = array("text"=>"");
