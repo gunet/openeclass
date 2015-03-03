@@ -27,6 +27,7 @@
 
 define('HIDE_TOOL_TITLE', 1);
 $require_current_course = true;
+$guest_allowed = true;
 $require_help = TRUE;
 $helpTopic = 'AddCourseUnitscontent';
 
