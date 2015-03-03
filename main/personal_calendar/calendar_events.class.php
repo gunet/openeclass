@@ -396,10 +396,10 @@ class Calendar_Events {
         global $uid, $langNotValidInput;
         $refobjinfo = References::get_ref_obj_field_values($reference_obj_id);
         
-        $d1 = DateTime::createFromFormat('Y-m-d H:i', $start);
-        $d2 = DateTime::createFromFormat('Y-m-d H:i:s', $start);
+        $d1 = DateTime::createFromFormat('d-m-Y H:i', $start);
+        $d2 = DateTime::createFromFormat('d-m-Y H:i:s', $start);
         $title = trim($title);
-        if(empty($title) || !(($d1 && $d1->format('Y-m-d H:i') == $start) || ($d2 && $d2->format('Y-m-d H:i:s') == $start)))
+        if(empty($title) || !(($d1 && $d1->format('d-m-Y H:i') == $start) || ($d2 && $d2->format('d-m-Y H:i:s') == $start)))
         {
             return array('success'=>false, 'message'=>$langNotValidInput);
         }
@@ -415,7 +415,7 @@ class Calendar_Events {
                 . "reference_obj_id = ?d, "
                 . "reference_obj_course = ?d "
                 . $where_clause,
-                $title, $start, $duration, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $eventid);
+                $title, $d1->format('Y-m-d H:i'), $duration, purify($content), $refobjinfo['objmodule'], $refobjinfo['objtype'], $refobjinfo['objid'], $refobjinfo['objcourse'], $eventid);
 
         Log::record(0, MODULE_ID_PERSONALCALENDAR, LOG_MODIFY, array('user_id' => $uid, 'id' => $eventid,
         'title' => $title,
