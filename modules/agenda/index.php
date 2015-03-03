@@ -302,7 +302,8 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         ));                        
     
     if (isset($_GET['id'])) {
-       $cal_content_list = event_list_view($_GET['id']);
+       $id = intval($_GET['id']);
+       $cal_content_list = event_list_view($id);
     } else {
         $cal_content_list = event_list_view();
     }
