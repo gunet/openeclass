@@ -59,16 +59,16 @@ function appendToolsDom($dom, $domRoot, $toolsArr) {
 }
 
 function populateTools() {
-    global $urlMobile, $langMyAnnouncements, $langMyPersoDeadlines, $langMyProfile, $langRegCourses, $langMyAgenda;
+    global $urlServer, $langMyAnnouncements, $langMyPersoDeadlines, $langMyProfile, $langRegCourses, $langMyAgenda;
 
     $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
-    $baseurl = $urlMobile . 'modules/mobile/mlogin.php' . $profile . 'redirect=';
+    $baseurl = $urlServer . 'modules/mobile/mlogin.php' . $profile . 'redirect=';
 
     $toolsArr = array();
 
     $tool = new stdClass();
     $tool->name = $langMyAnnouncements;
-    $tool->redirect = $urlMobile . 'modules/announcements/myannouncements.php';
+    $tool->redirect = $urlServer . 'modules/announcements/myannouncements.php';
     $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myannouncements';
     $tool->active = "true";
@@ -76,7 +76,7 @@ function populateTools() {
 
     $tool = new stdClass();
     $tool->name = $langMyPersoDeadlines;
-    $tool->redirect = $urlMobile . 'modules/work/mydeadlines.php';
+    $tool->redirect = $urlServer . 'modules/work/mydeadlines.php';
     $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'mydeadlines';
     $tool->active = "true";
@@ -84,7 +84,7 @@ function populateTools() {
 
     $tool = new stdClass();
     $tool->name = $langMyAgenda;
-    $tool->redirect = $urlMobile . 'modules/agenda/myagenda.php';
+    $tool->redirect = $urlServer . 'modules/agenda/myagenda.php';
     $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myagenda';
     $tool->active = "true";
@@ -92,7 +92,7 @@ function populateTools() {
 
     $tool = new stdClass();
     $tool->name = $langMyProfile;
-    $tool->redirect = $urlMobile . 'main/profile/display_profile.php';
+    $tool->redirect = $urlServer . 'main/profile/display_profile.php';
     $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myprofile';
     $tool->active = "true";
@@ -100,7 +100,7 @@ function populateTools() {
 
     $tool = new stdClass();
     $tool->name = $langRegCourses;
-    $tool->redirect = $urlMobile . 'modules/auth/courses.php';
+    $tool->redirect = $urlServer . 'modules/auth/courses.php';
     $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'coursesubscribe';
     $tool->active = "true";

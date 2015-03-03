@@ -127,11 +127,11 @@ function createDom($groupsArr, $toolsArr) {
 }
 
 function correctLink($value) {
-    global $urlMobile, $urlAppend;
-    $link = $urlMobile . substr($value, strlen($urlAppend));
+    global $urlServer, $urlAppend;
+    $link = $urlServer . substr($value, strlen($urlAppend));
     $profile = (isset($_SESSION['profile'])) ? '?profile=' . $_SESSION['profile'] . '&' : '?';
     $redirect = 'redirect=' . urlencode($link);
-    return $urlMobile . 'modules/mobile/mlogin.php' . $profile . $redirect;
+    return $urlServer . 'modules/mobile/mlogin.php' . $profile . $redirect;
 }
 
 function correctRedirect($value) {
