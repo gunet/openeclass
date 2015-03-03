@@ -440,6 +440,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if (!$is_embedonce) {
         if ($is_mobile) {
             $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
+            $t->set_block('mainBlock', 'headerBlock', 'delete');
         } else {
             $t->set_block('mainBlock', 'mobileViewOpenDiv', 'delete');
         }
