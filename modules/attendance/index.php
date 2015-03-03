@@ -827,7 +827,7 @@ if ($is_editor) {
                         <td>" . nice_format($resultUser->reg_date) . "</td>
                         <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>
                         <td class='center'>
-                            <input class='form-control' type='checkbox' value='1' name='" . $resultUser->userID . "'";
+                            <input type='checkbox' value='1' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
 
                             $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);

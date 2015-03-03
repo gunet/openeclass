@@ -223,7 +223,7 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
     }
     $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                      'url' => $urlServer,
+                      'url' => "index.php",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
     
