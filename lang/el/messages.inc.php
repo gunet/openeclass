@@ -4380,7 +4380,7 @@ $langEnableSocialSharingLiks = "Ενεργοποίηση διαμοιρασμο�
 /* * ******************************************
   Theme Options
  * ***************************************** */
-$langThemeSettings = 'Ρυθμίσεις Θέματος';
+$langThemeSettings = 'Ρυθμίσεις Εμφάνισης';
 $langActiveTheme = 'Ενεργό Θέμα';
 $langPreviewState = 'Βρίσκετε σε κατάσταση προεπισκόπησης του θέματος';
 $langThemeInstalled = 'Το θέμα εγκαταστάθηκε με επιτυχία';
