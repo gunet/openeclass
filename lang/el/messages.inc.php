@@ -3274,7 +3274,6 @@ $langAllCourses = "Όλα τα μαθήματα";
 $langSubmit = "Υποβολή";
 $langCheck = "Έλεγχος";
 $langModule = "Υποσύστημα";
-$langAllModules = "Όλα τα Υποσυστήματα";
 $langValueType = "Είδος Στατιστικών";
 $langQuantity = "Ποσοτικά";
 $langProportion = "Ποσοστιαία";

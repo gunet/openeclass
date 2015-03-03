@@ -74,9 +74,15 @@ class CourseXMLElement extends SimpleXMLElement {
      * @param  array  $data - array containing data to preload the form with
      * @return string
      */
+    
     public function asForm($data = null) {
-        global $course_code, $langSubmit, $langRequiredFields;
-        $out = "<div class='right smaller'>$langRequiredFields</div>";
+        global $course_code, $langSubmit, $langRequiredFields, $langBack;;
+        $out = action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')),false);
+        $out .= "<div class='right smaller'>$langRequiredFields</div>";
         $out .= "
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                 <ul class='nav nav-tabs' role='tablist'>
