@@ -777,6 +777,30 @@ $db->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
                 `tag` VARCHAR(50),
                 INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `shortname` VARCHAR(255) NOT NULL,
+                `name` MEDIUMTEXT NOT NULL,
+                `description` MEDIUMTEXT NULL DEFAULT NULL,
+                `datatype` VARCHAR(255) NOT NULL,
+                `categoryid` INT(11) NOT NULL DEFAULT 0,
+                `sortorder`  INT(11) NOT NULL DEFAULT 0,
+                `required` TINYINT NOT NULL DEFAULT 0,
+                `visibility` TINYINT NOT NULL DEFAULT 0,
+                `user_type` TINYINT NOT NULL,
+                `registration` TINYINT NOT NULL DEFAULT 0) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `field_id` INT(11) NOT NULL,
+                `data` TEXT NOT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name` MEDIUMTEXT NOT NULL,
+                `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
