@@ -2466,6 +2466,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
+                
+        Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
+                `id` MEDIUMINT(11) NOT NULL auto_increment,
+                `element_type` VARCHAR(255) NOT NULL DEFAULT '',
+                `element_id` MEDIUMINT(11) NOT NULL ,
+                `user_id` VARCHAR(255) NOT NULL DEFAULT '',
+                `tag` TEXT,
+                `date` DATE DEFAULT NULL,
+                `course_id` INT(11) NOT NULL DEFAULT 0,
+                PRIMARY KEY (id)) $charset_spec");
 
         if (DBHelper::fieldExists('course_user', 'team')) {
             Database::get()->query('ALTER TABLE `course_user` DROP COLUMN `team`');
