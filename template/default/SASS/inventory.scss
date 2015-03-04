@@ -2124,6 +2124,18 @@ div#profile-about-me{
     padding-top: 20px;
     padding-bottom: 20px;
 }
+.extapp{
+    table.extapp-table thead.list-header{
+        td{
+            padding: 10px;
+        }
+    }
+    table.extapp-table tr{
+        td{
+            padding: 20px;
+        }
+    }
+}
 #calendar_wrapper{
     margin-bottom: 25px;
 
