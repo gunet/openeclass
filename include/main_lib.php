@@ -238,7 +238,9 @@ function load_js($file, $init='') {
         }   elseif ($file == 'spectrum') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/spectrum/spectrum.css'>\n";
             $file = "spectrum/spectrum.js";
-        }                
+        } elseif ($file == 'sortable') {
+            $file = "sortable/Sortable.min.js";
+        }
         $head_content .= "<script type='text/javascript' src='{$urlAppend}js/$file'></script>\n";
     }
 
