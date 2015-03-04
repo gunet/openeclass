@@ -9571,14 +9571,20 @@ a.list-group-item.delete:hover {
   cursor: pointer;
 }
 
+@media (min-width: 480px) {
+  /* line 84, ../SASS/bootstrap-custom.scss */
+  div.all_courses {
+    float: left;
+  }
+}
 @media (min-width: 768px) {
-  /* line 83, ../SASS/bootstrap-custom.scss */
+  /* line 89, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 20%;
   }
 }
 @media (max-width: 768px) {
-  /* line 89, ../SASS/bootstrap-custom.scss */
+  /* line 95, ../SASS/bootstrap-custom.scss */
   .login-form {
     margin-right: 5%;
     margin-left: 5%;
@@ -9586,7 +9592,7 @@ a.list-group-item.delete:hover {
   }
 }
 @media (max-width: 992px) {
-  /* line 96, ../SASS/bootstrap-custom.scss */
+  /* line 102, ../SASS/bootstrap-custom.scss */
   .float-menu {
     position: absolute;
     width: 225px;
@@ -9596,41 +9602,41 @@ a.list-group-item.delete:hover {
     background-color: #232C3A;
   }
 
-  /* line 104, ../SASS/bootstrap-custom.scss */
+  /* line 110, ../SASS/bootstrap-custom.scss */
   #leftnav {
     overflow-y: scroll;
     z-index: 8888;
   }
 
-  /* line 108, ../SASS/bootstrap-custom.scss */
+  /* line 114, ../SASS/bootstrap-custom.scss */
   .navbar-toggle {
     display: block;
   }
 }
 @media (min-width: 992px) {
-  /* line 113, ../SASS/bootstrap-custom.scss */
+  /* line 119, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 18%;
   }
 
-  /* line 116, ../SASS/bootstrap-custom.scss */
+  /* line 122, ../SASS/bootstrap-custom.scss */
   .navbar-custom {
     margin: 15px 15px 0px;
   }
 }
 @media (min-width: 1200px) {
-  /* line 121, ../SASS/bootstrap-custom.scss */
+  /* line 127, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 17%;
   }
 }
 @media (min-width: 1450px) {
-  /* line 126, ../SASS/bootstrap-custom.scss */
+  /* line 132, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 12.4%;
   }
 }
-/* line 132, ../SASS/bootstrap-custom.scss */
+/* line 138, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9642,7 +9648,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-/* line 144, ../SASS/bootstrap-custom.scss */
+/* line 150, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9656,7 +9662,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-/* line 158, ../SASS/bootstrap-custom.scss */
+/* line 164, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -9670,33 +9676,33 @@ a.list-group-item.delete:hover {
   top: 8px;
 }
 
-/* line 182, ../SASS/bootstrap-custom.scss */
+/* line 188, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 185, ../SASS/bootstrap-custom.scss */
+/* line 191, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 188, ../SASS/bootstrap-custom.scss */
+/* line 194, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 195, ../SASS/bootstrap-custom.scss */
+/* line 201, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 198, ../SASS/bootstrap-custom.scss */
+/* line 204, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 201, ../SASS/bootstrap-custom.scss */
+/* line 207, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading .opt-btn {
   background-color: whitesmoke;
 }
 
-/* line 207, ../SASS/bootstrap-custom.scss */
+/* line 213, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;

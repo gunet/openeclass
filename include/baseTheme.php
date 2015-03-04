@@ -263,6 +263,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('PROFILE_LINK', $urlServer . "main/profile/display_profile.php");
         $t->set_var('LANG_MESSAGES', $GLOBALS['langMyDropBox']);
         $t->set_var('MESSAGES_LINK', $urlServer . "modules/dropbox/index.php");
+        $t->set_var('LANG_COURSES', $GLOBALS['langMyPersoLessons']);
+        $t->set_var('COURSES_LINK', $urlServer . "main/my_courses.php");        
         $t->set_var('LANG_AGENDA', $langMyAgenda);
         $t->set_var('AGENDA_LINK', $urlServer . "main/personal_calendar/index.php");
         $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);

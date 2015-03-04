@@ -79,6 +79,12 @@ color: #262626;
 background-color: whitesmoke;
 cursor: pointer; 
 }
+//portfolio datatable 'all courses' button fix 
+@media(min-width: $screen-xs){
+    div.all_courses {
+        float: left;
+    }
+}
 @media(min-width: $screen-tablet){
   .affix {
     width: 20%;
