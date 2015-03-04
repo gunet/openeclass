@@ -83,7 +83,19 @@ class User {
         }, $id);
         return $ret;
     }
+    
+    public function getDepartmentIdsAllowedForCourseCreation($id) {
+        $ret = array();
+        Database::get()->queryFunc("SELECT ud.department AS id
+                              FROM $this->utable u
+                              JOIN $this->departmenttable ud ON (u.id = ud.user)
+                              JOIN hierarchy h ON (h.id = ud.department)
+                             WHERE u.id = ?d
+                               AND u.id = ud.user
+                               AND h.allow_course = true", function($row) use (&$ret) {
+            $ret[] = $row->id;
+        }, $id);
+        return $ret;
+    }
 
 }
-
-?>

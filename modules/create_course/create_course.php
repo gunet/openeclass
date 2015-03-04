@@ -202,7 +202,7 @@ $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
 
 foreach ($departments as $dep) {
-    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid))) {
+    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIdsAllowedForCourseCreation($uid))) {
         $deps_valid = false;
     }
 }
@@ -219,7 +219,7 @@ if (!$deps_valid) {
 // display form
 if (!isset($_POST['create_course'])) {
         $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => $allow_only_defaults));        
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIdsAllowedForCourseCreation($uid), 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
