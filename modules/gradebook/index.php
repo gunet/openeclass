@@ -76,16 +76,30 @@ $(function() {
 });
 </script>";
 
+//change the gradebook
+if (isset($_POST['gradebookActive'])){
+    $gradebook_id = intval($_POST['gradebookActive']);
+    $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d AND id = ?d  ", $course_id, $gradebook_id);
+    if ($gradebook) {
+      //make the others inactive
+      Database::get()->querySingle("UPDATE gradebook SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
+      //make the new active
+      Database::get()->querySingle("UPDATE gradebook SET active = 1 WHERE id = ?d ", $gradebook->id);
+    }
+}    
+    
 //gradebook_id for the course: check if there is an gradebook module for the course. If not insert it
-$gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d ", $course_id);
+$gradebook = Database::get()->querySingle("SELECT id, students_semester,`range`, `title` FROM gradebook WHERE course_id = ?d AND active = 1", $course_id);
+
 if ($gradebook) {
     $gradebook_id = $gradebook->id;
+    $gradebook_title = $gradebook->title;
     $gradebook_range = $gradebook->range;
     $showSemesterParticipants = $gradebook->students_semester;
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;    
 }else{
     //new gradebook
-    $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d ", $course_id)->lastInsertID;   
+    $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1", $course_id)->lastInsertID;   
     //create gradebook users (default the last six months)
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
@@ -214,30 +228,13 @@ if ($is_editor) {
         }
     }
     
-    
-    /*
-    //UPDATE/INSERT DB: edit users display number 
-    if (isset($_POST['submitGradebookActiveUsers'])) {
-        $gradebook_users_limit = intval($_POST['usersLimit']);
-        if($gradebook_users_limit ==1 || $gradebook_users_limit == 0){
-            Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $gradebook_users_limit, $gradebook_id);
-            $message = "<p class='success'>$langGradebookEdit</p>";
-            $tool_content .= $message . "<br/>";
-            //update value for the check box and the users query
-            $showSemesterParticipants = $gradebook_users_limit;
-        }
+    //EDIT: edit title
+    if (isset($_POST['title']) && strlen($_POST['title'])) {
+        $gradebook_title = intval($_POST['title']);
+        Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
+            Session::Messages($langGradebookEdit,"alert-success");
+            redirect_to_home_page("modules/gradebook/index.php");
     }
-
-    //Number of students for this gradebook book and limit_date (depends on the limit of the last semester selection - if $showSemesterParticipants = 1 --> Users that have logged in to the course the last 6 months)
-    if ($showSemesterParticipants) {
-        //Six months limit
-        $limitDate = date('Y-m-d', strtotime(' -6 months'));
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) as count FROM actions_daily, user WHERE actions_daily.user_id = user.id AND user.status = ?d AND course_id = ?d AND actions_daily.day > ?t ", USER_STUDENT, $course_id, $limitDate)->count;
-    } else {
-        $limitDate = "0000-00-00";
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(user.id) as count FROM course_user, user WHERE course_user.course_id = ?d AND course_user.user_id = user.id AND user.status = ?d ", $course_id, USER_STUDENT)->count;
-    }
-    */
     
     //FORM: new activity (or edit) form to gradebook module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
@@ -772,6 +769,64 @@ if ($is_editor) {
                             </div>
                         </fieldset>
                     </form>
+                </div>
+            </div>
+        </div>";
+                            
+        //===================================================
+        //section to insert new gradebook and select another
+        //===================================================
+        
+        $result = Database::get()->queryArray("SELECT * FROM gradebook  WHERE course_id = ?d", $course_id);
+
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>Νέο βαθμολόγιο<small class='help-block'>(δημιουργία νέου βαθμολογίου για το μάθημα)</small></label></div>                            
+                                <div class='form-group'> 
+                                    <div class='col-xs-3'>
+                                        <input type='text' placeholder='Τίτλος' name='title'/>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <div class='col-xs-12'>
+                                        <input class='btn btn-primary' type='submit' name='newGradebook' value='".$langInsert."' />
+                                    </div>
+                                </div>
+                    </form>
+                    
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>Διαθέσιμα βαθμολόγια<small class='help-block'>(επιλογή διαθέσιμων βαθμολογίων για το μάθημα)</small></label></div>                            
+                                <div class='form-group'>";
+                                
+                                if ($result){
+                                    foreach ($result as $year){
+                                        if($year->title == ""){
+                                            $title = "Βαθμολόγιο χωρίς τίτλο";
+                                        }else{
+                                            $title = $year->title;
+                                        }
+                                        $tool_content .= "<input type='radio' name='gradebookYear' value='$year->id'";
+                                                    if ($gradebook_id == $year->id) {
+                                                      $tool_content .= " checked";
+                                                    } 
+                                                    $tool_content .= "/>$title";
+                                    }
+                                }
+                                              
+        
+                 $tool_content .="</div>
+                                <div class='form-group'>
+                                    <div class='col-xs-12'>
+                                        <input class='btn btn-primary' type='submit' name='selectGradebook' value='".$langSelect."' />
+                                    </div>
+                                </div>
+                    </form>
+                    
                 </div>
             </div>
         </div>";
