@@ -117,7 +117,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['gradebookBook'])) {
@@ -126,7 +126,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['modify'])) {
@@ -135,7 +135,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['ins'])) {
@@ -144,7 +144,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
@@ -161,7 +161,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['book'])) {
@@ -170,7 +170,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label'),
             array('title' => $langGradebookBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
@@ -181,7 +181,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
-                  'icon' => 'fa fa-cog space-after-icon',
+                  'icon' => 'fa fa-cog ',
                   'level' => 'primary-label'),
             array('title' => $langUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
