@@ -518,18 +518,42 @@ require_once 'include/lib/references.class.php';
         if (count($events) > 0) {
             return event_list($events, $sens);
         }else{
-            return "<p class='alert alert-warning text-center'>$langNoEvents</p>";
+            return "<div class='alert alert-warning text-center'>$langNoEvents</div>";
         }
     }
     
-    
+    /**
+     * @brief display event list
+     * @global type $course_code
+     * @global type $is_editor
+     * @global type $langEvents
+     * @global type $langCalendar
+     * @global type $langDateNow
+     * @global type $dateFormatLong
+     * @global type $langHour
+     * @global type $langHours
+     * @global type $langDuration
+     * @global type $langAgendaNoTitle
+     * @global type $langDelete
+     * @global type $langConfirmDeleteEvent
+     * @global type $langConfirmDeleteRecursive
+     * @global type $langConfirmDeleteRecursiveEvents
+     * @global type $langModify
+     * @global type $langVisible
+     * @param type $events
+     * @param type $sens
+     * @return string
+     */
     function event_list($events, $sens){
-        global $course_code, $is_editor, $langEvents, $langCalendar, $langDateNow, $dateFormatLong, $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, $langModify, $langVisible;
+        global $course_code, $is_editor, $langEvents, $langCalendar, $langDateNow, $dateFormatLong, 
+                $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, 
+                $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, 
+                $langModify, $langVisible;
+        
         $dateNow = date("j-n-Y / H:i", time());
         $barMonth = '';
         $nowBarShowed = false;
-        $eventlist = "<div class='table-responsive'><table class='table-default'>
-                          ";
+        $eventlist = "<div class='table-responsive'><table class='table-default'>";
 
         foreach ($events as $myrow) {
             $content = standard_text_escape($myrow->content);
@@ -583,9 +607,9 @@ require_once 'include/lib/references.class.php';
                 $msg = '';
             }
             if ($myrow->title == '') {
-                $eventlist .= $langAgendaNoTitle;
+                $eventlist .= "<a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$myrow->id'>$langAgendaNoTitle</a>";
             } else {
-                $eventlist .= "<strong>".q($myrow->title)."</strong> &nbsp;&nbsp;$msg";
+                $eventlist .= "<strong><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$myrow->id'>".q($myrow->title)."</a></strong> &nbsp;&nbsp;$msg";
             }
             $eventlist .= "<div><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div>";
             $eventlist .= "<br>";

@@ -40,15 +40,31 @@ ModalBoxHelper::loadModalBox();
 
 $action = new action();
 $action->record(MODULE_ID_AGENDA);
+// define different views of agenda
+define('EVENT_LIST_VIEW', 1);
+define('EVENT_CALENDAR_VIEW', 0);
 
 $dateNow = date("j-n-Y / H:i", time());
 
 $toolName = $langAgenda;
 
-if (isset($_GET['id'])) {
+if (isset($_GET['v'])) {
+    $v = intval($_GET['v']); // get agenda view    
+    if ($v == 1) {
+        $view = EVENT_LIST_VIEW; // list view
+    } else {
+        $view = EVENT_CALENDAR_VIEW; // calendar view
+    }
+} else if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
+    $view = EVENT_LIST_VIEW;
+} else {
+    $view = EVENT_CALENDAR_VIEW; // default is calendar view
 }
+ 
+// list view if we want a specific event 
 
+        
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
 load_js('bootstrap-timepicker');
@@ -282,7 +298,7 @@ if ($is_editor) {
      *  End  of  prof only
      * ------------------------------------------- */
 // display action bar
-if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
+if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {        
     $tool_content .= action_bar(array(
             array('title' => $langAddEvent,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addEvent=1",
@@ -290,24 +306,32 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                   'level' => 'primary-label',
                   'button-class' => 'btn-success',
                   'show' => $is_editor),
-            array('title' => $langListAll,
-                      'url' => "javascript:void(0)",
+            array('title' => $langListCalendar,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-list',
                       'level' => 'primary-label',
-                      'button-class' => 'btn-default listviewbtn'),
+                      'button-class' => 'btn-default',
+                      'show' => (($view == EVENT_LIST_VIEW) and (!isset($id)))),
+            array('title' => $langListAll,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;v=1",
+                      'icon' => 'fa-list',
+                      'level' => 'primary-label',
+                      'button-class' => 'btn-default',
+                      'show' => ($view == EVENT_CALENDAR_VIEW or isset($id))),
             array('title' => $langiCalExport,
                   'url' => "icalendar.php?c=$course_id",
                   'icon' => 'fa-calendar',
                   'level' => 'primary')
-        ));                        
-    
+        ));    
     if (isset($_GET['id'])) {
-       $id = intval($_GET['id']);
        $cal_content_list = event_list_view($id);
     } else {
         $cal_content_list = event_list_view();
     }
-    $tool_content .= ''
+    if ($view == EVENT_LIST_VIEW) {
+        $tool_content .= "<div class='row'><div class='col-md-12'>$cal_content_list</div></div>";
+    } else {
+        $tool_content .= ''
                 . '<div id="calendar_wrapper" class="row">
                     <div class="col-md-12">
                         <div class="row calendar-header">
@@ -330,14 +354,12 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
                             </div>
                             </div>
                         </div>'
-                . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'
-                . '<div class="row"><div class="col-md-12" id="raweventlist">'.$cal_content_list.'</div></div>'
+                . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'                
                 . '</div></div>';
 
-    $tool_content .= "<script type='text/javascript'>" .
-    '$(document).ready(function(){
-        $("#raweventlist").hide();
-        var calendar = $("#bootstrapcalendar").calendar(
+        $tool_content .= "<script type='text/javascript'>" .
+        '$(document).ready(function(){        
+            var calendar = $("#bootstrapcalendar").calendar(
             {
                 tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
                 events_source: "' . $urlAppend . 'modules/agenda/calendar_data.php?course='.$course_code.'",
@@ -353,8 +375,7 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $(".btn-group button[data-calendar-nav]").each(function() {
             var $this = $(this);
             $this.click(function() {
-                calendar.navigate($this.data("calendar-nav"));
-                $("#raweventlist").hide();
+                calendar.navigate($this.data("calendar-nav"));                
                 $("#bootstrapcalendar").show();
             });
         });
@@ -362,21 +383,14 @@ if (!isset($_GET['addEvent']) && !isset($_GET['edit'])) {
         $(".btn-group button[data-calendar-view]").each(function() {
             var $this = $(this);
             $this.click(function() {
-                calendar.view($this.data("calendar-view"));
-                $("#raweventlist").hide();
+                calendar.view($this.data("calendar-view"));                
                 $("#bootstrapcalendar").show();
-            });
-
-        $(".listviewbtn").click(function() {
-            $(".btn-group button").removeClass("active");
-            $("#bootstrapcalendar").hide();
-            $("#raweventlist").show();
-        });
+            });       
     });    
     });
 
     </script>';
-    
+}   
 }
 add_units_navigation(TRUE);
 

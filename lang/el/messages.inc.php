@@ -588,6 +588,7 @@ $langInHour = "(σε ώρες)";
 $langEmptyAgendaTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του γεγονότος";
 $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
 $langListAll = "Λίστα όλων";
+$langListCalendar = "Μορφή ημερολογίου";
 $langAgendaDueDay = "Προθεσμία";
 $langAgendaCourseEvent = "Γεγ. μαθήματος";
 $langAgendaPersonalEvent = "Προσ. γεγονός";
