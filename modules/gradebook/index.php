@@ -153,6 +153,8 @@ if ($is_editor) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
             $pageName = "$langAdd $langInsertExercise";
+        } elseif (isset($_GET['addActivityLp'])) {
+            $pageName = "$langAdd $langLearningPath1";
         } else {
             $pageName = $langGradebookAddActivity;
         }
@@ -883,7 +885,7 @@ if ($is_editor) {
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<h4>$langLearningPath</h4>";
             $tool_content .= "<table class='table-default' id='t1'>";            
-            $tool_content .= "<tr><th>$langTitle</th><th>$langDescription</th>";
+            $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
             $tool_content .= "<th class='text-center'>$langActions</th>";
             $tool_content .= "</tr>";
             foreach ($checkForLp as $newExerToGradebook) {
@@ -1012,8 +1014,8 @@ if ($is_editor) {
             $tool_content .= $weightLeftMessage;
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
-                              <tr><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
-                              <tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
+                              <tr class='list-header'><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
+                              <tr class='list-header'><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
                               <th class='text-center'>$langView</th>
                               <th class='text-center'>$langScore</th>
                               <th class='text-center'><i class='fa fa-cogs'></i></th>
