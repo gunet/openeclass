@@ -548,7 +548,7 @@ require_once 'include/lib/references.class.php';
         global $course_code, $is_editor, $langEvents, $langCalendar, $langDateNow, $dateFormatLong, 
                 $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, 
                 $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, 
-                $langModify, $langVisible;
+                $langModify, $langVisible, $id;
         
         $dateNow = date("j-n-Y / H:i", time());
         $barMonth = '';
@@ -611,9 +611,13 @@ require_once 'include/lib/references.class.php';
             } else {
                 $eventlist .= "<strong><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;id=$myrow->id'>".q($myrow->title)."</a></strong> &nbsp;&nbsp;$msg";
             }
+            
             $eventlist .= "<div><span class='day'>" . ucfirst(claro_format_locale_date($dateFormatLong, $d)) . "</span> ($langHour: " . ucfirst(date('H:i', $d)) . ")</div>";
-            $eventlist .= "<br>";
-            $eventlist .= "<div class='text-muted'>$content</div></td>";
+            if (isset($id)) {
+                $eventlist .= "<br>";
+                $eventlist .= "<div class='text-muted'>$content</div>";
+            }
+            $eventlist .= "</td>";
 
            if ($is_editor) {
                $eventlist .= "<td class='option-btn-cell'>";
