@@ -1434,3 +1434,21 @@ function make_clickable_path($path) {
     }
     return $out;
 }
+
+
+/**
+ * Redirect user to current documents page, keeping subsystem and current directory
+ * @global type $base_url
+ * @global type $curDirPath
+ */
+function redirect_to_current_dir() {
+    global $base_url, $curDirPath;
+
+    $redirect_base_url = str_replace('&amp;', '&', $base_url);
+    if (isset($curDirPath) and $curDirPath) {
+        $redirect_base_url .= 'openDir=' . $curDirPath;
+    } else {
+        $redirect_base_url = preg_replace('/[&?]$/', '', $redirect_base_url);
+    }
+    redirect_to_home_page($redirect_base_url, true);
+}
