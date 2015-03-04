@@ -20,34 +20,6 @@
  * ======================================================================== 
  */
 
-final class WebDAV extends CredentialDrive {
-
-    public function authorize($callbackToken) {
-        
-    }
-
-    public function getAuthURL() {
-        
-    }
-
-    public function getDisplayName() {
-        
-    }
-
-    public function getFiles($dir) {
-        
-    }
-
-    public function isAuthorized() {
-        
-    }
-
-    public function isPresent() {
-        
-    }
-
-    public function store($cloudfile, $path) {
-        
-    }
-
+abstract class CredentialDrive extends CloudDrive {
+    
 }
