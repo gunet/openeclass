@@ -1702,14 +1702,24 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
+    image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
-        {title: 'None', value: ''}
+        {title: 'Float left', value: 'pull-left'},
+        {title: 'Float left and responsive', value: 'pull-left img-responsive'},
+        {title: 'Float right', value: 'pull-right'},
+        {title: 'Float right and responsive', value: 'pull-right img-responsive'},
+        {title: 'Rounded image', value: 'img-rounded'},
+        {title: 'Rounded image and responsive', value: 'img-rounded img-responsive'},
+        {title: 'Circle image', value: 'img-circle'},
+        {title: 'Circle image and responsive', value: 'img-circle img-responsive'},
+        {title: 'Thumbnail image', value: 'img-thumbnail'},
+        {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
+        {title: 'None', value: ' '}
     ],
     plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
     entity_encoding: 'raw',
     relative_urls: false,
-    image_advtab: true,
     link_class_list: [
         {title: 'None', value: ''},
         {title: '$langPopUp', value: 'colorbox'},
@@ -1718,7 +1728,7 @@ tinymce.init({
     $filebrowser
 
     // Toolbar options
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
+    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
