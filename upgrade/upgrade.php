@@ -2466,7 +2466,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
-                
+        
+        if (!DBHelper::fieldExists('gradebook', 'active')) {
+            Database::get()->query("ALTER table `gradebook` ADD `active` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('gradebook', 'title')) {
+            Database::get()->query("ALTER table `gradebook` ADD `title` VARCHAR(250) DEFAULT NULL");
+        }
+        if (!DBHelper::fieldExists('attendance', 'active')) {
+            Database::get()->query("ALTER table `attendance` ADD `active` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('attendance', 'title')) {
+            Database::get()->query("ALTER table `attendance` ADD `title` VARCHAR(250) DEFAULT NULL");
+        }
         Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
                 `id` MEDIUMINT(11) NOT NULL auto_increment,
                 `element_type` VARCHAR(255) NOT NULL DEFAULT '',
