@@ -341,7 +341,7 @@ if ($is_editor) {
                                         " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
                                     </div>
                                 </div>";
-                                if (isset($module_auto_id)) { //accept the auto booking mechanism
+                                if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto booking mechanism
                                     $tool_content .= "<div class='form-group'>
                                     <label for='weight' class='col-sm-2 control-label'>$langGradebookInsAut:</label> 
                                             <div class='col-sm-10'><input type='checkbox' class='form-control' value='1' name='auto' ";
