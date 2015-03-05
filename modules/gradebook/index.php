@@ -861,11 +861,11 @@ if ($is_editor) {
                                         }else{
                                             $title = $year->title;
                                         }
-                                        $tool_content .= "<input type='radio' name='gradebookYear' value='$year->id'";
+                                        $tool_content .= "<div><input type='radio' name='gradebookYear' value='$year->id'";
                                                     if ($gradebook_id == $year->id) {
                                                       $tool_content .= " checked";
                                                     } 
-                                                    $tool_content .= "/>$title";
+                                                    $tool_content .= "/>$title</div>";
                                     }
                                 }
                                               
