@@ -295,7 +295,7 @@ if ($action == "editPost") {
                 <div class='form-group'>
                     <label for='newContent' class='col-sm-2 control-label'>$langBlogPostBody:</label>
                     <div class='col-sm-10'>
-                        ".rich_text_editor('newContent', 4, 20, '', $post->getContent())."
+                        ".rich_text_editor('newContent', 4, 20, $post->getContent())."
                     </div>
                 </div>
                 <div class='form-group'>
