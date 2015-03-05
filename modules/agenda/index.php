@@ -162,9 +162,11 @@ if ($is_editor) {
     if (isset($_GET['mkInvisibl']) and $_GET['mkInvisibl'] == true) {
         Database::get()->query("UPDATE agenda SET visible = 0 WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->store($id);
+        redirect_to_home_page("modules/agenda/index.php?course=$course_code&v=1");
     } elseif (isset($_GET['mkVisibl']) and ( $_GET['mkVisibl'] == true)) {
         Database::get()->query("UPDATE agenda SET visible = 1 WHERE course_id = ?d AND id = ?d", $course_id, $id);
         $agdx->store($id);
+        redirect_to_home_page("modules/agenda/index.php?course=$course_code&v=1");
     }
     if (isset($_POST['event_title'])) {
         register_posted_variables(array('startdate' => true, 'event_title' => true, 'content' => true, 'duration' => true));
@@ -186,14 +188,17 @@ if ($is_editor) {
             foreach($ev['event'] as $id) {
                 $agdx->store($id);                
             }
-        }        
-        $tool_content .= "<div class='alert alert-success text-center' role='alert'>$langStoredOK</div>";        
+        }
+        Session::Messages($langStoredOK, 'alert-success');
+        redirect_to_home_page("modules/agenda/index.php?course=$course_code");
     } elseif (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
         $resp = (isset($_GET['rep']) && $_GET['rep'] == 'yes')? delete_recursive_event($id):delete_event($id);
         $agdx->remove($id);
         $msgresp = ($resp['success'])? $langDeleteOK : $langDeleteError.": ".$resp['message'];
         $alerttype = ($resp['success'])? 'alert-success' : 'alert-error';
-        $tool_content .= "<div class='alert $alerttype text-center' role='alert'>$msgresp</div><br>";        
+        
+        Session::Messages($msgresp, $alerttype);
+        redirect_to_home_page("modules/agenda/index.php?course=$course_code");              
     }
 
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
