@@ -44,7 +44,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'dbfielduser' => true, 'dbfieldpass' => true, 'dbpassencr' => true,
     'shibemail' => true, 'shibuname' => true,
     'shibcn' => true, 'checkseparator' => true,
-    'submit' => true, 'auth_instructions' => true,
+    'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
     'test_username' => true), 'all', 'autounquote');
 
 // unescapeSimple() preserves whitespace in password
@@ -177,9 +177,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             }
             if ($is_valid) {
                 $auth_allow = 1;
-                $tool_content .= "                  
-                        <table width='100%'><tbody><tr>
-				<td class='alert alert-success'>$langConnYes</td></tr></tbody></table><br /><br />";
+                $tool_content .= "<div class='alert alert-success'>$langConnYes</div>";
                 // Debugging CAS
                 if ($debugCAS) {
                     if (!empty($cas_ret['message']))
@@ -190,16 +188,15 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     }
                 }
             } else {
-                $tool_content .= "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langConnNo";
+                $tool_content .= "<div class='alert alert-danger'>$langConnNo";
                 if (isset($GLOBALS['auth_errors'])) {
                     $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
                 }
-                $tool_content .= "</td></tr></tbody></table><br /><br />";
+                $tool_content .= "</div>";
                 $auth_allow = 0;
             }
         } else {
-            $tool_content .= "<table width='100%'><tbody><tr>
-			                  <td class='alert alert-danger'>$langWrongAuth</td></tr></tbody></table><br /><br />";
+            $tool_content .= "<div class='alert alert-danger'>$langWrongAuth</div>";
             $auth_allow = 0;
         }
 
@@ -210,14 +207,15 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             }
             $result = Database::get()->query("UPDATE auth
             			SET auth_settings = ?s,
-                            auth_instructions = ?s,
-                            auth_default = 1,
-                            auth_name = ?s
-                        WHERE
-                        	auth_id = ?d"
+                                    auth_instructions = ?s,
+                                    auth_default = 1,
+                                    auth_title = ?s,
+                                    auth_name = ?s                                    
+                                WHERE
+                                    auth_id = ?d"
                     , function ($error) use(&$tool_content, $langErrActiv) {
                 $tool_content .= "<div class='alert alert-warning'>$langErrActiv</div>";
-            }, $auth_settings, $auth_instructions, $auth_ids[$auth], $auth);
+            }, $auth_settings, $auth_instructions, $auth_title, $auth_ids[$auth], $auth);
             if ($result) {
                 if ($result->affectedRows == 1) {
                     $tool_content .= "<div class='alert alert-success'>$langHasActivate</div>";

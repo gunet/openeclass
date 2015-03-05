@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,12 +21,13 @@
 
 
 if (!method_exists('phpCAS', 'setDebug')) {
-    $tool_content .= "<p align='center'><font color='red'><strong>$langCASNotWork.</strong></font></p>";
+    $tool_content .= "<div class='alert alert-danger'>$langCASNotWork</div>";
 }
 $casdata = $auth_data;
 
 $cassettings = $casdata['auth_settings'];
 $auth_instructions = $casdata['auth_instructions'];
+$auth_title = $casdata['auth_title'];
 
 if (!empty($cassettings)) {
     $cas = explode('|', $cassettings);
@@ -129,7 +130,13 @@ $tool_content .= "
         <div class='col-sm-10'>
             ". selection($cas_altauth_data, 'cas_altauth', $cas_altauth, 'class="form-control"') ."
         </div>
-    </div>     
+    </div>
+    <div class='form-group'>
+        <label for='auth_title' class='col-sm-2 control-label'>$langAuthTitle:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='auth_title' id='auth_title' type='text' value='" . q($auth_title) . "'>
+        </div>
+    </div>
     <div class='form-group'>
         <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
         <div class='col-sm-10'>
