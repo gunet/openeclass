@@ -34,8 +34,9 @@ $toolName = $langGradebook;
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
+load_js('bootstrap-timepicker');
+load_js('bootstrap-datepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
@@ -329,7 +330,7 @@ if ($is_editor) {
                                 <div class='form-group'>
                                     <label for='visible' class='col-sm-2 control-label'>$langGradeVisible</label>
                                     <div class='col-sm-10'>
-                                        <input type='checkbox' class='form-control' id='visible' name='visible' value='1'";
+                                        <input type='checkbox' id='visible' name='visible' value='1'";
                                         if($visible){
                                             $tool_content .= " checked";
                                         }
@@ -344,7 +345,7 @@ if ($is_editor) {
                                 if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto booking mechanism
                                     $tool_content .= "<div class='form-group'>
                                     <label for='weight' class='col-sm-2 control-label'>$langGradebookInsAut:</label> 
-                                            <div class='col-sm-10'><input type='checkbox' class='form-control' value='1' name='auto' ";
+                                            <div class='col-sm-10'><input type='checkbox' value='1' name='auto' ";
                                     if ($auto) {
                                         $tool_content .= " checked";
                                     }
