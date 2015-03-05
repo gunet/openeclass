@@ -80,7 +80,7 @@ background-color: whitesmoke;
 cursor: pointer; 
 }
 //portfolio datatable 'all courses' button fix 
-@media(min-width: $screen-xs){
+@media(min-width: $screen-sm){
     div.all_courses {
         float: left;
     }

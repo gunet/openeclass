@@ -9556,7 +9556,7 @@ a.list-group-item.delete:hover {
   cursor: pointer;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 768px) {
   /* line 84, ../SASS/bootstrap-custom.scss */
   div.all_courses {
     float: left;
@@ -9621,11 +9621,7 @@ a.list-group-item.delete:hover {
     width: 12.4%;
   }
 }
-<<<<<<< local
-/* line 131, ../SASS/bootstrap-custom.scss */
-=======
-/* line 138, ../SASS/bootstrap-custom.scss */
->>>>>>> other
+/* line 137, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9637,11 +9633,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-<<<<<<< local
-/* line 143, ../SASS/bootstrap-custom.scss */
-=======
-/* line 150, ../SASS/bootstrap-custom.scss */
->>>>>>> other
+/* line 149, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9655,11 +9647,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-<<<<<<< local
-/* line 157, ../SASS/bootstrap-custom.scss */
-=======
-/* line 164, ../SASS/bootstrap-custom.scss */
->>>>>>> other
+/* line 163, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
