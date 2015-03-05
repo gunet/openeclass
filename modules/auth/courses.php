@@ -135,7 +135,7 @@ if (isset($_POST['submit'])) {
 
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
-            $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>";
+            $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
         } 
         
     } // end of else (department exists)
