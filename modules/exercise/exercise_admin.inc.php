@@ -28,12 +28,15 @@ require_once 'modules/search/indexer.class.php';
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('exerciseTitle'));
+    $v->rule('required', array('exerciseTitle','exerciseEndDate', 'exerciseStartDate'));
     $v->rule('numeric', array('exerciseTimeConstraint', 'exerciseAttemptsAllowed'));
+    $v->rule('date', array('exerciseEndDate', 'exerciseStartDate'));
     $v->labels(array(
         'exerciseTitle' => "$langTheField $langExerciseName",
         'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",
-        'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed"
+        'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed",
+        'exerciseEndDate' => "$langTheField $langExerciseEnd",
+        'exerciseStartDate' => "$langTheField $langExerciseStart"
     ));
     if($v->validate()) {
         $exerciseTitle = trim($exerciseTitle);
@@ -159,23 +162,23 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>              
-                 <div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
+                 <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
                      <div class='col-xs-10 col-sm-9'>        
                          <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
+                         <span class='help-block'>".Session::getError('exerciseStartDate')."</span>
                      </div>
                      <div class='col-xs-2 col-sm-1'>  
-                         <span class='add-on'><i class='fa fa-times'></i></span>
                          <span class='add-on'><i class='fa fa-calendar'></i></span>
                      </div>
                  </div>            
-                 <div class='input-append date form-group' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
+                 <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd:</label>
                      <div class='col-xs-10 col-sm-9'>        
                          <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
+                         <span class='help-block'>".Session::getError('exerciseEndDate')."</span>
                      </div>
                      <div class='col-xs-2 col-sm-1'>  
-                         <span class='add-on'><i class='fa fa-times'></i></span>
                          <span class='add-on'><i class='fa fa-calendar'></i></span>
                      </div>
                  </div>
