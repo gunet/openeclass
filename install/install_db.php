@@ -1165,6 +1165,7 @@ $db->query("CREATE TABLE `auth` (
                   `auth_name` varchar(20) NOT NULL default '',
                   `auth_settings` text ,
                   `auth_instructions` text ,
+                  `auth_title` text,
                   `auth_default` tinyint(1) NOT NULL default 0,
                   PRIMARY KEY (`auth_id`))
                   $charset_spec");

@@ -2467,6 +2467,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
         
+        if (!DBHelper::fieldExists('auth', 'auth_title')) {
+            Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
+        }
         if (!DBHelper::fieldExists('gradebook', 'active')) {
             Database::get()->query("ALTER table `gradebook` ADD `active` TINYINT(1) NOT NULL DEFAULT 0");
         }

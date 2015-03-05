@@ -122,108 +122,118 @@ if ($uid AND !isset($_GET['logout'])) {
 } else {   
     // check for shibboleth authentication
     $shibboleth_link = "";
-    $shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'");
+    $shibactive = Database::get()->querySingle("SELECT auth_name, auth_default, auth_title FROM auth WHERE auth_id = 6");
     if ($shibactive) {
 	    if ($shibactive->auth_default == 1) {
-     	   $shibboleth_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/index.php'>Είσοδος</a><br />";
+                $shibboleth_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/index.php'>$langEnter</a><br />";
+                $shib_link_title = (!empty($shibactive->auth_title)) ? $shibactive->auth_title : "$langLogIn $shibactive->auth_name";
 	    }
 	}
 
     // check for CAS authentication
     $cas_link = "";
-    $casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'");
+    $casactive = Database::get()->querySingle("SELECT auth_name, auth_default, auth_title FROM auth WHERE auth_id = 7");
     if ($casactive) {
     	if ($casactive->auth_default == 1) {
-        	$cas_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/cas.php'>Είσοδος</a><br />";
+        	$cas_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/cas.php'>$langEnter</a><br />";
+                $cas_link_title = (!empty($casactive->auth_title)) ? $casactive->auth_title : "$langLogIn $casactive->auth_name";
     	}
     }
        
-        $head_content .= "
-            <script>
-            $(function() {
-                $('#revealPass')
-                    .mousedown(function() {
-                        $('#pass').attr('type', 'text');
-                    })
-                    .mouseup(function() {
-                        $('#pass').attr('type', 'password');
-                    })
-            });            
-            </script>
-        ";
+    $head_content .= "
+        <script>
+        $(function() {
+            $('#revealPass')
+                .mousedown(function() {
+                    $('#pass').attr('type', 'text');
+                })
+                .mouseup(function() {
+                    $('#pass').attr('type', 'password');
+                })
+        });            
+        </script>
+    ";
         $tool_content .= "
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
-                    <div class='row'>
-                        ";
-        if (!get_config('dont_display_login_form')) {
-                            
-                        $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
-                                            <div class='wrapper-login-option'>
-                                                <div class='login-option'>
-                                                    <h2>$langUserLogin</h2>
-                                                    <form  action='$urlServer' method='post'>
-                                                        <div class='form-group'>
-                                                            <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
-                                                        </div>
-                                                        <div class='form-group'>
-                                                            <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
-                                                        </div>
-                                                        <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
-                                                    </form>
-                                                    <div class='login-settings row'>
-                                                        <div class='text-center'>
-                                                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                                                        </div>";
-                                                        
-                                                    if (!empty($shibboleth_link) or !empty($cas_link)) {
-                                                        $tool_content .= "<div class='or-separator'><span>ή</span></div>
-                                                        <div class='alt_login text-center'>
-                                                            <span>
-                                                                <button type='button' data-target='1' class='option-btn hide'><span>Connect with your</span>Accademic account</button>
-                                                                <button type='button' data-target='2' class='option-btn hide'><span>Connect with your</span>Social network</button>
-                                                            </span>
-                                                        </div>";
-                                                    }
-                                                    $tool_content .= "</div>
-                                                </div>
-                                            <div class='login-option login-option-sso'>
-                                                <h2>$langUserLogin</h2>
-                                                <form>
-                                                        <span class='head-text'>Login with your SSO account</span>";
-                                                    if (!empty($cas_link)) { $tool_content.= "$cas_link"; }
-                                                    if (!empty($shibboleth_link)) { $tool_content.= "$shibboleth_link"; }
-                                                $tool_content .= "</form>
-                                                <div class='login-settings row'>
-	                                <div class='or-separator'><span>ή</span></div>
-	                                <div class='alt_login text-center'>
-	                                    <span>
-                                                <button type='button' data-target='0' class='option-btn hide'><span>Connect with your</span> Username / Password</button>
-                                                <button type='button' data-target='2' class='option-btn hide'><span>Connect with your</span>Social network</button>
-                                            </span>
+                    <div class='row'>";
+        if (!get_config('dont_display_login_form')) {                            
+            $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
+                                <div class='wrapper-login-option'>
+                                    <div class='login-option'>
+                                        <h2>$langUserLogin</h2>
+                                        <form  action='$urlServer' method='post'>
+                                            <div class='form-group'>
+                                                <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
+                                            </div>
+                                            <div class='form-group'>
+                                                <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                            </div>
+                                            <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
+                                        </form>
+                                        <div class='login-settings row'>
+                                            <div class='text-center'>
+                                                  <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                                            </div>";
+
+                                        if (!empty($shibboleth_link) or !empty($cas_link)) {                                            
+                                            $tool_content .= "<div class='or-separator'><span>$langOr</span></div>
+                                            <div class='alt_login text-center'>
+                                                <span>";
+                                                if (!empty($cas_link)) {
+                                                    $tool_content .= "<button type='button' data-target='1' class='option-btn hide'>$cas_link_title</button>";
+                                                }
+                                                if (!empty($shibboleth_link)) {
+                                                    $tool_content.= "<button type='button' data-target='1' class='option-btn hide'>$shib_link_title</button>";
+                                                }
+                                                    $tool_content .= "<button type='button' data-target='2' class='option-btn hide'><span>Connect with your</span>Social network</button>
+                                                </span>
+                                            </div>";
+                                        }
+                                        $tool_content .= "</div>
                                         </div>
-                                    </div>
-                                </div>
-                            <div class='login-option login-option-social'>
-                            	<h2>$langUserLogin</h2>
-                                <form action='https://eclass30-test.gunet.gr/' method='post'>
-                                	<span class='head-text'>Login with your social networks</span>
-                                    <button type='button' class='btn social-btn social-btn-fb'><i class='fa fa-facebook-square'></i> Connect with Facebook</button>
-                                    <button type='button' class='btn social-btn social-btn-google'><i class='fa fa-google-plus-square'></i> Connect with Google</button>
-                                </form>
-                            	<div class='login-settings row'>
-	                                <div class='or-separator'><span>ή</span></div>
-	                                <div class='alt_login text-center'>
-	                                    <span>
-                                                <button type='button' data-target='0' class='option-btn hide'><span>Connect with your</span> Username/Password</button>
-                                                <button type='button' data-target='1' class='option-btn hide'><span>Connect with your</span> Academic Account</button>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                        <div class='login-option login-option-sso'>
+                                        <h2>$langUserLogin</h2>
+                                        <form>";                                        
+                                        if (!empty($cas_link)) {
+                                            $tool_content .= "<span class='head-text'>$cas_link_title</span>";
+                                            $tool_content.= "$cas_link";                                             
+                                        }
+                                        if (!empty($shibboleth_link)) {
+                                            $tool_content .= "<span class='head-text'>$shib_link_title</span>";
+                                            $tool_content.= "$shibboleth_link";
+                                        }
+                                    $tool_content .= "</form>
+                                    <div class='login-settings row'>
+                            <div class='or-separator'><span>$langOr</span></div>
+                            <div class='alt_login text-center'>
+                                <span>
+                                    <button type='button' data-target='0' class='option-btn hide'><span>Connect with your</span> Username / Password</button>
+                                    <button type='button' data-target='2' class='option-btn hide'><span>Connect with your</span>Social network</button>
+                                </span>
                             </div>
-                        ";
+                        </div>
+                    </div>
+                <div class='login-option login-option-social'>
+                    <h2>$langUserLogin</h2>
+                    <form action='https://eclass30-test.gunet.gr/' method='post'>
+                            <span class='head-text'>Login with your social networks</span>
+                        <button type='button' class='btn social-btn social-btn-fb'><i class='fa fa-facebook-square'></i> Connect with Facebook</button>
+                        <button type='button' class='btn social-btn social-btn-google'><i class='fa fa-google-plus-square'></i> Connect with Google</button>
+                    </form>
+                    <div class='login-settings row'>
+                            <div class='or-separator'><span>ή</span></div>
+                            <div class='alt_login text-center'>
+                                <span>
+                                    <button type='button' data-target='0' class='option-btn hide'><span>Connect with your</span> Username/Password</button>
+                                    <button type='button' data-target='1' class='option-btn hide'><span>Connect with your</span> Academic Account</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ";
             
 //                                                    if (!empty($shibboleth_link) or !empty($cas_link)) {
 //                                    $tool_content .= "<div class='alt_login text-center'>
@@ -233,8 +243,10 @@ if ($uid AND !isset($_GET['logout'])) {
 //                                         $tool_content .= "</div>";
                                 //}
                         
-                    if (!empty($warning)) { $tool_content.= "<br><span>$warning</span>"; }
-                    $tool_content .= "</div>";
+            if (!empty($warning)) { 
+                $tool_content.= "<br><span>$warning</span>";                 
+            }
+            $tool_content .= "</div>";
         }
         $tool_content .= "</div>
                 </div>
