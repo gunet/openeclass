@@ -117,7 +117,7 @@ if (!$info) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else {
     $pageName = $langEBookEdit;
-    $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
+    $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
     $k = 0;
     list($paths, $files, $file_ids, $id_map) = find_html_files();
     // Form #1 - edit ebook title
@@ -291,12 +291,12 @@ function find_html_files() {
 
 function get_html_title($file) {
     $dom = new DOMDocument();
-    @$dom->loadHTMLFile($file);
+    $dom->loadHTMLFile($file);
     if (!is_object($dom)) {
         return '';
     }
     $title_elements = $dom->getElementsByTagName('title');
-    if (!is_object($title_elements) or ! $title_elements->length) {
+    if (!is_object($title_elements) or !$title_elements->length) {
         return '';
     }
     $title = $title_elements->item(0)->nodeValue;
