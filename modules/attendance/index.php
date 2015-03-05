@@ -425,7 +425,12 @@ if ($is_editor) {
 
     //EDIT DB: add or edit attendance limit
     elseif(isset($_POST['submitAttendanceLimit'])){
-        $attendance_limit = intval($_POST['limit']);
+        
+        if(isset($_POST['limit'])){
+            $attendance_limit = 0;
+        }else{
+            $attendance_limit = intval($_POST['limit']);
+        }
         Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
         
         Session::Messages($langAttendanceLimit,"alert-success");
