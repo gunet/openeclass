@@ -123,7 +123,7 @@ if ($attendance) {
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
 }else{
     //new attendance
-    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d ", $course_id)->lastInsertID;    
+    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, active = 1 ", $course_id)->lastInsertID;    
     //create attendance users (default the last six months)
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
@@ -425,12 +425,8 @@ if ($is_editor) {
 
     //EDIT DB: add or edit attendance limit
     elseif(isset($_POST['submitAttendanceLimit'])){
+        $attendance_limit = intval($_POST['limit']);
         
-        if(isset($_POST['limit'])){
-            $attendance_limit = 0;
-        }else{
-            $attendance_limit = intval($_POST['limit']);
-        }
         Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
         
         Session::Messages($langAttendanceLimit,"alert-success");
