@@ -123,7 +123,7 @@ if ($attendance) {
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
 }else{
     //new attendance
-    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d ", $course_id)->lastInsertID;    
+    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, active = 1 ", $course_id)->lastInsertID;    
     //create attendance users (default the last six months)
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
@@ -327,9 +327,9 @@ if ($is_editor) {
         //check the type of the module (assignments)
         if($type == 1) {
             //checking if it is new or not
-            $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1) AND assignment.id = ?d",function ($errormsg) {
+            $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1 AND attendance_id = ?d) AND assignment.id = ?d",function ($errormsg) {
                 echo "An error has occured: " . $errormsg;
-            }, $course_id, $id);
+            }, $course_id, $attendance_id, $id);
         
             if($checkForAss){
                 $module_auto_id = $checkForAss->id;
@@ -357,8 +357,8 @@ if ($is_editor) {
         if($type == 2){
             //checking if it is new or not
             $checkForExer = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d "
-                    . "AND exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2) "
-                    . "AND exercise.id = ?d", $course_id, $id);        
+                    . "AND exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2 AND attendance_id = ?d) "
+                    . "AND exercise.id = ?d", $course_id, $attendance_id, $id);        
             if($checkForExer){
                 $module_auto_id = $checkForExer->id;
                 $module_auto_type = 2; 
@@ -425,12 +425,8 @@ if ($is_editor) {
 
     //EDIT DB: add or edit attendance limit
     elseif(isset($_POST['submitAttendanceLimit'])){
+        $attendance_limit = intval($_POST['limit']);
         
-        if(isset($_POST['limit'])){
-            $attendance_limit = 0;
-        }else{
-            $attendance_limit = intval($_POST['limit']);
-        }
         Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
         
         Session::Messages($langAttendanceLimit,"alert-success");
@@ -812,7 +808,7 @@ if ($is_editor) {
     elseif (isset($_GET['addActivityAs'])) {
         //Assignments
         //Course activities available for the attendance
-        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1)", $course_id);
+        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1 AND attendance_id = ?d)", $course_id, $attendance_id);
 
         $checkForAssNumber = count($checkForAss);        
         
@@ -856,7 +852,7 @@ if ($is_editor) {
     elseif (isset($_GET['addActivityEx'])){
         //Exercises
         //Course activities available for the attendance
-        $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d AND  exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2)", $course_id);
+        $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d AND  exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2 AND attendance_id = ?d)", $course_id, $attendance_id);
         $checkForExerNumber = count($checkForExer);
         
         if ($checkForExerNumber > 0) {
