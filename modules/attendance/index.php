@@ -804,7 +804,7 @@ if ($is_editor) {
         $showAttendanceActivities = 0;
     }
     
-    //
+    //DISPLAY: Add assignment
     elseif (isset($_GET['addActivityAs'])) {
         //Assignments
         //Course activities available for the attendance
@@ -848,7 +848,7 @@ if ($is_editor) {
         $showAttendanceActivities = 0;
     }
     
-    //
+    //DISPLAY: Add exercise
     elseif (isset($_GET['addActivityEx'])){
         //Exercises
         //Course activities available for the attendance
@@ -1021,7 +1021,7 @@ if ($is_editor) {
                     $tool_content .= $langAttendanceActivity;
                 }
                 $tool_content .= "</td>";
-                $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
+                $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber, $attendance_id) . "</td>";
                 $tool_content .= "<td class='text-center option-btn-cell'>".                        
                         action_button(array(
                                     array('title' => $langDelete,
@@ -1155,10 +1155,10 @@ function userAttendTotal ($attendance_id, $userID){
  * @param type $participantsNumber
  * @return string
  */
-function userAttendTotalActivityStats ($activityID, $participantsNumber){
+function userAttendTotalActivityStats ($activityID, $participantsNumber, $attendance_id){
         
     $sumAtt = 0;
-    $userAttTotalActivity = Database::get()->queryArray("SELECT attend, attendance_book.uid FROM attendance_book, attendance_users WHERE attendance_activity_id = ?d AND attendance_users.uid=attendance_book.uid", $activityID);
+    $userAttTotalActivity = Database::get()->queryArray("SELECT attend, attendance_book.uid FROM attendance_book, attendance_users WHERE attendance_activity_id = ?d AND attendance_users.uid=attendance_book.uid AND attendance_users.attendance_id=?d", $activityID, $attendance_id);
     foreach ($userAttTotalActivity as $module) {
         $sumAtt += $module->attend;
     }
