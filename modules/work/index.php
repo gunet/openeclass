@@ -1029,7 +1029,6 @@ function edit_assignment($id) {
         Session::Messages($langEditSuccess,'alert-success');         
         redirect_to_home_page("modules/work/index.php?course=$course_code");
     } else {
-//        $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");        
     }
@@ -1582,7 +1581,9 @@ function show_assignment($id, $display_graph_results = false) {
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
-                                <div align='center'><input type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'></div>
+                                    <div class='form-group'>
+                                        <input class='form-control' type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'>
+                                    </div>
                                 </td>
                                 </tr>
                                 <tr>
@@ -1922,37 +1923,48 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
 
 // submit grades to students
 function submit_grades($grades_id, $grades, $email = false) {
-    global $tool_content, $langGrades, $langWorkWrongInput, $course_id;
+    global $tool_content, $langGrades, $langWorkWrongInput, $course_id, 
+           $course_code, $langFormErrors;
+    $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $grades_id)->max_grade;
+    $v = new Valitron\Validator(array('grades' => $grades));
+    $v->rule('numeric', array('grades.*'));
+    $v->rule('min', array('grades.*'), 0);
+    $v->rule('max', array('grades.*'), $max_grade);
+    if($v->validate()) {
+        foreach ($grades as $sid => $grade) {
+            $sid = intval($sid);
+            $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
+            $grade_valid = filter_var($grade, FILTER_VALIDATE_FLOAT);
 
-    foreach ($grades as $sid => $grade) {
-        $sid = intval($sid);
-        $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
-        $grade_valid = filter_var($grade, FILTER_VALIDATE_FLOAT);
-        
-        (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
+            (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
 
-        if ($val != $grade) {
-            if (Database::get()->query("UPDATE assignment_submit
-                                        SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
-                                        WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
-                $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?d", $sid)->assignment_id;
-                $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?d", $assign_id)->title;
-                Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-                        'title' => $title,
-                        'grade' => $grade));
-                
-                //update gradebook if needed
-                $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                update_gradebook_book($quserid, $assign_id, $grade, 'assignment');
-                
-                if ($email) {
-                    grade_email_notify($grades_id, $sid, $grade, '');
-                }          
-                Session::Messages($langGrades, 'alert-success');
+            if ($val != $grade) {
+                if (Database::get()->query("UPDATE assignment_submit
+                                            SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
+                                            WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
+                    $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?d", $sid)->assignment_id;
+                    $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?d", $assign_id)->title;
+                    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
+                            'title' => $title,
+                            'grade' => $grade));
+
+                    //update gradebook if needed
+                    $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                    update_gradebook_book($quserid, $assign_id, $grade, 'assignment');
+
+                    if ($email) {
+                        grade_email_notify($grades_id, $sid, $grade, '');
+                    }          
+                    Session::Messages($langGrades, 'alert-success');
+                }
             }
         }
+        Session::Messages($langGrades, 'alert-success');        
+    } else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     }
-    show_assignment($grades_id);
+    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$grades_id");
+
 }
 
 // functions for downloading
