@@ -162,9 +162,9 @@ if (!isset($_POST['submit'])) {
                       <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
                     </div>";
             }
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+        $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                         <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "' />
-                    </div>
+                    </div></div>
         </fieldset>
       </form>
       </div>";

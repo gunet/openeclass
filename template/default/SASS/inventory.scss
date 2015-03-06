@@ -2705,7 +2705,7 @@ div.login-form .btn.btn-login:hover {
 }
 
 .wrapper-login-option{
-  width:400%;
+  width:300%;
   transition:250ms margin ease-out;
   -webkit-transition:250ms margin ease-out;
   -moz-transition:250ms margin ease-out;
@@ -2721,7 +2721,7 @@ div.login-form .btn.btn-login:hover {
 }
 
 .wrapper-login-option .login-option{
-  width:25%;
+  width:33.3%;
   float:left;
   padding: 2em;
 }
@@ -2742,10 +2742,8 @@ div.login-form .btn.btn-login{
   position: relative;
   padding:2px 5px;
   z-index: 9;
-
   width:100%;
   background: white;
-
   margin-bottom: 0.4em!important;
 }
 
@@ -2754,7 +2752,6 @@ div.login-form .btn.btn-login{
   display: inline-block;
   position:relative;
   z-index:99;
-
 }
 
 .text-center{
@@ -2765,49 +2762,39 @@ div.login-form .btn.btn-login{
   content: "";
   display:inline-block;
   position: absolute;
-
   z-index: -1;
-
   width: calc(100% + 2em);
   height:1em;
   top: calc(50% - 0.5em);
   left: -1em;
-
   background: white;
-
 }
 
 .or-separator:after{
-
   width:100%;
   height:1px;
-
   position: absolute;
   background: rgba(0,0,0,.1);
-
   z-index: 1;
-
   content: "";
-
   top:47%;
   left:0px;
 }
 
 .option-btn{
-
   display:inline-block;
   width: 45%;
-
   border-radius: 6px;
   border: 1px solid rgba(0,0,0,.2);
   background:none;
   padding: 0.5em 1em;
   font-weight: normal;
-
   outline: none;
-
   margin:0 5px;
+}
 
+.option-btn:first-child:nth-child(2), .option-btn:first-child:nth-child(2) ~ button{
+    width: 90%;
 }
 
 .option-btn:hover{

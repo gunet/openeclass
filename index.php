@@ -160,84 +160,82 @@ if ($uid AND !isset($_GET['logout'])) {
                     <div class='row'>";
         if (!get_config('dont_display_login_form')) {                            
             $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
-                                <div class='wrapper-login-option'>
-                                    <div class='login-option'>
-                                        <h2>$langUserLogin</h2>
-                                        <form  action='$urlServer' method='post'>
-                                            <div class='form-group'>
-                                                <input autofocus type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
-                                            </div>
-                                            <div class='form-group'>
-                                                <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
-                                            </div>
-                                            <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
-                                        </form>
-                                        <div class='login-settings row'>
-                                            <div class='text-center'>
-                                                  <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                                            </div>";
+                                <div class='wrapper-login-option'>";
 
-                                        if (!empty($shibboleth_link) or !empty($cas_link)) {                                            
-                                            $tool_content .= "<div class='or-separator'><span>$langOr</span></div>
-                                            <div class='alt_login text-center'>
-                                                <span>";
-                                                if (!empty($cas_link)) {
-                                                    $tool_content .= "<button type='button' data-target='1' class='option-btn hide'>$cas_link_title</button>";
-                                                }
-                                                if (!empty($shibboleth_link)) {
-                                                    $tool_content.= "<button type='button' data-target='1' class='option-btn hide'>$shib_link_title</button>";
-                                                }
-                                                    $tool_content .= "<button type='button' data-target='2' class='option-btn hide'><b>$langLogInWith</b><br>Social network</button>
-                                                </span>
-                                            </div>";
-                                        }
-                                        $tool_content .= "</div>
-                                        </div>
-                                        <div class='login-option login-option-sso'>
-                                        <h2>$langUserLogin</h2>
-                                        <div><span class='head-text'>$langLoginSSO</span> ";                                        
-                                        if (!empty($cas_link)) {
-                                            $tool_content.= "$cas_link";                                             
-                                        }
-                                        if (!empty($shibboleth_link)) {
-                                            $tool_content.= "$shibboleth_link";
-                                        }
-                                    $tool_content .= "</div>
+                                  if (!empty($shibboleth_link) or !empty($cas_link)) {  
+                                  $tool_content .= "<div class='login-option login-option-sso'>
+                                    <h2>$langUserLogin</h2>
+                                    <div><span class='head-text'>$langLoginSSO</span> ";                                        
+                                    if (!empty($cas_link)) {
+                                        $tool_content .= $cas_link;                                             
+                                    }
+                                    if (!empty($shibboleth_link)) {
+                                        $tool_content .= $shibboleth_link;
+                                    }
+                                    $tool_content .= "
+                                    </div>
                                     <div class='login-settings row'>
-                            <div class='or-separator'><span>$langOr</span></div>
-                            <div class='alt_login text-center'>
-                                <span>
-                                    <button type='button' data-target='0' class='option-btn hide'><b>$langLogInWith</b><br> Creditentials</button>
-                                    <button type='button' data-target='2' class='option-btn hide'><b>$langLogInWith</b><br>Social network</button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                <div class='login-option login-option-social'>
-                    <h2>$langUserLogin</h2>
-                            <span class='head-text'>$langLoginSocialNetwork</span>
-                        <button type='button' class='btn social-btn social-btn-fb'><i class='fa fa-facebook-square'></i> Connect with Facebook</button>
-                        <button type='button' class='btn social-btn social-btn-google'><i class='fa fa-google-plus-square'></i> Connect with Google</button>
-                    <div class='login-settings row'>
-                            <div class='or-separator'><span>ή</span></div>
-                            <div class='alt_login text-center'>
-                                <span>
-                                    <button type='button' data-target='0' class='option-btn hide'><b>$langLogInWith</b><br> Username/Password</button>
-                                    <button type='button' data-target='1' class='option-btn hide'><b>$langLogInWith</b><br> Academic Account</button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            ";
-            
-//                                                    if (!empty($shibboleth_link) or !empty($cas_link)) {
-//                                    $tool_content .= "<div class='alt_login text-center'>
-//                                        <span>$langAlternateLogin:</span> ";
-//                                            if (!empty($cas_link)) { $tool_content.= "<span>$cas_link</span>"; }
-//                                            if (!empty($shibboleth_link)) { $tool_content.= "<span>$shibboleth_link</span>"; }
-//                                         $tool_content .= "</div>";
-                                //}
+                                      <div class='or-separator'><span>$langOr</span></div>
+                                      <div class='alt_login text-center'>
+                                        <span>
+                                          <button type='button' data-target='1' class='option-btn hide'><b>$langLogInWith</b><br>Credentials</button>
+                                          
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>";
+                                  }
+
+                                  $tool_content .= "<div class='login-option'>
+                                    <h2>$langUserLogin</h2>
+                                    <form action='$urlServer' method='post'>
+                                      <div class='form-group'>
+                                         <input  type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
+                                      </div>
+                                      <div class='form-group'>
+                                         <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                      </div>
+                                      <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
+                                    </form>
+                                    <div class='login-settings row'>
+                                      <div class='text-center'>
+                                        <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                                      </div>";
+                                      if (!empty($shibboleth_link) or !empty($cas_link)) {                                            
+                                          $tool_content .= "
+                                          <div class='or-separator'><span>$langOr</span></div>
+                                          <div class='alt_login text-center'>
+                                              <span>";
+                                          if (!empty($cas_link)) {
+                                              $tool_content .= "<button type='button' data-target='0' class='option-btn hide'>$cas_link_title</button>";
+                                          }
+                                          if (!empty($shibboleth_link)) {
+                                              $tool_content.= "<button type='button' data-target='0' class='option-btn hide'>$shib_link_title</button>";
+                                          }
+                                          $tool_content .= "<button type='button' data-target='2' class='option-btn hide'><b>$langLogInWith</b><br>Social network</button>
+                                              </span>
+                                          </div>";
+                                      }
+                                      $tool_content .= "
+                                    </div>
+                                  </div>
+
+                                  <div class='login-option login-option-social'>
+                                    <h2>$langUserLogin</h2>
+                                    <span class='head-text'>$langLoginSocialNetwork</span>
+                                    <button type='button' class='btn social-btn social-btn-fb'><i class='fa fa-facebook-square'></i> Connect with Facebook</button>
+                                    <button type='button' class='btn social-btn social-btn-google'><i class='fa fa-google-plus-square'></i> Connect with Google</button>
+                                    <div class='login-settings row'>
+                                      <div class='or-separator'><span>ή</span></div>
+                                        <div class='alt_login text-center'>
+                                          <span>
+                                            <button type='button' data-target='0' class='option-btn hide'><b>$langLogInWith</b><br> Academic Account</button>
+                                            <button type='button' data-target='1' class='option-btn hide'><b>$langLogInWith</b><br> Username/Password</button>
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>";
                         
             if (!empty($warning)) { 
                 $tool_content.= "<br><span>$warning</span>";                 

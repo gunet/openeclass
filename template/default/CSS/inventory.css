@@ -3044,7 +3044,7 @@ div.login-form .btn.btn-login:hover {
 
 /* line 2707, ../SASS/inventory.scss */
 .wrapper-login-option {
-  width: 400%;
+  width: 300%;
   transition: 250ms margin ease-out;
   -webkit-transition: 250ms margin ease-out;
   -moz-transition: 250ms margin ease-out;
@@ -3062,7 +3062,7 @@ div.login-form .btn.btn-login:hover {
 
 /* line 2723, ../SASS/inventory.scss */
 .wrapper-login-option .login-option {
-  width: 25%;
+  width: 33.3%;
   float: left;
   padding: 2em;
 }
@@ -3088,7 +3088,7 @@ div.login-form .btn.btn-login {
   margin-bottom: 0.4em !important;
 }
 
-/* line 2752, ../SASS/inventory.scss */
+/* line 2750, ../SASS/inventory.scss */
 .or-separator span {
   content: "";
   display: inline-block;
@@ -3096,12 +3096,12 @@ div.login-form .btn.btn-login {
   z-index: 99;
 }
 
-/* line 2760, ../SASS/inventory.scss */
+/* line 2757, ../SASS/inventory.scss */
 .text-center {
   text-align: center;
 }
 
-/* line 2764, ../SASS/inventory.scss */
+/* line 2761, ../SASS/inventory.scss */
 .or-separator span:before {
   content: "";
   display: inline-block;
@@ -3114,7 +3114,7 @@ div.login-form .btn.btn-login {
   background: white;
 }
 
-/* line 2780, ../SASS/inventory.scss */
+/* line 2773, ../SASS/inventory.scss */
 .or-separator:after {
   width: 100%;
   height: 1px;
@@ -3126,7 +3126,7 @@ div.login-form .btn.btn-login {
   left: 0px;
 }
 
-/* line 2796, ../SASS/inventory.scss */
+/* line 2784, ../SASS/inventory.scss */
 .option-btn {
   display: inline-block;
   width: 45%;
@@ -3139,46 +3139,51 @@ div.login-form .btn.btn-login {
   margin: 0 5px;
 }
 
-/* line 2813, ../SASS/inventory.scss */
+/* line 2796, ../SASS/inventory.scss */
+.option-btn:first-child:nth-child(2), .option-btn:first-child:nth-child(2) ~ button {
+  width: 90%;
+}
+
+/* line 2800, ../SASS/inventory.scss */
 .option-btn:hover {
   background: #3071a9;
   color: white;
   border-color: transparent;
 }
 
-/* line 2819, ../SASS/inventory.scss */
+/* line 2806, ../SASS/inventory.scss */
 .option-btn > span {
   font-weight: 700;
   display: block;
 }
 
-/* line 2824, ../SASS/inventory.scss */
+/* line 2811, ../SASS/inventory.scss */
 div.login-form .login-option-sso .btn-login {
   height: 8rem;
   line-height: 7rem;
 }
 
-/* line 2829, ../SASS/inventory.scss */
+/* line 2816, ../SASS/inventory.scss */
 .head-text {
   text-align: center;
   display: block;
 }
 
-/* line 2834, ../SASS/inventory.scss */
+/* line 2821, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn {
   width: 100%;
   margin-top: 0.5em;
   color: white;
 }
 
-/* line 2840, ../SASS/inventory.scss */
+/* line 2827, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn i.fa {
   float: left;
   font-size: 1.6em;
   position: relative;
 }
 
-/* line 2846, ../SASS/inventory.scss */
+/* line 2833, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn i.fa:after {
   content: "";
   display: inline-block;
@@ -3189,32 +3194,32 @@ div.login-form .login-option-social .social-btn i.fa:after {
   background: rgba(255, 255, 255, 0.25);
 }
 
-/* line 2856, ../SASS/inventory.scss */
+/* line 2843, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn:first-of-type {
   margin-top: 0.8em;
 }
 
-/* line 2860, ../SASS/inventory.scss */
+/* line 2847, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn:last-of-type {
   margin-bottom: 0.8em;
 }
 
-/* line 2864, ../SASS/inventory.scss */
+/* line 2851, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn.social-btn-fb {
   background: rgba(97, 152, 224, 0.8);
 }
 
-/* line 2868, ../SASS/inventory.scss */
+/* line 2855, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn.social-btn-fb:hover {
   background: #6198e0;
 }
 
-/* line 2872, ../SASS/inventory.scss */
+/* line 2859, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn.social-btn-google {
   background: rgba(224, 84, 84, 0.8);
 }
 
-/* line 2876, ../SASS/inventory.scss */
+/* line 2863, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn.social-btn-google:hover {
   background: #e05454;
 }
