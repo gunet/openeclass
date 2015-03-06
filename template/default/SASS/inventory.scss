@@ -2387,27 +2387,6 @@ body.page-login h1 {
   margin: 1.25em 1em;
 }
 
-/* line 183, styles.scss */
-.jumbotron.jumbotron-login {
-  padding-top: 3rem;
-  padding-bottom: 3rem;
-  border-radius: 0px;
-  -moz-border-radius: 0px;
-  -webkit-border-radius: 0px;
-  background-color: #025694;
-  /* fallback from css grandient */
-  background: url("jumbotron-bg.png") repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-position: 30% 60%;
-  background-repeat: no-repeat;
-  background: -webkit-gradient(radial, 30% 60%, 0, 30% 60%, 300, from(#009bcf), to(#025694));
-  background: -webkit-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
-  background: -moz-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
-  background: -ms-radial-gradient(30% 60%, closest-corner, #009bcf, #025694);
-}
 /* line 208, styles.scss */
 .jumbotron.jumbotron-login .graphic {
   position: absolute;
