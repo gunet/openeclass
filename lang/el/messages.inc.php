@@ -2846,6 +2846,7 @@ $langPassSameAuth = 'Το συνθηματικό σας είναι αυτό τη
 $langLdapRequest = 'Υπάρχει ήδη μια αίτηση για τον χρήστη';
 $langLDAPUser = 'Χρήστης LDAP';
 $langLogIn = 'Σύνδεση';
+$langLogInWith = "Σύνδεση με";
 $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά μάθημα";

@@ -125,8 +125,8 @@ if ($uid AND !isset($_GET['logout'])) {
     $shibactive = Database::get()->querySingle("SELECT auth_name, auth_default, auth_title FROM auth WHERE auth_id = 6");
     if ($shibactive) {
 	    if ($shibactive->auth_default == 1) {
+                $shib_link_title = (!empty($shibactive->auth_title)) ? $shibactive->auth_title : "<b>$langLogInWith</b><br>$shibactive->auth_name";
                 $shibboleth_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/index.php'>$langEnter</a><br />";
-                $shib_link_title = (!empty($shibactive->auth_title)) ? $shibactive->auth_title : "$langLogIn $shibactive->auth_name";
 	    }
 	}
 
@@ -135,8 +135,8 @@ if ($uid AND !isset($_GET['logout'])) {
     $casactive = Database::get()->querySingle("SELECT auth_name, auth_default, auth_title FROM auth WHERE auth_id = 7");
     if ($casactive) {
     	if ($casactive->auth_default == 1) {
-        	$cas_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/cas.php'>$langEnter</a><br />";
-                $cas_link_title = (!empty($casactive->auth_title)) ? $casactive->auth_title : "$langLogIn $casactive->auth_name";
+            $cas_link_title = (!empty($casactive->auth_title)) ? $casactive->auth_title : "<b>$langLogInWith</b><br>$casactive->auth_name";
+            $cas_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/cas.php'>$langEnter</a><br />";
     	}
     }
        
@@ -187,7 +187,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                                 if (!empty($shibboleth_link)) {
                                                     $tool_content.= "<button type='button' data-target='1' class='option-btn hide'>$shib_link_title</button>";
                                                 }
-                                                    $tool_content .= "<button type='button' data-target='2' class='option-btn hide'><span>Connect with your</span>Social network</button>
+                                                    $tool_content .= "<button type='button' data-target='2' class='option-btn hide'><b>$langLogInWith</b><br>Social network</button>
                                                 </span>
                                             </div>";
                                         }
@@ -195,22 +195,20 @@ if ($uid AND !isset($_GET['logout'])) {
                                         </div>
                                         <div class='login-option login-option-sso'>
                                         <h2>$langUserLogin</h2>
-                                        <form>";                                        
+                                        <div>";                                        
                                         if (!empty($cas_link)) {
-                                            $tool_content .= "<span class='head-text'>$cas_link_title</span>";
                                             $tool_content.= "$cas_link";                                             
                                         }
                                         if (!empty($shibboleth_link)) {
-                                            $tool_content .= "<span class='head-text'>$shib_link_title</span>";
                                             $tool_content.= "$shibboleth_link";
                                         }
-                                    $tool_content .= "</form>
+                                    $tool_content .= "</div>
                                     <div class='login-settings row'>
                             <div class='or-separator'><span>$langOr</span></div>
                             <div class='alt_login text-center'>
                                 <span>
-                                    <button type='button' data-target='0' class='option-btn hide'><span>Connect with your</span> Username / Password</button>
-                                    <button type='button' data-target='2' class='option-btn hide'><span>Connect with your</span>Social network</button>
+                                    <button type='button' data-target='0' class='option-btn hide'><b>$langLogInWith</b><br> Creditentials</button>
+                                    <button type='button' data-target='2' class='option-btn hide'><b>$langLogInWith</b><br>Social network</button>
                                 </span>
                             </div>
                         </div>
@@ -226,8 +224,8 @@ if ($uid AND !isset($_GET['logout'])) {
                             <div class='or-separator'><span>ή</span></div>
                             <div class='alt_login text-center'>
                                 <span>
-                                    <button type='button' data-target='0' class='option-btn hide'><span>Connect with your</span> Username/Password</button>
-                                    <button type='button' data-target='1' class='option-btn hide'><span>Connect with your</span> Academic Account</button>
+                                    <button type='button' data-target='0' class='option-btn hide'><b>$langLogInWith</b><br> Username/Password</button>
+                                    <button type='button' data-target='1' class='option-btn hide'><b>$langLogInWith</b><br> Academic Account</button>
                                 </span>
                             </div>
                         </div>
@@ -261,6 +259,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                                         AND (`begin` <= NOW() or `begin` IS null)
                                                         AND (NOW() <= `end` or `end` IS null)
                                                 ORDER BY `order` DESC", $language);
+   
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
         $ann_content .= "<ul class='front-announcements'>";
@@ -271,7 +270,7 @@ if ($uid AND !isset($_GET['logout'])) {
                     <li>
                     <div><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></div>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
-            " . standard_text_escape(ellipsize_html($announceArr[$i]->body, 500, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a></div>"))."</li>";
+            " . standard_text_escape(ellipsize_html("<div class='announcement-main'>".$announceArr[$i]->body."</div>", 500, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a></div>"))."</li>";
         }        
     }
 

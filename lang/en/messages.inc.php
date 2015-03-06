@@ -1208,6 +1208,7 @@ $langLinkAsModule = "Use a Link";
 $langLinkAsModuleLabel = "Link";
 $langLinkInsertedAsModule = "has been added as a module of the course and of this learning path";
 $langLogin = "Login";
+$langLogInWith = "Connect with";
 $langMaxFileSize = "Max file size: ";
 $langMinuteShort = "min.";
 $langModuleMoved = "Module moved";

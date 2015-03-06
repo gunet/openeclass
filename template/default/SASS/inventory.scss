@@ -2009,20 +2009,23 @@ ul.front-announcements, .single_announcement
         padding-bottom: 0px !important;
     }
     .announcement-title{
-            font-weight: bold;
-            font-size: 15px;
-        }
-        .announcement-date{
-            font-style: italic;
-            color: #777;
-            font-size: 13px;
-            line-height: 30px;
-        }
-        .announcements-more{
-            text-align: right;
-        }
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .announcement-date{
+        font-style: italic;
+        color: #777;
+        font-size: 13px;
+        line-height: 30px;
+    }
+    .announcement-main{
+        padding: 10px;
+    }
+    .announcements-more{
+        text-align: right;
+    }
     li:first-child{
-        
+
     }
     li:last-child{
         border-bottom: none;
@@ -2820,6 +2823,7 @@ div.login-form .btn.btn-login{
 
 div.login-form .login-option-sso .btn-login{
   height: 8rem;
+  line-height: 7rem;
 }
 
 .head-text{
