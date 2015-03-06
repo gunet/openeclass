@@ -3749,6 +3749,7 @@ $langShare = "Share it";
 $langSharingDisAdmin = "Social sharing is globally disabled by the platform's administrator.";
 $langSharingDisCourse = "Social sharing is disabled for non-open courses.";
 $langEnableSocialSharingLiks = "Enable social sharing links";
+$langCustomProfileFieldsAdmin = 'Custom profile fields administration';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';
