@@ -328,7 +328,7 @@ if ($is_editor) {
                                     <label for='visible' class='col-sm-2 control-label'>$langGradeVisible</label>
                                     <div class='col-sm-10'>
                                         <input type='checkbox' class='form-control' id='visible' name='visible' value='1'";
-                                        if($visible){
+                                        if($visible == 1){
                                             $tool_content .= " checked";
                                         }
                                     $tool_content .= " /></div>
@@ -377,7 +377,7 @@ if ($is_editor) {
             //checking if it is new or not
             $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d "
                                                       . "AND assignment.active = 1 "
-                                                      . "AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1) AND assignment.id = ?d", $course_id, $id);        
+                                                      . "AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d) AND assignment.id = ?d", $course_id, $gradebook_id, $id);        
             if ($checkForAss) {
                 $module_auto_id = $checkForAss->id;
                 $module_auto_type = 1; //one for assignments
@@ -400,7 +400,7 @@ if ($is_editor) {
             //checking if it is new or not
             $checkForExe = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d "
                                                          . "AND exercise.active = 1 "
-                                                         . "AND exercise.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2) AND exercise.id = ?d", $course_id, $id);        
+                                                         . "AND exercise.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2 AND gradebook_id = ?d) AND exercise.id = ?d", $course_id, $gradebook_id, $id);        
             if ($checkForExe) {
                 $module_auto_id = $checkForExe->id;
                 $module_auto_type = 2; //one for assignments
@@ -424,7 +424,7 @@ if ($is_editor) {
         if ($type == 3) {            
             //checking if it is new or not
             $checkForLp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d 
-                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3) AND learnPath_id = ?d", $course_id, $id);                        
+                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3 AND gradebook_id = ?d) AND learnPath_id = ?d", $course_id, $gradebook_id, $id);                        
             if ($checkForLp) {
                 $module_auto_id = $checkForLp->learnPath_id;
                 $module_auto_type = 3; //3 for lp
@@ -886,7 +886,7 @@ if ($is_editor) {
 
     elseif (isset($_GET['addActivityAs'])) {
         //Assignments
-        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1)", $course_id);
+        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d)", $course_id, $gradebook_id);
 
         $checkForAssNumber = count($checkForAss);
         
@@ -941,7 +941,7 @@ if ($is_editor) {
         //Exercises
         $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d 
                                 AND exercise.active = 1 AND exercise.id 
-                                NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2)", $course_id);
+                                NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2 AND gradebook_id = ?d)", $course_id, $gradebook_id);
         $checkForExerNumber = count($checkForExer);
         if ($checkForExerNumber > 0) {
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
@@ -979,7 +979,7 @@ if ($is_editor) {
     elseif (isset($_GET['addActivityLp'])) {
         //Learning paths - SCORMS
         $checkForLp = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name 
-                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3)", $course_id);
+                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3 AND gradebook_id = ?d)", $course_id, $gradebook_id);
                 
         $checkForLpNumber = count($checkForLp);
         
