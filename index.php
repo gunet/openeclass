@@ -195,7 +195,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                         </div>
                                         <div class='login-option login-option-sso'>
                                         <h2>$langUserLogin</h2>
-                                        <div>";                                        
+                                        <div><span class='head-text'>$langLoginSSO</span> ";                                        
                                         if (!empty($cas_link)) {
                                             $tool_content.= "$cas_link";                                             
                                         }
@@ -215,11 +215,9 @@ if ($uid AND !isset($_GET['logout'])) {
                     </div>
                 <div class='login-option login-option-social'>
                     <h2>$langUserLogin</h2>
-                    <form action='https://eclass30-test.gunet.gr/' method='post'>
-                            <span class='head-text'>Login with your social networks</span>
+                            <span class='head-text'>$langLoginSocialNetwork</span>
                         <button type='button' class='btn social-btn social-btn-fb'><i class='fa fa-facebook-square'></i> Connect with Facebook</button>
                         <button type='button' class='btn social-btn social-btn-google'><i class='fa fa-google-plus-square'></i> Connect with Google</button>
-                    </form>
                     <div class='login-settings row'>
                             <div class='or-separator'><span>ή</span></div>
                             <div class='alt_login text-center'>
