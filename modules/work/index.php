@@ -1899,7 +1899,7 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
     (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
         
     if (Database::get()->query("UPDATE assignment_submit 
-                                SET grade = ?d, grade_comments = ?s,
+                                SET grade = ?f, grade_comments = ?s,
                                 grade_submission_date = NOW(), grade_submission_ip = ?s
                                 WHERE id = ?d", $grade, $comment, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
         $title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
@@ -1928,10 +1928,12 @@ function submit_grades($grades_id, $grades, $email = false) {
         $sid = intval($sid);
         $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
         $grade_valid = filter_var($grade, FILTER_VALIDATE_FLOAT);
-        (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;             
+        
+        (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
+
         if ($val != $grade) {
             if (Database::get()->query("UPDATE assignment_submit
-                                        SET grade = ?d, grade_submission_date = NOW(), grade_submission_ip = ?s
+                                        SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
                                         WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
                 $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?d", $sid)->assignment_id;
                 $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?d", $assign_id)->title;
