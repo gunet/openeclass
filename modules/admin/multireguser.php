@@ -37,7 +37,7 @@ $user = new User();
 
 load_js('jstree');
 
-$pageName = $langMultiRegUser;
+$toolName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $error = '';
@@ -227,9 +227,9 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     global $charset, $langAsProf,
     $langYourReg, $siteName, $langDestination, $langYouAreReg,
     $langSettings, $langPass, $langAddress, $langIs, $urlServer,
-    $langProblem, $administratorName, $administratorSurname,
+    $langProblem,
     $langManager, $langTel, $langEmail,
-    $emailhelpdesk, $profsuccess, $usersuccess,
+    $profsuccess, $usersuccess,
     $user;
 
     if ($status == 1) {
@@ -261,7 +261,8 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                     , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
     $user->refresh($id, $departments);
     $telephone = get_config('phone');
-
+    $administratorName = get_config('admin_name');
+    $emailhelpdesk = get_config('email_helpdesk');
     $emailsubject = "$langYourReg $siteName $type_message";
     $emailbody = "
 $langDestination $givenname $surname
@@ -271,10 +272,10 @@ $langPass : $password
 $langAddress $siteName $langIs: $urlServer
 $langProblem
 
-$administratorName $administratorSurname
-$langManager $siteName
-$langTel $telephone
-$langEmail : $emailhelpdesk
+$administratorName
+$langManager: $siteName
+$langTel: $telephone
+$langEmail: $emailhelpdesk
 ";
     if ($send_mail) {
         send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
