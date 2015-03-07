@@ -736,7 +736,7 @@ if ($is_editor) {
                             <label class='col-xs-12'>$langTitle</label></div>                            
                                 <div class='form-group'> 
                                     <div class='col-xs-3'>
-                                        <input type='text' placeholder='Τίτλος' name='title' value='$gradebook_title'/>
+                                        <input type='text' placeholder='$langTitle' name='title' value='$gradebook_title'/>
                                     </div>
                                 </div>
                                 <div class='form-group'>
@@ -834,10 +834,10 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <div class='form-group'>
-                            <label class='col-xs-12'>Νέο βαθμολόγιο<small class='help-block'>(δημιουργία νέου βαθμολογίου για το μάθημα)</small></label></div>                            
+                            <label class='col-xs-12'>$langNewGradebook<small class='help-block'>$langNewGradebook2</small></label></div>                            
                                 <div class='form-group'> 
                                     <div class='col-xs-3'>
-                                        <input type='text' placeholder='Τίτλος' name='title'/>
+                                        <input type='text' placeholder='$langTitle' name='title'/>
                                     </div>
                                 </div>
                                 <div class='form-group'>
@@ -849,13 +849,13 @@ if ($is_editor) {
                     
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <div class='form-group'>
-                            <label class='col-xs-12'>Διαθέσιμα βαθμολόγια<small class='help-block'>(επιλογή διαθέσιμων βαθμολογίων για το μάθημα)</small></label></div>                            
+                            <label class='col-xs-12'>$langChangeGradebook<small class='help-block'>$langChangeGradebook2</small></label></div>                            
                                 <div class='form-group'>";
                                 
                                 if ($result){
                                     foreach ($result as $year){
                                         if($year->title == ""){
-                                            $title = "Βαθμολόγιο χωρίς τίτλο";
+                                            $title = $langGradebookNoTitle2;
                                         }else{
                                             $title = $year->title;
                                         }

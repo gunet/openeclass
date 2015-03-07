@@ -1035,6 +1035,11 @@ $langAttendance3Months = "Συμμετέχουν οι $langsStudents τελευ�
 $langAttendanceAllMonths = "Συμμετέχουν όλοι οι εγγεγραμμένοι $langsStudents";
 $langAttendanceDeleteUsers = "Αν θέλετε να διαγράψετε κάποιους από το παρουσιολόγιο επιλέξτε τους από τη παρακάτω λίστα και κάντε κλικ στο κουμπί διαγραφή";
 $langAttendanceDelete = "Διαγραφή χρήστη από το παρουσιολόγιο";
+$langNewAttendance = "Νέο Παρουσιολόγιο";
+$langNewAttendance2 = "(δημιουργία νέου παρουσιολογίου για το μάθημα)";
+$langChangeAttendance = "Διαθέσιμα παρουσιολόγια";
+$langChangeAttendance2 = "(επιλογή διαθέσιμων παρουσιολογίων για το μάθημα)";
+$langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 
 $langGradebook = "Βαθμολόγιο";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
@@ -1118,6 +1123,11 @@ $langNoStudentsInAttendance = "Δεν υπάρχουν $langsStudents στο π�
 $langUsersGradebook = "$langStudents βαθμολογίου";
 $langNoGradebook = "Δεν συμμετέχετε σε μαθήματα με βαθμολόγηση.";
 $langGradeVisible = "Εμφάνιση βαθμολογίας στους χρήστες";
+$langNewGradebook = "Νέο βαθμολόγιο";
+$langNewGradebook2 = "(δημιουργία νέου βαθμολογίου για το μάθημα)";
+$langChangeGradebook = "Διαθέσιμα βαθμολόγια";
+$langChangeGradebook2 = "(επιλογή διαθέσιμων βαθμολογίων για το μάθημα)";
+$langGradebookNoTitle2 = "Βαθμολόγιο χωρίς τίτλο";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
