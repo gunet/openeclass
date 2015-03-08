@@ -512,7 +512,7 @@ if ($is_editor) {
         <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
-                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value='brown,red,green'>
+                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
             </div>
         </div>
 

@@ -315,6 +315,19 @@ function add_assignment() {
         if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
             $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
                     . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+            
+            //tags
+            if (isset($_POST['tags'])) {
+                //delete all the previous for this item, course
+                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //echo $tagItem;
+                    //insert all the new ones
+                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                }
+            }
+            
             $secret = work_secret($id);
             if ($id) {
                 $local_name = uid_to_name($uid);
@@ -519,9 +532,11 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
-    global $langBack, $langStudents, $langMove, $langWorkFile;
+    global $langBack, $langStudents, $langMove, $langWorkFile, $langTags;
     
     load_js('bootstrap-datetimepicker');
+    load_js('select2');
+
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#enddatepicker').datetimepicker({
@@ -542,7 +557,38 @@ function new_assignment() {
                 var caret = '<i class=\"fa fa-caret-down\"></i>';
                 $('#hidden-opt-btn').html('$langMoreOptions '+caret);
             })               
-        });      
+        });
+    
+    $(document).ready(function () {
+        $('#tags').select2({
+                minimumInputLength: 2,
+                tags: true,
+                tokenSeparators: [', ', ' '],
+                createSearchChoice: function(term, data) {
+                  if ($(data).filter(function() {
+                    return this.text.localeCompare(term) === 0;
+                  }).length === 0) {
+                    return {
+                      id: term,
+                      text: term
+                    };
+                  }
+                },
+                ajax: {
+                    url: '../tags/feed.php',
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function(data, page) {
+                        return {results: data};
+                    }
+                }
+        });
+        $('#tags').select2('data', [".$answer."]);
+    });    
     </script>";
     $workEnd = isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "";
     
@@ -571,6 +617,15 @@ function new_assignment() {
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
             </div>
+            
+            <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
+            <div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+                </div>
+            </div>
+
+
             <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
                 <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
@@ -699,9 +754,21 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
         $urlAppend, $works_url, $course_id, $head_content, $language, 
         $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment,
-        $langLessOptions, $langMoreOptions;
+        $langLessOptions, $langMoreOptions, $langTags;
     
+    //initialize the tags
+    $answer = "";
+    if (isset($id)) {
+        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+        foreach ($tags_init as $tag) {
+            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
+            $answer = $answer . $arrayTemp;
+        }
+    }
+
     load_js('bootstrap-datetimepicker');
+    load_js('select2');
+    
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#enddatepicker').datetimepicker({
@@ -723,6 +790,37 @@ function show_edit_assignment($id) {
                 $('#hidden-opt-btn').html('$langMoreOptions '+caret);
             })            
         });
+        
+        $(document).ready(function () {
+            $('#tags').select2({
+                    minimumInputLength: 2,
+                    tags: true,
+                    tokenSeparators: [', ', ' '],
+                    createSearchChoice: function(term, data) {
+                      if ($(data).filter(function() {
+                        return this.text.localeCompare(term) === 0;
+                      }).length === 0) {
+                        return {
+                          id: term,
+                          text: term
+                        };
+                      }
+                    },
+                    ajax: {
+                        url: '../tags/feed.php',
+                        dataType: 'json',
+                        data: function(term, page) {
+                            return {
+                                q: term
+                            };
+                        },
+                        results: function(data, page) {
+                            return {results: data};
+                        }
+                    }
+            });
+        $('#tags').select2('data', [".$answer."]);
+        });    
     </script>";
     
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -811,6 +909,13 @@ function show_edit_assignment($id) {
                 </div>
             </div>";
     }
+    
+    $tool_content .= "<div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
+            <div class='form-group'>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+                </div>
+            </div>";
     
     $tool_content .= "<div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
@@ -1007,6 +1112,18 @@ function edit_assignment($id) {
              $comments, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
 
          Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
+         
+         //tags
+         if (isset($_POST['tags'])) {
+                //delete all the previous for this item, course
+                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //echo $tagItem;
+                    //insert all the new ones
+                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                }
+         }
 
          if ($assign_to_specific && !empty($assigned_to)) {
              if ($group_submissions == 1) {
@@ -1318,7 +1435,7 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
     $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
-    $langSaved, $langGraphResults, $langConfirmDelete, $langWorkFile;
+    $langSaved, $langGraphResults, $langConfirmDelete, $langWorkFile, $langTags, $course_id;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -1436,7 +1553,18 @@ function assignment_details($id, $row) {
                 <div class='col-sm-9'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."                   
                 </div>                
-            </div>    
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langTags:</strong>
+                </div>
+                <div class='col-sm-9'>";
+                    $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                    foreach($tags_list as $tag){
+                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
+                    }                   
+$tool_content .="</div>                
+            </div>   
         </div>
     </div>";
        
