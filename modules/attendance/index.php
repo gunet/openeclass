@@ -666,7 +666,6 @@ if ($is_editor) {
         //===================================================
         //section to insert or edit the title of the gradebook
         //===================================================
-        
         $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
@@ -675,13 +674,13 @@ if ($is_editor) {
                         <div class='form-group'>
                             <label class='col-xs-12'>$langTitle</label></div>                            
                                 <div class='form-group'> 
-                                    <div class='col-xs-3'>
-                                        <input type='text' placeholder='$langTitle' name='title' value='$attendance_title'/>
+                                    <div class='col-xs-12'>
+                                        <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$attendance_title'/>
                                     </div>
                                 </div>
                                 <div class='form-group'>
                                     <div class='col-xs-12'>
-                                        <input class='btn btn-primary' type='submit' name='titleSubmit' value='".$langInsert."' />
+                                        <input class='btn btn-primary' type='submit' name='titleSubmit' value='".($attendance_title ? $langEdit : $langInsert)."' />
                                     </div>
                                 </div>
                     </form>
@@ -760,7 +759,7 @@ if ($is_editor) {
                             <label class='col-xs-12'>$langNewAttendance<small class='help-block'>$langNewAttendance2</small></label></div>                            
                                 <div class='form-group'> 
                                     <div class='col-xs-3'>
-                                        <input type='text' placeholder='$langTitle' name='title'/>
+                                        <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
                                     </div>
                                 </div>
                                 <div class='form-group'>
@@ -818,7 +817,7 @@ if ($is_editor) {
         if ($checkForAssNumber > 0) {            
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>";
-            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>$langDescription</th>";
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
             $tool_content .= "</tr>";       
             foreach ($checkForAss as $newAssToAttendance) {
@@ -1022,15 +1021,15 @@ if ($is_editor) {
                 $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber, $attendance_id) . "</td>";
                 $tool_content .= "<td class='text-center option-btn-cell'>".                        
                         action_button(array(
+                                    array('title' => $langModify,
+                                        'icon' => 'fa-edit',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"
+                                        ),                            
                                     array('title' => $langDelete,
                                         'icon' => 'fa-times',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
                                         'confirm' => $langConfirmDelete,
-                                        'class' => 'delete'),                                    
-                                    array('title' => $langModify,
-                                        'icon' => 'fa-edit',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"
-                                        ))).
+                                        'class' => 'delete'))).
                         "</td></tr>";
             } // end of while
             $tool_content .= "</table></div></div></div>";
