@@ -390,8 +390,7 @@ if (!isset($_POST['create_course'])) {
     }
 
     if ($validationFailed) {
-        header("Location:" . $urlServer . "modules/create_course/create_course.php");
-        exit;
+        redirect_to_home_page('modules/create_course/create_course.php');
     }
     
     // create new course code: uppercase, no spaces allowed
@@ -412,7 +411,10 @@ if (!isset($_POST['create_course'])) {
     }
 
     // create course directories
-    create_course_dirs($code);
+    if (!create_course_dirs($code)) {
+        Session::Messages($langGeneralError, 'alert-danger');
+        redirect_to_home_page('modules/create_course/create_course.php');
+    }
 
     // get default quota values
     $doc_quota = get_config('doc_quota');

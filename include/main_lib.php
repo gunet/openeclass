@@ -896,7 +896,7 @@ function mkpath($path) {
             if (!is_dir($path)) {
                 return false;
             }
-        } elseif (!mkdir($path, 0755)) {
+        } elseif (!@mkdir($path, 0755)) {
             return false;
         }
     }
@@ -2965,3 +2965,32 @@ function setOpenCoursesExtraHTML() {
             </div>";
     }
 }
+
+/**
+ * @brief returns the appropriate translation of a message depending on the current language
+ * @param string $message either simple string or serialized array of [ $langCode => $locMessage ]
+ * @param string $lang [optional] language to use for localization - if unset, uses global $lang
+ */
+function getSerializedMessage($message, $lang=null) {
+    global $language;
+
+    if (!isset($lang)) {
+        $lang = $language;
+    }
+
+    // Message is simple string, not serialized array - just return it
+    if (!($data = @unserialize($message))) {
+        return $message;
+    } else {
+        if (isset($data[$lang])) {
+            return $data[$lang]; // return requested language if possible...
+        } elseif (isset($data['en'])) {
+            return $data['en']; // ... else return English message if possible...
+        } elseif (isset($data['el'])) {
+            return $data['el']; // ... else return Greek message
+        }
+    }
+    return '';
+}
+
+
