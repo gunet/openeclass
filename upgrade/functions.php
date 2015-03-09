@@ -1150,7 +1150,7 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
 }
 
 /**
- * @brief upgrare to 3.0rc2
+ * @brief upgrare to 3.0rc3
  * @param string $code
  * @param int    $course_id
  */
