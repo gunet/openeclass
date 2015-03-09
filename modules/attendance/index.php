@@ -91,6 +91,8 @@ if (isset($_POST['selectAttendance'])){
       //make the new active
       Database::get()->querySingle("UPDATE attendance SET active = 1 WHERE id = ?d ", $attendance->id);
     }
+    Session::Messages($langChangeAttendanceSuccess,'alert-success');
+    redirect_to_home_page("modules/attendance/index.php?course=$course_code&editAttendanceBooks=1");
 }    
     
 //add a new attendance
@@ -109,9 +111,8 @@ if (isset($_POST['newAttendance']) && strlen($_POST['title'])){
         
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
                                         FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
-    
-
-    
+    Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
+    redirect_to_home_page("modules/attendance/index.php?course=$course_code");
 }
 
 //attendance_id for the course: check if there is an attendance module for the course. If not insert it and create list of users
@@ -156,6 +157,14 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply space-after-icon',
                   'level' => 'primary-label')
             ));
+    } elseif (isset($_GET['editAttendanceBooks'])) {
+        $pageName = $langAttendanceManagement;
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label')
+            ));        
     } elseif (isset($_GET['attendanceBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $pageName = $langUsers;
@@ -212,8 +221,9 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa fa-reply space-after-icon',)
             ));
-    } else {        
-        $tool_content .= action_bar(array(
+    } else {
+        $pageName = $attendance->title;
+        $tool_content .= action_bar(array(         
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
                   'icon' => 'fa fa-cog space-after-icon',
@@ -222,6 +232,10 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
                   'icon' => 'fa fa-users',
                   'level' => 'primary-label'),
+            array('title' => $langAttendances,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editAttendanceBooks=1",
+                  'icon' => 'fa fa-list space-after-icon',
+                  'level' => 'primary-label'),               
             array('title' => $langAttendanceAddActivity,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
                   'icon' => 'fa fa-plus'),
@@ -758,7 +772,7 @@ if ($is_editor) {
                         <div class='form-group'>
                             <label class='col-xs-12'>$langNewAttendance<small class='help-block'>$langNewAttendance2</small></label></div>                            
                                 <div class='form-group'> 
-                                    <div class='col-xs-3'>
+                                    <div class='col-xs-12'>
                                         <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
                                     </div>
                                 </div>
@@ -771,8 +785,9 @@ if ($is_editor) {
                     
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <div class='form-group'>
-                            <label class='col-xs-12'>$langChangeAttendance<small class='help-block'>$langChangeAttendance2</small></label></div>                            
-                                <div class='form-group'>";
+                            <label class='col-xs-12'>$langChangeAttendance<small class='help-block'>$langChangeAttendance2</small></label>
+                            <div class='col-xs-12'>
+                                <select name='attendanceYear' class='form-control'>";
                                 
                                 if ($result){
                                     foreach ($result as $year){
@@ -781,16 +796,19 @@ if ($is_editor) {
                                         }else{
                                             $title = $year->title;
                                         }
-                                        $tool_content .= "<div><input type='radio' name='attendanceYear' value='$year->id'";
+                                        $tool_content .= "<option value='$year->id'";
                                                     if ($attendance_id == $year->id) {
-                                                      $tool_content .= " checked";
+                                                      $tool_content .= " selected";
                                                     } 
-                                                    $tool_content .= "/>$title</div>";
+                                                    $tool_content .= ">$title</option>";
                                     }
                                 }
                                               
         
-                 $tool_content .="</div>
+                 $tool_content .="
+                                </select>
+                            </div>
+                        </div>
                                 <div class='form-group'>
                                     <div class='col-xs-12'>
                                         <input class='btn btn-primary' type='submit' name='selectAttendance' value='".$langSelect."' />
@@ -805,7 +823,72 @@ if ($is_editor) {
         //do not show activities list 
         $showAttendanceActivities = 0;
     }
-    
+    elseif(isset($_GET['editAttendanceBooks'])){        
+         
+        //===================================================
+        //section to insert new attendance and select another
+        //===================================================
+        
+        $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
+
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langChangeAttendance<small class='help-block'>$langChangeAttendance2</small></label>
+                            <div class='col-xs-12'>
+                                <select name='attendanceYear' class='form-control'>";
+                                
+                                if ($result){
+                                    foreach ($result as $year){
+                                        if($year->title == ""){
+                                            $title = "$langAttendanceNoTitle2";
+                                        }else{
+                                            $title = $year->title;
+                                        }
+                                        $tool_content .= "<option value='$year->id'";
+                                                    if ($attendance_id == $year->id) {
+                                                      $tool_content .= " selected";
+                                                    } 
+                                                    $tool_content .= ">$title</option>";
+                                    }
+                                }
+                                              
+        
+                 $tool_content .="
+                                </select>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='selectAttendance' value='".$langSelect."' />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'> 
+                            <label class='col-xs-12'>$langNewAttendance<small class='help-block'>$langNewAttendance2</small></label>
+                            <div class='col-xs-12'>
+                                <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='newAttendance' value='".$langInsert."' />
+                            </div>
+                        </div>
+                    </form>
+                </div>                
+            </div>
+        </div>";
+         
+        //do not show activities list 
+        $showAttendanceActivities = 0;
+    }    
     //DISPLAY: Add assignment
     elseif (isset($_GET['addActivityAs'])) {
         //Assignments

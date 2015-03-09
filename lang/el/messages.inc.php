@@ -984,7 +984,8 @@ $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία 
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
 
 $langAttendance = "Παρουσιολόγιο";
-$langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
+$langAttendances = "Παρουσιολόγια";
+$langAttendanceManagement = "Διαχείριση Παρουσιολογίων";
 $langAttendanceAbsencesYes = "Παρουσία";
 $langAttendanceAbsencesNo = "Απουσία";
 $langAttendanceAbsences = "Παρουσίες";
@@ -1038,8 +1039,10 @@ $langAttendanceDeleteUsers = "Αν θέλετε να διαγράψετε κάπ
 $langAttendanceDelete = "Διαγραφή χρήστη από το παρουσιολόγιο";
 $langNewAttendance = "Νέο Παρουσιολόγιο";
 $langNewAttendance2 = "(δημιουργία νέου παρουσιολογίου για το μάθημα)";
-$langChangeAttendance = "Διαθέσιμα παρουσιολόγια";
-$langChangeAttendance2 = "(επιλογή διαθέσιμων παρουσιολογίων για το μάθημα)";
+$langChangeAttendance = "Επιλογή παρουσιολογίου";
+$langChangeAttendance2 = "(επιλογή ενεργού παρουσιολογίου για το μάθημα)";
+$langChangeAttendanceSuccess = "Το παρουσιολόγιο ενεργοποιήθηκε με επιτυχία";
+$langChangeAttendanceCreateSuccess = "Το παρουσιολόγιο δημιουργήθηκε με επιτυχία";
 $langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 
 $langGradebook = "Βαθμολόγιο";
