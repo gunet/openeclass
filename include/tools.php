@@ -30,6 +30,9 @@
  *
  */
 
+require_once 'modules/bbb/functions.php';
+require_once 'modules/dropbox/class.mailbox.php';
+
 /*
  * Function getSideMenu
  *
@@ -636,12 +639,18 @@ function lessonToolsMenu() {
 
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;
+
+            // hide groups for unregistered users
             if ($mid == MODULE_ID_GROUPS and !$courses[$course_code]) {
                 continue;
             }
-            if ($mid == MODULE_ID_DROPBOX) {
-                require_once 'modules/dropbox/class.mailbox.php';
 
+            // hide teleconference when no BBB servers are enabled
+            if ($mid == MODULE_ID_BBB and !get_total_bbb_servers()) {
+                continue;
+            }
+
+            if ($mid == MODULE_ID_DROPBOX) {
                 $mbox = new Mailbox($uid, course_code_to_id($course_code));
                 $new_msgs = $mbox->unreadMsgsNumber();
                 if ($new_msgs != 0) {
