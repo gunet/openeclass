@@ -11,6 +11,7 @@ $warning = '';
 $login_user = FALSE;
 $eclass = $shibboleth_link = $cas_link = "";
 $active_login_types = 0;
+
 // check for eclass 
 $eclass = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='eclass'");
 if ($eclass) {
@@ -76,8 +77,8 @@ $tool_content .= "<div class='login-form-page'>
     </div>
     <div class='form-group'>
     <div class='col-xs-12'>
-    <button class='btn btn-primary pull-left' type='submit' name='submit' value='$langEnter'>$langEnter</button>
-        <div class='pull-right'><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></div>
+    <button class='btn btn-primary margin-bottom-thin' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+        <div><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></div>
         </div>
         </div>
         </form>
