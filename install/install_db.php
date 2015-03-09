@@ -788,7 +788,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
                 `required` TINYINT NOT NULL DEFAULT 0,
                 `visibility` TINYINT NOT NULL DEFAULT 0,
                 `user_type` TINYINT NOT NULL,
-                `registration` TINYINT NOT NULL DEFAULT 0) $charset_spec");
+                `registration` TINYINT NOT NULL DEFAULT 0,
+                `data` TEXT NULL DEFAULT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
