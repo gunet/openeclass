@@ -30,17 +30,18 @@ require_once 'include/lib/textLib.inc.php';
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
     $('input[name=date]').datetimepicker({
-        dateFormat: 'yy-mm-dd', 
-        timeFormat: 'hh:mm'
+            format: 'yyyy-mm-dd hh:ii',
+            pickerPosition: 'bottom-left', 
+            language: '".$language."',
+            autoclose: true             
         });
     var oTable = $('#users_table{$course_id}').DataTable ({
         'aLengthMenu': [
@@ -968,7 +969,7 @@ if ($is_editor) {
                         $tool_content .= "
                     </tr>";
             }
-            $tool_content .= "</tbody></table> <input type='submit' class='btn btn-default' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
+            $tool_content .= "</tbody></table> <input type='submit' class='btn btn-primary' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
         }
         $showAttendanceActivities = 0;
     }
