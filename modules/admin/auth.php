@@ -54,6 +54,13 @@ if (!empty($auth) and ! empty($active)) {
 
 $auth_methods = get_auth_active_methods();
 
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "index.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ),false);
+
 if (empty($auth)) {
     $tool_content .= "<div class='alert alert-info'><label>$langMethods</label>";
     if ($auth_methods) {
