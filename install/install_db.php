@@ -1171,13 +1171,13 @@ $db->query("CREATE TABLE `auth` (
                   $charset_spec");
 
 $db->query("INSERT INTO `auth` VALUES
-                (1, 'eclass', '', '', 1),
-                (2, 'pop3', '', '', 0),
-                (3, 'imap', '', '', 0),
-                (4, 'ldap', '', '', 0),
-                (5, 'db', '', '', 0),
-                (6, 'shibboleth', '', '', 0),
-                (7, 'cas', '', '', 0)");
+                (1, 'eclass', '', '', '', 1),
+                (2, 'pop3', '', '', '', 0),
+                (3, 'imap', '', '', '', 0),
+                (4, 'ldap', '', '', '', 0),
+                (5, 'db', '', '', '', 0),
+                (6, 'shibboleth', '', '', '', 0),
+                (7, 'cas', '', '', '', 0)");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);
