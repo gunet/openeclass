@@ -1153,20 +1153,20 @@ class CourseXMLElement extends SimpleXMLElement {
         $arr[$clang] = $GLOBALS['langCMeta'][$key];
         $revert = false;
         if ($clang != 'en') {
-            include("${webDir}/lang/en/common.inc.php");
-            include("${webDir}/lang/en/messages.inc.php");
-            $arr['en'] = $GLOBALS['langCMeta'][$key];
+            require("${webDir}/lang/en/common.inc.php");
+            require("${webDir}/lang/en/messages.inc.php");
+            $arr['en'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
             $revert = true;
         }
         if ($clang != 'el') {
-            include("${webDir}/lang/el/common.inc.php");
-            include("${webDir}/lang/el/messages.inc.php");
-            $arr['en'] = $GLOBALS['langCMeta'][$key];
+            require("${webDir}/lang/el/common.inc.php");
+            require("${webDir}/lang/el/messages.inc.php");
+            $arr['en'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
             $revert = true;
         }
         if ($revert) { // revert messages back to current language
-            include("${webDir}/lang/" . $currentCourseLanguage . "/common.inc.php");
-            include("${webDir}/lang/" . $currentCourseLanguage . "/messages.inc.php");
+            require("${webDir}/lang/" . $currentCourseLanguage . "/common.inc.php");
+            require("${webDir}/lang/" . $currentCourseLanguage . "/messages.inc.php");
         }
         return base64_encode(serialize($arr));
     }
