@@ -176,7 +176,9 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $pageName = $langAttendanceBook;
+        $actID = intval($_GET['ins']);
+        $result = Database::get()->querySingle("SELECT * FROM attendance_activities  WHERE id = ?d", $actID);
+        $pageName = $langAttendanceBook.' '.$result->title;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -893,8 +895,6 @@ if ($is_editor) {
     //DISPLAY - EDIT DB: insert attendances for each activity
     elseif (isset($_GET['ins'])){
 
-        $actID = intval($_GET['ins']);
-
         //record booking
         if(isset($_POST['bookUsersToAct'])){                        
 
@@ -925,9 +925,8 @@ if ($is_editor) {
 
         //display the form and the list
         
-        $result = Database::get()->querySingle("SELECT * FROM attendance_activities  WHERE id = ?d", $actID);
+
         
-        $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
 
         //show all the students
         $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
