@@ -386,13 +386,27 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                             });
                            </script>";
         
-        $tool_content .= "
+        if (isset($_GET['id'])) {            
+            $q = Database::get()->querySingle("SELECT id, CONCAT_WS(' ',surname,givenname) AS name FROM user WHERE id = ?d", $_GET['id']);
+            if ($q) {
+                $u_name = $q->name;
+            }
+            $tool_content .= "<input type='hidden' name='recipients' value='$_GET[id]'>
+                            <div class='form-group'>
+                                <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
+                                <div class='col-sm-10'>
+                                    <label>$u_name</label>
+                                </div>
+                            </div>";
+        } else {
+            $tool_content .= "
                             <div class='form-group'>
                                 <label for='title' class='col-sm-2 control-label'>$langSendTo:</label>
                                 <div class='col-sm-10'>
                                     <input name=recipients id='recipients' class='form-control'><span class='help-block'>$langSearchSurname</span>
                                 </div>
-                            </div>";        
+                            </div>";
+        }
     }
     
 	$tool_content .= "

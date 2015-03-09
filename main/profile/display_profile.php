@@ -82,11 +82,11 @@ if ($userdata) {
                     'icon' => 'fa-times',
                     'level' => 'primary')
                 ));    
-    }else{
+    } else {
         $tool_content .= 
             action_bar(array(
                 array('title' => $langProfileSendMail,
-                    'url' => "profile.php",
+                    'url' => "../../modules/dropbox/index.php?upload=1&id=$id",
                     'icon' => 'fa-envelope',
                     'level' => 'primary-label')
                 ));
