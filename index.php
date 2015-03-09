@@ -162,16 +162,11 @@ if ($uid AND !isset($_GET['logout'])) {
             $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                                 <div class='wrapper-login-option'>";
 
-                                  if (!empty($shibboleth_link) or !empty($cas_link)) {  
+                                  if (!empty($cas_link)) {  
                                   $tool_content .= "<div class='login-option login-option-sso'>
                                     <h2>$langUserLogin</h2>
-                                    <div><span class='head-text'>$langLoginSSO</span> ";                                        
-                                    if (!empty($cas_link)) {
-                                        $tool_content .= $cas_link;                                             
-                                    }
-                                    if (!empty($shibboleth_link)) {
-                                        $tool_content .= $shibboleth_link;
-                                    }
+                                    <div><span class='head-text'>$langLoginSSO</span> ";     
+                                        $tool_content .= $cas_link;                          
                                     $tool_content .= "
                                     </div>
                                     <div class='login-settings row'>
@@ -179,7 +174,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                       <div class='alt_login text-center'>
                                         <span>
                                           <button type='button' data-target='1' class='option-btn-login hide'><b>$langLogInWith</b><br>Credentials</button>
-                                          <button type='button' data-target='2' class='option-btn-login hide'><b>$langLogInWith</b><br>Social network</button>
+                                          <button type='button' data-target='2' class='option-btn-login hide'><b>$langLogInWith</b><br>Shibboleth</button>
                                         </span>
                                       </div>
                                     </div>
@@ -210,27 +205,27 @@ if ($uid AND !isset($_GET['logout'])) {
                                               $tool_content .= "<button type='button' data-target='0' class='option-btn-login hide'>$cas_link_title</button>";
                                           }
                                           if (!empty($shibboleth_link)) {
-                                              $tool_content.= "<button type='button' data-target='0' class='option-btn-login hide'>$shib_link_title</button>";
+                                              $tool_content.= "<button type='button' data-target='2' class='option-btn-login hide'>$shib_link_title</button>";
                                           }
-                                          $tool_content .= "<button type='button' data-target='2' class='option-btn-login hide'><b>$langLogInWith</b><br>Social network</button>
-                                              </span>
+                                            $tool_content .= "</span>
                                           </div>";
                                       }
                                       $tool_content .= "
                                     </div>
                                   </div>
 
-                                  <div class='login-option login-option-social'>
+                                  <div class='login-option login-option-sso'>
                                     <h2>$langUserLogin</h2>
-                                    <span class='head-text'>$langLoginSocialNetwork</span>
-                                    <button type='button' class='btn social-btn social-btn-fb'><i class='fa fa-facebook-square'></i> Connect with Facebook</button>
-                                    <button type='button' class='btn social-btn social-btn-google'><i class='fa fa-google-plus-square'></i> Connect with Google</button>
+                                    <div><span class='head-text'>$langLoginSSO</span> ";     
+                                        $tool_content .= $shibboleth_link;                          
+                                    $tool_content .= "
+                                    </div>
                                     <div class='login-settings row'>
                                       <div class='or-separator'><span>ή</span></div>
                                         <div class='alt_login text-center'>
                                           <span>
-                                            <button type='button' data-target='0' class='option-btn-login hide'><b>$langLogInWith</b><br> Academic Account</button>
-                                            <button type='button' data-target='1' class='option-btn-login hide'><b>$langLogInWith</b><br> Username/Password</button>
+                                            <button type='button' data-target='0' class='option-btn-login hide'><b>$langLogInWith</b><br>Cas</button>
+                                            <button type='button' data-target='1' class='option-btn-login hide'><b>$langLogInWith</b><br>Credentials</button>
                                           </span>
                                         </div>
                                       </div>
