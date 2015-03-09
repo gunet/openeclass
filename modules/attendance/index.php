@@ -942,7 +942,6 @@ if ($is_editor) {
                       <th><div align='left' width='100'>$langName $langSurname</div></th>
                       <th class='center' width='80'>$langRegistrationDateShort</th>
                       <th class='center'>$langAttendanceAbsences</th>
-                      <th class='center'>$langActions</th>
                     </tr>
                 </thead>
                 <tbody>";
@@ -955,7 +954,6 @@ if ($is_editor) {
                         <td>$cnt</td>
                         <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
                         <td>" . nice_format($resultUser->reg_date) . "</td>
-                        <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>
                         <td class='center'>
                             <input type='checkbox' value='1' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
