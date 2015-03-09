@@ -178,8 +178,8 @@ if ($uid AND !isset($_GET['logout'])) {
                                       <div class='or-separator'><span>$langOr</span></div>
                                       <div class='alt_login text-center'>
                                         <span>
-                                          <button type='button' data-target='1' class='option-btn hide'><b>$langLogInWith</b><br>Credentials</button>
-                                          
+                                          <button type='button' data-target='1' class='option-btn-login hide'><b>$langLogInWith</b><br>Credentials</button>
+                                          <button type='button' data-target='2' class='option-btn-login hide'><b>$langLogInWith</b><br>Social network</button>
                                         </span>
                                       </div>
                                     </div>
@@ -207,12 +207,12 @@ if ($uid AND !isset($_GET['logout'])) {
                                           <div class='alt_login text-center'>
                                               <span>";
                                           if (!empty($cas_link)) {
-                                              $tool_content .= "<button type='button' data-target='0' class='option-btn hide'>$cas_link_title</button>";
+                                              $tool_content .= "<button type='button' data-target='0' class='option-btn-login hide'>$cas_link_title</button>";
                                           }
                                           if (!empty($shibboleth_link)) {
-                                              $tool_content.= "<button type='button' data-target='0' class='option-btn hide'>$shib_link_title</button>";
+                                              $tool_content.= "<button type='button' data-target='0' class='option-btn-login hide'>$shib_link_title</button>";
                                           }
-                                          $tool_content .= "<button type='button' data-target='2' class='option-btn hide'><b>$langLogInWith</b><br>Social network</button>
+                                          $tool_content .= "<button type='button' data-target='2' class='option-btn-login hide'><b>$langLogInWith</b><br>Social network</button>
                                               </span>
                                           </div>";
                                       }
@@ -229,8 +229,8 @@ if ($uid AND !isset($_GET['logout'])) {
                                       <div class='or-separator'><span>ή</span></div>
                                         <div class='alt_login text-center'>
                                           <span>
-                                            <button type='button' data-target='0' class='option-btn hide'><b>$langLogInWith</b><br> Academic Account</button>
-                                            <button type='button' data-target='1' class='option-btn hide'><b>$langLogInWith</b><br> Username/Password</button>
+                                            <button type='button' data-target='0' class='option-btn-login hide'><b>$langLogInWith</b><br> Academic Account</button>
+                                            <button type='button' data-target='1' class='option-btn-login hide'><b>$langLogInWith</b><br> Username/Password</button>
                                           </span>
                                         </div>
                                       </div>

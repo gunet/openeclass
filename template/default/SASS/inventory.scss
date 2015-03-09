@@ -2760,9 +2760,9 @@ div.login-form .btn.btn-login{
   left:0px;
 }
 
-.option-btn{
+.option-btn-login{
   display:inline-block;
-  width: 45%;
+  width: 90%;
   border-radius: 6px;
   border: 1px solid rgba(0,0,0,.2);
   background:none;
@@ -2772,17 +2772,17 @@ div.login-form .btn.btn-login{
   margin:0 5px;
 }
 
-.option-btn:first-child:nth-child(2), .option-btn:first-child:nth-child(2) ~ button{
-    width: 90%;
+.option-btn-login:first-child:nth-last-child(2), .option-btn-login:first-child:nth-last-child(2) ~ button{
+    width: 45%;
 }
 
-.option-btn:hover{
+.option-btn-login:hover{
   background:#3071a9;
   color:white;
   border-color: transparent;
 }
 
-.option-btn > span{
+.option-btn-login > span{
   font-weight: 700;
   display:block;
 }

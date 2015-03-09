@@ -80,12 +80,12 @@ $(document).ready(function () {
 
 
     if (count == '2') {
-        $('.login-form .wrapper-login-option > .login-option button.option-btn:not([data-target="2"])').removeClass('hide');
+        $('.login-form .wrapper-login-option > .login-option button.option-btn-login:not([data-target="2"])').removeClass('hide');
     } else if (count == '3') {
-        $('.login-form .wrapper-login-option > .login-option button.option-btn').removeClass('hide');
+        $('.login-form .wrapper-login-option > .login-option button.option-btn-login').removeClass('hide');
     }
 
-    $('.login-option button.option-btn').on('click', function () {
+    $('.login-option button.option-btn-login').on('click', function () {
         width = $('.login-form').outerWidth();
         var tar = $(this).attr('data-target');
         tar = -(tar * 100);
