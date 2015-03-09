@@ -51,6 +51,30 @@ require_once 'include/action.php';
                 $tool_content .= $langAnnouncement.": ";
                 $tool_content .= "<a href='../../modules/announcements/?course=".$course_code."&an_id=".$tag->element_id."'>$announce->title</a><br>";
             }
+            if($tag->element_type == "work"){
+                
+                $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
+                
+                $tool_content .= $langWork.": ";
+                if($work->title){
+                    $title = $work->title;
+                }else{
+                    $title = $langGradebookNoTitle;
+                }
+                $tool_content .= "<a href='../../modules/work/?course=".$course_code."&id=".$tag->element_id."'>$work->title</a><br>";
+            }
+            if($tag->element_type == "exe"){
+                
+                $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
+                
+                $tool_content .= $langWork.": ";
+                if($exe->title){
+                    $title = $exe->title;
+                }else{
+                    $title = $langGradebookNoTitle;
+                }
+                $tool_content .= "<a href='../../modules/exercise/admin.php?course=".$course_code."&exerciseId=".$tag->element_id."'>$exe->title</a><br>";
+            }
         }
         $tool_content .= "</div></div>";
 }
