@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
     $am = $_POST['am'];
     $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
-
+    
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {
             $tool_content = "<div class='alert alert-danger'>$langMultiRegFieldError <b>" . q($field) . "</b></div>";
@@ -134,6 +134,12 @@ if (isset($_POST['submit'])) {
     $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
         ACCESS_PROFS => $langProfileInfoProfs,
         ACCESS_USERS => $langProfileInfoUsers);
+    $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "index.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ),false);
     $tool_content .= "<div class='alert alert-info'>$langMultiRegUserInfo</div>
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
