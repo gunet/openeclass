@@ -336,7 +336,7 @@ if ($is_editor) {
                                 <div class='form-group'>
                                     <label for='visible' class='col-sm-2 control-label'>$langGradeVisible</label>
                                     <div class='col-sm-10'>
-                                        <input type='checkbox' class='form-control' id='visible' name='visible' value='1'";
+                                        <input type='checkbox' id='visible' name='visible' value='1'";
                                         if($visible == 1) {
                                             $tool_content .= " checked";
                                         }
