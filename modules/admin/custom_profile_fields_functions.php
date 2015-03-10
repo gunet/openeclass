@@ -26,7 +26,7 @@
  * @return string
  */
 function render_profile_fields_form($context) {
-    
+    global $uid;
     $return_string = "";
     
     $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
@@ -54,7 +54,7 @@ function render_profile_fields_form($context) {
             }
         }
         
-        $res = Database::get()->queryArray("SELECT name, shortname, description, required, datatype 
+        $res = Database::get()->queryArray("SELECT id, name, shortname, description, required, datatype 
                                             FROM custom_profile_fields WHERE categoryid = ?d ".$registr.
                                             "AND user_type <> ?d ORDER BY sortorder DESC", $args);
         
@@ -63,9 +63,24 @@ function render_profile_fields_form($context) {
                 $return_string .= '<div class="form-group">';
                 $return_string .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.$f->name.'</label>';
                 $return_string .= '<div class="col-sm-10">';
+                
+                //get data to prefill fields
+                if ($context['origin'] == 'edit_profile') {
+                    $data_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data 
+                                                          WHERE field_id = ?d AND user_id = ?d", $f->id, $uid);
+                    if ($data_res) {
+                        $fdata = $data_res->data;
+                    }
+                }
+                
+                $val = '';
+                
                 switch ($f->datatype) {
                     case 1: //text box
-                        $return_string .= '<input class="form-control" type="text" name="'.$f->shortname.'">';
+                        if (isset($fdata)) {
+                            $val = 'value"'.q($fdata).'"';
+                        }
+                        $return_string .= '<input class="form-control" .. type="text" name="'.$f->shortname.'">';
                         break;
                     case 2: //textarea
                         $return_string .= rich_text_editor($f->shortname, 8, 20, '');
