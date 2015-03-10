@@ -1379,8 +1379,8 @@ function disp_progress_bar($progress, $factor) {
     // display progress bar
     // origin of the bar
     $progressBar = "
-    <div class='progress' style='display: inline-block; width: 200px; margin-right: 20px; margin-top: 15px;'>
-        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%;'>
+    <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
+        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
             $progress%
         </div>
     </div>";

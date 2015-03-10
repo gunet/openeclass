@@ -93,21 +93,15 @@ if ($learnPathName) {
             . '    </tr>' . "\n";
 
     // display tab content
-    $k = 0;
     foreach ($usersList as $user) {
         $lpProgress = get_learnPath_progress($path_id, $user->id);
-        if ($k % 2 == 0) {
-            $tool_content .= "\n    <tr class=\"even\">";
-        } else {
-            $tool_content .= "\n    <tr class=\"odd\">";
-        }
+        $tool_content .= "\n    <tr>";
         $tool_content .= '' . "\n"
                 . '      <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '&amp;path_id=' . $path_id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>' . "\n"
                 . '      <td align="right">'
                 . disp_progress_bar($lpProgress, 1)
                 . '</td>' . "\n"
                 . '    </tr>' . "\n";
-        $k++;
     }
     // foot of table
     $tool_content .= '    ' . "\n\n" . '    </table></div>' . "\n\n";
