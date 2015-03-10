@@ -2845,6 +2845,19 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
 
 
 // Login Page
-#main-content .panel.login-page-option{
-    min-height: 300px;
+#main-content .login-page{
+    .panel{
+        
+    }
+    .form-group input{
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        box-shadow: none;
+    }
+    .btn-block{
+        a{
+            line-height: 40px;
+        }
+    }
 }

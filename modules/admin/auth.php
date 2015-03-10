@@ -34,21 +34,11 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $auth = isset($_GET['auth']) ? $_GET['auth'] : '';
 $active = isset($_GET['active']) ? $_GET['active'] : '';
 
-if (!empty($auth) and ! empty($active)) {
+if (!empty($auth) and !empty($active)) {
     $s = get_auth_settings($auth);        
     $settings = $s['auth_settings'];
-    switch ($active) {
-        case 'yes': if ($auth == 1) { // eclass method has no settings
-                        $q = 1;
-                    } else {
-                        $q = empty($settings) ? 0 : 1;
-                    }
-            break;
-        case 'no': $q = 0;
-            break;
-        default: $q = 0;
-            break;
-    }
+    // an auth method can only be activated if it has non-empty settings or is 'eclass' (id=1)
+    $q = ($active == 'yes' and ($auth == 1 or !empty($settings)));
     Database::get()->query("UPDATE auth SET auth_default = ?d WHERE auth_id = ?d", $q, $auth);
 }
 

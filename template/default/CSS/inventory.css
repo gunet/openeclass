@@ -3201,7 +3201,14 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover {
   background: #e05454;
 }
 
-/* line 2848, ../SASS/inventory.scss */
-#main-content .panel.login-page-option {
-  min-height: 300px;
+/* line 2852, ../SASS/inventory.scss */
+#main-content .login-page .form-group input {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  box-shadow: none;
+}
+/* line 2859, ../SASS/inventory.scss */
+#main-content .login-page .btn-block a {
+  line-height: 40px;
 }

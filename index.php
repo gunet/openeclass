@@ -119,130 +119,97 @@ if ($uid AND !isset($_GET['logout'])) {
     }
     // if user is not guest redirect him to portfolio
     header("Location: {$urlServer}main/portfolio.php");
-} else {   
-    // check for shibboleth authentication
-    $shibboleth_link = "";
-    $shibactive = Database::get()->querySingle("SELECT auth_name, auth_default, auth_title FROM auth WHERE auth_id = 6");
-    if ($shibactive) {
-	    if ($shibactive->auth_default == 1) {
-                $shib_link_title = (!empty($shibactive->auth_title)) ? $shibactive->auth_title : "<b>$langLogInWith</b><br>$shibactive->auth_name";
-                $shibboleth_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/index.php'>$langEnter</a><br />";
-	    }
-	}
-
-    // check for CAS authentication
-    $cas_link = "";
-    $casactive = Database::get()->querySingle("SELECT auth_name, auth_default, auth_title FROM auth WHERE auth_id = 7");
-    if ($casactive) {
-    	if ($casactive->auth_default == 1) {
-            $cas_link_title = (!empty($casactive->auth_title)) ? $casactive->auth_title : "<b>$langLogInWith</b><br>$casactive->auth_name";
-            $cas_link = "<a class='btn btn-default btn-login' href='{$urlServer}secure/cas.php'>$langEnter</a><br />";
-    	}
+} else {
+    // check authentication methods
+    $authLink = array();
+    $extAuthMethods = array('cas', 'shibboleth');
+    $loginFormEnabled = false;
+    $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
+            FROM auth WHERE auth_default <> 0
+            ORDER BY auth_default DESC");
+    foreach ($q as $l) {
+        $extAuth = in_array($l->auth_name, $extAuthMethods);
+        if ($extAuth) {
+            $authLink[] = array(
+                'showTitle' => true,
+                'class' => 'login-option login-option-sso',
+                'title' => empty($l->auth_title)? "<b>$langLogInWith</b><br>{$l->auth_name}": q($l->auth_title),
+                'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
+                          ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
+        } elseif (!$loginFormEnabled) {
+            $loginFormEnabled = true;
+            $authLink[] = array(
+                'showTitle' => false,
+                'class' => 'login-option',
+                'title' => "<b>$langLogInWith</b><br>Credentials",
+                'html' => "<form action='$urlServer' method='post'>
+                             <div class='form-group'>
+                               <input type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
+                             </div>
+                             <div class='form-group'>
+                               <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                             </div>
+                             <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
+                           </form>
+                           <div class='text-center'>
+                             <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                           </div>");
+        }
     }
-       
+
+
     $head_content .= "
-        <script>
+      <script>
         $(function() {
-            $('#revealPass')
-                .mousedown(function() {
-                    $('#pass').attr('type', 'text');
-                })
-                .mouseup(function() {
-                    $('#pass').attr('type', 'password');
-                })
-        });            
-        </script>
+            $('#revealPass').mousedown(function () {
+                $('#pass').attr('type', 'text');
+            }).mouseup(function () {
+                $('#pass').attr('type', 'password');
+            })
+        });
+      </script>
+      <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>
     ";
-        $tool_content .= "
+    $tool_content .= "$warning
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>";
-        if (!get_config('dont_display_login_form')) {                            
-            $tool_content .= "<div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
-                                <div class='wrapper-login-option'>";
+    if (!get_config('dont_display_login_form')) {
+        $tool_content .= "
+                        <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
+                          <div class='wrapper-login-option'>";
 
-                                  if (!empty($cas_link)) {  
-                                  $tool_content .= "<div class='login-option login-option-sso'>
-                                    <h2>$langUserLogin</h2>
-                                    <div><span class='head-text'>$langLoginSSO</span> ";     
-                                        $tool_content .= $cas_link;                          
-                                    $tool_content .= "
-                                    </div>
-                                    <div class='login-settings row'>
-                                      <div class='or-separator'><span>$langOr</span></div>
-                                      <div class='alt_login text-center'>
-                                        <span>
-                                          <button type='button' data-target='1' class='option-btn-login hide'><b>$langLogInWith</b><br>Credentials</button>
-                                          <button type='button' data-target='2' class='option-btn-login hide'><b>$langLogInWith</b><br>Shibboleth</button>
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </div>";
-                                  }
-
-                                  $tool_content .= "<div class='login-option'>
-                                    <h2>$langUserLogin</h2>
-                                    <form action='$urlServer' method='post'>
-                                      <div class='form-group'>
-                                         <input  type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
-                                      </div>
-                                      <div class='form-group'>
-                                         <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left:-20px;color:black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
-                                      </div>
-                                      <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
-                                    </form>
-                                    <div class='login-settings row'>
-                                      <div class='text-center'>
-                                        <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                                      </div>";
-                                      if (!empty($shibboleth_link) or !empty($cas_link)) {                                            
-                                          $tool_content .= "
-                                          <div class='or-separator'><span>$langOr</span></div>
-                                          <div class='alt_login text-center'>
-                                              <span>";
-                                          if (!empty($cas_link)) {
-                                              $tool_content .= "<button type='button' data-target='0' class='option-btn-login hide'>$cas_link_title</button>";
-                                          }
-                                          if (!empty($shibboleth_link)) {
-                                              $tool_content.= "<button type='button' data-target='2' class='option-btn-login hide'>$shib_link_title</button>";
-                                          }
-                                            $tool_content .= "</span>
-                                          </div>";
-                                      }
-                                      $tool_content .= "
-                                    </div>
-                                  </div>
-
-                                  <div class='login-option login-option-sso'>
-                                    <h2>$langUserLogin</h2>
-                                    <div><span class='head-text'>$langLoginSSO</span> ";     
-                                        $tool_content .= $shibboleth_link;                          
-                                    $tool_content .= "
-                                    </div>
-                                    <div class='login-settings row'>
-                                      <div class='or-separator'><span>ή</span></div>
-                                        <div class='alt_login text-center'>
-                                          <span>
-                                            <button type='button' data-target='0' class='option-btn-login hide'><b>$langLogInWith</b><br>Cas</button>
-                                            <button type='button' data-target='1' class='option-btn-login hide'><b>$langLogInWith</b><br>Credentials</button>
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>";
-                        
-            if (!empty($warning)) { 
-                $tool_content.= "<br><span>$warning</span>";                 
+        foreach ($authLink as $i => $l) {
+            $tool_content .= "<div class='$l[class]'>
+                                <h2>$langUserLogin</h2>
+                                <div>" . ($l['showTitle']? "<span class='head-text'>$l[title]</span>": '') .
+                                   $l['html'] . "
+                                </div>
+                                <div class='login-settings row'>
+                                  <div class='or-separator'><span>$langOr</span></div>
+                                  <div class='alt_login text-center'>
+                                    <span>";
+            foreach ($authLink as $j => $otherAuth) {
+                if ($j != $i) {
+                    $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                }
             }
-            $tool_content .= "</div>";
+            $tool_content .= "      </span>
+                                  </div>
+                                </div>
+                              </div>";
         }
-        $tool_content .= "</div>
+
+        $tool_content .= "
+                          </div>
+                        </div>";
+    }
+    $tool_content .= "
+                    </div>
                 </div>
             </div>
-        </div>";    
-        $rss_link = "<link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='" .
-            $urlServer . "rss.php'>";
+        </div>";
 
     $announceArr = Database::get()->queryArray("SELECT `id`, `date`, `title`, `body`, `order` FROM `admin_announcement`
                                                 WHERE `visible` = 1
@@ -250,7 +217,7 @@ if ($uid AND !isset($_GET['logout'])) {
                                                         AND (`begin` <= NOW() or `begin` IS null)
                                                         AND (NOW() <= `end` or `end` IS null)
                                                 ORDER BY `order` DESC", $language);
-   
+
     $ann_content = '';
     if ($announceArr && sizeof($announceArr) > 0) {
         $ann_content .= "<ul class='front-announcements'>";
@@ -262,18 +229,18 @@ if ($uid AND !isset($_GET['logout'])) {
                     <div><a class='announcement-title' href='modules/announcements/main_ann.php?aid=$aid'>" . q($announceArr[$i]->title) . "</a></div>
                     <span class='announcement-date'>- " . claro_format_locale_date($dateFormatLong, strtotime($announceArr[$i]->date)) . " -</span>
             " . standard_text_escape(ellipsize_html("<div class='announcement-main'>".$announceArr[$i]->body."</div>", 500, "<div class='announcements-more'><a href='modules/announcements/main_ann.php?aid=$aid'>$langMore &hellip;</a></div>"))."</li>";
-        }        
+        }
     }
 
     $tool_content .= "<div class='row'>
-        <div class='col-md-8'>";     
+        <div class='col-md-8'>";
         $tool_content .= "<div class='panel'>
             <div class='panel-body'>
                 $langInfoAbout
             </div>
         </div>";
-        
-        // display admin announcements    
+
+        // display admin announcements
         if(!empty($ann_content)) {
             $tool_content .= "<h3 class='content-title'>$langAnnouncements <a href='${urlServer}rss.php' style='padding-left:5px;'>
                     <i class='fa fa-rss-square'></i>
@@ -283,7 +250,7 @@ if ($uid AND !isset($_GET['logout'])) {
             $tool_content .= $ann_content;
             $tool_content .= "</ul></div></div>";
         }
-        $tool_content .= "</div>";        
+        $tool_content .= "</div>";
         $tool_content .= "<div class='col-md-4'>";
 
     // display extras right
@@ -322,8 +289,8 @@ if ($uid AND !isset($_GET['logout'])) {
                  </a>
                 </div>";
     }
-    
-        $tool_content .= "              
+
+        $tool_content .= "
             <div class='panel' id='openeclass-banner'>
                 <div class='panel-body'>
                     <a href='http://www.openeclass.org/' target='_blank'>
@@ -331,7 +298,7 @@ if ($uid AND !isset($_GET['logout'])) {
                     </a>
                 </div>
             </div>";
-    
+
         if (get_config('enable_mobileapi')) {
         $tool_content .= "<div class='panel mobile-apps'>
                 <div class='panel-body'>
@@ -340,13 +307,13 @@ if ($uid AND !isset($_GET['logout'])) {
                 <a href='https://itunes.apple.com/us/app/open-eclass-mobile/id796936702' target=_blank><img src='$themeimg/appstore.png' class='img-responsive center-block' alt='Available on the App Store'></a>
                 </div>
                 <div class='col-xs-6'>
-                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='$themeimg/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>                    
+                <a href='https://play.google.com/store/apps/details?id=gr.gunet.eclass' target=_blank><img src='$themeimg/playstore.png' class='img-responsive center-block' alt='Available on the Play Store'></a>
                 </div>
                 </div></div>
             </div>";
     }
-        
+
         $tool_content .= "</div>
         </div>";
-    draw($tool_content, 0, null, $rss_link.$head_content);
+    draw($tool_content, 0, null, $head_content);
 }
