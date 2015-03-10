@@ -528,7 +528,7 @@ function process_login() {
     global $warning, $surname, $givenname, $email, $status, $is_admin, $language,
     $langInvalidId, $langAccountInactive1, $langAccountInactive2,
     $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
-    $auth_ids, $inactive_uid, $langTooManyFails;
+    $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
 
     if (isset($_POST['uname'])) {
         $posted_uname = canonicalize_whitespace($_POST['uname']);
