@@ -1995,11 +1995,6 @@ function show_assignments() {
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
               action_button(array(
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDelete),
                     array('title' => $langEdit,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
@@ -2010,7 +2005,12 @@ function show_assignments() {
                           'show' => is_numeric($num_submitted) && $num_submitted > 0),
                     array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
-                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'))).
+                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'),
+                    array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete))).
                    "</td></tr>";
             $index++;
         }
