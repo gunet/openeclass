@@ -364,7 +364,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0, '')");
     DBHelper::fieldExists('user', 'email_public') or
             Database::get()->query("ALTER TABLE `user`
                         ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
@@ -2486,6 +2485,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('attendance', 'title')) {
             Database::get()->query("ALTER table `attendance` ADD `title` VARCHAR(250) DEFAULT NULL");
         }
+        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0, '')");
         Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
                 `id` MEDIUMINT(11) NOT NULL auto_increment,
                 `element_type` VARCHAR(255) NOT NULL DEFAULT '',
