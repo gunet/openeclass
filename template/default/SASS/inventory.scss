@@ -242,7 +242,7 @@ hr
 #main-content .panel
 {
   background: $color-panel !important;
-  min-height: 2.4em  !important;
+  min-height: 2.4em;
   @include box-sizing(border-box);
   @include border-radius(2px);
   @include box-shadow(0 0px 7px #DDDDDD);
@@ -2841,4 +2841,23 @@ div.login-form .login-option-social .social-btn.social-btn-google{
 
 div.login-form .login-option-social .social-btn.social-btn-google:hover{
   background: rgba(224, 84, 84,1);
+}
+
+
+// Login Page
+#main-content .login-page{
+    .panel{
+        
+    }
+    .form-group input{
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        box-shadow: none;
+    }
+    .btn-block{
+        a{
+            line-height: 40px;
+        }
+    }
 }

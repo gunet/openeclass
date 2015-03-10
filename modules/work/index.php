@@ -322,9 +322,10 @@ function add_assignment() {
                 Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
                 $tagsArray = explode(',', $_POST['tags']);
                 foreach ($tagsArray as $tagItem) {
-                    //echo $tagItem;
                     //insert all the new ones
-                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                    }
                 }
             }
             
@@ -1119,9 +1120,10 @@ function edit_assignment($id) {
                 Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
                 $tagsArray = explode(',', $_POST['tags']);
                 foreach ($tagsArray as $tagItem) {
-                    //echo $tagItem;
                     //insert all the new ones
-                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                    }
                 }
          }
 
@@ -1995,11 +1997,6 @@ function show_assignments() {
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
               action_button(array(
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDelete),
                     array('title' => $langEdit,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
@@ -2010,7 +2007,12 @@ function show_assignments() {
                           'show' => is_numeric($num_submitted) && $num_submitted > 0),
                     array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
-                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'))).
+                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'),
+                    array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete))).
                    "</td></tr>";
             $index++;
         }

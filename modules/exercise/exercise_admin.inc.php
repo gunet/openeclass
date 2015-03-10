@@ -66,9 +66,10 @@ if (isset($_POST['submitExercise'])) {
                 Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
                 $tagsArray = explode(',', $_POST['tags']);
                 foreach ($tagsArray as $tagItem) {
-                    //echo $tagItem;
                     //insert all the new ones
-                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "exe", $exerciseId, $tagItem, $course_id);
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "exe", $exerciseId, $tagItem, $course_id);
+                    }
                 }
         }
         

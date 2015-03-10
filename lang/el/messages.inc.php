@@ -1046,6 +1046,7 @@ $langChangeAttendanceCreateSuccess = "Το παρουσιολόγιο δημιο
 $langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 
 $langGradebook = "Βαθμολόγιο";
+$langGradebooks = "Βαθμολόγια";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
 $langGradebookAddActivity = "Προσθήκη νέας δραστηριότητας";
 $langGradebookActivityDescription = "Περιγραφή";
@@ -1129,8 +1130,10 @@ $langNoGradebook = "Δεν συμμετέχετε σε μαθήματα με β�
 $langGradeVisible = "Εμφάνιση βαθμολογίας στους χρήστες";
 $langNewGradebook = "Νέο βαθμολόγιο";
 $langNewGradebook2 = "(δημιουργία νέου βαθμολογίου για το μάθημα)";
-$langChangeGradebook = "Διαθέσιμα βαθμολόγια";
-$langChangeGradebook2 = "(επιλογή διαθέσιμων βαθμολογίων για το μάθημα)";
+$langChangeGradebook = "Επιλογή βαθμολογίου";
+$langChangeGradebookSuccess = "Το βαθμολόγιο ενεργοποιήθηκε με επιτυχία";
+$langCreateGradebookSuccess = "Το βαθμολόγιο δημιουργήθηκε με επιτυχία";
+$langChangeGradebook2 = "(επιλογή ενεργού βαθμολογίου για το μάθημα)";
 $langGradebookNoTitle2 = "Βαθμολόγιο χωρίς τίτλο";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
@@ -1859,8 +1862,7 @@ $langNoPgTitle = "Δεν πληκτρολογήσατε τίτλο σελίδα�
  * php
  * ************************************************************* */
 $langHomePage = "Αρχική Σελίδα";
-$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε εγγεγραμμένος, συμπληρώστε τη
-        <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.";
+$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε εγγεγραμμένος, συμπληρώστε τη <a href='%s'>φόρμα εγγραφής</a>.";
 $langEnterPlatform = "Για να μπείτε στην πλατφόρμα κάντε κλικ";
 $langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον.";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
