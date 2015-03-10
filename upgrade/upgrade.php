@@ -364,7 +364,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
+    Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0, '')");
     DBHelper::fieldExists('user', 'email_public') or
             Database::get()->query("ALTER TABLE `user`
                         ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
