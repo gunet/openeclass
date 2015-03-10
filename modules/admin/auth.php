@@ -94,7 +94,9 @@ if (isset($_GET['auth'])) {
             if (in_array($auth_id, $auth_methods)) {
                     if ($auth_id == get_auth_primary_method()) {
                         $primary = true;
+                        $primary_link = "&nbsp;&nbsp;<small><span class='label label-default'>$langPrimaryAuthType</span></small>";
                     } else {
+                        $primary_link = '';
                         $primary = false;
                     }
                     $active = true;
@@ -105,12 +107,13 @@ if (isset($_GET['auth'])) {
             } else {
                     $active = false;
                     $primary = false;
+                    $primary_link = '';
                     $visibility = 'not_visible';
                     $activation_url = "$_SERVER[PHP_SELF]?auth=$auth_id&amp;q=1";
                     $activation_title = $langActivate;
                     $activation_icon = "fa-toggle-on";
-            }
-            $tool_content .= "<tr><td class=$visibility>".  strtoupper($auth_name)."</td></td><td class='option-btn-cell'>";        
+            }            
+            $tool_content .= "<tr><td class=$visibility>".  strtoupper($auth_name)."$primary_link</td><td class='option-btn-cell'>";        
             $tool_content .= action_button(array(
                     array('title' => $activation_title,
                           'url' => $activation_url,

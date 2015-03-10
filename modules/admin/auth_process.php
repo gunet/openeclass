@@ -78,6 +78,15 @@ if (empty($ldap_login_attr)) {
     $ldap_login_attr = 'uid';
 }
 
+
+$tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'icon' => 'fa-reply',
+            'level' => 'primary-label',
+            'url' => 'auth.php'
+        )));
+
 // You have to logout from CAS and preferably close your browser
 // to change CAS settings
 if (!empty($_SESSION['cas_warn']) and $auth == 7) {
