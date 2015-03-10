@@ -592,6 +592,7 @@ function process_login() {
             }
         }
 
+        $invalidIdMessage = sprintf($langInvalidId, $urlAppend . 'modules/auth/registration.php');
         if (!isset($_SESSION['uid'])) {
             switch ($auth_allow) {
                 case 1: $warning .= "";
@@ -601,7 +602,7 @@ function process_login() {
                     if(isset($_GET['login_page'])) {
                         die('ehllo');
                     } else {
-                        $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
+                        $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
                     }
                     break;
                 case 3: $warning .= "<div class='alert alert-warning'>$langAccountInactive1 " .
@@ -610,11 +611,10 @@ function process_login() {
                     break;
                 case 4:
                     if(isset($_GET['login_page'])) {
-                        Session::flash('login_error', $langInvalidId);
-                        //Session::Messages($langInvalidId);
+                        Session::flash('login_error', $invalidIdMessage);
                         redirect_to_home_page('main/login_form.php');
                     } else {
-                        $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
+                        $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
                         increaseLoginFailure();
                     }
                     break;
