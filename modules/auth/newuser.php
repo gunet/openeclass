@@ -30,6 +30,7 @@ require_once 'include/phpass/PasswordHash.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
 
@@ -162,6 +163,8 @@ if (!isset($_POST['submit'])) {
                       <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
                     </div>";
             }
+        //add custom profile fields 
+        $tool_content .= render_profile_fields_form(array('origin' => 'student_register'));
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
                         <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "' />
                     </div>

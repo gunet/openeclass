@@ -25,6 +25,7 @@ $require_login = true;
 $helpTopic = 'Profile';
 include '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/pwgen.inc.php';
 $require_valid_uid = TRUE;
@@ -372,7 +373,10 @@ $tool_content .= "<div class='form-group'>
         <div class='form-group'>      
           <label for='desription' class='col-sm-2 control-label'>$langDescription:</label>
           <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
-        </div>
+        </div>";
+//add custom profile fields
+$tool_content .= render_profile_fields_form(array('origin' => 'edit_profile'));
+$tool_content .= "
         <div class='col-sm-offset-2 col-sm-10'>        
           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>

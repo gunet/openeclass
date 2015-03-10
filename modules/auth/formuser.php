@@ -22,6 +22,7 @@
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 include 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
 
@@ -266,7 +267,8 @@ if ($all_set) {
                       <div class='col-sm-10'><input class='form-control' type='text' name='captcha_code' maxlength='6'/></div>
                     </div>";
     }
-
+    //add custom profile fields
+    $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
     $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
                     </div>
