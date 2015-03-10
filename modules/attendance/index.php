@@ -757,69 +757,7 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
-        
-        //===================================================
-        //section to insert new attendance and select another
-        //===================================================
-        
-        $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
-
-        $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-12'>
-                <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <div class='form-group'>
-                            <label class='col-xs-12'>$langNewAttendance<small class='help-block'>$langNewAttendance2</small></label></div>                            
-                                <div class='form-group'> 
-                                    <div class='col-xs-12'>
-                                        <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
-                                    </div>
-                                </div>
-                                <div class='form-group'>
-                                    <div class='col-xs-12'>
-                                        <input class='btn btn-primary' type='submit' name='newAttendance' value='".$langInsert."' />
-                                    </div>
-                                </div>
-                    </form>
-                    
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <div class='form-group'>
-                            <label class='col-xs-12'>$langChangeAttendance<small class='help-block'>$langChangeAttendance2</small></label>
-                            <div class='col-xs-12'>
-                                <select name='attendanceYear' class='form-control'>";
-                                
-                                if ($result){
-                                    foreach ($result as $year){
-                                        if($year->title == ""){
-                                            $title = "$langAttendanceNoTitle2";
-                                        }else{
-                                            $title = $year->title;
-                                        }
-                                        $tool_content .= "<option value='$year->id'";
-                                                    if ($attendance_id == $year->id) {
-                                                      $tool_content .= " selected";
-                                                    } 
-                                                    $tool_content .= ">$title</option>";
-                                    }
-                                }
-                                              
-        
-                 $tool_content .="
-                                </select>
-                            </div>
-                        </div>
-                                <div class='form-group'>
-                                    <div class='col-xs-12'>
-                                        <input class='btn btn-primary' type='submit' name='selectAttendance' value='".$langSelect."' />
-                                    </div>
-                                </div>
-                    </form>
-                    
-                </div>
-            </div>
-        </div>"; 
-         
+                 
         //do not show activities list 
         $showAttendanceActivities = 0;
     }
