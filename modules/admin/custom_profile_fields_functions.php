@@ -78,19 +78,22 @@ function render_profile_fields_form($context) {
                 switch ($f->datatype) {
                     case 1: //text box
                         if (isset($fdata)) {
-                            $val = 'value"'.q($fdata).'"';
+                            $val = 'value="'.q($fdata).'"';
                         }
-                        $return_string .= '<input class="form-control" .. type="text" name="'.$f->shortname.'">';
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="'.$f->shortname.'">';
                         break;
                     case 2: //textarea
-                        $return_string .= rich_text_editor($f->shortname, 8, 20, '');
+                        $return_string .= rich_text_editor($f->shortname, 8, 20, $val);
                         break;
                     case 3: //date
                         break;
                     case 4: //menu
                         break;
                     case 5: //link
-                        $return_string .= '<input type="text" name="'.$f->shortname.'">';
+                        if (isset($fdata)) {
+                            $val = 'value="'.q($fdata).'"';
+                        }
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="'.$f->shortname.'">';
                         break;
                 }
                 $return_string .= '</div></div>';
