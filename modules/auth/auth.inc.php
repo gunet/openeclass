@@ -643,14 +643,26 @@ function process_login() {
                 case 1: $warning .= "";
                     session_regenerate_id();
                     break;
-                case 2: $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
+                case 2: 
+                    if(isset($_GET['login_page'])) {
+                        die('ehllo');
+                    } else {
+                        $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
+                    }
                     break;
                 case 3: $warning .= "<div class='alert alert-warning'>$langAccountInactive1 " .
                             "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
                             token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></div>";
                     break;
-                case 4: $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
-                    increaseLoginFailure();
+                case 4: 
+                    if(isset($_GET['login_page'])) {
+                        Session::flash('login_error', $langInvalidId);
+                        //Session::Messages($langInvalidId);
+                        redirect_to_home_page('main/login_form.php');
+                    } else {
+                        $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
+                        increaseLoginFailure();
+                    }
                     break;
                 case 5: $warning .= "<div class='alert alert-warning'>$langNoCookies</div>";
                     break;

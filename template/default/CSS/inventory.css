@@ -380,7 +380,7 @@ hr {
 /* line 242, ../SASS/inventory.scss */
 #main-content .panel {
   background: #FFFFFF !important;
-  min-height: 2.4em  !important;
+  min-height: 2.4em;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
@@ -3199,4 +3199,9 @@ div.login-form .login-option-social .social-btn.social-btn-google {
 /* line 2842, ../SASS/inventory.scss */
 div.login-form .login-option-social .social-btn.social-btn-google:hover {
   background: #e05454;
+}
+
+/* line 2848, ../SASS/inventory.scss */
+#main-content .panel.login-page-option {
+  min-height: 300px;
 }
