@@ -1150,7 +1150,7 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
 }
 
 /**
- * @brief upgrare to 3.0rc3
+ * @brief upgrade to 3.0rc3
  * @param string $code
  * @param int    $course_id
  */
@@ -1163,7 +1163,7 @@ function upgrade_course_3_0_rc3($code, $course_id) {
 }
 
 /**
- * @brief upgrare to 3.0rc2
+ * @brief upgrade to 3.0rc2
  * @param string $code
  * @param int    $course_id
  */
@@ -1176,7 +1176,7 @@ function upgrade_course_3_0_rc2($code, $course_id) {
 }
 
 /**
- * @brief upgrare to 2.11
+ * @brief upgrade to 2.11
  * @global type $langUpgCourse
  * @param type $code
  * @param type $lang
