@@ -377,7 +377,7 @@ if ($l == 0) {
 $tool_content .= "
 <div class='table-responsive'>    
     <table class='table-default'>
-    <tr>
+    <tr class='list-header'>
       <th><div align='left'>$langLearningPaths</div></th>\n";
 
 if ($is_editor) {
