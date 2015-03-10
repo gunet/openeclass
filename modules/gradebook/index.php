@@ -343,7 +343,7 @@ if ($is_editor) {
                                     $tool_content .= " /></div>
                                 </div>
                                 <div class='form-group'>
-                                    <label for='actDesc' class='col-sm-2 control-label'>$langGradebookActivityWeight:</label>
+                                    <label for='actDesc' class='col-sm-2 control-label'>$langComments:</label>
                                     <div class='col-sm-10'>
                                         " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
                                     </div>
