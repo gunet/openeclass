@@ -55,7 +55,7 @@ $tool_content .= "<div class='login-page'>
                     <div class='row'>
                         <div class='col-sm-offset-2 col-sm-8'>
                             <div class='panel panel-default '>
-                                <div class='panel-heading'><span>default</span></div>
+                                <div class='panel-heading'><span>$langUserLogin</span></div>
                                 <div class='panel-body'>
                                     <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
                                         $next
@@ -91,8 +91,8 @@ $tool_content .= "<div class='login-page'>
                     $tool_content .= "
                     <div class='row margin-bottom-fat'>
                         <div class='col-xs-offset-3 col-xs-6'>
-                            <div class='or-separator'>
-                                <span>$langOr</span>
+                            <div class='or-separator' style='background-color: none;'>
+                                <span style='backround-color: #333;'>$langOr</span>
                             </div>
                         </div>
                     </div>
@@ -105,10 +105,10 @@ $tool_content .= "<div class='login-page'>
                     <div class='row'>
                         <div class='col-sm-offset-2 col-sm-8'>
                             <div class='panel panel-default '>
-                                <div class='panel-heading'><span>Cas</span></div>
+                                <div class='panel-heading'><span>$langAlternateLogin</span></div>
                                 <div class='panel-body'>
                                     <div class='col-sm-6'>
-                                        $langViaCAS
+                                        <p>$langViaCAS</p>
                                     </div>
                                     <div class='col-sm-offset-1 col-sm-5'>
                                         $cas_link
@@ -125,8 +125,8 @@ $tool_content .= "<div class='login-page'>
                 $tool_content .= "
                     <div class='row margin-bottom-fat'>
                         <div class='col-xs-offset-3 col-xs-6'>
-                            <div class='or-separator'>
-                                <span>$langOr</span>
+                            <div class='or-separator' style='background-color: none;'>
+                                <span style='backround-color: #333;'>$langOr</span>
                             </div>
                         </div>
                     </div>
@@ -139,7 +139,7 @@ $tool_content .= "<div class='login-page'>
                     <div class='row'>
                         <div class='col-sm-offset-2 col-sm-8'>
                             <div class='panel panel-default '>
-                                <div class='panel-heading'><span>Shibboleth</span></div>
+                                <div class='panel-heading'><span>$langAlternateLogin</span></div>
                                 <div class='panel-body'>
                                     <div class='col-sm-6'>
                                         <p>$langShibboleth</p>
