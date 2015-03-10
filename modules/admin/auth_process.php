@@ -106,101 +106,104 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
 
     // if form is submitted
     if (isset($_POST['submit']) or $cas_valid == true) {
-        $tool_content .= "<br /><p>$langConnTest</p>";
-        if (($auth == 6) or ( isset($cas_valid) and $cas_valid == true)) {
-            $test_username = $test_password = " ";
-        }
-        // when we come back from CAS
-        if (isset($_SESSION['cas_do']) && $_SESSION['cas_do']) {
-            $auth = 7;
-        }
-        switch ($auth) {
-            case '1':
-                $settings = array();
-                break;
-            case '2':
-                $settings = array('pop3host' => $pop3host);
-                break;
-            case '3':
-                $settings = array('imaphost' => $imaphost);
-                break;
-            case '4':
-                $settings = array('ldaphost' => $ldaphost,
-                    'ldap_base' => $ldap_base,
-                    'ldapbind_dn' => $ldapbind_dn,
-                    'ldapbind_pw' => $ldapbind_pw,
-                    'ldap_login_attr' => $ldap_login_attr,
-                    'ldap_login_attr2' => $ldap_login_attr2);
-                break;
-            case '5':
-                $settings = array('dbhost' => $dbhost,
-                    'dbname' => $dbname,
-                    'dbuser' => $dbuser,
-                    'dbpass' => $dbpass,
-                    'dbtable' => $dbtable,
-                    'dbfielduser' => $dbfielduser,
-                    'dbfieldpass' => $dbfieldpass,
-                    'dbpassencr' => $dbpassencr);
-                break;
-            case '6':
-                if ($checkseparator) {
-                    $auth_settings = unescapeSimple($_POST['shibseparator']);
-                } else {
-                    $auth_settings = 'shibboleth';
-                }
-                $settings = array('shibemail' => $shibemail,
-                    'shibuname' => $shibuname,
-                    'shibcn' => $shibcn);
-                break;
-            case '7':
-                $settings = array('cas_host' => $_SESSION['cas_host'],
-                    'cas_port' => $_SESSION['cas_port'],
-                    'cas_context' => $_SESSION['cas_context'],
-                    'cas_cachain' => $_SESSION['cas_cachain'],
-                    'casusermailattr' => $_SESSION['casusermailattr'],
-                    'casuserfirstattr' => $_SESSION['casuserfirstattr'],
-                    'casuserlastattr' => $_SESSION['casuserlastattr'],
-                    'cas_altauth' => $_SESSION['cas_altauth'],
-                    'cas_logout' => $_SESSION['cas_logout'],
-                    'cas_ssout' => $_SESSION['cas_ssout']);
-                $auth_instructions = $_SESSION['auth_instructions'];
-                break;
-            default:
-                break;
-        }
-        $auth_allow = false;
-        if ($test_username !== '' and $test_password !== '') {
-            $test_username = canonicalize_whitespace($test_username);
-            if (isset($cas_valid) and $cas_valid) {
-                $is_valid = true;
-            } else {
-                $is_valid = auth_user_login($auth, $test_username, $test_password, $settings);
-            }
-            if ($is_valid) {
-                $auth_allow = true;
-                $tool_content .= "<div class='alert alert-success'>$langConnYes</div>";
-                // Debugging CAS
-                if ($debugCAS) {
-                    if (!empty($cas_ret['message']))
-                        $tool_content .= "<p>{$cas_ret['message']}</p>";
-                    if (!empty($cas_ret['attrs']) && is_array($cas_ret['attrs'])) {
-                        $tmp_attrs = "<p>$langCASRetAttr:<br />" . array2html($cas_ret['attrs']);
-                        $tool_content .= "$tmp_attrs</p>";
-                    }
-                }
-            } else {
-                $tool_content .= "<div class='alert alert-danger'>$langConnNo";
-                if (isset($GLOBALS['auth_errors'])) {
-                    $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
-                }
-                $tool_content .= "</div>";
-            }
+        if ($auth == 1) {
+            $settings = array();
+            $auth_allow = 1; //eclass method doesn't need test
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langWrongAuth</div>";
+            $tool_content .= "<div class='alert alert-info'>$langConnTest</div>";
+            if (($auth == 6) or (isset($cas_valid) and $cas_valid == true)) {
+                $test_username = $test_password = " ";
+            }
+            // when we come back from CAS
+            if (isset($_SESSION['cas_do']) && $_SESSION['cas_do']) {
+                $auth = 7;
+            }
+            switch ($auth) {                
+                case '2':
+                    $settings = array('pop3host' => $pop3host);
+                    break;
+                case '3':
+                    $settings = array('imaphost' => $imaphost);
+                    break;
+                case '4':
+                    $settings = array('ldaphost' => $ldaphost,
+                        'ldap_base' => $ldap_base,
+                        'ldapbind_dn' => $ldapbind_dn,
+                        'ldapbind_pw' => $ldapbind_pw,
+                        'ldap_login_attr' => $ldap_login_attr,
+                        'ldap_login_attr2' => $ldap_login_attr2);
+                    break;
+                case '5':
+                    $settings = array('dbhost' => $dbhost,
+                        'dbname' => $dbname,
+                        'dbuser' => $dbuser,
+                        'dbpass' => $dbpass,
+                        'dbtable' => $dbtable,
+                        'dbfielduser' => $dbfielduser,
+                        'dbfieldpass' => $dbfieldpass,
+                        'dbpassencr' => $dbpassencr);
+                    break;
+                case '6':
+                    if ($checkseparator) {
+                        $auth_settings = unescapeSimple($_POST['shibseparator']);
+                    } else {
+                        $auth_settings = 'shibboleth';
+                    }
+                    $settings = array('shibemail' => $shibemail,
+                        'shibuname' => $shibuname,
+                        'shibcn' => $shibcn);
+                    break;
+                case '7':
+                    $settings = array('cas_host' => $_SESSION['cas_host'],
+                        'cas_port' => $_SESSION['cas_port'],
+                        'cas_context' => $_SESSION['cas_context'],
+                        'cas_cachain' => $_SESSION['cas_cachain'],
+                        'casusermailattr' => $_SESSION['casusermailattr'],
+                        'casuserfirstattr' => $_SESSION['casuserfirstattr'],
+                        'casuserlastattr' => $_SESSION['casuserlastattr'],
+                        'cas_altauth' => $_SESSION['cas_altauth'],
+                        'cas_logout' => $_SESSION['cas_logout'],
+                        'cas_ssout' => $_SESSION['cas_ssout']);
+                    $auth_instructions = $_SESSION['auth_instructions'];
+                    break;
+                default:
+                    break;
+            }
+            if ($test_username !== '' and $test_password !== '') {
+                $test_username = canonicalize_whitespace($test_username);
+                if (isset($cas_valid) and $cas_valid) {
+                    $is_valid = true;
+                } else {
+                    $is_valid = auth_user_login($auth, $test_username, $test_password, $settings);
+                }
+                if ($is_valid) {
+                    $auth_allow = 1;
+                    $tool_content .= "<div class='alert alert-success'>$langConnYes</div>";
+                    // Debugging CAS
+                    if ($debugCAS) {
+                        if (!empty($cas_ret['message']))
+                            $tool_content .= "<p>{$cas_ret['message']}</p>";
+                        if (!empty($cas_ret['attrs']) && is_array($cas_ret['attrs'])) {
+                            $tmp_attrs = "<p>$langCASRetAttr:<br />" . array2html($cas_ret['attrs']);
+                            $tool_content .= "$tmp_attrs</p>";
+                        }
+                    }
+                } else {
+                    $tool_content .= "<div class='alert alert-danger'>$langConnNo";
+                    if (isset($GLOBALS['auth_errors'])) {
+                        $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
+                    }
+                    $tool_content .= "</div>";
+                    $auth_allow = 0;
+                }
+            } else {
+                $tool_content .= "<div class='alert alert-danger'>$langWrongAuth</div>";
+                $auth_allow = 0;
+            }
         }
 
-        // store the values - do the updates //
-        if ($auth_allow) {
+        // update table `auth`
+        if (!empty($auth_allow) and $auth_allow == 1) {
             if ($auth != 6) {
                 $auth_settings = pack_settings($settings);
             }
@@ -209,7 +212,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                                     auth_instructions = ?s,
                                     auth_default = MAX(auth_default, 1),
                                     auth_title = ?s,
-                                    auth_name = ?s
+                                    auth_name = ?s                                    
                                 WHERE
                                     auth_id = ?d"
                     , function ($error) use(&$tool_content, $langErrActiv) {
@@ -221,8 +224,6 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                 } else {
                     $tool_content .= "<div class='alert alert-warning'>$langAlreadyActiv</div>";
                 }
-            } else {
-
             }
         }
     }
@@ -234,11 +235,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
         header('Location: ../admin/auth.php');
         exit;
     }
-    // Display the form
-    // we need to load auth=7 settings
-    if ($auth != 6) {
-        $auth_data = get_auth_settings($auth);
-    }
+    
     $pageName = get_auth_info($auth);
     $tool_content .= action_bar(array(
         array(
@@ -246,9 +243,14 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label',
             'url' => 'auth.php'
-        )
-    ))."
-    <div class='form-wrapper'>
+        )));
+    
+    // get authentication settings
+    if ($auth != 6) {
+        $auth_data = get_auth_settings($auth);
+    }
+    // display form
+    $tool_content .= "<div class='form-wrapper'> 
     <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<fieldset>	
         <input type='hidden' name='auth' value='" . intval($auth) . "'>";
@@ -258,6 +260,8 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
         $tool_content .= "<div class='alert alert-warning'>$langCASnochange</div>";
     }
     switch ($auth) {
+        case 1: $tool_content .= eclass_auth_form($auth_data['auth_title'], $auth_data['auth_instructions']);
+            break;
         case 2: require_once 'modules/auth/methods/pop3form.php';
             break;
         case 3: require_once 'modules/auth/methods/imapform.php';
@@ -272,8 +276,8 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             break;
         default:
             break;
-    }
-    if ($auth != 6 && $auth != 7) {
+    }       
+    if ($auth != 6 && $auth != 7 && $auth != 1) {
         $tool_content .= "
                 <div class='alert alert-info'>$langTestAccount</div>
                 <div class='form-group'>
@@ -287,13 +291,13 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     <div class='col-sm-10'>
                         <input class='form-control' type='password' name='test_password' id='test_password' value='" . q($test_password) . "' autocomplete='off'>
                     </div>
-                </div>";
+                </div>";                 
     }
     $tool_content .= "
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-                        <a class='btn btn-default' href='auth.php'>$langCancel</a>
+                        <a class='btn btn-default' href='auth.php'>$langCancel</a>                
                     </div>
                 </div>
             </fieldset>
@@ -303,6 +307,40 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
 
 draw($tool_content, 3);
 
+/**
+ * @brief display form for completing info about authentication via eclass
+ * @global type $langAuthTitle
+ * @global type $langInstructionsAuth
+ * @param type $auth_title
+ * @param type $auth_instructions
+ * @return string
+ */
+function eclass_auth_form($auth_title, $auth_instructions) {
+    
+    global $langAuthTitle, $langInstructionsAuth;
+    
+    $content = "<div class='form-group'>
+            <label for='auth_title' class='col-sm-2 control-label'>$langAuthTitle:</label>
+            <div class='col-sm-10'>
+                <input class='form-control' name='auth_title' id='auth_title' type='text' value='" . q($auth_title) . "'>
+            </div>
+        </div>
+        <div class='form-group'>
+            <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
+            <div class='col-sm-10'>
+                <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
+            </div>
+        </div>";
+    
+    return $content;
+}
+
+
+/**
+ * @brief utility function
+ * @param type $settings
+ * @return type
+ */
 function pack_settings($settings) {
     $items = array();
     foreach ($settings as $key => $value) {

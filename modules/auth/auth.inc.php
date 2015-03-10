@@ -47,20 +47,35 @@ $auth_ids = array(1 => 'eclass',
     7 => 'cas');
 
 
-/* * **************************************************************
-  find/return the ids of the default authentication methods
-  return $auth_methods (array with all the values of the defined/active methods)
- * Array elements are values between 1 and 7: 1-eclass,2-pop3,3-imap,4-ldap,5-db,6-shibboleth,7-cas
- * ************************************************************** */
-
+/**
+ * get active authentication methods auth_ids
+ * @return type
+ */
 function get_auth_active_methods() {
+    
     $auth_methods = array();
     $q = Database::get()->queryArray("SELECT auth_id FROM auth
-        WHERE auth_default <> 0 AND (auth_settings <> '' OR auth_id = 1)");
+                            WHERE auth_default <> 0 AND (auth_settings <> '' OR auth_id = 1)");
     foreach ($q as $row) {
         $auth_methods[] = $row->auth_id;
     }
     return $auth_methods;
+}
+
+/**
+ * get auth primary method
+ * @return int
+ */
+function get_auth_primary_method() {
+    
+    $q = Database::get()->querySingle("SELECT auth_id FROM auth WHERE auth_default = 2");
+    if ($q) {
+        $auth_primary_method = $q->auth_id;
+        return $auth_primary_method;
+    } else {
+        return 0;
+    }
+           
 }
 
 /* * **************************************************************
