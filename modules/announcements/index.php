@@ -353,7 +353,9 @@ if ($is_editor) {
                 foreach ($tagsArray as $tagItem) {
                     //echo $tagItem;
                     //insert all the new ones
-                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                    }
                 }
             }
         } else { // add new announcement
@@ -373,10 +375,10 @@ if ($is_editor) {
             if (isset($_POST['tags'])) {
                 $tagsArray = explode(',', $_POST['tags']);
                 foreach ($tagsArray as $tagItem) {
-                    //echo $tagItem;
-                    //delete all the previous for this item, course
                     //insert all the new ones
-                    Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                    }
                 }
             }
         }
