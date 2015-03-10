@@ -2722,7 +2722,6 @@ div.login-form .btn.btn-login{
   padding:2px 5px;
   z-index: 9;
   width:100%;
-  background: white;
   margin-bottom: 0.4em!important;
 }
 
@@ -2847,7 +2846,6 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
 // Login Page
 #main-content .login-page{
     .panel{
-        
     }
     .form-group input{
         border-top: none;
@@ -2859,5 +2857,8 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
         a{
             line-height: 40px;
         }
+    }
+    .or-separator span:before, .or-separator span:after{
+        background-color: #fafafa;
     }
 }
