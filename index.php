@@ -126,7 +126,7 @@ if ($uid AND !isset($_GET['logout'])) {
     $loginFormEnabled = false;
     $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
             FROM auth WHERE auth_default <> 0
-            ORDER BY auth_default DESC");
+            ORDER BY auth_default DESC, auth_id");
     foreach ($q as $l) {
         $extAuth = in_array($l->auth_name, $extAuthMethods);
         if ($extAuth) {
