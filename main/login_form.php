@@ -57,60 +57,75 @@ $tool_content .= action_bar(array(
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ),false);
-$tool_content .= "<div class='login-form-page'>
-    <div class='row'><div class='col-sm-$columns'>
-    <div class='panel panel-default'>
-        <div class='panel-heading'><apan>default</span>
-        </div>
-        <div class='panel-body'>
-        <form class='form-horizontal' role='form' action='$urlServer' method='post'>
-  $next
-    <div class='form-group'>       
-        <div class='col-xs-12'>
-            <input class='form-control' name='uname' placeholder='$langUsername'>
-        </div>
-    </div>
-    <div class='form-group'>
-        <div class='col-xs-12'>
-            <input class='form-control' name='pass' type='password' placeholder='$langPass'>
-        </div>
-    </div>
-    <div class='form-group'>
-    <div class='col-xs-12'>
-    <button class='btn btn-primary margin-bottom-thin' type='submit' name='submit' value='$langEnter'>$langEnter</button>
-        <div><a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a></div>
-        </div>
-        </div>
-        </form>
-        </div></div></div>";
-        
-        //  Login with Cas
-        if (!empty($cas_link)) {
-        $tool_content .= "
-            <div class='col-sm-$columns'>
-                <div class='panel panel-default'>
-                    <div class='panel-heading'><span>Cas</span></div>
-                    <div class='panel-body'>
-                        $cas_link
+$tool_content .= "<div class='login-page'>
+                    <div class='row'>
+                        <div class='col-sm-offset-3 col-sm-6'>
+                            <div class='panel panel-default '>
+                                <div class='panel-heading'><span>default</span></div>
+                                <div class='panel-body'>
+                                    <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
+                                        $next
+                                        <div class='form-group'>       
+                                            <div class='col-xs-12'>
+                                                <input class='form-control' name='uname' placeholder='$langUsername'>
+                                            </div>
+                                        </div>
+                                        <div class='form-group'>
+                                            <div class='col-xs-12'>
+                                                <input class='form-control' name='pass' type='password' placeholder='$langPass'>
+                                            </div>
+                                        </div>
+                                        <div class='form-group'>
+                                            <div class='col-xs-12'>
+                                                <button class='btn btn-primary btn-block margin-bottom-thin' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+                                            </div>
+                                            <div class='col-xs-12 text-center'>
+                                                <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+                                            </div>
+                                        </div>
+                                    </form>";
+                                    if (Session::has('login_error')) {
+                            $tool_content .= "<div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div>";
+                         }
+                $tool_content .= "</div>
+                            </div>
+                        </div>
+                    </div>";
+                
+                //  Login Type Seperator
+                                                
+                                                
+                //  Login with Cas
+                if (!empty($cas_link)) {
+                $tool_content .= "
+                    <div class='row'>
+                        <div class='col-sm-offset-3 col-sm-6'>
+                            <div class='panel panel-default '>
+                                <div class='panel-heading'><span>Cas</span></div>
+                                <div class='panel-body'>
+                                    $cas_link
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-                ";
-        }
+                        ";
+                }
         
-        //  Login with Sibboleth
-        if (!empty($shibboleth_link)) {
-        $tool_content .= "
-            <div class='col-sm-$columns'>
-                <div class='panel panel-default'>
-                    <div class='panel-heading'><span>Shibboleth</span></div>
-                    <div class='panel-body'>
-                        $shibboleth_link
+                //  Login with Sibboleth
+                if (!empty($shibboleth_link)) {
+                $tool_content .= "
+                    <div class='row'>
+                        <div class='col-sm-offset-3 col-sm-6'>
+                            <div class='panel panel-default '>
+                                <div class='panel-heading'><span>Shibboleth</span></div>
+                                <div class='panel-body'>
+                                    $shibboleth_link
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-                ";
-        }
+                        ";
+                }
          //  Login with Social Networks
         /*if (false) {
         $tool_content .= "
@@ -124,10 +139,6 @@ $tool_content .= "<div class='login-form-page'>
             </div></div></div>
                 ";
         }*/
-        $tool_content .= "</div>";
-    if (!isset($warning)) {
-    $tool_content .= "<div class='alert alert-warning' role='alert'>$warning</div>";
-        }
         $tool_content .= "</div>";
 
 draw($tool_content, 0);
