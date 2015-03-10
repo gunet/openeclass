@@ -86,8 +86,8 @@ if ($learnPathName) {
     
     // display tab header
     $tool_content .= '' . "\n\n"
-            . '    <table class="table-default">' . "\n"
-            . '    <tr>' . "\n"
+            . '    <div class="table-responsive"><table class="table-default">' . "\n"
+            . '    <tr class="list-header">' . "\n"
             . '      <th class="text-left">' . $langStudent . '</th>' . "\n"
             . '      <th width="5px">' . $langProgress . '</th>' . "\n"
             . '    </tr>' . "\n";
@@ -110,7 +110,7 @@ if ($learnPathName) {
         $k++;
     }
     // foot of table
-    $tool_content .= '    ' . "\n\n" . '    </table>' . "\n\n";
+    $tool_content .= '    ' . "\n\n" . '    </table></div>' . "\n\n";
 }
 
 draw($tool_content, 2, null, $head_content);

@@ -53,7 +53,7 @@ require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
 $navigation[] = array('url' => "detailsAll.php?course=$course_code", 'name' => $langTrackAllPathExplanation);
-$nameTools = $langTrackUser;
+$toolName = $langTrackUser;
 
 // user info can not be empty, return to the list of details
 if (empty($_REQUEST['uInfo'])) {

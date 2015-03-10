@@ -261,13 +261,13 @@ if ($is_editor) {
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
                             <div class='col-sm-10'>
-                              <input name='newPathName' type='text' class='form-control' id='newPathName' placeholder='$langLearningPathName'>
+                              <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='newComment' class='col-sm-2 control-label'>$langComment:</label>
                             <div class='col-sm-10'>
-                              <input name='newComment' type='text' class='form-control' id='newComment' placeholder='$langComment'>
+                              <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
                         <div class='form-group'>
