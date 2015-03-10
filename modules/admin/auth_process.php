@@ -168,6 +168,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             default:
                 break;
         }
+        $auth_allow = false;
         if ($test_username !== '' and $test_password !== '') {
             $test_username = canonicalize_whitespace($test_username);
             if (isset($cas_valid) and $cas_valid) {
@@ -176,7 +177,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                 $is_valid = auth_user_login($auth, $test_username, $test_password, $settings);
             }
             if ($is_valid) {
-                $auth_allow = 1;
+                $auth_allow = true;
                 $tool_content .= "<div class='alert alert-success'>$langConnYes</div>";
                 // Debugging CAS
                 if ($debugCAS) {
@@ -193,24 +194,22 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     $tool_content .= "<p>$GLOBALS[auth_errors]</p>";
                 }
                 $tool_content .= "</div>";
-                $auth_allow = 0;
             }
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langWrongAuth</div>";
-            $auth_allow = 0;
         }
 
         // store the values - do the updates //
-        if (!empty($auth_allow) and $auth_allow == 1) {
+        if ($auth_allow) {
             if ($auth != 6) {
                 $auth_settings = pack_settings($settings);
             }
             $result = Database::get()->query("UPDATE auth
             			SET auth_settings = ?s,
                                     auth_instructions = ?s,
-                                    auth_default = 1,
+                                    auth_default = MAX(auth_default, 1),
                                     auth_title = ?s,
-                                    auth_name = ?s                                    
+                                    auth_name = ?s
                                 WHERE
                                     auth_id = ?d"
                     , function ($error) use(&$tool_content, $langErrActiv) {
@@ -223,7 +222,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     $tool_content .= "<div class='alert alert-warning'>$langAlreadyActiv</div>";
                 }
             } else {
-                
+
             }
         }
     }
@@ -249,7 +248,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             'url' => 'auth.php'
         )
     ))."
-    <div class='form-wrapper'> 
+    <div class='form-wrapper'>
     <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<fieldset>	
         <input type='hidden' name='auth' value='" . intval($auth) . "'>";
@@ -273,7 +272,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             break;
         default:
             break;
-    }       
+    }
     if ($auth != 6 && $auth != 7) {
         $tool_content .= "
                 <div class='alert alert-info'>$langTestAccount</div>
@@ -288,13 +287,13 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     <div class='col-sm-10'>
                         <input class='form-control' type='password' name='test_password' id='test_password' value='" . q($test_password) . "' autocomplete='off'>
                     </div>
-                </div>";                 
+                </div>";
     }
     $tool_content .= "
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-                        <a class='btn btn-default' href='auth.php'>$langCancel</a>                
+                        <a class='btn btn-default' href='auth.php'>$langCancel</a>
                     </div>
                 </div>
             </fieldset>

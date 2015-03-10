@@ -12,42 +12,36 @@ $login_user = FALSE;
 $eclass = $shibboleth_link = $cas_link = "";
 $active_login_types = 0;
 
-// check for eclass 
+// check for eclass
 $eclass = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='eclass'");
-if ($eclass) {
-    if ($eclass->auth_default == 1) {
-        $active_login_types ++;
-    } 
+if ($eclass and $eclass->auth_default == 1) {
+    $active_login_types++;
 }
 // check for shibboleth
 $shibactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='shibboleth'");
-if ($shibactive) {
-    if ($shibactive->auth_default == 1) {
-        $shibboleth_link = "<a class='btn btn-primary btn-block' href='{$urlServer}secure/index.php'>$langEnter</a><br />";
-        $active_login_types ++;
-    } 
+if ($shibactive and $shibactive->auth_default) {
+    $shibboleth_link = "<a class='btn btn-primary btn-block' href='{$urlServer}secure/index.php'>$langEnter</a><br />";
+    $active_login_types++;
 }
 // check for CAS
 $casactive = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='cas'");
-if ($casactive) {
-    if ($casactive->auth_default == 1) {
-        $cas_link = "<a class='btn btn-primary btn-block' href='{$urlServer}secure/cas.php'>$langEnter</a><br>";
-        $active_login_types ++;
-    }
+if ($casactive and $casactive->auth_default) {
+    $cas_link = "<a class='btn btn-primary btn-block' href='{$urlServer}secure/cas.php'>$langEnter</a><br>";
+    $active_login_types++;
 }
 /*// check for Social Networks
 $social_networks = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='social_networks'");
 if ($social_networks) {
     if ($social_networks->auth_default == 1) {
-        
+
     }
 }*/
 
-$columns = 12/$active_login_types;
+$columns = 12 / $active_login_types;
 
-$next = isset($_GET['next']) ?
-        ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>") :
-        '';
+$next = isset($_GET['next'])?
+    ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>"):
+    '';
 
 $pageName = $langUserLogin;
 $tool_content .= action_bar(array(
@@ -65,7 +59,7 @@ $tool_content .= "<div class='login-page'>
                                 <div class='panel-body'>
                                     <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
                                         $next
-                                        <div class='form-group'>       
+                                        <div class='form-group'>
                                             <div class='col-xs-12'>
                                                 <input class='form-control' name='uname' placeholder='$langUsername'>
                                             </div>
@@ -91,7 +85,7 @@ $tool_content .= "<div class='login-page'>
                             </div>
                         </div>
                     </div>";
-                
+
                 //  Login Type Seperator
                 if ($active_login_types >= 2) {
                     $tool_content .= "
@@ -104,7 +98,7 @@ $tool_content .= "<div class='login-page'>
                     </div>
                             ";
                 }
-                                                
+
                 //  Login with Cas
                 if (!empty($cas_link)) {
                 $tool_content .= "
@@ -117,7 +111,7 @@ $tool_content .= "<div class='login-page'>
                                         $langViaCAS
                                     </div>
                                     <div class='col-sm-offset-1 col-sm-5'>
-                                        $cas_link  
+                                        $cas_link
                                     </div>
                                 </div>
                             </div>
@@ -125,8 +119,8 @@ $tool_content .= "<div class='login-page'>
                     </div>
                         ";
                 }
-        
-                
+
+
                 if ($active_login_types >=3) {
                 $tool_content .= "
                     <div class='row margin-bottom-fat'>
@@ -138,7 +132,7 @@ $tool_content .= "<div class='login-page'>
                     </div>
                             ";
                 }
-                
+
                 //  Login with Sibboleth
                 if (!empty($shibboleth_link)) {
                 $tool_content .= "
@@ -151,7 +145,7 @@ $tool_content .= "<div class='login-page'>
                                         <p>$langShibboleth</p>
                                     </div>
                                     <div class='col-sm-offset-1 col-sm-5'>
-                                        $shibboleth_link  
+                                        $shibboleth_link
                                     </div>
                                 </div>
                             </div>
