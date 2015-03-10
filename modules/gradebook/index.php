@@ -87,6 +87,8 @@ if (isset($_POST['selectGradebook'])){
       //make the new active
       Database::get()->querySingle("UPDATE gradebook SET active = 1 WHERE id = ?d ", $gradebook->id);
     }
+    Session::Messages($langChangeGradebookSuccess, 'alert-success');
+    redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradeBooks=1");
 }    
     
 //add a new gradebook
@@ -106,8 +108,8 @@ if (isset($_POST['newGradebook']) && strlen($_POST['title'])){
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
                                         FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
     
-
-    
+    Session::Messages($langCreateGradebookSuccess, 'alert-success');
+    redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradeBooks=1");   
 }
 
 //gradebook_id for the course: check if there is an gradebook module for the course. If not insert it
@@ -147,9 +149,9 @@ if ($is_editor) {
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
-    if(isset($_GET['editUsers'])){
+    if(isset($_GET['editUsers']) || isset($_GET['gradeBooks'])){
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $pageName = $langConfig;
+        $pageName = isset($_GET['editUsers']) ? $langConfig : $langGradebookManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -217,24 +219,28 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
-                  'icon' => 'fa fa-cog ',
+                  'icon' => 'fa-cog ',
                   'level' => 'primary-label'),
             array('title' => $langUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
-                  'icon' => 'fa fa-users',
+                  'icon' => 'fa-users',
                   'level' => 'primary-label'),
+            array('title' => $langGradebooks,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradeBooks=1",
+                  'icon' => 'fa-list',
+                  'level' => 'primary-label'),            
             array('title' => $langGradebookAddActivity,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
-                  'icon' => 'fa fa-plus'),
+                  'icon' => 'fa-plus'),
             array('title' => "$langAdd $langInsertWork",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
-                  'icon' => 'fa fa-flask'),
+                  'icon' => 'fa-flask'),
             array('title' => "$langAdd $langInsertExercise",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
-                  'icon' => 'fa fa-edit'),
+                  'icon' => 'fa-edit'),
             array('title' => "$langAdd $langLearningPath1",
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1",
-                  'icon' => 'fa fa-ellipsis-h'),
+                  'icon' => 'fa-ellipsis-h'),
             ));
     }               
     $tool_content .= "</div></div>";
@@ -736,17 +742,16 @@ if ($is_editor) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <div class='form-group'>
-                            <label class='col-xs-12'>$langTitle</label></div>                            
-                                <div class='form-group'> 
-                                    <div class='col-xs-3'>
-                                        <input type='text' placeholder='$langTitle' name='title' value='$gradebook_title'/>
-                                    </div>
-                                </div>
-                                <div class='form-group'>
-                                    <div class='col-xs-12'>
-                                        <input class='btn btn-primary' type='submit' name='titleSubmit' value='".$langInsert."' />
-                                    </div>
-                                </div>
+                            <label class='col-xs-12'>$langTitle</label>                           
+                            <div class='col-xs-12'>
+                                <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$gradebook_title'/>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='titleSubmit' value='".$langInsert."' />
+                            </div>                        
+                        </div>
                     </form>
                 </div>
             </div>
@@ -825,6 +830,10 @@ if ($is_editor) {
             </div>
         </div>";
                             
+        
+        //do not show activities list
+        $showGradebookActivities = 0;
+    } elseif (isset($_GET['gradeBooks'])) {
         //===================================================
         //section to insert new gradebook and select another
         //===================================================
@@ -834,13 +843,46 @@ if ($is_editor) {
         $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
+                <div class='form-wrapper'>    
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langChangeGradebook<small class='help-block'>$langChangeGradebook2</small></label>                            
+                            <div class='col-xs-12'>
+                                <select class='form-control' name='gradebookYear'>";
+                                if ($result){
+                                    foreach ($result as $year){
+                                        if($year->title == ""){
+                                            $title = $langGradebookNoTitle2;
+                                        }else{
+                                            $title = $year->title;
+                                        }
+                                        $tool_content .= "<option value='$year->id'";
+                                                    if ($gradebook_id == $year->id) {
+                                                      $tool_content .= " selected";
+                                                    } 
+                                                    $tool_content .= ">$title</option>";
+                                    }
+                                }
+                                              
+        
+                 $tool_content .="
+                                </select>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='selectGradebook' value='".$langSelect."' />
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                         <div class='form-group'>
                             <label class='col-xs-12'>$langNewGradebook<small class='help-block'>$langNewGradebook2</small></label></div>                            
                                 <div class='form-group'> 
-                                    <div class='col-xs-3'>
-                                        <input type='text' placeholder='$langTitle' name='title'/>
+                                    <div class='col-xs-12'>
+                                        <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
                                     </div>
                                 </div>
                                 <div class='form-group'>
@@ -849,45 +891,11 @@ if ($is_editor) {
                                     </div>
                                 </div>
                     </form>
-                    
-                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                        <div class='form-group'>
-                            <label class='col-xs-12'>$langChangeGradebook<small class='help-block'>$langChangeGradebook2</small></label></div>                            
-                                <div class='form-group'>";
-                                
-                                if ($result){
-                                    foreach ($result as $year){
-                                        if($year->title == ""){
-                                            $title = $langGradebookNoTitle2;
-                                        }else{
-                                            $title = $year->title;
-                                        }
-                                        $tool_content .= "<div><input type='radio' name='gradebookYear' value='$year->id'";
-                                                    if ($gradebook_id == $year->id) {
-                                                      $tool_content .= " checked";
-                                                    } 
-                                                    $tool_content .= "/>$title</div>";
-                                    }
-                                }
-                                              
-        
-                 $tool_content .="</div>
-                                <div class='form-group'>
-                                    <div class='col-xs-12'>
-                                        <input class='btn btn-primary' type='submit' name='selectGradebook' value='".$langSelect."' />
-                                    </div>
-                                </div>
-                    </form>
-                    
-                </div>
+                </div>                
             </div>
         </div>";
-        
-        //do not show activities list
         $showGradebookActivities = 0;
-    }
-
-    elseif (isset($_GET['addActivityAs'])) {
+    } elseif (isset($_GET['addActivityAs'])) {
         //Assignments
         $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d)", $course_id, $gradebook_id);
 
@@ -1199,17 +1207,18 @@ if ($is_editor) {
                 $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($announce->id, $gradebook_id) . "</td>";
                 $tool_content .= "<td class='option-btn-cell text-center'>".
                         action_button(array(
-                                    array('title' => $langDelete,
-                                        'icon' => 'fa-times',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
-                                        'confirm' => $langConfirmDelete,
-                                        'class' => 'delete'),
                                     array('title' => $langModify,
                                         'icon' => 'fa-edit',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"),
                                     array('title' => $langGradebookBook,
                                         'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"))).
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"),
+                                    array('title' => $langDelete,
+                                        'icon' => 'fa-times',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                        'confirm' => $langConfirmDelete,
+                                        'class' => 'delete')                            
+                            )).
                         "</td>";
             } // end of while
             $tool_content .= "</table></div></div></div>";       
