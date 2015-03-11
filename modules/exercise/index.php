@@ -281,11 +281,11 @@ if (!$nbrExercises) {
             $currentDate = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5, 2), substr($currentDate, 8, 2), substr($currentDate, 0, 4));
         
             if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
-                $tool_content .= "<td>".icon('fa-angle-double-right')." <a href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>";
+                $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>";
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
-                $tool_content .= "<td class='not_visible'>".icon('fa-angle-double-right')." " . q($row->title) . "&nbsp;&nbsp;";
+                $tool_content .= "<td class='not_visible'>" . q($row->title) . "&nbsp;&nbsp;";
             } else { // exercise has expired
-                $tool_content .= "<td>".icon('fa-angle-double-right')." " . q($row->title) . "&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
+                $tool_content .= "<td>" . q($row->title) . "&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
             }
             $tool_content .= "<br />" . $row->description . "</td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
