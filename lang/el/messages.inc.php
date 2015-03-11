@@ -707,9 +707,9 @@ $langWrongAuth = "Πληκτρολογήσατε λάθος όνομα χρήσ�
 $langExplainShib = "Πληκτρολογήστε τα ονόματα των μεταβλητών που επιστρέφει ο εξυπηρέτης Shibboleth. Οι μεταβλητές θα γραφτούν στο αρχείο <em>%ssecure/index.php</em>. Σημειώστε ότι, αν το Shibboleth Canonical Name περιλαμβάνει το ονοματεπώνυμο του χρήστη, τότε θα πρέπει να ορίσετε τον χαρακτήρα που χωρίζει το όνομα από το επώνυμο.";
 $langCharSeparator = "Χαρακτήρας χωρισμού";
 $langPrimaryAuthType = "Κύριος τρόπος πιστοποίησης";
-$langSecondaryAuthType = "Δευτερεύον τρόπος πιστοποίησης";
+$langSecondaryAuthType = "Δευτερεύων τρόπος πιστοποίησης";
 $langPrimaryAuthTypeChanged = "Ο τρόπος πιστοποίησης έγινε κύριος.";
-$langSecondaryAuthTypeChanged = "Ο τρόπος πιστοποίησης έγινε δευτερεύον.";
+$langSecondaryAuthTypeChanged = "Ο τρόπος πιστοποίησης έγινε δευτερεύων.";
 
 /* * **********************************************************
  * auth_change.php

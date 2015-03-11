@@ -288,8 +288,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LOGGED_IN', 'true');
     } else {
         if (!get_config('dont_display_login_form')) {
+            $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+            if (preg_match('@(?:^/(?:modules|courses)|listfaculte|opencourses|openfaculties)@', $next)) {
+                $nextParam = '?next=' . urlencode($next);
+            } else {
+                $nextParam = '';
+            }
             $t->set_var('LANG_LOGOUT', $langLogin);
-            $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php');
+            $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php' . $nextParam);
         } else {
             $t->set_var('LOGOUT_LINK', '#');
         }
