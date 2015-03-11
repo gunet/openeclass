@@ -9,12 +9,13 @@ if (isset($_SESSION['uid'])) {
 
 $warning = '';
 $login_user = FALSE;
-$eclass = $shibboleth_link = $cas_link = "";
+$eclass_link = $shibboleth_link = $cas_link = "";
 $active_login_types = 0;
 
 // check for eclass
 $eclass = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name='eclass'");
 if ($eclass and $eclass->auth_default == 1) {
+    $eclass_link = 1;
     $active_login_types++;
 }
 // check for shibboleth
@@ -54,10 +55,9 @@ $tool_content .= action_bar(array(
 $tool_content .= "<div class='login-page'>
                     <div class='row'>
                     ";
-print_r($eclass);
-                if (!empty($eclass)) {
+                if (!empty($eclass_link)) {
                     $tool_content .= "
-                        <div class='col-sm-$columns'>
+                        <div class='col-sm-$columns login-page-option'>
                             <div class='panel panel-default '>
                                 <div class='panel-heading'><span>$langUserLogin</span></div>
                                 <div class='panel-body'>
@@ -91,14 +91,14 @@ print_r($eclass);
                         ";
                 }
 
-
+                
                 //  Login with Cas
                 if (!empty($cas_link)) {
                 $tool_content .= "
                         <div class='col-sm-$columns'>
                             <div class='panel panel-default '>
                                 <div class='panel-heading'><span>$langAlternateLogin</span></div>
-                                <div class='panel-body'>
+                                <div class='panel-body login-page-option'>
                                     <div class='col-sm-6'>
                                         <p>$langViaCAS</p>
                                     </div>
@@ -117,7 +117,7 @@ print_r($eclass);
                         <div class='col-sm-$columns'>
                             <div class='panel panel-default '>
                                 <div class='panel-heading'><span>$langAlternateLogin</span></div>
-                                <div class='panel-body'>
+                                <div class='panel-body login-page-option'>
                                     <div class='col-sm-6'>
                                         <p>$langShibboleth</p>
                                     </div>

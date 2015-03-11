@@ -3200,18 +3200,34 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover {
   background: #e05454;
 }
 
-/* line 2850, ../SASS/inventory.scss */
+/* line 2848, ../SASS/inventory.scss */
+#main-content .login-page .panel {
+  margin-bottom: 0px !important;
+}
+/* line 2851, ../SASS/inventory.scss */
+#main-content .login-page .login-page-option {
+  min-height: 200px;
+}
+/* line 2854, ../SASS/inventory.scss */
 #main-content .login-page .form-group input {
   border-top: none;
   border-right: none;
   border-left: none;
   box-shadow: none;
 }
-/* line 2857, ../SASS/inventory.scss */
+/* line 2861, ../SASS/inventory.scss */
 #main-content .login-page .btn-block a {
   line-height: 40px;
 }
-/* line 2861, ../SASS/inventory.scss */
+/* line 2865, ../SASS/inventory.scss */
 #main-content .login-page .or-separator span:before, #main-content .login-page .or-separator span:after {
   background-color: #fafafa;
+}
+/* line 2868, ../SASS/inventory.scss */
+#main-content .login-page .row > .col-sm-6:first-child {
+  border-right: 1px solid #ddd !important;
+}
+/* line 2871, ../SASS/inventory.scss */
+#main-content .login-page .row > .col-sm-4:first-child, #main-content .login-page .row > .col-sm-4:nth-last-child(2) {
+  border-right: 1px solid #ddd !important;
 }

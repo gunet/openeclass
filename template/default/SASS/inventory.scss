@@ -2846,6 +2846,10 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
 // Login Page
 #main-content .login-page{
     .panel{
+        margin-bottom: 0px !important;
+    }
+    .login-page-option{
+        min-height: 200px;
     }
     .form-group input{
         border-top: none;
@@ -2860,5 +2864,11 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
     }
     .or-separator span:before, .or-separator span:after{
         background-color: #fafafa;
+    }
+    .row>.col-sm-6:first-child{
+        border-right: 1px solid #ddd !important;
+    }
+    .row>.col-sm-4:first-child, .row>.col-sm-4:nth-last-child(2){
+        border-right: 1px solid #ddd !important;
     }
 }
