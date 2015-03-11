@@ -399,7 +399,7 @@ if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
           <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
           <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
           <input type='hidden' name='cmd' value='createLabel' />
-          <input class='btn btn-primary' type='submit' value='" . $langCreate . "' />
+          <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
         </form>
       </td>
     </tr>";
@@ -595,11 +595,6 @@ foreach ($flatElementList as $module) {
                 array('title' => $langModify, // Modify command / go to other page
                     'url' => "module.php?course=$course_code&amp;module_id=" . $module['module_id'],
                     'icon' => 'fa-edit'),
-                array('title' => $langRemove, // DELETE ROW. In case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
-                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'],
-                    'class' => 'delete',
-                    'confirm' => $del_conf_text + " " + $module['name'],
-                    'icon' => 'fa-times'),
                 // VISIBILITY
                 array('title' => $langVisible,
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=" . $module['module_id'],
@@ -615,6 +610,11 @@ foreach ($flatElementList as $module) {
                 array('title' => $langMove, // DISPLAY CATEGORY MOVE COMMAND
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'],
                     'icon' => 'fa-mail-forward'),
+                array('title' => $langDelete, // DELETE ROW. In case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
+                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'],
+                    'class' => 'delete',
+                    'confirm' => $del_conf_text + " " + $module['name'],
+                    'icon' => 'fa-times'),
                 array('title' => $langUp, // DISPLAY MOVE UP COMMAND only if it is not the top learning path
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'],
                     'level' => 'primary',
