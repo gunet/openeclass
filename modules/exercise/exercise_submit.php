@@ -297,7 +297,7 @@ if (isset($_POST['formSent'])) {
         if (isset($time_expired) && $time_expired) {
             Session::Messages($langExerciseExpiredTime);
         } else {
-            Session::Messages($langExerciseCompleted);
+            Session::Messages($langExerciseCompleted, 'alert-success');
         }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }

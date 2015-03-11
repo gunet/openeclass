@@ -99,10 +99,12 @@ class Session {
     }    
     //Sets automatically generated on next request messages
     public static function Messages($messages, $class='alert-warning'){
-        if ( !is_array($messages)) $messages = array($class => array($messages));
-        foreach ($messages as $i => $message) {           
+        if(!is_array($messages)) $messages = array($messages);
+        
+        foreach ($messages as $i => $message) {
             $_SESSION['messages'][$class][$i] = $message;
         }
+   
         if(!isset($_SESSION['flash_new'])) $_SESSION['flash_new'] = array();
         array_push($_SESSION['flash_new'], 'messages');
         return new self;
