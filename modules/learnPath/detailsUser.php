@@ -58,7 +58,6 @@ $toolName = $langTrackUser;
 // user info can not be empty, return to the list of details
 if (empty($_REQUEST['uInfo'])) {
     header("Location: ./detailsAll.php?course=$course_code");
-    exit();
 }
 
 // check if user is in this course
@@ -69,7 +68,7 @@ $rescnt = Database::get()->querySingle("SELECT COUNT(*) AS count
             AND `u`.`id` = ?d", $course_id, $_REQUEST['uInfo'])->count;
 
 
-$pageName = $_GET['uName'];
+
 
 if ($rescnt == 0) {
     header("Location: ./detailsAll.php?course=$course_code");
