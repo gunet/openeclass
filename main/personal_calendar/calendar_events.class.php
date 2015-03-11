@@ -45,8 +45,8 @@ class Calendar_Events {
     /** @staticvar array of urls to form links from events in calendar
     */
     private static $event_type_url = array(
-            'personal' => 'main/personal_calendar/?modify=thisid',
-            'admin' => 'main/personal_calendar/?admin=1&modify=thisid',
+            'personal' => 'main/personal_calendar/?id=thisid',
+            'admin' => 'main/personal_calendar/?admin=1&id=thisid',
             'assignment' => 'modules/work/index.php?id=thisid&course=thiscourse',
             'exercise' => 'modules/exercise/exercise_submit.php?course=thiscourse&exerciseId=thisid',
             'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
@@ -97,12 +97,8 @@ class Calendar_Events {
      * @return array event tuple
      */
     public static function get_admin_event($eventid) {
-        global $is_admin;
-        if ($is_admin) {
-            return Database::get()->querySingle("SELECT * FROM admin_calendar WHERE id = ?d", $eventid);
-        } else {
-            return null;
-        }
+        
+        return Database::get()->querySingle("SELECT * FROM admin_calendar WHERE id = ?d", $eventid);        
 
     }
 
@@ -496,7 +492,7 @@ class Calendar_Events {
         if ($eventtype == 'personal' && !$event = Calendar_Events::get_event($eventid)) {
             return array('success' => false, 'message' => $langNotAllowed);
         }
-        if ($eventtype == 'admin' && (!is_admin || !$event = Calendar_Events::get_admin_event($eventid))) {
+        if ($eventtype == 'admin' && (!$is_admin || !$event = Calendar_Events::get_admin_event($eventid))) {
             return array('success' => false, 'message' => $langNotAllowed);
         }
         $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';

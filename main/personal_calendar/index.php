@@ -177,10 +177,10 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
 }
 
 /* edit */
-if (isset($_GET['modify'])) {
+if (isset($_GET['modify'])) {    
     $modify = intval($_GET['modify']);
     $displayForm = false;
-    if (isset($_GET['admin']) && $_GET['admin'] == 1) {
+    if (isset($_GET['admin']) and $is_admin) {
         $event = Calendar_Events::get_admin_event($modify);
         if ($event) {
             $eventToModify = $event->id;
@@ -194,7 +194,7 @@ if (isset($_GET['modify'])) {
             $displayForm = true;
         }
     } else {
-        $event = Calendar_Events::get_event($modify);
+        $event = Calendar_Events::get_event($modify);        
         if ($event) {
             $eventToModify = $event->id;
             $contentToModify = $event->content;
@@ -213,7 +213,7 @@ if (isset($_GET['modify'])) {
 }
 
 /* display form */
-if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) { 
+if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['addAdminEvent'])) or isset($_GET['modify']))) { 
     if (isset($_GET['modify'])) {
         $pageName = $langModifEvent;
     } else {
@@ -274,30 +274,29 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
           </div>
         </div>";
         if (!isset($_GET['modify'])) {
-        $tool_content .= "
-        <div class='form-group'>
-          <label for='frequencynumber' class='col-sm-2 control-label'>$langRepeat $langEvery:</label>
-          <div class='col-sm-2'>
-                <select class='form-control' name='frequencynumber' id='frequencynumber'>
-                    <option value='0'>$langSelectFromMenu</option>";
-            for ($i = 1; $i < 10; $i++) {
-                $tool_content .= "<option value=\"$i\">$i</option>";
-            }
-            $tool_content .= "</select>
-          </div>
-          <div class='col-sm-2'>
-                <select class='form-control' name='frequencyperiod'>
-                    <option value=''>$langSelectFromMenu...</option>
-                    <option value='D'>$langDays</option>
-                    <option value='W'>$langWeeks</option>
-                    <option value='M'>$langMonthsAbstract</option>
-                </select>
-          </div>
-          <label for='enddate' class='col-sm-2 control-label'>$langUntil:</label>
-          <div class='col-sm-2'>
-               <input class='form-control' type='text' name='enddate' id='enddate' value=''>
-          </div>          
-        </div>";
+            $tool_content .= "
+            <div class='form-group'>
+              <label for='frequencynumber' class='col-sm-2 control-label'>$langRepeat $langEvery:</label>
+              <div class='col-sm-2'>
+                    <select class='form-control' name='frequencynumber' id='frequencynumber'>
+                        <option value='0'>$langSelectFromMenu</option>";
+                for ($i = 1; $i < 10; $i++) {
+                    $tool_content .= "<option value=\"$i\">$i</option>";
+                }
+                $tool_content .= "</select></div>
+                <div class='col-sm-2'>
+                      <select class='form-control' name='frequencyperiod'>
+                        <option value=''>$langSelectFromMenu...</option>
+                        <option value='D'>$langDays</option>
+                        <option value='W'>$langWeeks</option>
+                        <option value='M'>$langMonthsAbstract</option>
+                    </select>
+              </div>
+              <label for='enddate' class='col-sm-2 control-label'>$langUntil:</label>
+              <div class='col-sm-2'>
+                   <input class='form-control' type='text' name='enddate' id='enddate' value=''>
+              </div>
+            </div>";
         }
         if (!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])) {
             $eventtype = 'personal';
@@ -328,20 +327,15 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
             </div>";            
         }
         $tool_content .= "
-        <div class='form-group'>
-          <div class='col-sm-10 col-sm-offset-2'>
-               <input class='btn btn-primary' type='submit' name='submitEvent' value='$langSubmit'>
-               <a class='btn btn-default' href='index.php'>$langCancel</a>
-          </div>
-        </div>            
-    </form>
-</div>";
-    if(isset($_GET['modify'])) {  
-        $tool_content .= "<form method='POST' action='$_SERVER[SCRIPT_NAME]?delete=$eventToModify&et=$eventtype' accept-charset='UTF-8' style='display:inline'>
-                            <button class='btn btn-danger' data-toggle='modal' data-target='#confirmAction' data-title='$langConfirmDelete' data-message='$langDelEventConfirm' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</button>
-                        </form>";
-    }
-} else {    
+            <div class='form-group'>
+              <div class='col-sm-10 col-sm-offset-2'>
+                   <input class='btn btn-primary' type='submit' name='submitEvent' value='$langSubmit'>
+                   <a class='btn btn-default' href='index.php'>$langCancel</a>
+              </div>
+            </div>            
+            </form>
+        </div>";    
+} else {
     /* display actions toolbar */
     $tool_content .= 
                 action_bar(array(
@@ -362,69 +356,81 @@ if ($displayForm and ( isset($_GET['addEvent']) or ( $is_admin && isset($_GET['a
                         'level' => 'primary'),
                 ));
 
-/* display events */
-$day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
-$month = (isset($_GET['month'])) ? intval($_GET['month']) : null;
-$year = (isset($_GET['year'])) ? intval($_GET['year']) : null;
-$tool_content .= '<div id="calendar_wrapper" class="row">
-                <div class="col-md-12">
-                    <div class="row calendar-header">
+    if (isset($_GET['id'])) {
+        require_once 'modules/agenda/course_calendar.inc.php';
+        $id = intval($_GET['id']);
+        if (isset($_GET['admin'])) {
+            $personal_event = array('0' => Calendar_Events::get_admin_event($id));
+            $tool_content .= event_list($personal_event, 'ASC', 'admin');
+        } else {
+            $personal_event = array('0' => Calendar_Events::get_event($id));
+            $tool_content .= event_list($personal_event, 'ASC', 'personal');
+        }
+        
+    } else {
+        /* display events */
+        $day = (isset($_GET['day'])) ? intval($_GET['day']) : null;
+        $month = (isset($_GET['month'])) ? intval($_GET['month']) : null;
+        $year = (isset($_GET['year'])) ? intval($_GET['year']) : null;
+        $tool_content .= '<div id="calendar_wrapper" class="row">
                     <div class="col-md-12">
-                    <div id="calendar-header">
-                        <div class="pull-right form-inline">
-                            <div class="btn-group">
-                                    <button class="btn btn-default btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
-                                    <button class="btn btn-default btn-sm" data-calendar-nav="today">' . $langToday . '</button>
-                                    <button class="btn btn-default btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
+                        <div class="row calendar-header">
+                        <div class="col-md-12">
+                        <div id="calendar-header">
+                            <div class="pull-right form-inline">
+                                <div class="btn-group">
+                                        <button class="btn btn-default btn-sm" data-calendar-nav="prev"><i class="fa fa-caret-left"></i>  ' . '' . '</button>
+                                        <button class="btn btn-default btn-sm" data-calendar-nav="today">' . $langToday . '</button>
+                                        <button class="btn btn-default btn-sm" data-calendar-nav="next">' . '' . ' <i class="fa fa-caret-right"></i> </button>
+                                </div>
+                                <div class="btn-group">
+                                        <button class="btn btn-default btn-sm" data-calendar-view="year">' . $langYear . '</button>
+                                        <button class="btn btn-default btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
+                                        <button class="btn btn-default btn-sm" data-calendar-view="week">' . $langWeek . '</button>
+                                        <button class="btn btn-default btn-sm" data-calendar-view="day">' . $langDay . '</button>
+                                </div>
                             </div>
-                            <div class="btn-group">
-                                    <button class="btn btn-default btn-sm" data-calendar-view="year">' . $langYear . '</button>
-                                    <button class="btn btn-default btn-sm active" data-calendar-view="month">' . $langMonth . '</button>
-                                    <button class="btn btn-default btn-sm" data-calendar-view="week">' . $langWeek . '</button>
-                                    <button class="btn btn-default btn-sm" data-calendar-view="day">' . $langDay . '</button>
+                            <h4></h4>
                             </div>
-                        </div>
-                        <h4></h4>
-                        </div>
-                        </div>
-                    </div>'
-            . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'
-            . '</div></div>' .
-            "<script type='text/javascript'>" .
-            '$(document).ready(function(){
+                            </div>
+                        </div>'
+                . '<div class="row"><div id="bootstrapcalendar" class="col-md-12"></div></div>'
+                . '</div></div>' .
+                "<script type='text/javascript'>" .
+                '$(document).ready(function(){
 
-    var calendar = $("#bootstrapcalendar").calendar(
-            {
-                tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
-                events_source: "' . $urlAppend . 'main/calendar_data.php",
-                language: "el-GR",
-                onAfterViewLoad: function(view) {
-                            $(".calendar-header h4").text(this.getTitle());
-                            $(".btn-group button").removeClass("active");
-                            $("button[data-calendar-view=\'" + view + "\']").addClass("active");
-                            $("button[data-calendar-nav=\'today\']").text(this.getTitle());
-                            }
-            }
-        );
+        var calendar = $("#bootstrapcalendar").calendar(
+                {
+                    tmpl_path: "' . $urlAppend . 'js/bootstrap-calendar-master/tmpls/",
+                    events_source: "' . $urlAppend . 'main/calendar_data.php",
+                    language: "el-GR",
+                    onAfterViewLoad: function(view) {
+                                $(".calendar-header h4").text(this.getTitle());
+                                $(".btn-group button").removeClass("active");
+                                $("button[data-calendar-view=\'" + view + "\']").addClass("active");
+                                $("button[data-calendar-nav=\'today\']").text(this.getTitle());
+                                }
+                }
+            );
 
-    $(".btn-group button[data-calendar-nav]").each(function() {
-        var $this = $(this);
-        $this.click(function() {
-            calendar.navigate($this.data("calendar-nav"));
+        $(".btn-group button[data-calendar-nav]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.navigate($this.data("calendar-nav"));
+            });
         });
-    });
 
-    $(".btn-group button[data-calendar-view]").each(function() {
-        var $this = $(this);
-        $this.click(function() {
-            calendar.view($this.data("calendar-view"));
+        $(".btn-group button[data-calendar-view]").each(function() {
+            var $this = $(this);
+            $this.click(function() {
+                calendar.view($this.data("calendar-view"));
+            });
+        });    
         });
-    });    
-    });
 
-    </script>';
+        </script>';
+    }
 }
-
 add_units_navigation(TRUE);
 
 draw($tool_content, 1, null, $head_content);

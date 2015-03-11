@@ -546,17 +546,16 @@ require_once 'include/lib/references.class.php';
      * @param type $sens
      * @return string
      */
-    function event_list($events, $sens){
-        global $course_code, $is_editor, $langEvents, $langCalendar, $langDateNow, $dateFormatLong, 
+    function event_list($events, $sens, $type = '') {
+        global $course_code, $is_editor, $langDateNow, $dateFormatLong, 
                 $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, 
                 $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, 
-                $langModify, $langVisible, $id;
+                $langModify, $langVisible, $id, $is_admin;
         
         $dateNow = date("j-n-Y / H:i", time());
         $barMonth = '';
         $nowBarShowed = false;
         $eventlist = "<div class='table-responsive'><table class='table-default'>";
-
         foreach ($events as $myrow) {
             $content = standard_text_escape($myrow->content);
             $d = strtotime($myrow->start);
@@ -592,7 +591,7 @@ require_once 'include/lib/references.class.php';
                 }
             }
             $eventlist .= "<tr $classvis>";
-            if ($is_editor) {
+            if ($is_editor or $type == 'personal' or ($is_admin and $type == 'admin')) {
                 $eventlist .= "<td style='padding:15px;'>";
             } else {
                 $eventlist .= "<td style='padding:15px;' colspan='2'>";
@@ -642,7 +641,33 @@ require_once 'include/lib/references.class.php';
                              'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
                              'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye')
                    ));
-              $eventlist .= "</td>";                                 
+              $eventlist .= "</td>";              
+           } elseif ($type == 'personal') { // personal event
+               $eventlist .= "<td class='option-btn-cell'>";
+               $eventlist .= action_button(array(
+                       array('title' => $langDelete,
+                             'url' => "?delete=$myrow->id&et=personal",
+                             'icon' => 'fa-times',
+                             'class' => 'delete',
+                             'confirm' => $langConfirmDeleteEvent),                       
+                       array('title' => $langModify,
+                             'url' => "?modify=$myrow->id",
+                             'icon' => 'fa-edit'),                       
+                   ));
+              $eventlist .= "</td>";
+           } elseif ($type == 'admin' and $is_admin == true) {
+               $eventlist .= "<td class='option-btn-cell'>";
+               $eventlist .= action_button(array(
+                       array('title' => $langDelete,
+                             'url' => "?delete=$myrow->id&et=admin",
+                             'icon' => 'fa-times',
+                             'class' => 'delete',
+                             'confirm' => $langConfirmDeleteEvent),                       
+                       array('title' => $langModify,
+                             'url' => "?admin=1&amp;modify=$myrow->id",
+                             'icon' => 'fa-edit'),                       
+                   ));
+              $eventlist .= "</td>";
            }
            $eventlist .= "</tr>";
        }
