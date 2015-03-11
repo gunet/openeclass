@@ -99,26 +99,23 @@ function getToolsArray($cat) {
     switch ($cat) {
         case 'Public':
             $sql = "SELECT * FROM course_module
-                                        WHERE visible = 1 AND
-                                        course_id = $cid AND
-                                        module_id NOT IN (" . MODULE_ID_CHAT . ",
-                                                          " . MODULE_ID_ASSIGN . ",
-                                                          " . MODULE_ID_DROPBOX . ",
-                                                          " . MODULE_ID_QUESTIONNAIRE . ",
-                                                          " . MODULE_ID_FORUM . ",
-                                                          " . MODULE_ID_GROUPS . ",
-                                                          " . MODULE_ID_WIKI . ",
-                                                          " . MODULE_ID_ATTENDANCE . ",
-                                                          " . MODULE_ID_GRADEBOOK . ",                                                          
-                                                          " . MODULE_ID_LP . ")
-
-                                        ORDER BY module_id";
+                        WHERE visible = 1 AND
+                        course_id = $cid AND
+                        module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                          " . MODULE_ID_ASSIGN . ",
+                                          " . MODULE_ID_DROPBOX . ",
+                                          " . MODULE_ID_QUESTIONNAIRE . ",
+                                          " . MODULE_ID_FORUM . ",
+                                          " . MODULE_ID_GROUPS . ",
+                                          " . MODULE_ID_WIKI . ",
+                                          " . MODULE_ID_ATTENDANCE . ",
+                                          " . MODULE_ID_GRADEBOOK . ",
+                                          " . MODULE_ID_LP . ")";
             if (!check_guest()) {
                 if (isset($_SESSION['uid']) and $_SESSION['uid']) {
                     $result = Database::get()->queryArray("SELECT * FROM course_module
                                                         WHERE visible = 1 AND
-                                                        course_id = ?d
-                                                        ORDER BY module_id", $cid);
+                                                        course_id = ?d", $cid);
                 } else {
                     $result = Database::get()->queryArray($sql);
                 }
@@ -129,8 +126,7 @@ function getToolsArray($cat) {
         case 'PublicButHide':
             $result = Database::get()->queryArray("SELECT * FROM course_module
                                          WHERE visible = 0 AND
-                                         course_id = ?d
-                                         ORDER BY module_id", $cid);
+                                         course_id = ?d", $cid);
             break;
     }
     return $result;
@@ -272,11 +268,11 @@ function loggedInMenu() {
     array_push($sideMenuText, $GLOBALS['langMyPersoLessons']);
     array_push($sideMenuLink, $urlServer . "main/my_courses.php");
     array_push($sideMenuImg, "fa-graduation-cap");
-    
+
     array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
     array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
     array_push($sideMenuImg, "fa-bullhorn");
-    
+
     array_push($sideMenuText, $GLOBALS['langMyAgenda']);
     array_push($sideMenuLink, $urlServer . "main/personal_calendar/index.php");
     array_push($sideMenuImg, "fa-calendar");
@@ -335,13 +331,13 @@ function loggedOutMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'text';
     $arrMenuType['text'] = $GLOBALS['langBasicOptions'];
-    $arrMenuType['class'] = 'basic';    
+    $arrMenuType['class'] = 'basic';
     array_push($sideMenuSubGroup, $arrMenuType);
-    
+
     array_push($sideMenuText, $GLOBALS['langListCourses']);
     array_push($sideMenuLink, $urlServer . "modules/auth/listfaculte.php");
     array_push($sideMenuImg, "fa-graduation-cap");
-    
+
     if (get_config('user_registration')) {
         array_push($sideMenuText, $GLOBALS['langNewUser']);
         array_push($sideMenuLink, $urlServer . "modules/auth/registration.php");
@@ -350,11 +346,11 @@ function loggedOutMenu() {
     array_push($sideMenuText, $GLOBALS['langManuals']);
     array_push($sideMenuLink, $urlServer . "info/manual.php");
     array_push($sideMenuImg, "fa-file-video-o");
-    
+
     array_push($sideMenuText, $GLOBALS['langPlatformIdentity']);
     array_push($sideMenuLink, $urlServer . "info/about.php");
     array_push($sideMenuImg, "fa-credit-card");
-    
+
     array_push($sideMenuText, $GLOBALS['langContact']);
     array_push($sideMenuLink, $urlServer . "info/contact.php");
     array_push($sideMenuImg, "fa-phone");
@@ -636,6 +632,12 @@ function lessonToolsMenu() {
                              'text' => $section['title'],
                              'class' => $section['class']);
         array_push($sideMenuSubGroup, $arrMenuType);
+
+        setlocale(LC_COLLATE, $GLOBALS['langLocale']);
+        usort($result, function ($a, $b) {
+            global $modules;
+            return strcoll($modules[$a->module_id]['title'], $modules[$b->module_id]['title']);
+        });
 
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;

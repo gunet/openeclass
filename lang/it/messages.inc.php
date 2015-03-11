@@ -3,6 +3,7 @@
 // Message file for language it
 // Generated 2015-02-19 15:55:43
 
+$langLocale = 'it_IT.UTF-8';
 $langCourse = "Corso";
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Versione";

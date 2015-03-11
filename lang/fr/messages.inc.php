@@ -3,6 +3,7 @@
 // Message file for language fr
 // Generated 2015-02-19 15:55:42
 
+$langLocale = 'fr_FR.UTF-8';
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "Version";

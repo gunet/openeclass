@@ -3,6 +3,7 @@
 // Message file for language de
 // Generated 2015-02-19 15:55:41
 
+$langLocale = 'de_DE.UTF-8';
 $langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName Version";
