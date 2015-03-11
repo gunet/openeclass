@@ -73,6 +73,12 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
     statistics_tools($course_code, "detailsAll", "../usage/");
 }
 
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "index.php",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')),false); 
+
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
 if ($lcnt == 0) {
@@ -88,8 +94,9 @@ if ($lcnt == 0) {
 
 // display tab header
 $tool_content .= "
+  <div class='table-responsive'>
   <table class='table-default'>
-  <tr>
+  <tr class='list-header'>
     <th class='left'><div align='left'>$langStudent</div></th>
     <th width='120'>$langAm</th>
     <th>$langGroup</th>
@@ -117,7 +124,7 @@ foreach ($usersList as $user) {
     }
     $total = round($globalprog / ($iterator - 1));
     $tool_content .= 
-            '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>'
+            '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '&amp;uName=' . $user->givenname . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>'
             . '    <td class="center">' . q(uid_to_am($user->id)) . '</td>'
             . '    <td align="center">' . user_groups($course_id, $user->id) . '</td>'
             . '    <td class="right" width=\'120\'>'
@@ -128,6 +135,6 @@ foreach ($usersList as $user) {
     $k++;
 }
 // foot of table
-$tool_content .= '</table>';
+$tool_content .= '</table></div>';
 
 draw($tool_content, 2, null, $head_content);
