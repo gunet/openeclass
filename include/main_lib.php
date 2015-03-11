@@ -410,7 +410,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
             $groups .= ((count($q) > 1) ? '<li>' : '') .
                     "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r->id' title='" .
                     q($r->name) . "'>" .
-                    q(ellipsize($r->name, 20)) . "</a>" .
+                    q(ellipsize($r->name, 40)) . "</a>" .
                     ((count($q) > 1) ? '</li>' : '');
         } else {
             $groups .= (empty($groups) ? '' : ', ') . $r->name;
@@ -418,7 +418,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
     }
     if ($format == 'html') {
         if (count($q) > 1) {
-            return "<ol>$groups</ol>";
+            return "<ul class='list-unstyled'>$groups</ul>";
         } else {
             return "<div style='padding-left: 15px'>$groups</div>";
         }
