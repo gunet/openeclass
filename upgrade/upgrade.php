@@ -2580,6 +2580,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `poll` ADD `end_message` MEDIUMTEXT NULL DEFAULT NULL");
         }
 
+        Database::get()->query("ALTER TABLE `bbb_session` CHANGE `participants` `participants` VARCHAR(1000)");
         set_config('theme', 'default');
         set_config('theme_options_id', get_config('theme_options_id', 0));
 
