@@ -531,7 +531,7 @@ function submit_work($id, $on_behalf_of = null) {
 
 //  assignment - prof view only
 function new_assignment() {
-    global $tool_content, $m, $langAdd, $course_code, $course_id;
+    global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
     global $langBack, $langStudents, $langMove, $langWorkFile, $langTags;
     
