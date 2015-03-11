@@ -618,19 +618,16 @@ function new_assignment() {
                 " . rich_text_editor('desc', 4, 20, $desc) . "
                 </div>
             </div>
-            
-            <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
             <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+                <label for='tags' class='col-sm-2 control-panel'>$langTags:</label>
+                <div class='col-sm-10'>
+                    <input type='hidden' class='form-control' name='tags' id='tags' value=''>
                 </div>
             </div>
-
-
             <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
-                <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
-            </div>
+                <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
+                    <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
+                </div>
             </div>
             <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
@@ -911,18 +908,18 @@ function show_edit_assignment($id) {
             </div>";
     }
     
-    $tool_content .= "<div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
-            <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-                </div>
-            </div>";
-    
-    $tool_content .= "<div class='form-group'>
+    $tool_content .= "
+        <div class='form-group'>
+            <label for='tags' class='col-sm-2 control-panel'>$langTags:</label>
+            <div class='col-sm-10'>
+                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+            </div>
+        </div>
+        <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
                 <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
             </div>
-            </div>
+        </div>
             <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
