@@ -3307,6 +3307,7 @@ $langTill = "to";
 $langDelAllWorkSubs = "Delete all course assignments' submissions";
 $langPurgeExercise = "Delete Exercise";
 $langPurgeExerciseSuccess = "Exercise successfully deleted.";
+$langExerciseCompleted = "Exercise has been successfully completed.";
 $langConfirmPurgeExercise = "Exercise Delete Confirmation";
 $langPurgeExerciseResultsSuccess = "Exercise results were successfully deleted.";
 $langConfirmPurgeExerciseResults = "Execise results delete confirmation";

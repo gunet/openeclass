@@ -296,6 +296,8 @@ if (isset($_POST['formSent'])) {
         // if time expired set flashdata
         if (isset($time_expired) && $time_expired) {
             Session::Messages($langExerciseExpiredTime);
+        } else {
+            Session::Messages($langExerciseCompleted);
         }
         redirect_to_home_page('modules/exercise/exercise_result.php?course='.$course_code.'&eurId='.$eurid);
     }

@@ -896,6 +896,7 @@ $langDocsDeleted = "Τα έγγραφα απενεργοποιήθηκαν";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
 $langPurgeExercise = "Διαγραφή ασκήσης";
 $langPurgeExerciseSuccess = "Η Άσκηση διαγράφηκε.";
+$langExerciseCompleted = "Η Άσκηση ολοκληρώθηκε με επιτυχία.";
 $langConfirmPurgeExercise = "Επιβεβαίωση διαγραφής άσκησης";
 $langPurgeExerciseResults = "Διαγραφή αποτελεσμάτων άσκησης";
 $langPurgeExerciseResultsSuccess = "Τα αποτελέσματα της ασκήσης διαγράφηκαν";
