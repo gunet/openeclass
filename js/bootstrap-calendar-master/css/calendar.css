@@ -209,9 +209,9 @@
 }
 .cal-week-box [data-event-class] {
   white-space: nowrap;
-  height: 13px;
+  height: 30px;
   margin: 1px 1px;
-  line-height: 13px;
+  line-height: 30px;
   text-overflow: ellipsis;
   overflow: hidden;
   padding-left: 10px;
@@ -513,6 +513,7 @@ span[data-cal-date]:hover {
 a.cal-event-week {
   text-decoration: none;
   color: #151515;
+ 
 }
 .badge-important {
   background-color: #b94a48;
