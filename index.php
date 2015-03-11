@@ -151,7 +151,7 @@ if ($uid AND !isset($_GET['logout'])) {
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                            </form>
-                           <div class='text-center'>
+                           <div class='text-right'>
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
         }
@@ -179,14 +179,14 @@ if ($uid AND !isset($_GET['logout'])) {
         $tool_content .= "
                         <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                           <div class='wrapper-login-option'>";
-
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
                                 <div>" . ($l['showTitle']? "<span class='head-text'>$l[title]</span>": '') .
                                    $l['html'] . "
-                                </div>
-                                <div class='login-settings row'>
+                                </div>";
+                                if (count($i) >=1){
+                                $tool_content .= "<div class='login-settings row'>
                                   <div class='or-separator'><span>$langOr</span></div>
                                   <div class='alt_login text-center'>
                                     <span>";
@@ -197,8 +197,9 @@ if ($uid AND !isset($_GET['logout'])) {
             }
             $tool_content .= "      </span>
                                   </div>
-                                </div>
-                              </div>";
+                                </div>";
+                                }
+                              $tool_content .= "</div>";
         }
 
         $tool_content .= "

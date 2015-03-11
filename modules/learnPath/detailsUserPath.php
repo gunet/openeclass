@@ -124,8 +124,8 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 
 
 // -------------------- table header ----------------------------
-$tool_content .= '
-    <table width="99%" class="tbl_alt">' . "\n"
+$tool_content .= '<div class="table-responsive">
+    <table class="table-default">' . "\n"
         // ------------------- some user details --------------------------
         . '    <tr class="odd">' . "\n"
         . '      <td colspan="' . ($maxDeep + 1) . '" class="left"><small><b>' . $langLearnPath . '</b>:&nbsp;' . $LPname . '</small></td>' . "\n"
@@ -278,7 +278,7 @@ if ($moduleNb == 0) {
             . '      <td align="left"><small>&nbsp;' . round($globalProg / ($moduleNb)) . '%</small></td>' . "\n"
             . '    </tr>';
 }
-$tool_content .= "\n</table>\n";
+$tool_content .= "\n</table></div>\n";
 
 draw($tool_content, 2, null, $head_content);
 
