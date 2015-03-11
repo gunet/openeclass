@@ -179,13 +179,15 @@ if ($uid AND !isset($_GET['logout'])) {
         $tool_content .= "
                         <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                           <div class='wrapper-login-option'>";
+        
+        $show_seperator = count($authLink) >1? 1 : 0;
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
                                 <div>" . ($l['showTitle']? "<span class='head-text'>$l[title]</span>": '') .
                                    $l['html'] . "
                                 </div>";
-                                if (count($i) >=1){
+                                if ($show_seperator){
                                 $tool_content .= "<div class='login-settings row'>
                                   <div class='or-separator'><span>$langOr</span></div>
                                   <div class='alt_login text-center'>

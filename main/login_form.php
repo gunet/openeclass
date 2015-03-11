@@ -53,7 +53,11 @@ $tool_content .= action_bar(array(
                             ),false);
 $tool_content .= "<div class='login-page'>
                     <div class='row'>
-                        <div class='col-sm-offset-2 col-sm-8'>
+                    ";
+print_r($eclass);
+                if (!empty($eclass)) {
+                    $tool_content .= "
+                        <div class='col-sm-$columns'>
                             <div class='panel panel-default '>
                                 <div class='panel-heading'><span>$langUserLogin</span></div>
                                 <div class='panel-body'>
@@ -84,26 +88,14 @@ $tool_content .= "<div class='login-page'>
                 $tool_content .= "</div>
                             </div>
                         </div>
-                    </div>";
-
-                //  Login Type Seperator
-                if ($active_login_types >= 2) {
-                    $tool_content .= "
-                    <div class='row margin-bottom-fat'>
-                        <div class='col-xs-offset-3 col-xs-6'>
-                            <div class='or-separator' style='background-color: none;'>
-                                <span style='backround-color: #333;'>$langOr</span>
-                            </div>
-                        </div>
-                    </div>
-                            ";
+                        ";
                 }
+
 
                 //  Login with Cas
                 if (!empty($cas_link)) {
                 $tool_content .= "
-                    <div class='row'>
-                        <div class='col-sm-offset-2 col-sm-8'>
+                        <div class='col-sm-$columns'>
                             <div class='panel panel-default '>
                                 <div class='panel-heading'><span>$langAlternateLogin</span></div>
                                 <div class='panel-body'>
@@ -116,28 +108,13 @@ $tool_content .= "<div class='login-page'>
                                 </div>
                             </div>
                         </div>
-                    </div>
                         ";
-                }
-
-
-                if ($active_login_types >=3) {
-                $tool_content .= "
-                    <div class='row margin-bottom-fat'>
-                        <div class='col-xs-offset-3 col-xs-6'>
-                            <div class='or-separator' style='background-color: none;'>
-                                <span style='backround-color: #333;'>$langOr</span>
-                            </div>
-                        </div>
-                    </div>
-                            ";
                 }
 
                 //  Login with Sibboleth
                 if (!empty($shibboleth_link)) {
                 $tool_content .= "
-                    <div class='row'>
-                        <div class='col-sm-offset-2 col-sm-8'>
+                        <div class='col-sm-$columns'>
                             <div class='panel panel-default '>
                                 <div class='panel-heading'><span>$langAlternateLogin</span></div>
                                 <div class='panel-body'>
@@ -150,7 +127,6 @@ $tool_content .= "<div class='login-page'>
                                 </div>
                             </div>
                         </div>
-                    </div>
                         ";
                 }
          //  Login with Social Networks
@@ -166,6 +142,6 @@ $tool_content .= "<div class='login-page'>
             </div></div></div>
                 ";
         }*/
-        $tool_content .= "</div>";
+        $tool_content .= "</div></div>";
 
 draw($tool_content, 0);
