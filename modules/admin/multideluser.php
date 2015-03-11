@@ -44,7 +44,6 @@ if (isset($_POST['submit'])) {
         if (!empty($line)) {
             // fetch uid
             $u = usernameToUid($line);
-
             // for real uids not equal to admin
             if ($u !== false && $u > 1) {
                 // full deletion
@@ -55,6 +54,8 @@ if (isset($_POST['submit'])) {
                 } else {
                     $error_mgs[] = "$langErrorDelete: $line";
                 }
+            } else {
+                $error_mgs[] = "$langErrorDelete: $line";
             }
         }
         $line = strtok("\n");
