@@ -73,12 +73,12 @@ if (defined('COMMON_DOCUMENTS')) {
     $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
 } else {
     $type = ($subsystem == GROUP) ? 'group_quota' : 'doc_quota';
-    $d = Database::get()->querySingle("SELECT $type as quotatype FROM course WHERE id = ?d", $course_id);
+    $d = Database::get()->querySingle("SELECT $type AS quotatype FROM course WHERE id = ?d", $course_id);
     $diskQuotaDocument = $d->quotatype;
 }
 
 
-if (isset($_GET['showQuota'])) {    
+if (isset($_GET['showQuota'])) {
     if ($subsystem == GROUP) {
         $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => $langDoc);
     } elseif ($subsystem == EBOOK) {
@@ -114,7 +114,7 @@ if (isset($_GET['download'])) {
         $visible = $q->visible;
         $extra_path = $q->extra_path;
         $public = $q->public;
-        if (!(resource_access($visible, $public) or (isset($status) and $status == USER_TEACHER))) {        
+        if (!(resource_access($visible, $public) or (isset($status) and $status == USER_TEACHER))) {
             not_found($downloadDir);
         }
     }
@@ -427,7 +427,7 @@ if ($can_upload) {
     }
 
     // Delete file or directory
-    if (isset($_GET['delete']) and isset($_GET['filePath'])) {        
+    if (isset($_GET['delete']) and isset($_GET['filePath'])) {
         $filePath = $_GET['filePath'];
         $curDirPath = dirname($_GET['filePath']);
         // Check if file actually exists
@@ -498,12 +498,12 @@ if ($can_upload) {
                                              WHERE $group_sql AND
                                                    path = ?s", $_GET['rename'])->filename;
         $dialogBox .= "
-            
+
             <div id='rename_doc_file' class='row'>
                 <div class='col-xs-12'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                            <fieldset>                                
+                            <fieldset>
                                     <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
                                     $group_hidden_input
                                     <div class='form-group'>
@@ -547,8 +547,8 @@ if ($can_upload) {
     if (isset($_GET['createDir'])) {
         $createDir = q($_GET['createDir']);
         $dialogBox .= "
-        <div class='row'>        
-        <div class='col-md-12'>            
+        <div class='row'>
+        <div class='col-md-12'>
                 <div class='panel padding-thin focused'>
                     <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
                         $group_hidden_input
@@ -892,7 +892,7 @@ if ($can_upload) {
                         <div class='form-group'>
                             <label class='col-sm-2 control-label'>$langCopyrighted:</label>
                             <div class='col-sm-10'>"
-                                 .selection($copyright_titles, 'file_copyrighted', $oldCopyrighted, "class='form-control'") . 
+                                 .selection($copyright_titles, 'file_copyrighted', $oldCopyrighted, "class='form-control'") .
                             "</div>
                         </div>
                         <div class='form-group'>
@@ -911,7 +911,7 @@ if ($can_upload) {
                                 <input class='btn btn-primary' type='submit' value='$langOkComment'>
                             </div>
                         </div>
-                        <span class='help-block'>$langNotRequired</span>                       
+                        <span class='help-block'>$langNotRequired</span>
                         <input type='hidden' size='80' name='file_creator' value='$oldCreator'>
                         <input type='hidden' size='80' name='file_date' value='$oldDate'>
                         <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage'>
@@ -997,7 +997,7 @@ if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDi
     exit;
 }
 
-$order = 'ORDER BY filename';
+$order = 'ORDER BY sort_key COLLATE utf8_unicode_ci';
 $sort = 'name';
 $reverse = false;
 if (isset($_GET['sort'])) {
@@ -1017,7 +1017,7 @@ if (isset($_GET['rev'])) {
 list($filter, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) ? select_proper_filters($_REQUEST['docsfilter']) : array('', true);
 
 /* * * Retrieve file info for current directory from database and disk ** */
-$result = Database::get()->queryArray("SELECT * FROM document
+$result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, course_id, date_modified, public, visible, editable, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                         WHERE $group_sql AND
                                 path LIKE '$curDirPath/%' AND
                                 path NOT LIKE '$curDirPath/%/%' $filter $order");
