@@ -60,6 +60,11 @@ function render_profile_fields_form($context) {
         
         if (count($res) > 0) {
             foreach ($res as $f) {
+                
+                if (isset($fdata)) {
+                    unset($fdata);
+                }
+                
                 $return_string .= '<div class="form-group">';
                 $return_string .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.$f->name.'</label>';
                 $return_string .= '<div class="col-sm-10">';
@@ -80,10 +85,10 @@ function render_profile_fields_form($context) {
                         if (isset($fdata)) {
                             $val = 'value="'.q($fdata).'"';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" name="'.$f->shortname.'">';
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
                         break;
                     case 2: //textarea
-                        $return_string .= rich_text_editor($f->shortname, 8, 20, $val);
+                        $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
                         break;
                     case 3: //date
                         break;
@@ -93,7 +98,7 @@ function render_profile_fields_form($context) {
                         if (isset($fdata)) {
                             $val = 'value="'.q($fdata).'"';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" name="'.$f->shortname.'">';
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
                         break;
                 }
                 $return_string .= '</div></div>';
@@ -101,6 +106,25 @@ function render_profile_fields_form($context) {
         }
     }
     return $return_string;
+}
+
+/**
+ * Process custom profile fields values after submit
+ * @param array $post_array
+ * @param array $context
+ */
+function process_profile_fields_data($post_array, $context) {
+    $uid = $context['uid'];
+    foreach ($post_array as $key => $value) {
+        if (substr($key, 0, 4) == 'cpf_') { //custom profile field case
+            $field_name = substr($key, 4);
+            $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
+            if ($context['origin'] == 'edit_profile') { //delete old values if exist
+                Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
+            }
+            Database::get()->query("INSERT INTO custom_profile_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
+        }
+    }    
 }
 
 /**

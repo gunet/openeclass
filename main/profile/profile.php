@@ -196,6 +196,10 @@ if (isset($_POST['submit'])) {
                              $verified_mail_sql
                          WHERE id = ?d", 
                             $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
+        
+    //fill custom profile fields
+    process_profile_fields_data($_POST, array('uid' => $uid, 'origin' => 'edit_profile'));
+    
         if ($q->affectedRows > 0 or isset($departments)) {
             $userObj->refresh($uid, $departments);
             Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
