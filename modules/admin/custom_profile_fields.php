@@ -120,7 +120,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                       <div class='col-sm-10'><input id='name' type='text' name='field_name'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName</label>
+    $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName <small>($langCPFUniqueShortname)</small></label>
                       <div class='col-sm-10'><input id='shortname' type='text' name='field_shortname'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
@@ -170,31 +170,55 @@ if (isset($_GET['add_cat'])) { //add a new category form
     if (isset($_POST['field_id'])) { //save edited field
         $fieldid = intval($_POST['field_id']);
         
-        Database::get()->query("UPDATE custom_profile_fields SET name = ?s,
-                                shortname = ?s,
-                                description = ?s,
-                                datatype = ?d,
-                                required = ?d,
-                                visibility = ?d,
-                                user_type = ?d,
-                                registration = ?d
-                                WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $user_type, $registration, $fieldid);
-        Session::Messages($langCPFFieldEditSuccess, 'alert-success');
-        redirect_to_home_page("modules/admin/custom_profile_fields.php");
-    } else { //save new field
-        $catid = intval($_POST['catid']);
-        
-        $result = Database::get()->querySingle("SELECT MIN(sortorder) AS m FROM custom_profile_fields WHERE categoryid = ?d", $catid);
-        if (!is_null($result->m)) {
-            $sortorder = $result->m - 1;
-        } else {
-            $sortorder = 0;
+        //check for unique shortname
+        $is_unique = true;
+        $old_shortname = Database::get()->querySingle("SELECT shortname FROM custom_profile_fields WHERE id = ?d", $fieldid)->shortname;
+        if ($shortname != $old_shortname) {
+            $count = Database::get()->querySingle("SELECT COUNT(*) AS c FROM custom_profile_fields WHERE shortname = ?s", $shortname)->c;
+            if ($count != 0) {
+                $is_unique = false;
+            }
         }
         
-        Database::get()->query("INSERT INTO custom_profile_fields (shortname, name, description, datatype, categoryid, sortorder, required, visibility, user_type, registration) 
-                                VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, $user_type, $registration);
-        Session::Messages($langCPFFieldAddSuccess, 'alert-success');
-        redirect_to_home_page("modules/admin/custom_profile_fields.php");
+        if ($is_unique) {
+            Database::get()->query("UPDATE custom_profile_fields SET name = ?s,
+                                    shortname = ?s,
+                                    description = ?s,
+                                    datatype = ?d,
+                                    required = ?d,
+                                    visibility = ?d,
+                                    user_type = ?d,
+                                    registration = ?d
+                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $user_type, $registration, $fieldid);
+            Session::Messages($langCPFFieldEditSuccess, 'alert-success');
+            redirect_to_home_page("modules/admin/custom_profile_fields.php");
+        } else {
+            Session::Messages($langCPFEditUniqueShortnameError, 'alert-danger');
+            redirect_to_home_page("modules/admin/custom_profile_fields.php");
+        }
+    } else { //save new field
+        
+        //check for unique shortname
+        $count = Database::get()->querySingle("SELECT COUNT(*) AS c FROM custom_profile_fields WHERE shortname = ?s", $shortname)->c;
+        if ($count == 0) { //shortname is unique, proceed
+        
+            $catid = intval($_POST['catid']);
+            
+            $result = Database::get()->querySingle("SELECT MIN(sortorder) AS m FROM custom_profile_fields WHERE categoryid = ?d", $catid);
+            if (!is_null($result->m)) {
+                $sortorder = $result->m - 1;
+            } else { 
+                $sortorder = 0;
+            }
+            
+            Database::get()->query("INSERT INTO custom_profile_fields (shortname, name, description, datatype, categoryid, sortorder, required, visibility, user_type, registration) 
+                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, $user_type, $registration);
+            Session::Messages($langCPFFieldAddSuccess, 'alert-success');
+            redirect_to_home_page("modules/admin/custom_profile_fields.php");
+        } else { //shortname is not unique, abort
+            Session::Messages($langCPFCreateUniqueShortnameError, 'alert-danger');
+            redirect_to_home_page("modules/admin/custom_profile_fields.php");
+        }
     }
 } elseif (isset($_GET['del_field'])) { //delete fields
     $fieldid = intval($_GET['del_field']);
@@ -244,7 +268,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                           <div class='col-sm-10'><input id='name' type='text' name='field_name' value='$name'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName</label>
+        $tool_content .= "<label for='shortname' class='col-sm-2 control-label'>$langCPFShortName <small>($langCPFUniqueShortname)</small></label>
                           <div class='col-sm-10'><input id='shortname' type='text' name='field_shortname' value='$shortname'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
