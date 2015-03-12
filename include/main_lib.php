@@ -1509,6 +1509,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar_settings WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM custom_profile_fields_data WHERE user_id = ?d", $u);
             return true;
         } else {
             return false;
