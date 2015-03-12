@@ -180,28 +180,30 @@ if ($uid AND !isset($_GET['logout'])) {
                         <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                           <div class='wrapper-login-option'>";
         
-        $show_seperator = count($authLink) >1? 1 : 0;
+        $show_seperator = count($authLink) > 1;
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
                                 <div>" . ($l['showTitle']? "<span class='head-text'>$l[title]</span>": '') .
                                    $l['html'] . "
                                 </div>";
-                                if ($show_seperator){
-                                $tool_content .= "<div class='login-settings row'>
+            if ($show_seperator) {
+                $tool_content .= "
+                                <div class='login-settings row'>
                                   <div class='or-separator'><span>$langOr</span></div>
                                   <div class='alt_login text-center'>
                                     <span>";
-            foreach ($authLink as $j => $otherAuth) {
-                if ($j != $i) {
-                    $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                foreach ($authLink as $j => $otherAuth) {
+                    if ($j != $i) {
+                        $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                    }
                 }
-            }
-            $tool_content .= "      </span>
+                $tool_content .= "
+                                    </span>
                                   </div>
                                 </div>";
-                                }
-                              $tool_content .= "</div>";
+            }
+            $tool_content .= "</div>";
         }
 
         $tool_content .= "

@@ -127,7 +127,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             if (isset($_SESSION['cas_do']) && $_SESSION['cas_do']) {
                 $auth = 7;
             }
-            switch ($auth) {                
+            switch ($auth) {
                 case '2':
                     $settings = array('pop3host' => $pop3host);
                     break;
@@ -219,9 +219,9 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             $result = Database::get()->query("UPDATE auth
             			SET auth_settings = ?s,
                                     auth_instructions = ?s,
-                                    auth_default = MAX(auth_default, 1),
+                                    auth_default = GREATEST(auth_default, 1),
                                     auth_title = ?s,
-                                    auth_name = ?s                                    
+                                    auth_name = ?s
                                 WHERE
                                     auth_id = ?d"
                     , function ($error) use(&$tool_content, $langErrActiv) {
@@ -241,25 +241,17 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
     // also handles requests with empty $auth
     // without this, a form with just username/password is displayed
     if (!$auth) {
-        header('Location: ../admin/auth.php');
-        exit;
+        redirect_to_home_page('modules/admin/auth.php');
     }
-    
+
     $pageName = get_auth_info($auth);
-    $tool_content .= action_bar(array(
-        array(
-            'title' => $langBack,
-            'icon' => 'fa-reply',
-            'level' => 'primary-label',
-            'url' => 'auth.php'
-        )));
-    
+
     // get authentication settings
     if ($auth != 6) {
         $auth_data = get_auth_settings($auth);
     }
     // display form
-    $tool_content .= "<div class='form-wrapper'> 
+    $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' name='authmenu' method='post' action='$_SERVER[SCRIPT_NAME]'>
 	<fieldset>	
         <input type='hidden' name='auth' value='" . intval($auth) . "'>";
@@ -283,9 +275,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             break;
         case 7: require_once 'modules/auth/methods/casform.php';
             break;
-        default:
-            break;
-    }       
+    }
     if ($auth != 6 && $auth != 7 && $auth != 1) {
         $tool_content .= "
                 <div class='alert alert-info'>$langTestAccount</div>
@@ -300,13 +290,13 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     <div class='col-sm-10'>
                         <input class='form-control' type='password' name='test_password' id='test_password' value='" . q($test_password) . "' autocomplete='off'>
                     </div>
-                </div>";                 
+                </div>";
     }
     $tool_content .= "
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
-                        <a class='btn btn-default' href='auth.php'>$langCancel</a>                
+                        <a class='btn btn-default' href='auth.php'>$langCancel</a>
                     </div>
                 </div>
             </fieldset>
@@ -325,9 +315,9 @@ draw($tool_content, 3);
  * @return string
  */
 function eclass_auth_form($auth_title, $auth_instructions) {
-    
+
     global $langAuthTitle, $langInstructionsAuth;
-    
+
     $content = "<div class='form-group'>
             <label for='auth_title' class='col-sm-2 control-label'>$langAuthTitle:</label>
             <div class='col-sm-10'>
@@ -340,7 +330,7 @@ function eclass_auth_form($auth_title, $auth_instructions) {
                 <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
             </div>
         </div>";
-    
+
     return $content;
 }
 
