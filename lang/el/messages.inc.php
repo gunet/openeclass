@@ -19,7 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
+$langLocale = 'el_GR.UTF-8';
 $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και υποστηρίζει την Υπηρεσία Ασύγχρονης Τηλεκπαίδευσης στο <a href=\"$InstitutionUrl\" target=\"_blank\" class=mainpage>$Institution</a>.";
 $langVersion = "Έκδοση";
 $langAboutText = "Η έκδοση της πλατφόρμας είναι";
@@ -588,6 +588,7 @@ $langInHour = "(σε ώρες)";
 $langEmptyAgendaTitle = "Παρακαλώ πληκτρολογήστε τον τίτλο του γεγονότος";
 $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
 $langListAll = "Λίστα όλων";
+$langListCalendar = "Μορφή ημερολογίου";
 $langAgendaDueDay = "Προθεσμία";
 $langAgendaCourseEvent = "Γεγ. μαθήματος";
 $langAgendaPersonalEvent = "Προσ. γεγονός";
@@ -705,7 +706,10 @@ $langAuthSettings = "Ρυθμίσεις πιστοποίησης";
 $langWrongAuth = "Πληκτρολογήσατε λάθος όνομα χρήστη / συνθηματικό";
 $langExplainShib = "Πληκτρολογήστε τα ονόματα των μεταβλητών που επιστρέφει ο εξυπηρέτης Shibboleth. Οι μεταβλητές θα γραφτούν στο αρχείο <em>%ssecure/index.php</em>. Σημειώστε ότι, αν το Shibboleth Canonical Name περιλαμβάνει το ονοματεπώνυμο του χρήστη, τότε θα πρέπει να ορίσετε τον χαρακτήρα που χωρίζει το όνομα από το επώνυμο.";
 $langCharSeparator = "Χαρακτήρας χωρισμού";
-
+$langPrimaryAuthType = "Κύριος τρόπος πιστοποίησης";
+$langSecondaryAuthType = "Δευτερεύων τρόπος πιστοποίησης";
+$langPrimaryAuthTypeChanged = "Ο τρόπος πιστοποίησης έγινε κύριος.";
+$langSecondaryAuthTypeChanged = "Ο τρόπος πιστοποίησης έγινε δευτερεύων.";
 
 /* * **********************************************************
  * auth_change.php
@@ -892,6 +896,7 @@ $langDocsDeleted = "Τα έγγραφα απενεργοποιήθηκαν";
 $langBeforeRegDate = "με ημερομηνία εγγραφής πριν από";
 $langPurgeExercise = "Διαγραφή ασκήσης";
 $langPurgeExerciseSuccess = "Η Άσκηση διαγράφηκε.";
+$langExerciseCompleted = "Η Άσκηση ολοκληρώθηκε με επιτυχία.";
 $langConfirmPurgeExercise = "Επιβεβαίωση διαγραφής άσκησης";
 $langPurgeExerciseResults = "Διαγραφή αποτελεσμάτων άσκησης";
 $langPurgeExerciseResultsSuccess = "Τα αποτελέσματα της ασκήσης διαγράφηκαν";
@@ -983,7 +988,8 @@ $langJustCreated = "Μόλις δημιουργήσατε με επιτυχία 
 $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές σχολές ή τμήματα. Παρακαλώ ξαναπροσπαθήστε.";
 
 $langAttendance = "Παρουσιολόγιο";
-$langAttendanceManagement = "Διαχείριση Παρουσιολόγιου";
+$langAttendances = "Παρουσιολόγια";
+$langAttendanceManagement = "Διαχείριση Παρουσιολογίων";
 $langAttendanceAbsencesYes = "Παρουσία";
 $langAttendanceAbsencesNo = "Απουσία";
 $langAttendanceAbsences = "Παρουσίες";
@@ -994,7 +1000,7 @@ $langAttendanceAddActivity = "Προσθήκη δραστηριότητας";
 $langAttendanceActivityDate = "Ημερομηνία διεξαγωγής";
 $langAttendanceActivity = "Δραστηριότητα";
 $langAttendanceActivityDate2 = "Ημερομηνία";
-$langAttendanceBook = "Καταχώρηση παρουσιών";
+$langAttendanceBook = "Καταχώρηση παρουσιών δραστηριότητας";
 $langAttendanceBooking = "Καταχώρηση";
 $langAttendanceUpdate = "Ενημέρωση";
 $langAttendanceEdit = "Επιτυχής αλλαγή";
@@ -1035,8 +1041,16 @@ $langAttendance3Months = "Συμμετέχουν οι $langsStudents τελευ�
 $langAttendanceAllMonths = "Συμμετέχουν όλοι οι εγγεγραμμένοι $langsStudents";
 $langAttendanceDeleteUsers = "Αν θέλετε να διαγράψετε κάποιους από το παρουσιολόγιο επιλέξτε τους από τη παρακάτω λίστα και κάντε κλικ στο κουμπί διαγραφή";
 $langAttendanceDelete = "Διαγραφή χρήστη από το παρουσιολόγιο";
+$langNewAttendance = "Νέο Παρουσιολόγιο";
+$langNewAttendance2 = "(δημιουργία νέου παρουσιολογίου για το μάθημα)";
+$langChangeAttendance = "Επιλογή παρουσιολογίου";
+$langChangeAttendance2 = "(επιλογή ενεργού παρουσιολογίου για το μάθημα)";
+$langChangeAttendanceSuccess = "Το παρουσιολόγιο ενεργοποιήθηκε με επιτυχία";
+$langChangeAttendanceCreateSuccess = "Το παρουσιολόγιο δημιουργήθηκε με επιτυχία";
+$langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 
 $langGradebook = "Βαθμολόγιο";
+$langGradebooks = "Βαθμολόγια";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
 $langGradebookAddActivity = "Προσθήκη νέας δραστηριότητας";
 $langGradebookActivityDescription = "Περιγραφή";
@@ -1118,6 +1132,13 @@ $langNoStudentsInAttendance = "Δεν υπάρχουν $langsStudents στο π�
 $langUsersGradebook = "$langStudents βαθμολογίου";
 $langNoGradebook = "Δεν συμμετέχετε σε μαθήματα με βαθμολόγηση.";
 $langGradeVisible = "Εμφάνιση βαθμολογίας στους χρήστες";
+$langNewGradebook = "Νέο βαθμολόγιο";
+$langNewGradebook2 = "(δημιουργία νέου βαθμολογίου για το μάθημα)";
+$langChangeGradebook = "Επιλογή βαθμολογίου";
+$langChangeGradebookSuccess = "Το βαθμολόγιο ενεργοποιήθηκε με επιτυχία";
+$langCreateGradebookSuccess = "Το βαθμολόγιο δημιουργήθηκε με επιτυχία";
+$langChangeGradebook2 = "(επιλογή ενεργού βαθμολογίου για το μάθημα)";
+$langGradebookNoTitle2 = "Βαθμολόγιο χωρίς τίτλο";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
@@ -1845,8 +1866,7 @@ $langNoPgTitle = "Δεν πληκτρολογήσατε τίτλο σελίδα�
  * php
  * ************************************************************* */
 $langHomePage = "Αρχική Σελίδα";
-$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε εγγεγραμμένος, συμπληρώστε τη
-        <a href='modules/auth/registration.php'>φόρμα εγγραφής</a>.";
+$langInvalidId = "Λάθος στοιχεία.<br>Αν δεν είστε εγγεγραμμένος, συμπληρώστε τη <a href='%s'>φόρμα εγγραφής</a>.";
 $langEnterPlatform = "Για να μπείτε στην πλατφόρμα κάντε κλικ";
 $langInvalidGuestAccount = "Το μάθημα για το οποίο έχει δημιουργηθεί ο λογαριασμός 'χρήστη επισκέπτη' δεν υπάρχει πλέον.";
 $langAccountInactive1 = "Μη ενεργός λογαριασμός.";
@@ -1879,6 +1899,8 @@ $langListCourses = "Μαθήματα";
 $langHierarchy = "Ιεραρχία Τμημάτων";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
 $langUserLogin = "Σύνδεση χρήστη";
+$langLoginSSO = "Σύνδεση μέσω SSO λογαριασμού";
+$langLoginSocialNetwork = "Σύνδεση μέσω κοινωνικών δικτύων";
 $langWelcomeToEclass = "Καλωσορίσατε στο " . $siteName . "!";
 $langWelcomeToPortfolio = "Καλωσορίσατε στο προσωπικό σας χαρτοφυλάκιο";
 $langUnregCourse = "Απεγγραφή από μάθημα";
@@ -2345,7 +2367,7 @@ $langFinalDesc = "Αναλυτική Περιγραφή $siteName";
 $langShortDesc = "Σύντομη Περιγραφή $siteName";
 $langManS = "Εγχειρίδιο $langOfStudent";
 $langManT = "Εγχειρίδιο $langOfTeacher";
-$langOr = "η";
+$langOr = "ή";
 $langNote = "Σημείωση";
 $langAcrobat = "Για να διαβάσετε τα αρχεία PDF μπορείτε να χρησιμοποιήσετε το %sπρόγραμμα Acrobat Reader%s ή άλλα %sελεύθερα διαθέσιμα προγράμματα που θα βρείτε εδώ%s.";
 $langTutorials = "Οδηγοί";
@@ -2845,6 +2867,7 @@ $langPassSameAuth = 'Το συνθηματικό σας είναι αυτό τη
 $langLdapRequest = 'Υπάρχει ήδη μια αίτηση για τον χρήστη';
 $langLDAPUser = 'Χρήστης LDAP';
 $langLogIn = 'Σύνδεση';
+$langLogInWith = "Σύνδεση με";
 $langAction = 'Ενέργεια';
 $langRequiredFields = 'Τα πεδία με (*) είναι υποχρεωτικά';
 $langCourseVisits = "Επισκέψεις ανά μάθημα";
@@ -3274,7 +3297,6 @@ $langAllCourses = "Όλα τα μαθήματα";
 $langSubmit = "Υποβολή";
 $langCheck = "Έλεγχος";
 $langModule = "Υποσύστημα";
-$langAllModules = "Όλα τα Υποσυστήματα";
 $langValueType = "Είδος Στατιστικών";
 $langQuantity = "Ποσοτικά";
 $langProportion = "Ποσοστιαία";
@@ -3339,7 +3361,7 @@ $langVisitsCourseStats = "Επισκέψεις σε σελίδες μαθημά�
 $langUserStats = "Στατιστικά Χρήστη";
 $langTotalVisitsCourses = "Συνολικές επισκέψεις σε σελίδες μαθημάτων";
 $langDumpUserDuration = "Στατιστικά χρήσης";
-$langDumpUserDurationToFile = "Σε αρχείο τύπου csv";
+$langDumpUserDurationToFile = "σε αρχείο τύπου csv";
 $langCodeUTF = "κωδικοποίηση UTF-8";
 $langCodeWin = "κωδικοποίηση Windows-1253";
 $langNoUserSelected = "Δεν επιλέξατε χρήστη";
@@ -4118,7 +4140,7 @@ $langCMeta['auth'] = "Αριστοτέλειο Πανεπιστήμιο Θεσσ
 $langCMeta['aua'] = "Γεωπονικό Πανεπιστήμιο Αθηνών";
 $langCMeta['duth'] = "Δημοκρίτειο Πανεπιστήμιο Θράκης";
 $langCMeta['ihu'] = "Διεθνές Πανεπιστήμιο της Ελλάδος";
-$langCMeta['uoa'] = "Εθνικό Καποδιστριακό Πανεπιστήμιο Αθηνών";
+$langCMeta['uoa'] = "Εθνικό και Καποδιστριακό Πανεπιστήμιο Αθηνών";
 $langCMeta['ntua'] = "Εθνικό Μετσόβιο Πολυτεχνείο";
 $langCMeta['eap'] = "Ελληνικό Ανοικτό Πανεπιστήμιο";
 $langCMeta['ionio'] = "Ιόνιο Πανεπιστήμιο";
@@ -4129,7 +4151,7 @@ $langCMeta['uth'] = "Πανεπιστήμιο Θεσσαλίας";
 $langCMeta['uoi'] = "Πανεπιστήμιο Ιωαννίνων";
 $langCMeta['uoc'] = "Πανεπιστήμιο Κρήτης";
 $langCMeta['uom'] = "Πανεπιστήμιο Μακεδονίας";
-$langCMeta['upatras'] = "Πανεπιστήμιο Πάτρας";
+$langCMeta['upatras'] = "Πανεπιστήμιο Πατρών";
 $langCMeta['unipi'] = "Πανεπιστήμιο Πειραιά";
 $langCMeta['upelop'] = "Πανεπιστήμιο Πελοποννήσου";
 $langCMeta['panteion'] = "Πάντειον Πανεπιστήμιο";
@@ -4222,7 +4244,7 @@ $langAddBBBServerInfo = "Στοιχεία νέου εξυπηρετητή BigBlu
 $langUpdateBBBServer = "Στοιχεία εξυπηρετητή BigBlueButton";
 $langAvailableBBBServers = "Διαθέσιμοι εξυπηρετητές BigBlueButton";
 $langNoAvailableBBBServers = "Δεν υπάρχουν διαθέσιμοι εξυπηρετητές BigBlueButton";
-$langExtAppConfig = 'Ρυθμίσεις εξωτερικών προγραμμάτων';
+$langExtAppConfig = 'Εξωτερικά εργαλεία';
 $langBBBConfig = 'Ρυθμίσεις BigBlueButton';
 $langBBBEnabled = 'Διαθέσιμος';
 $langBBBOptions = 'Τροποποίηση';
@@ -4478,3 +4500,9 @@ $langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";
 $langNationalOpenCourses = "Εθνικη πυλη ανοικτων μαθηματων";
 $langExtAppName = "Εφαρμογή";
 $langExtAppDescription = "Περιγραφή";
+
+/* * ***********************************************************
+ * Tags
+ * ************************************************************ */
+$langTags = 'Ετικέτες';
+

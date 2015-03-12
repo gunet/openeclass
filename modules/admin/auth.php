@@ -24,43 +24,51 @@
  * @file auth.php
  */
 
-
 $require_admin = true;
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
-$pageName = $langUserAuthentication;
+$toolName = $langUserAuthentication;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$auth = isset($_GET['auth']) ? $_GET['auth'] : '';
-$active = isset($_GET['active']) ? $_GET['active'] : '';
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "$_SERVER[PHP_SELF]",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ),false);
 
-if (!empty($auth) and ! empty($active)) {
-    $s = get_auth_settings($auth);        
-    $settings = $s['auth_settings'];
-    switch ($active) {
-        case 'yes': if ($auth == 1) { // eclass method has no settings
-                        $q = 1;
-                    } else {
-                        $q = empty($settings) ? 0 : 1;
-                    }
-            break;
-        case 'no': $q = 0;
-            break;
-        default: $q = 0;
-            break;
+if (isset($_GET['auth'])) {
+    $auth = $_GET['auth'];
+    if (isset($_GET['q'])) { // activate / deactivate authentication method
+        $q = $_GET['q'];
+        $s = get_auth_settings($auth);
+        $settings = $s['auth_settings'];
+
+        if (empty($settings) and $auth != 1) {
+            Session::Messages("$langErrActiv $langActFailure", 'alert-danger');
+        } else {
+            Database::get()->query("UPDATE auth SET auth_default = ?d WHERE auth_id = ?d", $q, $auth);
+            Session::Messages(($q? $langActSuccess: $langDeactSuccess) . get_auth_info($auth), 'alert-success');
+        }
+        redirect_to_home_page('modules/admin/auth.php');
+    } elseif (isset($_GET['p'])) {// modify primary authentication method
+        if ($_GET['p'] == 1) {
+            Database::get()->query("UPDATE auth SET auth_default = 1 WHERE auth_default <> 0");
+            Database::get()->query("UPDATE auth SET auth_default = 2 WHERE auth_id = ?d", $auth);
+            Session::Messages($langPrimaryAuthTypeChanged, 'alert-success');
+        } else {
+            Database::get()->query("UPDATE auth SET auth_default = 1 WHERE auth_id = ?d", $auth);
+            Session::Messages($langSecondaryAuthTypeChanged, 'alert-success');
+            redirect_to_home_page('modules/admin/auth.php');
+        }
     }
-    Database::get()->query("UPDATE auth SET auth_default = ?d WHERE auth_id = ?d", $q, $auth);
-}
-
-$auth_methods = get_auth_active_methods();
-
-if (empty($auth)) {
+} else {
     $tool_content .= "<div class='alert alert-info'><label>$langMethods</label>";
-    if ($auth_methods) {
+    if ($activeMethods = get_auth_active_methods()) {
         $tool_content .= "<ul>";
-        foreach ($auth_methods as $k => $v) {
+        foreach ($activeMethods as $k => $v) {
             $c = count_auth_users($v);
-            if ($c != 0) {                
+            if ($c != 0) {
                 $lc = "<a href='listusers.php?fname=&amp;lname=&amp;am=&amp;user_type=0&amp;auth_type=$v&amp;reg_flag=1&amp;user_registered_at=&verified_mail=3&amp;email=&amp;uname=&amp;department=0'>$c</a>";
                 if ($v != 1) {
                     $l = " - <a href='auth_change.php?auth=$v'>$langAuthChangeUser</a>";
@@ -76,45 +84,41 @@ if (empty($auth)) {
         $tool_content .= "</ul>";
     }
     $tool_content .= "</div>";
-} else {
-    if (empty($settings) and $auth != 1) {
-        $tool_content .= "<div class='alert alert-danger'>$langErrActiv $langActFailure</div>";
-    } else {
-        if ($active == 'yes') {
-            $tool_content .= "<div class='alert alert-success'>";
-            $tool_content .= "$langActSuccess" . get_auth_info($auth);
-            $tool_content .= "</div>";
-        } else {
-            $tool_content .= "<div class='alert alert-success'>";
-            $tool_content .= "$langDeactSuccess" . get_auth_info($auth);
-            $tool_content .= "</div>";
-        }
-    }
-}
 
-$tool_content .= "<div class='table-responsive'><table class='table-default'>";
-$tool_content .= "<th>$langAllAuthTypes</th><th class='text-center'>".icon('fa-gears', $langActions)."</th>";
-foreach ($auth_ids as $auth_id => $auth_name) {
-        $tool_content .= "<tr><td>".  strtoupper($auth_name).":</td><td class='option-btn-cell'>";
-        if (in_array($auth_id, $auth_methods)) {
-                $activation_url = "auth.php?auth=$auth_id&amp;active=no";
-                $activation_title = $langDeactivate;
-                $activation_icon = "fa-toggle-off";
-        } else {
-                $activation_url = "auth.php?auth=$auth_id&amp;active=yes";
-                $activation_title = $langActivate;
-                $activation_icon = "fa-toggle-on";
-        }
+    $authMethods = Database::get()->queryArray("SELECT * FROM auth ORDER BY auth_default DESC, auth_id");
+    $tool_content .= "<div class='table-responsive'><table class='table-default'>";
+    $tool_content .= "<th>$langAllAuthTypes</th><th class='text-right'>".icon('fa-gears', $langActions)."</th>";
+    foreach ($authMethods as $info) {
+        $auth_id = $info->auth_id;
+        $auth_name = $info->auth_name;
+        $active = $info->auth_default;
+        $primary = $info->auth_default > 1;
+        $primaryLabel = $primary? "&nbsp;&nbsp;<small><span class='label label-default'>$langPrimaryAuthType</span></small>": '';
+        $visibility = $active? '': ' class=not_visible';
+        $activation_url = "$_SERVER[PHP_SELF]?auth=$auth_id&amp;q=" . !$active;
+        $activation_title = $active? $langDeactivate: $langActivate;
+        $activation_icon = $active? 'fa-toggle-off': 'fa-toggle-on';
+        $tool_content .= "<tr><td$visibility>" . strtoupper($auth_name) . "$primaryLabel</td><td class='option-btn-cell'>";
         $tool_content .= action_button(array(
-                array('title' => $activation_title,
-                      'url' => $activation_url,
-                      'icon' => $activation_icon),
-                array('title' => $langAuthSettings,
-                      'url' => "auth_process.php?auth=$auth_id",
-                      'icon' => 'fa-gear',
-                      'show' => $auth_id != 1)));
-        $tool_content .= "</td><tr>";
+            array('title' => $activation_title,
+                  'url' => $activation_url,
+                  'icon' => $activation_icon,
+                  'show' => $auth_id == 1 or $info->auth_settings),
+            array('title' => $langAuthSettings,
+                  'url' => "auth_process.php?auth=$auth_id",
+                  'icon' => 'fa-gear'),
+            array('title' => $langPrimaryAuthType,
+                  'url' => "$_SERVER[PHP_SELF]?auth=$auth_id&amp;p=1",
+                  'icon' => 'fa-flag',
+                  'show' => $active and !$primary),
+            array('title' => $langSecondaryAuthType,
+                  'url' => "$_SERVER[PHP_SELF]?auth=$auth_id&amp;p=0",
+                  'icon' => 'fa-circle-o',
+                  'show' => $primary)));
+            $tool_content .= "</td><tr>";
+    }
+    $tool_content .= "</table></div>";
 }
-$tool_content .= "</table></div>";
 
 draw($tool_content, 3);
+

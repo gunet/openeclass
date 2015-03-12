@@ -58,7 +58,8 @@ if ($submit) {
     $pn = $_POST['pn'];
     $ps = $_POST['ps'];
     $pu = $_POST['pu'];
-    $pe = $_POST['pe'];    
+    $pe = $_POST['pe'];
+    $phone = $_POST['phone'];
     $department = $_POST['department'];
     $comment = isset($_POST['comment']) ? $_POST['comment'] : '';
     $lang = $session->validate_language_code(@$_POST['language']);
@@ -93,12 +94,12 @@ if ($submit) {
     $expires_at = time() + get_config('account_duration');
     $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-    $sql = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email, status,
+    $sql = Database::get()->query("INSERT INTO user (surname, givenname, username, password, email, status, phone,
                                                     am, registered_at, expires_at, lang, verified_mail, description, whitelist)
-                                VALUES (?s, ?s, ?s, ?s, ?s, 1, ?s, 
+                                VALUES (?s, ?s, ?s, ?s, ?s, 1, ?s, ?s, 
                                 " . DBHelper::timeAfter() . ",
                                 " . DBHelper::timeAfter(get_config('account_duration')) . ", ?s, ?d, '', '')", 
-                    $ps, $pn, $pu, $password, $pe, $comment, $lang, $verified_mail);
+                    $ps, $pn, $pu, $password, $pe, $phone, $comment, $lang, $verified_mail);
 
     $last_id = $sql->lastInsertID;
     $userObj->refresh($last_id, array(intval($department)));

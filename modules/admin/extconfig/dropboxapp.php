@@ -20,9 +20,9 @@
  * ======================================================================== 
  */
 
-require_once 'clouddriveapp.php';
+require_once 'oauthdriveapp.php';
 
-class DropBoxApp extends CloudDriveApp {
+class DropBoxApp extends OAuthDriveApp {
 
     public function getDisplayName() {
         return "DropBox";

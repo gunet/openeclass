@@ -3,6 +3,7 @@
 // Message file for language es
 // Generated 2015-02-19 15:55:36
 
+$langLocale = 'es_ES.UTF-8';
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -3094,6 +3095,7 @@ $langTill = "to";
 $langDelAllWorkSubs = "Delete all course assignments' submissions";
 $langPurgeExercise = "Delete Exercise";
 $langPurgeExerciseSuccess = "Exercise successfully deleted.";
+$langExerciseCompleted = "Exercise has been successfully completed.";
 $langConfirmPurgeExercise = "Exercise Delete Confirmation";
 $langPurgeExerciseResultsSuccess = "Exercise results were successfully deleted.";
 $langConfirmPurgeExerciseResults = "Execise results delete confirmation";

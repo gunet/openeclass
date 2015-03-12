@@ -28,12 +28,15 @@ require_once 'modules/search/indexer.class.php';
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('exerciseTitle'));
+    $v->rule('required', array('exerciseTitle','exerciseEndDate', 'exerciseStartDate'));
     $v->rule('numeric', array('exerciseTimeConstraint', 'exerciseAttemptsAllowed'));
+    $v->rule('date', array('exerciseEndDate', 'exerciseStartDate'));
     $v->labels(array(
         'exerciseTitle' => "$langTheField $langExerciseName",
         'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",
-        'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed"
+        'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed",
+        'exerciseEndDate' => "$langTheField $langExerciseEnd",
+        'exerciseStartDate' => "$langTheField $langExerciseStart"
     ));
     if($v->validate()) {
         $exerciseTitle = trim($exerciseTitle);
@@ -56,6 +59,20 @@ if (isset($_POST['submitExercise'])) {
         // reads the exercise ID (only useful for a new exercise)
         $exerciseId = $objExercise->selectId();
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
+        
+        //tags
+        if (isset($_POST['tags'])) {
+                //delete all the previous for this item, course
+                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //insert all the new ones
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "exe", $exerciseId, $tagItem, $course_id);
+                    }
+                }
+        }
+        
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);        
     } else {
         $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
@@ -88,7 +105,20 @@ if (isset($_POST['submitExercise'])) {
 
 // shows the form to modify the exercise
 if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
+    
+    //initialize the tags
+    $answer = "";
+    if (isset($exerciseId)) {
+        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
+        foreach ($tags_init as $tag) {
+            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
+            $answer = $answer . $arrayTemp;
+        }
+    }
+    
     load_js('bootstrap-datetimepicker');
+    load_js('select2');
+
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#startdatepicker, #enddatepicker').datetimepicker({
@@ -117,6 +147,36 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 }
             });
         });
+        $(document).ready(function () {
+            $('#tags').select2({
+                    minimumInputLength: 2,
+                    tags: true,
+                    tokenSeparators: [', ', ' '],
+                    createSearchChoice: function(term, data) {
+                      if ($(data).filter(function() {
+                        return this.text.localeCompare(term) === 0;
+                      }).length === 0) {
+                        return {
+                          id: term,
+                          text: term
+                        };
+                      }
+                    },
+                    ajax: {
+                        url: '../tags/feed.php',
+                        dataType: 'json',
+                        data: function(term, page) {
+                            return {
+                                q: term
+                            };
+                        },
+                        results: function(data, page) {
+                            return {results: data};
+                        }
+                    }
+            });
+            $('#tags').select2('data', [".$answer."]);
+        }); 
     </script>";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -159,23 +219,23 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>              
-                 <div class='input-append date form-group' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
+                 <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
                      <div class='col-xs-10 col-sm-9'>        
                          <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
+                         <span class='help-block'>".Session::getError('exerciseStartDate')."</span>
                      </div>
                      <div class='col-xs-2 col-sm-1'>  
-                         <span class='add-on'><i class='fa fa-times'></i></span>
                          <span class='add-on'><i class='fa fa-calendar'></i></span>
                      </div>
                  </div>            
-                 <div class='input-append date form-group' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
+                 <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd:</label>
                      <div class='col-xs-10 col-sm-9'>        
                          <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
+                         <span class='help-block'>".Session::getError('exerciseEndDate')."</span>
                      </div>
                      <div class='col-xs-2 col-sm-1'>  
-                         <span class='add-on'><i class='fa fa-times'></i></span>
                          <span class='add-on'><i class='fa fa-calendar'></i></span>
                      </div>
                  </div>
@@ -274,12 +334,21 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
+                 
+                 <div class='form-group'>
+                     <label for='dispresults' class='col-sm-2 control-label'>$langTags:</label>
+                     <div class='col-sm-10'>            
+                        <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+                     </div>
+                 </div>
+
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>
                      <input type='submit' class='btn btn-primary' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
                      <a href='".(($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code")."' class='btn btn-default'>$langCancel</a>    
                    </div>
                  </div>
+                 
              </fieldset>
              </form>
         </div>";    
@@ -393,7 +462,19 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 <div class='col-sm-9'>
                     $disp_score_message
                 </div>                
-            </div>              
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langTags:</strong>
+                </div>
+                <div class='col-sm-9'>";
+                    
+                $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
+                    foreach($tags_list as $tag){
+                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
+                    }                   
+$tool_content .="</div>                
+            </div>
         </div>
     </div>";
 }

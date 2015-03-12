@@ -364,7 +364,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
 
-    Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
     DBHelper::fieldExists('user', 'email_public') or
             Database::get()->query("ALTER TABLE `user`
                         ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
@@ -2436,6 +2435,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0rc2");
             upgrade_course_3_0_rc2($row->code, $row->id);
         }
+        if (version_compare($oldversion, '3.0rc3', '<')) {
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0rc3");
+            upgrade_course_3_0_rc3($row->code, $row->id);
+        }
         $i++;
     }
 
@@ -2492,6 +2495,32 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
+        
+        if (!DBHelper::fieldExists('auth', 'auth_title')) {
+            Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
+        }
+        if (!DBHelper::fieldExists('gradebook', 'active')) {
+            Database::get()->query("ALTER table `gradebook` ADD `active` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('gradebook', 'title')) {
+            Database::get()->query("ALTER table `gradebook` ADD `title` VARCHAR(250) DEFAULT NULL");
+        }
+        if (!DBHelper::fieldExists('attendance', 'active')) {
+            Database::get()->query("ALTER table `attendance` ADD `active` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('attendance', 'title')) {
+            Database::get()->query("ALTER table `attendance` ADD `title` VARCHAR(250) DEFAULT NULL");
+        }
+        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0, '')");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
+                `id` MEDIUMINT(11) NOT NULL auto_increment,
+                `element_type` VARCHAR(255) NOT NULL DEFAULT '',
+                `element_id` MEDIUMINT(11) NOT NULL ,
+                `user_id` VARCHAR(255) NOT NULL DEFAULT '',
+                `tag` TEXT,
+                `date` DATE DEFAULT NULL,
+                `course_id` INT(11) NOT NULL DEFAULT 0,
+                PRIMARY KEY (id)) $charset_spec");
 
         if (DBHelper::fieldExists('course_user', 'team')) {
             Database::get()->query('ALTER TABLE `course_user` DROP COLUMN `team`');
@@ -2577,6 +2606,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `poll` ADD `end_message` MEDIUMTEXT NULL DEFAULT NULL");
         }
 
+        Database::get()->query("ALTER TABLE `bbb_session` CHANGE `participants` `participants` VARCHAR(1000)");
         set_config('theme', 'default');
         set_config('theme_options_id', get_config('theme_options_id', 0));
 

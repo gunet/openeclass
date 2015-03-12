@@ -79,6 +79,12 @@ color: #262626;
 background-color: whitesmoke;
 cursor: pointer; 
 }
+//portfolio datatable 'all courses' button fix 
+@media(min-width: $screen-sm){
+    div.all_courses {
+        float: left;
+    }
+}
 @media(min-width: $screen-tablet){
   .affix {
     width: 20%;
@@ -174,7 +180,7 @@ top: 8px;
 }
 //Custtom default table class
 .table-default {
-    @extend .table, .table-striped, .table-bordered, .table-hover;
+    @extend .table, .table-striped, .table-bordered;
 }
 // Custtom Panel Classes to support action_button() in panel heading
 .panel-action-btn-default {

@@ -151,7 +151,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 }
             }
         } else {
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyAnswers=$question_id");
+            if (isset($exerciseId)) {
+               redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$question_id"); 
+            } else {
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyAnswers=$question_id");
+            }
         }
     } elseif ($answerType == MATCHING) {
         for ($i = 1; $i <= $nbrOptions; $i++) {

@@ -49,8 +49,8 @@ if (isset($_GET['course'])) {
     $course = intval($_GET['course']);
 }
 
-if (isset($_GET['exerciseId'])) {
-    $exerciseId = intval($_GET['exerciseId']);
+if (isset($_REQUEST['exerciseId'])) {
+    $exerciseId = intval($_REQUEST['exerciseId']);
 }
 
 // if the user has clicked on the "Cancel" button

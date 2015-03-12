@@ -47,7 +47,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-$nameTools = $langStatsOfLearnPath;
+$toolName = $langStatsOfLearnPath;
 
 // path id can not be empty, return to the list of learning paths
 if (empty($_REQUEST['path_id'])) {
@@ -76,39 +76,35 @@ if ($learnPathName) {
 
     $usersList = get_limited_list($sql, 30);
 
+    $pageName = $langLearnPath.": ".disp_tool_title($titleTab);
+    
+    $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "index.php",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'))); 
+    
     // display tab header
     $tool_content .= '' . "\n\n"
-            . '      <p>' . $langLearnPath . ': <b>';
-    $tool_content .= disp_tool_title($titleTab);
-    $tool_content .= '</b></p>' . "\n"
-            . '    <table width="99%" class="tbl_alt">' . "\n"
-            . '    <tr>' . "\n"
-            . '      <th>&nbsp;</th>' . "\n"
-            . '      <th><div align="left">' . $langStudent . '</div></th>' . "\n"
-            . '      <th colspan="2" width="25%">' . $langProgress . '</th>' . "\n"
+            . '    <div class="table-responsive"><table class="table-default">' . "\n"
+            . '    <tr class="list-header">' . "\n"
+            . '      <th class="text-left">' . $langStudent . '</th>' . "\n"
+            . '      <th width="5px">' . $langProgress . '</th>' . "\n"
             . '    </tr>' . "\n";
 
     // display tab content
-    $k = 0;
     foreach ($usersList as $user) {
         $lpProgress = get_learnPath_progress($path_id, $user->id);
-        if ($k % 2 == 0) {
-            $tool_content .= "\n    <tr class=\"even\">";
-        } else {
-            $tool_content .= "\n    <tr class=\"odd\">";
-        }
+        $tool_content .= "\n    <tr>";
         $tool_content .= '' . "\n"
-                . '      <td width="1"><img src="' . $themeimg . '/arrow.png" alt="bullet" title="bullet" border="0"></td>' . "\n"
                 . '      <td><a href="detailsUserPath.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '&amp;path_id=' . $path_id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>' . "\n"
                 . '      <td align="right">'
                 . disp_progress_bar($lpProgress, 1)
                 . '</td>' . "\n"
-                . '      <td align="left"><small>' . $lpProgress . '%</small></td>' . "\n"
                 . '    </tr>' . "\n";
-        $k++;
     }
     // foot of table
-    $tool_content .= '    ' . "\n\n" . '    </table>' . "\n\n";
+    $tool_content .= '    ' . "\n\n" . '    </table></div>' . "\n\n";
 }
 
 draw($tool_content, 2, null, $head_content);

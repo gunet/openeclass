@@ -28,7 +28,8 @@ if (file_exists('../../../include/log.php')) {
     require_once '../../../include/log.php';
 }
 
-if (!class_exists('Exercise')):
+if (!class_exists('Exercise')) {
+
     /* >>>>>>>>>>>>>>>>>>>> CLASS EXERCISE <<<<<<<<<<<<<<<<<<<< */
 
     /**
@@ -910,33 +911,32 @@ if (!class_exists('Exercise')):
                                     VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
                                     $clone_course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
                                     $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;        
-            if ($clone_course_id != $course_id) { // copy questions to new course question_pool
-                $maxId = Database::get()->querySingle("SELECT COALESCE(MAX(id), 0) AS maxId
-                                            FROM exercise_question WHERE course_id = ?d", $clone_course_id);
-                Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
-                                            SELECT ?d, question, description, weight, q_position, type, difficulty, 0
-                                                FROM `exercise_question`
-                                                   WHERE course_id = ?d AND
-                                                         id IN (SELECT question_id FROM exercise_with_questions
-                                                                   WHERE exercise_id = ?d)",
-                                        $clone_course_id, $course_id, $id);
+            if ($clone_course_id != $course_id) {
+                // copy questions and answers to new course question pool
+                Database::get()->queryFunc("SELECT question_id AS id FROM exercise_with_questions
+                        WHERE exercise_id = ?d",
+                    function ($question) use ($clone_id, $clone_course_id) {
+                        $question_clone_id = Database::get()->query("INSERT INTO exercise_question
+                            (course_id, question, description, weight, q_position, type, difficulty, category)
+                            SELECT ?d, question, description, weight, q_position, type, difficulty, 0
+                                FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
+                        Database::get()->query("INSERT INTO exercise_with_questions
+                            (question_id, exercise_id) VALUES (?d, ?d)", $question_clone_id, $clone_id);
+                        Database::get()->query("INSERT INTO exercise_answer
+                            (question_id, answer, correct, comment, weight, r_position)
+                            SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
+                                WHERE question_id = ?d",
+                            $question_clone_id, $question->id);
+                    },
+                    $id);
+            } else {
+                // add question to new exercise
+                Database::get()->query("INSERT INTO `exercise_with_questions`
+                        (question_id, exercise_id)
+                        SELECT question_id, ?d FROM `exercise_with_questions`
+                            WHERE exercise_id = ?d", $clone_id, $id);
             }
-            if ($clone_course_id == $course_id) { //add question to exercise
-                Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
-                                        SELECT question_id, ?d
-                                          FROM `exercise_with_questions`
-                                         WHERE exercise_id = ?d", $clone_id, $id);
-            } else { // add copied questions to exercise 
-                Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
-                                        SELECT id, ?d FROM `exercise_question`
-                                             WHERE course_id = ?d AND id > ?d", $clone_id, $clone_course_id, $maxId);
-            }
-        }        
-
+        }
     }
 
-    
-
-    
-
-endif;
+}

@@ -86,11 +86,6 @@ function showlinksofcategory($catid) {
                 $editlink .= "&amp;category=$category";
             }
             $tool_content .= action_button(array(
-                array('title' => $langDelete,
-                      'icon' => 'fa-times',
-                      'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
-                      'confirm' => $langLinkDelconfirm),
                 array('title' => $langModify,
                       'icon' => 'fa-edit',
                       'url' => $editlink),
@@ -105,7 +100,12 @@ function showlinksofcategory($catid) {
                       'icon' => 'fa-arrow-down',
                       'disabled' => $links_num >= $numberoflinks,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id",
-                      )
+                      ),
+                array('title' => $langDelete,
+                      'icon' => 'fa-times',
+                      'class' => 'delete',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
+                      'confirm' => $langLinkDelconfirm)
             ));
             $tool_content .= "</td>";
         }
@@ -136,11 +136,6 @@ function showcategoryadmintools($categoryid) {
 
     $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
     $tool_content .= action_button(array(
-                array('title' => $langDelete,
-                      'icon' => 'fa-times',
-                      'url' => "$basecaturl" . "action=deletecategory",
-                      'class' => 'delete',
-                      'confirm' => $langCatDel),
                 array('title' => $langModify,
                       'icon' => 'fa-edit',
                       'url' => "$basecaturl" . "action=editcategory"),
@@ -149,11 +144,16 @@ function showcategoryadmintools($categoryid) {
                       'icon' => 'fa-arrow-up',
                       'disabled' => $catcounter == 0,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid",),
-                 array('title' => $langDown,
+                array('title' => $langDown,
                        'level' => 'primary',
                        'icon' => 'fa-arrow-down',
                        'disabled' => $catcounter == $aantalcategories-1,
-                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid" )
+                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid" ),
+                array('title' => $langDelete,
+                              'icon' => 'fa-times',
+                              'url' => "$basecaturl" . "action=deletecategory",
+                              'class' => 'delete',
+                              'confirm' => $langCatDel)
                 ));           
     $catcounter++;
 }

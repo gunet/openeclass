@@ -57,6 +57,13 @@ if (isset($_REQUEST['username'])) {
     }
 }
 
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "index.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ),false);
+
 $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
             <div class='form-group'>

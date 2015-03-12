@@ -886,7 +886,7 @@ jContent;
         $defaults = array('params' => 'name="department[]"',
             'tree' => null,
             'useKey' => 'id',
-            'where' => 'AND node.allow_course = true',
+            'where' => 'AND node.allow_user = true',
             'multiple' => get_config('user_multidep'));
         $this->populateOptions($options, $defaults);
 

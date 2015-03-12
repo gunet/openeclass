@@ -94,4 +94,4 @@ if (defined('GROUP_DOCUMENTS')) {
     $basedir = $webDir . '/courses/' . $course_code . '/document';
     $pageName = $langDoc;
 }
-$redirect_base_url = preg_replace('/&$/', '', str_replace('&amp;', '&', $base_url));
+

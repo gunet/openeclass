@@ -263,6 +263,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('PROFILE_LINK', $urlServer . "main/profile/display_profile.php");
         $t->set_var('LANG_MESSAGES', $GLOBALS['langMyDropBox']);
         $t->set_var('MESSAGES_LINK', $urlServer . "modules/dropbox/index.php");
+        $t->set_var('LANG_COURSES', $GLOBALS['langMyPersoLessons']);
+        $t->set_var('COURSES_LINK', $urlServer . "main/my_courses.php");        
         $t->set_var('LANG_AGENDA', $langMyAgenda);
         $t->set_var('AGENDA_LINK', $urlServer . "main/personal_calendar/index.php");
         $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);
@@ -286,8 +288,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LOGGED_IN', 'true');
     } else {
         if (!get_config('dont_display_login_form')) {
+            $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+            if (preg_match('@(?:^/(?:modules|courses)|listfaculte|opencourses|openfaculties)@', $next)) {
+                $nextParam = '?next=' . urlencode($next);
+            } else {
+                $nextParam = '';
+            }
             $t->set_var('LANG_LOGOUT', $langLogin);
-            $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php');
+            $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php' . $nextParam);
         } else {
             $t->set_var('LOGOUT_LINK', '#');
         }

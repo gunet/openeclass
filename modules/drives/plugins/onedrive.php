@@ -20,7 +20,9 @@
  * ======================================================================== 
  */
 
-final class OneDrive extends CloudDrive {
+require_once 'oauthdrive.php';
+
+final class OneDrive extends OAuthDrive {
 
     private $client_id;
     private $redirect_url;

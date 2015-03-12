@@ -20,9 +20,9 @@
  * ======================================================================== 
  */
 
-require_once 'clouddriveapp.php';
+require_once 'oauthdriveapp.php';
 
-class GoogleDriveApp extends CloudDriveApp {
+class GoogleDriveApp extends OAuthDriveApp {
 
     const EMAIL = "email";
 

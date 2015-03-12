@@ -76,20 +76,17 @@ function list_docs() {
         $pageName = $langCommonDocs;
         $group_sql = "course_id = -1 AND subsystem = " . COMMON . "";
         $basedir = $webDir . '/courses/commondocs';
-        $result = Database::get()->queryArray("SELECT * FROM document
-                                    WHERE $group_sql AND
-                                          visible = 1 AND
-                                          path LIKE ?s AND
-                                          path NOT LIKE ?s",
-                                    "$path/%", "$path/%/%");
+        $visible_sql = 'visible = 1 AND';
     } else {
         $common_docs = false;
-        $result = Database::get()->queryArray("SELECT * FROM document
-                                    WHERE $group_sql AND
-                                          path LIKE ?s AND
-                                          path NOT LIKE ?s",
-                                    "$path/%", "$path/%/%");
+        $visible_sql = '';
     }
+    $result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+                                WHERE $group_sql AND $visible_sql
+                                      path LIKE ?s AND
+                                      path NOT LIKE ?s
+                                ORDER BY sort_key COLLATE utf8_unicode_ci",
+                                "$path/%", "$path/%/%");
 
     $fileinfo = array();
     $urlbase = $_SERVER['SCRIPT_NAME'] . "?course=$course_code$dir_setter&amp;type=doc&amp;id=$id&amp;path=";

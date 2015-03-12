@@ -202,7 +202,7 @@ $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
 
 foreach ($departments as $dep) {
-    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid))) {
+    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIdsAllowedForCourseCreation($uid))) {
         $deps_valid = false;
     }
 }
@@ -219,7 +219,7 @@ if (!$deps_valid) {
 // display form
 if (!isset($_POST['create_course'])) {
         $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => $allow_only_defaults));        
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIdsAllowedForCourseCreation($uid), 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
@@ -390,8 +390,7 @@ if (!isset($_POST['create_course'])) {
     }
 
     if ($validationFailed) {
-        header("Location:" . $urlServer . "modules/create_course/create_course.php");
-        exit;
+        redirect_to_home_page('modules/create_course/create_course.php');
     }
     
     // create new course code: uppercase, no spaces allowed
@@ -412,7 +411,10 @@ if (!isset($_POST['create_course'])) {
     }
 
     // create course directories
-    create_course_dirs($code);
+    if (!create_course_dirs($code)) {
+        Session::Messages($langGeneralError, 'alert-danger');
+        redirect_to_home_page('modules/create_course/create_course.php');
+    }
 
     // get default quota values
     $doc_quota = get_config('doc_quota');

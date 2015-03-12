@@ -33,7 +33,7 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $tool_content .= action_bar(array(
                 array('title' => $langBack,
-                    'url' => "$_SERVER[PHP_SELF]",
+                    'url' => "index.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')
                 ));
@@ -78,7 +78,8 @@ if (!empty($submit) && (isset($old_mail_ver) && isset($new_mail_ver))) {
 // admin hasn't clicked on edit
 if (empty($submit0) && empty($submit1) && empty($submit2)) {
     $tool_content .= "<form name='mail_verification' method='post' action='$_SERVER[SCRIPT_NAME]'>
-	<table class='table-default' style='margin-top: 20px;'>
+        <div class='table-responsive'>
+	<table class='table-default'>
 		<tr><td class='text-left' colspan='3'><b>$langMailVerificationSettings</b></td></tr>
 		<tr><td class='text-left' colspan='2'>$lang_email_required:</td>
 			<td class='text-center'>$mr</td></tr>
@@ -109,7 +110,7 @@ if (empty($submit0) && empty($submit1) && empty($submit2)) {
 			<td class='text-center'><b>" .
             Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt .
             "</b></td><td class='text-right'>&nbsp;</td></tr>
-	</table></form>";
+	</table></div></form>";
 }
 // admin wants to change user's mail verification value. 3 possible
 else { 

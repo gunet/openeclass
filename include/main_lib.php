@@ -230,8 +230,8 @@ function load_js($file, $init='') {
             $head_content .= "<script type='text/javascript' src='{$urlAppend}js/bootstrap-datepicker/js/bootstrap-datepicker.js'></script>\n";
             $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
         } elseif ($file == 'bootstrap-slider') {
-            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-slider/css/bootstrap-slider.css'>\n";
-            $file = "bootstrap-slider/js/bootstrap-slider.js";
+            $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-slider/css/bootstrap-slider.min.css'>\n";
+            $file = "bootstrap-slider/js/bootstrap-slider.min.js";
         } elseif ($file == 'bootstrap-colorpicker') {
             $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css'>\n";
             $file = "bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js";
@@ -412,7 +412,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
             $groups .= ((count($q) > 1) ? '<li>' : '') .
                     "<a href='{$urlAppend}modules/group/group_space.php?group_id=$r->id' title='" .
                     q($r->name) . "'>" .
-                    q(ellipsize($r->name, 20)) . "</a>" .
+                    q(ellipsize($r->name, 40)) . "</a>" .
                     ((count($q) > 1) ? '</li>' : '');
         } else {
             $groups .= (empty($groups) ? '' : ', ') . $r->name;
@@ -420,7 +420,7 @@ function user_groups($course_id, $user_id, $format = 'html') {
     }
     if ($format == 'html') {
         if (count($q) > 1) {
-            return "<ol>$groups</ol>";
+            return "<ul class='list-unstyled'>$groups</ul>";
         } else {
             return "<div style='padding-left: 15px'>$groups</div>";
         }
@@ -898,7 +898,7 @@ function mkpath($path) {
             if (!is_dir($path)) {
                 return false;
             }
-        } elseif (!mkdir($path, 0755)) {
+        } elseif (!@mkdir($path, 0755)) {
             return false;
         }
     }
@@ -1704,14 +1704,24 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
+    image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
-        {title: 'None', value: ''}
+        {title: 'Float left', value: 'pull-left'},
+        {title: 'Float left and responsive', value: 'pull-left img-responsive'},
+        {title: 'Float right', value: 'pull-right'},
+        {title: 'Float right and responsive', value: 'pull-right img-responsive'},
+        {title: 'Rounded image', value: 'img-rounded'},
+        {title: 'Rounded image and responsive', value: 'img-rounded img-responsive'},
+        {title: 'Circle image', value: 'img-circle'},
+        {title: 'Circle image and responsive', value: 'img-circle img-responsive'},
+        {title: 'Thumbnail image', value: 'img-thumbnail'},
+        {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
+        {title: 'None', value: ' '}
     ],
     plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
     entity_encoding: 'raw',
     relative_urls: false,
-    image_advtab: true,
     link_class_list: [
         {title: 'None', value: ''},
         {title: '$langPopUp', value: 'colorbox'},
@@ -1720,7 +1730,7 @@ tinymce.init({
     $filebrowser
 
     // Toolbar options
-    toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
+    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
@@ -2957,3 +2967,32 @@ function setOpenCoursesExtraHTML() {
             </div>";
     }
 }
+
+/**
+ * @brief returns the appropriate translation of a message depending on the current language
+ * @param string $message either simple string or serialized array of [ $langCode => $locMessage ]
+ * @param string $lang [optional] language to use for localization - if unset, uses global $lang
+ */
+function getSerializedMessage($message, $lang=null) {
+    global $language;
+
+    if (!isset($lang)) {
+        $lang = $language;
+    }
+
+    // Message is simple string, not serialized array - just return it
+    if (!($data = @unserialize($message))) {
+        return $message;
+    } else {
+        if (isset($data[$lang])) {
+            return $data[$lang]; // return requested language if possible...
+        } elseif (isset($data['en'])) {
+            return $data['en']; // ... else return English message if possible...
+        } elseif (isset($data['el'])) {
+            return $data['el']; // ... else return Greek message
+        }
+    }
+    return '';
+}
+
+

@@ -73,6 +73,12 @@ if (isset($_GET['from_stats']) and $_GET['from_stats'] == 1) { // if we come fro
     statistics_tools($course_code, "detailsAll", "../usage/");
 }
 
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "index.php",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')),false); 
+
 // check if there are learning paths available
 $lcnt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM lp_learnPath WHERE course_id = ?d", $course_id)->count;
 if ($lcnt == 0) {
@@ -81,19 +87,20 @@ if ($lcnt == 0) {
     exit;
 } else {
     $tool_content .= "<div class='alert alert-info'>
-           <b>$langDumpUserDurationToFile: </b>1. <a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>
-                2. <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
+           <b>$langSave $langDumpUserDurationToFile: </b><a href='dumpuserlearnpathdetails.php?course=$course_code'>$langcsvenc2</a>&nbsp;
+                $langOr&nbsp; <a href='dumpuserlearnpathdetails.php?course=$course_code&amp;enc=1253'>$langcsvenc1</a>          
           </div>";
 }
 
 // display tab header
 $tool_content .= "
+  <div class='table-responsive'>
   <table class='table-default'>
-  <tr>
-    <th class='left'><div align='left'>$langStudent</div></th>
+  <tr class='list-header text'>
+    <th>$langStudent</th>
     <th width='120'>$langAm</th>
     <th>$langGroup</th>
-    <th colspan='2'>$langProgress&nbsp;&nbsp;</th>
+    <th>$langProgress</th>
   </tr>\n";
 
 
@@ -117,17 +124,16 @@ foreach ($usersList as $user) {
     }
     $total = round($globalprog / ($iterator - 1));
     $tool_content .= 
-            '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '">' . q($user->surname) . ' ' . q($user->givenname) . '</a></td>'
-            . '    <td class="center">' . q(uid_to_am($user->id)) . '</td>'
-            . '    <td align="center">' . user_groups($course_id, $user->id) . '</td>'
-            . '    <td class="right" width=\'120\'>'
+            '    <td><a href="detailsUser.php?course=' . $course_code . '&amp;uInfo=' . $user->id . '&amp;uName=' . $user->givenname . '">' .  profile_image($user->id, IMAGESIZE_SMALL, 'img-circle')."&nbsp;". q($user->surname) . ' ' . q($user->givenname) . '</a></td>'
+            . '    <td class="text-center">' . q(uid_to_am($user->id)) . '</td>'
+            . '    <td class="text-left">' . user_groups($course_id, $user->id) . '</td>'
+            . '    <td class="text-right" width=\'120\'>'
             . disp_progress_bar($total, 1)
             . '</td>'
-            . '    <td align="left" width=\'10\'>' . $total . '%</td>'
             . '</tr>';
     $k++;
 }
 // foot of table
-$tool_content .= '</table>';
+$tool_content .= '</table></div>';
 
 draw($tool_content, 2, null, $head_content);

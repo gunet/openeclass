@@ -261,13 +261,13 @@ if ($is_editor) {
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
                             <div class='col-sm-10'>
-                              <input name='newPathName' type='text' class='form-control' id='newPathName' placeholder='$langLearningPathName'>
+                              <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='newComment' class='col-sm-2 control-label'>$langComment:</label>
                             <div class='col-sm-10'>
-                              <input name='newComment' type='text' class='form-control' id='newComment' placeholder='$langComment'>
+                              <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
                         <div class='form-group'>
@@ -377,7 +377,7 @@ if ($l == 0) {
 $tool_content .= "
 <div class='table-responsive'>    
     <table class='table-default'>
-    <tr>
+    <tr class='list-header'>
       <th><div align='left'>$langLearningPaths</div></th>\n";
 
 if ($is_editor) {
@@ -609,7 +609,6 @@ foreach ($result as $list) { // while ... learning path list
             $globalprog += $prog;
         }
         $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>\n";
-        $tool_content .= "<td class='text-left' width='10'>" . $prog . "% </td>";
     }
     $tool_content .= "</tr>\n";
     $iterator++;
@@ -621,9 +620,8 @@ if (!$is_editor && $iterator != 1 && $uid) {
     $total = round($globalprog / ($iterator - 1));
     $tool_content .= "
     <tr>
-      <th colspan='2'><div align='right'><b>$langPathsInCourseProg</b>:</div></th>
+      <th><div align='right'><b>$langPathsInCourseProg</b>:</div></th>
       <th><div align='right'>" . disp_progress_bar($total, 1) . "</div></th>
-      <th><div align='left'>$total%</div></th>
     </tr>\n";
 }
 $tool_content .= "\n     </table></div>\n";

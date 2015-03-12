@@ -269,9 +269,9 @@ if ($all_set) {
     }
     //add custom profile fields
     $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
+    $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
-                    </div>
+                    </div></div>
         </fieldset>
       </form>
       </div>";

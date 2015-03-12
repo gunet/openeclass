@@ -209,9 +209,9 @@
 }
 .cal-week-box [data-event-class] {
   white-space: nowrap;
-  height: 13px;
+  height: 30px;
   margin: 1px 1px;
-  line-height: 13px;
+  line-height: 30px;
   text-overflow: ellipsis;
   overflow: hidden;
   padding-left: 10px;
@@ -251,14 +251,16 @@
   text-wrap: none;
 }
 #cal-day-box .cal-day-hour-part {
-  height: 13px;
+  /*height: 13px;*/
+  height: 30px;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   border-bottom: thin dashed #e1e1e1;
 }
 #cal-day-box .cal-day-hour .day-highlight {
-  height: 13px;
+  /*height: 13px;*/
+  height: 30px;
 }
 #cal-day-box .cal-hours {
   font-weight: bolder;
@@ -281,7 +283,8 @@
   overflow: hidden;
 }
 #cal-day-box .day-highlight {
-  line-height: 13px;
+  /*line-height: 13px;*/
+  line-height: 30px;
   padding-left: 8px;
   padding-right: 8px;
   box-sizing: border-box;
@@ -510,6 +513,7 @@ span[data-cal-date]:hover {
 a.cal-event-week {
   text-decoration: none;
   color: #151515;
+ 
 }
 .badge-important {
   background-color: #b94a48;
