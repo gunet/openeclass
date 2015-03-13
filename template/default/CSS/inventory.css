@@ -3231,3 +3231,22 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover {
 #main-content .login-page .row > .col-sm-4:first-child, #main-content .login-page .row > .col-sm-4:nth-last-child(2) {
   border-right: 1px solid #ddd !important;
 }
+
+/* line 2877, ../SASS/inventory.scss */
+.form-wrapper h4.form-heading {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+/* line 2885, ../SASS/inventory.scss */
+.notice .notice-header {
+  color: black;
+  margin-bottom: 5px;
+  text-decoration: underline;
+}
+/* line 2890, ../SASS/inventory.scss */
+.notice .notice-body {
+  color: #777777;
+}
