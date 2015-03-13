@@ -362,6 +362,14 @@ if ($is_editor) {
             </div>
         </div>";
     }
+} else {
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "javascript:history.back();",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            )
+        ));
 }
 
 // check if there are learning paths available

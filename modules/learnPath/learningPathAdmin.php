@@ -358,8 +358,14 @@ if (isset($sortDirection) && $sortDirection) {
     }
 }
 
-
-$tool_content .= "<br><div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathData</h3></div>";
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "javascript:history.back();",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            )
+        ),false);
+$tool_content .= "<div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathData</h3></div>";
 $tool_content .= "<table class='table-default'>";
 
 //############################ LEARNING PATH NAME BOX ################################\\
