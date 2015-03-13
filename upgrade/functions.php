@@ -189,8 +189,12 @@ function is_admin($username, $password) {
             return false;
 
         $hasher = new PasswordHash(8, false);
-        if (!$hasher->CheckPassword($password, $user->password))
+        if (!$hasher->CheckPassword($password, $user->password)) {
+            if (strlen($user->password) < 60 and md5($password) == $user->password) {
+                return true;
+            }
             return false;
+        }
 
         if ($db_schema == 0) {
             $_SESSION['uid'] = $user->user_id;

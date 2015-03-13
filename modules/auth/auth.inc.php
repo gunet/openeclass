@@ -246,7 +246,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 $hasher = new PasswordHash(8, false);
                 if ($hasher->CheckPassword($test_password, $result->password)) {
                     $testauth = true;
-                } else if (result($myrow->password) < 60 && md5($test_password) == $result->password) {
+                } else if (strlen($myrow->password) < 60 && md5($test_password) == $result->password) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
                     $password_encrypted = $hasher->HashPassword($test_password);
