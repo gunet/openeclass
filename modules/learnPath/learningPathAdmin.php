@@ -359,7 +359,7 @@ if (isset($sortDirection) && $sortDirection) {
 }
 
 
-$tool_content .= "<br><div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathData</h3></div>";
+$tool_content .= "<br><div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathData</h3></div>";
 $tool_content .= "<table class='table-default'>";
 
 //############################ LEARNING PATH NAME BOX ################################\\
@@ -387,7 +387,7 @@ if ($cmd == "updatecomment") {
 }
 
 $tool_content .= "</td></tr></table></div>";
-$tool_content .= "<div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathConfigure</h3></div>";
+$tool_content .= "<div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathConfigure</h3></div>";
 $tool_content .= "<table class='table-default'>";
 
 // -------------------- create label -------------------
@@ -463,7 +463,7 @@ if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= $dialogBox;
 }
 
-$tool_content .= "<div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathStructure</h3></div>";
+$tool_content .= "<div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathStructure</h3></div>";
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`
