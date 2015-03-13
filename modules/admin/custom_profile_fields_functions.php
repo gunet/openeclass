@@ -107,6 +107,11 @@ function render_profile_fields_form($context) {
                         $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
                         break;
                     case CPF_DATE:
+                        if (isset($fdata) && $fdata != '') {
+                            $val = 'value="'.q($fdata).'"';
+                        }
+                        load_js('bootstrap-datepicker');
+                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
                         break;
                     case CPF_MENU:
                         if (isset($fdata) && $fdata != '') {
@@ -223,6 +228,7 @@ function render_profile_fields_content($context) {
                         $return_str .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
                         break;
                     case CPF_DATE:
+                        $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                         break;
                     case CPF_MENU:
                         $options = unserialize($f->data);
