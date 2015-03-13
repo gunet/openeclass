@@ -66,6 +66,7 @@ if (isset($_GET['path_id'])) {
 
 $lp = Database::get()->querySingle("SELECT name, visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
 $pageName = $lp->name;
+$toolName = $langLearningPaths;
 if (!add_units_navigation(TRUE)) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 }
@@ -174,15 +175,12 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 // comment
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
     $tool_content .= "
-    <table width='100%' class='tbl'>
-    <tr>
-      <th><div align='left'>" . $langComments . "&nbsp;" . $langLearningPath1 . ":</div></th>
-    </tr>
-    <tr class='odd'>
-      <td><small>" . commentBox(LEARNINGPATH_, DISPLAY_) . "</small></td>
-    </tr>
-    </table>
-    <br />";
+        <div class='row alert'>
+            <div class='col-xs-12'>"
+                . commentBox(LEARNINGPATH_, DISPLAY_) .
+            "</div>
+        </div>
+    ";
 }
 
 // --------------------------- module table header --------------------------
