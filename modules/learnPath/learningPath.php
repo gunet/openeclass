@@ -127,6 +127,14 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 
 $fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "javascript:history.back();",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            )
+        ));
+
 if (count($fetchedList) == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
     add_units_navigation();
