@@ -183,12 +183,12 @@ function render_profile_fields_content($context) {
         foreach ($res as $f) { //get user data for each field
             $return_str .= "<div class='profile-pers-info-data'>";
             
-            $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields
+            $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data
                                                        WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
             
             $return_str .= "<span class='tag'>".$f->name." : </span>";
             
-            if (is_null($fdata_res)) {
+            if (!$fdata_res) {
                 $return_str .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
             } else {
                 $return_str .= "";
