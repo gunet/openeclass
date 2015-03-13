@@ -385,8 +385,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         DBHelper::fieldExists('user', 'verified_mail') or
                 Database::get()->query("ALTER TABLE `user` ADD verified_mail BOOL NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
                                          ADD receive_mail BOOL NOT NULL DEFAULT 1");
-        DBHelper::fieldExists('course_user', 'receive_mail') or
-                Database::get()->query("ALTER TABLE `course_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
+        DBHelper::fieldExists('cours_user', 'receive_mail') or
+                Database::get()->query("ALTER TABLE `cours_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `document` (
                         `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `course_id` INT(11) NOT NULL,
@@ -406,10 +406,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `author` VARCHAR(255) NOT NULL DEFAULT '',
                         `format` VARCHAR(32) NOT NULL DEFAULT '',
                         `language` VARCHAR(16) NOT NULL DEFAULT '',
-                        `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
-                        FULLTEXT KEY `document`
-                            (`filename`, `comment`, `title`, `creator`,
-                            `subject`, `description`, `author`, `language`)) $charset_spec");
+                        `copyrighted` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `group_properties` (
                         `course_id` INT(11) NOT NULL PRIMARY KEY ,
                         `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
@@ -630,14 +627,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('opencourses_enable', 0)");
 
         DBHelper::fieldExists('document', 'public') or
-                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
-        DBHelper::fieldExists('cours_user', 'reviewer') or
-                Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");        
         DBHelper::fieldExists('cours', 'course_license') or
                 Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '0' AFTER `course_addon`");
-
         DBHelper::fieldExists("cours_user", "reviewer") or
-                Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0'");
 
         // prevent dir list under video storage
         if ($handle = opendir($webDir . '/video/')) {
