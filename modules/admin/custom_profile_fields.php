@@ -22,6 +22,7 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
+require 'modules/admin/custom_profile_fields_functions.php';
 
 $toolName = $langCPFAdmin;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -93,8 +94,32 @@ if (isset($_GET['add_cat'])) { //add a new category form
             var chkValidator  = new Validator("catForm");
             chkValidator.addValidation("catname","req","' . $langCPFCategoryNameAlert . '");
     //]]></script>';
-} elseif (isset($_GET['add_field'])) { //add new field form
+} elseif (isset($_GET['add_field'])) { //add new field form (first step)
     $catid = intval($_GET['add_field']);
+    
+    $pageName = $langAddField;
+    
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "custom_profile_fields.php",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));
+    
+    $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langCPFLink );
+    
+    $tool_content .= "<div class='form-wrapper'>";
+    $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+    $tool_content .= "<fieldset>";
+    $tool_content .= "<input type='hidden' name='catid' value='$catid'>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label for='datatype' class='col-sm-2 control-label'>$langCPFFieldDatatype</label>
+                      <div class='col-sm-10'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='add_field_proceed_step2' value='$langNext'></div>";
+    $tool_content .= "</fieldset></form></div>";
+    
+} elseif (isset($_POST['add_field_proceed_step2'])) { //add new field form 2nd step
+    $catid = intval($_POST['catid']);
     
     load_js('validation.js');
     
@@ -102,19 +127,21 @@ if (isset($_GET['add_cat'])) { //add a new category form
     
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-              'url' => "custom_profile_fields.php",
+              'url' => "custom_profile_fields.php?add_field=".$catid,
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
     
-    $field_types = array(1 => $langCPFText, 2 => $langCPFTextarea, 3 => $langCPFDate, 4 => $langCPFMenu, 5 =>$langCPFLink );
     $yes_no = array(0 => $m['no'], 1 => $m['yes']);
-    $visibility = array(1 => $langProfOnly, 10 => $langToAllUsers);
-    $user_type = array(1 => $langsTeachers, 5 => $langStudents, 10 => $langAll);
+    $visibility = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
+    $user_type = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
+    
+    $datatype = intval($_POST['datatype']);
     
     $tool_content .= "<div class='form-wrapper'>";
     $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<input type='hidden' name='catid' value='$catid'>";
+    $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='name' class='col-sm-2 control-label'>$langName</label>
                       <div class='col-sm-10'><input id='name' type='text' name='field_name'></div>";
@@ -126,14 +153,18 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $tool_content .= "<div class='form-group'><label for='fielddescr' class='col-sm-2 control-label'>$langCPFFieldDescr</label>
                       <div class='col-sm-10'>".rich_text_editor('fielddescr', 8, 20, '')."</div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='datatype' class='col-sm-2 control-label'>$langCPFFieldDatatype</label>
-                      <div class='col-sm-10'>".selection($field_types, 'datatype', 1, 'class="form-control"')."</div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
-                      <div class='col-sm-10'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
-    $tool_content .= "</div>";
+    if ($datatype != CPF_MENU) {
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
+                          <div class='col-sm-10'>".selection($yes_no, 'required', 0, 'class="form-control"')."</div>";
+        $tool_content .= "</div>";
+    }
+    if ($datatype == CPF_MENU) {
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label for='options' class='col-sm-2 control-label'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan)</small></label>
+                          <div class='col-sm-10'><textarea name='options' rows='8' cols='20'></textarea></div>";
+        $tool_content .= "</div>";
+    }
     $tool_content .= "<div class='form-group'>";
     $tool_content .= "<label for='registration' class='col-sm-2 control-label'>$langCPFFieldRegistration</label>
                       <div class='col-sm-10'>".selection($yes_no, 'registration', 0, 'class="form-control"')."</div>";
@@ -154,7 +185,11 @@ if (isset($_GET['add_cat'])) { //add a new category form
             var chkValidator  = new Validator("fieldForm");
             chkValidator.addValidation("field_name","req","' . $langCPFFieldNameAlert . '");
             chkValidator.addValidation("field_shortname","req","' . $langCPFFieldShortNameAlert . '");
-    //]]></script>';
+        ';
+    if ($datatype == CPF_MENU) {
+        $tool_content .= 'chkValidator.addValidation("options","req","' . $langCPFMenuOptionsAlert . '");';
+    }        
+    $tool_content .= '//]]></script>';
                 
 } elseif (isset($_POST['submit_field'])) {
     
@@ -162,7 +197,17 @@ if (isset($_GET['add_cat'])) { //add a new category form
     $shortname = $_POST['field_shortname'];
     $description = $_POST['fielddescr'];
     $datatype = intval($_POST['datatype']);
-    $required = intval($_POST['required']);
+    if (isset($_POST['required'])) {
+        $required = intval($_POST['required']);
+    } else {
+        $required = 0;
+    }
+    if ($datatype == CPF_MENU && isset($_POST['options'])) {
+        $data = explode("\r\n", $_POST['options']);
+        $data = serialize($data);
+    } else {
+        $data = '';
+    }
     $registration = intval($_POST['registration']);
     $user_type = intval($_POST['user_type']);
     $visibility = intval($_POST['visibility']);
@@ -187,8 +232,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     datatype = ?d,
                                     required = ?d,
                                     visibility = ?d,
-                                    registration = ?d
-                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $fieldid);
+                                    registration = ?d,
+                                    data = ?s
+                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $data, $fieldid);
             Session::Messages($langCPFFieldEditSuccess, 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else {
@@ -210,8 +256,8 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 $sortorder = 0;
             }
             
-            Database::get()->query("INSERT INTO custom_profile_fields (shortname, name, description, datatype, categoryid, sortorder, required, visibility, user_type, registration) 
-                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, $user_type, $registration);
+            Database::get()->query("INSERT INTO custom_profile_fields (shortname, name, description, datatype, categoryid, sortorder, required, visibility, user_type, registration, data) 
+                                    VALUES (?s, ?s, ?s, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)", $shortname, $name, $description, $datatype, $catid, $sortorder, $required, $visibility, $user_type, $registration, $data);
             Session::Messages($langCPFFieldAddSuccess, 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else { //shortname is not unique, abort
@@ -250,18 +296,29 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $vis = $result->visibility;
         $utype = $result->user_type;
         $registration = $result->registration;
+        $data = $result->data;
+        
+        if ($datatype == CPF_MENU) {
+            $data = unserialize($data);
+            $textarea_val = '';
+            foreach ($data as $line) {
+                $textarea_val .= $line."\n";
+            }
+            $textarea_val = substr($textarea_val, 0, strlen($textarea_val)-1);
+        }
         
         load_js('validation.js');
         
-        $field_types = array(1 => $langCPFText, 2 => $langCPFTextarea, 3 => $langCPFDate, 4 => $langCPFMenu, 5 =>$langCPFLink );
+        $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langCPFLink);
         $yes_no = array(0 => $m['no'], 1 => $m['yes']);
-        $visibility = array(1 => $langProfOnly, 10 => $langToAllUsers);
-        $user_type = array(1 => $langsTeachers, 5 => $langStudents, 10 => $langAll);
+        $visibility = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
+        $user_type = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
         
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' name='fieldForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset>";
         $tool_content .= "<input type='hidden' name='field_id' value='$fieldid'>";
+        $tool_content .= "<input type='hidden' name='datatype' value='$datatype'>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='name' class='col-sm-2 control-label'>$langName</label>
                           <div class='col-sm-10'><input id='name' type='text' name='field_name' value='$name'></div>";
@@ -275,12 +332,20 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='datatype' class='col-sm-2 control-label'>$langCPFFieldDatatype</label>
-                          <div class='col-sm-10'>".selection($field_types, 'datatype', $datatype, 'class="form-control" disabled')."</div>";
+                          <div class='col-sm-10'>".selection($field_types, 'datatype_disabled', $datatype, 'class="form-control" disabled')."</div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
-                          <div class='col-sm-10'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
-        $tool_content .= "</div>";
+        if ($datatype != CPF_MENU) {
+            $tool_content .= "<div class='form-group'>";
+            $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
+                              <div class='col-sm-10'>".selection($yes_no, 'required', $required, 'class="form-control"')."</div>";
+            $tool_content .= "</div>";
+        }
+        if ($datatype == CPF_MENU) {
+            $tool_content .= "<div class='form-group'>";
+            $tool_content .= "<label for='options' class='col-sm-2 control-label'>$langCPFMenuOptions <small>($langCPFMenuOptionsExplan - $langCPFMenuOptionsChangeExplan)</small></label>
+                              <div class='col-sm-10'><textarea name='options' rows='8' cols='20'>$textarea_val</textarea></div>";
+            $tool_content .= "</div>";
+        }
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='registration' class='col-sm-2 control-label'>$langCPFFieldRegistration</label>
                           <div class='col-sm-10'>".selection($yes_no, 'registration', $registration, 'class="form-control"')."</div>";
@@ -301,7 +366,11 @@ if (isset($_GET['add_cat'])) { //add a new category form
                             var chkValidator  = new Validator("fieldForm");
                             chkValidator.addValidation("field_name","req","' . $langCPFFieldNameAlert . '");
                             chkValidator.addValidation("field_shortname","req","' . $langCPFFieldShortNameAlert . '");
-                        //]]></script>';
+                        ';
+        if ($datatype == CPF_MENU) {
+            $tool_content .= 'chkValidator.addValidation("options","req","' . $langCPFMenuOptionsAlert . '");';
+        }
+        $tool_content .= '//]]></script>';
     } else {
         
     }
@@ -387,10 +456,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 $tool_content .= "</tbody>";
             } else {
                 
-                $field_types = array(1 => $langCPFText, 2 => $langCPFTextarea, 3 => $langCPFDate, 4 => $langCPFMenu, 5 =>$langCPFLink );
+                $field_types = array(CPF_TEXTBOX => $langCPFText, CPF_TEXTAREA => $langCPFTextarea, CPF_DATE => $langCPFDate, CPF_MENU => $langCPFMenu, CPF_LINK =>$langCPFLink);
                 $yes_no = array(0 => $m['no'], 1 => $m['yes']);
-                $visibility = array(1 => $langProfOnly, 10 => $langToAllUsers);
-                $user_type = array(1 => $langsTeachers, 5 => $langStudents, 10 => $langAll);
+                $visibility = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
+                $user_type = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
                 
                 $tool_content .= "<tbody>";
                 foreach ($q as $f) {

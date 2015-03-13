@@ -20,6 +20,19 @@
  * ======================================================================== 
  */
 
+define('CPF_TEXTBOX', 1);
+define('CPF_TEXTAREA', 2);
+define('CPF_DATE', 3);
+define('CPF_MENU', 4);
+define('CPF_LINK', 5);
+
+define('CPF_VIS_PROF', 1);
+define('CPF_VIS_ALL', 10);
+
+define('CPF_USER_TYPE_PROF', 1);
+define('CPF_USER_TYPE_STUD', 5);
+define('CPF_USER_TYPE_ALL', 10);
+
 /**
  * Render custom profile fields in profile forms
  * @param array $context
@@ -47,9 +60,9 @@ function render_profile_fields_form($context) {
             $args[] = 1;
             $args[] = 5;
         } elseif ($context['origin'] == 'edit_profile') { //edit profile form
-            if ($_SESSION['status'] == 1) { //teacher
+            if ($_SESSION['status'] == USER_TEACHER) {
                 $args[] = 5;
-            } elseif ($_SESSION['status'] == 5) { //student
+            } elseif ($_SESSION['status'] == USER_STUDENT) {
                 $args[] = 1;
             }
         }
@@ -81,20 +94,20 @@ function render_profile_fields_form($context) {
                 $val = '';
                 
                 switch ($f->datatype) {
-                    case 1: //text box
+                    case CPF_TEXTBOX:
                         if (isset($fdata)) {
                             $val = 'value="'.q($fdata).'"';
                         }
                         $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
                         break;
-                    case 2: //textarea
+                    case CPF_TEXTAREA:
                         $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
                         break;
-                    case 3: //date
+                    case CPF_DATE:
                         break;
-                    case 4: //menu
+                    case CPF_MENU:
                         break;
-                    case 5: //link
+                    case CPF_LINK:
                         if (isset($fdata)) {
                             $val = 'value="'.q($fdata).'"';
                         }
@@ -116,7 +129,7 @@ function render_profile_fields_form($context) {
 function process_profile_fields_data($post_array, $context) {
     $uid = $context['uid'];
     foreach ($post_array as $key => $value) {
-        if (substr($key, 0, 4) == 'cpf_') { //custom profile field case
+        if (substr($key, 0, 4) == 'cpf_') { //custom profile fields input names start with cpf_
             $field_name = substr($key, 4);
             $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
             if ($context['origin'] == 'edit_profile') { //delete old values if exist
@@ -193,16 +206,16 @@ function render_profile_fields_content($context) {
             } else {
                 $return_str .= "";
                 switch ($f->datatype) {
-                    case 1: //text box
+                    case CPF_TEXTBOX:
                         $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                         break;
-                    case 2:
+                    case CPF_TEXTAREA:
                         break;
-                    case 3:
+                    case CPF_DATE:
                         break;
-                    case 4:
+                    case CPF_MENU:
                         break;
-                    case 5:
+                    case CPF_LINK:
                         break;
                 }
             }
