@@ -3245,3 +3245,9 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover {
 .notice .notice-body {
   color: #777777;
 }
+
+/* line 2891, ../SASS/inventory.scss */
+.lp-module-show .row {
+  padding-bottom: 7px;
+  padding-top: 7px;
+}
