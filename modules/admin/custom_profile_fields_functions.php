@@ -67,7 +67,7 @@ function render_profile_fields_form($context) {
             }
         }
         
-        $res = Database::get()->queryArray("SELECT id, name, shortname, description, required, datatype 
+        $res = Database::get()->queryArray("SELECT id, name, shortname, description, required, datatype, data 
                                             FROM custom_profile_fields WHERE categoryid = ?d ".$registr.
                                             "AND user_type <> ?d ORDER BY sortorder DESC", $args);
         
@@ -95,20 +95,30 @@ function render_profile_fields_form($context) {
                 
                 switch ($f->datatype) {
                     case CPF_TEXTBOX:
-                        if (isset($fdata)) {
+                        if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
                         }
                         $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
                         break;
                     case CPF_TEXTAREA:
+                        if (isset($fdata) && $fdata != '') {
+                            $val = $fdata;
+                        }
                         $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
                         break;
                     case CPF_DATE:
                         break;
                     case CPF_MENU:
+                        if (isset($fdata) && $fdata != '') {
+                            $def_selection = intval($fdata);
+                        } else {
+                            $def_selection = 0;
+                        }
+                        $options = unserialize($f->data);
+                        $return_string .= selection($options, 'cpf_'.$f->shortname, $def_selection);
                         break;
                     case CPF_LINK:
-                        if (isset($fdata)) {
+                        if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
                         }
                         $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
@@ -168,7 +178,7 @@ function render_profile_fields_content($context) {
         
         if ($context['user_id'] == $uid) { //viewing own profile
             $args[] = $cat->id;
-            $res = Database::get()->queryArray("SELECT id, name, datatype FROM custom_profile_fields 
+            $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields 
                                                 WHERE $user_type AND categoryid = ?d 
                                                 ORDER BY sortorder DESC", $args);
         } else { //viewing other user's profile
@@ -182,7 +192,7 @@ function render_profile_fields_content($context) {
                 $args[] = 10;
             }
             $args[] = $cat->id;
-            $res = Database::get()->queryArray("SELECT id, name, datatype FROM custom_profile_fields
+            $res = Database::get()->queryArray("SELECT id, name, datatype, data FROM custom_profile_fields
                                                 WHERE $user_type AND $visibility AND categoryid = ?d 
                                                 ORDER BY sortorder DESC", $args);
         }
@@ -201,7 +211,7 @@ function render_profile_fields_content($context) {
             
             $return_str .= "<span class='tag'>".$f->name." : </span>";
             
-            if (!$fdata_res) {
+            if (!$fdata_res || $fdata_res->data == '') {
                 $return_str .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
             } else {
                 $return_str .= "";
@@ -210,12 +220,16 @@ function render_profile_fields_content($context) {
                         $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
                         break;
                     case CPF_TEXTAREA:
+                        $return_str .= "<span class='tag-value'>".standard_text_escape($fdata_res->data)."</span>";
                         break;
                     case CPF_DATE:
                         break;
                     case CPF_MENU:
+                        $options = unserialize($f->data);
+                        $return_str .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
                         break;
                     case CPF_LINK:
+                        $return_str .= "<span class='tag-value'><a href='".q($fdata_res->data)."'>".q($fdata_res->data)."</a></span>";
                         break;
                 }
             }
