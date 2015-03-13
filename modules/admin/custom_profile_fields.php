@@ -187,9 +187,8 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     datatype = ?d,
                                     required = ?d,
                                     visibility = ?d,
-                                    user_type = ?d,
                                     registration = ?d
-                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $user_type, $registration, $fieldid);
+                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $fieldid);
             Session::Messages($langCPFFieldEditSuccess, 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else {
@@ -276,7 +275,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='datatype' class='col-sm-2 control-label'>$langCPFFieldDatatype</label>
-                          <div class='col-sm-10'>".selection($field_types, 'datatype', $datatype, 'class="form-control"')."</div>";
+                          <div class='col-sm-10'>".selection($field_types, 'datatype', $datatype, 'class="form-control" disabled')."</div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<label for='required' class='col-sm-2 control-label'>$langCPFFieldRequired</label>
