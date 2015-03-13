@@ -130,9 +130,89 @@ function process_profile_fields_data($post_array, $context) {
 /**
  * Render custom profile fields content when viewing profile
  * @param array $context
- * @param int $user_id
  * @return string
  */
-function render_profile_fields_content($context, $user_id) {
+function render_profile_fields_content($context) {
+    global $uid, $langProfileNotAvailable;
     
+    $return_str = '';
+    
+    $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
+    
+    foreach ($result as $cat) {
+        $args = array();
+        
+        $ref_user_type = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $context['user_id'])->status;
+        if ($ref_user_type == USER_TEACHER) {
+            $user_type = '(user_type = ?d OR user_type = ?d)';
+            $args[] = 1;
+            $args[] = 10;
+        } elseif ($ref_user_type == USER_STUDENT) {
+            $user_type = '(user_type = ?d OR user_type = ?d)';
+            $args[]= 5;
+            $args[] = 10;
+        }
+        
+        if ($context['user_id'] == $uid) { //viewing own profile
+            $args[] = $cat->id;
+            $res = Database::get()->queryArray("SELECT id, name, datatype FROM custom_profile_fields 
+                                                WHERE $user_type AND categoryid = ?d 
+                                                ORDER BY sortorder DESC", $args);
+        } else { //viewing other user's profile
+            if ($_SESSION['status'] == USER_STUDENT) {
+                $visibility = '(visibility = ?d OR visibility = ?d)';
+                $args[]= 5;
+                $args[] = 10;
+            } elseif ($_SESSION['status'] == USER_TEACHER) {
+                $visibility = '(visibility = ?d OR visibility = ?d)';
+                $args[] = 1;
+                $args[] = 10;
+            }
+            $args[] = $cat->id;
+            $res = Database::get()->queryArray("SELECT id, name, datatype FROM custom_profile_fields
+                                                WHERE $user_type AND $visibility AND categoryid = ?d 
+                                                ORDER BY sortorder DESC", $args);
+        }
+        
+        if (count($res) > 0) { //category start
+            $return_str .= "<div class='row'>
+                                <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
+                                    <h4>".$cat->name."</h4>";
+        }
+        
+        foreach ($res as $f) { //get user data for each field
+            $return_str .= "<div class='profile-pers-info-data'>";
+            
+            $fdata_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields
+                                                       WHERE user_id = ?d AND field_id = ?d", $context['user_id'], $f->id);
+            
+            $return_str .= "<span class='tag'>".$f->name." : </span>";
+            
+            if (is_null($fdata_res)) {
+                $return_str .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
+            } else {
+                $return_str .= "";
+                switch ($f->datatype) {
+                    case 1: //text box
+                        $return_str .= "<span class='tag-value'>".q($fdata_res->data)."</span>";
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                }
+            }
+            $return_str .= "</div>";
+        }
+        
+        if (count($res) > 0) { //category end
+            $return_str .= "</div></div>";
+        }
+        
+    }
+    return $return_str;
 }
