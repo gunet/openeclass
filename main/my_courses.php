@@ -71,7 +71,7 @@ $pageName = $langMyPersoLessons;
         $tool_content .= "
             <div class='table-responsive'>
                 <table class='table-default'>
-                    <thead>
+                    <thead class='list-header'>
                         <th>$langTitle</th>
                         <th>$langTeacher</th>
                         <th class='text-center'>".icon('fa-gears')."</th>
