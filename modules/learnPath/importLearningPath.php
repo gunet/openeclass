@@ -1108,24 +1108,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         <div class='row'>
             <div class='col-sm-12'>
                 <div class='form-wrapper'>
+                    <h4 class='form-heading'>$langImport</h4>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
-                        <fieldset>
-                            <h4 class='form-heading'>$langImport</h4>
-                            <div class='form-group'>
-                                <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
-                                <div class='col-sm-10'>
-                                    <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
-                                    <input id='uploadedPackage' type='file' name='uploadedPackage'>
-                                    <span class='smaller'>$langLearningPathUploadFile</span>
-                                    <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
-                                </div>
+                        <div class='form-group'>
+                            <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
+                            <div class='col-sm-10'>
+                                <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
+                                <input id='uploadedPackage' type='file' name='uploadedPackage'>
+                                <span class='smaller'>$langLearningPathUploadFile</span>
+                                <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
                             </div>
-                            <div class='form-group'>
-                                <div class='col-sm-offset-2 col-sm-10'>
-                                    <input class='btn btn-primary' type='submit' value='$langImport' >
-                                </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-offset-2 col-sm-10'>
+                                <input class='btn btn-primary' type='submit' value='$langImport' >
                             </div>
-                        </fieldset>
+                        </div>
                     </form>
                 </div>
             </div>
