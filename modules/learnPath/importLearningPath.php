@@ -1110,7 +1110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
                         <fieldset>
-                            <legend>$langImport</legend>
+                            <h4 class='form-heading'>$langImport</h4>
                             <div class='form-group'>
                                 <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
                                 <div class='col-sm-10'>
@@ -1156,9 +1156,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     }
 
 
-    $tool_content .= "\n<div class=\"fileman\">";
+    $tool_content .= "\n<div class=\"fileman row\">";
+    $tool_content .= "\n<div class=\"col-xs-12\">";
     $tool_content .= "\n<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
-    $tool_content .= "\n  <fieldset><legend>$langLearningPathImportFromDocuments</legend>";
+    $tool_content .= "\n  <h4 class='form-heading'>$langLearningPathImportFromDocuments</h4>";
     $tool_content .= "\n  <table width=\"100%\" class=\"tbl_alt_bordless\">";
     $tool_content .= "\n  <tbody>";
 
@@ -1242,11 +1243,18 @@ EOF;
 
     $tool_content .= "\n  </tbody>";
     $tool_content .= "\n  </table>";
-    $tool_content .= "\n  </fieldset>";
     $tool_content .= "\n</form>";
     $tool_content .= "\n</div>";
+    $tool_content .= "\n</div>";
 
-    $tool_content .= "<p class='right smaller'>$langNote:<br/>$langScormIntroTextForDummies</p>";
+    $tool_content .= "
+            <div class='row'>
+                <div class='col-xs-12 notice add-gutter'>
+                    <p class='notice-header'>$langNote:</p>
+                    <p class='notice-body text-muted'>$langScormIntroTextForDummies</p>
+                </div>
+            </div>
+            ";
 } // else if method == 'post'
 
 chdir($pwd);

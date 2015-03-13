@@ -2232,12 +2232,7 @@ $langProgress = "Πρόοδος";
 $langQuitViewer = "Επιστροφή στη λίστα";
 $langRawHasBeenChanged = "Ο ελάχιστος βαθμός για προαγωγή έχει αλλαχθεί";
 $langSCORMTypeDesc = "SCORM προσαρμοσμένο περιεχόμενο";
-$langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα αρχείο zip και να είναι συμβατά με:
-   <ul class='right smaller'>
-     <li> το SCORM 2004 ή</li>
-     <li> το SCORM 1.2</li>
-     <li> το IMS CP 1.1.4</li>
-   </ul>";
+$langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα αρχείο zip και να είναι συμβατά με <b>SCORM 2004</b> ή  <b>SCORM 1.2</b> ή <b>IMS CP 1.1.4</b>";
 $langScormEmptyDocsList = "Ανεβάστε πακέτα SCORM στα έγγραφα του μαθήματος ώστε να σας εμφανιστεί η αντίστοιχη επιλογή εισαγωγής τους";
 $langSecondShort = "δευτ.";
 $langStartModule = "Έναρξη ενότητας";

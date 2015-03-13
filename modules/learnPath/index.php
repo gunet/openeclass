@@ -257,7 +257,6 @@ if ($is_editor) {
                         )
                     ),false);
                     $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        <fieldset>
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
                             <div class='col-sm-10'>
@@ -277,7 +276,6 @@ if ($is_editor) {
                                   <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
                             </div>
                         </div>                        
-                        </fieldset>
                         </form></div>";
                 }
                 break;

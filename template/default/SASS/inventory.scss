@@ -2872,3 +2872,22 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
         border-right: 1px solid #ddd !important;
     }
 }
+
+.form-wrapper{
+    h4.form-heading{
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        color: #000;
+        margin-bottom: 20px;
+    }
+}
+.notice{
+    .notice-header{
+        color: black;
+        margin-bottom: 5px;
+        text-decoration: underline;
+    }
+    .notice-body{
+        color: #777777;
+    }
+}
