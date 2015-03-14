@@ -39,7 +39,12 @@ define('CPF_USER_TYPE_ALL', 10);
  * @return string
  */
 function render_profile_fields_form($context) {
-    global $uid;
+    if ($context['origin'] == 'admin_edit_profile') { //admin editing users' profile
+        $uid = $context['user_id'];
+    } else {
+        global $uid;
+    }
+    
     $return_string = "";
     
     $result = Database::get()->queryArray("SELECT id, name FROM custom_profile_fields_category ORDER BY sortorder DESC");
@@ -54,16 +59,23 @@ function render_profile_fields_form($context) {
         if ($context['origin'] == 'student_register') { //student registration form
             $registr = 'AND registration = ?d ';
             $args[] = 1;
-            $args[] = 1;
+            $args[] = CPF_USER_TYPE_PROF;
         } elseif ($context['origin'] == 'teacher_register') { //teacher registration form
             $registr = 'AND registration = ?d ';
             $args[] = 1;
-            $args[] = 5;
+            $args[] = CPF_USER_TYPE_STUD;
         } elseif ($context['origin'] == 'edit_profile') { //edit profile form
             if ($_SESSION['status'] == USER_TEACHER) {
-                $args[] = 5;
+                $args[] = CPF_USER_TYPE_STUD;
             } elseif ($_SESSION['status'] == USER_STUDENT) {
-                $args[] = 1;
+                $args[] = CPF_USER_TYPE_PROF;
+            }
+        } elseif ($context['origin'] == 'admin_edit_profile') { //admin edit user profile form
+            $status = Database::get()->querySingle("SELECT status FROM user WHERE id = ?d", $uid)->status;
+            if ($status == USER_TEACHER) {
+                $args[] = CPF_USER_TYPE_STUD;
+            } elseif ($status == USER_STUDENT) {
+                $args[] = CPF_USER_TYPE_PROF;
             }
         }
         
@@ -83,7 +95,7 @@ function render_profile_fields_form($context) {
                 $return_string .= '<div class="col-sm-10">';
                 
                 //get data to prefill fields
-                if ($context['origin'] == 'edit_profile') {
+                if ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile') {
                     $data_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data 
                                                           WHERE field_id = ?d AND user_id = ?d", $f->id, $uid);
                     if ($data_res) {
@@ -166,7 +178,7 @@ function process_profile_fields_data($post_array, $context) {
             if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
                 $field_name = substr($key, 4);
                 $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
-                if (isset($context['origin']) && $context['origin'] == 'edit_profile') { //delete old values if exist
+                if (isset($context['origin']) && ($context['origin'] == 'edit_profile' || $context['origin'] == 'admin_edit_profile')) { //delete old values if exist
                     Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
                 }
                 Database::get()->query("INSERT INTO custom_profile_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
