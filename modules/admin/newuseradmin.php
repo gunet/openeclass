@@ -29,6 +29,7 @@ require_once 'include/lib/hierarchy.class.php';
 require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/pwgen.inc.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -143,7 +144,8 @@ if ($submit) {
                  , " . DBHelper::timeAfter(get_config('account_duration')) . "
                  , ?s, '', ?s, '')", $surname_form, $givenname_form, $uname, $password_encrypted, $email_form, $pstatus, $phone, $am, $proflanguage, $verified_mail)->lastInsertID;
         $user->refresh($uid, array(intval($depid)));
-
+        //process custom profile fields values
+        process_profile_fields_data($_POST, array('uid' => $uid));
         // close request if needed
         if (!empty($rid)) {
             $rid = intval($rid);
@@ -204,12 +206,17 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
             if ($res->faculty_id) {            
                 validateNode($pt, isDepartmentAdmin());
             }
+            $cpf_context = array('origin' => 'teacher_register', 'pending' => true, 'user_request_id' => $id);
+        } else {
+            $cpf_context = array('origin' => 'teacher_register');
         }
 
         // display actions toolbar        
     } elseif (@$_GET['type'] == 'user') {
+        $cpf_context = array('origin' => 'student_register');
         $pstatus = 5;
     } else {
+        $cpf_context = array('origin' => 'teacher_register');
         $pstatus = 1;
     }
 
@@ -301,6 +308,8 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
                                 <div class='col-sm-10'>" . q($pdate) . "</div></div>";            
             $tool_content .= "<input type='hidden' name='rid' value='$id' />";
         }
+        //add custom profile fields input
+        $tool_content .= render_profile_fields_form($cpf_context);
         $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>                   
                             <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
                         </div>              

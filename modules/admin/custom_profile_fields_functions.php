@@ -89,6 +89,12 @@ function render_profile_fields_form($context) {
                     if ($data_res) {
                         $fdata = $data_res->data;
                     }
+                } elseif (isset($context['pending']) && $context['pending']) {
+                    $data_res = Database::get()->querySingle("SELECT data FROM custom_profile_fields_data_pending
+                                                          WHERE field_id = ?d AND user_request_id = ?d", $f->id, $context['user_request_id']);
+                    if ($data_res) {
+                        $fdata = $data_res->data;
+                    }
                 }
                 
                 $val = '';
@@ -160,7 +166,7 @@ function process_profile_fields_data($post_array, $context) {
             if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
                 $field_name = substr($key, 4);
                 $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
-                if ($context['origin'] == 'edit_profile') { //delete old values if exist
+                if (isset($context['origin']) && $context['origin'] == 'edit_profile') { //delete old values if exist
                     Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
                 }
                 Database::get()->query("INSERT INTO custom_profile_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
