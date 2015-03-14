@@ -142,17 +142,31 @@ function render_profile_fields_form($context) {
  * @param array $context
  */
 function process_profile_fields_data($post_array, $context) {
-    $uid = $context['uid'];
-    foreach ($post_array as $key => $value) {
-        if (substr($key, 0, 4) == 'cpf_') { //custom profile fields input names start with cpf_
-            $field_name = substr($key, 4);
-            $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
-            if ($context['origin'] == 'edit_profile') { //delete old values if exist
-                Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
+    if (isset($context['pending']) && $context['pending']) { //pending teacher registration
+        $user_request_id = $context['user_request_id'];
+        foreach ($post_array as $key => $value) {
+            if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
+                $field_name = substr($key, 4);
+                $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
+                /*if ($context['origin'] == 'edit_profile') { //delete old values if exist
+                    Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
+                }*/
+                Database::get()->query("INSERT INTO custom_profile_fields_data_pending (user_request_id, field_id, data) VALUES (?d,?d,?s)", $user_request_id, $field_id, $value);
             }
-            Database::get()->query("INSERT INTO custom_profile_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
         }
-    }    
+    } else { //normal registration process
+        $uid = $context['uid'];
+        foreach ($post_array as $key => $value) {
+            if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
+                $field_name = substr($key, 4);
+                $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
+                if ($context['origin'] == 'edit_profile') { //delete old values if exist
+                    Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
+                }
+                Database::get()->query("INSERT INTO custom_profile_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
+            }
+        }
+    }
 }
 
 /**

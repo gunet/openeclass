@@ -131,7 +131,10 @@ if ($all_set) {
 			comment = ?s, lang = ?s, request_ip = ?s",
             $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
     $request_id = $res->lastInsertID;
-
+    
+    //save custom profile fields values in pending table
+    process_profile_fields_data($_POST, array('user_request_id' => $request_id, 'pending' => true));
+    
     // email does not need verification -> mail helpdesk
     if (!$email_verification_required) {
         //----------------------------- Email Request Message --------------------------

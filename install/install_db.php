@@ -800,6 +800,12 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
                 `data` TEXT NOT NULL,
                 PRIMARY KEY (`user_id`, `field_id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data_pending` (
+                `user_request_id` INT(11) NOT NULL DEFAULT 0,
+                `field_id` INT(11) NOT NULL,
+                `data` TEXT NOT NULL,
+                PRIMARY KEY (`user_request_id`, `field_id`)) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `name` MEDIUMTEXT NOT NULL,
