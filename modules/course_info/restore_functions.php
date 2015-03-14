@@ -143,7 +143,12 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
             }
         }
         if (!isset($sql_intro)) {
-            $sql_intro = "INSERT INTO `$table` " . field_names($data, $table, $restoreHelper) . ' VALUES ';
+            if ($table == 'custom_profile_fields_data') {
+                $sql_intro = "INSERT IGNORE INTO `$table` " . field_names($data, $table, $restoreHelper) . ' VALUES ';
+            } else {
+                $sql_intro = "INSERT INTO `$table` " . field_names($data, $table, $restoreHelper) . ' VALUES ';
+            }
+            
         }
         if (isset($options['map'])) {
             foreach ($options['map'] as $field => &$map) {
@@ -661,6 +666,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map_function' => 'ratings_map_function',
             'map_function_data' => array($blog_map, $forum_post_map,
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
+        }
+        
+        //custom_profile_fields_data
+        if (file_exists("$restoreThis/custom_profile_fields_data")) {
+            restore_table($restoreThis, 'custom_profile_fields_data', array(
+            'map_function' => 'custom_profile_fields_data_map_function',
+            'map_function_data' => array($userid_map)), $url_prefix_map, $backupData, $restoreHelper);
         }
         
         //Course_settings
@@ -1220,6 +1232,14 @@ function comments_map_function(&$data, $maps) {
         $data['rid'] = $blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
         $data['rid'] = $course_id;
+    }
+    return true;
+}
+
+function custom_profile_fields_data_map_function(&$data, $maps) {
+    list($user_map) = $maps;
+    if ($data['user_id'] != $user_map[$data['user_id']]) {
+        $data['user_id'] = $user_map[$data['user_id']];
     }
     return true;
 }
