@@ -795,10 +795,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
                 `data` TEXT NULL DEFAULT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `field_id` INT(11) NOT NULL,
-                `data` TEXT NOT NULL) $charset_spec");
+                `data` TEXT NOT NULL,
+                PRIMARY KEY (`user_id`, `field_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
