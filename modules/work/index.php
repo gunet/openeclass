@@ -2182,7 +2182,7 @@ function create_zip_index($path, $id, $online = FALSE) {
         $filename = basename($row->file_path);
         $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
-        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
+        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
         fputs($fp, '
 			<tr class="sep">
 				<td>' . q(uid_to_name($row->uid)) . '</td>
