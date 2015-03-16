@@ -171,11 +171,14 @@ function showmedia() {
     global $langName, $langSelection, $langAddModulesButton, $course_code, $course_id;
         
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-               <table width='100%' class='table-default'>
-               <tr>
+               <div class='table-responsive'>
+               <table class='table-default'>
+               <thead>
+               <tr class='list-header'>
                <th>$langName</th>
                <th width='50'>$langSelection</th>
                </tr>
+               </thead>
                <tbody>";
 
     $i = 1;
@@ -203,15 +206,19 @@ function showmedia() {
         $j++;
     }
 
-    $output .= "<tr>
+    $output .= "
+                </tbody>
+                <tfooter>
+                <tr>
                 <th colspan='3'>
                 <div align='right'>
                   <input type='hidden' name='maxMediaForm' value ='" . ($i + $j - 2) . "' />
                   <input class='btn btn-primary' type='submit' name='submitInsertedMedia' value='$langAddModulesButton'/>
                 </div></th>
                 </tr>
-                </tbody>
+                </tfooter>
                 </table>
+                </div>
                 </form>";
     return $output;
 }
