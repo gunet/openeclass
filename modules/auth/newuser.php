@@ -183,14 +183,20 @@ if (!isset($_POST['submit'])) {
     } else {
         $am_arr_value = false;
     }
-    $missing = register_posted_variables(array('uname' => true,
-        'surname_form' => true,
-        'givenname_form' => true,
-        'password' => true,
-        'password1' => true,
-        'email' => $email_arr_value,
-        'phone' => false,
-        'am' => $am_arr_value));
+    
+    $var_arr = array('uname' => true,
+                    'surname_form' => true,
+                    'givenname_form' => true,
+                    'password' => true,
+                    'password1' => true,
+                    'email' => $email_arr_value,
+                    'phone' => false,
+                    'am' => $am_arr_value);
+    
+    //add custom profile fields required variables
+    augment_registered_posted_variables_arr($var_arr);
+    
+    $missing = register_posted_variables($var_arr);
 
     if (!isset($_POST['department'])) {
         $departments = array();

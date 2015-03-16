@@ -100,18 +100,22 @@ if (isset($_POST['submit'])) {
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
     Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);    
-
-    $all_ok = register_posted_variables(array(
-        'am_form' => get_config('am_required') and $myrow->status != 1,
-        'desc_form' => false,
-        'phone_form' => false,
-        'email_form' => get_config('email_required'),
-        'surname_form' => !$is_admin,
-        'givenname_form' => true,
-        'username_form' => true,
-        'email_public' => false,
-        'phone_public' => false,
-        'am_public' => false), 'all');
+    
+    $var_arr = array('am_form' => get_config('am_required') and $myrow->status != 1,
+                    'desc_form' => false,
+                    'phone_form' => false,
+                    'email_form' => get_config('email_required'),
+                    'surname_form' => !$is_admin,
+                    'givenname_form' => true,
+                    'username_form' => true,
+                    'email_public' => false,
+                    'phone_public' => false,
+                    'am_public' => false);
+    
+    //add custom profile fields required variables
+    augment_registered_posted_variables_arr($var_arr);
+    
+    $all_ok = register_posted_variables($var_arr, 'all');
 
     $departments = null;
     if (!get_config('restrict_owndep')) {

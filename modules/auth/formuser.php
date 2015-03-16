@@ -61,16 +61,20 @@ if (!$prof and $eclass_stud_reg != 1) {
 $am_required = !$prof && get_config('am_required');
 $errors = array();
 
-$all_set = register_posted_variables(array(
-    'usercomment' => true,
-    'givenname' => true,
-    'surname' => true,
-    'username' => true,
-    'userphone' => $prof,
-    'usermail' => true,
-    'am' => $am_required,
-    'department' => true,
-    'captcha_code' => false));
+$var_arr = array('usercomment' => true,
+                'givenname' => true,
+                'surname' => true,
+                'username' => true,
+                'userphone' => $prof,
+                'usermail' => true,
+                'am' => $am_required,
+                'department' => true,
+                'captcha_code' => false);
+
+//add custom profile fields required variables
+augment_registered_posted_variables_arr($var_arr);
+
+$all_set = register_posted_variables($var_arr);
 
 if (!$all_set) {
     $errors[] = $langFieldsMissing;

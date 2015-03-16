@@ -188,6 +188,22 @@ function process_profile_fields_data($post_array, $context) {
 }
 
 /**
+ * Add to the array passed to register_posted_variables required custom profile fields for validation
+ * @param array $arr
+ */
+function augment_registered_posted_variables_arr(&$arr) {
+    foreach ($_POST as $key => $value) {
+        if (substr($key, 0, 4) == 'cpf_') { //custom profile fields input names start with cpf_
+            $field_name = substr($key, 4);
+            $required = Database::get()->querySingle("SELECT required FROM custom_profile_fields WHERE shortname = ?s", $field_name)->required;
+            if ($required == 1) {
+                $arr[$key] = true;
+            }
+        }
+    }
+}
+
+/**
  * Render custom profile fields content when viewing profile
  * @param array $context
  * @return string

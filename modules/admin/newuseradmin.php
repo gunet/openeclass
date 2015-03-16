@@ -63,21 +63,25 @@ $head_content .= <<<hContent
 hContent;
 
 $reqtype = '';
-$all_set = register_posted_variables(array(
-    'auth' => true,
-    'uname' => true,
-    'surname_form' => true,
-    'givenname_form' => true,
-    'email_form' => true,
-    'verified_mail_form' => false,
-    'language' => true,
-    'department' => true,
-    'am' => false,
-    'phone' => false,
-    'password' => true,
-    'pstatus' => true,
-    'rid' => false,
-    'submit' => true));
+$var_arr = array('auth' => true,
+                'uname' => true,
+                'surname_form' => true,
+                'givenname_form' => true,
+                'email_form' => true,
+                'verified_mail_form' => false,
+                'language' => true,
+                'department' => true,
+                'am' => false,
+                'phone' => false,
+                'password' => true,
+                'pstatus' => true,
+                'rid' => false,
+                'submit' => true);
+
+//add custom profile fields required variables
+augment_registered_posted_variables_arr($var_arr);
+
+$all_set = register_posted_variables($var_arr);
 $submit = isset($_POST['submit']) ? $_POST['submit'] : '';
 
 if (isset($_GET['id'])) {
