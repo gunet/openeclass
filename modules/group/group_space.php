@@ -107,7 +107,7 @@ $tool_content .= action_bar(array(
 
 
 $tool_content .= "<div class='group-space'>
-                    <div class='row alert'>
+                    <div class='row'>
                         <div class='col-xs-12'>
                             <div class='row'>
                                 <div class='col-sm-3'><strong>$langGroupName:</strong></div>
@@ -155,7 +155,7 @@ $tool_content .= "
             <div class='col-sm-9'>$tool_content_description</div>
         </div>
         </div>
-    </div>";
+    </div><br>";
 
 // members
 $tool_content .= "  <div class='row'>

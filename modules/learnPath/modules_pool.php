@@ -247,17 +247,17 @@ foreach ($result as $list) {
 
     $tool_content .= "</td><td class='option-btn-cell'>";
     $tool_content .= action_button(array(
-                array('title' => $langDelete,
-                      'icon' => 'fa-times',
-                      'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=eraseModule&amp;cmdid=$list->module_id",
-                      'confirm' => "$langConfirmDelete"),
                 array('title' => $langRename,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqRename&amp;module_id=$list->module_id",
                       'icon' => 'fa-repeat'),
                 array('title' => $langComments,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqComment&amp;module_id=$list->module_id",
-                      'icon' => 'fa-comment-o')
+                      'icon' => 'fa-comment-o'),
+                array('title' => $langDelete,
+                      'icon' => 'fa-times',
+                      'class' => 'delete',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=eraseModule&amp;cmdid=$list->module_id",
+                      'confirm' => "$langConfirmDelete")
                     ));          
     $tool_content .= "</td></tr>";
     $atleastOne = true;
