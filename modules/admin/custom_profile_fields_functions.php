@@ -159,6 +159,9 @@ function render_profile_fields_form($context) {
                         $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'">';
                         break;
                 }
+                if (!empty($f->description)) {
+                    $return_string .= '<small><em>'.standard_text_escape($f->description).'</em></small>';
+                }
                 $return_string .= '</div></div>';
             }
         }
