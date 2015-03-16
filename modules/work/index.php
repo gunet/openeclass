@@ -2054,7 +2054,10 @@ function submit_grades($grades_id, $grades, $email = false) {
            $course_code, $langFormErrors;
     $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $grades_id)->max_grade;
     $v = new Valitron\Validator(array('grades' => $grades));
-    $v->rule('numeric', array('grades.*'));
+    $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
+        if(is_numeric($value) || empty($value)) return true;
+    });        
+    $v->rule('emptyOrNumeric', array('grades.*'));
     $v->rule('min', array('grades.*'), 0);
     $v->rule('max', array('grades.*'), $max_grade);
     if($v->validate()) {
