@@ -672,9 +672,10 @@ function display_my_documents($dialogBox, $style) {
 
 
     $output .= '
-    <table width="99%" class="tbl_alt" >';
+    <div class="table-responsive">
+    <table class="table-default" >';
     $output .= "
-    <tr>
+    <tr class='list-header'>
       <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
       <th>$langSize</th>
       <th>$langDate</th>
@@ -765,7 +766,7 @@ function display_my_documents($dialogBox, $style) {
         $output .= '<tr><td colspan="4">&nbsp;</td></tr>';
     }
 
-    $output .= '</table></form>';
+    $output .= '</table></div></form>';
 
     return $output;
 }
