@@ -538,8 +538,8 @@ function display_my_exercises($dialogBox, $style) {
         $output .= disp_message_box($dialogBox, $style) . '<br />' . "\n";
     }
     $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n";
-    $output .= '<table class="table-default">' . "\n"
-            . '<tr>' . ""
+    $output .= '<div class="table-responsive"><table class="table-default">' . "\n"
+            . '<tr class="list-header">' . ""
             . '<th><div align="left">'
             . $langExercise
             . '</div></th>' . "\n"
@@ -600,7 +600,7 @@ function display_my_exercises($dialogBox, $style) {
                 . '</div></th>'
                 . '</tr>';
     }
-    $output .= '</table></form>';            
+    $output .= '</table></div></form>';            
 
     return $output;
 }
