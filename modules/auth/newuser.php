@@ -256,7 +256,7 @@ if (!isset($_POST['submit'])) {
         $userObj->refresh($last_id, $departments);
         
         //fill custom profile fields
-        process_profile_fields_data($_POST, array('uid' => $last_id, 'origin' => 'student_register'));
+        process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));
         
         if ($vmail) {
             $hmac = token_generate($uname . $email . $last_id);

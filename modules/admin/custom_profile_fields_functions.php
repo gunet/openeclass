@@ -156,13 +156,12 @@ function render_profile_fields_form($context) {
 
 /**
  * Process custom profile fields values after submit
- * @param array $post_array
  * @param array $context
  */
-function process_profile_fields_data($post_array, $context) {
+function process_profile_fields_data($context) {
     if (isset($context['pending']) && $context['pending']) { //pending teacher registration
         $user_request_id = $context['user_request_id'];
-        foreach ($post_array as $key => $value) {
+        foreach ($_POST as $key => $value) {
             if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
                 $field_name = substr($key, 4);
                 $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;
@@ -174,7 +173,7 @@ function process_profile_fields_data($post_array, $context) {
         }
     } else { //normal registration process
         $uid = $context['uid'];
-        foreach ($post_array as $key => $value) {
+        foreach ($_POST as $key => $value) {
             if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
                 $field_name = substr($key, 4);
                 $field_id = Database::get()->querySingle("SELECT id FROM custom_profile_fields WHERE shortname = ?s", $field_name)->id;

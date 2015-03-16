@@ -137,7 +137,7 @@ if ($all_set) {
     $request_id = $res->lastInsertID;
     
     //save custom profile fields values in pending table
-    process_profile_fields_data($_POST, array('user_request_id' => $request_id, 'pending' => true));
+    process_profile_fields_data(array('user_request_id' => $request_id, 'pending' => true));
     
     // email does not need verification -> mail helpdesk
     if (!$email_verification_required) {

@@ -415,7 +415,7 @@ if ($u) {
                           WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
             if ($qry->affectedRows > 0) {
                     //update custom profile fields
-                    process_profile_fields_data($_POST, array('uid' => $u, 'origin' => 'admin_edit_profile'));
+                    process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
                     $tool_content .= "<div class='alert alert-info'>$langSuccessfulUpdate</div>";
             } else {                                                
                     $tool_content .= "<div class='alert alert-warning'>$langUpdateNoChange</div>";               

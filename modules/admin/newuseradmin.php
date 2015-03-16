@@ -149,7 +149,7 @@ if ($submit) {
                  , ?s, '', ?s, '')", $surname_form, $givenname_form, $uname, $password_encrypted, $email_form, $pstatus, $phone, $am, $proflanguage, $verified_mail)->lastInsertID;
         $user->refresh($uid, array(intval($depid)));
         //process custom profile fields values
-        process_profile_fields_data($_POST, array('uid' => $uid));
+        process_profile_fields_data(array('uid' => $uid));
         // close request if needed
         if (!empty($rid)) {
             $rid = intval($rid);
