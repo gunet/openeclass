@@ -39,7 +39,7 @@ define('CPF_USER_TYPE_ALL', 10);
  * @return string
  */
 function render_profile_fields_form($context) {
-    global $langOptional;
+    global $langOptional, $langCompulsory;
     
     if ($context['origin'] == 'admin_edit_profile') { //admin editing users' profile
         $uid = $context['user_id'];
@@ -121,6 +121,8 @@ function render_profile_fields_form($context) {
                         }
                         if ($f->required == 0) {
                             $placeholder = 'placeholder="'.$langOptional.'"';
+                        } else {
+                            $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
                         $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'">';
                         break;
@@ -136,6 +138,8 @@ function render_profile_fields_form($context) {
                         }
                         if ($f->required == 0) {
                             $placeholder = 'placeholder="'.$langOptional.'"';
+                        } else {
+                            $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
                         load_js('bootstrap-datepicker');
                         $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
@@ -155,6 +159,8 @@ function render_profile_fields_form($context) {
                         }
                         if ($f->required == 0) {
                             $placeholder = 'placeholder="'.$langOptional.'"';
+                        } else {
+                            $placeholder = 'placeholder="'.$langCompulsory.'"';
                         }
                         $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'">';
                         break;
