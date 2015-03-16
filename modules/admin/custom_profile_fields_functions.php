@@ -39,6 +39,8 @@ define('CPF_USER_TYPE_ALL', 10);
  * @return string
  */
 function render_profile_fields_form($context) {
+    global $langOptional;
+    
     if ($context['origin'] == 'admin_edit_profile') { //admin editing users' profile
         $uid = $context['user_id'];
     } else {
@@ -110,13 +112,17 @@ function render_profile_fields_form($context) {
                 }
                 
                 $val = '';
+                $placeholder = '';
                 
                 switch ($f->datatype) {
                     case CPF_TEXTBOX:
                         if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
+                        if ($f->required == 0) {
+                            $placeholder = 'placeholder="'.$langOptional.'"';
+                        }
+                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'">';
                         break;
                     case CPF_TEXTAREA:
                         if (isset($fdata) && $fdata != '') {
@@ -128,8 +134,11 @@ function render_profile_fields_form($context) {
                         if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
                         }
+                        if ($f->required == 0) {
+                            $placeholder = 'placeholder="'.$langOptional.'"';
+                        }
                         load_js('bootstrap-datepicker');
-                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
+                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'" data-provide="datepicker" data-date-format="dd-mm-yyyy">';
                         break;
                     case CPF_MENU:
                         if (isset($fdata) && $fdata != '') {
@@ -144,7 +153,10 @@ function render_profile_fields_form($context) {
                         if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
                         }
-                        $return_string .= '<input class="form-control" '.$val.' type="text" name="cpf_'.$f->shortname.'">';
+                        if ($f->required == 0) {
+                            $placeholder = 'placeholder="'.$langOptional.'"';
+                        }
+                        $return_string .= '<input class="form-control" '.$val.' type="text" '.$placeholder.' name="cpf_'.$f->shortname.'">';
                         break;
                 }
                 $return_string .= '</div></div>';
