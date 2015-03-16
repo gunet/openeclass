@@ -208,7 +208,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . "\n<html>\n"
  . '<head>' . "\n"
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
- . '<link href="../../../template/' . $theme . '/theme.css" rel="stylesheet" type="text/css" />' . "\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
  . '<title>' . $langExercice . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
