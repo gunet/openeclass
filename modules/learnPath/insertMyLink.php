@@ -190,7 +190,7 @@ function showlinks() {
     foreach ($result as $myrow) {
         $output .= "
                 <tr>                
-                <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=" . $myrow->id . "&amp;link_url=" . urlencode($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>
+                <td align='left' valign='top'><a href='" . $myrow->url . "' target='_blank'>" . q($myrow->title) . "</a>
                 <br>
                 <small class='comments'>" . $myrow->description . "</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
