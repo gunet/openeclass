@@ -177,12 +177,15 @@ function showlinks() {
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d ORDER BY `order` DESC", $course_id);
 
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                    <div class='table-responsive'>
                       <table class='table-default'>
-                      <tr>
+                      <thead><tr class='list-header'>
                         <th>$langName</th>
                         <th width='50'>$langSelection</th>
-                      </tr>
-                      <tbody>";
+                      </tr></thead>
+                      <tbody>
+                      
+                      ";
     $i = 1;
     foreach ($result as $myrow) {
         $output .= "
@@ -194,16 +197,19 @@ function showlinks() {
                 </tr>";
         $i++;
     }
-    $output .= "
+    $output .= "</tbody>
+        <tfooter>
         <tr>
-        <th colspan='2'>
+            <th colspan='2'>
                 <div align='right'>
                 <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
                 <input class='btn btn-primary' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
-                </div></th>
+                </div>
+            </th>
         </tr>
-        </tbody>
-        </table>
+        </tfooter>
+        
+        </table></div>
         </form>";
     return $output;
 }
