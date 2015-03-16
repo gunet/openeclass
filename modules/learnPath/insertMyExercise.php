@@ -94,7 +94,7 @@ foreach ($resultex as $listex) {
             }
         }
         if ($incompatible) {
-            $messBox .= "<tr>" . disp_message_box(q($listex->title) . " : " . $langExIncompatibleWithLP . "<br>", "caution") . "</td></tr>";
+            $messBox .= "<p>" . disp_message_box1(q($listex->title) . " : " . $langExIncompatibleWithLP . "<br>", "caution") . "</p>";
             continue;
         }
 
@@ -133,7 +133,7 @@ foreach ($resultex as $listex) {
 
             insertInLearningPath($insertedExercice_id, $order);
 
-            $messBox .= "<tr>" . disp_message_box($exercise->title . " :  " . $langExInsertedAsModule . "<br>", "success") . "</td></tr>";
+            $messBox .= "<p>" . disp_message_box1($exercise->title . " :  " . $langExInsertedAsModule . "<br>", "success") . "</p>";
         } else {
             // exercise is already used as a module in another learning path , so reuse its reference
             // check if this is this LP that used this exercise as a module
@@ -150,17 +150,19 @@ foreach ($resultex as $listex) {
             if ($num == 0) {
                 // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 insertInLearningPath($thisExerciseModule->module_id, $order);
-                $messBox .= "<tr>" . disp_message_box(q($exercise->title) . " : " . $langExInsertedAsModule . "<br>", "success") . "</td></tr>";
+                $messBox .= "<p>" . disp_message_box1(q($exercise->title) . " : " . $langExInsertedAsModule . "<br>", "success") . "</p>";
             } else {
-                $messBox .= "<tr>" . disp_message_box(q($listex->title) . " : " . $langExAlreadyUsed . "<br>", "caution") . "</td></tr>";
+                $messBox .= "<p>" . disp_message_box1(q($listex->title) . " : " . $langExAlreadyUsed . "<br>", "caution") . "</p>";
             }
         }
     } // end if request
 } //end while
 
-$tool_content .= "<table class='table-default'>";
-$tool_content .= $messBox;
-$tool_content .= "</table><br />";
+if(!empty($messBox)) {
+    $tool_content .= "<div class='alert alert-warning'>";
+    $tool_content .= $messBox;
+    $tool_content .= "</div>";
+}
 
 //STEP ONE : display form to add an exercise
 $tool_content .= display_my_exercises("", "");
