@@ -2414,9 +2414,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0rc2");
             upgrade_course_3_0_rc2($row->code, $row->id);
         }
-        if (version_compare($oldversion, '3.0rc3', '<')) {
-            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0rc3");
-            upgrade_course_3_0_rc3($row->code, $row->id);
+        if (version_compare($oldversion, '3.0', '<')) {
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0");
+            upgrade_course_3_0_rc2($row->code, $row->id);
         }
         $i++;
     }

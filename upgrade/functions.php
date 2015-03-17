@@ -1154,19 +1154,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
 }
 
 /**
- * @brief upgrade to 3.0rc3
- * @param string $code
- * @param int    $course_id
- */
-function upgrade_course_3_0_rc3($code, $course_id) {
-    // refresh XML metadata
-    require_once "modules/course_metadata/CourseXML.php";
-    if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
-        CourseXMLElement::refreshCourse($course_id, $code, true);
-    }
-}
-
-/**
  * @brief upgrade to 3.0rc2
  * @param string $code
  * @param int    $course_id
