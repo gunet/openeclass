@@ -1383,14 +1383,18 @@ function upgrade_course_2_4($code, $course_id, $lang) {
         if (!$doc_id) {
             $doc_id = 1;
         }
+        Database::get()->query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
+        Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
+        Database::get()->query("ALTER TABLE `document`
+                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1");
         Database::get()->query("INSERT INTO `$mysqlMainDb`.document
-                                (`id`, `course_id`, `subsystem`, `subsystem_id`, `path`, `filename`, `visibility`, `comment`,
+                                (`id`, `course_id`, `subsystem`, `subsystem_id`, `path`, `filename`, `visible`, `comment`,
                                  `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                  `description`, `author`, `format`, `language`, `copyrighted`)
-                                SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visibility`, `comment`,
+                                SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visible`, `comment`,
                                        0 + `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                        `description`, `author`, `format`, `language`, 0 + `copyrighted` FROM document") and
-                Database::get()->query("DROP TABLE document");
+        Database::get()->query("DROP TABLE document");
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                                  SET res_id = res_id + $doc_id
                                  WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'doc'");

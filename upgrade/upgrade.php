@@ -89,9 +89,19 @@ if (!DBHelper::tableExists('config')) {
 
 // Upgrade user table first if needed
 if (!DBHelper::fieldExists('user', 'id')) {
-    // check for mulitple usernames
+    // check for multiple usernames
     fix_multiple_usernames();
-
+    
+    if (DBHelper::indexExists('user', 'user_username')) {
+        Database::get()->query("DROP KEY user_username");
+    }        
+    if (!DBHelper::fieldExists('user', 'whitelist')) {
+        Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT");
+        Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
+    }
+    if (!DBHelper::fieldExists('user', 'description')) {
+        Database::get()->query("ALTER TABLE `user` ADD description TEXT");
+    }        
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -118,8 +128,7 @@ if (!DBHelper::fieldExists('user', 'id')) {
                         CHANGE whitelist whitelist TEXT,
                         DROP forum_flag,
                         DROP announce_flag,
-                        DROP doc_flag,
-                        DROP KEY user_username");
+                        DROP doc_flag");
     Database::get()->query("ALTER TABLE admin
                         CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
 }
@@ -342,9 +351,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         if (!DBHelper::fieldExists('cours_user', 'course_id')) {
             Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
-            Database::get()->query('UPDATE cours_user SET course_id =
-                                        (SELECT course_id FROM cours WHERE code = cours_user.code_cours)
-                             WHERE course_id = 0');
+            $t = Database::get()->queryArray("SELECT cours_id, code_cours FROM cours");
+            foreach ($t as $entry) {
+              Database::get()->query("UPDATE cours_user SET course_id = $entry->cours_id WHERE code_cours = '$entry->code_cours'");
+            }            
             Database::get()->query('ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
             Database::get()->query('CREATE INDEX course_user_id ON cours_user (user_id, course_id)');
             Database::get()->query('ALTER TABLE cours_user DROP code_cours');
@@ -352,9 +362,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         if (!DBHelper::fieldExists('annonces', 'course_id')) {
             Database::get()->query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
-            Database::get()->query('UPDATE annonces SET course_id =
-                                        (SELECT course_id FROM cours WHERE code = annonces.code_cours)
-                             WHERE course_id = 0');
+            $t = Database::get()->queryArray("SELECT cours_id, code_cours FROM cours");
+            foreach ($t as $entry) {
+                Database::get()->query("UPDATE annonces SET course_id = $entry->cours_id WHERE code_cours = '$entry->code_cours'");
+            }
             Database::get()->query('ALTER TABLE annonces DROP code_cours');
         }
     }
