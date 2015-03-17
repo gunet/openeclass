@@ -161,14 +161,14 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<li><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
     } else {
-        $prevNextString .= "<li><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
+        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<li><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
     } else {
-        $prevNextString .= "<li><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
+        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
     }
 }
 
@@ -221,7 +221,40 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 
         .navbar-right {
         float: right!important;
-        }        
+        }   
+        
+        .progressbar-plr{
+            margin-top: 15px !important;
+        }
+        #navigation-btns li a, #navigation-btns li a span{
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
+        #navigation-btns li, #navigation-btns li a i{
+            height: 50px;
+            line-height: 50px;
+        }
+        #navigation-btns li a{
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+        #navigation-btns li:nth-child(1){
+            padding-left: 35px;
+            padding-right: 5px;
+        }
+        #navigation-btns li:nth-child(2){
+            padding-left: 5px;
+            padding-right: 35px;
+        }
+        #navigation-btns #close-btn{
+            padding-right:20px;
+            padding-left:20px;
+            border-left: 2px groove #999;
+        }
+        #navigation-btns #close-btn span{
+            font-size:16px;
+        }
+        
     </style>    
     <script type='text/javascript'>
     /* <![CDATA[ */
@@ -268,11 +301,11 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
                   <a class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png'></a>
                 </div>
                 <div class='navbar-header col-xs-10 pull-right'>
-                    <ul class='nav navbar-nav navbar-right'>
+                    <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li><a href='$returl' target='_top'><i class='fa fa-reply fa-lg'></i> <span class='hidden-xs'>$langBack</span></a></li>
+                        <li id='close-btn'><a href='$returl'><i class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></i></a></li>
                     </ul>                
-                    <div class='pull-right'>";
+                    <div class='pull-right progressbar-plr'>";
                   
                          if ($uid) {
                             $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
