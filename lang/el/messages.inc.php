@@ -4438,6 +4438,8 @@ $langCPFMenuOptions = 'Επιλογές μενού';
 $langCPFMenuOptionsExplan = 'Εισάγετε μια επιλογή ανά γραμμή';
 $langCPFMenuOptionsAlert = 'Πρέπει να εισάγετε τουλάχιστον μια επιλογή για το μενού';
 $langCPFMenuOptionsChangeExplan = 'Η αλλαγή των επιλογών μπορεί να οδηγήσει σε ασυνέπειες για πεδία που έχουν ήδη περιεχόμενο';
+$langCPFChangeOrder = 'Αλλαγή διάταξης';
+$langCPFSortOrderSuccess = 'Η διάταξη των κατηγοριών και των πεδίων αποθηκεύθηκε.';
 
 /* * ******************************************
   Theme Options

@@ -392,6 +392,24 @@ if (isset($_GET['add_cat'])) { //add a new category form
         Session::Messages($langCPFCatAddedSuccess, 'alert-success');
         redirect_to_home_page("modules/admin/custom_profile_fields.php");
     }
+} elseif (isset($_POST['cats'])) { //save sort order
+    $cats_counter = count($_POST['cats']);
+    $fields_counter = count($_POST['fields']);
+    
+    foreach ($_POST['cats'] as $cat) {
+        $cat_id = substr($cat, 4);
+        Database::get()->query("UPDATE custom_profile_fields_category SET sortorder = ?d WHERE id = ?d", $cats_counter, $cat_id);
+        $cats_counter--;
+    }
+    
+    foreach ($_POST['fields'] as $field) {
+        $field_id = substr($field, 6); echo $field_id." ".$fields_counter."<br/>";
+        Database::get()->query("UPDATE custom_profile_fields SET sortorder = ?d WHERE id = ?d", $fields_counter, $field_id);
+        $fields_counter--;
+    }
+    
+    Session::Messages($langCPFSortOrderSuccess, 'alert-success');
+    redirect_to_home_page("modules/admin/custom_profile_fields.php");
 } else { //show categories and fields list
     load_js('sortable');
     
@@ -406,12 +424,16 @@ if (isset($_GET['add_cat'])) { //add a new category form
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
 
-    $result = Database::get()->queryArray("SELECT * FROM custom_profile_fields_category");
+    $result = Database::get()->queryArray("SELECT * FROM custom_profile_fields_category ORDER BY sortorder DESC");
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langCPFNoCats</div>";
     } else {
+        $form_data_array = array(); //array used to build the sortorder form
+        
         $tool_content .= "<div id='multi'>"; //container for sorting
         foreach ($result as $res) {
+            $form_data_array[$res->id] = array();
+            
             $head_content .= "<style>
                                 .tile__name {
                                     cursor: move;
@@ -420,7 +442,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     cursor: move;
                                 }
                               </style>";
-            $tool_content .= "<div class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
+            $tool_content .= "<div id='cat_".$res->id."' class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
             $tool_content .= "<caption class='tile__name'><strong>$langCategory :</strong> $res->name<div class='pull-right'>";
             
             $dyntools = array(
@@ -457,7 +479,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 <td>" . icon('fa-gears') . "</td>
 		        </tr></thead>";
             
-            $q = Database::get()->queryArray("SELECT * FROM custom_profile_fields WHERE categoryid = ?d", $res->id);
+            $q = Database::get()->queryArray("SELECT * FROM custom_profile_fields WHERE categoryid = ?d ORDER BY sortorder DESC", $res->id);
             if (count($q) == 0) {
                 $tool_content .= "<tbody class='tile__list'>";
                 $tool_content .= "<tr class='ignore-item'><td colspan='9' class='text-center'><span class='not_visible'>".$langCPFNoFieldinCat."</td></tr>";
@@ -471,7 +493,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 
                 $tool_content .= "<tbody class='tile__list'>";
                 foreach ($q as $f) {
-                    
+                    $form_data_array[$res->id][] = $f->id;
                     $field_dyntools = array(
                         array('title' => $langModify,
                               'url' => "$_SERVER[SCRIPT_NAME]?edit_field=$f->id",
@@ -485,7 +507,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                         )
                     );
                     
-                    $tool_content .= "<tr>";
+                    $tool_content .= "<tr id='field_".$f->id."'>";
                     $tool_content .= "<td>".q($f->name)."</td>";
                     $tool_content .= "<td>".q($f->shortname)."</td>";
                     $tool_content .= "<td>".standard_text_escape($f->description)."</td>";
@@ -503,6 +525,9 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= "</table></div>";
         }
         $tool_content .= "</div>";
+        $tool_content .= "<form name='sortOrderForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
+        $tool_content .= "<input type='button' class='btn btn-success' onclick='submitSortOrderForm();' name='submitOrderForm' value='$langCPFChangeOrder'>";
+        $tool_content .= "</form>";
         $tool_content .= "<script src='custom_profile_fields.js'></script>";
     }
     

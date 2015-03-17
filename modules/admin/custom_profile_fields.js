@@ -77,3 +77,34 @@
     });
 	
 })();
+
+function submitSortOrderForm() {
+	var form = document.sortOrderForm;
+	
+	//categories
+	var cat_divs = document.getElementsByClassName('table-responsive tile');
+	for (var i=0; i<cat_divs.length; i++) {
+		var input = document.createElement("input");
+		input.type = 'hidden';
+		input.name = 'cats[]';
+		input.value = cat_divs[i].id;
+		form.appendChild(input);
+	}
+	
+	//fields
+	var field_tbodys = document.getElementsByClassName('tile__list');
+	for (var i=0; i<field_tbodys.length; i++) {
+		var trs = field_tbodys[i].childNodes;
+		for (var j=0; j<trs.length; j++) {
+			if (trs[j].className != 'ignore-item') {
+				var input = document.createElement("input");
+				input.type = 'hidden';
+				input.name = 'fields[]';
+				input.value = trs[j].id;
+				form.appendChild(input);
+			}
+		}
+	}
+	
+	form.submit();
+}
