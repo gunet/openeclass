@@ -118,6 +118,8 @@ function render_profile_fields_form($context) {
                     case CPF_TEXTBOX:
                         if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
+                        } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
+                            $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
                         if ($f->required == 0) {
                             $placeholder = 'placeholder="'.$langOptional.'"';
@@ -129,12 +131,16 @@ function render_profile_fields_form($context) {
                     case CPF_TEXTAREA:
                         if (isset($fdata) && $fdata != '') {
                             $val = $fdata;
+                        } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
+                            $val = $_REQUEST['cpf_'.$f->shortname];
                         }
                         $return_string .= rich_text_editor('cpf_'.$f->shortname, 8, 20, $val);
                         break;
                     case CPF_DATE:
                         if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
+                        } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
+                            $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
                         if ($f->required == 0) {
                             $placeholder = 'placeholder="'.$langOptional.'"';
@@ -147,6 +153,8 @@ function render_profile_fields_form($context) {
                     case CPF_MENU:
                         if (isset($fdata) && $fdata != '') {
                             $def_selection = intval($fdata);
+                        } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
+                            $def_selection = intval($_REQUEST['cpf_'.$f->shortname]);
                         } else {
                             $def_selection = 0;
                         }
@@ -156,6 +164,8 @@ function render_profile_fields_form($context) {
                     case CPF_LINK:
                         if (isset($fdata) && $fdata != '') {
                             $val = 'value="'.q($fdata).'"';
+                        } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
+                            $val = 'value="'.q($_REQUEST['cpf_'.$f->shortname]).'"';
                         }
                         if ($f->required == 0) {
                             $placeholder = 'placeholder="'.$langOptional.'"';
@@ -316,4 +326,13 @@ function render_profile_fields_content($context) {
         
     }
     return $return_str;
+}
+
+function augment_url_refill_custom_profile_fields_registr() {
+    $ret_str = '';
+    foreach ($_POST as $key => $value) {
+        if (substr($key, 0, 4) == 'cpf_' && $value != '')
+        $ret_str .= '&amp;'.$key.'='.urldecode($value);
+    }
+    return $ret_str;
 }

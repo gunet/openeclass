@@ -329,6 +329,7 @@ if (!isset($_POST['submit'])) {
                 '&amp;email=' . urlencode($email) .
                 '&amp;am=' . urlencode($am) .
                 '&amp;phone=' . urlencode($phone) .
+                augment_url_refill_custom_profile_fields_registr() . 
                 "'>$langAgain</a></p>";
     }
 } // end of registration
