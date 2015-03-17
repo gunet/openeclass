@@ -1662,7 +1662,7 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
     if (!Database::get()->query("INSERT INTO `$mysqlMainDb`.document SET
                               course_id = ?d, subsystem = 1, subsystem_id = ?d,
                               path = ?s, filename = ?s,
-                              format = ?s, visibility = 'v',
+                              format = ?s, visible = 1,
                               date = ?d, date_modified = ?d", $course_id, $group_id, $internal_path, $filename, $type, $file_date, $file_date)) {
         $group_document_upgrade_ok = false;
     }
