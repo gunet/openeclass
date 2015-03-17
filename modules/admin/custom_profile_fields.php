@@ -410,10 +410,18 @@ if (isset($_GET['add_cat'])) { //add a new category form
     if (count($result) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langCPFNoCats</div>";
     } else {
-        $tool_content .= "<div>"; //container for sorting
+        $tool_content .= "<div id='multi'>"; //container for sorting
         foreach ($result as $res) {
-            $tool_content .= "<div class='table-responsive' style='margin-bottom:30px;'><table class='table-default'>";
-            $tool_content .= "<caption><strong>$langCategory :</strong> $res->name<div class='pull-right'>";
+            $head_content .= "<style>
+                                .tile__name {
+                                    cursor: move;
+                                }
+                                .tile__list {
+                                    cursor: move;
+                                }
+                              </style>";
+            $tool_content .= "<div class='table-responsive tile' style='margin-bottom:30px;'><table class='table-default'>";
+            $tool_content .= "<caption class='tile__name'><strong>$langCategory :</strong> $res->name<div class='pull-right'>";
             
             $dyntools = array(
                 array(
@@ -437,7 +445,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             
             $tool_content .= action_button($dyntools)."</div></caption>";
             
-            $tool_content .= "<tr class='list-header'>
+            $tool_content .= "<thead><tr class='list-header'>
                 <td>$langName</td>
                 <td>$langCPFShortName</td>
                 <td>$langCPFFieldDescr</td>
@@ -447,7 +455,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 <td>$langCPFFieldUserType</td>
                 <td>$langCPFFieldVisibility</td>
                 <td>" . icon('fa-gears') . "</td>
-		        </tr>";
+		        </tr></thead>";
             
             $q = Database::get()->queryArray("SELECT * FROM custom_profile_fields WHERE categoryid = ?d", $res->id);
             if (count($q) == 0) {
@@ -461,7 +469,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
                 $visibility = array(CPF_VIS_PROF => $langProfOnly, CPF_VIS_ALL => $langToAllUsers);
                 $user_type = array(CPF_USER_TYPE_PROF => $langsTeachers, CPF_USER_TYPE_STUD => $langStudents, CPF_USER_TYPE_ALL => $langAll);
                 
-                $tool_content .= "<tbody>";
+                $tool_content .= "<tbody class='tile__list'>";
                 foreach ($q as $f) {
                     
                     $field_dyntools = array(
@@ -495,7 +503,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
             $tool_content .= "</table></div>";
         }
         $tool_content .= "</div>";
-            
+        $tool_content .= "<script src='custom_profile_fields.js'></script>";
     }
     
 }
