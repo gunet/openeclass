@@ -172,7 +172,6 @@ if ($moduleNb > 1) {
     }
 }
 
-load_js('jquery-' . JQUERY_VERSION . '.min');
 
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
 <html>
@@ -188,6 +187,9 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
         
     <!-- Our javascript -->
     <script type='text/javascript' src='{$urlAppend}template/default/js/main.js'></script>
+        
+    <!-- SlimScroll -->
+    <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
 
     <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
