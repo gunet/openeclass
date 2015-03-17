@@ -472,7 +472,7 @@ foreach ($result as $list) { // while ... learning path list
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
 
-        $play_img = "<img src='$themeimg/$image_bullet' alt='' />";
+        $play_img = "<i class='fa fa-play-circle' style='font-size:20px;'></i>";
 
         if (count($resultmodules) > 0) {
             $firstmodule = $resultmodules[0];
@@ -482,7 +482,7 @@ foreach ($result as $list) { // while ... learning path list
         }
 
         $tool_content .= "
-      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a></td>\n";
+      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------

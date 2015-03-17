@@ -213,7 +213,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . $head_content
  . '</head>' . "\n"
  . '<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">' . "\n"
- . '<div id="content">';
+ . '<div id="content" style="width:800px; margin: 0 auto;">';
 
 echo ("
   <table width='100%' class='tbl_border'>
