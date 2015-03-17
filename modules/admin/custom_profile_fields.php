@@ -459,8 +459,8 @@ if (isset($_GET['add_cat'])) { //add a new category form
             
             $q = Database::get()->queryArray("SELECT * FROM custom_profile_fields WHERE categoryid = ?d", $res->id);
             if (count($q) == 0) {
-                $tool_content .= "<tbody>";
-                $tool_content .= "<tr><td colspan='9' class='text-center'><span class='not_visible'>".$langCPFNoFieldinCat."</td></tr>";
+                $tool_content .= "<tbody class='tile__list'>";
+                $tool_content .= "<tr class='ignore-item'><td colspan='9' class='text-center'><span class='not_visible'>".$langCPFNoFieldinCat."</td></tr>";
                 $tool_content .= "</tbody>";
             } else {
                 
