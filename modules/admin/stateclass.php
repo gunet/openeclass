@@ -313,19 +313,19 @@ function tablize($table) {
     global $langTypesClosed, $langTypesRegistration, $langTypesOpen, $langsCourseInactiveShort,
     $langPre, $langPost, $langOther, $native_language_names_init;
 
-    $ret = "";
+    $ret = "";    
     if (is_array($table)) {
-        while (list($key, $thevalue) = each($table)) {
+        foreach ($table as $key => $thevalue) {            
             $ret .= "<tr>";
             switch ($key) {
-                case '0': $key = $langTypesClosed;
+                case 'COURSE_CLOSED': $key = $langTypesClosed;
                     break;
-                case COURSE_REGISTRATION;
+                case 'COURSE_REGISTRATION';
                     $key = $langTypesRegistration;
                     break;
-                case COURSE_OPEN: $key = $langTypesOpen;
+                case 'COURSE_OPEN': $key = $langTypesOpen;                
                     break;
-                case COURSE_INACTIVE: $key = $langsCourseInactiveShort;
+                case 'COURSE_INACTIVE': $key = $langsCourseInactiveShort;
                     break;
                 case 'pre': $key = $langPre;
                     break;
