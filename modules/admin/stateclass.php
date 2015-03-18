@@ -310,7 +310,7 @@ if (isset($_GET['stats'])) {
  */
 function tablize($table) {
 
-    global $langTypesClosed, $langTypesRegistration, $langTypesOpen, $langsCourseInactiveShort,
+    global $langTypesClosed, $langTypesRegistration, $langTypesOpen, $langCourseInactiveShort,
     $langPre, $langPost, $langOther, $native_language_names_init;
 
     $ret = "";    
@@ -318,14 +318,13 @@ function tablize($table) {
         foreach ($table as $key => $thevalue) {            
             $ret .= "<tr>";
             switch ($key) {
-                case 'COURSE_CLOSED': $key = $langTypesClosed;
+                case '0': $key = $langTypesClosed;
                     break;
-                case 'COURSE_REGISTRATION';
-                    $key = $langTypesRegistration;
+                case '1': $key = $langTypesRegistration;
                     break;
-                case 'COURSE_OPEN': $key = $langTypesOpen;                
+                case '2': $key = $langTypesOpen;                
                     break;
-                case 'COURSE_INACTIVE': $key = $langsCourseInactiveShort;
+                case '3': $key = $langCourseInactiveShort;
                     break;
                 case 'pre': $key = $langPre;
                     break;
