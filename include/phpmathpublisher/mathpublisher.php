@@ -1639,31 +1639,32 @@ return '<img src="'.$pathtoimg."math_".$v."_".$nameimg.'" style="vertical-align:
 
 function mathfilter($text,$size,$pathtoimg)
 {
-/* THE MAIN FUNCTION
-1) the content of the math tags (<m></m>) are extracted in the $t variable (you can replace <m></m> by your own tag).
-2) the "mathimage" function replaces the $t code by <img src=...></img> according to this method :
-- if the image corresponding to the formula doesn't exist in the $dirimg cache directory (detectimg($nameimg)=0), the script creates the image and returns the "<img src=...></img>" code.
-- otherwise, the script returns only the <img src=...></img>" code.
-To align correctly the formula image with the text, the "valign" parameter of the image is required.
-That's why a parameter (1000+valign) is recorded in the name of the image file (the "detectimg" function returns this parameter if the image exists in the cache directory)
-To be sure that the name of the image file is unique and to allow the script to retrieve the valign parameter without re-creating the image, the syntax of the image filename is :
-math_(1000+valign)_md5(formulatext.size).png.
-(1000+valign is used instead of valign directly to avoid a negative number)
-*/
-// $text=stripslashes($text);
-$size=max($size,10);
-$size=min($size,24);
-//preg_match_all("|<m>(.*?)</m>|", $text, $regs, PREG_SET_ORDER);
-preg_match_all("#(<m>.*?</m>|\\[m].*?\\[/m])#", $text, $regs, PREG_SET_ORDER);
-foreach ($regs as $math)
-	{
-//	$t=str_replace('<m>','',$math[0]);
-//	$t=str_replace('</m>','',$t);
+    if (!function_exists('imagettfbbox')) {
+        // Skip mathfilter if PHP GD doesn't support FreeType
+        return $text;
+    }
+    /* THE MAIN FUNCTION
+        1) the content of the math tags (<m></m>) are extracted in the $t variable (you can replace <m></m> by your own tag).
+        2) the "mathimage" function replaces the $t code by <img src=...></img> according to this method :
+        - if the image corresponding to the formula doesn't exist in the $dirimg cache directory (detectimg($nameimg)=0), the script creates the image and returns the "<img src=...></img>" code.
+        - otherwise, the script returns only the <img src=...></img>" code.
+        To align correctly the formula image with the text, the "valign" parameter of the image is required.
+        That's why a parameter (1000+valign) is recorded in the name of the image file (the "detectimg" function returns this parameter if the image exists in the cache directory)
+        To be sure that the name of the image file is unique and to allow the script to retrieve the valign parameter without re-creating the image, the syntax of the image filename is :
+        math_(1000+valign)_md5(formulatext.size).png.
+        (1000+valign is used instead of valign directly to avoid a negative number)
+     */
+    // $text=stripslashes($text);
+    $size=max($size,10);
+    $size=min($size,24);
+    //preg_match_all("|<m>(.*?)</m>|", $text, $regs, PREG_SET_ORDER);
+    preg_match_all("#(<m>.*?</m>|\\[m].*?\\[/m])#", $text, $regs, PREG_SET_ORDER);
+    foreach ($regs as $math) {
+        //	$t=str_replace('<m>','',$math[0]);
+        //	$t=str_replace('</m>','',$t);
         $t=str_replace(array('<m>','</m>','[m]','[/m]'), '',$math[0]);
-	$code=mathimage(trim($t),$size,$pathtoimg);
-	$text = str_replace($math[0], $code, $text);
-	}
-return $text;
+        $code=mathimage(trim($t),$size,$pathtoimg);
+        $text = str_replace($math[0], $code, $text);
+    }
+    return $text;
 }
-
-?>

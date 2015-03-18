@@ -358,8 +358,18 @@ if (isset($sortDirection) && $sortDirection) {
     }
 }
 
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "javascript:history.back();",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            )
+        ),false);
 
-$tool_content .= "<br><div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathData</h3></div>";
+$tool_content .= "<div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'>$langLearningPathData</h3>
+                    </div>";
 $tool_content .= "<table class='table-default'>";
 
 //############################ LEARNING PATH NAME BOX ################################\\
@@ -387,54 +397,6 @@ if ($cmd == "updatecomment") {
 }
 
 $tool_content .= "</td></tr></table></div>";
-$tool_content .= "<div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathConfigure</h3></div>";
-$tool_content .= "<table class='table-default'>";
-
-// -------------------- create label -------------------
-if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-    $tool_content .= " <tr>
-      <th width='200'>$langLabel:</th>
-      <td>
-        <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
-          <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
-          <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
-          <input type='hidden' name='cmd' value='createLabel' />
-          <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
-        </form>
-      </td>
-    </tr>";
-}
-
-
-// --------------- learning path course admin links ------------------------------
-
-if (!isset($displayCreateLabelForm)) {
-    $tool_content .="
-    <tr>
-      <th width=\"200\">$langLabel:</th>
-      <td><a href=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=createLabel\">" . $langCreate . "</a></td>
-    </tr>";
-}
-$tool_content .="
-    <tr>
-      <th rowspan=\"2\">$langLearningObjects:</th>
-      <td>";
-$tool_content .= "$langAdd: <a href=\"insertMyDoc.php?course=$course_code\" title=\"$langDocumentAsModule\">" .
-        $langDocumentAsModuleLabel . "</a> | <a href=\"insertMyExercise.php?course=$course_code\" title=\"$langExerciseAsModule\">" .
-        $langExerciseAsModuleLabel . "</a> | <a href=\"insertMyLink.php?course=$course_code\" title=\"$langLinkAsModule\">" .
-        $langLinkAsModuleLabel . "</a> | <a href=\"insertMyMedia.php?course=$course_code\" title=\"$langMediaAsModule\">" .
-        $langMediaAsModuleLabel . "</a> | <a href=\"insertMyDescription.php?course=$course_code\" title=\"$langCourseDescriptionAsModule\">" .
-        $langCourseDescriptionAsModuleLabel . "</a>
-      </td>
-    </tr>";
-
-$tool_content .= "
-    <tr>
-      <td>$langReuse: <a href=\"insertMyModule.php?course=$course_code\" title=\"$langModuleOfMyCourse\">" . $langModuleOfMyCourse . "</a>
-      </td>
-    </tr>";
-
-$tool_content .= "</table></div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox = "<table class=\"table-default\">
@@ -462,8 +424,51 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
 if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= $dialogBox;
 }
-
-$tool_content .= "<div class='panel panel-primary'><div class='panel-heading'><h3 class='panel-title'>$langLearningPathStructure</h3></div>";
+$lp_action_button = action_button(array(
+    array(
+        'title' => "$langReuse $langModuleOfMyCourse",
+        'url' => "insertMyModule.php?course=$course_code",
+        'icon' => "fa-plus",
+        'level' => "primary-label"
+    ),      
+    array(
+        'title' => "$langAdd $langLabel",
+        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=createLabel",
+        'icon' => "fa-tag"
+    ),    
+    array(
+        'title' => "$langAdd $langDocumentAsModuleLabel",
+        'url' => "insertMyDoc.php?course=$course_code",
+        'icon' => 'fa-folder-open-o'
+    ),
+    array(
+        'title' => "$langAdd $langExerciseAsModuleLabel",
+        'url' => "insertMyExercise.php?course=$course_code",
+        'icon' => "fa-pencil-square-o"
+    ),
+    array(
+        'title' => "$langAdd $langLinkAsModuleLabel",
+        'url' => "insertMyLink.php?course=$course_code",
+        'icon' => "fa-link"
+    ),
+    array(
+        'title' => "$langAdd $langMediaAsModuleLabel",
+        'url' => "insertMyMedia.php?course=$course_code",
+        'icon' => "fa-film"
+    ),
+    array(
+        'title' => "$langAdd $langCourseDescriptionAsModuleLabel",
+        'url' => "insertMyDescription.php?course=$course_code",
+        'icon' => "fa-info-circle"
+    )    
+));
+$tool_content .= "<div class='panel panel-action-btn-default'>
+                    <div class='pull-right'>
+                        $lp_action_button
+                    </div>
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'>$langLearningPathStructure</h3>
+                    </div>";
 
 //  -------------------------- learning path list content ----------------------------
 $sql = "SELECT M.*, LPM.*, A.`path`
@@ -522,7 +527,22 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 }
 
 // -------------------------- learning path list header ----------------------------
-$tool_content .= "<table class='table-default'>
+$tool_content .= "<table class='table-default'>";
+// -------------------- create label -------------------
+if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
+    $tool_content .= " <tr>
+      <th width='200'>$langLabel:</th>
+      <td>
+        <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
+          <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
+          <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
+          <input type='hidden' name='cmd' value='createLabel' />
+          <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
+        </form>
+      </td>
+    </tr>";
+}
+$tool_content .= "
     <tr>
       <th class='text-left' colspan=\"" . ($maxDeep + 1) . "\">&nbsp;" . $langContents . "</th>
       <th class='text-center'>" . icon('fa-gears') . "</th>

@@ -39,7 +39,7 @@ $TOCurl = "../viewer_toc.php?course=$course_code";
         </script>
     </head>
     <body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">
-        <div id="content">
+        <div id="content" style="width:800px; margin: 0 auto;">
             <br /><br /><br />
             <?php
             if ($_GET['op'] == 'cancel') {

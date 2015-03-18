@@ -1161,7 +1161,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($clang != 'el') {
             require("${webDir}/lang/el/common.inc.php");
             require("${webDir}/lang/el/messages.inc.php");
-            $arr['en'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
+            $arr['el'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
             $revert = true;
         }
         if ($revert) { // revert messages back to current language

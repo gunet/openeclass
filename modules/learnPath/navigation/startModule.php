@@ -191,7 +191,7 @@ if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
     echo "<frameset border='0' rows='0,56,*' frameborder='0'>
 		<frame src='updateProgress.php?course=$course_code' name='upFrame'>";
 } else {
-    echo "<frameset border='0' rows='85,*' frameborder='0'>";
+    echo "<frameset border='0' rows='50,*' frameborder='0'>";
 }
 
 echo "<frame src='../viewer_toc.php?course=$course_code' name='tocFrame' scrolling='no' />";

@@ -2054,7 +2054,10 @@ function submit_grades($grades_id, $grades, $email = false) {
            $course_code, $langFormErrors;
     $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $grades_id)->max_grade;
     $v = new Valitron\Validator(array('grades' => $grades));
-    $v->rule('numeric', array('grades.*'));
+    $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
+        if(is_numeric($value) || empty($value)) return true;
+    });        
+    $v->rule('emptyOrNumeric', array('grades.*'));
     $v->rule('min', array('grades.*'), 0);
     $v->rule('max', array('grades.*'), $max_grade);
     if($v->validate()) {
@@ -2182,7 +2185,7 @@ function create_zip_index($path, $id, $online = FALSE) {
         $filename = basename($row->file_path);
         $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
-        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
+        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
         fputs($fp, '
 			<tr class="sep">
 				<td>' . q(uid_to_name($row->uid)) . '</td>

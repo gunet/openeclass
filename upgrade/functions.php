@@ -189,8 +189,12 @@ function is_admin($username, $password) {
             return false;
 
         $hasher = new PasswordHash(8, false);
-        if (!$hasher->CheckPassword($password, $user->password))
+        if (!$hasher->CheckPassword($password, $user->password)) {
+            if (strlen($user->password) < 60 and md5($password) == $user->password) {
+                return true;
+            }
             return false;
+        }
 
         if ($db_schema == 0) {
             $_SESSION['uid'] = $user->user_id;
@@ -1136,8 +1140,9 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         // finally drop database
         Database::get()->query("DROP DATABASE `$code`");
     }
-    
+        
     // refresh XML metadata
+    Database::get()->query("USE `$mysqlMainDb`");
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse($course_id, $code, true);
@@ -1150,24 +1155,15 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
 }
 
 /**
- * @brief upgrade to 3.0rc3
- * @param string $code
- * @param int    $course_id
- */
-function upgrade_course_3_0_rc3($code, $course_id) {
-    // refresh XML metadata
-    require_once "modules/course_metadata/CourseXML.php";
-    if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
-        CourseXMLElement::refreshCourse($course_id, $code, true);
-    }
-}
-
-/**
  * @brief upgrade to 3.0rc2
  * @param string $code
  * @param int    $course_id
  */
 function upgrade_course_3_0_rc2($code, $course_id) {
+    
+    global $mysqlMainDb;
+    
+    Database::get()->query("USE `$mysqlMainDb`");
     // refresh XML metadata
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
@@ -1379,14 +1375,18 @@ function upgrade_course_2_4($code, $course_id, $lang) {
         if (!$doc_id) {
             $doc_id = 1;
         }
+        Database::get()->query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
+        Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
+        Database::get()->query("ALTER TABLE `document`
+                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1");
         Database::get()->query("INSERT INTO `$mysqlMainDb`.document
-                                (`id`, `course_id`, `subsystem`, `subsystem_id`, `path`, `filename`, `visibility`, `comment`,
+                                (`id`, `course_id`, `subsystem`, `subsystem_id`, `path`, `filename`, `visible`, `comment`,
                                  `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                  `description`, `author`, `format`, `language`, `copyrighted`)
-                                SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visibility`, `comment`,
+                                SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visible`, `comment`,
                                        0 + `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                        `description`, `author`, `format`, `language`, 0 + `copyrighted` FROM document") and
-                Database::get()->query("DROP TABLE document");
+        Database::get()->query("DROP TABLE document");
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                                  SET res_id = res_id + $doc_id
                                  WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'doc'");

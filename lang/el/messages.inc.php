@@ -2133,7 +2133,7 @@ $langErrorSql = "Σφάλμα στη δήλωση SQL";
 $langErrorValuesInDouble = "Σφάλμα: μία ή δύο τιμές είναι διπλές";
 $langErrortExtractingManifest = "Δεν μπορεί να εμφανιστεί απόσπασμα από το αρχείο zip.";
 $langExAlreadyUsed = "Αυτή η άσκηση ήδη χρησιμοποιείται ως ενότητα σε αυτή τη γραμμή μάθησης";
-$langExIncompatibleWithLP = "Αυτή η άσκηση περιέχει τύπους ερωτήσεων που δεν είναι συμβατοί με το υποσύστημα της γραμμής μάθησης";
+$langExIncompatibleWithLP = "Αυτή η άσκηση περιέχει τύπου ερωτήσης \"Ελεύθερου Κειμένου\" ο οποίος δεν είναι συμβατός με το υποσύστημα της γραμμής μάθησης";
 $langExInsertedAsModule = "έχει προστεθεί σαν ενότητα μαθήματος της γραμμής μάθησης";
 $langExercise = "Άσκηση";
 $langExerciseAsModule = "Χρήση Άσκησης";
@@ -2191,7 +2191,7 @@ $langMediaInsertedAsModule = "Έχει προστεθεί ως ενότητα μ
 $langMediaTypeDesc = "Πολυμέσο";
 $langMinuteShort = "ελαχ.";
 $langModuleMoved = "Μετακίνηση ενότητας";
-$langModuleOfMyCourse = "Ενότητας του μαθήματος";
+$langModuleOfMyCourse = "Ενότητας";
 $langModuleOfMyCourseLabel = "Eτικέτας του μαθήματος";
 $langModuleOfMyCourseLabel_onom = "Eτικέτα του μαθήματος";
 $langModuleStillInPool = "Σημειώστε ότι οι ενότητες αυτής της γραμμής θα είναι ακόμα διαθέσιμες στο σύνολο των ενοτήτων";
@@ -2232,12 +2232,7 @@ $langProgress = "Πρόοδος";
 $langQuitViewer = "Επιστροφή στη λίστα";
 $langRawHasBeenChanged = "Ο ελάχιστος βαθμός για προαγωγή έχει αλλαχθεί";
 $langSCORMTypeDesc = "SCORM προσαρμοσμένο περιεχόμενο";
-$langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα αρχείο zip και να είναι συμβατά με:
-   <ul class='right smaller'>
-     <li> το SCORM 2004 ή</li>
-     <li> το SCORM 1.2</li>
-     <li> το IMS CP 1.1.4</li>
-   </ul>";
+$langScormIntroTextForDummies = "Τα εισαγόμενα πακέτα πρέπει να αποτελούνται από ένα αρχείο zip και να είναι συμβατά με <b>SCORM 2004</b> ή  <b>SCORM 1.2</b> ή <b>IMS CP 1.1.4</b>";
 $langScormEmptyDocsList = "Ανεβάστε πακέτα SCORM στα έγγραφα του μαθήματος ώστε να σας εμφανιστεί η αντίστοιχη επιλογή εισαγωγής τους";
 $langSecondShort = "δευτ.";
 $langStartModule = "Έναρξη ενότητας";

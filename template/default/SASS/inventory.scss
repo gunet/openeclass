@@ -1900,10 +1900,6 @@ a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited{
     cursor: pointer;
 }
 div.group-space{
-    .row{
-        padding-top: 5px;
-        padding-bottom: 5px;
-    }
     .row.hr-seperator{
         margin-top: 15px;
         padding-bottom: 15px;
@@ -2870,5 +2866,30 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
     }
     .row>.col-sm-4:first-child, .row>.col-sm-4:nth-last-child(2){
         border-right: 1px solid #ddd !important;
+    }
+}
+
+.form-wrapper{
+    h4.form-heading{
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+        color: #000;
+        margin-bottom: 20px;
+    }
+}
+.notice{
+    .notice-header{
+        color: black;
+        margin-bottom: 5px;
+        text-decoration: underline;
+    }
+    .notice-body{
+        color: #777777;
+    }
+}
+.lp-module-show{
+    .row{
+        padding-bottom: 7px;
+        padding-top: 7px;
     }
 }
