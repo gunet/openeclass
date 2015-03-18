@@ -176,7 +176,7 @@ foreach ($flatElementList as $module) {
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
                 $moduleImg = 'fa-file-code-o';
-                $imagePassed = icon('fa-times');
+                $imagePassed = icon('fa-check');
             } else {
                 $imagePassed = icon('fa-check', $module['lesson_status']);
             }
