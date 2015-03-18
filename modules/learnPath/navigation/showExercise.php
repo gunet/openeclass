@@ -216,17 +216,21 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . $head_content
  . '</head>' . "\n"
  . '<body style="margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;">' . "\n"
- . '<div id="content">';
+ . '<div id="content"><div class="row"><div class="col-xs-12">';
 
 echo ("
   
 <div class='panel panel-primary'>
     <div class='panel-heading'>
         <h3 class='panel-title'>" . q($exerciseTitle) . "</h3>
-        </div><div class='panel-body'>
-            <p>$exerciseDescription_temp</p>
-        </div>
-    </div>
+    </div>");
+if (!empty($exerciseDescription_temp)) {
+    echo ("<div class='panel-body'>
+        $exerciseDescription_temp
+    </div>");
+}
+    echo ("</div>
+    
 
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
@@ -280,7 +284,7 @@ foreach ($questionList as $questionId) {
 } // end foreach()
 
 if (!$questionList) {
-    echo ("<div class='alert alert-danger'>$langNoAnswer</div>");
+    echo ("<div class='alert alert-alert'>$langNoQuestion</div>");
 } else {
     echo "<div class='panel'><div class='panel-body'><input class='btn btn-primary' type='submit' value=\"";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
@@ -441,6 +445,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
     if (!$nbrAnswers) {
         echo "<tr><td colspan='2'><div class='alert alert-danger'>$langNoAnswer</div></td></tr>";
     }
+    echo "</div></div>";
     // destruction of the Answer object
     unset($objAnswerTmp);
     // destruction of the Question object

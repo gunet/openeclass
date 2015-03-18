@@ -245,15 +245,17 @@ echo "<!DOCTYPE HTML>
         }
         #navigation-btns li:nth-child(2){
             padding-left: 5px;
-            padding-right: 35px;
+            padding-right: 0px;
         }
         #navigation-btns #close-btn{
             padding-right:20px;
             padding-left:20px;
             border-left: 2px groove #999;
+            margin-left: 35px;
         }
         #navigation-btns #close-btn span{
             font-size:16px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
     </style>
