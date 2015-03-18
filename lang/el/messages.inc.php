@@ -4435,6 +4435,7 @@ $langCPFMenuOptionsAlert = 'Πρέπει να εισάγετε τουλάχισ�
 $langCPFMenuOptionsChangeExplan = 'Η αλλαγή των επιλογών μπορεί να οδηγήσει σε ασυνέπειες για πεδία που έχουν ήδη περιεχόμενο';
 $langCPFChangeOrder = 'Αλλαγή διάταξης';
 $langCPFSortOrderSuccess = 'Η διάταξη των κατηγοριών και των πεδίων αποθηκεύθηκε.';
+$langCPFAdminSideMenuLink = 'Πεδία προφίλ χρήστη';
 
 /* * ******************************************
   Theme Options

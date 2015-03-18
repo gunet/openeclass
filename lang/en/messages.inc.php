@@ -3792,6 +3792,7 @@ $langCPFMenuOptionsAlert = 'You must specify at least one menu option';
 $langCPFMenuOptionsChangeExplan = 'Changing menu options may lead to inconsistencies for fields that already have stored values';
 $langCPFChangeOrder = 'Change order';
 $langCPFSortOrderSuccess = 'The sort order of categories and fields was saved.';
+$langCPFAdminSideMenuLink = 'User profile fields';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';
