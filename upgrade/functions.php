@@ -1140,8 +1140,9 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         // finally drop database
         Database::get()->query("DROP DATABASE `$code`");
     }
-    
+        
     // refresh XML metadata
+    Database::get()->query("USE `$mysqlMainDb`");
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse($course_id, $code, true);
@@ -1159,6 +1160,10 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
  * @param int    $course_id
  */
 function upgrade_course_3_0_rc2($code, $course_id) {
+    
+    global $mysqlMainDb;
+    
+    Database::get()->query("USE `$mysqlMainDb`");
     // refresh XML metadata
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {

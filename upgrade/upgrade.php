@@ -93,7 +93,7 @@ if (!DBHelper::fieldExists('user', 'id')) {
     fix_multiple_usernames();
     
     if (DBHelper::indexExists('user', 'user_username')) {
-        Database::get()->query("DROP KEY user_username");
+        Database::get()->query("DROP INDEX user_username");
     }        
     if (!DBHelper::fieldExists('user', 'whitelist')) {
         Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT");
