@@ -804,8 +804,10 @@ if ($can_upload) {
         if ($result) {
             $filename = q($result->filename);
             $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
+            enableCheckFileSize();
             $dialogBox = "<div class='form-wrapper'>
-                        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
+                        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>" .
+                        fileSizeHidenInput() . "
                         <fieldset>
                         <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
                         $group_hidden_input

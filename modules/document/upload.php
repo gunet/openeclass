@@ -71,9 +71,9 @@ if ($can_upload) {
         $fileinput = "
         <div class='form-group'>
           <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile</label>
-          <div class='col-sm-10'>
-            <input type='hidden' name='MAX_FILE_SIZE' value='" . fileUploadMaxSize() . "'>
-            " . CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
+          <div class='col-sm-10'>" .
+                fileSizeHidenInput() .
+                CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
           </div>
         </div>";
     }

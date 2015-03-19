@@ -90,7 +90,8 @@ if (isset($course->course_image)) {
         <input type='hidden' name='course_image' value='$course->course_image'>
     ";
 } else {
-   $course_image = "<input type='file' name='course_image' id='course_image'>"; 
+    enableCheckFileSize();
+    $course_image = fileSizeHidenInput() . "<input type='file' name='course_image' id='course_image'>"; 
 }
 
 

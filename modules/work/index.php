@@ -600,6 +600,7 @@ function new_assignment() {
               'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');
+    enableCheckFileSize();
     $tool_content .= "
         <div class='row'><div class='col-sm-12'>
         <div class='form-wrapper'>
@@ -632,7 +633,8 @@ function new_assignment() {
             <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
-                    <div class='col-sm-10'>    
+                    <div class='col-sm-10'>" .
+                      fileSizeHidenInput() . "
                       <input type='file' id='userfile' name='userfile'>
                     </div>
                 </div>

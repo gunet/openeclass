@@ -2999,6 +2999,7 @@ function getSerializedMessage($message, $lang=null) {
 
 /**
  * @brief Returns a file size limit in bytes based on the PHP upload_max_filesize and post_max_size
+ * @return int
  */
 function fileUploadMaxSize() {
     static $max_size;
@@ -3042,3 +3043,10 @@ $(enableCheckFileSize);
 ";
 }
 
+/**
+ * @brief Return the HTML code for a hidden input setting the max upload size
+ * @return string
+ */
+function fileSizeHidenInput() {
+    return "<input type='hidden' name='MAX_FILE_SIZE' value='" . fileUploadMaxSize() . "'>";
+}

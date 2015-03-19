@@ -168,6 +168,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     foreach ($q_cats as $q_cat) {
         $options .= "<option value='$q_cat->question_cat_id' ". (($category == $q_cat->question_cat_id) ? "selected" : "") .">$q_cat->question_cat_name</option>\n";
     }
+    enableCheckFileSize();
     $tool_content .= "
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
@@ -203,9 +204,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             </div>            
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-2 control-label'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
-                <div class='col-sm-10'>
-                  ".(($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "")."
-                  <input type='file'  name='imageUpload' id='imageUpload'> 
+                <div class='col-sm-10'>" .
+                  (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
+                  fileSizeHidenInput() . "  
+                  <input type='file' name='imageUpload' id='imageUpload'> 
                 </div>
             </div>";
     if ($okPicture) {

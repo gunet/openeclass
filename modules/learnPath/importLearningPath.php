@@ -1110,6 +1110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         </div>
     ";
     // Upload Form section
+    enableCheckFileSize();
     $tool_content .="
         <div class='row'>
             <div class='col-sm-12'>
@@ -1119,7 +1120,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         <div class='form-group'>
                             <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
                             <div class='col-sm-10'>
-                                <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
+                                <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
+                                fileSizeHidenInput() . "
                                 <input id='uploadedPackage' type='file' name='uploadedPackage'>
                                 <span class='smaller'>$langLearningPathUploadFile</span>
                                 <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>

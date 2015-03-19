@@ -77,8 +77,8 @@ if ($is_editor) {
         enableCheckFileSize();
         $tool_content .= "
         <div class='form-wrapper'>
-            <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>
-                <input type='hidden' name='MAX_FILE_SIZE' value='" . fileUploadMaxSize() . "'>
+            <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>" .
+                fileSizeHidenInput() . "
                 <div class='form-group'>
                     <label for='ebook_title' class='col-sm-2 control-label'>$langTitle: </label>
                     <div class='col-sm-10'>

@@ -345,13 +345,16 @@ hContent;
                 }
                 $tool_content .= "<fieldset>";
                 if ($_GET['form_input'] == 'file') {
-                        $tool_content .= "<div class='form-group'>
+                    enableCheckFileSize();
+                    $tool_content .= "<div class='form-group'>
                             <label for='FileName' class='col-sm-2 control-label'>$langWorkFile:</label>
                             <input type='hidden' name='id' value=''>
-                            <div class='col-sm-10'><input type='file' name='userFile'></div>
+                            <div class='col-sm-10'>" .
+                                fileSizeHidenInput() . "
+                                <input type='file' name='userFile'></div>
                         </div>";
                 } else {
-                        $tool_content .= "<div class='form-group'>
+                    $tool_content .= "<div class='form-group'>
                         <label for='Url' class='col-sm-2 control-label'>$langURL:</label>
                           <input type='hidden' name='id' value=''>
                           <div class='col-sm-10'><input class='form-control' type='text' name='URL'></div>

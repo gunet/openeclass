@@ -185,9 +185,11 @@ if (isset($_GET['mid'])) {
                     </div>";
 
             if ($course_id != 0) {
+                enableCheckFileSize();
                 $out .= "<div class='form-group'>
                             <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
-                            <div class='col-sm-10'>
+                            <div class='col-sm-10'>" .
+                                fileSizeHidenInput() . "
                                 <input type='file' name='file' size='35'>
                             </div>
                         </div>";
