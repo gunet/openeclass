@@ -45,11 +45,14 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www
  . '<head>' . "\n"
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-theme.min.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/inventory.css' rel='stylesheet'>\n"
  . '<title>' . $langExercicesResult . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
  . '<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">' . "\n"
- . '<div id="content">';
+ . '<div id="content"  style="padding:20px;">';
 
 $pageName = $langExercicesResult;
 
@@ -80,13 +83,17 @@ $exerciseDescription_temp = mathfilter($exerciseDescription_temp, 12, "$webDir/c
 $displayResults = $objExercise->selectResults();
 $displayScore = $objExercise->selectScore();
 
-echo "<table class='tbl_border' width='99%'>
-  <tr class='odd'>
-    <td colspan='2'><b>" . q(stripslashes($exerciseTitle)) . "</b>
-    <br/>" . standard_text_escape(stripslashes($exerciseDescription_temp)) . "
-    </td>
-  </tr>
-  </table>";
+echo "<div class='panel panel-primary'>
+        <div class='panel-heading'>
+            <b>" . q(stripslashes($exerciseTitle)) . "</b>
+        </div>";
+if ($exerciseDescription_temp) {
+   echo "<div class='panel-body'>
+        " . standard_text_escape(stripslashes($exerciseDescription_temp)) . "
+        </div>";
+  }
+echo "</div>";
+
 
 // probaloume th dikia mas forma me to diko mas action
 // kai me to katallhlo hidden pedio
@@ -124,7 +131,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
     $iplus = $i + 1;
 
     echo "<br/>
-        <table width='100%' class='tbl_alt'>
+        <table class='table-default graded'>
         <tr class='odd'>
         <td colspan='${colspan}'><b><u>$langQuestion</u>: $iplus</b></td>
         </tr>
@@ -342,7 +349,7 @@ Database::get()->query("UPDATE exercise_user_record SET total_score = ?d, total_
 if ($displayScore == 1) {
     echo ("
     <br/>
-    <table width='100%' class='tbl_alt'>
+    <table class='table-default'>
     <tr class='odd'>
 	<td class='right'>$langYourTotalScore: <b>$totalScore/$totalWeighting</b>
       </td>
