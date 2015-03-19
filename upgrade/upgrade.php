@@ -360,11 +360,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE cours_user DROP code_cours");
         }
 
-        if (!DBHelper::fieldExists('annonces', 'course_id')) {
-            Database::get()->query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
+        if (!DBHelper::fieldExists('annonces', 'cours_id')) {
+            Database::get()->query('ALTER TABLE annonces ADD cours_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
             $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
             foreach ($t as $entry) {
-                Database::get()->query("UPDATE annonces SET course_id = $entry->cours_id WHERE code_cours = '$entry->code'");
+                Database::get()->query("UPDATE annonces SET cours_id = $entry->cours_id WHERE code_cours = '$entry->code'");
             }
             Database::get()->query('ALTER TABLE annonces DROP code_cours');
         }
