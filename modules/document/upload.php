@@ -31,6 +31,8 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/document/doc_init.php';
 require_once 'modules/drives/clouddrive.php';
 
+enableCheckFileSize();
+
 $toolName = $langDoc;
 
 if (isset($_GET['uploadPath'])) {
@@ -70,6 +72,7 @@ if ($can_upload) {
         <div class='form-group'>
           <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile</label>
           <div class='col-sm-10'>
+            <input type='hidden' name='MAX_FILE_SIZE' value='" . fileUploadMaxSize() . "'>
             " . CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
           </div>
         </div>";
@@ -217,8 +220,6 @@ if ($can_upload) {
     $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
-if (defined('COMMON_DOCUMENTS')) {
-    draw($tool_content, 3);
-} else {
-    draw($tool_content, 2);
-}
+draw($tool_content,
+    defined('COMMON_DOCUMENTS')? 3: 2,
+    null, $head_content);

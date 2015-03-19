@@ -74,9 +74,11 @@ if ($is_editor) {
         }
     } elseif (isset($_GET['create'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langEBook);
+        enableCheckFileSize();
         $tool_content .= "
         <div class='form-wrapper'>
-            <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>     
+            <form class='form-horizontal' role='form' method='post' action='create.php?course=$course_code' enctype='multipart/form-data'>
+                <input type='hidden' name='MAX_FILE_SIZE' value='" . fileUploadMaxSize() . "'>
                 <div class='form-group'>
                     <label for='ebook_title' class='col-sm-2 control-label'>$langTitle: </label>
                     <div class='col-sm-10'>
@@ -86,8 +88,12 @@ if ($is_editor) {
                 <div class='form-group'>
                     <label for='fileUpload' class='col-sm-2 control-label'>$langZipFile:</label>
                     <div class='col-sm-10'>                    
-                      <input type='file' name='file' id='fileUpload'> 
+                      <input type='file' name='file' id='fileUpload'>
+ $langOptional
                     </div>
+                </div>
+                <div class='row'>
+                      <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2 '>

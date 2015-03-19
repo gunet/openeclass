@@ -35,31 +35,22 @@ if (!$is_editor) {
     redirect_to_home_page();
 } else {
     $title = trim(@$_POST['title']);
-    if (empty($title) or ! isset($_FILES['file'])) {
-        $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing</div>";
+    if (empty($title)) {
+        Session::Messages($langFieldsMissing, 'alert-danger');
+        redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
     }
-    if (!preg_match('/\.zip$/i', $_FILES['file']['name'])) {
-        $tool_content .= "<div class='alert alert-danger'>$langUnwantedFiletype: " .
-                q($_FILES['file']['name']) . "</div>";
+    if (isset($_FILES['file']['name']) and !$_FILES['file']['error']) {
+        if (!preg_match('/\.zip$/i', $_FILES['file']['name'])) {
+            Session::Messages("$langUnwantedFiletype: " . $_FILES['file']['name'], 'alert-danger');
+            redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
+        }
+        validateUploadedFile($_FILES['file']['name'], 2);
+        $zipFile = new pclZip($_FILES['file']['tmp_name']);
+        validateUploadedZipFile($zipFile->listContent(), 2);
     }
 
-    validateUploadedFile($_FILES['file']['name'], 2);
-
-    if (!empty($tool_content)) {
-        draw($tool_content, 2);
-        exit;
-    }
-
-    $zipFile = new pclZip($_FILES['file']['tmp_name']);
-    validateUploadedZipFile($zipFile->listContent(), 2);
-
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS `order` FROM ebook WHERE course_id = ?d", $course_id)->order;
-    if (!$order) {
-        $order = 1;
-    } else {
-        $order++;
-    }
-    $ebook_id = Database::get()->query("INSERT INTO ebook SET `order` = ?d, `course_id` = ?d, `title` = ?s", $order, $course_id, $title)->lastInsertID;
+    $order = Database::get()->querySingle("SELECT COALESCE(MAX(`order`), 1) AS `order` FROM ebook WHERE course_id = ?d", $course_id)->order;
+    $ebook_id = Database::get()->query("INSERT INTO ebook SET `order` = ?d, `course_id` = ?d, `title` = ?s", $order + 1, $course_id, $title)->lastInsertID;
 
     // Initialize document subsystem global variables
     require_once 'modules/document/doc_init.php';
@@ -67,13 +58,14 @@ if (!$is_editor) {
 
     if (!mkdir($basedir, 0775, true)) {
         Database::get()->query("DELETE FROM ebook WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
-        $tool_content .= "<div class='alert alert-danger'>$langImpossible</div>";
-        draw($tool_content, 2);
-        exit;
+        Session::Messages($langImpossible, 'alert-danger');
+        redirect_to_home_page("modules/ebook/index.php?course=$course_code&create=1");
     }
 
-    chdir($basedir);
-    $realFileSize = 0;
-    $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
-    header("Location: {$urlAppend}modules/ebook/edit.php?course=$course_code&id=$ebook_id");
+    if (isset($zipFile)) {
+        chdir($basedir);
+        $realFileSize = 0;
+        $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
+    }
+    redirect_to_home_page("modules/ebook/edit.php?course=$course_code&id=$ebook_id");
 }

@@ -2185,6 +2185,7 @@ $langLinkAsModuleLabel = "Συνδέσμου";
 $langLinkInsertedAsModule = "Έχει προστεθεί ως ενότητα μαθήματος αυτής της γραμμής μάθησης";
 $langLogin = "Είσοδος";
 $langMaxFileSize = "Μέγιστο μέγεθος αρχείου: ";
+$langMaxFileSizeExceeded = 'Το μέγεθος του αρχείου υπερβαίνει το μέγιστο επιτρεπτό όριο.';
 $langMediaAlreadyUsed = "Αυτό το πολυμέσο ήδη χρησιμοποιείται ως ενότητα σε αυτήν τη γραμμή μάθησης";
 $langMediaAsModule = "Χρήση Πολυμέσου";
 $langMediaAsModuleLabel = "Πολυμέσου";

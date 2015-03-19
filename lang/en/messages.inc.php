@@ -1214,6 +1214,7 @@ $langLinkInsertedAsModule = "has been added as a module of the course and of thi
 $langLogin = "Login";
 $langLogInWith = "Connect with";
 $langMaxFileSize = "Max file size: ";
+$langMaxFileSizeExceeded = 'File size exceeds maximum upload limit.';
 $langMinuteShort = "min.";
 $langModuleMoved = "Module moved";
 $langModuleOfMyCourse = "Use a ";
