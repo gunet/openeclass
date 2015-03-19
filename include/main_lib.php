@@ -2143,7 +2143,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "title='$title'";
+        $extra = "title='$title' data-toggle='tooltip'";
     } else {
         $extra = '';
     }

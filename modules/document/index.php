@@ -122,6 +122,9 @@ if (isset($_GET['download'])) {
     set_time_limit(0);
 
     if ($format == '.dir') {
+        if (!$uid) {
+            forbidden($downloadDir);
+        }
         $real_filename = $real_filename . '.zip';
         $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
         zip_documents_directory($dload_filename, $downloadDir, $can_upload);
@@ -1139,7 +1142,7 @@ if ($doc_count == 0) {
     }
 
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
-    $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
+    $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-save', $langDownloadDir, "{$base_url}download=$download_path") : '';
     $tool_content .= "
         <div class='pull-left'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
             "&nbsp;$download_dir</div>
@@ -1316,7 +1319,8 @@ if ($doc_count == 0) {
                                           'confirm' => "$langConfirmDelete $entry[filename]")));
                     $tool_content .= "</td>";
                 } else { // student view
-                    $tool_content .= "<td class='text-center'>" . icon('fa-save', $dload_msg, $download_url) . "</td>";
+                    $tool_content .= "<td class='text-center'>" .
+                        (($uid or $entry['format'] != '.dir')? icon('fa-save', $dload_msg, $download_url): '&nbsp;') . "</td>";
                 }
             }
             $tool_content .= "</tr>";
