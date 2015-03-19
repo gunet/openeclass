@@ -12,7 +12,7 @@
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
- *
+ *ε
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
@@ -2260,6 +2260,7 @@ $langWrongOperation = "Λανθασμένη λειτουργία";
 $langYourBestScore = "Η καλύτερή σου βαθμολογία";
 $lang_enroll = "Eγγραφή";
 $langimportLearningPath = "Εισαγωγή γραμμής μάθησης";
+$langimportLearningPathSort = "Εισαγωγή";
 $langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πακέτου SCORM";
 $langLPViewerToggleLeftTOC = "Εναλλαγή εμφάνισης περιεχομένων";
 
