@@ -176,6 +176,18 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("main/profile/profile.php");
         }
     }
+    
+    //check for validation errors in custom profile fields
+    $cpf_check = cpf_validate_format();
+    if ($cpf_check[0] === false) {
+        $cpf_error_str = '';
+        unset($cpf_check[0]);
+        foreach ($cpf_check as $cpf_error) {
+            $cpf_error_str .= $cpf_error;
+        }
+        Session::Messages($cpf_error_str);
+        redirect_to_home_page("main/profile/profile.php");
+    }
 
     // TODO: Allow admin to configure allowed username format
     if (!empty($email_form) && ($email_form != $_SESSION['email']) && get_config('email_verification_required')) {

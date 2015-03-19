@@ -188,8 +188,10 @@ function render_profile_fields_form($context) {
 /**
  * Process custom profile fields values after submit
  * @param array $context
+ * @return boolean $updated
  */
 function process_profile_fields_data($context) {
+    $updated = false;
     if (isset($context['pending']) && $context['pending']) { //pending teacher registration
         $user_request_id = $context['user_request_id'];
         foreach ($_POST as $key => $value) {
@@ -200,6 +202,7 @@ function process_profile_fields_data($context) {
                     Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
                 }*/
                 Database::get()->query("INSERT INTO custom_profile_fields_data_pending (user_request_id, field_id, data) VALUES (?d,?d,?s)", $user_request_id, $field_id, $value);
+                $updated = true;
             }
         }
     } else { //normal registration process
@@ -212,9 +215,11 @@ function process_profile_fields_data($context) {
                     Database::get()->query("DELETE FROM custom_profile_fields_data WHERE field_id = ?d AND user_id = ?d", $field_id, $uid);
                 }
                 Database::get()->query("INSERT INTO custom_profile_fields_data (user_id, field_id, data) VALUES (?d,?d,?s)", $uid, $field_id, $value);
+                $updated = true;
             }
         }
     }
+    return $updated;
 }
 
 /**

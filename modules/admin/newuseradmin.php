@@ -130,7 +130,10 @@ if ($submit) {
     
     // check if user name exists
     $user_exist = Database::get()->querySingle("SELECT username FROM user WHERE username=?s", $uname);
-
+    
+    //check for validation errors in custom profile fields
+    $cpf_check = cpf_validate_format();
+    
     // check if there are empty fields
     if (!$all_set) {
         $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing <br /><a href='$backlink'>$langAgain</a></div>";        
@@ -138,6 +141,13 @@ if ($submit) {
         $tool_content .= "<div class='alert alert-danger'>$langUserFree <br /><a href='$backlink'>$langAgain</a></div>";
     } elseif (!email_seems_valid($email_form)) {
         $tool_content .= "<div class='alert alert-danger'>$langEmailWrong <br /><a href='$backlink'>$langAgain</a></div>";        
+    } elseif ($cpf_check[0] === false) {
+        unset($cpf_check[0]);
+        $cpf_error_str = '';
+        foreach ($cpf_check as $cpf_error) {
+            $cpf_error_str .= $cpf_error;
+        }
+        $tool_content .= "<div class='alert alert-danger'>$cpf_error_str <br /><a href='$backlink'>$langAgain</a></div>";
     } else {
         validateNode(intval($depid), isDepartmentAdmin());
         $hasher = new PasswordHash(8, false);

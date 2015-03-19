@@ -358,7 +358,10 @@ if ($u) {
                                                  username = ?s", $u, $username)) {
             $user_exist = TRUE;
         }
-
+        
+        //check for validation errors in custom profile fields
+        $cpf_check = cpf_validate_format();
+        
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username)) {
             $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing <br>
@@ -368,6 +371,16 @@ if ($u) {
         } elseif (isset($user_exist) and $user_exist == true) {
             $tool_content .= "<div class='alert alert-danger'>$langUserFree <br>
                                   <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
+            draw($tool_content, 3, null, $head_content);
+            exit();
+        } elseif ($cpf_check[0] === false) {
+            $cpf_error_str = '';
+            unset($cpf_check[0]);
+            foreach ($cpf_check as $cpf_error) {
+                $cpf_error_str .= $cpf_error;
+            }
+            $tool_content .= "<div class='alert alert-danger'>$cpf_error_str <br>
+                                <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
             draw($tool_content, 3, null, $head_content);
             exit();
         }
@@ -413,9 +426,9 @@ if ($u) {
                                     verified_mail = ?d,
                                     whitelist = ?s
                           WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
-            if ($qry->affectedRows > 0) {
-                    //update custom profile fields
-                    process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
+            //update custom profile fields
+            $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
+            if ($qry->affectedRows > 0 || $cpf_updated === true) {
                     $tool_content .= "<div class='alert alert-info'>$langSuccessfulUpdate</div>";
             } else {                                                
                     $tool_content .= "<div class='alert alert-warning'>$langUpdateNoChange</div>";               
