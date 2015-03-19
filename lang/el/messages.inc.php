@@ -1588,6 +1588,7 @@ $langAllExercises = "Όλες οι ερωτήσεις";
 $langFilter = "Φιλτράρισμα";
 $langGoBackToEx = "Επιστροφή στην άσκηση";
 $langReuse = "Επαναχρησιμοποίηση";
+$langUsed = "Χρησιμοποιύμενης";
 $langQuestionReused = "Η ερώτηση προστέθηκε στην άσκηση";
 
 // exercise_result.php
@@ -2200,6 +2201,7 @@ $langMyCourses = "Τα μαθήματά μου";
 $langNeverBrowsed = "Δεν έχει ολοκληρωθεί";
 $langNewLabel = "Δημιουργία νέου κεφαλαίου";
 $langLabel = "Eτικέτα";
+$langLabel2 = "Eτικέτας";
 $langNext = "Επόμενο";
 $langNextPage = "Επόμενη Σελίδα";
 $langNoEmail = "Δεν έχει οριστεί email";

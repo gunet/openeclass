@@ -424,44 +424,48 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
 if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= $dialogBox;
 }
-$lp_action_button = action_button(array(
+$lp_action_button = action_button(array(    
     array(
-        'title' => "$langReuse $langModuleOfMyCourse",
-        'url' => "insertMyModule.php?course=$course_code",
-        'icon' => "fa-plus",
-        'level' => "primary-label"
-    ),      
-    array(
-        'title' => "$langAdd $langLabel",
+        'title' => "$langLabel2",
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=createLabel",
         'icon' => "fa-tag"
     ),    
     array(
-        'title' => "$langAdd $langDocumentAsModuleLabel",
+        'title' => "$langDocumentAsModuleLabel",
         'url' => "insertMyDoc.php?course=$course_code",
         'icon' => 'fa-folder-open-o'
     ),
     array(
-        'title' => "$langAdd $langExerciseAsModuleLabel",
+        'title' => "$langExerciseAsModuleLabel",
         'url' => "insertMyExercise.php?course=$course_code",
         'icon' => "fa-pencil-square-o"
     ),
     array(
-        'title' => "$langAdd $langLinkAsModuleLabel",
+        'title' => "$langLinkAsModuleLabel",
         'url' => "insertMyLink.php?course=$course_code",
         'icon' => "fa-link"
     ),
     array(
-        'title' => "$langAdd $langMediaAsModuleLabel",
+        'title' => "$langMediaAsModuleLabel",
         'url' => "insertMyMedia.php?course=$course_code",
         'icon' => "fa-film"
     ),
     array(
-        'title' => "$langAdd $langCourseDescriptionAsModuleLabel",
+        'title' => "$langCourseDescriptionAsModuleLabel",
         'url' => "insertMyDescription.php?course=$course_code",
         'icon' => "fa-info-circle"
+    ),
+    array(
+        'title' => "$langUsed $langModuleOfMyCourse",
+        'url' => "insertMyModule.php?course=$course_code",
+        'icon' => "fa-plus-square"
     )    
-));
+),
+    array(
+        'secondary_title' => $langAdd,
+        'secondary_icon' => 'fa-plus'
+    )
+);
 $tool_content .= "<div class='panel panel-action-btn-default'>
                     <div class='pull-right'>
                         $lp_action_button

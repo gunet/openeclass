@@ -2834,7 +2834,7 @@ function action_bar($options, $page_title_flag = true) {
  * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'class' => 'primary danger')
  * 
  */
-function action_button($options) {
+function action_button($options, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
     foreach (array_reverse($options) as $option) {
@@ -2893,11 +2893,13 @@ function action_button($options) {
         $primary_buttons = implode('', $out_primary);
     }       
     $action_button = "";
+    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
+    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
         $action_button = "
                 <a tabindex='1' class='btn btn-default' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
-                    <i class='fa fa-gear'></i>  <span class='caret'></span>
+                    <i class='fa $secondary_icon'></i> $secondary_title <span class='caret'></span>
                 </a>";
     }    
     
