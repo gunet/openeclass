@@ -1283,6 +1283,7 @@ $langWrongOperation = "Wrong operation";
 $langYourBestScore = "Your best performance";
 $lang_enroll = "Enrol";
 $langimportLearningPath = "Import a learning path";
+$langimportLearningPathSort = "Import";
 $langScormErrorExport = "Error exporting SCORM package";
 $langActiveTools = "Active tools";
 $langAdministrationTools = "Administration tools";
