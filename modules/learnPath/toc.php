@@ -176,15 +176,15 @@ foreach ($flatElementList as $module) {
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
                 $moduleImg = 'fa-file-code-o';
-                $imagePassed = icon('fa-check');
+                $imagePassed = "<span style='color:green'>".icon('fa-check')."</span>";
             } else {
-                $imagePassed = icon('fa-check', $module['lesson_status']);
+                $imagePassed = "<span style='color:green'>".icon('fa-check', $module['lesson_status'])."</span>";
             }
         }
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
             $moduleImg = 'fa-file-code-o';
-            $imagePassed = icon('fa-times');
+            $imagePassed = "<span style='color:red'>".icon('fa-times')."</span>";
         }
 
         echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg);
