@@ -2733,7 +2733,7 @@ function forbidden($path = '') {
  * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'level' => 'primary')
  * level is optional and can be 'primary' for primary entries or unset
  */
-function action_bar($options, $page_title_flag = true) {
+function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete, $pageName;
     
     $out_primary = $out_secondary = array();
@@ -2802,9 +2802,11 @@ function action_bar($options, $page_title_flag = true) {
     }
 
     $action_button = "";
+    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
+    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";    
     if (count($out_secondary)) {
         //$action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
-        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa fa-gears'></i> <span class='caret'></span></button>";
+        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
         $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
                      ".implode('', $out_secondary)."
                   </ul>";
