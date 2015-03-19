@@ -360,7 +360,7 @@ if (isset($sortDirection) && $sortDirection) {
 
 $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "javascript:history.back();",
+                'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
             )
