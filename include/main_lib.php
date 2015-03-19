@@ -298,7 +298,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
 
     $token = token_generate($user->id, true);
     return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
-            q($user->givenname) . " " .  q($user->surname) . "</a>" .
+            q($user->surname) . " " .  q($user->givenname) . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
 
