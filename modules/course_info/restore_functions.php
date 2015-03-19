@@ -1157,6 +1157,9 @@ function document_map_function(&$data, $maps) {
             return false;
         }
     }
+    if (!isset($data['extra_path'])) {
+        $data['extra_path'] = '';
+    }
     return true;
 }
 
