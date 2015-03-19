@@ -222,7 +222,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply space-after-icon',)
             ));
     } else {
-        $pageName = $attendance->title;
+        $pageName = $attendance->title ? $attendance->title : $langAttendanceNoTitle2;
         $tool_content .= action_bar(
             array(         
                 array('title' => $langConfig,

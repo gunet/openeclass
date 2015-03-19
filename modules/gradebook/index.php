@@ -215,7 +215,8 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
-    } else {       
+    } else {
+        $pageName = $gradebook->title ? $gradebook->title : $langGradebookNoTitle2;
         $tool_content .= action_bar(
             array(
                 array('title' => $langConfig,
