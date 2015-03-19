@@ -4436,6 +4436,8 @@ $langCPFMenuOptionsChangeExplan = 'Η αλλαγή των επιλογών μπ�
 $langCPFChangeOrder = 'Αλλαγή διάταξης';
 $langCPFSortOrderSuccess = 'Η διάταξη των κατηγοριών και των πεδίων αποθηκεύθηκε.';
 $langCPFAdminSideMenuLink = 'Πεδία προφίλ χρήστη';
+$langCPFLinkValidFail = 'Το πεδίο %s δεν είναι έγκυρη διαδικτυακή διεύθυνση. ';
+$langCPFDateValidFail = 'Το πεδίο %s δεν είναι έγκυρη ημερομηνία. ';
 
 /* * ******************************************
   Theme Options

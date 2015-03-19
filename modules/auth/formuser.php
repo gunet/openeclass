@@ -110,6 +110,16 @@ if ($display_captcha) {
     }
 }
 
+//check for validation errors in custom profile fields
+$cpf_check = cpf_validate_format();
+if ($cpf_check[0] === false) {
+    $all_set = false;
+    unset($cpf_check[0]);
+    foreach ($cpf_check as $cpf_error) {
+        $errors[] = $cpf_error;
+    }
+}
+
 if (isset($_POST['submit'])) {
     foreach ($errors as $message) {
         $tool_content .= "<div class='alert alert-warning'>$message</div>";

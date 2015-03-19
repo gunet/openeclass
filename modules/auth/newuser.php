@@ -233,6 +233,14 @@ if (!isset($_POST['submit'])) {
     if ($password != $_POST['password1']) { // check if the two passwords match
         $registration_errors[] = $langPassTwice;
     }
+    //check for validation errors in custom profile fields
+    $cpf_check = cpf_validate_format();
+    if ($cpf_check[0] === false) {
+        unset($cpf_check[0]);
+        foreach ($cpf_check as $cpf_error) {
+            $registration_errors[] = $cpf_error;
+        }
+    }
     if (count($registration_errors) == 0) {
         if (get_config('email_verification_required') && !empty($email)) {
             $verified_mail = 0;
