@@ -239,6 +239,25 @@ function augment_registered_posted_variables_arr(&$arr) {
 }
 
 /**
+ * admin/edituser.php uses a different approach for validating required fields
+ * so a specific function is needed
+ * @return boolean $success
+ */
+function cpf_validate_required_edituser() {
+    $success = true;
+    foreach ($_POST as $key => $value) {
+        if (substr($key, 0, 4) == 'cpf_') { //custom profile fields input names start with cpf_
+            $field_name = substr($key, 4);
+            $required = Database::get()->querySingle("SELECT required FROM custom_profile_fields WHERE shortname = ?s", $field_name)->required;
+            if ($required == 1 && $value == '') {
+                $success = false;
+            }
+        }
+    }
+    return $success;
+}
+
+/**
  * Render custom profile fields content when viewing profile
  * @param array $context
  * @return string

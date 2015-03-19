@@ -363,7 +363,7 @@ if ($u) {
         $cpf_check = cpf_validate_format();
         
         // check if there are empty fields
-        if (empty($fname) or empty($lname) or empty($username)) {
+        if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
             $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing <br>
                                   <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div>";
             draw($tool_content, 3, null, $head_content);
