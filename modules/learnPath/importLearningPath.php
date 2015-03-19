@@ -891,7 +891,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 }
 
                 // elegxoume an to contentType prepei na einai scorm h asset
-                if (isset($manifestData['scos'][$item['identifierref']]['contentTypeFlag']) && $manifestData['scos'][$item['identifierref']]['contentTypeFlag'] == CTSCORMASSET_) {
+                if (isset($manifestData['scos'][$item['identifierref']]['href']) and parse_url($manifestData['scos'][$item['identifierref']]['href'],  PHP_URL_HOST) !== null) {
+                    $contentType = CTLINK_;
+                } elseif (isset($manifestData['scos'][$item['identifierref']]['contentTypeFlag']) && $manifestData['scos'][$item['identifierref']]['contentTypeFlag'] == CTSCORMASSET_) {
                     $contentType = CTSCORMASSET_;
                 } else {
                     $contentType = CTSCORM_;
@@ -942,7 +944,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                     $extraPath = "";
                 }
 
-                $assetPath = "/"
+                if ($contentType == CTLINK_) {
+                    $assetPath = $manifestData['scos'][$item['identifierref']]['href'];
+                } else {
+                    $assetPath = "/"
                         . $manifestData['xml:base']['manifest']
                         . $manifestData['xml:base']['ressources']
                         . $extraPath
@@ -951,6 +956,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         . $manifestData['scos'][$item['identifierref']]['parameters']
                         . $manifestData['assets'][$item['identifierref']]['parameters']
                         . $manifestData['items'][$item['itemIdentifier']]['parameters'];
+                }
 
                 // create new asset
                 // array of all inserted asset ids
