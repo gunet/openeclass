@@ -430,6 +430,9 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langChangeUser']);
         array_push($sideMenuLink, "../admin/change_user.php");
         array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
+        array_push($sideMenuLink, "../admin/custom_profile_fields.php");
+        array_push($sideMenuImg, "arrow.png");
     }
 
     array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
@@ -544,9 +547,6 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
-        array_push($sideMenuImg, "arrow.png");
-        array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
-        array_push($sideMenuLink, "../admin/custom_profile_fields.php");
         array_push($sideMenuImg, "arrow.png");
         array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
         array_push($sideMenuLink, "../admin/extapp.php");
