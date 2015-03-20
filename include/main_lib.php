@@ -1702,6 +1702,7 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
+    skin: 'lightgray',
     image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
@@ -1717,7 +1718,7 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
+    plugins: 'fullscreen,pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
@@ -1726,8 +1727,20 @@ tinymce.init({
         {title: '$langPopUpFrame', value: 'colorboxframe'}
     ],
     $filebrowser
-
+    // Menubar options
+    //menu : 'false',
+//    menu : { // this is the complete default configuration
+//        edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall'},
+//        insert : {title : 'Insert', items : 'link image media | template hr insertdatetime'},
+//        view   : {title : 'View'  , items : 'fullscreen visualaid visualchars | preview'},
+//        format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
+//        table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
+//        tools  : {title : 'Tools' , items : 'code'}
+//    },
     // Toolbar options
+    //toolbar1: 'undo redo | cut copy paste pastetext removeformat | formatselect fontselect fontsizeselect | link image media eclmedia | fullscreen preview | searchreplace | bold italic | underline strikethrough superscript subscript | alignleft aligncenter alignright alignjustify | table | bullist numlist outdent indent | link image media | code',
+    // Replace values for the template plugin
+     // Toolbar options
     toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
