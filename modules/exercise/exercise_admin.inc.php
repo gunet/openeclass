@@ -81,9 +81,10 @@ if (isset($_POST['submitExercise'])) {
     }    
 } else {
     $exerciseId = $objExercise->selectId();
-    $exerciseTitle = $objExercise->selectTitle();
-    $exerciseDescription = $objExercise->selectDescription();
-    $exerciseType = $objExercise->selectType();
+    $exerciseTitle = Session::has('exerciseTitle') ? Session::get('exerciseTitle') : $objExercise->selectTitle();
+    $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
+    $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
+    //more repopulation need to be done
     $startDateTime_obj = DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate());
     $exerciseStartDate = $startDateTime_obj->format('d-m-Y H:i');
     $exerciseEndDate = $objExercise->selectEndDate();

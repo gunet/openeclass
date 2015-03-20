@@ -80,7 +80,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                       </tr>";
     }
     
-    if ($answerType == FILL_IN_BLANKS) {
+    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         $tool_content .= "<div class='form-inline'>";
     }
 
@@ -89,7 +89,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        if ($answerType == FILL_IN_BLANKS) {
+        if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
@@ -124,7 +124,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                         </div>";
         }
         // fill in blanks
-        elseif ($answerType == FILL_IN_BLANKS) {
+        elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             $tool_content .= $answer;
         }
         // matching
@@ -193,7 +193,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     if ($answerType == MATCHING && $nbrAnswers>0) {
         $tool_content .= "</table>";
     }
-    if ($answerType == FILL_IN_BLANKS) {
+    if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         $tool_content .= "</div>";
     } 
     if (!$nbrAnswers && $answerType != FREE_TEXT) {

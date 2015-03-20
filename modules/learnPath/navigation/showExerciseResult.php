@@ -154,7 +154,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                         <td valign='top'><b>$langAnswer</b></td>
                         <td valign='top'><b>$langComment</b></td>
                         </tr>";
-        } elseif ($answerType == FILL_IN_BLANKS) {
+        } elseif ($answerType == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
             echo "<tr>
                         <td class='even'><b>$langAnswer</b></td>
                         </tr>";
@@ -194,7 +194,9 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                 }
                 break;
             // for fill in the blanks
-            case FILL_IN_BLANKS : // splits text and weightings that are joined with the char '::'
+            case FILL_IN_BLANKS :
+            case FILL_IN_BLANKS_TOLERANT :    
+                // splits text and weightings that are joined with the char '::'
                 list($answer, $answerWeighting) = explode('::', $answer);
                 // splits weightings that are joined with a comma
                 $answerWeighting = explode(',', $answerWeighting);
@@ -308,7 +310,7 @@ foreach ($_SESSION['questionList'][$exerciseId] as $questionId) {
                         echo ('&nbsp;');
                     }
                     echo ("</td></tr>");
-                } elseif ($answerType == FILL_IN_BLANKS) {
+                } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                     echo ("
                                         <tr class='even'>
                                           <td>" . standard_text_escape(nl2br($answer)) . "</td>

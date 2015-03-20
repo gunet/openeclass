@@ -369,7 +369,7 @@ if (!class_exists('ScormExport')):
                         $idCounter++;
                     }
                     // Fill in blanks
-                    elseif ($qtype == FILL_IN_BLANKS) {
+                    elseif ($qtype == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
                         $pageBody .= '<tr><td colspan="2">';
 
                         // We must split the text, to be able to treat each input independently

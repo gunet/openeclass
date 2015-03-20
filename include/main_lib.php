@@ -103,6 +103,7 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 define('FREE_TEXT', 6);
+define('FILL_IN_BLANKS_TOLERANT', 7);
 
 // exercise attempt types
 define('ATTEMPT_COMPLETED', 1);
