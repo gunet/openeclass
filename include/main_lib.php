@@ -1621,7 +1621,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -1661,7 +1661,6 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
         }
         if ($onFocus) {
             $focus_init = ",
-                menubar: false,
                 statusbar: false,   
                 setup: function (theEditor) {
                     theEditor.on('focus', function () {
@@ -1677,14 +1676,23 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
         } else {
             $focus_init = ",
                 setup: function (editor) {
-                    editor.addMenuItem('myitem', {
-                        text: 'My menu item (TODO)',
-                        context: 'tools',
+                    editor.on('PostProcess', function(e) {
+                        alert('hello');
+                    });
+                    editor.addButton('toggle', {
+                        text: '".js_escape($langMore)."',
+                        title: '".js_escape($langMore)."',
                         onclick: function() {
-                            editor.insertContent('Some content - TODO');
+                            $('#mceu_44').toggle();
                         }
                     });
-                }";
+                    
+                },
+                init_instance_callback : function(editor){
+                    $('#mceu_44').hide();
+                    $('div#mceu_35, div#mceu_52').attr('style','border:1px solid #ddd');
+                }
+                ";
         }
         load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
@@ -1712,7 +1720,7 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
-    skin: 'lightgray',
+    skin: 'light',
     image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
@@ -1738,20 +1746,13 @@ tinymce.init({
     ],
     $filebrowser
     // Menubar options
-    //menu : 'false',
-//    menu : { // this is the complete default configuration
-//        edit   : {title : 'Edit'  , items : 'undo redo | cut copy paste pastetext | selectall'},
-//        insert : {title : 'Insert', items : 'link image media | template hr insertdatetime'},
-//        view   : {title : 'View'  , items : 'fullscreen visualaid visualchars | preview'},
-//        format : {title : 'Format', items : 'bold italic underline strikethrough superscript subscript | formats | removeformat'},
-//        table  : {title : 'Table' , items : 'inserttable tableprops deletetable | cell row column'},
-//        tools  : {title : 'Tools' , items : 'code'}
-//    },
+    menu : 'false',
     // Toolbar options
-    //toolbar1: 'undo redo | cut copy paste pastetext removeformat | formatselect fontselect fontsizeselect | link image media eclmedia | fullscreen preview | searchreplace | bold italic | underline strikethrough superscript subscript | alignleft aligncenter alignright alignjustify | table | bullist numlist outdent indent | link image media | code',
+    toolbar1: 'toggle | undo redo | bold italic | link image media eclmedia | alignleft aligncenter alignright alignjustify | table | bullist numlist outdent indent',
+    toolbar2: 'underline strikethrough superscript subscript | cut copy paste pastetext removeformat | formatselect fontsizeselect | fullscreen preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
-    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
+    //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
