@@ -1674,7 +1674,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                         $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
                     });
                 }";
-        } /* else {
+        } else {
             $focus_init = ",
                 setup: function (editor) {
                     editor.addMenuItem('myitem', {
@@ -1685,7 +1685,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                         }
                     });
                 }";
-        } */
+        }
         load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
 <script type='text/javascript'>
