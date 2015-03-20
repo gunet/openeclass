@@ -1674,9 +1674,18 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                         $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
                     });
                 }";
-        } else {
-            $focus_init ='';
-        }
+        } /* else {
+            $focus_init = ",
+                setup: function (editor) {
+                    editor.addMenuItem('myitem', {
+                        text: 'My menu item (TODO)',
+                        context: 'tools',
+                        onclick: function() {
+                            editor.insertContent('Some content - TODO');
+                        }
+                    });
+                }";
+        } */
         load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
 <script type='text/javascript'>
@@ -1724,8 +1733,8 @@ tinymce.init({
     relative_urls: false,
     link_class_list: [
         {title: 'None', value: ''},
-        {title: '$langPopUp', value: 'colorbox'},
-        {title: '$langPopUpFrame', value: 'colorboxframe'}
+        {title: '".js_escape($langPopUp)."', value: 'colorbox'},
+        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}
     ],
     $filebrowser
     // Menubar options
