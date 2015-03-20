@@ -55,8 +55,6 @@ function doArchive($course_id, $course_code) {
         'user' => "id IN (SELECT user_id FROM course_user
                                           WHERE course_id = $course_id)",
         'course_user' => "course_id = $course_id",
-        'custom_profile_fields_data' =>"user_id IN (SELECT user_id FROM course_user
-                                                      WHERE course_id = $course_id)",
         'course_settings' => "course_id = $course_id",
         'course_department' => "course = $course_id",
         'course_module' => $sql_course,
