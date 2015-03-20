@@ -85,23 +85,21 @@ if (isset($_POST['submitExercise'])) {
     $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
     $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
     //more repopulation need to be done
-    $startDateTime_obj = DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate());
-    $exerciseStartDate = $startDateTime_obj->format('d-m-Y H:i');
+    $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
     $exerciseEndDate = $objExercise->selectEndDate();
-    if ($exerciseEndDate == '') {
+    if ($exerciseEndDate == '' && !Session::has('exerciseEndDate')) {
         $endDateTime_obj = new DateTime;
         $endDateTime_obj->add(new DateInterval('P1Y'));
         $exerciseEndDate = $endDateTime_obj->format('d-m-Y H:i');
     } else {
-        $endDateTime_obj = DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate());
-        $exerciseEndDate = $endDateTime_obj->format('d-m-Y H:i'); 
-    }
-    $exerciseTempSave = $objExercise->selectTempSave();
-    $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
-    $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
-    $randomQuestions = $objExercise->isRandom();
-    $displayResults = $objExercise->selectResults();
-    $displayScore = $objExercise->selectScore();
+        $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
+    }   
+    $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
+    $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
+    $exerciseAttemptsAllowed = Session::has('exerciseAttemptsAllowed') ? Session::get('exerciseAttemptsAllowed') : $objExercise->selectAttemptsAllowed();
+    $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
+    $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
+    $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
 }
 
 // shows the form to modify the exercise
