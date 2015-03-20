@@ -115,11 +115,26 @@ var dialogDeleteOptions = {
             className: 'btn-warning'}}};
 
 $(document).ready(function(){
+    $('#enddatecal').hide();
+    
     $('#submitbtn').on('click', 
             function(e){
                 checkrequired($('#agendaform'));
     });
+
+    $('#frequencynumber').change(function(){checkenableenddate();});
+    $('#frequencyperiod').change(function(){checkenableenddate();});
+
+    
 });
+
+function checkenableenddate(){
+    if($('#frequencynumber').val() == '0' || $('#frequencyperiod').val() === \"\"){
+        $('#enddatecal').hide();
+    } else {
+        $('#enddatecal').show();
+    }
+}
 $(function() {
     $('#startdatecal').datetimepicker({
         format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
@@ -237,7 +252,7 @@ if ($is_editor) {
         } else {
             $id = $content = $duration = '';
             $startdate = date('d-m-Y H:i', strtotime('now'));
-            $enddate = date('d-m-Y', strtotime('now +1 week'));
+            $enddate = '';
         } 
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
@@ -272,7 +287,7 @@ if ($is_editor) {
              $tool_content .= "<div class='form-group'>
                                     <label for='Repeat' class='col-sm-2 control-label'>$langRepeat $langEvery</label>
                                 <div class='col-sm-2'>
-                                    <select class='form-control' name='frequencynumber'>
+                                    <select class='form-control' name='frequencynumber' id='frequencynumber'>
                                     <option value='0'>$langSelectFromMenu</option>";
             for($i = 1;$i<10;$i++) {
                 $tool_content .= "<option value=\"$i\"";
@@ -288,7 +303,7 @@ if ($is_editor) {
                 $selected[$repeatperiod] = ' selected';
             }
             $tool_content .= "<div class='col-sm-2'>
-                        <select class='form-control' name='frequencyperiod'>
+                        <select class='form-control' name='frequencyperiod' id='frequencyperiod'>
                             <option value=\"\">$langSelectFromMenu...</option>
                             <option value=\"D\"{$selected['D']}>$langDays</option>
                             <option value=\"W\"{$selected['W']}>$langWeeks</option>

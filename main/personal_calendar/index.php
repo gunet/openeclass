@@ -147,20 +147,22 @@ var dialogDeleteOptions = {
             className: 'btn-warning'}}};
 
 $(document).ready(function(){
+    $('#enddatecal').hide();
     $('#submitEvent').on('click', 
             function(e){
                 checkrequired($('#myeventform'));
     });
     
-    $('#frequencynumber').on('change',function(){});
-    $('#frequencyperiod').on('change',function(){});
+    $('#frequencynumber').change(function(){checkenableenddate();});
+    $('#frequencyperiod').change(function(){checkenableenddate();});
 });
 
 function checkenableenddate(){
-    if($('#frequencynumber').val() != '0' && $('#frequencyperiod').val() != '')
-        $('#enddate').prop('disabled',false);
-    else
-        $('#enddate').prop('disabled',true);
+    if($('#frequencynumber').val() == '0' || $('#frequencyperiod').val() === \"\"){
+        $('#enddatecal').hide();
+    } else {
+        $('#enddatecal').show();
+    }
 }
     
 function checkrequired(thisform) {
@@ -245,7 +247,11 @@ if (isset($_POST['newTitle'])) {
 /* delete */
 if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' || $_GET['et'] == 'admin'))) {
     $thisEventId = intval($_GET['delete']);
-    $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
+    if(isset($_GET['rep']) && $_GET['rep'] == 'yes'){
+        $resp = Calendar_Events::delete_recursive_event($thisEventId, $_GET['et']);
+    } else {
+        $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
+    }
     if ($resp['success']) {
         Session::Messages($langEventDel, 'alert-success');
     } else {
