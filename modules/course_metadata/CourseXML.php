@@ -1217,7 +1217,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($clang != 'el') {
             include("${webDir}modules/lang/greek/common.inc.php");
             include("${webDir}modules/lang/greek/messages.inc.php");
-            $data['course_language_el'] = $GLOBALS['langNameOfLang'][$course['languageCourse']];
+            $data['course_language_el'] = $langNameOfLang[$course['languageCourse']]; // do not use GLOBALS here as it will not work
             // revert messages back to current language
             include("${webDir}modules/lang/" . $course['languageCourse'] . "/common.inc.php");
             include("${webDir}modules/lang/" . $course['languageCourse'] . "/messages.inc.php");
