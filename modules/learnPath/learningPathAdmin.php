@@ -299,10 +299,21 @@ switch ($cmd) {
 
             // create new learning path module
             Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
-                   (`learnPath_id`, `module_id`, `specificComment`, `rank`, `parent`)
-                   VALUES (?d, ?d, '', ?d, 0)", $_SESSION['path_id'], $thisInsertedModuleId, $order);
+                   (`learnPath_id`, `module_id`, `specificComment`, `rank`, `parent`, `visible`)
+                   VALUES (?d, ?d, '', ?d, 0, 1)", $_SESSION['path_id'], $thisInsertedModuleId, $order);
         } else {  // create form requested
             $displayCreateLabelForm = true; // the form code comes after name and comment boxes section
+            $createLabelHTML = " <tr>
+                <th width='200'>$langLabel:</th>
+                <td>
+                  <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
+                    <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
+                    <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
+                    <input type='hidden' name='cmd' value='createLabel' />
+                    <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
+                  </form>
+                </td>
+              </tr>";
         }
         break;
 
@@ -487,7 +498,12 @@ $sql = "SELECT M.*, LPM.*, A.`path`
 $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 if (count($result) == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div></div>";
+    // handle exceptional requirement to add label before exiting early
+    if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
+        $tool_content .= "</div><table class='table-default'>" . $createLabelHTML . "</table>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langNoModule</div></div>";
+    }
     draw($tool_content, 2, null, $head_content, $body_action);
     exit();
 }
@@ -534,17 +550,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 $tool_content .= "<table class='table-default'>";
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-    $tool_content .= " <tr>
-      <th width='200'>$langLabel:</th>
-      <td>
-        <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
-          <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
-          <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
-          <input type='hidden' name='cmd' value='createLabel' />
-          <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
-        </form>
-      </td>
-    </tr>";
+    $tool_content .= $createLabelHTML;
 }
 $tool_content .= "
     <tr>
