@@ -285,6 +285,15 @@ class CourseXMLElement extends SimpleXMLElement {
             }
             return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . intval($value) . "' $readonly>" . $fieldEnd;
         }
+        
+        // float fields
+        if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+            $value = (string) $this;
+            if (empty($value)) {
+                $value = 0;
+            }
+            return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . CourseXMLConfig::getFloat($value) . "' $readonly>" . $fieldEnd;
+        }
 
         // textarea fields
         if (in_array($fullKeyNoLang, CourseXMLConfig::$textareaFields)) {
@@ -528,6 +537,8 @@ class CourseXMLElement extends SimpleXMLElement {
             if (!is_array($data[$fullKey])) {
                 if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
                     $this->{0} = intval($data[$fullKey]);
+                } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+                    $this->{0} = CourseXMLConfig::getFloat($data[$fullKey]);
                 } else {
                     $this->{0} = $data[$fullKey];
                 }
@@ -556,6 +567,8 @@ class CourseXMLElement extends SimpleXMLElement {
                         if ($i < count($data[$fullKey])) {
                             if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
                                 $parent->{$name}[$i] = intval($data[$fullKey][$i]);
+                            } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+                                $parent->{$name}[$i] = CourseXMLConfig::getFloat($data[$fullKey][$i]);
                             } else {
                                 $parent->{$name}[$i] = $data[$fullKey][$i];
                             }
@@ -581,6 +594,8 @@ class CourseXMLElement extends SimpleXMLElement {
                         if ($j < count($data[$fullKey])) {
                             if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
                                 $this->{0} = intval($data[$fullKey][$j]);
+                            } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+                                $this->{0} = CourseXMLConfig::getFloat($data[$fullKey][$j]);
                             } else {
                                 $this->{0} = $data[$fullKey][$j];
                             }
