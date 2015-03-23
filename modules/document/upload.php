@@ -63,7 +63,7 @@ if ($can_upload) {
         <div class='form-group'>
           <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
           <div class='col-sm-10'>
-            <input type='text' class='form-control' id='fileURL' name='fileURL' value='sss'>
+            <input type='text' class='form-control' id='fileURL' name='fileURL'>
           </div>
         </div>";
     } else {

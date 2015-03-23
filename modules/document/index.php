@@ -1215,11 +1215,12 @@ if ($doc_count == 0) {
                     } else {
                         // External file URL
                         $file_url = $entry['extra_path'];
-                        if ($is_editor) {
-                            $link_title_extra .= '&nbsp;external';
+                        if ($can_upload) {
+                            $link_title_extra .= '&nbsp;' . icon('fa-external-link', $langExternalFile);
                         }
                     }
                 }
+
                 if ($can_upload and $entry['editable']) {
                     $edit_url = "new.php?course=$course_code&amp;editPath=$entry[path]" .
                         ($groupset? "&amp;$groupset": '');
@@ -1247,6 +1248,9 @@ if ($doc_count == 0) {
             } else {
                 // External document
                 $download_url = $entry['extra_path'];
+            }
+            if ($can_upload and !$entry['public']) {
+                $link_title_extra .= '&nbsp;' . icon('fa-lock', $langNonPublicFile);
             }
             $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
                               <td>$link_href $link_title_extra";
@@ -1284,10 +1288,6 @@ if ($doc_count == 0) {
                                     array('title' => $langVisible,
                                           'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
                                           'icon' => $entry['visible'] ? 'fa-eye' : 'fa-eye-slash'),
-                                    array('title' => $langResourceAccess,
-                                          'url' => "{$base_url}limited=$cmdDirName",
-                                          'icon' => 'fa-unlock',
-                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and $entry['public']),
                                     array('title' => $langMove,
                                           'url' => "{$base_url}move=$cmdDirName",
                                           'icon' => 'fa-arrows',
@@ -1309,9 +1309,13 @@ if ($doc_count == 0) {
                                           'icon' => 'fa-tags',
                                           'show' => get_config("insert_xml_metadata")),
                                     array('title' => $langResourceAccess,
+                                          'url' => "{$base_url}limited=$cmdDirName",
+                                          'icon' => 'fa-unlock',
+                                          'show' => $entry['public']),
+                                    array('title' => $langResourceAccess,
                                           'url' => "{$base_url}public=$cmdDirName",
                                           'icon' => 'fa-lock',
-                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and !$entry['public']),
+                                          'show' => !$entry['public']),
                                     array('title' => $langDelete,
                                           'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
