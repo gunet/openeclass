@@ -207,7 +207,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start', 'bbb.start_date', $datecond);
-            $q .= "SELECT bbb.id, CONCAT(c.title,': ',bbb.title), bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + time('01:00'), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+            $q .= "SELECT bbb.id, CONCAT(c.title,': ',bbb.title), bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(bbb.start_date, interval 1 hour), '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                     . "FROM bbb_session bbb JOIN course_user cu ON bbb.course_id=cu.course_id JOIN course c ON cu.course_id=c.id "
                     . "WHERE cu.user_id =?d AND bbb.active='1' "
                     . $dc;
@@ -220,7 +220,7 @@ class Calendar_Events {
                 $q .= " UNION ";
             }
             $dc = str_replace('start', 'ass.deadline', $datecond);
-            $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + time('01:00'), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+            $q .= "SELECT ass.id, CONCAT(c.title,': ',ass.title), ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(date_add(ass.deadline, interval 1 hour), '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                     . "FROM assignment ass JOIN course_user cu ON ass.course_id=cu.course_id  JOIN course c ON cu.course_id=c.id LEFT JOIN assignment_to_specific ass_sp ON ass.id=ass_sp.assignment_id "
                     . "WHERE cu.user_id =?d AND (assign_to_specific = '0' OR  ass_sp.user_id = ?d OR cu.status = 1) AND ass.active = 1"
                     . $dc;
@@ -242,6 +242,7 @@ class Calendar_Events {
             return null;
         }
         $q .= " ORDER BY start, event_type";
+        
         return Database::get()->queryArray($q, $q_args);
 
         /*if ($eventtypes == "all") {
@@ -475,7 +476,7 @@ class Calendar_Events {
             return array('success' => false, 'message' => $langNotAllowed);
         }
         
-        if($recursivelly && !is_null($reursion)){
+        if($recursivelly && !is_null($recursion)){
             $oldrec = Calendar_Events::get_event_recursion($eventid, 'admin');
             $p = "P".$recursion['repeat'].$recursion['unit'];
             $e = DateTime::createFromFormat('d-m-Y', $recursion['end'])->format('Y-m-d');
@@ -1323,7 +1324,7 @@ class Calendar_Events {
        } else {
             $eventlist = Calendar_Events::get_calendar_events("month", $fromdatetime, $todatetime);
        }
-
+       
        $events = array();
        foreach ($eventlist as $event) {
            $startdatetime = new DateTime($event->start);
