@@ -1675,10 +1675,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 }";
         } else {
             $focus_init = ",
-                setup: function (editor) {
-                    editor.on('PostProcess', function(e) {
-                        alert('hello');
-                    });
+                setup: function (editor) {                    
                     editor.addButton('toggle', {
                         text: '".js_escape($langMore)."',
                         title: '".js_escape($langMore)."',
