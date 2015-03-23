@@ -35,14 +35,20 @@ enableCheckFileSize();
 
 $toolName = $langDoc;
 
+if (defined('EBOOK_DOCUMENTS')) {
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+} 
+
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
 } else {
     $uploadPath = '';
 }
 
+$backUrl = documentBackLink($uploadPath);
+
 if ($can_upload) {
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
+    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
     $pendingCloudUpload = CloudDriveManager::getFileUploadPending();
 
     if ($pendingCloudUpload) {
@@ -79,7 +85,7 @@ if ($can_upload) {
     }
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
+            'url' => $backUrl,
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
     $tool_content .= "

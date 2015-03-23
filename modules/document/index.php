@@ -66,7 +66,6 @@ copyright_info_init();
 $require_help = TRUE;
 $helpTopic = 'Doc';
 $toolName = $langDoc;
-$pageName = '';
 // check for quotas
 $diskUsed = dir_total_space($basedir);
 if (defined('COMMON_DOCUMENTS')) {
@@ -77,12 +76,15 @@ if (defined('COMMON_DOCUMENTS')) {
     $diskQuotaDocument = $d->quotatype;
 }
 
+if (defined('EBOOK_DOCUMENTS')) {
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+} 
 
 if (isset($_GET['showQuota'])) {
     if ($subsystem == GROUP) {
         $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => $langDoc);
     } elseif ($subsystem == EBOOK) {
-        $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
+        $navigation[] = array('url' => 'document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
     } elseif ($subsystem == COMMON) {
         $navigation[] = array('url' => 'commondocs.php', 'name' => $langCommonDocs);
     } else {

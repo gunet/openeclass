@@ -3073,3 +3073,27 @@ $(enableCheckFileSize);
 function fileSizeHidenInput() {
     return "<input type='hidden' name='MAX_FILE_SIZE' value='" . fileUploadMaxSize() . "'>";
 }
+
+
+/**
+ * @brief Return the HTML code for a link back to the current Documents page
+ * @param string $path Path of the current documents directory
+ * @return string
+ */
+function documentBackLink($path) {
+    global $upload_target_url, $groupset;
+
+    $opts = '';
+    if ($groupset) {
+        $opts = $groupset;
+    }
+    if ($path) {
+        $opts .= ($opts? '&amp;': '') . "openDir=$path";
+    }
+    if ($opts) {
+        return $upload_target_url .
+            (defined('COMMON_DOCUMENTS')? '?': '&amp;') . $opts;
+    } else {
+        return $upload_target_url;
+    }
+}

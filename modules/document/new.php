@@ -26,9 +26,6 @@
 if (!defined('COMMON_DOCUMENTS')) {
     $require_current_course = true;
     $require_login = true;
-    $back_separator = '&amp;';
-} else {
-    $back_separator = '?';
 }
 
 require_once "../../include/baseTheme.php";
@@ -44,22 +41,27 @@ if (isset($_GET['uploadPath'])) {
     $uploadPath = dirname($editPath);
 }
 
-$navigation[] = array('url' => $upload_target_url . $back_separator . "openDir=$uploadPath", 'name' => $pageName);
+if (defined('EBOOK_DOCUMENTS')) {
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+} 
+
+$backUrl = documentBackLink($uploadPath);
 
 if ($can_upload) {
+    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
     if ($editPath) {
         $pageName = $langEditDoc;
         $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
         $htmlFileName = '<p class="form-control-static">'.q($info->filename).'</p>';
         $htmlTitle = ' value="' . q($info->title) . '"';
         $fileContent = file_get_contents($basedir . $info->path);
-	$htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
+        $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
     } else {
         $pageName = $langCreateDoc;
         $htmlFileName = "<input type='text' class='form-control' id='file_name' name='file_name'>";
         $htmlTitle = '';
         $fileContent = '';
-	$htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
+        $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
     }
     $action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
     $tool_content .= action_bar(array(
