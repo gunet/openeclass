@@ -1677,8 +1677,10 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
             $focus_init = ",
                 setup: function (editor) {                    
                     editor.addButton('toggle', {
-                        text: '".js_escape($langMore)."',
                         title: '".js_escape($langMore)."',
+                        classes: 'toggle',
+                        image: '../../js/tinymce/skins/light/img/toggle.gif',
+                        style: 'padding:5px 0 0 5px',
                         onclick: function() {
                             $('#mceu_44').toggle();
                         }
