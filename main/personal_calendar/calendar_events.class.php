@@ -409,7 +409,7 @@ class Calendar_Events {
                 return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, $reference_obj_id);
             }
         }
-        if(!is_null($recursion) && !Calendar_Events::is_recursive($eventid)){
+        if(!is_null($recursion) && !Calendar_Events::is_recursive($eventid, 'personal')){
             Calendar_Events::delete_event($eventid, 'personal');
             return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, $reference_obj_id);
         }
@@ -486,7 +486,7 @@ class Calendar_Events {
             }
         }
         
-        if(!is_null($recursion) && !Calendar_Events::is_recursive($eventid))
+        if(!is_null($recursion) && !Calendar_Events::is_recursive($eventid, 'admin'))
         {
             Calendar_Events::delete_event($eventid, 'admin');
             return Calendar_Events::add_event($title, $content, $start, $duration, $recursion, null, $visibility_level);
@@ -1356,10 +1356,11 @@ class Calendar_Events {
         return $calendar;
    }
    
-   public static function is_recursive($event_id){
-        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM personal_calendar WHERE id=?d',$event_id);
+   public static function is_recursive($event_id, $event_type){
+        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
+        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM $t WHERE id=?d',$event_id);
         if($rec_eventid && $rec_eventid->source_event_id>0){
-            $event_count = Database::get()->querySingle('SELECT count(*) c FROM personal_calendar WHERE source_event_id=?d',$rec_eventid->source_event_id);
+            $event_count = Database::get()->querySingle('SELECT count(*) c FROM $t WHERE source_event_id=?d',$rec_eventid->source_event_id);
             if($event_count){
                 return $event_count->c > 1;
             }

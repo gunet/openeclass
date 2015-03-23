@@ -651,7 +651,7 @@ require_once 'include/lib/references.class.php';
                              'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye')
                    ));
               $eventlist .= "</td>";              
-           } elseif ($type == 'personal') { // personal event
+           } elseif ($type == 'personal' || $type == 'admin') { // personal or admin event
                $eventlist .= "<td class='option-btn-cell'>";
                $eventlist .= action_button(array(
                        array('title' => $langDelete,
@@ -660,7 +660,7 @@ require_once 'include/lib/references.class.php';
                              'class' => 'delete',
                              'confirm' => $langConfirmDeleteEvent),                       
                        array('title' => $langConfirmDeleteRecursive,
-                             'url' => "?delete=$myrow->id&et=personal&amp;rep=yes",
+                             'url' => "?delete=$myrow->id&et=$type&amp;rep=yes",
                              'icon' => 'fa-times-circle-o',
                              'class' => 'delete',
                              'confirm' => $langConfirmDeleteRecursiveEvents,
