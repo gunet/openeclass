@@ -277,7 +277,7 @@ if ($is_editor) {
             <div class='input-append bootstrap-timepicker form-group'>
                 <label for='durationcal' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
                 <div class='col-sm-10'>
-                    <div class='input-group'>
+                    <div class='input-group add-on'>
                         <input class='form-control' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
                         <div class='input-group-addon add-on'><i class='fa fa-clock-o fa-fw'></i></div>
                     </div>
@@ -312,8 +312,8 @@ if ($is_editor) {
                         </div>
                     ";
             $tool_content .= "<div class='input-append date' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                <label for='Enddate' class='col-sm-1 control-label'>$langUntil :</label>
-                    <div class='col-sm-5'>
+                <label for='Enddate' class='col-sm-2 control-label'>$langUntil :</label>
+                    <div class='col-sm-4'>
                         <div class='input-group'>
                             <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
                             <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>

@@ -376,9 +376,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         <div class='input-append bootstrap-timepicker form-group'>
             <label for='durationcal' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
             <div class='col-sm-10'>
-                <div class='input-group'>
+                <div class='input-group add-on'>
                     <input class='form-control' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
-                    <div class='input-group-addon add-on'><i class='fa fa-clock-o fa-fw'></i></div>
+                    <div class='input-group-addon'><i class='fa fa-clock-o fa-fw'></i></div>
                 </div>
             </div>
         </div>
@@ -411,8 +411,8 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                     </select>
               </div>
               <div class='input-append date' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
-                <label for='enddate' class='col-sm-1 control-label'>$langUntil:</label>
-                <div class='col-sm-5'>
+                <label for='enddate' class='col-sm-2 control-label'>$langUntil:</label>
+                <div class='col-sm-4'>
                   <div class='input-group'>
                      <input class='form-control' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
                      <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
