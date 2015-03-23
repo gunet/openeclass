@@ -130,10 +130,10 @@ $exercisetotalweight = $objExercise->selectTotalWeighting();
 
 $temp_CurrentDate = $recordStartDate = time();
 $exercise_StartDate = new DateTime($objExercise->selectStartDate());
-$exercise_EndDate = new DateTime($objExercise->selectEndDate());
-
+$exercise_EndDate = $objExercise->selectEndDate();
+$exercise_EndDate = isset($exercise_EndDate) ? new DateTime($objExercise->selectEndDate()) : $exercise_EndDate;
 //exercise has ended or hasn't been enabled yet due to declared dates
-if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) {
+if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise_EndDate) && ($temp_CurrentDate >= $exercise_EndDate->getTimestamp())) {
     //if that happens during an active attempt
     if(isset($_SESSION['exerciseUserRecordID'][$exerciseId])) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];

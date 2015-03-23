@@ -31,7 +31,13 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/document/doc_init.php';
 require_once 'modules/drives/clouddrive.php';
 
+enableCheckFileSize();
+
 $toolName = $langDoc;
+
+if (defined('EBOOK_DOCUMENTS')) {
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+} 
 
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
@@ -39,8 +45,10 @@ if (isset($_GET['uploadPath'])) {
     $uploadPath = '';
 }
 
+$backUrl = documentBackLink($uploadPath);
+
 if ($can_upload) {
-    $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langDoc);
+    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
     $pendingCloudUpload = CloudDriveManager::getFileUploadPending();
 
     if ($pendingCloudUpload) {
@@ -61,7 +69,7 @@ if ($can_upload) {
         <div class='form-group'>
           <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
           <div class='col-sm-10'>
-            <input type='text' class='form-control' id='fileURL' name='fileURL' value='sss'>
+            <input type='text' class='form-control' id='fileURL' name='fileURL'>
           </div>
         </div>";
     } else {
@@ -69,14 +77,15 @@ if ($can_upload) {
         $fileinput = "
         <div class='form-group'>
           <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile</label>
-          <div class='col-sm-10'>
-            " . CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
+          <div class='col-sm-10'>" .
+                fileSizeHidenInput() .
+                CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
           </div>
         </div>";
     }
     $tool_content .= action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
+            'url' => $backUrl,
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
     $tool_content .= "
@@ -217,8 +226,6 @@ if ($can_upload) {
     $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
-if (defined('COMMON_DOCUMENTS')) {
-    draw($tool_content, 3);
-} else {
-    draw($tool_content, 2);
-}
+draw($tool_content,
+    defined('COMMON_DOCUMENTS')? 3: 2,
+    null, $head_content);

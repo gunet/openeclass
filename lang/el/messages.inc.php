@@ -12,7 +12,7 @@
  * be useful (without any warranty), under the terms of the GNU (General
  * Public License) as published by the Free Software Foundation.
  * The full license can be read in "/info/license/license_gpl.txt".
- *
+ *ε
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
@@ -541,6 +541,7 @@ $langExternalFile = "Σύνδεση εξωτερικού αρχείου";
 $langExternalFileInfo = "Διεύθυνση (URL) εξωτερικού αρχείου";
 $langCommonDocLink = "Κοινόχρηστο αρχείο";
 $langCommonDocLinkInvisible = "Αόρατο κοινόχρηστο αρχείο";
+$langNonPublicFile = 'Ορατό μόνο στους εγγεγραμμένους χρήστες';
 
 /* * ********************************************************
  * agenda.php
@@ -996,7 +997,7 @@ $langAttendanceAbsences = "Παρουσίες";
 $langAttendanceAbsencesFrom = "παρουσίες από τις";
 $langAttendanceAbsencesFrom2 = "υποχρεωτικές του μαθήματος.";
 $langAttendanceAbsencesYesNo = "Παρουσία/απουσία";
-$langAttendanceAddActivity = "Προσθήκη δραστηριότητας";
+$langAttendanceAddActivity = "Δραστηριότητας";
 $langAttendanceActivityDate = "Ημερομηνία διεξαγωγής";
 $langAttendanceActivity = "Δραστηριότητα";
 $langAttendanceActivityDate2 = "Ημερομηνία";
@@ -1052,7 +1053,7 @@ $langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 $langGradebook = "Βαθμολόγιο";
 $langGradebooks = "Βαθμολόγια";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
-$langGradebookAddActivity = "Προσθήκη νέας δραστηριότητας";
+$langGradebookAddActivity = "Nέας δραστηριότητας";
 $langGradebookActivityDescription = "Περιγραφή";
 $langGradebookActivityDate = "Ημερομηνία διεξαγωγής";
 $langGradebookActivityDate2 = "Ημερομηνία";
@@ -1532,6 +1533,10 @@ $langAnswerType = "Τύπος Απάντησης";
 $langUniqueSelect = "Πολλαπλής Επιλογής (Μοναδική Απάντηση)";
 $langMultipleSelect = "Πολλαπλής Επιλογής (Πολλαπλές Απαντήσεις)";
 $langFillBlanks = "Συμπλήρωμα Κενών";
+$langFillBlanksStrict = "Αυστηρή Ταυτοποίηση";
+$langFillBlanksTolerant = "Χαλαρή Ταυτοποίηση";
+$langFillBlanksStrictExample = "(Αθήνα ≠ αθηνα ≠ ΑΘΗΝΑ)";
+$langFillBlanksTolerantExample = "(Αθήνα = αθηνα = ΑΘΗΝΑ)";
 $langMatching = "Ταίριασμα";
 $langTrueFalse = "Σωστό / Λάθος";
 $langFreeText = "Ελεύθερου Κειμένου";
@@ -1588,6 +1593,7 @@ $langAllExercises = "Όλες οι ερωτήσεις";
 $langFilter = "Φιλτράρισμα";
 $langGoBackToEx = "Επιστροφή στην άσκηση";
 $langReuse = "Επαναχρησιμοποίηση";
+$langUsed = "Χρησιμοποιύμενης";
 $langQuestionReused = "Η ερώτηση προστέθηκε στην άσκηση";
 
 // exercise_result.php
@@ -2184,6 +2190,7 @@ $langLinkAsModuleLabel = "Συνδέσμου";
 $langLinkInsertedAsModule = "Έχει προστεθεί ως ενότητα μαθήματος αυτής της γραμμής μάθησης";
 $langLogin = "Είσοδος";
 $langMaxFileSize = "Μέγιστο μέγεθος αρχείου: ";
+$langMaxFileSizeExceeded = 'Το μέγεθος του αρχείου υπερβαίνει το μέγιστο επιτρεπτό όριο.';
 $langMediaAlreadyUsed = "Αυτό το πολυμέσο ήδη χρησιμοποιείται ως ενότητα σε αυτήν τη γραμμή μάθησης";
 $langMediaAsModule = "Χρήση Πολυμέσου";
 $langMediaAsModuleLabel = "Πολυμέσου";
@@ -2200,6 +2207,7 @@ $langMyCourses = "Τα μαθήματά μου";
 $langNeverBrowsed = "Δεν έχει ολοκληρωθεί";
 $langNewLabel = "Δημιουργία νέου κεφαλαίου";
 $langLabel = "Eτικέτα";
+$langLabel2 = "Eτικέτας";
 $langNext = "Επόμενο";
 $langNextPage = "Επόμενη Σελίδα";
 $langNoEmail = "Δεν έχει οριστεί email";
@@ -2260,6 +2268,7 @@ $langWrongOperation = "Λανθασμένη λειτουργία";
 $langYourBestScore = "Η καλύτερή σου βαθμολογία";
 $lang_enroll = "Eγγραφή";
 $langimportLearningPath = "Εισαγωγή γραμμής μάθησης";
+$langimportLearningPathSort = "Εισαγωγή";
 $langScormErrorExport = "Σφάλμα κατά την εξαγωγή του πακέτου SCORM";
 $langLPViewerToggleLeftTOC = "Εναλλαγή εμφάνισης περιεχομένων";
 
@@ -3757,10 +3766,10 @@ $langResourceCourseUnitDeleted = "Ο πόρος της θεματικής ενό
 $langResourceUnitModified = "Τα στοιχεία του πόρου της ενότητας τροποποιήθηκαν";
 $langInsertText = "κειμένου";
 $langInsertDoc = "εγγράφου";
-$langInsertExercise = "άσκησης";
+$langInsertExercise = "Άσκησης";
 $langInsertVideo = "πολυμεσικού αρχείου";
 $langInsertForum = "περιοχής συζητήσεων";
-$langInsertWork = 'εργασίας';
+$langInsertWork = 'Εργασίας';
 $langInsertWiki = 'wiki';
 $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";

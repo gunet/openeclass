@@ -222,29 +222,36 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply space-after-icon',)
             ));
     } else {
-        $pageName = $attendance->title;
-        $tool_content .= action_bar(array(         
-            array('title' => $langConfig,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
-                  'icon' => 'fa fa-cog space-after-icon',
-                  'level' => 'primary-label'),
-            array('title' => $langUsers,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
-                  'icon' => 'fa fa-users',
-                  'level' => 'primary-label'),
-            array('title' => $langAttendances,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editAttendanceBooks=1",
-                  'icon' => 'fa fa-list space-after-icon',
-                  'level' => 'primary-label'),               
-            array('title' => $langAttendanceAddActivity,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
-                  'icon' => 'fa fa-plus'),
-            array('title' => "$langAdd $langInsertWork",
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
-                  'icon' => 'fa fa-flask'),
-            array('title' => "$langAdd $langInsertExercise",
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
-                  'icon' => 'fa fa-edit')));
+        $pageName = $attendance->title ? $attendance->title : $langAttendanceNoTitle2;
+        $tool_content .= action_bar(
+            array(         
+                array('title' => $langConfig,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                      'icon' => 'fa fa-cog space-after-icon',
+                      'level' => 'primary-label'),
+                array('title' => $langUsers,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
+                      'icon' => 'fa fa-users',
+                      'level' => 'primary-label'),
+                array('title' => $langAttendances,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editAttendanceBooks=1",
+                      'icon' => 'fa fa-list space-after-icon',
+                      'level' => 'primary-label'),               
+                array('title' => $langAttendanceAddActivity,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                      'icon' => 'fa fa-plus'),
+                array('title' => "$langInsertWork",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
+                      'icon' => 'fa fa-flask'),
+                array('title' => "$langInsertExercise",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
+                      'icon' => 'fa fa-edit')
+            ),
+            true,
+            array(
+                'secondary_title' => $langAdd,
+                'secondary_icon' => 'fa-plus'
+            ));
         
     }       
     

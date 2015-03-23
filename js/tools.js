@@ -354,3 +354,20 @@ function icon_src_to_name(src) {
     var spl = src.split(/[\/.]/);
     return spl[spl.length - 2];
 }
+
+function checkFileSize(input, maxSize) {
+    var file = input[0].files[0];
+    if (file.size > maxSize || file.fileSize > maxSize) {
+        alert(langMaxFileSizeExceeded);
+        return false;
+    }
+    return true;
+}
+function enableCheckFileSize() {
+    var input = $('input[type=file]');
+    var form = input.closest('form');
+    var maxSize = form.find('input[name=MAX_FILE_SIZE]').val();
+    form.on('submit', function () {
+        return checkFileSize(input, maxSize);
+    });
+}

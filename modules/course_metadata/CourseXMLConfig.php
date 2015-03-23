@@ -206,6 +206,20 @@ class CourseXMLConfig {
             return null;
         }
     }
+    
+    /**
+     * Turn strings to float values, normalising separator.
+     * 
+     * @param  string $str
+     * @return float
+     */
+    public static function getFloat($str) {
+        if (strstr($str, ",")) {
+            $str = str_replace(".", "", $str); // replace dots (thousand seps) with blancs
+            $str = str_replace(",", ".", $str); // replace ',' with '.'
+        }
+        return floatval($str);
+    }
 
     /**
      * Array HTML Form fields.
@@ -274,6 +288,14 @@ class CourseXMLConfig {
         'course_semester', 'course_type', 'course_institution',
         'course_thematic', 'course_subthematic'
     );
+    
+    /**
+     * Float HTML Form fields.
+     * @var array
+     */
+    public static $floatFields = array(
+        'course_credits'
+    );
 
     /**
      * Fields that should be hidden from the HTML Form.
@@ -313,7 +335,7 @@ class CourseXMLConfig {
      */
     public static $integerFields = array(
         'course_credithours', 'course_coTeachingDepartmentCreditHours',
-        'course_credits', 'course_numberOfUnits'
+        'course_numberOfUnits'
     );
 
     /**

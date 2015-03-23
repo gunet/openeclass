@@ -93,7 +93,7 @@ if (!DBHelper::fieldExists('user', 'id')) {
     fix_multiple_usernames();
     
     if (DBHelper::indexExists('user', 'user_username')) {
-        Database::get()->query("DROP INDEX user_username");
+        Database::get()->query("ALTER TABLE user DROP INDEX user_username");
     }        
     if (!DBHelper::fieldExists('user', 'whitelist')) {
         Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT");
@@ -351,24 +351,24 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         if (!DBHelper::fieldExists('cours_user', 'course_id')) {
             Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
-            $t = Database::get()->queryArray("SELECT cours_id, code_cours FROM cours");
-            foreach ($t as $entry) {
-              Database::get()->query("UPDATE cours_user SET course_id = $entry->cours_id WHERE code_cours = '$entry->code_cours'");
+            $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
+            foreach ($t as $entry) {                
+              Database::get()->query("UPDATE cours_user SET course_id = $entry->cours_id WHERE code_cours = '$entry->code'");
             }            
-            Database::get()->query('ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
-            Database::get()->query('CREATE INDEX course_user_id ON cours_user (user_id, course_id)');
-            Database::get()->query('ALTER TABLE cours_user DROP code_cours');
+            Database::get()->query("ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)");
+            Database::get()->query("CREATE INDEX course_user_id ON cours_user (user_id, course_id)");
+            Database::get()->query("ALTER TABLE cours_user DROP code_cours");
         }
 
-        if (!DBHelper::fieldExists('annonces', 'course_id')) {
-            Database::get()->query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
-            $t = Database::get()->queryArray("SELECT cours_id, code_cours FROM cours");
+        if (!DBHelper::fieldExists('annonces', 'cours_id')) {
+            Database::get()->query('ALTER TABLE annonces ADD cours_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
+            $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
             foreach ($t as $entry) {
-                Database::get()->query("UPDATE annonces SET course_id = $entry->cours_id WHERE code_cours = '$entry->code_cours'");
+                Database::get()->query("UPDATE annonces SET cours_id = $entry->cours_id WHERE code_cours = '$entry->code'");
             }
             Database::get()->query('ALTER TABLE annonces DROP code_cours');
         }
-    }
+    }    
     if (version_compare($oldversion, '2.3.1', '<')) {
         if (!DBHelper::fieldExists('prof_request', 'am')) {
             Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');

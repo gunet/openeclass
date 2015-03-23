@@ -1664,12 +1664,14 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
     $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
     $internal_path = quote(str_replace($group_document_dir, '', $path));
     $filename = Database::get()->querySingle("SELECT `filename` FROM group_documents WHERE `path` = ?s", $internal_path)->filename;
-    if (!Database::get()->query("INSERT INTO `$mysqlMainDb`.document SET
-                              course_id = ?d, subsystem = 1, subsystem_id = ?d,
-                              path = ?s, filename = ?s,
-                              format = ?s, visibility = 'v',
-                              date = ?d, date_modified = ?d", $course_id, $group_id, $internal_path, $filename, $type, $file_date, $file_date)) {
-        $group_document_upgrade_ok = false;
+    if(!empty($filename)) {
+        if (!Database::get()->query("INSERT INTO `$mysqlMainDb`.document SET
+                                  course_id = ?d, subsystem = 1, subsystem_id = ?d,
+                                  path = ?s, filename = ?s,
+                                  format = ?s, visible = 1,
+                                  date = ?d, date_modified = ?d", $course_id, $group_id, $internal_path, $filename, $type, $file_date, $file_date)) {
+            $group_document_upgrade_ok = false;
+        }
     }
 }
 

@@ -171,7 +171,7 @@ $t = new Template();
 $t->set_root($webDir . '/template/' . $theme);
 $t->set_file('page', 'ebook_fullscreen.html');
 $t->set_var('URL_PATH', $urlAppend);
-$t->set_var('langBack', $langBack);
+$t->set_var('langBack', $langLeave);
 $t->set_var('page_title', q($currentCourseName . ': ' . $pageName));
 $t->set_var('course_title', q($currentCourseName));
 $t->set_var('course_title_short', q(ellipsize($currentCourseName, 35)));

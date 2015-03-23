@@ -299,10 +299,21 @@ switch ($cmd) {
 
             // create new learning path module
             Database::get()->query("INSERT INTO `lp_rel_learnPath_module`
-                   (`learnPath_id`, `module_id`, `specificComment`, `rank`, `parent`)
-                   VALUES (?d, ?d, '', ?d, 0)", $_SESSION['path_id'], $thisInsertedModuleId, $order);
+                   (`learnPath_id`, `module_id`, `specificComment`, `rank`, `parent`, `visible`)
+                   VALUES (?d, ?d, '', ?d, 0, 1)", $_SESSION['path_id'], $thisInsertedModuleId, $order);
         } else {  // create form requested
             $displayCreateLabelForm = true; // the form code comes after name and comment boxes section
+            $createLabelHTML = " <tr>
+                <th width='200'>$langLabel:</th>
+                <td>
+                  <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
+                    <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
+                    <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
+                    <input type='hidden' name='cmd' value='createLabel' />
+                    <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
+                  </form>
+                </td>
+              </tr>";
         }
         break;
 
@@ -360,7 +371,7 @@ if (isset($sortDirection) && $sortDirection) {
 
 $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "javascript:history.back();",
+                'url' => "index.php?course=$course_code",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label'
             )
@@ -424,44 +435,48 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
 if (isset($dialogBox) && $dialogBox != "") {
     $tool_content .= $dialogBox;
 }
-$lp_action_button = action_button(array(
+$lp_action_button = action_button(array(    
     array(
-        'title' => "$langReuse $langModuleOfMyCourse",
-        'url' => "insertMyModule.php?course=$course_code",
-        'icon' => "fa-plus",
-        'level' => "primary-label"
-    ),      
-    array(
-        'title' => "$langAdd $langLabel",
+        'title' => "$langLabel2",
         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=createLabel",
         'icon' => "fa-tag"
     ),    
     array(
-        'title' => "$langAdd $langDocumentAsModuleLabel",
+        'title' => "$langDocumentAsModuleLabel",
         'url' => "insertMyDoc.php?course=$course_code",
         'icon' => 'fa-folder-open-o'
     ),
     array(
-        'title' => "$langAdd $langExerciseAsModuleLabel",
+        'title' => "$langExerciseAsModuleLabel",
         'url' => "insertMyExercise.php?course=$course_code",
         'icon' => "fa-pencil-square-o"
     ),
     array(
-        'title' => "$langAdd $langLinkAsModuleLabel",
+        'title' => "$langLinkAsModuleLabel",
         'url' => "insertMyLink.php?course=$course_code",
         'icon' => "fa-link"
     ),
     array(
-        'title' => "$langAdd $langMediaAsModuleLabel",
+        'title' => "$langMediaAsModuleLabel",
         'url' => "insertMyMedia.php?course=$course_code",
         'icon' => "fa-film"
     ),
     array(
-        'title' => "$langAdd $langCourseDescriptionAsModuleLabel",
+        'title' => "$langCourseDescriptionAsModuleLabel",
         'url' => "insertMyDescription.php?course=$course_code",
         'icon' => "fa-info-circle"
+    ),
+    array(
+        'title' => "$langUsed $langModuleOfMyCourse",
+        'url' => "insertMyModule.php?course=$course_code",
+        'icon' => "fa-plus-square"
     )    
-));
+),
+    array(
+        'secondary_title' => $langAdd,
+        'secondary_icon' => 'fa-plus'
+    )
+);
 $tool_content .= "<div class='panel panel-action-btn-default'>
                     <div class='pull-right'>
                         $lp_action_button
@@ -483,7 +498,12 @@ $sql = "SELECT M.*, LPM.*, A.`path`
 $result = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
 if (count($result) == 0) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoModule</div></div>";
+    // handle exceptional requirement to add label before exiting early
+    if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
+        $tool_content .= "</div><table class='table-default'>" . $createLabelHTML . "</table>";
+    } else {
+        $tool_content .= "<div class='alert alert-warning'>$langNoModule</div></div>";
+    }
     draw($tool_content, 2, null, $head_content, $body_action);
     exit();
 }
@@ -530,17 +550,7 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 $tool_content .= "<table class='table-default'>";
 // -------------------- create label -------------------
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
-    $tool_content .= " <tr>
-      <th width='200'>$langLabel:</th>
-      <td>
-        <form action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code' method='post'>
-          <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
-          <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
-          <input type='hidden' name='cmd' value='createLabel' />
-          <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
-        </form>
-      </td>
-    </tr>";
+    $tool_content .= $createLabelHTML;
 }
 $tool_content .= "
     <tr>

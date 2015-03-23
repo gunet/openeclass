@@ -257,7 +257,14 @@ echo "<!DOCTYPE HTML>
             font-size:16px;
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
-
+        #leftTOCtoggler{
+            margin-top: 7px;
+        }
+        #toc_logo{
+            padding-left: 10px;
+            margin-left: 10px;
+            border-left: 2px groove #999;
+        }
     </style>
     <script type='text/javascript'>
     /* <![CDATA[ */
@@ -300,8 +307,8 @@ echo "<!DOCTYPE HTML>
     <nav class='navbar navbar-inverse navbar-static-top' role='navigation'>
             <div class='container-fluid'>
                 <div class='navbar-header col-xs-2'>
-                  <a id='leftTOCtoggler' class='btn pull-left' style='margin-top:12px;'><i class='fa fa-bars fa-lg'></i></a>
-                  <a class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png' alt=''></a>
+                  <a id='leftTOCtoggler' class='btn pull-left'><i class='fa fa-bars fa-lg'></i></a>
+                  <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png' alt='Logo'></a>
                 </div>
                 <div class='navbar-header col-xs-10 pull-right'>
                     <ul id='navigation-btns' class='nav navbar-nav navbar-right '>

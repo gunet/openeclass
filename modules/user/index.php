@@ -394,8 +394,8 @@ $tool_content .= "
     <table id='users_table{$course_id}' class='table-default'>
         <thead>
             <tr>
-              <th>$langName $langSurname</th>
-              <th class='text-center'>Ρόλοι</th>
+              <th>$langSurnameName</th>
+              <th class='text-center'>$langRole</th>
               <th class='text-center'>$langGroup</th>
               <th class='text-center' width='80'>$langRegistrationDateShort</th>
               <th class='text-center'>".icon('fa-gears')."</th>

@@ -66,7 +66,6 @@ copyright_info_init();
 $require_help = TRUE;
 $helpTopic = 'Doc';
 $toolName = $langDoc;
-$pageName = '';
 // check for quotas
 $diskUsed = dir_total_space($basedir);
 if (defined('COMMON_DOCUMENTS')) {
@@ -77,12 +76,15 @@ if (defined('COMMON_DOCUMENTS')) {
     $diskQuotaDocument = $d->quotatype;
 }
 
+if (defined('EBOOK_DOCUMENTS')) {
+    $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
+} 
 
 if (isset($_GET['showQuota'])) {
     if ($subsystem == GROUP) {
         $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;group_id=' . $group_id, 'name' => $langDoc);
     } elseif ($subsystem == EBOOK) {
-        $navigation[] = array('url' => 'index.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
+        $navigation[] = array('url' => 'document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id, 'name' => $langDoc);
     } elseif ($subsystem == COMMON) {
         $navigation[] = array('url' => 'commondocs.php', 'name' => $langCommonDocs);
     } else {
@@ -122,6 +124,9 @@ if (isset($_GET['download'])) {
     set_time_limit(0);
 
     if ($format == '.dir') {
+        if (!$uid) {
+            forbidden($downloadDir);
+        }
         $real_filename = $real_filename . '.zip';
         $dload_filename = $webDir . '/courses/temp/' . safe_filename('zip');
         zip_documents_directory($dload_filename, $downloadDir, $can_upload);
@@ -804,8 +809,10 @@ if ($can_upload) {
         if ($result) {
             $filename = q($result->filename);
             $replacemessage = sprintf($langReplaceFile, '<b>' . $filename . '</b>');
+            enableCheckFileSize();
             $dialogBox = "<div class='form-wrapper'>
-                        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
+                        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>" .
+                        fileSizeHidenInput() . "
                         <fieldset>
                         <input type='hidden' name='replacePath' value='" . q($_GET['replace']) . "' />
                         $group_hidden_input
@@ -1137,7 +1144,7 @@ if ($doc_count == 0) {
     }
 
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
-    $download_dir = ($is_in_tinymce) ? '' : "<a href='{$base_url}download=$download_path'><img src='$themeimg/save_s.png' width='16' height='16' align='middle' alt='$langDownloadDir' title='$langDownloadDir'></a>";
+    $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-save', $langDownloadDir, "{$base_url}download=$download_path") : '';
     $tool_content .= "
         <div class='pull-left'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
             "&nbsp;$download_dir</div>
@@ -1210,11 +1217,12 @@ if ($doc_count == 0) {
                     } else {
                         // External file URL
                         $file_url = $entry['extra_path'];
-                        if ($is_editor) {
-                            $link_title_extra .= '&nbsp;external';
+                        if ($can_upload) {
+                            $link_title_extra .= '&nbsp;' . icon('fa-external-link', $langExternalFile);
                         }
                     }
                 }
+
                 if ($can_upload and $entry['editable']) {
                     $edit_url = "new.php?course=$course_code&amp;editPath=$entry[path]" .
                         ($groupset? "&amp;$groupset": '');
@@ -1242,6 +1250,9 @@ if ($doc_count == 0) {
             } else {
                 // External document
                 $download_url = $entry['extra_path'];
+            }
+            if ($can_upload and !$entry['public']) {
+                $link_title_extra .= '&nbsp;' . icon('fa-lock', $langNonPublicFile);
             }
             $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
                               <td>$link_href $link_title_extra";
@@ -1279,10 +1290,6 @@ if ($doc_count == 0) {
                                     array('title' => $langVisible,
                                           'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
                                           'icon' => $entry['visible'] ? 'fa-eye' : 'fa-eye-slash'),
-                                    array('title' => $langResourceAccess,
-                                          'url' => "{$base_url}limited=$cmdDirName",
-                                          'icon' => 'fa-unlock',
-                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and $entry['public']),
                                     array('title' => $langMove,
                                           'url' => "{$base_url}move=$cmdDirName",
                                           'icon' => 'fa-arrows',
@@ -1304,9 +1311,13 @@ if ($doc_count == 0) {
                                           'icon' => 'fa-tags',
                                           'show' => get_config("insert_xml_metadata")),
                                     array('title' => $langResourceAccess,
+                                          'url' => "{$base_url}limited=$cmdDirName",
+                                          'icon' => 'fa-unlock',
+                                          'show' => $entry['public']),
+                                    array('title' => $langResourceAccess,
                                           'url' => "{$base_url}public=$cmdDirName",
                                           'icon' => 'fa-lock',
-                                          'show' => $course_id > 0 and course_status($course_id) == COURSE_OPEN and !$entry['public']),
+                                          'show' => !$entry['public']),
                                     array('title' => $langDelete,
                                           'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
@@ -1314,7 +1325,8 @@ if ($doc_count == 0) {
                                           'confirm' => "$langConfirmDelete $entry[filename]")));
                     $tool_content .= "</td>";
                 } else { // student view
-                    $tool_content .= "<td class='text-center'>" . icon('fa-save', $dload_msg, $download_url) . "</td>";
+                    $tool_content .= "<td class='text-center'>" .
+                        (($uid or $entry['format'] != '.dir')? icon('fa-save', $dload_msg, $download_url): '&nbsp;') . "</td>";
                 }
             }
             $tool_content .= "</tr>";

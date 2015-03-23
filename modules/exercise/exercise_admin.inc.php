@@ -28,7 +28,7 @@ require_once 'modules/search/indexer.class.php';
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('exerciseTitle','exerciseEndDate', 'exerciseStartDate'));
+    $v->rule('required', array('exerciseTitle'));
     $v->rule('numeric', array('exerciseTimeConstraint', 'exerciseAttemptsAllowed'));
     $v->rule('date', array('exerciseEndDate', 'exerciseStartDate'));
     $v->labels(array(
@@ -45,10 +45,10 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($exerciseDescription);
         $objExercise->updateType($exerciseType);
-        $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate);
-        $objExercise->updateStartDate($startDateTime_obj->format('Y-m-d H:i:s'));
-        $endDateTime_obj = DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate);
-        $objExercise->updateEndDate($endDateTime_obj->format('Y-m-d H:i:s'));
+        $startDateTime_obj = isset($exerciseStartDate) && !empty($exerciseStartDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate)->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
+        $objExercise->updateStartDate($startDateTime_obj);
+        $endDateTime_obj = isset($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
+        $objExercise->updateEndDate($endDateTime_obj);
         $objExercise->updateTempSave($exerciseTempSave);
         $objExercise->updateTimeConstraint($exerciseTimeConstraint);
         $objExercise->updateAttemptsAllowed($exerciseAttemptsAllowed);
@@ -81,26 +81,23 @@ if (isset($_POST['submitExercise'])) {
     }    
 } else {
     $exerciseId = $objExercise->selectId();
-    $exerciseTitle = $objExercise->selectTitle();
-    $exerciseDescription = $objExercise->selectDescription();
-    $exerciseType = $objExercise->selectType();
-    $startDateTime_obj = DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate());
-    $exerciseStartDate = $startDateTime_obj->format('d-m-Y H:i');
+    $exerciseTitle = Session::has('exerciseTitle') ? Session::get('exerciseTitle') : $objExercise->selectTitle();
+    $exerciseDescription = Session::has('exerciseDescription') ? Session::get('exerciseDescription') : $objExercise->selectDescription();
+    $exerciseType = Session::has('exerciseType') ? Session::get('exerciseType') : $objExercise->selectType();
+    //more repopulation need to be done
+    $exerciseStartDate = Session::has('exerciseStartDate') ? Session::get('exerciseStartDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectStartDate())->format('d-m-Y H:i');
     $exerciseEndDate = $objExercise->selectEndDate();
-    if ($exerciseEndDate == '') {
-        $endDateTime_obj = new DateTime;
-        $endDateTime_obj->add(new DateInterval('P1Y'));
-        $exerciseEndDate = $endDateTime_obj->format('d-m-Y H:i');
+    if (is_null($exerciseEndDate) && !Session::has('exerciseEndDate')) {
+        $exerciseEndDate = '';
     } else {
-        $endDateTime_obj = DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate());
-        $exerciseEndDate = $endDateTime_obj->format('d-m-Y H:i'); 
-    }
-    $exerciseTempSave = $objExercise->selectTempSave();
-    $exerciseTimeConstraint = $objExercise->selectTimeConstraint();
-    $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
-    $randomQuestions = $objExercise->isRandom();
-    $displayResults = $objExercise->selectResults();
-    $displayScore = $objExercise->selectScore();
+        $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
+    }   
+    $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
+    $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
+    $exerciseAttemptsAllowed = Session::has('exerciseAttemptsAllowed') ? Session::get('exerciseAttemptsAllowed') : $objExercise->selectAttemptsAllowed();
+    $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
+    $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
+    $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
 }
 
 // shows the form to modify the exercise
@@ -121,12 +118,21 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
 
     $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#startdatepicker, #enddatepicker').datetimepicker({
+            $('#exerciseStartDate, #exerciseEndDate').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
                 language: '".$language."',
                 autoclose: true    
             });
+            $('#enableEndDate, #enableStartDate').change(function() {
+                var dateType = $(this).prop('id').replace('enable', '');
+                if($(this).prop('checked')) {
+                    $('input#exercise'+dateType).prop('disabled', false);
+                } else {
+                    $('input#exercise'+dateType).prop('disabled', true);
+                }
+            });
+            
             $('.questionDrawnRadio').change(function() {
                 if($(this).val()==0){
                     $('#questionDrawnInput').val(''); 
@@ -221,22 +227,26 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>              
                  <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
-                     <div class='col-xs-10 col-sm-9'>        
-                         <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'>
-                         <span class='help-block'>".Session::getError('exerciseStartDate')."</span>
-                     </div>
-                     <div class='col-xs-2 col-sm-1'>  
-                         <span class='add-on'><i class='fa fa-calendar'></i></span>
+                     <div class='col-xs-10'>
+                        <div class='input-group'>   
+                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate' disabled>
+                            <span class='input-group-addon'>
+                              <input type='checkbox' id='enableStartDate'>
+                            </span>
+                        </div>
+                        <span class='help-block'>".Session::getError('exerciseStartDate')."</span>
                      </div>
                  </div>            
                  <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd:</label>
-                     <div class='col-xs-10 col-sm-9'>        
-                         <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'>
-                         <span class='help-block'>".Session::getError('exerciseEndDate')."</span>
-                     </div>
-                     <div class='col-xs-2 col-sm-1'>  
-                         <span class='add-on'><i class='fa fa-calendar'></i></span>
+                     <label for='exerciseEndDate' class='col-xs-2 control-label'>$langExerciseEnd:</label>
+                     <div class='col-xs-10'>
+                        <div class='input-group'>                   
+                            <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate' disabled>
+                            <span class='input-group-addon'>
+                              <input type='checkbox' id='enableEndDate'>
+                            </span>                                                            
+                        </div>
+                        <span class='help-block'>".Session::getError('exerciseEndDate')."</span>
                      </div>
                  </div>
                  <div class='form-group'>
@@ -358,8 +368,8 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
     $exerciseDescription = standard_text_escape($exerciseDescription);
     $exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
-    
-    $exerciseEndDate = nice_format(date("Y-m-d H:i", strtotime($exerciseEndDate)), true);
+
+    $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
     $tool_content .= action_bar(array(

@@ -390,7 +390,7 @@ class IMSCPExport
                     $idCounter++;
                 }
                 // Fill in blanks
-                elseif ( $qtype == FILL_IN_BLANKS )
+                elseif ( $qtype == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT)
                 {
                     $pageBody .= '<tr><td colspan="2">';
 

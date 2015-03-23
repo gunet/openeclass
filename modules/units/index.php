@@ -143,7 +143,7 @@ if (!$info) {
     draw($tool_content, 2, null, $head_content);
     exit;
 } else {
-    $pageName = htmlspecialchars($info->title);
+    $pageName = q($info->title);
     $comments = trim($info->comments);
 }
 
@@ -189,14 +189,11 @@ foreach (array('previous', 'next') as $i) {
 
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
     $tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>";
-        
-    $tool_content .= "
-        ". $link['previous'] ."
-        ". $link['next'] ."";
-    
-    $tool_content .= "</div>
+        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>" .
+            $link['previous'] .
+            $link['next'] . "
         </div>
+      </div>
     </div>";
 }
 
@@ -204,23 +201,19 @@ $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
         
       </div>
-    </div>";
+    </div>
 
-if (!empty($comments)) {
-    $tool_content .= "<div class='row'>
+    <div class='row'>
       <div class='col-md-12'>
         <div class='panel padding'>
-        <div class='margin-bottom-fat'>
-        <h4 class='text-center'>$pageName</h4>
-            </div>
-              $comments
+          <div class='margin-bottom-fat'>
+            <h4 class='text-center'>$pageName</h4>
+          </div>
+          $comments
         </div>
       </div>
-    </div>";
-}
-
-
-$tool_content .= "<div class='row'>
+    </div>
+    <div class='row'>
   <div class='col-md-12'>
     <div class='panel padding'>";
 show_resources($id);

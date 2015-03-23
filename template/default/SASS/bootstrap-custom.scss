@@ -211,24 +211,36 @@ top: 8px;
 }
 
 .navbar-nav .open .dropdown-menu {
-        position: absolute;
-        float: none;
-        width: auto;
-        margin-top: 0;
-        background-color:#ffffff;
-        border-left-color: rgba(0, 0, 0, 0.14902);
-        color: #000;
-border-left-style: solid;
-border-left-width: 1px;
-border-right-color: rgba(0, 0, 0, 0.14902);
-border-right-style: solid;
-border-right-width: 1px;
-border-top-color: rgba(0, 0, 0, 0.14902);
-border-top-left-radius: 0px;
-border-top-right-radius: 0px;
-border-top-style: solid;
-border-top-width: 1px;
-bottom: auto;
-box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
-box-sizing: border-box;
+    position: absolute;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color:#ffffff;
+    border-left-color: rgba(0, 0, 0, 0.14902);
+    color: #000;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.14902);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.14902);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    bottom: auto;
+    box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
+    box-sizing: border-box;
+}
+
+//  tinymce css
+
+.mce-toggle:hover{
+    cursor: pointer;
+}
+.mce-toggle{
+    i.mce-ico.mce-i-none{
+        
+        width: 22px;
     }
+}

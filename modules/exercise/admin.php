@@ -39,7 +39,7 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langE
 // picture path
 $picturePath = "courses/$course_code/image";
 // the 4 types of answers
-$aType = array($langUniqueSelect, $langMultipleSelect, $langFillBlanks, $langMatching, $langTrueFalse, $langFreeText);
+$aType = array($langUniqueSelect, $langMultipleSelect, "$langFillBlanks ($langFillBlanksStrict)", $langMatching, $langTrueFalse, $langFreeText, "$langFillBlanks ($langFillBlanksTolerant)");
 
 if (!$is_editor) {
     Session::Messages($langNotAllowed);

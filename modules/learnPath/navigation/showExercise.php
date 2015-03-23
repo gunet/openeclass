@@ -216,7 +216,7 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . $head_content
  . '</head>' . "\n"
  . '<body style="margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;">' . "\n"
- . '<div id="content"><div class="row"><div class="col-xs-12">';
+ . '<div id="content" style="padding:20px;">';
 
 echo ("
   
@@ -351,7 +351,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        if ($answerType == FILL_IN_BLANKS) {
+        if ($answerType == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
@@ -379,7 +379,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                         </div>");
         }
         // fill in blanks
-        elseif ($answerType == FILL_IN_BLANKS) {
+        elseif ($answerType == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
             echo ($answer);
         }
         // matching
@@ -400,7 +400,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                 foreach ($select as $key => $val) {
                     echo "<option value=\"${key}\">${val['Lettre']}</option>";
                 }
-                echo "</select></div></td>
+                echo "</select></td>
                                     <td width='200'>";
                 if (isset($select[$cpt2]))
                     echo '<b>' . $select[$cpt2]['Lettre'] . '.</b> ' . $select[$cpt2]['Reponse'];
@@ -445,7 +445,6 @@ function showQuestion($questionId, $onlyAnswers = false) {
     if (!$nbrAnswers) {
         echo "<tr><td colspan='2'><div class='alert alert-danger'>$langNoAnswer</div></td></tr>";
     }
-    echo "</div></div>";
     // destruction of the Answer object
     unset($objAnswerTmp);
     // destruction of the Question object

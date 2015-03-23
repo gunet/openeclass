@@ -134,11 +134,13 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
 // -------------------------------------
 // Display restore info form
 // -------------------------------------
+    enableCheckFileSize();
     $tool_content .= "<div class='alert alert-info'><label>$langFirstMethod</label> $langRequest1</div>
         <div class='form-wrapper'>
             <form role='form' class='form-horizontal' action='" . $_SERVER['SCRIPT_NAME'] . "' method='post' enctype='multipart/form-data'>            
             <div class='form-group'>
-                <div class='col-sm-4'>
+                <div class='col-sm-4'>" .
+                    fileSizeHidenInput() . "
                     <input type='file' name='archiveZipped' />
                 </div>
                 <div class='col-sm-6'>

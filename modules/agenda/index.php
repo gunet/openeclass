@@ -83,7 +83,6 @@ var dialogUpdateOptions = {
     buttons: {
         cancel:{label: '$langCancel',
         callback: function() {
-                      return false;
                  }
              },
         yes:{
@@ -116,11 +115,26 @@ var dialogDeleteOptions = {
             className: 'btn-warning'}}};
 
 $(document).ready(function(){
+    $('#enddatecal').hide();
+    
     $('#submitbtn').on('click', 
             function(e){
                 checkrequired($('#agendaform'));
     });
+
+    $('#frequencynumber').change(function(){checkenableenddate();});
+    $('#frequencyperiod').change(function(){checkenableenddate();});
+
+    
 });
+
+function checkenableenddate(){
+    if($('#frequencynumber').val() == '0' || $('#frequencyperiod').val() === \"\"){
+        $('#enddatecal').hide();
+    } else {
+        $('#enddatecal').show();
+    }
+}
 $(function() {
     $('#startdatecal').datetimepicker({
         format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
@@ -171,14 +185,18 @@ if ($is_editor) {
         register_posted_variables(array('startdate' => true, 'event_title' => true, 'content' => true, 'duration' => true));
         $content = purify($content);
         if (isset($_POST['id']) and !empty($_POST['id'])) {  // update event
-            $id = $_POST['id'];                        
+            $id = $_POST['id'];
+            $recursion = null;
+            if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
+                $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
+            }            
             if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
-                $resp = update_recursive_event($id, $event_title, $startdate, $duration, $content);
+                $resp = update_recursive_event($id, $event_title, $startdate, $duration, $content, $recursion);
             } else {
-                $resp = update_event($id, $event_title, $startdate, $duration, $content);
+                $resp = update_event($id, $event_title, $startdate, $duration, $content, $recursion);
             }
             $agdx->store($id);
-        } else {
+        } else { // add new event
             $recursion = null;            
             if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
                 $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
@@ -199,6 +217,7 @@ if ($is_editor) {
         Session::Messages($msgresp, $alerttype);
         redirect_to_home_page("modules/agenda/index.php?course=$course_code");              
     }
+    $is_recursive_event = false;
 
     if (isset($_GET['addEvent']) or isset($_GET['edit'])) {
         $pageName = $langAddEvent;
@@ -209,26 +228,36 @@ if ($is_editor) {
                       'level' => 'primary-label',
                       'show' => $is_editor)));        
         $navigation[] = array("url" => $_SERVER['SCRIPT_NAME'] . "?course=$course_code", "name" => $langAgenda);
-        $rep = '';
+        $applytogroup = '';
         if (isset($id) && $id) {
-            $myrow = Database::get()->querySingle("SELECT id, title, content, start, duration FROM agenda WHERE course_id = ?d AND id = ?d", $course_id, $id);
+            $myrow = Database::get()->querySingle("SELECT * FROM agenda WHERE course_id = ?d AND id = ?d", $course_id, $id);
             if ($myrow) {
                 $id = $myrow->id;
                 $event_title = $myrow->title;
                 $content = $myrow->content;
                 $startdate = date('d-m-Y H:i', strtotime($myrow->start));
                 $duration = $myrow->duration;
-                $rep = (is_recursive($myrow->id))? 'no':''; 
+                $applytogroup = '';
+                $is_recursive_event = false;
+                $enddate = '';
+                if(is_recursive($myrow->id)){
+                   $is_recursive_event = true;
+                   $applytogroup = 'no';
+                   $repeatnumber = substr($myrow->recursion_period, 1, strlen($myrow->recursion_period)-2);
+                   $repeatperiod = substr($myrow->recursion_period, -1);
+                   $repeatend_obj = DateTime::createFromFormat('Y-m-d', $myrow->recursion_end);
+                   $enddate = $repeatend_obj->format('d-m-Y');
+                }
             }
         } else {
             $id = $content = $duration = '';
             $startdate = date('d-m-Y H:i', strtotime('now'));
-            $enddate = date('d-m-Y', strtotime('now +1 week'));
+            $enddate = '';
         } 
         $tool_content .= "<div class='form-wrapper'>";
         $tool_content .= "<form id='agendaform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
             <input type='hidden' id = 'id' name='id' value='$id'>"
-                . "<input type='hidden' name='rep' id='rep' value='$rep'>";
+                . "<input type='hidden' name='rep' id='rep' value='$applytogroup'>";
         @$tool_content .= "
             <div class='form-group'>
                 <label for='event_title' class='col-sm-2 control-label'>$langTitle :</label>
@@ -248,43 +277,52 @@ if ($is_editor) {
             <div class='input-append bootstrap-timepicker form-group'>
                 <label for='durationcal' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
                 <div class='col-sm-10'>
-                    <div class='input-group'>
+                    <div class='input-group add-on'>
                         <input class='form-control' name='duration' id='durationcal' type='text' class='input-small' value='" . $duration . "'>
                         <div class='input-group-addon add-on'><i class='fa fa-clock-o fa-fw'></i></div>
                     </div>
                 </div>
             </div>";
-        if(!isset($_GET['edit'])) {
-            $tool_content .= "<div class='form-group'>
+        /**** Recursion paramneters *****/
+             $tool_content .= "<div class='form-group'>
                                     <label for='Repeat' class='col-sm-2 control-label'>$langRepeat $langEvery</label>
                                 <div class='col-sm-2'>
-                                    <select class='form-control' name='frequencynumber'>
+                                    <select class='form-control' name='frequencynumber' id='frequencynumber'>
                                     <option value='0'>$langSelectFromMenu</option>";
             for($i = 1;$i<10;$i++) {
-                $tool_content .= "<option value=\"$i\">$i</option>";
+                $tool_content .= "<option value=\"$i\"";
+                if($is_recursive_event && $i == $repeatnumber){
+                    $tool_content .= ' selected';
+                }
+                $tool_content .= ">$i</option>";
             }
+            
             $tool_content .= "</select></div>";            
+            $selected = array('D'=>'', 'W'=>'','M'=>'');
+            if($is_recursive_event){
+                $selected[$repeatperiod] = ' selected';
+            }
             $tool_content .= "<div class='col-sm-2'>
-                        <select class='form-control' name='frequencyperiod'>
-                            <option value=\"D\">$langSelectFromMenu...</option>
-                            <option value=\"D\">$langDays</option>
-                            <option value=\"W\">$langWeeks</option>
-                            <option value=\"M\">$langMonthsAbstract</option>
+                        <select class='form-control' name='frequencyperiod' id='frequencyperiod'>
+                            <option value=\"\">$langSelectFromMenu...</option>
+                            <option value=\"D\"{$selected['D']}>$langDays</option>
+                            <option value=\"W\"{$selected['W']}>$langWeeks</option>
+                            <option value=\"M\"{$selected['M']}>$langMonthsAbstract</option>
                         </select>
                         </div>
-                    </div>";
-            $tool_content .= "<div class='input-append date form-group' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                    ";
+            $tool_content .= "<div class='input-append date' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
                 <label for='Enddate' class='col-sm-2 control-label'>$langUntil :</label>
-                    <div class='col-sm-10'>
+                    <div class='col-sm-4'>
                         <div class='input-group'>
-                            <input class='form-control' name='enddate' id='enddate' type='text' value = '" . $enddate . "'>
+                            <input class='form-control' name='enddate' id='enddate' type='text' value = '" .$enddate . "'>
                             <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
                         </div>
                     </div>
-                </div>";
-        }
-                
-        $tool_content .= "<div class='form-group'>
+                </div>
+              </div>";
+        /**** end of recursion paramneters *****/
+         $tool_content .= "<div class='form-group'>
                         <label for='Detail' class='col-sm-2 control-label'>$langDetail :</label>
                         <div class='col-sm-10'>" . rich_text_editor('content', 4, 20, $content) . "</div>
                       </div>            

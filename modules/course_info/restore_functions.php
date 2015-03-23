@@ -957,7 +957,11 @@ function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
         if (isset($userid_map[$old_id])) {
             $status[$old_id] = $cudata[$restoreHelper->getField('course_user', 'status')];
             $tutor[$old_id] = $cudata['tutor'];
-            $editor[$old_id] = $cudata['editor'];
+            if (isset($cudata['editor'])) {
+                $editor[$old_id] = $cudata['editor'];
+            } else {
+                $editor[$old_id] = ($status[$old_id] == USER_TEACHER);
+            }
             $reviewer[$old_id] = (isset($cudata['reviewer'])) ? $cudata['reviewer'] : 0;
             $reg_date[$old_id] = $cudata['reg_date'];
             $receive_mail[$old_id] = $cudata['receive_mail'];
@@ -1153,6 +1157,9 @@ function document_map_function(&$data, $maps) {
         } else {
             return false;
         }
+    }
+    if (!isset($data['extra_path'])) {
+        $data['extra_path'] = '';
     }
     return true;
 }

@@ -103,6 +103,7 @@ define('FILL_IN_BLANKS', 3);
 define('MATCHING', 4);
 define('TRUE_FALSE', 5);
 define('FREE_TEXT', 6);
+define('FILL_IN_BLANKS_TOLERANT', 7);
 
 // exercise attempt types
 define('ATTEMPT_COMPLETED', 1);
@@ -300,7 +301,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
 
     $token = token_generate($user->id, true);
     return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
-            q($user->givenname) . " " .  q($user->surname) . "</a>" .
+            q($user->surname) . " " .  q($user->givenname) . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
 
@@ -1623,7 +1624,7 @@ function register_posted_variables($var_array, $what = 'all', $callback = null) 
  * @return type
  */
 function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
-    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser;
+    global $head_content, $language, $urlAppend, $course_code, $langPopUp, $langPopUpFrame, $is_editor, $is_admin, $langResourceBrowser, $langMore;
     static $init_done = false;
     if (!$init_done) {
         $init_done = true;
@@ -1663,7 +1664,6 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
         }
         if ($onFocus) {
             $focus_init = ",
-                menubar: false,
                 statusbar: false,   
                 setup: function (theEditor) {
                     theEditor.on('focus', function () {
@@ -1677,7 +1677,24 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                     });
                 }";
         } else {
-            $focus_init ='';
+            $focus_init = ",
+                setup: function (editor) {                    
+                    editor.addButton('toggle', {
+                        title: '".js_escape($langMore)."',
+                        classes: 'toggle',
+                        image: '../../js/tinymce/skins/light/img/toggle.png',
+                        style: 'padding:3px 0 0 5px;',
+                        onclick: function() {
+                            $('#mceu_55').toggle();
+                        }
+                    });
+                    
+                },
+                init_instance_callback : function(editor){
+                    $('#mceu_55').hide();
+                    $('div#mceu_35, div#mceu_72').attr('style','border:1px solid #ddd');
+                }
+                ";
         }
         load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
@@ -1705,6 +1722,7 @@ tinymce.init({
     selector: 'textarea.mceEditor',
     language: '$language',
     theme: 'modern',
+    skin: 'light',
     image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
@@ -1720,18 +1738,23 @@ tinymce.init({
         {title: 'Thumbnail image and responsive', value: 'img-thumbnail img-responsive'},
         {title: 'None', value: ' '}
     ],
-    plugins: 'pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
+    plugins: 'fullscreen,pagebreak,save,image,link,media,eclmedia,print,contextmenu,paste,noneditable,visualchars,nonbreaking,template,wordcount,advlist,emoticons,preview,searchreplace,table,insertdatetime,code',
     entity_encoding: 'raw',
     relative_urls: false,
     link_class_list: [
         {title: 'None', value: ''},
-        {title: '$langPopUp', value: 'colorbox'},
-        {title: '$langPopUpFrame', value: 'colorboxframe'}
+        {title: '".js_escape($langPopUp)."', value: 'colorbox'},
+        {title: '".js_escape($langPopUpFrame)."', value: 'colorboxframe'}
     ],
     $filebrowser
-
+    // Menubar options
+    menu : 'false',
     // Toolbar options
-    toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
+    toolbar1: 'toggle | undo | redo | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | table | bullist | numlist | outdent | indent',
+    toolbar2: 'underline | strikethrough | superscript | subscript | cut | copy | paste | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
+    // Replace values for the template plugin
+     // Toolbar options
+    //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
     // Replace values for the template plugin
     template_replace_values: {
             username : 'Open eClass',
@@ -2146,7 +2169,7 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
 
     if (isset($title)) {
         $title = q($title);
-        $extra = "title='$title'";
+        $extra = "title='$title' data-toggle='tooltip'";
     } else {
         $extra = '';
     }
@@ -2736,7 +2759,7 @@ function forbidden($path = '') {
  * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'level' => 'primary')
  * level is optional and can be 'primary' for primary entries or unset
  */
-function action_bar($options, $page_title_flag = true) {
+function action_bar($options, $page_title_flag = true, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete, $pageName;
     
     $out_primary = $out_secondary = array();
@@ -2805,9 +2828,11 @@ function action_bar($options, $page_title_flag = true) {
     }
 
     $action_button = "";
+    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
+    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";    
     if (count($out_secondary)) {
         //$action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
-        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa fa-gears'></i> <span class='caret'></span></button>";
+        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
         $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
                      ".implode('', $out_secondary)."
                   </ul>";
@@ -2837,7 +2862,7 @@ function action_bar($options, $page_title_flag = true) {
  * array('title' => 'Create', 'url' => '/create.php', 'icon' => 'create', 'class' => 'primary danger')
  * 
  */
-function action_button($options) {
+function action_button($options, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
     foreach (array_reverse($options) as $option) {
@@ -2896,11 +2921,13 @@ function action_button($options) {
         $primary_buttons = implode('', $out_primary);
     }       
     $action_button = "";
+    $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
+    $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
         $action_button = "
                 <a tabindex='1' class='btn btn-default' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
-                    <i class='fa fa-gear'></i>  <span class='caret'></span>
+                    <i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }    
     
@@ -2996,4 +3023,80 @@ function getSerializedMessage($message, $lang=null) {
     return '';
 }
 
+/**
+ * @brief Returns a file size limit in bytes based on the PHP upload_max_filesize and post_max_size
+ * @return int
+ */
+function fileUploadMaxSize() {
+    static $max_size;
 
+    if (!isset($max_size)) {
+        // Start with post_max_size.
+        $max_size = parseSize(ini_get('post_max_size'));
+
+        // If upload_max_size is less, then reduce. Except if upload_max_size is
+        // zero, which indicates no limit.
+        $upload_max = parseSize(ini_get('upload_max_filesize'));
+        if ($upload_max > 0 && $upload_max < $max_size) {
+            $max_size = $upload_max;
+        }
+    }
+    return $max_size;
+}
+
+function parseSize($size) {
+    $unit = preg_replace('/[^bkmgtpezy]/i', '', $size); // Remove the non-unit characters from the size.
+    $size = preg_replace('/[^0-9\.]/', '', $size); // Remove the non-numeric characters from the size.
+    if ($unit) {
+        // Find the position of the unit in the ordered string which is the power of magnitude to multiply a kilobyte by.
+        return round($size * pow(1024, stripos('bkmgtpezy', $unit[0])));
+    } else {
+        return round($size);
+    }
+}
+
+/**
+ * @brief Include JavaScript code to check file upload size
+ */
+function enableCheckFileSize() {
+    global $langMaxFileSizeExceeded, $head_content;
+    load_js('tools.js');
+    $head_content .= "
+<script>
+var langMaxFileSizeExceeded = '" . js_escape($langMaxFileSizeExceeded) . "';
+$(enableCheckFileSize);
+</script>
+";
+}
+
+/**
+ * @brief Return the HTML code for a hidden input setting the max upload size
+ * @return string
+ */
+function fileSizeHidenInput() {
+    return "<input type='hidden' name='MAX_FILE_SIZE' value='" . fileUploadMaxSize() . "'>";
+}
+
+
+/**
+ * @brief Return the HTML code for a link back to the current Documents page
+ * @param string $path Path of the current documents directory
+ * @return string
+ */
+function documentBackLink($path) {
+    global $upload_target_url, $groupset;
+
+    $opts = '';
+    if ($groupset) {
+        $opts = $groupset;
+    }
+    if ($path) {
+        $opts .= ($opts? '&amp;': '') . "openDir=$path";
+    }
+    if ($opts) {
+        return $upload_target_url .
+            (defined('COMMON_DOCUMENTS')? '?': '&amp;') . $opts;
+    } else {
+        return $upload_target_url;
+    }
+}

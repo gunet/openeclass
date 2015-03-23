@@ -66,7 +66,7 @@ if (!class_exists('Exercise')) {
             $this->description = '';
             $this->type = 1;
             $this->startDate = date("Y-m-d H:i:s");
-            $this->endDate = '';
+            $this->endDate = null;
             $this->tempSave = 0;
             $this->timeConstraint = 0;
             $this->attemptsAllowed = 0;
@@ -449,7 +449,6 @@ if (!class_exists('Exercise')) {
             $public = $this->public;
             $results = $this->results;
             $score = $this->score;
-
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
@@ -639,7 +638,7 @@ if (!class_exists('Exercise')) {
                     $exerciseResult[$row->question_id] = $row->answer;
                 } elseif ($question_type == MATCHING){
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
-                } elseif ($question_type == FILL_IN_BLANKS){
+                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT){
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
                 } elseif ($question_type == MULTIPLE_ANSWER){
                     $exerciseResult[$row->question_id][$row->answer_id] = 1;                    
@@ -687,7 +686,7 @@ if (!class_exists('Exercise')) {
                         }
                     }
                     unset($objAnswerTmp);
-                } else if ($question_type == FILL_IN_BLANKS) {  
+                } else if ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {  
                     // construction of the Answer object
                     $objAnswerTmp = new Answer($question_id);
                     $answer = $objAnswerTmp->selectAnswer(1);
@@ -727,7 +726,7 @@ if (!class_exists('Exercise')) {
                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
                            VALUES (?d, ?d, ?s, ?d, ?d, ?d)", $eurid, $key, $value, 0, $weight, $as_answered);                                    
                }                              
-           } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS) {
+           } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
                //splits answer string from weighting string
@@ -738,7 +737,10 @@ if (!class_exists('Exercise')) {
                preg_match_all('#\[(.*?)\]#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
                    //if user's choice is right assign rightAnswerWeight else 0
-                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
+                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[1][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[1][$row_key-1];
+
+                       $weight = ($canonical_choice == $canonical_match) ? $rightAnswerWeighting[$row_key-1] : 0;
                        Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
                                VALUES (?d, ?d, ?s, ?d, ?f, ?d)", $eurid, $key, $row_choice, $row_key, $weight, $as_answered);
 
@@ -807,7 +809,7 @@ if (!class_exists('Exercise')) {
                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, 
                                           answer_id = 0, weight = 0, is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);                                           
                }                              
-           } elseif ($question_type == FILL_IN_BLANKS) {
+           } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
                //splits answer string from weighting string
@@ -818,7 +820,9 @@ if (!class_exists('Exercise')) {
                preg_match_all('#\[(.*?)\]#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
                    //if user's choice is right assign rightAnswerWeight else 0
-                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
+                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[1][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[1][$row_key-1];                   
+                       $weight = ($canonical_choice == $canonical_match) ? $rightAnswerWeighting[$row_key-1] : 0;
                        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, weight = ?f, is_answered = 1 
                                               WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d", $row_choice, $weight, $eurid, $key, $row_key);
                }

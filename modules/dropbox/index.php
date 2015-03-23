@@ -251,10 +251,12 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
             </div>
         </div>";        
     if ($course_id != 0 || ($type == 'cm' && $course_id == 0)) {
+        enableCheckFileSize();
         $tool_content .= "
         <div class='form-group'>
             <label for='title' class='col-sm-2 control-label'>$langFileName:</label>
-            <div class='col-sm-10'>
+            <div class='col-sm-10'>" .
+                fileSizeHidenInput() . "
                 <input type='file' name='file'>
             </div>
         </div>";

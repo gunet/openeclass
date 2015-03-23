@@ -67,21 +67,25 @@ $head_content .= "
 <script type='text/javascript'>
 $(function() {
     $('#startdate').datetimepicker({
-        format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
-        language: '" . $language . "',
+        format: 'dd-mm-yyyy hh:ii', 
+        pickerPosition: 'bottom-left', 
+        language: '".$language."',
         autoclose: true
     });
-    $('#enddate').datepicker({
-        format: 'dd-mm-yyyy',
-        language: '" . $language . "',
+    $('#enddatecal').datepicker({
+        format: 'dd-mm-yyyy', 
+        pickerPosition: 'bottom-left', 
+        language: '".$language."',
         autoclose: true
     });
-    $('#duration').timepicker({ 
-        showMeridian: false, 
+    $('#duration').timepicker({
+        showMeridian: false,
+        pickerPosition: 'bottom-left',
         minuteStep: 1, 
-        defaultTime: false 
-    });
-});" .
+        defaultTime: false,
+        autoclose: true});
+});
+" .
         '
 var selectedday = ' . $today['mday'] . ';
 var selectedmonth = ' . $today['mon'] . ';
@@ -104,13 +108,75 @@ function show_day(day,month,year){
     selectedyear = year;
     $.get("../calendar_data.php",{day:day, month: month, year: year, caltype: "day"}, function(data){$("#monthcalendar").html(data);});    
 }
-</script>';
+'
+."var dialogUpdateOptions = {
+    title: '$langConfirmUpdate',
+    message: '$langConfirmUpdateRecursiveEvents',
+    buttons: {
+        cancel:{label: '$langCancel',
+        callback: function() {
+                 }
+             },
+        yes:{
+            label: '$langYes',
+            className: 'btn-primary',
+             callback: function() {
+                           $('#rep').val('yes');
+                           $('#myeventform').submit();
+                      }
+            },
+        no:{
+            label: '$langNoJustThisOne',
+            className: 'btn-info',
+            callback: function() {
+                           $('#rep').val('no');
+                           $('#myeventform').submit();
+                      }
+            }
+    }};
+var dialogDeleteOptions = {
+    title: '$langConfirmDelete',
+    message: '$langConfirmDeleteRecursiveEvents',
+    buttons: {
+        cancel:{label: '$langCancel'},
+        yes:{
+            label: '$langYes',
+            className: 'btn-danger'},
+        no:{
+            label: '$langNoJustThisOne',
+            className: 'btn-warning'}}};
 
-//angela: Do we need recording of personal actions????
-// The following is added for statistics purposes
-//require_once 'include/action.php';
-//$action = new action();
-//$action->record(MODULE_ID_ANNOUNCE);
+$(document).ready(function(){
+    $('#enddatecal').hide();
+    $('#submitEvent').on('click', 
+            function(e){
+                checkrequired($('#myeventform'));
+    });
+    
+    $('#frequencynumber').change(function(){checkenableenddate();});
+    $('#frequencyperiod').change(function(){checkenableenddate();});
+});
+
+function checkenableenddate(){
+    if($('#frequencynumber').val() == '0' || $('#frequencyperiod').val() === \"\"){
+        $('#enddatecal').hide();
+    } else {
+        $('#enddatecal').show();
+    }
+}
+    
+function checkrequired(thisform) {
+    if ($('#newTitle').val()=='' || $('#startdate').val()=='') {
+            bootbox.alert('$langTitleDateNotEmpty');
+            return false;
+    }
+    if($('#id').val()>0 && $('#rep').val() != ''){
+        bootbox.dialog(dialogUpdateOptions);
+    } else {
+        thisform.submit();
+    }
+}"
+.'</script>';
 
 $toolName = $langMyAgenda;
 
@@ -123,7 +189,7 @@ $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 $displayForm = true;
 
 /* submit form: new or updated event */
-if (isset($_POST['submitEvent'])) {
+if (isset($_POST['newTitle'])) {
 
     $newTitle = $_POST['newTitle'];
     $newContent = $_POST['newContent'];
@@ -138,10 +204,24 @@ if (isset($_POST['submitEvent'])) {
     $duration = $_POST['duration'];
     if (!empty($_POST['id'])) { //existing event
         $id = intval($_POST['id']);
+        $recursion = null;
+        if (!empty($_POST['frequencyperiod']) && intval($_POST['frequencynumber']) > 0 && !empty($_POST['enddate'])) {
+            $recursion = array('unit' => $_POST['frequencyperiod'], 'repeat' => $_POST['frequencynumber'], 'end' => $_POST['enddate']);
+        }
         if (is_null($visibility)) {
-            $resp = Calendar_Events::update_event($id, $newTitle, $start, $duration, $newContent, $refobjid);
+            if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
+                $resp = Calendar_Events::update_recursive_event($id, $newTitle, $start, $duration, $newContent, $recursion, $refobjid);
+            } else {
+              $resp = Calendar_Events::update_event($id, $newTitle, $start, $duration, $newContent, false, $recursion, $refobjid);
+            }
+            
         } else {
-            $resp = Calendar_Events::update_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility);
+            $resp = Calendar_Events::update_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility, $recursion);
+            if(isset($_POST['rep']) && $_POST['rep'] == 'yes'){
+                    $resp = Calendar_Events::update_recursive_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility, $recursion);
+            } else {
+                $resp = Calendar_Events::update_admin_event($id, $newTitle, $start, $duration, $newContent, $visibility, $recursion);
+            }
         }
         if ($resp['success']) {
             Session::Messages($langEventModify, 'alert-success');
@@ -167,7 +247,11 @@ if (isset($_POST['submitEvent'])) {
 /* delete */
 if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' || $_GET['et'] == 'admin'))) {
     $thisEventId = intval($_GET['delete']);
-    $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
+    if(isset($_GET['rep']) && $_GET['rep'] == 'yes'){
+        $resp = Calendar_Events::delete_recursive_event($thisEventId, $_GET['et']);
+    } else {
+        $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
+    }
     if ($resp['success']) {
         Session::Messages($langEventDel, 'alert-success');
     } else {
@@ -175,8 +259,9 @@ if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' 
     }
     redirect_to_home_page('main/personal_calendar/index.php');
 }
-
-/* edit */
+$is_recursive_event = false;
+$enddate = '';/* edit */
+$applytogroup = '';
 if (isset($_GET['modify'])) {    
     $modify = intval($_GET['modify']);
     $displayForm = false;
@@ -187,9 +272,17 @@ if (isset($_GET['modify'])) {
             $contentToModify = $event->content;
             $titleToModify = q($event->title);
             $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $event->start);
-            $startdate = $startDate_obj->format('d-m-Y H:i');
-            $datetimeToModify = q($startdate);
-            $durationToModify = q($event->duration);
+            $startdate = DateTime::createFromFormat('Y-m-d H:i:s', $event->start)->format('d-m-Y H:i');
+            $datetimeToModify = $startdate;
+            $durationToModify = DateTime::createFromFormat('H:i:s', $event->duration)->format('H:i');
+            $enddate = '';
+            if(Calendar_Events::is_recursive($event->id)){
+                   $is_recursive_event = true;
+                   $applytogroup = 'no';
+                   $repeatnumber = substr($event->recursion_period, 1, strlen($event->recursion_period)-2);
+                   $repeatperiod = substr($event->recursion_period, -1);
+                   $enddate = DateTime::createFromFormat('Y-m-d', $event->recursion_end)->format('d-m-Y');
+            }
             $visibility_level = $event->visibility_level;
             $displayForm = true;
         }
@@ -199,15 +292,24 @@ if (isset($_GET['modify'])) {
             $eventToModify = $event->id;
             $contentToModify = $event->content;
             $titleToModify = q($event->title);
-            $startDate_obj = DateTime::createFromFormat('Y-m-d H:i:s', $event->start);
-            $startdate = $startDate_obj->format('d-m-Y H:i');
+            $startdate = DateTime::createFromFormat('Y-m-d H:i:s', $event->start)->format('d-m-Y H:i');
             $datetimeToModify = q($startdate);
-            $durationToModify = q($event->duration);
+            $durationToModify = DateTime::createFromFormat('H:i:s', $event->duration)->format('H:i');
             $gen_type_selected = $event->reference_obj_module;
             $course_selected = $event->reference_obj_course;
             $type_selected = $event->reference_obj_type;
             $object_selected = $event->reference_obj_id;
             $displayForm = true;
+            $is_recursive_event = false;
+            $enddate = '';
+            if(Calendar_Events::is_recursive($event->id)){
+                $is_recursive_event = true;
+                $applytogroup = 'no';
+                $repeatnumber = substr($event->recursion_period, 1, strlen($event->recursion_period)-2);
+                $repeatperiod = substr($event->recursion_period, -1);
+                $enddate = DateTime::createFromFormat('Y-m-d', $event->recursion_end)->format('d-m-Y');
+            }
+            
         }
     }
 }
@@ -247,8 +349,9 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         $object_selected = null;    
     $tool_content .= "
     <div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\" style='display:inline'>
-        <input type='hidden' name='id' value='$eventToModify'>
+        <form id='myeventform' class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' style='display:inline'>
+        <input type='hidden' id='id' name='id' value='$eventToModify'>
+        <input type='hidden' name='rep' id='rep' value='$applytogroup'>
         <div class='form-group'>
           <label for='newTitle' class='col-sm-2 control-label'>$langEventTitle:</label>
           <div class='col-sm-10'>
@@ -261,43 +364,62 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
                " . rich_text_editor('newContent', 4, 20, $contentToModify) . "
           </div>
         </div>
-        <div class='form-group'>
-          <label for='startdate' class='col-sm-2 control-label'>$langDate:</label>
-          <div class='col-sm-10'>
-               <input class='form-control' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
-          </div>
+        <div class='input-append date form-group' name='startdatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+              <label for='startdate' class='col-sm-2 control-label'>$langDate:</label>
+              <div class='col-sm-10'>
+                  <div class='input-group'>
+                     <input class='form-control' type='text' name='startdate' id='startdate' value='$datetimeToModify'>
+                     <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
+                  </div>
+              </div>
         </div>
-        <div class='form-group'>
-          <label for='duration' class='col-sm-2 control-label'>$langDuration:</label>
-          <div class='col-sm-10'>
-               <input class='form-control' type='text' name='duration' id='duration' value='$durationToModify'>
-          </div>
-        </div>";
-        if (!isset($_GET['modify'])) {
-            $tool_content .= "
+        <div class='input-append bootstrap-timepicker form-group'>
+            <label for='durationcal' class='col-sm-2 control-label'>$langDuration <small>$langInHour</small></label>
+            <div class='col-sm-10'>
+                <div class='input-group add-on'>
+                    <input class='form-control' name='duration' id='duration' type='text' class='input-small' value='" . $durationToModify . "'>
+                    <div class='input-group-addon'><i class='fa fa-clock-o fa-fw'></i></div>
+                </div>
+            </div>
+        </div>
+        ";
+        /* Repetition period*/
+        $tool_content .= "
             <div class='form-group'>
               <label for='frequencynumber' class='col-sm-2 control-label'>$langRepeat $langEvery:</label>
               <div class='col-sm-2'>
                     <select class='form-control' name='frequencynumber' id='frequencynumber'>
                         <option value='0'>$langSelectFromMenu</option>";
                 for ($i = 1; $i < 10; $i++) {
-                    $tool_content .= "<option value=\"$i\">$i</option>";
+                    $tool_content .= "<option value=\"$i\"";
+                    if($is_recursive_event && $i == $repeatnumber){
+                        $tool_content .= ' selected';
+                    }
+                    $tool_content .= ">$i</option>";
+                }
+                $selected = array('D'=>'', 'W'=>'','M'=>'');
+                if($is_recursive_event){
+                    $selected[$repeatperiod] = ' selected';
                 }
                 $tool_content .= "</select></div>
                 <div class='col-sm-2'>
-                      <select class='form-control' name='frequencyperiod'>
-                        <option value=''>$langSelectFromMenu...</option>
-                        <option value='D'>$langDays</option>
-                        <option value='W'>$langWeeks</option>
-                        <option value='M'>$langMonthsAbstract</option>
+                      <select class='form-control' name='frequencyperiod' id='frequencyperiod'>
+                        <option value=\"\">$langSelectFromMenu...</option>
+                        <option value=\"D\"{$selected['D']}>$langDays</option>
+                        <option value=\"W\"{$selected['W']}>$langWeeks</option>
+                        <option value=\"M\"{$selected['M']}>$langMonthsAbstract</option>
                     </select>
               </div>
-              <label for='enddate' class='col-sm-2 control-label'>$langUntil:</label>
-              <div class='col-sm-2'>
-                   <input class='form-control' type='text' name='enddate' id='enddate' value=''>
+              <div class='input-append date' id='enddatecal' data-date='$langDate' data-date-format='dd-mm-yyyy'>
+                <label for='enddate' class='col-sm-2 control-label'>$langUntil:</label>
+                <div class='col-sm-4'>
+                  <div class='input-group'>
+                     <input class='form-control' type='text' name='enddate' id='enddate' value='$enddate' type='text' >
+                     <div class='input-group-addon'><span class='add-on'><i class='fa fa-calendar fa-fw'></i></span></i></div>
+                  </div>
+                </div>
               </div>
             </div>";
-        }
         if (!isset($_GET['addAdminEvent']) && !isset($_GET['admin'])) {
             $eventtype = 'personal';
             $tool_content .= "
@@ -329,7 +451,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
         $tool_content .= "
             <div class='form-group'>
               <div class='col-sm-10 col-sm-offset-2'>
-                   <input class='btn btn-primary' type='submit' name='submitEvent' value='$langSubmit'>
+                   <input class='btn btn-primary' type='button' id='submitEvent' name='submitEvent' value='$langSubmit'>
                    <a class='btn btn-default' href='index.php'>$langCancel</a>
               </div>
             </div>            

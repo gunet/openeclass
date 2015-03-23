@@ -170,20 +170,24 @@ if (!class_exists('Question')):
          */
         function selectTypeWord($answerTypeId) {
             global $langUniqueSelect, $langMultipleSelect, $langFillBlanks, 
-                   $langMatching, $langTrueFalse, $langFreeText;
+                   $langMatching, $langTrueFalse, $langFreeText, 
+                   $langFillBlanksStrict, $langFillBlanksTolerant;
+                   
             switch ($answerTypeId) {
                 case UNIQUE_ANSWER:
                     return $langUniqueSelect;
                 case MULTIPLE_ANSWER:
                     return $langMultipleSelect;
                 case FILL_IN_BLANKS:
-                    return $langFillBlanks;
+                    return "$langFillBlanks ($langFillBlanksStrict)";
                 case MATCHING:
                     return $langMatching;
                 case TRUE_FALSE:    
                     return $langTrueFalse;
                 case FREE_TEXT:    
                     return $langFreeText;
+                case FILL_IN_BLANKS_TOLERANT:
+                    return "$langFillBlanks ($langFillBlanksTolerant)";                    
             }            
         }
         /**
@@ -361,7 +365,7 @@ if (!class_exists('Question')):
          */
         function save($exerciseId = 0) {
             global $course_id;
-
+            
             $id = $this->id;
             $question = $this->question;
             $description = $this->description;
@@ -467,15 +471,16 @@ if (!class_exists('Question')):
             $answers = Database::get()->queryArray("SELECT * FROM exercise_answer_record WHERE eurid = ?d AND question_id = ?d", $eurid, $question_id);    
             $i = 1;
             foreach ($answers as $row) {
-                if ($type == 1 || $type == 5) {
+                
+                if ($type == UNIQUE_ANSWER || $type == TRUE_FALSE) {
                     $choice = $row->answer_id;
-                } elseif ($type == 2) {
+                } elseif ($type == MULTIPLE_ANSWER) {
                     $choice[$row->answer_id] = 1;
-                } elseif ($type == 6) {
+                } elseif ($type == FREE_TEXT) {
                     $choice = $row->answer;
-                } elseif ($type == 3) {
+                } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) {
                     $choice[$row->answer_id] = $row->answer;
-                } elseif ($type == 4) {
+                } elseif ($type == MATCHING) {
                     $choice[$row->answer] = $row->answer_id;
                 }
                
@@ -556,19 +561,19 @@ if (!class_exists('Question')):
                         }
                     }
                     $q_correct_answers_cnt = $i-1;
-            } elseif ($type == FILL_IN_BLANKS) { // Works Great                              
+            } elseif ($type == FILL_IN_BLANKS || $type == FILL_IN_BLANKS_TOLERANT) { // Works Great                              
                $answer_field = $objAnswerTmp->selectAnswer($nbrAnswers);
                //splits answer string from weighting string
                list($answer, $answerWeighting) = explode('::', $answer_field);
                //getting all matched strings between [ and ] delimeters
                preg_match_all('#\[(.*?)\]#', $answer, $match);
-
                $i=1;
+               $sql_binary_comparison = $type == FILL_IN_BLANKS ? 'BINARY ' : '';
                foreach ($match[1] as $value){
                    $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
-                   $q_correct_answers_sql .= "(a.answer = '$value'  AND a.answer_id = $i)";
+                   $q_correct_answers_sql .= "(a.answer = $sql_binary_comparison'$value' AND a.answer_id = $i)";
                    $q_incorrect_answers_sql .= ($i!=1) ? ' OR ' : '';                     
-                   $q_incorrect_answers_sql .= "(a.answer != '$value'  AND a.answer_id = $i)";                
+                   $q_incorrect_answers_sql .= "(a.answer != $sql_binary_comparison'$value' AND a.answer_id = $i)";                
                    $i++;
                }
                 $q_correct_answers_cnt = $i-1;

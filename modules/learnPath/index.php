@@ -346,10 +346,11 @@ if ($is_editor) {
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary-label',
                         'button-class' => 'btn-success'),
-                    array('title' => $langimportLearningPath,
+                    array('title' => $langimportLearningPathSort,
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
-                        'level' => 'secondary',),
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
                     array('title' => $langTrackAllPathExplanation,
                         'url' => "detailsAll.php?course=$course_code",
                         'icon' => 'fa-line-chart',
@@ -362,14 +363,6 @@ if ($is_editor) {
             </div>
         </div>";
     }
-} else {
-    $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                'url' => "javascript:history.back();",
-                'icon' => 'fa-reply',
-                'level' => 'primary-label'
-            )
-        ));
 }
 
 // check if there are learning paths available
