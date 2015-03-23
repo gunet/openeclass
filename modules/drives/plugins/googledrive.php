@@ -20,9 +20,10 @@
  * ======================================================================== 
  */
 
+require_once 'oauthdrive.php';
 require_once 'google-api-php-client/autoload.php';
 
-final class GoogleDrive extends CloudDrive {
+final class GoogleDrive extends OAuthDrive {
 
     private $client = null;
 

@@ -256,10 +256,12 @@ final class Database {
     }
 
     private function findErrorCallback($arguments, &$offset) {
-        if ($arguments && count($arguments) > $offset && is_callable($arguments[$offset])) {
-            $func = $arguments[$offset];
-            $offset++;
-            return $func;
+        if ($arguments && count($arguments) > $offset) {
+            $funcTest = $arguments[$offset];
+            if (is_object($funcTest) && is_callable($funcTest)) {
+                $offset++;
+                return $funcTest;
+            }
         }
         return null;
     }

@@ -217,10 +217,11 @@ if ($u) {
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langFaculty:</label>
         <div class='col-sm-10'>";
-        if (isDepartmentAdmin())
+        if (isDepartmentAdmin()) {
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u), 'allowables' => $user->getDepartmentIds($uid)));
-        else
+        } else {
             list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $user->getDepartmentIds($u)));
+        }
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</div></div>

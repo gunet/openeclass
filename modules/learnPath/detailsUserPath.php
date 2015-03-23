@@ -122,21 +122,34 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
     }
 }
 
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "detailsUser.php?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')),false);
 
+$tool_content .= "
+        <div class='row margin-bottom-thin'>
+            <div class='col-xs-12'>
+                <div>
+                    <b>$langLearnPath:</b> <span class='text-muted'>$LPname</span>
+                </div>
+                <div>
+                    <b>$langStudent:</b> <span class='text-muted'>".q($uDetails->surname) . "&nbsp;" . q($uDetails->givenname) . " (" . q($uDetails->email).")</span>
+                </div>
+            </div>
+        </div>
+        ";
 // -------------------- table header ----------------------------
-$tool_content .= '
-    <table width="99%" class="tbl_alt">' . "\n"
+$tool_content .= '<div class="table-responsive">
+    <table class="table-default">' . "\n"
         // ------------------- some user details --------------------------
-        . '    <tr class="odd">' . "\n"
-        . '      <td colspan="' . ($maxDeep + 1) . '" class="left"><small><b>' . $langLearnPath . '</b>:&nbsp;' . $LPname . '</small></td>' . "\n"
-        . '      <td colspan="' . ($maxDeep + 4) . '" class="right"><small><b>' . $langStudent . '</b>: ' . q($uDetails->surname) . ' ' . q($uDetails->givenname) . ' (' . q($uDetails->email) . ')</small></td>' . "\n"
-        . '    </tr>' . "\n"
-        . '    <tr>' . "\n"
+        . '    <tr class="list-header">' . "\n"
         . '      <th colspan="' . ($maxDeep + 1) . '">' . $langLearningObjects . '</th>' . "\n"
         . '      <th>' . $langLastSessionTimeSpent . '</th>' . "\n"
         . '      <th>' . $langTotalTimeSpent . '</th>' . "\n"
         . '      <th>' . $langLessonStatus . '</th>' . "\n"
-        . '      <th colspan="2">' . $langProgress . '</th>' . "\n"
+        . '      <th>' . $langProgress . '</th>' . "\n"
         . '    </tr>' . "\n";
 
 // ---------------- display list of elements ------------------------
@@ -248,9 +261,8 @@ foreach ($flatElementList as $module) {
     if ($module['contentType'] != CTLABEL_) {
         // display the progress value for current module
         $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n";
-        $tool_content .= '<td align="left" width="10">&nbsp;' . $progress . '%</td>' . "\n";
     } else { // label
-        $tool_content .= '      <td colspan="2">&nbsp;</td>' . "\n";
+        $tool_content .= '      <td>&nbsp;</td>' . "\n";
     }
 
     if ($progress > 0) {
@@ -264,21 +276,20 @@ foreach ($flatElementList as $module) {
 }
 
 if ($moduleNb == 0) {
-    $tool_content .= '    <tr class="odd">' . "\n" . '<td align="center" colspan="7">' . $langNoModule . '</td>' . "\n" . '    </tr>' . "\n";
+    $tool_content .= '    <tr class="odd">' . "\n" . '<td align="center" colspan="5">' . $langNoModule . '</td>' . "\n" . '    </tr>' . "\n";
 } elseif ($moduleNb > 0) {
     // display global stats
     $tool_content .= '    <tr class="odd">' . "\n"
-            . '      <td colspan="' . ($maxDeep + 1) . '">&nbsp;</td>' . "\n"
-            . '      <td align="right">' . (($global_time != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . '</td>' . "\n"
-            . '      <td align="center">' . (($global_time != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;') . '</td>' . "\n"
-            . '<td align="right"><small>' . $langGlobalProgress . '</small></td>' . "\n"
-            . '<td align="right">'
+            . '      <th colspan="' . ($maxDeep + 1) . '">&nbsp;</th>' . "\n"
+            . '      <th align="right">' . (($global_time != "0000:00:00") ? $langTimeInLearnPath : '&nbsp;') . '</th>' . "\n"
+            . '      <th align="center">' . (($global_time != "0000:00:00") ? preg_replace("/\.[0-9]{0,2}/", "", $global_time) : '&nbsp;') . '</th>' . "\n"
+            . '<th align="right"><small>' . $langGlobalProgress . '</small></th>' . "\n"
+            . '<th align="right">'
             . disp_progress_bar(round($globalProg / ($moduleNb)), 1)
-            . '</td>' . "\n"
-            . '      <td align="left"><small>&nbsp;' . round($globalProg / ($moduleNb)) . '%</small></td>' . "\n"
+            . '</th>' . "\n"
             . '    </tr>';
 }
-$tool_content .= "\n</table>\n";
+$tool_content .= "\n</table></div>\n";
 
 draw($tool_content, 2, null, $head_content);
 

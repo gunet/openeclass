@@ -3,6 +3,7 @@
 // Message file for language es
 // Generated 2015-02-19 15:55:36
 
+$langLocale = 'es_ES.UTF-8';
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
 $langVersion = "$siteName versión";
@@ -3094,6 +3095,7 @@ $langTill = "to";
 $langDelAllWorkSubs = "Delete all course assignments' submissions";
 $langPurgeExercise = "Delete Exercise";
 $langPurgeExerciseSuccess = "Exercise successfully deleted.";
+$langExerciseCompleted = "Exercise has been successfully completed.";
 $langConfirmPurgeExercise = "Exercise Delete Confirmation";
 $langPurgeExerciseResultsSuccess = "Exercise results were successfully deleted.";
 $langConfirmPurgeExerciseResults = "Execise results delete confirmation";
@@ -3102,7 +3104,7 @@ $langLeaveExerciseWarning = "BEWARE! Leaving this exercise your attempt will be 
 $langTemporarySave = "Save Temporary";
 $langAttendance = "Attendance";
 $langAttendanceManagement = "Attendance Management";
-$langAttendanceAddActivity = "Add activity";
+$langAttendanceAddActivity = "Activity";
 $langAttendanceActivityDate = "Activity date";
 $langAttendanceActivityDate2 = "Date";
 $langAttendanceBook = "Attendance entry";
@@ -3137,7 +3139,7 @@ $langAttendanceActivity = "Activity";
 $langAttendanceAutoBook = "Record attendance automatically";
 $langGradebook = "Gradebook";
 $langGradebookManagement = "Gradebook management";
-$langGradebookAddActivity = "Add new activity";
+$langGradebookAddActivity = "New activity";
 $langGradebookActivityDescription = "Description";
 $langGradebookActivityDate = "Activity date";
 $langGradebookActivityDate2 = "Date";
@@ -3754,7 +3756,10 @@ $langDefaultThemeSettings = 'Open eClass Default';
 $langThemeSettingsDelete = 'Are you sure you want to delete this theme?';
 $langThemeSettingsName = "Theme Name";
 $langGeneralSettings = 'General Settings';
-$langContainerWidth = 'Container Width';
+$langLayout = 'Layout';
+$langFluid = 'Fluid';
+$langBoxed = 'Boxed';
+$langFluidContainerWidth = 'Max Container Width';
 $langLogo = 'Logo';
 $langLogoNormal = "(Normal)";
 $langLogoSmall = "(Small displays)";

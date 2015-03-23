@@ -891,7 +891,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                 }
 
                 // elegxoume an to contentType prepei na einai scorm h asset
-                if (isset($manifestData['scos'][$item['identifierref']]['contentTypeFlag']) && $manifestData['scos'][$item['identifierref']]['contentTypeFlag'] == CTSCORMASSET_) {
+                if (isset($manifestData['scos'][$item['identifierref']]['href']) and parse_url($manifestData['scos'][$item['identifierref']]['href'],  PHP_URL_HOST) !== null) {
+                    $contentType = CTLINK_;
+                } elseif (isset($manifestData['scos'][$item['identifierref']]['contentTypeFlag']) && $manifestData['scos'][$item['identifierref']]['contentTypeFlag'] == CTSCORMASSET_) {
                     $contentType = CTSCORMASSET_;
                 } else {
                     $contentType = CTSCORM_;
@@ -942,7 +944,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                     $extraPath = "";
                 }
 
-                $assetPath = "/"
+                if ($contentType == CTLINK_) {
+                    $assetPath = $manifestData['scos'][$item['identifierref']]['href'];
+                } else {
+                    $assetPath = "/"
                         . $manifestData['xml:base']['manifest']
                         . $manifestData['xml:base']['ressources']
                         . $extraPath
@@ -951,6 +956,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         . $manifestData['scos'][$item['identifierref']]['parameters']
                         . $manifestData['assets'][$item['identifierref']]['parameters']
                         . $manifestData['items'][$item['itemIdentifier']]['parameters'];
+                }
 
                 // create new asset
                 // array of all inserted asset ids
@@ -1104,28 +1110,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
         </div>
     ";
     // Upload Form section
+    enableCheckFileSize();
     $tool_content .="
         <div class='row'>
             <div class='col-sm-12'>
                 <div class='form-wrapper'>
+                    <h4 class='form-heading'>$langImport</h4>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
-                        <fieldset>
-                            <legend>$langImport</legend>
-                            <div class='form-group'>
-                                <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
-                                <div class='col-sm-10'>
-                                    <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >
-                                    <input id='uploadedPackage' type='file' name='uploadedPackage'>
-                                    <span class='smaller'>$langLearningPathUploadFile</span>
-                                    <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
-                                </div>
+                        <div class='form-group'>
+                            <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
+                            <div class='col-sm-10'>
+                                <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
+                                fileSizeHidenInput() . "
+                                <input id='uploadedPackage' type='file' name='uploadedPackage'>
+                                <span class='smaller'>$langLearningPathUploadFile</span>
+                                <span class='smaller'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</span>
                             </div>
-                            <div class='form-group'>
-                                <div class='col-sm-offset-2 col-sm-10'>
-                                    <input class='btn btn-primary' type='submit' value='$langImport' >
-                                </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-offset-2 col-sm-10'>
+                                <input class='btn btn-primary' type='submit' value='$langImport' >
                             </div>
-                        </fieldset>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -1156,9 +1162,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     }
 
 
-    $tool_content .= "\n<div class=\"fileman\">";
+    $tool_content .= "\n<div class=\"fileman row\">";
+    $tool_content .= "\n<div class=\"col-xs-12\">";
     $tool_content .= "\n<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
-    $tool_content .= "\n  <fieldset><legend>$langLearningPathImportFromDocuments</legend>";
+    $tool_content .= "\n  <h4 class='form-heading'>$langLearningPathImportFromDocuments</h4>";
     $tool_content .= "\n  <table width=\"100%\" class=\"tbl_alt_bordless\">";
     $tool_content .= "\n  <tbody>";
 
@@ -1242,11 +1249,18 @@ EOF;
 
     $tool_content .= "\n  </tbody>";
     $tool_content .= "\n  </table>";
-    $tool_content .= "\n  </fieldset>";
     $tool_content .= "\n</form>";
     $tool_content .= "\n</div>";
+    $tool_content .= "\n</div>";
 
-    $tool_content .= "<p class='right smaller'>$langNote:<br/>$langScormIntroTextForDummies</p>";
+    $tool_content .= "
+            <div class='row'>
+                <div class='col-xs-12 notice add-gutter'>
+                    <p class='notice-header'>$langNote:</p>
+                    <p class='notice-body text-muted'>$langScormIntroTextForDummies</p>
+                </div>
+            </div>
+            ";
 } // else if method == 'post'
 
 chdir($pwd);

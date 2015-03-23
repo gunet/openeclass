@@ -56,6 +56,7 @@ jQuery(document).ready(function() {
         placeholder : '$langSearch...'
       });
     },
+    'dom': '<\"all_courses\">frtip',
     'oLanguage': {
            'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
            'sZeroRecords':  '".$langNoResult."',
@@ -73,6 +74,7 @@ jQuery(document).ready(function() {
            }
        }    
   });
+  $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');  
   jQuery('.panel_content').hide();
    jQuery('.panel_content_open').show();
   jQuery('.panel_title').click(function()
@@ -255,7 +257,7 @@ $tool_content .= "
                               <span class='text-muted'>$langSumCoursesSupport</span>
                             </li>
                         </ul>
-                        <div class='quick-change-pwd'><a href='".$urlSecure."main/profile/password.php'>$langProfileQuickPassword</a></div>
+                        <div class='quick-change-pwd'><a href='".$urlServer."main/profile/password.php'>$langProfileQuickPassword</a></div>
                     </div>
                 </div>
             </div>

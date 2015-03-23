@@ -1,10 +1,10 @@
 <?php
 
 /* ========================================================================
- * Open eClass 2.4
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2011  Greek Universities Network - GUnet
+ * Copyright 2003-2014  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -21,7 +21,7 @@
 
 
 if (!function_exists('ldap_connect')) { // Is php4-ldap really there?
-    $tool_content .= "<div class='alert alert-danger'<strong>$langLdapNotWork.</div>";
+    $tool_content .= "<div class='alert alert-danger'>$langLdapNotWork</div>";
 }
 
 $ldapdata = $auth_data;
@@ -29,6 +29,7 @@ $ldapdata = $auth_data;
 if (!empty($ldapdata)) {
     $ldapsettings = $ldapdata['auth_settings'];
     $auth_instructions = $ldapdata['auth_instructions'];
+    $auth_title = $ldapdata['auth_title'];
     if (!empty($ldapsettings)) {
         $ldap = explode('|', $ldapsettings);
         $ldaphost = str_replace('ldaphost=', '', $ldap[0]);
@@ -51,6 +52,7 @@ if (!empty($ldapdata)) {
 } else {
     $ldapsettings = $ldapdata['auth_settings'];
     $auth_instructions = $ldapdata['auth_instructions'];
+    $auth_title = $ldapdata['auth_title'];
     $ldaphost = $ldapsettings;
 }
 
@@ -92,8 +94,14 @@ $tool_content .= "
         </div>
     </div>
     <div class='form-group'>
+        <label for='auth_title' class='col-sm-2 control-label'>$langAuthTitle:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='auth_title' id='auth_title' type='text' value='" . q($auth_title) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
         <label for='auth_instructions' class='col-sm-2 control-label'>$langInstructionsAuth:</label>
         <div class='col-sm-10'>
-            <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='10'>" . q($auth_instructions) . "</textarea>
+            <textarea class='form-control' name='auth_instructions' id='auth_instructions' rows='4'>" . q($auth_instructions) . "</textarea>
         </div>
     </div>";

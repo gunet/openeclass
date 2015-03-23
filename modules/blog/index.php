@@ -97,21 +97,21 @@ if ($is_editor) {
             $checkStud = "";
         }
         if (setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id) == 1) {
-        	$checkDis = "";
-        	$checkEn = "checked ";
+        	$checkCommentDis = "";
+        	$checkCommentEn = "checked ";
         } else {
-        	$checkDis = "checked ";
-        	$checkEn = "";
+        	$checkCommentDis = "checked ";
+        	$checkCommentEn = "";
         }
         if (setting_get(SETTING_BLOG_RATING_ENABLE, $course_id) == 1) {
-        	$checkDis = "";
-        	$checkEn = "checked ";
+        	$checkRatingDis = "";
+        	$checkRatingEn = "checked ";
         } else {
-        	$checkDis = "checked ";
-        	$checkEn = "";
+        	$checkRatingDis = "checked ";
+        	$checkRatingEn = "";
         }
         if (!$sharing_allowed) {
-            $radio_dis = " disabled";
+            $sharing_radio_dis = " disabled";
             $sharing_dis_label = "<tr><td><em>";
             if (!get_config('enable_social_sharing_links')) {
                 $sharing_dis_label .= $langSharingDisAdmin;
@@ -121,16 +121,16 @@ if ($is_editor) {
             }
             $sharing_dis_label .= "</em></td></tr>";
         } else {
-            $radio_dis = "";
+            $sharing_radio_dis = "";
             $sharing_dis_label = "";
         }
 		
         if ($sharing_enabled == 1) {
-            $checkDis = "";
-            $checkEn = "checked";
+            $checkSharingDis = "";
+            $checkSharingEn = "checked";
         } else {
-            $checkDis = "checked";
-            $checkEn = "";
+            $checkSharingDis = "checked";
+            $checkSharingEn = "";
         }
         
         
@@ -162,12 +162,12 @@ if ($is_editor) {
                                     <div class='col-sm-9'>    
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' value='1' name='2_radio' $checkEn>$langCommentsEn
+                                                <input type='radio' value='1' name='2_radio' $checkCommentEn>$langCommentsEn
                                             </label>
                                         </div>
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' value='0' name='2_radio' $checkDis>$langCommentsDis
+                                                <input type='radio' value='0' name='2_radio' $checkCommentDis>$langCommentsDis
                                             </label>
                                         </div>
                                     </div>
@@ -177,12 +177,12 @@ if ($is_editor) {
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' value='1' name='3_radio' $checkEn>$langRatingEn
+                                                <input type='radio' value='1' name='3_radio' $checkRatingEn>$langRatingEn
                                             </label>
                                         </div>
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' value='0' name='3_radio' $checkDis>$langRatingDis
+                                                <input type='radio' value='0' name='3_radio' $checkRatingDis>$langRatingDis
                                             </label>
                                         </div>
                                     </div>
@@ -192,12 +192,12 @@ if ($is_editor) {
                                     <div class='col-sm-9'>
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' value='1' name='4_radio' $checkEn $radio_dis>$langSharingEn
+                                                <input type='radio' value='1' name='4_radio' $checkSharingEn $sharing_radio_dis>$langSharingEn
                                             </label>
                                         </div>
                                         <div class='radio'>
                                             <label>
-                                                <input type='radio' value='0' name='4_radio' $checkDis $radio_dis>$langSharingDis
+                                                <input type='radio' value='0' name='4_radio' $checkSharingDis $sharing_radio_dis>$langSharingDis
                                             </label>
                                         </div>
                                     </div>
@@ -295,7 +295,7 @@ if ($action == "editPost") {
                 <div class='form-group'>
                     <label for='newContent' class='col-sm-2 control-label'>$langBlogPostBody:</label>
                     <div class='col-sm-10'>
-                        ".rich_text_editor('newContent', 4, 20, '', $post->getContent())."
+                        ".rich_text_editor('newContent', 4, 20, $post->getContent())."
                     </div>
                 </div>
                 <div class='form-group'>

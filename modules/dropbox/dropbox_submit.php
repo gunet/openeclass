@@ -115,7 +115,7 @@ if (isset($_POST['submit'])) {
             } else {
                 $subject = $langMessage;
             }
-            
+
             $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
         } else {
             $cwd = getcwd();
@@ -132,10 +132,10 @@ if (isset($_POST['submit'])) {
             if ($filesize + $dropbox_space > $diskQuotaDropbox) {
                 $errormsg = $langNoSpace;
                 $error = TRUE;
-            } elseif (!is_uploaded_file($filetmpname)) { // check user found : no clean error msg 
+            } elseif (!is_uploaded_file($filetmpname)) { // check user found : no clean error msg
                 die($langBadFormData);
             }
-            // set title                       
+            // set title
             if (isset($_POST['message_title']) and $_POST['message_title'] != '') {
                 $subject = $_POST['message_title'];
             } else {
@@ -150,11 +150,12 @@ if (isset($_POST['submit'])) {
                 $filename_final = $dropbox_dir . '/' . $filename;
                 move_uploaded_file($filetmpname, $filename_final) or die($langUploadError);
                 @chmod($filename_final, 0644);
-                
+
                 $msg = new Msg($uid, $cid, $subject, $_POST['body'], $recipients, $filename, $real_filename, $filesize);
-            }            
+            }
             chdir($cwd);
-        }        
+        }
+        $msgURL = $urlServer . 'modules/dropbox/index.php?mid=' . $msg->id;
         if (isset($_POST['mailing']) and $_POST['mailing']) { // send mail to recipients of dropbox file
             if ($course_id != 0 || isset($_POST['course'])) {//message in course context
                 $c = course_id_to_title($cid);
@@ -167,7 +168,7 @@ if (isset($_POST['submit'])) {
                         if ($filesize > 0) {
                                 $body_dropbox_message .= "<a href='${urlServer}modules/dropbox/dropbox_download.php?course=".course_id_to_code($cid)."&amp;id=$msg->id'>[$langAttachedFile]</a><br /><br />";
                         }
-                        $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php?course=".course_id_to_code($cid)."'>$langHere</a>.<br />";
+                        $body_dropbox_message .= "$langNote: $langDoNotReply <a href='$msgURL'>$langHere</a>.<br />";
                         $body_dropbox_message .= "$unsubscribe $linkhere";
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
@@ -181,7 +182,7 @@ if (isset($_POST['submit'])) {
                         $linkhere = "<a href='${urlServer}main/profile/profile.php'>$langHere</a>.";
                         //$unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $title);
                         $body_dropbox_message = "$langSender: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). " <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
-                        $body_dropbox_message .= "$langNote: $langDoNotReply <a href='${urlServer}modules/dropbox/index.php'>$langHere</a>.<br />";
+                        $body_dropbox_message .= "$langNote: $langDoNotReply <a href='$msgURL'>$langHere</a>.<br />";
                         //$body_dropbox_message .= "$unsubscribe $linkhere";
                         $plain_body_dropbox_message = html2text($body_dropbox_message);
                         $emailaddr = uid_to_email($userid);
@@ -190,15 +191,11 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
-        $tool_content .= "<div class='alert alert-success'>$langdocAdd<br>";
+        Session::Messages($langdocAdd, 'alert-success');
     } else { //end if(!$error)
-        $tool_content .= "<div class='alert alert-danger'>$errormsg<br>";
+        Session::Messages($errormsg, 'alert-danger');
     }
-    if ($course_id == 0) {
-        $tool_content .= "<a href='index.php'>$langBack</a></div><br>";
-    } else {
-        $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div><br>";
-    }
+    redirect_to_home_page('modules/dropbox/' . ($course_id? "?course=$course_code": ''));
 }
 
 if ($course_id == 0) {

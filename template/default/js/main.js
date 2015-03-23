@@ -36,17 +36,29 @@ function act_confirm() {
         });
     });
 }
+
 function popover_init() {
+    var click_in_process = false;
     var hidePopover = function () {
-        $(this).popover('hide');
+        if (!click_in_process) {
+            $(this).popover('hide');
+        }
     }
     , togglePopover = function () {
         $(this).popover('toggle');
     };
     $('[data-toggle="popover"]').popover().on('click', togglePopover).on('blur', hidePopover);
     $('[data-toggle="popover"]').on('shown.bs.popover', function () {
+        $('.popover').mousedown(function () {
+            click_in_process = true;
+        });
+        $('.popover').mouseup(function () {
+            click_in_process = false;
+            $(this).popover('hide');
+        });
         act_confirm();
     });
+
 }
 function tooltip_init() {
     $('[data-toggle=tooltip]').tooltip({container: 'body'});
@@ -61,17 +73,35 @@ $(document).ready(function () {
     animate_btn();
     tooltip_init();
     popover_init();
-    
+
+    // Login Box
+    var width;
+    var count = $('.login-form .wrapper-login-option').children().length;
+
+
+    if (count == '2') {
+        $('.login-form .wrapper-login-option > .login-option button.option-btn-login:not([data-target="2"])').removeClass('hide');
+    } else if (count == '3') {
+        $('.login-form .wrapper-login-option > .login-option button.option-btn-login').removeClass('hide');
+    }
+
+    $('.login-option button.option-btn-login').on('click', function () {
+        width = $('.login-form').outerWidth();
+        var tar = $(this).attr('data-target');
+        tar = -(tar * 100);
+        $(this).parents('.wrapper-login-option').css('margin-left', tar + '%')
+    });
+
     // Action Bar Placeholder
     var action_bar = $('.action_bar').length;
-    if( !action_bar ) {
-        $('div.title-row').css('margin-bottom','24px');
+    if (!action_bar) {
+        $('div.title-row').css('margin-bottom', '24px');
     }
-    
-    $('body').on('click', 'a.disabled', function(e) {
+
+    $('body').on('click', 'a.disabled', function (e) {
         e.preventDefault();
     });
-    $('body').on('click', 'a.back_btn', function(e) {
+    $('body').on('click', 'a.back_btn', function (e) {
         e.preventDefault();
         javascript:window.history.back();
     });

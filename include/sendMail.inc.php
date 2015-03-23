@@ -52,12 +52,12 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body, $cha
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header
 function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $body_plain, $body_html, $charset) {
-    global $emailAnnounce;
-
+    
+    $emailAnnounce = get_config('email_announce');
     $body_html = add_host_to_urls($body_html);
 
     if (count($to_address) > 1) {
-        if (isset($emailAnnounce)) {
+        if (isset($emailAnnounce) and (!(empty($emailAnnounce)))) {
             if (empty($to)) {
                 $to_header = $emailAnnounce;
             } else {
@@ -130,8 +130,8 @@ function from($from, $from_address) {
 
 // Determine the correct Reply-To: header if needed
 function reply_to($from, $from_address, $extra_headers='') {
-    global $siteName, $emailAdministrator, $emailAnnounce, $charset;
-
+    global $emailAdministrator, $charset;
+        
     // Don't include reply-to if it has been provided by caller
     if (strpos(strtolower($extra_headers), 'reply-to:') !== false) {
         return '';

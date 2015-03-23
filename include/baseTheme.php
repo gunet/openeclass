@@ -54,7 +54,7 @@ if (isset($toolContent_ErrorExists)) {
     session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlSecure . "main/login_form.php?next=" . urlencode($next));
+        header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
     } else {
         header("Location:" . $urlServer . "index.php");
     }
@@ -90,7 +90,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
-        $toolContent_ErrorExists, $urlAppend, $urlSecure, $urlServer,
+        $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor,
         $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
 
@@ -125,7 +125,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     } elseif (!$pageName and $toolName) {
         $pageName = $toolName;
     }
-    $pageTitle = $siteName;    
+    $pageTitle = $siteName;
     $is_mobile = (isset($_SESSION['mobile']) && $_SESSION['mobile'] == true);
     $is_embedonce = (isset($_SESSION['embedonce']) && $_SESSION['embedonce'] == true);
     unset($_SESSION['embedonce']);
@@ -158,7 +158,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         //Remove search if not enabled
         if (!get_config('enable_search')) {
             $t->set_block('mainBlock', 'searchBlock', 'delete');
-        }        
+        }
         $t->set_var('leftNavClass', 'no-embed');
     }
 
@@ -263,6 +263,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('PROFILE_LINK', $urlServer . "main/profile/display_profile.php");
         $t->set_var('LANG_MESSAGES', $GLOBALS['langMyDropBox']);
         $t->set_var('MESSAGES_LINK', $urlServer . "modules/dropbox/index.php");
+        $t->set_var('LANG_COURSES', $GLOBALS['langMyPersoLessons']);
+        $t->set_var('COURSES_LINK', $urlServer . "main/my_courses.php");        
         $t->set_var('LANG_AGENDA', $langMyAgenda);
         $t->set_var('AGENDA_LINK', $urlServer . "main/personal_calendar/index.php");
         $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);
@@ -286,8 +288,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LOGGED_IN', 'true');
     } else {
         if (!get_config('dont_display_login_form')) {
+            $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
+            if (preg_match('@(?:^/(?:modules|courses)|listfaculte|opencourses|openfaculties)@', $next)) {
+                $nextParam = '?next=' . urlencode($next);
+            } else {
+                $nextParam = '';
+            }
             $t->set_var('LANG_LOGOUT', $langLogin);
-            $t->set_var('LOGOUT_LINK', $urlSecure . 'main/login_form.php');
+            $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php' . $nextParam);
         } else {
             $t->set_var('LOGOUT_LINK', '#');
         }
@@ -390,7 +398,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
                 $t->parse('breadCrumbEntry', 'breadCrumbEntryBlock', true);
             }
         }
-        
+
         // Breadcrumb course home entry
         if (isset($course_code)) {
             $t->set_var('BREAD_TEXT', q(ellipsize($currentCourseName, 48)));
@@ -440,18 +448,21 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if (!$is_embedonce) {
         if ($is_mobile) {
             $t->set_block('mainBlock', 'normalViewOpenDiv', 'delete');
+            $t->set_block('mainBlock', 'headerBlock', 'delete');
         } else {
             $t->set_block('mainBlock', 'mobileViewOpenDiv', 'delete');
         }
     }
-    
+
     // Add Theme Options styles
     $t->set_var('logo_img', $themeimg.'/eclass-new-logo.png');
     $t->set_var('logo_img_small', $themeimg.'/logo_eclass_small.png');
+    $t->set_var('container', 'container');
     $theme_id = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : get_config('theme_options_id');
     if ($theme_id) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
+        $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
         $styles_str = '';
         if (!empty($theme_options_styles['bgColor']) || !empty($theme_options_styles['bgImage'])) {
             $background_type = "";
@@ -460,19 +471,20 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             } elseif(isset($theme_options_styles['bgType']) && $theme_options_styles['bgType'] == 'fix') {
                 $background_type .= "background-size: 100% 100%;background-attachment: fixed;";
             }
-            $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[bgImage]')" : "";
+            $bg_image = isset($theme_options_styles['bgImage']) ? " url('$urlThemeData/$theme_options_styles[bgImage]')" : "";
             $bg_color = isset($theme_options_styles['bgColor']) ? $theme_options_styles['bgColor'] : "";
             $styles_str .= "body{background: $bg_color$bg_image;$background_type}";
         }
         $gradient_str = 'radial-gradient(closest-corner at 30% 60%, #009BCF, #025694)';
         if (!empty($theme_options_styles['loginJumbotronBgColor']) && !empty($theme_options_styles['loginJumbotronRadialBgColor'])) $gradient_str = "radial-gradient(closest-corner at 30% 60%, $theme_options_styles[loginJumbotronRadialBgColor], $theme_options_styles[loginJumbotronBgColor])";
-        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[loginImg]'), $gradient_str }";
+        if (isset($theme_options_styles['loginImg'])) $styles_str .= ".jumbotron.jumbotron-login { background-image: url('$urlThemeData/$theme_options_styles[loginImg]'), $gradient_str }";
         if (isset($theme_options_styles['loginImgPlacement']) && $theme_options_styles['loginImgPlacement']=='full-width') {
             $styles_str .= ".jumbotron.jumbotron-login {  background-size: cover, cover; background-position: 0% 0%;}";
         }
         //$styles_str .= ".jumbotron.jumbotron-login {  background-size: 353px, cover; background-position: 10% 60%;}";
-        if (isset($theme_options_styles['containerWidth'])){
-            $styles_str .= "@media (min-width: $theme_options_styles[containerWidth]px){.container {width: $theme_options_styles[containerWidth]px;}}";
+        if (isset($theme_options_styles['fluidContainerWidth'])){
+            $t->set_var('container', 'container-fluid');
+            $styles_str .= ".container-fluid {max-width:$theme_options_styles[fluidContainerWidth]px}";
         }
         if (isset($theme_options_styles['openeclassBanner'])){
              $styles_str .= "#openeclass-banner {display: none;}";
@@ -489,14 +501,14 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         if (!empty($theme_options_styles['leftSubMenuFontColor'])) $styles_str .= "#leftnav .panel a {color: $theme_options_styles[leftSubMenuFontColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverBgColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{background: $theme_options_styles[leftSubMenuHoverBgColor];}";
         if (!empty($theme_options_styles['leftSubMenuHoverFontColor'])) $styles_str .= "#leftnav .panel a.list-group-item:hover{color: $theme_options_styles[leftSubMenuHoverFontColor];}";
-        if (!empty($theme_options_styles['leftMenuFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu{color: $theme_options_styles[leftMenuFontColor];}";        
+        if (!empty($theme_options_styles['leftMenuFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu{color: $theme_options_styles[leftMenuFontColor];}";
         if (!empty($theme_options_styles['leftMenuBgColor'])) $styles_str .= "#leftnav .panel a.parent-menu{background: $theme_options_styles[leftMenuBgColor];}";
         if (!empty($theme_options_styles['leftMenuHoverFontColor'])) $styles_str .= "#leftnav .panel .panel-heading:hover {color: $theme_options_styles[leftMenuHoverFontColor];}";
         if (!empty($theme_options_styles['leftMenuSelectedFontColor'])) $styles_str .= "#leftnav .panel a.parent-menu:not(.collapsed){color: $theme_options_styles[leftMenuSelectedFontColor];}";
-        if (isset($theme_options_styles['imageUpload'])) $t->set_var('logo_img', $urlAppend."courses/theme_data/$theme_id/".$theme_options_styles['imageUpload']);        
-        if (isset($theme_options_styles['imageUploadSmall'])) $t->set_var('logo_img_small', $urlAppend."courses/theme_data/$theme_id/".$theme_options_styles['imageUploadSmall']); 
-      
-        $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");        
+        if (isset($theme_options_styles['imageUpload'])) $t->set_var('logo_img', "$urlThemeData/$theme_options_styles[imageUpload]");
+        if (isset($theme_options_styles['imageUploadSmall'])) $t->set_var('logo_img_small', "$urlThemeData/$theme_options_styles[imageUploadSmall]");
+
+        $t->set_var('EXTRA_CSS', "<style>$styles_str</style>");
     }
 
     $t->set_var('TOOL_PATH', $urlAppend);
@@ -529,7 +541,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     if ($require_help == true) {
         if (isset($require_current_course) and !$is_editor) {
             $helpTopic .= '_student';
-        } 
+        }
         $head_content .= "
         <script>
         $(function() {
@@ -540,7 +552,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         });
         </script>
         ";
-                
+
         $help_link_icon = "
 
         <a id='help-btn' href=\"" . $urlAppend . "modules/help/help.php?topic=$helpTopic&amp;language=$language\">
@@ -553,7 +565,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('HELP_LINK_ICON', '');
         $t->set_var('LANG_HELP', '');
     }
-    
+
     if (isset($head_content)) {
         global $webDir; // required by indexer
         require_once 'modules/search/indexer.class.php';
@@ -563,7 +575,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         }
         $t->set_var('HEAD_EXTRAS', $head_content);
     }
-    
+
     if (defined('RSS')) {
         $t->set_var('RSS_LINK_ICON', "
 
@@ -583,7 +595,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
         $t->set_var('LANG_PERSO_FORUM', $langMyPersoForum);
         $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
-        
+
         $t->set_var('LESSON_CONTENT', $lesson_content);
         $t->set_var('ASSIGN_CONTENT', $assigns_content);
         $t->set_var('DOCS_CONTENT', $docs_content);
@@ -734,7 +746,7 @@ function lang_select_options($name, $onchange_js = '', $default_langcode = false
  *
  */
 function module_path($path) {
-    global $urlAppend, $urlServer, $urlSecure;
+    global $urlAppend, $urlServer;
 
     if (strpos($path, 'modules/units/insert.php') !== false) {
         if (strpos($path, '&dir=') !== false) {
@@ -743,8 +755,8 @@ function module_path($path) {
     }
 
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
-    $path = str_replace(array($urlServer, $urlSecure, $urlAppend, 'index.php'),
-                        array('/', '/', '/', ''), $path);
+    $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
+                        array('/', '/', ''), $path);
     if (strpos($path, '/course_info/restore_course.php') !== false) {
         return 'course_info/restore_course.php';
     } elseif (strpos($path, '/info/') !== false) {

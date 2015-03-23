@@ -74,9 +74,15 @@ class CourseXMLElement extends SimpleXMLElement {
      * @param  array  $data - array containing data to preload the form with
      * @return string
      */
+    
     public function asForm($data = null) {
-        global $course_code, $langSubmit, $langRequiredFields;
-        $out = "<div class='right smaller'>$langRequiredFields</div>";
+        global $course_code, $langSubmit, $langRequiredFields, $langBack;;
+        $out = action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')),false);
+        $out .= "<div class='right smaller'>$langRequiredFields</div>";
         $out .= "
                 <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
                 <ul class='nav nav-tabs' role='tablist'>
@@ -278,6 +284,15 @@ class CourseXMLElement extends SimpleXMLElement {
                 $value = 0;
             }
             return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . intval($value) . "' $readonly>" . $fieldEnd;
+        }
+        
+        // float fields
+        if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+            $value = (string) $this;
+            if (empty($value)) {
+                $value = 0;
+            }
+            return $fieldStart . "<input class='form-control' type='text' size='2' name='" . q($fullKey) . "' value='" . CourseXMLConfig::getFloat($value) . "' $readonly>" . $fieldEnd;
         }
 
         // textarea fields
@@ -522,6 +537,8 @@ class CourseXMLElement extends SimpleXMLElement {
             if (!is_array($data[$fullKey])) {
                 if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
                     $this->{0} = intval($data[$fullKey]);
+                } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+                    $this->{0} = CourseXMLConfig::getFloat($data[$fullKey]);
                 } else {
                     $this->{0} = $data[$fullKey];
                 }
@@ -550,6 +567,8 @@ class CourseXMLElement extends SimpleXMLElement {
                         if ($i < count($data[$fullKey])) {
                             if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
                                 $parent->{$name}[$i] = intval($data[$fullKey][$i]);
+                            } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+                                $parent->{$name}[$i] = CourseXMLConfig::getFloat($data[$fullKey][$i]);
                             } else {
                                 $parent->{$name}[$i] = $data[$fullKey][$i];
                             }
@@ -575,6 +594,8 @@ class CourseXMLElement extends SimpleXMLElement {
                         if ($j < count($data[$fullKey])) {
                             if (in_array($fullKeyNoLang, CourseXMLConfig::$integerFields)) {
                                 $this->{0} = intval($data[$fullKey][$j]);
+                            } else if (in_array($fullKeyNoLang, CourseXMLConfig::$floatFields)) {
+                                $this->{0} = CourseXMLConfig::getFloat($data[$fullKey][$j]);
                             } else {
                                 $this->{0} = $data[$fullKey][$j];
                             }
@@ -1147,20 +1168,20 @@ class CourseXMLElement extends SimpleXMLElement {
         $arr[$clang] = $GLOBALS['langCMeta'][$key];
         $revert = false;
         if ($clang != 'en') {
-            include("${webDir}/lang/en/common.inc.php");
-            include("${webDir}/lang/en/messages.inc.php");
-            $arr['en'] = $GLOBALS['langCMeta'][$key];
+            require("${webDir}/lang/en/common.inc.php");
+            require("${webDir}/lang/en/messages.inc.php");
+            $arr['en'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
             $revert = true;
         }
         if ($clang != 'el') {
-            include("${webDir}/lang/el/common.inc.php");
-            include("${webDir}/lang/el/messages.inc.php");
-            $arr['en'] = $GLOBALS['langCMeta'][$key];
+            require("${webDir}/lang/el/common.inc.php");
+            require("${webDir}/lang/el/messages.inc.php");
+            $arr['el'] = $langCMeta[$key]; // do not use GLOBALS here as it will not work
             $revert = true;
         }
         if ($revert) { // revert messages back to current language
-            include("${webDir}/lang/" . $currentCourseLanguage . "/common.inc.php");
-            include("${webDir}/lang/" . $currentCourseLanguage . "/messages.inc.php");
+            require("${webDir}/lang/" . $currentCourseLanguage . "/common.inc.php");
+            require("${webDir}/lang/" . $currentCourseLanguage . "/messages.inc.php");
         }
         return base64_encode(serialize($arr));
     }
@@ -1197,7 +1218,7 @@ class CourseXMLElement extends SimpleXMLElement {
         if ($clang != 'el') {
             include("${webDir}/lang/el/common.inc.php");
             include("${webDir}/lang/el/messages.inc.php");
-            $data['course_language_el'] = $GLOBALS['langNameOfLang'][langcode_to_name($clang)];
+            $data['course_language_el'] = $langNameOfLang[langcode_to_name($clang)]; // do not use GLOBALS here as it will not work
             // revert messages back to current language
             include("${webDir}/lang/" . $clang . "/common.inc.php");
             include("${webDir}/lang/" . $clang . "/messages.inc.php");

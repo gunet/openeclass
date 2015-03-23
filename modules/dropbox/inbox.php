@@ -37,11 +37,11 @@ if (!isset($course_id)) {
 
 if (isset($_GET['mid'])) {
     $personal_msgs_allowed = get_config('dropbox_allow_personal_messages');
-    
+
     $mid = intval($_GET['mid']);
     $msg = new Msg($mid, $uid, 'msg_view');
     if (!$msg->error) {
-       
+
         $urlstr = '';
         if ($course_id != 0) {
             $urlstr = "?course=".$course_code;
@@ -51,7 +51,7 @@ if (isset($_GET['mid'])) {
                                   'url' => "javascript:void(0)",
                                   'icon' => 'fa-edit',
                                   'button-class' => 'btn-reply btn-default',
-                                  'level' => 'primary-label'),            
+                                  'level' => 'primary-label'),
                             array('title' => $langBack,
                                   'url' => "inbox.php".$urlstr,
                                   'icon' => 'fa-reply',
@@ -68,7 +68,7 @@ if (isset($_GET['mid'])) {
             if ($r != $msg->author_id) {
                 $recipients .= display_user($r, false, false, "outtabs").'<br/>';
             }
-        }        
+        }
         $out .= "<div id='del_msg'></div>
                 <div id='msg_area'>
                     <div class='panel panel-primary'>
@@ -79,7 +79,7 @@ if (isset($_GET['mid'])) {
                                 </div>
                                 <div class='col-sm-10'>
                                     ".q($msg->subject)."
-                                </div>  
+                                </div>
                             </div>";
         if ($msg->course_id != 0 && $course_id == 0) {
             $out .= "       <div class='row  margin-bottom-thin'>
@@ -88,17 +88,17 @@ if (isset($_GET['mid'])) {
                                 </div>
                                 <div class='col-sm-10'>
                                     <a class=\"outtabs\" href=\"index.php?course=".course_id_to_code($msg->course_id)."\">".course_id_to_title($msg->course_id)."</a>
-                                </div>                
+                                </div>
                             </div>";
         }
-        $out .= "       
+        $out .= "
                             <div class='row  margin-bottom-thin'>
                                 <div class='col-sm-2'>
                                     <strong>$langDate:</strong>
                                 </div>
                                 <div class='col-sm-10'>
                                     ".nice_format(date('Y-m-d H:i:s',$msg->timestamp), true)."
-                                </div>                
+                                </div>
                             </div>
                             <div class='row  margin-bottom-thin'>
                                 <div class='col-sm-2'>
@@ -106,7 +106,7 @@ if (isset($_GET['mid'])) {
                                 </div>
                                 <div class='col-sm-10'>
                                     ".display_user($msg->author_id, false, false, "outtabs")."
-                                </div>                
+                                </div>
                             </div>
                             <div class='row  margin-bottom-thin'>
                                 <div class='col-sm-2'>
@@ -114,8 +114,8 @@ if (isset($_GET['mid'])) {
                                 </div>
                                 <div class='col-sm-10'>
                                     $recipients
-                                </div>                
-                            </div>                            
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class='panel panel-default'>
@@ -137,10 +137,10 @@ if (isset($_GET['mid'])) {
                     &nbsp<i class='fa fa-save'></i></a>&nbsp;&nbsp;(".format_file_size($msg->filesize).")
                                 </div>
                             </div>";
-               }          
+               }
                $out .= "</div>
                     </div>";
-        
+
         /*****Reply Form****/
         if ($msg->course_id == 0 && !$personal_msgs_allowed) {
             //do not show reply form when personal messages are not allowed
@@ -159,7 +159,7 @@ if (isset($_GET['mid'])) {
                 if ($rec != $uid) {
                     $out .= "<input type='hidden' name='recipients[]' value='$rec' />";
                 }
-            }            
+            }
             $out .= "
                 <fieldset>
                 <legend>$langReply</legend>
@@ -167,78 +167,81 @@ if (isset($_GET['mid'])) {
                         <label for='senderName' class='col-sm-2 control-label'>$langSender:</label>
                         <div class='col-sm-10'>
                             <input name='senderName' type='text' class='form-control' id='senderName' value='" . q(uid_to_name($uid)) . "' disabled>
-                        </div>                            
+                        </div>
                     </div>
                     <div class='form-group'>
                         <label for='message_title' class='col-sm-2 control-label'>$langSubject:</label>
                         <div class='col-sm-10'>
-                            <input name='message_title' type='text' class='form-control' id='message_title' value='".$langMsgRe.$msg->subject."'>
-                        </div>                            
+                            <input name='message_title' type='text' class='form-control' id='message_title' value='" .
+                                q($langMsgRe . ' ' . $msg->subject) . "'>
+                        </div>
                     </div>
                     <div class='form-group'>
                         <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
                         <div class='col-sm-10'>
                             ".rich_text_editor('body', 4, 20, '')."
-                            <span class='help-block'>$langMaxMessageSize</span>        
-                        </div>                            
+                            <span class='help-block'>$langMaxMessageSize</span>
+                        </div>
                     </div>";
-                 
+
             if ($course_id != 0) {
+                enableCheckFileSize();
                 $out .= "<div class='form-group'>
                             <label for='body' class='col-sm-2 control-label'>$langFileName:</label>
-                            <div class='col-sm-10'>
+                            <div class='col-sm-10'>" .
+                                fileSizeHidenInput() . "
                                 <input type='file' name='file' size='35'>
                             </div>
                         </div>";
-            }              
+            }
 $out .=         "
                     <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='mailing' value='1' checked>
-                                        $langMailToUsers                                    
+                                        $langMailToUsers
                                     </label>
                                 </div>
-                                    
-                        </div>                            
-                    </div>     
+
+                        </div>
+                    </div>
                     <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>
                             <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
                             <a id='cancelReply' class='btn btn-default' href='javascript:void(0)'>$langCancel</a>
-                        </div>                            
-                    </div>        
+                        </div>
+                    </div>
                 </fieldset>";
-        
+
             $out .= "
                  <div class='pull-right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                </form></div>";
-    
+
              $out .= "<script type='text/javascript' src='{$urlAppend}js/select2-3.5.1/select2.min.js'></script>\n
                  <script type='text/javascript'>
                         $(document).ready(function () {
-                        
+
                             $('.row.title-row').next('.row').hide();
                             $('#dropboxTabs .nav.nav-tabs').hide();
                             $('.btn-reply').on('click', function(){
                                 $('#replyBox').show();
                                 $('html, body').animate({
                                     scrollTop: $('#replyBox').offset().top
-                                }, 2000);                                
+                                }, 2000);
                             });
                             $('#cancelReply').on('click', function(){
                                 $('#replyBox').hide();
                                 $('html, body').animate({
                                     scrollTop: $('#header_section').offset().top
-                                }, 2000);                                
-                            });                            
+                                }, 2000);
+                            });
                             $('.back_index').on('click', function(){
                                 $('.row.title-row').next('.row').show();
                                 $('#dropboxTabs .nav.nav-tabs').show();
                             });
 
-                            $('#select-recipients').select2();       
+                            $('#select-recipients').select2();
                             $('#selectAll').click(function(e) {
                                 e.preventDefault();
                                 var stringVal = [];
@@ -251,26 +254,26 @@ $out .=         "
                                 e.preventDefault();
                                 var stringVal = [];
                                 $('#select-recipients').val(stringVal).trigger('change');
-                            });         
+                            });
                         });
 
                         </script>";
         }
         /******End of Reply Form ********/
-        
-        $out .= "</div>"; 
-         
+
+        $out .= "</div>";
+
         $out .= '<script>
                   $(function() {
                     $("#in_msg_body").find("a").addClass("outtabs");
-                    
+
                     $(document).off( "click",".delete_in");
 
                     $(document).on( "click",".delete_in_inner", function (e) {
                          e.preventDefault();
                          var id = $(this).data("id");
                          var string = "mid="+id;
-                         bootbox.confirm("'.$langConfirmDelete.'", function(result) {                       
+                         bootbox.confirm("'.$langConfirmDelete.'", function(result) {
                          if(result) {
                              $.ajax({
                               type: "POST",
@@ -282,7 +285,7 @@ $out .=         "
                                  $(".alert-success").delay(3000).fadeOut(1500);
                                  $("#msg_area").remove();
                               }});
-                         }              
+                         }
                         });
                       });
 
@@ -292,7 +295,7 @@ $out .=         "
                         var rowContainer = $(this).parent().parent();
                         var id = rowContainer.attr("id");
                         var string = \'mid=\'+ id ;
-            
+
                         $.ajax({
                           type: "POST",
                           url: "ajax_handler.php",
@@ -314,14 +317,14 @@ $out .=         "
         $out .= $head_content;
     }
 } else {
-    
+
     $out = "<div id='del_msg'></div><div id='inbox'>";
-    
+
     $out .= "<table id='inbox_table' class='table-default'>
                   <thead>
                     <tr class='list-header'>
                       <th>$langSubject</th>";
-    if ($course_id == 0) {        
+    if ($course_id == 0) {
         $out .= "    <th>$langCourse</th>";
     }
     $out .= "         <th>$langSender</th>
@@ -332,7 +335,7 @@ $out .=         "
                 <tbody>
                 </tbody>
               </table></div>";
-    
+
     $out .= "<script type='text/javascript'>
                $(document).ready(function() {
 
@@ -342,7 +345,7 @@ $out .=         "
                    'bProcessing': true,
                    'sDom': '<\"top\"fl<\"clear\">>rt<\"bottom\"ip<\"clear\">>',
                    'bServerSide': true,
-                   'sAjaxSource': 'ajax_handler.php?mbox_type=inbox&course_id=$course_id',                   
+                   'sAjaxSource': 'ajax_handler.php?mbox_type=inbox&course_id=$course_id',
                    'aLengthMenu': [
                        [10, 15, 20 , -1],
                        [10, 15, 20, '$langAllOfThem'] // change per page values here
@@ -356,7 +359,7 @@ $out .=         "
                           placeholder : '$langSearch...'
                         });
                     },
-                   'oLanguage': {                       
+                   'oLanguage': {
                         'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
                         'sZeroRecords':  '".$langNoResult."',
                         'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
@@ -378,7 +381,7 @@ $out .=         "
                      e.preventDefault();
                      var id = $(this).data('id');
                      var string = 'mid='+id;
-                     bootbox.confirm('$langConfirmDelete', function(result) {                       
+                     bootbox.confirm('$langConfirmDelete', function(result) {
                      if(result) {
                          $.ajax({
                           type: 'POST',
@@ -405,10 +408,10 @@ $out .=         "
                               console.log(error);
                           }
                         });
-                    }              
+                    }
                     });
                   });
-                 
+
                  $('.delete_all_in').click(function() {
                      bootbox.confirm('$langConfirmDeleteAllMsgs', function(result) {
                          if(result) {
@@ -426,7 +429,7 @@ $out .=         "
                                          if(page_number!=0) {
                                              page_number--;
                                          }
-                                     }    
+                                     }
                                      $('#del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteAllSuccess</p>');
                                      $('.alert-success').delay(3000).fadeOut(1500);
                                      oTable.fnPageChange(page_number);
@@ -435,9 +438,9 @@ $out .=         "
                          }
                      })
                  });
-                 
+
                });
              </script>";
 }
 echo $out;
-    
+

@@ -212,7 +212,7 @@ $head_content .= "
                     var api = this.api();
                     var column = api.column(1);
                     var select = $('<select id=\'select_role\'>'+
-                                        '<option value=\'0\'>-- Όλοι --</option>'+
+                                        '<option value=\'0\'>-- $langAllUsers --</option>'+
                                         '<option value=\'teacher\'>$langTeacher</option>'+
                                         '<option value=\'student\'>$langStudent</option>'+
                                         '<option value=\'editor\'>$langEditor</option>'+
@@ -356,6 +356,7 @@ if (get_config('opencourses_enable')) {
     }
 }
 
+$eclass_stud_reg = get_config('eclass_stud_reg');
 // show help link and link to Add new user, search new user and management page of groups
 $tool_content .= 
         action_bar(array(
@@ -371,7 +372,8 @@ $tool_content .=
                 'level' => 'primary-label'),
             array('title' => $langAddGUser,
                 'url' => "guestuser.php?course=$course_code",
-                'icon' => 'fa-plane'),
+                'icon' => 'fa-plane',
+                'show' => $eclass_stud_reg != 0),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),
@@ -392,8 +394,8 @@ $tool_content .= "
     <table id='users_table{$course_id}' class='table-default'>
         <thead>
             <tr>
-              <th>$langName $langSurname</th>
-              <th class='text-center'>Ρόλοι</th>
+              <th>$langSurnameName</th>
+              <th class='text-center'>$langRole</th>
               <th class='text-center'>$langGroup</th>
               <th class='text-center' width='80'>$langRegistrationDateShort</th>
               <th class='text-center'>".icon('fa-gears')."</th>

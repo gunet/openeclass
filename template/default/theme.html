@@ -18,7 +18,7 @@
      <!-- BootBox -->
     <script src="{%URL_PATH%}js/bootbox/bootbox.min.js"></script>
     
-    <!-- BootBox -->
+    <!-- SlimScroll -->
     <script src="{%URL_PATH%}js/jquery.slimscroll.min.js"></script>
     <script>
     bootbox.setDefaults({
@@ -42,7 +42,11 @@
     <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/global.css">
     <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/structure.css">
     <link rel="stylesheet" type="text/css" href="{%template_base%}/CSS/inventory.css">
-
+    
+    <!--[if lt IE 9]>
+      <script type="text/javascript" src="{%template_base%}/js/html5shiv.min.js"></script>
+      <script type="text/javascript" src="{%template_base%}/js/respond.min.js"></script>
+    <![endif]-->
 
     {%EXTRA_CSS%}
     {%TOOL_CSS%}
@@ -51,7 +55,7 @@
 </head>
 
 <body>
-	<div class="container">
+	<div class="{%container%}">
         <!-- BEGIN headerBlock -->
             <div class="row" id="header_section">
                 <!-- BEGIN normalViewOpenDiv -->
@@ -66,13 +70,13 @@
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-10 nav-container">
                 <!-- END normalViewOpenDiv -->
-                <!-- BEGIN mobileViewOpenDiv -->
-                <div class="col-xs-12">
-                <!-- END mobileViewOpenDiv -->
+                
                     <nav id="header" class="navbar navbar-default" role="navigation">
+                        <!-- BEGIN normalViewOpenDiv -->
                         <button class="navbar-toggle pull-left">
                             <i class="fa fa-bars" style='color: #777;'></i>
                         </button>
+                        <!-- END normalViewOpenDiv -->
                         <!-- BEGIN logoBlock -->
                         <a href='{%URL_PATH%}' class="navbar-brand small-logo">
                             <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt=''>
@@ -89,7 +93,10 @@
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><i class="fa fa-user"></i>{%LANG_PROFILE%}</a>
-                                    </li>                                       
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%COURSES_LINK%}"><i class="fa fa-graduation-cap"></i>{%LANG_COURSES%}</a>
+                                    </li>                                    
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><i class="fa fa-envelope-o"></i>{%LANG_MESSAGES%}</a>
                                     </li>
@@ -115,10 +122,8 @@
                             <!-- END LoggedInBlock -->
                             <!-- BEGIN LoggedOutBlock -->
                             {%LANG_SELECT%}
-
-                            <li><a href="{%URL_PATH%}main/login_form.php"><i class="fa fa-lock"></i></a></li>
+                            <li><a href="{%LOGOUT_LINK%}"><i class="fa fa-lock"></i></a></li>
                             <!-- END LoggedOutBlock -->
-
                         </ul>
                     </nav>
                 </div>

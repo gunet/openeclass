@@ -46,7 +46,7 @@ if (!visible_module(MODULE_ID_BLOG)) {
     $errorMessagePath = "../../";
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlSecure . "login_form.php?next=" . urlencode($next));
+        header("Location:" . $urlServer . "login_form.php?next=" . urlencode($next));
     } else {
         header("Location:" . $urlServer . "index.php");
     }

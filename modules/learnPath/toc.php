@@ -41,6 +41,21 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 <html>
 <head><title>-</title>
     <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
+    <!-- jQuery -->
+    <script type='text/javascript' src='{$urlAppend}js/jquery-2.1.1.min.js'></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
+        
+    <!-- Latest compiled and minified CSS -->
+    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
+
+    <!-- Optional theme -->
+    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-theme.min.css'>
+
+    <!-- Font Awesome - A font of icons -->
+    <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>  
+        
     <link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet' type='text/css' />
 </head>
 <body style='padding-right: 5px;'>
@@ -121,14 +136,12 @@ foreach ($flatElementList as $module) {
     //-------------visibility-----------------------------
     if ($module['visible'] == 0 || $is_blocked) {
         if ($is_editor) {
-            $style = " class='invisible'";
-            $image_bullet = "off";
+            $style = " style='color:grey;'";
         } else {
             continue; // skip the display of this file
         }
     } else {
         $style = "";
-        $image_bullet = "on"; //image bullet no longer used in fa icons. Should be checked.
     }
 
     // indent a child based on label ownership
@@ -141,17 +154,17 @@ foreach ($flatElementList as $module) {
         echo "<li style=\"margin-left: " . $marginIndent . "px;\"><font " . $style . " style=\"font-weight: bold\">" . htmlspecialchars($module['name']) . "</font></li>";
     } else { // module
         if ($module['contentType'] == CTEXERCISE_) {
-            $moduleImg = "exercise_$image_bullet";
+            $moduleImg = "fa-edit";
         } else if ($module['contentType'] == CTLINK_) {
-            $moduleImg = "links_$image_bullet";
+            $moduleImg = "fa-link";
         } else if ($module['contentType'] == CTCOURSE_DESCRIPTION_) {
-            $moduleImg = "description_$image_bullet";
+            $moduleImg = "fa-info-circle";
         } else if ($module['contentType'] == CTDOCUMENT_) {
             $moduleImg = choose_image(basename($module['path']));
         } else if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) { // eidika otan einai scorm module, deixnoume allo eikonidio pou exei na kanei me thn proodo
-            $moduleImg = "lp_check";
+            $moduleImg = "fa-file-code-o";
         } else if ($module['contentType'] == CTMEDIA_ || $module['contentType'] == CTMEDIALINK_) {
-            $moduleImg = "videos_on";
+            $moduleImg = "fa-film";
         } else {
             $moduleImg = choose_image(basename($module['path']));
         }
@@ -162,23 +175,25 @@ foreach ($flatElementList as $module) {
         unset($imagePassed);
         if ($module['credit'] == 'CREDIT' || $module['lesson_status'] == 'COMPLETED' || $module['lesson_status'] == 'PASSED') {
             if ($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) {
-                $moduleImg = 'tick';
+                $moduleImg = 'fa-file-code-o';
+                $imagePassed = "<span style='color:green'>".icon('fa-check')."</span>";
             } else {
-                $imagePassed = icon_old_style('tick', $module['lesson_status']);
+                $imagePassed = "<span style='color:green'>".icon('fa-check', $module['lesson_status'])."</span>";
             }
         }
 
         if (($module['contentType'] == CTSCORM_ || $module['contentType'] == CTSCORMASSET_) && $module['lesson_status'] == 'FAILED') {
-            $moduleImg = 'lp_failed';
+            $moduleImg = 'fa-file-code-o';
+            $imagePassed = "<span style='color:red'>".icon('fa-times')."</span>";
         }
 
-        echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon_old_style($moduleImg, '');
+        echo "<li style=\"margin-left: " . $marginIndent . "px;\">" . icon($moduleImg);
 
         // emphasize currently displayed module or not
         if ($_SESSION['lp_module_id'] == $module['module_id']) {
-            echo "<em>" . htmlspecialchars($module['name']) . "</em>";
+            echo "&nbsp;<em>" . htmlspecialchars($module['name']) . "</em>";
         } else {
-            echo "<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'" . $style . " target='scoFrame'>" . htmlspecialchars($module['name']) . "</a>";
+            echo "&nbsp;<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'" . $style . " target='scoFrame'>" . htmlspecialchars($module['name']) . "</a>";
         }
         if (isset($imagePassed)) {
             echo "&nbsp;&nbsp;" . $imagePassed;

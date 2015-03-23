@@ -112,7 +112,7 @@ if (!$thisDocumentModule) {
     }
 }
 
-$tool_content = "<div class='alert alert-success'>";
+$tool_content .= "<div class='alert alert-success'>";
 $tool_content .= disp_tool_title($langLinkInsertedAsModule);
 $tool_content .= "</div>";
 

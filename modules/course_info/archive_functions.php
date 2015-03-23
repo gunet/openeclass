@@ -78,6 +78,9 @@ function doArchive($course_id, $course_code) {
         'course_units' => $sql_course,
         'unit_resources' => "unit_id IN (SELECT id FROM course_units
                                                     WHERE course_id = $course_id)",
+        'course_weekly_view' => $sql_course,
+        'course_weekly_view_activities' => "course_weekly_view_id IN (SELECT id FROM course_weekly_view 
+                                                                                WHERE course_id = $course_id)",
         'forum' => $sql_course,
         'forum_category' => $sql_course,
         'forum_topic' => "forum_id IN (SELECT id FROM forum
@@ -139,6 +142,9 @@ function doArchive($course_id, $course_code) {
                                                                  WHERE course_id = $course_id) OR
                                           exercise_id IN (SELECT id FROM exercise
                                                                  WHERE course_id = $course_id)",
+        'exercise_question_cats' => $sql_course,
+        'exercise_answer_record' => "question_id IN (SELECT id FROM exercise_question
+                                                                WHERE course_id = $course_id)",
         'bbb_session' => "course_id IN (SELECT id FROM bbb_session WHERE course_id = $course_id)",
         'blog_post' => "id IN (SELECT id FROM blog_post WHERE course_id = $course_id)",
         'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",

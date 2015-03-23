@@ -161,33 +161,36 @@ $prevNextString = "";
 if ($moduleNb > 1) {
 
     if ($previousModule != '') {
-        $prevNextString .= '<li><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $previousModule . '" target="scoFrame"><i class="fa fa-arrow-circle-left fa-lg"></i> </a></li>';
     } else {
-        $prevNextString .= "<li><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
+        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-left'></i></a></li>";
     }
     if ($nextModule != '') {
-        $prevNextString .= '<li><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
+        $prevNextString .= '<li class="prevnext"><a href="navigation/viewModule.php?course=' . $course_code . '&amp;viewModule_id=' . $nextModule . '" target="scoFrame"><i class="fa fa-arrow-circle-right fa-lg"></i></a></li>';
     } else {
-        $prevNextString .= "<li><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
+        $prevNextString .= "<li class='prevnext'><a href='#' class='inactive'><i class='fa fa-arrow-circle-right'></i></a></li>";
     }
 }
 
-load_js('jquery-' . JQUERY_VERSION . '.min');
 
-echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>
+echo "<!DOCTYPE HTML>
 <html>
-<head><title>-</title>
-    <meta http-equiv='Content-Type' content='text/html; charset=$charset'>
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <title>-</title>
     <!-- jQuery -->
     <script type='text/javascript' src='{$urlAppend}js/jquery-2.1.1.min.js'></script>
 
     <!-- Latest compiled and minified JavaScript -->
     <script src='{$urlAppend}template/default/js/bootstrap.min.js'></script>
-        
+
     <script type='text/javascript' src='{$urlAppend}js/jquery.cookie.js'></script>
-        
+
     <!-- Our javascript -->
     <script type='text/javascript' src='{$urlAppend}template/default/js/main.js'></script>
+
+    <!-- SlimScroll -->
+    <script src='{$urlAppend}js/jquery.slimscroll.min.js'></script>
 
     <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
@@ -197,13 +200,11 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>
-        
-    $head_content
 
     <style>
         .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
         .navbar-inverse .navbar-nav > li > a.inactive, .navbar-inverse .navbar-nav > li > a.inactive:hover, .navbar-inverse .navbar-nav > li > a.inactive:focus {color: #9d9d9d; cursor: default;}
-        .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus { color: #9BCCF7; }   
+        .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus { color: #9BCCF7; }
         a#leftTOCtoggler {
             color: whitesmoke;
         }
@@ -221,11 +222,53 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
 
         .navbar-right {
         float: right!important;
-        }        
-    </style>    
+        }
+
+        .progressbar-plr{
+            margin-top: 15px !important;
+        }
+        #navigation-btns li a, #navigation-btns li a span{
+            padding-top: 0px !important;
+            padding-bottom: 0px !important;
+        }
+        #navigation-btns li, #navigation-btns li a i{
+            height: 50px;
+            line-height: 50px;
+        }
+        #navigation-btns li a{
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+        #navigation-btns li:nth-child(1){
+            padding-left: 35px;
+            padding-right: 5px;
+        }
+        #navigation-btns li:nth-child(2){
+            padding-left: 5px;
+            padding-right: 0px;
+        }
+        #navigation-btns #close-btn{
+            padding-right:20px;
+            padding-left:20px;
+            border-left: 2px groove #999;
+            margin-left: 35px;
+        }
+        #navigation-btns #close-btn span{
+            font-size:16px;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+        #leftTOCtoggler{
+            margin-top: 7px;
+        }
+        #toc_logo{
+            padding-left: 10px;
+            margin-left: 10px;
+            border-left: 2px groove #999;
+        }
+    </style>
     <script type='text/javascript'>
     /* <![CDATA[ */
-    
+
     $(document).ready(function() {
         var leftTOChiddenStatus = 0;
         if ($.cookie('leftTOChiddenStatus') !== undefined) {
@@ -244,7 +287,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
         $('#leftTOCtoggler').on('click', function() {
             var fs = window.parent.document.getElementById('colFrameset');
             var fsJQe = $('#colFrameset', window.parent.document);
-            
+
             fsJQe.toggleClass('hidden');
             if (fsJQe.hasClass('hidden')) {
                 fs.cols = '0, *';
@@ -255,7 +298,7 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
             }
         });
     });
-    
+
     /* ]]> */
     </script>
 </head>
@@ -264,45 +307,24 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <nav class='navbar navbar-inverse navbar-static-top' role='navigation'>
             <div class='container-fluid'>
                 <div class='navbar-header col-xs-2'>
-                  <a id='leftTOCtoggler' class='btn pull-left' style='margin-top:12px;'><i class='fa fa-bars fa-lg'></i></a>
-                  <a class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png'></a>
+                  <a id='leftTOCtoggler' class='btn pull-left'><i class='fa fa-bars fa-lg'></i></a>
+                  <a id='toc_logo' class='navbar-brand hidden-xs' href='#'><img class='img-responsive' style='height:20px;' src='{$themeimg}/eclass-new-logo-small.png' alt='Logo'></a>
                 </div>
                 <div class='navbar-header col-xs-10 pull-right'>
-                    <ul class='nav navbar-nav navbar-right'>
+                    <ul id='navigation-btns' class='nav navbar-nav navbar-right '>
                         $prevNextString
-                        <li><a href='$returl' target='_top'><i class='fa fa-reply fa-lg'></i> <span class='hidden-xs'>$langBack</span></a></li>
-                    </ul>                
-                    <div class='pull-right'>";
-                  
+                        <li id='close-btn'><a href='$returl'><i class='fa fa-times fa-lg'>&nbsp;<span class='hidden-xs'>$langLogout</span></i></a></li>
+                    </ul>
+                    <div class='pull-right progressbar-plr'>";
+
                          if ($uid) {
                             $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
                             echo disp_progress_bar($lpProgress, 1);
                         }
 echo "</div>
-                </div>                
-            </div>       
+                </div>
+            </div>
     </nav>
     </body>
 </html>";
-      
-    
-//<div class='header'>
-//    <div class='tools'>
-//    <div class='lp_right'>$prevNextString&nbsp;<a href='$returl' target='_top'>
-//        <img src='$themeimg/lp/nofullscreen.png' alt='$langQuitViewer' title='$langQuitViewer' /></a></div>
-//    <div class='lp_left'>
-//        <a href='{$urlAppend}courses/$course_code' target='_top' title='" .
-// q($currentCourseName) . "'>" . q(ellipsize($currentCourseName, 35)) . "</a> &#187;
-//        <a href='{$urlAppend}modules/learnPath/index.php?course=$course_code' target='_top'>
-//                $langLearningPaths</a> &#187;
-//        <a href='$returl' title='" . q($lpName) . "' target='_top'>" . q(ellipsize($lpName, 40)) . "</a>
-//        &nbsp;&nbsp;|&nbsp;&nbsp;
-//        <a id='leftTOCtoggler' href='#'>$langLPViewerToggleLeftTOC</a></div>
-//    <div class='clear'></div>
-//    <div class='logo'><img src='$themeimg/lp/logo_openeclass.png' alt='' title='' /></div>
-//    <div class='lp_right_grey'>";
-//if ($uid) {
-//    $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
-//    echo $langProgress . ': ' . disp_progress_bar($lpProgress, 1) . "&nbsp;" . $lpProgress . "%";
-//}
-//echo "</div></div></div></body></html>";
+

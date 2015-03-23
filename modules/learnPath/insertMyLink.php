@@ -177,33 +177,39 @@ function showlinks() {
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d ORDER BY `order` DESC", $course_id);
 
     $output = "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                    <div class='table-responsive'>
                       <table class='table-default'>
-                      <tr>
+                      <thead><tr class='list-header'>
                         <th>$langName</th>
                         <th width='50'>$langSelection</th>
-                      </tr>
-                      <tbody>";
+                      </tr></thead>
+                      <tbody>
+                      
+                      ";
     $i = 1;
     foreach ($result as $myrow) {
         $output .= "
                 <tr>                
-                <td align='left' valign='top'><a href='../link/link_goto.php?course=$course_code&amp;link_id=" . $myrow->id . "&amp;link_url=" . urlencode($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>
+                <td align='left' valign='top'><a href='" . q($myrow->url) . "' target='_blank'>" . q($myrow->title) . "</a>
                 <br>
                 <small class='comments'>" . $myrow->description . "</small></td>";
         $output .= "<td><div align='center'><input type='checkbox' name='insertLink_" . $i . "' id='insertLink_" . $i . "' value='" . $myrow->id . "' /></div></td>
                 </tr>";
         $i++;
     }
-    $output .= "
+    $output .= "</tbody>
+        <tfooter>
         <tr>
-        <th colspan='2'>
+            <th colspan='2'>
                 <div align='right'>
                 <input type='hidden' name='maxLinkForm' value ='" . ($i - 1) . "' />
                 <input class='btn btn-primary' type='submit' name='submitInsertedLink' value='$langAddModulesButton'/>
-                </div></th>
+                </div>
+            </th>
         </tr>
-        </tbody>
-        </table>
+        </tfooter>
+        
+        </table></div>
         </form>";
     return $output;
 }

@@ -315,6 +315,20 @@ function add_assignment() {
         if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
             $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
                     . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+            
+            //tags
+            if (isset($_POST['tags'])) {
+                //delete all the previous for this item, course
+                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //insert all the new ones
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                    }
+                }
+            }
+            
             $secret = work_secret($id);
             if ($id) {
                 $local_name = uid_to_name($uid);
@@ -517,11 +531,13 @@ function submit_work($id, $on_behalf_of = null) {
 
 //  assignment - prof view only
 function new_assignment() {
-    global $tool_content, $m, $langAdd, $course_code, $course_id;
+    global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
-    global $langBack, $langStudents, $langMove, $langWorkFile;
+    global $langBack, $langStudents, $langMove, $langWorkFile, $langTags;
     
     load_js('bootstrap-datetimepicker');
+    load_js('select2');
+
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#enddatepicker').datetimepicker({
@@ -542,7 +558,38 @@ function new_assignment() {
                 var caret = '<i class=\"fa fa-caret-down\"></i>';
                 $('#hidden-opt-btn').html('$langMoreOptions '+caret);
             })               
-        });      
+        });
+    
+    $(document).ready(function () {
+        $('#tags').select2({
+                minimumInputLength: 2,
+                tags: true,
+                tokenSeparators: [', ', ' '],
+                createSearchChoice: function(term, data) {
+                  if ($(data).filter(function() {
+                    return this.text.localeCompare(term) === 0;
+                  }).length === 0) {
+                    return {
+                      id: term,
+                      text: term
+                    };
+                  }
+                },
+                ajax: {
+                    url: '../tags/feed.php',
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function(data, page) {
+                        return {results: data};
+                    }
+                }
+        });
+        $('#tags').select2('data', [".$answer."]);
+    });    
     </script>";
     $workEnd = isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "";
     
@@ -553,6 +600,7 @@ function new_assignment() {
               'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');
+    enableCheckFileSize();
     $tool_content .= "
         <div class='row'><div class='col-sm-12'>
         <div class='form-wrapper'>
@@ -572,14 +620,21 @@ function new_assignment() {
                 </div>
             </div>
             <div class='form-group'>
-            <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
-                <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
+                <label for='tags' class='col-sm-2 control-panel'>$langTags:</label>
+                <div class='col-sm-10'>
+                    <input type='hidden' class='form-control' name='tags' id='tags' value=''>
+                </div>
             </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
+                    <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
+                </div>
             </div>
             <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
-                    <div class='col-sm-10'>    
+                    <div class='col-sm-10'>" .
+                      fileSizeHidenInput() . "
                       <input type='file' id='userfile' name='userfile'>
                     </div>
                 </div>
@@ -699,9 +754,21 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
         $urlAppend, $works_url, $course_id, $head_content, $language, 
         $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment,
-        $langLessOptions, $langMoreOptions;
+        $langLessOptions, $langMoreOptions, $langTags;
     
+    //initialize the tags
+    $answer = "";
+    if (isset($id)) {
+        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+        foreach ($tags_init as $tag) {
+            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
+            $answer = $answer . $arrayTemp;
+        }
+    }
+
     load_js('bootstrap-datetimepicker');
+    load_js('select2');
+    
     $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#enddatepicker').datetimepicker({
@@ -723,6 +790,37 @@ function show_edit_assignment($id) {
                 $('#hidden-opt-btn').html('$langMoreOptions '+caret);
             })            
         });
+        
+        $(document).ready(function () {
+            $('#tags').select2({
+                    minimumInputLength: 2,
+                    tags: true,
+                    tokenSeparators: [', ', ' '],
+                    createSearchChoice: function(term, data) {
+                      if ($(data).filter(function() {
+                        return this.text.localeCompare(term) === 0;
+                      }).length === 0) {
+                        return {
+                          id: term,
+                          text: term
+                        };
+                      }
+                    },
+                    ajax: {
+                        url: '../tags/feed.php',
+                        dataType: 'json',
+                        data: function(term, page) {
+                            return {
+                                q: term
+                            };
+                        },
+                        results: function(data, page) {
+                            return {results: data};
+                        }
+                    }
+            });
+        $('#tags').select2('data', [".$answer."]);
+        });    
     </script>";
     
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
@@ -812,11 +910,18 @@ function show_edit_assignment($id) {
             </div>";
     }
     
-    $tool_content .= "<div class='form-group'>
+    $tool_content .= "
+        <div class='form-group'>
+            <label for='tags' class='col-sm-2 control-panel'>$langTags:</label>
+            <div class='col-sm-10'>
+                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+            </div>
+        </div>
+        <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2 margin-top-fat margin-bottom-fat'>
                 <a id='hidden-opt-btn' class='btn btn-success btn-xs' href='#' style='text-decoration:none;'>$langMoreOptions <i class='fa fa-caret-down'></i></a>
             </div>
-            </div>
+        </div>
             <div class='collapse ".(Session::hasErrors() ? "in" : "")."' id='hidden-opt'>
                 <div class='form-group'>
                     <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
@@ -1007,6 +1112,19 @@ function edit_assignment($id) {
              $comments, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
 
          Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
+         
+         //tags
+         if (isset($_POST['tags'])) {
+                //delete all the previous for this item, course
+                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //insert all the new ones
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
+                    }
+                }
+         }
 
          if ($assign_to_specific && !empty($assigned_to)) {
              if ($group_submissions == 1) {
@@ -1029,7 +1147,6 @@ function edit_assignment($id) {
         Session::Messages($langEditSuccess,'alert-success');         
         redirect_to_home_page("modules/work/index.php?course=$course_code");
     } else {
-//        $new_or_modify = isset($_GET['NewExercise']) ? "&NewExercise=Yes" : "&exerciseId=$_GET[exerciseId]&modifyExercise=yes";
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");        
     }
@@ -1318,7 +1435,7 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
     $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
-    $langSaved, $langGraphResults, $langConfirmDelete, $langWorkFile;
+    $langSaved, $langGraphResults, $langConfirmDelete, $langWorkFile, $langTags, $course_id;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -1436,7 +1553,18 @@ function assignment_details($id, $row) {
                 <div class='col-sm-9'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."                   
                 </div>                
-            </div>    
+            </div>
+            <div class='row  margin-bottom-fat'>
+                <div class='col-sm-3'>
+                    <strong>$langTags:</strong>
+                </div>
+                <div class='col-sm-9'>";
+                    $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                    foreach($tags_list as $tag){
+                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
+                    }                   
+$tool_content .="</div>                
+            </div>   
         </div>
     </div>";
        
@@ -1582,7 +1710,9 @@ function show_assignment($id, $display_graph_results = false) {
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
-                                <div align='center'><input type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'></div>
+                                    <div class='form-group'>
+                                        <input class='form-control' type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'>
+                                    </div>
                                 </td>
                                 </tr>
                                 <tr>
@@ -1866,11 +1996,6 @@ function show_assignments() {
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
               action_button(array(
-                    array('title' => $langDelete,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmDelete),
                     array('title' => $langEdit,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
@@ -1881,7 +2006,12 @@ function show_assignments() {
                           'show' => is_numeric($num_submitted) && $num_submitted > 0),
                     array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
-                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'))).
+                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'),
+                    array('title' => $langDelete,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDelete))).
                    "</td></tr>";
             $index++;
         }
@@ -1899,7 +2029,7 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
     (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
         
     if (Database::get()->query("UPDATE assignment_submit 
-                                SET grade = ?d, grade_comments = ?s,
+                                SET grade = ?f, grade_comments = ?s,
                                 grade_submission_date = NOW(), grade_submission_ip = ?s
                                 WHERE id = ?d", $grade, $comment, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
         $title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
@@ -1922,35 +2052,51 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
 
 // submit grades to students
 function submit_grades($grades_id, $grades, $email = false) {
-    global $tool_content, $langGrades, $langWorkWrongInput, $course_id;
+    global $tool_content, $langGrades, $langWorkWrongInput, $course_id, 
+           $course_code, $langFormErrors;
+    $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $grades_id)->max_grade;
+    $v = new Valitron\Validator(array('grades' => $grades));
+    $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
+        if(is_numeric($value) || empty($value)) return true;
+    });        
+    $v->rule('emptyOrNumeric', array('grades.*'));
+    $v->rule('min', array('grades.*'), 0);
+    $v->rule('max', array('grades.*'), $max_grade);
+    if($v->validate()) {
+        foreach ($grades as $sid => $grade) {
+            $sid = intval($sid);
+            $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
+            $grade_valid = filter_var($grade, FILTER_VALIDATE_FLOAT);
 
-    foreach ($grades as $sid => $grade) {
-        $sid = intval($sid);
-        $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
-        $grade_valid = filter_var($grade, FILTER_VALIDATE_FLOAT);
-        (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;             
-        if ($val != $grade) {
-            if (Database::get()->query("UPDATE assignment_submit
-                                        SET grade = ?d, grade_submission_date = NOW(), grade_submission_ip = ?s
-                                        WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
-                $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?d", $sid)->assignment_id;
-                $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?d", $assign_id)->title;
-                Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-                        'title' => $title,
-                        'grade' => $grade));
-                
-                //update gradebook if needed
-                $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                update_gradebook_book($quserid, $assign_id, $grade, 'assignment');
-                
-                if ($email) {
-                    grade_email_notify($grades_id, $sid, $grade, '');
-                }          
-                Session::Messages($langGrades, 'alert-success');
+            (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
+
+            if ($val != $grade) {
+                if (Database::get()->query("UPDATE assignment_submit
+                                            SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
+                                            WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
+                    $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?d", $sid)->assignment_id;
+                    $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?d", $assign_id)->title;
+                    Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
+                            'title' => $title,
+                            'grade' => $grade));
+
+                    //update gradebook if needed
+                    $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                    update_gradebook_book($quserid, $assign_id, $grade, 'assignment');
+
+                    if ($email) {
+                        grade_email_notify($grades_id, $sid, $grade, '');
+                    }          
+                    Session::Messages($langGrades, 'alert-success');
+                }
             }
         }
+        Session::Messages($langGrades, 'alert-success');        
+    } else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     }
-    show_assignment($grades_id);
+    redirect_to_home_page("modules/work/index.php?course=$course_code&id=$grades_id");
+
 }
 
 // functions for downloading
@@ -2041,7 +2187,7 @@ function create_zip_index($path, $id, $online = FALSE) {
         $filename = basename($row->file_path);
         $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
-        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
+        $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
         fputs($fp, '
 			<tr class="sep">
 				<td>' . q(uid_to_name($row->uid)) . '</td>

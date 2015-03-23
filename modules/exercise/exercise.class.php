@@ -28,7 +28,8 @@ if (file_exists('../../../include/log.php')) {
     require_once '../../../include/log.php';
 }
 
-if (!class_exists('Exercise')):
+if (!class_exists('Exercise')) {
+
     /* >>>>>>>>>>>>>>>>>>>> CLASS EXERCISE <<<<<<<<<<<<<<<<<<<< */
 
     /**
@@ -65,7 +66,7 @@ if (!class_exists('Exercise')):
             $this->description = '';
             $this->type = 1;
             $this->startDate = date("Y-m-d H:i:s");
-            $this->endDate = '';
+            $this->endDate = null;
             $this->tempSave = 0;
             $this->timeConstraint = 0;
             $this->attemptsAllowed = 0;
@@ -448,7 +449,6 @@ if (!class_exists('Exercise')):
             $public = $this->public;
             $results = $this->results;
             $score = $this->score;
-
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
@@ -638,7 +638,7 @@ if (!class_exists('Exercise')):
                     $exerciseResult[$row->question_id] = $row->answer;
                 } elseif ($question_type == MATCHING){
                     $exerciseResult[$row->question_id][$row->answer] = $row->answer_id;
-                } elseif ($question_type == FILL_IN_BLANKS){
+                } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT){
                     $exerciseResult[$row->question_id][$row->answer_id] = $row->answer;
                 } elseif ($question_type == MULTIPLE_ANSWER){
                     $exerciseResult[$row->question_id][$row->answer_id] = 1;                    
@@ -686,7 +686,7 @@ if (!class_exists('Exercise')):
                         }
                     }
                     unset($objAnswerTmp);
-                } else if ($question_type == FILL_IN_BLANKS) {  
+                } else if ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {  
                     // construction of the Answer object
                     $objAnswerTmp = new Answer($question_id);
                     $answer = $objAnswerTmp->selectAnswer(1);
@@ -726,7 +726,7 @@ if (!class_exists('Exercise')):
                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
                            VALUES (?d, ?d, ?s, ?d, ?d, ?d)", $eurid, $key, $value, 0, $weight, $as_answered);                                    
                }                              
-           } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS) {
+           } elseif ($objQuestionTmp->selectType() == FILL_IN_BLANKS || $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
                //splits answer string from weighting string
@@ -737,7 +737,10 @@ if (!class_exists('Exercise')):
                preg_match_all('#\[(.*?)\]#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
                    //if user's choice is right assign rightAnswerWeight else 0
-                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
+                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[1][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[1][$row_key-1];
+
+                       $weight = ($canonical_choice == $canonical_match) ? $rightAnswerWeighting[$row_key-1] : 0;
                        Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, weight, is_answered)
                                VALUES (?d, ?d, ?s, ?d, ?f, ?d)", $eurid, $key, $row_choice, $row_key, $weight, $as_answered);
 
@@ -806,7 +809,7 @@ if (!class_exists('Exercise')):
                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, 
                                           answer_id = 0, weight = 0, is_answered = 1 WHERE eurid = ?d AND question_id = ?d", $value, $eurid, $key);                                           
                }                              
-           } elseif ($question_type == FILL_IN_BLANKS) {
+           } elseif ($question_type == FILL_IN_BLANKS || $question_type == FILL_IN_BLANKS_TOLERANT) {
                $objAnswersTmp = new Answer($key);
                $answer_field = $objAnswersTmp->selectAnswer(1);
                //splits answer string from weighting string
@@ -817,7 +820,9 @@ if (!class_exists('Exercise')):
                preg_match_all('#\[(.*?)\]#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
                    //if user's choice is right assign rightAnswerWeight else 0
-                       $weight = ($row_choice == $match[1][$row_key-1]) ? $rightAnswerWeighting[$row_key-1] : 0;
+                       $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
+                       $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[1][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[1][$row_key-1];                   
+                       $weight = ($canonical_choice == $canonical_match) ? $rightAnswerWeighting[$row_key-1] : 0;
                        Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, weight = ?f, is_answered = 1 
                                               WHERE eurid = ?d AND question_id = ?d AND answer_id = ?d", $row_choice, $weight, $eurid, $key, $row_key);
                }
@@ -910,33 +915,32 @@ if (!class_exists('Exercise')):
                                     VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
                                     $clone_course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
                                     $timeConstraint, $attemptsAllowed, $random, $active, $results, $score)->lastInsertID;        
-            if ($clone_course_id != $course_id) { // copy questions to new course question_pool
-                $maxId = Database::get()->querySingle("SELECT COALESCE(MAX(id), 0) AS maxId
-                                            FROM exercise_question WHERE course_id = ?d", $clone_course_id);
-                Database::get()->query("INSERT INTO `exercise_question` (course_id, question, description, weight, q_position, type, difficulty, category)
-                                            SELECT ?d, question, description, weight, q_position, type, difficulty, 0
-                                                FROM `exercise_question`
-                                                   WHERE course_id = ?d AND
-                                                         id IN (SELECT question_id FROM exercise_with_questions
-                                                                   WHERE exercise_id = ?d)",
-                                        $clone_course_id, $course_id, $id);
+            if ($clone_course_id != $course_id) {
+                // copy questions and answers to new course question pool
+                Database::get()->queryFunc("SELECT question_id AS id FROM exercise_with_questions
+                        WHERE exercise_id = ?d",
+                    function ($question) use ($clone_id, $clone_course_id) {
+                        $question_clone_id = Database::get()->query("INSERT INTO exercise_question
+                            (course_id, question, description, weight, q_position, type, difficulty, category)
+                            SELECT ?d, question, description, weight, q_position, type, difficulty, 0
+                                FROM `exercise_question` WHERE id = ?d", $clone_course_id, $question->id)->lastInsertID;
+                        Database::get()->query("INSERT INTO exercise_with_questions
+                            (question_id, exercise_id) VALUES (?d, ?d)", $question_clone_id, $clone_id);
+                        Database::get()->query("INSERT INTO exercise_answer
+                            (question_id, answer, correct, comment, weight, r_position)
+                            SELECT ?d, answer, correct, comment, weight, r_position FROM exercise_answer
+                                WHERE question_id = ?d",
+                            $question_clone_id, $question->id);
+                    },
+                    $id);
+            } else {
+                // add question to new exercise
+                Database::get()->query("INSERT INTO `exercise_with_questions`
+                        (question_id, exercise_id)
+                        SELECT question_id, ?d FROM `exercise_with_questions`
+                            WHERE exercise_id = ?d", $clone_id, $id);
             }
-            if ($clone_course_id == $course_id) { //add question to exercise
-                Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
-                                        SELECT question_id, ?d
-                                          FROM `exercise_with_questions`
-                                         WHERE exercise_id = ?d", $clone_id, $id);
-            } else { // add copied questions to exercise 
-                Database::get()->query("INSERT INTO `exercise_with_questions` (question_id, exercise_id)
-                                        SELECT id, ?d FROM `exercise_question`
-                                             WHERE course_id = ?d AND id > ?d", $clone_id, $clone_course_id, $maxId);
-            }
-        }        
-
+        }
     }
 
-    
-
-    
-
-endif;
+}

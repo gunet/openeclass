@@ -57,9 +57,12 @@ if (isset($_GET['moveDown']) || isset($_GET['moveUp'])) {
 
 if (isset($_POST['submitPoll'])) {
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('PollName'));
+    $v->rule('required', array('PollName','PollStart','PollEnd'));
+    $v->rule('date', array('PollStart','PollEnd'));
     $v->labels(array(
-        'PollName' => "$langTheField $langTitle"
+        'PollName' => "$langTheField $langTitle",
+        'PollStart' => "$langTheField $langTitle",
+        'PollEnd' => "$langTheField $langTitle"
     ));
     if($v->validate()) {
         $PollName = $_POST['PollName'];
@@ -99,8 +102,8 @@ if (isset($_POST['submitQuestion'])) {
     $v->rule('numeric', array('questionScale'));
     $v->rule('min', array('questionScale'), 1);
     $v->labels(array(
-        'questionName' => "$langTheField $langQuestion",
-        'questionScale' => "$langTheField $langScale"
+        'questionName' => "$langTheField $langPollStart",
+        'questionScale' => "$langTheField $langPollEnd"
     ));
     if($v->validate()) {    
         $question_text = $_POST['questionName'];
@@ -231,29 +234,29 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code".(isset($_GET['modifyPoll']) ? "&amp;pid=$pid&amp;modifyPoll=yes" : "&amp;newPoll=yes")."' method='post'>
             <fieldset>
             <div class='form-group ".(Session::getError('PollName') ? "has-error" : "")."'>
-              <label for='PollName' class='col-sm-2 control-label'>$langTitle :</label>
+              <label for='PollName' class='col-sm-2 control-label'>$langTitle:</label>
               <div class='col-sm-10'>
                 <input type='text' class='form-control' id='PollName' name='PollName' placeholder='$langTitle' value='$PollName'>
                 <span class='help-block'>".Session::getError('PollName')."</span>
               </div>
             </div>
-            <div class='input-append date form-group' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
-                <label for='PollStart' class='col-sm-2 control-label'>$langPollStart :</label>
+            <div class='input-append date form-group".(Session::getError('PollStart') ? " has-error" : "")."' id='startdatepicker' data-date='$PollStart' data-date-format='dd-mm-yyyy'>
+                <label for='PollStart' class='col-sm-2 control-label'>$langPollStart:</label>
                 <div class='col-xs-10 col-sm-9'>        
                     <input class='form-control' name='PollStart' id='PollStart' type='text' value='$PollStart'>
+                    <span class='help-block'>".Session::getError('PollStart')."</span>
                 </div>
                 <div class='col-xs-2 col-sm-1'>  
-                    <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
             </div>            
-            <div class='input-append date form-group' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
-                <label for='PollEnd' class='col-sm-2 control-label'>$langPollEnd :</label>
+            <div class='input-append date form-group".(Session::getError('PollEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$PollEnd' data-date-format='dd-mm-yyyy'>
+                <label for='PollEnd' class='col-sm-2 control-label'>$langPollEnd:</label>
                 <div class='col-xs-10 col-sm-9'>        
                     <input class='form-control' name='PollEnd' id='PollEnd' type='text' value='$PollEnd'>
+                    <span class='help-block'>".Session::getError('PollEnd')."</span>
                 </div>
                 <div class='col-xs-2 col-sm-1'>  
-                    <span class='add-on'><i class='fa fa-times'></i></span>
                     <span class='add-on'><i class='fa fa-calendar'></i></span>
                 </div>
             </div>

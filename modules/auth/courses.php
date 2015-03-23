@@ -125,22 +125,19 @@ if (isset($_POST['submit'])) {
             $tool_content .= $tree->buildRootsSelectForm($fc);
         }
         $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
-        $tool_content .= "<table class='table-default'>
-                                  <tr><th><a name='top'></a>$langFaculty: " .
+        $tool_content .= "<ul class='list-group'>
+                                  <li class='list-group-item list-header'><a name='top'></a>$langFaculty: " .
                 $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "
-                                  </th></tr></table><br />";
+                                  </li>";
+        $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
+        $subTrees = $tree->buildSubtrees(array($fc));
+        $tool_content .= "</ul></form>";
 
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
-            $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration' />&nbsp;&nbsp;</div>";
-        } else {
-            $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'courses');
-            $subTrees = $tree->buildSubtrees(array($fc));
-            if (count($subTrees) <= 1) { // is leaf
-                $tool_content .= "<br /><div class=alert1>$langNoCoursesAvailable</div>\n";
-            }
-        }
-        $tool_content .= "</form>";
+            $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
+        } 
+        
     } // end of else (department exists)
 }
 $tool_content .= "<script type='text/javascript'>$(course_list_init);
@@ -219,10 +216,10 @@ function expanded_faculte($facid, $uid) {
         $myCourses[$course->course_id] = $course;
     }, intval($uid));
 
-    $retString .= $tree->buildDepartmentChildrenNavigationHtml($facid, 'courses');
+    
 
     $retString .= "\n    <div class='table-responsive'><table class='table-default'>";
-    $retString .= "\n    <tr>";
+    $retString .= "\n    <tr class='list-header'>";
     $retString .= "\n      <th width='50' align='center'>$langRegistration</th>";
     $retString .= "\n      <th>$langCourseCode</th>";
     $retString .= "\n      <th width='220'>$langTeacher</th>";
@@ -275,7 +272,8 @@ function expanded_faculte($facid, $uid) {
                 $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
                 $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
             } else {
-                $retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
+                //$retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
+                $retString .= "<i class='fa fa-user'></i>";
             }
         } else { // display unregistered courses
             if (!empty($password) and ($mycours->visible == COURSE_REGISTRATION or $mycours->visible == COURSE_OPEN)) {

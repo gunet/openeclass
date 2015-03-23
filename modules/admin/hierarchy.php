@@ -395,11 +395,27 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $tool_content .= "<div class='form-group'>
                         <label class='col-sm-3 control-label'>$langNodeParent:</label>
                         <div class='col-sm-9'>";
-        if ($is_admin) {
-            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft->lft, 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false));
+        
+        $treeopts = array(
+            'params' => 'name="nodelft"',
+            'exclude' => $id,
+            'tree' => array('0' => 'Top'),
+            'useKey' => 'lft',
+            'multiple' => false);
+        if (isset($parentLft) && isset($parentLft->lft)) {
+            $treeopts['defaults'] = $parentLft->lft;
+            $formPLft = $parentLft->lft;
         } else {
-            list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'defaults' => $parentLft->lft, 'exclude' => $id, 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+            $formPLft = 0;
         }
+        
+        if ($is_admin) {
+            list($js, $html) = $tree->buildNodePicker($treeopts);
+        } else {
+            $treeopts['allowables'] = $user->getDepartmentIds($uid);
+            list($js, $html) = $tree->buildNodePicker($treeopts);
+        }
+        
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
@@ -423,7 +439,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
           </div>
         </div>
         <input type='hidden' name='id' value='$id' />
-               <input type='hidden' name='parentLft' value='" . $parentLft->lft . "'/>
+               <input type='hidden' name='parentLft' value='" . $formPLft . "'/>
                <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
                <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
         <div class='form-group'>

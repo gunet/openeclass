@@ -57,6 +57,12 @@ $body_action = '';
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
 $toolName = $langLearningObjectsInUse;
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "index.php",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'))); 
+
 
 // display use explication text
 $tool_content .= "<div class='alert alert-info'>$langUseOfPool</div>";
@@ -110,8 +116,9 @@ switch ($cmd) {
 
             $tool_content .= disp_message_box("
                         <form method='post' name='rename' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                        <table width='100%' class='table-default'>
-                        <tr>
+                        <div class='table-responsive'>
+                        <table class='table-default'>
+                        <tr class='list-header'>
                         <td width=\"160\"><label for=\"newName\">" . $langInsertNewModuleName . "</label> :</td>
                         <td><input type=\"text\" size=\"40\" name=\"newName\" id=\"newName\" value=\"" . q($list->name) . "\"></input>
                                 <input class='btn btn-primary' type=\"submit\" value=\"" . $langModify . "\" name=\"submit\">
@@ -120,6 +127,7 @@ switch ($cmd) {
                         </td>
                         </tr>
                         </table>
+                        </div>
                         </form>
                         <br />") . "";
         }
@@ -162,6 +170,7 @@ switch ($cmd) {
                     AND `course_id` = ?d", $_GET['module_id'], $course_id);
             if ($comment && $comment->comment) {
                 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>
+                    <div class='table-responsive'>
                     <table class='table-default'>
                     <tr><th class='left' colspan='2'>$langComments:</th></tr>
                     <tr><td colspan='2'>" . rich_text_editor('comment', 2, 60, $comment->comment) . "
@@ -169,7 +178,7 @@ switch ($cmd) {
                     <input type='hidden' name='module_id' value='$module_id'>
                     </td></tr>
                     <tr><td><input class='btn btn-primary' type='submit' value='$langImport'>
-                    </td></tr></table>
+                    </td></tr></table></div>
                     </form>";
             } else {
                 $tool_content .= "<form method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code'>\n"
@@ -217,7 +226,7 @@ $num_results = count($result);
 
 if (!$num_results == 0) {
     $tool_content .= "<table class=\"table-default\">
-        <tr>
+        <tr class='list-header'>
         <th colspan='2'>" . $langLearningObjects . "</th>
         <th class='text-center'>" . icon('fa-gears') . "</th>
         </tr>";
@@ -238,17 +247,17 @@ foreach ($result as $list) {
 
     $tool_content .= "</td><td class='option-btn-cell'>";
     $tool_content .= action_button(array(
-                array('title' => $langDelete,
-                      'icon' => 'fa-times',
-                      'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=eraseModule&amp;cmdid=$list->module_id",
-                      'confirm' => "$langConfirmDelete"),
                 array('title' => $langRename,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqRename&amp;module_id=$list->module_id",
                       'icon' => 'fa-repeat'),
                 array('title' => $langComments,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqComment&amp;module_id=$list->module_id",
-                      'icon' => 'fa-comment-o')
+                      'icon' => 'fa-comment-o'),
+                array('title' => $langDelete,
+                      'icon' => 'fa-times',
+                      'class' => 'delete',
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=eraseModule&amp;cmdid=$list->module_id",
+                      'confirm' => "$langConfirmDelete")
                     ));          
     $tool_content .= "</td></tr>";
     $atleastOne = true;

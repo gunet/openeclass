@@ -47,79 +47,51 @@ $auth_ids = array(1 => 'eclass',
     7 => 'cas');
 
 
-/* * **************************************************************
-  find/return the ids of the default authentication methods
-  return $auth_methods (array with all the values of the defined/active methods)
- * Array elements are values between 1 and 7: 1-eclass,2-pop3,3-imap,4-ldap,5-db,6-shibboleth,7-cas
- * ************************************************************** */
-
+/**
+ * get active authentication methods auth_ids
+ * @return type
+ */
 function get_auth_active_methods() {
     
-    $auth_methods = array();    
-    $q = Database::get()->queryArray("SELECT auth_id, auth_settings FROM auth WHERE auth_default = 1");
-    if ($q) {
-        foreach ($q as $row) {
-            // get only those with valid, not empty settings
-            if ($row->auth_id == 1 or !empty($row->auth_settings)) {
-                $auth_methods[] = $row->auth_id;
-            }
-        }
+    $auth_methods = array();
+    $q = Database::get()->queryArray("SELECT auth_id FROM auth
+                            WHERE auth_default <> 0 AND (auth_settings <> '' OR auth_id = 1)");
+    foreach ($q as $row) {
+        $auth_methods[] = $row->auth_id;
     }
     return $auth_methods;
 }
 
-/* * **************************************************************
-  check if method $auth is active
- * ************************************************************** */
-function check_auth_active($auth) {
+/**
+ * get auth primary method
+ * @return int
+ */
+function get_auth_primary_method() {
     
-    $active_auth = Database::get()->queryArray("SELECT auth_default, auth_settings FROM auth WHERE auth_id = ?d", $auth);    
-    if ($active_auth) {
-        foreach ($active_auth as $authrow) {
-            // return true only if method is valid,not empty settings
-            if (($authrow->auth_default == 1) && !empty($authrow->auth_settings)) {
-                return true;
-            }
-        }
-    return false;
-    }
-}
-
-/* * **************************************************************
-  find if the eclass method is the only one active in the platform
-  return $is_eclass_unique (integer)
- * ************************************************************** */
-
-function is_eclass_unique() {
-    $is_eclass_unique = 0;
-    
-    $auth_method = Database::get()->queryArray("SELECT auth_id, auth_settings FROM auth WHERE auth_default=1");     
-    if ($auth_method) {
-        $count_methods = 0;
-        $is_eclass = 0;
-        foreach ($auth_method as $authrow) {
-            if ($authrow->auth_id == 1) {
-                $is_eclass = 1;
-                $count_methods++;
-            } else {
-                if (empty($authrow->auth_settings)) {
-                    continue;
-                } else {
-                    $count_methods++;
-                }
-            }
-        }
-        if (($is_eclass == 1) && ($count_methods == 1)) {
-            $is_eclass_unique = 1;
-        } else {
-            $is_eclass_unique = 0;
-        }
+    $q = Database::get()->querySingle("SELECT auth_id FROM auth WHERE auth_default = 2");
+    if ($q) {
+        $auth_primary_method = $q->auth_id;
+        return $auth_primary_method;
     } else {
-        $is_eclass_unique = 0;
+        return 0;
     }
-
-    return $is_eclass_unique;
+           
 }
+
+/**
+ * @brief check if method $auth is active
+ * @param type $auth_id
+ * @return boolean
+ */
+function check_auth_active($auth_id) {
+    
+    $auth = Database::get()->querySingle("SELECT auth_id, auth_default, auth_settings FROM auth WHERE auth_id = ?d", $auth_id);
+    if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($authrow->auth_settings))) {
+            return true;
+    }
+    return false;
+}
+
 
 /* * **************************************************************
   count users for each authentication method
@@ -130,14 +102,14 @@ function count_auth_users($auth) {
     global $auth_ids;
     $auth = intval($auth);
 
-    if ($auth === 1) {        
+    if ($auth === 1) {
         for ($i = 2; $i <= count($auth_ids); $i++) {
             $extra = " AND password != '{$auth_ids[$i]}'";
         }
         $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password != '{$auth_ids[1]}' $extra");
-    } else {        
+    } else {
         $result = Database::get()->querySingle("SELECT COUNT(*) AS total FROM user WHERE password = '" . $auth_ids[$auth] . "'");
-    }    
+    }
     if ($result) {
         return $result->total;
     }
@@ -188,11 +160,12 @@ function get_auth_settings($auth) {
     global $auth_ids;
 
     $auth = intval($auth);
-    $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);        
-    if ($result) {        
-            $settings['auth_id'] = $result->auth_id;            
+    $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
+    if ($result) {
+            $settings['auth_id'] = $result->auth_id;
             $settings['auth_settings'] = $result->auth_settings;
             $auth_settings = $settings['auth_settings'];
+            $settings['auth_title'] = $result->auth_title;
             $settings['auth_instructions'] = $result->auth_instructions;
             $settings['auth_default'] = $result->auth_default;
             switch ($auth) {
@@ -239,8 +212,8 @@ function get_auth_settings($auth) {
                         'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9])));
                     break;
             }
-            $settings['auth_name'] = $auth_ids[$auth];            
-            return $settings;        
+            $settings['auth_name'] = $auth_ids[$auth];
+            return $settings;
     }
     return 0;
 }
@@ -267,18 +240,18 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
-            $unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = ";            
+            $unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = ";
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
-            if ($result) {                
-                $hasher = new PasswordHash(8, false);                    
+            if ($result) {
+                $hasher = new PasswordHash(8, false);
                 if ($hasher->CheckPassword($test_password, $result->password)) {
                     $testauth = true;
-                } else if (result($myrow->password) < 60 && md5($test_password) == $result->password) {
+                } else if (strlen($myrow->password) < 60 && md5($test_password) == $result->password) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
                     $password_encrypted = $hasher->HashPassword($test_password);
                     Database::get()->query("UPDATE user SET password = ?s WHERE username COLLATE utf8_bin = ?s" ,$password_encrypted, $test_username);
-                }                
+                }
             }
             break;
 
@@ -572,7 +545,7 @@ function process_login() {
     global $warning, $surname, $givenname, $email, $status, $is_admin, $language,
     $langInvalidId, $langAccountInactive1, $langAccountInactive2,
     $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
-    $auth_ids, $inactive_uid, $langTooManyFails;
+    $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
 
     if (isset($_POST['uname'])) {
         $posted_uname = canonicalize_whitespace($_POST['uname']);
@@ -582,16 +555,15 @@ function process_login() {
 
     $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
     $auth = get_auth_active_methods();
-    $is_eclass_unique = is_eclass_unique();
 
     if (isset($_POST['submit'])) {
-        unset($_SESSION['uid']);        
+        unset($_SESSION['uid']);
         $auth_allow = 0;
 
         if (get_config('login_fail_check')) {
-            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' 
-                                        AND COUNT > " . intval(get_config('login_fail_threshold')) . " 
-                                        AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");            
+            $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+                                        AND COUNT > " . intval(get_config('login_fail_threshold')) . "
+                                        AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
         }
         if (get_config('login_fail_check') && $r) {
             $auth_allow = 8;
@@ -602,7 +574,7 @@ function process_login() {
                 $sqlLogin = "= ?s";
             } else {
                 $sqlLogin = "COLLATE utf8_bin = ?s";
-            }           
+            }
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username $sqlLogin", $posted_uname);
             //print_r($result);
@@ -616,7 +588,7 @@ function process_login() {
                 $auth_allow = 4;
             } else {
                 if ($myrow) {
-                    $exists = 1;                    
+                    $exists = 1;
                     if (!empty($auth)) {
                         if (in_array($myrow->password, $auth_ids)) {
                             // alternate methods login
@@ -637,19 +609,31 @@ function process_login() {
             }
         }
 
+        $invalidIdMessage = sprintf($langInvalidId, $urlAppend . 'modules/auth/registration.php');
         if (!isset($_SESSION['uid'])) {
             switch ($auth_allow) {
                 case 1: $warning .= "";
                     session_regenerate_id();
                     break;
-                case 2: $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
+                case 2:
+                    if(isset($_GET['login_page'])) {
+                        die('ehllo');
+                    } else {
+                        $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
+                    }
                     break;
                 case 3: $warning .= "<div class='alert alert-warning'>$langAccountInactive1 " .
                             "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
                             token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></div>";
                     break;
-                case 4: $warning .= "<div class='alert alert-warning'>$langInvalidId</div>";
-                    increaseLoginFailure();
+                case 4:
+                    if(isset($_GET['login_page'])) {
+                        Session::flash('login_error', $invalidIdMessage);
+                        redirect_to_home_page('main/login_form.php');
+                    } else {
+                        $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
+                        increaseLoginFailure();
+                    }
                     break;
                 case 5: $warning .= "<div class='alert alert-warning'>$langNoCookies</div>";
                     break;
@@ -837,11 +821,11 @@ function shib_cas_login($type) {
     } else {
         $autoregister = FALSE;
     }
-    
+
     if ($type == 'shibboleth') {
         $uname = $_SESSION['shib_uname'];
         $email = $_SESSION['shib_email'];
-        $shib_surname = $_SESSION['shib_surname'];        
+        $shib_surname = $_SESSION['shib_surname'];
         $shibsettings = Database::get()->querySingle("SELECT auth_settings FROM auth WHERE auth_id = 6");
         if ($shibsettings) {
             if ($shibsettings->auth_settings != 'shibboleth' and $shibsettings->auth_settings != '') {
@@ -859,7 +843,7 @@ function shib_cas_login($type) {
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
     }
-    // user is authenticated, now let's see if he is registered also in db    
+    // user is authenticated, now let's see if he is registered also in db
     if (get_config('case_insensitive_usernames')) {
         $sqlLogin = "= ?s";
     } else {
@@ -890,7 +874,7 @@ function shib_cas_login($type) {
             if (!empty($info->status)) {
                 $status = $info->status;
             }
-            // update user information                
+            // update user information
             Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s
                                         WHERE id = ?d", $surname, $givenname, $email, $info->id);
             // check for admin privileges
@@ -909,7 +893,7 @@ function shib_cas_login($type) {
                 $_SESSION['is_departmentmanage_user'] = 1;
                 $is_departmentmanage_user = 1;
             }
-            $_SESSION['uid'] = $info->id;                
+            $_SESSION['uid'] = $info->id;
             if (isset($_SESSION['langswitch'])) {
                 $language = $_SESSION['langswitch'];
             } else {
@@ -927,7 +911,7 @@ function shib_cas_login($type) {
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
-                        username = ?s, email = ?s, status = ?d, lang = ?s, 
+                        username = ?s, email = ?s, status = ?d, lang = ?s,
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
@@ -949,8 +933,8 @@ function shib_cas_login($type) {
     $_SESSION['email'] = $email;
     $_SESSION['status'] = $status;
     //$_SESSION['is_admin'] = $is_admin;
-    $_SESSION['shib_user'] = 1; // now we are shibboleth user    
-    
+    $_SESSION['shib_user'] = 1; // now we are shibboleth user
+
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
 
@@ -994,7 +978,7 @@ function increaseLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
 
-    $ip = $_SERVER['REMOTE_ADDR'];    
+    $ip = $_SERVER['REMOTE_ADDR'];
     $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $ip . "'");
 
     if ($r) {
@@ -1011,7 +995,7 @@ function increaseLoginFailure() {
 function resetLoginFailure() {
     if (!get_config('login_fail_check'))
         return;
-    
+
     Database::get()->query("DELETE FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "' AND DATE_SUB(CURRENT_TIMESTAMP, INTERVAL " . intval(get_config('login_fail_forgive_interval')) . " HOUR) >= last_fail"); // de-penalize only after 24 hours
 }
 

@@ -257,17 +257,16 @@ if ($is_editor) {
                         )
                     ),false);
                     $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
-                        <fieldset>
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
                             <div class='col-sm-10'>
-                              <input name='newPathName' type='text' class='form-control' id='newPathName' placeholder='$langLearningPathName'>
+                              <input name='newPathName' type='text' class='form-control' id='newPathName'>
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='newComment' class='col-sm-2 control-label'>$langComment:</label>
                             <div class='col-sm-10'>
-                              <input name='newComment' type='text' class='form-control' id='newComment' placeholder='$langComment'>
+                              <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
                         </div>
                         <div class='form-group'>
@@ -277,7 +276,6 @@ if ($is_editor) {
                                   <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
                             </div>
                         </div>                        
-                        </fieldset>
                         </form></div>";
                 }
                 break;
@@ -348,10 +346,11 @@ if ($is_editor) {
                         'icon' => 'fa-plus-circle',
                         'level' => 'primary-label',
                         'button-class' => 'btn-success'),
-                    array('title' => $langimportLearningPath,
+                    array('title' => $langimportLearningPathSort,
                         'url' => "importLearningPath.php?course=$course_code",
                         'icon' => 'fa-upload',
-                        'level' => 'secondary',),
+                        'level' => 'primary-label',
+                        'button-class' => 'btn-success'),
                     array('title' => $langTrackAllPathExplanation,
                         'url' => "detailsAll.php?course=$course_code",
                         'icon' => 'fa-line-chart',
@@ -377,7 +376,7 @@ if ($l == 0) {
 $tool_content .= "
 <div class='table-responsive'>    
     <table class='table-default'>
-    <tr>
+    <tr class='list-header'>
       <th><div align='left'>$langLearningPaths</div></th>\n";
 
 if ($is_editor) {
@@ -466,7 +465,7 @@ foreach ($result as $list) { // while ... learning path list
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
 
-        $play_img = "<img src='$themeimg/$image_bullet' alt='' />";
+        $play_img = "<i class='fa fa-play-circle' style='font-size:20px;'></i>";
 
         if (count($resultmodules) > 0) {
             $firstmodule = $resultmodules[0];
@@ -476,7 +475,7 @@ foreach ($result as $list) { // while ... learning path list
         }
 
         $tool_content .= "
-      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a></td>\n";
+      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -609,7 +608,6 @@ foreach ($result as $list) { // while ... learning path list
             $globalprog += $prog;
         }
         $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>\n";
-        $tool_content .= "<td class='text-left' width='10'>" . $prog . "% </td>";
     }
     $tool_content .= "</tr>\n";
     $iterator++;
@@ -621,9 +619,8 @@ if (!$is_editor && $iterator != 1 && $uid) {
     $total = round($globalprog / ($iterator - 1));
     $tool_content .= "
     <tr>
-      <th colspan='2'><div align='right'><b>$langPathsInCourseProg</b>:</div></th>
+      <th><div align='right'><b>$langPathsInCourseProg</b>:</div></th>
       <th><div align='right'>" . disp_progress_bar($total, 1) . "</div></th>
-      <th><div align='left'>$total%</div></th>
     </tr>\n";
 }
 $tool_content .= "\n     </table></div>\n";

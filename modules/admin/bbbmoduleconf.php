@@ -48,44 +48,44 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
     $tool_content .= "<fieldset>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='host' class='col-sm-2 control-label'>$langHost</label>
-                    <div class='col-sm-10'><input id='host' type='text' name='hostname_form'></div>";
+    $tool_content .= "<label for='host' class='col-sm-3 control-label'>$langHost:</label>
+                    <div class='col-sm-9'><input class='form-control' id='host' type='text' name='hostname_form'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'><label for='ip_form' class='col-sm-2 control-label'>IP:</label>
-                <div class='col-sm-10'><input type='text' id='ip_form' name='ip_form'></div>";
-    $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='key_form' class='col-sm-2 control-label'>$langPresharedKey</label>
-            <div class='col-sm-10'><input type='text' name='key_form'></div>";
+    $tool_content .= "<div class='form-group'><label for='ip_form' class='col-sm-3 control-label'>IP:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' id='ip_form' name='ip_form'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='api_url_form' class='col-sm-2 control-label'>API URL:</label>
-            <div class='col-sm-10'><input type='text' id='api_url_form' name='api_url_form'></div>";
+    $tool_content .= "<label for='key_form' class='col-sm-3 control-label'>$langPresharedKey:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' name='key_form'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='max_rooms_form' class='col-sm-2 control-label'>$langMaxRooms</label>
-            <div class='col-sm-10'><input type='text' id='max_rooms_for' name='max_rooms_form'></div>";
+    $tool_content .= "<label for='api_url_form' class='col-sm-3 control-label'>API URL:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' id='api_url_form' name='api_url_form'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label for='max_rooms_form' class='col-sm-2 control-label'>$langMaxUsers</label>
-            <div class='col-sm-10'><input type='text' id='max_users_form' name='max_users_form'></div>";
+    $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxRooms:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' id='max_rooms_for' name='max_rooms_form'></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-2 control-label'>$langBBBEnableRecordings</label>
-            <div class='col-sm-10 radio'><label><input type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>
-            <div class='col-sm-10 radio'><label><input type='radio' id='recordings_on' name='enable_recordings' value='true'>$langYes</label></div>";
+    $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxUsers:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' id='max_users_form' name='max_users_form'></div>";
+    $tool_content .= "</div>";
+    $tool_content .= "<div class='form-group'>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' checked='true' value='false'>$langNo</label></div>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true'>$langYes</label></div>";
     $tool_content .= "</div>";
     $tool_content .= "<div class='form-group'>";
     
-    $tool_content .= "<label class='col-sm-2 control-label'>$langActivate</label>
-            <div class='col-sm-10 radio'><label><input type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>
-            <div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
+    $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>
+            <div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' checked='false' value='false'>$langNo</label></div>
+            <div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' checked='true' value='true'>$langYes</label></div>
         </div>";
     $tool_content .= "<div class='form-group'>";
-    $tool_content .= "<label class='col-sm-2 control-label'>$langBBBServerOrder</label>
-            <div class='col-sm-10'><input type='text' name='weight'></div>";
+    $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
+            <div class='col-sm-9'><input class='form-control' type='text' name='weight'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+    $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
     $tool_content .= "</fieldset></form></div>";
 
     $tool_content .='<script language="javaScript" type="text/javascript">
@@ -171,60 +171,60 @@ else {
         $tool_content .= "<form class='form-horizontal' role='form' name='serverForm' action='$_SERVER[SCRIPT_NAME]' method='post'>";
         $tool_content .= "<fieldset>";        
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='host' class='col-sm-2 control-label'>$langHost</label>
-                        <div class='col-sm-10'><input id='host' type='text' name='hostname_form' value='$server->hostname'></div>";
+        $tool_content .= "<label for='host' class='col-sm-3 control-label'>$langHost:</label>
+                        <div class='col-sm-9'><input class='form-control' id='host' type='text' name='hostname_form' value='$server->hostname'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'><label for='ip_form' class='col-sm-2 control-label'>IP:</label>
-                    <div class='col-sm-10'><input type='text' id='ip_form' name='ip_form' value='$server->ip'></div>";
-        $tool_content .= "</div>";
-        $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='key_form' class='col-sm-2 control-label'>$langPresharedKey</label>
-                <div class='col-sm-10'><input type='text' name='key_form' value='$server->server_key'></div>";
+        $tool_content .= "<div class='form-group'><label for='ip_form' class='col-sm-3 control-label'>IP:</label>
+                    <div class='col-sm-9'><input class='form-control' type='text' id='ip_form' name='ip_form' value='$server->ip'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='api_url_form' class='col-sm-2 control-label'>API URL:</label>
-                <div class='col-sm-10'><input type='text' id='api_url_form' name='api_url_form' value='$server->api_url'></div>";
+        $tool_content .= "<label for='key_form' class='col-sm-3 control-label'>$langPresharedKey:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' name='key_form' value='$server->server_key'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='max_rooms_form' class='col-sm-2 control-label'>$langMaxRooms</label>
-                <div class='col-sm-10'><input type='text' id='max_rooms_for' name='max_rooms_form' value='$server->max_rooms'></div>";
+        $tool_content .= "<label for='api_url_form' class='col-sm-3 control-label'>API URL:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' id='api_url_form' name='api_url_form' value='$server->api_url'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label for='max_rooms_form' class='col-sm-2 control-label'>$langMaxUsers</label>
-                <div class='col-sm-10'><input type='text' id='max_users_form' name='max_users_form' value='$server->max_users'></div>";
+        $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxRooms:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' id='max_rooms_for' name='max_rooms_form' value='$server->max_rooms'></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label class='col-sm-2 control-label'>$langBBBEnableRecordings</label>";
+        $tool_content .= "<label for='max_rooms_form' class='col-sm-3 control-label'>$langMaxUsers:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' id='max_users_form' name='max_users_form' value='$server->max_users'></div>";
+        $tool_content .= "</div>";
+        $tool_content .= "<div class='form-group'>";
+        $tool_content .= "<label class='col-sm-3 control-label'>$langBBBEnableRecordings:</label>";
         if ($server->enable_recordings == "false") {
             $checkedfalse = " checked='true' ";
         } else $checkedfalse = '';
-        $tool_content .= "<div class='col-sm-10 radio'><label><input type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo:</label></div>";
         if ($server->enable_recordings == "true") {
             $checkedtrue = " checked='true' ";
         } else $checkedtrue = '';
-        $tool_content .= "<div class='col-sm-10 radio'><label><input type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes:</label></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
 
-        $tool_content .= "<label class='col-sm-2 control-label'>$langActivate</label>";
+        $tool_content .= "<label class='col-sm-3 control-label'>$langActivate:</label>";
         if ($server->enabled == "false") {
             $checkedfalse2 = " checked='false' ";
         } else $checkedfalse2 = '';
         
-        $tool_content .= "<div class='col-sm-10 radio'><label><input type='radio' id='enabled_false' name='enabled' $checkedfalse2 value='false'>$langNo</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='enabled_false' name='enabled' $checkedfalse2 value='false'>$langNo</label></div>";
         
         if ($server->enabled == "true") {
             $checkedtrue2 = " checked='false' ";
         } else $checkedtrue2 = '';
         
-         $tool_content .= "<div class='col-sm-offset-2 col-sm-10 radio'><label><input type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>
+         $tool_content .= "<div class='col-sm-offset-3 col-sm-9 radio'><label><input  type='radio' id='enabled_true' name='enabled' $checkedtrue2 value='true'>$langYes</label></div>
             </div>";
         $tool_content .= "<div class='form-group'>";
-        $tool_content .= "<label class='col-sm-2 control-label'>$langBBBServerOrder</label>
-                <div class='col-sm-10'><input type='text' name='weight' value='$server->weight'></div>";
+        $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
+                <div class='col-sm-9'><input class='form-control' type='text' name='weight' value='$server->weight'></div>";
         $tool_content .= "</div>";
-        $tool_content .= "<input type = 'hidden' name = 'id_form' value='$bbb_server'>";
-        $tool_content .= "<div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div>";
+        $tool_content .= "<input class='form-control' type = 'hidden' name = 'id_form' value='$bbb_server'>";
+        $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
         $tool_content .= "</fieldset></form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
                 //<![CDATA[

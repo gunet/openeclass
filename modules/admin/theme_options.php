@@ -35,10 +35,11 @@ $defaults = array(
                 "rgba(238,238,238,1)" => array('leftSubMenuHoverFontColor'),
                 "rgba(0,0,0,0.2)" => array('leftMenuBgColor'),
                 "repeat" => array('bgType'),
+                "boxed" => array('containerType'),
                 "rgba(0,155,207,1)" => array('loginJumbotronRadialBgColor'),
                 "rgba(2,86,148,1)" => array('loginJumbotronBgColor'),
                 "small-right" => array("loginImgPlacement"),
-                "1340" => array('containerWidth')
+                "" => array('fluidContainerWidth')
             );
 $active_theme = get_config('theme_options_id');
 $preview_theme = isset($_SESSION['theme_options_id']) ? $_SESSION['theme_options_id'] : NULL;
@@ -51,7 +52,7 @@ if (isset($_GET['delete_image'])) {
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
         $theme_options_styles = unserialize($theme_options->styles);
         $logo_type = $_GET['delete_image'];
-        unlink("$webDir/courses/theme_data/$theme_id/$theme_options_styles[$logo_type]");
+        unlink("$webDir/courses/theme_data/$theme_id/{$theme_options_styles[$logo_type]}");
         unset($theme_options_styles[$logo_type]);
         $serialized_data = serialize($theme_options_styles);
         Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
@@ -61,7 +62,7 @@ if (isset($_GET['export'])) {
         if (!$theme_id) redirect_to_home_page('modules/admin/theme_options.php'); // if default theme
         require_once 'include/pclzip/pclzip.lib.php';
         require_once 'include/lib/fileUploadLib.inc.php';
-        if(!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
+        if (!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);        
         $theme_name = $theme_options->name;
 
@@ -163,9 +164,21 @@ if (isset($_POST['optionsSave'])) {
     $head_content .= "
     <script>
         $(function(){
-            $('#containerWidth').slider({
+            $('#fluidContainerWidth').slider({
+                tooltip: 'hide',
                 formatter: function(value) {
-                    return value + 'px';
+                    $('#pixelCounter').text(value + 'px');
+                }
+            });
+            $('input[name=\'containerType\']').change(function(){
+                if($(this).val()=='fluid') {
+                    $('#fluidContainerWidth').slider('enable');
+                    $('#fluidContainerWidth').prop('disabled', false);
+                    $('#fluidContainerWidth').closest('.form-group').removeClass('hidden');
+                } else {
+                    $('#fluidContainerWidth').slider('disable');
+                    $('#fluidContainerWidth').prop('disabled', true);
+                    $('#fluidContainerWidth').closest('.form-group').addClass('hidden');
                 }
             });
             $('.uploadTheme').click(function (e)
@@ -316,9 +329,10 @@ if (isset($_POST['optionsSave'])) {
                     <form class='form-inline' style='display:inline;' method='post' action='$_SERVER[SCRIPT_NAME]?delThemeId=$theme_id'>
                         <a class='confirmAction btn btn-danger btn-xs$del_class' id='theme_delete' data-title='$langConfirmDelete' data-message='$langThemeSettingsDelete' data-cancel-txt='$langCancel' data-action-txt='$langDelete' data-action-class='btn-danger'>$langDelete</a>
                     </form>";
+    $urlThemeData = $urlAppend . 'courses/theme_data/' . $theme_id;
     if (isset($theme_options_styles['imageUpload'])) {
         $logo_field = "
-            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[imageUpload]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUpload'>$langDelete</a>
             <input type='hidden' name='imageUpload' value='$theme_options_styles[imageUpload]'>
         ";    
     } else {
@@ -326,7 +340,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['imageUploadSmall'])) {
         $small_logo_field = "
-            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[imageUploadSmall]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=imageUploadSmall'>$langDelete</a>
             <input type='hidden' name='imageUploadSmall' value='$theme_options_styles[imageUploadSmall]'>
         ";
     } else {
@@ -334,7 +348,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['bgImage'])) {
         $bg_field = "
-            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[bgImage]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=bgImage'>$langDelete</a>
             <input type='hidden' name='bgImage' value='$theme_options_styles[bgImage]'>
         ";
     } else {
@@ -342,7 +356,7 @@ if (isset($_POST['optionsSave'])) {
     }
     if (isset($theme_options_styles['loginImg'])) {
         $login_image_field = "
-            <img src='$urlAppend/courses/theme_data/$theme_id/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
+            <img src='$urlThemeData/$theme_options_styles[loginImg]' style='max-height:100px;max-width:150px;'> &nbsp;&nbsp;<a class='btn btn-xs btn-danger' href='$_SERVER[SCRIPT_NAME]?delete_image=loginImg'>$langDelete</a>
             <input type='hidden' name='loginImg' value='$theme_options_styles[loginImg]'>
         ";
     } else {
@@ -416,9 +430,27 @@ $tool_content .= "
     <div role='tabpanel' class='tab-pane in active fade' id='generalsetting'>
         <div class='form-wrapper'>
             <div class='form-group'>
-                <label for='containerWidth' class='col-sm-3 control-label'>$langContainerWidth:</label>
+                <label class='col-sm-3 control-label'>$langLayout:</label>
+                <div class='form-inline col-sm-9'>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='containerType' value='boxed' ".(($theme_options_styles['containerType'] == 'boxed')? 'checked' : '').">
+                          $langBoxed &nbsp; 
+                        </label>
+                      </div>
+                      <div class='radio'>
+                        <label>
+                          <input type='radio' name='containerType' value='fluid' ".(($theme_options_styles['containerType'] == 'fluid')? 'checked' : '').">
+                          $langFluid &nbsp;
+                        </label>
+                      </div>                                
+                </div>                
+            </div>        
+            <div class='form-group".(($theme_options_styles['containerType'] == 'boxed')? ' hidden' : '')."'>
+                <label for='fluidContainerWidth' class='col-sm-3 control-label'>$langFluidContainerWidth:</label>
                 <div class='col-sm-9'>
-                    <input id='containerWidth' name='containerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1890' data-slider-step='10' data-slider-value='$theme_options_styles[containerWidth]'>
+                    <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]' ".(($theme_options_styles['containerType'] == 'boxed')? ' disabled' : '').">
+                    <span style='margin-left:10px;' id='pixelCounter'></span>
                 </div>
             </div>                        
             <div class='form-group'>

@@ -61,15 +61,15 @@ if (isset($_GET['delete'])) {
                                                         title = ?s"
                 , $ebook_id, $_POST['new_section_id'], $_POST['new_section_title']);
     }
-    header("Location: " . $urlAppend . '/modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
-    exit;
+    redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
 } elseif (isset($_POST['title_submit'])) {
     $info = Database::get()->querySingle("SELECT id, title FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
     $ebook_title = trim($_POST['ebook_title']);
     if (!empty($ebook_title) and $info->title != $ebook_title) {
         Database::get()->query("UPDATE `ebook` SET title = ?s WHERE id = ?d", $ebook_title, $info->id);
     }
-    $tool_content .= "<div class='alert alert-success'>$langEBookTitleModified</div>";
+    Session::Messages($langEBookTitleModified, 'alert-success');
+    redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
 } elseif (isset($_POST['submit'])) {
     $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
     list($paths, $files, $file_ids, $id_map) = find_html_files();
@@ -108,7 +108,8 @@ if (isset($_GET['delete'])) {
             Database::get()->query('DELETE FROM ebook_subsection WHERE id IN (' . implode(', ', $oldssids) . ')');
         }
     }
-    $tool_content .= "<div class='alert alert-success'>$langEBookSectionsModified</div>";
+    Session::Messages($langEBookSectionsModified, 'alert-success');
+    redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
 }
 
 $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
@@ -117,7 +118,7 @@ if (!$info) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else {
     $pageName = $langEBookEdit;
-    $basedir = $webDir . 'courses/' . $course_code . '/ebook/' . $ebook_id;
+    $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
     $k = 0;
     list($paths, $files, $file_ids, $id_map) = find_html_files();
     // Form #1 - edit ebook title
@@ -291,12 +292,12 @@ function find_html_files() {
 
 function get_html_title($file) {
     $dom = new DOMDocument();
-    @$dom->loadHTMLFile($file);
+    $dom->loadHTMLFile($file);
     if (!is_object($dom)) {
         return '';
     }
     $title_elements = $dom->getElementsByTagName('title');
-    if (!is_object($title_elements) or ! $title_elements->length) {
+    if (!is_object($title_elements) or !$title_elements->length) {
         return '';
     }
     $title = $title_elements->item(0)->nodeValue;

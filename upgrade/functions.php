@@ -189,8 +189,12 @@ function is_admin($username, $password) {
             return false;
 
         $hasher = new PasswordHash(8, false);
-        if (!$hasher->CheckPassword($password, $user->password))
+        if (!$hasher->CheckPassword($password, $user->password)) {
+            if (strlen($user->password) < 60 and md5($password) == $user->password) {
+                return true;
+            }
             return false;
+        }
 
         if ($db_schema == 0) {
             $_SESSION['uid'] = $user->user_id;
@@ -1136,8 +1140,9 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         // finally drop database
         Database::get()->query("DROP DATABASE `$code`");
     }
-    
+        
     // refresh XML metadata
+    Database::get()->query("USE `$mysqlMainDb`");
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse($course_id, $code, true);
@@ -1150,11 +1155,15 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
 }
 
 /**
- * @brief upgrare to 3.0rc2
+ * @brief upgrade to 3.0rc2
  * @param string $code
  * @param int    $course_id
  */
 function upgrade_course_3_0_rc2($code, $course_id) {
+    
+    global $mysqlMainDb;
+    
+    Database::get()->query("USE `$mysqlMainDb`");
     // refresh XML metadata
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
@@ -1163,7 +1172,7 @@ function upgrade_course_3_0_rc2($code, $course_id) {
 }
 
 /**
- * @brief upgrare to 2.11
+ * @brief upgrade to 2.11
  * @global type $langUpgCourse
  * @param type $code
  * @param type $lang
@@ -1366,14 +1375,18 @@ function upgrade_course_2_4($code, $course_id, $lang) {
         if (!$doc_id) {
             $doc_id = 1;
         }
+        Database::get()->query("UPDATE `document` SET visibility = '1' WHERE visibility = 'v'");
+        Database::get()->query("UPDATE `document` SET visibility = '0' WHERE visibility = 'i'");
+        Database::get()->query("ALTER TABLE `document`
+                                CHANGE `visibility` `visible` TINYINT(4) NOT NULL DEFAULT 1");
         Database::get()->query("INSERT INTO `$mysqlMainDb`.document
-                                (`id`, `course_id`, `subsystem`, `subsystem_id`, `path`, `filename`, `visibility`, `comment`,
+                                (`id`, `course_id`, `subsystem`, `subsystem_id`, `path`, `filename`, `visible`, `comment`,
                                  `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                  `description`, `author`, `format`, `language`, `copyrighted`)
-                                SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visibility`, `comment`,
+                                SELECT $doc_id + id, $course_id, 0, NULL, `path`, `filename`, `visible`, `comment`,
                                        0 + `category`, `title`, `creator`, `date`, `date_modified`, `subject`,
                                        `description`, `author`, `format`, `language`, 0 + `copyrighted` FROM document") and
-                Database::get()->query("DROP TABLE document");
+        Database::get()->query("DROP TABLE document");
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
                                  SET res_id = res_id + $doc_id
                                  WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'doc'");
@@ -1651,12 +1664,14 @@ function group_documents_main_db($path, $course_id, $group_id, $type) {
     $file_date = quote(date('Y-m-d H:i:s', filemtime($path)));
     $internal_path = quote(str_replace($group_document_dir, '', $path));
     $filename = Database::get()->querySingle("SELECT `filename` FROM group_documents WHERE `path` = ?s", $internal_path)->filename;
-    if (!Database::get()->query("INSERT INTO `$mysqlMainDb`.document SET
-                              course_id = ?d, subsystem = 1, subsystem_id = ?d,
-                              path = ?s, filename = ?s,
-                              format = ?s, visibility = 'v',
-                              date = ?d, date_modified = ?d", $course_id, $group_id, $internal_path, $filename, $type, $file_date, $file_date)) {
-        $group_document_upgrade_ok = false;
+    if(!empty($filename)) {
+        if (!Database::get()->query("INSERT INTO `$mysqlMainDb`.document SET
+                                  course_id = ?d, subsystem = 1, subsystem_id = ?d,
+                                  path = ?s, filename = ?s,
+                                  format = ?s, visible = 1,
+                                  date = ?d, date_modified = ?d", $course_id, $group_id, $internal_path, $filename, $type, $file_date, $file_date)) {
+            $group_document_upgrade_ok = false;
+        }
     }
 }
 
@@ -1748,5 +1763,41 @@ function fix_multiple_usernames()  {
             }
         }
         $tool_content .= "</div>";
+    }
+}
+
+/**
+ * @brief default theme options
+ */
+$theme_options = array(
+  array('name' => 'Open Courses Atoms','styles' => 'a:11:{s:11:"imageUpload";s:25:"eclass-new-logo_atoms.png";s:7:"bgImage";s:36:"bcgr_lines_petrol_les saturation.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:18:"rgba(76,173,178,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:37:"OpenCourses_banner_Color_theme1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.64)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.71)";s:22:"leftMenuHoverFontColor";s:18:"rgba(64,121,146,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(67,142,158,1)";}'),
+  array('name' => 'Open Courses Sketchy','styles' => 'a:12:{s:11:"imageUpload";s:27:"eclass-new-logo_sketchy.png";s:7:"bgImage";s:24:"Light_sketch_bcgr2-1.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:19:"rgba(155,128,106,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:27:"banner_Sketch_empty-1-2.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(37,37,37,0.91)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.83)";s:22:"leftMenuHoverFontColor";s:18:"rgba(146,100,64,1)";s:25:"leftMenuSelectedFontColor";s:18:"rgba(228,164,77,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(158,135,67,1)";}'),
+  array('name' => 'Open eClass Classic','styles' => 'a:13:{s:11:"imageUpload";s:27:"eclass-new-logo_classic.png";s:7:"bgColor";s:19:"rgba(223,223,223,1)";s:9:"linkColor";s:19:"rgba(152,143,138,1)";s:14:"linkHoverColor";s:17:"rgba(152,57,47,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:23:"eclass_classic2-1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(130,124,120,1)";s:17:"leftMenuFontColor";s:19:"rgba(221,218,218,1)";s:22:"leftMenuHoverFontColor";s:19:"rgba(251,198,145,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(223,223,223,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(213,209,209,1)";s:23:"leftSubMenuHoverBgColor";s:17:"rgba(155,69,69,1)";}'),
+  array('name' => 'Open eClass City Lights','styles' => 'a:4:{s:7:"bgImage";s:21:"Open-eClass-4-1-1.jpg";s:6:"bgType";s:3:"fix";s:27:"loginJumbotronRadialBgColor";s:0:"";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.58)";}'),
+  array('name' => 'Open eClass Classic Ice','styles' => 'a:13:{s:11:"imageUpload";s:23:"eclass-new-logo_ice.png";s:7:"bgColor";s:19:"rgba(208,219,229,1)";s:7:"bgImage";s:7:"ice.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:17:"rgba(35,82,124,1)";s:14:"linkHoverColor";s:19:"rgba(140,195,239,1)";s:8:"loginImg";s:14:"eclass_ice.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:20:"rgba(57,78,113,0.71)";s:17:"leftMenuFontColor";s:22:"rgba(220,215,215,0.89)";s:22:"leftMenuHoverFontColor";s:19:"rgba(149,173,192,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(153,199,236,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(217,208,208,1)";}')
+);
+
+/**
+ * @brief Copy theme images to theme_data directory
+ * @global string $webDir
+ * @global string $_SESSION[theme]
+ */
+function copyThemeImages() {
+    global $webDir;
+
+    $imgDir = "$webDir/template/$_SESSION[theme]/img";
+    $images = array('bgImage', 'imageUpload', 'imageUploadSmall', 'loginImg');
+    $themes = Database::get()->queryArray("SELECT * FROM theme_options");
+    foreach ($themes as $t) {
+        $themeDir = "$webDir/courses/theme_data/" . $t->id;
+        if (!file_exists($themeDir)) {
+            mkdir($themeDir, 0755, true);
+        }
+        $styles = unserialize($t->styles);
+        foreach ($images as $img) {
+            if (isset($styles[$img]) and file_exists("$imgDir/{$styles[$img]}") and !file_exists("$themeDir/{$styles[$img]}")) {
+                copy("$imgDir/{$styles[$img]}", "$themeDir/{$styles[$img]}");
+            }
+        }
     }
 }

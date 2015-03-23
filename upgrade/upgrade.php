@@ -89,9 +89,19 @@ if (!DBHelper::tableExists('config')) {
 
 // Upgrade user table first if needed
 if (!DBHelper::fieldExists('user', 'id')) {
-    // check for mulitple usernames
+    // check for multiple usernames
     fix_multiple_usernames();
-
+    
+    if (DBHelper::indexExists('user', 'user_username')) {
+        Database::get()->query("ALTER TABLE user DROP INDEX user_username");
+    }        
+    if (!DBHelper::fieldExists('user', 'whitelist')) {
+        Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT");
+        Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
+    }
+    if (!DBHelper::fieldExists('user', 'description')) {
+        Database::get()->query("ALTER TABLE `user` ADD description TEXT");
+    }        
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -118,8 +128,7 @@ if (!DBHelper::fieldExists('user', 'id')) {
                         CHANGE whitelist whitelist TEXT,
                         DROP forum_flag,
                         DROP announce_flag,
-                        DROP doc_flag,
-                        DROP KEY user_username");
+                        DROP doc_flag");
     Database::get()->query("ALTER TABLE admin
                         CHANGE idUser user_id INT(11) NOT NULL PRIMARY KEY");
 }
@@ -235,10 +244,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
         set_config('base_url', $urlServer);
         set_config('default_language', $language);
-        set_config('active_ui_languages', implode(' ', $active_ui_languages));
-        if ($urlSecure != $urlServer) {
-            set_config('secure_url', $urlSecure);
-        }
+        set_config('active_ui_languages', implode(' ', $active_ui_languages));        
         set_config('phpMyAdminURL', $phpMyAdminURL);
         set_config('phpSysInfoURL', $phpSysInfoURL);
 
@@ -345,29 +351,30 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         if (!DBHelper::fieldExists('cours_user', 'course_id')) {
             Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
-            Database::get()->query('UPDATE cours_user SET course_id =
-                                        (SELECT course_id FROM cours WHERE code = cours_user.code_cours)
-                             WHERE course_id = 0');
-            Database::get()->query('ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)');
-            Database::get()->query('CREATE INDEX course_user_id ON cours_user (user_id, course_id)');
-            Database::get()->query('ALTER TABLE cours_user DROP code_cours');
+            $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
+            foreach ($t as $entry) {                
+              Database::get()->query("UPDATE cours_user SET course_id = $entry->cours_id WHERE code_cours = '$entry->code'");
+            }            
+            Database::get()->query("ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)");
+            Database::get()->query("CREATE INDEX course_user_id ON cours_user (user_id, course_id)");
+            Database::get()->query("ALTER TABLE cours_user DROP code_cours");
         }
 
-        if (!DBHelper::fieldExists('annonces', 'course_id')) {
-            Database::get()->query('ALTER TABLE annonces ADD course_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
-            Database::get()->query('UPDATE annonces SET course_id =
-                                        (SELECT course_id FROM cours WHERE code = annonces.code_cours)
-                             WHERE course_id = 0');
+        if (!DBHelper::fieldExists('annonces', 'cours_id')) {
+            Database::get()->query('ALTER TABLE annonces ADD cours_id int(11) DEFAULT 0 NOT NULL AFTER code_cours');
+            $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
+            foreach ($t as $entry) {
+                Database::get()->query("UPDATE annonces SET cours_id = $entry->cours_id WHERE code_cours = '$entry->code'");
+            }
             Database::get()->query('ALTER TABLE annonces DROP code_cours');
         }
-    }
+    }    
     if (version_compare($oldversion, '2.3.1', '<')) {
         if (!DBHelper::fieldExists('prof_request', 'am')) {
             Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
         }
     }
 
-    Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
     DBHelper::fieldExists('user', 'email_public') or
             Database::get()->query("ALTER TABLE `user`
                         ADD `email_public` TINYINT(1) NOT NULL DEFAULT 0,
@@ -389,8 +396,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         DBHelper::fieldExists('user', 'verified_mail') or
                 Database::get()->query("ALTER TABLE `user` ADD verified_mail BOOL NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
                                          ADD receive_mail BOOL NOT NULL DEFAULT 1");
-        DBHelper::fieldExists('course_user', 'receive_mail') or
-                Database::get()->query("ALTER TABLE `course_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
+        DBHelper::fieldExists('cours_user', 'receive_mail') or
+                Database::get()->query("ALTER TABLE `cours_user` ADD receive_mail BOOL NOT NULL DEFAULT 1");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `document` (
                         `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `course_id` INT(11) NOT NULL,
@@ -410,10 +417,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `author` VARCHAR(255) NOT NULL DEFAULT '',
                         `format` VARCHAR(32) NOT NULL DEFAULT '',
                         `language` VARCHAR(16) NOT NULL DEFAULT '',
-                        `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
-                        FULLTEXT KEY `document`
-                            (`filename`, `comment`, `title`, `creator`,
-                            `subject`, `description`, `author`, `language`)) $charset_spec");
+                        `copyrighted` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `group_properties` (
                         `course_id` INT(11) NOT NULL PRIMARY KEY ,
                         `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
@@ -634,14 +638,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('opencourses_enable', 0)");
 
         DBHelper::fieldExists('document', 'public') or
-                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
-        DBHelper::fieldExists('cours_user', 'reviewer') or
-                Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");        
         DBHelper::fieldExists('cours', 'course_license') or
                 Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '0' AFTER `course_addon`");
-
         DBHelper::fieldExists("cours_user", "reviewer") or
-                Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0' AFTER `editor`");
+                Database::get()->query("ALTER TABLE `cours_user` ADD `reviewer` INT(11) NOT NULL DEFAULT '0'");
 
         // prevent dir list under video storage
         if ($handle = opendir($webDir . '/video/')) {
@@ -970,7 +971,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
             Database::get()->query("RENAME TABLE annonces TO announcement");
             Database::get()->query("UPDATE announcement SET visibility = '0' WHERE visibility <> 'v'");
-            Database::get()->query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");            
+            Database::get()->query("UPDATE announcement SET visibility = '1' WHERE visibility = 'v'");
             Database::get()->query("ALTER TABLE announcement CHANGE `contenu` `content` TEXT,
                                        CHANGE `temps` `date` DATETIME,
                                        CHANGE `cours_id` `course_id` INT(11),
@@ -1960,7 +1961,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 break;
             }
         }
-        
+
         // oai_metadata
         Database::get()->query("ALTER TABLE `oai_record` DROP COLUMN `dc_title`,
             DROP COLUMN `dc_description`,
@@ -2024,7 +2025,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             DROP INDEX cid,
             DROP INDEX oaiid
             ");
-        
+
         if (!DBHelper::tableExists('oai_metadata')) {
             Database::get()->query("CREATE TABLE `oai_metadata` (
                 `id` int(11) NOT NULL auto_increment PRIMARY KEY,
@@ -2037,11 +2038,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     // Rename table `cours` to `course` and `cours_user` to `course_user`
     if (!DBHelper::tableExists('course')) {
-        
+
         if (DBHelper::indexExists('cours', 'cours')) {
             Database::get()->query("ALTER TABLE cours DROP INDEX cours");
         }
-        
+
         DBHelper::fieldExists('cours', 'expand_glossary') or
                 Database::get()->query("ALTER TABLE `cours` ADD `expand_glossary` BOOL NOT NULL DEFAULT 0");
         DBHelper::fieldExists('cours', 'glossary_index') or
@@ -2426,6 +2427,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0rc2");
             upgrade_course_3_0_rc2($row->code, $row->id);
         }
+        if (version_compare($oldversion, '3.0', '<')) {
+            updateInfo(-1, $langUpgCourse . " " . $row->code . " 3.0");
+            upgrade_course_3_0_rc2($row->code, $row->id);
+        }
         $i++;
     }
 
@@ -2483,9 +2488,35 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
         
+        if (!DBHelper::fieldExists('auth', 'auth_title')) {
+            Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
+        }
+        if (!DBHelper::fieldExists('gradebook', 'active')) {
+            Database::get()->query("ALTER table `gradebook` ADD `active` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('gradebook', 'title')) {
+            Database::get()->query("ALTER table `gradebook` ADD `title` VARCHAR(250) DEFAULT NULL");
+        }
+        if (!DBHelper::fieldExists('attendance', 'active')) {
+            Database::get()->query("ALTER table `attendance` ADD `active` TINYINT(1) NOT NULL DEFAULT 0");
+        }
+        if (!DBHelper::fieldExists('attendance', 'title')) {
+            Database::get()->query("ALTER table `attendance` ADD `title` VARCHAR(250) DEFAULT NULL");
+        }
+        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0, '')");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
+                `id` MEDIUMINT(11) NOT NULL auto_increment,
+                `element_type` VARCHAR(255) NOT NULL DEFAULT '',
+                `element_id` MEDIUMINT(11) NOT NULL ,
+                `user_id` VARCHAR(255) NOT NULL DEFAULT '',
+                `tag` TEXT,
+                `date` DATE DEFAULT NULL,
+                `course_id` INT(11) NOT NULL DEFAULT 0,
+                PRIMARY KEY (id)) $charset_spec");
+
         if (DBHelper::fieldExists('course_user', 'team')) {
             Database::get()->query('ALTER TABLE `course_user` DROP COLUMN `team`');
-        }                
+        }
         if (!DBHelper::fieldExists('exercise_question', 'difficulty')) {
             Database::get()->query("ALTER table `exercise_question` ADD difficulty INT(1) DEFAULT 0");
         }
@@ -2497,31 +2528,33 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `question_cat_name` VARCHAR(300) NOT NULL,
                             `course_id` INT(11) NOT NULL)
                             $charset_spec");
-        
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `theme_options` (
                                 `id` int(11) NOT NULL AUTO_INCREMENT,
                                 `name` VARCHAR(300) NOT NULL,
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
-        $theme_options = array(
-          array('name' => 'Open Courses Atoms','styles' => 'a:11:{s:11:"imageUpload";s:25:"eclass-new-logo_atoms.png";s:7:"bgImage";s:36:"bcgr_lines_petrol_les saturation.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:18:"rgba(76,173,178,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:37:"OpenCourses_banner_Color_theme1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.64)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.71)";s:22:"leftMenuHoverFontColor";s:18:"rgba(64,121,146,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(67,142,158,1)";}'),
-          array('name' => 'Open Courses Sketchy','styles' => 'a:12:{s:11:"imageUpload";s:27:"eclass-new-logo_sketchy.png";s:7:"bgImage";s:24:"Light_sketch_bcgr2-1.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:19:"rgba(155,128,106,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:27:"banner_Sketch_empty-1-2.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(37,37,37,0.91)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.83)";s:22:"leftMenuHoverFontColor";s:18:"rgba(146,100,64,1)";s:25:"leftMenuSelectedFontColor";s:18:"rgba(228,164,77,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(158,135,67,1)";}'),
-          array('name' => 'Open eClass Classic','styles' => 'a:13:{s:11:"imageUpload";s:27:"eclass-new-logo_classic.png";s:7:"bgColor";s:19:"rgba(223,223,223,1)";s:9:"linkColor";s:19:"rgba(152,143,138,1)";s:14:"linkHoverColor";s:17:"rgba(152,57,47,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:23:"eclass_classic2-1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(130,124,120,1)";s:17:"leftMenuFontColor";s:19:"rgba(221,218,218,1)";s:22:"leftMenuHoverFontColor";s:19:"rgba(251,198,145,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(223,223,223,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(213,209,209,1)";s:23:"leftSubMenuHoverBgColor";s:17:"rgba(155,69,69,1)";}'),
-          array('name' => 'Open eClass City Lights','styles' => 'a:4:{s:7:"bgImage";s:21:"Open-eClass-4-1-1.jpg";s:6:"bgType";s:3:"fix";s:27:"loginJumbotronRadialBgColor";s:0:"";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.58)";}'),
-          array('name' => 'Open eClass Classic Ice','styles' => 'a:13:{s:11:"imageUpload";s:23:"eclass-new-logo_ice.png";s:7:"bgColor";s:19:"rgba(208,219,229,1)";s:7:"bgImage";s:7:"ice.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:17:"rgba(35,82,124,1)";s:14:"linkHoverColor";s:19:"rgba(140,195,239,1)";s:8:"loginImg";s:14:"eclass_ice.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:20:"rgba(57,78,113,0.71)";s:17:"leftMenuFontColor";s:22:"rgba(220,215,215,0.89)";s:22:"leftMenuHoverFontColor";s:19:"rgba(149,173,192,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(153,199,236,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(217,208,208,1)";}')
-        );
+
+        // add or upgrade default theme options
         foreach ($theme_options as $theme) {
-            Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)", $theme['name'], $theme['styles']);
-        }        
+            if ($q = Database::get()->querySingle("SELECT id FROM theme_options WHERE name = ?s", $theme['name'])) {
+                Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $theme['styles'], $q->id);
+            } else {
+                Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)", $theme['name'], $theme['styles']);
+            }
+        }
+        copyThemeImages();
+
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
         }
-        //Add course home_layout fiels        
+
+        // Add course home_layout fiels
         if (!DBHelper::fieldExists('course', 'home_layout')) {
             Database::get()->query("ALTER TABLE course ADD home_layout TINYINT(1) NOT NULL DEFAULT 1");
             Database::get()->query("UPDATE course SET home_layout = 3");
         }
-        //Add course image field
+        // Add course image field
         if (!DBHelper::fieldExists('course', 'course_image')) {
             Database::get()->query("ALTER TABLE course ADD course_image VARCHAR(400) NULL");
         }
@@ -2552,26 +2585,30 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         Database::get()->query("DELETE FROM unit_resources WHERE res_id = -1");
         Database::get()->query("DELETE FROM course_units WHERE `order` = -1");
-        
-        // loosen poll schema, mediumtext columns can be allowed to be null    
-        if (DBHelper::fieldExists('poll', 'description')) { 
+
+        // loosen poll schema, mediumtext columns can be allowed to be null
+        if (DBHelper::fieldExists('poll', 'description')) {
             Database::get()->query("ALTER TABLE `poll` CHANGE `description` `description` MEDIUMTEXT NULL DEFAULT NULL");
         } else {
             Database::get()->query("ALTER TABLE `poll` ADD `description` MEDIUMTEXT NULL DEFAULT NULL");
         }
-        if (DBHelper::fieldExists('poll', 'end_message')) { 
+        if (DBHelper::fieldExists('poll', 'end_message')) {
             Database::get()->query("ALTER TABLE `poll` CHANGE `end_message` `end_message` MEDIUMTEXT NULL DEFAULT NULL");
         } else {
             Database::get()->query("ALTER TABLE `poll` ADD `end_message` MEDIUMTEXT NULL DEFAULT NULL");
         }
-        
+
+        Database::get()->query("ALTER TABLE `bbb_session` CHANGE `participants` `participants` VARCHAR(1000)");
         set_config('theme', 'default');
-        set_config('theme_options_id', 0);
-        
+        set_config('theme_options_id', get_config('theme_options_id', 0));
+
         // delete stale course licenses (if exist)
         Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
         // delete stale course units entries from course modules (27 -> MODULE_ID_UNITS)
         Database::get()->query("DELETE FROM course_module WHERE module_id = 27");
+        // delete secure_url (aka $urlSecure) from table `config`
+        Database::get()->query("DELETE FROM config WHERE `key` = 'secure_url'");
+        
     }
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
@@ -2592,7 +2629,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     updateInfo(1, $langUpgradeSuccess);
     $logdate = date("Y-m-d_G:i:s");
 
-    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">Log output</a></div><p/>";
+    $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
     if ($debug_error) {
         $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
     }

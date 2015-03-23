@@ -82,13 +82,19 @@ $tool_content .= action_bar(array(
 if (count($tree->buildRootsArray()) > 1) {
     $tool_content .= $tree->buildRootsSelectForm($fc);
 }
-$tool_content .= "<table class='table-default'>
-                    <tr>
-                    <th><a name='top'></a>$langFaculty:&nbsp;<b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b></th>
-                    </tr>
-                  </table>";
 
-$tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
+$tool_content .= "
+    <div class='row'>
+        <div class='col-xs-12'>
+            <ul class='list-group'>
+                <li class='list-group-item list-header'>$langFaculty: <b>" . $tree->getFullPath($fc, false, $_SERVER['SCRIPT_NAME'] . '?fc=') . "</b>";
+            $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
+       $tool_content .= "</ul>
+           </div>
+    </div>
+        ";
+
+
 
 $queryCourseIds = '';
 $queryExtraSelect = '';
@@ -151,8 +157,8 @@ if ($runQuery) {
 }
 
 if (count($courses) > 0) {
-    $tool_content .= "<table class='table-default'>        
-                <tr><th class='text-left'>" . q($m['lessoncode']) . "</th>";
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='table-responsive'><table class='table-default'>        
+                <tr class='list-header'><th class='text-left'>" . q($m['lessoncode']) . "</th>";
 
     if ($isInOpenCoursesMode) {
         $tool_content .= "<th class='text-left' width='220'>" . q($m['professor']) . "</th>
@@ -189,12 +195,7 @@ if (count($courses) > 0) {
         $tool_content .= "</td>";
         $tool_content .= "</tr>";        
     }
-    $tool_content .= "</table>";
-} else {
-    $subTrees = $tree->buildSubtrees(array($fc));
-    if (count($subTrees) <= 1) { // is leaf
-        $tool_content .= "<div class='alert alert-warning'>" . $langNoCoursesAvailable . "</div>";
-    }
+    $tool_content .= "</table></div></div></div>";
 }
 
 if ($isInOpenCoursesMode) {

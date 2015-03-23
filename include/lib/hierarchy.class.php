@@ -886,7 +886,7 @@ jContent;
         $defaults = array('params' => 'name="department[]"',
             'tree' => null,
             'useKey' => 'id',
-            'where' => 'AND node.allow_course = true',
+            'where' => 'AND node.allow_user = true',
             'multiple' => get_config('user_multidep'));
         $this->populateOptions($options, $defaults);
 
@@ -1062,7 +1062,6 @@ jContent;
                          WHERE node.id IN (" . implode(', ', $nodes) . ")");
 
         if (count($res) > 0) {
-            $ret .= "<table class='table table-striped table-bordered table-hover'>";
             $nodenames = array();
             $nodecodes = array();
 
@@ -1087,17 +1086,16 @@ jContent;
                 }
 
                 if ($showEmpty or $count > 0) {
-                    $ret .= "<tr><td><a href='$url.php?fc=" . intval($key) . "'>" .
-                            q($value) . "</a>&nbsp;&nbsp;<small>";
+                    $ret .= "<li class='list-group-item' ><a href='$url.php?fc=" . intval($key) . "'>" .
+                            q($value);
                     if (strlen(q($nodecodes[$key])) > 0) {
-                        $ret .= "(" . q($nodecodes[$key]) . ")";
+                        $ret .= "</a>&nbsp;(" . q($nodecodes[$key]) . ")";
                     }
 
-                    $ret .= "&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" .
-                        ($count == 1 ? $langAvCours : $langAvCourses) . "</small></td></tr>";
+                    $ret .= "</a><small>&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" .
+                        ($count == 1 ? $langAvCours : $langAvCourses) . "</small></li>";
                 }
             }
-            $ret .= "</table>";
         }
 
         return $ret;
@@ -1113,6 +1111,10 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
+        
+        global $langNoCoursesAvailable;
+
+
         // select subnodes of the next depth level
         $res = Database::get()->queryArray("SELECT node.id FROM " . $this->dbtable . " AS node
                 LEFT OUTER JOIN " . $this->dbtable . " AS parent ON parent.lft =
@@ -1129,7 +1131,7 @@ jContent;
 
             return $this->buildNodesNavigationHtml($nodes, $url, $countCallback, $showEmpty);
         } else {
-            return "";
+            return " ";
         }
     }
 
@@ -1159,12 +1161,12 @@ jContent;
             }
             asort($nodenames);
 
-            $ret .= "<select class='form-control' $params>";
+            $ret .= "<div class='col-sm-9'><select class='form-control' $params>";
             foreach ($nodenames as $id => $name) {
                 $selected = ($id == $parentId) ? "selected=''" : '';
                 $ret .= "<option value='" . intval($id) . "' $selected>" . q($name) . "</option>";
             }
-            $ret .= "</select>";
+            $ret .= "</select></div>";
         }
 
         return $ret;
@@ -1178,12 +1180,13 @@ jContent;
      */
     public function buildRootsSelectForm($currentNode) {
         global $langSelectFac;
-
-        $ret = "<div class='form-wrapper'><form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
-        $ret .= "<div class='form-group'>";
-        $ret .= "<label>$langSelectFac:</label>";
+        
+        $ret  = "<div class='row'><div class='col-xs-12'>";
+        $ret .= "<div class='form-wrapper'><form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
+        $ret .= "<div class='form-group' style='margin-bottom: 0px;'>";
+        $ret .= "<label class='col-sm-3 control-label'>$langSelectFac:</label>";
         $ret .= $this->buildRootsSelection($currentNode, "name='fc' onChange='document.depform.submit();'");
-        $ret .= "</div></form></div>";
+        $ret .= "</div></form></div></div></div>";
         return $ret;
     }
 

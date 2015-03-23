@@ -110,28 +110,6 @@ abstract class CloudDrive {
      */
     private $extapp;
 
-    protected function getCallbackName() {
-        return "code";
-    }
-
-    public function getCallbackToken() {
-        $name = $this->getCallbackName();
-        return isset($_GET[$name]) ? $_GET[$name] : null;
-    }
-
-    protected function getAuthorizeName() {
-        return $this->getName() . "_session_authorize";
-    }
-
-    protected function setAuthorizeToken($code) {
-        $_SESSION[$this->getAuthorizeName()] = $code;
-    }
-
-    public function getAuthorizeToken() {
-        $name = $this->getAuthorizeName();
-        return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
-    }
-
     public function getName() {
         return strtolower(str_replace(' ', '', $this->getDisplayName()));
     }
@@ -145,22 +123,6 @@ abstract class CloudDrive {
             $this->extapp = ExtAppManager::getApp($this->getName());
         }
         return $this->extapp;
-    }
-
-    protected function getClientID() {
-        return $this->getExtApp()->getParam(CloudDriveApp::CLIENTID)->value();
-    }
-
-    protected function getSecret() {
-        return $this->getExtApp()->getParam(CloudDriveApp::SECRET)->value();
-    }
-
-    protected function getRedirect() {
-        return $this->getExtApp()->getParam(CloudDriveApp::REDIRECT)->value();
-    }
-
-    public function isPresent() {
-        return ($this->getClientID() && $this->getSecret() && $this->getRedirect());
     }
 
     protected function downloadToFile($url, $filename, $post = null) {
@@ -197,6 +159,8 @@ abstract class CloudDrive {
         curl_close($ch);
         return $result;
     }
+
+    public abstract function isPresent();
 
     public abstract function store($cloudfile, $path);
 

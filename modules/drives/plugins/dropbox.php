@@ -20,18 +20,19 @@
  * ======================================================================== 
  */
 
+require_once 'oauthdrive.php';
 require_once 'Dropbox/autoload.php';
 
 use Dropbox as dbx;
 
-final class DropBox extends CloudDrive {
+final class DropBox extends OAuthDrive {
 
     private $appInfo = null;
 
     const CLIENT = "Open eClass/3.0";
     const SESSION_TOKEN = "dropbox-auth-csrf-token";
 
-    public function init() {
+    private function init() {
         if (!$this->appInfo) {
             $this->appInfo = dbx\AppInfo::loadFromJson(array("key" => $this->getClientID(), "secret" => $this->getSecret()));
         }

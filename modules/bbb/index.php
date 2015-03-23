@@ -128,7 +128,8 @@ if ($is_editor) {
                 array('title' => $langNewBBBSession,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
                       'icon' => 'fa-calendar',
-                      'level' => 'primary-label')));
+                      'level' => 'primary-label',
+                      'show' => get_total_bbb_servers())));
         }
     }    
 }

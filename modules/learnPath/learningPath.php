@@ -66,6 +66,7 @@ if (isset($_GET['path_id'])) {
 
 $lp = Database::get()->querySingle("SELECT name, visible FROM lp_learnPath WHERE learnPath_id = ?d AND `course_id` = ?d", $_SESSION['path_id'], $course_id);
 $pageName = $lp->name;
+$toolName = $langLearningPaths;
 if (!add_units_navigation(TRUE)) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
 }
@@ -126,6 +127,14 @@ $sql = "SELECT LPM.`learnPath_module_id`, LPM.`parent`,
 
 $fetchedList = Database::get()->queryArray($sql, $_SESSION['path_id'], $course_id);
 
+$tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'
+            )
+        ));
+
 if (count($fetchedList) == 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoModule</div>";
     add_units_navigation();
@@ -174,25 +183,23 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
 // comment
 if (commentBox(LEARNINGPATH_, DISPLAY_)) {
     $tool_content .= "
-    <table width='100%' class='tbl'>
-    <tr>
-      <th><div align='left'>" . $langComments . "&nbsp;" . $langLearningPath1 . ":</div></th>
-    </tr>
-    <tr class='odd'>
-      <td><small>" . commentBox(LEARNINGPATH_, DISPLAY_) . "</small></td>
-    </tr>
-    </table>
-    <br />";
+        <div class='row'>
+            <div class='col-xs-12'>"
+                . commentBox(LEARNINGPATH_, DISPLAY_) .
+            "</div>
+        </div>
+    ";
 }
 
 // --------------------------- module table header --------------------------
-$tool_content .= "<table width='99%' class='tbl_alt'>";
-$tool_content .= "<tr><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningObjects . "</b></div></th>\n";
+$tool_content .= "<div class='table-responsive'>";
+$tool_content .= "<table class='table-default'>";
+$tool_content .= "<tr class='list-header'><th colspan=\"" . ($maxDeep + 2) . "\"><div align=\"left\">&nbsp;&nbsp;<b>" . $langLearningObjects . "</b></div></th>\n";
 
 
 // show only progress column for authenticated users
 if ($uid) {
-    $tool_content .= '<th colspan="2"><b>' . $langProgress . '</b></th>' . "\n";
+    $tool_content .= '<th><b>' . $langProgress . '</b></th>' . "\n";
 }
 
 $tool_content .= "</tr>\n";
@@ -202,13 +209,7 @@ if (!isset($globalProg)) {
     $globalProg = 0;
 }
 
-$ind = 1;
 foreach ($flatElementList as $module) {
-    if ($ind % 2 == 0) {
-        $style = 'class="even"';
-    } else {
-        $style = 'class="odd"';
-    }
 
     if ($module['scoreMax'] > 0 && $module['raw'] > 0) {
         $progress = round($module['raw'] / $module['scoreMax'] * 100);
@@ -243,7 +244,7 @@ foreach ($flatElementList as $module) {
         $colspan++;
     }
 
-    $tool_content .= "<tr $style>" . $spacingString . "
+    $tool_content .= "<tr>" . $spacingString . "
       <td colspan=\"" . $colspan . "\" align='left'>";
 
     //-- if chapter head
@@ -310,13 +311,10 @@ foreach ($flatElementList as $module) {
             $first_blocked = true;
         }
         // display the progress value for current module
-        $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n"
-                . '      <td align="left" width="10">'
-                . '&nbsp;' . $progress . '%'
-                . '</td>' . "\n";
+        $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n";
     }
     elseif ($uid && $module['contentType'] == CTLABEL_) {
-        $tool_content .= '<td colspan="2">&nbsp;</td>' . "\n";
+        $tool_content .= '<td>&nbsp;</td>' . "\n";
     }
 
     if ($progress > 0) {
@@ -328,7 +326,6 @@ foreach ($flatElementList as $module) {
     }
 
     $tool_content .= "</tr>";
-    $ind++;
 }
 
 
@@ -339,10 +336,7 @@ if ($uid && $moduleNb > 0) {
             . '<th align="right" width="120"><div align="right">'
             . disp_progress_bar(round($globalProg / ($moduleNb)), 1)
             . '</div></th>' . "\n"
-            . '<th align="left" width="10"><div class="center">'
-            . '&nbsp;' . round($globalProg / ($moduleNb)) . '%'
-            . '</div></th>' . "\n"
             . '</tr>' . "";
 }
-$tool_content .= "</table>";
+$tool_content .= "</table></div>";
 draw($tool_content, 2);

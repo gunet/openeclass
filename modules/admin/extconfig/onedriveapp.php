@@ -20,9 +20,9 @@
  * ======================================================================== 
  */
 
-require_once 'clouddriveapp.php';
+require_once 'oauthdriveapp.php';
 
-class OneDriveApp extends CloudDriveApp {
+class OneDriveApp extends OAuthDriveApp {
 
     public function getDisplayName() {
         return "OneDrive";

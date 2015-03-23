@@ -172,7 +172,7 @@ while ($iterator <= $_REQUEST['maxDocForm']) {
                 $style = "success";
                 $tool_content .= "<table class='table-default'><tr>";
                 $tool_content .= disp_message_box($InfoBox, $style);
-                $tool_content .= "</td></tr></table>";
+                $tool_content .= "</tr></table>";
                 $tool_content .= "<br />";
             } else {
                 // check if this is this LP that used this document as a module

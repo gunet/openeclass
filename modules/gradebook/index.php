@@ -34,17 +34,18 @@ $toolName = $langGradebook;
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
     $('input[name=date]').datetimepicker({
-        dateFormat: 'yy-mm-dd', 
-        timeFormat: 'hh:mm'
+            format: 'yyyy-mm-dd hh:ii',
+            pickerPosition: 'bottom-left', 
+            language: '".$language."',
+            autoclose: true 
         });
     var oTable = $('#users_table{$course_id}').DataTable ({
         'aLengthMenu': [
@@ -76,16 +77,53 @@ $(function() {
 });
 </script>";
 
+//change the gradebook
+if (isset($_POST['selectGradebook'])){
+    $gradebook_id = intval($_POST['gradebookYear']);
+    $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d AND id = ?d  ", $course_id, $gradebook_id);
+    if ($gradebook) {
+      //make the others inactive
+      Database::get()->querySingle("UPDATE gradebook SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
+      //make the new active
+      Database::get()->querySingle("UPDATE gradebook SET active = 1 WHERE id = ?d ", $gradebook->id);
+    }
+    Session::Messages($langChangeGradebookSuccess, 'alert-success');
+    redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradeBooks=1");
+}    
+    
+//add a new gradebook
+if (isset($_POST['newGradebook']) && strlen($_POST['title'])){
+    //make the others inactive
+    Database::get()->querySingle("UPDATE gradebook SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
+    
+    $newTitle = $_POST['title'];
+    $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;   
+    //create gradebook users (default the last six months)
+    $limitDate = date('Y-m-d', strtotime(' -6 month'));
+    Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                            SELECT $gradebook_id, user_id FROM course_user
+                            WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
+                                    $course_id, $limitDate);
+        
+    $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
+                                        FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
+    
+    Session::Messages($langCreateGradebookSuccess, 'alert-success');
+    redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradeBooks=1");   
+}
+
 //gradebook_id for the course: check if there is an gradebook module for the course. If not insert it
-$gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d ", $course_id);
+$gradebook = Database::get()->querySingle("SELECT id, students_semester,`range`, `title` FROM gradebook WHERE course_id = ?d AND active = 1", $course_id);
+
 if ($gradebook) {
     $gradebook_id = $gradebook->id;
+    $gradebook_title = $gradebook->title;
     $gradebook_range = $gradebook->range;
     $showSemesterParticipants = $gradebook->students_semester;
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;    
 }else{
     //new gradebook
-    $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d ", $course_id)->lastInsertID;   
+    $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1", $course_id)->lastInsertID;   
     //create gradebook users (default the last six months)
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
@@ -111,13 +149,13 @@ if ($is_editor) {
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
-    if(isset($_GET['editUsers'])){
+    if(isset($_GET['editUsers']) || isset($_GET['gradeBooks'])){
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $pageName = $langConfig;
+        $pageName = isset($_GET['editUsers']) ? $langConfig : $langGradebookManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['gradebookBook'])) {
@@ -126,7 +164,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['modify'])) {
@@ -135,7 +173,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['ins'])) {
@@ -144,7 +182,7 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
@@ -153,13 +191,15 @@ if ($is_editor) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
             $pageName = "$langAdd $langInsertExercise";
+        } elseif (isset($_GET['addActivityLp'])) {
+            $pageName = "$langAdd $langLearningPath1";
         } else {
             $pageName = $langGradebookAddActivity;
         }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['book'])) {
@@ -168,36 +208,48 @@ if ($is_editor) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply space-after-icon',
+                  'icon' => 'fa fa-reply ',
                   'level' => 'primary-label'),
             array('title' => $langGradebookBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
-    } else {       
-        $tool_content .= action_bar(array(
-            array('title' => $langConfig,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
-                  'icon' => 'fa fa-cog space-after-icon',
-                  'level' => 'primary-label'),
-            array('title' => $langUsers,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
-                  'icon' => 'fa fa-users',
-                  'level' => 'primary-label'),
-            array('title' => $langGradebookAddActivity,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
-                  'icon' => 'fa fa-plus'),
-            array('title' => "$langAdd $langInsertWork",
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
-                  'icon' => 'fa fa-flask'),
-            array('title' => "$langAdd $langInsertExercise",
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
-                  'icon' => 'fa fa-edit'),
-            array('title' => "$langAdd $langLearningPath1",
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1",
-                  'icon' => 'fa fa-ellipsis-h'),
-            ));
+    } else {
+        $pageName = $gradebook->title ? $gradebook->title : $langGradebookNoTitle2;
+        $tool_content .= action_bar(
+            array(
+                array('title' => $langConfig,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                      'icon' => 'fa-cog ',
+                      'level' => 'primary-label'),
+                array('title' => $langUsers,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebookBook=1",
+                      'icon' => 'fa-users',
+                      'level' => 'primary-label'),
+                array('title' => $langGradebooks,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradeBooks=1",
+                      'icon' => 'fa-list',
+                      'level' => 'primary-label'),            
+                array('title' => $langGradebookAddActivity,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                      'icon' => 'fa-plus'),
+                array('title' => "$langInsertWork",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
+                      'icon' => 'fa-flask'),
+                array('title' => "$langInsertExercise",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
+                      'icon' => 'fa-edit'),
+                array('title' => "$langLearningPath1",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1",
+                      'icon' => 'fa-ellipsis-h')
+            ),
+            true,
+            array(
+                'secondary_title' => $langAdd,
+                'secondary_icon' => 'fa-plus'
+            )
+        );
     }               
     $tool_content .= "</div></div>";
 
@@ -214,30 +266,13 @@ if ($is_editor) {
         }
     }
     
-    
-    /*
-    //UPDATE/INSERT DB: edit users display number 
-    if (isset($_POST['submitGradebookActiveUsers'])) {
-        $gradebook_users_limit = intval($_POST['usersLimit']);
-        if($gradebook_users_limit ==1 || $gradebook_users_limit == 0){
-            Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $gradebook_users_limit, $gradebook_id);
-            $message = "<p class='success'>$langGradebookEdit</p>";
-            $tool_content .= $message . "<br/>";
-            //update value for the check box and the users query
-            $showSemesterParticipants = $gradebook_users_limit;
-        }
+    //EDIT: edit title
+    if (isset($_POST['title']) && strlen($_POST['title'])) {
+        $gradebook_title = $_POST['title'];
+        Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
+            Session::Messages($langGradebookEdit,"alert-success");
+            redirect_to_home_page("modules/gradebook/index.php");
     }
-
-    //Number of students for this gradebook book and limit_date (depends on the limit of the last semester selection - if $showSemesterParticipants = 1 --> Users that have logged in to the course the last 6 months)
-    if ($showSemesterParticipants) {
-        //Six months limit
-        $limitDate = date('Y-m-d', strtotime(' -6 months'));
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) as count FROM actions_daily, user WHERE actions_daily.user_id = user.id AND user.status = ?d AND course_id = ?d AND actions_daily.day > ?t ", USER_STUDENT, $course_id, $limitDate)->count;
-    } else {
-        $limitDate = "0000-00-00";
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(user.id) as count FROM course_user, user WHERE course_user.course_id = ?d AND course_user.user_id = user.id AND user.status = ?d ", $course_id, USER_STUDENT)->count;
-    }
-    */
     
     //FORM: new activity (or edit) form to gradebook module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
@@ -309,22 +344,22 @@ if ($is_editor) {
                                 <div class='form-group'>
                                     <label for='visible' class='col-sm-2 control-label'>$langGradeVisible</label>
                                     <div class='col-sm-10'>
-                                        <input type='checkbox' class='form-control' id='visible' name='visible' value='1'";
-                                        if($visible){
+                                        <input type='checkbox' id='visible' name='visible' value='1'";
+                                        if($visible == 1) {
                                             $tool_content .= " checked";
                                         }
                                     $tool_content .= " /></div>
                                 </div>
                                 <div class='form-group'>
-                                    <label for='actDesc' class='col-sm-2 control-label'>$langGradebookActivityWeight:</label>
+                                    <label for='actDesc' class='col-sm-2 control-label'>$langComments:</label>
                                     <div class='col-sm-10'>
                                         " . rich_text_editor('actDesc', 4, 20, $contentToModify) . "
                                     </div>
                                 </div>";
-                                if (isset($module_auto_id)) { //accept the auto booking mechanism
+                                if (isset($module_auto_id) && $module_auto_id != 0) { //accept the auto booking mechanism
                                     $tool_content .= "<div class='form-group'>
                                     <label for='weight' class='col-sm-2 control-label'>$langGradebookInsAut:</label> 
-                                            <div class='col-sm-10'><input type='checkbox' class='form-control' value='1' name='auto' ";
+                                            <div class='col-sm-10'><input type='checkbox' value='1' name='auto' ";
                                     if ($auto) {
                                         $tool_content .= " checked";
                                     }
@@ -359,7 +394,7 @@ if ($is_editor) {
             //checking if it is new or not
             $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d "
                                                       . "AND assignment.active = 1 "
-                                                      . "AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1) AND assignment.id = ?d", $course_id, $id);        
+                                                      . "AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d) AND assignment.id = ?d", $course_id, $gradebook_id, $id);        
             if ($checkForAss) {
                 $module_auto_id = $checkForAss->id;
                 $module_auto_type = 1; //one for assignments
@@ -382,7 +417,7 @@ if ($is_editor) {
             //checking if it is new or not
             $checkForExe = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d "
                                                          . "AND exercise.active = 1 "
-                                                         . "AND exercise.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2) AND exercise.id = ?d", $course_id, $id);        
+                                                         . "AND exercise.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2 AND gradebook_id = ?d) AND exercise.id = ?d", $course_id, $gradebook_id, $id);        
             if ($checkForExe) {
                 $module_auto_id = $checkForExe->id;
                 $module_auto_type = 2; //one for assignments
@@ -406,7 +441,7 @@ if ($is_editor) {
         if ($type == 3) {            
             //checking if it is new or not
             $checkForLp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d 
-                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3) AND learnPath_id = ?d", $course_id, $id);                        
+                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3 AND gradebook_id = ?d) AND learnPath_id = ?d", $course_id, $gradebook_id, $id);                        
             if ($checkForLp) {
                 $module_auto_id = $checkForLp->learnPath_id;
                 $module_auto_type = 3; //3 for lp
@@ -704,8 +739,35 @@ if ($is_editor) {
                 $tool_content .= "<div class='alert alert-warning'>$langNoStudents</div>";
             }
         }
-
+        
+        //===================================================
+        //section to insert or edit the title of the gradebook
+        //===================================================
+        
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langTitle</label>                           
+                            <div class='col-xs-12'>
+                                <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$gradebook_title'/>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='titleSubmit' value='".$langInsert."' />
+                            </div>                        
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>";
+        
+        //==============================================
         //section to reset the gradebook users list
+        //==============================================
         
         $tool_content .= "
         <div class='row'>
@@ -775,14 +837,75 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
+                            
         
         //do not show activities list
         $showGradebookActivities = 0;
-    }
+    } elseif (isset($_GET['gradeBooks'])) {
+        //===================================================
+        //section to insert new gradebook and select another
+        //===================================================
+        
+        $result = Database::get()->queryArray("SELECT * FROM gradebook  WHERE course_id = ?d", $course_id);
 
-    elseif (isset($_GET['addActivityAs'])) {
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>    
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langChangeGradebook<small class='help-block'>$langChangeGradebook2</small></label>                            
+                            <div class='col-xs-12'>
+                                <select class='form-control' name='gradebookYear'>";
+                                if ($result){
+                                    foreach ($result as $year){
+                                        if($year->title == ""){
+                                            $title = $langGradebookNoTitle2;
+                                        }else{
+                                            $title = $year->title;
+                                        }
+                                        $tool_content .= "<option value='$year->id'";
+                                                    if ($gradebook_id == $year->id) {
+                                                      $tool_content .= " selected";
+                                                    } 
+                                                    $tool_content .= ">$title</option>";
+                                    }
+                                }
+                                              
+        
+                 $tool_content .="
+                                </select>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='selectGradebook' value='".$langSelect."' />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langNewGradebook<small class='help-block'>$langNewGradebook2</small></label></div>                            
+                                <div class='form-group'> 
+                                    <div class='col-xs-12'>
+                                        <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <div class='col-xs-12'>
+                                        <input class='btn btn-primary' type='submit' name='newGradebook' value='".$langInsert."' />
+                                    </div>
+                                </div>
+                    </form>
+                </div>                
+            </div>
+        </div>";
+        $showGradebookActivities = 0;
+    } elseif (isset($_GET['addActivityAs'])) {
         //Assignments
-        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1)", $course_id);
+        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 1 AND gradebook_id = ?d)", $course_id, $gradebook_id);
 
         $checkForAssNumber = count($checkForAss);
         
@@ -837,7 +960,7 @@ if ($is_editor) {
         //Exercises
         $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d 
                                 AND exercise.active = 1 AND exercise.id 
-                                NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2)", $course_id);
+                                NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 2 AND gradebook_id = ?d)", $course_id, $gradebook_id);
         $checkForExerNumber = count($checkForExer);
         if ($checkForExerNumber > 0) {
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
@@ -875,7 +998,7 @@ if ($is_editor) {
     elseif (isset($_GET['addActivityLp'])) {
         //Learning paths - SCORMS
         $checkForLp = Database::get()->queryArray("SELECT * FROM lp_learnPath WHERE course_id = ?d ORDER BY name 
-                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3)", $course_id);
+                                AND learnPath_id NOT IN (SELECT module_auto_id FROM gradebook_activities WHERE module_auto_type = 3 AND gradebook_id = ?d)", $course_id, $gradebook_id);
                 
         $checkForLpNumber = count($checkForLp);
         
@@ -883,7 +1006,7 @@ if ($is_editor) {
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<h4>$langLearningPath</h4>";
             $tool_content .= "<table class='table-default' id='t1'>";            
-            $tool_content .= "<tr><th>$langTitle</th><th>$langDescription</th>";
+            $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
             $tool_content .= "<th class='text-center'>$langActions</th>";
             $tool_content .= "</tr>";
             foreach ($checkForLp as $newExerToGradebook) {
@@ -1012,8 +1135,8 @@ if ($is_editor) {
             $tool_content .= $weightLeftMessage;
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
-                              <tr><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
-                              <tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
+                              <tr class='list-header'><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
+                              <tr class='list-header'><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
                               <th class='text-center'>$langView</th>
                               <th class='text-center'>$langScore</th>
                               <th class='text-center'><i class='fa fa-cogs'></i></th>
@@ -1092,17 +1215,18 @@ if ($is_editor) {
                 $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($announce->id, $gradebook_id) . "</td>";
                 $tool_content .= "<td class='option-btn-cell text-center'>".
                         action_button(array(
-                                    array('title' => $langDelete,
-                                        'icon' => 'fa-times',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
-                                        'confirm' => $langConfirmDelete,
-                                        'class' => 'delete'),
                                     array('title' => $langModify,
                                         'icon' => 'fa-edit',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"),
                                     array('title' => $langGradebookBook,
                                         'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"))).
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id"),
+                                    array('title' => $langDelete,
+                                        'icon' => 'fa-times',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
+                                        'confirm' => $langConfirmDelete,
+                                        'class' => 'delete')                            
+                            )).
                         "</td>";
             } // end of while
             $tool_content .= "</table></div></div></div>";       

@@ -14,6 +14,10 @@
 #btn-search{
     @include button-variant(white, #232C3A, #111111);
 }
+.container-fluid {
+    padding: 0px;
+    max-width: 1920px;
+}
 //Input file global fix
 input[type="file"] {
     padding-top: 7px;
@@ -74,6 +78,12 @@ text-decoration: none;
 color: #262626;
 background-color: whitesmoke;
 cursor: pointer; 
+}
+//portfolio datatable 'all courses' button fix 
+@media(min-width: $screen-sm){
+    div.all_courses {
+        float: left;
+    }
 }
 @media(min-width: $screen-tablet){
   .affix {
@@ -170,7 +180,7 @@ top: 8px;
 }
 //Custtom default table class
 .table-default {
-    @extend .table, .table-striped, .table-bordered, .table-hover;
+    @extend .table, .table-striped, .table-bordered;
 }
 // Custtom Panel Classes to support action_button() in panel heading
 .panel-action-btn-default {
@@ -201,24 +211,36 @@ top: 8px;
 }
 
 .navbar-nav .open .dropdown-menu {
-        position: absolute;
-        float: none;
-        width: auto;
-        margin-top: 0;
-        background-color:#ffffff;
-        border-left-color: rgba(0, 0, 0, 0.14902);
-        color: #000;
-border-left-style: solid;
-border-left-width: 1px;
-border-right-color: rgba(0, 0, 0, 0.14902);
-border-right-style: solid;
-border-right-width: 1px;
-border-top-color: rgba(0, 0, 0, 0.14902);
-border-top-left-radius: 0px;
-border-top-right-radius: 0px;
-border-top-style: solid;
-border-top-width: 1px;
-bottom: auto;
-box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
-box-sizing: border-box;
+    position: absolute;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color:#ffffff;
+    border-left-color: rgba(0, 0, 0, 0.14902);
+    color: #000;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.14902);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.14902);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    bottom: auto;
+    box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
+    box-sizing: border-box;
+}
+
+//  tinymce css
+
+.mce-toggle:hover{
+    cursor: pointer;
+}
+.mce-toggle{
+    i.mce-ico.mce-i-none{
+        
+        width: 22px;
     }
+}

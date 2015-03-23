@@ -265,11 +265,7 @@ class RestoreHelper {
         
         // data consistency for res_id
         $unit_resources_res_id = function($value) {
-            if (is_int($value)) {
-                return $value;
-            } else {
-                return 0;
-            }
+            return intval($value);
         };
         $this->values[self::STYLE_2X]['unit_resources']['res_id'] = $unit_resources_res_id;
         $this->values[self::STYLE_3X]['unit_resources']['res_id'] = $unit_resources_res_id;

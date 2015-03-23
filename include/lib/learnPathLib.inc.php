@@ -538,8 +538,8 @@ function display_my_exercises($dialogBox, $style) {
         $output .= disp_message_box($dialogBox, $style) . '<br />' . "\n";
     }
     $output .= '<form method="POST" name="addmodule" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmdglobal=add">' . "\n";
-    $output .= '<table class="table-default">' . "\n"
-            . '<tr>' . ""
+    $output .= '<div class="table-responsive"><table class="table-default">' . "\n"
+            . '<tr class="list-header">' . ""
             . '<th><div align="left">'
             . $langExercise
             . '</div></th>' . "\n"
@@ -600,7 +600,7 @@ function display_my_exercises($dialogBox, $style) {
                 . '</div></th>'
                 . '</tr>';
     }
-    $output .= '</table></form>';            
+    $output .= '</table></div></form>';            
 
     return $output;
 }
@@ -672,9 +672,10 @@ function display_my_documents($dialogBox, $style) {
 
 
     $output .= '
-    <table width="99%" class="tbl_alt" >';
+    <div class="table-responsive">
+    <table class="table-default" >';
     $output .= "
-    <tr>
+    <tr class='list-header'>
       <th colspan='2'><div align='left'>&nbsp;&nbsp;$langName</div></th>
       <th>$langSize</th>
       <th>$langDate</th>
@@ -765,7 +766,7 @@ function display_my_documents($dialogBox, $style) {
         $output .= '<tr><td colspan="4">&nbsp;</td></tr>';
     }
 
-    $output .= '</table></form>';
+    $output .= '</table></div></form>';
 
     return $output;
 }
@@ -1379,8 +1380,8 @@ function disp_progress_bar($progress, $factor) {
     // display progress bar
     // origin of the bar
     $progressBar = "
-    <div class='progress' style='display: inline-block; width: 200px; margin-right: 20px; margin-top: 15px;'>
-        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%;'>
+    <div class='progress' style='display: inline-block; width: 200px; margin-bottom:0px;'>
+        <div class='progress-bar' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width: $progress%; min-width: 2em;'>
             $progress%
         </div>
     </div>";

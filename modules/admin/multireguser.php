@@ -37,7 +37,7 @@ $user = new User();
 
 load_js('jstree');
 
-$pageName = $langMultiRegUser;
+$toolName = $langMultiRegUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 $error = '';
@@ -54,7 +54,7 @@ if (isset($_POST['submit'])) {
     $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
     $am = $_POST['am'];
     $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
-
+    
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {
             $tool_content = "<div class='alert alert-danger'>$langMultiRegFieldError <b>" . q($field) . "</b></div>";
@@ -134,6 +134,12 @@ if (isset($_POST['submit'])) {
     $access_options = array(ACCESS_PRIVATE => $langProfileInfoPrivate,
         ACCESS_PROFS => $langProfileInfoProfs,
         ACCESS_USERS => $langProfileInfoUsers);
+    $tool_content .= action_bar(array(
+                array('title' => $langBack,
+                    'url' => "index.php",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')
+                ),false);
     $tool_content .= "<div class='alert alert-info'>$langMultiRegUserInfo</div>
         <div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();' >
@@ -227,9 +233,9 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     global $charset, $langAsProf,
     $langYourReg, $siteName, $langDestination, $langYouAreReg,
     $langSettings, $langPass, $langAddress, $langIs, $urlServer,
-    $langProblem, $administratorName, $administratorSurname,
+    $langProblem,
     $langManager, $langTel, $langEmail,
-    $emailhelpdesk, $profsuccess, $usersuccess,
+    $profsuccess, $usersuccess,
     $user;
 
     if ($status == 1) {
@@ -261,7 +267,8 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                     , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
     $user->refresh($id, $departments);
     $telephone = get_config('phone');
-
+    $administratorName = get_config('admin_name');
+    $emailhelpdesk = get_config('email_helpdesk');
     $emailsubject = "$langYourReg $siteName $type_message";
     $emailbody = "
 $langDestination $givenname $surname
@@ -271,10 +278,10 @@ $langPass : $password
 $langAddress $siteName $langIs: $urlServer
 $langProblem
 
-$administratorName $administratorSurname
-$langManager $siteName
-$langTel $telephone
-$langEmail : $emailhelpdesk
+$administratorName
+$langManager: $siteName
+$langTel: $telephone
+$langEmail: $emailhelpdesk
 ";
     if ($send_mail) {
         send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);

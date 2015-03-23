@@ -51,14 +51,26 @@ $(function() {
         else if (value == 3) $('#questionDifficultyValue').addClass('label-warning');
         else if (value > 3 && value <= 5) $('#questionDifficultyValue').addClass('label-danger');
     }    
-    $('input[name=answerType]').click(hideGrade);
-    $('input#free_text_selector').click(showGrade);
+    $('input[name=answerType]').not('#free_text_selector').click(hideGrade);
+    $('input[name=answerType]').not('#fill_in_blanks_selector').click(hideFillInChoices);
+    $('input[name=answerType]#free_text_selector').click(showGrade);
+    $('input[name=answerType]#fill_in_blanks_selector').click(showFillInChoices);
+    $('input[name=fillInBlanksOptions]').change(updateFillInBlanksAnswerTypeValue);
     function hideGrade(){
         $('input[name=questionGrade]').prop('disabled', true).closest('div.form-group').addClass('hide');    
     }
     function showGrade(){
         $('input[name=questionGrade]').prop('disabled', false).closest('div.form-group').removeClass('hide');    
-    }   
+    }
+    function showFillInChoices(){
+        $('#fillInBlanksOptions').removeClass('hide');    
+    }
+    function hideFillInChoices(){
+        $('#fillInBlanksOptions').addClass('hide');    
+    }
+    function updateFillInBlanksAnswerTypeValue(){
+        $('input[name=answerType]#fill_in_blanks_selector').val($(this).val());
+    }
  });
 </script>
  ";
@@ -168,6 +180,7 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
     foreach ($q_cats as $q_cat) {
         $options .= "<option value='$q_cat->question_cat_id' ". (($category == $q_cat->question_cat_id) ? "selected" : "") .">$q_cat->question_cat_name</option>\n";
     }
+    enableCheckFileSize();
     $tool_content .= "
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' enctype='multipart/form-data' method='post' action='$form_submit_action'>
@@ -203,9 +216,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['modifyQuestion'])) {
             </div>            
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-2 control-label'>".(($okPicture) ? $langReplacePicture : $langAddPicture).":</label>
-                <div class='col-sm-10'>
-                  ".(($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "")."
-                  <input type='file'  name='imageUpload' id='imageUpload'> 
+                <div class='col-sm-10'>" .
+                  (($okPicture) ? "<img src='../../$picturePath/quiz-$questionId'><br><br>" : "") .
+                  fileSizeHidenInput() . "  
+                  <input type='file' name='imageUpload' id='imageUpload'> 
                 </div>
             </div>";
     if ($okPicture) {
@@ -238,10 +252,30 @@ $tool_content .= "<div class='form-group'>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='answerType' value='3' ". (($answerType == FILL_IN_BLANKS) ? "checked" : "") .">
+                        <input type='radio' name='answerType' value='". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) ? $answerType : 3) ."' id='fill_in_blanks_selector' ". (($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
                        $langFillBlanks
                       </label>
-                    </div>                       
+                    </div>
+                    <div class='row'>
+                        <div class='col-xs-11 col-xs-offset-1'>
+                            <div class='form-group ".(($answerType != FILL_IN_BLANKS && $answerType != FILL_IN_BLANKS_TOLERANT) ? "hide": "")."' id='fillInBlanksOptions'>
+                                <div class='col-sm-8 col-sm-offest-4'>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS."' ". (($answerType != FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
+                                            $langFillBlanksStrict $langFillBlanksStrictExample
+                                        </label>
+                                    </div>
+                                    <div class='radio'>
+                                        <label>
+                                            <input type='radio' name='fillInBlanksOptions' value='".FILL_IN_BLANKS_TOLERANT."' ". (($answerType == FILL_IN_BLANKS_TOLERANT) ? "checked" : "") .">
+                                            $langFillBlanksTolerant $langFillBlanksTolerantExample
+                                        </label>
+                                    </div>                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class='radio'>
                       <label>
                         <input type='radio' name='answerType' value='4' ". (($answerType == MATCHING) ? "checked" : "") .">
@@ -263,8 +297,8 @@ $tool_content .= "<div class='form-group'>
                 </div>
             </div>
             <div class='form-group ".(($answerType != 6) ? "hide": "")."'>
-                <label for='questionGrade' class='col-sm-2 control-label'>$m[grade]:</label>
-                <div class='col-sm-10'>
+                <label for='questionGrade' class='col-sm-2 col-sm-offset-1 control-label'>$m[grade]:</label>
+                <div class='col-sm-9'>
                   <input name='questionGrade' type='text' class='form-control' id='questionGrade' placeholder='$m[grade]' value='$questionWeight'".(($answerType != 6) ? " disabled": "").">
                 </div>
             </div>

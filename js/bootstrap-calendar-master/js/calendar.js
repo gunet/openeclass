@@ -464,7 +464,8 @@ if(!String.prototype.formatNum) {
 		$.each(data.events, function(k, e) {
 			var s = new Date(parseInt(e.start));
 			var f = new Date(parseInt(e.end));
-
+                        e.col = k % 4;
+                        
 			e.start_hour = s.getHours().toString().formatNum(2) + ':' + s.getMinutes().toString().formatNum(2);
 			e.end_hour = f.getHours().toString().formatNum(2) + ':' + f.getMinutes().toString().formatNum(2);
 

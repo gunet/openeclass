@@ -220,7 +220,7 @@ $(document).ready(function() {
 EOF;
 }
 
-// Save new config.php
+// Save new `config` table
 if (isset($_POST['submit'])) {
     $active_lang_codes = array();
     if (isset($_POST['av_lang'])) {
@@ -255,7 +255,8 @@ if (isset($_POST['submit'])) {
     set_config('min_password_len', intval($_POST['min_password_len']));
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
-
+    set_config('email_announce', $_POST['email_announce']);
+    
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
         'dont_mail_unverified_mails' => true,
@@ -596,12 +597,18 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                 </div>
                                 <div class='checkbox'>
                                     <label>
-                                        <input type='checkbox' name='email_from' value='1' $cbox_email_from>    
+                                        <input type='checkbox' name='email_from' value='1' $cbox_email_from>
                                         $lang_email_from
                                     </label>
-                                </div>                                  
+                                </div>                                
                            </div>
-                        </div>                        
+                        </div>
+                        <div class='form-group'>
+                           <label for='formEmailAnnounce' class='col-sm-2 control-label'>$langEmailAnnounce:</label>
+                           <div class='col-sm-10'>
+                                <input type='text' class='form-control' name='email_announce' id='formEmailAnnounce' value='".get_config('email_announce')."'>
+                           </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>";

@@ -401,15 +401,30 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         if (file_exists($course_file)) {
             $course_dataArr = unserialize(file_get_contents($course_file));
             $course_data = $course_dataArr[0];
-            Database::get()->query("UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
-                    . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d WHERE id = ?d", 
-                    $course_data[$restoreHelper->getField('course', 'keywords')], 
-                    floatval($course_data['doc_quota']), 
-                    floatval($course_data['video_quota']), 
-                    floatval($course_data['group_quota']), 
-                    floatval($course_data['dropbox_quota']), 
-                    intval($course_data[$restoreHelper->getField('course', 'glossary_expand')]), 
-                    intval($new_course_id));
+            // update course query
+            $upd_course_sql = "UPDATE course SET keywords = ?s, doc_quota = ?f, video_quota = ?f, "
+                            . " group_quota = ?f, dropbox_quota = ?f, glossary_expand = ?d ";
+            $upd_course_args = array(
+                $course_data[$restoreHelper->getField('course', 'keywords')], 
+                floatval($course_data['doc_quota']), 
+                floatval($course_data['video_quota']), 
+                floatval($course_data['group_quota']), 
+                floatval($course_data['dropbox_quota']), 
+                intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
+            );
+            // handle course weekly if exists
+            if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['finish_date'])) {
+                $upd_course_sql .= " , view_type = ?s, start_date = ?t, finish_date = ?t ";
+                array_push($upd_course_args, 
+                    $course_data['view_type'], 
+                    $course_data['start_date'], 
+                    $course_data['finish_date']
+                );
+            }
+            $upd_course_sql .= " WHERE id = ?d ";
+            array_push($upd_course_args, intval($new_course_id));
+            
+            Database::get()->query($upd_course_sql, $upd_course_args);
         }
 
         $userid_map = array();
@@ -693,18 +708,37 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $agenda_map[0] = 0;
 
         // Exercises
-        $exercise_map = restore_table($restoreThis, 'exercise', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        $exercise_map = restore_table($restoreThis, 'exercise', array(
+            'set' => array('course_id' => $new_course_id), 
+            'return_mapping' => 'id'
+            ), $url_prefix_map, $backupData, $restoreHelper);
         $exercise_map[0] = 0;
-        restore_table($restoreThis, 'exercise_user_record', array('delete' => array('eurid'),
-            'map' => array('eid' => $exercise_map, 'uid' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
-        $question_map = restore_table($restoreThis, 'exercise_question', array('set' => array('course_id' => $new_course_id),
-            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'exercise_user_record', array(
+            'delete' => array('eurid'),
+            'map' => array('eid' => $exercise_map, 'uid' => $userid_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        $question_category_map = restore_table($restoreThis, 'exercise_question_cats', array(
+            'set' => array('course_id' => $new_course_id),
+            'return_mapping' => 'question_cat_id'
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        $question_category_map[0] = 0;
+        $question_map = restore_table($restoreThis, 'exercise_question', array(
+            'set' => array('course_id' => $new_course_id),
+            'map' => array('category' => $question_category_map),
+            'return_mapping' => 'id'
+            ), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'exercise_answer', array(
             'delete' => array('id'),
             'map' => array('question_id' => $question_map)
-        ), $url_prefix_map, $backupData, $restoreHelper);
-        restore_table($restoreThis, 'exercise_with_questions', array('map' => array('question_id' => $question_map,
-                'exercise_id' => $exercise_map)), $url_prefix_map, $backupData, $restoreHelper);
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'exercise_answer_record', array(
+            'delete' => array('answer_record_id'),
+            'map' => array('question_id' => $question_map,
+                'eurid' => $userid_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'exercise_with_questions', array(
+            'map' => array('question_id' => $question_map, 'exercise_id' => $exercise_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
 
         $sql = "SELECT asset.asset_id, asset.path FROM `lp_module` AS module, `lp_asset` AS asset
                         WHERE module.startAsset_id = asset.asset_id
@@ -796,10 +830,36 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 $lp_learnPath_map,
                 $wiki_map,
                 $assignments_map,
-                $exercise_map)), $url_prefix_map, $backupData, $restoreHelper);
+                $exercise_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        
+        // Weekly
+        $weekly_map = restore_table($restoreThis, 'course_weekly_view', array(
+            'set' => array('course_id' => $new_course_id), 
+            'return_mapping' => 'id'
+            ), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'course_weekly_view_activities', array(
+            'delete' => array('id'),
+            'map' => array('course_weekly_view_id' => $weekly_map),
+            'map_function' => 'unit_map_function',
+            'map_function_data' => array($document_map,
+                $link_category_map,
+                $link_map,
+                $ebook_map,
+                $ebook_section_map,
+                $ebook_subsection_map,
+                $video_map,
+                $videolink_map,
+                $lp_learnPath_map,
+                $wiki_map,
+                $assignments_map,
+                $exercise_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
 
-        restore_table($restoreThis, 'course_description', array('set' => array('course_id' => $new_course_id),
-            'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
+        restore_table($restoreThis, 'course_description', array(
+            'set' => array('course_id' => $new_course_id),
+            'delete' => array('id')
+            ), $url_prefix_map, $backupData, $restoreHelper);
 
         removeDir($restoreThis);
 
@@ -905,7 +965,11 @@ function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
         if (isset($userid_map[$old_id])) {
             $status[$old_id] = $cudata[$restoreHelper->getField('course_user', 'status')];
             $tutor[$old_id] = $cudata['tutor'];
-            $editor[$old_id] = $cudata['editor'];
+            if (isset($cudata['editor'])) {
+                $editor[$old_id] = $cudata['editor'];
+            } else {
+                $editor[$old_id] = ($status[$old_id] == USER_TEACHER);
+            }
             $reviewer[$old_id] = (isset($cudata['reviewer'])) ? $cudata['reviewer'] : 0;
             $reg_date[$old_id] = $cudata['reg_date'];
             $receive_mail[$old_id] = $cudata['receive_mail'];
@@ -1102,6 +1166,9 @@ function document_map_function(&$data, $maps) {
             return false;
         }
     }
+    if (!isset($data['extra_path'])) {
+        $data['extra_path'] = '';
+    }
     return true;
 }
 
@@ -1127,7 +1194,7 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = intval($data['res_id']);
     } elseif ($type == 'video') {
         $data['res_id'] = $video_map[$data['res_id']];
-    } elseif ($type == 'videolink') {
+    } elseif ($type == 'videolink' || $type == 'videolinks') {
         $data['res_id'] = $videolink_map[$data['res_id']];
     } elseif ($type == 'lp') {
         $data['res_id'] = $lp_learnPath_map[$data['res_id']];

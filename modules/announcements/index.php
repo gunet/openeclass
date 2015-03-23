@@ -339,11 +339,25 @@ if ($is_editor) {
         } else {
             $stop_display = "0000-00-00";
         }
+        
         if (!empty($_POST['id'])) {
             $id = intval($_POST['id']);
             Database::get()->query("UPDATE announcement SET content = ?s, title = ?s, `date` = " . DBHelper::timeAfter() . ", start_display = ?t, stop_display = ?t  WHERE id = ?d", $newContent, $antitle, $start_display, $stop_display, $id);
             $log_type = LOG_MODIFY;
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
+            
+            if (isset($_POST['tags'])) {
+                //delete all the previous for this item, course
+                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $id, $course_id);
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //echo $tagItem;
+                    //insert all the new ones
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                    }
+                }
+            }
         } else { // add new announcement
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
                                                    WHERE course_id = ?d", $course_id)->maxorder;
@@ -357,6 +371,16 @@ if ($is_editor) {
                                              start_display = ?t,
                                              stop_display = ?t", $newContent, $antitle, $course_id, $order, $start_display, $stop_display)->lastInsertID;
             $log_type = LOG_INSERT;
+            
+            if (isset($_POST['tags'])) {
+                $tagsArray = explode(',', $_POST['tags']);
+                foreach ($tagsArray as $tagItem) {
+                    //insert all the new ones
+                    if($tagItem){
+                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
+                    }
+                }
+            }
         }
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
         $txt_content = ellipsize_html(canonicalize_whitespace(strip_tags($_POST['newContent'])), 50, '+');
@@ -486,6 +510,14 @@ if ($is_editor) {
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>
+        
+        <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
+        <div class='form-group'>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+            </div>
+        </div>
+
         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
         
         <div class='form-group'>
@@ -527,7 +559,7 @@ if (isset($_GET['an_id'])) {
               'level' => 'primary',
               'confirm' => $langSureToDelAnnounce,
               'show' => $is_editor),));
-    } elseif (!isset($_GET['modify'])) {
+    } elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
         $tool_content .= action_bar(array(
             array('title' => $langAddAnn,
                   'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;addAnnounce=1",
@@ -543,6 +575,12 @@ if (isset($_GET['an_id'])) {
         $tool_content .= "<div class='panel-body'>";
         $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
         $tool_content .= $row->content;
+        
+        $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $row->id, $course_id);
+        $tool_content .= $langTags.": ";
+        foreach($tags_list as $tag){
+            $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
+        }
         $tool_content .= "</div></div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
@@ -554,6 +592,19 @@ if (isset($_GET['an_id'])) {
         }
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
+    
+    
+
+//initialize the tags
+$answer = "";
+if(isset($modify)){
+    $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $modify, $course_id);
+    foreach($tags_init as $tag){
+        $arrayTemp = "{id:\"".$tag->tag."\" , text:\"".$tag->tag."\"},";
+        $answer = $answer.$arrayTemp;
+    } 
+}
+
 add_units_navigation(TRUE);
 load_js('select2');
 $head_content .= "<script type='text/javascript'>
@@ -571,7 +622,35 @@ $head_content .= "<script type='text/javascript'>
             e.preventDefault();
             var stringVal = [];
             $('#select-recipients').val(stringVal).trigger('change');
-        });         
+        });   
+        $('#tags').select2({
+                minimumInputLength: 2,
+                tags: true,
+                tokenSeparators: [', ', ' '],
+                createSearchChoice: function(term, data) {
+                  if ($(data).filter(function() {
+                    return this.text.localeCompare(term) === 0;
+                  }).length === 0) {
+                    return {
+                      id: term,
+                      text: term
+                    };
+                  }
+                },
+                ajax: {
+                    url: '../tags/feed.php',
+                    dataType: 'json',
+                    data: function(term, page) {
+                        return {
+                            q: term
+                        };
+                    },
+                    results: function(data, page) {
+                        return {results: data};
+                    }
+                }
+        });
+        $('#tags').select2('data', [".$answer."]);
     });
     </script>";
 draw($tool_content, 2, null, $head_content);

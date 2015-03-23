@@ -13,7 +13,7 @@
 /* TRANSITIONS ------------------------------------------------------------------- */
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 113, ../SASS/global.scss */
+/* line 114, ../SASS/global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -23,58 +23,82 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
+  /* line 120, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 121, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 122, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
+
 @-moz-keyframes NEW-ITEM-FX {
+  /* line 128, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 129, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 130, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
+
 @-o-keyframes NEW-ITEM-FX {
+  /* line 136, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 137, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 138, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
+
 @keyframes NEW-ITEM-FX {
+  /* line 144, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 145, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 146, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
+
 /* GLOBAL STYLES -----------------------------------------------------------------*/
 /* line 13, ../SASS/inventory.scss */
 .delete-action {
-  color: #CE6B6B;
+  color: #ce6b6b;
 }
 
 /* line 14, ../SASS/inventory.scss */
 .delete-action:hover {
-  background: #CE6B6B !important;
+  background: #ce6b6b !important;
   color: white !important;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
@@ -210,42 +234,42 @@
   padding: 0px;
 }
 
-/* line 51, ../SASS/inventory.scss */
+/* line 52, ../SASS/inventory.scss */
 .no-gutters {
   padding-right: 0;
   padding-left: 0;
 }
 
-/* line 56, ../SASS/inventory.scss */
+/* line 57, ../SASS/inventory.scss */
 .add-gutter {
   padding-left: 30px;
   padding-right: 30px;
 }
 
-/* line 62, ../SASS/inventory.scss */
+/* line 63, ../SASS/inventory.scss */
 .remove-gutter {
   padding-left: 0px;
   padding-right: 0px;
 }
 
-/* line 69, ../SASS/inventory.scss */
+/* line 70, ../SASS/inventory.scss */
 .whole-row {
   width: 100% !important;
 }
 
-/* line 74, ../SASS/inventory.scss */
+/* line 75, ../SASS/inventory.scss */
 .place-at-toolbox {
   margin: 0em 0.2em 0.65em 0.2em !important;
 }
 
-/* line 80, ../SASS/inventory.scss */
+/* line 81, ../SASS/inventory.scss */
 .focused {
-  box-shadow: 0 0px 10px #BBBBBB !important;
-  -moz-box-shadow: 0 0px 10px #BBBBBB !important;
-  -webkit-box-shadow: 0 0px 10px #BBBBBB !important;
+  box-shadow: 0 0px 10px #bbbbbb !important;
+  -moz-box-shadow: 0 0px 10px #bbbbbb !important;
+  -webkit-box-shadow: 0 0px 10px #bbbbbb !important;
 }
 
-/* line 85, ../SASS/inventory.scss */
+/* line 86, ../SASS/inventory.scss */
 .infotext-sm {
   font-size: 0.8em;
   font-style: italic;
@@ -253,18 +277,18 @@
 }
 
 /* Style for links -------------------------------------------------*/
-/* line 97, ../SASS/inventory.scss */
+/* line 98, ../SASS/inventory.scss */
 a {
   text-decoration: none;
   color: #4da1e4;
   outline: 0;
 }
-/* line 103, ../SASS/inventory.scss */
+/* line 104, ../SASS/inventory.scss */
 a:hover {
   text-decoration: underline;
   outline: 0;
 }
-/* line 109, ../SASS/inventory.scss */
+/* line 110, ../SASS/inventory.scss */
 a:focus {
   outline: 0;
 }
@@ -281,13 +305,13 @@ a:focus {
 }
 
 /* Styles for headings, hr and titles --------------------------------------------------*/
-/* line 126, ../SASS/inventory.scss */
+/* line 127, ../SASS/inventory.scss */
 h1 {
   font-size: 2em;
   font-weight: 300;
 }
 
-/* line 132, ../SASS/inventory.scss */
+/* line 133, ../SASS/inventory.scss */
 h1.page-title {
   margin: 0em;
   font-weight: 400 !important;
@@ -295,23 +319,23 @@ h1.page-title {
   font-size: 20px;
 }
 
-/* line 143, ../SASS/inventory.scss */
+/* line 144, ../SASS/inventory.scss */
 #main h1 {
   color: #444;
 }
-/* line 148, ../SASS/inventory.scss */
+/* line 149, ../SASS/inventory.scss */
 #main h2, #main h3, #main h4, #main h5, #main h6 {
   color: #777;
 }
 
-/* line 154, ../SASS/inventory.scss */
+/* line 155, ../SASS/inventory.scss */
 .h-separator {
   border-bottom: 1px solid #dbdbdb;
   padding: 0.6em 0em;
   color: #4da1e4;
 }
 
-/* line 161, ../SASS/inventory.scss */
+/* line 162, ../SASS/inventory.scss */
 hr {
   height: 1px;
   border: none;
@@ -320,7 +344,7 @@ hr {
   margin-bottom: 0px;
 }
 
-/* line 170, ../SASS/inventory.scss */
+/* line 171, ../SASS/inventory.scss */
 .descr_title {
   float: right;
 }
@@ -330,7 +354,7 @@ hr {
 {
   font-size:1em !important;
 }*/
-/* line 184, ../SASS/inventory.scss */
+/* line 185, ../SASS/inventory.scss */
 .content-title {
   color: #888888;
   font-weight: 500;
@@ -339,18 +363,18 @@ hr {
   margin-bottom: 10px;
 }
 
-/* line 194, ../SASS/inventory.scss */
+/* line 195, ../SASS/inventory.scss */
 .page-subtitle {
   color: #555555;
   font-size: 16px;
   margin: 10px 0;
 }
-/* line 200, ../SASS/inventory.scss */
+/* line 201, ../SASS/inventory.scss */
 .page-subtitle a {
   text-decoration: none;
 }
 
-/* line 206, ../SASS/inventory.scss */
+/* line 207, ../SASS/inventory.scss */
 .page-subtitle-name {
   color: #555555;
   font-size: 18px;
@@ -358,7 +382,7 @@ hr {
 }
 
 /* Extend bootstrap style - forms */
-/* line 215, ../SASS/inventory.scss */
+/* line 216, ../SASS/inventory.scss */
 .form-control {
   border-radius: 2px 2px 2px 2px !important;
   -webkit-border-radius: 2px 2px 2px 2px !important;
@@ -366,7 +390,7 @@ hr {
 }
 
 /* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
-/* line 227, ../SASS/inventory.scss */
+/* line 228, ../SASS/inventory.scss */
 .breadcrumb {
   padding-left: 0px !important;
   background-color: transparent !important;
@@ -377,27 +401,27 @@ hr {
 }
 
 /* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
-/* line 242, ../SASS/inventory.scss */
+/* line 243, ../SASS/inventory.scss */
 #main-content .panel {
-  background: #FFFFFF !important;
-  min-height: 2.4em  !important;
+  background: white !important;
+  min-height: 2.4em;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  box-shadow: 0 0px 7px #DDDDDD;
-  -moz-box-shadow: 0 0px 7px #DDDDDD;
-  -webkit-box-shadow: 0 0px 7px #DDDDDD;
+  box-shadow: 0 0px 7px #dddddd;
+  -moz-box-shadow: 0 0px 7px #dddddd;
+  -webkit-box-shadow: 0 0px 7px #dddddd;
 }
 
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 255, ../SASS/inventory.scss */
+/* line 256, ../SASS/inventory.scss */
 .toolbox {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
-  background: #F0F4F6;
+  background: #f0f4f6;
   border-top: 1px solid #d8d8d8;
   border-bottom: 1px solid #f8f8f8;
   box-sizing: border-box;
@@ -414,28 +438,28 @@ hr {
   margin-right: 0em;
   display: inline-block;
 }
-/* line 270, ../SASS/inventory.scss */
+/* line 271, ../SASS/inventory.scss */
 .toolbox ul:not(.dropdown-menu) {
   display: block;
   display: inline-block;
   margin: 0px;
   padding: 0px;
 }
-/* line 278, ../SASS/inventory.scss */
+/* line 279, ../SASS/inventory.scss */
 .toolbox li {
   list-style-type: none;
 }
-/* line 284, ../SASS/inventory.scss */
+/* line 285, ../SASS/inventory.scss */
 .toolbox ul.toolbox-submenu {
   display: none;
 }
 
-/* line 292, ../SASS/inventory.scss */
+/* line 293, ../SASS/inventory.scss */
 .toolbox:hover .toolbox-submenu {
   display: inline-block;
 }
 
-/* line 301, ../SASS/inventory.scss */
+/* line 302, ../SASS/inventory.scss */
 .toolbox-border-only {
   padding: 0.65em 0.65em 0em 0.65em;
   color: #333;
@@ -453,7 +477,7 @@ hr {
 }
 
 /* tiny-icons actions--------------------------------------------------------------------------- */
-/* line 324, ../SASS/inventory.scss */
+/* line 325, ../SASS/inventory.scss */
 .tiny-icon {
   color: #666;
   font-size: 15px !important;
@@ -464,12 +488,12 @@ hr {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 331, ../SASS/inventory.scss */
+/* line 332, ../SASS/inventory.scss */
 .tiny-icon .tiny-icon-text {
   font-size: 12px !important;
 }
 
-/* line 337, ../SASS/inventory.scss */
+/* line 338, ../SASS/inventory.scss */
 .tiny-icon:hover {
   color: #4da1e4;
   text-decoration: none;
@@ -480,7 +504,7 @@ hr {
   transition: all 120ms linear;
 }
 
-/* line 344, ../SASS/inventory.scss */
+/* line 345, ../SASS/inventory.scss */
 .tiny-icon-rss:hover {
   color: #FFBB4F !important;
   text-decoration: none;
@@ -491,9 +515,9 @@ hr {
   transition: all 120ms linear;
 }
 
-/* line 351, ../SASS/inventory.scss */
+/* line 352, ../SASS/inventory.scss */
 .tiny-icon-green:hover {
-  color: #6BCE6B !important;
+  color: #6bce6b !important;
   text-decoration: none;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
@@ -502,9 +526,9 @@ hr {
   transition: all 120ms linear;
 }
 
-/* line 358, ../SASS/inventory.scss */
+/* line 359, ../SASS/inventory.scss */
 .tiny-icon-red:hover {
-  color: #CE6B6B !important;
+  color: #ce6b6b !important;
   text-decoration: none;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
@@ -522,7 +546,7 @@ hr {
   position: relative;
   border-radius: 5rem;
   overflow: hidden;
-  background: #F0F4F6;
+  background: #f0f4f6;
   box-shadow: inset -3px 0px 2px #dddddd;
   -moz-box-shadow: inset -3px 0px 2px #dddddd;
   -webkit-box-shadow: inset -3px 0px 2px #dddddd;
@@ -542,9 +566,9 @@ hr {
 .btn-toggle:hover span {
   background: #4da1e4;
   color: white;
-  box-shadow: 0px 0px 4px #000000;
-  -moz-box-shadow: 0px 0px 4px #000000;
-  -webkit-box-shadow: 0px 0px 4px #000000;
+  box-shadow: 0px 0px 4px black;
+  -moz-box-shadow: 0px 0px 4px black;
+  -webkit-box-shadow: 0px 0px 4px black;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
@@ -584,7 +608,7 @@ hr {
   height: 100%;
   left: 0px;
   top: 0px;
-  background: #FFFFFF;
+  background: white;
   color: #555555;
   box-shadow: 2px 0px 2px #dddddd;
   -moz-box-shadow: 2px 0px 2px #dddddd;
@@ -684,7 +708,7 @@ input.toggle[type=checkbox]:checked:after
   left:0px;
 }*/
 /* BUTTONS and styles -------------------------------------------------------------------*/
-/* line 536, ../SASS/inventory.scss */
+/* line 537, ../SASS/inventory.scss */
 .btn-default-eclass {
   color: #555555;
   outline: 0;
@@ -710,26 +734,26 @@ input.toggle[type=checkbox]:checked:after
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
-  box-shadow: 0 0px 7px #DDDDDD;
-  -moz-box-shadow: 0 0px 7px #DDDDDD;
-  -webkit-box-shadow: 0 0px 7px #DDDDDD;
+  box-shadow: 0 0px 7px #dddddd;
+  -moz-box-shadow: 0 0px 7px #dddddd;
+  -webkit-box-shadow: 0 0px 7px #dddddd;
   /*
     Giving right/reft margin on icons that ain't last/first childs
   */
 }
-/* line 561, ../SASS/inventory.scss */
+/* line 562, ../SASS/inventory.scss */
 .btn-default-eclass > .fa:not(:last-child) {
   margin-right: 10px;
 }
-/* line 566, ../SASS/inventory.scss */
+/* line 567, ../SASS/inventory.scss */
 .btn-default-eclass > .fa:not(:first-child) {
   margin-left: 10px;
 }
-/* line 571, ../SASS/inventory.scss */
+/* line 572, ../SASS/inventory.scss */
 .btn-default-eclass > .fa.fa-caret-down {
   margin-right: 0px !important;
 }
-/* line 576, ../SASS/inventory.scss */
+/* line 578, ../SASS/inventory.scss */
 .btn-default-eclass:hover, .btn-default-eclass:focus {
   text-decoration: none;
   outline: 0;
@@ -743,11 +767,11 @@ input.toggle[type=checkbox]:checked:after
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 588, ../SASS/inventory.scss */
+/* line 589, ../SASS/inventory.scss */
 .btn-default-eclass:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
-  border-bottom-color: #3F87C1 !important;
+  border-bottom-color: #3f87c1 !important;
   color: white !important;
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
@@ -760,17 +784,17 @@ input.toggle[type=checkbox]:checked:after
 }
 
 /* BUTTON COLORS */
-/* line 602, ../SASS/inventory.scss */
+/* line 603, ../SASS/inventory.scss */
 .btn-default-eclass.color-green {
   color: white;
-  background: #6BCE6B;
+  background: #6bce6b;
   border: 1px solid transparent;
   border-bottom: 1px solid #4AA04A;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
 }
-/* line 610, ../SASS/inventory.scss */
+/* line 611, ../SASS/inventory.scss */
 .btn-default-eclass.color-green:hover, .btn-default-eclass.color-green:focus {
   text-decoration: none;
   outline: 0;
@@ -784,11 +808,11 @@ input.toggle[type=checkbox]:checked:after
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 622, ../SASS/inventory.scss */
+/* line 623, ../SASS/inventory.scss */
 .btn-default-eclass.color-green:active {
   background: #4da1e4 !important;
   border-color: #4da1e4;
-  border-bottom-color: #3F87C1 !important;
+  border-bottom-color: #3f87c1 !important;
   color: white !important;
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   -moz-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
@@ -800,17 +824,17 @@ input.toggle[type=checkbox]:checked:after
   transition: all 120ms linear;
 }
 
-/* line 635, ../SASS/inventory.scss */
+/* line 636, ../SASS/inventory.scss */
 .btn-default-eclass.color-red {
   color: white;
-  background: #CE6B6B;
+  background: #ce6b6b;
   border-bottom: 1px solid #984B4B;
   border-top: none;
   box-shadow: none;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 643, ../SASS/inventory.scss */
+/* line 644, ../SASS/inventory.scss */
 .btn-default-eclass.color-red:hover, .btn-default-eclass.color-red:focus {
   background: #E58080;
   text-decoration: none;
@@ -820,7 +844,7 @@ input.toggle[type=checkbox]:checked:after
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 652, ../SASS/inventory.scss */
+/* line 653, ../SASS/inventory.scss */
 .btn-default-eclass.color-red:active {
   background: #E58080 !important;
   outline: 0 !important;
@@ -836,23 +860,23 @@ input.toggle[type=checkbox]:checked:after
 }
 
 /* BUTTON SIZES */
-/* line 666, ../SASS/inventory.scss */
+/* line 667, ../SASS/inventory.scss */
 .btn-default-eclass.size-xl {
   font-size: 1.2em;
 }
 
-/* line 671, ../SASS/inventory.scss */
+/* line 672, ../SASS/inventory.scss */
 .btn-default-eclass.size-l {
   font-size: 1.1em;
 }
 
-/* line 676, ../SASS/inventory.scss */
+/* line 677, ../SASS/inventory.scss */
 .btn-default-eclass.size-s {
   font-size: 0.85em;
 }
 
 /* flippin btn */
-/* line 687, ../SASS/inventory.scss */
+/* line 688, ../SASS/inventory.scss */
 .btn-flippin {
   position: relative;
   border: 0;
@@ -861,14 +885,14 @@ input.toggle[type=checkbox]:checked:after
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
-  color: transparent;
+  color: rgba(0, 0, 0, 0);
   background: transparent;
   border-radius: .25rem;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-touch-callout: none;
 }
 
-/* line 703, ../SASS/inventory.scss */
+/* line 705, ../SASS/inventory.scss */
 .btn-flippin,
 .btn-flippin:after,
 .btn-flippin:before {
@@ -883,7 +907,7 @@ input.toggle[type=checkbox]:checked:after
   transform-style: preserve-3d;
 }
 
-/* line 717, ../SASS/inventory.scss */
+/* line 718, ../SASS/inventory.scss */
 .btn-flippin:after,
 .btn-flippin:before {
   position: absolute;
@@ -947,7 +971,7 @@ input.toggle[type=checkbox]:checked:after
 }
 
 /* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 782, ../SASS/inventory.scss */
+/* line 783, ../SASS/inventory.scss */
 ul.tablelist {
   font-size: 0.8em;
   margin: 0px;
@@ -961,7 +985,7 @@ ul.tablelist {
     animation:         NEW-ITEM-FX 3s 1;
     }*/
 }
-/* line 789, ../SASS/inventory.scss */
+/* line 790, ../SASS/inventory.scss */
 ul.tablelist li.list-item {
   position: relative;
   box-sizing: border-box;
@@ -972,24 +996,24 @@ ul.tablelist li.list-item {
   background: white;
   overflow: hidden;
 }
-/* line 799, ../SASS/inventory.scss */
+/* line 800, ../SASS/inventory.scss */
 ul.tablelist li.list-item:last-child {
   border-bottom: none;
 }
-/* line 804, ../SASS/inventory.scss */
+/* line 805, ../SASS/inventory.scss */
 ul.tablelist li.list-item .max-height {
   max-height: 3.35em;
 }
-/* line 809, ../SASS/inventory.scss */
+/* line 810, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
   border-right: 1px solid #eee;
 }
-/* line 814, ../SASS/inventory.scss */
+/* line 815, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span:first-child {
   border-left: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
-/* line 820, ../SASS/inventory.scss */
+/* line 821, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols {
   float: right;
   position: absolute;
@@ -997,22 +1021,22 @@ ul.tablelist li.list-item .item-right-cols {
   right: 0px;
   max-width: 95%;
 }
-/* line 829, ../SASS/inventory.scss */
+/* line 831, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols > span,
 ul.tablelist li.list-item .item-title {
   display: inline-block;
 }
-/* line 835, ../SASS/inventory.scss */
+/* line 836, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-wholeline {
   padding: 0.7em 0;
   /*padding-right: 60px;*/
   display: inline-block;
 }
-/* line 842, ../SASS/inventory.scss */
+/* line 843, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-content {
   font-size: 0.9em;
 }
-/* line 847, ../SASS/inventory.scss */
+/* line 848, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols a {
   width: 1em;
   padding: 1em 1.4em;
@@ -1020,7 +1044,7 @@ ul.tablelist li.list-item .item-right-cols a {
   text-align: center;
   cursor: pointer;
 }
-/* line 857, ../SASS/inventory.scss */
+/* line 858, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-date {
   color: rgba(0, 0, 0, 0.6);
   background: white;
@@ -1028,13 +1052,13 @@ ul.tablelist li.list-item .item-right-cols .item-date {
   text-align: center;
   vertical-align: top;
 }
-/* line 866, ../SASS/inventory.scss */
+/* line 867, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options {
   padding: 0px;
   margin-left: -0.26em;
   padding-right: 3.8em;
 }
-/* line 873, ../SASS/inventory.scss */
+/* line 874, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   position: absolute;
   display: inline-block;
@@ -1046,7 +1070,7 @@ ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
   color: #7E7E7E;
   background: #F8F8F8;
 }
-/* line 886, ../SASS/inventory.scss */
+/* line 887, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   background: #4da1e4;
   color: white;
@@ -1056,7 +1080,7 @@ ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 893, ../SASS/inventory.scss */
+/* line 894, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .options-content {
   display: block;
   margin-right: -25em;
@@ -1068,16 +1092,16 @@ ul.tablelist li.list-item .item-right-cols .options-content {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 902, ../SASS/inventory.scss */
+/* line 903, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-options:hover .options-content {
   margin-right: 0em;
   background: #333333;
 }
-/* line 908, ../SASS/inventory.scss */
+/* line 909, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a {
   color: white;
 }
-/* line 912, ../SASS/inventory.scss */
+/* line 913, ../SASS/inventory.scss */
 ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   color: white;
   background: #4da1e4;
@@ -1087,17 +1111,17 @@ ul.tablelist li.list-item .item-right-cols .item-options a:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 919, ../SASS/inventory.scss */
+/* line 920, ../SASS/inventory.scss */
 ul.tablelist li.list-item .text-title {
   font-size: 1.3em;
   padding-bottom: 5px;
 }
-/* line 925, ../SASS/inventory.scss */
+/* line 926, ../SASS/inventory.scss */
 ul.tablelist li.list-item .text-grey {
   font-style: italic;
   color: #999999;
 }
-/* line 943, ../SASS/inventory.scss */
+/* line 944, ../SASS/inventory.scss */
 ul.tablelist li.list-item:hover {
   background: #FCFCFC;
   -webkit-transition: all 120ms linear;
@@ -1108,11 +1132,11 @@ ul.tablelist li.list-item:hover {
 }
 
 /* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 956, ../SASS/inventory.scss */
+/* line 957, ../SASS/inventory.scss */
 .boxlist {
   padding: 0px;
 }
-/* line 961, ../SASS/inventory.scss */
+/* line 962, ../SASS/inventory.scss */
 .boxlist .list-item {
   display: block;
   position: relative;
@@ -1122,20 +1146,20 @@ ul.tablelist li.list-item:hover {
   overflow: hidden;
   /*important for the transition*/
   list-style-type: none;
-  background: #FFFFFF;
+  background: white;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 974, ../SASS/inventory.scss */
+/* line 975, ../SASS/inventory.scss */
 .boxlist .list-item.hidden {
   background: rgba(255, 255, 255, 0.6);
 }
-/* line 979, ../SASS/inventory.scss */
+/* line 980, ../SASS/inventory.scss */
 .boxlist .list-item.hidden .item-content {
   opacity: 0.6;
 }
-/* line 984, ../SASS/inventory.scss */
+/* line 985, ../SASS/inventory.scss */
 .boxlist .list-item:hover .side-header {
   color: #eee;
   -webkit-transition: all 120ms linear;
@@ -1144,7 +1168,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 990, ../SASS/inventory.scss */
+/* line 991, ../SASS/inventory.scss */
 .boxlist .list-item .item-content {
   /*width: 93%;*/
   /* a fallback for calc */
@@ -1158,30 +1182,30 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-/* line 1003, ../SASS/inventory.scss */
+/* line 1004, ../SASS/inventory.scss */
 .boxlist .item-header {
   padding: 0em 4em 1em 0em;
   border-bottom: 1px solid #ccc;
   margin-top: 1em;
 }
-/* line 1010, ../SASS/inventory.scss */
+/* line 1011, ../SASS/inventory.scss */
 .boxlist .item-header h4.item-title {
   margin: 0px;
   font-size: 15px;
   width: 85%;
 }
-/* line 1017, ../SASS/inventory.scss */
+/* line 1018, ../SASS/inventory.scss */
 .boxlist .item-header .item-date {
   font-size: 0.8em;
   color: rgba(0, 0, 0, 0.4);
 }
-/* line 1023, ../SASS/inventory.scss */
+/* line 1024, ../SASS/inventory.scss */
 .boxlist .item-body {
   padding: 1em 1em 1em 0em;
   min-height: 5em;
   font-size: 14px;
 }
-/* line 1030, ../SASS/inventory.scss */
+/* line 1031, ../SASS/inventory.scss */
 .boxlist .list-item .item-side {
   display: inline-block;
   position: absolute;
@@ -1194,7 +1218,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 50ms linear;
   transition: all 50ms linear;
 }
-/* line 1045, ../SASS/inventory.scss */
+/* line 1046, ../SASS/inventory.scss */
 .boxlist .list-item .option-button {
   display: inline-block;
   position: relative;
@@ -1212,7 +1236,7 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 1059, ../SASS/inventory.scss */
+/* line 1060, ../SASS/inventory.scss */
 .boxlist .list-item .item-side .item-options:hover .option-button {
   background: #4da1e4;
   color: white;
@@ -1222,7 +1246,7 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1067, ../SASS/inventory.scss */
+/* line 1068, ../SASS/inventory.scss */
 .boxlist .list-item .item-side .item-options ul {
   position: relative;
   z-index: 2;
@@ -1237,19 +1261,19 @@ ul.tablelist li.list-item:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1079, ../SASS/inventory.scss */
+/* line 1080, ../SASS/inventory.scss */
 .boxlist .list-item .item-side .item-options:hover ul {
   margin-right: 0%;
 }
-/* line 1084, ../SASS/inventory.scss */
+/* line 1085, ../SASS/inventory.scss */
 .boxlist .list-item .item-side .item-options > * {
   float: right;
 }
-/* line 1089, ../SASS/inventory.scss */
+/* line 1090, ../SASS/inventory.scss */
 .boxlist .list-item .item-side:hover .item-options ul {
   display: block;
 }
-/* line 1094, ../SASS/inventory.scss */
+/* line 1095, ../SASS/inventory.scss */
 .boxlist .list-item .item-options ul li {
   display: inline-block;
   padding: 1em 1.4em;
@@ -1262,7 +1286,7 @@ ul.tablelist li.list-item:hover {
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
 }
-/* line 1107, ../SASS/inventory.scss */
+/* line 1108, ../SASS/inventory.scss */
 .boxlist .list-item .item-options ul li:hover {
   background: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -1311,11 +1335,11 @@ ul.tablelist li.list-item:hover {
     max-width: none;
 }*/
 /* Course-home licence box */
-/* line 1153, ../SASS/inventory.scss */
+/* line 1154, ../SASS/inventory.scss */
 .license_info_box {
   text-align: center;
 }
-/* line 1157, ../SASS/inventory.scss */
+/* line 1158, ../SASS/inventory.scss */
 .license_info_box img {
   width: 100px;
   margin: 8px 0 5px 0;
@@ -1634,20 +1658,20 @@ textarea{
   background: rgba(35, 35, 35, 0.8)!important;
 }*/
 /* Action Button ------------------------------------------------------------------- */
-/* line 1533, ../SASS/inventory.scss */
+/* line 1534, ../SASS/inventory.scss */
 .opt-btn-wrapper {
   position: relative;
   width: 56px;
   height: 48px;
 }
 
-/* line 1539, ../SASS/inventory.scss */
+/* line 1540, ../SASS/inventory.scss */
 .opt-btn {
   position: absolute;
   background-color: #F8F8F8;
 }
 
-/* line 1544, ../SASS/inventory.scss */
+/* line 1545, ../SASS/inventory.scss */
 .opt-btn:hover {
   background-color: #4da1e4 !important;
   color: white !important;
@@ -1658,7 +1682,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1550, ../SASS/inventory.scss */
+/* line 1551, ../SASS/inventory.scss */
 .opt-btn-more-wrapper {
   position: absolute;
   width: 56px;
@@ -1667,12 +1691,12 @@ textarea{
   overflow: hidden;
 }
 
-/* line 1558, ../SASS/inventory.scss */
+/* line 1559, ../SASS/inventory.scss */
 .opt-btn-more-tool {
   float: left;
 }
 
-/* line 1562, ../SASS/inventory.scss */
+/* line 1563, ../SASS/inventory.scss */
 .tool-btn {
   width: 56px;
   height: 48px;
@@ -1682,7 +1706,7 @@ textarea{
   color: #7e7e7e;
 }
 
-/* line 1571, ../SASS/inventory.scss */
+/* line 1572, ../SASS/inventory.scss */
 .tool-btn a {
   display: block;
   width: 56px;
@@ -1691,15 +1715,15 @@ textarea{
   background-color: #232C3A;
 }
 
-/* line 1579, ../SASS/inventory.scss */
+/* line 1580, ../SASS/inventory.scss */
 .tool-btn.delete a {
-  color: #CE6B6B;
+  color: #ce6b6b;
 }
 
-/* line 1583, ../SASS/inventory.scss */
+/* line 1584, ../SASS/inventory.scss */
 .tool-btn.delete a:hover {
   color: white;
-  background-color: #CE6B6B;
+  background-color: #ce6b6b;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
@@ -1707,7 +1731,7 @@ textarea{
   transition: all 120ms linear;
 }
 
-/* line 1590, ../SASS/inventory.scss */
+/* line 1591, ../SASS/inventory.scss */
 .tool-btn a:hover {
   color: white;
   background-color: #4da1e4;
@@ -1741,7 +1765,7 @@ ul.expandable.secondary-active {
 /* Datatables ---------------------------------------------------------*/
 /* line 1619, ../SASS/inventory.scss */
 .not_visible {
-  color: rgba(3, 3, 3, 0.3);
+  color: rgba(3, 3, 3, 0.3) !important;
   font-style: italic;
 }
 
@@ -1757,7 +1781,7 @@ tr.not_visible td:not(:last-child) a {
 }
 
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
-/* line 1636, ../SASS/inventory.scss */
+/* line 1637, ../SASS/inventory.scss */
 .row {
   position: relative !important;
 }
@@ -1768,7 +1792,7 @@ tr.not_visible td:not(:last-child) a {
   padding-top: 1em;
 }
 
-/* line 1644, ../SASS/inventory.scss */
+/* line 1645, ../SASS/inventory.scss */
 #background-cheat {
   position: absolute;
   background-color: #fafafa;
@@ -1777,10 +1801,10 @@ tr.not_visible td:not(:last-child) a {
   padding: 0px;
 }
 
-/* line 1652, ../SASS/inventory.scss */
+/* line 1653, ../SASS/inventory.scss */
 #background-cheat-leftnav {
   position: absolute;
-  background: #232C3A;
+  background: #232c3a;
   height: 100%;
   padding-bottom: 49px;
   left: 0px;
@@ -1790,20 +1814,20 @@ tr.not_visible td:not(:last-child) a {
 
 /* line 1662, ../SASS/inventory.scss */
 #bgr-cheat-footer {
-  background: #232C3A;
+  background: #232c3a;
   height: 49px;
   border-radius: 0px 0px 4px 4px;
 }
 
 /* line 1667, ../SASS/inventory.scss */
 #bgr-cheat-header {
-  background: #232C3A;
+  background: #232c3a;
   height: 53px;
   border-bottom: 1px solid transparent;
   border-radius: 4px 4px 0px 0px;
 }
 
-/* line 1674, ../SASS/inventory.scss */
+/* line 1675, ../SASS/inventory.scss */
 #my-courses .panel .alert {
   margin: 15px;
 }
@@ -1833,7 +1857,7 @@ td.option-btn-cell {
   position: relative;
   width: 259px;
 }
-/* line 1700, ../SASS/inventory.scss */
+/* line 1701, ../SASS/inventory.scss */
 .overlayed div.spinner-div {
   position: absolute;
   z-index: 9999;
@@ -1858,7 +1882,7 @@ th.forum_td:first-child {
   width: 35% !important;
 }
 
-/* line 1722, ../SASS/inventory.scss */
+/* line 1723, ../SASS/inventory.scss */
 .forum-anchor-link {
   font-size: 16px;
 }
@@ -1895,7 +1919,7 @@ table.category-links tr.link-subcategory-title {
   background-color: #f3f3f3;
 }
 
-/* line 1750, ../SASS/inventory.scss */
+/* line 1751, ../SASS/inventory.scss */
 .open-category, .open-category:hover {
   color: #333;
   text-decoration: none;
@@ -1906,7 +1930,7 @@ table.category-links td.category-link {
   padding: 15px 20px;
 }
 
-/* line 1759, ../SASS/inventory.scss */
+/* line 1760, ../SASS/inventory.scss */
 #Frame {
   padding: 0 0;
   margin: 0 0;
@@ -1938,7 +1962,7 @@ table.category-links td.category-link {
   margin: 15px 0;
 }
 
-/* line 1782, ../SASS/inventory.scss */
+/* line 1783, ../SASS/inventory.scss */
 #quick-search-wrapper input.form-control {
   background-color: rgba(0, 0, 0, 0.2);
   border: 1px solid #111111;
@@ -1951,7 +1975,7 @@ table.category-links td.category-link {
   text-decoration: none !important;
 }
 
-/* line 1793, ../SASS/inventory.scss */
+/* line 1794, ../SASS/inventory.scss */
 #rename_doc_file label {
   word-wrap: break-word;
 }
@@ -1967,37 +1991,54 @@ table.category-links td.category-link {
 }
 
 /* line 1805, ../SASS/inventory.scss */
+div.row.oc-metedata-list ul li:first-child {
+  padding-left: 10px;
+}
+/* line 1808, ../SASS/inventory.scss */
+div.row.oc-metedata-list ul li {
+  padding-left: 25px;
+}
+/* line 1810, ../SASS/inventory.scss */
+div.row.oc-metedata-list ul li .badge.valid {
+  background-color: #006400;
+}
+/* line 1813, ../SASS/inventory.scss */
+div.row.oc-metedata-list ul li .badge.not-valid {
+  background-color: #ad2121;
+}
+
+/* line 1819, ../SASS/inventory.scss */
 .mobile-apps .col-xs-6:first-child {
   padding-right: 7px;
 }
-/* line 1808, ../SASS/inventory.scss */
+/* line 1822, ../SASS/inventory.scss */
 .mobile-apps .col-xs-6:last-child {
   padding-left: 7px;
 }
 
-/* line 1815, ../SASS/inventory.scss */
+/* line 1829, ../SASS/inventory.scss */
 .opencourses .inner_opencourses span.opencourse_header {
   display: block;
   font-size: 18px;
   color: #aaa;
   text-align: center;
 }
-/* line 1822, ../SASS/inventory.scss */
+/* line 1836, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .num_sub_wrapper {
   padding-top: 15px;
 }
-/* line 1825, ../SASS/inventory.scss */
+/* line 1839, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div span {
   display: block;
 }
-/* line 1828, ../SASS/inventory.scss */
+/* line 1842, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_link {
   font-size: 16px;
   color: #444;
   padding: 8px 0px 14px 0;
   text-align: center;
 }
-/* line 1834, ../SASS/inventory.scss */
+/* line 1848, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_num {
   font-size: 40px;
   float: left;
@@ -2006,19 +2047,19 @@ table.category-links td.category-link {
   line-height: 40px;
   padding: 0 3px;
 }
-/* line 1842, ../SASS/inventory.scss */
+/* line 1856, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_num_text {
   padding: 0px;
 }
-/* line 1845, ../SASS/inventory.scss */
+/* line 1859, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_num_text a {
   display: block;
 }
-/* line 1849, ../SASS/inventory.scss */
+/* line 1863, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div > div > div {
   float: right;
 }
-/* line 1852, ../SASS/inventory.scss */
+/* line 1866, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_sub {
   float: left;
   background-color: #428bca;
@@ -2027,7 +2068,7 @@ table.category-links td.category-link {
   font-size: 13px;
   padding: 0px 15px;
 }
-/* line 1860, ../SASS/inventory.scss */
+/* line 1874, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_triangle {
   float: left;
   border-top: 20px solid transparent;
@@ -2036,49 +2077,44 @@ table.category-links td.category-link {
   width: 0px;
   height: 0px;
 }
-/* line 1869, ../SASS/inventory.scss */
+/* line 1883, ../SASS/inventory.scss */
 .opencourses .inner_opencourses a:hover {
   text-decoration: none;
 }
 
-/* line 1874, ../SASS/inventory.scss */
+/* line 1888, ../SASS/inventory.scss */
 div.glossary-categories a:hover {
   text-decoration: none;
 }
-/* line 1877, ../SASS/inventory.scss */
+/* line 1891, ../SASS/inventory.scss */
 div.glossary-categories td.space-left {
   padding-left: 25px;
 }
 
-/* line 1881, ../SASS/inventory.scss */
+/* line 1895, ../SASS/inventory.scss */
 a.action-btn-link {
   color: #23527c;
 }
 
-/* line 1884, ../SASS/inventory.scss */
+/* line 1898, ../SASS/inventory.scss */
 a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited {
   text-decoration: none;
   cursor: pointer;
 }
 
-/* line 1889, ../SASS/inventory.scss */
-div.group-space .row {
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-/* line 1893, ../SASS/inventory.scss */
+/* line 1903, ../SASS/inventory.scss */
 div.group-space .row.hr-seperator {
   margin-top: 15px;
   padding-bottom: 15px;
 }
-/* line 1896, ../SASS/inventory.scss */
+/* line 1906, ../SASS/inventory.scss */
 div.group-space .row.hr-seperator hr {
   margin-top: 9px;
   padding-top: 1px;
   padding-bottom: 1px;
 }
 
-/* line 1904, ../SASS/inventory.scss */
+/* line 1914, ../SASS/inventory.scss */
 .unit-pagination {
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -2086,17 +2122,17 @@ div.group-space .row.hr-seperator hr {
   margin-bottom: 10px;
 }
 
-/* line 1910, ../SASS/inventory.scss */
+/* line 1920, ../SASS/inventory.scss */
 .list-header {
   background-color: #eeeeee !important;
   color: #777777 !important;
 }
 
-/* line 1914, ../SASS/inventory.scss */
+/* line 1924, ../SASS/inventory.scss */
 .panel.opencourses-national {
   min-height: 2px;
 }
-/* line 1918, ../SASS/inventory.scss */
+/* line 1928, ../SASS/inventory.scss */
 .panel.opencourses-national a {
   display: block;
   font-size: 14px;
@@ -2107,28 +2143,28 @@ div.group-space .row.hr-seperator hr {
   height: 100%;
   text-align: center;
 }
-/* line 1928, ../SASS/inventory.scss */
+/* line 1938, ../SASS/inventory.scss */
 .panel.opencourses-national a:hover {
   text-decoration: none;
   color: white;
 }
 
-/* line 1933, ../SASS/inventory.scss */
+/* line 1943, ../SASS/inventory.scss */
 .no-borders {
   border: 0px;
 }
 
-/* line 1937, ../SASS/inventory.scss */
+/* line 1947, ../SASS/inventory.scss */
 #dropboxTabs .nav-tabs {
   margin-bottom: 15px;
 }
 
-/* line 1941, ../SASS/inventory.scss */
+/* line 1951, ../SASS/inventory.scss */
 #profile_menu_dropdown ul li:last-child {
   border-top: 1px #ddd solid;
 }
 
-/* line 1944, ../SASS/inventory.scss */
+/* line 1954, ../SASS/inventory.scss */
 .add-unit-btn {
   line-height: 37px;
   font-size: 22px;
@@ -2136,11 +2172,11 @@ div.group-space .row.hr-seperator hr {
   color: #5cb85c;
 }
 
-/* line 1950, ../SASS/inventory.scss */
+/* line 1960, ../SASS/inventory.scss */
 .course-info-title {
   margin-bottom: 10px;
 }
-/* line 1952, ../SASS/inventory.scss */
+/* line 1962, ../SASS/inventory.scss */
 .course-info-title h4 {
   line-height: 30px;
   font-size: 16px;
@@ -2148,11 +2184,11 @@ div.group-space .row.hr-seperator hr {
   margin: 0px;
   color: #666;
 }
-/* line 1960, ../SASS/inventory.scss */
+/* line 1970, ../SASS/inventory.scss */
 .course-info-title .edit-course-title {
   margin: 0px 15px;
 }
-/* line 1962, ../SASS/inventory.scss */
+/* line 1972, ../SASS/inventory.scss */
 .course-info-title .edit-course-title i {
   font-size: 16px;
   line-height: 30px;
@@ -2160,70 +2196,74 @@ div.group-space .row.hr-seperator hr {
   text-decoration: none;
   font-weight: bold;
 }
-/* line 1969, ../SASS/inventory.scss */
+/* line 1979, ../SASS/inventory.scss */
 .course-info-title .edit-course-title i:hover {
   color: #4DA1E4;
 }
 
-/* line 1974, ../SASS/inventory.scss */
+/* line 1984, ../SASS/inventory.scss */
 ul.sharinglist li a i {
   color: #666;
 }
 
-/* line 1977, ../SASS/inventory.scss */
+/* line 1987, ../SASS/inventory.scss */
 ul.sharinglist li a i:hover {
   color: #333;
 }
 
-/* line 1980, ../SASS/inventory.scss */
+/* line 1991, ../SASS/inventory.scss */
 ul.front-announcements, .single_announcement {
   list-style: none;
   padding-left: 0px;
 }
-/* line 1984, ../SASS/inventory.scss */
+/* line 1994, ../SASS/inventory.scss */
 ul.front-announcements li, .single_announcement li {
   padding: 15px 0;
   border-bottom: 1px solid #ddd;
 }
-/* line 1987, ../SASS/inventory.scss */
+/* line 1997, ../SASS/inventory.scss */
 ul.front-announcements li a:hover, .single_announcement li a:hover {
   text-decoration: none;
 }
-/* line 1991, ../SASS/inventory.scss */
+/* line 2001, ../SASS/inventory.scss */
 ul.front-announcements li:first-child, .single_announcement li:first-child {
   padding-top: 0px;
 }
-/* line 1994, ../SASS/inventory.scss */
+/* line 2004, ../SASS/inventory.scss */
 ul.front-announcements li:last-child, .single_announcement li:last-child {
   padding-bottom: 0px !important;
 }
-/* line 1997, ../SASS/inventory.scss */
+/* line 2007, ../SASS/inventory.scss */
 ul.front-announcements .announcement-title, .single_announcement .announcement-title {
   font-weight: bold;
   font-size: 15px;
 }
-/* line 2001, ../SASS/inventory.scss */
+/* line 2011, ../SASS/inventory.scss */
 ul.front-announcements .announcement-date, .single_announcement .announcement-date {
   font-style: italic;
   color: #777;
   font-size: 13px;
   line-height: 30px;
 }
-/* line 2007, ../SASS/inventory.scss */
+/* line 2017, ../SASS/inventory.scss */
+ul.front-announcements .announcement-main, .single_announcement .announcement-main {
+  padding: 10px;
+}
+/* line 2020, ../SASS/inventory.scss */
 ul.front-announcements .announcements-more, .single_announcement .announcements-more {
   text-align: right;
 }
-/* line 2013, ../SASS/inventory.scss */
+/* line 2026, ../SASS/inventory.scss */
 ul.front-announcements li:last-child, .single_announcement li:last-child {
   border-bottom: none;
   padding-bottom: 10px;
 }
 
-/* line 2019, ../SASS/inventory.scss */
+/* line 2033, ../SASS/inventory.scss */
 .dataTables_filter {
   position: relative;
 }
-/* line 2022, ../SASS/inventory.scss */
+/* line 2035, ../SASS/inventory.scss */
 .dataTables_filter:before {
   position: absolute;
   font-family: FontAwesome;
@@ -2232,23 +2272,23 @@ ul.front-announcements li:last-child, .single_announcement li:last-child {
   content: "\f002";
   color: #999;
 }
-/* line 2030, ../SASS/inventory.scss */
+/* line 2043, ../SASS/inventory.scss */
 .dataTables_filter label {
   margin: 0 0 10px 0;
   width: 100%;
 }
-/* line 2034, ../SASS/inventory.scss */
+/* line 2047, ../SASS/inventory.scss */
 .dataTables_filter input {
   margin: 0px !important;
   padding-right: 25px;
 }
 
-/* line 2039, ../SASS/inventory.scss */
+/* line 2053, ../SASS/inventory.scss */
 table#portfolio-lessons tr {
   padding: 5px 0;
 }
 
-/* line 2044, ../SASS/inventory.scss */
+/* line 2057, ../SASS/inventory.scss */
 .navbar-toggle {
   border: none;
   margin-left: 8px;
@@ -2260,13 +2300,13 @@ table#portfolio-lessons tr {
   height: 52px;
 }
 
-/* line 2054, ../SASS/inventory.scss */
+/* line 2068, ../SASS/inventory.scss */
 .quick-change-pwd {
   text-align: right;
   font-size: 11px;
 }
 
-/* line 2059, ../SASS/inventory.scss */
+/* line 2072, ../SASS/inventory.scss */
 #scrollToTop {
   display: none;
   position: fixed;
@@ -2275,30 +2315,30 @@ table#portfolio-lessons tr {
   bottom: 15px;
 }
 
-/* line 2066, ../SASS/inventory.scss */
+/* line 2079, ../SASS/inventory.scss */
 #scrollToTop i {
   padding: 0 0 10px 0;
   color: #a7a7a7;
   cursor: pointer;
 }
 
-/* line 2071, ../SASS/inventory.scss */
+/* line 2084, ../SASS/inventory.scss */
 .footer {
   height: 49px;
   font-size: 12px;
 }
 
-/* line 2075, ../SASS/inventory.scss */
+/* line 2088, ../SASS/inventory.scss */
 .footer span {
   line-height: 24px;
 }
 
-/* line 2078, ../SASS/inventory.scss */
+/* line 2091, ../SASS/inventory.scss */
 .panel-footer .event-legend > div {
   margin-bottom: 5px;
 }
 
-/* line 2081, ../SASS/inventory.scss */
+/* line 2095, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 8px;
@@ -2307,14 +2347,14 @@ table#portfolio-lessons tr {
   border-radius: 5px;
 }
 
-/* line 2090, ../SASS/inventory.scss */
+/* line 2103, ../SASS/inventory.scss */
 p.link-to-more {
   text-align: right;
   font-size: 12px;
   margin: 0px;
 }
 
-/* line 2096, ../SASS/inventory.scss */
+/* line 2109, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -2323,7 +2363,7 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 2103, ../SASS/inventory.scss */
+/* line 2116, ../SASS/inventory.scss */
 div.profile-pers-info-name {
   font-size: 16px;
   font-weight: bold;
@@ -2331,56 +2371,64 @@ div.profile-pers-info-name {
   padding-top: 10px;
 }
 
-/* line 2109, ../SASS/inventory.scss */
+/* line 2122, ../SASS/inventory.scss */
 div#profile-about-me {
   padding-top: 20px;
   padding-bottom: 20px;
 }
 
-/* line 2113, ../SASS/inventory.scss */
+/* line 2128, ../SASS/inventory.scss */
+.extapp table.extapp-table thead.list-header td {
+  padding: 10px;
+}
+/* line 2133, ../SASS/inventory.scss */
+.extapp table.extapp-table tr td {
+  padding: 20px;
+}
+
+/* line 2138, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 2116, ../SASS/inventory.scss */
+/* line 2141, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
-  margin-top: 20px;
   margin-bottom: 15px;
 }
-/* line 2120, ../SASS/inventory.scss */
+/* line 2145, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 2124, ../SASS/inventory.scss */
+/* line 2149, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 2130, ../SASS/inventory.scss */
+/* line 2155, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 2139, ../SASS/inventory.scss */
+/* line 2165, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 2145, ../SASS/inventory.scss */
+/* line 2170, ../SASS/inventory.scss */
 .event-legend {
   font-size: 11px;
   color: #666;
   line-height: 10px;
 }
-/* line 2149, ../SASS/inventory.scss */
+/* line 2174, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
-/* line 2155, ../SASS/inventory.scss */
+/* line 2181, ../SASS/inventory.scss */
 .event {
   width: 14px;
   height: 14px;
@@ -2388,16 +2436,16 @@ span[data-cal-date] {
   border-radius: 7px;
   border: 0px !important;
   margin-bottom: 4px;
-  box-shadow: 0 0px 0px #BBBBBB !important;
-  -moz-box-shadow: 0 0px 0px #BBBBBB !important;
-  -webkit-box-shadow: 0 0px 0px #BBBBBB !important;
+  box-shadow: 0 0px 0px #bbbbbb !important;
+  -moz-box-shadow: 0 0px 0px #bbbbbb !important;
+  -webkit-box-shadow: 0 0px 0px #bbbbbb !important;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 2167, ../SASS/inventory.scss */
+/* line 2192, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -2407,8 +2455,822 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 2173, ../SASS/inventory.scss */
+/* line 2199, ../SASS/inventory.scss */
 #cal-slide-content {
-  background: #232C3A !important;
+  background: #232c3a !important;
   background-image: none;
+}
+
+/* ... */
+/* line 6, styles.scss */
+/* line 2212, ../SASS/inventory.scss */
+form.login-form {
+  height: 300px;
+  position: relative;
+  padding: 0em !important;
+  margin: 0 15px;
+}
+
+/* line 12, styles.scss */
+/* line 2219, ../SASS/inventory.scss */
+form.login-form .form-group {
+  position: relative;
+}
+
+/* line 14, styles.scss */
+/* line 2223, ../SASS/inventory.scss */
+form.login-form .form-group label {
+  padding: 0em;
+  position: absolute;
+  top: 0.8em;
+  left: 0em;
+  z-index: 9;
+}
+
+/* line 21, styles.scss */
+/* line 2231, ../SASS/inventory.scss */
+form.login-form .form-group input {
+  padding-left: 2em !important;
+}
+
+/* line 28, styles.scss */
+/* line 2236, ../SASS/inventory.scss */
+.flip-container {
+  /* entire container, keeps perspective */
+}
+
+/* line 30, styles.scss */
+/* line 2240, ../SASS/inventory.scss */
+.flip-container.effect-slide {
+  position: relative;
+  display: block;
+  font-size: 0.85em;
+  background: white;
+  border-radius: 3rem;
+  padding: 0em;
+  margin: 0 15px;
+  z-index: 99;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+/* line 49, styles.scss */
+/* line 2255, ../SASS/inventory.scss */
+.flip-container.effect-slide .flipper {
+  width: 200%;
+  height: 100%;
+  position: absolute;
+  left: 0%;
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+
+/* line 62, styles.scss */
+/* line 2266, ../SASS/inventory.scss */
+.flip-container.effect-slide.hover .flipper {
+  left: -100%;
+}
+
+/* line 67, styles.scss */
+/* line 2271, ../SASS/inventory.scss */
+.flip-container.effect-slide .flipper .front,
+.flip-container.effect-slide .flipper .back {
+  width: 50%;
+  position: absolute;
+  padding: 2em 3em;
+}
+
+/* line 73, styles.scss */
+/* line 2277, ../SASS/inventory.scss */
+.flip-container.effect-slide .flipper .back {
+  right: 0;
+}
+
+/* line 79, styles.scss */
+/* line 2281, ../SASS/inventory.scss */
+.flip-container.effect-flip {
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  perspective: 1000;
+  -ms-transform: perspective(1000px);
+  -moz-transform: perspective(1000px);
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  /* Style of front and back */
+  /* flip speed goes here */
+  /* hide back of pane during swap */
+  /* front pane, placed above back */
+  /* back, initially hidden pane */
+}
+
+/* line 89, styles.scss */
+/* line 2297, ../SASS/inventory.scss */
+.flip-container.effect-flip.hover .flipper {
+  transform: rotateY(180deg);
+}
+
+/* line 94, styles.scss */
+/* line 2301, ../SASS/inventory.scss */
+.flip-container.effect-flip .front, .flip-container.effect-flip .back {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: block;
+  background: white;
+  height: 100%;
+  font-size: 0.85em;
+  position: relative;
+  z-index: 99;
+  background: white;
+  border-radius: 3rem;
+  padding: 2em 3em;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* line 115, styles.scss */
+/* line 2319, ../SASS/inventory.scss */
+.flip-container.effect-flip .flipper {
+  height: 100%;
+  -webkit-transition: 0.6s;
+  -webkit-transform-style: preserve-3d;
+  -ms-transition: 0.6s;
+  -moz-transition: 0.6s;
+  -moz-transform: perspective(1000px);
+  -moz-transform-style: preserve-3d;
+  -ms-transform-style: preserve-3d;
+  transition: 0.6s;
+  transform-style: preserve-3d;
+  position: relative;
+}
+
+/* line 131, styles.scss */
+/* line 2333, ../SASS/inventory.scss */
+.flip-container.effect-flip .front, .flip-container.effect-flip .back {
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition: 0.6s;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transform: rotateY(0deg);
+  -moz-transition: 0.6s;
+  -moz-transform-style: preserve-3d;
+  -moz-transform: rotateY(0deg);
+  -o-transition: 0.6s;
+  -o-transform-style: preserve-3d;
+  -o-transform: rotateY(0deg);
+  -ms-transition: 0.6s;
+  -ms-transform-style: preserve-3d;
+  -ms-transform: rotateY(0deg);
+  transition: 0.6s;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* line 157, styles.scss */
+/* line 2358, ../SASS/inventory.scss */
+.flip-container.effect-flip .front {
+  -webkit-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  z-index: 2;
+}
+
+/* line 164, styles.scss */
+/* line 2364, ../SASS/inventory.scss */
+.flip-container.effect-flip .back {
+  -webkit-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  -ms-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+
+/* line 174, styles.scss */
+/* line 2373, ../SASS/inventory.scss */
+body {
+  height: 100%;
+  position: relative;
+  font-family: "Open Sans" !important;
+  margin: 0 auto;
+}
+
+/* line 176, styles.scss */
+/* line 2381, ../SASS/inventory.scss */
+body.page-login h1 {
+  margin: 1.25em 1em;
+}
+
+/* line 208, styles.scss */
+/* line 2386, ../SASS/inventory.scss */
+.jumbotron.jumbotron-login .graphic {
+  position: absolute;
+  z-index: 9;
+  width: 77%;
+  max-width: 100%;
+  top: -2.8rem;
+}
+
+/* line 220, styles.scss */
+/* line 2395, ../SASS/inventory.scss */
+form.login-form {
+  font-size: 0.85em;
+  position: relative;
+  z-index: 99;
+  background: white;
+  border-radius: 3rem;
+  padding: 2em 3em;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* line 235, styles.scss */
+/* line 2407, ../SASS/inventory.scss */
+form.login-form h2 {
+  text-align: center;
+  font-size: 1.8em;
+  margin: 2rem 0rem;
+  margin-top: 0rem;
+  color: #232c3a;
+}
+
+/* line 243, styles.scss */
+/* line 2415, ../SASS/inventory.scss */
+form.login-form .form-group {
+  margin: 0rem;
+}
+
+/* line 248, styles.scss */
+/* line 2419, ../SASS/inventory.scss */
+form.login-form .form-group > * {
+  display: inline-block;
+  float: none;
+}
+
+/* line 254, styles.scss */
+/* line 2424, ../SASS/inventory.scss */
+form.login-form .form-group input {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0px;
+  border-width: 1px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  outline: none;
+  font-size: 1.2em;
+  padding: 0.4em;
+  line-height: 1.42857143;
+  color: #555;
+}
+
+/* line 271, styles.scss */
+/* line 2440, ../SASS/inventory.scss */
+form.login-form .form-group input:focus {
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+/* line 276, styles.scss */
+/* line 2444, ../SASS/inventory.scss */
+form.login-form .form-group label {
+  margin: 0;
+  text-align: center;
+}
+
+/* line 281, styles.scss */
+/* line 2449, ../SASS/inventory.scss */
+form.login-form .form-group i.fa {
+  font-size: 1.2em;
+  margin: 0;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* line 288, styles.scss */
+/* line 2455, ../SASS/inventory.scss */
+form.login-form .login-settings {
+  margin: 2rem 0rem;
+  font-size: 0.9em;
+}
+
+/* line 292, styles.scss */
+/* line 2460, ../SASS/inventory.scss */
+form.login-form .login-settings > * {
+  margin: 0;
+}
+
+/* line 297, styles.scss */
+/* line 2465, ../SASS/inventory.scss */
+form.login-form .login-settings .checkbox,
+form.login-form .login-settings .link {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* line 302, styles.scss */
+/* line 2470, ../SASS/inventory.scss */
+form.login-form .login-settings .checkbox label,
+form.login-form .login-settings .link label {
+  font-weight: bold;
+}
+
+/* line 306, styles.scss */
+/* line 2474, ../SASS/inventory.scss */
+form.login-form .login-settings .link a {
+  float: right;
+  margin-top: 0.3em;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* line 312, styles.scss */
+/* line 2480, ../SASS/inventory.scss */
+form.login-form .login-settings .checkbox label span {
+  margin-top: 0.3em;
+  display: inline-block;
+}
+
+/* line 318, styles.scss */
+/* line 2485, ../SASS/inventory.scss */
+form.login-form .btn.btn-login {
+  width: 100%;
+  height: 4rem;
+  border-radius: 4rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  background: #428bca;
+  letter-spacing: 0.1em;
+}
+
+/* line 328, styles.scss */
+/* line 2496, ../SASS/inventory.scss */
+form.login-form .btn.btn-login:hover {
+  background: #3071a9;
+}
+
+/* DELETE THIS */
+/* line 335, styles.scss */
+/* line 2502, ../SASS/inventory.scss */
+.row .deleteThisClass {
+  height: 400px;
+  border: 1px solid #eee;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* RESPONSIVE */
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+  /* Styles */
+  /* line 346, styles.scss */
+  /* line 2512, ../SASS/inventory.scss */
+  form.login-form .login-settings .link {
+    float: left !important;
+    margin-top: 1em;
+  }
+
+  /* line 351, styles.scss */
+  /* line 2518, ../SASS/inventory.scss */
+  .jumbotron.jumbotron-login img.graphic {
+    top: 7.1rem;
+    left: -2rem;
+    width: 100%;
+  }
+}
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  /* line 360, styles.scss */
+  /* line 2526, ../SASS/inventory.scss */
+  .jumbotron.jumbotron-login img.graphic {
+    width: 94%;
+  }
+}
+/* line 2532, ../SASS/inventory.scss */
+div.login-form {
+  font-size: 0.85em;
+  position: relative;
+  z-index: 99;
+  background: white;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  padding: 2em 2em;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+
+/* line 606, ../SASS/structure.scss */
+/* line 2551, ../SASS/inventory.scss */
+div.login-form:hover {
+  box-shadow: 0px 0px 20px 3px black;
+  -moz-box-shadow: 0px 0px 20px 3px black;
+  -webkit-box-shadow: 0px 0px 20px 3px black;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+
+/* line 610, ../SASS/structure.scss */
+/* line 2562, ../SASS/inventory.scss */
+div.login-form h2 {
+  text-align: center;
+  font-size: 1.8em;
+  margin: 2rem 0rem;
+  margin-top: 0rem;
+  color: #232c3a;
+}
+
+/* line 618, ../SASS/structure.scss */
+/* line 2570, ../SASS/inventory.scss */
+div.login-form .form-group {
+  margin: 0rem;
+}
+
+/* line 623, ../SASS/structure.scss */
+/* line 2574, ../SASS/inventory.scss */
+div.login-form .form-group > * {
+  display: inline-block;
+  float: none;
+}
+
+/* line 629, ../SASS/structure.scss */
+/* line 2579, ../SASS/inventory.scss */
+div.login-form .form-group input {
+  width: 82%;
+  border-bottom: 1px solid #eeeeee;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0px;
+  border-width: 1px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  outline: none;
+  font-size: 1.1em;
+  padding: 0.4em;
+  line-height: 1.42857143;
+  color: #444444;
+}
+
+/* line 650, ../SASS/structure.scss */
+/* line 2597, ../SASS/inventory.scss */
+div.login-form .form-group input:focus {
+  border-color: #4da1e4;
+}
+
+/* line 656, ../SASS/structure.scss */
+/* line 2601, ../SASS/inventory.scss */
+div.login-form .form-group label {
+  width: 17%;
+  margin: 0;
+  text-align: center;
+}
+
+/* line 662, ../SASS/structure.scss */
+/* line 2607, ../SASS/inventory.scss */
+div.login-form .form-group i.fa {
+  font-size: 1.2em;
+  margin: 0;
+  color: #aaaaaa;
+}
+
+/* line 669, ../SASS/structure.scss */
+/* line 2613, ../SASS/inventory.scss */
+div.login-form .login-settings {
+  margin: 5px 0px 0px 0px;
+  font-size: 0.9em;
+}
+
+/* line 673, ../SASS/structure.scss */
+/* line 2618, ../SASS/inventory.scss */
+div.login-form .login-settings > div:first-child {
+  text-align: right;
+  padding: 5px 0;
+}
+
+/* line 678, ../SASS/structure.scss */
+/* line 2623, ../SASS/inventory.scss */
+div.login-form .login-settings > hr {
+  margin: 5px 0 10px;
+}
+
+/* line 682, ../SASS/structure.scss */
+/* line 2627, ../SASS/inventory.scss */
+div.login-form .login-settings .alt_login span:first-child {
+  font-weight: bold;
+}
+
+/* line 685, ../SASS/structure.scss */
+/* line 2631, ../SASS/inventory.scss */
+div.login-form .login-settings > * {
+  margin: 0;
+}
+
+/* line 689, ../SASS/structure.scss */
+/* line 2636, ../SASS/inventory.scss */
+div.login-form .login-settings .checkbox,
+div.login-form .login-settings .link {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* line 694, ../SASS/structure.scss */
+/* line 2641, ../SASS/inventory.scss */
+div.login-form .login-settings .checkbox label,
+div.login-form .login-settings .link label {
+  font-weight: bold;
+}
+
+/* line 699, ../SASS/structure.scss */
+/* line 2645, ../SASS/inventory.scss */
+div.login-form .login-settings .link a {
+  float: right;
+  margin-top: 0.3em;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* line 705, ../SASS/structure.scss */
+/* line 2651, ../SASS/inventory.scss */
+div.login-form .login-settings .checkbox label span {
+  margin-top: 0.3em;
+  display: inline-block;
+}
+
+/* line 711, ../SASS/structure.scss */
+/* line 2656, ../SASS/inventory.scss */
+div.login-form .btn.btn-login {
+  margin: 15px 0 5px;
+  width: 100%;
+  height: 4rem;
+  border-radius: 4rem;
+  font-weight: 600;
+  color: white;
+  background: #428bca;
+  letter-spacing: 0.1em;
+  outline: none;
+}
+
+/* line 721, ../SASS/structure.scss */
+/* line 2668, ../SASS/inventory.scss */
+div.login-form .btn.btn-login:hover {
+  background: #3071a9;
+}
+
+/* line 2674, ../SASS/inventory.scss */
+.login-form {
+  position: relative;
+  overflow: hidden;
+  padding: 0em !important;
+}
+
+/* line 2681, ../SASS/inventory.scss */
+.wrapper-login-option {
+  width: 300%;
+  transition: 250ms margin ease-out;
+  -webkit-transition: 250ms margin ease-out;
+  -moz-transition: 250ms margin ease-out;
+  -o-transition: 250ms margin ease-out;
+}
+
+/* line 2689, ../SASS/inventory.scss */
+.wrapper-login-option:after {
+  content: ".";
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+/* line 2697, ../SASS/inventory.scss */
+.wrapper-login-option .login-option {
+  width: 33.3%;
+  float: left;
+  padding: 2em;
+}
+
+/* line 2704, ../SASS/inventory.scss */
+.hide {
+  display: none;
+}
+
+/* line 2709, ../SASS/inventory.scss */
+div.login-form .btn.btn-login {
+  border-radius: 1rem !important;
+}
+
+/* line 2714, ../SASS/inventory.scss */
+.or-separator {
+  text-align: center !important;
+  position: relative;
+  padding: 2px 5px;
+  z-index: 9;
+  width: 100%;
+  margin-bottom: 0.4em !important;
+}
+
+/* line 2723, ../SASS/inventory.scss */
+.or-separator span {
+  content: "";
+  display: inline-block;
+  position: relative;
+  z-index: 99;
+}
+
+/* line 2730, ../SASS/inventory.scss */
+.text-center {
+  text-align: center;
+}
+
+/* line 2734, ../SASS/inventory.scss */
+.or-separator span:before {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  z-index: -1;
+  width: calc(100% + 2em);
+  height: 1em;
+  top: calc(50% - 0.5em);
+  left: -1em;
+  background: white;
+}
+
+/* line 2746, ../SASS/inventory.scss */
+.or-separator:after {
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  content: "";
+  top: 47%;
+  left: 0px;
+}
+
+/* line 2757, ../SASS/inventory.scss */
+.option-btn-login {
+  display: inline-block;
+  width: 90%;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: none;
+  padding: 0.5em 1em;
+  font-weight: normal;
+  outline: none;
+  margin: 0 5px;
+}
+
+/* line 2769, ../SASS/inventory.scss */
+.option-btn-login:first-child:nth-last-child(2), .option-btn-login:first-child:nth-last-child(2) ~ button {
+  width: 45%;
+}
+
+/* line 2773, ../SASS/inventory.scss */
+.option-btn-login:hover {
+  background: #3071a9;
+  color: white;
+  border-color: transparent;
+}
+
+/* line 2779, ../SASS/inventory.scss */
+.option-btn-login > span {
+  font-weight: 700;
+  display: block;
+}
+
+/* line 2784, ../SASS/inventory.scss */
+div.login-form .login-option-sso .btn-login {
+  height: 8rem;
+  line-height: 7rem;
+}
+
+/* line 2789, ../SASS/inventory.scss */
+.head-text {
+  text-align: center;
+  display: block;
+}
+
+/* line 2794, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn {
+  width: 100%;
+  margin-top: 0.5em;
+  color: white;
+}
+
+/* line 2800, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn i.fa {
+  float: left;
+  font-size: 1.6em;
+  position: relative;
+}
+
+/* line 2806, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn i.fa:after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  right: -0.6em;
+  height: 100%;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* line 2816, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn:first-of-type {
+  margin-top: 0.8em;
+}
+
+/* line 2820, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn:last-of-type {
+  margin-bottom: 0.8em;
+}
+
+/* line 2824, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn.social-btn-fb {
+  background: rgba(97, 152, 224, 0.8);
+}
+
+/* line 2828, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn.social-btn-fb:hover {
+  background: #6198e0;
+}
+
+/* line 2832, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn.social-btn-google {
+  background: rgba(224, 84, 84, 0.8);
+}
+
+/* line 2836, ../SASS/inventory.scss */
+div.login-form .login-option-social .social-btn.social-btn-google:hover {
+  background: #e05454;
+}
+
+/* line 2843, ../SASS/inventory.scss */
+#main-content .login-page .panel {
+  margin-bottom: 0px !important;
+}
+/* line 2846, ../SASS/inventory.scss */
+#main-content .login-page .login-page-option {
+  min-height: 200px;
+}
+/* line 2849, ../SASS/inventory.scss */
+#main-content .login-page .form-group input {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  box-shadow: none;
+}
+/* line 2856, ../SASS/inventory.scss */
+#main-content .login-page .btn-block a {
+  line-height: 40px;
+}
+/* line 2860, ../SASS/inventory.scss */
+#main-content .login-page .or-separator span:before, #main-content .login-page .or-separator span:after {
+  background-color: #fafafa;
+}
+/* line 2863, ../SASS/inventory.scss */
+#main-content .login-page .row > .col-sm-6:first-child {
+  border-right: 1px solid #ddd !important;
+}
+/* line 2866, ../SASS/inventory.scss */
+#main-content .login-page .row > .col-sm-4:first-child, #main-content .login-page .row > .col-sm-4:nth-last-child(2) {
+  border-right: 1px solid #ddd !important;
+}
+
+/* line 2872, ../SASS/inventory.scss */
+.form-wrapper h4.form-heading {
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+/* line 2880, ../SASS/inventory.scss */
+.notice .notice-header {
+  color: black;
+  margin-bottom: 5px;
+  text-decoration: underline;
+}
+/* line 2885, ../SASS/inventory.scss */
+.notice .notice-body {
+  color: #777777;
+}
+
+/* line 2890, ../SASS/inventory.scss */
+.lp-module-show .row {
+  padding-bottom: 7px;
+  padding-top: 7px;
 }

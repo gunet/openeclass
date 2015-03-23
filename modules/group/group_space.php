@@ -101,16 +101,18 @@ $tool_content .= action_bar(array(
                 'title' => $langBack,
                 'level' => 'primary-label',
                 'icon' => 'fa-reply',
-                'url' => "index.php?course=$course_code"
+                'url' => "javascript:history.back();"
             )
         ));
 
 
-$tool_content .= "<div class='form-wrapper group-space'>
+$tool_content .= "<div class='group-space'>
                     <div class='row'>
-                        <div class='col-xs-3 text-right'><strong>$langGroupName:</strong></div>
-                        <div class='col-xs-9'>" . q($group_name) . "</div>
-                    </div>";
+                        <div class='col-xs-12'>
+                            <div class='row'>
+                                <div class='col-sm-3'><strong>$langGroupName:</strong></div>
+                                <div class='col-sm-9'>" . q($group_name) . "</div>
+                            </div>";
 
 $tutors = array();
 $members = array();
@@ -131,37 +133,40 @@ foreach ($q as $user) {
 if ($tutors) {
     $tool_content_tutor = implode(', ', $tutors);
 } else {
-    $tool_content_tutor = $langGroupNoTutor;
+    $tool_content_tutor = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
 }
 
 $tool_content .= "
         <div class='row'>
-            <div class='col-xs-3 text-right'><strong>$langGroupTutor:</strong></div>
-            <div class='col-xs-9'>$tool_content_tutor</div>
+            <div class='col-sm-3'><strong>$langGroupTutor:</strong></div>
+            <div class='col-sm-9'>$tool_content_tutor</div>
         </div>";
 
 $group_description = trim($group_description);
 if (empty($group_description)) {
-    $tool_content_description = $langGroupNone;
+    $tool_content_description = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
 } else {
     $tool_content_description = q($group_description);
 }
 
 $tool_content .= "
         <div class='row'>
-            <div class='col-xs-3 text-right'><strong>$langDescription:</strong></div>
-            <div class='col-xs-9'>$tool_content_description</div>
-        </div>";
+            <div class='col-sm-3'><strong>$langDescription:</strong></div>
+            <div class='col-sm-9'>$tool_content_description</div>
+        </div>
+        </div>
+    </div><br>";
 
 // members
-$tool_content .= "  <div class='row hr-seperator'>
-                        <div class='col-xs-3 text-right'><strong>$langGroupMembers:</strong></div>
-                        <div class='col-xs-9'><hr></div>
-                    </div>
-                    <div class='row'>
+$tool_content .= "  <div class='row'>
                         <div class='col-xs-12'>
                           <ul class='list-group'>
                               <li class='list-group-item list-header'>
+                                <div class='row'>
+                                    <div class='text-center'>
+                                        <b>$langGroupMembers</b>
+                                    </div>
+                                </div>
                                   <div class='row'>
                                       <div class='col-xs-4'>$langSurnameName</div>
                                       <div class='col-xs-4'>$langAm</div>

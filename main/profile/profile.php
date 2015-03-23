@@ -225,8 +225,8 @@ $desc_form = $myrow->description;
 $userLang = $myrow->lang;
 $icon = $myrow->has_icon;
 
-$sec = $urlSecure . 'main/profile/profile.php';
-$passurl = $urlSecure . 'main/profile/password.php';
+$sec = $urlServer . 'main/profile/profile.php';
+$passurl = $urlServer . 'main/profile/password.php';
 
 $tool_content .= 
         action_bar(array(
@@ -365,9 +365,11 @@ if ($icon) {
     $picture = $delete = '';
     $message_pic = $langAddPicture;
 }
+enableCheckFileSize();
 $tool_content .= "<div class='form-group'>
         <label for='picture' class='col-sm-2 control-label'>$message_pic</label>
-            <div class='col-sm-10'><span>$picture$delete</span><input type='file' name='userimage' size='30'></div>
+            <div class='col-sm-10'><span>$picture$delete</span>" . fileSizeHidenInput() . "
+            <input type='file' name='userimage' size='30'></div>
         </div>
         <div class='form-group'>      
           <label for='desription' class='col-sm-2 control-label'>$langDescription:</label>

@@ -61,7 +61,7 @@ if ($userdata) {
         $allow_password_change = true;
     }
     if ($uid == $id) {
-        $passurl = $urlSecure . 'main/profile/password.php';
+        $passurl = $urlServer . 'main/profile/password.php';
         $tool_content .= 
             action_bar(array(
                 array('title' => $langEditProfile,
@@ -82,14 +82,16 @@ if ($userdata) {
                     'icon' => 'fa-times',
                     'level' => 'primary')
                 ));    
-    }else{
-        $tool_content .= 
-            action_bar(array(
-                array('title' => $langProfileSendMail,
-                    'url' => "profile.php",
-                    'icon' => 'fa-envelope',
-                    'level' => 'primary-label')
-                ));
+    } else {
+        if (get_config('dropbox_allow_personal_messages')) {
+            $tool_content .= 
+                action_bar(array(
+                    array('title' => $langProfileSendMail,
+                        'url' => "../../modules/dropbox/index.php?upload=1&id=$id",
+                        'icon' => 'fa-envelope',
+                        'level' => 'primary-label')
+                    ));
+        }
     }
     /*if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
         $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}

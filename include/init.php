@@ -78,11 +78,7 @@ if (isset($language)) {
     $siteName = get_config('site_name');
     $Institution = get_config('institution');
     $InstitutionUrl = get_config('institution_url');
-    $urlServer = get_config('base_url');
-    $urlSecure = get_config('secure_url');
-    if (empty($urlSecure)) {
-        $urlSecure = $urlServer;
-    }
+    $urlServer = get_config('base_url');    
     $session = new Session();
     $uid = $session->user_id;
     $language = $session->language;    
@@ -126,13 +122,6 @@ $purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()
 require_once 'include/phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
 define('PCLZIP_TEMPORARY_DIR', $webDir . '/courses/temp/');
-
-if (!isset($urlSecure)) {
-    $urlSecure = $urlServer;
-}
-if (!isset($urlMobile)) {
-    $urlMobile = $urlServer;
-}
 
 // include_messages
 require "$webDir/lang/$language/common.inc.php";
@@ -386,7 +375,7 @@ $admin_modules = array(
 
 // modules which can't be enabled or disabled
 $static_module_paths = array('user' => MODULE_ID_USERS,
-    'usage' => MODULE_ID_UNITS,
+    'usage' => MODULE_ID_USAGE,
     'course_info' => MODULE_ID_COURSEINFO,
     'course_tools' => MODULE_ID_TOOLADMIN,
     'units' => MODULE_ID_UNITS,

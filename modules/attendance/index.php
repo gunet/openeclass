@@ -30,17 +30,18 @@ require_once 'include/lib/textLib.inc.php';
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
+load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
-$head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/jquery-ui-timepicker-addon.min.css'>
+$head_content .= "
 <script type='text/javascript'>
 $(function() {
     $('input[name=date]').datetimepicker({
-        dateFormat: 'yy-mm-dd', 
-        timeFormat: 'hh:mm'
+            format: 'yyyy-mm-dd hh:ii',
+            pickerPosition: 'bottom-left', 
+            language: '".$language."',
+            autoclose: true             
         });
     var oTable = $('#users_table{$course_id}').DataTable ({
         'aLengthMenu': [
@@ -80,16 +81,51 @@ $(function() {
     
 $toolName = $langAttendance;
 
+//change the attendance
+if (isset($_POST['selectAttendance'])){
+    $attendance_id = intval($_POST['attendanceYear']);
+    $attendance = Database::get()->querySingle("SELECT id FROM attendance WHERE course_id = ?d AND id = ?d  ", $course_id, $attendance_id);
+    if ($attendance) {
+      //make the others inactive
+      Database::get()->querySingle("UPDATE attendance SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
+      //make the new active
+      Database::get()->querySingle("UPDATE attendance SET active = 1 WHERE id = ?d ", $attendance->id);
+    }
+    Session::Messages($langChangeAttendanceSuccess,'alert-success');
+    redirect_to_home_page("modules/attendance/index.php?course=$course_code&editAttendanceBooks=1");
+}    
+    
+//add a new attendance
+if (isset($_POST['newAttendance']) && strlen($_POST['title'])){
+    //make the others inactive
+    Database::get()->querySingle("UPDATE attendance SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
+    
+    $newTitle = $_POST['title'];
+    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;   
+    //create attendance users (default the last six months)
+    $limitDate = date('Y-m-d', strtotime(' -6 month'));
+    Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
+                            SELECT $attendance_id, user_id FROM course_user
+                            WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
+                                    $course_id, $limitDate);
+        
+    $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
+                                        FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
+    Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
+    redirect_to_home_page("modules/attendance/index.php?course=$course_code");
+}
+
 //attendance_id for the course: check if there is an attendance module for the course. If not insert it and create list of users
-$attendance = Database::get()->querySingle("SELECT id,`limit`, `students_semester` FROM attendance WHERE course_id = ?d ", $course_id);
+$attendance = Database::get()->querySingle("SELECT id,`limit`, `students_semester`, `title` FROM attendance WHERE course_id = ?d AND active = 1", $course_id);
 if ($attendance) {
     $attendance_id = $attendance->id;
+    $attendance_title = $attendance->title;
     $attendance_limit = $attendance->limit;
     $showSemesterParticipants = $attendance->students_semester;  
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) as count FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
 }else{
     //new attendance
-    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d ", $course_id)->lastInsertID;    
+    $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, active = 1 ", $course_id)->lastInsertID;    
     //create attendance users (default the last six months)
     $limitDate = date('Y-m-d', strtotime(' -6 month'));
     Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
@@ -121,6 +157,14 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply space-after-icon',
                   'level' => 'primary-label')
             ));
+    } elseif (isset($_GET['editAttendanceBooks'])) {
+        $pageName = $langAttendanceManagement;
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa fa-reply space-after-icon',
+                  'level' => 'primary-label')
+            ));        
     } elseif (isset($_GET['attendanceBook'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $pageName = $langUsers;
@@ -141,7 +185,9 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $pageName = $langAttendanceBook;
+        $actID = intval($_GET['ins']);
+        $result = Database::get()->querySingle("SELECT * FROM attendance_activities  WHERE id = ?d", $actID);
+        $pageName = $langAttendanceBook.' '.$result->title;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -175,25 +221,37 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa fa-reply space-after-icon',)
             ));
-    } else {        
-        $tool_content .= action_bar(array(
-            array('title' => $langConfig,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
-                  'icon' => 'fa fa-cog space-after-icon',
-                  'level' => 'primary-label'),
-            array('title' => $langUsers,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
-                  'icon' => 'fa fa-users',
-                  'level' => 'primary-label'),
-            array('title' => $langGradebookAddActivity,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
-                  'icon' => 'fa fa-plus'),
-            array('title' => "$langAdd $langInsertWork",
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
-                  'icon' => 'fa fa-flask'),
-            array('title' => "$langAdd $langInsertExercise",
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
-                  'icon' => 'fa fa-edit')));
+    } else {
+        $pageName = $attendance->title ? $attendance->title : $langAttendanceNoTitle2;
+        $tool_content .= action_bar(
+            array(         
+                array('title' => $langConfig,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editUsers=1",
+                      'icon' => 'fa fa-cog space-after-icon',
+                      'level' => 'primary-label'),
+                array('title' => $langUsers,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendanceBook=1",
+                      'icon' => 'fa fa-users',
+                      'level' => 'primary-label'),
+                array('title' => $langAttendances,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;editAttendanceBooks=1",
+                      'icon' => 'fa fa-list space-after-icon',
+                      'level' => 'primary-label'),               
+                array('title' => $langAttendanceAddActivity,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
+                      'icon' => 'fa fa-plus'),
+                array('title' => "$langInsertWork",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
+                      'icon' => 'fa fa-flask'),
+                array('title' => "$langInsertExercise",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
+                      'icon' => 'fa fa-edit')
+            ),
+            true,
+            array(
+                'secondary_title' => $langAdd,
+                'secondary_icon' => 'fa-plus'
+            ));
         
     }       
     
@@ -201,6 +259,14 @@ if ($is_editor) {
 
     //FLAG: flag to show the activities
     $showAttendanceActivities = 1;       
+    
+    //EDIT: edit title
+    if (isset($_POST['titleSubmit']) && strlen($_POST['title'])) {
+        $attendance_title = $_POST['title'];
+        Database::get()->querySingle("UPDATE attendance SET `title` = ?s WHERE id = ?d ", $attendance_title, $attendance_id);
+            Session::Messages($langAttendanceEdit,"alert-success");
+            redirect_to_home_page("modules/attendance/index.php");
+    }
     
     //DISPLAY: new (or edit) activity form to attendance module
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
@@ -285,9 +351,9 @@ if ($is_editor) {
         //check the type of the module (assignments)
         if($type == 1) {
             //checking if it is new or not
-            $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1) AND assignment.id = ?d",function ($errormsg) {
+            $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1 AND attendance_id = ?d) AND assignment.id = ?d",function ($errormsg) {
                 echo "An error has occured: " . $errormsg;
-            }, $course_id, $id);
+            }, $course_id, $attendance_id, $id);
         
             if($checkForAss){
                 $module_auto_id = $checkForAss->id;
@@ -315,8 +381,8 @@ if ($is_editor) {
         if($type == 2){
             //checking if it is new or not
             $checkForExer = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d "
-                    . "AND exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2) "
-                    . "AND exercise.id = ?d", $course_id, $id);        
+                    . "AND exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2 AND attendance_id = ?d) "
+                    . "AND exercise.id = ?d", $course_id, $attendance_id, $id);        
             if($checkForExer){
                 $module_auto_id = $checkForExer->id;
                 $module_auto_type = 2; 
@@ -384,6 +450,7 @@ if ($is_editor) {
     //EDIT DB: add or edit attendance limit
     elseif(isset($_POST['submitAttendanceLimit'])){
         $attendance_limit = intval($_POST['limit']);
+        
         Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
         
         Session::Messages($langAttendanceLimit,"alert-success");
@@ -617,7 +684,35 @@ if ($is_editor) {
             $usersMessage = $langAttendanceAllMonths;
         }
         
+        //===================================================
+        //section to insert or edit the title of the gradebook
+        //===================================================
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langTitle</label></div>                            
+                                <div class='form-group'> 
+                                    <div class='col-xs-12'>
+                                        <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$attendance_title'/>
+                                    </div>
+                                </div>
+                                <div class='form-group'>
+                                    <div class='col-xs-12'>
+                                        <input class='btn btn-primary' type='submit' name='titleSubmit' value='".($attendance_title ? $langEdit : $langInsert)."' />
+                                    </div>
+                                </div>
+                    </form>
+                </div>
+            </div>
+        </div>";
+        
+        //==============================================
         //section to reset the attendance users list
+        //==============================================
+        
         $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
@@ -669,23 +764,88 @@ if ($is_editor) {
                 </div>
             </div>
         </div>";
-        
+                 
         //do not show activities list 
         $showAttendanceActivities = 0;
     }
-    
-    //
+    elseif(isset($_GET['editAttendanceBooks'])){        
+         
+        //===================================================
+        //section to insert new attendance and select another
+        //===================================================
+        
+        $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
+
+        $tool_content .= "
+        <div class='row'>
+            <div class='col-sm-12'>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'>
+                            <label class='col-xs-12'>$langChangeAttendance<small class='help-block'>$langChangeAttendance2</small></label>
+                            <div class='col-xs-12'>
+                                <select name='attendanceYear' class='form-control'>";
+                                
+                                if ($result){
+                                    foreach ($result as $year){
+                                        if($year->title == ""){
+                                            $title = "$langAttendanceNoTitle2";
+                                        }else{
+                                            $title = $year->title;
+                                        }
+                                        $tool_content .= "<option value='$year->id'";
+                                                    if ($attendance_id == $year->id) {
+                                                      $tool_content .= " selected";
+                                                    } 
+                                                    $tool_content .= ">$title</option>";
+                                    }
+                                }
+                                              
+        
+                 $tool_content .="
+                                </select>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='selectAttendance' value='".$langSelect."' />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class='form-wrapper'>
+                    <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                        <div class='form-group'> 
+                            <label class='col-xs-12'>$langNewAttendance<small class='help-block'>$langNewAttendance2</small></label>
+                            <div class='col-xs-12'>
+                                <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                                <input class='btn btn-primary' type='submit' name='newAttendance' value='".$langInsert."' />
+                            </div>
+                        </div>
+                    </form>
+                </div>                
+            </div>
+        </div>";
+         
+        //do not show activities list 
+        $showAttendanceActivities = 0;
+    }    
+    //DISPLAY: Add assignment
     elseif (isset($_GET['addActivityAs'])) {
         //Assignments
         //Course activities available for the attendance
-        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1)", $course_id);
+        $checkForAss = Database::get()->queryArray("SELECT * FROM assignment WHERE assignment.course_id = ?d AND  assignment.active = 1 AND assignment.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 1 AND attendance_id = ?d)", $course_id, $attendance_id);
 
         $checkForAssNumber = count($checkForAss);        
         
         if ($checkForAssNumber > 0) {            
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<table class='table-default'>";
-            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>Περιγραφή</th>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langAttendanceActivityDate2</th><th>$langDescription</th>";
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
             $tool_content .= "</tr>";       
             foreach ($checkForAss as $newAssToAttendance) {
@@ -718,11 +878,11 @@ if ($is_editor) {
         $showAttendanceActivities = 0;
     }
     
-    //
+    //DISPLAY: Add exercise
     elseif (isset($_GET['addActivityEx'])){
         //Exercises
         //Course activities available for the attendance
-        $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d AND  exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2)", $course_id);
+        $checkForExer = Database::get()->queryArray("SELECT * FROM exercise WHERE exercise.course_id = ?d AND  exercise.active = 1 AND exercise.id NOT IN (SELECT module_auto_id FROM attendance_activities WHERE module_auto_type = 2 AND attendance_id = ?d)", $course_id, $attendance_id);
         $checkForExerNumber = count($checkForExer);
         
         if ($checkForExerNumber > 0) {
@@ -762,8 +922,6 @@ if ($is_editor) {
     //DISPLAY - EDIT DB: insert attendances for each activity
     elseif (isset($_GET['ins'])){
 
-        $actID = intval($_GET['ins']);
-
         //record booking
         if(isset($_POST['bookUsersToAct'])){                        
 
@@ -794,9 +952,8 @@ if ($is_editor) {
 
         //display the form and the list
         
-        $result = Database::get()->querySingle("SELECT * FROM attendance_activities  WHERE id = ?d", $actID);
+
         
-        $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
 
         //show all the students
         $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
@@ -812,7 +969,6 @@ if ($is_editor) {
                       <th><div align='left' width='100'>$langName $langSurname</div></th>
                       <th class='center' width='80'>$langRegistrationDateShort</th>
                       <th class='center'>$langAttendanceAbsences</th>
-                      <th class='center'>$langActions</th>
                     </tr>
                 </thead>
                 <tbody>";
@@ -825,9 +981,8 @@ if ($is_editor) {
                         <td>$cnt</td>
                         <td> " . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
                         <td>" . nice_format($resultUser->reg_date) . "</td>
-                        <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>
                         <td class='center'>
-                            <input class='form-control' type='checkbox' value='1' name='" . $resultUser->userID . "'";
+                            <input type='checkbox' value='1' name='" . $resultUser->userID . "'";
                             //check if the user has attendace for this activity already OR if it should be automatically inserted here
 
                             $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
@@ -840,7 +995,7 @@ if ($is_editor) {
                         $tool_content .= "
                     </tr>";
             }
-            $tool_content .= "</tbody></table> <input type='submit' class='btn btn-default' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
+            $tool_content .= "</tbody></table> <input type='submit' class='btn btn-primary' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
         }
         $showAttendanceActivities = 0;
     }
@@ -869,7 +1024,7 @@ if ($is_editor) {
                 $d = strtotime($announce->date);
                 $tool_content .= "<tr><td>";
                  if (empty($announce->title)) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id'>$langGradebookNoTitle</a>";
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id'>$langAttendanceNoTitle</a>";
                 } else {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$announce->id'>".q($announce->title)."</a>";
                 }
@@ -891,18 +1046,18 @@ if ($is_editor) {
                     $tool_content .= $langAttendanceActivity;
                 }
                 $tool_content .= "</td>";
-                $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber) . "</td>";
+                $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber, $attendance_id) . "</td>";
                 $tool_content .= "<td class='text-center option-btn-cell'>".                        
                         action_button(array(
+                                    array('title' => $langModify,
+                                        'icon' => 'fa-edit',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"
+                                        ),                            
                                     array('title' => $langDelete,
                                         'icon' => 'fa-times',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$announce->id",
                                         'confirm' => $langConfirmDelete,
-                                        'class' => 'delete'),                                    
-                                    array('title' => $langModify,
-                                        'icon' => 'fa-edit',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"
-                                        ))).
+                                        'class' => 'delete'))).
                         "</td></tr>";
             } // end of while
             $tool_content .= "</table></div></div></div>";
@@ -1025,10 +1180,10 @@ function userAttendTotal ($attendance_id, $userID){
  * @param type $participantsNumber
  * @return string
  */
-function userAttendTotalActivityStats ($activityID, $participantsNumber){
+function userAttendTotalActivityStats ($activityID, $participantsNumber, $attendance_id){
         
     $sumAtt = 0;
-    $userAttTotalActivity = Database::get()->queryArray("SELECT attend, attendance_book.uid FROM attendance_book, attendance_users WHERE attendance_activity_id = ?d AND attendance_users.uid=attendance_book.uid", $activityID);
+    $userAttTotalActivity = Database::get()->queryArray("SELECT attend, attendance_book.uid FROM attendance_book, attendance_users WHERE attendance_activity_id = ?d AND attendance_users.uid=attendance_book.uid AND attendance_users.attendance_id=?d", $activityID, $attendance_id);
     foreach ($userAttTotalActivity as $module) {
         $sumAtt += $module->attend;
     }

@@ -226,7 +226,7 @@ if (count($exercise_question_ids)>0){
                               <td valign='top'><b>$langAnswer</b></td>
                               <td valign='top'><b>$langComment</b></td>
                             </tr>";
-            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FREE_TEXT) {
+            } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT || $answerType == FREE_TEXT) {
                 $tool_content .= "
                             <tr class='active'>
                               <td><b>$langAnswer</b></td>
@@ -268,7 +268,9 @@ if (count($exercise_question_ids)>0){
                         }
                         break;
                     // for fill in the blanks
-                    case FILL_IN_BLANKS : // splits text and weightings that are joined with the char '::'
+                    case FILL_IN_BLANKS :
+                    case FILL_IN_BLANKS_TOLERANT :    
+                        // splits text and weightings that are joined with the char '::'
                         list($answer, $answerWeighting) = explode('::', $answer);
                         // splits weightings that are joined with a comma
                         $answerWeighting = explode(',', $answerWeighting);
@@ -295,8 +297,10 @@ if (count($exercise_question_ids)>0){
                             }
                             $choice[$j] = trim(stripslashes($choice[$j]));
                             // if the word entered is the same as the one defined by the professor
-                                                       
-                            if (strtolower(substr($temp, 0, $pos)) == strtolower($choice[$j])) {
+                            $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
+                            $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);   
+
+                            if ($canonical_match == $canonical_choice) {
                                 // gives the related weighting to the student
                                 $questionScore+=$answerWeighting[$j-1];
                                 // increments total score
@@ -373,7 +377,7 @@ if (count($exercise_question_ids)>0){
                                 $tool_content .= '&nbsp;';
                             }
                             $tool_content .= "</td></tr>";
-                        } elseif ($answerType == FILL_IN_BLANKS) {
+                        } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
                             $tool_content .= "
                                                 <tr class='even'>
                                                   <td>" . standard_text_escape(nl2br($answer)) . "</td>

@@ -49,8 +49,8 @@ if (isset($_GET['course'])) {
     $course = intval($_GET['course']);
 }
 
-if (isset($_GET['exerciseId'])) {
-    $exerciseId = intval($_GET['exerciseId']);
+if (isset($_REQUEST['exerciseId'])) {
+    $exerciseId = intval($_REQUEST['exerciseId']);
 }
 
 // if the user has clicked on the "Cancel" button
@@ -208,23 +208,29 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . "\n<html>\n"
  . '<head>' . "\n"
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
- . '<link href="../../../template/' . $theme . '/theme.css" rel="stylesheet" type="text/css" />' . "\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-theme.min.css' rel='stylesheet'>\n"
+ . "<link href='{$urlAppend}template/$theme/CSS/inventory.css' rel='stylesheet'>\n"
  . '<title>' . $langExercice . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
- . '<body style="margin: 0px; padding-left: 0px; height: 100%!important; height: auto; background-color: #ffffff;">' . "\n"
- . '<div id="content">';
+ . '<body style="margin: 0px; padding-left: 0px; height: 100% !important; height: auto; background-color: #ffffff;">' . "\n"
+ . '<div id="content" style="padding:20px;">';
 
 echo ("
-  <table width='100%' class='tbl_border'>
-  <tr class='odd'>
-    <th colspan=\"2\">" . q($exerciseTitle) . "</th>
-  </tr>
-  <tr class='even'>
-    <td colspan=\"2\">$exerciseDescription_temp</td>
-  </tr>
-  </table>
-  <br />
+  
+<div class='panel panel-primary'>
+    <div class='panel-heading'>
+        <h3 class='panel-title'>" . q($exerciseTitle) . "</h3>
+    </div>");
+if (!empty($exerciseDescription_temp)) {
+    echo ("<div class='panel-body'>
+        $exerciseDescription_temp
+    </div>");
+}
+    echo ("</div>
+    
 
   <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
   <input type='hidden' name='formSent' value='1' />
@@ -259,17 +265,17 @@ foreach ($questionList as $questionId) {
             }
         }
     }
+    
     // shows the question and its answers
-    echo ("<table width=\"100%\" class=\"tbl\">
-          <tr class='sub_title1'>
-            <td colspan=\"2\">" . $langQuestion . ": " . $i);
+    echo ("<div class='panel panel-success'>
+            <div class='panel-heading'>" . $langQuestion . ": " . $i . "</div>");
 
     if ($exerciseType == 2) {
         echo ("/" . $nbrQuestions);
     }
-    echo ("</td></tr>");
+    echo ("<div class='panel-body'>");
     showQuestion($questionId);
-    echo "<tr><td colspan=\"2\">&nbsp;</td></tr></table>";
+    echo "</div></div>";
     // for sequential exercises
     if ($exerciseType == 2) {
         // quits the loop
@@ -278,27 +284,15 @@ foreach ($questionList as $questionId) {
 } // end foreach()
 
 if (!$questionList) {
-    echo ("
-      <table width=\"100%\">
-      <tr>
-        <td colspan='2'>
-          <div class='alert alert-danger'>$langNoAnswer</div>
-        </td>
-      </tr>
-      </table>");
+    echo ("<div class='alert alert-alert'>$langNoQuestion</div>");
 } else {
-    echo "<br/><table width='100%' class='tbl'><tr>
-               <td><div class='right'><input class='btn btn-primary' type='submit' value=\"";
+    echo "<div class='panel'><div class='panel-body'><input class='btn btn-primary' type='submit' value=\"";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         echo "$langCont\" />&nbsp;";
     } else {
         echo $langNext . " &gt;" . "\" />";
     }
-    echo "<input class='btn btn-primary' type='submit' name='buttonCancel' value='$langCancel' /></div></td></tr>
-              <tr>
-                <td colspan=\"2\">&nbsp;</td>
-              </tr>
-              </table>";
+    echo "<input class='btn btn-primary' type='submit' name='buttonCancel' value='$langCancel' /></div></div>";
 }
 echo "</form>";
 echo "</div></body>" . "\n";
@@ -329,15 +323,10 @@ function showQuestion($questionId, $onlyAnswers = false) {
         $questionName = $objQuestionTmp->selectTitle();
         $questionDescription = $objQuestionTmp->selectDescription();
         $questionDescription_temp = standard_text_escape($questionDescription);
-        echo "<tr class='even'>
-                    <td colspan='2'><b>" . q($questionName) . "</b><br />
-                    $questionDescription_temp
-                    </td>
-                    </tr>";
+        echo "<b>" . q($questionName) . "</b><br />
+                    $questionDescription_temp";
         if (file_exists($picturePath . '/quiz-' . $questionId)) {
-            echo "<tr class='even'>
-                        <td class='center' colspan='2'><img src='$urlServer/$picturePath/quiz-$questionId' /></td>
-                      </tr>";
+            echo "<img src='$urlServer/$picturePath/quiz-$questionId' />";
         }
     }  // end if(!$onlyAnswers)
     // construction of the Answer object
@@ -349,25 +338,20 @@ function showQuestion($questionId, $onlyAnswers = false) {
         $cpt1 = 'A';
         $cpt2 = 1;
         $select = array();
-        echo "
+        echo "<table class='table-default'>
               <tr class='even'>
-                <td colspan='2'>
-                  <table class='tbl_border' width='100%'>
-                  <tr>
                     <th width='200'>$langColumnA</th>
                     <th width='130'>$langMakeCorrespond</th>
                     <th width='200'>$langColumnB</th>
                   </tr>
-                  </table>
-                </td>
-              </tr>";
+                  ";
     }
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        if ($answerType == FILL_IN_BLANKS) {
+        if ($answerType == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
@@ -376,29 +360,27 @@ function showQuestion($questionId, $onlyAnswers = false) {
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
             echo "
-                      <tr class='even'>
-                        <td class='center' width='1'>
-                          <input type='radio' name='choice[${questionId}]' value='${answerId}' />
-                        </td>
-                        <td>" . standard_text_escape($answer) . "</td>
-                      </tr>";
+                      <div class='radio'>
+                          <label>
+                            <input type='radio' name='choice[${questionId}]' value='${answerId}'>
+                            " . standard_text_escape($answer) . "
+                          </label>
+                        </div>";
+                          
         }
         // multiple answers
         elseif ($answerType == MULTIPLE_ANSWER) {
             echo ("
-                      <tr class='even'>
-                        <td width='1' align='center'>
-                          <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1' />
-                        </td>
-                        <td>" . standard_text_escape($answer) . "</td>
-                      </tr>");
+                      <div class='checkbox'>
+                          <label>
+                            <input type='checkbox' name='choice[${questionId}][${answerId}]' value='1'>
+                            " . standard_text_escape($answer) . "
+                          </label>
+                        </div>");
         }
         // fill in blanks
-        elseif ($answerType == FILL_IN_BLANKS) {
-            echo ("
-                      <tr class='even'>
-                        <td colspan='2'>" . $answer . "</td>
-                      </tr>");
+        elseif ($answerType == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
+            echo ($answer);
         }
         // matching
         elseif ($answerType == MATCHING) {
@@ -409,9 +391,6 @@ function showQuestion($questionId, $onlyAnswers = false) {
                 $select[$answerId]['Reponse'] = standard_text_escape($answer);
             } else {
                 echo "<tr class='even'>
-                                <td colspan='2'>
-                                  <table class='tbl'>
-                                  <tr>
                                     <td width='200'><b>${cpt2}.</b> " . standard_text_escape($answer) . "</td>
                                     <td width='130'><div align='center'>
                                      <select name='choice[${questionId}][${answerId}]'>
@@ -421,14 +400,14 @@ function showQuestion($questionId, $onlyAnswers = false) {
                 foreach ($select as $key => $val) {
                     echo "<option value=\"${key}\">${val['Lettre']}</option>";
                 }
-                echo "</select></div></td>
+                echo "</select></td>
                                     <td width='200'>";
                 if (isset($select[$cpt2]))
                     echo '<b>' . $select[$cpt2]['Lettre'] . '.</b> ' . $select[$cpt2]['Reponse'];
                 else
                     echo '&nbsp;';
 
-                echo "</td></tr></table></td></tr>";
+                echo "</td></tr>";
                 $cpt2++;
                 // if the left side of the "matching" has been completely shown
                 if ($answerId == $nbrAnswers) {
@@ -449,14 +428,19 @@ function showQuestion($questionId, $onlyAnswers = false) {
                     } // end while()
                 }  // end if()
             }
+            
         } elseif ($answerType == TRUE_FALSE) {
-            echo "<tr class='even'>
-                                <td width='1' align='center'>
-                                <input type='radio' name='choice[${questionId}]' value='${answerId}' />
-                                </td><td>$answer</td>
-                                </tr>";
+            echo "<div class='radio'>
+                          <label>
+                            <input type='radio' name='choice[${questionId}]' value='${answerId}'>
+                            " . standard_text_escape($answer) . "
+                          </label>
+                        </div>";
         }
     } // end for()
+    if ($answerType == MATCHING) {
+        echo "</table>";
+    }
 
     if (!$nbrAnswers) {
         echo "<tr><td colspan='2'><div class='alert alert-danger'>$langNoAnswer</div></td></tr>";

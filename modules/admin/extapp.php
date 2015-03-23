@@ -36,6 +36,12 @@ $shouldEdit = isset($_GET['edit']);
 $shouldUpdate = isset($_GET['update']);
 $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null);
 
+$tool_content .= action_bar(array(
+        array('title' => $langBack,
+            'url' => "index.php",
+            'icon' => 'fa-reply',
+            'level' => 'primary-label')));
+
 if ($appName) {
     $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
     $app = ExtAppManager::getApp($appName);
@@ -56,41 +62,43 @@ if ($appName) {
         redirect_to_home_page('modules/admin/extapp.php?edit=' . $appName);
     }
     if ($shouldEdit) {
-        $tool_content .= "\n<div class='form-wrapper'>\n";
-        $tool_content .= "  <form class='form-horizontal' role='form' action='extapp.php?update=" . $appName . "' method='post'>\n";
-        $tool_content .= "    <fieldset>\n";
+        $tool_content .= "\n<div class='row extapp'>\n<div class='col-xs-12'>\n";
+        $tool_content .= "  <div class='form-wrapper'>\n";
+        $tool_content .= "    <form class='form-horizontal' role='form' action='extapp.php?update=" . $appName . "' method='post'>\n";
+        $tool_content .= "      <fieldset>\n";
 
         foreach ($app->getParams() as $param) {
-            $tool_content .= "      <div class='form-group'>\n";
-            $tool_content .= "        <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
-            $tool_content .= "        <div class='col-sm-10'><input class='FormData_InputText form-control' type='text' name='" . $param->name() . "' value='" . $param->value() . "'></div>";
-            $tool_content .= "      </div>\n";
+            $tool_content .= "        <div class='form-group'>\n";
+            $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
+            $tool_content .= "          <div class='col-sm-10'><input class='FormData_InputText form-control' type='text' name='" . $param->name() . "' value='" . $param->value() . "'></div>";
+            $tool_content .= "        </div>\n";
         }
 
-        $tool_content .= "      <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>\n";
-        $tool_content .= "    </fieldset>\n";
-        $tool_content .= "  </form>\n</div>\n";
+        $tool_content .= "        <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>\n";
+        $tool_content .= "      </fieldset>\n";
+        $tool_content .= "    </form>\n</div>\n</div>\n";
         $tool_content.=$app->getLongDescription();
     }
 } else {
-    $tool_content .="<table class=\"table-default dataTable no-footer\">\n";
-    $tool_content.="<thead><td colspan=\"2\">Εφαρμογή</td><td>Περιγραφή</td></thead>\n";
+    $tool_content .= "<div class=\"row extapp\">\n<div class='col-xs-12'>\n";
+    $tool_content .="<table class=\"table-default dataTable no-footer extapp-table\">\n";
+    $tool_content.="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
     $tool_content.="\n";
-    foreach (ExtAppManager::getApps() as $app) {
+    /*foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>\n";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
         $tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
         $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>" . $app->getDisplayName() . "</a></td>\n";
         $tool_content .= "<td>" . $app->getShortDescription() . "</td>\n";
         $tool_content .="</tr>\n";
-    }
+    }*/
     $tool_content .="<tr>\n";
-    $tool_content .= "<td style=\"width:90px;\"><a href=\"bbbmoduleconf.php\"'><img height=\"50\" width=\"89\" src=\"../../template/icons/bigbluebutton.png\"/></a></td>\n";
-    $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"bbbmoduleconf.php\"'>BigBlueButton</a></td>\n";
-    $tool_content .= "<td></td>\n";
+    $tool_content .= "<td style=\"width:90px;\"><a href=\"bbbmoduleconf.php\"><img class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></td>\n";
+    $tool_content .= "<td class=\"text-muted\"><p>Το υποσύστημα <b>Τηλεσυνεργασίας</b> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p><p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p></td>\n";
     $tool_content .="</tr>\n";
 
     $tool_content.="</table>\n";
+    $tool_content .= "</div>\n</div>\n";
 }
 
 draw($tool_content, 3, null, $head_content);

@@ -89,7 +89,7 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 $editQuestion = $questionId;
             }
         }
-    } elseif ($answerType == FILL_IN_BLANKS) {
+    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         $reponse = trim($reponse);
         if (!isset($buttonBack)) {
             if ($setWeighting) {
@@ -151,7 +151,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                 }
             }
         } else {
-            redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyAnswers=$question_id");
+            if (isset($exerciseId)) {
+               redirect_to_home_page("modules/exercise/admin.php?course=$course_code&exerciseId=$exerciseId&modifyAnswers=$question_id"); 
+            } else {
+                redirect_to_home_page("modules/exercise/admin.php?course=$course_code&modifyAnswers=$question_id");
+            }
         }
     } elseif ($answerType == MATCHING) {
         for ($i = 1; $i <= $nbrOptions; $i++) {
@@ -287,7 +291,7 @@ if (isset($_GET['modifyAnswers'])) {
         if ($nbrAnswers < 2) {
             $nbrAnswers = 2;
         }
-    } elseif ($answerType == FILL_IN_BLANKS) {
+    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         if (!isset($submitAnswers) && !isset($buttonBack)) {
             if (!isset($setWeighting)) {
                 $reponse = $objAnswer->selectAnswer(1);
@@ -467,7 +471,7 @@ if (isset($_GET['modifyAnswers'])) {
                       <td colspan='3'>&nbsp;</td>
                     </tr>
                     </table>";
-    } elseif ($answerType == FILL_IN_BLANKS) {
+    } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         $tool_content .= "
                     <form name='formulaire' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code".((isset($exerciseId))? "&amp;exerciseId=$exerciseId" : "")."&amp;modifyAnswers=" . urlencode($_GET['modifyAnswers']) . "'>";
         if (!isset($setWeighting)) {
@@ -702,8 +706,8 @@ if (isset($_GET['modifyAnswers'])) {
     }
     
     $cancel_link = isset($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "question_pool.php?course=$course_code";
-    $submit_text = $answerType == FILL_IN_BLANKS && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
-    $back_button = $answerType == FILL_IN_BLANKS && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
+    $submit_text = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) && !isset($setWeighting) ? "$langNext &gt;" : $langCreate;
+    $back_button = ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) && isset($setWeighting) ? "<input class='btn btn-primary' type='submit' name='buttonBack' value='&lt; $langBack'' />" : "";
     $tool_content .= "
                     <div class='row'>
                         <div class='col-sm-10 col-sm-offset-2'>

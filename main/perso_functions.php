@@ -47,7 +47,7 @@ require_once 'modules/dropbox/class.msg.php';
  * @return string
  */
 function getUserLessonInfo($uid) {
-    global $teacher_courses_count, $student_courses_count;
+    global $teacher_courses_count, $student_courses_count, $langAllCourses;
     global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm;
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
