@@ -9710,3 +9710,13 @@ a.list-group-item.delete:hover {
   box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
   box-sizing: border-box;
 }
+
+/* line 238, ../SASS/bootstrap-custom.scss */
+.mce-toggle:hover {
+  cursor: pointer;
+}
+
+/* line 242, ../SASS/bootstrap-custom.scss */
+.mce-toggle i.mce-ico.mce-i-none {
+  width: 22px;
+}

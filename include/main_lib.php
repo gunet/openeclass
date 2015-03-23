@@ -1679,17 +1679,17 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                     editor.addButton('toggle', {
                         title: '".js_escape($langMore)."',
                         classes: 'toggle',
-                        image: '../../js/tinymce/skins/light/img/toggle.gif',
-                        style: 'padding:5px 0 0 5px',
+                        image: '../../js/tinymce/skins/light/img/toggle.png',
+                        style: 'padding:3px 0 0 5px;',
                         onclick: function() {
-                            $('#mceu_44').toggle();
+                            $('#mceu_55').toggle();
                         }
                     });
                     
                 },
                 init_instance_callback : function(editor){
-                    $('#mceu_44').hide();
-                    $('div#mceu_35, div#mceu_52').attr('style','border:1px solid #ddd');
+                    $('#mceu_55').hide();
+                    $('div#mceu_35, div#mceu_72').attr('style','border:1px solid #ddd');
                 }
                 ";
         }
@@ -1747,8 +1747,8 @@ tinymce.init({
     // Menubar options
     menu : 'false',
     // Toolbar options
-    toolbar1: 'toggle | undo redo | bold italic | link image media eclmedia | alignleft aligncenter alignright alignjustify | table | bullist numlist outdent indent',
-    toolbar2: 'underline strikethrough superscript subscript | cut copy paste pastetext removeformat | formatselect fontsizeselect | fullscreen preview | searchreplace | code',
+    toolbar1: 'toggle | undo | redo | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | table | bullist | numlist | outdent | indent',
+    toolbar2: 'underline | strikethrough | superscript | subscript | cut | copy | paste | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
     //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
