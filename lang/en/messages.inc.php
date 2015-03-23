@@ -2464,6 +2464,7 @@ $lang_email_required = "$langsOfStudent email address is required during registr
 $lang_am_required = "$langsOfStudent ID is required during registration";
 $lang_dropbox_allow_student_to_student = "Allow course messages exchange between $langsOfStudents in 'Dropbox'";
 $lang_dont_display_login_form = "Don't display login form in platform home page";
+$lang_hide_login_link = "Don't display login form link in pages";
 $lang_block_username_change = "Don't allow users to change their 'username'";
 $lang_display_captcha = "Display security code during user registration";
 $lang_insert_xml_metadata = "Insert xml metadata in 'Documents' according to LOM specification";

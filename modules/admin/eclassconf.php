@@ -82,6 +82,14 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
         }
         $('#town').prop('disabled', !$('#uown').is(":checked"));
     });
+
+    // Login screen / link checkboxes
+    $('#hide_login_check').click(function(event) {
+        if (!$('#hide_login_check').is(":checked")) {
+            $('#hide_login_link_check').prop('checked', false);
+        }
+        $('#hide_login_link_check').prop('disabled', !$('#hide_login_check').is(":checked"));
+    });
     
     // Login Fail Panel
     loginFailPanel();
@@ -263,6 +271,7 @@ if (isset($_POST['submit'])) {
         'email_from' => true,
         'am_required' => true,
         'dont_display_login_form' => true,
+        'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
         'block_username_change' => true,
@@ -528,6 +537,7 @@ else {
         $sel = array();
         $selectable_langs = array();
         $cbox_dont_display_login_form = get_config('dont_display_login_form') ? 'checked' : '';
+        $cbox_hide_login_link = get_config('hide_login_link') ? 'checked' : '';
         foreach ($language_codes as $langcode => $langname) {
             if (in_array($langcode, $langdirs)) {
                 $loclangname = $langNameOfLang[$langname];
@@ -568,8 +578,14 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-9'>
                                 <div class='checkbox'>
                                     <label>
-                                        <input type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>    
+                                        <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>    
                                         $lang_dont_display_login_form
+                                    </label>
+                                </div>                              
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>    
+                                        $lang_hide_login_link
                                     </label>
                                 </div>                              
                            </div>

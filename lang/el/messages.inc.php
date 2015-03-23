@@ -2034,6 +2034,7 @@ $lang_dropbox_allow_student_to_student = "Να επιτρέπεται η αντ�
 $lang_dropbox_allow_personal_messages = "Να επιτρέπεται η ανταλλαγή προσωπικών μηνυμάτων στο υποσύστημα 'Ανταλλαγή Μηνυμάτων'";
 $lang_login_form = "Οθόνη Σύνδεσης";
 $lang_dont_display_login_form = "Να μην εμφανίζεται στην αρχική σελίδα η οθόνη σύνδεσης";
+$lang_hide_login_link = "Να μην εμφανίζεται σύνδεσμος προς την οθόνη σύνδεσης";
 $lang_block_username_change = "Να μην επιτρέπεται να αλλάζουν οι χρήστες το 'όνομα χρήστη'";
 $lang_display_captcha = "Εμφάνιση κωδικού ασφαλείας κατά την εγγραφή χρηστών";
 $lang_display_captcha_label = "Κωδικός ασφαλείας (CAPTCHA)";
