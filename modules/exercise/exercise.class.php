@@ -66,7 +66,7 @@ if (!class_exists('Exercise')) {
             $this->description = '';
             $this->type = 1;
             $this->startDate = date("Y-m-d H:i:s");
-            $this->endDate = '';
+            $this->endDate = null;
             $this->tempSave = 0;
             $this->timeConstraint = 0;
             $this->attemptsAllowed = 0;
@@ -449,7 +449,6 @@ if (!class_exists('Exercise')) {
             $public = $this->public;
             $results = $this->results;
             $score = $this->score;
-
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
