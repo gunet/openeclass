@@ -70,7 +70,7 @@ if ($is_editor) {
                                  subsystem = " . EBOOK . " AND
                                  subsystem_id = ?d AND
                                  course_id = ?d", $id, $course_id);
-            $tool_content .= "<div class='alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
+            $tool_content .= "<div class='alert alert-success'>" . q(sprintf($langEBookDeleted, $title)) . "</div>";
         }
     } elseif (isset($_GET['create'])) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langEBook);
