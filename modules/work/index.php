@@ -712,24 +712,26 @@ function new_assignment() {
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
-                        <table id='assignees_tbl' class='table hide'>
-                            <tr class='title1'>
-                              <td id='assignees'>$langStudents</td>
-                              <td class='text-center'>$langMove</td>
-                              <td>$m[WorkAssignTo]</td>
-                            </tr>
-                            <tr>
-                              <td>
-                                <select class='form-control' id='assign_box' size='10' multiple></select>
-                              </td>
-                              <td class='text-center'>
-                                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-                              </td>
-                              <td width='40%'>
-                                <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple></select>
-                              </td>
-                            </tr>
-                        </table>
+                        <div class='table-responsive'>
+                            <table id='assignees_tbl' class='table-default hide'>
+                                <tr class='title1'>
+                                  <td id='assignees'>$langStudents</td>
+                                  <td class='text-center'>$langMove</td>
+                                  <td>$m[WorkAssignTo]</td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <select class='form-control' id='assign_box' size='10' multiple></select>
+                                  </td>
+                                  <td class='text-center'>
+                                    <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                  </td>
+                                  <td width='40%'>
+                                    <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple></select>
+                                  </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class='form-group'>
@@ -1006,28 +1008,30 @@ function show_edit_assignment($id) {
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
-                        <table id='assignees_tbl' class='table ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
-                        <tr class='title1'>
-                          <td id='assignees'>$langStudents</td>
-                          <td class='text-center'>$langMove</td>
-                          <td>$m[WorkAssignTo]</td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <select class='form-control' id='assign_box' size='10' multiple>
-                            ".((isset($unassigned_options)) ? $unassigned_options : '')."
-                            </select>
-                          </td>
-                          <td class='text-center'>
-                            <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-                          </td>
-                          <td width='40%'>
-                            <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple>
-                            ".((isset($assignee_options)) ? $assignee_options : '')."
-                            </select>
-                          </td>
-                        </tr>
-                        </table>
+                        <div class='table-responsive'>
+                            <table id='assignees_tbl' class='table-default ".(($row->assign_to_specific==1) ? '' : 'hide')."'>
+                            <tr class='title1'>
+                              <td id='assignees'>$langStudents</td>
+                              <td class='text-center'>$langMove</td>
+                              <td>$m[WorkAssignTo]</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <select class='form-control' id='assign_box' size='10' multiple>
+                                ".((isset($unassigned_options)) ? $unassigned_options : '')."
+                                </select>
+                              </td>
+                              <td class='text-center'>
+                                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                              </td>
+                              <td>
+                                <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                ".((isset($assignee_options)) ? $assignee_options : '')."
+                                </select>
+                              </td>
+                            </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div class='form-group'>
