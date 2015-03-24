@@ -1680,15 +1680,15 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                         title: '".js_escape($langMore)."',
                         classes: 'toggle',
                         image: '../../js/tinymce/skins/light/img/toggle.png',
-                        style: 'padding:3px 0 0 5px;',
+                        style: 'padding:5px 8px 0 10px;',
                         onclick: function() {
-                            $('#mceu_55').toggle();
+                            $('#mceu_49').toggle();
                         }
                     });
                     
                 },
                 init_instance_callback : function(editor){
-                    $('#mceu_55').hide();
+                    $('#mceu_49').hide();
                     $('div#mceu_35, div#mceu_72').attr('style','border:1px solid #ddd');
                 }
                 ";
@@ -1747,8 +1747,8 @@ tinymce.init({
     // Menubar options
     menu : 'false',
     // Toolbar options
-    toolbar1: 'toggle | undo | redo | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | table | bullist | numlist | outdent | indent',
-    toolbar2: 'underline | strikethrough | superscript | subscript | cut | copy | paste | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
+    toolbar1: 'toggle | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
+    toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
     //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
