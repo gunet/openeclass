@@ -733,7 +733,7 @@ function new_assignment() {
                     </div>
                 </div>
                 <div class='form-group'>
-                    <label for='tags' class='col-sm-2 control-panel'>$langTags:</label>
+                    <label for='tags' class='col-sm-2 control-label'>$langTags:</label>
                     <div class='col-sm-10'>
                         <input type='hidden' class='form-control' name='tags' id='tags' value=''>
                     </div>
