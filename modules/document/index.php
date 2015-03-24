@@ -383,7 +383,11 @@ if ($can_upload) {
                     "</body></html>\n");
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
                 Session::Messages($langDownloadEnd, 'alert-success');
-                redirect_to_current_dir();
+                if(isset($_GET['from']) && $_GET['from'] == 'ebookEdit') {
+                    redirect_to_home_page("modules/ebook/edit.php?course=$course_code&id=$ebook_id");
+                } else {
+                    redirect_to_current_dir();
+                }
             }
         }
     }

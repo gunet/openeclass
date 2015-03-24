@@ -52,7 +52,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $groupset = "ebook_id=$ebook_id&amp;";
     $group_id = '';
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $groupset;
-    $upload_target_url = 'document.php?course=' . $course_code;
+    $upload_target_url = 'document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id . (isset($_REQUEST['from']) ? '&amp;from=ebookEdit' : '');
     $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
     $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
     $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;

@@ -54,7 +54,7 @@ if (isset($_GET['delete'])) {
         if (!$info) {
             redirect_to_home_page("modules/ebook/index.php?course=$course_code");
         }
-        $pageName = "Επεξεργασία Στοιχείων/Ενοτήτων Ηλεκτρ. Βιβλίου";
+        $pageName = $langEBookInfoEdit;
         $tool_content .= action_bar(array(
                         array('title' => $langBack,
                               'url' => "edit.php?course=$course_code&amp;id=$info->id",
@@ -234,7 +234,7 @@ if (isset($_GET['delete'])) {
             $sections_table .= "
                     </table>";
         } else {
-            $sections_table = "Δεν έχουν ορισθεί ενότητες";
+            $sections_table = $langNoEBookSections;
         }
         // Form #1 - edit ebook title
         $tool_content .= action_bar(array(
@@ -246,7 +246,7 @@ if (isset($_GET['delete'])) {
         $tool_content .= "
             <div class='panel panel-primary'>
                 <div class='panel-heading'>
-                    <h3 class='panel-title'>Στοιχεία Ηλεκτρονικού Βιβλίου &nbsp;
+                    <h3 class='panel-title'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
                             <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>
                         </a>
@@ -284,17 +284,22 @@ if (isset($_GET['delete'])) {
         }
 
         $tool_content .= action_bar(array(
-                        array('title' => $langFileAdmin,
-                              'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
-                              'icon' => 'fa-hdd-o',                          
-                              'level' => 'primary-label')
+                            array('title' => $langNewEBookPage,
+                              'url' => "new.php?course=TMA105&ebook_id=$ebook_id&amp;from=ebookEdit",
+                              'icon' => 'fa-plus-circle',
+                              'button-class' => 'btn-success',
+                              'level' => 'primary-label'),            
+                            array('title' => $langFileAdmin,
+                                  'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
+                                  'icon' => 'fa-hdd-o',                          
+                                  'level' => 'primary-label')            
                         ), false);      
         // Form #3 - edit subsection file assignment
         $tool_content .= "
          <fieldset>
          <table class='table-default'>
          <tr>
-            <th colspan='4'><h4>$langPages Ηλεκτρονικού Βιβλίου</h4></th>
+            <th colspan='4'><h4>$langEBookPages</h4></th>
          </tr>
          <tr>       
            <th>$langFileName</th>
