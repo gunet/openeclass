@@ -1689,7 +1689,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                 },
                 init_instance_callback : function(editor){
                     $('#mceu_49').hide();
-                    $('div#mceu_35, div#mceu_72').attr('style','border:1px solid #ddd');
+                    $('div#mceu_32, div#mceu_66').attr('style','border:1px solid #ddd');
                 }
                 ";
         }
