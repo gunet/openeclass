@@ -150,7 +150,7 @@ $displayScore = $objExercise->selectScore();
 
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
-    <h3 class='panel-title'>$exerciseTitle</h3>
+    <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
   </div>";
 if (!empty($exerciseDescription_temp)) {
     $tool_content .= "<div class='panel-body'>
@@ -203,7 +203,7 @@ if (count($exercise_question_ids)>0){
             </tr>
             <tr>
               <td colspan='${colspan}'>
-                <b>" . q($questionName) . "</b>
+                <b>" . q_math($questionName) . "</b>
                 <br />" .
                 standard_text_escape($questionDescription_temp)
                 . "<br/><br/>

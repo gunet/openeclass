@@ -66,7 +66,7 @@ $tool_content .= "
 <div class='table-responsive'>
     <table class='table-default'>
     <tr>
-    <th>" . q($exerciseTitle) . "</th>
+    <th>" . q_math($exerciseTitle) . "</th>
     </tr>";
 if($exerciseDescription_temp) {
     $tool_content .= "

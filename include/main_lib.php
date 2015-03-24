@@ -141,6 +141,13 @@ function q($s) {
     return htmlspecialchars($s, ENT_QUOTES);
 }
 
+// Escape HTML special characters and expand math tags
+function q_math($s) {
+    global $urlAppend;
+    $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', q($s));
+    return mathfilter($text, 12, $urlAppend . 'courses/mathimg/');
+}
+
 function unescapeSimple($str) {
     if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
         return stripslashes($str);

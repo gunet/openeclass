@@ -256,7 +256,7 @@ if ($nbrQuestions) {
          
         $tool_content .= "<tr>
 			<td align='right' width='1'>" . $i . ".</td>
-			<td> " . q($objQuestionTmp->selectTitle()) . "<br />
+			<td> " . q_math($objQuestionTmp->selectTitle()) . "<br />
 			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
 			<td class='option-btn-cell'>".            
                     action_button(array(

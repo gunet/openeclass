@@ -566,7 +566,7 @@ if (!class_exists('Question')):
                //splits answer string from weighting string
                list($answer, $answerWeighting) = explode('::', $answer_field);
                //getting all matched strings between [ and ] delimeters
-               preg_match_all('#\[(.*?)\]#', $answer, $match);
+               preg_match_all('#\[(?!/?m)(.*?)\]#', $answer, $match);
                $i=1;
                $sql_binary_comparison = $type == FILL_IN_BLANKS ? 'BINARY ' : '';
                foreach ($match[1] as $value){

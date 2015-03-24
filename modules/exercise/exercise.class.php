@@ -734,7 +734,7 @@ if (!class_exists('Exercise')) {
                // splits weightings that are joined with a comma
                $rightAnswerWeighting = explode(',', $answerWeighting);
                //getting all matched strings between [ and ] delimeters
-               preg_match_all('#\[(.*?)\]#', $answer, $match);
+               preg_match_all('#\[(?!/?m)(.*?)\]#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
                    //if user's choice is right assign rightAnswerWeight else 0
                        $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
@@ -817,7 +817,7 @@ if (!class_exists('Exercise')) {
                // splits weightings that are joined with a comma
                $rightAnswerWeighting = explode(',', $answerWeighting);
                //getting all matched strings between [ and ] delimeters
-               preg_match_all('#\[(.*?)\]#', $answer, $match);
+               preg_match_all('#\[(?!/?m)(.*?)\]#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
                    //if user's choice is right assign rightAnswerWeight else 0
                        $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
