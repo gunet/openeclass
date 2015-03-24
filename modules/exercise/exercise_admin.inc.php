@@ -47,7 +47,7 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateType($exerciseType);
         $startDateTime_obj = isset($exerciseStartDate) && !empty($exerciseStartDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate)->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
         $objExercise->updateStartDate($startDateTime_obj);
-        $endDateTime_obj = isset($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
+        $endDateTime_obj = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
         $objExercise->updateTempSave($exerciseTempSave);
         $objExercise->updateTimeConstraint($exerciseTimeConstraint);
@@ -91,7 +91,9 @@ if (isset($_POST['submitExercise'])) {
         $exerciseEndDate = '';
     } else {
         $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
-    }   
+    }
+    $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : null;
+    $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : null;
     $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
     $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
     $exerciseAttemptsAllowed = Session::has('exerciseAttemptsAllowed') ? Session::get('exerciseAttemptsAllowed') : $objExercise->selectAttemptsAllowed();
@@ -228,11 +230,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
                      <div class='col-xs-10'>
-                        <div class='input-group'>   
-                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate' disabled>
+                        <div class='input-group'>
                             <span class='input-group-addon'>
-                              <input type='checkbox' id='enableStartDate'>
-                            </span>
+                                <input type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableEndDate ? ' checked' : '').">
+                            </span>                        
+                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableEndDate ? '' : ' disabled').">
                         </div>
                         <span class='help-block'>".Session::getError('exerciseStartDate')."</span>
                      </div>
@@ -240,11 +242,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseEndDate' class='col-xs-2 control-label'>$langExerciseEnd:</label>
                      <div class='col-xs-10'>
-                        <div class='input-group'>                   
-                            <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate' disabled>
+                        <div class='input-group'>
                             <span class='input-group-addon'>
-                              <input type='checkbox' id='enableEndDate'>
-                            </span>                                                            
+                              <input type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                            </span>                           
+                            <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'".($enableEndDate ? '' : ' disabled').">                                                         
                         </div>
                         <span class='help-block'>".Session::getError('exerciseEndDate')."</span>
                      </div>
