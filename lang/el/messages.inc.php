@@ -3850,7 +3850,6 @@ $langSections = 'Ενότητες';
 $langEBookDelConfirm = 'Επιβεβαίωση διαγραφής ηλεκτρονικού βιβλίου';
 $langEBookSectionDelConfirm = 'Επιβεβαίωση διαγραφής κεφαλαίου';
 $langEBookDeleted = 'Το βιβλίο με τίτλο «%s» διαγράφηκε.';
-$langEBookMenuTitle = 'Υποενότητες';
 $langEBookReplace = 'Αντικατάσταση αρχείων';
 $langEBookReplaceDoneZip = 'Τα περιεχόμενα του αρχείου ZIP αποσυμπιέστηκαν στο ηλεκτρονικό βιβλίο.';
 $langEBookTitleModified = "Η αλλαγή του τίτλου του ηλεκτρονικού βιβλίου πραγματοποιήθηκε";

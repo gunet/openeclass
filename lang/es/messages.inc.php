@@ -2381,7 +2381,6 @@ $langSubsection = 'Subsection';
 $langEBookDelConfirm = 'Confirm delete of e-book "%s"';
 $langEBookSectionDelConfirm = 'Confirm delete of section "%s"';
 $langEBookDeleted = 'The e-book titled "%s" has been deleted.';
-$langEBookMenuTitle = 'Subsections';
 $langEBookReplace = 'Replace files';
 $langEBookReplaceDoneZip = 'The contents of the ZIP file have been extracted in the e-book.';
 $langEBookTitleModified = "E-book title modified";

@@ -2305,7 +2305,6 @@ $langSubsection = 'Unterabschnitt ';
 $langEBookDelConfirm = 'Das Löschen des e-Buchs "%s"bestätigen';
 $langEBookSectionDelConfirm = 'Das Löschen des Abschnitts "%s"bestätigen';
 $langEBookDeleted = 'Das e-Buch mit Titel "%s"wurde gelöscht.';
-$langEBookMenuTitle = 'Unterabschnitte';
 $langEBookReplace = 'Dateien ersetzen';
 $langEBookReplaceDoneZip = 'Der Inhalt der Zip Datei wurde in das e-Buch extrahiert';
 $langEBookTitleModified = "Der Titel des e-Buches wurde geändert";

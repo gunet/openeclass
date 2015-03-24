@@ -2549,7 +2549,6 @@ $langSubsection = 'Sous-section';
 $langEBookDelConfirm = 'Confirmer la suppression du livre électronique «%s»';
 $langEBookSectionDelConfirm = 'Confirmer la suppression du chapitre «%s»';
 $langEBookDeleted = 'Le livre avec le titre «%s» a été supprimé.';
-$langEBookMenuTitle = 'Sous-sections';
 $langEBookReplace = 'Remplacer les fichiers';
 $langEBookReplaceDoneZip = 'Le contenu du fichier ZIP a été décompressé dans le livre électronique.';
 $langEBookTitleModified = "Le titre du livre électronique a été modifié";

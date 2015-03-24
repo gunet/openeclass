@@ -2361,7 +2361,6 @@ $langSubsection = "Sottosezione";
 $langEBookDelConfirm = "Conferma che vuoi eliminare l' e-book '%s'";
 $langEBookSectionDelConfirm = "Conferma che vuoi eliminare la sezione '%s'";
 $langEBookDeleted = "L' e-Book intitolato '%s' è eliminato.";
-$langEBookMenuTitle = "Sottosezioni";
 $langEBookReplace = "Sostituire file";
 $langEBookReplaceDoneZip = "I contenuti del file ZIP  sono decompressi nell' e-Book.";
 $langEBookTitleModified = "Il titolo dell' e-Book è modificato";
