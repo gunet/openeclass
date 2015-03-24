@@ -1280,6 +1280,10 @@ if ($doc_count == 0) {
 
                     $xmlCmdDirName = ($entry['format'] == ".meta" && get_file_extension($cmdDirName) == "xml") ? substr($cmdDirName, 0, -4) : $cmdDirName;
                     $tool_content .= action_button(array(
+                                    array('title' => $langEditDoc,
+                                          'url' => "{$base_url}comment=$cmdDirName",
+                                          'icon' => 'fa-edit',
+                                          'show' => $entry['format'] != '.meta'),                        
                                     array('title' => $langGroupSubmit,
                                           'url' => "{$urlAppend}modules/work/group_work.php?course=$course_code&amp;group_id=$group_id&amp;submit=$cmdDirName",
                                           'icon' => 'fa-book',
@@ -1297,10 +1301,6 @@ if ($doc_count == 0) {
                                     array('title' => $langRename,
                                           'url' => "{$base_url}rename=$cmdDirName",
                                           'icon' => 'fa-repeat',
-                                          'show' => $entry['format'] != '.meta'),
-                                    array('title' => $langComments,
-                                          'url' => "{$base_url}comment=$cmdDirName",
-                                          'icon' => 'fa-comment-o',
                                           'show' => $entry['format'] != '.meta'),
                                     array('title' => $langReplace,
                                           'url' => "{$base_url}replace=$cmdDirName",
