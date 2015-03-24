@@ -397,7 +397,7 @@ $tool_content .= "</td></tr>";
 //############################ LEARNING PATH COMMENT BOX #############################\\
 $tool_content .="
     <tr>
-      <th width='90'>$langComments:</th>
+      <th width='90'>$langDescr:</th>
       <td>";
 if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);

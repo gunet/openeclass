@@ -1890,10 +1890,10 @@ function show_student_assignments() {
             <div class='row'><div class='col-sm-12'>
             <div class='table-responsive'><table class='table-default'>
                                   <tr class='list-header'>
-                                      <th>$m[title]</th>
-                                      <th class='text-center'>$m[deadline]</th>
+                                      <th style='width:45%'>$m[title]</th>
+                                      <th class='text-center' style='width:25%'>$m[deadline]</th>
                                       <th class='text-center'>$m[submitted]</th>
-                                      <th>$m[grade]</th>
+                                      <th class='text-center'>$m[grade]</th>
                                   </tr>";
         $k = 0;
         foreach ($result as $row) {
@@ -1907,13 +1907,13 @@ function show_student_assignments() {
             $tool_content .= "
                                 <tr>
                                     <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id'>$title_temp</a></td>
-                                    <td width='150' class='text-center'>" . $deadline ;
+                                    <td class='text-center'>" . $deadline ;
             if ($row->time > 0) {
-                $tool_content .= "<br> (<span>$langDaysLeft" . format_time_duration($row->time) . ")</span>";
+                $tool_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
             } else if((int)$row->deadline){
-                $tool_content .= "<br> (<span class='expired'>$m[expired]</span>)";
+                $tool_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
             }
-            $tool_content .= "</td><td width='170' align='center'>";
+            $tool_content .= "</td><td class='text-center'>";
 
             if ($submission = find_submissions(is_group_assignment($row->id), $uid, $row->id, $gids)) {
                 foreach ($submission as $sub) {
@@ -1922,12 +1922,12 @@ function show_student_assignments() {
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
                     }
-                    $tool_content .= icon('fa-check-square-o', $m['yes'])."<br>";
+                    $tool_content .= "<i class='fa fa-check'></i><br>";
                 }
-            } else {
-                $tool_content .= icon('fa-square-o', $m['no']);
-            }
-            $tool_content .= "</td>
+                } else {
+                    $tool_content .= "<i class='fa fa-times'></i><br>";
+                }
+                $tool_content .= "</td>
                                     <td width='30' align='center'>";
             foreach ($submission as $sub) {
                 $grade = submission_grade($sub->id);
@@ -1970,7 +1970,7 @@ function show_assignments() {
                     <div class='table-responsive'>
                     <table class='table-default'>
                     <tr class='list-header'>
-                      <th>$m[title]</th>
+                      <th style='width:45%;'>$m[title]</th>
                       <th class='text-center'>$m[subm]</th>
                       <th class='text-center'>$m[nogr]</th>
                       <th class='text-center'>$m[deadline]</th>
@@ -1979,14 +1979,10 @@ function show_assignments() {
         $index = 0;
         foreach ($result as $row) {
             // Check if assignement contains submissions
-            $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
-            if (!$num_submitted) {
-                $num_submitted = '&nbsp;';
-            }
-                    
+            $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;                    
             $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;            
             if (!$num_ungraded) {
-                $num_ungraded = '&nbsp;';
+                $num_ungraded = '-';
             }
             
             $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
@@ -1998,9 +1994,9 @@ function show_assignments() {
                             <td class='text-center'>$num_ungraded</td>
                             <td class='text-center'>$deadline"; 
             if ($row->time > 0) {
-                $tool_content .= " <br><span class='label label-warning'>$langDaysLeft" . format_time_duration($row->time) . "</span>";
+                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
             } else if((int)$row->deadline){
-                $tool_content .= " <br><span class='label label-danger'>$m[expired]</span>";
+                $tool_content .= " <br><span class='label label-danger'><small>$m[expired]</small></span>";
             }                         
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
@@ -2012,7 +2008,7 @@ function show_assignments() {
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                           'icon' => 'fa-eraser',
                           'confirm' => "$langWarnForSubmissions $langDelSure",
-                          'show' => is_numeric($num_submitted) && $num_submitted > 0),
+                          'show' => $num_submitted > 0),
                     array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
                           'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
                           'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'),
