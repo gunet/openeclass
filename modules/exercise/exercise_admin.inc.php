@@ -229,26 +229,26 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>              
                  <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
-                     <div class='col-xs-10'>
+                     <div class='col-sm-10'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
-                                <input type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableEndDate ? ' checked' : '').">
+                                <input style='cursor:pointer;' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableEndDate ? ' checked' : '').">
                             </span>                        
                             <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableEndDate ? '' : ' disabled').">
                         </div>
-                        <span class='help-block'>".Session::getError('exerciseStartDate')."</span>
+                        <span class='help-block'>".(Session::hasError('exerciseStartDate') ? Session::getError('exerciseStartDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseStartHelpBlock")."</span>
                      </div>
                  </div>            
                  <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseEndDate' class='col-xs-2 control-label'>$langExerciseEnd:</label>
-                     <div class='col-xs-10'>
+                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd:</label>
+                     <div class='col-sm-10'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
-                              <input type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                              <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
                             </span>                           
                             <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'".($enableEndDate ? '' : ' disabled').">                                                         
                         </div>
-                        <span class='help-block'>".Session::getError('exerciseEndDate')."</span>
+                        <span class='help-block'>".(Session::hasError('exerciseEndDate') ? Session::getError('exerciseEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseEndHelpBlock")."</span>
                      </div>
                  </div>
                  <div class='form-group'>
