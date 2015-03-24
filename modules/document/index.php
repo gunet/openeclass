@@ -1229,10 +1229,10 @@ if ($doc_count == 0) {
                     $link_title_extra .= '&nbsp;' .
                         icon('fa-edit', $langEdit, $edit_url);
                 }
-                if ($copyid = $entry['copyrighted'] and
-                    $copyicon = $copyright_icons[$copyid]) {
+                if (($copyid = $entry['copyrighted']) && $entry['copyrighted'] != 2) {
+                    $copyicon = ($copyid == 1) ? 'fa-copyright' : 'fa-cc';
                     $link_title_extra .= "&nbsp;" .
-                        icon_old_style($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], null, 'png', 'target="_blank"');
+                        icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], 'target="_blank" style="color:#555555;"');
                 }
                 $dload_msg = $langSave;
 
