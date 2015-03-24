@@ -98,8 +98,8 @@ class Calendar_Events {
      * @return array event tuple
      */
     public static function get_admin_event($eventid) {
-        
-        return Database::get()->querySingle("SELECT * FROM admin_calendar WHERE id = ?d", $eventid);        
+                
+        return Database::get()->querySingle("SELECT * FROM admin_calendar WHERE id = ?d", $eventid);
 
     }
 
@@ -543,13 +543,20 @@ class Calendar_Events {
      */
     public static function delete_event($eventid, $eventtype, $recursivelly = false) {
         global $uid, $is_admin, $langNotAllowed;
+        
+        if ($eventtype == 'personal') {
+            $event = Calendar_Events::get_event($eventid);
+        } else {
+            $event = Calendar_Events::get_admin_event($eventid);
+        }
+        
         if ($eventtype != 'personal' && $eventtype != 'admin') {
             return array('success' => false, 'message' => $langNotAllowed);
         }
-        if ($eventtype == 'personal' && !$event = Calendar_Events::get_event($eventid)) {
+        if ($eventtype == 'personal' && !$event) {
             return array('success' => false, 'message' => $langNotAllowed);
         }
-        if ($eventtype == 'admin' && (!$is_admin || !$event = Calendar_Events::get_admin_event($eventid))) {
+        if ($eventtype == 'admin' && (!$is_admin)) {            
             return array('success' => false, 'message' => $langNotAllowed);
         }
         $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
@@ -559,14 +566,23 @@ class Calendar_Events {
 
         $m = ($eventtype == 'personal')? MODULE_ID_PERSONALCALENDAR:MODULE_ID_ADMINCALENDAR;
         Log::record(0, $m, LOG_DELETE, array('user_id' => $uid, 'id' => $eventid,
-            'title' => $event->title,
-            'content' => $content));
+                                             'title' => $event->title,
+                                             'content' => $content));
         return array('success' => true, 'message' => '', 'event' => $eventid);
     }
 
+    /**
+     * @brief delete a recursive event
+     * @global type $langNotValidInput
+     * @param type $eventid
+     * @param type $eventtype
+     * @return type
+     */
     public static function delete_recursive_event($eventid, $eventtype) {
         global $langNotValidInput;
-        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM personal_calendar WHERE id=?d',$eventid);
+        
+        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';                        
+        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM '.$t.' WHERE id=?d', $eventid);
         if ($rec_eventid) {
             return Calendar_Events::delete_event($rec_eventid->source_event_id, $eventtype, true);
         } else {
@@ -1356,11 +1372,11 @@ class Calendar_Events {
         return $calendar;
    }
    
-   public static function is_recursive($event_id, $event_type){
-        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';
-        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM $t WHERE id=?d',$event_id);
+   public static function is_recursive($event_id, $eventtype){
+        $t = ($eventtype == 'personal')? 'personal_calendar':'admin_calendar';        
+        $rec_eventid = Database::get()->querySingle('SELECT source_event_id FROM '.$t.' WHERE id=?d', $event_id);
         if($rec_eventid && $rec_eventid->source_event_id>0){
-            $event_count = Database::get()->querySingle('SELECT count(*) c FROM $t WHERE source_event_id=?d',$rec_eventid->source_event_id);
+            $event_count = Database::get()->querySingle('SELECT COUNT(*) c FROM '.$t.' WHERE source_event_id=?d', $rec_eventid->source_event_id);
             if($event_count){
                 return $event_count->c > 1;
             }

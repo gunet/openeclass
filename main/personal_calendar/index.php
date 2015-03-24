@@ -246,8 +246,8 @@ if (isset($_POST['newTitle'])) {
 
 /* delete */
 if (isset($_GET['delete']) && (isset($_GET['et']) && ($_GET['et'] == 'personal' || $_GET['et'] == 'admin'))) {
-    $thisEventId = intval($_GET['delete']);
-    if(isset($_GET['rep']) && $_GET['rep'] == 'yes'){
+    $thisEventId = intval($_GET['delete']);    
+    if(isset($_GET['rep']) && $_GET['rep'] == 'yes'){        
         $resp = Calendar_Events::delete_recursive_event($thisEventId, $_GET['et']);
     } else {
         $resp = Calendar_Events::delete_event($thisEventId, $_GET['et']);
@@ -265,7 +265,7 @@ $applytogroup = '';
 if (isset($_GET['modify'])) {    
     $modify = intval($_GET['modify']);
     $displayForm = false;
-    if (isset($_GET['admin']) and $is_admin) {
+    if (isset($_GET['admin']) and $is_admin) {                
         $event = Calendar_Events::get_admin_event($modify);
         if ($event) {
             $eventToModify = $event->id;
@@ -276,7 +276,7 @@ if (isset($_GET['modify'])) {
             $datetimeToModify = $startdate;
             $durationToModify = DateTime::createFromFormat('H:i:s', $event->duration)->format('H:i');
             $enddate = '';
-            if(Calendar_Events::is_recursive($event->id)){
+            if(Calendar_Events::is_recursive($event->id, 'admin')){
                    $is_recursive_event = true;
                    $applytogroup = 'no';
                    $repeatnumber = substr($event->recursion_period, 1, strlen($event->recursion_period)-2);
@@ -302,7 +302,7 @@ if (isset($_GET['modify'])) {
             $displayForm = true;
             $is_recursive_event = false;
             $enddate = '';
-            if(Calendar_Events::is_recursive($event->id)){
+            if(Calendar_Events::is_recursive($event->id, 'personal')){
                 $is_recursive_event = true;
                 $applytogroup = 'no';
                 $repeatnumber = substr($event->recursion_period, 1, strlen($event->recursion_period)-2);
