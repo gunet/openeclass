@@ -65,14 +65,16 @@ if (isset($_GET['delete'])) {
                         ));         
         // Form #1 - edit title
         $tool_content .= "
-            <div class='form-wrapper'>
+        <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <input type='hidden' name='id' value='$ebook_id' />
                 <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langTitle</label>         
-                    <div class='col-sm-10'>
-                        <input type='text' name='ebook_title' size='53' value='" . q($info->title) . "' />
-                        <input class='btn btn-primary' name='title_submit' type='submit' value='$langModify' />
+                    <label class='col-sm-2 control-label'>$langTitle:</label>         
+                    <div class='col-sm-9 input-group'>
+                        <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
+                        <span class='input-group-btn'>
+                            <button class='btn btn-primary' name='title_submit' type='submit' value='$langModify'>$langModify</button>
+                        </span>
                     </div>
                 </div>
             </form>
@@ -106,8 +108,8 @@ if (isset($_GET['delete'])) {
             $sections[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
             if ($sid === $edit_section) {
                 $section_id = "<input type='hidden' name='csid' value='$sid' />" .
-                        "<input type='text size='3' name='new_section_id' value='$qsid' />";
-                $section_title = "<input type='text size='3' name='new_section_title' value='$qstitle' />";
+                        "<input type='text name='new_section_id' value='$qsid' />";
+                $section_title = "<input type='text  name='new_section_title' value='$qstitle' />";
                 $section_editing = true;
                 $section_tools = "<input class='btn btn-primary' type='submit' name='new_section_submit' value='$langModify' />";
             } else {
