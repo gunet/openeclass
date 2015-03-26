@@ -108,8 +108,8 @@ if (isset($_GET['delete'])) {
             $sections[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
             if ($sid === $edit_section) {
                 $section_id = "<input type='hidden' name='csid' value='$sid' />" .
-                        "<input type='text name='new_section_id' value='$qsid' />";
-                $section_title = "<input type='text  name='new_section_title' value='$qstitle' />";
+                        "<input size='3' type='text' name='new_section_id' value='$qsid' />";
+                $section_title = "<input type='text size='3' name='new_section_title' value='$qstitle' />";
                 $section_editing = true;
                 $section_tools = "<input class='btn btn-primary' type='submit' name='new_section_submit' value='$langModify' />";
             } else {
@@ -128,7 +128,7 @@ if (isset($_GET['delete'])) {
             }       
             $tool_content .= "
             <tr>
-              <td class='text-right'>$section_id</td>
+              <td>$section_id</td>
               <td>$section_title</td>
               <td class='text-center'>$section_tools</td>
             </tr>";          
@@ -220,25 +220,22 @@ if (isset($_GET['delete'])) {
                            WHERE ebook_id = ?d
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
         if ($sections){
-            $sections_table =                
-                    "<table class='table-default'>
-                        <tr>
-                          <th style='max-width:8px;'>$langID</th>
-                          <th>$langTitle</th>
-                        </tr>";       
+            
+            $sections_table = "<ul class='list-group'>";
             foreach ($sections as $section){
                 $sections_table .=
                         "
-                        <tr>
-                            <td>".q($section->public_id)."</td>
-                            <td>".q($section->title)."</td>     
-                        </tr>
+                        <li class='list-group-item'>
+                            ".q($section->public_id).".&nbsp;
+                            ".q($section->title)."    
+                        </li>
                         ";
             }
-            $sections_table .= "
-                    </table>";
+            $sections_table .= "</ul>";
+            
+            
         } else {
-            $sections_table = $langNoEBookSections;
+            $sections_table = "<span class='not_visible'> - $langNoEBookSections - </span>";
         }
         // Form #1 - edit ebook title
         $tool_content .= action_bar(array(
