@@ -165,7 +165,7 @@ function printPolls() {
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
     foreach ($my_courses as $row) {
-        $courses_options .= "'<option value=\"$row->Course_id\">$row->Title</option>'+";
+        $courses_options .= "'<option value=\"$row->Course_id\">".q($row->Title)."</option>'+";
     }    
     $head_content .= "
     <script>
