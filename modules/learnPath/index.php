@@ -606,7 +606,7 @@ foreach ($result as $list) { // while ... learning path list
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm + " '" . $list->name . "'") : $langDelete),
+                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete),
                     array('title' => $langUp,
                         'level' => 'primary',
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id,
