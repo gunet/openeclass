@@ -1982,7 +1982,11 @@ function show_assignments() {
             $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;                    
             $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;            
             if (!$num_ungraded) {
-                $num_ungraded = '-';
+                if ($num_submitted > 0) {
+                    $num_ungraded = '0';
+                } else {
+                    $num_ungraded = '-';
+                }
             }
             
             $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
