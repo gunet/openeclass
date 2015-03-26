@@ -506,6 +506,7 @@ $langRefreshSuccess = "The lesson refresh operation was successful. The followin
 $langUsersDeleted = "Users deleted from course";
 $langAnnDeleted = "Announcements deleted from course";
 $langAgendaDeleted = "Calendar data deleted from course";
+$langWorksDelConfirm = "This assignment will be deleted. Are you sure?";
 $langWorksDeleted = "Assignments deleted";
 $langDocsDeleted = "Documents deleted";
 $langContactProf = "Contact $langTeachers";

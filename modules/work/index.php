@@ -1444,7 +1444,7 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
     $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
-    $langSaved, $langGraphResults, $langConfirmDelete, $langWorkFile, $langTags, $course_id;
+    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langTags, $course_id;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -1476,7 +1476,7 @@ function assignment_details($id, $row) {
                 'icon' => 'fa-times',
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=do_delete",
                 'button-class' => "btn-danger",
-                'confirm' => "$langConfirmDelete"
+                'confirm' => "$langWorksDelConfirm"
             )            
         ));
     }
@@ -1487,8 +1487,8 @@ function assignment_details($id, $row) {
         $deadline_notice = "<br><span class='text-danger'>$langEndDeadline</span>";
     }   
     $tool_content .= "
-    <div class='panel panel-primary'>
-        <div class='panel-heading'>
+    <div class='panel panel-default'>
+        <div class='panel-heading list-header'>
             <h3 class='panel-title'>$m[WorkInfo] &nbsp;". (($is_editor) ? icon('fa-edit', $m['edit'], "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit"): "")."</h3>
         </div>
         <div class='panel-body'>
@@ -1806,7 +1806,7 @@ function show_non_submitted($id) {
                             <p>$num_of_submissions</p>
                             <div class='row'><div class='col-sm-12'>
                             <div class='table-responsive'>    
-                            <table class='sortable'>
+                            <table class='table-default sortable'>
                             <tr class='list-header'>
                           <th width='3'>&nbsp;</th>";
                 sort_link($langGroup, 'username');
@@ -1950,7 +1950,7 @@ function show_student_assignments() {
 // show all the assignments
 function show_assignments() {
     global $tool_content, $m, $langEdit, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
-    $course_code, $themeimg, $course_id, $langConfirmDelete, $langDaysLeft, $m,
+    $course_code, $themeimg, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
     $langWarnForSubmissions, $langDelSure;
     
 
@@ -2016,7 +2016,7 @@ function show_assignments() {
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                             'icon' => 'fa-times',
                             'class' => 'delete',
-                            'confirm' => $langConfirmDelete))).
+                            'confirm' => $langWorksDelConfirm))).
                    "</td></tr>";
             $index++;
         }
