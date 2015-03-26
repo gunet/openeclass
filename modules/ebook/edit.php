@@ -35,6 +35,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 $toolName = $langEBook;
 
 
+
 if (!$is_editor) {
     redirect_to_home_page();
 }
@@ -351,7 +352,7 @@ if (isset($_GET['delete'])) {
          </form>";
     }    
 }
-
+$pageName = $langEBookEdit;
 
 draw($tool_content, 2, null, $head_content);
 
