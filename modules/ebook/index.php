@@ -126,7 +126,7 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       GROUP BY ebook.id
                       ORDER BY `order`", $course_id);
 
-if (!$q) {
+if (!$q && !isset($_GET['create'])) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else if(!isset($_GET['create'])){
     $tool_content .= "<div class='table-responsive'>";
