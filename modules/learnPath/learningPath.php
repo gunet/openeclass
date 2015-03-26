@@ -303,7 +303,7 @@ foreach ($flatElementList as $module) {
     if ($uid && ($module['contentType'] != CTLABEL_)) {
         // display actions for current module (taking into consideration blocked modules)
         if (!$is_blocked || !$first_blocked) {
-            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('fa-line-chart', $langTracking) . "</a></td>";
+            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('fa-line-chart', $langLearningObjectData) . "</a></td>";
         } else {
             $tool_content .= "<td></td>";
         }
