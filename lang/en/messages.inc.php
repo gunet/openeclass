@@ -2404,6 +2404,7 @@ $langGlossaryAdded = "New term successfully added";
 $langGlossaryUpdated = "Term successfully updated";
 $langGlossaryDeleted = "Term successfully deleted";
 $langGlossaryUrl = "Definition URL";
+$langEBookEditStructure = 'Edit';
 $langEBook = 'E-Book';
 $langEBookCreate = "New e-Book";
 $langEBookEdit = 'Update e-Book';

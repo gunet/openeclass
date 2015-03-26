@@ -34,6 +34,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 
 $toolName = $langEBook;
 
+
 if (!$is_editor) {
     redirect_to_home_page();
 }
@@ -244,7 +245,7 @@ if (isset($_GET['delete'])) {
                              'level' => 'primary-label')
                         ));    
         $tool_content .= "
-            <div class='panel panel-primary'>
+            <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <h3 class='panel-title'>$langEBookInfo &nbsp;
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
@@ -282,7 +283,7 @@ if (isset($_GET['delete'])) {
             $qstitle = q($section->title);
             $sections[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
         }
-
+        $pageName = $langEBookPages;
         $tool_content .= action_bar(array(
                             array('title' => $langNewEBookPage,
                               'url' => "new.php?course=TMA105&ebook_id=$ebook_id&amp;from=ebookEdit",
@@ -293,15 +294,12 @@ if (isset($_GET['delete'])) {
                                   'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
                                   'icon' => 'fa-hdd-o',                          
                                   'level' => 'primary-label')            
-                        ), false);      
+                        ));      
         // Form #3 - edit subsection file assignment
         $tool_content .= "
          <fieldset>
          <table class='table-default'>
-         <tr>
-            <th colspan='4'><h4>$langEBookPages</h4></th>
-         </tr>
-         <tr>       
+         <tr class='list-header'>       
            <th>$langFileName</th>
            <th>$langTitle</th>
            <th>$langSection</th>

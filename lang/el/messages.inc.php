@@ -3838,6 +3838,7 @@ $langGlossaryOverLimit = 'Το πλήθος όρων του γλωσσαρίου
   Ebook
  * ***************************************** */
 
+$langEBookEditStructure = 'Επεξεργασία';
 $langEBook = 'Ηλεκτρονικό Βιβλίο';
 $langEBookCreate = "Δημιουργία Ηλεκτρονικού Βιβλίου";
 $langEBookEdit = 'Διόρθωση Ηλεκτρονικού Βιβλίου';
