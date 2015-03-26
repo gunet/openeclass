@@ -51,6 +51,8 @@ require_once 'modules/document/doc_init.php';
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d AND id = ?d", $ebook_id, $_GET['delete']);
+    $return_url = "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1";
+    redirect_to_home_page($return_url);
 } elseif (isset($_GET['editEbook'])) {
         $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
         if (!$info) {
