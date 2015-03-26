@@ -160,6 +160,30 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $("#confirmIndexDialog").modal("show");
         }
     });
+
+    $('#personal_blog_enable').change(function(event) {
+        if ($('#personal_blog_enable').is(":checked")) {
+            $('#personal_blog_commenting_enable').prop('disabled', false);
+            $('#personal_blog_rating_enable').prop('disabled', false);
+            $('#personal_blog_sharing_enable').prop('disabled', false);
+        } else {
+            $('#personal_blog_commenting_enable').prop('disabled', true);
+            $('#personal_blog_rating_enable').prop('disabled', true);
+            $('#personal_blog_sharing_enable').prop('disabled', true);
+        }
+    });    
+    
+    if (!$('#personal_blog_enable').is(":checked")) {
+        $('#personal_blog_commenting_enable').prop('disabled', true);
+        $('#personal_blog_rating_enable').prop('disabled', true);
+        $('#personal_blog_sharing_enable').prop('disabled', true);
+    }
+        
+    $('input[name=submit]').click(function() {
+        $('#personal_blog_commenting_enable').prop('disabled', false);
+        $('#personal_blog_rating_enable').prop('disabled', false);
+        $('#personal_blog_sharing_enable').prop('disabled', false);
+    });
         
     // Mobile API Confirmations    
     $('#confirmMobileAPIDialog').modal({
@@ -274,6 +298,10 @@ if (isset($_POST['submit'])) {
         'hide_login_link' => true,
         'dropbox_allow_student_to_student' => true,
         'dropbox_allow_personal_messages' => true,
+        'personal_blog' => true,
+        'personal_blog_commenting' => true,
+        'personal_blog_rating' => true,
+        'personal_blog_sharing' => true,
         'block_username_change' => true,
         'display_captcha' => true,
         'insert_xml_metadata' => true,
@@ -720,6 +748,10 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_am_required = get_config('am_required') ? 'checked' : '';
     $cbox_dropbox_allow_student_to_student = get_config('dropbox_allow_student_to_student') ? 'checked' : '';
     $cbox_dropbox_allow_personal_messages = get_config('dropbox_allow_personal_messages') ? 'checked' : '';
+    $cbox_personal_blog = get_config('personal_blog') ? 'checked' : '';
+    $cbox_personal_blog_commenting = get_config('personal_blog_commenting') ? 'checked' : '';
+    $cbox_personal_blog_rating = get_config('personal_blog_rating') ? 'checked' : '';
+    $cbox_personal_blog_sharing = get_config('personal_blog_sharing') ? 'checked' : '';
     $cbox_block_username_change = get_config('block_username_change') ? 'checked' : '';
     $cbox_enable_mobileapi = get_config('enable_mobileapi') ? 'checked' : '';
     $max_glossary_terms = get_config('max_glossary_terms');
@@ -785,6 +817,30 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                     <label>
                                         <input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages>
                                         $lang_dropbox_allow_personal_messages
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='personal_blog_enable' type='checkbox' name='personal_blog' value='1' $cbox_personal_blog>
+                                        $lang_personal_blog
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='personal_blog_commenting_enable' type='checkbox' name='personal_blog_commenting' value='1' $cbox_personal_blog_commenting>
+                                        $lang_personal_blog_commenting
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='personal_blog_rating_enable' type='checkbox' name='personal_blog_rating' value='1' $cbox_personal_blog_rating>
+                                        $lang_personal_blog_rating
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input id='personal_blog_sharing_enable' type='checkbox' name='personal_blog_sharing' value='1' $cbox_personal_blog_sharing>
+                                        $lang_personal_blog_sharing
                                     </label>
                                 </div>  
                                 <div class='checkbox'>
