@@ -383,7 +383,7 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
             </div>
         </div>
         ";
-        /* Repetition period*/
+        /* Repeat period*/
         $tool_content .= "
             <div class='form-group'>
               <label for='frequencynumber' class='col-sm-2 control-label'>$langRepeat $langEvery:</label>
@@ -440,10 +440,10 @@ if ($displayForm and (isset($_GET['addEvent']) or ($is_admin && isset($_GET['add
               <label for='startdate' class='col-sm-2 control-label'>$langShowTo:</label>
               <div class='col-sm-10'>
                 <select class='form-control' name='visibility_level'>
-                    <option value='0' $selectedvis[0]>$langShowToAdminsOnly</option>
-                    <option value=\"" . USER_TEACHER . "\" " . $selectedvis[USER_TEACHER] . ">$langShowToAdminsandProfs</option>
                     <option value=\"" . USER_STUDENT . "\" " . $selectedvis[USER_STUDENT] . ">$langShowToAllregistered</option>
                     <option value=\"" . USER_GUEST . "\" " . $selectedvis[USER_GUEST] . ">$langShowToAll</option>
+                    <option value='0' $selectedvis[0]>$langShowToAdminsOnly</option>
+                    <option value=\"" . USER_TEACHER . "\" " . $selectedvis[USER_TEACHER] . ">$langShowToAdminsandProfs</option>                                        
                 </select>
               </div>
             </div>";            
