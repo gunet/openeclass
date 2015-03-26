@@ -81,7 +81,6 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
     header('Pragma:');
     header('Cache-Control: public');
 
-    header('Content-length: ' . filesize($real_filename));
     $mtime = filemtime($real_filename);
     $mdate = gmdate('D, d M Y H:i:s', $mtime);
     $etag = md5($real_filename . $mdate . $filename . filesize($real_filename));
@@ -98,7 +97,60 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
         if ($delete) {
             register_shutdown_function('unlink', $real_filename);
         }
-        readfile($real_filename);
+        
+        $size = filesize($real_filename);
+        
+        if(isset($_SERVER['HTTP_RANGE'])) {
+            // Parse the range header to get the byte offset
+            $ranges = array_map(
+                'intval', // Parse the parts into integer
+                explode(
+                    '-', // The range separator
+                    substr($_SERVER['HTTP_RANGE'], 6) // Skip the `bytes=` part of the header
+                )
+            );
+            
+            // If the last range param is empty, it means EOF
+            if (!$ranges[1]) {
+                $ranges[1] = $size - 1;
+            }
+            
+            // Send the appropriate headers
+            header('HTTP/1.1 206 Partial Content');
+            header('Accept-Ranges: bytes');
+            header('Content-Length: ' . ($ranges[1] - $ranges[0])); // The size of the range
+            
+            // Send the ranges we offered
+            header(
+                sprintf(
+                    'Content-Range: bytes %d-%d/%d', // The header format
+                    $ranges[0], // The start range
+                    $ranges[1], // The end range
+                    $size // Total size of the file
+                )
+            );
+            
+            $f = fopen($real_filename, 'rb'); // binary file output
+            $chunkSize = 8192;
+            fseek($f, $ranges[0]); // Seek to the requested start range
+            
+            // Data Output
+            while (true) {
+                // Check if we have outputted all the data requested
+                if (ftell($f) >= $ranges[1]) {
+                    break;
+                }
+
+                echo fread($f, $chunkSize);
+
+                // (Optional) flush
+                //@ob_flush();
+                //flush();
+            }
+        } else {
+            header('Content-length: ' . $size);
+            readfile($real_filename);
+        }
     }
 
     return true;
@@ -283,7 +335,8 @@ function get_mime_type($filename) {
         'wmd' => 'application/x-ms-wmd',
         'mp4' => 'video/mp4',
         'flv' => 'video/x-flv',
-        'webm' => 'video/webm');
+        'webm' => 'video/webm',
+        'ogv' => 'video/ogg');
     $ext = get_file_extension($filename);
     if (isset($f[$ext])) {
         return $f[$ext];

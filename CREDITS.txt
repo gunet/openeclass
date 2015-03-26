@@ -200,7 +200,10 @@ jQuery MultiSelect UI Widget 1.9, Copyright (c) 2011 Eric Hynds
   Dual licensed under the MIT and GPL licenses.
   http://www.erichynds.com/jquery/jquery-ui-multiselect-widget/
 
-flowplayer 3.2.7 - Copyright 2009-2011 Flowplayer Oy
+Flowplayer Flash 3.2.18 & Flowplayer HTML5 5.5.2
+Copyright 2008-2015 Flowplayer Oy
+The Flowplayer Free version is released under the
+GNU GENERAL PUBLIC LICENSE Version 3 (GPL).
 
 HTML Purify: (include/htmlpurifier-4.3.0-standalone)
  Copyright (C) 2006-2008 Edward Z. Yang
