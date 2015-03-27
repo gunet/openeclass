@@ -978,6 +978,7 @@ $langModifyInfo = "Διαχείριση Μαθήματος";
 $langDropBox = "Μηνύματα";
 $langMyDropBox = "Τα μηνύματά μου";
 $langLearnPath = "Γραμμή Μάθησης";
+$langWikiDescriptionShort = "Περιγραφή";
 $langWiki = "Σύστημα Wiki";
 $langToolManagement = "Εργαλεία";
 $langUsage = "Στατιστικά";

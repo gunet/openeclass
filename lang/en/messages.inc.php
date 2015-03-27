@@ -2095,6 +2095,7 @@ $langTheSystemIsCaseSensitive = "The system is case sensitive.";
 $langUpdateImage = "Change picture";
 $langUserIsPlaformAdmin = "Is platform admin";
 $langUserid = "User ID";
+$langWikiDescriptionShort = "Description";
 $langWikiAccessControl = "Access control management";
 $langWikiAccessControlText = "You can set access rights for users using the following grid : ";
 $langWikiAllPages = "All pages";

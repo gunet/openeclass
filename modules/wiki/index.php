@@ -370,9 +370,9 @@ switch ($action) {
                 // if admin, display title, edit and delete
                 if ($is_editor) {
                     $tool_content .= "
-                                    <tr>
+                                    <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
+                                        <th class='text-center'>$langWikiDescriptionShort</th>
                                         <th class='text-center'>$langPages</th>
                                         <th class='text-center'>" .icon('fa-gears'). "</th>
                                     </tr>";
@@ -380,9 +380,9 @@ switch ($action) {
                 // else display title only
                 else {
                     $tool_content .= "
-                                    <tr>
+                                    <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
+                                        <th class='text-center'>$langWikiDescriptionShort</th>
                                         <th class='text-center'>$langWikiNumberOfPages</th>
                                         <th class='text-center'>$langWikiRecentChanges</th>
                                     </tr>";
@@ -402,9 +402,7 @@ switch ($action) {
 
                     $tool_content .= '<td class="text-center">';
                     if (!empty($entry->description)) {
-                        $tool_content .= ''
-                                . $entry->description . ''
-                        ;
+                        $tool_content .= $entry->description;
                     }
                     $tool_content .= "  </td>
                                         <td class='text-center'>
@@ -431,12 +429,15 @@ switch ($action) {
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete",
                                         'icon' => 'fa-times',
                                         'class' => 'delete',
-                                        'confirm' => $langConfirmDelete)
+                                        'confirm' => $langWikiDeleteWiki)
                                 ));
                         $tool_content.= "</td>";
-                     
-                       
-			
+                    } else {
+                        $last_modification = current($wikiStore->loadWiki($entry->id)->recentChanges(0,1));
+                        $tool_content .= "<td class='text-center'>
+                                            " . q(user_get_data($last_modification->editor_id)->givenname) . "<br/>"
+                                              .nice_format($last_modification->last_mtime,TRUE)."
+                        </td>";
                     }
 
                     $tool_content .= '</tr>' . "\n";
