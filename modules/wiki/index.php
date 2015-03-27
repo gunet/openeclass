@@ -288,7 +288,7 @@ if ($action == 'rqEdit') {
 switch ($action) {
     case "rqEdit": {
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId", 'name' => $langWiki);
-            $pageName = $langWikiProperties;
+            $pageName = $langWikiCreateWiki;
             $noPHP_SELF = true;
             break;
         }
@@ -403,6 +403,8 @@ switch ($action) {
                     $tool_content .= '<td class="text-center">';
                     if (!empty($entry->description)) {
                         $tool_content .= $entry->description;
+                    } else {
+                        $tool_content .= "<span class='not_visible'>$langWikiNoDescription</span>";
                     }
                     $tool_content .= "  </td>
                                         <td class='text-center'>
