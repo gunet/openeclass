@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 
 $require_usermanage_user = TRUE;
@@ -29,17 +29,17 @@ if (isset($_POST['submit'])) {
         $ok = array();
         $not_found = array();
         $course_not_found = array();
-        $existing = array();        
-        $field = 'username';                        
-        $courses_codes = preg_split('/\s+/', mb_strtoupper($_POST['courses_codes']), PREG_SPLIT_NO_EMPTY);        
+        $existing = array();
+        $field = 'username';
+        $courses_codes = preg_split('/\s+/ms', mb_strtoupper($_POST['courses_codes']));
         $line = strtok($_POST['user_info'], "\n\r");
         while ($line !== false) {
             $userid = finduser(canonicalize_whitespace($line), $field);
             if (!$userid) {
                 $not_found[] = $line;
-            } else {                
-                foreach ($courses_codes as $codes) {                    
-                    $cid = course_code_to_id($codes);                    
+            } else {
+                foreach ($courses_codes as $codes) {
+                    $cid = course_code_to_id($codes);
                     if ($cid) {
                         if (adduser($userid, $cid)) {
                             $ok[] = $userid;
@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
             }
             $line = strtok("\n\r");
         }
-        
+
         if (count($not_found)) {
             $tool_content .= "<div class='alert alert-warning'>$langUsersNotExist<br>";
             foreach ($not_found as $uname) {
@@ -61,8 +61,8 @@ if (isset($_POST['submit'])) {
             }
             $tool_content .= '</div>';
         }
-        
-        if (count($course_not_found)) { 
+
+        if (count($course_not_found)) {
             $tool_content .= "<div class='alert alert-warning'>$langCourseNotExist<br>";
             foreach ($course_not_found as $course) {
                 $tool_content .= q($course) . '<br>';
@@ -99,7 +99,7 @@ $tool_content .= "<div class='form-wrapper'>
                 </label>
                 </div>
             <div class='col-sm-7'>" . text_area('user_info', 10, 30, '') . "</div>
-        </div>                                                
+        </div>
         </fieldset>
         <fieldset>
            <h4>$langCourseCodes</h4>
@@ -120,7 +120,7 @@ $tool_content .= "<div class='form-wrapper'>
  * @return boolean
  */
 function finduser($user, $field) {
-    
+
     $result = Database::get()->querySingle("SELECT id FROM user WHERE $field = ?s", $user);
     if ($result) {
         $userid = $result->id;
@@ -138,7 +138,7 @@ function finduser($user, $field) {
  * @return boolean
  */
 function adduser($userid, $cid) {
-        
+
     $result = Database::get()->querySingle("SELECT * FROM course_user WHERE user_id = ?d AND course_id = ?d", $userid, $cid);
     if ($result) {
             return false;
