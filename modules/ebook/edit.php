@@ -288,7 +288,7 @@ if (isset($_GET['delete'])) {
         $pageName = $langEBookPages;
         $tool_content .= action_bar(array(
                             array('title' => $langNewEBookPage,
-                              'url' => "new.php?course=TMA105&ebook_id=$ebook_id&amp;from=ebookEdit",
+                              'url' => "new.php?course=$course_code&ebook_id=$ebook_id&amp;from=ebookEdit",
                               'icon' => 'fa-plus-circle',
                               'button-class' => 'btn-success',
                               'level' => 'primary-label'),            
