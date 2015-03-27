@@ -1920,10 +1920,10 @@ function show_student_assignments() {
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
                     }
-                    $tool_content .= "<i class='fa fa-check'></i><br>";
+                    $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
                 }
                 } else {
-                    $tool_content .= "<i class='fa fa-times'></i><br>";
+                    $tool_content .= "<i class='fa fa-square-o'></i><br>";
                 }
                 $tool_content .= "</td>
                                     <td width='30' align='center'>";
