@@ -1024,11 +1024,13 @@ switch ($action) {
                     <input type='hidden' name='action' value='exSearch'>
                     <div class='form-group'>
                         <label for='searchPattern'>$langSearch:</label>
-                        <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langSearch'>
-                    </div>
-                    <div class='form-group'>
-                        <input class='btn btn-primary' type='submit' value='". $langSubmit ."'>
-                        <a class='btn btn-default' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
+                            <div class='input-group'>
+                                <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langSearch'>
+                                <div class='input-group-btn'>
+                                    <input class='btn btn-primary' type='submit' value='". $langSubmit ."'>
+                                        <a class='btn btn-default' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
+                                </div>
+                            </div>
                     </div>
                 </form>
             </div>";
