@@ -566,13 +566,13 @@ if ($action == "showBlog") {
                                         ". action_button(array(
                                             array(
                                                 'title' => $langModify,
-                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editPost&amp;pId=".$post->getId(),
+                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
                                                 'icon' => 'fa-edit',
                                                 'show' => $allow_to_edit
                                             ),
                                             array(
                                                 'title' => $langDelete,
-                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=delPost&amp;pId=".$post->getId(),
+                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
                                                 'icon' => 'fa-times',
                                                 'class' => 'delete',
                                                 'confirm' => $langSureToDelBlogPost,
