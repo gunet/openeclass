@@ -65,7 +65,7 @@ if ($result->c > 0) {
 } else {
     $is_courseMember = false;
 }
-$pageName = $langWiki;
+$toolName = $langWiki;
 
 // check and set user access level for the tool
 if (!isset($_REQUEST['wikiId'])) {
