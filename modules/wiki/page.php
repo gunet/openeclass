@@ -1023,7 +1023,7 @@ switch ($action) {
                 <form class='form-inline' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
                     <input type='hidden' name='action' value='exSearch'>
                     <div class='form-group'>
-                        <label for='searchPattern'>$langSearch:</label>
+                        <label for='searchPattern' class='label-control'>$langSearch:</label>
                             <div class='input-group'>
                                 <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langSearch'>
                                 <div class='input-group-btn'>
