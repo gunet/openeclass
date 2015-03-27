@@ -67,15 +67,17 @@ if ($can_upload) {
         $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $_GET['ebook_id']);
+        $section_id = '';
         if ($editPath) {
-            $section_id = Database::get()->querySingle("SELECT section_id 
-                FROM ebook_subsection WHERE file_id = ?d", $info->id)->section_id;
+            $section = Database::get()->querySingle("SELECT section_id 
+                FROM ebook_subsection WHERE file_id = ?d", $info->id);
+            if($section){
+                $section_id = $section->section_id;
+            }
         }else {
             if(count($sections)){
                 $section_id =  $sections[0]->id;
-            } else {
-                $section_id = '';
-            }    
+            }   
         }
         $sections_array = array('' => '---');
         foreach ($sections as $sid => $section){
