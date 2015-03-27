@@ -145,7 +145,7 @@ if (isset($_GET['delete'])) {
         }
         $tool_content .= "
           </table>
-          </fieldset>";        
+          </fieldset></form>";        
 } elseif (isset($_POST['new_section_submit'])) {
     if (isset($_POST['csid'])) {
         Database::get()->query("UPDATE ebook_section
@@ -299,57 +299,59 @@ if (isset($_GET['delete'])) {
                         ));      
         // Form #3 - edit subsection file assignment
         $tool_content .= "
-         <fieldset>
-         <table class='table-default'>
-         <tr class='list-header'>       
-           <th>$langFileName</th>
-           <th>$langTitle</th>
-           <th>$langSection</th>
-           <th>$langSubsection</th>
-         </tr>";
-        $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
-                                  ebook_section.id AS psid,
-                                  ebook_section.title AS section_title,
-                                  ebook_subsection.id AS ssid,
-                                  ebook_subsection.public_id AS pssid,
-                                  ebook_subsection.title AS subsection_title,
-                                  ebook_subsection.file_id as file_id
-                           FROM ebook_section, ebook_subsection
-                           WHERE ebook_section.ebook_id = $info->id AND
-                                 ebook_section.id = ebook_subsection.section_id
-                                 ORDER BY CONVERT(psid, UNSIGNED), psid,
-                                          CONVERT(pssid, UNSIGNED), pssid");
-        foreach ($q as $r) {        
-            $file_id = $r->file_id;
-            $display_id = $r->sid . ',' . $r->ssid;
-            $tool_content .= "
-                <tr>              
-                  <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
-                  <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
-                  <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
-                  <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
-                      <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "'></td>
+        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+            <input type='hidden' name='id' value='$ebook_id' />
+            <fieldset>
+                <table class='table-default'>
+                <tr class='list-header'>       
+                  <th>$langFileName</th>
+                  <th>$langTitle</th>
+                  <th>$langSection</th>
+                  <th>$langSubsection</th>
                 </tr>";
-            unset($files[$id_map[$file_id]]);        
-        }
-        foreach ($files as $key => $file) {        
-            $path = $paths[$key];
-            $file_id = $file_ids[$key];
-            $title = get_html_title($basedir . $path);
-            $tool_content .= "
-            <tr>          
-              <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
-              <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
-              <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
-              <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
-            </tr>";        
-        }
-        $tool_content .= "
-         <tr>
-           <td colspan='3'>&nbsp;</td>
-           <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
-         </table>
-         </fieldset>
+               $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
+                                         ebook_section.id AS psid,
+                                         ebook_section.title AS section_title,
+                                         ebook_subsection.id AS ssid,
+                                         ebook_subsection.public_id AS pssid,
+                                         ebook_subsection.title AS subsection_title,
+                                         ebook_subsection.file_id as file_id
+                                  FROM ebook_section, ebook_subsection
+                                  WHERE ebook_section.ebook_id = $info->id AND
+                                        ebook_section.id = ebook_subsection.section_id
+                                        ORDER BY CONVERT(psid, UNSIGNED), psid,
+                                                 CONVERT(pssid, UNSIGNED), pssid");
+               foreach ($q as $r) {        
+                   $file_id = $r->file_id;
+                   $display_id = $r->sid . ',' . $r->ssid;
+                   $tool_content .= "
+                       <tr>              
+                         <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
+                         <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
+                         <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
+                         <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
+                             <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "'></td>
+                       </tr>";
+                   unset($files[$id_map[$file_id]]);        
+               }
+               foreach ($files as $key => $file) {        
+                   $path = $paths[$key];
+                   $file_id = $file_ids[$key];
+                   $title = get_html_title($basedir . $path);
+                   $tool_content .= "
+                   <tr>          
+                     <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
+                     <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
+                     <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
+                     <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
+                   </tr>";        
+               }
+               $tool_content .= "
+                <tr>
+                  <td colspan='3'>&nbsp;</td>
+                  <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
+                </table>
+            </fieldset>
          </form>";
     }    
 }
