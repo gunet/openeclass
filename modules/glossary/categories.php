@@ -184,7 +184,7 @@ if (!isset($_GET['edit']) && !isset($_GET['add'])) {
             $tool_content .= "
         <div class='table-responsive glossary-categories'>    
             <table class='table-default'>
-                <tr><th class='text-left'>$langName</th>" .
+                <tr class='list-header'><th class='text-left'>$langName</th>" .
              ($is_editor ? "<th class='text-center'>" . icon('fa-gears') . "</th>" : '') . "
                 </tr>";
 
