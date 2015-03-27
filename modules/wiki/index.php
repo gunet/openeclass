@@ -384,7 +384,7 @@ switch ($action) {
                                         <th class='text-left'>$langTitle</th>
                                         <th class='text-center'>$langWikiDescriptionShort</th>
                                         <th class='text-center'>$langWikiNumberOfPages</th>
-                                        <th class='text-center'>$langWikiRecentChanges</th>
+                                        <th class='text-center'>$langWikiLastModification</th>
                                     </tr>";
                 }
                 $k = 0;
@@ -433,11 +433,15 @@ switch ($action) {
                                 ));
                         $tool_content.= "</td>";
                     } else {
-                        $last_modification = current($wikiStore->loadWiki($entry->id)->recentChanges(0,1));
-                        $tool_content .= "<td class='text-center'>
+                        $last_modification = current($wikiStore->loadWiki($entry->id)->recentChanges());
+                        if ($last_modification){
+                            $tool_content .= "<td class='text-center'>
                                             " . q(user_get_data($last_modification->editor_id)->givenname) . "<br/>"
                                               .nice_format($last_modification->last_mtime,TRUE)."
-                        </td>";
+                                                </td>";
+                        } else {
+                            $tool_content .= "<td class='text-center not_visible'>$langWikiNoModifications</td>";
+                        }
                     }
 
                     $tool_content .= '</tr>' . "\n";
