@@ -657,14 +657,13 @@ function new_assignment() {
                     </div>
                 </div>
                 <div class='input-append date form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-8 col-xs-offset-2'>        
-                        <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                    <div class='col-xs-8 col-xs-offset-2'>
+                        <div class='input-group'>
+                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                            <span class='add-on input-group-addon'><i class='fa fa-times'></i></span>
+                            <span class='add-on input-group-addon'><i class='fa fa-calendar'></i></span>
+                        </div>
                     </div>
-                    <div class='col-xs-2'>  
-                        <span class='add-on'><i class='fa fa-times'></i></span>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
-                    </div>
-                    <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
                 </div>
                 <div class='form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>             
@@ -953,14 +952,13 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='input-append date form-group ". (!empty($deadline) ? "" : "hide") ."' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-8 col-xs-offset-2'>        
-                        <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$deadline'>
+                    <div class='col-xs-8 col-xs-offset-2'> 
+                        <div class='input-group'>
+                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$deadline'>
+                            <span class='add-on input-group-addon'><i class='fa fa-times'></i></span>
+                            <span class='add-on input-group-addon'><i class='fa fa-calendar'></i></span>
+                        </div>
                     </div>
-                    <div class='col-xs-2'>  
-                        <span class='add-on'><i class='fa fa-times'></i></span>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
-                    </div>
-                    <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
                 </div>
                 <div class='form-group ". (!empty($deadline) ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>             
