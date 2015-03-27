@@ -46,14 +46,16 @@ Class Blog {
      */
     public function blogPostsNumber() {
         $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE ';
+        $params = array();
         if ($this->course_id != 0) {//course blog
             $sql .= '`course_id` = ?d';
-            $param = $this->course_id;
+            $params[] = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = 0 AND `user_id` = ?d';
-            $param = $this->user_id;
+            $sql .= '`course_id` = ?d AND `user_id` = ?d';
+            $params[] = 0;
+            $params[] = $this->user_id;
         }
-        $numPosts = Database::get()->querySingle($sql, $param)->c;
+        $numPosts = Database::get()->querySingle($sql, $params)->c;
         return $numPosts;
     }
     
@@ -66,14 +68,18 @@ Class Blog {
     public function getBlogPostsDB($page, $postsPerPage) {
         $offset = $page*$postsPerPage;
         $sql = 'SELECT * FROM `blog_post` WHERE ';
+        $params = array();
         if ($this->course_id != 0) {//course blog
             $sql .= '`course_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
-            $param = $this->course_id;
+            $params[] = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = 0 AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
-            $param = $this->user_id;
+            $sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
+            $params[] = 0;
+            $params[] = $this->user_id;
         }
-        $result = Database::get()->queryArray($sql, $param, $offset, $postsPerPage);
+        $params[] = $offset;
+        $params[] = $postsPerPage;
+        $result = Database::get()->queryArray($sql, $params);
         $ret = array();
         if (is_array($result)) {
         	$ret = BlogPost::loadFromPDOArr($result);
@@ -88,14 +94,17 @@ Class Blog {
      */
     private function getPopularBlogPostsDB($num) {
         $sql = 'SELECT * FROM `blog_post` WHERE ';
+        $params = array();
         if ($this->course_id != 0) {//course blog
         	$sql .= '`course_id` = ?d ORDER BY `views` DESC LIMIT ?d';
-        	$param = $this->course_id;
+        	$params[] = $this->course_id;
         } else {//user blog
-        	$sql .= '`course_id` = 0 AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
-        	$param = $this->user_id;
+        	$sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+        	$params[] = 0;
+        	$params[] = $this->user_id;
         }
-        $result = Database::get()->queryArray($sql, $param, $num);
+        $params[] = $num;
+        $result = Database::get()->queryArray($sql, $params);
         $ret = array();
         if (is_array($result)) {
             $ret = BlogPost::loadFromPDOArr($result);
