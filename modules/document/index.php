@@ -370,7 +370,7 @@ if ($can_upload) {
                 } else {
                     $log_action = LOG_MODIFY;
                 }
-                $ebookSectionTitle = $_POST['section_id']? $_POST['section_id']: $fileName;
+                $ebookSectionTitle = $_POST['file_title']? $_POST['file_title']: $fileName;
                 if (isset($_GET['ebook_id']) && isset($_POST['section_id'])){
                     $subsectionOrder = Database::get()->querySingle("SELECT COALESCE(MAX(public_id), 0) + 1
                         FROM ebook_subsection WHERE section_id = ?d", $_POST['section_id']);
