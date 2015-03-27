@@ -18,33 +18,73 @@
 *                  e-mail: info@openeclass.org
 * ======================================================================== */
 
-$require_current_course = TRUE;
+if (isset($_GET['course'])) { //course blog
+    $require_current_course = TRUE;
+    $blog_type = 'course_blog';
+} else { //personal blog
+    $require_current_course = FALSE;
+    $blog_type = 'perso_blog';
+}
 $require_help = TRUE;
 $helpTopic = 'Blog';
-require_once '../comments/class.comment.php';
-require_once '../comments/class.commenting.php';
-require_once '../rating/class.rating.php';
 require_once '../../include/baseTheme.php';
-require_once 'class.blog.php';
-require_once 'class.blogpost.php';
+require_once 'modules/comments/class.comment.php';
+require_once 'modules/comments/class.commenting.php';
+require_once 'modules/rating/class.rating.php';
+require_once 'modules/blog/class.blog.php';
+require_once 'modules/blog/class.blogpost.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
 
-define ('RSS', 'modules/blog/rss.php?course='.$course_code);
+if ($blog_type == 'course_blog') {
+    $user_id = 0;
+    
+    define ('RSS', 'modules/blog/rss.php?course='.$course_code);
+    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
+    
+    //check if commenting is enabled for course blogs
+    $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
+    //check if rating is enabled for course blogs
+    $ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
+    
+    $sharing_allowed = is_sharing_allowed($course_id);
+    $sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
+    
+    $url_params = "course=$course_code";
+} elseif ($blog_type == 'perso_blog') {
+    $course_id = 0;
+    
+    $is_blog_editor = false;
+    
+    if (isset($_GET['user_id'])) {
+        $user_id = intval($_GET['user_id']);
+        if ($user_id == $_SESSION['uid']) {
+            $is_blog_editor = true;
+        }
+    } else {
+        $user_id = $_SESSION['uid']; //current user's blog
+        $is_blog_editor = true;
+    }
+    
+    define ('RSS', 'modules/blog/rss.php?user_id='.$user_id);
+    
+    //check if commenting is enabled for personal blogs
+    $comments_enabled = get_config('personal_blog_commenting');
+    //check if rating is enabled for personal blogs
+    $ratings_enabled = get_config('personal_blog_rating');
+    //check if sharing is enabled for personal blogs
+    $sharing_enabled = get_config('personal_blog_sharing');
+    
+    $url_params = "user_id=$user_id";
+}
+
+
 load_js('tools.js');
 
-$pageName = $langBlog;
+$toolName = $langBlog;
 
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
-
-//check if commenting is enabled for blogs
-$comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
-//check if rating is enabled for blogs
-$ratings_enabled = setting_get(SETTING_BLOG_RATING_ENABLE, $course_id);
-
-$sharing_allowed = is_sharing_allowed($course_id); 
-$sharing_enabled = setting_get(SETTING_BLOG_SHARING_ENABLE, $course_id);
 
 //define allowed actions
 $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delPost", "savePost", "settings");
@@ -61,9 +101,7 @@ $posts_per_page = 10;
 $num_popular = 5;//number of popular blog posts to show in sidebar
 $num_chars_teaser_break = 500;//chars before teaser break
 
-$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
-
-if ($is_editor) {
+if ($blog_type == 'course_blog' && $is_editor) {
     $tool_content .= action_bar(array(
                          array('title' => $langBack,
                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
@@ -217,16 +255,30 @@ if ($is_editor) {
         
         
     }
+} elseif ($blog_type == 'perso_blog' && $is_blog_editor) {
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?user=$user_id&amp;action=showBlog",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label',
+                  'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
+    ),false);
 }
 
 //instantiate the object representing this blog
-$blog = new Blog($course_id, 0);
+$blog = new Blog($course_id, $user_id);
 
 //delete post
 if ($action == "delPost") {
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
-        if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
+        //different criteria regarding editing posts for different blog types
+        if ($blog_type == 'course_blog') {
+            $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
+        } elseif ($blog_type == 'perso_blog') {
+            $allow_to_edit = $is_blog_editor;
+        }
+        if ($allow_to_edit) {
             if($post->delete()) {
                 Session::Messages($langBlogPostDelSucc, 'alert-success');
             } else {
@@ -238,15 +290,21 @@ if ($action == "delPost") {
     } else {
         Session::Messages($langBlogPostNotFound);      
     }
-    redirect_to_home_page("modules/blog/index.php?course=$course_code");
+    redirect_to_home_page("modules/blog/index.php?$url_params");
 }
 
 //create blog post form
 if ($action == "createPost") {
-    if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
+    //different criteria regarding creating posts for different blog types
+    if ($blog_type == 'course_blog') {
+        $allow_to_create = $blog->permCreate($is_editor, $stud_allow_create, $uid);
+    } elseif ($blog_type == 'perso_blog') {
+        $allow_to_create = $is_blog_editor;
+    }
+    if ($allow_to_create) {
         $tool_content .= "
         <div class='form-wrapper'>
-            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
             <fieldset>
                 <div class='form-group'>
                     <label for='blogPostTitle' class='col-sm-2 control-label'>$langBlogPostTitle:</label>
@@ -263,7 +321,7 @@ if ($action == "createPost") {
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langAdd'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
+                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
                     </div>
                 </div>          
                 <input type='hidden' name='action' value='savePost' />
@@ -272,7 +330,7 @@ if ($action == "createPost") {
         </div>";
     } else {
         Session::Messages($langBlogPostNotAllowedCreate);
-        redirect_to_home_page("modules/blog/index.php?course=$course_code");
+        redirect_to_home_page("modules/blog/index.php?$url_params");
     }
     
 }
@@ -281,10 +339,16 @@ if ($action == "createPost") {
 if ($action == "editPost") {
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
-        if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
+        //different criteria regarding creating posts for different blog types
+        if ($blog_type == 'course_blog') {
+            $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
+        } elseif ($blog_type == 'perso_blog') {
+            $allow_to_edit = $is_blog_editor;
+        }
+        if ($allow_to_edit) {
             $tool_content .= "
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=".$course_code."' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
                 <fieldset>
                 <div class='form-group'>
                     <label for='blogPostTitle' class='col-sm-2 control-label'>$langBlogPostTitle:</label>
@@ -301,7 +365,7 @@ if ($action == "editPost") {
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langModifBlogPost'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
+                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog' class='btn btn-default'>$langCancel</a>
                     </div>
                 </div>              
                 <input type='hidden' name='action' value='savePost'>
@@ -311,11 +375,11 @@ if ($action == "editPost") {
         </div>";
         } else {
             Session::Messages($langBlogPostNotAllowedEdit);
-            redirect_to_home_page("modules/blog/index.php?course=$course_code");            
+            redirect_to_home_page("modules/blog/index.php?$url_params");            
         }
     } else {
         Session::Messages($langBlogPostNotFound);
-        redirect_to_home_page("modules/blog/index.php?course=$course_code");        
+        redirect_to_home_page("modules/blog/index.php?$url_params");        
     }
 }
 
@@ -323,7 +387,13 @@ if ($action == "editPost") {
 if ($action == "savePost") {
     
     if (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langAdd) {
-        if ($blog->permCreate($is_editor, $stud_allow_create, $uid)) {
+        //different criteria regarding creating posts for different blog types
+        if ($blog_type == 'course_blog') {
+            $allow_to_create = $blog->permCreate($is_editor, $stud_allow_create, $uid);
+        } elseif ($blog_type == 'perso_blog') {
+            $allow_to_create = $is_blog_editor;
+        }
+        if ($allow_to_create) {
             $post = new BlogPost();
             if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
                 Session::Messages($langBlogPostSaveSucc, 'alert-success');
@@ -336,7 +406,13 @@ if ($action == "savePost") {
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
         if ($post->loadFromDB($_POST['pId'])) {
-            if ($post->permEdit($is_editor, $stud_allow_create, $uid)) {
+            //different criteria regarding creating posts for different blog types
+            if ($blog_type == 'course_blog') {
+                $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
+            } elseif ($blog_type == 'perso_blog') {
+                $allow_to_edit = $is_blog_editor;
+            }
+            if ($allow_to_edit) {
                 if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
                     Session::Messages($langBlogPostSaveSucc, 'alert-success');
                 } else {
@@ -349,7 +425,7 @@ if ($action == "savePost") {
             Session::Messages($langBlogPostNotFound);                      
         }
     } 
-    redirect_to_home_page("modules/blog/index.php?course=$course_code");      
+    redirect_to_home_page("modules/blog/index.php?$url_params");      
 }
 
 if (isset($message) && $message) {
@@ -360,18 +436,22 @@ if (isset($message) && $message) {
 if ($action == "showPost") {
     $tool_content .= action_bar(array(
             array('title' => $langBack,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showBlog",
+                    'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showBlog",
                     'icon' => 'fa-reply',
-                    'level' => 'primary-label',
-                    'show' => $blog->permCreate($is_editor, $stud_allow_create, $uid))
+                    'level' => 'primary-label')
     ));
     $post = new BlogPost();
     if ($post->loadFromDB($pId)) {
+        if ($blog_type == 'course_blog') {
+            $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
+        } elseif ($blog_type == 'perso_blog') {
+            $allow_to_edit = $is_blog_editor;
+        }
         $post->incViews();
         $sharing_content = '';
         $rating_content = '';
         if ($sharing_allowed) {
-            $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
+            $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?$url_params&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
         }
         if ($ratings_enabled) {
             $rating = new Rating('up_down', 'blogpost', $post->getId());
@@ -383,17 +463,17 @@ if ($action == "showPost") {
                                     ". action_button(array(
                                         array(
                                             'title' => $langModify,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editPost&amp;pId=".$post->getId(),
+                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
                                             'icon' => 'fa-edit',
-                                            'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                            'show' => $allow_to_edit
                                         ),
                                         array(
                                             'title' => $langDelete,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=delPost&amp;pId=".$post->getId(),
+                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
                                             'icon' => 'fa-times',
                                             'class' => 'delete',
                                             'confirm' => $langSureToDelBlogPost,
-                                            'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                            'show' => $allow_to_edit
                                         )                                        
                                     ))."
                                 </div>
@@ -418,25 +498,30 @@ if ($action == "showPost") {
         
     } else {
         Session::Messages($langBlogPostNotFound);
-        redirect_to_home_page("modules/blog/index.php?course=$course_code");  
+        redirect_to_home_page("modules/blog/index.php?$url_params");  
     }
 
 }
 
 //show all blog posts
 if ($action == "showBlog") {
+    if ($blog_type == 'course_blog') {
+        $allow_to_create = $blog->permCreate($is_editor, $stud_allow_create, $uid);
+    } elseif ($blog_type == 'perso_blog') {
+        $allow_to_create = $is_blog_editor;
+    }
     $tool_content .= action_bar(array(
                         array('title' => $langBlogAddPost,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=createPost",
+                              'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=createPost",
                               'icon' => 'fa-plus-circle',
                               'level' => 'primary-label',
                               'button-class' => 'btn-success',
-                              'show' => $blog->permCreate($is_editor, $stud_allow_create, $uid)),
+                              'show' => $allow_to_create),
                         array('title' => $langConfig,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings",
+                              'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=settings",
                               'icon' => 'fa-gear',
                               'level' => 'primary',
-                              'show' => $is_editor && $blog->permCreate($is_editor, $stud_allow_create, $uid))
+                              'show' => ($blog_type == 'course_blog') && $is_editor && $blog->permCreate($is_editor, $stud_allow_create, $uid))
                      ));
     
     $num_posts = $blog->blogPostsNumber();
@@ -455,10 +540,15 @@ if ($action == "showBlog") {
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='col-sm-9'>";
         foreach ($posts as $post) {
+            if ($blog_type == 'course_blog') {
+                $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
+            } elseif ($blog_type == 'perso_blog') {
+                $allow_to_edit = $is_blog_editor;
+            }
             $sharing_content = '';
             $rating_content = '';
             if ($sharing_allowed) {
-                $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
+                $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?$url_params&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
             }            
             if ($ratings_enabled) {
                 $rating = new Rating('up_down', 'blogpost', $post->getId());
@@ -478,7 +568,7 @@ if ($action == "showBlog") {
                                                 'title' => $langModify,
                                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editPost&amp;pId=".$post->getId(),
                                                 'icon' => 'fa-edit',
-                                                'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                                'show' => $allow_to_edit
                                             ),
                                             array(
                                                 'title' => $langDelete,
@@ -486,12 +576,12 @@ if ($action == "showBlog") {
                                                 'icon' => 'fa-times',
                                                 'class' => 'delete',
                                                 'confirm' => $langSureToDelBlogPost,
-                                                'show' => $post->permEdit($is_editor, $stud_allow_create, $uid)
+                                                'show' => $allow_to_edit
                                             )                                        
                                         ))."
                                     </div>
                                     <h3 class='panel-title'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
                                     </h3>                                    
                                 </div>
                                 <div class='panel-body'>
@@ -525,4 +615,8 @@ if ($action == "showBlog") {
     }
 }
 
-draw($tool_content, 2, null, $head_content);
+if ($blog_type == 'course_blog') {
+    draw($tool_content, 2, null, $head_content);
+} elseif ($blog_type == 'perso_blog') {
+    draw($tool_content, 1, null, $head_content);
+}
