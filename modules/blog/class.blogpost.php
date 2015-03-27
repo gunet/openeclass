@@ -206,7 +206,7 @@ Class BlogPost {
     }
     
     /**
-     * Check if a user has permission to edit/delete blog posts
+     * Check if a user has permission to edit/delete course blog posts
      * @param isEditor boolean showing if user is teacher
      * @param studConfigVal boolean based on the config value allowing users to create posts
      * @param uid the user id
