@@ -370,6 +370,11 @@ if ($can_upload) {
                 } else {
                     $log_action = LOG_MODIFY;
                 }
+                if(isset($_GET['ebook_id']) && isset($_POST['section_id'])){
+                    Database::get()->query("INSERT INTO ebook_subsection
+                        SET section_id = ?s, file_id = ?d, title = ?s", 
+                        $_POST['section_id'], $id, $fileName); 
+                }
                 Log::record($course_id, MODULE_ID_DOCS, $log_action,
                         array('id' => $id,
                               'filepath' => $file_path,

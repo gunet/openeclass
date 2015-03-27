@@ -63,6 +63,38 @@ if ($can_upload) {
         $fileContent = '';
         $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
     }
+    if(isset($_GET['ebook_id'])){
+        $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
+                           WHERE ebook_id = ?d
+                           ORDER BY CONVERT(public_id, UNSIGNED), public_id", $_GET['ebook_id']);
+        if ($editPath) {
+            $section_id = Database::get()->querySingle("SELECT section_id 
+                FROM ebook_subsection WHERE file_id = ?d", $info->id)->section_id;
+        }else {
+            if(count($sections)){
+                $section_id =  $sections[0]->id;
+            } else {
+                $section_id = '';
+            }    
+        }
+        $sections_array = array('' => '---');
+        foreach ($sections as $sid => $section){
+            $sid = $section->id;
+            $qsid = q($section->public_id);
+            $sections_array[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
+        }
+        
+        $ebook_section_select = "
+                <div class='form-group'>
+                    <label for='section' class='col-sm-2 control-label'>$langSection:</label>
+                    <div class='col-sm-10'>
+                    " . selection($sections_array, 'section_id', $section_id, 'class="form-control"') . "
+                    </div>                        
+                </div>
+                ";
+    } else {
+        $ebook_section_select = "";
+    }
     $action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
     $tool_content .= action_bar(array(
                                 array('title' => $langBack,
@@ -75,6 +107,7 @@ if ($can_upload) {
     $tool_content .= "<form class='form-horizontal' role='form' action='$upload_target_url' method='post'>
     $htmlPath
     $group_hidden_input
+    $ebook_section_select    
 
               <div class='form-group'>
         <label for='file_name' class='col-sm-2 control-label'>$langFileName:</label>
