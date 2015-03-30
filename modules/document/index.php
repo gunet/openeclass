@@ -220,12 +220,19 @@ if ($can_upload) {
         $components = explode('/', $extra_path);
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
+        if (isset($_POST['uploadPath'])) {
+            $uploadPath = $_POST['uploadPath'];
+        } elseif (isset($_POST['editPath'])) {
+            $uploadPath = dirname($_POST['editPath']);
+        } else {
+            $uploadPath = '';
+        }
         $diskUsed = dir_total_space($basedir);
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
             Session::Messages($langNoSpace, 'alert-danger');
             redirect_to_current_dir();
         } else {
-            $fileName = newPageFileName($_POST['uploadPath'], 'page_', '.html');
+            $fileName = newPageFileName($uploadPath, 'page_', '.html');
             $uploaded = true;
         }
     }
@@ -392,7 +399,7 @@ if ($can_upload) {
                     "</body></html>\n");
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
                 Session::Messages($langDownloadEnd, 'alert-success');
-                if(isset($_GET['from']) && $_GET['from'] == 'ebookEdit') {
+                if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
                     redirect_to_home_page("modules/ebook/edit.php?course=$course_code&id=$ebook_id");
                 } else {
                     redirect_to_current_dir();
