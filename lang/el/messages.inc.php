@@ -1154,11 +1154,11 @@ $langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώμ
 $langCopyrightedUnknown="Άγνωστο";
 $langLicenseUnset = 'Δεν έχει οριστεί';
 $langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
-$langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
-$langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
-$langCreativeCommonsCCBYNC = "CC - Μη Εμπορική Χρήση";
-$langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
-$langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYSA = "CC - Αναφορά - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYND = "CC - Αναφορά - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYNC = "CC - Αναφορά - Μη Εμπορική Χρήση";
+$langCreativeCommonsCCBYNCSA = "CC - Αναφορά - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYNCND = "CC - Αναφορά - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
 $langCommercialUse = "Εμπορική χρήση";
 $langAllowModification = "Επιτρέψτε διασκευή";
 
