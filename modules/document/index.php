@@ -225,12 +225,7 @@ if ($can_upload) {
             Session::Messages($langNoSpace, 'alert-danger');
             redirect_to_current_dir();
         } else {
-            if (isset($_POST['file_name'])) {
-                $fileName = $_POST['file_name'];
-                if (!preg_match('/\.html?$/i', $fileName)) {
-                    $fileName .= '.html';
-                }
-            }
+            $fileName = newPageFileName($_POST['uploadPath'], 'page_', '.html');
             $uploaded = true;
         }
     }
@@ -1481,4 +1476,23 @@ function redirect_to_current_dir() {
         $redirect_base_url = preg_replace('/[&?]$/', '', $redirect_base_url);
     }
     redirect_to_home_page($redirect_base_url, true);
+}
+
+/**
+ * Generate a new filename in path $editPath in current document subsystem
+ * @param string $editPath Current path
+ * @param string $prefix New file prefix
+ * @param string $suffix New file suffix
+ * @global string $group_sql Current subsystem SQL options
+ */
+function newPageFileName($uploadPath, $prefix, $suffix) {
+    global $group_sql;
+
+    $newId = Database::get()->querySingle(
+        "SELECT COALESCE(MAX(CONVERT(REPLACE(REPLACE(filename, ?s, ''), ?s, ''), SIGNED INTEGER)), 0) + 1 AS newPageId
+             FROM document WHERE $group_sql AND
+                  path LIKE ?s AND path NOT LIKE ?s AND filename REGEXP ?s",
+        $prefix, $suffix, $uploadPath . '/%', $uploadPath . '/%/%',
+        preg_quote($prefix) . '[0-9]+' . preg_quote($suffix))->newPageId;
+    return $prefix . $newId . $suffix;
 }

@@ -1,6 +1,6 @@
 <?php
 /* ========================================================================
- * Open eClass 3.0 
+ * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2014  Greek Universities Network - GUnet
@@ -43,7 +43,7 @@ if (isset($_GET['uploadPath'])) {
 
 if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
-} 
+}
 
 $backUrl = documentBackLink($uploadPath);
 
@@ -52,13 +52,19 @@ if ($can_upload) {
     if ($editPath) {
         $pageName = $langEditDoc;
         $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
-        $htmlFileName = '<p class="form-control-static">'.q($info->filename).'</p>';
+        $htmlFileName = "
+      <div class='form-group'>
+        <label for='file_name' class='col-sm-2 control-label'>$langFileName:</label>
+        <div class='col-sm-10'>
+          <p class='form-control-static'>" . q($info->filename) . "</p>
+        </div>
+      </div>";
         $htmlTitle = ' value="' . q($info->title) . '"';
         $fileContent = file_get_contents($basedir . $info->path);
         $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
     } else {
         $pageName = $langCreateDoc;
-        $htmlFileName = "<input type='text' class='form-control' id='file_name' name='file_name'>";
+        $htmlFileName = '';
         $htmlTitle = '';
         $fileContent = '';
         $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
@@ -69,15 +75,15 @@ if ($can_upload) {
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $_GET['ebook_id']);
         $section_id = '';
         if ($editPath) {
-            $section = Database::get()->querySingle("SELECT section_id 
+            $section = Database::get()->querySingle("SELECT section_id
                 FROM ebook_subsection WHERE file_id = ?d", $info->id);
-            if($section){
+            if ($section) {
                 $section_id = $section->section_id;
             }
-        }else {
-            if(count($sections)){
+        } else {
+            if (count($sections)) {
                 $section_id =  $sections[0]->id;
-            }   
+            }
         }
         $sections_array = array('' => '---');
         foreach ($sections as $sid => $section){
@@ -85,13 +91,13 @@ if ($can_upload) {
             $qsid = q($section->public_id);
             $sections_array[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
         }
-        
+
         $ebook_section_select = "
                 <div class='form-group'>
                     <label for='section' class='col-sm-2 control-label'>$langSection:</label>
                     <div class='col-sm-10'>
                     " . selection($sections_array, 'section_id', $section_id, 'class="form-control"') . "
-                    </div>                        
+                    </div>
                 </div>
                 ";
     } else {
@@ -105,20 +111,14 @@ if ($can_upload) {
                                       'level' => 'primary-label',
                                       'class' => 'back_btn')
                             ),false);
-    $tool_content .= "<div class='form-wrapper'>";
-    $tool_content .= "<form class='form-horizontal' role='form' action='$upload_target_url' method='post'>
-    $htmlPath
-    $group_hidden_input
-    $ebook_section_select    
+    $tool_content .= "<div class='form-wrapper'>
+    <form class='form-horizontal' role='form' action='$upload_target_url' method='post'>
+      $htmlPath
+      $group_hidden_input
+      $ebook_section_select
+      $htmlFileName
 
-              <div class='form-group'>
-        <label for='file_name' class='col-sm-2 control-label'>$langFileName:</label>
-        <div class='col-sm-10'>
-          $htmlFileName
-        </div>
-      </div>
-	
-        <div class='form-group'>
+      <div class='form-group'>
         <label for='file_title' class='col-sm-2 control-label'>$langTitle:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='file_title' name='file_title'$htmlTitle>
@@ -130,7 +130,7 @@ if ($can_upload) {
           . rich_text_editor('file_content', 20, 40, $fileContent) .
         "</div>
       </div>
-	  
+	
 	<div class='form-group'>
         <div class='col-xs-offset-2 col-xs-10'>
           <button type='submit' value='" . $langSubmit . "' class='btn btn-primary'>
@@ -143,6 +143,6 @@ if ($can_upload) {
 	$tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
 }
 
-draw($tool_content, 
+draw($tool_content,
     defined('COMMON_DOCUMENTS')? 3: 2,
     null, $head_content);
