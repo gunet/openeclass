@@ -737,6 +737,7 @@ if (!class_exists('Exercise')) {
                preg_match_all('#\[(?!/?m)(.*?)\]#', $answer, $match);
                foreach ($value as $row_key => $row_choice) {
                    //if user's choice is right assign rightAnswerWeight else 0
+                   //Some more coding should be done if blank can have multiple answers
                        $canonical_choice = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($row_choice, 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $row_choice;
                        $canonical_match = $objQuestionTmp->selectType() == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($match[1][$row_key-1], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $match[1][$row_key-1];
 
