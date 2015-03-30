@@ -1991,6 +1991,7 @@ function show_assignments() {
             $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
             $tool_content .= "<td>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+                                <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             </td>
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
