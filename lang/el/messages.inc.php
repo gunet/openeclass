@@ -778,14 +778,13 @@ $langSaveErrorMessage = "Η κουβέντα δεν μπόρεσε να αποθ
 $langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
 $langChatDeleted ="Η διαγραφή της κουβέντας πραγματοποιήθηκε";
 $langNoChatAvailable = "Δεν υπάρχουν διαθέσιμες \"Κουβεντούλες\"";
-$langChatActive = "Ενεργή Κουβεντούλα";
 
 /* * ***************************************************************
  * copyright.php
  * **************************************************************** */
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2011<br>&nbsp;<br>
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2015<br>&nbsp;<br>
 Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
@@ -1600,7 +1599,7 @@ $langAllExercises = "Όλες οι ερωτήσεις";
 $langFilter = "Φιλτράρισμα";
 $langGoBackToEx = "Επιστροφή στην άσκηση";
 $langReuse = "Επαναχρησιμοποίηση";
-$langUsed = "Χρησιμοποιύμενης";
+$langUsed = "Χρησιμοποιούμενης";
 $langQuestionReused = "Η ερώτηση προστέθηκε στην άσκηση";
 
 // exercise_result.php
