@@ -60,7 +60,7 @@ if ($can_upload) {
         </div>
       </div>";
         $htmlTitle = ' value="' . q($info->title) . '"';
-        $fileContent = Session::has('file_content') ? Session::get('file_content') : file_get_contents($basedir . $info->path);
+        $fileContent = Session::has('file_content') ? Session::get('file_content') : getHtmlBody($basedir . $info->path);
         $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
     } else {
         $pageName = $langCreateDoc;
@@ -147,3 +147,11 @@ if ($can_upload) {
 draw($tool_content,
     defined('COMMON_DOCUMENTS')? 3: 2,
     null, $head_content);
+
+
+function getHtmlBody($path) {
+    $dom = new DOMDocument();
+    $dom->loadHTMLFile($path);
+    $body = $dom->getElementsByTagName('body')->item(0);
+    return dom_save_html($dom, $body);
+}

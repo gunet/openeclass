@@ -399,10 +399,12 @@ if ($can_upload) {
                                   'title' => $_POST['file_title']));
                     $title = $_POST['file_title']? $_POST['file_title']: $fileName;
                     file_put_contents($basedir . $file_path,
-                        '<!DOCTYPE html><head><meta charset="utf-8">' .
-                        '<title>' . q($title) . '</title><body>' .
+                        "<!DOCTYPE html>\n" .
+                        "<head>\n" .
+                        "  <meta charset='utf-8'>\n" .
+                        '  <title>' . q($title) . "</title>\n</head>\n<body>\n" .
                         purify($_POST['file_content']) .
-                        "</body></html>\n");
+                        "\n</body>\n</html>\n");
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
                     Session::Messages($langDownloadEnd, 'alert-success');
                     if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
