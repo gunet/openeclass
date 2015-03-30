@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -594,9 +594,9 @@ $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
 $langListAll = "Λίστα όλων";
 $langListCalendar = "Μορφή ημερολογίου";
 $langAgendaDueDay = "Προθεσμία";
-$langAgendaCourseEvent = "Γεγ. μαθήματος";
-$langAgendaPersonalEvent = "Προσ. γεγονός";
-$langAgendaSystemEvent = "Γεγ. συστήματος";
+$langAgendaCourseEvent = "Γεγονός μαθήματος";
+$langAgendaPersonalEvent = "Προσωπικό γεγονός";
+$langAgendaSystemEvent = "Γεγονός συστήματος";
 
 // week days
 $langDay_of_weekNames = array();
