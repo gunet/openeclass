@@ -2210,6 +2210,7 @@ $m['already_group_sub'] = 'A file has already been submitted for this
 $m['group_or_user'] = 'Assignment type';
 $m['group_work'] = 'Group submissions';
 $m['user_work'] = 'Individual submissions';
+$m['delete_work'] = 'Delete';
 $m['submitted_by_other_member'] = 'This file has been submitted by another
 	member of';
 $m['your_group'] = 'your group';

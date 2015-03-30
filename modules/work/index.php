@@ -1674,10 +1674,10 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                         <input type='hidden' name='grades_id' value='$id' />
-                        <p><div class='sub_title1'>$langSubmissions:</div><p>
-                        <p>$num_of_submissions</p>
+                        <br>
                         <div class='table-responsive'>    
                         <table class='table-default'>
+                        <tbody>
                         <tr class='list-header'>
                       <th width='3'>&nbsp;</th>";
             sort_link($m['username'], 'username');
@@ -1729,7 +1729,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td colspan='6'>
                                 <div>$subContentGroup</div>";
                 if (trim($row->comments != '')) {
-                    $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
+                    $tool_content .= "<div style='margin-top: .5em;'>" .
                             q($row->comments) . '</div>';
                 }
                 //professor comments
@@ -1755,9 +1755,16 @@ function show_assignment($id, $display_graph_results = false) {
                 $i++;
             } //END of Foreach
 
-            $tool_content .= "</table>
+            $tool_content .= "
+                    </tbody>
+                    <tfoot>
+                        <tr class='text-center'>
+                            <td colspan='7'><b>$langSubmissions:</b>&nbsp; $num_results</td>
+                        </tr>
+                    </tfoot>
+                    </table>
                             </div>
-                        <p class='smaller right'><img src='$themeimg/email.png' alt='' >
+                        <p class='smaller right'><i class='fa fa-envelope'></i>&nbsp;
                                 $m[email_users]: <input type='checkbox' value='1' name='email'></p>
                         <p><input class='btn btn-primary' type='submit' name='submit_grades' value='$langGradeOk'></p>
                         </form>";
