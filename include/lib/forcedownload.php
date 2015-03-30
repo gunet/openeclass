@@ -93,7 +93,6 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
             trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag)) {
         header("HTTP/1.0 304 Not Modified");
     } else {
-        stop_output_buffering();
         if ($delete) {
             register_shutdown_function('unlink', $real_filename);
         }
@@ -134,6 +133,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
             $chunkSize = 8192;
             fseek($f, $ranges[0]); // Seek to the requested start range
             
+            stop_output_buffering();
             // Data Output
             while (true) {
                 // Check if we have outputted all the data requested
@@ -149,6 +149,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
             }
         } else {
             header('Content-length: ' . $size);
+            stop_output_buffering();
             readfile($real_filename);
         }
     }
