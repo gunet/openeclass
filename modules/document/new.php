@@ -60,13 +60,13 @@ if ($can_upload) {
         </div>
       </div>";
         $htmlTitle = ' value="' . q($info->title) . '"';
-        $fileContent = file_get_contents($basedir . $info->path);
+        $fileContent = Session::has('file_content') ? Session::get('file_content') : file_get_contents($basedir . $info->path);
         $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
     } else {
         $pageName = $langCreateDoc;
         $htmlFileName = '';
         $htmlTitle = '';
-        $fileContent = '';
+        $fileContent = Session::has('file_content') ? Session::get('file_content') : '';
         $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
     }
     if(isset($_GET['ebook_id'])){
@@ -118,10 +118,11 @@ if ($can_upload) {
       $ebook_section_select
       $htmlFileName
 
-      <div class='form-group'>
+      <div class='form-group".(Session::getError('file_title') ? " has-error" : "")."'>
         <label for='file_title' class='col-sm-2 control-label'>$langTitle:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='file_title' name='file_title'$htmlTitle>
+          <span class='help-block'>".Session::getError('file_title')."</span>    
         </div>
       </div>
       <div class='form-group'>

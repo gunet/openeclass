@@ -320,91 +320,108 @@ if ($can_upload) {
             Session::Messages($langDownloadEnd, 'alert-success');
             redirect_to_current_dir();
         } elseif (isset($_POST['file_content'])) {
-            $q = false;
-            if (isset($_POST['editPath'])) {
-                $fileInfo = Database::get()->querySingle("SELECT * FROM document
-                    WHERE $group_sql AND path = ?s", $_POST['editPath']);
-                if ($fileInfo->editable) {
-                    $file_path = $fileInfo->path;
-                    $q = Database::get()->query("UPDATE document
-                            SET date_modified = NOW(), title = ?s
-                            WHERE $group_sql AND path = ?s",
-                            $_POST['file_title'], $_POST['editPath']);
-                    $id = $fileInfo->id;
-                    $fileName = $fileInfo->filename;
+            $v = new Valitron\Validator($_POST);
+            $v->rule('required', array('file_title'));
+            $v->labels(array(
+                'file_title' => "$langTheField $langTitle"
+            ));
+            if($v->validate()) {                      
+                $q = false;
+                if (isset($_POST['editPath'])) {              
+                    $fileInfo = Database::get()->querySingle("SELECT * FROM document
+                        WHERE $group_sql AND path = ?s", $_POST['editPath']);
+                    if ($fileInfo->editable) {
+                        $file_path = $fileInfo->path;
+                        $q = Database::get()->query("UPDATE document
+                                SET date_modified = NOW(), title = ?s
+                                WHERE $group_sql AND path = ?s",
+                                $_POST['file_title'], $_POST['editPath']);
+                        $id = $fileInfo->id;
+                        $fileName = $fileInfo->filename;
+                    }
+                } else {
+                    $safe_fileName = safe_filename(get_file_extension($fileName));
+                    $file_path = $uploadPath . '/' . $safe_fileName;
+                    $file_date = date("Y\-m\-d G\:i\:s");
+                    $file_format = get_file_extension($fileName);
+                    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+                    $q = Database::get()->query("INSERT INTO document SET
+                                course_id = ?d,
+                                subsystem = ?d,
+                                subsystem_id = ?d,
+                                path = ?s,
+                                extra_path = '',
+                                filename = ?s,
+                                visible = 1,
+                                comment = '',
+                                category = 0,
+                                title = ?s,
+                                creator = ?s,
+                                date = ?s,
+                                date_modified = ?s,
+                                subject = '',
+                                description = '',
+                                author = ?s,
+                                format = ?s,
+                                language = ?s,
+                                copyrighted = 0,
+                                editable = 1",
+                                $course_id, $subsystem, $subsystem_id, $file_path,
+                                $fileName, $_POST['file_title'], $file_creator,
+                                $file_date, $file_date, $file_creator, $file_format,
+                                $language);
+                }
+                if ($q) {
+                    if (!isset($id)) {
+                        $id = $q->lastInsertID;
+                        $log_action = LOG_INSERT;
+                    } else {
+                        $log_action = LOG_MODIFY;
+                    }
+                    $ebookSectionTitle = $_POST['file_title'] ? $_POST['file_title'] : $fileName;
+                    if (isset($_GET['ebook_id']) && isset($_POST['section_id'])){
+                        if(isset($_POST['editPath'])){
+                            Database::get()->query("UPDATE ebook_subsection
+                                SET section_id = ?s, title = ?s WHERE file_id = ?d", 
+                                $_POST['section_id'], $ebookSectionTitle, $id);                        
+                        } else {
+                            $subsectionOrder = Database::get()->querySingle("SELECT COALESCE(MAX(public_id), 0) + 1
+                                FROM ebook_subsection WHERE section_id = ?d", $_POST['section_id']);
+                            Database::get()->query("INSERT INTO ebook_subsection
+                                SET section_id = ?s, file_id = ?d, title = ?s, public_id = ?s", 
+                                $_POST['section_id'], $id, $ebookSectionTitle, $subsectionOrder);
+                        }                  
+                    }
+                    Log::record($course_id, MODULE_ID_DOCS, $log_action,
+                            array('id' => $id,
+                                  'filepath' => $file_path,
+                                  'filename' => $fileName,
+                                  'title' => $_POST['file_title']));
+                    $title = $_POST['file_title']? $_POST['file_title']: $fileName;
+                    file_put_contents($basedir . $file_path,
+                        '<!DOCTYPE html><head><meta charset="utf-8">' .
+                        '<title>' . q($title) . '</title><body>' .
+                        purify($_POST['file_content']) .
+                        "</body></html>\n");
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+                    Session::Messages($langDownloadEnd, 'alert-success');
+                    if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
+                        $redirect_url = "modules/ebook/edit.php?course=$course_code&id=$ebook_id";
+                    } else {
+                        redirect_to_current_dir();
+                    }
                 }
             } else {
-                $safe_fileName = safe_filename(get_file_extension($fileName));
-                $file_path = $uploadPath . '/' . $safe_fileName;
-                $file_date = date("Y\-m\-d G\:i\:s");
-                $file_format = get_file_extension($fileName);
-                $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-                $q = Database::get()->query("INSERT INTO document SET
-                            course_id = ?d,
-                            subsystem = ?d,
-                            subsystem_id = ?d,
-                            path = ?s,
-                            extra_path = '',
-                            filename = ?s,
-                            visible = 1,
-                            comment = '',
-                            category = 0,
-                            title = ?s,
-                            creator = ?s,
-                            date = ?s,
-                            date_modified = ?s,
-                            subject = '',
-                            description = '',
-                            author = ?s,
-                            format = ?s,
-                            language = ?s,
-                            copyrighted = 0,
-                            editable = 1",
-                            $course_id, $subsystem, $subsystem_id, $file_path,
-                            $fileName, $_POST['file_title'], $file_creator,
-                            $file_date, $file_date, $file_creator, $file_format,
-                            $language);
-            }
-            if ($q) {
-                if (!isset($id)) {
-                    $id = $q->lastInsertID;
-                    $log_action = LOG_INSERT;
-                } else {
-                    $log_action = LOG_MODIFY;
-                }
-                $ebookSectionTitle = $_POST['file_title'] ? $_POST['file_title'] : $fileName;
+                Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
                 if (isset($_GET['ebook_id']) && isset($_POST['section_id'])){
-                    if(isset($_POST['editPath'])){
-                        Database::get()->query("UPDATE ebook_subsection
-                            SET section_id = ?s, title = ?s WHERE file_id = ?d", 
-                            $_POST['section_id'], $ebookSectionTitle, $id);                        
-                    } else {
-                        $subsectionOrder = Database::get()->querySingle("SELECT COALESCE(MAX(public_id), 0) + 1
-                            FROM ebook_subsection WHERE section_id = ?d", $_POST['section_id']);
-                        Database::get()->query("INSERT INTO ebook_subsection
-                            SET section_id = ?s, file_id = ?d, title = ?s, public_id = ?s", 
-                            $_POST['section_id'], $id, $ebookSectionTitle, $subsectionOrder);
-                    }                  
-                }
-                Log::record($course_id, MODULE_ID_DOCS, $log_action,
-                        array('id' => $id,
-                              'filepath' => $file_path,
-                              'filename' => $fileName,
-                              'title' => $_POST['file_title']));
-                $title = $_POST['file_title']? $_POST['file_title']: $fileName;
-                file_put_contents($basedir . $file_path,
-                    '<!DOCTYPE html><head><meta charset="utf-8">' .
-                    '<title>' . q($title) . '</title><body>' .
-                    purify($_POST['file_content']) .
-                    "</body></html>\n");
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
-                Session::Messages($langDownloadEnd, 'alert-success');
-                if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
-                    redirect_to_home_page("modules/ebook/edit.php?course=$course_code&id=$ebook_id");
+                    $append_to_url = isset($_GET['from']) and $_GET['from'] == 'ebookEdit' ? "&from=ebookEdit" : "";
+                    $redirect_url = "modules/ebook/new.php?course=$course_code&ebook_id=$ebook_id$append_to_url";                    
                 } else {
-                    redirect_to_current_dir();
-                }
+                    $append_to_url = isset($_POST['editPath']) ? "&editPath=$_POST[editPath]" : "&uploadPath=$curDirPath";
+                    $redirect_url = "modules/document/new.php?course=$course_code$append_to_url";
+                }               
             }
+            redirect_to_home_page($redirect_url);
         }
     }
 
