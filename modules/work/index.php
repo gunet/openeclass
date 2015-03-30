@@ -1736,19 +1736,19 @@ function show_assignment($id, $display_graph_results = false) {
                 $gradelink = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 if (trim($row->grade_comments)) {
                     $label = $m['gradecomments'] . ':';
-                    $icon = 'edit.png';
+                    $icon = '<i class="fa fa-edit" style="color:"></i>';
                     $comments = "<div class='smaller'>" . standard_text_escape($row->grade_comments) . "</div>";
                 } else {
                     $label = $m['addgradecomments'];
-                    $icon = 'add.png';
+                    $icon = '<i class="fa fa-plus-circle" style="color:#5cb85c;"></i>';
                     $comments = '';
                 }
                 if ($row->grade_comments || $row->grade != '') {
                     $comments .= "<div class='smaller'><i>($m[grade_comment_date]: " .
                             nice_format($row->grade_submission_date) . ")</i></div>";
                 }
-                $tool_content .= "<div style='padding-top: .5em;'><a href='$gradelink'><b>$label</b></a>
-				  <a href='$gradelink'><img src='$themeimg/$icon'></a>
+                $tool_content .= "<div style='padding-top: .5em;'><b>$label</b>
+				  <a href='$gradelink'>$icon</a>
 				  $comments
                                 </td>
                                 </tr>";
