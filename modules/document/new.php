@@ -59,7 +59,7 @@ if ($can_upload) {
           <p class='form-control-static'>" . q($info->filename) . "</p>
         </div>
       </div>";
-        $htmlTitle = ' value="' . q($info->title) . '"';
+        $htmlTitle = ' value="' . (Session::has('file_title') ? Session::get('file_title') : q($info->title)) . '"';
         $fileContent = Session::has('file_content') ? Session::get('file_content') : getHtmlBody($basedir . $info->path);
         $htmlPath = "<input type='hidden' name='editPath' value='$editPath'>";
     } else {
