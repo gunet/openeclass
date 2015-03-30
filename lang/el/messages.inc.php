@@ -3606,6 +3606,7 @@ $m['already_group_sub'] = 'Έχει ήδη υποβληθεί η εργασία 
 $m['group_or_user'] = 'Τύπος εργασίας';
 $m['group_work'] = 'Ομαδική εργασία';
 $m['user_work'] = 'Ατομική εργασία';
+$m['delete_work'] = 'Διαγραφή';
 $m['submitted_by_other_member'] = 'Το αρχείο αυτό υποβλήθηκε από άλλο μέλος της';
 $m['your_group'] = 'ομάδας σας';
 $m['this_is_group_assignment'] = 'Η εργασία αυτή είναι ομαδική.';

@@ -1685,7 +1685,7 @@ function show_assignment($id, $display_graph_results = false) {
             sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');
             sort_link($m['grade'], 'grade');
-            $tool_content .= "</tr>";
+            $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
 
             $i = 1;
             foreach ($result as $row) {
@@ -1710,10 +1710,8 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
                                 <td>${uid_2_name}</td>
                                 <td width='85'>" . q($stud_am) . "</td>
-                                <td width='180'>$filelink
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
-                                 <img src='$themeimg/delete.png' title='$m[WorkDelete]' />
-                                </a>                                
+                                <td width='180'>
+                                        $filelink             
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
@@ -1721,9 +1719,14 @@ function show_assignment($id, $display_graph_results = false) {
                                         <input class='form-control' type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'>
                                     </div>
                                 </td>
+                                <td class='text-center'>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
+                                     <i class='fa fa-times-circle' style='color:#ad2121; font-size:20px;'></i>
+                                    </a>                                
+                                </td>
                                 </tr>
                                 <tr>
-                                <td colspan='5'>
+                                <td colspan='6'>
                                 <div>$subContentGroup</div>";
                 if (trim($row->comments != '')) {
                     $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
