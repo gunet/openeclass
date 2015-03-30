@@ -473,6 +473,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $new_course_id), 'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
         } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
             create_modules($new_course_id);
+            foreach (get_tabledata_from_parsed('accueil', $backupData, $restoreHelper) as $accueil) {
+                Database::get()->query('UPDATE course_module SET visible = ?d WHERE course_id = ?d AND module_id = ?d',
+                    $accueil['visible'], $new_course_id, $accueil['id']);
+            }
         }
         restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $new_course_id), 'delete' => array('id', 'preview')), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'group_properties', array('set' => array('course_id' => $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
