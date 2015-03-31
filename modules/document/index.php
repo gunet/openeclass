@@ -1183,25 +1183,23 @@ if ($doc_count == 0) {
         $cols = 3;
     }
 
+    // Parent directory button
+    if ($curDirName) {
+        // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+        $parentlink = $base_url . 'openDir=' . $cmdParentDir;
+        $tool_content.=" <div class='pull-right'>
+                            <a href='$parentlink' type='button' class='btn btn-success'><i class='fa fa-level-up'></i> $langUp</a>
+                        </div>";
+    }
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
     $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-save', $langDownloadDir, "{$base_url}download=$download_path") : '';
-    $tool_content .= "
-        <div class='pull-left'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-            "&nbsp;$download_dir</div>
-        ";
+    $tool_content .= "<div><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
+            "&nbsp;$download_dir</div>";
     $dirComment = Database::get()->querySingle("SELECT comment FROM document WHERE $group_sql AND path = ?s", $curDirPath)->comment;
     if ($dirComment) {
         $tool_content .= '<div>' . q($dirComment) . '</div>';
     }
 
-    /* ** go to parent directory ** */
-    if ($curDirName) { // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
-        $parentlink = $base_url . 'openDir=' . $cmdParentDir;
-        $tool_content.=" <div class='pull-right'>
-                            <a href='$parentlink' type='button' class='btn btn-success'><i class='fa fa-level-up'></i> $langUp</a>
-                        </div>";
-
-    }
     $tool_content .= "</div>
             </div>
         </div>
