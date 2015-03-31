@@ -299,8 +299,8 @@ if (count($exercise_question_ids)>0){
                             // if the word entered is the same as the one defined by the professor
                             $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
                             $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);   
-
-                            if ($canonical_match == $canonical_choice) {
+                            $right_answers = preg_split('/\s*,\s*/', $canonical_match);
+                            if (in_array($canonical_choice, $right_answers)) {
                                 // gives the related weighting to the student
                                 $questionScore+=$answerWeighting[$j-1];
                                 // increments total score
@@ -316,7 +316,7 @@ if (count($exercise_question_ids)>0){
                                 $answer.='&nbsp;&nbsp;&nbsp;';
                             }
                             // adds the correct word, followed by ] to close the blank
-                            $answer.=' / <font color="green"><b>' . q(substr($temp, 0, $pos)) . '</b></font>]';
+                            $answer.=' / <font color="green"><b>' . q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) . '</b></font>]';
                             $j++;
                             $temp = substr($temp, $pos + 1);
                         }
