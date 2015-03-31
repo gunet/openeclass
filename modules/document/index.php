@@ -872,6 +872,7 @@ if ($can_upload) {
     // Add comment form
     if (isset($_GET['comment'])) {
         $comment = $_GET['comment'];
+        $curDirPath = dirname($comment);
         $oldComment = '';
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
@@ -1027,16 +1028,17 @@ if ($can_upload) {
 // Common for teachers and students
 
 // Set current directory
-$curDirPath = isset($_GET['openDir'])? $_GET['openDir']: '';
-if ($curDirPath == '/' or $curDirPath == '\\') {
-    $curDirPath = '';
+if (!isset($curDirPath)) {
+    $curDirPath = isset($_GET['openDir'])? $_GET['openDir']: '';
+    if ($curDirPath == '/' or $curDirPath == '\\') {
+        $curDirPath = '';
+    }
 }
 $curDirName = my_basename($curDirPath);
 $parentDir = dirname($curDirPath);
 if ($parentDir == '\\') {
     $parentDir = '/';
 }
-
 if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
     $tool_content .= $langInvalidDir;
     draw($tool_content, $menuTypeID);
@@ -1183,19 +1185,23 @@ if ($doc_count == 0) {
         $cols = 3;
     }
 
-    // Parent directory button
+    // If inside a subdirectory ($curDirName is not empty)
     if ($curDirName) {
-        // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+        // Display parent directory link
         $parentlink = $base_url . 'openDir=' . $cmdParentDir;
         $tool_content.=" <div class='pull-right'>
                             <a href='$parentlink' type='button' class='btn btn-success'><i class='fa fa-level-up'></i> $langUp</a>
                         </div>";
+        // Get current directory comment
+        $dirComment = Database::get()->querySingle("SELECT comment FROM document WHERE $group_sql AND path = ?s", $curDirPath)->comment;
+    } else {
+        // In root directory - don't display parent directory link or comments
+        $dirComment = '';
     }
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
     $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-save', $langDownloadDir, "{$base_url}download=$download_path") : '';
     $tool_content .= "<div><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
             "&nbsp;$download_dir</div>";
-    $dirComment = Database::get()->querySingle("SELECT comment FROM document WHERE $group_sql AND path = ?s", $curDirPath)->comment;
     if ($dirComment) {
         $tool_content .= '<div>' . q($dirComment) . '</div>';
     }
