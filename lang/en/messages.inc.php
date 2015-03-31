@@ -3746,6 +3746,7 @@ $lang_personal_blog_rating = "Activate rating on personal blog posts";
 $lang_personal_blog_sharing = "Activate sharing on personal blog posts";
 $langPersoBlogDisabled = "Personal Blogs are disabled from the platform 's administrators.";
 $langMyBlog = "My Blog";
+$langUserBlog = "Personal Blog";
 $langCommentsDelConfirm = "Are you sure you want to delete the comment?";
 $langCommentsDelSuccess = "The comment was successfully deleted";
 $langCommentsDelFail = "Comment could not be deleted";
