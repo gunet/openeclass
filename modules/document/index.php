@@ -1189,9 +1189,12 @@ if ($doc_count == 0) {
         <div class='pull-left'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
             "&nbsp;$download_dir</div>
         ";
+    $dirComment = Database::get()->querySingle("SELECT comment FROM document WHERE $group_sql AND path = ?s", $curDirPath)->comment;
+    if ($dirComment) {
+        $tool_content .= '<div>' . q($dirComment) . '</div>';
+    }
 
-
-    /*     * * go to parent directory ** */
+    /* ** go to parent directory ** */
     if ($curDirName) { // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
         $parentlink = $base_url . 'openDir=' . $cmdParentDir;
         $tool_content.=" <div class='pull-right'>
