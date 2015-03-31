@@ -9720,3 +9720,8 @@ a.list-group-item.delete:hover {
 .mce-toggle i.mce-ico.mce-i-none {
   width: 22px;
 }
+
+/* line 250, ../SASS/bootstrap-custom.scss */
+.checkbox_cell {
+  width: 5px;
+}
