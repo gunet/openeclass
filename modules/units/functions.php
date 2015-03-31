@@ -697,9 +697,9 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
  */
 function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
     
-    global $course_id, $course_code, $is_editor, $urlServer;
+    global $course_id, $course_code, $is_editor, $urlServer, $langInactiveModule;
     
-    $module_visible = visible_module(MODULE_ID_WIKI); // checks module visibility
+    $module_visible = visible_module(MODULE_ID_QUESTIONNAIRE); // checks module visibility
 
     if (!$module_visible and ! $is_editor) {
         return '';
@@ -720,17 +720,17 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         }
     } else {
         $link = "<a href='${urlServer}modules/questionnaire/pollparticipate.php?course=$course_code&amp;pid=$poll_id&amp;UseCase=1'>";
-        $polllink = $link . "$title</a>";
+        $polllink = $link . $title . '</a>';
         if (!$module_visible) {
             $polllink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "" . icon('fa-question-circle') . "</a>";
+        $imagelink = $link . icon('fa-question-circle') . '</a>';
     }
     
     if (!empty($comments)) {
-        $comment_box = "<br />$comments";
+        $comment_box = "<br>$comments";
     } else {
-        $comment_box = "";
+        $comment_box = '';
     }
     return "
         <tr$class_vis>
@@ -1042,7 +1042,7 @@ function show_ebook_section($title, $comments, $resource_id, $section_id, $visib
 function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, $visibility) {
     global $course_id;
     
-    $data = Database::get()->queryArray("SELECT ebook.id AS ebook_id, ebook_section.id AS sid
+    $data = Database::get()->querySingle("SELECT ebook.id AS ebook_id, ebook_section.id AS sid
                 FROM ebook, ebook_section, ebook_subsection
                 WHERE ebook.course_id = ?d AND
                     ebook_section.ebook_id = ebook.id AND

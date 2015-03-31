@@ -81,7 +81,7 @@ function list_docs() {
         $common_docs = false;
         $visible_sql = '';
     }
-    $result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+    $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                                 WHERE $group_sql AND $visible_sql
                                       path LIKE ?s AND
                                       path NOT LIKE ?s

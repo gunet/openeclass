@@ -911,11 +911,13 @@ function mkpath($path) {
     return true;
 }
 
-// check if we can display activationlink (e.g. module_id is one of our modules)
+// Check if we can display activation link (e.g. module_id is one of our modules)
+// Link is displayed only on main page of each module
 function display_activation_link($module_id) {
     global $modules;
 
-    if (!defined('STATIC_MODULE') and $module_id && array_key_exists($module_id, $modules)) {
+    $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;
