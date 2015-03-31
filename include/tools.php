@@ -287,6 +287,12 @@ function loggedInMenu() {
         array_push($sideMenuImg, "gradebook");
     }
 
+    if (get_config('personal_blog')) {
+        array_push($sideMenuText, $GLOBALS['langMyBlog']);
+        array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
+        array_push($sideMenuImg, "blog");
+    }
+    
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
     array_push($sideMenuImg, "fa-user");
