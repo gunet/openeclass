@@ -69,7 +69,7 @@ function list_exercises() {
             $tool_content .= "</tr>";            
         }
         $tool_content .= "</table>
-                    <div align='right'>";
+                    <div class='text-right'>";
         $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_exercise' value='$langAddModulesButton'></div>
                 </form>";
     }

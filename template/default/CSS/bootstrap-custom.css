@@ -9724,4 +9724,5 @@ a.list-group-item.delete:hover {
 /* line 250, ../SASS/bootstrap-custom.scss */
 .checkbox_cell {
   width: 5px;
+  text-align: center;
 }
