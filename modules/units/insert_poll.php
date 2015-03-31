@@ -61,8 +61,8 @@ function list_polls() {
             $tool_content .= "<td class='text-center'><input type='checkbox' name='poll[]' value='$entry[id]'></td>";
             $tool_content .= "</tr>";            
         }
-        $tool_content .= "</table></form>";
+        $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_poll' value='$langAddModulesButton'></div>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_poll' value='$langAddModulesButton'></div></form>";
     }    
 }

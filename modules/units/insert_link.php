@@ -94,8 +94,8 @@ function list_links() {
                 "</tr>";
             }
         }
-        $tool_content .= "</table></form>";
+        $tool_content .= "</table>";
         $tool_content .= "<div class='text-right'>" .
-                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton' /></div>";
+                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton' /></div></form>";
     }
 }
