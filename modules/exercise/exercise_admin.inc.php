@@ -45,7 +45,12 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($exerciseDescription);
         $objExercise->updateType($exerciseType);
-        $startDateTime_obj = isset($exerciseStartDate) && !empty($exerciseStartDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate)->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
+        if (isset($exerciseStartDate) and !empty($exerciseStartDate)) {
+            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $exerciseStartDate);
+        } else {
+            $startDateTime_obj = new DateTime('NOW');
+        }
+        $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
         $objExercise->updateStartDate($startDateTime_obj);
         $endDateTime_obj = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);

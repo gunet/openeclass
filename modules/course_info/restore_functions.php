@@ -412,6 +412,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 floatval($course_data['dropbox_quota']), 
                 intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
             );
+            // Set keywords to '' if NULL
+            if (!isset($upd_course_args[0])) {
+                $upd_course_args[0] = '';
+            }
             // handle course weekly if exists
             if (isset($course_data['view_type']) && isset($course_data['start_date']) && isset($course_data['finish_date'])) {
                 $upd_course_sql .= " , view_type = ?s, start_date = ?t, finish_date = ?t ";
@@ -469,6 +473,10 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             restore_table($restoreThis, 'course_module', array('set' => array('course_id' => $new_course_id), 'delete' => array('id')), $url_prefix_map, $backupData, $restoreHelper);
         } else if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
             create_modules($new_course_id);
+            foreach (get_tabledata_from_parsed('accueil', $backupData, $restoreHelper) as $accueil) {
+                Database::get()->query('UPDATE course_module SET visible = ?d WHERE course_id = ?d AND module_id = ?d',
+                    $accueil['visible'], $new_course_id, $accueil['id']);
+            }
         }
         restore_table($restoreThis, 'announcement', array('set' => array('course_id' => $new_course_id), 'delete' => array('id', 'preview')), $url_prefix_map, $backupData, $restoreHelper);
         restore_table($restoreThis, 'group_properties', array('set' => array('course_id' => $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
@@ -485,8 +493,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $forum_topic_map = restore_table($restoreThis, 'forum_topic', array('return_mapping' => 'id',
             'map' => array('forum_id' => $forum_map, 'poster_id' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
         $forum_topic_map[0] = 0;
-        $forum_post_map = restore_table($restoreThis, 'forum_post', array('return_mapping' => 'id',
-            'map' => array('topic_id' => $forum_topic_map, 'poster_id' => $userid_map)), $url_prefix_map, $backupData, $restoreHelper);
+        $forum_post_options = array('return_mapping' => 'id',
+                                    'map' => array('topic_id' => $forum_topic_map,
+                                                   'poster_id' => $userid_map));
+        if ($restoreHelper->getBackupVersion() === RestoreHelper::STYLE_2X) {
+            $forum_post_options['set'] = array('post_text' => '');
+        }
+        $forum_post_map = restore_table($restoreThis, 'forum_post', $forum_post_options, $url_prefix_map, $backupData, $restoreHelper);
         $forum_post_map[0] = 0;
         restore_table($restoreThis, 'forum_notify', array('set' => array('course_id' => $new_course_id),
             'map' => array('user_id' => $userid_map, 'cat_id' => $forum_category_map, 'forum_id' => $forum_map, 'topic_id' => $forum_topic_map),
