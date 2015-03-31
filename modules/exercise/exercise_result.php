@@ -305,7 +305,7 @@ if (count($exercise_question_ids)>0){
                                 $questionScore+=$answerWeighting[$j-1];
                                 // increments total score
                                 // adds the word in green at the end of the string
-                                $answer.=$choice[$j];
+                                $answer.='<b>'.$choice[$j].'</b>';
                             }
                             // else if the word entered is not the same as the one defined by the professor
                             elseif (!empty($choice[$j])) {
