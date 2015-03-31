@@ -577,14 +577,13 @@ if (!class_exists('Question')):
                     foreach ($correct_answers as $value){
                         $q_correct_answers_sql .= ($j!=1) ? ' OR ' : '';
                         $q_correct_answers_sql .= "(a.answer = $sql_binary_comparison'$value' AND a.answer_id = $i)";
-                        $q_incorrect_answers_sql .= ($j!=1) ? ' OR ' : '';                     
+                        $q_incorrect_answers_sql .= ($j!=1) ? ' AND ' : '';                     
                         $q_incorrect_answers_sql .= "(a.answer != $sql_binary_comparison'$value' AND a.answer_id = $i)";
                         $j++;
-                    }
+                    }                    
                     $i++;
                }
                $q_correct_answers_cnt = $i-1;
-                            
             }
             //FIND CORRECT ANSWER ATTEMPTS
             if ($type == FREE_TEXT) {
@@ -596,7 +595,7 @@ if (!class_exists('Question')):
                 // One Query to Rule Them All (except free text questions)
                 // This query groups attempts and counts correct and incorrect answers
                 // then counts attempts where (correct answers == total anticipated correct attempts)
-                // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)
+                // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)               
                 if ($q_correct_answers_cnt > 0) {
                     $correct_answer_attempts = Database::get()->querySingle("
                         SELECT COUNT(*) AS counter FROM(
