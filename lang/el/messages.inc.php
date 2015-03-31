@@ -1565,7 +1565,7 @@ $langQuestionVeryDifficult = "Πολύ δύσκολη";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
-$langUseTagForBlank = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά";
+$langUseTagForBlank = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά και το κόμμα αν θέλετε περισσότερες από μία σωστές απαντήσεις για το ίδιο κενό (π.χ. [Αθήνα,Παρίσι])";
 $langQuestionWeighting = "Βάρος";
 $langTypeTextBelow = "Πληκτρολογήστε το κείμενό σας παρακάτω";
 $langDefaultTextInBlanks = "Πρωτεύουσα της Ελλάδας είναι η [Αθήνα].";
