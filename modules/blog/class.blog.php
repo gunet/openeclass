@@ -162,12 +162,14 @@ Class Blog {
         	$newer = TRUE;
         $out = '';
         if ((isset($newer) && $newer) || (isset($older) && $older)) {
-            $out = "<table id='navcontainer' width='100%'><tr>";
-            if(isset($newer) && $newer)
-            	$out .= "<td class='left'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts."</a>&nbsp;</td>";
-            if(isset($older) && $older)
-            	$out .= "<td class='right'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>".$langBlogOlderPosts."</a>&nbsp;</td>";
-            $out .= "</tr></table>";
+            $out = "<ul class='pager'>";
+            if(isset($older) && $older) {
+            	$out .= "<li class='previous'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
+            }
+            if(isset($newer) && $newer) {
+                $out .= "<li class='next'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts." &rarr;</a></li>";
+            }
+            $out .= "</ul>";
         }
         
         return $out;
