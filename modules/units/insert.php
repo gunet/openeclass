@@ -148,50 +148,52 @@ draw($tool_content, 2, null, $head_content);
 function insert_docs($id) {
     global $webDir, $course_id, $course_code, $group_sql, $subsystem, $subsystem_id, $basedir;
 
-    if ($id == -1) { // Insert common documents into main documents
-        $target_dir = '';
-        if (isset($_POST['dir']) and !empty($_POST['dir'])) {
-            // Make sure specified target dir exists in course
-            $target_dir = Database::get()->querySingle("SELECT path FROM document
-                                        WHERE course_id = ?d AND
-                                              subsystem = " . MAIN . " AND
-                                              path = ?s", $course_id, $_POST['dir']->path);
-        }
-
-        foreach ($_POST['document'] as $file_id) {
-            $file = Database::get()->querySingle("SELECT * FROM document
-                                        WHERE course_id = -1
-                                        AND subsystem = " . COMMON . "
-                                        AND id = ?d", $file_id);
-            if ($file) {
-                $subsystem = MAIN;
-                $subsystem_id = 'NULL';
-                $group_sql = "course_id = $course_id AND subsystem = " . MAIN;
-                $basedir = $webDir . '/courses/' . $course_code . '/document';
-                insert_common_docs($file, $target_dir);
+    if(isset($_POST['document'])){
+        if ($id == -1) { // Insert common documents into main documents
+            $target_dir = '';
+            if (isset($_POST['dir']) and !empty($_POST['dir'])) {
+                // Make sure specified target dir exists in course
+                $target_dir = Database::get()->querySingle("SELECT path FROM document
+                                            WHERE course_id = ?d AND
+                                                  subsystem = " . MAIN . " AND
+                                                  path = ?s", $course_id, $_POST['dir']->path);
             }
-        }
-        header('Location: ../document/index.php?course=' . $course_code .
-                '&openDir=' . $target_dir);
-        exit;
-    }
 
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['document'] as $file_id) {
-        $order++;
-        $file = Database::get()->querySingle("SELECT * FROM document
-                                    WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
-        $title = (empty($file->title)) ? $file->filename : $file->title;
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='doc', 
-                                        title = ?s, comments = ?s, 
-                                        visible = ?d, `order` = ?d, 
-                                        `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
-                                    $id, $title, $file->comment, $file->visible, $order, $file->id);
-        $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+            foreach ($_POST['document'] as $file_id) {
+                $file = Database::get()->querySingle("SELECT * FROM document
+                                            WHERE course_id = -1
+                                            AND subsystem = " . COMMON . "
+                                            AND id = ?d", $file_id);
+                if ($file) {
+                    $subsystem = MAIN;
+                    $subsystem_id = 'NULL';
+                    $group_sql = "course_id = $course_id AND subsystem = " . MAIN;
+                    $basedir = $webDir . '/courses/' . $course_code . '/document';
+                    insert_common_docs($file, $target_dir);
+                }
+            }
+            header('Location: ../document/index.php?course=' . $course_code .
+                    '&openDir=' . $target_dir);
+            exit;
+        }
+
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['document'] as $file_id) {
+            $order++;
+            $file = Database::get()->querySingle("SELECT * FROM document
+                                        WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
+            $title = (empty($file->title)) ? $file->filename : $file->title;
+            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='doc', 
+                                            title = ?s, comments = ?s, 
+                                            visible = ?d, `order` = ?d, 
+                                            `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                                        $id, $title, $file->comment, $file->visible, $order, $file->id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
@@ -206,16 +208,17 @@ function insert_docs($id) {
  */
 function insert_text($id) {
     global $comments, $course_code, $course_id;
-
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    $order++;
-    $comments = purify($comments);
-    $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
-                        comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $comments, $order);
-    $uresId = $q->lastInsertID;
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
+    if(!empty($comments)){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        $order++;
+        $comments = purify($comments);
+        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='text', title='',
+                            comments = ?s, visible=1, `order` = ?d, `date`= " . DBHelper::timeAfter() . ", res_id = 0", $id, $comments, $order);
+        $uresId = $q->lastInsertID;
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+    }
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
@@ -228,20 +231,21 @@ function insert_text($id) {
  */
 function insert_lp($id) {
     global $course_code, $course_id;
-
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['lp'] as $lp_id) {
-        $order++;
-        $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath
-			WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='lp', title = ?s, comments = ?s,
-                                        visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                                $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
-        $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+    if(isset($_POST['lp'])) {
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['lp'] as $lp_id) {
+            $order++;
+            $lp = Database::get()->querySingle("SELECT * FROM lp_learnPath
+                            WHERE course_id = ?d AND learnPath_id = ?d", $course_id, $lp_id);
+            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='lp', title = ?s, comments = ?s,
+                                            visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
+                                    $id, $lp->name, $lp->comment, $lp->visible, $order, $lp->learnPath_id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
@@ -295,31 +299,32 @@ function insert_video($id) {
  */
 function insert_work($id) {
     global $course_code, $course_id;
-
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['work'] as $work_id) {
-        $order++;
-        $work = Database::get()->querySingle("SELECT * FROM assignment
-			WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
-        if ($work->active == '0') {
-            $visibility = 0;
-        } else {
-            $visibility = 1;
+    if(isset($_POST['work'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['work'] as $work_id) {
+            $order++;
+            $work = Database::get()->querySingle("SELECT * FROM assignment
+                            WHERE course_id = ?d AND id = ?d", $course_id, $work_id);
+            if ($work->active == '0') {
+                $visibility = 0;
+            } else {
+                $visibility = 1;
+            }
+            $q = Database::get()->query("INSERT INTO unit_resources SET
+                                    unit_id = ?d,
+                                    type = 'work',
+                                    title = ?s,
+                                    comments = ?s,
+                                    visible = ?d,
+                                    `order` = ?d,
+                                    `date` = " . DBHelper::timeAfter() . ",
+                                    res_id = ?d", $id, $work->title, $work->description, $visibility, $order, $work->id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
         }
-        $q = Database::get()->query("INSERT INTO unit_resources SET
-                                unit_id = ?d,
-                                type = 'work',
-                                title = ?s,
-                                comments = ?s,
-                                visible = ?d,
-                                `order` = ?d,
-                                `date` = " . DBHelper::timeAfter() . ",
-                                res_id = ?d", $id, $work->title, $work->description, $visibility, $order, $work->id);
-        $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
@@ -333,25 +338,26 @@ function insert_work($id) {
  */
 function insert_exercise($id) {
     global $course_code, $course_id;
-
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['exercise'] as $exercise_id) {
-        $order++;
-        $exercise = Database::get()->querySingle("SELECT * FROM exercise
-			WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
-        if ($exercise->active == '0') {
-            $visibility = 0;
-        } else {
-            $visibility = 1;
+    if(isset($_POST['exercise'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['exercise'] as $exercise_id) {
+            $order++;
+            $exercise = Database::get()->querySingle("SELECT * FROM exercise
+                            WHERE course_id = ?d AND id = ?d", $course_id, $exercise_id);
+            if ($exercise->active == '0') {
+                $visibility = 0;
+            } else {
+                $visibility = 1;
+            }
+            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='exercise', title = ?s,
+                                comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
+                        $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
         }
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='exercise', title = ?s,
-                            comments = ?s, visible = ?d, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                    $id, $exercise->title, $exercise->description, $visibility, $order, $exercise->id);
-        $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
@@ -365,33 +371,34 @@ function insert_exercise($id) {
  */
 function insert_forum($id) {
     global $course_code, $course_id;
-
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['forum'] as $for_id) {
-        $order++;
-        $ids = explode(':', $for_id);
-        if (count($ids) == 2) {
-            list($forum_id, $topic_id) = $ids;
-            $topic = Database::get()->querySingle("SELECT * FROM forum_topic
-                                        WHERE id = ?d
-                                        AND forum_id = ?d", $topic_id, $forum_id);
-            $q = Database::get()->query("INSERT INTO unit_resources
-                                            SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                                        $id, $topic->title, $order, $topic->id);
-        } else {
-            $forum_id = $ids[0];
-            $forum = Database::get()->querySingle("SELECT * FROM forum
-                                        WHERE id = ?d
-                                        AND course_id = ?d", $forum_id, $course_id);
-            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'forum', title = ?s,
-                                            comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                                    $id, $forum->name, $forum->desc, $order, $forum->id);
+    if(isset($_POST['forum'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['forum'] as $for_id) {
+            $order++;
+            $ids = explode(':', $for_id);
+            if (count($ids) == 2) {
+                list($forum_id, $topic_id) = $ids;
+                $topic = Database::get()->querySingle("SELECT * FROM forum_topic
+                                            WHERE id = ?d
+                                            AND forum_id = ?d", $topic_id, $forum_id);
+                $q = Database::get()->query("INSERT INTO unit_resources
+                                                SET unit_id = ?d, type = 'topic', title = ?s, visible = 1, `order`= ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
+                                            $id, $topic->title, $order, $topic->id);
+            } else {
+                $forum_id = $ids[0];
+                $forum = Database::get()->querySingle("SELECT * FROM forum
+                                            WHERE id = ?d
+                                            AND course_id = ?d", $forum_id, $course_id);
+                $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'forum', title = ?s,
+                                                comments = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
+                                        $id, $forum->name, $forum->desc, $order, $forum->id);
+            }
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
         }
-        $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
@@ -405,19 +412,20 @@ function insert_forum($id) {
  */
 function insert_poll($id) {
     global $course_id, $course_code;
-    
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['poll'] as $poll_id) {
-        $order++;
-        $poll = Database::get()->querySingle("SELECT * from poll where course_id = ?d", $course_id);
-        $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', 
-                                        title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
-                                    $id, $poll->name, $order, $poll->pid);
-        $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+    if(isset($_POST['poll'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['poll'] as $poll_id) {
+            $order++;
+            $poll = Database::get()->querySingle("SELECT * from poll where course_id = ?d", $course_id);
+            $q = Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type = 'poll', 
+                                            title = ?s, visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d",
+                                        $id, $poll->name, $order, $poll->pid);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;       
 }
@@ -430,20 +438,21 @@ function insert_poll($id) {
  */
 function insert_wiki($id) {
     global $course_code, $course_id;
-
-    $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
-    foreach ($_POST['wiki'] as $wiki_id) {
-        $order++;
-        $wiki = Database::get()->querySingle("SELECT * FROM wiki_properties
-			WHERE course_id = ?d AND id = ?d", $course_id, $wiki_id);
-        $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='wiki', title = ?s, comments = ?s,
-                                        visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
-                                    $id, $wiki->title, $wiki->description, $order, $wiki->id);
-        $uresId = $q->lastInsertID;
-        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+    if(isset($_POST['wiki'])){
+        $order = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM unit_resources WHERE unit_id = ?d", $id)->maxorder;
+        foreach ($_POST['wiki'] as $wiki_id) {
+            $order++;
+            $wiki = Database::get()->querySingle("SELECT * FROM wiki_properties
+                            WHERE course_id = ?d AND id = ?d", $course_id, $wiki_id);
+            $q =  Database::get()->query("INSERT INTO unit_resources SET unit_id = ?d, type='wiki', title = ?s, comments = ?s,
+                                            visible = 1, `order` = ?d, `date` = " . DBHelper::timeAfter() . ", res_id = ?d", 
+                                        $id, $wiki->title, $wiki->description, $order, $wiki->id);
+            $uresId = $q->lastInsertID;
+            Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $uresId);
+        }
+        Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
+        CourseXMLElement::refreshCourse($course_id, $course_code);
     }
-    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
-    CourseXMLElement::refreshCourse($course_id, $course_code);
     header('Location: index.php?course=' . $course_code . '&id=' . $id);
     exit;
 }
