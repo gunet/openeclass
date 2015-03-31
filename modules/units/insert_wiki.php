@@ -66,9 +66,8 @@ function list_wikis() {
         }
         $tool_content .= "
                     </table>
-                </form>
                 <div class='text-right'>
                     <input class='btn btn-primary' type='submit' name='submit_wiki' value='$langAddModulesButton'>
-                </div>";
+                </div></form>";
     }
 }

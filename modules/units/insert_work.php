@@ -47,11 +47,10 @@ function list_assignments() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
-                "<tr>" .
+                "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langTitle</th>" .
-                "<th width='110'>$langVisible</th>" .
                 "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
-                "<th width='80'>$langChoice</th>" .
+                "<th class='checkbox_cell text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($result as $row) {
             
@@ -63,18 +62,13 @@ function list_assignments() {
             $description = empty($row->description) ? '' :
                     "<div>$row->description</div>";            
             $tool_content .= "<tr>" .
-                    "<td>&laquo; " . q($row->title) . " $description</td>" .
-                    "<td class='text-center'>$visible</td>" .
+                    "<td> " . q($row->title) . "<br><br><div class='text-muted'>$description</div></td>" .
                     "<td class='text-center'>".nice_format($row->submission_date, true)."</td>" .
                     "<td class='text-center'><input name='work[]' value='$row->id' type='checkbox' /></td>" .
                     "</tr>";            
         }
-        $tool_content .= "<tr>" .
-                "<th colspan='4'><div align='right'>" .
-                "<input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' />" .
-                "</div></th>" .
-                "</tr>" .
+        $tool_content .= 
                 "</table>" .
-                "</form>";
+                "<div align='right'><input class='btn btn-primary' type='submit' name='submit_work' value='$langAddModulesButton' /></div></th></form>";
     }
 }
