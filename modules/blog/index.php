@@ -574,7 +574,7 @@ if ($action == "showBlog") {
             }
             if ($comments_enabled) {
                 $comm = new Commenting('blogpost', $post->getId());
-                $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+                $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }            
