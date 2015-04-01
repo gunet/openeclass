@@ -277,6 +277,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('MY_MESSAGES', $GLOBALS['langNewMyMessagesSide']);
         $t->set_var('LANG_ANNOUNCEMENTS', $GLOBALS['langMyAnnouncements']);
         $t->set_var('ANNOUNCEMENTS_LINK', $urlServer . "modules/announcements/myannouncements.php");
+        if (get_config('personal_blog')) {
+            $t->set_var('LANG_MYBLOG', $GLOBALS['langMyBlog']);
+            $t->set_var('MYBLOG_LINK', $urlServer . "modules/blog/index.php");
+        } else {
+            $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
+        }
         $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
         $t->set_var('langSave', $GLOBALS['langSave']);
         $t->set_var('langAllNotes', $GLOBALS['langAllNotes']);
