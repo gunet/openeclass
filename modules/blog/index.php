@@ -461,7 +461,13 @@ if ($action == "showPost") {
         }
         if ($ratings_enabled) {
             $rating = new Rating('up_down', 'blogpost', $post->getId());
-            $rating_content = $rating->put($is_editor, $uid, $course_id);
+            if ($blog_type == 'course_blog') {
+                $rating_content = $rating->put($is_editor, $uid, $course_id);
+            } elseif ($blog_type == 'perso_blog') {
+                //in this case send user_id as third argument instead of course_id which is 0
+                //since we only need this info for identifying user's blog
+                $rating_content = $rating->put(NULL, $uid, $user_id);
+            }
         }        
         $tool_content .= "<div class='panel panel-action-btn-default'>
                             <div class='panel-heading'>
@@ -558,7 +564,13 @@ if ($action == "showBlog") {
             }            
             if ($ratings_enabled) {
                 $rating = new Rating('up_down', 'blogpost', $post->getId());
-                $rating_content = $rating->put($is_editor, $uid, $course_id);
+                if ($blog_type == 'course_blog') {
+                    $rating_content = $rating->put($is_editor, $uid, $course_id);
+                } elseif ($blog_type == 'course_blog') {
+                    //in this case send user_id as third argument instead of course_id which is 0
+                    //since we only need this info for identifying user's blog
+                    $rating_content = $rating->put(NULL, $uid, $user_id);
+                }
             }
             if ($comments_enabled) {
                 $comm = new Commenting('blogpost', $post->getId());

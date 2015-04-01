@@ -373,10 +373,17 @@ Class Rating {
             
             $onclick_up = $onclick_down = "";
             
-            //disable icons when user hasn't permission to vote
-            if (Rating::permRate($isEditor, $uid, $courseId, $this->rtype)) {
-                $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate.php')\"";
-                $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate.php')\"";
+            if (!is_null($isEditor)) {
+                //disable icons when user hasn't permission to vote
+                if (Rating::permRate($isEditor, $uid, $courseId, $this->rtype)) {
+                    $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate.php')\"";
+                    $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate.php')\"";
+                }
+            } else { //ratings in personal blog
+                if (get_config('personal_blog_rating')) {
+                    $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate_perso_blog.php')\"";
+                    $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate_perso_blog.php')\"";
+                }
             }
             
             $has_rated = $this->userHasRated($uid);
