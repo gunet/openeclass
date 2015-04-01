@@ -216,7 +216,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } else {
-        $pageName = $gradebook->title ? $gradebook->title : $langGradebookNoTitle2;
+        $pageName = ($gradebook && $gradebook->title) ? $gradebook->title : $langGradebookNoTitle2;
         $tool_content .= action_bar(
             array(
                 array('title' => $langConfig,
