@@ -33,7 +33,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     if ($is_admin) {
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                'url' => "profile/profile.php",
+                'url' => "profile/display_profile.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
         $tool_content .= "<div class='alert alert-danger'>$langAdminNo</div>";
