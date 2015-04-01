@@ -2596,9 +2596,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // delete secure_url (aka $urlSecure) from table `config`
         Database::get()->query("DELETE FROM config WHERE `key` = 'secure_url'");
         // fix calendar entries (if any)
-        Database::get()->query("UPDATE agenda SET source_event = id WHERE source_event_id IS NULL");
-        Database::get()->query("UPDATE admin_calendar SET source_event = id WHERE source_event_id IS NULL");
-        Database::get()->query("UPDATE personal_calendar SET source_event = id WHERE source_event_id IS NULL");
+        Database::get()->query("UPDATE agenda SET source_event_id = id WHERE source_event_id IS NULL");
+        Database::get()->query("UPDATE admin_calendar SET source_event_id = id WHERE source_event_id IS NULL");
+        Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE source_event_id IS NULL");
         
     }
     // update eclass version
