@@ -103,7 +103,7 @@ $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
 //config setting allowing students to create posts and edit/delete own posts
 $stud_allow_create = setting_get(SETTING_BLOG_STUDENT_POST, $course_id);
 
-$posts_per_page = 1;
+$posts_per_page = 10;
 $num_popular = 5;//number of popular blog posts to show in sidebar
 $num_chars_teaser_break = 500;//chars before teaser break
 
