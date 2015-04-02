@@ -505,7 +505,11 @@ if ($action == "showPost") {
         if ($comments_enabled) {
             commenting_add_js(); //add js files needed for comments
             $comm = new Commenting('blogpost', $post->getId());
-            $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
+            if ($blog_type == 'course_blog') {
+                $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
+            } elseif ($blog_type == 'perso_blog') {
+                $tool_content .= $comm->put(NULL, $is_blog_editor, $uid, true);
+            }
         }
         
     } else {
