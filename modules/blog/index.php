@@ -371,7 +371,7 @@ if ($action == "showPost") {
         $sharing_content = '';
         $rating_content = '';
         if ($sharing_allowed) {
-            $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
+            $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&action=showPost&pId=".$post->getId(), $post->getTitle()) : '';
         }
         if ($ratings_enabled) {
             $rating = new Rating('up_down', 'blogpost', $post->getId());
@@ -458,7 +458,7 @@ if ($action == "showBlog") {
             $sharing_content = '';
             $rating_content = '';
             if ($sharing_allowed) {
-                $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&amp;action=showPost&amp;pId=".$post->getId(), $post->getTitle()) : '';
+                $sharing_content = ($sharing_enabled) ? print_sharing_links($urlServer."modules/blog/index.php?course=$course_code&action=showPost&pId=".$post->getId(), $post->getTitle()) : '';
             }            
             if ($ratings_enabled) {
                 $rating = new Rating('up_down', 'blogpost', $post->getId());
