@@ -78,7 +78,8 @@ if ($blog_type == 'course_blog') {
     $comments_enabled = get_config('personal_blog_commenting');
     //check if rating is enabled for personal blogs
     $ratings_enabled = get_config('personal_blog_rating');
-    //check if sharing is enabled for personal blogs
+    //check if sharing is platform widely allowed and enabled for personal blogs
+    $sharing_allowed = get_config('enable_social_sharing_links');
     $sharing_enabled = get_config('personal_blog_sharing');
     
     $url_params = "user_id=$user_id";
