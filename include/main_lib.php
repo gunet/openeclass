@@ -2739,6 +2739,38 @@ function crypto_rand_secure($min = null, $max = null) {
     return $min + $rnd;
 }
 
+
+/**
+ * Return a javascript code snippet to protect the page from being framed.
+ *
+ * return string
+ */
+function framebusting_code() {
+    return '
+    <!-- Framebusting code follows -->
+    <style id="antiClickjack">body{display:none !important;}</style>
+    <script type="text/javascript">
+        if (self === top) {
+            var antiClickjack = document.getElementById("antiClickjack");
+            antiClickjack.parentNode.removeChild(antiClickjack);
+        } else {
+            top.location = self.location;
+        }
+    </script>
+    ';
+}
+
+
+/**
+ * Sets the X-Frame-Options header to disallow framing the web pages of 
+ * platform. The SAMEORIGIN option is used in order to allow framing from 
+ * other web pages of the platform in case this functionality is needed.
+ */
+function add_framebusting_headers() {
+    header('X-Frame-Options: SAMEORIGIN');
+}
+
+ 
 /**
  * @brief returns HTTP 403 status code 
  * @param type $path
