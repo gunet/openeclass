@@ -566,7 +566,7 @@ if ($action == "showBlog") {
                 $rating = new Rating('up_down', 'blogpost', $post->getId());
                 if ($blog_type == 'course_blog') {
                     $rating_content = $rating->put($is_editor, $uid, $course_id);
-                } elseif ($blog_type == 'course_blog') {
+                } elseif ($blog_type == 'perso_blog') {
                     //in this case send user_id as third argument instead of course_id which is 0
                     //since we only need this info for identifying user's blog
                     $rating_content = $rating->put(NULL, $uid, $user_id);
