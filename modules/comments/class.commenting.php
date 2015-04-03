@@ -98,7 +98,7 @@ Class Commenting {
             $comments = $this->getCommentsDB();
             foreach ($comments as $comment) {
                 if (is_null($courseCode)) { //for the case of personal blog posts comments
-                    if (get_config('personal_blog_commenting') && isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
+                    if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
                         $post_actions = '<div class="pull-right">';
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
                         $post_actions .= icon('fa-edit', $langModify).'</a> ';
@@ -140,7 +140,7 @@ Class Commenting {
         $out .= "</div>";
         
         if (is_null($courseCode)) { //for the case of personal blog posts comments
-            if (get_config('personal_blog_commenting') && isset($_SESSION['uid'])) {
+            if (isset($_SESSION['uid'])) {
                 $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
                 $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
                 $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';

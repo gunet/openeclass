@@ -72,7 +72,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid'])) {
+            if (get_config('personal_blog_commenting') && isset($_SESSION['uid'])) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }
@@ -102,7 +102,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid'])) {
+            if (get_config('personal_blog_commenting') && isset($_SESSION['uid'])) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }
@@ -129,7 +129,7 @@ if (get_config('personal_blog_commenting')) {
         $comment = new Comment();
         if ($comment->loadFromDB(intval($_POST['cid']))) {
             $permEdit = false;
-            if (isset($_SESSION['uid'])) {
+            if (get_config('personal_blog_commenting') && isset($_SESSION['uid'])) {
                 if ($comment->getAuthor() == $uid) {
                     $permEdit = true;
                 }
