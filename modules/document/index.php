@@ -220,17 +220,19 @@ if ($can_upload) {
         $components = explode('/', $extra_path);
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
+        if (isset($_POST['uploadPath'])) {
+            $uploadPath = $_POST['uploadPath'];
+        } elseif (isset($_POST['editPath'])) {
+            $uploadPath = dirname($_POST['editPath']);
+        } else {
+            $uploadPath = '';
+        }
         $diskUsed = dir_total_space($basedir);
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
             Session::Messages($langNoSpace, 'alert-danger');
             redirect_to_current_dir();
         } else {
-            if (isset($_POST['file_name'])) {
-                $fileName = $_POST['file_name'];
-                if (!preg_match('/\.html?$/i', $fileName)) {
-                    $fileName .= '.html';
-                }
-            }
+            $fileName = newPageFileName($uploadPath, 'page_', '.html');
             $uploaded = true;
         }
     }
@@ -318,77 +320,110 @@ if ($can_upload) {
             Session::Messages($langDownloadEnd, 'alert-success');
             redirect_to_current_dir();
         } elseif (isset($_POST['file_content'])) {
-            $q = false;
-            if (isset($_POST['editPath'])) {
-                $fileInfo = Database::get()->querySingle("SELECT * FROM document
-                    WHERE $group_sql AND path = ?s", $_POST['editPath']);
-                if ($fileInfo->editable) {
-                    $file_path = $fileInfo->path;
-                    $q = Database::get()->query("UPDATE document
-                            SET date_modified = NOW(), title = ?s
-                            WHERE $group_sql AND path = ?s",
-                            $_POST['file_title'], $_POST['editPath']);
-                    $id = $fileInfo->id;
-                    $fileName = $fileInfo->filename;
+            $v = new Valitron\Validator($_POST);
+            $v->rule('required', array('file_title'));
+            $v->labels(array(
+                'file_title' => "$langTheField $langTitle"
+            ));
+            if($v->validate()) {                      
+                $q = false;
+                if (isset($_POST['editPath'])) {              
+                    $fileInfo = Database::get()->querySingle("SELECT * FROM document
+                        WHERE $group_sql AND path = ?s", $_POST['editPath']);
+                    if ($fileInfo->editable) {
+                        $file_path = $fileInfo->path;
+                        $q = Database::get()->query("UPDATE document
+                                SET date_modified = NOW(), title = ?s
+                                WHERE $group_sql AND path = ?s",
+                                $_POST['file_title'], $_POST['editPath']);
+                        $id = $fileInfo->id;
+                        $fileName = $fileInfo->filename;
+                    }
+                } else {
+                    $safe_fileName = safe_filename(get_file_extension($fileName));
+                    $file_path = $uploadPath . '/' . $safe_fileName;
+                    $file_date = date("Y\-m\-d G\:i\:s");
+                    $file_format = get_file_extension($fileName);
+                    $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
+                    $q = Database::get()->query("INSERT INTO document SET
+                                course_id = ?d,
+                                subsystem = ?d,
+                                subsystem_id = ?d,
+                                path = ?s,
+                                extra_path = '',
+                                filename = ?s,
+                                visible = 1,
+                                comment = '',
+                                category = 0,
+                                title = ?s,
+                                creator = ?s,
+                                date = ?s,
+                                date_modified = ?s,
+                                subject = '',
+                                description = '',
+                                author = ?s,
+                                format = ?s,
+                                language = ?s,
+                                copyrighted = 0,
+                                editable = 1",
+                                $course_id, $subsystem, $subsystem_id, $file_path,
+                                $fileName, $_POST['file_title'], $file_creator,
+                                $file_date, $file_date, $file_creator, $file_format,
+                                $language);
+                }
+                if ($q) {
+                    if (!isset($id)) {
+                        $id = $q->lastInsertID;
+                        $log_action = LOG_INSERT;
+                    } else {
+                        $log_action = LOG_MODIFY;
+                    }
+                    $ebookSectionTitle = $_POST['file_title'] ? $_POST['file_title'] : $fileName;
+                    if (isset($_GET['ebook_id']) && isset($_POST['section_id'])){
+                        if(isset($_POST['editPath'])){
+                            Database::get()->query("UPDATE ebook_subsection
+                                SET section_id = ?s, title = ?s WHERE file_id = ?d", 
+                                $_POST['section_id'], $ebookSectionTitle, $id);                        
+                        } else {
+                            $subsectionOrder = Database::get()->querySingle("SELECT COALESCE(MAX(public_id), 0) + 1
+                                FROM ebook_subsection WHERE section_id = ?d", $_POST['section_id']);
+                            Database::get()->query("INSERT INTO ebook_subsection
+                                SET section_id = ?s, file_id = ?d, title = ?s, public_id = ?s", 
+                                $_POST['section_id'], $id, $ebookSectionTitle, $subsectionOrder);
+                        }                  
+                    }
+                    Log::record($course_id, MODULE_ID_DOCS, $log_action,
+                            array('id' => $id,
+                                  'filepath' => $file_path,
+                                  'filename' => $fileName,
+                                  'title' => $_POST['file_title']));
+                    $title = $_POST['file_title']? $_POST['file_title']: $fileName;
+                    file_put_contents($basedir . $file_path,
+                        "<!DOCTYPE html>\n" .
+                        "<head>\n" .
+                        "  <meta charset='utf-8'>\n" .
+                        '  <title>' . q($title) . "</title>\n</head>\n<body>\n" .
+                        purify($_POST['file_content']) .
+                        "\n</body>\n</html>\n");
+                    Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
+                    Session::Messages($langDownloadEnd, 'alert-success');
+                    if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
+                        $redirect_url = "modules/ebook/edit.php?course=$course_code&id=$ebook_id";
+                    } else {
+                        redirect_to_current_dir();
+                    }
                 }
             } else {
-                $safe_fileName = safe_filename(get_file_extension($fileName));
-                $file_path = $uploadPath . '/' . $safe_fileName;
-                $file_date = date("Y\-m\-d G\:i\:s");
-                $file_format = get_file_extension($fileName);
-                $file_creator = "$_SESSION[givenname] $_SESSION[surname]";
-                $q = Database::get()->query("INSERT INTO document SET
-                            course_id = ?d,
-                            subsystem = ?d,
-                            subsystem_id = ?d,
-                            path = ?s,
-                            extra_path = '',
-                            filename = ?s,
-                            visible = 1,
-                            comment = '',
-                            category = 0,
-                            title = ?s,
-                            creator = ?s,
-                            date = ?s,
-                            date_modified = ?s,
-                            subject = '',
-                            description = '',
-                            author = ?s,
-                            format = ?s,
-                            language = ?s,
-                            copyrighted = 0,
-                            editable = 1",
-                            $course_id, $subsystem, $subsystem_id, $file_path,
-                            $fileName, $_POST['file_title'], $file_creator,
-                            $file_date, $file_date, $file_creator, $file_format,
-                            $language);
-            }
-            if ($q) {
-                if (!isset($id)) {
-                    $id = $q->lastInsertID;
-                    $log_action = LOG_INSERT;
+                Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+                if (isset($_GET['ebook_id']) && isset($_POST['section_id'])){
+                    $append_to_url = isset($_GET['from']) and $_GET['from'] == 'ebookEdit' ? "&from=ebookEdit" : "";
+                    $redirect_url = "modules/ebook/new.php?course=$course_code&ebook_id=$ebook_id$append_to_url";                    
                 } else {
-                    $log_action = LOG_MODIFY;
-                }
-                Log::record($course_id, MODULE_ID_DOCS, $log_action,
-                        array('id' => $id,
-                              'filepath' => $file_path,
-                              'filename' => $fileName,
-                              'title' => $_POST['file_title']));
-                $title = $_POST['file_title']? $_POST['file_title']: $fileName;
-                file_put_contents($basedir . $file_path,
-                    '<!DOCTYPE html><head><meta charset="utf-8">' .
-                    '<title>' . q($title) . '</title><body>' .
-                    purify($_POST['file_content']) .
-                    "</body></html>\n");
-                Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
-                Session::Messages($langDownloadEnd, 'alert-success');
-                if(isset($_GET['from']) && $_GET['from'] == 'ebookEdit') {
-                    redirect_to_home_page("modules/ebook/edit.php?course=$course_code&id=$ebook_id");
-                } else {
-                    redirect_to_current_dir();
-                }
+                    $append_to_url = isset($_POST['editPath']) ? "&editPath=$_POST[editPath]" : "&uploadPath=$curDirPath";
+                    $redirect_url = "modules/document/new.php?course=$course_code$append_to_url";
+                }               
             }
+            redirect_to_home_page($redirect_url);
         }
     }
 
@@ -837,6 +872,7 @@ if ($can_upload) {
     // Add comment form
     if (isset($_GET['comment'])) {
         $comment = $_GET['comment'];
+        $curDirPath = dirname($comment);
         $oldComment = '';
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
@@ -992,16 +1028,17 @@ if ($can_upload) {
 // Common for teachers and students
 
 // Set current directory
-$curDirPath = isset($_GET['openDir'])? $_GET['openDir']: '';
-if ($curDirPath == '/' or $curDirPath == '\\') {
-    $curDirPath = '';
+if (!isset($curDirPath)) {
+    $curDirPath = isset($_GET['openDir'])? $_GET['openDir']: '';
+    if ($curDirPath == '/' or $curDirPath == '\\') {
+        $curDirPath = '';
+    }
 }
 $curDirName = my_basename($curDirPath);
 $parentDir = dirname($curDirPath);
 if ($parentDir == '\\') {
     $parentDir = '/';
 }
-
 if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
     $tool_content .= $langInvalidDir;
     draw($tool_content, $menuTypeID);
@@ -1104,6 +1141,10 @@ if ($can_upload) {
                   'icon' => 'fa-plus-circle',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success'),
+            array('title' => $langCreateDoc,
+                  'url' => "new.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
+                  'icon' => 'fa-file-o',
+                  'level' => 'primary'),                          
             array('title' => $langCreateDir,
                   'url' => "{$base_url}createDir=$cmdCurDirPath",
                   'icon' => 'fa-folder',
@@ -1114,9 +1155,6 @@ if ($can_upload) {
             array('title' => $langExternalFile,
                   'url' => "upload.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath&amp;ext=true",
                   'icon' => 'fa-external-link'),
-            array('title' => $langCreateDoc,
-                  'url' => "new.php?course=$course_code&amp;{$groupset}uploadPath=$curDirPath",
-                  'icon' => 'fa-file-o'),
             array('title' => $langCommonDocs,
                   'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
                   'icon' => 'fa-plus-circle',
@@ -1147,22 +1185,27 @@ if ($doc_count == 0) {
         $cols = 3;
     }
 
-    $download_path = empty($curDirPath) ? '/' : $curDirPath;
-    $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-save', $langDownloadDir, "{$base_url}download=$download_path") : '';
-    $tool_content .= "
-        <div class='pull-left'><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-            "&nbsp;$download_dir</div>
-        ";
-
-
-    /*     * * go to parent directory ** */
-    if ($curDirName) { // if the $curDirName is empty, we're in the root point and we can't go to a parent dir
+    // If inside a subdirectory ($curDirName is not empty)
+    if ($curDirName) {
+        // Display parent directory link
         $parentlink = $base_url . 'openDir=' . $cmdParentDir;
         $tool_content.=" <div class='pull-right'>
                             <a href='$parentlink' type='button' class='btn btn-success'><i class='fa fa-level-up'></i> $langUp</a>
                         </div>";
-
+        // Get current directory comment
+        $dirComment = Database::get()->querySingle("SELECT comment FROM document WHERE $group_sql AND path = ?s", $curDirPath)->comment;
+    } else {
+        // In root directory - don't display parent directory link or comments
+        $dirComment = '';
     }
+    $download_path = empty($curDirPath) ? '/' : $curDirPath;
+    $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-save', $langDownloadDir, "{$base_url}download=$download_path") : '';
+    $tool_content .= "<div><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
+            "&nbsp;$download_dir</div>";
+    if ($dirComment) {
+        $tool_content .= '<div>' . q($dirComment) . '</div>';
+    }
+
     $tool_content .= "</div>
             </div>
         </div>
@@ -1467,4 +1510,23 @@ function redirect_to_current_dir() {
         $redirect_base_url = preg_replace('/[&?]$/', '', $redirect_base_url);
     }
     redirect_to_home_page($redirect_base_url, true);
+}
+
+/**
+ * Generate a new filename in path $editPath in current document subsystem
+ * @param string $editPath Current path
+ * @param string $prefix New file prefix
+ * @param string $suffix New file suffix
+ * @global string $group_sql Current subsystem SQL options
+ */
+function newPageFileName($uploadPath, $prefix, $suffix) {
+    global $group_sql;
+
+    $newId = Database::get()->querySingle(
+        "SELECT COALESCE(MAX(CONVERT(REPLACE(REPLACE(filename, ?s, ''), ?s, ''), SIGNED INTEGER)), 0) + 1 AS newPageId
+             FROM document WHERE $group_sql AND
+                  path LIKE ?s AND path NOT LIKE ?s AND filename REGEXP ?s",
+        $prefix, $suffix, $uploadPath . '/%', $uploadPath . '/%/%',
+        preg_quote($prefix) . '[0-9]+' . preg_quote($suffix))->newPageId;
+    return $prefix . $newId . $suffix;
 }

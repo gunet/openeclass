@@ -288,7 +288,7 @@ if ($action == 'rqEdit') {
 switch ($action) {
     case "rqEdit": {
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId", 'name' => $langWiki);
-            $pageName = $langWikiProperties;
+            $pageName = $langWikiCreateWiki;
             $noPHP_SELF = true;
             break;
         }
@@ -359,7 +359,7 @@ switch ($action) {
                               'level' => 'primary-label',
                               'button-class' => 'btn-success',
                               'show' => !isset($_GET['action']))
-                        ));
+                        ),false);
             }
 
             // wiki list not empty
@@ -370,9 +370,9 @@ switch ($action) {
                 // if admin, display title, edit and delete
                 if ($is_editor) {
                     $tool_content .= "
-                                    <tr>
+                                    <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
+                                        <th class='text-center'>$langWikiDescriptionShort</th>
                                         <th class='text-center'>$langPages</th>
                                         <th class='text-center'>" .icon('fa-gears'). "</th>
                                     </tr>";
@@ -380,11 +380,11 @@ switch ($action) {
                 // else display title only
                 else {
                     $tool_content .= "
-                                    <tr>
+                                    <tr class='list-header'>
                                         <th class='text-left'>$langTitle</th>
-                                        <th class='text-center'>$langDescription</th>
+                                        <th class='text-center'>$langWikiDescriptionShort</th>
                                         <th class='text-center'>$langWikiNumberOfPages</th>
-                                        <th class = 'text-center'>$langWikiRecentChanges</th>
+                                        <th class='text-center'>$langWikiLastModification</th>
                                     </tr>";
                 }
                 $k = 0;
@@ -400,14 +400,14 @@ switch ($action) {
                             . $entry->title . '</a>';
                     $tool_content .= '</td>' . "\n";
 
-                    $tool_content .= '<td>';
+                    $tool_content .= '<td class="text-center">';
                     if (!empty($entry->description)) {
-                        $tool_content .= ''
-                                . $entry->description . ''
-                        ;
+                        $tool_content .= $entry->description;
+                    } else {
+                        $tool_content .= "<span class='not_visible'>$langWikiNoDescription</span>";
                     }
                     $tool_content .= "  </td>
-                                        <td>
+                                        <td class='text-center'>
                                             <a href='page.php?course=$course_code&amp;wikiId=$entry->id&amp;action=all'>
                                                 " . $wikiStore->getNumberOfPagesInWiki($entry->id) . "
                                             </a>
@@ -418,25 +418,32 @@ switch ($action) {
                         $tool_content.= "<td class='option-btn-cell'>";
                         $tool_content .=
                                  action_button(array(
+                                array(  'title' => $langModify,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=rqEdit",
+                                        'icon' => 'fa-edit'),
+                                array(  'title' => $langWikiRecentChanges,
+                                        'url' => "page.php?course=$course_code&amp;wikiId=$entry->id &amp;action=recent",
+                                        'icon' => "fa-clock-o"),
+                                array(  'title' => $langWikiExport,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport",
+                                        'icon' => "fa-download"),
                                 array(  'title' => $langDelete,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exDelete",
                                         'icon' => 'fa-times',
                                         'class' => 'delete',
-                                        'confirm' => $langConfirmDelete),
-                                array(  'title' => $langModify,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=rqEdit",
-                                        'icon' => 'fa-edit'),
-                                array(  'title' => $langWikiExport,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=exExport",
-                                        'icon' => "fa-download"),
-                                array(  'title' => $langWikiRecentChanges,
-                                        'url' => "page.php?course=$course_code&amp;wikiId=$entry->id &amp;action=recent",
-                                        'icon' => "fa-clock-o")
+                                        'confirm' => $langWikiDeleteWiki)
                                 ));
                         $tool_content.= "</td>";
-                     
-                       
-			
+                    } else {
+                        $last_modification = current($wikiStore->loadWiki($entry->id)->recentChanges());
+                        if ($last_modification){
+                            $tool_content .= "<td class='text-center'>
+                                            " . q(user_get_data($last_modification->editor_id)->givenname) . "<br/>"
+                                              .nice_format($last_modification->last_mtime,TRUE)."
+                                                </td>";
+                        } else {
+                            $tool_content .= "<td class='text-center not_visible'>$langWikiNoModifications</td>";
+                        }
                     }
 
                     $tool_content .= '</tr>' . "\n";

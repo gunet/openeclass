@@ -237,8 +237,8 @@ if ($paging and $total > $posts_per_page) {
     }
 }
 
-$tool_content .= "<div class='table-responsive'><table width='100%' class='table-default'>
-    <tr>
+$tool_content .= "<div class='table-responsive'><table class='table-default'>
+    <tr class='list-header'>
       <th width='220'>$langUserForum</th>
       <th>$langMessage</th>";
 if ($is_editor || $topic_locked != 1) {

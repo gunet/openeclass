@@ -566,18 +566,24 @@ if (!class_exists('Question')):
                //splits answer string from weighting string
                list($answer, $answerWeighting) = explode('::', $answer_field);
                //getting all matched strings between [ and ] delimeters
-               preg_match_all('#\[(?!/?m)(.*?)\]#', $answer, $match);
+               preg_match_all('#(?<=\[)(?!/?m)[^\]]+#', $answer, $match);
                $i=1;
                $sql_binary_comparison = $type == FILL_IN_BLANKS ? 'BINARY ' : '';
-               foreach ($match[1] as $value){
-                   $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
-                   $q_correct_answers_sql .= "(a.answer = $sql_binary_comparison'$value' AND a.answer_id = $i)";
-                   $q_incorrect_answers_sql .= ($i!=1) ? ' OR ' : '';                     
-                   $q_incorrect_answers_sql .= "(a.answer != $sql_binary_comparison'$value' AND a.answer_id = $i)";                
-                   $i++;
+               foreach ($match[0] as $answers){
+                    $correct_answers = preg_split('/\s*,\s*/', $answers);
+                    $j=1;
+                    $q_correct_answers_sql .= ($i!=1) ? ' OR ' : '';
+                    $q_incorrect_answers_sql .= ($i!=1) ? ' OR ' : '';
+                    foreach ($correct_answers as $value){
+                        $q_correct_answers_sql .= ($j!=1) ? ' OR ' : '';
+                        $q_correct_answers_sql .= "(a.answer = $sql_binary_comparison'$value' AND a.answer_id = $i)";
+                        $q_incorrect_answers_sql .= ($j!=1) ? ' AND ' : '';                     
+                        $q_incorrect_answers_sql .= "(a.answer != $sql_binary_comparison'$value' AND a.answer_id = $i)";
+                        $j++;
+                    }                    
+                    $i++;
                }
-                $q_correct_answers_cnt = $i-1;
-                            
+               $q_correct_answers_cnt = $i-1;
             }
             //FIND CORRECT ANSWER ATTEMPTS
             if ($type == FREE_TEXT) {
@@ -589,7 +595,7 @@ if (!class_exists('Question')):
                 // One Query to Rule Them All (except free text questions)
                 // This query groups attempts and counts correct and incorrect answers
                 // then counts attempts where (correct answers == total anticipated correct attempts)
-                // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)
+                // and (incorrect answers == 0) (this control is necessary mostly in cases of MULTIPLE ANSWER type)               
                 if ($q_correct_answers_cnt > 0) {
                     $correct_answer_attempts = Database::get()->querySingle("
                         SELECT COUNT(*) AS counter FROM(

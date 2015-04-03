@@ -113,7 +113,7 @@ if (isset($_POST['submitCat'])) {
         ),
         array(
             'title' => $langBack,
-            'level' => 'primary',
+            'level' => 'primary-label',
             'icon' => 'fa-reply',
             'url' => "index.php?course=$course_code"
         ),          

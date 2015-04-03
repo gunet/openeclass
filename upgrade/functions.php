@@ -911,7 +911,7 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
                           `active`, `secret_directory`, `group_submissions`, `assign_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
-                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '1' 
+                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '0' 
                                 FROM assignments ORDER BY id") != null);
 
         // ----- assigments DB Table ----- //

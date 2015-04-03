@@ -93,7 +93,6 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
             trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag)) {
         header("HTTP/1.0 304 Not Modified");
     } else {
-        stop_output_buffering();
         if ($delete) {
             register_shutdown_function('unlink', $real_filename);
         }
@@ -101,6 +100,7 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
         $size = filesize($real_filename);
         
         if(isset($_SERVER['HTTP_RANGE'])) {
+            // error_log('http range ON: ' . $_SERVER['HTTP_RANGE']); // debug output in apache error.log
             // Parse the range header to get the byte offset
             $ranges = array_map(
                 'intval', // Parse the parts into integer
@@ -110,45 +110,43 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
                 )
             );
             
-            // If the last range param is empty, it means EOF
-            if (!$ranges[1]) {
-                $ranges[1] = $size - 1;
+            if (!$ranges[1]) { // Second number missing, return from byte $range[0] to end
+                $start = $ranges[0];
+                $end = $size - 1;
+            } else { // Both numbers present, return specific range
+                $start = $ranges[0];
+                $end = $ranges[1];
             }
+            $length = $end - $start + 1;
             
             // Send the appropriate headers
             header('HTTP/1.1 206 Partial Content');
             header('Accept-Ranges: bytes');
-            header('Content-Length: ' . ($ranges[1] - $ranges[0])); // The size of the range
-            
-            // Send the ranges we offered
+            header('Content-Length: ' . $length);
             header(
                 sprintf(
                     'Content-Range: bytes %d-%d/%d', // The header format
-                    $ranges[0], // The start range
-                    $ranges[1], // The end range
+                    $start, // The start range
+                    $end, // The end range
                     $size // Total size of the file
                 )
             );
             
-            $f = fopen($real_filename, 'rb'); // binary file output
-            $chunkSize = 8192;
-            fseek($f, $ranges[0]); // Seek to the requested start range
+            $f = fopen($real_filename, 'rb'); // Open the file in binary mode
+            $chunkSize = 8192; // The size of each chunk to output
+            fseek($f, $start); // Seek to the requested start range
             
-            // Data Output
-            while (true) {
-                // Check if we have outputted all the data requested
-                if (ftell($f) >= $ranges[1]) {
-                    break;
-                }
-
-                echo fread($f, $chunkSize);
-
-                // (Optional) flush
-                //@ob_flush();
-                //flush();
+            stop_output_buffering();
+            while ($length) { // Read in blocks of chunksize so we don't chew up memory on the server
+                $read = ($length > $chunkSize) ? $chunkSize : $length;
+                $length -= $read;
+                echo fread($f, $read);
             }
+            fclose($f);
         } else {
+            // error_log('http range OFF'); // debug output in apache error.log
             header('Content-length: ' . $size);
+            stop_output_buffering();
             readfile($real_filename);
         }
     }

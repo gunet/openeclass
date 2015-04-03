@@ -51,10 +51,10 @@ function list_forums() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id' />" .
                 "<table class='table-default'>" .
-                "<tr>" .
+                "<tr class='list-header'>" .
                 "<th>$langForums</th>" .
                 "<th>$langComments</th>" .
-                "<th width='80'>$langChoice</th>" .
+                "<th class='checkbox_cell text-center'>$langChoice</th>" .
                 "</tr>";
 
         foreach ($foruminfo as $entry) {
@@ -82,12 +82,11 @@ function list_forums() {
                 }
             }
         }
-        $tool_content .= "<tr><th colspan='3'>
-                        <div align='right'>
+        $tool_content .= 
+                "</table>";
+        $tool_content .= "<div class='text-right'>
                             <input class='btn btn-primary' type='submit' name='submit_forum' value='$langAddModulesButton' />
-                        </div></th>";
-        $tool_content .= "</tr>" .
-                "</table>" .
-                "</form>";
+                        </div></form>";
+        
     }
 }

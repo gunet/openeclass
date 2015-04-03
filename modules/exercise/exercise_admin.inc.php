@@ -45,7 +45,12 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($exerciseDescription);
         $objExercise->updateType($exerciseType);
-        $startDateTime_obj = isset($exerciseStartDate) && !empty($exerciseStartDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate)->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
+        if (isset($exerciseStartDate) and !empty($exerciseStartDate)) {
+            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $exerciseStartDate);
+        } else {
+            $startDateTime_obj = new DateTime('NOW');
+        }
+        $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
         $objExercise->updateStartDate($startDateTime_obj);
         $endDateTime_obj = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
@@ -93,7 +98,7 @@ if (isset($_POST['submitExercise'])) {
         $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
     }
     $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : null;
-    $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : null;
+    $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($exerciseEndDate ? 1 : 0);
     $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
     $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
     $exerciseAttemptsAllowed = Session::has('exerciseAttemptsAllowed') ? Session::get('exerciseAttemptsAllowed') : $objExercise->selectAttemptsAllowed();
@@ -232,9 +237,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <div class='col-sm-10'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
-                                <input style='cursor:pointer;' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableEndDate ? ' checked' : '').">
+                                <input style='cursor:pointer;' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
                             </span>                        
-                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableEndDate ? '' : ' disabled').">
+                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableStartDate ? '' : ' disabled').">
                         </div>
                         <span class='help-block'>".(Session::hasError('exerciseStartDate') ? Session::getError('exerciseStartDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseStartHelpBlock")."</span>
                      </div>
@@ -364,14 +369,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
              </fieldset>
              </form>
         </div>";    
-} else {
-    
+} else {  
     $disp_results_message = ($displayResults == 1) ? $langAnswersDisp : $langAnswersNotDisp;
     $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
     $exerciseDescription = standard_text_escape($exerciseDescription);
-    $exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
-
-    $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : $m['no_deadline'];
+    $exerciseStartDate = $exerciseStartDate;
+    $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
     $tool_content .= action_bar(array(

@@ -911,11 +911,13 @@ function mkpath($path) {
     return true;
 }
 
-// check if we can display activationlink (e.g. module_id is one of our modules)
+// Check if we can display activation link (e.g. module_id is one of our modules)
+// Link is displayed only on main page of each module
 function display_activation_link($module_id) {
     global $modules;
 
-    if (!defined('STATIC_MODULE') and $module_id && array_key_exists($module_id, $modules)) {
+    $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;
@@ -2737,6 +2739,38 @@ function crypto_rand_secure($min = null, $max = null) {
     return $min + $rnd;
 }
 
+
+/**
+ * Return a javascript code snippet to protect the page from being framed.
+ *
+ * return string
+ */
+function framebusting_code() {
+    return '
+    <!-- Framebusting code follows -->
+    <style id="antiClickjack">body{display:none !important;}</style>
+    <script type="text/javascript">
+        if (self === top) {
+            var antiClickjack = document.getElementById("antiClickjack");
+            antiClickjack.parentNode.removeChild(antiClickjack);
+        } else {
+            top.location = self.location;
+        }
+    </script>
+    ';
+}
+
+
+/**
+ * Sets the X-Frame-Options header to disallow framing the web pages of 
+ * platform. The SAMEORIGIN option is used in order to allow framing from 
+ * other web pages of the platform in case this functionality is needed.
+ */
+function add_framebusting_headers() {
+    header('X-Frame-Options: SAMEORIGIN');
+}
+
+ 
 /**
  * @brief returns HTTP 403 status code 
  * @param type $path

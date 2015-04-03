@@ -399,8 +399,8 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                 $pageName = q($g->term);
             }        
             if (!empty($g->url)) {
-                $urllink = "<div><span class='term-url'><a href='" . q($g->url) .
-                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></span></div>";
+                $urllink = "<div><span class='term-url'><small><a href='" . q($g->url) .
+                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></small></span></div>";
             } else {
                 $urllink = '';
             }
@@ -412,7 +412,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             if (!empty($g->notes)) {
-                $urllink .= "<br>". standard_text_escape($g->notes);
+                $urllink .= "<br><u>$langComments:</u><div class='text-muted'>". standard_text_escape($g->notes)."</div>";
             }
 
             if (!empty($g->definition)) {

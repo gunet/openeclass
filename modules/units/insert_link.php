@@ -36,7 +36,7 @@
  */
 function list_links() {
     global $id, $course_id, $course_code, $tool_content,
-    $langNoCategory, $langCategorisedLinks, $langComments, $langAddModulesButton,
+    $langNoCategory, $langCategorisedLinks, $langDescr, $langAddModulesButton,
     $langChoice, $langNoLinksExist, $langLinks, $course_code;
     
     $result = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d", $course_id);
@@ -46,21 +46,19 @@ function list_links() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
 				<input type='hidden' name='id' value='$id' />" .
                 "<table class='table-default'>" .
-                "<tr>" .
-                "<th class='text-left'>&nbsp;$langLinks</th>" .
-                "<th class='text-left'>$langComments</th>" .
-                "<th width='80'>$langChoice</th>" .
+                "<tr class='list-header'>" .
+                "<th class='text-left' style='width:'>&nbsp;$langLinks</th>" .
+                "<th class='text-left'>$langDescr</th>" .
+                "<th width='10'>$langChoice</th>" .
                 "</tr>";
         $sql = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d", $course_id);
         if (count($sql) > 0) {
-            $tool_content .= "<tr>" .
-                    "<td colspan='3' class='bold'>&nbsp;$langCategorisedLinks</td>" .
-                    "</tr>";            
+                        
             foreach ($sql as $catrow) {
                 $tool_content .= "<tr>";
-                $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;".
-                        q($catrow->name) . "</td>";
-                $tool_content .= "<td>" . standard_text_escape($catrow->description) . "</td>";
+                $tool_content .= "<td><b>".icon('fa-folder-o')."&nbsp;".
+                        q($catrow->name) . "</b></td>";
+                $tool_content .= "<td >" . standard_text_escape($catrow->description) . "</td>";
                 $tool_content .= "<td class='text-center'><input type='checkbox' name='catlink[]' value='$catrow->id' /></td>";
                 $tool_content .= "</tr>";
                 $sql2 = Database::get()->queryArray("SELECT * FROM link WHERE course_id = ?d AND category = ?d", $course_id, $catrow->id);                
@@ -86,7 +84,7 @@ function list_links() {
         }
         if (count($linkinfo) > 0) {
             $tool_content .= "<tr>" .
-                    "<td colspan='3' class='bold'>$langNoCategory</td>" .
+                    "<td colspan='3'><b>$langNoCategory</b></td>" .
                     "</tr>";
             foreach ($linkinfo as $entry) {
                 $tool_content .= "<tr>" .
@@ -96,9 +94,8 @@ function list_links() {
                 "</tr>";
             }
         }
-        $tool_content .= "<tr>" .
-                "<th colspan='3'><div align='right'>" .
-                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton' /></div></th>" .
-                "</tr></table></form>";
+        $tool_content .= "</table>";
+        $tool_content .= "<div class='text-right'>" .
+                "<input class='btn btn-primary' type='submit' name='submit_link' value='$langAddModulesButton' /></div></form>";
     }
 }

@@ -4,7 +4,7 @@
  * Open eClass 3.0
  * E-learning and Course Management System
  * ========================================================================
- * Copyright 2003-2012  Greek Universities Network - GUnet
+ * Copyright 2003-2015  Greek Universities Network - GUnet
  * A full copyright notice can be read in "/info/copyright.txt".
  * For a full list of contributors, see "credits.txt".
  *
@@ -384,6 +384,9 @@ $langMultiDelUserConfirm = "Η ενέργεια αυτή θα διαγράψει
 $langMultiDelUserData = "Ονόματα Λογαριασμών Χρηστών (usernames)";
 $langMultiDelUserInfo = 'Εισάγετε στην παρακάτω περιοχή μια λίστα με τα ονόματα χρηστών (usernames), μία γραμμή ανα χρήστη που επιθυμείτε να διαγραφεί. Οι γραμμές που αρχίζουν από # αγνοούνται.';
 $langMultiRegUser = 'Μαζική δημιουργία λογαριασμών χρηστών';
+$langMultiRegCourseUser = 'Μαζική εγγραφή χρηστών σε μαθήματα';
+$langCourseCodes = "Κωδικοί μαθημάτων";
+$langAskManyUsersToCourses = "Τα μαθήματα θα πρέπει να υπάρχουν και οι χρήστες θα πρέπει να έχουν ήδη λογαριασμό στην πλατφόρμα για να εγγραφούν σε αυτά. Πληκτρολογήστε τα ονόματα χρήστη (usernames) και τους κωδικούς των μαθημάτων σε ξεχωριστές γραμμές.";
 $langMultiRegUserInfo = "<p>Εισαγάγετε στην παρακάτω περιοχή έναν κατάλογο με
 τα στοιχεία των χρηστών, μία γραμμή ανα χρήστη που επιθυμείτε να δημιουργηθεί.
 </p>
@@ -591,9 +594,9 @@ $langAgendaNoTitle = "Γεγονός χωρίς τίτλο";
 $langListAll = "Λίστα όλων";
 $langListCalendar = "Μορφή ημερολογίου";
 $langAgendaDueDay = "Προθεσμία";
-$langAgendaCourseEvent = "Γεγ. μαθήματος";
-$langAgendaPersonalEvent = "Προσ. γεγονός";
-$langAgendaSystemEvent = "Γεγ. συστήματος";
+$langAgendaCourseEvent = "Γεγονός μαθήματος";
+$langAgendaPersonalEvent = "Προσωπικό γεγονός";
+$langAgendaSystemEvent = "Γεγονός συστήματος";
 
 // week days
 $langDay_of_weekNames = array();
@@ -775,14 +778,13 @@ $langSaveErrorMessage = "Η κουβέντα δεν μπόρεσε να αποθ
 $langNoGuest = "Οι χρήστες-επισκέπτες δεν μπορούν να χρησιμοποιήσουν το υποσύστημα 'Κουβέντα' !";
 $langChatDeleted ="Η διαγραφή της κουβέντας πραγματοποιήθηκε";
 $langNoChatAvailable = "Δεν υπάρχουν διαθέσιμες \"Κουβεντούλες\"";
-$langChatActive = "Ενεργή Κουβεντούλα";
 
 /* * ***************************************************************
  * copyright.php
  * **************************************************************** */
 $langCopyright = "Πληροφορίες Πνευματικών Δικαιωμάτων";
 $langCopyrightNotice = '
-<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2011<br>&nbsp;<br>
+<a href="http://www.openeclass.org" target=_blank>Open eClass</a> © 2003 - 2015<br>&nbsp;<br>
 Η πλατφόρμα ' . $siteName . ' βασίζεται στην ανοικτή πλατφόρμα <a href="http://www.openeclass.org" target=_blank>Open eClass</a>
 η οποία είναι ένα ολοκληρωμένο Σύστημα Διαχείρισης Ηλεκτρονικών Μαθημάτων και αποτελεί
 την πρόταση του Ακαδημαϊκού Διαδικτύου GUnet για την υποστήριξη της Υπηρεσίας
@@ -978,7 +980,10 @@ $langModifyInfo = "Διαχείριση Μαθήματος";
 $langDropBox = "Μηνύματα";
 $langMyDropBox = "Τα μηνύματά μου";
 $langLearnPath = "Γραμμή Μάθησης";
+$langWikiDescriptionShort = "Περιγραφή";
 $langWiki = "Σύστημα Wiki";
+$langWikiNoModifications = "Δεν υπάρχουν αλλαγές";
+$langWikiLastModification = "Τελευταία αλλαγή";
 $langToolManagement = "Εργαλεία";
 $langUsage = "Στατιστικά";
 $langClearStats = "Καθαρισμός στατιστικών";
@@ -1148,11 +1153,11 @@ $langCopyrightedNotFree="Προστατεύονται όλα τα δικαιώμ
 $langCopyrightedUnknown="Άγνωστο";
 $langLicenseUnset = 'Δεν έχει οριστεί';
 $langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
-$langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
-$langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
-$langCreativeCommonsCCBYNC = "CC - Μη Εμπορική Χρήση";
-$langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
-$langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYSA = "CC - Αναφορά - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYND = "CC - Αναφορά - Όχι Παράγωγα Έργα";
+$langCreativeCommonsCCBYNC = "CC - Αναφορά - Μη Εμπορική Χρήση";
+$langCreativeCommonsCCBYNCSA = "CC - Αναφορά - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
+$langCreativeCommonsCCBYNCND = "CC - Αναφορά - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
 $langCommercialUse = "Εμπορική χρήση";
 $langAllowModification = "Επιτρέψτε διασκευή";
 
@@ -1560,7 +1565,7 @@ $langQuestionVeryDifficult = "Πολύ δύσκολη";
 
 // answer_admin.php
 $langWeightingForEachBlank = "Δώστε ένα βάρος σε κάθε κενό";
-$langUseTagForBlank = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά";
+$langUseTagForBlank = "χρησιμοποιήστε αγκύλες [...] για να ορίσετε ένα ή περισσότερα κενά και το κόμμα αν θέλετε να ορίσετε περισσότερες από μία σωστές απαντήσεις για το ίδιο κενό (π.χ. [Ιωάννινα,Γιάννενα])";
 $langQuestionWeighting = "Βάρος";
 $langTypeTextBelow = "Πληκτρολογήστε το κείμενό σας παρακάτω";
 $langDefaultTextInBlanks = "Πρωτεύουσα της Ελλάδας είναι η [Αθήνα].";
@@ -1594,7 +1599,7 @@ $langAllExercises = "Όλες οι ερωτήσεις";
 $langFilter = "Φιλτράρισμα";
 $langGoBackToEx = "Επιστροφή στην άσκηση";
 $langReuse = "Επαναχρησιμοποίηση";
-$langUsed = "Χρησιμοποιύμενης";
+$langUsed = "Χρησιμοποιούμενης";
 $langQuestionReused = "Η ερώτηση προστέθηκε στην άσκηση";
 
 // exercise_result.php
@@ -2770,6 +2775,7 @@ $langAdded = " προστέθηκε στο μάθημά σας.";
 $langAddError = "Σφάλμα! Ο χρήστης δεν προστέθηκε στο μάθημα. Παρακαλούμε προσπαθήστε ξανά ή επικοινωνήστε με το διαχειριστή του συστήματος.";
 $langAddBack = "Επιστροφή στη σελίδα εγγραφής χρηστών";
 $langUsersNotExist = "Οι χρήστες με τα παρακάτω στοιχεία δεν βρέθηκαν:";
+$langCourseNotExist = "Ο κωδικός μαθήματος δεν υπάρχει.";
 $langUsersAlreadyRegistered = "Οι παρακάτω χρήστες είναι ήδη γραμμένοι στο μάθημά σας:";
 $langUsersRegistered = "Οι παρακάτω χρήστες προστέθηκαν στο μάθημά σας:";
 $langNotifyRegUser1 = "Πραγματοποιήθηκε η εγγραφή σας στο μάθημα ";
@@ -2902,7 +2908,7 @@ $langProfAccount = "Λογαριασμός $langOfTeacher";
 $langUserAccountInfo1 = 'Αίτηση Νέου Λογαριασμού';
 $langUserAccountInfo2 = 'Δημιουργία Νέου Λογαριασμού';
 $langUserAccountInfo3 = 'Εναλλακτικά, μπορείτε να επιλέξετε';
-$langUserAccountInfo4 = 'Σύνδεση με Άλλο Λογαριασμό';
+$langUserAccountInfo4 = 'Σύνδεση με άλλο λογαριασμό';
 $langNewAccount = 'Νέος Λογαριασμός';
 $langNewAccountActivation = 'Ενεργοποίηση Λογαριασμού';
 $langNewUserAccountActivation = "Ενεργοποίηση Λογαριασμού $langOfStudent";
@@ -3457,8 +3463,10 @@ $langWikiLockTimeRemaining = "Χρόνος κλειδώματος επεξεργ
 $langWikiLockTimeEnd = "Η Wiki σελίδα έπαψε να είναι κλειδωμένη για επεξεργασία. Μπορείτε να συνεχίσετε να την επεξεργάζεστε, αλλά ενδέχεται να μην μπορέσετε να αποθηκεύσετε άμεσα τις αλλαγές σας";
 $langWikiContentEmpty = "Αυτή η σελίδα είναι κενή, κάνε κλικ στο 'Αλλαγή της σελίδας' για να προσθέσετε περιεχόμενο";
 $langWikiCourseMembers = "Μέλη μαθήματος ";
+$langWikiCreateWiki = "Δημιουργία Wiki";
 $langWikiCreateNewWiki = "Δημιουργήστε ένα νέο Wiki";
 $langWikiCreatePrivilege = "Δημιουργήστε σελίδες ";
+$langWikiNoDescription = "Δεν υπάρχει περιγραφή";
 $langWikiCreationSucceed = "Η δημιουργία του Wiki ήταν επιτυχημένη";
 $langWikiDeleteWiki = "Διαγραφή Wiki";
 $langWikiDeletePage = "Διαγραφή της Σελίδας";
@@ -3595,8 +3603,9 @@ $m['group'] = 'ομάδα';
 $m['already_group_sub'] = 'Έχει ήδη υποβληθεί η εργασία αυτή από κάποιο
 	μέλος της ομάδας σας';
 $m['group_or_user'] = 'Τύπος εργασίας';
-$m['group_work'] = 'Ομαδική';
-$m['user_work'] = 'Ατομική';
+$m['group_work'] = 'Ομαδική εργασία';
+$m['user_work'] = 'Ατομική εργασία';
+$m['delete_work'] = 'Διαγραφή';
 $m['submitted_by_other_member'] = 'Το αρχείο αυτό υποβλήθηκε από άλλο μέλος της';
 $m['your_group'] = 'ομάδας σας';
 $m['this_is_group_assignment'] = 'Η εργασία αυτή είναι ομαδική.';
@@ -3770,10 +3779,10 @@ $langResourceCourseUnitDeleted = "Ο πόρος της θεματικής ενό
 $langResourceUnitModified = "Τα στοιχεία του πόρου της ενότητας τροποποιήθηκαν";
 $langInsertText = "κειμένου";
 $langInsertDoc = "εγγράφου";
-$langInsertExercise = "Άσκησης";
+$langInsertExercise = "άσκησης";
 $langInsertVideo = "πολυμεσικού αρχείου";
 $langInsertForum = "περιοχής συζητήσεων";
-$langInsertWork = 'Εργασίας';
+$langInsertWork = 'εργασίας';
 $langInsertWiki = 'wiki';
 $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
@@ -3863,7 +3872,7 @@ $langEBookTitleModified = "Η αλλαγή του τίτλου του ηλεκτ
 $langEBookSectionsModified = "Οι αλλαγές στις ενότητες του ηλεκτρονικού βιβλίου πραγματοποιήθηκαν";
 $langEBookAdmin = "Διαχείριση ηλεκτρονικού βιβλίου";
 $langFileAdmin = "Διαχείριση αρχείων";
-$langEBookNoSections = "Δεν έχουν οριστεί ενότητες";
+$langEBookNoSections = "Δεν έχουν αντιστοιχιστεί σελίδες σε ενότητες";
 
 /* * ******************************************
   Notes

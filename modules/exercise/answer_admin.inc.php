@@ -497,7 +497,7 @@ if (isset($_GET['modifyAnswers'])) {
                             <table class='table'>
                             <tr>
                               <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
-                              <textarea name='reponse' cols='70' rows='6'>";
+                              <textarea class='form-control' name='reponse' cols='70' rows='6'>";
             if (!isset($submitAnswers) && empty($reponse)) {
                 $tool_content .= $langDefaultTextInBlanks;
             } else {

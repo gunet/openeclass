@@ -441,6 +441,9 @@ function adminMenu() {
     array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
     array_push($sideMenuLink, "../admin/multireguser.php");
     array_push($sideMenuImg, "arrow.png");
+    array_push($sideMenuText, $GLOBALS['langMultiRegCourseUser']);
+    array_push($sideMenuLink, "../admin/multicourseuser.php");
+    array_push($sideMenuImg, "arrow.png");
     array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
     array_push($sideMenuLink, "../admin/multideluser.php");
     array_push($sideMenuImg, "arrow.png");

@@ -97,7 +97,7 @@ if (isset($_POST['submit'])) {
         exit;
     } else {
         Session::Messages($langPassOldWrong);
-        redirect_to_home_page('main/profile/profile.php');
+        redirect_to_home_page('main/profile/password.php');
     }
 }
 

@@ -293,19 +293,22 @@ if ($is_editor) {
                 } elseif ($row->type == 2) {
                     $answerType = $langMultipleSelect;
                 } elseif ($row->type == 3) {
-                    $answerType = $langFillBlanks;
+                    $answerType = "$langFillBlanks ($langFillBlanksStrict)";
                 } elseif ($row->type == 4) {
                     $answerType = $langMatching;
                 } elseif ($row->type == 5) {
                     $answerType = $langTrueFalse;
                 } elseif ($row->type == 6) {
                     $answerType = $langFreeText;
+                } elseif ($row->type == 7) {
+                    $answerType = "$langFillBlanks ($langFillBlanksTolerant)";
                 }
                 $tool_content .= "<tr>";
                 if (!isset($fromExercise)) {
                     $tool_content .= "<td><a ".((count($exercise_ids)>0)? "class='warnLink' data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "")."href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
                 } else {
-                    $tool_content .= "<td><a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br/>" . $answerType . "</td>";
+                    $tool_content .= "<td>
+                                        <a href=\"admin.php?course=$course_code&amp;editQuestion=" . $row->id . "&amp;fromExercise=" . $fromExercise . "\">" . q($row->question) . "</a><br>" . $answerType . "</td>";
                 }
                 $tool_content .= "<td class='option-btn-cell'>".
                     action_button(array(
@@ -326,6 +329,7 @@ if ($is_editor) {
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=" .
                                     (isset($fromExercise) ? $fromExercise : '') .
                                     "&amp;exerciseId=$exerciseId",
+                              'level' => 'primary',
                               'icon' => 'fa-plus-square',
                               'show' => isset($fromExercise))
                      )) .

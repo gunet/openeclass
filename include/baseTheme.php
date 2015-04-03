@@ -345,19 +345,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $module_id = current_module_id();
         if (display_activation_link($module_id)) {
             if (visible_module($module_id)) {
-                $message = $langDeactivate;
                 $mod_activation = "
-
                 <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                    <i class='fa fa-minus-square tiny-icon tiny-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
-                    </a>";
+                  <i class='fa fa-minus-square tiny-icon tiny-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
+                </a>";
             } else {
-                $message = $langActivate;
                 $mod_activation = "
-
                 <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                    <i class='fa fa-check-square tiny-icon tiny-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
-                    </a>";
+                  <i class='fa fa-check-square tiny-icon tiny-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
+                </a>";
             }
         }
     }

@@ -192,7 +192,7 @@ $tool_content .=
 
 $tool_content .="
     <div class='panel panel-default lp-module-show'>
-        <div class='panel-heading'>$langLearningObjectData
+        <div class='panel-heading'><h3 class='panel-title'>$langLearningObjectData</h3>
         </div>
         <div class='panel-body'>
             <div class='row'>
@@ -336,22 +336,22 @@ if ($module->contentType != CTLABEL_) { //
         }
 
         // no sens to display a score in case of a document module
-        if (($resultBrowsed->contentType != CTDOCUMENT_) &&
-                ($resultBrowsed->contentType != CTLINK_) &&
-                ($resultBrowsed->contentType != CTCOURSE_DESCRIPTION_) &&
-                ($resultBrowsed->contentType != CTMEDIA_) &&
-                ($resultBrowsed->contentType != CTMEDIALINK_)
-        ) {
-            $tool_content .= "<div class='row'>
-                            <div class='col-sm-3'>
-                                <strong>$langYourBestScore:</strong>
-                            </div>
-                            <div class='col-sm-9'>
-                                " . disp_progress_bar($raw, 1) . "
-                            </div>
-                        </div>
-                ";
-        }
+//        if (($resultBrowsed->contentType != CTDOCUMENT_) &&
+//                ($resultBrowsed->contentType != CTLINK_) &&
+//                ($resultBrowsed->contentType != CTCOURSE_DESCRIPTION_) &&
+//                ($resultBrowsed->contentType != CTMEDIA_) &&
+//                ($resultBrowsed->contentType != CTMEDIALINK_)
+//        ) {
+//            $tool_content .= "<div class='row'>
+//                            <div class='col-sm-3'>
+//                                <strong>$langYourBestScore:</strong>
+//                            </div>
+//                            <div class='col-sm-9'>
+//                                " . disp_progress_bar($raw, 1) . "
+//                            </div>
+//                        </div>
+//                ";
+//        }
 
         //display lesson status
         // display a human readable string ...

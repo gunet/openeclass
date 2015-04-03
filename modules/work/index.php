@@ -657,14 +657,13 @@ function new_assignment() {
                     </div>
                 </div>
                 <div class='input-append date form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-8 col-xs-offset-2'>        
-                        <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                    <div class='col-xs-8 col-xs-offset-2'>
+                        <div class='input-group'>
+                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                            <span class='add-on input-group-addon'><i class='fa fa-times'></i></span>
+                            <span class='add-on input-group-addon'><i class='fa fa-calendar'></i></span>
+                        </div>
                     </div>
-                    <div class='col-xs-2'>  
-                        <span class='add-on'><i class='fa fa-times'></i></span>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
-                    </div>
-                    <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
                 </div>
                 <div class='form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>             
@@ -953,14 +952,13 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='input-append date form-group ". (!empty($deadline) ? "" : "hide") ."' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-8 col-xs-offset-2'>        
-                        <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$deadline'>
+                    <div class='col-xs-8 col-xs-offset-2'> 
+                        <div class='input-group'>
+                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$deadline'>
+                            <span class='add-on input-group-addon'><i class='fa fa-times'></i></span>
+                            <span class='add-on input-group-addon'><i class='fa fa-calendar'></i></span>
+                        </div>
                     </div>
-                    <div class='col-xs-2'>  
-                        <span class='add-on'><i class='fa fa-times'></i></span>
-                        <span class='add-on'><i class='fa fa-calendar'></i></span>
-                    </div>
-                    <div class='col-xs-10 col-xs-offset-2'>$m[deadline_notif]</div>
                 </div>
                 <div class='form-group ". (!empty($deadline) ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>             
@@ -1676,10 +1674,10 @@ function show_assignment($id, $display_graph_results = false) {
             $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
                         <input type='hidden' name='grades_id' value='$id' />
-                        <p><div class='sub_title1'>$langSubmissions:</div><p>
-                        <p>$num_of_submissions</p>
+                        <br>
                         <div class='table-responsive'>    
                         <table class='table-default'>
+                        <tbody>
                         <tr class='list-header'>
                       <th width='3'>&nbsp;</th>";
             sort_link($m['username'], 'username');
@@ -1687,7 +1685,7 @@ function show_assignment($id, $display_graph_results = false) {
             sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');
             sort_link($m['grade'], 'grade');
-            $tool_content .= "</tr>";
+            $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
 
             $i = 1;
             foreach ($result as $row) {
@@ -1712,10 +1710,8 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
                                 <td>${uid_2_name}</td>
                                 <td width='85'>" . q($stud_am) . "</td>
-                                <td width='180'>$filelink
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
-                                 <img src='$themeimg/delete.png' title='$m[WorkDelete]' />
-                                </a>                                
+                                <td width='180'>
+                                        $filelink             
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
@@ -1723,40 +1719,52 @@ function show_assignment($id, $display_graph_results = false) {
                                         <input class='form-control' type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'>
                                     </div>
                                 </td>
+                                <td class='text-center'>
+                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
+                                     <i class='fa fa-times-circle' style='color:#ad2121; font-size:20px;'></i>
+                                    </a>                                
+                                </td>
                                 </tr>
                                 <tr>
-                                <td colspan='5'>
+                                <td colspan='6'>
                                 <div>$subContentGroup</div>";
                 if (trim($row->comments != '')) {
-                    $tool_content .= "<div style='margin-top: .5em;'><b>$m[comments]:</b> " .
+                    $tool_content .= "<div style='margin-top: .5em;'>" .
                             q($row->comments) . '</div>';
                 }
                 //professor comments
                 $gradelink = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 if (trim($row->grade_comments)) {
                     $label = $m['gradecomments'] . ':';
-                    $icon = 'edit.png';
+                    $icon = '<i class="fa fa-edit" style="color:"></i>';
                     $comments = "<div class='smaller'>" . standard_text_escape($row->grade_comments) . "</div>";
                 } else {
                     $label = $m['addgradecomments'];
-                    $icon = 'add.png';
+                    $icon = '<i class="fa fa-plus-circle" style="color:#5cb85c;"></i>';
                     $comments = '';
                 }
                 if ($row->grade_comments || $row->grade != '') {
                     $comments .= "<div class='smaller'><i>($m[grade_comment_date]: " .
                             nice_format($row->grade_submission_date) . ")</i></div>";
                 }
-                $tool_content .= "<div style='padding-top: .5em;'><a href='$gradelink'><b>$label</b></a>
-				  <a href='$gradelink'><img src='$themeimg/$icon'></a>
+                $tool_content .= "<div style='padding-top: .5em;'><b>$label</b>
+				  <a href='$gradelink'>$icon</a>
 				  $comments
                                 </td>
                                 </tr>";
                 $i++;
             } //END of Foreach
 
-            $tool_content .= "</table>
+            $tool_content .= "
+                    </tbody>
+                    <tfoot>
+                        <tr class='text-center'>
+                            <td colspan='7'><b>$langSubmissions:</b>&nbsp; $num_results</td>
+                        </tr>
+                    </tfoot>
+                    </table>
                             </div>
-                        <p class='smaller right'><img src='$themeimg/email.png' alt='' >
+                        <p class='smaller right'><i class='fa fa-envelope'></i>&nbsp;
                                 $m[email_users]: <input type='checkbox' value='1' name='email'></p>
                         <p><input class='btn btn-primary' type='submit' name='submit_grades' value='$langGradeOk'></p>
                         </form>";
@@ -1879,8 +1887,8 @@ function show_student_assignments() {
     }
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                 FROM assignment WHERE course_id = ?d AND active = 1 AND 
-                                 (assign_to_specific = 0 OR assign_to_specific = 1 AND id IN
+                                 FROM assignment WHERE course_id = ?d AND active = '1' AND 
+                                 (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
                                     (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id IN ($gids_sql_ready))
                                  )
                                  ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
@@ -1922,10 +1930,10 @@ function show_student_assignments() {
                                 "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
                                 "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)</div>";
                     }
-                    $tool_content .= "<i class='fa fa-check'></i><br>";
+                    $tool_content .= "<i class='fa fa-check-square-o'></i><br>";
                 }
                 } else {
-                    $tool_content .= "<i class='fa fa-times'></i><br>";
+                    $tool_content .= "<i class='fa fa-square-o'></i><br>";
                 }
                 $tool_content .= "</td>
                                     <td width='30' align='center'>";
@@ -1993,6 +2001,7 @@ function show_assignments() {
             $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
             $tool_content .= "<td>
                                 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+                                <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
                             </td>
                             <td class='text-center'>$num_submitted</td>
                             <td class='text-center'>$num_ungraded</td>
