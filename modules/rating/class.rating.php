@@ -380,7 +380,7 @@ Class Rating {
                     $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate.php')\"";
                 }
             } else { //ratings in personal blog
-                if (get_config('personal_blog_rating')) {
+                if (isset($_SESSION['uid'])) {
                     $onclick_up = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',1,'".$urlServer."modules/rating/rate_perso_blog.php')\"";
                     $onclick_down = "onclick=\"Rate('".$this->widget."',".$this->rid.",'".$this->rtype."',-1,'".$urlServer."modules/rating/rate_perso_blog.php')\"";
                 }

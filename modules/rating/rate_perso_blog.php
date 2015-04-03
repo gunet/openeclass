@@ -24,48 +24,50 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/rating/class.rating.php';
 
 if (get_config('personal_blog_rating') == 1) {
-    $widget = $_GET['widget'];
-    $rtype = $_GET['rtype'];
-    $rid = intval($_GET['rid']);
-    $value = intval($_GET['value']);
-    
-    //response array
-    $response = array();
-    
-    $rating = new Rating($widget, $rtype, $rid);
-    $had_rated = $rating->userHasRated($uid);
-    $action = $rating->castRating($value, $uid);
-    
-    if ($widget == 'up_down') {
-        $up_value = $rating->getUpRating();
-        $down_value = $rating->getDownRating();
+    if (isset($_SESSION['uid'])) {
+        $widget = $_GET['widget'];
+        $rtype = $_GET['rtype'];
+        $rid = intval($_GET['rid']);
+        $value = intval($_GET['value']);
         
-        $response[0] = $up_value;//positive rating
-        $response[1] = $down_value;//negative rating
-        $response[2] = $action;//new rating or deletion of old one
-        $response[3] = $langUserHasRated;//necessary string
+        //response array
+        $response = array();
         
-        if ($had_rated === false && $value == 1) {
-            $response[4] = $urlServer."modules/rating/thumbs_up_active.png";
-            $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
-        } elseif ($had_rated === false && $value == -1) {
-            $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
-            $response[5] = $urlServer."modules/rating/thumbs_down_active.png";
-        } elseif ($had_rated !== false) {
-            if ($action == 'del') {
-                $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
+        $rating = new Rating($widget, $rtype, $rid);
+        $had_rated = $rating->userHasRated($uid);
+        $action = $rating->castRating($value, $uid);
+        
+        if ($widget == 'up_down') {
+            $up_value = $rating->getUpRating();
+            $down_value = $rating->getDownRating();
+            
+            $response[0] = $up_value;//positive rating
+            $response[1] = $down_value;//negative rating
+            $response[2] = $action;//new rating or deletion of old one
+            $response[3] = $langUserHasRated;//necessary string
+            
+            if ($had_rated === false && $value == 1) {
+                $response[4] = $urlServer."modules/rating/thumbs_up_active.png";
                 $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
-            } else {
-                if ($value == 1) {
-                    $response[4] = $urlServer."modules/rating/thumbs_up_active.png";
-                    $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
-                } elseif ($value == -1) {
+            } elseif ($had_rated === false && $value == -1) {
+                $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
+                $response[5] = $urlServer."modules/rating/thumbs_down_active.png";
+            } elseif ($had_rated !== false) {
+                if ($action == 'del') {
                     $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
-                    $response[5] = $urlServer."modules/rating/thumbs_down_active.png";
+                    $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
+                } else {
+                    if ($value == 1) {
+                        $response[4] = $urlServer."modules/rating/thumbs_up_active.png";
+                        $response[5] = $urlServer."modules/rating/thumbs_down_inactive.png";
+                    } elseif ($value == -1) {
+                        $response[4] = $urlServer."modules/rating/thumbs_up_inactive.png";
+                        $response[5] = $urlServer."modules/rating/thumbs_down_active.png";
+                    }
                 }
             }
-        }
-        
-    } 
-    echo json_encode($response);
+            
+        } 
+        echo json_encode($response);
+    }
 }
