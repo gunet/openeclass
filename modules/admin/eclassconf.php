@@ -160,12 +160,28 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $("#confirmIndexDialog").modal("show");
         }
     });
-
+    
+    $('#social_sharing_links').change(function(event) {
+        if ($('#social_sharing_links').is(":checked")) {
+            if ($('#personal_blog_enable').is(":checked")) {
+                $('#personal_blog_sharing_enable').prop('disabled', false);
+            }
+        } else {
+            $('#personal_blog_sharing_enable').prop('disabled', true);
+        }
+    });
+        
+    if (!$('#social_sharing_links').is(":checked")) {
+        $('#personal_blog_sharing_enable').prop('disabled', true);
+    }   
+    
     $('#personal_blog_enable').change(function(event) {
         if ($('#personal_blog_enable').is(":checked")) {
             $('#personal_blog_commenting_enable').prop('disabled', false);
             $('#personal_blog_rating_enable').prop('disabled', false);
-            $('#personal_blog_sharing_enable').prop('disabled', false);
+            if ($('#social_sharing_links').is(":checked")) {
+                $('#personal_blog_sharing_enable').prop('disabled', false);
+            }
         } else {
             $('#personal_blog_commenting_enable').prop('disabled', true);
             $('#personal_blog_rating_enable').prop('disabled', true);
@@ -863,7 +879,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                 </div>      
                                 <div class='checkbox'>
                                     <label>
-                                        <input type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links>
+                                        <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links>
                                         $langEnableSocialSharingLiks
                                     </label>
                                 </div>                                      
