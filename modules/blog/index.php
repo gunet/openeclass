@@ -22,6 +22,7 @@ if (isset($_GET['course'])) { //course blog
     $require_current_course = TRUE;
     $blog_type = 'course_blog';
 } else { //personal blog
+    $require_login = true;
     $require_current_course = FALSE;
     $blog_type = 'perso_blog';
 }
