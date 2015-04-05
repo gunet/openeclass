@@ -67,6 +67,8 @@ if ($blog_type == 'course_blog') {
         $user_id = intval($_GET['user_id']);
         if ($user_id == $_SESSION['uid']) {
             $is_blog_editor = true;
+        } elseif (isset($is_admin) && $is_admin) {
+            $is_blog_editor = true;
         }
     } else {
         $user_id = $_SESSION['uid']; //current user's blog
