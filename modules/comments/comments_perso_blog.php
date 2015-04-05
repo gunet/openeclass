@@ -80,6 +80,9 @@ if (get_config('personal_blog_commenting')) {
                 if ($blog_user->user_id == $uid) {
                     $permEdit = true;
                 }
+                if (isset($is_admin) && $is_admin) {
+                    $permEdit = true;
+                }
             }
             if ($permEdit) {
                 if ($comment->delete()) {
@@ -110,6 +113,9 @@ if (get_config('personal_blog_commenting')) {
                 if ($blog_user->user_id == $uid) {
                     $permEdit = true;
                 }
+                if (isset($is_admin) && $is_admin) {
+                    $permEdit = true;
+                }
             }
             if ($permEdit) {
                 $response[0] = 'OK';
@@ -135,6 +141,9 @@ if (get_config('personal_blog_commenting')) {
                 }
                 $blog_user = Database::get()->querySingle("SELECT user_id FROM blog_post WHERE id = ?d", $comment->getRid());
                 if ($blog_user->user_id == $uid) {
+                    $permEdit = true;
+                }
+                if (isset($is_admin) && $is_admin) {
                     $permEdit = true;
                 }
             }
