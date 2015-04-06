@@ -199,12 +199,12 @@ if ($is_editor) {
         } elseif (isset($_REQUEST['choice'])) {
             $choice = $_REQUEST['choice'];
             if ($choice == 'disable') {
-                if (Database::get()->query("UPDATE assignment SET active = 0 WHERE id = ?d", $id)->affectedRows > 0) {
+                if (Database::get()->query("UPDATE assignment SET active = '0' WHERE id = ?d", $id)->affectedRows > 0) {
                     Session::Messages($langAssignmentDeactivated, 'alert-success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
             } elseif ($choice == 'enable') {
-                if (Database::get()->query("UPDATE assignment SET active = 1 WHERE id = ?d", $id)->affectedRows > 0) {
+                if (Database::get()->query("UPDATE assignment SET active = '1' WHERE id = ?d", $id)->affectedRows > 0) {
                     Session::Messages($langAssignmentActivated, 'alert-success');
                 }
                 redirect_to_home_page('modules/work/index.php?course='.$course_code);
@@ -1704,6 +1704,13 @@ function show_assignment($id, $display_graph_results = false) {
                         ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
                         q($row->file_name) . "</a>");
                 
+                if(Session::has("grades")) {
+                    $grades = Session::get('grades');
+                    $grade = $grades[$row->id]['grade'];
+                } else {
+                    $grade = $row->grade;
+                }
+                
                 $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
                 $tool_content .= "
                                 <tr>
@@ -1715,13 +1722,14 @@ function show_assignment($id, $display_graph_results = false) {
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
-                                    <div class='form-group'>
-                                        <input class='form-control' type='text' value='{$row->grade}' maxlength='3' size='3' name='grades[{$row->id}]'>
+                                    <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
+                                        <input class='form-control' type='text' value='$grade' maxlength='3' size='3' name='grades[$row->id][grade]'>
+                                        <span class='help-block'>".Session::getError("grade.$row->id")."</span>
                                     </div>
                                 </td>
                                 <td class='text-center'>
                                     <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
-                                     <i class='fa fa-times-circle' style='color:#ad2121; font-size:20px;'></i>
+                                        <i class='fa fa-times-circle' style='color:#ad2121; font-size:20px;'></i>
                                     </a>                                
                                 </td>
                                 </tr>
@@ -2071,16 +2079,29 @@ function submit_grade_comments($id, $sid, $grade, $comment, $email) {
 // submit grades to students
 function submit_grades($grades_id, $grades, $email = false) {
     global $tool_content, $langGrades, $langWorkWrongInput, $course_id, 
-           $course_code, $langFormErrors;
+           $course_code, $langFormErrors, $langTheField, $m;
     $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $grades_id)->max_grade;
-    $v = new Valitron\Validator(array('grades' => $grades));
-    $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
-        if(is_numeric($value) || empty($value)) return true;
-    });        
-    $v->rule('emptyOrNumeric', array('grades.*'));
-    $v->rule('min', array('grades.*'), 0);
-    $v->rule('max', array('grades.*'), $max_grade);
-    if($v->validate()) {
+    $errors = [];
+
+    foreach ($grades as $key => $grade) {
+        $v = new Valitron\Validator($grade);
+        $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
+            if(is_numeric($value) || empty($value)) return true;
+        });
+        $v->rule('emptyOrNumeric', array('grade'));
+        $v->rule('min', array('grade'), 0);
+        $v->rule('max', array('grade'), $max_grade);
+        $v->labels(array(
+            'grade' => "$langTheField $m[grade]"
+        ));        
+        if($v->validate()) {
+
+        } else {
+            $valitron_errors = $v->errors();
+            $errors["grade.$key"] = $valitron_errors['grade'];
+        }
+    }
+    if(empty($errors)) {
         foreach ($grades as $sid => $grade) {
             $sid = intval($sid);
             $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
@@ -2111,7 +2132,7 @@ function submit_grades($grades_id, $grades, $email = false) {
         }
         Session::Messages($langGrades, 'alert-success');        
     } else {
-        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        Session::flashPost()->Messages($langFormErrors)->Errors($errors);
     }
     redirect_to_home_page("modules/work/index.php?course=$course_code&id=$grades_id");
 
