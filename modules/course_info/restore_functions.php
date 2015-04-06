@@ -142,6 +142,13 @@ function restore_table($basedir, $table, $options, $url_prefix_map, $backupData,
                 unset($data[$field]);
             }
         }
+        if (isset($options['init'])) {
+            foreach ($options['init'] as $field => $value) {
+                if (!isset($data[$field])) {
+                    $data[$field] = $value;
+                }
+            }
+        }
         if (!isset($sql_intro)) {
             $sql_intro = "INSERT INTO `$table` " . field_names($data, $table, $restoreHelper) . ' VALUES ';
         }
@@ -683,7 +690,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         // Polls
         $poll_map = restore_table($restoreThis, 'poll', array('set' => array('course_id' => $new_course_id),
-            'map' => array('creator_id' => $userid_map), 'return_mapping' => 'pid'), $url_prefix_map, $backupData, $restoreHelper);
+            'map' => array('creator_id' => $userid_map), 'return_mapping' => 'pid', 'delete' => array('type')),
+             $url_prefix_map, $backupData, $restoreHelper);
         $poll_question_map = restore_table($restoreThis, 'poll_question', array('map' => array('pid' => $poll_map),
             'return_mapping' => 'pqid'), $url_prefix_map, $backupData, $restoreHelper);
         $poll_answer_map = restore_table($restoreThis, 'poll_question_answer', array('map' => array('pqid' => $poll_question_map),
@@ -728,6 +736,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $question_category_map[0] = 0;
         $question_map = restore_table($restoreThis, 'exercise_question', array(
             'set' => array('course_id' => $new_course_id),
+            'init' => array('category' => 0),
             'map' => array('category' => $question_category_map),
             'return_mapping' => 'id'
             ), $url_prefix_map, $backupData, $restoreHelper);
