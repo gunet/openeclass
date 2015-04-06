@@ -23,6 +23,7 @@ if (isset($_GET['course'])) { //course blog
     $blog_type = 'course_blog';
 } else { //personal blog
     $require_login = true;
+    $require_valid_uid = FALSE;
     $require_current_course = FALSE;
     $blog_type = 'perso_blog';
 }
@@ -73,6 +74,13 @@ if ($blog_type == 'course_blog') {
     } else {
         $user_id = $_SESSION['uid']; //current user's blog
         $is_blog_editor = true;
+    }
+    
+    $db_user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $user_id);
+    if (!$db_user) {
+        $tool_content = "<div class='alert alert-danger'>$langBlogUserNotExist</div>";
+        draw($tool_content, 1);
+        exit;
     }
     
     define ('RSS', 'modules/blog/rss.php?user_id='.$user_id);
