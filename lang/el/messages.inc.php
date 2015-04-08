@@ -4400,6 +4400,7 @@ $langCommentsDelNoPerm = "Δεν έχετε δικαίωμα διαγραφής 
 $langCommentsEditNoPerm = "Δεν έχετε δικαίωμα επεξεργασίας του σχολίου";
 $langCourseCommenting = "Σχολιασμός στην αρχική σελίδα του μαθήματος";
 $langBlogCommenting = "Σχολιασμός αναρτήσεων ιστολογίου";
+$langBlogPostCommenting = "Σχολιασμός ανάρτησης";
 $langCommentsEn = "Ενεργοποιημένος σχολιασμός";
 $langCommentsDis = "Απενεργοποιημένος σχολιασμός";
 

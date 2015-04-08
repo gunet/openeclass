@@ -320,6 +320,22 @@ if ($action == "createPost") {
         $allow_to_create = $is_blog_editor;
     }
     if ($allow_to_create) {
+        $commenting_setting = '';
+        if ($comments_enabled) {
+            $commenting_setting = "<div class='form-group'>
+                                       <label class='col-sm-2 control-label'>$langBlogPostCommenting:</label>
+                                       <div class='col-sm-10'>
+                                           <div>
+                                                <input type='radio' value='1' name='commenting' checked>
+                                                $langCommentsEn
+                                           </div>
+                                           <div>
+                                                <input type='radio' value='0' name='commenting'>
+                                                $langCommentsDis
+                                           </div>
+                                       </div>
+                                   </div>";
+        }
         $tool_content .= "
         <div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
@@ -335,7 +351,8 @@ if ($action == "createPost") {
                     <div class='col-sm-10'>
                         ".rich_text_editor('newContent', 4, 20, '')."
                     </div>
-                </div> 
+                </div>
+                $commenting_setting
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langAdd'>
@@ -364,6 +381,29 @@ if ($action == "editPost") {
             $allow_to_edit = $is_blog_editor;
         }
         if ($allow_to_edit) {
+            $commenting_setting = '';
+            if ($comments_enabled) {
+                if ($post->getCommenting() == 1) {
+                    $checkCommentEn = 'checked';
+                    $checkCommentDis = '';
+                } elseif ($post->getCommenting() == 0) {
+                    $checkCommentEn = '';
+                    $checkCommentDis = 'checked';
+                }
+                $commenting_setting = "<div class='form-group'>
+                                           <label class='col-sm-2 control-label'>$langBlogPostCommenting:</label>
+                                           <div class='col-sm-10'>
+                                               <div>
+                                                   <input type='radio' value='1' name='commenting' $checkCommentEn>
+                                                   $langCommentsEn
+                                               </div>
+                                               <div>
+                                                   <input type='radio' value='0' name='commenting' $checkCommentDis>
+                                                   $langCommentsDis
+                                               </div>
+                                           </div>
+                                       </div>";
+            }
             $tool_content .= "
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?$url_params' onsubmit=\"return checkrequired(this, 'blogPostTitle');\">
@@ -380,6 +420,7 @@ if ($action == "editPost") {
                         ".rich_text_editor('newContent', 4, 20, $post->getContent())."
                     </div>
                 </div>
+                $commenting_setting
                 <div class='form-group'>
                     <div class='col-sm-10 col-sm-offset-2'>
                         <input class='btn btn-primary' type='submit' name='submitBlogPost' value='$langModifBlogPost'>
@@ -413,7 +454,12 @@ if ($action == "savePost") {
         }
         if ($allow_to_create) {
             $post = new BlogPost();
-            if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id)) {
+            if (isset($_POST['commenting'])) {
+                $commenting = intval($_POST['commenting']);
+            } else {
+                $commenting = NULL;
+            }
+            if ($post->create($_POST['blogPostTitle'], purify($_POST['newContent']), $uid, $course_id, $commenting)) {
                 Session::Messages($langBlogPostSaveSucc, 'alert-success');
             } else {
                 Session::Messages($langBlogPostSaveFail);
@@ -431,7 +477,12 @@ if ($action == "savePost") {
                 $allow_to_edit = $is_blog_editor;
             }
             if ($allow_to_edit) {
-                if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']))) {
+                if (isset($_POST['commenting'])) {
+                    $commenting = intval($_POST['commenting']);
+                } else {
+                    $commenting = NULL;
+                }
+                if ($post->edit($_POST['blogPostTitle'], purify($_POST['newContent']), $commenting)) {
                     Session::Messages($langBlogPostSaveSucc, 'alert-success');
                 } else {
                     Session::Messages($langBlogPostSaveFail);
@@ -515,12 +566,14 @@ if ($action == "showPost") {
                         </div>";
         
         if ($comments_enabled) {
-            commenting_add_js(); //add js files needed for comments
-            $comm = new Commenting('blogpost', $post->getId());
+            if ($post->getCommenting() == 1) {
+                commenting_add_js(); //add js files needed for comments
+                $comm = new Commenting('blogpost', $post->getId());
             if ($blog_type == 'course_blog') {
                 $tool_content .= $comm->put($course_code, $is_editor, $uid, true);
             } elseif ($blog_type == 'perso_blog') {
                 $tool_content .= $comm->put(NULL, $is_blog_editor, $uid, true);
+            }
             }
         }
         
@@ -588,7 +641,7 @@ if ($action == "showBlog") {
                     $rating_content = $rating->put(NULL, $uid, $user_id);
                 }
             }
-            if ($comments_enabled) {
+            if ($comments_enabled && ($post->getCommenting() == 1)) {
                 $comm = new Commenting('blogpost', $post->getId());
                 $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {

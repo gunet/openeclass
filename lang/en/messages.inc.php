@@ -3732,6 +3732,7 @@ $langCommentsNewNoPerm = "You do not have permission to submit a comment";
 $langCommentsDelNoPerm = "You do not have permission to delete this comment";
 $langCommentsEditNoPerm = "You do not have permission to edit this comment";
 $langCommenting = "Commenting";
+$langBlogPostCommenting = "Post Commenting";
 $langCommentsEn = "Commenting enabled";
 $langCommentsDis = "Commenting disabled";
 $langRating = "Rating";
