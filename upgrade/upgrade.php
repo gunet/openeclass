@@ -1229,6 +1229,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `content` TEXT NOT NULL,
                             `time` DATETIME NOT NULL,
                             `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+                            `commenting` TINYINT NOT NULL DEFAULT '1',
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `course_id` INT(11) NOT NULL) $charset_spec");
 
