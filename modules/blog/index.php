@@ -43,6 +43,7 @@ if ($blog_type == 'course_blog') {
     
     define ('RSS', 'modules/blog/rss.php?course='.$course_code);
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
+    $toolName = $langBlog;
     
     //check if commenting is enabled for course blogs
     $comments_enabled = setting_get(SETTING_BLOG_COMMENT_ENABLE, $course_id);
@@ -76,11 +77,17 @@ if ($blog_type == 'course_blog') {
         $is_blog_editor = true;
     }
     
-    $db_user = Database::get()->querySingle("SELECT * FROM user WHERE id = ?d", $user_id);
+    $db_user = Database::get()->querySingle("SELECT surname, givenname FROM user WHERE id = ?d", $user_id);
     if (!$db_user) {
         $tool_content = "<div class='alert alert-danger'>$langBlogUserNotExist</div>";
         draw($tool_content, 1);
         exit;
+    }
+    
+    if ($user_id == $_SESSION['uid']) {
+        $toolName = $langMyBlog;
+    } else {
+        $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
     }
     
     define ('RSS', 'modules/blog/rss.php?user_id='.$user_id);
@@ -98,8 +105,6 @@ if ($blog_type == 'course_blog') {
 
 
 load_js('tools.js');
-
-$toolName = $langBlog;
 
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 		$langEmptyBlogPostTitle . '";</script>';
