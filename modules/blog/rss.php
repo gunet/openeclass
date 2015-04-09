@@ -22,24 +22,10 @@
  * Blog RSS Feed Component
 */
 
-include '../../include/init.php';
+$require_current_course = TRUE;
 
-if (isset($_GET['course'])) {
-    $code = $_GET['course'];
-    $course_id = course_code_to_id($code);
-} else {
-    $code = '';
-    $course_id = false;
-}
-if ($course_id === false) {
-    header("HTTP/1.0 404 Not Found");
-    echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
-    '<title>404 Not Found</title></head><body>',
-    '<h1>Not Found</h1><p>The requested course "',
-    htmlspecialchars($code),
-    '" does not exist.</p></body></html>';
-    exit;
-}
+require_once '../../include/baseTheme.php';
+
 if (!visible_module(MODULE_ID_BLOG)) {
     Session::Messages($langCheckPublicTools, 'alert-danger');
     session_write_close();
