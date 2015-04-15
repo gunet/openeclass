@@ -91,29 +91,40 @@ if ($is_editor) {
     }
 
     if (isset($_POST['submit_category'])) {
-        if (isset($_POST['category_id'])) {
-            $category_id = intval($_POST['category_id']);
-            $q = Database::get()->query("UPDATE glossary_category
-                                              SET name = ?s,
-                                                  description = ?s
-                                              WHERE id = ?d AND course_id = ?d"
-                    , $_POST['name'], $_POST['description'], $category_id, $course_id);
-            $success_message = $langCategoryModded;
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('name'));
+        $v->labels(array(
+            'name' => "$langTheField $langCategoryName"
+        ));        
+        if($v->validate()) {
+            if (isset($_POST['category_id'])) {
+                $category_id = intval($_POST['category_id']);
+                $q = Database::get()->query("UPDATE glossary_category
+                                                  SET name = ?s,
+                                                      description = ?s
+                                                  WHERE id = ?d AND course_id = ?d"
+                        , $_POST['name'], $_POST['description'], $category_id, $course_id);
+                $success_message = $langCategoryModded;
+            } else {
+                Database::get()->query("SELECT @new_order := (1 + IFNULL(MAX(`order`),0))
+                                             FROM glossary_category WHERE course_id = ?d", $course_id);
+                $q = Database::get()->query("INSERT INTO glossary_category
+                                                  SET name = ?s,
+                                                      description = ?s,
+                                                      course_id = ?d,
+                                                      `order` = @new_order"
+                        , $_POST['name'], $_POST['description'], $course_id);
+                $category_id = $q->lastInsertID;
+                $success_message = $langCategoryAdded;
+            }
+            if ($q and $q->affectedRows) {
+                Session::Messages($success_message, 'alert-success');
+            }
+            redirect_to_home_page("modules/glossary/categories.php?course=$course_code");
         } else {
-            Database::get()->query("SELECT @new_order := (1 + IFNULL(MAX(`order`),0))
-                                         FROM glossary_category WHERE course_id = ?d", $course_id);
-            $q = Database::get()->query("INSERT INTO glossary_category
-                                              SET name = ?s,
-                                                  description = ?s,
-                                                  course_id = ?d,
-                                                  `order` = @new_order"
-                    , $_POST['name'], $_POST['description'], $course_id);
-            $category_id = $q->lastInsertID;
-            $success_message = $langCategoryAdded;
-        }
-        if ($q and $q->affectedRows) {
-            $categories[$category_id] = $_POST['name'];
-            $tool_content .= "<div class='alert alert-success'>$success_message</div><br />";
+            $new_or_modify = isset($_POST['category_id']) ? "&edit=$_POST[category_id]" : "&add=1";
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/glossary/categories.php?course=$course_code$new_or_modify");
         }
     }
 
@@ -134,7 +145,7 @@ if ($is_editor) {
 
     // display form for adding or editing a category
     if (isset($_GET['add']) or isset($_GET['edit'])) {
-        $html_id = $html_name = $description = '';
+        $html_id = '';
         if (isset($_GET['add'])) {
             $pageName = $langCategoryAdd;
             $submit_value = $langSubmit;
@@ -144,18 +155,19 @@ if ($is_editor) {
             $data = Database::get()->querySingle("SELECT name, description
                                               FROM glossary_category WHERE id = ?d", $cat_id);
             if ($data) {
-                $html_name = " value='" . q($data->name) . "'";
                 $html_id = "<input type = 'hidden' name='category_id' value='$cat_id'>";
-                $description = $data->description;
             }
             $submit_value = $langModify;
         }
+        $name = Session::has('name') ? Session::get('name') : ( isset($_GET['add']) ? "" : q($data->name) );
+        $description = Session::has('description') ? Session::get('description') : ( isset($_GET['add']) ? "" : q($data->description) );
         $tool_content .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$cat_url' method='post'>
                     $html_id
-                    <div class='form-group'>
+                    <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
                          <label for='name' class='col-sm-2 control-label'>$langCategoryName: </label>
                          <div class='col-sm-10'>
-                             <input type='text' class='form-control' id='term' name='name' placeholder='$langCategoryName'$html_name>
+                             <input type='text' class='form-control' id='term' name='name' placeholder='$langCategoryName' value='$name'>
+                             <span class='help-block'>".Session::getError('name')."</span>    
                          </div>
                     </div>
                     <div class='form-group'>
