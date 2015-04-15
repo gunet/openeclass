@@ -36,6 +36,7 @@ require_once 'include/log.php';
 require_once 'linkfunctions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
+require_once 'include/course_settings.php';
 
 require_once 'include/action.php';
 $action_stats = new action();
@@ -55,6 +56,9 @@ if (isset($_GET['action'])) {
             break;
         case 'editcategory':
             $pageName = $langCategoryMod;
+            break;
+        case 'settings':
+            $pageName = $langLinkSettings;
             break;
     }
 }
@@ -131,6 +135,13 @@ if ($is_editor) {
         Session::Messages($messsage, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
+    if (isset($_POST['submitSettings'])) {
+        if (isset($_POST['settings_radio'])) {
+            setting_set(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, intval($_POST['settings_radio']));
+            Session::Messages($langLinkSettingsSucc, 'alert-success');
+        }
+        redirect_to_home_page("modules/link/index.php?course=$course_code");
+    }
     switch ($action) {
         case 'deletelink':
             delete_link($id);
@@ -167,7 +178,11 @@ if ($is_editor) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory$ext",
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
-                      'level' => 'primary-label')));
+                      'level' => 'primary-label'),
+                array('title' => $langConfig,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=settings",
+                      'icon' => 'fa-gear',
+                      'level' => 'primary')));
         }
     }
 
@@ -264,6 +279,44 @@ if ($is_editor) {
                         </fieldset>
                     </form>
                 </div>";
+    } elseif ($action == 'settings') {
+        $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
+        if (setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id) == 1) {
+            $checkDis = "";
+            $checkEn = "checked ";
+        } else {
+            $checkDis = "checked ";
+            $checkEn = "";
+        }
+        $tool_content .= "<div class = 'form-wrapper'>";
+        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>";
+        $tool_content .= "<fieldset>                               
+                              <div class='form-group'>
+                                  <label class='col-sm-3'>$langSocialBookmarksFunct</label>
+                                  <div class='col-sm-9'> 
+                                      <div class='radio'>
+                                          <label>
+                                              <input type='radio' value='1' name='settings_radio' $checkEn>$langActivate
+                                          </label>
+                                      </div>
+                                      <div class='radio'>
+                                          <label>
+                                              <input type='radio' value='0' name='settings_radio' $checkDis>$langDeactivate
+                                          </label>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class='form-group'>
+                                  <div class='col-sm-9 col-sm-offset-3'>
+                                      <input type='submit' class='btn btn-primary' name='submitSettings' value='$langSubmit' />
+                                          <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                                  </div>
+                              </div>
+                          </fieldset>
+                      </form>
+                  </div>";
+        draw($tool_content, 2, null, $head_content);
+        exit;
     }
 }
 

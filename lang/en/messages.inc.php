@@ -1311,6 +1311,9 @@ $shownone = "Show none";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
 $langNoLinksExist = "The " . $langsTeacher . " has not added any links.";
 $langEmptyLinkURL = "Link URL is empty";
+$langLinkSettings = "Link module settings";
+$langLinkSettingsSucc = "Settings were succesfully saved";
+$langSocialBookmarksFunct = "Social bookmarking functionality";
 $lang_remind_pass = 'Reset password';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
 and email.
