@@ -315,8 +315,6 @@ if ($is_editor) {
                           </fieldset>
                       </form>
                   </div>";
-        draw($tool_content, 2, null, $head_content);
-        exit;
     }
 }
 
@@ -330,7 +328,7 @@ if (isset($_GET['down'])) {
     move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $course_id");
 }
 $display_tools = $is_editor && !$is_in_tinymce;
-if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory'))) {
+if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory', 'settings'))) {
     $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d", $course_id)->cnt;
 
     if ($countlinks > 0) {
