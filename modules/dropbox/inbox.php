@@ -200,7 +200,7 @@ $out .=         "
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='mailing' value='1' checked>
-                                        $langMailToUsers
+                                        " . q($langMailToUsers) . "
                                     </label>
                                 </div>
 
@@ -273,7 +273,7 @@ $out .=         "
                          e.preventDefault();
                          var id = $(this).data("id");
                          var string = "mid="+id;
-                         bootbox.confirm("'.$langConfirmDelete.'", function(result) {
+                         bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {
                          if(result) {
                              $.ajax({
                               type: "POST",
@@ -281,7 +281,7 @@ $out .=         "
                               datatype: "json",
                               data: string,
                               success: function(){
-                                 $("#del_msg").html("<p class=\"alert alert-success\">'.$langMessageDeleteSuccess.'</p>");
+                                 $("#del_msg").html("<p class=\"alert alert-success\">'.js_escape($langMessageDeleteSuccess).'</p>");
                                  $(".alert-success").delay(3000).fadeOut(1500);
                                  $("#msg_area").remove();
                               }});
@@ -291,7 +291,7 @@ $out .=         "
 
 
                     $(".delete").click(function() {
-                      if (confirm("' . $langConfirmDelete . '")) {
+                      if (confirm("' . js_escape($langConfirmDelete) . '")) {
                         var rowContainer = $(this).parent().parent();
                         var id = rowContainer.attr("id");
                         var string = \'mid=\'+ id ;
@@ -304,7 +304,7 @@ $out .=         "
                           success: function(){
                             $("#msg_area").slideUp(\'fast\', function() {
                               $(this).remove();
-                              $("#del_msg").html("<p class=\'success\'>'.$langMessageDeleteSuccess.'</p>");
+                              $("#del_msg").html("<p class=\'success\'>'.q($langMessageDeleteSuccess).'</p>");
                             });
                           }
                        });
@@ -348,7 +348,7 @@ $out .=         "
                    'sAjaxSource': 'ajax_handler.php?mbox_type=inbox&course_id=$course_id',
                    'aLengthMenu': [
                        [10, 15, 20 , -1],
-                       [10, 15, 20, '$langAllOfThem'] // change per page values here
+                       [10, 15, 20, '".js_escape($langAllOfThem)."'] // change per page values here
                     ],
                    'sPaginationType': 'full_numbers',
                    'bSort': false,
@@ -356,14 +356,14 @@ $out .=         "
                    'fnDrawCallback': function( oSettings ) {
                         $('#inbox_table_filter label input').attr({
                           class : 'form-control input-sm',
-                          placeholder : '$langSearch...'
+                          placeholder : '".js_escape($langSearch)."...'
                         });
                     },
                    'oLanguage': {
-                        'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                        'sZeroRecords':  '".$langNoResult."',
-                        'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                        'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                        'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',
+                        'sZeroRecords':  '".js_escape($langNoResult)."',
+                        'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
+                        'sInfoEmpty':    '".js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2")."',
                         'sInfoFiltered': '',
                         'sInfoPostFix':  '',
                         'sSearch':       '',
@@ -381,7 +381,7 @@ $out .=         "
                      e.preventDefault();
                      var id = $(this).data('id');
                      var string = 'mid='+id;
-                     bootbox.confirm('$langConfirmDelete', function(result) {
+                     bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
                      if(result) {
                          $.ajax({
                           type: 'POST',
@@ -397,7 +397,7 @@ $out .=         "
                                      page_number--;
                                  }
                              }
-                             $('#del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteSuccess</p>');
+                             $('#del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteSuccess)."</p>');
                              $('.alert-success').delay(3000).fadeOut(1500);
                              $('#msg_area').remove();
                              oTable.fnPageChange(page_number);
@@ -413,7 +413,7 @@ $out .=         "
                   });
 
                  $('.delete_all_in').click(function() {
-                     bootbox.confirm('$langConfirmDeleteAllMsgs', function(result) {
+                     bootbox.confirm('".js_escape($langConfirmDeleteAllMsgs)."', function(result) {
                          if(result) {
                              var string = 'all_inbox=1';
                              $.ajax({
@@ -430,7 +430,7 @@ $out .=         "
                                              page_number--;
                                          }
                                      }
-                                     $('#del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteAllSuccess</p>');
+                                     $('#del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteAllSuccess)."</p>');
                                      $('.alert-success').delay(3000).fadeOut(1500);
                                      oTable.fnPageChange(page_number);
                                  }
