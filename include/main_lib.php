@@ -1167,7 +1167,7 @@ function append_units($amount, $singular, $plural) {
 }
 
 // Convert $sec to days, hours, minutes, seconds;
-function format_time_duration($sec) {
+function format_time_duration($sec, $hourLimit = 24) {
     global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours, $langDay, $langDays;
 
     if ($sec < 60) {
@@ -1184,8 +1184,11 @@ function format_time_duration($sec) {
     }
     $hour = floor($min / 60);
     $min = $min % 60;
-    if ($hour < 24) {
-        append_units($hour, $langhour, $langhours) .
+    if ($hour < $hourLimit) {
+        if ($hour > 24) {
+            $min = 0;
+        }
+        return append_units($hour, $langhour, $langhours) .
                 (($min == 0) ? '' : (' ' . append_units($min, $langminute, $langminutes)));
     }
     $day = floor($hour / 24);
