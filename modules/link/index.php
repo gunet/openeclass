@@ -42,6 +42,9 @@ require_once 'include/action.php';
 $action_stats = new action();
 $action_stats->record(MODULE_ID_LINKS);
 
+//check if social bookmarking is enabled for this course
+$social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+
 $toolName = $langLinks;
 if (isset($_GET['action'])) {
     switch ($_GET['action']) {
@@ -329,7 +332,11 @@ if (isset($_GET['down'])) {
 }
 $display_tools = $is_editor && !$is_in_tinymce;
 if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory', 'settings'))) {
-    $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d", $course_id)->cnt;
+    if ($social_bookmarks_enabled == 1) {
+        $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d", $course_id)->cnt;
+    } else {
+        $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1)->cnt;
+    }
 
     if ($countlinks > 0) {
         $numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND (category = 0 OR category IS NULL)", $course_id));
@@ -363,7 +370,35 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
             }
         }
         $tool_content .= "</tr></table></div></div></div>";
-
+        
+        if ($social_bookmarks_enabled == 1) {
+            $numberofsocialcategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -1));
+            $tool_content .= "
+            <div class='row'>
+                <div class='col-sm-12'>
+                <div class='table-responsive'>
+                <table class='table-default nocategory-links'>";
+            if ($numberofsocialcategory !== 0) {
+                $tool_content .= "<tr class='list-header'><th class='text-left'>$langSocialCategory</th>";
+                if ($display_tools) {
+                    $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+                }
+                $tool_content .= "</tr>";
+                showlinksofcategory(-1);
+            } else {
+                $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langSocialCategory</th>";
+                if ($display_tools) {
+                    $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+                }
+                $tool_content .= "</tr>";
+                $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>";
+                if ($display_tools) {
+                    $tool_content .= "<td></td>";
+                }
+            }
+            $tool_content .= "</tr></table></div></div></div>";
+        }
+        
         $tool_content .= "
             <div class='row'>
                 <div class='col-sm-12'>
