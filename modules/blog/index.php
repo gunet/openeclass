@@ -23,7 +23,7 @@ if (isset($_GET['course'])) { //course blog
     $blog_type = 'course_blog';
 } else { //personal blog
     $require_login = true;
-    $require_valid_uid = FALSE;
+    $require_valid_uid = TRUE;
     $require_current_course = FALSE;
     $blog_type = 'perso_blog';
 }
@@ -90,7 +90,7 @@ if ($blog_type == 'course_blog') {
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
     }
     
-    define ('RSS', 'modules/blog/rss.php?user_id='.$user_id);
+    //define ('RSS', 'modules/blog/rss.php?user_id='.$user_id);
     
     //check if commenting is enabled for personal blogs
     $comments_enabled = get_config('personal_blog_commenting');
