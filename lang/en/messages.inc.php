@@ -1865,7 +1865,10 @@ $langExplUpgrade = "The upgrade script will modify configuration file <em>config
    Please make sure that web server have access to <em>config.php</em>. For security reasons, current configuration of <em>config.php</em> will remain in file <em>config_backup.php</em>.";
 $langExpl2Upgrade = "Also for security reasons make sure that you have backedup all the databases.";
 $langWarnUpgrade = "WARNING!";
-$langUpgradeCont = "Tο continue upgrade process, please enter platform administrator username / password:";
+$langUpgradeInProgress = 'Use is temporary restricted, because the platform is
+    being upgraded since %s ago. Please wait for the upgrade to finish before trying
+    to login.';
+$langUpgradeCont = "Tο begin the upgrade process, please enter the username and password of the platform administrator.";
 $langUpgDetails = "Username / Password";
 $langUpgMan = "upgrade instructions";
 $langUpgLastStep = "before continue.";
