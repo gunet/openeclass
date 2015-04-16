@@ -3840,6 +3840,9 @@ $langEnterNote = "Enter note";
 $langAttemptWasCanceled = "The attempt was canceled.";
 $langNoUnits = "No course units";
 $langExternalTools = 'External tools';
+$langDisableModules = 'Modules';
+$langDisableModulesHelp = 'You can select which modules will be disabled
+    for all courses platform-wide.';
 $langTeacherTutorials = "$langTeacher Tutorials";
 $langStudentTutorials = "$langStudent Tutorials";
 $langCourseInformationText = "Edit Course Description";

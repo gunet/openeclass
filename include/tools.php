@@ -110,12 +110,14 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_WIKI . ",
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
-                                          " . MODULE_ID_LP . ")";
+                                          " . MODULE_ID_LP . ") AND
+                        module_id NOT IN (SELECT module_id FROM module_disable)";
             if (!check_guest()) {
                 if (isset($_SESSION['uid']) and $_SESSION['uid']) {
                     $result = Database::get()->queryArray("SELECT * FROM course_module
-                                                        WHERE visible = 1 AND
-                                                        course_id = ?d", $cid);
+                            WHERE visible = 1 AND
+                                  module_id NOT IN (SELECT module_id FROM module_disable) AND
+                            course_id = ?d", $cid);
                 } else {
                     $result = Database::get()->queryArray($sql);
                 }
@@ -126,6 +128,7 @@ function getToolsArray($cat) {
         case 'PublicButHide':
             $result = Database::get()->queryArray("SELECT * FROM course_module
                                          WHERE visible = 0 AND
+                                               module_id NOT IN (SELECT module_id FROM module_disable) AND
                                          course_id = ?d", $cid);
             break;
     }
@@ -548,20 +551,29 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langConfig']);
         array_push($sideMenuLink, "../admin/eclassconf.php");
         array_push($sideMenuImg, "arrow.png");
+
         array_push($sideMenuText, $GLOBALS['langExtAppConfig']);
         array_push($sideMenuLink, "../admin/extapp.php");
         array_push($sideMenuImg, "arrow.png");
+
         array_push($sideMenuText, $GLOBALS['langThemeSettings']);
         array_push($sideMenuLink, "../admin/theme_options.php");
         array_push($sideMenuImg, "arrow.png");
+
+        array_push($sideMenuText, $GLOBALS['langDisableModules']);
+        array_push($sideMenuLink, "../admin/modules.php");
+        array_push($sideMenuImg, "arrow.png");
+
         array_push($sideMenuText, $GLOBALS['langStat']);
         array_push($sideMenuLink, "../admin/stateclass.php");
         array_push($sideMenuImg, "arrow.png");
+
         if (get_config('enable_common_docs')) {
             array_push($sideMenuText, $GLOBALS['langCommonDocs']);
             array_push($sideMenuLink, "../admin/commondocs.php");
             array_push($sideMenuImg, "arrow.png");
         }
+
         array_push($sideMenuText, $GLOBALS['langAdminAn']);
         array_push($sideMenuLink, "../admin/adminannouncements.php");
         array_push($sideMenuImg, "arrow.png");
@@ -755,7 +767,8 @@ function pickerMenu() {
         $visible = ($is_editor) ? '' : 'AND visible = 1';
         $result = Database::get()->queryArray("SELECT * FROM course_module
                                WHERE course_id = ?d AND
-                                     module_id IN (" . MODULE_ID_DOCS . ', ' . MODULE_ID_VIDEO . ', ' . MODULE_ID_LINKS . ")
+                                     module_id IN (" . MODULE_ID_DOCS . ', ' . MODULE_ID_VIDEO . ', ' . MODULE_ID_LINKS . ") AND
+                                     module_id NOT IN (SELECT module_id FROM module_disable)
                                      $visible
                                ORDER BY module_id", $course_id);
 

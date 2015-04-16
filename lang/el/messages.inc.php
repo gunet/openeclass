@@ -156,6 +156,10 @@ $langCronInfo = "Ενημερωτικά στοιχεία για τις προγ�
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
 $langExternalTools = 'Εξωτερικά εργαλεία';
+$langDisableModules = 'Υποσυστήματα';
+$langDisableModulesHelp = 'Μπορείτε να επιλέξετε ποια από τα παρακάτω
+    υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα μαθήματα της
+    πλατφόρμας.';
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;

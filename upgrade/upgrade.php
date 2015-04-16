@@ -2608,6 +2608,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE source_event_id IS NULL");
         
     }
+
+    if (version_compare($oldversion, '3.0.1', '<')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 

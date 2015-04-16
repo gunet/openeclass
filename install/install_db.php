@@ -80,6 +80,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `module_course` (`module_id`,`course_id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS module_disable (
+    module_id int(11) NOT NULL PRIMARY KEY)");
+
 #
 # table `log`
 #
@@ -287,6 +290,7 @@ $db->query("CREATE TABLE course_review (
     `is_certified` BOOL NOT NULL DEFAULT 0,
     `level` TINYINT(4) NOT NULL DEFAULT 0,
     `last_review` DATETIME NOT NULL,
+
     `last_reviewer` INT(11) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY cid (course_id)) $charset_spec");
