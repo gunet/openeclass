@@ -173,34 +173,34 @@ $tool_content .= "
 
 $tool_content .= <<<tForm
 <div class='form-wrapper'>
-<form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
-<table class="table table-striped table-hover">
-<tr>
-<th width="45%" class="center">$langInactiveTools</th>
-<th width="10%" class="center">$langMove</th>
-<th width="45%" class="center">$langActiveTools</th>
-</tr>
-<tr>
-<td class="center">
-<select name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[1]</select>
-</td>
-<td class="center">
-<input class="btn btn-primary" type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br><br>
-<input class="btn btn-primary" type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
-</td>
-<td class="center">
-<select name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[0]</select>
-</td>
-</tr>
-<tr>
-    <td>&nbsp;</td>
-<td class="center">
-    <input type="submit" class="btn btn-primary" value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
-</td>
-<td>&nbsp;</td>
-</tr>
-</table>
-</form>
+    <form name="courseTools" action="$_SERVER[SCRIPT_NAME]?course=$course_code" method="post" enctype="multipart/form-data">
+        <div class="table-responsive">    
+            <table class="table-default">
+                <tr>
+                    <th width="45%" class="text-center">$langInactiveTools</th>
+                    <th width="10%" class="text-center">$langMove</th>
+                    <th width="45%" class="text-center">$langActiveTools</th>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[1]</select>
+                    </td>
+                    <td class="text-center">
+                        <input class="btn btn-primary" type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br><br>
+                        <input class="btn btn-primary" type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
+                    </td>
+                    <td class="text-center">
+                        <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[0]</select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3" class="text-center">
+                        <input type="submit" class="btn btn-primary" value="$langSubmitChanges" name="toolStatus" onClick="selectAll('active_box',true)" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
 </div>
 tForm;
 // ------------------------------------------------
