@@ -333,9 +333,9 @@ if (isset($_GET['down'])) {
 $display_tools = $is_editor && !$is_in_tinymce;
 if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory', 'settings'))) {
     if ($social_bookmarks_enabled == 1) {
-        $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d", $course_id)->cnt;
-    } else {
         $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d", $course_id, -1)->cnt;
+    } else {
+        $countlinks = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `link` WHERE course_id = ?d AND category <> ?d AND category <> ?d", $course_id, -1, -2)->cnt;
     }
 
     if ($countlinks > 0) {
@@ -372,7 +372,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
         $tool_content .= "</tr></table></div></div></div>";
         
         if ($social_bookmarks_enabled == 1) {
-            $numberofsocialcategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -1));
+            $numberofsocialcategory = count(Database::get()->queryArray("SELECT * FROM `link` WHERE course_id = ?d AND category = ?d", $course_id, -2));
             $tool_content .= "
             <div class='row'>
                 <div class='col-sm-12'>
@@ -384,7 +384,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                     $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
                 }
                 $tool_content .= "</tr>";
-                showlinksofcategory(-1);
+                showlinksofcategory(-2);
             } else {
                 $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langSocialCategory</th>";
                 if ($display_tools) {
