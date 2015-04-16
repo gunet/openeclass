@@ -1801,3 +1801,20 @@ function copyThemeImages() {
         }
     }
 }
+
+function setGlobalContactInfo() {
+    global $Institution, $postaddress, $telephone, $fax;
+
+    if (!isset($Institution)) {
+        $Institution = get_config('institution');
+    }
+    if (!isset($postaddress)) {
+        $postaddress = get_config('postaddress');
+    }
+    if (!isset($telephone)) {
+        $telephone = get_config('phone');
+    }
+    if (!isset($fax)) {
+        $fax = get_config('fax');
+    }
+}

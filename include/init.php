@@ -92,7 +92,7 @@ use Valitron\Validator as V;
 V::langDir(__DIR__.'/Valitron/lang'); // always set langDir before lang.
 V::lang($language);
 
-//Managing Session Flash Data
+// Managing Session Flash Data
 if (isset($_SESSION['flash_old'])){
     foreach($_SESSION['flash_old'] as $row){
         unset($_SESSION[$row]);
@@ -137,6 +137,15 @@ if (file_exists($extra_messages)) {
 require "$webDir/lang/$language/messages.inc.php";
 if ($extra_messages) {
     include $extra_messages;
+}
+
+if (($upgrade_begin = get_config('upgrade_begin'))) {
+    if (!defined('UPGRADE')) {
+        Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
+        if (!isset($guest_allowed) or !$guest_allowed) {
+            redirect_to_home_page();
+        }
+    }
 }
 
 // check if we are admin or power user or manageuser_user

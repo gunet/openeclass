@@ -36,35 +36,39 @@ if ($language == 'el') {
     $upgrade_info_file = 'http://wiki.openeclass.org/doku.php?id=en:upgrade_doc';
     $link_changes_file = 'http://wiki.openeclass.org/en:changes';
 }
+
 // Main body
 $tool_content .= "
-<div class='alert alert-warning'><b>$langWarnUpgrade</b><p>$langExplUpgrade</p>
-<p> &nbsp; </p>
-<p class='red'>$langExpl2Upgrade</p>";
-set_time_limit(0);
-$tool_content .= "<p>&nbsp;</p><p>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>. $langUpgRead <a href='$upgrade_info_file' target=_blank>$langUpgMan</a>
-   $langUpgLastStep</p>
-<p>$langUpgradeCont</p></div>";
-$tool_content .= "<div class = 'form-wrapper'>
-    <form class='form-horizontal' role='form' method='post' action='upgrade.php'>
-    <fieldset>
-    <div class='form-group'><label for='Details' class='col-sm-2 control-label'>$langUpgDetails</label></div>
-    <div class='form-group'>
-        <label for='username' class='col-sm-2 control-label'>$langUsername</label>
-        <div class='col-sm-10'>
-            <input class='auth_input_admin' style='width:200px; heigth:20px;' type='text' name='login' size='20' autocomplete='off' >
+  <div class='alert alert-warning'>
+    <h4>$langWarnUpgrade</h4>
+    <p class='margin-bottom-thin'>$langExplUpgrade</p>
+    <p class='margin-top-thin margin-bottom-thin text-danger'>$langExpl2Upgrade</p>
+    <p class='margin-top-thin margin-bottom-thin'>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.
+      $langUpgRead <a href='$upgrade_info_file' target='_blank'>$langUpgMan</a> $langUpgLastStep</p>
+    <p>$langUpgradeCont</p>
+  </div>
+  
+  <div class='panel panel-default login-page'>
+    <div class='panel-heading'><span>$langUpgDetails</span></div>
+    <div class='panel-body login-page-option'>
+      <form class='form-horizontal' role='form' action='upgrade.php' method='post'>
+        <div class='form-group'>
+          <div class='col-xs-12'>
+            <input class='form-control' name='login' placeholder='$langUsername'>
+          </div>
         </div>
-    </div>
-    <div class='form-group'>
-        <label for='pass' class='col-sm-2 control-label'>$langPass:</label>
-        <div class='col-sm-10'>
-            <input class='auth_input_admin' type='password' style='width:200px; heigth:20px;' name='password' size='20' autocomplete='off' >
+        <div class='form-group'>
+          <div class='col-xs-12'>
+            <input class='form-control' name='password' placeholder='$langPass' type='password'>
+          </div>
         </div>
+        <div class='form-group'>
+          <div class='col-xs-12'>
+            <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit_upgrade2' value='$langUpgrade'>$langUpgrade</button>
+          </div>
+        </div>
+      </form>
     </div>
-    <p class='pull-right'>
-      <input class='btn btn-primary' type='submit' name='submit_upgrade2' value='$langUpgrade' />
-     </p>";
- 
-$tool_content .= "</fieldset></form></div>";
+  </div>";
 
 draw($tool_content, 0);

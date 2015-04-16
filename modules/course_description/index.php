@@ -53,13 +53,26 @@ if ($is_editor) {
     processActions();
 
     if (isset($_POST['saveCourseDescription'])) {
-        if (isset($_POST['editId'])) {
-            updateCourseDescription($_POST['editId'], $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('editTitle'));
+        $v->rule('numeric', array('editId'));
+        $v->labels(array(
+            'editTitle' => "$langTheField $langTitle"
+        ));
+        if($v->validate()) {
+            if (isset($_POST['editId'])) {
+                updateCourseDescription($_POST['editId'], $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
+            } else {
+                updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
+            }
+            Session::Messages($langCourseUnitAdded,"alert-success");
+            redirect_to_home_page("modules/course_description/index.php");
         } else {
-            updateCourseDescription(null, $_POST['editTitle'], $_POST['editComments'], $_POST['editType']);
+            
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $edit_id = isset($_POST['editId']) ? "&id=$_POST[editId]" : "";
+            redirect_to_home_page("modules/course_description/edit.php?course=$course_code$edit_id");          
         }
-        Session::Messages($langCourseUnitAdded,"alert-success");
-        redirect_to_home_page("modules/course_description/index.php");
     }
 }
 
@@ -75,11 +88,6 @@ if ($q && count($q) > 0) {
                 <div class='pull-right'>".
                 action_button(
                         array(
-                            array('title' => q($langDelete),
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$row->id",
-                                'icon' => 'fa-times',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmDelete),
                             array(
                                 'title' => q($langEdit),
                                 'url' => "edit.php?course=$course_code&amp;id=$row->id",
@@ -98,7 +106,12 @@ if ($q && count($q) > 0) {
                                 'level' => 'primary',
                                 'icon' => 'fa-arrow-down',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$row->id",
-                                'disabled' => $i + 1 >= count($q))
+                                'disabled' => $i + 1 >= count($q)),
+                            array('title' => q($langDelete),
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$row->id",
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmDelete)                            
                         )
                 ) ."</div>";
         }

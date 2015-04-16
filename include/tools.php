@@ -143,7 +143,7 @@ function getExternalLinks() {
     global $course_id;
 
     $result = Database::get()->queryArray("SELECT url, title FROM link
-                                            WHERE category IN (-1, -2) AND
+                                            WHERE category = -1 AND
                                         course_id = ?d", $course_id);
     if ($result) {
         return $result;

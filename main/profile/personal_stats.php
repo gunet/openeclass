@@ -34,32 +34,24 @@ $pageName = $langPersonalStats;
 $totalHits = 0;
 $totalDuration = 0;
 
-$result = Database::get()->queryArray("SELECT a.code code, a.title title
-                                        FROM course AS a LEFT JOIN course_user AS b
-                                             ON a.id = b.course_id
-                                        WHERE b.user_id = ?d
-                                        AND a.visible != " . COURSE_INACTIVE . "
-                                        ORDER BY a.title", $uid);
+$result = Database::get()->queryArray("SELECT SUM(hits) AS cnt, SUM(duration) AS duration, course.code, course.title
+                                        FROM course
+                                            LEFT JOIN course_user ON course.id = course_user.course_id
+                                            LEFT JOIN actions_daily
+                                                ON actions_daily.user_id = course_user.user_id AND
+                                                   actions_daily.course_id = course_user.course_id
+                                        WHERE course_user.user_id = ?d
+                                        AND course.visible != " . COURSE_INACTIVE . "
+                                        GROUP BY course.id
+                                        ORDER BY duration DESC", $uid);
 
-if (count($result) > 0) {  // found courses ?    
-    foreach ($result as $row) {
-        $course_codes[] = $row->code;
-        $course_names[$row->code] = $row->title;
-    }  
-    foreach ($course_codes as $code) {                        
-        $cid = course_code_to_id($code);                
-        $row = Database::get()->querySingle("SELECT SUM(hits) AS cnt FROM actions_daily
-                                WHERE user_id = ?d
-                                AND course_id =?d", $uid, $cid);
-        if ($row) {
-            $totalHits += $row->cnt;
-            $hits[$code] = $row->cnt;
-        }
-        $result = Database::get()->querySingle("SELECT SUM(duration) AS duration FROM actions_daily
-                                        WHERE user_id = ?d
-                                        AND course_id = ?d", $uid, $cid);
-        $duration[$code] = $result->duration;
-        $totalDuration += $duration[$code];        
+if (count($result) > 0) {  // found courses ?
+    foreach ($result as $item) {
+        $totalHits += $item->cnt;
+        $totalDuration += $item->duration;
+        $hits[$item->code] = $item->cnt;
+        $duration[$item->code] = $item->duration;
+        $course_names[$item->code] = $item->title;
     }
 
     $chart = new Plotter(600, 300);
@@ -76,61 +68,78 @@ if (count($result) > 0) {  // found courses ?
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
-                            ),false);
-    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
-    $tool_content .= $chart->plot();
+                            ), false);
+    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>" .
+        $chart->plot() .
+        "</div></div></div></div>";
 
-    $totalDuration = format_time_duration(0 + $totalDuration);
+    $totalDuration = format_time_duration(0 + $totalDuration, 240);
     $tool_content .= "
                 <h4>$langPlatformGenStats</h4>
-                <table class='table-default'>
-                <tr>
-                <th>$langTotalVisitsCourses:</th>
-                <td>$totalHits</td>
-                </tr>
-                <tr>
-                <th>$langDurationVisits:</th>
-                <td>$totalDuration</td>
-                </tr>
-                <tr>
-                <th valign='top'>$langDurationVisitsPerCourse:</th>
-                <td>
-                <table class='table-default' width='550'>
-                <tr>
-                <th>$langCourseTitle</th>                   
-                <th width='160'>$langDuration</th>
-                </tr>";    
-    foreach ($duration as $code => $time) {        
-        $tool_content .= "                
-                <td>" . q(course_code_to_title($code)) . "</td>
-                <td width='140'>" . format_time_duration(0 + $time) . "</td>
-                </tr>";
+                <div class='row margin-bottom-fat'>
+                  <div class='col-md-4'>$langTotalVisitsCourses:</div>
+                  <div class='col-md-8'>$totalHits</div>
+                </div>
+                <div class='row margin-bottom-fat margin-top-fat'>
+                  <div class='col-md-4'>$langDurationVisits:</div>
+                  <div class='col-md-8'>$totalDuration</div>
+                </div>
+                <div class='row margin-bottom-fat margin-top-fat'>
+                  <div class='col-xs-12'>$langDurationVisitsPerCourse:</div>
+                  <div class='col-xs-12'>
+                    <ul class='list-group'>
+                      <li class='list-group-item disabled'>
+                        <div class='row'>
+                          <div class='col-sm-8'><b>$langCourseTitle</b></div>
+                          <div class='col-sm-4 text-muted'><b>$langDuration</b></div>
+                        </div>
+                      </li>";
+    foreach ($duration as $code => $time) {
+        $tool_content .= "
+                      <li class='list-group-item'>
+                        <div class='row'>
+                          <div class='col-sm-8'><b>" . q(course_code_to_title($code)) . "</b></div>
+                          <div class='col-sm-4 text-muted'>" . format_time_duration(0 + $time, 240) . "</div>
+                        </div>
+                      </li>";
     }
-    $tool_content .= "</table></td></tr>";
+    $tool_content .= "
+                    </ul>
+                  </div>
+                </div>";
 }
-// End of chart display; chart unlinked at end of script.
 
-$tool_content .= "<tr><th>$langLastVisits:</th><td>";
-$tool_content .= "<table class='table-default' width='550'>
-            <tr>
-              <th>$langDate</th>
-              <th width='140'>$langAction</th>
-            </tr>";
-$act["LOGIN"] = "<font color='#008000'>$langLogIn</font>";
-$act["LOGOUT"] = "<font color='#FF0000'>$langLogout</font>";
+$tool_content .= "
+                <div class='row margin-bottom-fat margin-top-fat'>
+                  <div class='col-xs-12'>$langLastVisits:</div>
+                  <div class='col-xs-12'>
+                    <ul class='list-group'>
+                      <li class='list-group-item disabled'>
+                        <div class='row'>
+                          <div class='col-sm-8'><b>$langDate</b></div>
+                          <div class='col-sm-4'><b>$langAction</b></div>
+                        </div>
+                      </li>";
+$act["LOGIN"] = "<span class='text-success'>$langLogIn</span>";
+$act["LOGOUT"] = "<span class='text-danger'>$langLogout</span>";
 $q = Database::get()->queryArray("SELECT * FROM loginout
                         WHERE id_user = ?d ORDER by idLog DESC LIMIT 10", $uid);
 
 foreach ($q as $result) {
     $when = $result->when;
     $action = $result->action;
-    
-    $tool_content .= "        
-        <td>" . strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when)) . "</td>
-        <td>" . $act[$action] . "</td>
-        </tr>";
+
+    $tool_content .= "
+                      <li class='list-group-item'>
+                        <div class='row'>
+                          <div class='col-sm-8'><b>" . strftime("%d/%m/%Y (%H:%M:%S) ", strtotime($when)) . "</b></div>
+                          <div class='col-sm-4 text-muted'>" . $act[$action] . "</div>
+                        </div>
+                      </li>";
 }
-$tool_content .= "</table>";
-$tool_content .= "</td></tr></table></div></div></div></div>";
+$tool_content .= "
+                    </ul>
+                  </div>
+                </div>";
 
 draw($tool_content, 1, null, $head_content);

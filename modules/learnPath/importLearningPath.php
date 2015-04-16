@@ -1118,7 +1118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                     <h4 class='form-heading'>$langImport</h4>
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data'>
                         <div class='form-group'>
-                            <label for='uploadedPackage' class='col-sm-2 control-label'>Εισαγωγή αρχείου</label>
+                            <label for='uploadedPackage' class='col-sm-2 control-label'>$langPathUploadFile</label>
                             <div class='col-sm-10'>
                                 <input type='hidden' name='claroFormId' value='" . uniqid('') . "' >" .
                                 fileSizeHidenInput() . "

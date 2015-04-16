@@ -3132,8 +3132,11 @@ $langExplUpgrade = "Το πρόγραμμα αναβάθμισης θα τροπ
    <em>config_backup.php</em>.";
 $langExpl2Upgrade = "Επίσης για λόγους ασφαλείας βεβαιωθείτε ότι έχετε κρατήσει αντίγραφα ασφαλείας των βάσεων δεδομένων.";
 $langWarnUpgrade = "ΠΡΟΣΟΧΗ!";
+$langUpgradeInProgress = 'Η χρήση της πλατφόρμας είναι προσωρινά αδύνατη, καθώς εδώ
+    και %s βρίσκεται σε εξέλιξη διαδικασία αναβάθμισης. Παρακαλούμε περιμένετε να
+    ολοκληρωθεί η διαδικασία πριν συνδεθείτε.';
 $langUpgradeCont = "Για να προχωρήσετε στην αναβάθμιση της βάσης δεδομένων, δώστε το όνομα
-   χρήστη και το συνθηματικό του διαχειριστή της πλατφόρμας:";
+   χρήστη και το συνθηματικό του διαχειριστή της πλατφόρμας.";
 $langUpgDetails = "Στοιχεία Εισόδου";
 $langUpgMan = "οδηγίες αναβάθμισης";
 $langUpgLastStep = "πριν προχωρήσετε στο παρακάτω βήμα.";
@@ -4439,20 +4442,26 @@ $langThemeSettingsDelete = 'Είστε σίγουρος ότι θέλετε να
 $langThemeSettingsName = "Όνομα Θέματος";
 $langGeneralSettings = 'Γενικές Ρυθμίσεις';
 $langLayout = 'Layout';
+$langLayoutConfig = 'Ρυθμίσεις Layout';
 $langFluid = 'Fluid';
 $langBoxed = 'Boxed';
 $langFluidContainerWidth = 'Μέγιστο Πλάτος Επιφάνειας Εργασίας';
 $langLogo = 'Λογότυπο';
+$langLogoConfig = 'Ρυθμίσεις Λογότυπου';
 $langLogoNormal = "(Κανονικό)";
 $langLogoSmall = "(Για μικρές οθόνες)";
-$langMainMenuLinkColor = "Χρώμα Συνδέσμου Κυρίως Μενού";
-$langMainMenuBgColor = "Χρώμα Φόντου Κυρίως Μενού";
-$langMainMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Κυρίως Μενού";
-$langMainMenuActiveLinkColor = "Χρώμα Ενεργού Συνδέσμου Κυρίως Μενού";
-$langSubMenuLinkColor = "Χρώμα Συνδέσμου Υπομενού";
-$langSubMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Υπομενού";
-$langSubMenuLinkBgHoverColor = "Χρώμα Φόντου Hovered Συνδέσμου Υπομενού";
+$langMainMenuLinkColor = "Χρώμα Συνδέσμου Ομάδας Επιλογών";
+$langMainMenuConfiguration = "Ρυθμίσεις Ομάδας Επιλογών";
+$langMainMenuBgColor = "Χρώμα Φόντου Ομάδας Επιλογών";
+$langMainMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Ομάδας Επιλογών";
+$langMainMenuActiveLinkColor = "Χρώμα Ενεργού Συνδέσμου Ομάδας Επιλογών";
+$langSubMenuConfig = "Ρυθμίσεις Επιλογών Ομάδων";
+$langSubMenuLinkColor = "Χρώμα Συνδέσμου Επιλογών";
+$langSubMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Επιλογών";
+$langSubMenuLinkBgHoverColor = "Χρώμα Φόντου Hovered Συνδέσμου Επιλογών";
 $langBgColor = 'Χρώμα Φόντου';
+$langBgColorConfig = 'Ρυθμίσεις Φόντου';
+$langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
 $langLinkColor = 'Χρώμα Συνδέσμων';
 $langLinkHoverColor = 'Χρώμα Hovered Συνδέσμων';
 $langBgImg = "Εικόνα Φόντου";
@@ -4461,6 +4470,7 @@ $langStretchedImg = 'Τεντωμένη Εικόνα';
 $langFixedImg = 'Σταθερή Εικόνα';
 $langNavSettings = 'Ρυθμίσεις Μενού Πλοήγησης';
 $langSaveAs = 'Αποθήκευση ως ...';
+$langLoginConfiguration = "Ρυθμίσεις Οθόνης Σύνδεσης";
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
 $langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";

@@ -128,6 +128,10 @@ function getUserLessonInfo($uid) {
 function getUserAnnouncements($lesson_id, $type = '') {
 
     global $urlAppend, $dateFormatLong;
+
+    if (!count($lesson_id)) {
+        return '';
+    }
             
     $ann_content = '';
     $last_month = strftime('%Y-%m-%d', strtotime('now -1 month'));
