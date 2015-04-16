@@ -72,13 +72,7 @@ if (isset($_REQUEST['toolStatus'])) {
 
 if (isset($_GET['delete'])) {
     $delete = $_GET['delete'];
-    $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);
-    if ($r->category == -2) { //  backward compatibility ----- if we want to delete html page also delete file
-        $link = explode(" ", $r->url);
-        $path = substr($link[0], 6);
-        $file2Delete = $webDir . "/" . $path;
-        unlink($file2Delete);
-    }
+    $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);    
     Database::get()->query("DELETE FROM link WHERE id = ?d", $delete);
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
                                                                    'link' => $r->url,
@@ -214,7 +208,7 @@ $tool_content .= "<table class='table-default'>
   <th class='text-center'>".icon('fa-gears')."</th>
 </tr>";
 $q = Database::get()->queryArray("SELECT id, title FROM link
-                        WHERE category IN(-1,-2) AND
+                        WHERE category = -1 AND
                         course_id = ?d", $course_id);
 foreach ($q as $externalLinks) {
     $tool_content .= "<td class='text-left'>" . q($externalLinks->title) . "</td>";
