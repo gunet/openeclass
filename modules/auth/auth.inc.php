@@ -850,6 +850,7 @@ function shib_cas_login($type) {
         $surname = $_SESSION['cas_surname'];
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
+        $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
     }
     // user is authenticated, now let's see if he is registered also in db
     if (get_config('case_insensitive_usernames')) {
@@ -871,6 +872,7 @@ function shib_cas_login($type) {
             unset($_SESSION['cas_email']);
             unset($_SESSION['cas_surname']);
             unset($_SESSION['cas_givenname']);
+            unset($_SESSION['cas_userstudentid']);
             Session::Messages($langUserAltAuth, 'alert-danger');
             redirect_to_home_page();
         } else {
@@ -920,10 +922,11 @@ function shib_cas_login($type) {
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
+                        am = ?s,
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language)->lastInsertID;
+                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am)->lastInsertID;
     } else {
         // user not registered, automatic registration disabled
         // redirect to registration screen

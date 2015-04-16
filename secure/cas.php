@@ -32,7 +32,6 @@ cas_authenticate($auth);
 if (phpCAS::checkAuthentication()) {
     $cas = get_auth_settings($auth);
     $attrs = get_cas_attrs(phpCAS::getAttributes(), $cas);
-    print_a($attrs);
     $_SESSION['cas_uname'] = phpCAS::getUser();
 
     if (!empty($_SESSION['cas_uname'])) {
