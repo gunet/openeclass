@@ -375,6 +375,7 @@ $langcas_altauth = "Εναλλακτικός τρόπος πιστοποίηση
 $langcasusermailattr = "CAS SAML attribute για το E-mail";
 $langcasuserfirstattr = "CAS SAML attribute για το Όνομα";
 $langcasuserlastattr = "CAS SAML attribute για το Επώνυμο";
+$langcasuserstudentid = "CAS SAML attribute για τον Αριθμό Μητρώου";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
 $langChangeUser = 'Σύνδεση με λογαριασμό άλλου χρήστη';
 $langChangeUserAs = 'Σύνδεση ως';

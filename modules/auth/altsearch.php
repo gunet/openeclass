@@ -198,6 +198,7 @@ if ($is_valid) {
     if (isset($auth_user_info)) {
         $givenname_form = $auth_user_info['firstname'];
         $surname_form = $auth_user_info['lastname'];
+        $am = $auth_user_info['studentid'];
         if (!$email and !empty($auth_user_info['email'])) {
             $email = $auth_user_info['email'];
         }
@@ -478,7 +479,7 @@ function user_info_form() {
                  " .($email_required ? "&nbsp;" : "<span class='help-block'><small>$mail_message</small></span>") . "
             </div>
         </div>";
-    if (!$prof) {        
+    if (!$prof) {
         if (get_config('am_required')) {
             $am_message = $langCompulsory;
         } else {
@@ -486,8 +487,9 @@ function user_info_form() {
         }
         $tool_content .= "<div class='form-group'>
                 <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
-                <div class='col-sm-10'>
-                    <input type='text' name='am' size='20' maxlength='20'" . set('am') . "' placeholder='$am_message'>
+                <div class='col-sm-10'> ". (isset($auth_user_info) ?
+                    $auth_user_info['studentid'] :
+                    '<input type="text" name="am" size="20" maxlength="20"' . set('am') . ' placeholder="$am_message"> ') . "
                 </div>
             </div>";        
     }

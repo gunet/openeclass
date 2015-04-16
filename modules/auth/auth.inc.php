@@ -209,7 +209,8 @@ function get_auth_settings($auth) {
                         'casuserlastattr' => str_replace('casuserlastattr=', '', @$cas[6]),
                         'cas_altauth' => str_replace('cas_altauth=', '', @$cas[7]),
                         'cas_logout' => str_replace('cas_logout=', '', @$cas[8]),
-                        'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9])));
+                        'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9]),
+                        'casuserstudentid' => str_replace('casuserstudentid=', '', @$cas[10])));
                     break;
             }
             $settings['auth_name'] = $auth_ids[$auth];
@@ -455,6 +456,7 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
             $casusermailattr = $cas['casusermailattr'];
             $casuserfirstattr = $cas['casuserfirstattr'];
             $casuserlastattr = $cas['casuserlastattr'];
+            $casuserstudentid = $cas['casuserstudentid'];
             $cas_altauth = $cas['cas_altauth'];
         }
     }
@@ -533,6 +535,12 @@ function get_cas_attrs($phpCASattrs, $settings) {
             $ret['casuserlastattr'] = $attrs[$settings['casuserlastattr']];
             $GLOBALS['auth_user_info']['lastname'] = $attrs[$settings['casuserlastattr']];
         }
+
+	if (!empty($settings['casuserstudentid']))
+		if(!empty($attrs[$settings['casuserstudentid']])) {
+			$ret['casuserstudentid'] = $attrs[$settings['casuserstudentid']];
+			$GLOBALS['auth_user_info']['studentid'] = $attrs[$settings['casuserstudentid']];
+		}
 
     return $ret;
 }
