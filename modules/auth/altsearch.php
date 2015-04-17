@@ -484,9 +484,9 @@ function user_info_form() {
         $tool_content .= "<div class='form-group'>
                 <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
                 <div class='col-sm-10'>" .
-                    (isset($_SESSION['auth_user_info']) && !empty($_SESSION['auth_user_info']['studentid'] ?
+                    (isset($_SESSION['auth_user_info']) && !empty($_SESSION['auth_user_info']['studentid']) ?
                         q($_SESSION['auth_user_info']['studentid']) :
-                        '<input type="text" name="am" size="20" maxlength="20"' . set('am') . ' placeholder="' q($am_message) . '"> ') . "
+                        '<input type="text" name="am" size="20" maxlength="20"' . set('am') . ' placeholder="' . q($am_message) . '"> ') . "
                 </div>
             </div>";        
     }
