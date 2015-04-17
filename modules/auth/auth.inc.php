@@ -911,22 +911,27 @@ function shib_cas_login($type) {
             }
         }
     } elseif ($autoregister and !get_config('am_required')) {
-        // if user not found and autoregister enabled, create user
-        if (get_config('email_verification_required')) {
-            $verified_mail = 0;
-            $_SESSION['mail_verification_required'] = 1;
-        } else {
-            $verified_mail = 2;
-        }
+    // if user not found and autoregister enabled, create user
+	    $verified_mail = EMAIL_UNVERIFIED;
+    	if (isset($_SESSION['cas_email'])) {
+    	    $verified_mail = EMAIL_VERIFIED;
+    	} else { // redirect user to mail_verify_change.php
+	    	$_SESSION['mail_verification_required'] = 1;
+    		/*        if (get_config('email_verification_required')) {
+            	$verified_mail = 0;
+            	$_SESSION['mail_verification_required'] = 1;
+        	} */    	    
+    	}
+        
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
-                        am = ?s,
+                        am = ?s, verified_mail = ?d,
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am)->lastInsertID;
+                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am, $verified_mail)->lastInsertID;
     } else {
         // user not registered, automatic registration disabled
         // redirect to registration screen

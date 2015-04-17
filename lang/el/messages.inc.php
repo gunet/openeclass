@@ -2012,6 +2012,7 @@ $langProtect = "Συμβουλή: Για να προστατέψετε το Open
            επιτρέψτε μόνο ανάγνωση (CHMOD 444).";
 $langInstallSuccess = "Η εγκατάσταση ολοκληρώθηκε με επιτυχία! Κάντε κλικ παρακάτω για να μπείτε στο Open eClass";
 $langEnterFirstTime = "Είσοδος στο Open eClass";
+$langCancelAndEnter = "Παράλειψη και Είσοδος";
 $langMCU = "MCU (μονάδα ελέγχου για τηλεδιάσκεψη)";
 $langVod = "Εξυπηρέτης Vod ";
 $langSiteUrl = "URL του Open eClass";
@@ -2672,8 +2673,9 @@ $langSurname = "Επώνυμο";
 $langUsername = "Όνομα χρήστη (username)";
 $langConfirmation = "Επιβεβαίωση συνθηματικού";
 $langUserNotice = "Μέχρι 30 χαρακτήρες";
-$langEmailNotice = "Το e-mail δεν είναι απαραίτητο, αλλά χωρίς αυτό δε θα μπορείτε να λαμβάνετε
-ανακοινώσεις, ούτε θα μπορείτε να χρησιμοποιήσετε τη λειτουργία υπενθύμισης συνθηματικού.";
+$langEmailInfo = "Μπορείτε να δηλώσετε μια διεύθυνση email στη παρακάτω φόρμα.";
+$langEmailNotice = "Η διεύθυνση email δεν είναι απαραίτητη, αλλά χωρίς αυτή δε θα μπορείτε να λαμβάνετε
+ανακοινώσεις και ειδοποιήσεις.";
 $langAm = "Αριθμός μητρώου";
 $langEmailVerified = "Το e-mail έχει επιβεβαιωθεί";
 $langUserDetails = "Εγγραφή $langOfStudent";
@@ -3019,7 +3021,7 @@ $langMailVerificationToaddr = "στην ηλεκτρονική διεύθυνσ�
 $langMailVerificationCode = "Κωδικός επιβεβαίωσης";
 $langMailVerificationNewCode = "Αποστολή κωδικού επιβεβαίωσης";
 $langMailVerificationWrong = "Η διεύθυνση ηλεκτρονικού ταχυδρομείου δεν άλλαξε γιατί δεν είναι συμπληρωμένη ή περιέχει άκυρους χαρακτήρες";
-$langMailVerificationAddrChange = "Αν η διεύθυνση είναι λάθος παρακαλούμε πληκτρολογήστε τη σωστή";
+$langMailVerificationAddrChange = "παρακαλούμε πληκτρολογήστε μία σωστή διεύθυνση";
 $langMailVerificationSuccess3 = "Ελέγξτε ότι είναι σωστή η παρακάτω ηλεκτρονική διεύθυνση και πατήστε στην «<b>$langMailVerificationNewCode</b>»";
 $langMailVerificationReq = "Είναι απαραίτητο να επιβεβαιωθεί η e-mail διεύθυνση σας προτού προχωρήσετε.<br /><br />$langMailVerificationSuccess3";
 $langMailVerificationSuccess4 = "Σύντομα θα λάβετε ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις απαραίτητες οδηγίες για την ολοκλήρωση της εγγραφής σας";

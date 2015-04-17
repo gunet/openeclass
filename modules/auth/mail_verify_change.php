@@ -42,10 +42,11 @@ if (empty($uid)) {
     draw($tool_content, 0);
     exit;
 }
-// user might already verified mail account or verification is no more needed (e.g. autoregister is enabled)
+// user might already verified mail account or verification is no more needed
 if (!get_config('email_verification_required') or
-    get_mail_ver_status($uid) == EMAIL_VERIFIED or		
-    get_config('alt_auth_stud_reg') == 2) {
+    get_mail_ver_status($uid) == EMAIL_VERIFIED or
+    isset($_SESSION['cas_email']) or
+    isset($_POST['enter'])) {
     	if (isset($_SESSION['mail_verification_required'])) {
         	unset($_SESSION['mail_verification_required']);
     	}
@@ -79,10 +80,15 @@ if (!empty($_POST['submit'])) {
     else {
         $tool_content .= "<div class='alert alert-danger'>$langMailVerificationWrong</div> ";
     }
-} elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
-    $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div> ";
+} else {
+	if (get_config('alt_auth_stud_reg') == 2) {
+			$tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
+	} else if (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
+	    	$tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+	}
 }
 
+//var_dump($_SESSION);
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
     $tool_content .= "<div class='form-wrapper'>
     	<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
@@ -96,6 +102,7 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
 			<div class='form-group'>
 				<div class='col-sm-offset-2 col-sm-10'>
 					<input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>
+					<input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>
 				</div>
 			</div>
         </fieldset>
