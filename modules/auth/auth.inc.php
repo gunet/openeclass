@@ -161,62 +161,24 @@ function get_auth_settings($auth) {
 
     $auth = intval($auth);
     $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
-    if ($result) {
-            $settings['auth_id'] = $result->auth_id;
-            $settings['auth_settings'] = $result->auth_settings;
-            $auth_settings = $settings['auth_settings'];
-            $settings['auth_title'] = $result->auth_title;
-            $settings['auth_instructions'] = $result->auth_instructions;
-            $settings['auth_default'] = $result->auth_default;
-            switch ($auth) {
-                case 2:
-                    $settings['pop3host'] = str_replace('pop3host=', '', $auth_settings);
-                    break;
-                case 3:
-                    $settings['imaphost'] = str_replace('imaphost=', '', $auth_settings);
-                    break;
-                case 4:
-                    $ldap = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'ldaphost' => str_replace('ldaphost=', '', @$ldap[0]),
-                        'ldap_base' => str_replace('ldap_base=', '', @$ldap[1]),
-                        'ldapbind_dn' => str_replace('ldapbind_dn=', '', @$ldap[2]),
-                        'ldapbind_pw' => str_replace('ldapbind_pw=', '', @$ldap[3]),
-                        'ldap_login_attr' => str_replace('ldap_login_attr=', '', @$ldap[4]),
-                        'ldap_login_attr2' => str_replace('ldap_login_attr2=', '', @$ldap[5])));
-                    break;
-                case 5:
-                    $edb = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'dbhost' => str_replace('dbhost=', '', @$edb[0]),
-                        'dbname' => str_replace('dbname=', '', @$edb[1]),
-                        'dbuser' => str_replace('dbuser=', '', @$edb[2]),
-                        'dbpass' => str_replace('dbpass=', '', @$edb[3]),
-                        'dbtable' => str_replace('dbtable=', '', @$edb[4]),
-                        'dbfielduser' => str_replace('dbfielduser=', '', @$edb[5]),
-                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6]),
-                        'dbpassencr' => str_replace('dbpassencr=', '', @$edb[7])));
-                    break;
-                case 7:
-                    $cas = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'cas_host' => str_replace('cas_host=', '', @$cas[0]),
-                        'cas_port' => str_replace('cas_port=', '', @$cas[1]),
-                        'cas_context' => str_replace('cas_context=', '', @$cas[2]),
-                        'cas_cachain' => str_replace('cas_cachain=', '', @$cas[3]),
-                        'casusermailattr' => str_replace('casusermailattr=', '', @$cas[4]),
-                        'casuserfirstattr' => str_replace('casuserfirstattr=', '', @$cas[5]),
-                        'casuserlastattr' => str_replace('casuserlastattr=', '', @$cas[6]),
-                        'cas_altauth' => str_replace('cas_altauth=', '', @$cas[7]),
-                        'cas_logout' => str_replace('cas_logout=', '', @$cas[8]),
-                        'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9]),
-                        'casuserstudentid' => str_replace('casuserstudentid=', '', @$cas[10])));
-                    break;
-            }
-            $settings['auth_name'] = $auth_ids[$auth];
-            return $settings;
+    if (!$result) {
+        return 0;
     }
-    return 0;
+
+    $settings['auth_id'] = $result->auth_id;
+    $settings['auth_settings'] = $result->auth_settings;
+    $settings['auth_title'] = $result->auth_title;
+    $settings['auth_instructions'] = $result->auth_instructions;
+    $settings['auth_default'] = $result->auth_default;
+    $settings['auth_name'] = $auth_ids[$auth];
+
+    foreach (explode('|', $result->auth_settings) as $item) {
+        if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
+            $settings[$matches[1]] = $matches[2];
+        }
+    }
+
+    return $settings;
 }
 
 /* * **************************************************************
