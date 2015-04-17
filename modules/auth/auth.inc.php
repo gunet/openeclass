@@ -35,7 +35,7 @@
 
 require_once 'include/log.php';
 // pop3 class
-include 'modules/auth/methods/pop3.php';
+require_once 'modules/auth/methods/pop3.php';
 require_once 'include/phpass/PasswordHash.php';
 
 $auth_ids = array(1 => 'eclass',
@@ -185,16 +185,17 @@ function get_auth_settings($auth) {
   Try to authenticate the user with the admin-defined auth method
   true (the user is authenticated) / false (not authenticated)
 
-  $auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db, 6:shibboleth, 7:cas)
+  $auth an integer-value for auth method (1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db, 6:shibboleth, 7:cas)
   $test_username
   $test_password
   return $testauth (boolean: true-is authenticated, false-is not)
 
-  Sets the global variable $auth_user_info to an array with the following
+  Sets the session variable $auth_user_info to an array with the following
   keys, if available from the current auth method:
-  firstname (LDAP attribute: givenname)
-  lastname (LDAP attribute: sn)
+  givenname (LDAP attribute: givenname)
+  surname (LDAP attribute: sn)
   email (LDAP attribute: mail)
+  studentid
  * ************************************************************** */
 
 function auth_user_login($auth, $test_username, $test_password, $settings) {
@@ -265,7 +266,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         $search_filter = "($settings[ldap_login_attr]=${test_username})";
                     } else {
                         $search_filter = "(|($settings[ldap_login_attr]=${test_username})
-                                                                ($settings[ldap_login_attr2]=${test_username}))";
+                                            ($settings[ldap_login_attr2]=${test_username}))";
                     }
 
                     $userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
@@ -275,15 +276,15 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
-                                $lastname = get_ldap_attribute($userinfo, 'sn');
-                                $firstname = get_ldap_attribute($userinfo, 'givenname');
-                                if (empty($firstname)) {
+                                $surname = get_ldap_attribute($userinfo, 'sn');
+                                $givenname = get_ldap_attribute($userinfo, 'givenname');
+                                if (empty($givennname)) {
                                     $cn = get_ldap_attribute($userinfo, 'cn');
-                                    $firstname = trim(str_replace($lastname, '', $cn));
+                                    $givenname = trim(str_replace($surname, '', $cn));
                                 }
-                                $GLOBALS['auth_user_info'] = array(
-                                    'firstname' => $firstname,
-                                    'lastname' => $lastname,
+                                $_SESSION['auth_user_info'] = array(
+                                    'givenname' => $givenname,
+                                    'surname' => $surname,
                                     'email' => get_ldap_attribute($userinfo, 'mail'));
                             }
                         }
@@ -480,29 +481,18 @@ function get_cas_attrs($phpCASattrs, $settings) {
     }
 
     $ret = array();
-    if (!empty($settings['casusermailattr']))
-        if (!empty($attrs[$settings['casusermailattr']])) {
-            $ret['casusermailattr'] = $attrs[$settings['casusermailattr']];
-            $GLOBALS['auth_user_info']['email'] = $attrs[$settings['casusermailattr']];
+    foreach (array('email' => 'casusermailattr',
+                   'givenname' => 'casuserfirstattr',
+                   'surname' => 'casuserlastattr',
+                   'studentid' => 'casuserstudentid') as $name => $attrname) {
+        $_SESSION['auth_user_info'][$name] = $ret[$attrname] = '';
+        if (isset($settings[$attrname]) and $settings[$attrname]) {
+            $setting = $settings[$attrname];
+            if (isset($attrs[$setting])) {
+                $_SESSION['auth_user_info'][$name] = $ret[$attrname] = $attrs[$setting];
+            }
         }
-
-    if (!empty($settings['casuserfirstattr']))
-        if (!empty($attrs[$settings['casuserfirstattr']])) {
-            $ret['casuserfirstattr'] = $attrs[$settings['casuserfirstattr']];
-            $GLOBALS['auth_user_info']['firstname'] = $attrs[$settings['casuserfirstattr']];
-        }
-
-    if (!empty($settings['casuserlastattr']))
-        if (!empty($attrs[$settings['casuserlastattr']])) {
-            $ret['casuserlastattr'] = $attrs[$settings['casuserlastattr']];
-            $GLOBALS['auth_user_info']['lastname'] = $attrs[$settings['casuserlastattr']];
-        }
-
-	if (!empty($settings['casuserstudentid']))
-		if(!empty($attrs[$settings['casuserstudentid']])) {
-			$ret['casuserstudentid'] = $attrs[$settings['casuserstudentid']];
-			$GLOBALS['auth_user_info']['studentid'] = $attrs[$settings['casuserstudentid']];
-		}
+    }
 
     return $ret;
 }
@@ -754,13 +744,17 @@ function alt_login($user_info_object, $uname, $pass) {
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             // if ldap entries have changed update database
-            if (!empty($auth_user_info['firstname']) and (!empty($auth_user_info['lastname'])) and (($user_info_object->givenname != $auth_user_info['firstname']) or
-                    ($user_info_object->surname != $auth_user_info['lastname']))) {
-                Database::get()->query("UPDATE user SET givenname = '" . $auth_user_info['firstname'] . "',
-                                                          surname = '" . $auth_user_info['lastname'] . "'
-                                                      WHERE id = " . $user_info_object->id . "");
-                $_SESSION['surname'] = $auth_user_info['firstname'];
-                $_SESSION['givenname'] = $auth_user_info['lastname'];
+            if (!empty($_SESSION['auth_user_info']['givenname']) and
+                !empty($_SESSION['auth_user_info']['surname']) and
+                ($user_info_object->givenname != $_SESSION['auth_user_info']['givenname'] or
+                 $user_info_object->surname != $_SESSION['auth_user_info']['surname'])) {
+                Database::get()->query("UPDATE user SET givenname = ?s, surname = ?s
+                                                    WHERE id = ?d",
+                    $_SESSION['auth_user_info']['givenname'],
+                    $_SESSION['auth_user_info']['surname'],
+                    $user_info_object->id);
+                $_SESSION['surname'] = $_SESSION['auth_user_info']['surname'];
+                $_SESSION['givenname'] = $_SESSION['auth_user_info']['givenname'];
             } else {
                 $_SESSION['surname'] = $user_info_object->surname;
                 $_SESSION['givenname'] = $user_info_object->givenname;
