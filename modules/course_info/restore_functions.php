@@ -563,6 +563,8 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         $link_category_map = restore_table($restoreThis, 'link_category', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         $link_category_map[0] = 0;
+        $link_category_map[-1] = -1;
+        $link_category_map[-2] = -2;
         $link_map = restore_table($restoreThis, 'link', array('set' => array('course_id' => $new_course_id),
             'map' => array('category' => $link_category_map), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         $ebook_map = restore_table($restoreThis, 'ebook', array('set' => array('course_id' => $new_course_id), 'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
