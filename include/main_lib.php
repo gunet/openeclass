@@ -1399,6 +1399,10 @@ function delete_course($cid) {
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `link` ON `rating`.`rid` = `link`.`id`
+                            WHERE `rating`.`rtype` = ?s AND `link`.`course_id` = ?d", 'link', $cid);
+    Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `link` ON `rating_cache`.`rid` = `link`.`id`
+                            WHERE `rating_cache`.`rtype` = ?s AND `link`.`course_id` = ?d", 'link', $cid);
     Database::get()->query("DELETE FROM link WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM link_category WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM agenda WHERE course_id = ?d", $cid);

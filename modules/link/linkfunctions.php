@@ -20,6 +20,7 @@
  * ======================================================================== */
 
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/rating/class.rating.php';
 
 function makedefaultviewcode($locatie) {
     global $aantalcategories;
@@ -76,6 +77,11 @@ function showlinksofcategory($catid) {
                 urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
+        }
+        if ($catid == -2) { //social bookmarks can be rated
+            global $uid;
+            $rating = new Rating('thumbs_up', 'link', $myrow->id);
+            $tool_content .= $rating->put($is_editor, $uid, $course_id);
         }
         $tool_content .= "</td>";
         
