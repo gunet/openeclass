@@ -29,6 +29,7 @@ include '../../include/init.php';
 if (isset($_GET['c'])) {
     $code = $_GET['c'];
     $course_id = course_code_to_id($code);
+    $course_status = course_status($course_id);
 } else {
     $code = '';
     $course_id = false;
@@ -42,17 +43,12 @@ if ($course_id === false) {
     '" does not exist.</p></body></html>';
     exit;
 }
-if (!visible_module(MODULE_ID_ANNOUNCE)) {
-    Session::Messages($langCheckPublicTools);
-    session_write_close();
-    $errorMessagePath = "../../";    
-    if (!$uid) {
-        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
-    } else {
-        header("Location:" . $urlServer . "index.php");
-    }
-    exit;
+if ($course_status == COURSE_INACTIVE or
+    !visible_module(MODULE_ID_ANNOUNCE) or
+    ($course_status != COURSE_OPEN and
+     !(isset($_GET['token']) and isset($_GET['uid']) and
+       rss_token_valid($_GET['token'], $_GET['uid'])))) {
+    forbidden($_SERVER['REQUEST_URI']);
 }
 
 $title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $course_id)->title, ENT_NOQUOTES);
@@ -89,3 +85,18 @@ Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %
 }, $course_id);
 
 echo "</channel></rss>";
+
+
+function rss_token_valid($token, $uid) {
+    global $code, $course_id;
+
+    if (!token_validate('announce' . $uid . $code, $token)) {
+        return false;
+    }
+    $q = Database::get()->querySingle('SELECT status FROM course_user
+        WHERE course_id = ?d AND user_id = ?d', $course_id, $uid);
+    if (!$q or !$q->status) {
+        return false;
+    }
+    return true;
+}

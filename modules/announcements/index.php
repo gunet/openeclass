@@ -38,7 +38,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_ANNOUNCE);
 
-define('RSS', 'modules/announcements/rss.php?c=' . $course_code);
+define_rss_link();
 
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -653,4 +653,22 @@ $head_content .= "<script type='text/javascript'>
         $('#tags').select2('data', [".$answer."]);
     });
     </script>";
+
 draw($tool_content, 2, null, $head_content);
+
+function define_rss_link() {
+    global $uid, $course_code, $course_id;
+
+    $link = 'modules/announcements/rss.php?c=' . $course_code;
+    $course_status = course_status($course_id);
+
+    if ($course_status == COURSE_INACTIVE) {
+        return;
+    } elseif ($course_status != COURSE_OPEN) {
+        $link .= '&amp;uid=' . $uid .  '&amp;token=' .
+            token_generate('announce' . $uid . $course_code);
+    }
+
+    define('RSS', $link);
+
+}
