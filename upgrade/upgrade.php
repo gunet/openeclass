@@ -2611,6 +2611,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0.1', '<')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
+        Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
+        Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
     }
 
     // update eclass version

@@ -57,7 +57,12 @@ $toolName = $langWorks;
 //-------------------------------------------
 // main program
 //-------------------------------------------
-
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    $sid = $_POST['sid'];
+    $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
+    echo json_encode($data);
+    exit();    
+}
 //Gets the student's assignment file ($file_type=NULL) 
 //or the teacher's assignment ($file_type=1)
 if (isset($_GET['get'])) {
@@ -90,7 +95,31 @@ if ($is_editor) {
     global $themeimg, $m;
     $head_content .= "
     <script type='text/javascript'>
-    $(function() {        
+    $(function() {
+        $('.onlineText').click( function(e){
+            e.preventDefault();
+            var sid = $(this).data('id');
+            $.ajax({
+              type: 'POST',
+              url: '',
+              datatype: 'json',
+              data: {
+                 sid: sid
+              },
+              success: function(data){
+                data = $.parseJSON(data);
+                bootbox.alert({ 
+                    size: 'large',
+                    message: data.submission_text, 
+                });                
+              },
+              error: function(xhr, textStatus, error){
+                  console.log(xhr.statusText);
+                  console.log(textStatus);
+                  console.log(error);
+              }
+            });                         
+        });
         $('input[name=group_submissions]').click(changeAssignLabel);
         $('input[id=assign_button_some]').click(ajaxAssignees);        
         $('input[id=assign_button_all]').click(hideAssignees);
@@ -302,6 +331,7 @@ function add_assignment() {
         $title = $_POST['title'];
         $desc = $_POST['desc'];
         $deadline = (trim($_POST['WorkEnd'])!=FALSE) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '0000-00-00 00:00:00';
+        $submission_type = $_POST['submission_type'];
         $late_submission = ((isset($_POST['late_submission']) &&  trim($_POST['WorkEnd']!=FALSE)) ? 1 : 0);
         $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
         $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
@@ -313,8 +343,8 @@ function add_assignment() {
             $assign_to_specific = 0;
         }
         if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
-            $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
-                    . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
+                    . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
             
             //tags
             if (isset($_POST['tags'])) {
@@ -388,25 +418,26 @@ function add_assignment() {
 }
 
 function submit_work($id, $on_behalf_of = null) {
-    global $tool_content, $workPath, $uid, $course_id, $works_url,
-    $langUploadSuccess, $langBack, $langUploadError,
-    $langExerciseNotPermit, $langUnwantedFiletype, $course_code,
-    $langOnBehalfOfUserComment, $langOnBehalfOfGroupComment, $course_id;
+    global $course_id, $uid, $langOnBehalfOfGroupComment, 
+           $works_url, $langOnBehalfOfUserComment, $workPath, 
+           $langUploadSuccess, $langUploadError, $course_code;
 
-    if (isset($on_behalf_of)) {
-        $user_id = $on_behalf_of;
-    } else {
-        $user_id = $uid;
-    }
-    $submit_ok = FALSE; // Default do not allow submission
+    $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type, 
+                            deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                            FROM assignment 
+                            WHERE course_id = ?d AND id = ?d", 
+                            $course_id, $id);    
+
+    $nav[] = $works_url;
+    $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => q($row->title));
+
+    $submit_ok = FALSE; // Default do not allow submission    
     if (isset($uid) && $uid) { // check if logged-in
         if ($GLOBALS['status'] == 10) { // user is guest
             $submit_ok = FALSE;
         } else { // user NOT guest
             if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
                 // user is registered to this lesson
-                $row = Database::get()->querySingle("SELECT deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
-                                              FROM assignment WHERE id = ?d", $id);
                 if (($row->time < 0 && (int) $row->deadline && !$row->late_submission) and !$on_behalf_of) {
                     $submit_ok = FALSE; // after assignment deadline
                 } else {
@@ -417,115 +448,130 @@ function submit_work($id, $on_behalf_of = null) {
                 $submit_ok = FALSE;
             }
         }
-    } //checks for submission validity end here
-    
-    $row = Database::get()->querySingle("SELECT title, group_submissions FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    $title = q($row->title);
-    $group_sub = $row->group_submissions;
-    $nav[] = $works_url;
-    $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => $title);
-
+    } //checks for submission validity end here    
     if ($submit_ok) {
-        if ($group_sub) {
+        $success_msgs = array();
+        $error_msgs = array();
+        //Preparing variables
+        $user_id = isset($on_behalf_of) ? $on_behalf_of : $uid;
+        if ($row->group_submissions) {
             $group_id = isset($_POST['group_id']) ? intval($_POST['group_id']) : -1;
             $gids = user_group_info($on_behalf_of ? null : $user_id, $course_id);
-            $local_name = isset($gids[$group_id]) ? greek_to_latin($gids[$group_id]) : '';
         } else {
             $group_id = 0;
-            $local_name = uid_to_name($user_id);
-            $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
-            if (!empty($am)) {
-                $local_name .= $am;
-            }
-            $local_name = greek_to_latin($local_name);
         }
-        $local_name = replace_dangerous_char($local_name);
-        if (isset($on_behalf_of) and
-                (!isset($_FILES) or !$_FILES['userfile']['size'])) {
-            $_FILES['userfile']['name'] = '';
-            $_FILES['userfile']['tmp_name'] = '';
-            $no_files = true;
-        } else {
-            $no_files = false;
-        }
-
-        validateUploadedFile($_FILES['userfile']['name'], 2);
-
-        if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-            $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-            $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
-            return;
-        }
-        $secret = work_secret($id);
-        $ext = get_file_extension($_FILES['userfile']['name']);
-        $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-
-        if (!isset($on_behalf_of)) {
-            $msg1 = delete_submissions_by_uid($user_id, -1, $id);
-            if ($group_sub) {
-                if (array_key_exists($group_id, $gids)) {
-                    $msg1 = delete_submissions_by_uid(-1, $group_id, $id);
-                }
-            }
-        } else {
-            $msg1 = '';
-        }
-        if ($no_files or move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
-            if ($no_files) {
-                $filename = '';
+        // If submission type is Online Text
+        if($row->submission_type){        
+            $filename = '';
+            $file_name = '';
+        } else { // If submission type is File
+            if ($row->group_submissions) {
+                $local_name = isset($gids[$group_id]) ? greek_to_latin($gids[$group_id]) : '';
             } else {
-                @chmod("$workPath/$filename", 0644);
+                $local_name = uid_to_name($user_id);
+                $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
+                if (!empty($am)) {
+                    $local_name .= $am;
+                }
+                $local_name = greek_to_latin($local_name);            
             }
-            $msg2 = $langUploadSuccess;
-            $submit_ip = $_SERVER['REMOTE_ADDR'];
-            if (isset($on_behalf_of)) {
-                if ($group_sub) {
-                    $auto_comments = sprintf($langOnBehalfOfGroupComment, uid_to_name($uid), $gids[$group_id]);
+            $local_name = replace_dangerous_char($local_name);
+            if (isset($on_behalf_of) and (!isset($_FILES) or !$_FILES['userfile']['size'])) {
+                $_FILES['userfile']['name'] = '';
+                $_FILES['userfile']['tmp_name'] = '';
+                $no_files = true;
+            } else {
+                $no_files = false;
+            }
+            $file_name = $_FILES['userfile']['name'];
+            validateUploadedFile($file_name, 2);
+            if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+                Session::Messages("$langUnwantedFiletype: ".$file_name, 'alert-warning');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=".$row->id);
+            }
+            $secret = work_secret($row->id);
+            $ext = get_file_extension($file_name);
+            $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
+
+            if ($no_files or move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
+                if ($no_files) {
+                    $filename = '';
                 } else {
-                    $auto_comments = sprintf($langOnBehalfOfUserComment, uid_to_name($uid), uid_to_name($user_id));
+                    @chmod("$workPath/$filename", 0644);
                 }
-                $stud_comments = $auto_comments;
-                $grade_comments = $_POST['stud_comments'];
-                
-                $grade_valid = filter_input(INPUT_POST, 'grade', FILTER_VALIDATE_FLOAT);
-                (isset($_POST['grade']) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
-             
-                $grade_ip = $submit_ip;
+                $success_msgs[] = $langUploadSuccess;
             } else {
-                $stud_comments = $_POST['stud_comments'];
-                $grade = NULL;
-                $grade_comments = $grade_ip = "";            
-            }
-            if (!$group_sub or array_key_exists($group_id, $gids)) {
-                $file_name = $_FILES['userfile']['name'];
-                $sid = Database::get()->query("INSERT INTO assignment_submit
-                                        (uid, assignment_id, submission_date, submission_ip, file_path,
-                                         file_name, comments, grade, grade_comments, grade_submission_ip,
-                                         grade_submission_date, group_id)
-                                         VALUES (?d, ?d, NOW(), ?s, ?s, ?s, ?s, ?f, ?s, ?s, NOW(), ?d)", $user_id, $id, $submit_ip, $filename, $file_name, $stud_comments, $grade, $grade_comments, $grade_ip, $group_id)->lastInsertID;
-                Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
-                    'title' => $title,
-                    'assignment_id' => $id,
-                    'filepath' => $filename,
-                    'filename' => $file_name,
-                    'comments' => $stud_comments,
-                    'group_id' => $group_id));
-                
-                // update attendance book as well
-                update_attendance_book($id, 'assignment');
-                
-                if ($on_behalf_of and isset($_POST['email'])) {
-                    $email_grade = $_POST['grade'];
-                    $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
-                    grade_email_notify($id, $sid, $email_grade, $email_comments);
-                }
-            }
-            $tool_content .= "<div class='alert alert-success'>$msg2<br>$msg1<br><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id'>$langBack</a></div><br>";
-        } else {
-            $tool_content .= "<div class='alert alert-danger'>$langUploadError<br><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
+                $error_msgs[] = $langUploadError;
+            }         
         }
+
+        $submit_ip = $_SERVER['REMOTE_ADDR'];
+        $submission_text = isset($_POST['submission_text']) ? purify($_POST['submission_text']) : NULL;
+        if (isset($on_behalf_of)) {           
+            if ($row->group_submissions) {
+                $stud_comments = sprintf($langOnBehalfOfGroupComment, uid_to_name($uid), $gids[$group_id]);
+            } else {
+                $stud_comments = sprintf($langOnBehalfOfUserComment, uid_to_name($uid), uid_to_name($user_id));
+            }
+            $grade_comments = $_POST['stud_comments'];
+            $grade_valid = filter_input(INPUT_POST, 'grade', FILTER_VALIDATE_FLOAT);
+            (isset($_POST['grade']) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
+            $grade_ip = $submit_ip;             
+        } else {            
+            if ($row->group_submissions) {
+                if (array_key_exists($group_id, $gids)) {
+                    $success_msgs[] = delete_submissions_by_uid(-1, $group_id, $row->id);
+                }
+            } else {
+                $success_msgs[] = delete_submissions_by_uid($user_id, -1, $row->id);
+            }
+            $stud_comments = $_POST['stud_comments'];
+            $grade = NULL;
+            $grade_comments = $grade_ip = "";           
+        }    
+
+        if (!$row->group_submissions || array_key_exists($group_id, $gids)) {
+            $data = array(
+                $user_id,
+                $row->id,
+                $submit_ip,
+                $filename,
+                $file_name,
+                $submission_text,
+                $stud_comments,
+                $grade,
+                $grade_comments,
+                $grade_ip,
+                $group_id             
+            );
+            $sid = Database::get()->query("INSERT INTO assignment_submit
+                                    (uid, assignment_id, submission_date, submission_ip, file_path,
+                                     file_name, submission_text, comments, grade, grade_comments, grade_submission_ip,
+                                     grade_submission_date, group_id)
+                                     VALUES (?d, ?d, NOW(), ?s, ?s, ?s, ?s, ?s, ?f, ?s, ?s, NOW(), ?d)", $data)->lastInsertID;
+            Log::record($course_id, MODULE_ID_ASSIGN, LOG_INSERT, array('id' => $sid,
+                'title' => $row->title,
+                'assignment_id' => $row->id,
+                'filepath' => $filename,
+                'filename' => $file_name,
+                'comments' => $stud_comments,
+                'group_id' => $group_id));
+
+            // update attendance book as well
+            update_attendance_book($row->id, 'assignment');
+
+            if ($on_behalf_of and isset($_POST['email'])) {
+                $email_grade = $_POST['grade'];
+                $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
+                grade_email_notify($row->id, $sid, $email_grade, $email_comments);
+            }
+        }
+        Session::Messages($success_msgs, 'alert-success');
+        Session::Messages($error_msgs);
+        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else { // not submit_ok
-        $tool_content .="<div class='alert alert-danger'>$langExerciseNotPermit<br><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
+        Session::Messages($langExerciseNotPermit);
+        redirect_to_home_page("modules/work/index.php?course=$course_code");          
     }
 }
 
@@ -533,7 +579,8 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
-    global $langBack, $langStudents, $langMove, $langWorkFile, $langTags;
+    global $langBack, $langStudents, $langMove, $langWorkFile, $langTags, 
+           $langWorkSubType, $langWorkOnlineText;
     
     load_js('bootstrap-datetimepicker');
     load_js('select2');
@@ -591,7 +638,6 @@ function new_assignment() {
         $('#tags').select2('data', [".$answer."]);
     });    
     </script>";
-    $workEnd = isset($_POST['WorkEnd']) ? $_POST['WorkEnd'] : "";
     
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -600,6 +646,9 @@ function new_assignment() {
               'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');
+    $max_grade = Session::has('max_grade') ? Session::get('max_grade') : 10;
+    $submission_type = Session::has('submission_type') ? Session::get('submission_type') : 0;
+    $WorkEnd = Session::has('WorkEnd') ? Session::get('WorkEnd') : "";
     enableCheckFileSize();
     $tool_content .= "
         <div class='row'><div class='col-sm-12'>
@@ -635,37 +684,54 @@ function new_assignment() {
                 <div class='form-group ".($max_grade_error ? "has-error" : "")."'>
                     <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
                     <div class='col-sm-10'>
-                      <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='". ((isset($_POST['max_grade'])) ? $_POST['max_grade'] : "10") ."'>
+                      <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
                       <span class='help-block'>$max_grade_error</span>    
                     </div>
                 </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langWorkSubType:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='submission_type' value='0'". ($submission_type ? "" : " checked") .">
+                             $langWorkFile
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='submission_type' value='1'". ($submission_type ? " checked" : "") .">
+                            $langWorkOnlineText
+                          </label>
+                        </div>
+                    </div>
+                </div>                
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$m[deadline]:</label>
                     <div class='col-sm-10'>            
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='is_deadline' value='0' ". ((isset($_POST['WorkEnd'])) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
+                            <input type='radio' name='is_deadline' value='0'". ($WorkEnd ? "" : " checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
                             $m[no_deadline]
                           </label>
                         </div>
                         <div class='radio'>
                           <label>
-                            <input type='radio' name='is_deadline' value='1' ". ((isset($_POST['WorkEnd'])) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
+                            <input type='radio' name='is_deadline' value='1'". ($WorkEnd ? " checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
                             $m[with_deadline]
                           </label>
                         </div>
                     </div>
                 </div>
-                <div class='input-append date form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='enddatepicker' data-date='$workEnd' data-date-format='dd-mm-yyyy'>
+                <div class='input-append date form-group ". ($WorkEnd ? "" : "hide") ."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
                     <div class='col-xs-8 col-xs-offset-2'>
                         <div class='input-group'>
-                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$workEnd'>
+                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$WorkEnd'>
                             <span class='add-on input-group-addon'><i class='fa fa-times'></i></span>
                             <span class='add-on input-group-addon'><i class='fa fa-calendar'></i></span>
                         </div>
                     </div>
                 </div>
-                <div class='form-group ". ((isset($_POST['WorkEnd'])) ? "" : "hide") ."' id='late_sub_row'>
+                <div class='form-group ". ($WorkEnd ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>             
                         <div class='checkbox'>
                           <label>
@@ -755,8 +821,8 @@ function show_edit_assignment($id) {
     
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
         $urlAppend, $works_url, $course_id, $head_content, $language, 
-        $langStudents, $langMove, $langWorkFile, $themeimg, $langDelWarnUserAssignment,
-        $langLessOptions, $langMoreOptions, $langTags;
+        $langStudents, $langMove, $langWorkFile, $themeimg,
+        $langLessOptions, $langMoreOptions, $langTags, $langWorkOnlineText, $langWorkSubType;
     
     //initialize the tags
     $answer = "";
@@ -935,6 +1001,23 @@ function show_edit_assignment($id) {
                     </div>
                 </div>
                 <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langWorkSubType:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='submission_type' value='0'". ($row->submission_type ? "" : "checked") .">
+                             $langWorkFile
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='submission_type' value='1' ". ($row->submission_type ? "checked" : "") .">
+                            $langWorkOnlineText
+                          </label>
+                        </div>
+                    </div>
+                </div>                
+                <div class='form-group'>
                     <label class='col-sm-2 control-label'>$m[deadline]:</label>
                     <div class='col-sm-10'>            
                         <div class='radio'>
@@ -1066,6 +1149,7 @@ function edit_assignment($id) {
         $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
         $title = $_POST['title'];
         $desc = purify($_POST['desc']);
+        $submission_type = $_POST['submission_type'];
         $deadline = trim($_POST['WorkEnd']) == FALSE ? '0000-00-00 00:00': date('Y-m-d H:i', strtotime($_POST['WorkEnd']));
         $late_submission = ((isset($_POST['late_submission']) && trim($_POST['WorkEnd']) != FALSE) ? 1 : 0);
         $group_submissions = $_POST['group_submissions'];
@@ -1113,10 +1197,10 @@ function edit_assignment($id) {
              }        
          }   
          Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
-             group_submissions = ?d, comments = ?s, deadline = ?t, late_submission = ?d, max_grade = ?d, 
+             group_submissions = ?d, comments = ?s, submission_type = ?d, deadline = ?t, late_submission = ?d, max_grade = ?d, 
              assign_to_specific = ?d, file_path = ?s, file_name = ?s
              WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
-             $comments, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
+             $comments, $submission_type, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
 
          Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
          
@@ -1316,10 +1400,12 @@ function show_student_assignment($id) {
 }
 
 function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
-    global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, $langNotice3, $gid,
-    $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, $course_code, $langBack, $is_editor, $langCancel;
+    global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, 
+    $langNotice3, $gid, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, 
+    $course_code, $langBack, $is_editor, $langCancel, $langWorkOnlineText;
     
-    $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $id)->max_grade;
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+    
     $group_select_hidden_input = $group_select_form = '';
     $is_group_assignment = is_group_assignment($id);
     if ($is_group_assignment) {
@@ -1331,7 +1417,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
             } elseif ($user_group_info) {
                 $group_select_form = "
                         <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
+                            <label for='group_id' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
                             <div class='col-sm-10'>
                               " . selection($user_group_info, 'group_id') . "
                             </div>
@@ -1349,7 +1435,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
             if (count($groups_with_no_submissions)>0) {
                 $group_select_form = "
                         <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
+                            <label for='group_id' class='col-sm-2 control-label'>$langGroupSpaceLink:</label>
                             <div class='col-sm-10'>
                               " . selection($groups_with_no_submissions, 'group_id') . "
                             </div>
@@ -1364,7 +1450,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
             if (count($users_with_no_submissions)>0) {
                 $group_select_form = "
                         <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$langOnBehalfOf:</label>
+                            <label for='user_id' class='col-sm-2 control-label'>$langOnBehalfOf:</label>
                             <div class='col-sm-10'>
                               " .selection($users_with_no_submissions, 'user_id', '', "class='form-control'") . "
                             </div>
@@ -1377,9 +1463,9 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
     $notice = $on_behalf_of ? '' : "<div class='alert alert-info'>".icon('fa-info-circle')." $langNotice3</div>";   
     $extra = $on_behalf_of ? "                        
                         <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$m[grade]:</label>
+                            <label class='col-sm-2 control-label'>$m[grade]:</label>
                             <div class='col-sm-10'>
-                              <input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]: $max_grade)
+                              <input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]: $assignment->max_grade)
                               <input type='hidden' name='on_behalf_of' value='1'>
                             </div>
                         </div>
@@ -1392,8 +1478,25 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                                   </label>
                                 </div>
                             </div>
-                        </div>" : '';
+                        </div>" : '';   
     if (!$is_group_assignment || count($user_group_info) || $on_behalf_of) {
+        if($assignment->submission_type){
+            $submission_form = "
+                        <div class='form-group'>
+                            <label for='submission_text' class='col-sm-2 control-label'>$langWorkOnlineText:</label>
+                            <div class='col-sm-10'>
+                                ". rich_text_editor('submission_text', 10, 20, '') ."    
+                            </div>
+                        </div>";            
+        } else {
+            $submission_form = "
+                        <div class='form-group'>
+                            <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
+                            <div class='col-sm-10'>
+                              <input type='file'  name='userfile' id='userfile'> 
+                            </div>
+                        </div>";
+        }
         $back_link = $is_editor ? "index.php?course=$course_code&id=$id" : "index.php?course=$course_code";
         $tool_content .= action_bar(array(
                 array(
@@ -1410,12 +1513,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                         <input type='hidden' name='id' value='$id' />$group_select_hidden_input
                         <fieldset>
                         $group_select_form
-                        <div class='form-group'>
-                            <label for='userfile' class='col-sm-2 control-label'>$langWorkFile:</label>
-                            <div class='col-sm-10'>
-                              <input type='file'  name='userfile' id='userfile'> 
-                            </div>
-                        </div>
+                        $submission_form
                         <div class='form-group'>
                             <label for='stud_comments' class='col-sm-2 control-label'>$m[comments]:</label>
                             <div class='col-sm-10'>
@@ -1604,16 +1702,17 @@ function sort_link($title, $opt, $attrib = '') {
 // the optional message appears instead of assignment details
 function show_assignment($id, $display_graph_results = false) {
     global $tool_content, $m, $langBack, $langNoSubmissions, $langSubmissions,
-    $langEndDeadline, $langWEndDeadline, $langNEndDeadline,
+    $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langWorkOnlineText,
     $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
-    $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id, $langDelWarnUserAssignment;
-
-    $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+    $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id, 
+    $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEdit;
+    
+    $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
                                 WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
     $nav[] = $works_url;
-    assignment_details($id, $row);
+    assignment_details($id, $assign);
     
     $rev = (@($_REQUEST['rev'] == 1)) ? ' DESC' : '';
     if (isset($_REQUEST['sort'])) {
@@ -1682,7 +1781,7 @@ function show_assignment($id, $display_graph_results = false) {
                       <th width='3'>&nbsp;</th>";
             sort_link($m['username'], 'username');
             sort_link($m['am'], 'am');
-            sort_link($m['filename'], 'filename');
+            $assign->submission_type ? $tool_content .= "<th>$langWorkOnlineText</th>" : sort_link($m['filename'], 'filename');
             sort_link($m['sub_date'], 'date');
             sort_link($m['grade'], 'grade');
             $tool_content .= "<th width='5%' class='text-center'><i class='fa fa-cogs'></i></th></tr>";
@@ -1699,11 +1798,13 @@ function show_assignment($id, $display_graph_results = false) {
                 }
                 $uid_2_name = display_user($row->uid);
                 $stud_am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $row->uid)->am;
-                
-                $filelink = empty($row->file_name) ? '&nbsp;' :
-                        ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
-                        q($row->file_name) . "</a>");
-                
+                if ($assign->submission_type) {
+                    $filelink = "<a href='#' class='onlineText btn btn-xs btn-default' data-id='$row->id'>$langQuestionView</a>";
+                } else {
+                    $filelink = empty($row->file_name) ? '&nbsp;' :
+                            ("<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$row->id'>" .
+                            q($row->file_name) . "</a>");
+                }
                 if(Session::has("grades")) {
                     $grades = Session::get('grades');
                     $grade = $grades[$row->id]['grade'];
@@ -1717,7 +1818,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
                                 <td>${uid_2_name}</td>
                                 <td width='85'>" . q($stud_am) . "</td>
-                                <td width='180'>
+                                <td class='text-center' width='180'>
                                         $filelink             
                                 </td>
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
@@ -1727,10 +1828,22 @@ function show_assignment($id, $display_graph_results = false) {
                                         <span class='help-block'>".Session::getError("grade.$row->id")."</span>
                                     </div>
                                 </td>
-                                <td class='text-center'>
-                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id' onClick='return confirmation(\"$langDelWarnUserAssignment\");'>
-                                        <i class='fa fa-times-circle' style='color:#ad2121; font-size:20px;'></i>
-                                    </a>                                
+                                <td class='option-btn-cell'>".  
+                                    action_button(array(
+                                        array(
+                                            'title' => $langEdit,
+                                            'url' => "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id",
+                                            'level' => 'primary',
+                                            'icon' => 'fa-edit'
+                                        ),                                        
+                                        array(
+                                            'title' => $langDelete,
+                                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;as_id=$row->id",
+                                            'class' => 'delete',
+                                            'icon' => 'fa-times',
+                                            'confirm' => $langDelWarnUserAssignment
+                                        )
+                                    ))."                         
                                 </td>
                                 </tr>
                                 <tr>
@@ -1741,22 +1854,18 @@ function show_assignment($id, $display_graph_results = false) {
                             q($row->comments) . '</div>';
                 }
                 //professor comments
-                $gradelink = "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id";
                 if (trim($row->grade_comments)) {
-                    $label = $m['gradecomments'] . ':';
-                    $icon = '<i class="fa fa-edit" style="color:"></i>';
+                    $label = '<b>'.$m['gradecomments'] . '</b>:';
                     $comments = "<div class='smaller'>" . standard_text_escape($row->grade_comments) . "</div>";
                 } else {
-                    $label = $m['addgradecomments'];
-                    $icon = '<i class="fa fa-plus-circle" style="color:#5cb85c;"></i>';
+                    $label = '';
                     $comments = '';
                 }
                 if ($row->grade_comments || $row->grade != '') {
                     $comments .= "<div class='smaller'><i>($m[grade_comment_date]: " .
                             nice_format($row->grade_submission_date) . ")</i></div>";
                 }
-                $tool_content .= "<div style='padding-top: .5em;'><b>$label</b>
-				  <a href='$gradelink'>$icon</a>
+                $tool_content .= "<div style='padding-top: .5em;'>$label
 				  $comments
                                 </td>
                                 </tr>";
@@ -2055,9 +2164,7 @@ function submit_grade_comments() {
     $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $_POST['assignment'])->max_grade;
     $id = $_POST['assignment'];
     $sid = $_POST['submission'];        
-    $grade = $_POST['grade'];
-    $comment = $_POST['comments'];  
-    
+     
     $v = new Valitron\Validator($_POST);
     $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
         if(is_numeric($value) || empty($value)) return true;
@@ -2070,6 +2177,8 @@ function submit_grade_comments() {
         'grade' => "$langTheField $m[grade]"
     ));
     if($v->validate()) {
+        $grade = $_POST['grade'];
+        $comment = $_POST['comments'];         
         if(empty($grade)) $grade = null;
         if (Database::get()->query("UPDATE assignment_submit 
                                     SET grade = ?f, grade_comments = ?s,
@@ -2125,10 +2234,9 @@ function submit_grades($grades_id, $grades, $email = false) {
         foreach ($grades as $sid => $grade) {
             $sid = intval($sid);
             $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
-            $grade_valid = filter_var($grade, FILTER_VALIDATE_FLOAT);
-
-            (isset($grade) && $grade_valid!== false) ? $grade = $grade_valid : $grade = NULL;
-
+            
+            if (empty($grade)) $grade = NULL;
+            
             if ($val != $grade) {
                 if (Database::get()->query("UPDATE assignment_submit
                                             SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
