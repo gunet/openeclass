@@ -464,6 +464,7 @@ function submit_work($id, $on_behalf_of = null) {
         if($row->submission_type){        
             $filename = '';
             $file_name = '';
+            $success_msgs[] = $langUploadSuccess;
         } else { // If submission type is File
             if ($row->group_submissions) {
                 $local_name = isset($gids[$group_id]) ? greek_to_latin($gids[$group_id]) : '';
@@ -1583,9 +1584,22 @@ function assignment_details($id, $row) {
         $deadline_notice = "<br><span class='text-danger'>$langEndDeadline</span>";
     }   
     $tool_content .= "
-    <div class='panel panel-default'>
+    <div class='panel panel-action-btn-default'>
         <div class='panel-heading list-header'>
-            <h3 class='panel-title'>$m[WorkInfo] &nbsp;". (($is_editor) ? icon('fa-edit', $m['edit'], "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit"): "")."</h3>
+            <div class='pull-right'>
+            ". (($is_editor) ? 
+                    action_button(array(
+                        array(
+                            'title' => $m['edit'],
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
+                            'level' => 'primary-label',
+                            'icon' => 'fa-edit'
+                        )
+                    )) : "")."    
+            </div>
+            <h3 class='panel-title'>
+                $m[WorkInfo]
+            </h3>
         </div>
         <div class='panel-body'>
             <div class='row  margin-bottom-fat'>
@@ -1771,9 +1785,12 @@ function show_assignment($id, $display_graph_results = false) {
                                                    ORDER BY ?s ?s", $id, $order, $rev);
 
             $tool_content .= "
-                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
                         <input type='hidden' name='grades_id' value='$id' />
                         <br>
+                        <div class='margin-bottom-thin'>
+                            <b>$langSubmissions:</b>&nbsp; $num_results
+                        </div>
                         <div class='table-responsive'>    
                         <table class='table-default'>
                         <tbody>
@@ -1854,16 +1871,16 @@ function show_assignment($id, $display_graph_results = false) {
                             q($row->comments) . '</div>';
                 }
                 //professor comments
+                if ($row->grade_comments || $row->grade != '') {
+                    $comments = "<br><div class='label label-primary'>" .
+                            nice_format($row->grade_submission_date) . "</div>";
+                }                
                 if (trim($row->grade_comments)) {
                     $label = '<b>'.$m['gradecomments'] . '</b>:';
-                    $comments = "<div class='smaller'>" . standard_text_escape($row->grade_comments) . "</div>";
+                    $comments .= "&nbsp;<span>" . standard_text_escape($row->grade_comments) . "</span>";
                 } else {
                     $label = '';
-                    $comments = '';
-                }
-                if ($row->grade_comments || $row->grade != '') {
-                    $comments .= "<div class='smaller'><i>($m[grade_comment_date]: " .
-                            nice_format($row->grade_submission_date) . ")</i></div>";
+                    $comments .= '';
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$label
 				  $comments
@@ -1874,17 +1891,21 @@ function show_assignment($id, $display_graph_results = false) {
 
             $tool_content .= "
                     </tbody>
-                    <tfoot>
-                        <tr class='text-center'>
-                            <td colspan='7'><b>$langSubmissions:</b>&nbsp; $num_results</td>
-                        </tr>
-                    </tfoot>
-                    </table>
-                            </div>
-                        <p class='smaller right'><i class='fa fa-envelope'></i>&nbsp;
-                                $m[email_users]: <input type='checkbox' value='1' name='email'></p>
-                        <p><input class='btn btn-primary' type='submit' name='submit_grades' value='$langGradeOk'></p>
-                        </form>";
+                </table>
+            </div>
+            <div class='form-group'>
+                <div class='col-xs-12'>            
+                    <div class='checkbox'>
+                      <label>    
+                        <input type='checkbox' value='1' name='email'> $m[email_users] 
+                      </label>
+                    </div>
+                </div>
+            </div>
+            <div class='pull-right'>
+                <button class='btn btn-primary' type='submit' name='submit_grades'>$langGradeOk</button>
+            </div>            
+        </form>";
         } else {
         // display pie chart with grades results
             if ($gradesExists) {
