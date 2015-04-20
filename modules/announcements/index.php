@@ -664,7 +664,8 @@ function define_rss_link() {
 
     if ($course_status == COURSE_INACTIVE) {
         return;
-    } elseif ($course_status != COURSE_OPEN) {
+    } elseif ($course_status != COURSE_OPEN or
+              $_SESSION['courses'][$course_code]) {
         $link .= '&amp;uid=' . $uid .  '&amp;token=' .
             token_generate('announce' . $uid . $course_code);
     }
