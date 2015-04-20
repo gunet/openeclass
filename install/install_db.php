@@ -516,6 +516,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `link` (
                 `category` INT(6) DEFAULT 0 NOT NULL,
                 `order` INT(6) DEFAULT 0 NOT NULL,
                 `hits` INT(6) DEFAULT 0 NOT NULL,
+                `user_id` INT(11) DEFAULT 0 NOT NULL,
                 PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `link_category` (
                 `id` INT(6) NOT NULL AUTO_INCREMENT,

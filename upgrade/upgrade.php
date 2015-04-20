@@ -2081,7 +2081,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         DROP COLUMN `code_cours`');
         }
     }
-
+    
+    DBHelper::fieldExists('link', 'user_id') or
+            Database::get()->query("ALTER TABLE `link` ADD `user_id` INT(11) NOT NULL DEFAULT 0");
     DBHelper::fieldExists('ebook', 'visible') or
             Database::get()->query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
     DBHelper::fieldExists('admin', 'privilege') or
