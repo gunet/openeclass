@@ -64,16 +64,17 @@ if (isset($_POST['submit'])) {
         $icon = icon($icon);
         $tool_content .= "
            <div class='form-group'>
-             <div class='col-xs-1'>
-               <input class='form-control' type='checkbox' name='moduleDisable[$mid]' id='id_$mid' value='1'$checked>
+             <div class='col-xs-12 checkbox'>
+               <label>
+                 <input type='checkbox' name='moduleDisable[$mid]' value='1'$checked> " .
+                    $icon . '&nbsp;' . q($minfo['title']) . "
+               </label>
              </div>
-             <label class='col-xs-11 control-label' for='id_$mid'><div class='text-left'>" .
-                $icon . '&nbsp;' . q($minfo['title']) . "</div></label>
            </div>";
     }
     $tool_content .= "
            <div class='form-group'>
-             <div class='col-xs-11 col-xs-offset-1'>
+             <div class='col-xs-12'>
                <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitChanges) . "'>
              </div>
            </div>
