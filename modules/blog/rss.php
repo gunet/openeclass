@@ -26,18 +26,7 @@ $require_current_course = TRUE;
 
 require_once '../../include/baseTheme.php';
 
-if (!visible_module(MODULE_ID_BLOG)) {
-    Session::Messages($langCheckPublicTools, 'alert-danger');
-    session_write_close();
-    $errorMessagePath = "../../";
-    if (!$uid) {
-        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlServer . "login_form.php?next=" . urlencode($next));
-    } else {
-        header("Location:" . $urlServer . "index.php");
-    }
-    exit;
-}
+rss_check_access();
 
 $title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $course_id)->title, ENT_NOQUOTES);
 $lastbuilddateobj = Database::get()->querySingle("SELECT DATE_FORMAT(`time`,'%a, %d %b %Y %T +0300') AS dateformat
@@ -49,12 +38,17 @@ if (is_object($lastbuilddateobj)) {
 } else {
     $lastbuilddate = '';
 }
+
+$link = $urlServer . 'modules/blog/rss.php?c=' . urlencode($course_code);
+if (isset($_GET['token'])) {
+    $link .= '&amp;uid=' . $_GET['uid'] . '&amp;token=' . $_GET['token'];
+}
     
 header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
-echo "<atom:link href='{$urlServer}modules/blog/rss.php?course=" . urlencode($code) . "' rel='self' type='application/rss+xml' />";
+echo "<atom:link href='$link' rel='self' type='application/rss+xml' />";
 echo "<title>$langCourseBlog " . q($title) . "</title>";
 echo "<link>{$urlServer}courses/" . q($code) . "/</link>";
 echo "<description>$langBlogPosts</description>";
@@ -62,10 +56,10 @@ echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>$language</language>";
 
 Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`time`,'%a, %d %b %Y %T +0300') AS dateformat
-        FROM blog_post WHERE course_id = ?d ORDER BY `time` DESC", function($r) use ($code, $urlServer) {
+        FROM blog_post WHERE course_id = ?d ORDER BY `time` DESC", function($r) use ($course_code, $urlServer) {
         echo "<item>";
         echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
-        echo "<link>{$urlServer}modules/blog/index.php?pId=" . $r->id . "&amp;course=" . urlencode($code) . "</link>";
+        echo "<link>{$urlServer}modules/blog/index.php?pId=" . $r->id . "&amp;course=" . urlencode($course_code) . "</link>";
         echo "<description>" . htmlspecialchars($r->content, ENT_NOQUOTES) . "</description>";
         echo "<pubDate>" . $r->dateformat . "</pubDate>";
         echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";

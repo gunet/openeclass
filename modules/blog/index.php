@@ -30,7 +30,7 @@ require_once 'class.blogpost.php';
 require_once 'include/course_settings.php';
 require_once 'modules/sharing/sharing.php';
 
-define ('RSS', 'modules/blog/rss.php?course='.$course_code);
+define_rss_link();
 load_js('tools.js');
 
 $pageName = $langBlog;

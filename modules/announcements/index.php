@@ -656,20 +656,3 @@ $head_content .= "<script type='text/javascript'>
 
 draw($tool_content, 2, null, $head_content);
 
-function define_rss_link() {
-    global $uid, $course_code, $course_id;
-
-    $link = 'modules/announcements/rss.php?c=' . $course_code;
-    $course_status = course_status($course_id);
-
-    if ($course_status == COURSE_INACTIVE) {
-        return;
-    } elseif ($course_status != COURSE_OPEN or
-              $_SESSION['courses'][$course_code]) {
-        $link .= '&amp;uid=' . $uid .  '&amp;token=' .
-            token_generate('announce' . $uid . $course_code);
-    }
-
-    define('RSS', $link);
-
-}
