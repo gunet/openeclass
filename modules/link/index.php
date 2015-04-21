@@ -486,19 +486,19 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 <table class='table-default nocategory-links'>";
             if ($numberofsocialcategory !== 0) {
                 $tool_content .= "<tr class='list-header'><th class='text-left'>$langSocialCategory</th>";
-                if ($display_tools) {
+                if (!$is_in_tinymce) {
                     $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
                 }
                 $tool_content .= "</tr>";
                 showlinksofcategory(-2);
             } else {
                 $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langSocialCategory</th>";
-                if ($display_tools) {
+                if (!$is_in_tinymce) {
                     $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
                 }
                 $tool_content .= "</tr>";
                 $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>";
-                if ($display_tools) {
+                if (!$is_in_tinymce) {
                     $tool_content .= "<td></td>";
                 }
             }

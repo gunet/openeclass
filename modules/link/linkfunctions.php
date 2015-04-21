@@ -114,6 +114,22 @@ function showlinksofcategory($catid) {
                       'confirm' => $langLinkDelconfirm)
             ));
             $tool_content .= "</td>";
+        } elseif ($catid == -2 && !$is_in_tinymce) {
+            if (isset($_SESSION['uid']) && is_link_creator($myrow->id)) {
+                $tool_content .= "<td class='option-btn-cell'>";
+                $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
+                $tool_content .= action_button(array(
+                        array('title' => $langModify,
+                                'icon' => 'fa-edit',
+                                'url' => $editlink),
+                        array('title' => $langDelete,
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
+                                'confirm' => $langLinkDelconfirm)
+                ));
+                $tool_content .= "</td>";
+            }
         }
         
         $tool_content .= "</tr>";
