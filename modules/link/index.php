@@ -227,6 +227,13 @@ if ($is_editor) {
             <div class='col-sm-3'>
                 <select class='form-control' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
+        if ($social_bookmarks_enabled) {
+            $tool_content .= "<option value='-2'";
+            if (isset($category) and -2 == $category) {
+                $tool_content .= " selected='selected'";
+            }
+            $tool_content .= ">$langSocialCategory</option>";
+        }
         $resultcategories = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
         foreach ($resultcategories as $myrow) {
             $tool_content .= "<option value='$myrow->id'";
@@ -318,6 +325,105 @@ if ($is_editor) {
                           </fieldset>
                       </form>
                   </div>";
+    }
+} elseif ($social_bookmarks_enabled) {
+    //check if user is course member
+    if (isset($_SESSION['uid'])) {
+        $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM course_user WHERE course_id = ?d AND user_id = ?d", $course_id, $uid);
+        if ($result->c > 0) {
+            if (isset($_POST['submitLink'])) {
+                if (isset($_POST['id']) && !is_link_creator($_POST['id'])) {
+                    Session::Messages($langLinkNotOwner, 'alert-error');
+                } else {
+                    $_POST['selectcategory'] = -2; //ensure that simple users cannot change category
+                    submit_link();
+                    $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
+                    Session::Messages($message, 'alert-success');
+                }
+                redirect_to_home_page("modules/link/index.php");
+            }
+            switch ($action) {
+                case 'deletelink':
+                    if (is_link_creator($id)) {
+                        delete_link($id);
+                        Session::Messages($langLinkDeleted, 'alert-success');
+                    } else {
+                        Session::Messages($langLinkNotOwner, 'alert-danger');
+                    }
+                    redirect_to_home_page("modules/link/index.php");
+                    break;
+            }
+            
+            if (isset($_GET['action'])) {
+                $tool_content .= action_bar(array(
+                        array('title' => $langBack,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                              'icon' => 'fa-reply',
+                              'level' => 'primary-label',
+                              'show' => $is_editor)));
+            
+            } else {
+                $ext = (isset($urlview)? "&amp;urlview=$urlview": '');
+                $tool_content .= action_bar(array(
+                        array('title' => $langLinkAdd,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addlink$ext",
+                              'icon' => 'fa-plus-circle',
+                              'button-class' => 'btn-success',
+                              'level' => 'primary-label')));
+            }
+            
+            if (in_array($action, array('addlink', 'editlink'))) {
+                if ((isset($id) && is_link_creator($id)) || !isset($id)) {
+                    $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
+                    $tool_content .= "<div class = 'form-wrapper'>";
+                    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
+                    if ($action == 'editlink') {
+                        $tool_content .= "<input type='hidden' name='id' value='$id' />";
+                        link_form_defaults($id);
+                        $form_legend = $langLinkModify;
+                        $submit_label = $langLinkModify;
+                    } else {
+                        $form_url = $form_title = $form_description = '';
+                        $form_legend = $langLinkAdd;
+                        $submit_label = $langAdd;
+                    }
+                    $tool_content .= "<fieldset>
+                                        <div class='form-group'>
+                                            <label for='urllink' class='col-sm-2 control-label'>URL:</label>
+                                            <div class='col-sm-10'>
+                                                <input class='form-control' type='text' id='urllink' name='urllink' $form_url >
+                                            </div>
+                                        </div>
+                                        <div class='form-group'>
+                                            <label for='title' class='col-sm-2 control-label'>$langLinkName:</label>
+                                            <div class='col-sm-10'>
+                                                <input class='form-control' type='text' id='title' name='title'$form_title >
+                                            </div>
+                                        </div>
+                                        <div class='form-group'>
+                                            <label for='description' class='col-sm-2 control-label'>$langDescription:</label>
+                                            <div class='col-sm-10'>". rich_text_editor('description', 3, 30, $form_description) . "</div>
+                                        </div>
+                                        <div class='form-group'>
+                                            <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
+                                            <div class='col-sm-3'>
+                                                <select class='form-control' name='selectcategory' id='selectcategory'>
+                                                    <option value='-2'>$langSocialCategory</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class='form-group'>
+                                            <div class='col-sm-10 col-sm-offset-2'>
+                                                <input type='submit' class='btn btn-primary' name='submitLink' value='$submit_label' />
+                                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                                            </div>
+                                        </div>
+                                      </fieldset>
+                                  </form>
+                              </div>";
+                }
+            }
+        }
     }
 }
 

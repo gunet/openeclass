@@ -178,7 +178,7 @@ function showcategoryadmintools($categoryid) {
  * @return type
  */
 function submit_link() {
-    global $course_id, $langLinkMod, $langLinkAdded, $course_code,
+    global $course_id, $langLinkMod, $langLinkAdded, $course_code, $uid,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
 
     register_posted_variables(array('urllink' => true,
@@ -207,7 +207,7 @@ function submit_link() {
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
                                       WHERE course_id = ?d AND category = ?d", $course_id, $selectcategory)->maxorder;
         $order++;
-        $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
+        $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d, user_id = ?d", $terms, $course_id, $order, $uid)->lastInsertID;
         $log_type = LOG_INSERT;
     }
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
@@ -336,4 +336,20 @@ function delete_category($id) {
     Database::get()->query("DELETE FROM `link_category` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('cat_id' => $id,
                                                                'category' => $category));
+}
+
+/**
+ * @brief check if user is creator of link, mainly used for social bookmarks
+ * @global type $uid
+ * @param type $id
+ */
+function is_link_creator($id) {
+    global $uid;
+    
+    $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM `link` WHERE id = ?d AND user_id = ?d", $id, $uid);
+    if ($result->c > 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
