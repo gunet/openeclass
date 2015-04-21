@@ -178,7 +178,7 @@ function showcategoryadmintools($categoryid) {
  * @return type
  */
 function submit_link() {
-    global $course_id, $langLinkMod, $langLinkAdded, $course_code, $uid,
+    global $course_id, $langLinkMod, $langLinkAdded, $course_code, $uid, $langSocialCategory,
     $urllink, $title, $description, $selectcategory, $langLinkNotPermitted, $state;
 
     register_posted_variables(array('urllink' => true,
@@ -212,11 +212,15 @@ function submit_link() {
     }
     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_LINK, $id);
     // find category name
-    $category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
+    if ($selectcategory == -2) {
+        $category = $langSocialCategory;
+    } else {
+        $category_object = Database::get()->querySingle("SELECT link_category.name as name FROM link, link_category
                                                         WHERE link.category = link_category.id
                                                         AND link.course_id = ?s
                                                         AND link.id = ?d", $course_id, $id);
-    $category = $category_object ? $category_object->name : 0;
+        $category = $category_object ? $category_object->name : 0;
+    }
     $txt_description = ellipsize_html(canonicalize_whitespace(strip_tags($description)), 50, '+');
     Log::record($course_id, MODULE_ID_LINKS, $log_type, @array('id' => $id,
         'url' => $urllink,
