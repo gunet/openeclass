@@ -111,49 +111,6 @@ $wikiId = (isset($_REQUEST['wikiId'])) ? intval($_REQUEST['wikiId']) : 0;
 
 $creatorId = $uid;
 
-// get request variable for wiki edition
-if ($action == 'exEdit') {
-    $wikiTitle = (isset($_POST['title'])) ? strip_tags($_POST['title']) : '';
-    $wikiDesc = (isset($_POST['desc'])) ? strip_tags($_POST['desc']) : '';
-
-
-    $acl = (isset($_POST['acl'])) ? $_POST['acl'] : null;
-
-    // initialise access control list
-
-    $wikiACL = WikiAccessControl::emptyWikiACL();
-
-    if (is_array($acl)) {
-        foreach ($acl as $key => $value) {
-            if ($value == 'on') {
-                $wikiACL[$key] = true;
-            }
-        }
-    }
-
-    // force Wiki ACL coherence
-
-    if ($wikiACL['course_read'] == false and $wikiACL['course_edit'] == true) {
-        $wikiACL['course_edit'] = false;
-    }
-    if ($wikiACL['group_read'] == false and $wikiACL['group_edit'] == true) {
-        $wikiACL['group_edit'] = false;
-    }
-    if ($wikiACL['other_read'] == false and $wikiACL['other_edit'] == true) {
-        $wikiACL['other_edit'] = false;
-    }
-
-    if ($wikiACL['course_edit'] == false and $wikiACL['course_create'] == true) {
-        $wikiACL['course_create'] = false;
-    }
-    if ($wikiACL['group_edit'] == false and $wikiACL['group_create'] == true) {
-        $wikiACL['group_create'] = false;
-    }
-    if ($wikiACL['other_edit'] == false and $wikiACL['other_create'] == true) {
-        $wikiACL['other_create'] = false;
-    }
-}
-
 // Objects instantiation
 
 $wikiStore = new WikiStore();
@@ -210,13 +167,13 @@ switch ($action) {
     // request edit
     case "rqEdit": {
             if ($wikiId == 0) {
-                $wikiTitle = '';
-                $wikiDesc = '';
+                $wikiTitle = Session::has('title') ? Session::get('title') : '';
+                $wikiDesc = Session::has('desc') ? Session::get('desc') : '';
                 $wikiACL = null;
             } elseif ($wikiStore->wikiIdExists($wikiId)) {
                 $wiki = $wikiStore->loadWiki($wikiId);
-                $wikiTitle = $wiki->getTitle();
-                $wikiDesc = $wiki->getDescription();
+                $wikiTitle = Session::has('title') ? Session::get('title') : $wiki->getTitle();
+                $wikiDesc = Session::has('desc') ? Session::get('desc') : $wiki->getDescription();
                 $wikiACL = $wiki->getACL();
                 $groupId = $wiki->getGroupId();
             } else {
@@ -228,6 +185,51 @@ switch ($action) {
         }
     // execute edit
     case "exEdit": {
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title'));
+        $v->labels(array(
+            'title' => "$langTheField $langTitle"
+        ));
+        if($v->validate()) {        
+            $wikiTitle = (isset($_POST['title'])) ? strip_tags($_POST['title']) : '';
+            $wikiDesc = (isset($_POST['desc'])) ? strip_tags($_POST['desc']) : '';
+
+
+            $acl = (isset($_POST['acl'])) ? $_POST['acl'] : null;
+
+            // initialise access control list
+
+            $wikiACL = WikiAccessControl::emptyWikiACL();
+
+            if (is_array($acl)) {
+                foreach ($acl as $key => $value) {
+                    if ($value == 'on') {
+                        $wikiACL[$key] = true;
+                    }
+                }
+            }
+
+            // force Wiki ACL coherence
+
+            if ($wikiACL['course_read'] == false and $wikiACL['course_edit'] == true) {
+                $wikiACL['course_edit'] = false;
+            }
+            if ($wikiACL['group_read'] == false and $wikiACL['group_edit'] == true) {
+                $wikiACL['group_edit'] = false;
+            }
+            if ($wikiACL['other_read'] == false and $wikiACL['other_edit'] == true) {
+                $wikiACL['other_edit'] = false;
+            }
+
+            if ($wikiACL['course_edit'] == false and $wikiACL['course_create'] == true) {
+                $wikiACL['course_create'] = false;
+            }
+            if ($wikiACL['group_edit'] == false and $wikiACL['group_create'] == true) {
+                $wikiACL['group_create'] = false;
+            }
+            if ($wikiACL['other_edit'] == false and $wikiACL['other_create'] == true) {
+                $wikiACL['other_create'] = false;
+            }        
             if ($wikiId == 0) {
                 $wiki = new Wiki();
                 $wiki->setTitle($wikiTitle);
@@ -260,9 +262,13 @@ switch ($action) {
             }
 
             $action = 'list';
-
-            // no break
+        } else {
+            $new_or_edit = $wikiId ? "&wikiId=$wikiId" : "";
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/wiki/index.php?course=$course_code&gid=$groupId&action=rqEdit$new_or_edit");
         }
+        // no break
+    }
     // list wiki
     case "list": {
             if ($groupId == 0) {
