@@ -225,28 +225,39 @@ $tool_content .= "<div class='form-wrapper'>
         <div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupMembers:</label>
         <div class='col-sm-10'>
-          <table class='table-default'>
-          <tr class='title1'>
-            <td>$langNoGroupStudents</td>
-            <td width='100' class='center'>$langMove</td>
-            <td class='right'>$langGroupMembers</td>
-          </tr>
-          <tr>
-            <td>
-              <select id='users_box' name='nogroup[]' size='15' multiple>
-                $tool_content_not_Member
-              </select>
-            </td>
-            <td class='center'>
-              <input type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
-            </td>
-            <td class='right'>
-              <select id='members_box' name='ingroup[]' size='15' multiple>
-                $tool_content_group_members
-              </select>
-            </td>
-          </tr>
-          </table>
+            <div class='table-responsive'>
+                <table class='table-default'>
+                    <thead>
+                        <tr class='title1'>
+                          <th>$langNoGroupStudents</th>
+                          <th width='100' class='text-center'>$langMove</th>
+                          <th class='right'>$langGroupMembers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td>
+                            <select class='form-control' id='users_box' name='nogroup[]' size='15' multiple>
+                              $tool_content_not_Member
+                            </select>
+                          </td>
+                          <td class='text-center'>
+                              <div class='form-group'>
+                                  <input class='btn btn-default' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
+                              </div>
+                              <div class='form-group'>
+                                  <input class='btn btn-default' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
+                              </div>    
+                          </td>
+                          <td class='text-right'>
+                            <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
+                              $tool_content_group_members
+                            </select>
+                          </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
       </div>
     </div>
     <div class='group-control'>

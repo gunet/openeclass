@@ -14,6 +14,14 @@
 #btn-search{
     @include button-variant(white, #232C3A, #111111);
 }
+//Theme options legend
+legend.theme_options_legend {
+   font-size: $font-size-large;
+   margin-bottom: 30px;
+   &:not(:first-child) {
+        margin-top: 30px;
+   }
+}
 .container-fluid {
     padding: 0px;
     max-width: 1920px;

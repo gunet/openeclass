@@ -75,23 +75,33 @@ if (isset($_GET['up'])) {
 
 /* submit form: new or updated note */
 if (isset($_POST['submitNote'])) {
-
-    $newTitle = $_POST['newTitle'];
-    $newContent = $_POST['newContent'];
-    $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
-    if (!empty($_POST['id'])) { //existing note
-        $id = intval($_POST['id']);
-        Notes::update_note($id, $newTitle, $newContent, $refobjid);
-        Session::Messages($langNoteModify, 'alert-success');
-        redirect_to_home_page('main/notes/index.php');        
-    } else { // new note
-        $id = Notes::add_note($newTitle, $newContent, $refobjid);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            echo $langNoteAdd;
-            exit;
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('newTitle'));
+    $v->labels(array(
+        'newTitle' => "$langTheField $langTitle"
+    ));    
+    if($v->validate()) {
+        $newTitle = $_POST['newTitle'];
+        $newContent = $_POST['newContent'];
+        $refobjid = ($_POST['refobjid'] == "0") ? $_POST['refcourse'] : $_POST['refobjid'];
+        if (!empty($_POST['id'])) { //existing note
+            $id = intval($_POST['id']);
+            Notes::update_note($id, $newTitle, $newContent, $refobjid);
+            Session::Messages($langNoteModify, 'alert-success');
+            redirect_to_home_page('main/notes/index.php');        
+        } else { // new note
+            $id = Notes::add_note($newTitle, $newContent, $refobjid);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                echo $langNoteAdd;
+                exit;
+            }
+            Session::Messages($langNoteAdd, 'alert-success');
+            redirect_to_home_page('main/notes/index.php');
         }
-        Session::Messages($langNoteAdd, 'alert-success');
-        redirect_to_home_page('main/notes/index.php');
+    } else {
+        $new_or_modify = empty($_POST['id']) ? "addNote=1" : "modify=$_POST[id]";
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("main/notes/index.php?$new_or_modify");
     }
 } // end of if $submit
 
@@ -103,45 +113,26 @@ if (isset($_GET['delete'])) {
     redirect_to_home_page('main/notes/index.php');
 }
 
-/* edit */
-if (isset($_GET['modify'])) {
-    $modify = intval($_GET['modify']);
-    $note = Notes::get_note($modify);
-    if ($note) {
-        $noteToModify = $note->id;
-        $contentToModify = $note->content;
-        $titleToModify = q($note->title);
-        $titleToModify = q($note->title);
-        $gen_type_selected = $note->reference_obj_module;
-        $course_selected = $note->reference_obj_course;
-        $type_selected = $note->reference_obj_type;
-        $object_selected = $note->reference_obj_id;
-    }
-}
 
 
 /* display form */
 if (isset($_GET['addNote']) or isset($_GET['modify'])) {
+    $navigation[] = array('url' => "index.php", 'name' => $langNotes);
     if (isset($_GET['modify'])) {
         $langAdd = $pageName = $langModifNote;
+        $modify = intval($_GET['modify']);
+        $note = Notes::get_note($modify);      
     } else {
         $pageName = $langAddNote;
     }
-    $navigation[] = array('url' => "index.php", 'name' => $langNotes);
-    if (!isset($noteToModify))
-        $noteToModify = "";
-    if (!isset($contentToModify))
-        $contentToModify = "";
-    if (!isset($titleToModify))
-        $titleToModify = "";
-    if (!isset($gen_type_selected))
-        $gen_type_selected = null;
-    if (!isset($course_selected))
-        $course_selected = null;
-    if (!isset($type_selected))
-        $type_selected = null;
-    if (!isset($object_selected))
-        $object_selected = null;
+    $noteToModify = isset($note) ? $note->id : '';    
+    $titleToModify = Session::has('newTitle') ? Session::get('newTitle') : (isset($note) ? q($note->title) : '');
+    $contentToModify = Session::has('newContent') ? Session::get('newContent') : (isset($note) ? $note->content : '');
+    $gen_type_selected = isset($note) ? $note->reference_obj_module : null;
+    $course_selected = isset($note) ? $note->reference_obj_course :  null;
+    $type_selected = isset($note) ? $note->reference_obj_type : null;
+    $object_selected = isset($note) ? $note->reference_obj_id : null;
+
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
@@ -153,11 +144,12 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
     <div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit=\"return checkrequired(this, 'antitle');\">
     <fieldset>
-    <div class='form-group'>
-      <label for='newTitle' class='col-sm-2 control-label'>$langNoteTitle:</label>
-      <div class='col-sm-10'>
-        <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . q($titleToModify) . "' placeholder='$langNoteTitle'>
-      </div>
+    <div class='form-group".(Session::getError('newTitle') ? " has-error" : "")."'>
+        <label for='newTitle' class='col-sm-2 control-label'>$langNoteTitle:</label>
+        <div class='col-sm-10'>
+            <input name='newTitle' type='text' class='form-control' id='newTitle' value='" . q($titleToModify) . "' placeholder='$langNoteTitle'>
+            <span class='help-block'>".Session::getError('newTitle')."</span>
+        </div>
     </div>
     <div class='form-group'>
       <label for='newContent' class='col-sm-2 control-label'>$langNoteBody:</label>

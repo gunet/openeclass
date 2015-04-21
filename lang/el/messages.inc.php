@@ -156,6 +156,10 @@ $langCronInfo = "Ενημερωτικά στοιχεία για τις προγ�
 $langCronName = "Όνομα εργασίας";
 $langCronLastRun = "Τελευταία Εκτέλεση";
 $langExternalTools = 'Εξωτερικά εργαλεία';
+$langDisableModules = 'Υποσυστήματα';
+$langDisableModulesHelp = 'Μπορείτε να επιλέξετε ποια από τα παρακάτω
+    υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα μαθήματα της
+    πλατφόρμας.';
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
@@ -375,6 +379,7 @@ $langcas_altauth = "Εναλλακτικός τρόπος πιστοποίηση
 $langcasusermailattr = "CAS SAML attribute για το E-mail";
 $langcasuserfirstattr = "CAS SAML attribute για το Όνομα";
 $langcasuserlastattr = "CAS SAML attribute για το Επώνυμο";
+$langcasuserstudentid = "CAS SAML attribute για τον Αριθμό Μητρώου";
 $langUserAuthentication = "Πιστοποίηση Χρηστών";
 $langChangeUser = 'Σύνδεση με λογαριασμό άλλου χρήστη';
 $langChangeUserAs = 'Σύνδεση ως';
@@ -2007,6 +2012,7 @@ $langProtect = "Συμβουλή: Για να προστατέψετε το Open
            επιτρέψτε μόνο ανάγνωση (CHMOD 444).";
 $langInstallSuccess = "Η εγκατάσταση ολοκληρώθηκε με επιτυχία! Κάντε κλικ παρακάτω για να μπείτε στο Open eClass";
 $langEnterFirstTime = "Είσοδος στο Open eClass";
+$langCancelAndEnter = "Παράλειψη και Είσοδος";
 $langMCU = "MCU (μονάδα ελέγχου για τηλεδιάσκεψη)";
 $langVod = "Εξυπηρέτης Vod ";
 $langSiteUrl = "URL του Open eClass";
@@ -2667,8 +2673,9 @@ $langSurname = "Επώνυμο";
 $langUsername = "Όνομα χρήστη (username)";
 $langConfirmation = "Επιβεβαίωση συνθηματικού";
 $langUserNotice = "Μέχρι 30 χαρακτήρες";
-$langEmailNotice = "Το e-mail δεν είναι απαραίτητο, αλλά χωρίς αυτό δε θα μπορείτε να λαμβάνετε
-ανακοινώσεις, ούτε θα μπορείτε να χρησιμοποιήσετε τη λειτουργία υπενθύμισης συνθηματικού.";
+$langEmailInfo = "Μπορείτε να δηλώσετε μια διεύθυνση email στη παρακάτω φόρμα.";
+$langEmailNotice = "Η διεύθυνση email δεν είναι απαραίτητη, αλλά χωρίς αυτή δε θα μπορείτε να λαμβάνετε
+ανακοινώσεις και ειδοποιήσεις.";
 $langAm = "Αριθμός μητρώου";
 $langEmailVerified = "Το e-mail έχει επιβεβαιωθεί";
 $langUserDetails = "Εγγραφή $langOfStudent";
@@ -3014,7 +3021,7 @@ $langMailVerificationToaddr = "στην ηλεκτρονική διεύθυνσ�
 $langMailVerificationCode = "Κωδικός επιβεβαίωσης";
 $langMailVerificationNewCode = "Αποστολή κωδικού επιβεβαίωσης";
 $langMailVerificationWrong = "Η διεύθυνση ηλεκτρονικού ταχυδρομείου δεν άλλαξε γιατί δεν είναι συμπληρωμένη ή περιέχει άκυρους χαρακτήρες";
-$langMailVerificationAddrChange = "Αν η διεύθυνση είναι λάθος παρακαλούμε πληκτρολογήστε τη σωστή";
+$langMailVerificationAddrChange = "παρακαλούμε πληκτρολογήστε μία σωστή διεύθυνση";
 $langMailVerificationSuccess3 = "Ελέγξτε ότι είναι σωστή η παρακάτω ηλεκτρονική διεύθυνση και πατήστε στην «<b>$langMailVerificationNewCode</b>»";
 $langMailVerificationReq = "Είναι απαραίτητο να επιβεβαιωθεί η e-mail διεύθυνση σας προτού προχωρήσετε.<br /><br />$langMailVerificationSuccess3";
 $langMailVerificationSuccess4 = "Σύντομα θα λάβετε ένα e-mail από την Ομάδα Διαχείρισης της Πλατφόρμας Ασύγχρονης Τηλεκπαίδευσης $siteName, με τις απαραίτητες οδηγίες για την ολοκλήρωση της εγγραφής σας";
@@ -3128,8 +3135,11 @@ $langExplUpgrade = "Το πρόγραμμα αναβάθμισης θα τροπ
    <em>config_backup.php</em>.";
 $langExpl2Upgrade = "Επίσης για λόγους ασφαλείας βεβαιωθείτε ότι έχετε κρατήσει αντίγραφα ασφαλείας των βάσεων δεδομένων.";
 $langWarnUpgrade = "ΠΡΟΣΟΧΗ!";
+$langUpgradeInProgress = 'Η χρήση της πλατφόρμας είναι προσωρινά αδύνατη, καθώς εδώ
+    και %s βρίσκεται σε εξέλιξη διαδικασία αναβάθμισης. Παρακαλούμε περιμένετε να
+    ολοκληρωθεί η διαδικασία πριν συνδεθείτε.';
 $langUpgradeCont = "Για να προχωρήσετε στην αναβάθμιση της βάσης δεδομένων, δώστε το όνομα
-   χρήστη και το συνθηματικό του διαχειριστή της πλατφόρμας:";
+   χρήστη και το συνθηματικό του διαχειριστή της πλατφόρμας.";
 $langUpgDetails = "Στοιχεία Εισόδου";
 $langUpgMan = "οδηγίες αναβάθμισης";
 $langUpgLastStep = "πριν προχωρήσετε στο παρακάτω βήμα.";
@@ -3675,6 +3685,8 @@ $langDelAssign = "Διαγραφή Εργασίας";
 $langDelWarn1 = "Πρόκειται να διαγράψετε την εργασία με τίτλο";
 $langDelSure = "Είστε σίγουρος;";
 $langWorkFile = "Αρχείο";
+$langWorkSubType = "Τύπος Υποβολής";
+$langWorkOnlineText = "Online Κείμενο";
 $langZipDownload = "Κατέβασμα όλων των εργασιών σε αρχείο .zip";
 $langDelWarn2 = "Έχει αποσταλεί μία εργασία " . $langsOfStudent . ". Το αρχείο αυτό θα διαγραφεί!";
 $langDelTitle = "Προσοχή!";
@@ -4370,8 +4382,8 @@ $langBlogPostNotAllowedDel = "Δεν έχετε δικαίωμα διαγραφ�
 $langBlogPostNotAllowedEdit = "Δεν έχετε δικαίωμα επεξεργασίας της ανάρτησης";
 $langReturnBlog = "Επιστροφή στο ιστολόγιο";
 $langBlogPerm = "Δικαιώματα σύνταξης αναρτήσεων ιστολογίου";
-$langBlogPermStudents = "Ο καθηγητής και οι μαθητές έχουν δικαίωμα σύνταξης";
-$langBlogPermTeacher = "Ο καθηγητής μόνο έχει δικαίωμα σύνταξης";
+$langBlogPermStudents = "Ο $langsTeacher και οι $langsStudents έχουν δικαίωμα σύνταξης";
+$langBlogPermTeacher = "Ο $langsTeacher μόνο έχει δικαίωμα σύνταξης";
 
 /* * ***********************************************************
  * personal blog
@@ -4447,20 +4459,26 @@ $langThemeSettingsDelete = 'Είστε σίγουρος ότι θέλετε να
 $langThemeSettingsName = "Όνομα Θέματος";
 $langGeneralSettings = 'Γενικές Ρυθμίσεις';
 $langLayout = 'Layout';
+$langLayoutConfig = 'Ρυθμίσεις Layout';
 $langFluid = 'Fluid';
 $langBoxed = 'Boxed';
 $langFluidContainerWidth = 'Μέγιστο Πλάτος Επιφάνειας Εργασίας';
 $langLogo = 'Λογότυπο';
+$langLogoConfig = 'Ρυθμίσεις Λογότυπου';
 $langLogoNormal = "(Κανονικό)";
 $langLogoSmall = "(Για μικρές οθόνες)";
-$langMainMenuLinkColor = "Χρώμα Συνδέσμου Κυρίως Μενού";
-$langMainMenuBgColor = "Χρώμα Φόντου Κυρίως Μενού";
-$langMainMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Κυρίως Μενού";
-$langMainMenuActiveLinkColor = "Χρώμα Ενεργού Συνδέσμου Κυρίως Μενού";
-$langSubMenuLinkColor = "Χρώμα Συνδέσμου Υπομενού";
-$langSubMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Υπομενού";
-$langSubMenuLinkBgHoverColor = "Χρώμα Φόντου Hovered Συνδέσμου Υπομενού";
+$langMainMenuLinkColor = "Χρώμα Συνδέσμου Ομάδας Επιλογών";
+$langMainMenuConfiguration = "Ρυθμίσεις Ομάδας Επιλογών";
+$langMainMenuBgColor = "Χρώμα Φόντου Ομάδας Επιλογών";
+$langMainMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Ομάδας Επιλογών";
+$langMainMenuActiveLinkColor = "Χρώμα Ενεργού Συνδέσμου Ομάδας Επιλογών";
+$langSubMenuConfig = "Ρυθμίσεις Επιλογών Ομάδων";
+$langSubMenuLinkColor = "Χρώμα Συνδέσμου Επιλογών";
+$langSubMenuLinkHoverColor = "Χρώμα Hovered Συνδέσμου Επιλογών";
+$langSubMenuLinkBgHoverColor = "Χρώμα Φόντου Hovered Συνδέσμου Επιλογών";
 $langBgColor = 'Χρώμα Φόντου';
+$langBgColorConfig = 'Ρυθμίσεις Φόντου';
+$langLinksCongiguration = 'Ρυθμίσεις Συνδέσμων';
 $langLinkColor = 'Χρώμα Συνδέσμων';
 $langLinkHoverColor = 'Χρώμα Hovered Συνδέσμων';
 $langBgImg = "Εικόνα Φόντου";
@@ -4469,6 +4487,7 @@ $langStretchedImg = 'Τεντωμένη Εικόνα';
 $langFixedImg = 'Σταθερή Εικόνα';
 $langNavSettings = 'Ρυθμίσεις Μενού Πλοήγησης';
 $langSaveAs = 'Αποθήκευση ως ...';
+$langLoginConfiguration = "Ρυθμίσεις Οθόνης Σύνδεσης";
 $langLoginBgGradient = "Gradient φόντου οθόνης σύνδεσης";
 $langLoginImg = "Εικόνα οθόνης σύνδεσης";
 $langLoginBanner = "Banner Open eClass Οθόνης Σύνδεσης";

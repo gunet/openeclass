@@ -92,7 +92,7 @@ use Valitron\Validator as V;
 V::langDir(__DIR__.'/Valitron/lang'); // always set langDir before lang.
 V::lang($language);
 
-//Managing Session Flash Data
+// Managing Session Flash Data
 if (isset($_SESSION['flash_old'])){
     foreach($_SESSION['flash_old'] as $row){
         unset($_SESSION[$row]);
@@ -137,6 +137,15 @@ if (file_exists($extra_messages)) {
 require "$webDir/lang/$language/messages.inc.php";
 if ($extra_messages) {
     include $extra_messages;
+}
+
+if (($upgrade_begin = get_config('upgrade_begin'))) {
+    if (!defined('UPGRADE')) {
+        Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
+        if (!isset($guest_allowed) or !$guest_allowed) {
+            redirect_to_home_page();
+        }
+    }
 }
 
 // check if we are admin or power user or manageuser_user
@@ -445,28 +454,33 @@ if (isset($require_editor) and $require_editor) {
 }
 
 $module_id = current_module_id();
-// Security check:: Users that do not have Professor access for a course must not
-// be able to access inactive tools.
-if (isset($course_id) and !$is_editor and $module_id and !defined('STATIC_MODULE')) {
-    if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
-        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                                             WHERE visible = 1 AND
-                                             course_id = ?d", $course_id);
-    } else {
+
+// Security check:: Users must not be able to access inactive (if students) or disabled tools.
+if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
+    if (!$uid or check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
                               course_id = ?d AND
-                                module_id NOT IN (" . MODULE_ID_CHAT . ",
-                                                  " . MODULE_ID_ASSIGN . ",
-                                                  " . MODULE_ID_BBB . ",
-                                                  " . MODULE_ID_DROPBOX . ",
-                                                  " . MODULE_ID_QUESTIONNAIRE . ",
-                                                  " . MODULE_ID_FORUM . ",
-                                                  " . MODULE_ID_GROUPS . ",
-                                                  " . MODULE_ID_WIKI . ",
-                                                  " . MODULE_ID_GRADEBOOK . ",                                                  
-                                                  " . MODULE_ID_ATTENDANCE . ",
-                                                  " . MODULE_ID_LP . ")", $course_id);
+                              module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                                " . MODULE_ID_ASSIGN . ",
+                                                " . MODULE_ID_BBB . ",
+                                                " . MODULE_ID_DROPBOX . ",
+                                                " . MODULE_ID_QUESTIONNAIRE . ",
+                                                " . MODULE_ID_FORUM . ",
+                                                " . MODULE_ID_GROUPS . ",
+                                                " . MODULE_ID_WIKI . ",
+                                                " . MODULE_ID_GRADEBOOK . ",                                                  
+                                                " . MODULE_ID_ATTENDANCE . ",
+                                                " . MODULE_ID_LP . ")", $course_id);
+    } elseif ($is_admin) {
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE module_id NOT IN (SELECT module_id FROM module_disable)");
+    } else {
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE visible = 1 AND
+                              module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              course_id = ?d", $course_id);
     }
     $publicModules = array();
     foreach ($moduleIDs as $module) {

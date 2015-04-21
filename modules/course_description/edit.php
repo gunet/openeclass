@@ -36,12 +36,14 @@ $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $la
 if (isset($_REQUEST['id'])) {
     $editId = intval($_REQUEST['id']);
     $q = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $editId);
-    $cdtitle = $q->title;
-    $comments = $q->comments;
-    $defaultType = $q->type;
+    $cdtitle = Session::has('editTitle') ? Session::get('editTitle') : $q->title;
+    $comments = Session::has('editComments') ? Session::get('editComments') : $q->comments;
+    $defaultType = Session::has('editType') ? Session::get('editType') : $q->type;
 } else {
     $editId = false;
-    $cdtitle = $comments = $defaultType = '';
+    $cdtitle = Session::has('editTitle') ? Session::get('editTitle') : "";
+    $comments = Session::has('editComments') ? Session::get('editComments') : "";
+    $defaultType = Session::has('editType') ? Session::get('editType') : "";
 }
 
 $q = Database::get()->queryArray("SELECT id, title FROM course_description_type ORDER BY `order`");
@@ -67,38 +69,46 @@ $tool_content .= action_bar(array(
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
 
-$tool_content .= "<div class='row'><div class='col-xs-12'><div class='form-wrapper'><form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
+$tool_content .= "
+    <div class='row'>
+        <div class='col-xs-12'>
+            <div class='form-wrapper'>
+                <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
 if ($editId !== false) {
     $tool_content .= "<input type='hidden' name='editId' value='$editId' />";
 }
 $tool_content .= "
-    <fieldset>
-        <div class='form-group'>
-            <label for='typSel' class='col-sm-2 control-label'>$langType:</label>
-            <div class='col-sm-10'>
-            " . selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') . "
+                    <fieldset>
+                        <div class='form-group'>
+                            <label for='typSel' class='col-sm-2 control-label'>$langType:</label>
+                            <div class='col-sm-10'>
+                            " . selection($types, 'editType', $defaultType, 'class="form-control" id="typSel"') . "
+                            </div>
+                        </div>
+                        <div class='form-group".(Session::getError('editTitle') ? " has-error" : "")."'>
+                            <label for='titleSel' class='col-sm-2 control-label'>$langTitle:</label>
+                            <div class='col-sm-10'>
+                                <input type='text' name='editTitle' class='form-control' value='$cdtitle' size='40' id='titleSel'>
+                                <span class='help-block'>".Session::getError('editTitle')."</span>                                    
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='editComments' class='col-sm-2 control-label'>$langContent:</label>
+                            <div class='col-sm-10'>
+                            " . @rich_text_editor('editComments', 4, 20, $comments) . "
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <input class='btn btn-primary' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "'>
+                            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                        </div>
+                        </div>
+                  </fieldset>
+                </form>
             </div>
         </div>
-        <div class='form-group'>
-            <label for='titleSel' class='col-sm-2 control-label'>$langTitle:</label>
-            <div class='col-sm-10'>
-                <input type='text' name='editTitle' class='form-control' value='$cdtitle' size='40' id='titleSel'/>
-            </div>
-        </div>
-        <div class='form-group'>
-            <label for='editComments' class='col-sm-2 control-label'>$langContent:</label>
-            <div class='col-sm-10'>
-            " . @rich_text_editor('editComments', 4, 20, $comments) . "
-            </div>
-        </div>
-        <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <input class='btn btn-primary' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "'>
-            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
-        </div>
-        </div>
-  </fieldset>
-  </form></div></div></div>";
+    </div>";
 
 
 $head_content .= <<<hCont

@@ -41,7 +41,7 @@ require_once 'modules/sharing/sharing.php';
 if ($blog_type == 'course_blog') {
     $user_id = 0;
     
-    define ('RSS', 'modules/blog/rss.php?course='.$course_code);
+    define_rss_link();
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langBlog);
     $toolName = $langBlog;
     
@@ -88,9 +88,7 @@ if ($blog_type == 'course_blog') {
         $toolName = $langMyBlog;
     } else {
         $toolName = $langBlog." - ".$db_user->surname." ".$db_user->givenname;
-    }
-    
-    //define ('RSS', 'modules/blog/rss.php?user_id='.$user_id);
+    }    
     
     //check if commenting is enabled for personal blogs
     $comments_enabled = get_config('personal_blog_commenting');

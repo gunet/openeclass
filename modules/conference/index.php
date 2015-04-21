@@ -108,7 +108,7 @@ $tool_content .= "<div class='alert alert-info'>$langTypeMessage</div>
           </span>
         </div>
         <div class='embed-responsive embed-responsive-4by3 margin-top-fat'>
-          <iframe class='embed-responsive-item' id='iframe' src='messageList.php' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
+          <iframe class='embed-responsive-item' id='iframe' src='messageList.php?course=$course_code' name='messageList' style='border: 1px solid #CAC3B5;width:100%;overflow-x: hidden;'></iframe>
         </div>       
     </div>   
    </fieldset>

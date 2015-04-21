@@ -1167,7 +1167,7 @@ function append_units($amount, $singular, $plural) {
 }
 
 // Convert $sec to days, hours, minutes, seconds;
-function format_time_duration($sec) {
+function format_time_duration($sec, $hourLimit = 24) {
     global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours, $langDay, $langDays;
 
     if ($sec < 60) {
@@ -1184,8 +1184,11 @@ function format_time_duration($sec) {
     }
     $hour = floor($min / 60);
     $min = $min % 60;
-    if ($hour < 24) {
-        append_units($hour, $langhour, $langhours) .
+    if ($hour < $hourLimit) {
+        if ($hour > 24) {
+            $min = 0;
+        }
+        return append_units($hour, $langhour, $langhours) .
                 (($min == 0) ? '' : (' ' . append_units($min, $langminute, $langminutes)));
     }
     $day = floor($hour / 24);
@@ -3137,5 +3140,72 @@ function documentBackLink($path) {
             (defined('COMMON_DOCUMENTS')? '?': '&amp;') . $opts;
     } else {
         return $upload_target_url;
+    }
+}
+
+/**
+ * @brief Define the RSS constant, used by the template system, to the module's RSS link
+ */
+function define_rss_link() {
+    global $uid, $course_code, $course_id, $module_id, $modules;
+
+    $module_name = $modules[$module_id]['link'];
+    $link = 'modules/' . $module_name . '/rss.php?c=' . $course_code;
+    $course_status = course_status($course_id);
+
+    if ($course_status == COURSE_INACTIVE) {
+        return;
+    } elseif ($course_status != COURSE_OPEN or
+              $_SESSION['courses'][$course_code]) {
+        $link .= '&amp;uid=' . $uid .  '&amp;token=' .
+            token_generate($module_name . $uid . $course_code);
+    }
+
+    define('RSS', $link);
+}
+
+/**
+ * @brief Check whether an RSS link token is valid for the current module and user
+ */
+function rss_token_valid($token, $uid) {
+    global $course_code, $course_id, $module_id, $modules;
+
+    if (!token_validate($modules[$module_id]['link'] . $uid . $course_code, $token)) {
+        return false;
+    }
+    $q = Database::get()->querySingle('SELECT status FROM course_user
+        WHERE course_id = ?d AND user_id = ?d', $course_id, $uid);
+    if (!$q or !$q->status) {
+        return false;
+    }
+    return true;
+}
+
+function rss_check_access() {
+    global $course_code, $course_id, $course_status, $module_id;
+
+    if (isset($_GET['c'])) {
+        $course_code = $_GET['c'];
+        $course_id = course_code_to_id($course_code);
+        $course_status = course_status($course_id);
+    } else {
+        $course_code = '';
+        $course_id = false;
+    }
+    if ($course_id === false) {
+        header("HTTP/1.0 404 Not Found");
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+            '<title>404 Not Found</title></head><body>',
+            '<h1>Not Found</h1><p>The requested course "',
+            htmlspecialchars($course_code),
+            '" does not exist.</p></body></html>';
+        exit;
+    }
+    if ($course_status == COURSE_INACTIVE or
+        !visible_module($module_id) or
+        ($course_status != COURSE_OPEN and
+         !(isset($_GET['token']) and isset($_GET['uid']) and
+         rss_token_valid($_GET['token'], $_GET['uid'])))) {
+        forbidden($_SERVER['REQUEST_URI']);
     }
 }

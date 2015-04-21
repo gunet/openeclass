@@ -154,7 +154,7 @@ if (isset($_GET['mid'])) {
             e.preventDefault();
             var id = $(this).data("id");
             var string = "mid="+id;
-            bootbox.confirm("'.$langConfirmDelete.'", function(result) {                       
+            bootbox.confirm("'.js_escape($langConfirmDelete).'", function(result) {                       
             if(result) {
                 $.ajax({
                  type: "POST",
@@ -162,7 +162,7 @@ if (isset($_GET['mid'])) {
                  datatype: "json",
                  data: string,
                  success: function(){
-                    $("#out_del_msg").html("<p class=\"alert alert-success\">'.$langMessageDeleteSuccess.'</p>");
+                    $("#out_del_msg").html("<p class=\"alert alert-success\">'.js_escape($langMessageDeleteSuccess).'</p>");
                     $(".alert-success").delay(3000).fadeOut(1500);
                     $("#out_msg_area").remove();
                  }});
@@ -171,7 +171,7 @@ if (isset($_GET['mid'])) {
          });
                       
         $(".delete").click(function() {
-            if (confirm("' . $langConfirmDelete . '")) {
+            if (confirm("' . js_escape($langConfirmDelete) . '")) {
             var rowContainer = $(this).parent().parent();
                     var id = rowContainer.attr("id");
                     var string = \'mid=\'+ id;
@@ -184,7 +184,7 @@ if (isset($_GET['mid'])) {
                        success: function(){
                            $("#out_msg_area").slideUp(\'fast\', function() {
                                 $(this).remove();
-                                $("#out_del_msg").html("<p class=\'success\'>'.$langMessageDeleteSuccess.'</p>");
+                                $("#out_del_msg").html("<p class=\'success\'>'.q($langMessageDeleteSuccess).'</p>");
                            });
                        }
                     });
@@ -225,7 +225,7 @@ if (isset($_GET['mid'])) {
                     'sAjaxSource': 'ajax_handler.php?mbox_type=outbox&course_id=$course_id',
                     'aLengthMenu': [
                        [10, 15, 20 , -1],
-                       [10, 15, 20, '$langAllOfThem'] // change per page values here
+                       [10, 15, 20, '".js_escape($langAllOfThem)."'] // change per page values here
                      ],
                     'sPaginationType': 'full_numbers',
                     'bSort': false,
@@ -233,14 +233,14 @@ if (isset($_GET['mid'])) {
                     'fnDrawCallback': function( oSettings ) {
                         $('#outbox_table_filter label input').attr({
                           class : 'form-control input-sm',
-                          placeholder : '$langSearch...'
+                          placeholder : '".js_escape($langSearch)."...'
                         });
                     },
                     'oLanguage': {
-                            'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                            'sZeroRecords':  '".$langNoResult."',
-                            'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                            'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+                            'sLengthMenu':   '".js_escape("$langDisplay _MENU_ $langResults2")."',
+                            'sZeroRecords':  '".js_escape($langNoResult)."',
+                            'sInfo':         '".js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults")."',
+                            'sInfoEmpty':    '".js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2")."',
                             'sInfoFiltered': '',
                             'sInfoPostFix':  '',
                             'sSearch':       '',
@@ -259,7 +259,7 @@ if (isset($_GET['mid'])) {
                         e.preventDefault();
                         var id = $(this).data('id');
                         var string = 'mid='+ id ;
-                        bootbox.confirm('$langConfirmDelete', function(result) {
+                        bootbox.confirm('".js_escape($langConfirmDelete)."', function(result) {
                             if (result) {
                                 $.ajax({
                                   type: 'POST',
@@ -275,7 +275,7 @@ if (isset($_GET['mid'])) {
                                             page_number--;
                                         }
                                     }
-                                    $('#out_del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteSuccess</p>');
+                                    $('#out_del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteSuccess)."</p>');
                                     $('.alert-success').delay(3000).fadeOut(1500);
                                     $('#out_msg_area').remove();
                                     oTable2.fnPageChange(page_number);
@@ -286,7 +286,7 @@ if (isset($_GET['mid'])) {
                      });
                      
                     $('.delete_all_out').click(function() {
-                      bootbox.confirm('$langConfirmDeleteAllMsgs', function(result) {
+                      bootbox.confirm('".js_escape($langConfirmDeleteAllMsgs)."', function(result) {
                           if(result) {
                             var string = 'all_outbox=1';
                             $.ajax({
@@ -303,7 +303,7 @@ if (isset($_GET['mid'])) {
                                     page_number--;
                                   }
                                 }     
-                                $('#out_del_msg').html('<p class=\'alert alert-success\'>$langMessageDeleteAllSuccess</p>');
+                                $('#out_del_msg').html('<p class=\'alert alert-success\'>".js_escape($langMessageDeleteAllSuccess)."</p>');
                                 $('.alert-success').delay(3000).fadeOut(1500);
                                 oTable2.fnPageChange(page_number);
                               }

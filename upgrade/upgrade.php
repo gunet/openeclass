@@ -165,49 +165,54 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
-    $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>";
-    // get old contact values
-    $tool_content .= "<div class='form-wrapper'>
-            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-            <fieldset>
-            <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langUpgContact</label></div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langInstituteShortName:</label>
-                <div class='col-sm-10'>
-                    <input class=auth_input_admin type='text' size='40' name='Institution' value='" . @$Institution . "'>
-                </div>
+
+    setGlobalContactInfo();
+    $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>
+      <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_Institution'>$langInstituteShortName:</label>
+            <div class='col-md-9'>
+              <input class='form-control' type='text' name='Institution' id='id_Institution' value='" . q($Institution) . "'>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langUpgAddress</label>
-                <div class='col-sm-10'>
-                    <textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>" . @$postaddress . "</textarea>
-                </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_postaddress'>$langUpgAddress</label>
+            <div class='col-md-9'>
+              <textarea class='form-control' rows='3' name='postaddress' id='id_postaddress'>" . q($postaddress) . "</textarea>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langUpgTel</label>
-                <div class='col-sm-10'>
-                    <input class=auth_input_admin type='text' name='telephone' value='" . @$telephone . "'>
-                </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_telephone'>$langUpgTel</label>
+            <div class='col-md-9'>
+              <input class='form-control' type='text' name='telephone' id='id_telephone' value='" . q($telephone) . "'>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>Fax:</label>
-                <div class='col-sm-10'>
-                    <input class=auth_input_admin type='text' name='fax' value='" . @$fax . "'>
-                </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_fax'>Fax:</label>
+            <div class='col-md-9'>
+              <input class='form-control' type='text' name='fax' id='id_fax' value='" . q($fax) . "'>
             </div>
-            </fieldset>
-            <p class='pull-right'><input class='btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'></p>
-            </form>
-            </div>";
+          </div>
+          <div class='form-group'>
+            <div class='col-md-12'>
+              <input class='pull-right btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'>
+            </div>
+          </div>
+        </form>
+      </div>";
     draw($tool_content, 0);
 } else {
     // Main part of upgrade starts here
     if ($command_line) {
-        $_POST['Institution'] = @$Institution;
-        $_POST['postaddress'] = @$postaddress;
-        $_POST['telephone'] = @$telephone;
-        $_POST['fax'] = @$fax;
+        setGlobalContactInfo();
+        $_POST['Institution'] = $Institution;
+        $_POST['postaddress'] = $postaddress;
+        $_POST['telephone'] = $telephone;
+        $_POST['fax'] = $fax;
     }
+
+    set_config('upgrade_begin', time());
 
     $tool_content .= getInfoAreas();
     draw($tool_content, 0);
@@ -219,7 +224,12 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     });
     Debug::setLevel(Debug::WARNING);
 
-    if (isset($telephone)) {
+    set_config('institution', $_POST['Institution']);
+    set_config('postaddress', $_POST['postaddress']);
+    set_config('phone', $_POST['telephone']);
+    set_config('fax', $_POST['fax']);
+
+    if (isset($emailhelpdesk)) {
         // Upgrade to 3.x-style config
         if (!copy('config/config.php', 'config/config_backup.php')) {
             die($langConfigError1);
@@ -231,11 +241,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
 
         set_config('site_name', $siteName);
         set_config('account_duration', $durationAccount);
-        set_config('institution', $_POST['Institution']);
         set_config('institution_url', $InstitutionUrl);
-        set_config('phone', $_POST['telephone']);
-        set_config('postaddress', $_POST['postaddress']);
-        set_config('fax', $_POST['fax']);
         set_config('email_sender', $emailAdministrator);
         set_config('admin_name', $administratorName . ' ' . $administratorSurname);
         set_config('email_helpdesk', $emailhelpdesk);
@@ -2602,6 +2608,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE source_event_id IS NULL");
         
     }
+
+    if (version_compare($oldversion, '3.0.1', '<')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
+        Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
+        Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
@@ -2618,6 +2631,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             $placeholders, $values);
     });
 
+    set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
     $logdate = date("Y-m-d_G:i:s");
 

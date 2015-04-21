@@ -174,6 +174,7 @@ if ($userdata) {
                                   <div class='profile-pers-info-data'>
                                     <span class='tag'>$langAm :</span>";
                 if (!empty($userdata->am) and allow_access($userdata->am_public)) {
+
                     $tool_content .= " <span class='tag-value'>" . q($userdata->am) . "</span>";
 
                 } else {
