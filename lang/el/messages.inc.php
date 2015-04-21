@@ -4382,8 +4382,8 @@ $langBlogPostNotAllowedDel = "Δεν έχετε δικαίωμα διαγραφ�
 $langBlogPostNotAllowedEdit = "Δεν έχετε δικαίωμα επεξεργασίας της ανάρτησης";
 $langReturnBlog = "Επιστροφή στο ιστολόγιο";
 $langBlogPerm = "Δικαιώματα σύνταξης αναρτήσεων ιστολογίου";
-$langBlogPermStudents = "Ο καθηγητής και οι μαθητές έχουν δικαίωμα σύνταξης";
-$langBlogPermTeacher = "Ο καθηγητής μόνο έχει δικαίωμα σύνταξης";
+$langBlogPermStudents = "Ο $langsTeacher και οι $langsStudents έχουν δικαίωμα σύνταξης";
+$langBlogPermTeacher = "Ο $langsTeacher μόνο έχει δικαίωμα σύνταξης";
 
 /* * ***********************************************************
  * comments
