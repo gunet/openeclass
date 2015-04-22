@@ -1773,7 +1773,7 @@ $langPrivate_3 = "ελεύθερη πρόσβαση (μόνο για ανάγν�
 // Group space
 $langGroupThisSpace = "Περιοχή για την ομάδα χρηστών";
 $langGroupName = "Όνομα ομάδας χρηστών";
-$langEditGroup = "Διόρθωση των στοιχείων της ομάδας χρηστών";
+$langEditGroup = "Διόρθωση στοιχείων ομάδας";
 $langOptional = "(προαιρετικό)";
 $langNoGroupStudents = "Μη εγγεγραμμένοι " . $langsStudents . " ";
 $langGroupMembers = "Μέλη ομάδας χρηστών";

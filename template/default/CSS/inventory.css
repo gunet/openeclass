@@ -401,21 +401,14 @@ hr {
 }
 
 /* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
-/* line 243, ../SASS/inventory.scss */
-#main-content .panel {
-  background: white !important;
+/*#main-content .panel
+{
+  background: $color-panel !important;
   min-height: 2.4em;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  box-shadow: 0 0px 7px #dddddd;
-  -moz-box-shadow: 0 0px 7px #dddddd;
-  -webkit-box-shadow: 0 0px 7px #dddddd;
-}
-
+  @include box-sizing(border-box);
+  @include border-radius(2px);
+  @include box-shadow(0 0px 7px #DDDDDD);
+}*/
 /* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
 /* line 256, ../SASS/inventory.scss */
 .toolbox {

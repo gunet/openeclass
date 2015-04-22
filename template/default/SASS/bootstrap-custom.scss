@@ -197,10 +197,10 @@ top: 8px;
         @extend .clearfix;
         padding: 0 0 0 20px;
         h3 { 
-            line-height: 45px 
+            line-height: 45px; 
         }
         .opt-btn {
-            background-color: whitesmoke;
+            background: whitesmoke;
         }
     }
 }
@@ -210,10 +210,7 @@ top: 8px;
         @extend .clearfix;
         padding: 0 0 0 20px;
         h3 { 
-            line-height: 45px 
-        }
-        .opt-btn {
-            background-color: #337ab7;
+            line-height: 45px;
         }
     }
 }

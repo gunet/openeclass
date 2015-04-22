@@ -1584,8 +1584,8 @@ function assignment_details($id, $row) {
         $deadline_notice = "<br><span class='text-danger'>$langEndDeadline</span>";
     }   
     $tool_content .= "
-    <div class='panel panel-action-btn-default'>
-        <div class='panel-heading list-header'>
+    <div class='panel panel-action-btn-primary'>
+        <div class='panel-heading'>
             <div class='pull-right'>
             ". (($is_editor) ? 
                     action_button(array(

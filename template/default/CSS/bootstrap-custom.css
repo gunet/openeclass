@@ -10114,7 +10114,7 @@ a.list-group-item.delete:hover {
 }
 /* line 202, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading .opt-btn {
-  background-color: whitesmoke;
+  background: whitesmoke;
 }
 
 /* line 209, ../SASS/bootstrap-custom.scss */
@@ -10125,12 +10125,8 @@ a.list-group-item.delete:hover {
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 215, ../SASS/bootstrap-custom.scss */
-.panel-action-btn-primary > .panel-heading .opt-btn {
-  background-color: #337ab7;
-}
 
-/* line 221, ../SASS/bootstrap-custom.scss */
+/* line 218, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;
@@ -10154,17 +10150,17 @@ a.list-group-item.delete:hover {
   box-sizing: border-box;
 }
 
-/* line 246, ../SASS/bootstrap-custom.scss */
+/* line 243, ../SASS/bootstrap-custom.scss */
 .mce-toggle:hover {
   cursor: pointer;
 }
 
-/* line 250, ../SASS/bootstrap-custom.scss */
+/* line 247, ../SASS/bootstrap-custom.scss */
 .mce-toggle i.mce-ico.mce-i-none {
   width: 22px;
 }
 
-/* line 258, ../SASS/bootstrap-custom.scss */
+/* line 255, ../SASS/bootstrap-custom.scss */
 .checkbox_cell {
   width: 5px;
   text-align: center;
