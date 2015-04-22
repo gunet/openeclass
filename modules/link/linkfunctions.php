@@ -342,9 +342,14 @@ function submit_category() {
 function delete_link($id) {
     global $course_id, $langLinkDeleted;
 
-    $tuple = Database::get()->querySingle("SELECT url, title FROM link WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $tuple = Database::get()->querySingle("SELECT url, title, category FROM link WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $url = $tuple->url;
     $title = $tuple->title;
+    $category = $tuple->category;
+    if ($category == -2) { //delete abuse reports for social bookmark
+        Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON `link`.id = abuse_report.id
+                               WHERE abuse_report.rtype = ?s AND abuse_report.rid = ?d", 'link', $id);
+    }
     Database::get()->query("DELETE FROM `link` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_LINK, $id);
     Log::record($course_id, MODULE_ID_LINKS, LOG_DELETE, array('id' => $id,
