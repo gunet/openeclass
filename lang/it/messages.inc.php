@@ -875,7 +875,6 @@ $langGroupNoGroup = "$langsStudents non registrati.";
 $langGroupUsersList = "Utenti";
 $langGroupNoTutor = "nessuno";
 $langGroupNone = "Non c' è nessuna";
-$langGroupNoneMasc = "nessun";
 $langAddTutors = "Gestire l' elenco di utenti";
 $langForumGroup = "Forum del gruppo";
 $langMyGroup = "Il mio gruppo";
