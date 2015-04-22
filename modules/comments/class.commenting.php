@@ -119,16 +119,17 @@ Class Commenting {
                         $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
                         $post_actions .= icon('fa-times', $langDelete).'</a>';
                 
-                if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
-                    $post_actions .= abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)); 
-                }
+                        if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
+                            $post_actions .= abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)); 
+                        }
                 
                         $post_actions .='</div>';
                     } else {
-                if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
-                    $post_actions = '<div class="pull-right">'.abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)).'</div>';
-                } else {
-                        $post_actions = '';
+                        if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
+                            $post_actions = '<div class="pull-right">'.abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)).'</div>';
+                        } else {
+                            $post_actions = '';
+                        }
                     }
                 }           
                 $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
