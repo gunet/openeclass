@@ -3143,6 +3143,14 @@ function documentBackLink($path) {
     }
 }
 
+function stringStartsWith($haystack, $needle) {
+    return substr($haystack, 0, strlen($needle)) === $needle;
+}
+
+function stringEndsWith($haystack, $needle) {
+    return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
+}
+
 /**
  * @brief Define the RSS constant, used by the template system, to the module's RSS link
  */

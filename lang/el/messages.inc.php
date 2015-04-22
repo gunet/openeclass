@@ -2306,6 +2306,7 @@ $langLinkDeleted = "Ο σύνδεσμος διαγράφηκε";
 $langLinkName = "Όνομα συνδέσμου";
 $langLinkAdd = "Προσθήκη συνδέσμου";
 $langLinkAdded = "Ο σύνδεσμος προστέθηκε";
+$langLinksAdded = "Οι σύνδεσμοι προστέθηκαν";
 $langLinkNotPermitted = "Άκυρη μορφή συνδέσμου";
 $langLinkDelconfirm = "Θέλετε να διαγράψετε τον σύνδεσμο;";
 $langCategoryName = "Όνομα κατηγορίας";
@@ -3424,6 +3425,7 @@ $langFAdd = "Το αρχείο προστέθηκε";
 $langDelF = "Το αρχείο διαγράφηκε";
 $langAddV = "Προσθήκη αρχείου";
 $langAddVideoLink = "Σύνδεσμος βίντεο";
+$langAddOpenDelosVideoLink = "Σύνδεσμος OpenDelos";
 $langsendV = "Αποστολή αρχείου ήχου ή βίντεο";
 $langVideoTitle = "Τίτλος";
 $langDescr = "Περιγραφή";
@@ -3440,6 +3442,7 @@ $langColorboxCurrent = "πολυμέσο {current} από {total}";
 $langVideoDirectory = "Γενικά πολυμεσικά αρχεία";
 $langCatVideoDirectory = "Κατηγορίες πολυμεσικών αρχείων";
 $langCatVideoDirectoryCreated = "Η κατηγορία προστέθηκε";
+$langOpenDelosReplaceInfo = "Αν κάποιος επιλεγμένος σύνδεσμος ήδη υπάρχει στα πολυμέσα, θα ανανεωθεί με τα τρέχοντα στοιχεία.";
 
 /* * ***********************************************************
  * wiki.php

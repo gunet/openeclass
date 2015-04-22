@@ -44,6 +44,9 @@ require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/admin/extconfig/externals.php';
+require_once 'modules/admin/extconfig/opendelosapp.php';
+require_once 'delos_functions.php';
 
 $toolName = $langVideo;
 
@@ -66,9 +69,9 @@ if ($is_in_tinymce) {
 }
 
 if($display_tools) {
-        load_js('tools.js');
-        ModalBoxHelper::loadModalBox(true);
-        $head_content .= <<<hContent
+    load_js('tools.js');
+    ModalBoxHelper::loadModalBox(true);
+    $head_content .= <<<hContent
 <script type="text/javascript">
 function checkrequired(which, entry) {
 	var pass=true;
@@ -93,32 +96,48 @@ function checkrequired(which, entry) {
 
 </script>
 hContent;
+    $head_content .= getDelosJavaScript();
 
     if (!$is_in_tinymce and (!isset($_GET['showQuota']))) {
         if (!isset($_GET['form_input']) and (!isset($_GET['action'])) and (!isset($_GET['table_edit']))) {
-            $tool_content .= action_bar(array(
+            $actionBarArray = array(
                 array('title' => $langAddV,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file",
-                      'icon' => 'fa-plus-circle',
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-success'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=file",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
                 array('title' => $langAddVideoLink,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url",
-                      'icon' => 'fa-plus-circle',
-                      'level' => 'primary-label',
-                      'button-class' => 'btn-success'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;form_input=url",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
                 array('title' => $langCategoryAdd,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory",
-                      'icon' => 'fa-plus-circle'),
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=addcategory",
+                    'icon' => 'fa-plus-circle'),
                 array('title' => $langQuotaBar,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=true",
-                      'icon' => 'fa-pie-chart')));
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showQuota=true",
+                    'icon' => 'fa-pie-chart')
+            );
+            if (isDelosEnabled()) {
+                $actionBarArray[] = getDelosButton();
+            }
+            $tool_content .= action_bar($actionBarArray);
         } else {
             if (isset($_GET['action'])) {
-                $pageName =  ($_GET['action'] == 'editcategory') ? $langCategoryMod : $langCategoryAdd;
+                $pageName = ($_GET['action'] == 'editcategory') ? $langCategoryMod : $langCategoryAdd;
             }
             if (isset($_GET['form_input'])) {
-                $pageName =  ($_GET['form_input'] == 'file') ? $langAddV : $langAddVideoLink;
+                switch ($langCategoryMod) {
+                    case 'file':
+                        $pageName = $langAddV;
+                        break;
+                    case 'url':
+                        $pageName = $langAddVideoLink;
+                        break;
+                    case 'opendelos':
+                        $pageName = $langAddOpenDelosVideoLink;
+                        break;
+                }
             }
             if (isset($_GET['id']) and isset($_GET['table_edit']))  {
                 $pageName = $langModify;
@@ -317,7 +336,14 @@ hContent;
             }
             Session::Messages($langFAdd,"alert-success");
             redirect_to_home_page("modules/video/index.php");
-        }	// end of add
+        }	// end of add_submit
+        if (isset($_POST['add_submit_delos'])) {
+            if (isset($_POST['delosResources'])) {
+                $jsonObj = requestDelosJSON();
+                storeDelosResources($jsonObj);
+            }
+            $tool_content .= "<div class='alert alert-success'>$langLinksAdded</div>";
+        }
         if (isset($_GET['delete'])) {
                 if ($_GET['delete'] == 'delcat') { // delete video category
                     $q = Database::get()->queryArray("SELECT id FROM video WHERE category = ?d AND course_id = ?d", $_GET['id'], $course_id);
@@ -334,17 +360,21 @@ hContent;
                     delete_video($_GET['id'], $table);
                 }
                 $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
-        } elseif (isset($_GET['form_input'])) { // display video form
-                $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-
+        } else if (isset($_GET['form_input'])) { // display video form
+            $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
+            
+            if ($_GET['form_input'] === 'file' || $_GET['form_input'] === 'url') {
+                // Form
                 $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
-                if ($_GET['form_input'] == 'file') {
+                if ($_GET['form_input'] === 'file') {
                     $tool_content .= "<form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' enctype='multipart/form-data' onsubmit=\"return checkrequired(this, 'title');\">";
-                } else {
-                    $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">";
+                } else if ($_GET['form_input'] === 'url') {
+                    $tool_content .= "<form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">";
                 }
                 $tool_content .= "<fieldset>";
-                if ($_GET['form_input'] == 'file') {
+                
+                // Main Element
+                if ($_GET['form_input'] === 'file') {
                     enableCheckFileSize();
                     $tool_content .= "<div class='form-group'>
                             <label for='FileName' class='col-sm-2 control-label'>$langWorkFile:</label>
@@ -353,13 +383,15 @@ hContent;
                                 fileSizeHidenInput() . "
                                 <input type='file' name='userFile'></div>
                         </div>";
-                } else {
+                } else if ($_GET['form_input'] === 'url') {
                     $tool_content .= "<div class='form-group'>
                         <label for='Url' class='col-sm-2 control-label'>$langURL:</label>
                           <input type='hidden' name='id' value=''>
                           <div class='col-sm-10'><input class='form-control' type='text' name='URL'></div>
                       </div>";
                 }
+                
+                // Other fields
                 $tool_content .= "<div class='form-group'>
                     <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
                     <div class='col-sm-10'><input class='form-control' type='text' name='title' size='55'></div>
@@ -393,23 +425,34 @@ hContent;
                 $tool_content .=  "</select>
                     </div>
                 </div>";
-                if ($_GET['form_input'] == 'file') {
+                
+                // Submit button
+                if ($_GET['form_input'] === 'file') {
                     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                         <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langUpload) . "'>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div></div>";
-                } else {
+                } else if ($_GET['form_input'] === 'url') {
                     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                         <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langAdd) . "'>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div></div>";
                 }
                 $tool_content .= "</fieldset>";
-                if ($_GET['form_input'] == 'file') {
+                if ($_GET['form_input'] === 'file') {
                     $tool_content .= "<div class='smaller right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
                 }
                 $tool_content .= "</form>
                 </div></div></div>";
+            } else if ($_GET['form_input'] === 'opendelos') {
+                $jsonObj = requestDelosJSON();
+                // construct the form/table from the JSON received
+                if ($jsonObj !== null) {
+                    $tool_content .= displayDelosForm($jsonObj);
+                } else {
+                    $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
+                }
+            }
         }
 
     // ------------------- if no submit -----------------------f
