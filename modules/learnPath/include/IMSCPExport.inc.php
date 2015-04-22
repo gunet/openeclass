@@ -671,7 +671,7 @@ class IMSCPExport
         if ( !claro_copy_file('modules/learnPath/export/APIWrapper.js', $this->destDir)
           || !claro_copy_file('modules/learnPath/export/scores.js', $this->destDir)
           || !claro_copy_file('modules/learnPath/export/imscp_v1p2.xsd', $this->destDir)
-          || !claro_copy_file('template/default/css/bootstrap-custom.css', $this->destDir))
+          || !claro_copy_file('template/default/CSS/bootstrap-custom.css', $this->destDir))
         {
             $this->error[] = $langErrorCopyScormFiles;
             return false;
