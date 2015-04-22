@@ -1790,7 +1790,7 @@ $langGroupTooManyMembers = "Ο αριθμός που προτάθηκε υπερ
 	Η σύνθεση της ομάδας δεν άλλαξε";
 $langGroupNoTutor = "κανένας";
 $langGroupNone = "δεν υπάρχει";
-$langGroupNoneMasc = "κανένας";
+$langGroupNoneMasc = "Δεν υπάρχουν εκπαιδευόμενοι στην ομάδα";
 $langAddTutors = "Διαχείριση καταλόγου χρηστών";
 $langForumGroup = "Περιοχή συζητήσεων της ομάδας";
 $langMyGroup = "η ομάδα μου";

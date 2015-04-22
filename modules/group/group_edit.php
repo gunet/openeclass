@@ -197,20 +197,19 @@ foreach ($q as $member) {
 if (!empty($message)) {
     $tool_content .= $message;
 }
-
-      $tool_content .=  action_bar(array(
-            array('title' => $langAdminUsers,
-                'url' => "../user/?course=$course_code",
-                'icon' => 'fa-users',
-                'level' => 'primary-label'),
-            array(
-                'title' => $langBack,
-                'level' => 'primary-label',
-                'icon' => 'fa-reply',
-                'url' => "group_space.php?course=$course_code&amp;group_id=$group_id",
-                
-                 )
-        ));
+$back_url = isset($_GET['from']) && $_GET['from'] == 'group' ? "group_space.php?course=$course_code&group_id=$group_id" : "index.php?course=$course_code";
+$tool_content .=  action_bar(array(
+      array('title' => $langAdminUsers,
+          'url' => "../user/?course=$course_code",
+          'icon' => 'fa-users',
+          'level' => 'primary-label'),
+      array(
+          'title' => $langBack,
+          'level' => 'primary-label',
+          'icon' => 'fa-reply',
+          'url' => $back_url,
+           )
+  ));
 
 $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
