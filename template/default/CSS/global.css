@@ -8,7 +8,7 @@
 /* TRANSITIONS ------------------------------------------------------------------- */
 /* MIXINS ------------------------------------------------------------------------------- */
 /* CSS ANIMATIONS -----------------------------------------------------------------*/
-/* line 113, ../SASS/global.scss */
+/* line 114, ../SASS/global.scss */
 .transition {
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
@@ -18,45 +18,68 @@
 }
 
 @-webkit-keyframes NEW-ITEM-FX {
+  /* line 120, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 121, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 122, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
+
 @-moz-keyframes NEW-ITEM-FX {
+  /* line 128, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 129, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 130, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
+
 @-o-keyframes NEW-ITEM-FX {
+  /* line 136, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 137, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 138, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }
 }
+
 @keyframes NEW-ITEM-FX {
+  /* line 144, ../SASS/global.scss */
   0% {
     background: #e8ffcb;
   }
+
+  /* line 145, ../SASS/global.scss */
   20% {
     background: #e8ffcb;
   }
+
+  /* line 146, ../SASS/global.scss */
   100% {
     background: rgba(232, 255, 203, 0);
   }

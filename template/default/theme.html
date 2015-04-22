@@ -109,6 +109,11 @@
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%NOTES_LINK%}"><i class="fa fa-edit"></i>{%LANG_NOTES%}</a>
                                     </li>
+                                    <!-- BEGIN PersoBlogBlock -->
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="{%MYBLOG_LINK%}"><i class="fa fa-columns"></i>{%LANG_MYBLOG%}</a>
+                                    </li>
+                                    <!-- END PersoBlogBlock -->
                                     <li role="presentation">
                                         <a role="menuitem" tabindex="-1" href="{%STATS_LINK%}"><i class="fa fa-area-chart"></i>{%LANG_STATS%}</a>
                                     </li>                                    
@@ -122,7 +127,9 @@
                             <!-- END LoggedInBlock -->
                             <!-- BEGIN LoggedOutBlock -->
                             {%LANG_SELECT%}
+                            <!-- BEGIN LoginIconBlock -->
                             <li><a href="{%LOGOUT_LINK%}"><i class="fa fa-lock"></i></a></li>
+                            <!-- END LoginIconBlock -->
                             <!-- END LoggedOutBlock -->
                         </ul>
                     </nav>

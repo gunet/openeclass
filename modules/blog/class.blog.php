@@ -46,14 +46,16 @@ Class Blog {
      */
     public function blogPostsNumber() {
         $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE ';
+        $params = array();
         if ($this->course_id != 0) {//course blog
             $sql .= '`course_id` = ?d';
-            $param = $this->course_id;
+            $params[] = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = 0 AND `user_id` = ?d';
-            $param = $this->user_id;
+            $sql .= '`course_id` = ?d AND `user_id` = ?d';
+            $params[] = 0;
+            $params[] = $this->user_id;
         }
-        $numPosts = Database::get()->querySingle($sql, $param)->c;
+        $numPosts = Database::get()->querySingle($sql, $params)->c;
         return $numPosts;
     }
     
@@ -66,14 +68,18 @@ Class Blog {
     public function getBlogPostsDB($page, $postsPerPage) {
         $offset = $page*$postsPerPage;
         $sql = 'SELECT * FROM `blog_post` WHERE ';
+        $params = array();
         if ($this->course_id != 0) {//course blog
             $sql .= '`course_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
-            $param = $this->course_id;
+            $params[] = $this->course_id;
         } else {//user blog
-            $sql .= '`course_id` = 0 AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
-            $param = $this->user_id;
+            $sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `time` DESC LIMIT ?d,?d';
+            $params[] = 0;
+            $params[] = $this->user_id;
         }
-        $result = Database::get()->queryArray($sql, $param, $offset, $postsPerPage);
+        $params[] = $offset;
+        $params[] = $postsPerPage;
+        $result = Database::get()->queryArray($sql, $params);
         $ret = array();
         if (is_array($result)) {
         	$ret = BlogPost::loadFromPDOArr($result);
@@ -88,14 +94,17 @@ Class Blog {
      */
     private function getPopularBlogPostsDB($num) {
         $sql = 'SELECT * FROM `blog_post` WHERE ';
+        $params = array();
         if ($this->course_id != 0) {//course blog
         	$sql .= '`course_id` = ?d ORDER BY `views` DESC LIMIT ?d';
-        	$param = $this->course_id;
+        	$params[] = $this->course_id;
         } else {//user blog
-        	$sql .= '`course_id` = 0 AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
-        	$param = $this->user_id;
+        	$sql .= '`course_id` = ?d AND `user_id` = ?d ORDER BY `views` DESC LIMIT ?d';
+        	$params[] = 0;
+        	$params[] = $this->user_id;
         }
-        $result = Database::get()->queryArray($sql, $param, $num);
+        $params[] = $num;
+        $result = Database::get()->queryArray($sql, $params);
         $ret = array();
         if (is_array($result)) {
             $ret = BlogPost::loadFromPDOArr($result);
@@ -109,12 +118,18 @@ Class Blog {
      * @return string HMTL code
      */
     public function popularBlogPostsHTML($num) {
-        global $course_code, $langBlogPopular;
+        global $langBlogPopular;
+        if ($this->course_id != 0) { //course blog
+            global $course_code;
+            $url_params = "course=$course_code";
+        } else { //user blog
+            $url_params = "user_id=$this->user_id";
+        }
         $posts = $this->getPopularBlogPostsDB($num);
         $out = "<h5><strong>$langBlogPopular</strong></h5>
                     <div class='list-group'>";
         foreach ($posts as $post) {
-            $out .= "<a class='list-group-item' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
+            $out .= "<a class='list-group-item' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>";
         }
         $out .= "</div>";
         return $out;
@@ -127,7 +142,13 @@ Class Blog {
      * @return string HMTL code
      */
     public function navLinksHTML($page, $postsPerPage) {
-        global $course_code, $langBlogNewerPosts, $langBlogOlderPosts;
+        global $langBlogNewerPosts, $langBlogOlderPosts;
+        if ($this->course_id != 0) { //course blog
+            global $course_code;
+            $url_params = "course=$course_code";
+        } else { //user blog
+            $url_params = "user_id=$this->user_id";
+        }
         
         $num_posts = $this->blogPostsNumber();
         
@@ -141,12 +162,14 @@ Class Blog {
         	$newer = TRUE;
         $out = '';
         if ((isset($newer) && $newer) || (isset($older) && $older)) {
-            $out = "<table id='navcontainer' width='100%'><tr>";
-            if(isset($newer) && $newer)
-            	$out .= "<td class='left'><a href='$_SERVER[PHP_SELF]?course=".$course_code."&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts."</a>&nbsp;</td>";
-            if(isset($older) && $older)
-            	$out .= "<td class='right'><a href='$_SERVER[PHP_SELF]?course=".$course_code."&amp;action=showBlog&amp;page=".($page+1)."'>".$langBlogOlderPosts."</a>&nbsp;</td>";
-            $out .= "</tr></table>";
+            $out = "<ul class='pager'>";
+            if(isset($older) && $older) {
+            	$out .= "<li class='previous'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page+1)."'>&larr; ".$langBlogOlderPosts."</a></li>";
+            }
+            if(isset($newer) && $newer) {
+                $out .= "<li class='next'><a href='$_SERVER[PHP_SELF]?$url_params&amp;action=showBlog&amp;page=".($page-1)."'>".$langBlogNewerPosts." &rarr;</a></li>";
+            }
+            $out .= "</ul>";
         }
         
         return $out;
@@ -159,13 +182,23 @@ Class Blog {
      * @return string HMTL code
      */
     public function chronologicalTreeHTML($tree_month, $tree_year) {
-        global $course_id, $course_code, $langBlogPostHistory, $langMonthNames,
-               $head_content;
+        global $langBlogPostHistory, $langMonthNames, $head_content;
+        if ($this->course_id != 0) { //course blog
+            global $course_code;
+            $url_params = "course=$course_code";
+        } else { //user blog
+            $url_params = "user_id=$this->user_id";
+        }
         $out = '';
         
         if ($this->blogPostsNumber()>0) {
-            $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d ORDER BY `time` DESC";
-            $result = Database::get()->queryArray($sql, $course_id);
+            if ($this->course_id != 0) { //course blog
+                $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d ORDER BY `time` DESC";
+                $result = Database::get()->queryArray($sql, $this->course_id);
+            } else { //user blog
+                $sql = "SELECT `id`, `title`, YEAR(`time`) as `y`, MONTH(`time`) as `m`, DAY(`time`) as `d` FROM `blog_post` WHERE course_id = ?d AND user_id = ?d ORDER BY `time` DESC";
+                $result = Database::get()->queryArray($sql, 0, $this->user_id);
+            }
             load_js('jstree3');
             $head_content .= "
                     <script>
@@ -204,7 +237,7 @@ Class Blog {
                     $out_p = "";
                     foreach ($monthard as $id => $title) {
                     	$count_id += 1;
-                    	$out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-text-o\"}'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
+                    	$out_p .= "<li data-jstree='{\"icon\":\"fa fa-file-text-o\"}'><a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=$id'>".q($title)."</a></li>";
             	    }                    
                     $out_m .= "<li data-jstree='{\"icon\":\"fa fa-folder-o\"".(($month == $tree_month && $year == $tree_year)? ",\"opened\":true,\"selected\":true" :"")."}'>$m ($count_id)
                                     <ul>
@@ -242,7 +275,7 @@ Class Blog {
     }
     
     /**
-     * Check if a user has permission to create blog posts
+     * Check if a user has permission to create blog posts in course blogs
      * @param isEditor boolean showing if user is teacher
      * @param studConfigVal boolean based on the config value allowing users to create posts
      * @param uid the user id

@@ -911,7 +911,7 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
                           `active`, `secret_directory`, `group_submissions`, `assign_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
-                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '1' 
+                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '0' 
                                 FROM assignments ORDER BY id") != null);
 
         // ----- assigments DB Table ----- //
@@ -1799,5 +1799,22 @@ function copyThemeImages() {
                 copy("$imgDir/{$styles[$img]}", "$themeDir/{$styles[$img]}");
             }
         }
+    }
+}
+
+function setGlobalContactInfo() {
+    global $Institution, $postaddress, $telephone, $fax;
+
+    if (!isset($Institution)) {
+        $Institution = get_config('institution');
+    }
+    if (!isset($postaddress)) {
+        $postaddress = get_config('postaddress');
+    }
+    if (!isset($telephone)) {
+        $telephone = get_config('phone');
+    }
+    if (!isset($fax)) {
+        $fax = get_config('fax');
     }
 }

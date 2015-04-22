@@ -50,8 +50,11 @@ if (!$is_editor) {
     }
 
     $order = Database::get()->querySingle("SELECT COALESCE(MAX(`order`), 1) AS `order` FROM ebook WHERE course_id = ?d", $course_id)->order;
-    $ebook_id = Database::get()->query("INSERT INTO ebook SET `order` = ?d, `course_id` = ?d, `title` = ?s", $order + 1, $course_id, $title)->lastInsertID;
-
+    $ebook_id = Database::get()->query("INSERT INTO ebook SET `order` = ?d, `course_id` = ?d, `title` = ?s, `visible` = 1", $order + 1, $course_id, $title)->lastInsertID;
+    Database::get()->query("INSERT INTO ebook_section SET ebook_id = ?d,
+                                                    public_id = ?s,
+                                                    title = ?s"
+            , $ebook_id, '1', $langSection.' 1');
     // Initialize document subsystem global variables
     require_once 'modules/document/doc_init.php';
     require_once 'include/log.php';

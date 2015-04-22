@@ -142,6 +142,13 @@ function q($s) {
     return htmlspecialchars($s, ENT_QUOTES);
 }
 
+// Escape HTML special characters and expand math tags
+function q_math($s) {
+    global $urlAppend;
+    $text = preg_replace_callback('/\[m\].*?\[\/m\]/s', 'math_unescape', q($s));
+    return mathfilter($text, 12, $urlAppend . 'courses/mathimg/');
+}
+
 function unescapeSimple($str) {
     if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
         return stripslashes($str);
@@ -905,11 +912,13 @@ function mkpath($path) {
     return true;
 }
 
-// check if we can display activationlink (e.g. module_id is one of our modules)
+// Check if we can display activation link (e.g. module_id is one of our modules)
+// Link is displayed only on main page of each module
 function display_activation_link($module_id) {
     global $modules;
 
-    if (!defined('STATIC_MODULE') and $module_id && array_key_exists($module_id, $modules)) {
+    $script = preg_replace('|.*/|', '', $_SERVER['SCRIPT_NAME']);
+    if (!defined('STATIC_MODULE') and $module_id and array_key_exists($module_id, $modules) and $script == 'index.php' and count($_GET) == 1 and isset($_GET['course']) and $_SERVER['REQUEST_METHOD'] == 'GET') {
         return true;
     } else {
         return false;
@@ -1159,7 +1168,7 @@ function append_units($amount, $singular, $plural) {
 }
 
 // Convert $sec to days, hours, minutes, seconds;
-function format_time_duration($sec) {
+function format_time_duration($sec, $hourLimit = 24) {
     global $langsecond, $langseconds, $langminute, $langminutes, $langhour, $langhours, $langDay, $langDays;
 
     if ($sec < 60) {
@@ -1176,8 +1185,11 @@ function format_time_duration($sec) {
     }
     $hour = floor($min / 60);
     $min = $min % 60;
-    if ($hour < 24) {
-        append_units($hour, $langhour, $langhours) .
+    if ($hour < $hourLimit) {
+        if ($hour > 24) {
+            $min = 0;
+        }
+        return append_units($hour, $langhour, $langhours) .
                 (($min == 0) ? '' : (' ' . append_units($min, $langminute, $langminutes)));
     }
     $day = floor($hour / 24);
@@ -1687,16 +1699,16 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                         title: '".js_escape($langMore)."',
                         classes: 'toggle',
                         image: '../../js/tinymce/skins/light/img/toggle.png',
-                        style: 'padding:3px 0 0 5px;',
+                        style: 'padding:5px 8px 0 10px;',
                         onclick: function() {
-                            $('#mceu_55').toggle();
+                            $('#mceu_49').toggle();
                         }
                     });
                     
                 },
                 init_instance_callback : function(editor){
-                    $('#mceu_55').hide();
-                    $('div#mceu_35, div#mceu_72').attr('style','border:1px solid #ddd');
+                    $('#mceu_49').hide();
+                    $('div#mceu_32, div#mceu_66').attr('style','border:1px solid #ddd');
                 }
                 ";
         }
@@ -1754,8 +1766,8 @@ tinymce.init({
     // Menubar options
     menu : 'false',
     // Toolbar options
-    toolbar1: 'toggle | undo | redo | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | table | bullist | numlist | outdent | indent',
-    toolbar2: 'underline | strikethrough | superscript | subscript | cut | copy | paste | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
+    toolbar1: 'toggle | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
+    toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
     //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
@@ -2737,6 +2749,38 @@ function crypto_rand_secure($min = null, $max = null) {
     return $min + $rnd;
 }
 
+
+/**
+ * Return a javascript code snippet to protect the page from being framed.
+ *
+ * return string
+ */
+function framebusting_code() {
+    return '
+    <!-- Framebusting code follows -->
+    <style id="antiClickjack">body{display:none !important;}</style>
+    <script type="text/javascript">
+        if (self === top) {
+            var antiClickjack = document.getElementById("antiClickjack");
+            antiClickjack.parentNode.removeChild(antiClickjack);
+        } else {
+            top.location = self.location;
+        }
+    </script>
+    ';
+}
+
+
+/**
+ * Sets the X-Frame-Options header to disallow framing the web pages of 
+ * platform. The SAMEORIGIN option is used in order to allow framing from 
+ * other web pages of the platform in case this functionality is needed.
+ */
+function add_framebusting_headers() {
+    header('X-Frame-Options: SAMEORIGIN');
+}
+
+ 
 /**
  * @brief returns HTTP 403 status code 
  * @param type $path
@@ -2927,10 +2971,11 @@ function action_button($options, $secondary_menu_options = array()) {
     $action_button = "";
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
+    $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
     if (count($out_secondary)) {
         $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
         $action_button = "
-                <a tabindex='1' class='btn btn-default' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
+                <a tabindex='1' class='btn $secondary_btn_class' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
                 </a>";
     }    
@@ -3102,5 +3147,80 @@ function documentBackLink($path) {
             (defined('COMMON_DOCUMENTS')? '?': '&amp;') . $opts;
     } else {
         return $upload_target_url;
+    }
+}
+
+function stringStartsWith($haystack, $needle) {
+    return substr($haystack, 0, strlen($needle)) === $needle;
+}
+
+function stringEndsWith($haystack, $needle) {
+    return $needle === '' || substr_compare($haystack, $needle, -strlen($needle)) === 0;
+}
+
+/**
+ * @brief Define the RSS constant, used by the template system, to the module's RSS link
+ */
+function define_rss_link() {
+    global $uid, $course_code, $course_id, $module_id, $modules;
+
+    $module_name = $modules[$module_id]['link'];
+    $link = 'modules/' . $module_name . '/rss.php?c=' . $course_code;
+    $course_status = course_status($course_id);
+
+    if ($course_status == COURSE_INACTIVE) {
+        return;
+    } elseif ($course_status != COURSE_OPEN or
+              $_SESSION['courses'][$course_code]) {
+        $link .= '&amp;uid=' . $uid .  '&amp;token=' .
+            token_generate($module_name . $uid . $course_code);
+    }
+
+    define('RSS', $link);
+}
+
+/**
+ * @brief Check whether an RSS link token is valid for the current module and user
+ */
+function rss_token_valid($token, $uid) {
+    global $course_code, $course_id, $module_id, $modules;
+
+    if (!token_validate($modules[$module_id]['link'] . $uid . $course_code, $token)) {
+        return false;
+    }
+    $q = Database::get()->querySingle('SELECT status FROM course_user
+        WHERE course_id = ?d AND user_id = ?d', $course_id, $uid);
+    if (!$q or !$q->status) {
+        return false;
+    }
+    return true;
+}
+
+function rss_check_access() {
+    global $course_code, $course_id, $course_status, $module_id;
+
+    if (isset($_GET['c'])) {
+        $course_code = $_GET['c'];
+        $course_id = course_code_to_id($course_code);
+        $course_status = course_status($course_id);
+    } else {
+        $course_code = '';
+        $course_id = false;
+    }
+    if ($course_id === false) {
+        header("HTTP/1.0 404 Not Found");
+        echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
+            '<title>404 Not Found</title></head><body>',
+            '<h1>Not Found</h1><p>The requested course "',
+            htmlspecialchars($course_code),
+            '" does not exist.</p></body></html>';
+        exit;
+    }
+    if ($course_status == COURSE_INACTIVE or
+        !visible_module($module_id) or
+        ($course_status != COURSE_OPEN and
+         !(isset($_GET['token']) and isset($_GET['uid']) and
+         rss_token_valid($_GET['token'], $_GET['uid'])))) {
+        forbidden($_SERVER['REQUEST_URI']);
     }
 }

@@ -104,7 +104,7 @@ if (isset($language)) {
 
 
 // check if we are guest user
-if ($uid AND !isset($_GET['logout'])) {
+if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     if (check_guest()) {
         // if the user is a guest send him straight to the corresponding lesson
         $guest = Database::get()->querySingle("SELECT code FROM course_user, course
@@ -122,27 +122,28 @@ if ($uid AND !isset($_GET['logout'])) {
 } else {
     // check authentication methods
     $authLink = array();
-    $extAuthMethods = array('cas', 'shibboleth');
-    $loginFormEnabled = false;
-    $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
-            FROM auth WHERE auth_default <> 0
-            ORDER BY auth_default DESC, auth_id");
-    foreach ($q as $l) {
-        $extAuth = in_array($l->auth_name, $extAuthMethods);
-        if ($extAuth) {
-            $authLink[] = array(
-                'showTitle' => true,
-                'class' => 'login-option login-option-sso',
-                'title' => empty($l->auth_title)? "<b>$langLogInWith</b><br>{$l->auth_name}": q($l->auth_title),
-                'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
-                          ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
-        } elseif (!$loginFormEnabled) {
-            $loginFormEnabled = true;
-            $authLink[] = array(
-                'showTitle' => false,
-                'class' => 'login-option',
-                'title' => "<b>$langLogInWith</b><br>Credentials",
-                'html' => "<form action='$urlServer' method='post'>
+    if (!$upgrade_begin) {
+        $extAuthMethods = array('cas', 'shibboleth');
+        $loginFormEnabled = false;
+        $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
+                FROM auth WHERE auth_default <> 0
+                ORDER BY auth_default DESC, auth_id");
+        foreach ($q as $l) {
+            $extAuth = in_array($l->auth_name, $extAuthMethods);
+            if ($extAuth) {
+                $authLink[] = array(
+                    'showTitle' => true,
+                    'class' => 'login-option login-option-sso',
+                    'title' => empty($l->auth_title)? "<b>$langLogInWith</b><br>{$l->auth_name}": q($l->auth_title),
+                    'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
+                              ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
+            } elseif (!$loginFormEnabled) {
+                $loginFormEnabled = true;
+                $authLink[] = array(
+                    'showTitle' => false,
+                    'class' => 'login-option',
+                    'title' => "<b>$langLogInWith</b><br>Credentials",
+                    'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
                                <input type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
                              </div>
@@ -154,11 +155,10 @@ if ($uid AND !isset($_GET['logout'])) {
                            <div class='text-right'>
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
+            }
         }
-    }
 
-
-    $head_content .= "
+        $head_content .= "
       <script>
         $(function() {
             $('#revealPass').mousedown(function () {
@@ -168,14 +168,15 @@ if ($uid AND !isset($_GET['logout'])) {
             })
         });
       </script>
-      <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>
-    ";
+      <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>";
+    }
+
     $tool_content .= "$warning
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
                     <div class='row'>";
-    if (!get_config('dont_display_login_form')) {
+    if (!$upgrade_begin or get_config('dont_display_login_form')) {
         $tool_content .= "
                         <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                           <div class='wrapper-login-option'>";

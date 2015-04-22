@@ -429,6 +429,7 @@ $tool_content .= "
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane in active fade' id='generalsetting'>
         <div class='form-wrapper'>
+            <legend class='theme_options_legend'>$langLayoutConfig</legend>
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>$langLayout:</label>
                 <div class='form-inline col-sm-9'>
@@ -452,7 +453,8 @@ $tool_content .= "
                     <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]' ".(($theme_options_styles['containerType'] == 'boxed')? ' disabled' : '').">
                     <span style='margin-left:10px;' id='pixelCounter'></span>
                 </div>
-            </div>                        
+            </div>
+            <legend class='theme_options_legend'>$langLogoConfig</legend>
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-3 control-label'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-9'>
@@ -464,7 +466,8 @@ $tool_content .= "
                 <div class='col-sm-9'>
                    $small_logo_field
                 </div>
-            </div>              
+            </div>
+            <legend class='theme_options_legend'>$langBgColorConfig</legend>
             <div class='form-group'>
               <label for='bgColor' class='col-sm-3 control-label'>$langBgColor:</label>
               <div class='col-sm-9'>
@@ -497,6 +500,7 @@ $tool_content .= "
                       </div>              
                 </div>                
             </div>
+            <legend class='theme_options_legend'>$langLinksCongiguration</legend>
             <div class='form-group'>
               <label for='linkColor' class='col-sm-3 control-label'>$langLinkColor:</label>
               <div class='col-sm-9'>
@@ -508,7 +512,8 @@ $tool_content .= "
               <div class='col-sm-9'>
                 <input name='linkHoverColor' type='text' class='form-control colorpicker' id='linkHoverColor' value='$theme_options_styles[linkHoverColor]'>
               </div>
-            </div>                 
+            </div>
+            <legend class='theme_options_legend'>$langLoginConfiguration</legend>
             <div class='form-group'>
               <label for='loginJumbotronBgColor' class='col-sm-3 control-label'>$langLoginBgGradient:</label>
               <div class='col-xs-4 col-sm-1'>
@@ -558,12 +563,14 @@ $tool_content .= "
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>
         <div class='form-wrapper'>
+            <legend class='theme_options_legend'>$langBgColorConfig</legend>
             <div class='form-group'>
               <label for='leftNavBgColor' class='col-sm-3 control-label'>$langBgColor:</label>
               <div class='col-sm-9'>
                 <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
               </div>
             </div>
+            <legend class='theme_options_legend'>$langMainMenuConfiguration</legend>
             <div class='form-group'>
               <label for='leftMenuBgColor' class='col-sm-3 control-label'>$langMainMenuBgColor:</label>
               <div class='col-sm-9'>
@@ -587,7 +594,8 @@ $tool_content .= "
               <div class='col-sm-9'>
                 <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
               </div>
-            </div>               
+            </div>
+            <legend class='theme_options_legend'>Ρυθμίσεις Επιλογών</legend>
             <div class='form-group'>
               <label for='leftSubMenuFontColor' class='col-sm-3 control-label'>$langSubMenuLinkColor:</label>
               <div class='col-sm-9'>

@@ -242,9 +242,39 @@ if ($is_editor) {
                             'name' => $_POST['newPathName'],
                             'comment' => $_POST['newComment']));
                     } else {
+                        $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
+                        $pageName = $langCreateNewLearningPath;
+                        $dialogBox = action_bar(array(
+                            array('title' => $langBack,
+                                'url' => "index.php?course=$course_code",
+                                'icon' => 'fa-reply',
+                                'level' => 'primary-label'
+                            )
+                        ));
                         // display error message
-                        $dialogBox = $langErrorNameAlreadyExists;
+                        $dialogBox .= "<div class='alert alert-warning'>$langErrorNameAlreadyExists</div>";
                         $style = "caution";
+                        $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
+                        <div class='form-group'>
+                            <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
+                            <div class='col-sm-10'>
+                              <input name='newPathName' type='text' class='form-control' id='newPathName'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <label for='newComment' class='col-sm-2 control-label'>$langDescr:</label>
+                            <div class='col-sm-10'>
+                              <input name='newComment' type='text' class='form-control' id='newComment'>
+                            </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-sm-10 col-sm-offset-2'>
+                              <input type='hidden' name='cmd' value='create'>
+                              <input class='btn btn-primary' type='submit' value='$langCreate'>
+                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                            </div>
+                        </div>                        
+                        </form></div>";
                     }
                 } else { // create form requested
                     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
@@ -255,7 +285,7 @@ if ($is_editor) {
                             'icon' => 'fa-reply',
                             'level' => 'primary-label'
                         )
-                    ),false);
+                    ));
                     $dialogBox .= "<div class='form-wrapper'><form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='POST'>
                         <div class='form-group'>
                             <label for='newPathName' class='col-sm-2 control-label'>$langLearningPathName:</label>
@@ -264,7 +294,7 @@ if ($is_editor) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='newComment' class='col-sm-2 control-label'>$langComment:</label>
+                            <label for='newComment' class='col-sm-2 control-label'>$langDescr:</label>
                             <div class='col-sm-10'>
                               <input name='newComment' type='text' class='form-control' id='newComment'>
                             </div>
@@ -576,7 +606,7 @@ foreach ($result as $list) { // while ... learning path list
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
                         'icon' => 'fa-times',
                         'class' => 'delete',
-                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm + " '" . $list->name . "'") : $langDelete),
+                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete),
                     array('title' => $langUp,
                         'level' => 'primary',
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id,

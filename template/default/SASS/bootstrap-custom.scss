@@ -14,6 +14,14 @@
 #btn-search{
     @include button-variant(white, #232C3A, #111111);
 }
+//Theme options legend
+legend.theme_options_legend {
+   font-size: $font-size-large;
+   margin-bottom: 30px;
+   &:not(:first-child) {
+        margin-top: 30px;
+   }
+}
 .container-fluid {
     padding: 0px;
     max-width: 1920px;
@@ -205,7 +213,7 @@ top: 8px;
             line-height: 45px 
         }
         .opt-btn {
-            background-color: whitesmoke;
+            background-color: #337ab7;
         }
     }
 }
@@ -240,7 +248,14 @@ top: 8px;
 }
 .mce-toggle{
     i.mce-ico.mce-i-none{
-        
         width: 22px;
     }
+}
+
+
+//  Course Units
+
+.checkbox_cell{
+    width: 5px;
+    text-align: center;
 }

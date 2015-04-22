@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
              <fieldset>
             <div class='form-group'>
                 <label for='delusers' class='col-sm-2 control-label'>$langUsers</label>
-                <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delusers'>$langUserDelCourse</label>
+                <div class='col-sm-10 checkbox'><label><input type='checkbox' name='delusers'>$langUserDelCourse $langBeforeRegDate: </label>
                 <input type='text' name='before_date' id='before_date' value='" .date("d-m-Y", time()) ."'></div>
             </div>
             <div class='form-group'>

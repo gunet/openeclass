@@ -81,7 +81,6 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
     header('Pragma:');
     header('Cache-Control: public');
 
-    header('Content-length: ' . filesize($real_filename));
     $mtime = filemtime($real_filename);
     $mdate = gmdate('D, d M Y H:i:s', $mtime);
     $etag = md5($real_filename . $mdate . $filename . filesize($real_filename));
@@ -94,11 +93,62 @@ function send_file_to_client($real_filename, $filename, $disposition = null, $se
             trim($_SERVER['HTTP_IF_NONE_MATCH']) == $etag)) {
         header("HTTP/1.0 304 Not Modified");
     } else {
-        stop_output_buffering();
         if ($delete) {
             register_shutdown_function('unlink', $real_filename);
         }
-        readfile($real_filename);
+        
+        $size = filesize($real_filename);
+        
+        if(isset($_SERVER['HTTP_RANGE'])) {
+            // error_log('http range ON: ' . $_SERVER['HTTP_RANGE']); // debug output in apache error.log
+            // Parse the range header to get the byte offset
+            $ranges = array_map(
+                'intval', // Parse the parts into integer
+                explode(
+                    '-', // The range separator
+                    substr($_SERVER['HTTP_RANGE'], 6) // Skip the `bytes=` part of the header
+                )
+            );
+            
+            if (!$ranges[1]) { // Second number missing, return from byte $range[0] to end
+                $start = $ranges[0];
+                $end = $size - 1;
+            } else { // Both numbers present, return specific range
+                $start = $ranges[0];
+                $end = $ranges[1];
+            }
+            $length = $end - $start + 1;
+            
+            // Send the appropriate headers
+            header('HTTP/1.1 206 Partial Content');
+            header('Accept-Ranges: bytes');
+            header('Content-Length: ' . $length);
+            header(
+                sprintf(
+                    'Content-Range: bytes %d-%d/%d', // The header format
+                    $start, // The start range
+                    $end, // The end range
+                    $size // Total size of the file
+                )
+            );
+            
+            $f = fopen($real_filename, 'rb'); // Open the file in binary mode
+            $chunkSize = 8192; // The size of each chunk to output
+            fseek($f, $start); // Seek to the requested start range
+            
+            stop_output_buffering();
+            while ($length) { // Read in blocks of chunksize so we don't chew up memory on the server
+                $read = ($length > $chunkSize) ? $chunkSize : $length;
+                $length -= $read;
+                echo fread($f, $read);
+            }
+            fclose($f);
+        } else {
+            // error_log('http range OFF'); // debug output in apache error.log
+            header('Content-length: ' . $size);
+            stop_output_buffering();
+            readfile($real_filename);
+        }
     }
 
     return true;
@@ -283,7 +333,8 @@ function get_mime_type($filename) {
         'wmd' => 'application/x-ms-wmd',
         'mp4' => 'video/mp4',
         'flv' => 'video/x-flv',
-        'webm' => 'video/webm');
+        'webm' => 'video/webm',
+        'ogv' => 'video/ogg');
     $ext = get_file_extension($filename);
     if (isset($f[$ext])) {
         return $f[$ext];

@@ -53,26 +53,28 @@ function list_lps() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>" .
                 "<input type='hidden' name='id' value='$id'>" .
                 "<table class='table-default'>" .
-                "<tr>" .
+                "<tr class='list-header'>" .
                 "<th><div align='left'>&nbsp;$langLearningPaths</div></th>" .
                 "<th><div align='left'>$langComments</div></th>" .
                 "<th width='80'>$langChoice</th>" .
                 "</tr>";        
         foreach ($lpinfo as $entry) {
             if ($entry['visible'] == 0) {
-                $vis = 'invisible';
+                $vis = 'not_visible';
+                $disabled = 'disabled';
             } else {
                 $vis = '';
+                $disabled = '';
             }
             $tool_content .= "<tr class='$vis'>";
             $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$entry[id]'>" . q($entry['name']) . "</a></td>";
             $tool_content .= "<td>" . q($entry['comment']) . "</td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]'></td>";
+            $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
             $tool_content .= "</tr>";            
         }
-        $tool_content .= "<tr>" .
-                "<th colspan='3'><div align='right'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_lp' value='$langAddModulesButton'></div></th>";
-        $tool_content .= "</tr></table></form>\n";
+        $tool_content .= "</table>\n";
+        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_lp' value='$langAddModulesButton'></div></form>";
+        
     }
 }

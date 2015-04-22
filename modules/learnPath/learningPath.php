@@ -239,10 +239,10 @@ foreach ($flatElementList as $module) {
         $spacingString .= "<td width='5'>&nbsp;</td>";
     }
 
-    $colspan = $maxDeep - $module['children'] + 1;
-    if ($module['contentType'] == CTLABEL_) {
-        $colspan++;
-    }
+    $colspan = ($maxDeep - $module['children'] + 1)+1;
+//    if ($module['contentType'] == CTLABEL_) {
+//        $colspan++;
+//    }
 
     $tool_content .= "<tr>" . $spacingString . "
       <td colspan=\"" . $colspan . "\" align='left'>";
@@ -302,14 +302,14 @@ foreach ($flatElementList as $module) {
 
     if ($uid && ($module['contentType'] != CTLABEL_)) {
         // display actions for current module (taking into consideration blocked modules)
-        if (!$is_blocked || !$first_blocked) {
-            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('fa-line-chart', $langTracking) . "</a></td>";
-        } else {
-            $tool_content .= "<td></td>";
-        }
-        if ($is_blocked) {
-            $first_blocked = true;
-        }
+//        if (!$is_blocked || !$first_blocked) {
+//            $tool_content .= "<td width='18'><a href=\"module.php?course=$course_code&amp;module_id=" . $module['module_id'] . "\">" . icon('fa-line-chart', $langLearningObjectData) . "</a></td>";
+//        } else {
+//            $tool_content .= "<td></td>";
+//        }
+//        if ($is_blocked) {
+//            $first_blocked = true;
+//        }
         // display the progress value for current module
         $tool_content .= '<td align="right" width="120">' . disp_progress_bar($progress, 1) . '</td>' . "\n";
     }

@@ -277,6 +277,12 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('MY_MESSAGES', $GLOBALS['langNewMyMessagesSide']);
         $t->set_var('LANG_ANNOUNCEMENTS', $GLOBALS['langMyAnnouncements']);
         $t->set_var('ANNOUNCEMENTS_LINK', $urlServer . "modules/announcements/myannouncements.php");
+        if (get_config('personal_blog')) {
+            $t->set_var('LANG_MYBLOG', $GLOBALS['langMyBlog']);
+            $t->set_var('MYBLOG_LINK', $urlServer . "modules/blog/index.php");
+        } else {
+            $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
+        }
         $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
         $t->set_var('langSave', $GLOBALS['langSave']);
         $t->set_var('langAllNotes', $GLOBALS['langAllNotes']);
@@ -287,7 +293,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
         $t->set_var('LOGGED_IN', 'true');
     } else {
-        if (!get_config('dont_display_login_form')) {
+        if (get_config('hide_login_link')) {
+            $t->set_block('mainBlock', 'LoginIconBlock', 'delete');
+        } else {
             $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
             if (preg_match('@(?:^/(?:modules|courses)|listfaculte|opencourses|openfaculties)@', $next)) {
                 $nextParam = '?next=' . urlencode($next);
@@ -296,8 +304,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             }
             $t->set_var('LANG_LOGOUT', $langLogin);
             $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php' . $nextParam);
-        } else {
-            $t->set_var('LOGOUT_LINK', '#');
         }
         $t->set_var('LOGGED_IN', 'false');
     }
@@ -339,19 +345,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $module_id = current_module_id();
         if (display_activation_link($module_id)) {
             if (visible_module($module_id)) {
-                $message = $langDeactivate;
                 $mod_activation = "
-
                 <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                    <i class='fa fa-minus-square tiny-icon tiny-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
-                    </a>";
+                  <i class='fa fa-minus-square tiny-icon tiny-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
+                </a>";
             } else {
-                $message = $langActivate;
                 $mod_activation = "
-
                 <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                    <i class='fa fa-check-square tiny-icon tiny-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
-                    </a>";
+                  <i class='fa fa-check-square tiny-icon tiny-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
+                </a>";
             }
         }
     }

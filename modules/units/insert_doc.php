@@ -81,7 +81,7 @@ function list_docs() {
         $common_docs = false;
         $visible_sql = '';
     }
-    $result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+    $result = Database::get()->queryArray("SELECT id, course_id, path, filename, format, title, extra_path, date_modified, visible, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                                 WHERE $group_sql AND $visible_sql
                                       path LIKE ?s AND
                                       path NOT LIKE ?s
@@ -115,32 +115,30 @@ function list_docs() {
     if (count($fileinfo) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoDocuments</div>";
     } else {
-        if (empty($path)) {
-            $dirname = '';
-            $parenthtml = '';
-            $colspan = 5;
-        } else {
+        if (!empty($path)) {
             $dirname = Database::get()->querySingle("SELECT filename FROM document
                                                                    WHERE $group_sql AND path = ?s", $path);
             $parentpath = dirname($path);
-            $dirname = "/" . htmlspecialchars($dirname->filename);
+            $dirname =  htmlspecialchars($dirname->filename);
             $parentlink = $urlbase . $parentpath;
-            $parenthtml = "<th class='right'><a href='$parentlink'>$langUp</a> " .
-                    icon('fa-upload', $langUp, $parentlink) . "</th>";
+            $parenthtml = "<span class='pull-right'><a href='$parentlink'>$langUp " .
+                    icon('fa-level-up') . "</a></span>";
             $colspan = 4;
         }
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />" .
-                "<table class='table-default'>" .
+                "<table class='table-default'>";
+        if( !empty($path)) {
+        $tool_content .=
                 "<tr>" .
-                "<th colspan='$colspan'><div align='left'>$langDirectory: $dirname</div></th>" .
-                $parenthtml .
-                "</tr>" .
-                "<tr>" .
-                "<th>$langType</th>" .
-                "<th><div align='left'>$langName</div></th>" .
-                "<th width='100'>$langSize</th>" .
-                "<th width='80'>$langDate</th>" .
-                "<th width='80'>$langChoice</th>" .
+                "<th colspan='$colspan'><div class='text-left'>$langDirectory: $dirname$parenthtml</div></th>" .
+                "</tr>" ;
+        }
+        $tool_content .=
+                "<tr class='list-header'>" .
+                "<th class='text-left'>$langName</th>" .
+                "<th class='text-center'>$langSize</th>" .
+                "<th class='text-center'>$langDate</th>" .
+                "<th class='checkbox_cell'>$langChoice</th>" .
                 "</tr>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {
@@ -171,8 +169,7 @@ function list_docs() {
                     $vis = '';                    
                 }
                 $tool_content .= "<tr class='$vis'>";
-                $tool_content .= "<td width='1' class='center'>" . icon($image, '') . "</td>";
-                $tool_content .= "<td>$link_href";
+                $tool_content .= "<td>" . icon($image, '')."&nbsp;&nbsp;&nbsp;$link_href";
 
                 /* * * comments ** */
                 if (!empty($entry['comment'])) {
@@ -187,15 +184,16 @@ function list_docs() {
                 } else {
                     $size = format_file_size($entry['size']);
                     $date = nice_format($entry['date'], true, true);
-                    $tool_content .= "<td class='center'>$size</td><td class='center'>$date</td>";
+                    $tool_content .= "<td class='text-right'>$size</td><td class='text-center'>$date</td>";
                 }
-                $tool_content .= "<td class='center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='document[]' value='$entry[id]' /></td>";
                 $tool_content .= "</tr>";
                 $counter++;
             }
         }
-        $tool_content .= "<tr><th colspan=$colspan><div align='right'>";
-        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div></th>";
-        $tool_content .= "</tr></table>$dir_html</form>";
+        $tool_content .= "</table>";
+        $tool_content .= "<div class='text-right'>";
+        $tool_content .= "<input class='btn btn-primary' type='submit' name='submit_doc' value='$langAddModulesButton' /></div>$dir_html</form>";
+        
     }
 }

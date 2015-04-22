@@ -44,6 +44,7 @@ if (!empty($cassettings)) {
     $cas_altauth = intval(str_replace('cas_altauth=', '', $cas[7]));
     $cas_logout = str_replace('cas_logout=', '', $cas[8]);
     $cas_ssout = str_replace('cas_ssout=', '', $cas[9]);
+    $casuserstudentid = str_replace('casuserstudentid=', '', $cas[10]);
 } else {
     $cas_host = '';
     $cas_port = 443;
@@ -55,6 +56,7 @@ if (!empty($cassettings)) {
     // givenName is the default for LDAP not givename
     $casuserfirstattr = 'givenName';
     $casuserlastattr = 'sn';
+    $casuserstudentid = '';
     $cas_altauth = 0;
 }
 $cas_ssout_data = array();
@@ -123,6 +125,12 @@ $tool_content .= "
         <label for='casuserlastattr' class='col-sm-2 control-label'>$langcasuserlastattr:</label>
         <div class='col-sm-10'>
             <input class='form-control' name='casuserlastattr' id='casuserlastattr' type='text' value='" . q($casuserlastattr) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='casuserstudentid' class='col-sm-2 control-label'>$langcasuserstudentid:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='casuserstudentid' id='casuserstudentid' type='text' value='" . q($casuserstudentid) . "'>
         </div>
     </div>
     <div class='form-group'>

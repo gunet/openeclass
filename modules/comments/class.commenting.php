@@ -100,49 +100,70 @@ Class Commenting {
             //retrieve comments
             $comments = $this->getCommentsDB();
             foreach ($comments as $comment) {
-            if ($comment->permEdit($isEditor, $uid)) {
-                $post_actions = '<div class="pull-right">';
-                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
-                $post_actions .= icon('fa-edit', $langModify).'</a> ';
-                $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
-                $post_actions .= icon('fa-times', $langDelete).'</a>';
+                if (is_null($courseCode)) { //for the case of personal blog posts comments
+                    if (isset($_SESSION['uid']) && ($isEditor || ($comment->getAuthor() == $uid))) { //$isEditor corresponds to blog editor
+                        $post_actions = '<div class="pull-right">';
+                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                        $post_actions .= icon('fa-edit', $langModify).'</a> ';
+                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= icon('fa-times', $langDelete).'</a>';
+                        $post_actions .='</div>';
+                    } else {
+                        $post_actions = '';
+                    }
+                } else {
+                    if ($comment->permEdit($isEditor, $uid)) {
+                        $post_actions = '<div class="pull-right">';
+                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'editLoad\', '.$this->rid.', \''.$this->rtype.'\', \'\', '.$comment->getId().')">';
+                        $post_actions .= icon('fa-edit', $langModify).'</a> ';
+                        $post_actions .= '<a href="javascript:void(0)" onclick="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'delete\', '.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsDelConfirm.'\', '.$comment->getId().')">';
+                        $post_actions .= icon('fa-times', $langDelete).'</a>';
                 
                 if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
                     $post_actions .= abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)); 
                 }
                 
-                $post_actions .='</div>';
-            } else {
+                        $post_actions .='</div>';
+                    } else {
                 if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
                     $post_actions = '<div class="pull-right">'.abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)).'</div>';
                 } else {
-                    $post_actions = '';
-                }
-            }
-  $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
-            <div class='col-xs-12'>
-                <div class='media'>
-                    <a class='media-left' href='#'>
-                        ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
-                    </a>
-                    <div class='media-body bubble'>
-                        <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.
-                            "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
-                            $post_actions
-                            ."<div class='margin-top-thin' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
-                    </div>
-                </div>
-            </div>
-        </div>";              
+                        $post_actions = '';
+                    }
+                }           
+                $out .= "<div class='row margin-bottom-thin margin-top-thin comment' id='comment-".$comment->getId()."'>
+                          <div class='col-xs-12'>
+                           <div class='media'>
+                            <a class='media-left' href='#'>
+                            ". profile_image($comment->getAuthor(), IMAGESIZE_SMALL) ."
+                            </a>
+                            <div class='media-body bubble'>
+                             <div class='label label-success media-heading'>".nice_format($comment->getTime(), true).'</div>'.
+                              "<small>".$langBlogPostUser.display_user($comment->getAuthor(), false, false)."</small>".
+                               $post_actions
+                               ."<div class='margin-top-thin' id='comment_content-".$comment->getId()."'>". q($comment->getContent()) ."</div>
+                               </div>
+                            </div>
+                          </div>
+                         </div>";              
             }
         }
         $out .= "</div>";
         
-        if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
-            $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
-            $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
-            $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
-            $out .= '</form>';
+        if (is_null($courseCode)) { //for the case of personal blog posts comments
+            if (isset($_SESSION['uid'])) {
+                $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments_perso_blog.php\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+                $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
+                $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
+                $out .= '</form>';
+            } 
+        } else {
+            if (Commenting::permCreate($isEditor, $uid, course_code_to_id($courseCode))) {
+                $out .= '<form action="" onsubmit="xmlhttpPost(\''.$urlServer.'modules/comments/comments.php?course='.$courseCode.'\', \'new\','.$this->rid.', \''.$this->rtype.'\', \''.$langCommentsSaveConfirm.'\'); return false;">';
+                $out .= '<textarea class="form-control" name="textarea" id="textarea-'.$this->rid.'" rows="5"></textarea><br/>';
+                $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
+                $out .= '</form>';
+            }
         }
         
         $out .= '</div>';

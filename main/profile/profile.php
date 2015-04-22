@@ -148,6 +148,7 @@ if (isset($_POST['submit'])) {
 
     // check if email is valid
     if ((get_config('email_required') | get_config('email_verification_required')) and !email_seems_valid($email_form)) {
+
         Session::Messages($langEmailWrong);
         redirect_to_home_page("main/profile/profile.php");         
     }

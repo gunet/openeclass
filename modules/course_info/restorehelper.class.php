@@ -240,6 +240,11 @@ class RestoreHelper {
             }
             return $ret;
         };
+        $zero_if_null = function($value) {
+            if ($value == null) {
+                return 0;
+            }
+        };
         $this->values = array();
         // syntax is: [new table][old field]
         $this->values[self::STYLE_2X]['announcement']['visibility'] = $visibility;
@@ -251,6 +256,7 @@ class RestoreHelper {
         $this->values[self::STYLE_2X]['unit_resources']['visibility'] = $visibility;
         $this->values[self::STYLE_2X]['forum_category']['cat_order'] = $to_int;
         $this->values[self::STYLE_2X]['poll_question']['qtype'] = $poll_qtype;
+        $this->values[self::STYLE_2X]['exercise_question']['ponderation'] = $zero_if_null;
         
         // data consistency for contentType
         $lp_module_contentType = function($value) {

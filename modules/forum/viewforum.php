@@ -96,7 +96,7 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > $topics_per_page) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    $tool_content .= "<div class='table-responsive'><table class-'table-default' width='100%'><tr>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr>";
     $tool_content .= "<td width='50%' class='text-left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
     $current_page = $first_topic / $topics_per_page + 1; // current page
@@ -227,7 +227,7 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
 if (count($result) > 0) { // topics found    
     $tool_content .= "<div class='table-responsive'>
 	<table class='table-default'>
-	<tr>
+	<tr class='list-header'>
 	  <th class='forum_td'>&nbsp;$langSubject</th>
 	  <th class='text-center forum_td'>$langAnswers</th>
 	  <th class='text-center forum_td'>$langSender</th>

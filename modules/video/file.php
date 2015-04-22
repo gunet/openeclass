@@ -36,8 +36,9 @@ if (strpos($_GET['course'], '..') !== false) {
 // locate course id
 $course_id = null;
 $res1 = Database::get()->querySingle("SELECT course.id FROM course WHERE course.code = ?s", q($_GET['course']));
-if ($res1)
+if ($res1) {
     $course_id = intval($res1->id);
+}
 
 if ($course_id == null) {
     header("Location: ${urlServer}");

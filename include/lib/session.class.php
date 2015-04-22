@@ -147,6 +147,13 @@ class Session {
             }
         }
         return FALSE;
+    }
+    public static function hasError($key) {
+        if (isset($_SESSION[$key]['errors'][0])){
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }    
     public static function getError($key) {
         if (isset($_SESSION[$key]['errors'][0])){

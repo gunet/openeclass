@@ -126,7 +126,7 @@ $q = Database::get()->queryArray("SELECT ebook.id, ebook.title, visible, MAX(ebo
                       GROUP BY ebook.id
                       ORDER BY `order`", $course_id);
 
-if (!$q) {
+if (!$q && !isset($_GET['create'])) {
     $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else if(!isset($_GET['create'])){
     $tool_content .= "<div class='table-responsive'>";
@@ -182,24 +182,24 @@ draw($tool_content, 2, null, $head_content);
  */
 function tools($id, $k, $num, $vis) {
     global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, 
-           $langEBookDelConfirm, $course_code, $langVisibility;
+           $langEBookDelConfirm, $course_code, $langVisibility, $langEBookEditStructure;
 
     if (!$is_editor) {
         return '';
     } else {        
         $num--;
         $content = action_button(array(
-                    array('title' => $langModify,
+                    array('title' => $langEBookEditStructure,
                           'url' => "edit.php?course=$course_code&amp;id=$id",
                           'icon' => 'fa-edit'),
+                    array('title' => $langVisibility,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
+                          'icon' => $vis ? 'fa-eye' : 'fa-eye-slash'),
                     array('title' => $langDelete,                          
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
                           'icon' => 'fa-times',
                           'class' => 'delete',
                           'confirm' => $langEBookDelConfirm),
-                    array('title' => $langVisibility,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
-                          'icon' => $vis ? 'fa-eye' : 'fa-eye-slash'),
                     array('title' => "$langMove $langDown",
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$id",
                           'icon' => 'fa-arrow-down',

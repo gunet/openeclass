@@ -193,7 +193,7 @@ if (!$nbrExercises) {
         }
     }
 
-    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr class='list-header'>";
 
     // shows the title bar only for the administrator
     if ($is_editor) {
@@ -243,15 +243,6 @@ if (!$nbrExercises) {
                     array('title' => $langModify,
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
-                    array('title' => $langPurgeExercise,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmPurgeExercise),
-                    array('title' => $langPurgeExerciseResults,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
-                          'icon' => 'fa-trash',
-                          'confirm' => $langConfirmPurgeExerciseResults),
                     array('title' => $langVisible,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable").(isset($page) ? "&amp;page=$page" : "")."&amp;exerciseId=" . $row->id,
                           'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
@@ -266,7 +257,16 @@ if (!$nbrExercises) {
                           'icon-class' => 'warnLink',
                           'icon-extra' => "data-exerciseid='$row->id'",
                           'url' => "#",
-                          'icon' => 'fa-copy')                
+                          'icon' => 'fa-copy'),
+                    array('title' => $langPurgeExerciseResults,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
+                          'icon' => 'fa-trash',
+                          'confirm' => $langConfirmPurgeExerciseResults),
+                    array('title' => $langPurgeExercise,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmPurgeExercise)                
                     ))."</td></tr>";
             
         // student only

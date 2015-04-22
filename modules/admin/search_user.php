@@ -113,6 +113,12 @@ $tool_content .= "
 <form class='form-horizontal' role='form' action='listusers.php' method='get' name='user_search'>
 <fieldset>
     <div class='form-group'>
+        <label for='uname' class='col-sm-2 control-label'>$langUsername:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' type='text' name='uname' id='uname' value='" . q($uname) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
         <label for='fname' class='col-sm-2 control-label'>$langName:</label>
         <div class='col-sm-10'>
             <input class='form-control' type='text' name='fname' id='fname' value='" . q($fname) . "'>
@@ -124,6 +130,12 @@ $tool_content .= "
             <input class='form-control' type='text' name='lname' id='lname' value='" . q($lname) . "'>
         </div>
     </div>
+    <div class='form-group'>
+        <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' type='text' name='email' id='email' value='" . q($email) . "'>
+        </div>
+    </div>  
     <div class='form-group'>
         <label for='am' class='col-sm-2 control-label'>$langAm:</label>
         <div class='col-sm-10'>
@@ -155,18 +167,6 @@ $tool_content .= "
         <label class='col-sm-2 control-label'>$langEmailVerified:</label>
         <div class='col-sm-10'>
             " . selection($verified_mail_data, 'verified_mail', $verified_mail, 'class="form-control"') . "
-        </div>
-    </div>
-    <div class='form-group'>
-        <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
-        <div class='col-sm-10'>
-            <input class='form-control' type='text' name='email' id='email' value='" . q($email) . "'>
-        </div>
-    </div>  
-    <div class='form-group'>
-        <label for='uname' class='col-sm-2 control-label'>$langUsername:</label>
-        <div class='col-sm-10'>
-            <input class='form-control' type='text' name='uname' id='uname' value='" . q($uname) . "'>
         </div>
     </div>
     <div class='form-group'>

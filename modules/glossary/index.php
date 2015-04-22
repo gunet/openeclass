@@ -152,49 +152,65 @@ if ($is_editor) {
     }
 
     if (isset($_POST['submit'])) {
-        if (!isset($_POST['category_id']) || $_POST['category_id'] == 0) {
-            $category_id = NULL;
-        } else {
-            $category_id = intval($_POST['category_id']);
-        }
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('term', 'definition'));
+        $v->rule('url', array('url'));
+        $v->rule('urlActive', array('url'));
+        $v->labels(array(
+            'term' => "$langTheField $langGlossaryTerm",
+            'definition' => "$langTheField $langGlossaryDefinition",
+            'url' => "$langTheField $langGlossaryUrl"
+        ));
+        if($v->validate()) {
+            if (!isset($_POST['category_id']) || $_POST['category_id'] == 0) {
+                $category_id = NULL;
+            } else {
+                $category_id = intval($_POST['category_id']);
+            }
 
-        if (isset($_POST['id'])) {
-            $id = intval($_POST['id']);
-            $q = Database::get()->query("UPDATE glossary
-                                              SET term = ?s,
-                                                  definition = ?s,
-                                                  url = ?s,
-                                                  notes = ?s,
-                                                  category_id = ?d ,
-                                                  datestamp = NOW()
-                                              WHERE id = ?d AND course_id = ?d"
-                    , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $id, $course_id);
-            $log_action = LOG_MODIFY;
-            $success_message = $langGlossaryUpdated;
-        } else {
-            $q = Database::get()->query("INSERT INTO glossary
-                                              SET term = ?s,
-                                                  definition = ?s,
-                                                  url = ?s,
-                                                  notes = ?s,
-                                                  category_id = ?d,
-                                                  datestamp = NOW(),
-                                                  course_id = ?d,
-                                                  `order` = ?d"
-                    , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $course_id, findorder($course_id));
-            $log_action = LOG_INSERT;
-            $success_message = $langGlossaryAdded;
-        }
-        $id = $q->lastInsertID;
-        Log::record($course_id, MODULE_ID_GLOSSARY, $log_action, array('id' => $id,
-            'term' => $_POST['term'],
-            'definition' => $_POST['definition'],
-            'url' => $url,
-            'notes' => purify($_POST['notes'])));
+            if (isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                $q = Database::get()->query("UPDATE glossary
+                                                  SET term = ?s,
+                                                      definition = ?s,
+                                                      url = ?s,
+                                                      notes = ?s,
+                                                      category_id = ?d ,
+                                                      datestamp = NOW()
+                                                  WHERE id = ?d AND course_id = ?d"
+                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $id, $course_id);
+                $log_action = LOG_MODIFY;
+                $success_message = $langGlossaryUpdated;
+            } else {
+                $q = Database::get()->query("INSERT INTO glossary
+                                                  SET term = ?s,
+                                                      definition = ?s,
+                                                      url = ?s,
+                                                      notes = ?s,
+                                                      category_id = ?d,
+                                                      datestamp = NOW(),
+                                                      course_id = ?d,
+                                                      `order` = ?d"
+                        , $_POST['term'], $_POST['definition'], $url, purify($_POST['notes']), $category_id, $course_id, findorder($course_id));
+                $log_action = LOG_INSERT;
+                $success_message = $langGlossaryAdded;
+            }
+            $id = $q->lastInsertID;
+            Log::record($course_id, MODULE_ID_GLOSSARY, $log_action, array('id' => $id,
+                'term' => $_POST['term'],
+                'definition' => $_POST['definition'],
+                'url' => $url,
+                'notes' => purify($_POST['notes'])));
 
-        if ($q and $q->affectedRows) {
-            invalidate_glossary_cache();
-            $tool_content .= "<div class='alert alert-success'>$success_message</div><br />";
+            if ($q and $q->affectedRows) {
+                invalidate_glossary_cache();
+                Session::Messages($success_message, 'alert-success');
+            }
+            redirect_to_home_page("modules/glossary/index.php?course=$course_code");
+        } else {
+            $new_or_modify = isset($_POST['id']) ? "&edit=$_POST[id]" : "&add=1";
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/glossary/index.php?course=$course_code$new_or_modify");
         }
     }
 
@@ -252,7 +268,7 @@ if ($is_editor) {
     if (isset($_GET['add']) or isset($_GET['edit'])) {
         $navigation[] = array('url' => $base_url,
             'name' => $langGlossary);
-        $html_id = $html_term = $html_url = $definition = $notes = '';
+        $html_id = '';
         $category_id = 'none';
         if (isset($_GET['add'])) {
             $pageName = $langAddGlossaryTerm;
@@ -264,12 +280,14 @@ if ($is_editor) {
                                               FROM glossary WHERE id = ?d", $id);
             if ($data) {
                 $html_id = "<input type = 'hidden' name='id' value='$id'>";
-                $html_term = " value='" . q($data->term) . "'";
-                $html_url = " value='" . q($data->url) . "'";
                 $category_id = is_null($data->category_id) ? 'none' : $data->category_id;
             }
             $submit_value = $langModify;
         }
+        $term = Session::has('term') ? Session::get('term') : ( isset($_GET['add']) ? "" : q($data->term) );
+        $url = Session::has('url') ? Session::get('url') : ( isset($_GET['add']) ? "" : q($data->url) );
+        $definition = Session::has('definition') ? Session::get('definition') : (isset($_GET['add']) ? "" : $data->definition );
+        $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $data->notes );
         if ($categories) {
             $categories[0] = '-';
             $category_selection = "
@@ -283,33 +301,36 @@ if ($is_editor) {
         } else {
             $category_selection = '';
         }
-
+        
         $tool_content .= "
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' action='$edit_url' method='post'>
                   $html_id
-                   <div class='form-group'>
+                   <div class='form-group".(Session::getError('term') ? " has-error" : "")."'>
                         <label for='term' class='col-sm-2 control-label'>$langGlossaryTerm: </label>
                         <div class='col-sm-10'>
-                            <input type='text' class='form-control' id='term' name='term' placeholder='$langGlossaryTerm'$html_term>
+                            <input type='text' class='form-control' id='term' name='term' placeholder='$langGlossaryTerm' value='$term'>
+                            <span class='help-block'>".Session::getError('term')."</span>
                         </div>
                    </div>
-                   <div class='form-group'>
+                   <div class='form-group".(Session::getError('definition') ? " has-error" : "")."'>
                         <label for='term' class='col-sm-2 control-label'>$langGlossaryDefinition: </label>
                         <div class='col-sm-10'>
-                            " . @text_area('definition', 4, 60, $data->definition) . "
+                            " . @text_area('definition', 4, 60, $definition) . "
+                            <span class='help-block'>".Session::getError('definition')."</span>    
                         </div>
                    </div>
-                   <div class='form-group'>
+                   <div class='form-group".(Session::getError('url') ? " has-error" : "")."'>
                         <label for='url' class='col-sm-2 control-label'>$langGlossaryUrl: </label>
                         <div class='col-sm-10'>
-                            <input type='text' class='form-control' id='url' name='url' placeholder='$langGlossaryUrl'$html_url>
+                            <input type='text' class='form-control' id='url' name='url' value='$url'>
+                            <span class='help-block'>".Session::getError('url')."</span>     
                         </div>
                    </div>
                    <div class='form-group'>
                         <label for='notes' class='col-sm-2 control-label'>$langCategoryNotes: </label>
                         <div class='col-sm-10'>
-                            " . @rich_text_editor('notes', 4, 60, $data->notes) . "
+                            " . @rich_text_editor('notes', 4, 60, $notes) . "
                         </div>
                    </div>
                    $category_selection
@@ -399,8 +420,8 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
                 $pageName = q($g->term);
             }        
             if (!empty($g->url)) {
-                $urllink = "<div><span class='term-url'><a href='" . q($g->url) .
-                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></span></div>";
+                $urllink = "<div><span class='term-url'><small><a href='" . q($g->url) .
+                        "' target='_blank'>" . q($g->url) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444;'></i></a></small></span></div>";
             } else {
                 $urllink = '';
             }
@@ -412,7 +433,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             if (!empty($g->notes)) {
-                $urllink .= "<br>". standard_text_escape($g->notes);
+                $urllink .= "<br><u>$langComments:</u><div class='text-muted'>". standard_text_escape($g->notes)."</div>";
             }
 
             if (!empty($g->definition)) {

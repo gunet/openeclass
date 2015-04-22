@@ -75,8 +75,8 @@ class ModalBoxHelper {
                               $(".colorboxframe").colorbox({
                                       innerWidth  : ' . self::$modalWidth . ',
                                       innerHeight : ' . self::$modalHeight . ',
-                                      iframe      : "true",
-                                      scrolling   : "false",
+                                      iframe      : true,
+                                      scrolling   : false,
                                       opacity     : 0.8,
                                       ' . $colorbox_gallery . '
                                       current     : "' . $langColorboxCurrent . '"
@@ -86,9 +86,9 @@ class ModalBoxHelper {
                                       minHeight   : 200,
                                       maxWidth    : "100%",
                                       maxHeight   : "100%",
-                                      scrolling   : "false",
+                                      scrolling   : false,
                                       opacity     : 0.8,
-                                      photo       : "true",
+                                      photo       : true,
                                       ' . $colorbox_gallery . '
                                       current     : "' . $langColorboxCurrent . '"
                              });

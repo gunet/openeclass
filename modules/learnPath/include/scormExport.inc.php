@@ -247,7 +247,7 @@ if (!class_exists('ScormExport')):
 <meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">
 <meta http-equiv="expires" content="Tue, 05 DEC 2000 07:00:00 GMT">
 <meta http-equiv="Pragma" content="no-cache">
-<link rel="stylesheet" type="text/css" href="compatible.css" />
+<link rel="stylesheet" type="text/css" href="bootstrap-custom.css" />
 <link rel="stylesheet" type="text/css" href="' . $claro_stylesheet . '" media="screen, projection, tv" />
 <script language="javascript" type="text/javascript" src="APIWrapper.js"></script>
 <script language="javascript" type="text/javascript" src="scores.js"></script>
@@ -256,7 +256,7 @@ if (!class_exists('ScormExport')):
 
             $pageBody = '<body onload="loadPage()">
     <div id="claroBody"><form id="quiz">
-    <table width="99%" border="0" cellpadding="1" cellspacing="0"><tr><td>' . "\n";
+    <table class="table-default"><tr><td>' . "\n";
 
 
             // read the exercise
@@ -297,7 +297,7 @@ if (!class_exists('ScormExport')):
                 $questionPonderationList[$questionId] = $question->selectWeighting();
 
                 // Generic display, valid for all kind of question
-                $pageBody .= '<table width="99%">
+                $pageBody .= '<table class="table-default">
                 <tr><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
                 <tfoot>
                         <tr><td valign="top" colspan="2">' . $qtitle . '</td></tr>
@@ -513,7 +513,7 @@ if (!class_exists('ScormExport')):
             // No more questions, add the button.
             $pageEnd = '</td></tr>
             <tr>
-                <td align="center"><br><input type="button" value="' . $langOk . '" onClick="calcScore()"></td>
+                <td align="center"><br><input class="btn btn-primary" type="button" value="' . $langOk . '" onClick="calcScore()"></td>
             </tr>
             </table>
             </form>
@@ -625,7 +625,7 @@ if (!class_exists('ScormExport')):
 
             // Copy usual files (.css, .js, .xsd, etc)
             if (
-                    !claro_copy_file('modules/learnPath/export/APIWrapper.js', $this->destDir) || !claro_copy_file('modules/learnPath/export/XMLSchema.dtd', $this->destDir) || !claro_copy_file('modules/learnPath/export/adlcp_v1p3.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/adlnav_v1p3.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/adlseq_v1p3.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/datatypes.dtd', $this->destDir) || !claro_copy_file('modules/learnPath/export/ims_xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imscp_v1p1.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0auxresource.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0control.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0delivery.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0limit.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0objective.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0random.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0rollup.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0seqrule.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0util.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lom.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lomCustom.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lomLoose.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lomStrict.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/scores.js', $this->destDir) || !claro_copy_file('modules/learnPath/export/xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/common/anyElement.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/dataTypes.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/elementNames.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/elementTypes.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/rootElement.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/vocabTypes.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/vocabValues.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/extend/custom.xsd', $this->destDir . "/extend") || !claro_copy_file('modules/learnPath/export/extend/strict.xsd', $this->destDir . "/extend") || !claro_copy_file('modules/learnPath/export/unique/loose.xsd', $this->destDir . "/unique") || !claro_copy_file('modules/learnPath/export/unique/strict.xsd', $this->destDir . "/unique") || !claro_copy_file('modules/learnPath/export/vocab/custom.xsd', $this->destDir . "/vocab") || !claro_copy_file('modules/learnPath/export/vocab/loose.xsd', $this->destDir . "/vocab") || !claro_copy_file('modules/learnPath/export/vocab/strict.xsd', $this->destDir . "/vocab")
+                    !claro_copy_file('modules/learnPath/export/APIWrapper.js', $this->destDir) || !claro_copy_file('template/default/css/bootstrap-custom.css', $this->destDir) || !claro_copy_file('modules/learnPath/export/XMLSchema.dtd', $this->destDir) || !claro_copy_file('modules/learnPath/export/adlcp_v1p3.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/adlnav_v1p3.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/adlseq_v1p3.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/datatypes.dtd', $this->destDir) || !claro_copy_file('modules/learnPath/export/ims_xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imscp_v1p1.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0auxresource.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0control.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0delivery.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0limit.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0objective.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0random.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0rollup.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0seqrule.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/imsss_v1p0util.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lom.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lomCustom.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lomLoose.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/lomStrict.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/scores.js', $this->destDir) || !claro_copy_file('modules/learnPath/export/xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export/common/anyElement.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/dataTypes.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/elementNames.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/elementTypes.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/rootElement.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/vocabTypes.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/common/vocabValues.xsd', $this->destDir . "/common") || !claro_copy_file('modules/learnPath/export/extend/custom.xsd', $this->destDir . "/extend") || !claro_copy_file('modules/learnPath/export/extend/strict.xsd', $this->destDir . "/extend") || !claro_copy_file('modules/learnPath/export/unique/loose.xsd', $this->destDir . "/unique") || !claro_copy_file('modules/learnPath/export/unique/strict.xsd', $this->destDir . "/unique") || !claro_copy_file('modules/learnPath/export/vocab/custom.xsd', $this->destDir . "/vocab") || !claro_copy_file('modules/learnPath/export/vocab/loose.xsd', $this->destDir . "/vocab") || !claro_copy_file('modules/learnPath/export/vocab/strict.xsd', $this->destDir . "/vocab")
             ) {
                 $this->error[] = $langErrorCopyScormFiles;
                 return false;

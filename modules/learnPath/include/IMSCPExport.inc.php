@@ -260,7 +260,7 @@ class IMSCPExport
 <meta http-equiv="Content-Type" content="text/html; charset='.$charset.'">
 <meta http-equiv="expires" content="Tue, 05 DEC 2000 07:00:00 GMT">
 <meta http-equiv="Pragma" content="no-cache">
-<link rel="stylesheet" type="text/css" href="compatible.css" />
+<link rel="stylesheet" type="text/css" href="bootstrap-custom.css" />
 <link rel="stylesheet" type="text/css" href="' . $claro_stylesheet . '" media="screen, projection, tv" />
 <script language="javascript" type="text/javascript" src="APIWrapper.js"></script>
 <script language="javascript" type="text/javascript" src="scores.js"></script>
@@ -269,7 +269,7 @@ class IMSCPExport
 
         $pageBody = '<body onload="loadPage()">
     <div id="claroBody"><form id="quiz">
-    <table width="99%" border="0" cellpadding="1" cellspacing="0"><tr><td>' . "\n";
+    <table class="table-default"><tr><td>' . "\n";
 
 
         // read the exercise
@@ -313,7 +313,7 @@ class IMSCPExport
             $questionPonderationList[$questionId] = $question->selectWeighting();
 
             // Generic display, valid for all kind of question
-            $pageBody .= '<table width="99%">
+            $pageBody .= '<table class="table-default">
                 <tr><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
                 <tfoot>
                         <tr><td valign="top" colspan="2">' . $qtitle . '</td></tr>
@@ -553,7 +553,7 @@ class IMSCPExport
         // No more questions, add the button.
         $pageEnd = '</td></tr>
             <tr>
-                <td align="center"><br><input type="button" value="' . $langOk . '" onClick="calcScore()"></td>
+                <td align="center"><br><input class="btn btn-primary" type="button" value="' . $langOk . '" onClick="calcScore()"></td>
             </tr>
             </table>
             </form>
@@ -670,7 +670,8 @@ class IMSCPExport
         // Copy IMS CP 1.1.4 XSD file + standard Scorm API files
         if ( !claro_copy_file('modules/learnPath/export/APIWrapper.js', $this->destDir)
           || !claro_copy_file('modules/learnPath/export/scores.js', $this->destDir)
-          || !claro_copy_file('modules/learnPath/export/imscp_v1p2.xsd', $this->destDir) )
+          || !claro_copy_file('modules/learnPath/export/imscp_v1p2.xsd', $this->destDir)
+          || !claro_copy_file('template/default/css/bootstrap-custom.css', $this->destDir))
         {
             $this->error[] = $langErrorCopyScormFiles;
             return false;

@@ -38,7 +38,7 @@ require_once 'include/action.php';
 $action = new action();
 $action->record(MODULE_ID_ANNOUNCE);
 
-define('RSS', 'modules/announcements/rss.php?c=' . $course_code);
+define_rss_link();
 
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -653,4 +653,6 @@ $head_content .= "<script type='text/javascript'>
         $('#tags').select2('data', [".$answer."]);
     });
     </script>";
+
 draw($tool_content, 2, null, $head_content);
+

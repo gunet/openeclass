@@ -150,7 +150,7 @@ $displayScore = $objExercise->selectScore();
 
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
-    <h3 class='panel-title'>$exerciseTitle</h3>
+    <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
   </div>";
 if (!empty($exerciseDescription_temp)) {
     $tool_content .= "<div class='panel-body'>
@@ -203,7 +203,7 @@ if (count($exercise_question_ids)>0){
             </tr>
             <tr>
               <td colspan='${colspan}'>
-                <b>" . q($questionName) . "</b>
+                <b>" . q_math($questionName) . "</b>
                 <br />" .
                 standard_text_escape($questionDescription_temp)
                 . "<br/><br/>
@@ -299,13 +299,13 @@ if (count($exercise_question_ids)>0){
                             // if the word entered is the same as the one defined by the professor
                             $canonical_choice = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper($choice[$j], 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : $choice[$j];
                             $canonical_match = $answerType == FILL_IN_BLANKS_TOLERANT ? strtr(mb_strtoupper(substr($temp, 0, $pos), 'UTF-8'), "ΆΈΉΊΌΎΏ", "ΑΕΗΙΟΥΩ") : substr($temp, 0, $pos);   
-
-                            if ($canonical_match == $canonical_choice) {
+                            $right_answers = preg_split('/\s*,\s*/', $canonical_match);
+                            if (in_array($canonical_choice, $right_answers)) {
                                 // gives the related weighting to the student
                                 $questionScore+=$answerWeighting[$j-1];
                                 // increments total score
                                 // adds the word in green at the end of the string
-                                $answer.=$choice[$j];
+                                $answer.='<b>'.$choice[$j].'</b>';
                             }
                             // else if the word entered is not the same as the one defined by the professor
                             elseif (!empty($choice[$j])) {
@@ -316,7 +316,7 @@ if (count($exercise_question_ids)>0){
                                 $answer.='&nbsp;&nbsp;&nbsp;';
                             }
                             // adds the correct word, followed by ] to close the blank
-                            $answer.=' / <font color="green"><b>' . q(substr($temp, 0, $pos)) . '</b></font>]';
+                            $answer.=' / <font color="green"><b>' . q(preg_replace('/\s*,\s*/', " $langOr ", substr($temp, 0, $pos))) . '</b></font>]';
                             $j++;
                             $temp = substr($temp, $pos + 1);
                         }

@@ -378,7 +378,7 @@ $tool_content .= action_bar(array(
         ),false);
 
 $tool_content .= "<div class='panel panel-default'>
-                    <div class='panel-heading'>
+                    <div class='panel-heading list-header'>
                         <h3 class='panel-title'>$langLearningPathData</h3>
                     </div>";
 $tool_content .= "<table class='table-default'>";
@@ -397,7 +397,7 @@ $tool_content .= "</td></tr>";
 //############################ LEARNING PATH COMMENT BOX #############################\\
 $tool_content .="
     <tr>
-      <th width='90'>$langComments:</th>
+      <th width='90'>$langDescr:</th>
       <td>";
 if ($cmd == "updatecomment") {
     $tool_content .= commentBox(LEARNINGPATH_, UPDATE_);
@@ -474,14 +474,15 @@ $lp_action_button = action_button(array(
 ),
     array(
         'secondary_title' => $langAdd,
-        'secondary_icon' => 'fa-plus'
+        'secondary_icon' => '',
+        'secondary_btn_class' => 'btn-success btn-sm'
     )
 );
-$tool_content .= "<div class='panel panel-action-btn-default'>
-                    <div class='pull-right'>
+$tool_content .= "<div class='panel panel-default panel-action-btn-default'>
+                    <div class='pull-right' style='padding:8px;'>
                         $lp_action_button
                     </div>
-                    <div class='panel-heading'>
+                    <div class='panel-heading list-header'>
                         <h3 class='panel-title'>$langLearningPathStructure</h3>
                     </div>";
 
@@ -552,11 +553,6 @@ $tool_content .= "<table class='table-default'>";
 if (isset($displayCreateLabelForm) && $displayCreateLabelForm) {
     $tool_content .= $createLabelHTML;
 }
-$tool_content .= "
-    <tr>
-      <th class='text-left' colspan=\"" . ($maxDeep + 1) . "\">&nbsp;" . $langContents . "</th>
-      <th class='text-center'>" . icon('fa-gears') . "</th>
-    </tr>";
 
 // -------------------- LEARNING PATH LIST DISPLAY ---------------------------------
 foreach ($flatElementList as $module) {

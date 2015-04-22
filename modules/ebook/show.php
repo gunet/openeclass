@@ -69,21 +69,23 @@ if ($not_found) {
 $ebook_url_base = "{$urlServer}modules/ebook/show.php/$course_code/$ebook_id/";
 
 if ($show_orphan_file and $file_path) {
-    if (!$is_in_playmode)
-        send_file_by_url_file_path($file_path);
-    else {
-        require_once 'include/lib/multimediahelper.class.php';
+    if (!preg_match('/\.html?$/i', $file_path)) {
+        if (!$is_in_playmode)
+            send_file_by_url_file_path($file_path);
+        else {
+            require_once 'include/lib/multimediahelper.class.php';
 
-        $path_components = explode('/', str_replace('//', chr(1), $file_path));
-        $file_info = public_path_to_disk_path($path_components, '');
+            $path_components = explode('/', str_replace('//', chr(1), $file_path));
+            $file_info = public_path_to_disk_path($path_components, '');
 
-        $mediaPath = file_url($file_info->path, $file_info->filename);
-        $mediaURL = $urlServer . 'modules/ebook/document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id . '&amp;download=' . $file_info->path;
-        $token = token_generate($file_info->path, true);
-        $mediaAccess = $mediaPath . '?token=' . $token;
+            $mediaPath = file_url($file_info->path, $file_info->filename);
+            $mediaURL = $urlServer . 'modules/ebook/document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id . '&amp;download=' . $file_info->path;
+            $token = token_generate($file_info->path, true);
+            $mediaAccess = $mediaPath . '?token=' . $token;
 
-        echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);
-        exit();
+            echo MultimediaHelper::mediaHtmlObjectRaw($mediaAccess, $mediaURL, $mediaPath);
+            exit();
+        }
     }
 }
 
@@ -157,14 +159,20 @@ foreach ($q as $row) {
     $last_title = $row->subsection_title;
 }
 
-if (!$full_url_found) {
+if (!$full_url_found and !$show_orphan_file) {
     header('Location: ' . $ebook_url_base . $current_display_id . '/' . $unit_parameter);
     exit;
 }
 
 if ($file_path) {
     $initial_path = preg_replace('#/[^/]*$#', '', $subsection_path[$current_sid][$current_ssid]);
-    send_file_by_url_file_path($file_path, $initial_path);
+    if (!preg_match('/\.html?$/i', $file_path)) {
+        send_file_by_url_file_path($file_path, $initial_path);
+    } else {
+        $path_components = explode('/', str_replace('//', chr(1), $file_path));
+        $file_info = public_path_to_disk_path($path_components, $initial_path);
+        $subsection_path[$current_sid][$current_ssid] = $file_info->path;
+    }
 }
 
 $t = new Template();
@@ -185,19 +193,21 @@ $t->set_var('img_base', $themeimg);
 $t->set_var('js_base', $urlAppend . 'js');
 
 $t->set_var('ebook_url_base', $ebook_url_base);
-if (isset($back_section_id)) {
-    $t->set_block('page', 'back_link_inactive', 'back_link_hide');
-    $t->set_var('back_chapter_link', q($ebook_url_base . $back_section_id . '/' . $unit_parameter));
-    $t->set_var('back_chapter_title', q($back_title));
-} else {
-    $t->set_block('page', 'back_link_active', 'back_link_hide');
-}
-if (isset($next_section_id)) {
-    $t->set_block('page', 'next_link_inactive', 'next_link_hide');
-    $t->set_var('next_chapter_link', q($ebook_url_base . $next_section_id . '/' . $unit_parameter));
-    $t->set_var('next_chapter_title', q($next_title));
-} else {
-    $t->set_block('page', 'next_link_active', 'next_link_hide');
+if (!$show_orphan_file) {
+    if (isset($back_section_id)) {
+        $t->set_block('page', 'back_link_inactive', 'back_link_hide');
+        $t->set_var('back_chapter_link', q($ebook_url_base . $back_section_id . '/' . $unit_parameter));
+        $t->set_var('back_chapter_title', q($back_title));
+    } else {
+        $t->set_block('page', 'back_link_active', 'back_link_hide');
+    }
+    if (isset($next_section_id)) {
+        $t->set_block('page', 'next_link_inactive', 'next_link_hide');
+        $t->set_var('next_chapter_link', q($ebook_url_base . $next_section_id . '/' . $unit_parameter));
+        $t->set_var('next_chapter_title', q($next_title));
+    } else {
+        $t->set_block('page', 'next_link_active', 'next_link_hide');
+    }
 }
 
 $ebook_body = '';
@@ -235,16 +245,24 @@ $t->set_var('ebook_head', $ebook_head);
 $t->set_var('ebook_body', $ebook_body);
 
 $t->set_block('page', 'chapter_select_options', 'option_var');
-foreach ($sections as $section_info) {
-    $t->set_var('chapter_title', ($section_info['indent'] ? '&nbsp;&nbsp;&nbsp;' : '') .
-            q(ellipsize($section_info['title'], 40)));
-    $t->set_var('chapter_id', $section_info['id']);
-    if ($section_info['current']) {
-        $t->set_var('chapter_selected', ' selected="selected"');
-    } else {
-        $t->set_var('chapter_selected', '');
+if (!$show_orphan_file) {
+    foreach ($sections as $section_info) {
+        $t->set_var('chapter_title', ($section_info['indent'] ? '&nbsp;&nbsp;&nbsp;' : '') .
+                q(ellipsize($section_info['title'], 40)));
+        $t->set_var('chapter_id', $section_info['id']);
+        if ($section_info['current']) {
+            $t->set_var('chapter_selected', ' selected="selected"');
+        } else {
+            $t->set_var('chapter_selected', '');
+        }
+        $t->parse('option_var', 'chapter_select_options', true);
     }
-    $t->parse('option_var', 'chapter_select_options', true);
+} else {
+    $t->set_block('page', 'chapter_select', 'delete');
+    $t->set_block('page', 'back_link_active', 'delete');
+    $t->set_block('page', 'back_link_inactive', 'delete');
+    $t->set_block('page', 'next_link_active', 'delete');
+    $t->set_block('page', 'next_link_inactive', 'delete');
 }
 
 $ebook_title = Database::get()->querySingle("SELECT title FROM ebook WHERE id = ?d", $ebook_id)->title;
