@@ -876,7 +876,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'exercise', 'exercise_user_record', 'exercise_question',
             'exercise_answer', 'exercise_with_questions', 'course_module',
             'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session',
-            'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
+            'blog_post', 'comments', 'rating', 'rating_cache', 'abuse_report', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
                 if (Database::get()->querySingle("SELECT COUNT(*) FROM `$table_name`") > 0) {
@@ -1267,6 +1267,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `count` INT(11) NOT NULL DEFAULT 0,
                             `tag` VARCHAR(50),
                             INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
+                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                            `rid` INT(11) NOT NULL,
+                            `rtype` VARCHAR(50) NOT NULL,
+                            `course_id` INT(11) NOT NULL,
+                            `reason` VARCHAR(50) NOT NULL DEFAULT '',
+                            `message` TEXT NOT NULL,
+                            `timestamp` INT(11) NOT NULL DEFAULT 0,
+                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                            `status` TINYINT(1) NOT NULL DEFAULT 1,
+                            INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
+                            INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

@@ -24,6 +24,7 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
 
@@ -133,10 +134,25 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         $topic_id = intval($_GET['topic_id']);
     }
     $number_of_posts = get_total_posts($topic_id);
-    $sql = Database::get()->queryArray("SELECT id,poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+    $sql = Database::get()->queryArray("SELECT id,poster_id,post_text FROM forum_post WHERE topic_id = ?d", $topic_id);
     $post_authors = array();
     foreach ($sql as $r) {
         $post_authors[] = $r->poster_id;
+        //delete abuse_reports for forum_posts and log actions
+        $result = Database::get()->queryArray("SELECT * FROM abuse_report WHERE `rid` = ?d AND `rtype` = ?s", $r->id, 'forum_post');
+        foreach ($result as $res) {
+            Log::record($res->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                array('id' => $res->id,
+                     'user_id' => $res->user_id,
+                     'reason' => $res->reason,
+                     'message' => $res->message,
+                     'rtype' => 'forum_post',
+                     'rid' => $r->id,
+                     'rcontent' => $r->post_text,
+                     'status' => $res->status
+            ));
+        }
+        Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $r->id, 'forum_post');
         //delete forum posts rating first
         Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);

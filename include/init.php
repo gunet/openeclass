@@ -382,6 +382,7 @@ $admin_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'users'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'usage'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
+    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
 );
 
 // modules which can't be enabled or disabled
@@ -396,6 +397,7 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'comments' => MODULE_ID_COMMENTS,
     'rating' => MODULE_ID_RATING,
     'sharing' => MODULE_ID_SHARING,
+    'abuse_report' => MODULE_ID_ABUSE_REPORT,            
     'notes' => MODULE_ID_NOTES);
 
 // the system admin and power users have rights to all courses

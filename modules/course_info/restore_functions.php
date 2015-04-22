@@ -663,11 +663,20 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
 
         //Comments
         if (file_exists("$restoreThis/comments")) {
-            restore_table($restoreThis, 'comments', array('delete' => array('id'),
+            $comment_map = restore_table($restoreThis, 'comments', array('delete' => array('id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'comments_map_function',
-            'map_function_data' => array($blog_map,
-            $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
+            'map_function_data' => array($blog_map, $new_course_id),
+            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        }
+        
+        //Abuse Report
+        if (file_exists("$restoreThis/abuse_report")) {
+            restore_table($restoreThis, 'abuse_report', array('delete' => array('id'),
+            'map' => array('user_id' => $userid_map),
+            'map_function' => 'abuse_report_map_function',
+            'map_function_data' => array($forum_post_map, 
+            $comment_map)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
         //Rating
@@ -1253,6 +1262,17 @@ function comments_map_function(&$data, $maps) {
         $data['rid'] = $blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
         $data['rid'] = $course_id;
+    }
+    return true;
+}
+
+function abuse_report_map_function(&$data, $maps) {
+    list($forum_post_map, $comment_map) = $maps;
+    $rtype = $data['rtype'];
+    if ($rtype == 'comment') {
+        $data['rid'] = $comment_map[$data['rid']];
+    } elseif ($rtype == 'forum_post') {
+        $data['rid'] = $forum_post_map[$data['rid']];
     }
     return true;
 }
