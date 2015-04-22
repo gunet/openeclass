@@ -10112,21 +10112,17 @@ a.list-group-item.delete:hover {
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
-/* line 202, ../SASS/bootstrap-custom.scss */
-.panel-action-btn-default > .panel-heading .opt-btn {
-  background: whitesmoke;
-}
 
-/* line 209, ../SASS/bootstrap-custom.scss */
+/* line 206, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 212, ../SASS/bootstrap-custom.scss */
+/* line 209, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
 
-/* line 218, ../SASS/bootstrap-custom.scss */
+/* line 215, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;
@@ -10150,17 +10146,17 @@ a.list-group-item.delete:hover {
   box-sizing: border-box;
 }
 
-/* line 243, ../SASS/bootstrap-custom.scss */
+/* line 240, ../SASS/bootstrap-custom.scss */
 .mce-toggle:hover {
   cursor: pointer;
 }
 
-/* line 247, ../SASS/bootstrap-custom.scss */
+/* line 244, ../SASS/bootstrap-custom.scss */
 .mce-toggle i.mce-ico.mce-i-none {
   width: 22px;
 }
 
-/* line 255, ../SASS/bootstrap-custom.scss */
+/* line 252, ../SASS/bootstrap-custom.scss */
 .checkbox_cell {
   width: 5px;
   text-align: center;
