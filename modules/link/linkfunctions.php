@@ -63,7 +63,7 @@ function showlinksofcategory($catid) {
     global $is_editor, $course_id, $urlview, $tool_content,
     $urlServer, $course_code,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
-    $langModify, $is_in_tinymce, $links_num;
+    $langModify, $is_in_tinymce, $links_num, $langLinkSubmittedBy;
 
     $tool_content .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `link`
@@ -76,6 +76,9 @@ function showlinksofcategory($catid) {
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
         $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
                 urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
+        if ($catid == -2 && $myrow->user_id != 0) {
+            $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
+        }
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }

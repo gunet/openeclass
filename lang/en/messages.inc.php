@@ -1317,6 +1317,7 @@ $langLinkSettingsSucc = "Settings were succesfully saved";
 $langSocialBookmarksFunct = "Social bookmarking functionality";
 $langSocialCategory = "Social bookmarks";
 $langLinkNotOwner = "Failuer! You are not the owner of this link.";
+$langLinkSubmittedBy = "submitted by";
 $lang_remind_pass = 'Reset password';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
 and email.
