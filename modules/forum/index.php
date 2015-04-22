@@ -147,123 +147,114 @@ if ($total_categories > 0) {
         $tool_content .= action_button($dyntools)."</div></caption>";
 
         $tool_content .= "<tr class='list-header'>
-		<td class='forum_td'>$langForums</td>
-		<td class='text-center forum_td' width='100'>$langSubjects</td>
-		<td class='text-center forum_td' width='100'>$langPosts</td>
-		<td class='text-center forum_td'>$langLastPost</td>
-		<th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
-		</tr>";
+            <td class='forum_td'>$langForums</td>
+            <td class='text-center forum_td' width='100'>$langSubjects</td>
+            <td class='text-center forum_td' width='100'>$langPosts</td>
+            <td class='text-center forum_td'>$langLastPost</td>
+            <th class='text-center option-btn-cell forum_td'>" . icon('fa-gears') . "</th>
+          </tr>";
 
         // display forum topics
-        if($forum_row) {
-        foreach ($forum_row as $forum_data) {
-            unset($last_post);
-            $cat_id = $cat_row->id;
-            if (Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id)->count > 0) {
-                // if category forum topics are found
-                if ($forum_data->cat_id == $cat_id) {
-                    if ($forum_data->post_time) {
-                        $last_post = $forum_data->post_time;
-                        $last_post_datetime = $forum_data->post_time;
-                        list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
-                        list($year, $month, $day) = explode('-', $last_post_date);
-                        list($hour, $min) = explode(':', $last_post_time);
-                        $last_post_time = mktime($hour, $min, 0, $month, $day, $year);
-                        $human_last_post_time = date('d/m/Y -  H:i', $last_post_time);
-                    }
-                    if (empty($last_post)) {
-                        $last_post = $langNoPosts;
-                    }
-                    $tool_content .= "<tr>";
-                    if (!isset($last_visit)) {
-                        $last_visit = 0;
-                    }/*
-                    if (@$last_post_time > $last_visit && $last_post != $langNoPosts) {
-                        $tool_content .= "<td><img src='$newposts_image' /></td>";
-                    } else {
-                        $tool_content .= "<td>".icon('fa-comments')."</td>";
-                    }*/
-                    $forum_name = q($forum_data->name);
-                    if ($forum_data->poster_id) {
-                        $last_user_post = uid_to_name($forum_data->poster_id);
-                    } else {
-                        $last_user_post = '';
-                    }
-                    $last_post_topic_id = $forum_data->topic_id;
-                    $total_posts = $forum_data->num_posts;
-                    $total_topics = $forum_data->num_topics;
-                    $desc = q($forum_data->desc);
-                    $tool_content .= "<td>";
-                    $forum_id = $forum_data->id;
-                    $is_member = false;
-                    $group_id = init_forum_group_info($forum_id);
-                    $member = $is_member ? "&nbsp;&nbsp;($langMyGroup)" : '';
-                    // Show link to forum if:
-                    //  - user is admin of course
-                    //  - forum doesn't belong to group
-                    //  - forum belongs to group and group forums are enabled and
-                    //     - user is member of group
-                    $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
-								WHERE user_id = ?d
-								AND forum_id = ?d
-								AND course_id = ?d", $uid, $forum_id, $course_id);
-                    if ($forum_action_notify) {
-                        $forum_action_notify = $forum_action_notify->notify_sent;
-                    } else {
-                        $forum_action_notify = FALSE;
-                    }                    
-                    if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
-                        if ($forum_action_notify) $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='".q($langNotify)."'><i class='fa fa-envelope'></i></span>";
-                        $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
+        if ($forum_row) {
+            foreach ($forum_row as $forum_data) {
+                unset($last_post);
+                $cat_id = $cat_row->id;
+                $human_last_post_time = '';
+                if (Database::get()->querySingle("SELECT COUNT(*) AS count FROM forum WHERE cat_id = ?d AND course_id = ?d", $cat_id, $course_id)->count > 0) {
+                    // if category forum topics are found
+                    if ($forum_data->cat_id == $cat_id) {
+                        if ($forum_data->post_time) {
+                            $last_post = $forum_data->post_time;
+                            $last_post_datetime = $forum_data->post_time;
+                            list($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
+                            list($year, $month, $day) = explode('-', $last_post_date);
+                            list($hour, $min) = explode(':', $last_post_time);
+                            $last_post_time = mktime($hour, $min, 0, $month, $day, $year);
+                            $human_last_post_time = date('d/m/Y -  H:i', $last_post_time);
+                        }
+                        if (empty($last_post)) {
+                            $last_post = $langNoPosts;
+                        }
+                        $forum_name = q($forum_data->name);
+                        if ($forum_data->poster_id) {
+                            $last_user_post = uid_to_name($forum_data->poster_id);
+                        } else {
+                            $last_user_post = '';
+                        }
+                        $last_post_topic_id = $forum_data->topic_id;
+                        $total_posts = $forum_data->num_posts;
+                        $total_topics = $forum_data->num_topics;
+                        $desc = q($forum_data->desc);
+                        $forum_id = $forum_data->id;
+                        $is_member = false;
+                        $group_id = init_forum_group_info($forum_id);
+                        $member = $is_member ? "&nbsp;&nbsp;($langMyGroup)" : '';
+                        // Show link to forum if:
+                        //  - user is admin of course
+                        //  - forum doesn't belong to group
+                        //  - forum belongs to group and group forums are enabled and
+                        //     - user is member of group
+                        $forum_action_notify = Database::get()->querySingle("SELECT notify_sent FROM forum_notify
+                            WHERE user_id = ?d
+                                  AND forum_id = ?d
+                                  AND course_id = ?d", $uid, $forum_id, $course_id);
+                        if ($forum_action_notify) {
+                            $forum_action_notify = $forum_action_notify->notify_sent;
+                        } else {
+                            $forum_action_notify = FALSE;
+                        }                    
+                        $tool_content .= "<tr><td>";
+                        if ($is_editor or ! $group_id or ( $has_forum and $is_member)) {
+                            if ($forum_action_notify) $tool_content .= "<span class='pull-right label label-primary' data-toggle='tooltip' data-placement='bottom' title='".q($langNotify)."'><i class='fa fa-envelope'></i></span>";
+                            $tool_content .= "<a href='viewforum.php?course=$course_code&amp;forum=$forum_id'>
                                                                 <b>$forum_name</b>
                                                                 </a><div class='smaller'>" . $member . "</div>";
-                    } else {
-                        $tool_content .= $forum_name;
-                    }
-                    $tool_content .= "<div class='smaller'>$desc</div>";
-                    $tool_content .= "</td>";
-                    $tool_content .= "<td class='text-center'>$total_topics</td>";
-                    $tool_content .= "<td class='text-center'>$total_posts</td>";
-                    $tool_content .= "<td class='text-center'>";
-                    if ($total_topics > 0 && $total_posts > 0) {
-                        $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;
-                                                <a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>
-						".icon('fa-comment-o', $langLastPost)."
-						</a><br>
-						$human_last_post_time</span></td>";
-                    } else {
-                        $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
-                    }
+                        } else {
+                            $tool_content .= $forum_name;
+                        }
+                        $tool_content .= "<div class='smaller'>$desc</div>" .
+                            "</td>" .
+                            "<td class='text-center'>$total_topics</td>" .
+                            "<td class='text-center'>$total_posts</td>" .
+                            "<td class='text-center'>";
+                        if ($total_topics > 0 && $total_posts > 0) {
+                            $tool_content .= "<span class='smaller'>" . q($last_user_post) . "&nbsp;" .
+                                "<a href='viewtopic.php?course=$course_code&amp;topic=$last_post_topic_id&amp;forum=$forum_id'>" .
+                                icon('fa-comment-o', $langLastPost) . "</a><br>$human_last_post_time</span></td>";
+                        } else {
+                            $tool_content .= "<div class='inactive'>$langNoPosts</div></td>";
+                        }
 
-                    if (!isset($forum_action_notify)) {
-                        $forum_link_notify = false;
-                    } else {
-                        $forum_link_notify = toggle_link($forum_action_notify);
-                    }
-                    $tool_content .= "<td class='option-btn-cell'>";
+                        if (!isset($forum_action_notify)) {
+                            $forum_link_notify = false;
+                        } else {
+                            $forum_link_notify = toggle_link($forum_action_notify);
+                        }
+                        $tool_content .= "<td class='option-btn-cell'>";
 
-                    $dyntools = (!$is_editor) ? array() : array(
-                        array('title' => $langModify,
-                            'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
-                            'icon' => 'fa-edit'),
-                        array('title' => $langDelete,
-                            'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
-                            'icon' => 'fa-times',
-                            'class' => 'delete',
-                            'confirm' => $langConfirmDelete)
-                    );
-                    $dyntools[] = array('title' => $forum_action_notify ? $langStopNotify : $langNotify,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
-                        'icon' => 'fa-envelope');
-                    $tool_content .= action_button($dyntools);
+                        $dyntools = (!$is_editor) ? array() : array(
+                            array(
+                                'title' => $langModify,
+                                'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
+                                'icon' => 'fa-edit'),
+                            array(
+                                'title' => $langDelete,
+                                'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmDelete));
+                        $dyntools[] = array('title' => $forum_action_notify ? $langStopNotify : $langNotify,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
+                            'icon' => 'fa-envelope');
+                        $tool_content .= action_button($dyntools);
+                    }
+                } else {
+                    $tool_content .= "<tr>" .
+                        "<td colspan='6' class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>" .
+                        "</tr>";
+                    break;
                 }
-            } else {
-                $tool_content .= "<tr>";
-                $tool_content .= "<td colspan='6' class='alert2'><span class='not_visible'> - $langNoForumsCat - </span></td>";
-                $tool_content .= "</tr>";
-                break;
             }
-        }
         } else {
             $tool_content .= "<tr><td colspan='8' class='text-center'><span class='not_visible'> - ".$langNoForumTopic." - </td></tr>";
         }

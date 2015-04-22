@@ -35,7 +35,7 @@
 
 require_once 'include/log.php';
 // pop3 class
-include 'modules/auth/methods/pop3.php';
+require_once 'modules/auth/methods/pop3.php';
 require_once 'include/phpass/PasswordHash.php';
 
 $auth_ids = array(1 => 'eclass',
@@ -161,77 +161,41 @@ function get_auth_settings($auth) {
 
     $auth = intval($auth);
     $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
-    if ($result) {
-            $settings['auth_id'] = $result->auth_id;
-            $settings['auth_settings'] = $result->auth_settings;
-            $auth_settings = $settings['auth_settings'];
-            $settings['auth_title'] = $result->auth_title;
-            $settings['auth_instructions'] = $result->auth_instructions;
-            $settings['auth_default'] = $result->auth_default;
-            switch ($auth) {
-                case 2:
-                    $settings['pop3host'] = str_replace('pop3host=', '', $auth_settings);
-                    break;
-                case 3:
-                    $settings['imaphost'] = str_replace('imaphost=', '', $auth_settings);
-                    break;
-                case 4:
-                    $ldap = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'ldaphost' => str_replace('ldaphost=', '', @$ldap[0]),
-                        'ldap_base' => str_replace('ldap_base=', '', @$ldap[1]),
-                        'ldapbind_dn' => str_replace('ldapbind_dn=', '', @$ldap[2]),
-                        'ldapbind_pw' => str_replace('ldapbind_pw=', '', @$ldap[3]),
-                        'ldap_login_attr' => str_replace('ldap_login_attr=', '', @$ldap[4]),
-                        'ldap_login_attr2' => str_replace('ldap_login_attr2=', '', @$ldap[5])));
-                    break;
-                case 5:
-                    $edb = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'dbhost' => str_replace('dbhost=', '', @$edb[0]),
-                        'dbname' => str_replace('dbname=', '', @$edb[1]),
-                        'dbuser' => str_replace('dbuser=', '', @$edb[2]),
-                        'dbpass' => str_replace('dbpass=', '', @$edb[3]),
-                        'dbtable' => str_replace('dbtable=', '', @$edb[4]),
-                        'dbfielduser' => str_replace('dbfielduser=', '', @$edb[5]),
-                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6]),
-                        'dbpassencr' => str_replace('dbpassencr=', '', @$edb[7])));
-                    break;
-                case 7:
-                    $cas = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'cas_host' => str_replace('cas_host=', '', @$cas[0]),
-                        'cas_port' => str_replace('cas_port=', '', @$cas[1]),
-                        'cas_context' => str_replace('cas_context=', '', @$cas[2]),
-                        'cas_cachain' => str_replace('cas_cachain=', '', @$cas[3]),
-                        'casusermailattr' => str_replace('casusermailattr=', '', @$cas[4]),
-                        'casuserfirstattr' => str_replace('casuserfirstattr=', '', @$cas[5]),
-                        'casuserlastattr' => str_replace('casuserlastattr=', '', @$cas[6]),
-                        'cas_altauth' => str_replace('cas_altauth=', '', @$cas[7]),
-                        'cas_logout' => str_replace('cas_logout=', '', @$cas[8]),
-                        'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9])));
-                    break;
-            }
-            $settings['auth_name'] = $auth_ids[$auth];
-            return $settings;
+    if (!$result) {
+        return 0;
     }
-    return 0;
+
+    $settings['auth_id'] = $result->auth_id;
+    $settings['auth_settings'] = $result->auth_settings;
+    $settings['auth_title'] = $result->auth_title;
+    $settings['auth_instructions'] = $result->auth_instructions;
+    $settings['auth_default'] = $result->auth_default;
+    $settings['auth_name'] = $auth_ids[$auth];
+
+    foreach (explode('|', $result->auth_settings) as $item) {
+        if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
+            $settings[$matches[1]] = $matches[2];
+        }
+    }
+
+    return $settings;
 }
 
 /* * **************************************************************
   Try to authenticate the user with the admin-defined auth method
   true (the user is authenticated) / false (not authenticated)
 
-  $auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db, 6:shibboleth, 7:cas)
+  $auth an integer-value for auth method (1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db, 6:shibboleth, 7:cas)
   $test_username
   $test_password
   return $testauth (boolean: true-is authenticated, false-is not)
 
-  Sets the global variable $auth_user_info to an array with the following
+  Sets the session variable $auth_user_info to an array with the following
   keys, if available from the current auth method:
-  firstname (LDAP attribute: givenname)
-  lastname (LDAP attribute: sn)
+  givenname (LDAP attribute: givenname)
+  surname (LDAP attribute: sn)
   email (LDAP attribute: mail)
+  studentid
  * ************************************************************** */
 
 function auth_user_login($auth, $test_username, $test_password, $settings) {
@@ -302,7 +266,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         $search_filter = "($settings[ldap_login_attr]=${test_username})";
                     } else {
                         $search_filter = "(|($settings[ldap_login_attr]=${test_username})
-                                                                ($settings[ldap_login_attr2]=${test_username}))";
+                                            ($settings[ldap_login_attr2]=${test_username}))";
                     }
 
                     $userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
@@ -312,15 +276,15 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
-                                $lastname = get_ldap_attribute($userinfo, 'sn');
-                                $firstname = get_ldap_attribute($userinfo, 'givenname');
-                                if (empty($firstname)) {
+                                $surname = get_ldap_attribute($userinfo, 'sn');
+                                $givenname = get_ldap_attribute($userinfo, 'givenname');
+                                if (empty($givennname)) {
                                     $cn = get_ldap_attribute($userinfo, 'cn');
-                                    $firstname = trim(str_replace($lastname, '', $cn));
+                                    $givenname = trim(str_replace($surname, '', $cn));
                                 }
-                                $GLOBALS['auth_user_info'] = array(
-                                    'firstname' => $firstname,
-                                    'lastname' => $lastname,
+                                $_SESSION['auth_user_info'] = array(
+                                    'givenname' => $givenname,
+                                    'surname' => $surname,
                                     'email' => get_ldap_attribute($userinfo, 'mail'));
                             }
                         }
@@ -455,6 +419,7 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
             $casusermailattr = $cas['casusermailattr'];
             $casuserfirstattr = $cas['casuserfirstattr'];
             $casuserlastattr = $cas['casuserlastattr'];
+            $casuserstudentid = $cas['casuserstudentid'];
             $cas_altauth = $cas['cas_altauth'];
         }
     }
@@ -516,23 +481,18 @@ function get_cas_attrs($phpCASattrs, $settings) {
     }
 
     $ret = array();
-    if (!empty($settings['casusermailattr']))
-        if (!empty($attrs[$settings['casusermailattr']])) {
-            $ret['casusermailattr'] = $attrs[$settings['casusermailattr']];
-            $GLOBALS['auth_user_info']['email'] = $attrs[$settings['casusermailattr']];
+    foreach (array('email' => 'casusermailattr',
+                   'givenname' => 'casuserfirstattr',
+                   'surname' => 'casuserlastattr',
+                   'studentid' => 'casuserstudentid') as $name => $attrname) {
+        $_SESSION['auth_user_info'][$name] = $ret[$attrname] = '';
+        if (isset($settings[$attrname]) and $settings[$attrname]) {
+            $setting = $settings[$attrname];
+            if (isset($attrs[$setting])) {
+                $_SESSION['auth_user_info'][$name] = $ret[$attrname] = $attrs[$setting];
+            }
         }
-
-    if (!empty($settings['casuserfirstattr']))
-        if (!empty($attrs[$settings['casuserfirstattr']])) {
-            $ret['casuserfirstattr'] = $attrs[$settings['casuserfirstattr']];
-            $GLOBALS['auth_user_info']['firstname'] = $attrs[$settings['casuserfirstattr']];
-        }
-
-    if (!empty($settings['casuserlastattr']))
-        if (!empty($attrs[$settings['casuserlastattr']])) {
-            $ret['casuserlastattr'] = $attrs[$settings['casuserlastattr']];
-            $GLOBALS['auth_user_info']['lastname'] = $attrs[$settings['casuserlastattr']];
-        }
+    }
 
     return $ret;
 }
@@ -784,13 +744,17 @@ function alt_login($user_info_object, $uname, $pass) {
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             // if ldap entries have changed update database
-            if (!empty($auth_user_info['firstname']) and (!empty($auth_user_info['lastname'])) and (($user_info_object->givenname != $auth_user_info['firstname']) or
-                    ($user_info_object->surname != $auth_user_info['lastname']))) {
-                Database::get()->query("UPDATE user SET givenname = '" . $auth_user_info['firstname'] . "',
-                                                          surname = '" . $auth_user_info['lastname'] . "'
-                                                      WHERE id = " . $user_info_object->id . "");
-                $_SESSION['surname'] = $auth_user_info['firstname'];
-                $_SESSION['givenname'] = $auth_user_info['lastname'];
+            if (!empty($_SESSION['auth_user_info']['givenname']) and
+                !empty($_SESSION['auth_user_info']['surname']) and
+                ($user_info_object->givenname != $_SESSION['auth_user_info']['givenname'] or
+                 $user_info_object->surname != $_SESSION['auth_user_info']['surname'])) {
+                Database::get()->query("UPDATE user SET givenname = ?s, surname = ?s
+                                                    WHERE id = ?d",
+                    $_SESSION['auth_user_info']['givenname'],
+                    $_SESSION['auth_user_info']['surname'],
+                    $user_info_object->id);
+                $_SESSION['surname'] = $_SESSION['auth_user_info']['surname'];
+                $_SESSION['givenname'] = $_SESSION['auth_user_info']['givenname'];
             } else {
                 $_SESSION['surname'] = $user_info_object->surname;
                 $_SESSION['givenname'] = $user_info_object->givenname;
@@ -842,6 +806,7 @@ function shib_cas_login($type) {
         $surname = $_SESSION['cas_surname'];
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
+        $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
     }
     // user is authenticated, now let's see if he is registered also in db
     if (get_config('case_insensitive_usernames')) {
@@ -863,6 +828,7 @@ function shib_cas_login($type) {
             unset($_SESSION['cas_email']);
             unset($_SESSION['cas_surname']);
             unset($_SESSION['cas_givenname']);
+            unset($_SESSION['cas_userstudentid']);
             Session::Messages($langUserAltAuth, 'alert-danger');
             redirect_to_home_page();
         } else {
@@ -901,21 +867,27 @@ function shib_cas_login($type) {
             }
         }
     } elseif ($autoregister and !get_config('am_required')) {
-        // if user not found and autoregister enabled, create user
-        if (get_config('email_verification_required')) {
-            $verified_mail = 0;
-            $_SESSION['mail_verification_required'] = 1;
-        } else {
-            $verified_mail = 2;
-        }
+    // if user not found and autoregister enabled, create user
+	    $verified_mail = EMAIL_UNVERIFIED;
+    	if (isset($_SESSION['cas_email'])) {
+    	    $verified_mail = EMAIL_VERIFIED;
+    	} else { // redirect user to mail_verify_change.php
+	    	$_SESSION['mail_verification_required'] = 1;
+    		/*        if (get_config('email_verification_required')) {
+            	$verified_mail = 0;
+            	$_SESSION['mail_verification_required'] = 1;
+        	} */    	    
+    	}
+        
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
+                        am = ?s, verified_mail = ?d,
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language)->lastInsertID;
+                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am, $verified_mail)->lastInsertID;
     } else {
         // user not registered, automatic registration disabled
         // redirect to registration screen

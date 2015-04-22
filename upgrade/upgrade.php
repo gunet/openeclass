@@ -2610,6 +2610,20 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE source_event_id IS NULL");
         
     }
+    
+    // -----------------------------------
+    // upgrade queries for 3.1
+    // -----------------------------------
+    if (version_compare($oldversion, '3.1', '<')) {
+        Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
+        Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
+        Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
+        
+        if (!DBHelper::fieldExists('blog_post', 'commenting')) {
+            Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
+        }                
+    }
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 

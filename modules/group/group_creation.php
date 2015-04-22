@@ -42,21 +42,24 @@ $tool_content .= action_bar(array(
         'url' => "index.php?course=$course_code"
     )
 ));
-                
+$group_max_value = Session::has('group_max') ? Session::get('group_max') : 8;
+$group_quantity_value = Session::has('group_quantity') ? Session::get('group_quantity') : 1;
 $tool_content .= " 
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
-        <div class='form-group'>
+        <div class='form-group".(Session::getError('group_quantity') ? " has-error":"")."'>
             <label for='group_quantity' class='col-sm-2 control-label'>$langNewGroups:</label>
             <div class='col-sm-10'>
-              <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='1' placeholder='$langNewGroups'>
+                <input name='group_quantity' type='text' class='form-control' id='group_quantity' value='$group_quantity_value' placeholder='$langNewGroups'>
+                <span class='help-block'>".Session::getError('group_quantity')."</span>    
             </div>
         </div>
-        <div class='form-group'>
+        <div class='form-group".(Session::getError('group_max') ? " has-error":"")."'>
             <label for='group_max' class='col-sm-2 control-label'>$langNewGroupMembers:</label>
             <div class='col-sm-10'>
-              <input name='group_max' type='text' class='form-control' id='group_max' value='8' placeholder='$langNewGroupMembers'> &nbsp;$langMax $langPlaces
+                <input name='group_max' type='text' class='form-control' id='group_max' value='$group_max_value' placeholder='$langNewGroupMembers'>
+                <span class='help-block'>".(Session::getError('group_max') ?: "$langMax $langPlaces")."</span>
             </div>
         </div>
         <div class='form-group'>

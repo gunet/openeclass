@@ -26,34 +26,7 @@
 
 include '../../include/init.php';
 
-if (isset($_GET['c'])) {
-    $code = $_GET['c'];
-    $course_id = course_code_to_id($code);
-} else {
-    $code = '';
-    $course_id = false;
-}
-if ($course_id === false) {
-    header("HTTP/1.0 404 Not Found");
-    echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head>',
-    '<title>404 Not Found</title></head><body>',
-    '<h1>Not Found</h1><p>The requested course "',
-    htmlspecialchars($code),
-    '" does not exist.</p></body></html>';
-    exit;
-}
-if (!visible_module(MODULE_ID_ANNOUNCE)) {
-    Session::Messages($langCheckPublicTools);
-    session_write_close();
-    $errorMessagePath = "../../";    
-    if (!$uid) {
-        $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
-        header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
-    } else {
-        header("Location:" . $urlServer . "index.php");
-    }
-    exit;
-}
+rss_check_access();
 
 $title = htmlspecialchars(Database::get()->querySingle("SELECT title FROM course WHERE id = ?d", $course_id)->title, ENT_NOQUOTES);
 
@@ -66,22 +39,27 @@ if ($q) {
     $lastbuilddate = '';
 }
 
+$link = $urlServer . 'modules/announcements/rss.php?c=' . urlencode($course_code);
+if (isset($_GET['token'])) {
+    $link .= '&amp;uid=' . $_GET['uid'] . '&amp;token=' . $_GET['token'];
+}
+
 header("Content-Type: application/xml;");
 echo "<?xml version='1.0' encoding='utf-8'?>";
 echo "<rss version='2.0' xmlns:atom='http://www.w3.org/2005/Atom'>";
 echo "<channel>";
-echo "<atom:link href='{$urlServer}modules/announcements/rss.php?c=" . urlencode($code) . "' rel='self' type='application/rss+xml' />";
+echo "<atom:link href='$link' rel='self' type='application/rss+xml' />";
 echo "<title>$langCourseAnnouncements " . q($title) . "</title>";
-echo "<link>{$urlServer}courses/" . q($code) . "/</link>";
+echo "<link>{$urlServer}courses/" . q($course_code) . "/</link>";
 echo "<description>$langAnnouncements</description>";
 echo "<lastBuildDate>$lastbuilddate</lastBuildDate>";
 echo "<language>el</language>";
 
 Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %d %b %Y %T +0300') AS dateformat
-		FROM announcement WHERE course_id = ?d AND visible = 1 ORDER BY `order` DESC", function($r) use ($code, $urlServer) {
+		FROM announcement WHERE course_id = ?d AND visible = 1 ORDER BY `order` DESC", function($r) use ($course_code, $urlServer) {
     echo "<item>";
     echo "<title>" . htmlspecialchars($r->title, ENT_NOQUOTES) . "</title>";
-    echo "<link>{$urlServer}modules/announcements/index.php?an_id=" . $r->id . "&amp;c=" . urlencode($code) . "</link>";
+    echo "<link>{$urlServer}modules/announcements/index.php?an_id=" . $r->id . "&amp;course=" . urlencode($course_code) . "</link>";
     echo "<description>" . htmlspecialchars($r->content, ENT_NOQUOTES) . "</description>";
     echo "<pubDate>" . $r->dateformat . "</pubDate>";
     echo "<guid isPermaLink='false'>" . $r->dateformat . $r->id . "</guid>";
@@ -89,3 +67,4 @@ Database::get()->queryFunc("SELECT id, title, content, DATE_FORMAT(`date`,'%a, %
 }, $course_id);
 
 echo "</channel></rss>";
+

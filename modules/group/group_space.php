@@ -31,10 +31,6 @@ $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
-
-$toolName = $langGroups;
-$pageName = $langGroupInfo;
-$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 require_once 'group_functions.php';
 
 if (!$uid or !$courses[$course_code]) {
@@ -43,6 +39,10 @@ if (!$uid or !$courses[$course_code]) {
 
 initialize_group_id();
 initialize_group_info($group_id);
+
+$toolName = $langGroups;
+$pageName = $group_name;
+$navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
 if (isset($_GET['selfReg'])) {
     if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) {
@@ -68,7 +68,7 @@ if (!$is_member and !$is_editor) {
 
 $tool_content .= action_bar(array(
             array('title' => $langEditGroup,
-                'url' => "group_edit.php?course=$course_code&amp;group_id=$group_id",
+                'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
                 'icon' => 'fa-edit',
                 'level' => 'primary',
                 'show' => $is_editor or $is_tutor),
@@ -105,15 +105,6 @@ $tool_content .= action_bar(array(
             )
         ));
 
-
-$tool_content .= "<div class='group-space'>
-                    <div class='row'>
-                        <div class='col-xs-12'>
-                            <div class='row'>
-                                <div class='col-sm-3'><strong>$langGroupName:</strong></div>
-                                <div class='col-sm-9'>" . q($group_name) . "</div>
-                            </div>";
-
 $tutors = array();
 $members = array();
 $q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email, user.am, user.has_icon, group_members.is_tutor, 
@@ -136,12 +127,6 @@ if ($tutors) {
     $tool_content_tutor = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
 }
 
-$tool_content .= "
-        <div class='row'>
-            <div class='col-sm-3'><strong>$langGroupTutor:</strong></div>
-            <div class='col-sm-9'>$tool_content_tutor</div>
-        </div>";
-
 $group_description = trim($group_description);
 if (empty($group_description)) {
     $tool_content_description = ' &nbsp;&nbsp;-&nbsp;&nbsp;  ';
@@ -150,15 +135,32 @@ if (empty($group_description)) {
 }
 
 $tool_content .= "
-        <div class='row'>
-            <div class='col-sm-3'><strong>$langDescription:</strong></div>
-            <div class='col-sm-9'>$tool_content_description</div>
+    <div class='panel panel-primary'>
+        <div class='panel-heading'>
+            <h3 class='panel-title'>
+            $langGroupInfo
+            </h3>
         </div>
+        <div class='panel-body'>
+            <div class='row'>
+                <div class='col-sm-3'><strong>$langGroupName:</strong></div>
+                <div class='col-sm-9'>" . q($group_name) . "</div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-3'><strong>$langGroupTutor:</strong></div>
+                <div class='col-sm-9'>$tool_content_tutor</div>
+            </div>
+            <div class='row'>
+                <div class='col-sm-3'><strong>$langDescription:</strong></div>
+                <div class='col-sm-9'>$tool_content_description</div>
+            </div>
         </div>
-    </div><br>";
+    </div>";
 
 // members
-$tool_content .= "  <div class='row'>
+if (count($members) > 0) { 
+$tool_content .= "   
+                    <div class='row'>
                         <div class='col-xs-12'>
                           <ul class='list-group'>
                               <li class='list-group-item list-header'>
@@ -173,8 +175,7 @@ $tool_content .= "  <div class='row'>
                                       <div class='col-xs-4'>$langEmail</div>
                                   </div>
                               </li>";
-
-if (count($members) > 0) {    
+   
     foreach ($members as $member) {
         $user_group_description = $member->description;        
         $tool_content .= "<li class='list-group-item'><div class='row'><div class='col-xs-4'>" . display_user($member->id, false, true);
@@ -196,11 +197,11 @@ if (count($members) > 0) {
         }
         $tool_content .= "</div></div></li>";     
     }
+    $tool_content .= "</ul>";
+    $tool_content .= "</div></div>";
 } else {
-    $tool_content .= "<li class='list-group-item'><div class='row'><div class='col-xs-12'>$langGroupNoneMasc</li>";
+    $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
 }
 
-$tool_content .= "</ul>";
-$tool_content .= "</div></div></div>";
 draw($tool_content, 2);
 

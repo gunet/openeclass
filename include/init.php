@@ -454,28 +454,33 @@ if (isset($require_editor) and $require_editor) {
 }
 
 $module_id = current_module_id();
-// Security check:: Users that do not have Professor access for a course must not
-// be able to access inactive tools.
-if (isset($course_id) and !$is_editor and $module_id and !defined('STATIC_MODULE')) {
-    if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
-        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                                             WHERE visible = 1 AND
-                                             course_id = ?d", $course_id);
-    } else {
+
+// Security check:: Users must not be able to access inactive (if students) or disabled tools.
+if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
+    if (!$uid or check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
                               course_id = ?d AND
-                                module_id NOT IN (" . MODULE_ID_CHAT . ",
-                                                  " . MODULE_ID_ASSIGN . ",
-                                                  " . MODULE_ID_BBB . ",
-                                                  " . MODULE_ID_DROPBOX . ",
-                                                  " . MODULE_ID_QUESTIONNAIRE . ",
-                                                  " . MODULE_ID_FORUM . ",
-                                                  " . MODULE_ID_GROUPS . ",
-                                                  " . MODULE_ID_WIKI . ",
-                                                  " . MODULE_ID_GRADEBOOK . ",                                                  
-                                                  " . MODULE_ID_ATTENDANCE . ",
-                                                  " . MODULE_ID_LP . ")", $course_id);
+                              module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                                " . MODULE_ID_ASSIGN . ",
+                                                " . MODULE_ID_BBB . ",
+                                                " . MODULE_ID_DROPBOX . ",
+                                                " . MODULE_ID_QUESTIONNAIRE . ",
+                                                " . MODULE_ID_FORUM . ",
+                                                " . MODULE_ID_GROUPS . ",
+                                                " . MODULE_ID_WIKI . ",
+                                                " . MODULE_ID_GRADEBOOK . ",                                                  
+                                                " . MODULE_ID_ATTENDANCE . ",
+                                                " . MODULE_ID_LP . ")", $course_id);
+    } elseif ($is_admin) {
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE module_id NOT IN (SELECT module_id FROM module_disable)");
+    } else {
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE visible = 1 AND
+                              module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              course_id = ?d", $course_id);
     }
     $publicModules = array();
     foreach ($moduleIDs as $module) {

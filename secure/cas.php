@@ -1,5 +1,4 @@
 <?php
-
 /* ========================================================================
  * Open eClass 2.4
  * E-learning and Course Management System
@@ -47,6 +46,10 @@ if (phpCAS::checkAuthentication()) {
     if (!empty($attrs['casusermailattr'])) {
         $_SESSION['cas_email'] = $attrs['casusermailattr'];
     }
+    if (!empty($attrs['casuserstudentid'])) {
+    	$_SESSION['cas_userstudentid'] = $attrs['casuserstudentid'];
+    }
 }
-
+//print_a($_SESSION);
+//die;
 header("Location: $urlServer");

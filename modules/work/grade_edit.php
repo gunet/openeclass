@@ -48,7 +48,8 @@ function get_assignment_details($id) {
 // Show to professor details of a student's submission and allow editing of fields
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign) {
-    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, $langBack;
+    global $m, $langGradeOk, $tool_content, $course_code, $langCancel, 
+           $langBack, $assign, $langWorkOnlineText;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
@@ -65,6 +66,23 @@ function show_edit_form($id, $sid, $assign) {
         $email_status = !Session::has('email') ?: " checked";
         
         $pageName = $m['addgradecomments'];
+        if($assign->submission_type){
+            $submission = "
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$langWorkOnlineText:</label>
+                        <div class='col-sm-9'>
+                            $sub->submission_text
+                        </div>
+                    </div>";      
+        } else {
+            $submission = "
+                    <div class='form-group'>
+                        <label class='col-sm-3 control-label'>$m[filename]:</label>
+                        <div class='col-sm-9'>
+                            <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
+                        </div>
+                    </div>";                
+        }        
         $tool_content .= action_bar(array(
                 array(
                     'title' => $langBack,
@@ -90,12 +108,7 @@ function show_edit_form($id, $sid, $assign) {
                             <span>".q($sub->submission_date)."</span>
                         </div>
                     </div>
-                    <div class='form-group'>
-                        <label class='col-sm-3 control-label'>$m[filename]:</label>
-                        <div class='col-sm-9'>
-                            <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
-                        </div>
-                    </div>
+                    $submission
                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
                         <label for='grade' class='col-sm-3 control-label'>$m[grade]:</label>
                         <div class='col-sm-4'>

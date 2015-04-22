@@ -80,6 +80,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
   PRIMARY KEY  (`id`),
   UNIQUE KEY `module_course` (`module_id`,`course_id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS module_disable (
+    module_id int(11) NOT NULL PRIMARY KEY)");
+
 #
 # table `log`
 #
@@ -287,6 +290,7 @@ $db->query("CREATE TABLE course_review (
     `is_certified` BOOL NOT NULL DEFAULT 0,
     `level` TINYINT(4) NOT NULL DEFAULT 0,
     `last_review` DATETIME NOT NULL,
+
     `last_reviewer` INT(11) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY cid (course_id)) $charset_spec");
@@ -820,6 +824,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `title` VARCHAR(200) NOT NULL DEFAULT '',
                 `description` TEXT NOT NULL,
                 `comments` TEXT NOT NULL,
+                `submission_type` TINYINT NOT NULL DEFAULT '0',
                 `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `late_submission` TINYINT NOT NULL DEFAULT '0', 
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -839,6 +844,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                 `file_name` VARCHAR(200) NOT NULL DEFAULT '',
+                `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
                 `comments` TEXT NOT NULL,
                 `grade` FLOAT DEFAULT NULL,
                 `grade_comments` TEXT NOT NULL,
