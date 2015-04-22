@@ -676,7 +676,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'map' => array('user_id' => $userid_map),
             'map_function' => 'abuse_report_map_function',
             'map_function_data' => array($forum_post_map, 
-            $comment_map)), $url_prefix_map, $backupData, $restoreHelper);
+            $comment_map, $link_map)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
         //Rating
@@ -1267,12 +1267,14 @@ function comments_map_function(&$data, $maps) {
 }
 
 function abuse_report_map_function(&$data, $maps) {
-    list($forum_post_map, $comment_map) = $maps;
+    list($forum_post_map, $comment_map, $link_map) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'comment') {
         $data['rid'] = $comment_map[$data['rid']];
     } elseif ($rtype == 'forum_post') {
         $data['rid'] = $forum_post_map[$data['rid']];
+    } elseif ($rtype == 'link') {
+        $data['rid'] = $link_map[$data['rid']];
     }
     return true;
 }
