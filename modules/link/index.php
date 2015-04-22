@@ -487,14 +487,14 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
             if ($numberofsocialcategory !== 0) {
                 $tool_content .= "<tr class='list-header'><th class='text-left'>$langSocialCategory</th>";
                 if (isset($_SESSION['uid']) && !$is_in_tinymce) {
-                    $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+                    $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
                 }
                 $tool_content .= "</tr>";
                 showlinksofcategory(-2);
             } else {
                 $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langSocialCategory</th>";
                 if (isset($_SESSION['uid']) && !$is_in_tinymce) {
-                    $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+                    $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
                 }
                 $tool_content .= "</tr>";
                 $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoLinkInCategory - </td>";
