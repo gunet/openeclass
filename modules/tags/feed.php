@@ -27,28 +27,15 @@ $helpTopic = '';
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 
-//Datepicker
-load_js('tools.js');
-load_js('jquery');
-load_js('jquery-ui');
-load_js('jquery-ui-timepicker-addon.min.js');
-load_js('datatables');
-load_js('datatables_filtering_delay');
-
-
 $q = $_GET['q'];
 
-
-$tags = Database::get()->queryArray("SELECT id, tag FROM tags WHERE course_id = ?d AND tag LIKE ?s", $course_id, "%$q%");
-if($tags){
-    foreach($tags as $tag){
-        $tags2[] = array("id"=>$tag->tag, "text"=>$tag->tag);
-        //$tags2[] = array("text"=>$tag->tag);
+$taglist = Database::get()->queryArray("SELECT id, tag FROM tags WHERE course_id = ?d AND tag LIKE ?s GROUP BY tag", $course_id, "%$q%");
+if ($taglist) {
+    foreach ($taglist as $tag) {
+        $tags[] = array('id' => $tag->tag, 'text' => $tag->tag);
     }
-}else{
-    $tags2[] = array("text"=>"");
+} else {
+    $tags[] = array('text' => '');
 }
 
-
-//echo $tags2;
-echo json_encode($tags2);
+echo json_encode($tags);

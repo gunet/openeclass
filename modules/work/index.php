@@ -346,14 +346,14 @@ function add_assignment() {
             $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
                     . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
             
-            //tags
+            // tags
             if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
+                // delete all the previous for this item, course
                 Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
                 $tagsArray = explode(',', $_POST['tags']);
                 foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
+                    // insert all the new ones
+                    if ($tagItem) {
                         Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
                     }
                 }
@@ -628,6 +628,7 @@ function new_assignment() {
                     dataType: 'json',
                     data: function(term, page) {
                         return {
+                            course: '" . js_escape($course_code) . "',
                             q: term
                         };
                     },
@@ -825,12 +826,12 @@ function show_edit_assignment($id) {
         $langStudents, $langMove, $langWorkFile, $themeimg,
         $langLessOptions, $langMoreOptions, $langTags, $langWorkOnlineText, $langWorkSubType;
     
-    //initialize the tags
-    $answer = "";
+    // initialize the tags
+    $answer = '';
     if (isset($id)) {
         $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
         foreach ($tags_init as $tag) {
-            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
+            $arrayTemp = "{id:\"" . js_escape($tag->tag) . "\" , text:\"" . js_escape($tag->tag) . "\"},";
             $answer = $answer . $arrayTemp;
         }
     }

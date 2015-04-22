@@ -495,7 +495,7 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
                     }
                     $class_vis = ($visibility == 0 or !$module_visible or $status == 'del')? ' class="not_visible"': ' ';                            
                     $ltitle = q(($row->title == '')? $row->url: $row->title);
-                    $linkcontent .= "<br />".icon('fa-film')."&nbsp;&nbsp;$videolink</a>";
+                    $linkcontent .= "<br />".icon('fa-film')."&nbsp;&nbsp;$videolink";
                     if (!$module_visible) {
                             $linkcontent .= " <i>($langInactiveModule)</i>";
                     }

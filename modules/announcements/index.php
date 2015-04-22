@@ -594,14 +594,13 @@ if (isset($_GET['an_id'])) {
     }
     
     
-
-//initialize the tags
-$answer = "";
-if(isset($modify)){
+// initialize the tags
+$answer = '';
+if (isset($modify)) {
     $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $modify, $course_id);
-    foreach($tags_init as $tag){
-        $arrayTemp = "{id:\"".$tag->tag."\" , text:\"".$tag->tag."\"},";
-        $answer = $answer.$arrayTemp;
+    foreach ($tags_init as $tag) {
+        $arrayTemp = "{id:\"" . js_escape($tag->tag) . "\" , text:\"". js_escape($tag->tag) . "\"},";
+        $answer = $answer . $arrayTemp;
     } 
 }
 
@@ -642,6 +641,7 @@ $head_content .= "<script type='text/javascript'>
                     dataType: 'json',
                     data: function(term, page) {
                         return {
+                            course: '" . js_escape($course_code) . "',
                             q: term
                         };
                     },

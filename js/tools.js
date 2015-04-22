@@ -365,7 +365,7 @@ function icon_src_to_name(src) {
 
 function checkFileSize(input, maxSize) {
     var file = input[0].files[0];
-    if (file.size > maxSize || file.fileSize > maxSize) {
+    if (file && (file.size > maxSize || file.fileSize > maxSize)) {
         alert(langMaxFileSizeExceeded);
         return false;
     }

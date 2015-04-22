@@ -155,7 +155,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('LANG', $language);
 
     if (!$is_embedonce) {
-        //Remove search if not enabled
+        // Remove search if not enabled
         if (!get_config('enable_search')) {
             $t->set_block('mainBlock', 'searchBlock', 'delete');
         }
@@ -252,44 +252,44 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('ECLASS_LEFTNAV_EXTRAS', $GLOBALS['leftNavExtras']);
     }
 
-    //if user is logged in display the logout option
+    // if user is logged in display the logout option
     if (isset($_SESSION['uid'])) {
-        $t->set_var('LANG_USER', $langUserHeader);
+        $t->set_var('LANG_USER', q($langUserHeader));
         $t->set_var('USER_NAME', q($_SESSION['givenname']));
         $t->set_var('USER_SURNAME', q($_SESSION['surname']));
         $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
         $t->set_var('USERNAME', q($_SESSION['uname']));
-        $t->set_var('LANG_PROFILE', $GLOBALS['langMyProfile']);
-        $t->set_var('PROFILE_LINK', $urlServer . "main/profile/display_profile.php");
-        $t->set_var('LANG_MESSAGES', $GLOBALS['langMyDropBox']);
-        $t->set_var('MESSAGES_LINK', $urlServer . "modules/dropbox/index.php");
-        $t->set_var('LANG_COURSES', $GLOBALS['langMyPersoLessons']);
-        $t->set_var('COURSES_LINK', $urlServer . "main/my_courses.php");        
-        $t->set_var('LANG_AGENDA', $langMyAgenda);
-        $t->set_var('AGENDA_LINK', $urlServer . "main/personal_calendar/index.php");
-        $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);
-        $t->set_var('NOTES_LINK', $urlServer . 'main/notes/index.php');
-        $t->set_var('LANG_STATS', $GLOBALS['langMyStats']);
-        $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");
-        $t->set_var('LANG_LOGOUT', $langLogout);
-        $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
-        $t->set_var('MY_COURSES', $GLOBALS['langMyCoursesSide']);
-        $t->set_var('MY_MESSAGES', $GLOBALS['langNewMyMessagesSide']);
-        $t->set_var('LANG_ANNOUNCEMENTS', $GLOBALS['langMyAnnouncements']);
-        $t->set_var('ANNOUNCEMENTS_LINK', $urlServer . "modules/announcements/myannouncements.php");
+        $t->set_var('LANG_PROFILE', q($GLOBALS['langMyProfile']));
+        $t->set_var('PROFILE_LINK', $urlAppend . 'main/profile/display_profile.php');
+        $t->set_var('LANG_MESSAGES', q($GLOBALS['langMyDropBox']));
+        $t->set_var('MESSAGES_LINK', $urlAppend . 'modules/dropbox/index.php');
+        $t->set_var('LANG_COURSES', q($GLOBALS['langMyPersoLessons']));
+        $t->set_var('COURSES_LINK', $urlAppend . 'main/my_courses.php');        
+        $t->set_var('LANG_AGENDA', q($langMyAgenda));
+        $t->set_var('AGENDA_LINK', $urlAppend . 'main/personal_calendar/index.php');
+        $t->set_var('LANG_NOTES', q($GLOBALS['langNotes']));
+        $t->set_var('NOTES_LINK', $urlAppend . 'main/notes/index.php');
+        $t->set_var('LANG_STATS', q($GLOBALS['langMyStats']));
+        $t->set_var('STATS_LINK', $urlAppend . 'main/profile/personal_stats.php');
+        $t->set_var('LANG_LOGOUT', q($langLogout));
+        $t->set_var('LOGOUT_LINK', $urlAppend . 'index.php?logout=yes');
+        $t->set_var('MY_COURSES', q($GLOBALS['langMyCoursesSide']));
+        $t->set_var('MY_MESSAGES', q($GLOBALS['langNewMyMessagesSide']));
+        $t->set_var('LANG_ANNOUNCEMENTS', q($GLOBALS['langMyAnnouncements']));
+        $t->set_var('ANNOUNCEMENTS_LINK', $urlAppend . 'modules/announcements/myannouncements.php');
         if (get_config('personal_blog')) {
-            $t->set_var('LANG_MYBLOG', $GLOBALS['langMyBlog']);
-            $t->set_var('MYBLOG_LINK', $urlServer . "modules/blog/index.php");
-        } else {
+            $t->set_var('LANG_MYBLOG', q($GLOBALS['langMyBlog']));
+            $t->set_var('MYBLOG_LINK', $urlAppend . 'modules/blog/index.php');
+        } elseif ($menuTypeID > 0) {
             $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
         }
-        $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
-        $t->set_var('langSave', $GLOBALS['langSave']);
-        $t->set_var('langAllNotes', $GLOBALS['langAllNotes']);
-        $t->set_var('langAllMessages', $GLOBALS['langAllMessages']);
-        $t->set_var('langNoteTitle', $langNoteTitle);
-        $t->set_var('langEnterNote', $langEnterNote);
-        $t->set_var('langFieldsRequ', $langFieldsRequ);
+        $t->set_var('QUICK_NOTES', q($GLOBALS['langQuickNotesSide']));
+        $t->set_var('langSave', q($GLOBALS['langSave']));
+        $t->set_var('langAllNotes', q($GLOBALS['langAllNotes']));
+        $t->set_var('langAllMessages', q($GLOBALS['langAllMessages']));
+        $t->set_var('langNoteTitle', q($langNoteTitle));
+        $t->set_var('langEnterNote', q($langEnterNote));
+        $t->set_var('langFieldsRequ', q($langFieldsRequ));
 
         $t->set_var('LOGGED_IN', 'true');
     } else {

@@ -799,7 +799,6 @@ jContent;
      * Build a Tree Node Picker (UI). The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
      * - jquery
-     * - jquery-ui
      * - jstree
      * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
      *
@@ -829,7 +828,6 @@ jContent;
      * Build a Tree Node Picker (UI) for attaching courses under tree nodes. The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
      * - jquery
-     * - jquery-ui
      * - jstree
      * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
      *
@@ -863,7 +861,6 @@ jContent;
      * Build a Tree Node Picker (UI) for attaching users under tree nodes. The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
      * - jquery
-     * - jquery-ui
      * - jstree
      * - (optional) onsubmit='return validateNodePickerForm();' for the form using the node Picker
      *
