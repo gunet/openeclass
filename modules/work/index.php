@@ -1880,7 +1880,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $comments .= "&nbsp;<span>" . standard_text_escape($row->grade_comments) . "</span>";
                 } else {
                     $label = '';
-                    $comments .= '';
+                    $comments = '';
                 }
                 $tool_content .= "<div style='padding-top: .5em;'>$label
 				  $comments
