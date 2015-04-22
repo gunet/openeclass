@@ -86,6 +86,10 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         } elseif ($rtype == 'forum_post') {
             $res = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $rid);
             $rcontent = $res->post_text;
+        } elseif ($rtype == 'link') {
+            $res = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $rid);
+            $rcontent = $res->url;
+            $link_title = $res->title;
         }
         
         Log::record($cid, MODULE_ID_ABUSE_REPORT, LOG_INSERT,
@@ -128,6 +132,11 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             }
             $content_type = $langAComment;
             $content = q($res->content);
+        } elseif ($rtype == 'link') {
+            $content_type = $langLink;
+            $content = "<a href='" . $urlServer . "modules/link/go.php?course=".course_id_to_code($cid)."&amp;id=$rid&amp;url=" .
+                urlencode($rcontent) . "'>" . q($link_title) . "</a>";
+            $url = $urlServer."modules/link/?course=".course_id_to_code($cid);
         }
         
         $msg_body = sprintf($langAbuseReportPMBody, $content_type, q($reason), q($msg), $content, $url);

@@ -63,6 +63,13 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                 $content_type = $langAForumPost;
                 $content = mathfilter($result->post_text, 12, "../../courses/mathimg/");
                 $rcontent = $result->post_text;
+            } elseif ($rtype == 'link') {
+                $result = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $rid);
+                $content_type = $langLink;
+                $rcontent = $result->url;
+                $url = $urlServer."modules/link/?course=".$course_code;
+                $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$rid&amp;url=" .
+                urlencode($rcontent) . "'>" . q($result->title) . "</a>";
             }
             
             Log::record($course_id, MODULE_ID_ABUSE_REPORT, LOG_MODIFY,
@@ -122,7 +129,8 @@ if (!$nbrReports) {
                           'other' => $langOther);
     
     $resource_types = array('comment' => $langComment,
-                            'forum_post' => $langForumPost);
+                            'forum_post' => $langForumPost,
+                            'link' => $langLink);
     
     $maxpage = 1 + intval($total_reports / $limitReportsPage);
     if ($maxpage > 0) {
@@ -202,6 +210,22 @@ if (!$nbrReports) {
                                  'class' => 'delete',
                                  'confirm' => $langConfirmDeleteReportedResource),
                        ));
+        } elseif ($report->rtype == 'link') {
+            $res = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $report->id);
+            $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$report->id&amp;url=" .
+                urlencode($res->url) . "'>" . q($res->title) . "</a>";
+            $visiturl = $urlServer."modules/link/?course=$course_code";
+            $options = action_button(array(
+                    array('title' => $langAbuseReportClose,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
+                            'icon' => 'fa-archive',
+                            'confirm' => $langConfirmAbuseReportClose,
+                            'confirm_title' => $langAbuseReportClose,
+                            'confirm_button' => $langClose),
+                    array('title' => $langVisitReportedResource,
+                            'url' => $visiturl,
+                            'icon' => 'fa-external-link'),
+            ));
         }
         
         $tool_content .= "<tr>

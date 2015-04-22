@@ -221,6 +221,15 @@ function abuse_report_show_flag ($rtype, $rid, $course_id, $is_editor) {
             } else {
                 return false;
             }
+        } elseif ($rtype == 'link') {
+            $result = Database::get()->querySingle("SELECT `user_id` FROM `link` WHERE `id` = ?d", $rid);
+            if ($result) {
+                if ($result->user_id == $_SESSION['uid']) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
         } else { //unknown rtype
             return false;
         }

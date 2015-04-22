@@ -21,6 +21,7 @@
 
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/rating/class.rating.php';
+require_once 'modules/abuse_report/abuse_report.php';
 
 function makedefaultviewcode($locatie) {
     global $aantalcategories;
@@ -131,7 +132,13 @@ function showlinksofcategory($catid) {
                     ));
                     $tool_content .= "</td>";
                 } else {
-                    $tool_content .= "<td>&nbsp;</td>";
+                    if (abuse_report_show_flag('link', $myrow->id, $course_id, $is_editor)) {
+                        $flag_arr = abuse_report_action_button_flag('link', $myrow->id, $course_id);
+                    
+                        $tool_content .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
+                    } else {
+                        $tool_content .= "<td>&nbsp;</td>";
+                    }
                 }
             }
         }
