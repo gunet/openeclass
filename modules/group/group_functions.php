@@ -48,10 +48,10 @@ function initialize_group_info($group_id = false) {
             header("Location: {$urlServer}modules/group/index.php?course=$course_code");
             exit;
         }
-        $group_name = $res->name;
-        $group_description = $res->description;
+        $group_name = Session::has('name') ? Session::get('name') : $res->name;
+        $group_description = Session::has('description') ? Session::get('description') : $res->description;
         $forum_id = $res->forum_id;
-        $max_members = $res->max_members;
+        $max_members = Session::has('maxStudent') ? Session::get('maxStudent') : $res->max_members;
         $secret_directory = $res->secret_directory;
         $member_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM group_members
                                                                         WHERE group_id = ?d
