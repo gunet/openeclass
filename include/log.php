@@ -174,6 +174,8 @@ class Log {
                         $tool_content .= "<td>" . $langExternalLinks . "</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
                         $tool_content .= "<td>" . $langCourseInfo . "</td>";
+                    } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
+                        $tool_content .= "<td>" . $langAbuseReport . "</td>";
                     } else {                        
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
@@ -803,14 +805,15 @@ class Log {
     
         global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
-               $langAbuseReportOpen, $langAbuseReportClosed; 
+               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks; 
         
         $reports_cats = array('rudeness' => $langRudeness,
                               'spam' => $langSpam,
                               'other' => $langOther);
         
         $resource_types = array('comment' => $langComment,
-                                'forum_post' => $langForumPost);
+                                'forum_post' => $langForumPost,
+                                'link' => $langLinks);
                     
         $details = unserialize($details);
     
