@@ -47,6 +47,7 @@ $head_content .= "<script type='text/javascript'>
         $('#select-tutor').select2();              
     });
     </script>
+    <script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n    
 ";
 if (!($is_editor or $is_tutor)) {
     header('Location: group_space.php?course=' . $course_code . '&group_id=' . $group_id);
@@ -62,7 +63,7 @@ if (isset($_POST['modify'])) {
     $v->rule('numeric', array('maxStudent'));
     $v->rule('min', array('maxStudent'), 1);
     $v->labels(array(
-        'name' => "$langTheField $langGroupName",
+        'name' => "$langTheField $langNewGroups",
         'maxStudent' => "$langTheField $langMax $langGroupPlacesThis"
     ));
     if($v->validate()) {    

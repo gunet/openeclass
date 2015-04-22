@@ -297,11 +297,21 @@ if ($is_editor) {
                                                                         `group`.course_id = ?d)
                                 GROUP BY u.id
                                 ORDER BY u.surname, u.givenname", $course_id, $course_id);
+        //die(var_dump(max($placeAvailableInGroups)));
+        //['20' => 1]
+        // gets highest group value 1
+        //finds groups with  highest value 1
+        // gets first group with highest value and adds user id
         foreach ($resUserSansGroupe as $idUser) {
+            
             $idGroupChoisi = array_keys($placeAvailableInGroups, max($placeAvailableInGroups));
             $idGroupChoisi = $idGroupChoisi[0];
-            $userOfGroups[$idGroupChoisi][] = $idUser->id;
-            $placeAvailableInGroups[$idGroupChoisi] --;
+            if ($placeAvailableInGroups[$idGroupChoisi] > 0){            
+                $userOfGroups[$idGroupChoisi][] = $idUser->id;
+                $placeAvailableInGroups[$idGroupChoisi] --;
+            } else {
+                continue;
+            }
         }
 
         // NOW we have $userOfGroups containing new affectation. We must write this in database
