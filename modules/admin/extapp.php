@@ -84,14 +84,21 @@ if ($appName) {
     $tool_content .="<table class=\"table-default dataTable no-footer extapp-table\">\n";
     $tool_content.="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
     $tool_content.="\n";
-    /*foreach (ExtAppManager::getApps() as $app) {
+    foreach (ExtAppManager::getApps() as $app) {
         $tool_content .="<tr>\n";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
-        $tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
-        $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>" . $app->getDisplayName() . "</a></td>\n";
+        //$tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
+        //$tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>" . $app->getDisplayName() . "</a></td>\n";
+        
+        $tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>";
+        if ($app->getAppIcon() !== null) {
+            $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
+        }
+        $tool_content .= $app->getDisplayName() ."</a></td>\n";
+        
         $tool_content .= "<td>" . $app->getShortDescription() . "</td>\n";
         $tool_content .="</tr>\n";
-    }*/
+    }
     $tool_content .="<tr>\n";
     $tool_content .= "<td style=\"width:90px;\"><a href=\"bbbmoduleconf.php\"><img class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></td>\n";
     $tool_content .= "<td class=\"text-muted\"><p>Το υποσύστημα <b>Τηλεσυνεργασίας</b> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p><p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p></td>\n";
