@@ -2702,7 +2702,7 @@ $langAdministratorForum = 'Gestion des Forums';
 $langAdministratorGroup = "Gestion des Groupes d'apprenants";
 $langAltAuthStudentReq = "Activer la demande $langsOfStudent qui se connecte via un mode alternatif d'authentification";
 $langEditAuth = "Changer le mode d'authentification";
-$langEditAuthMethod = "Mode d'authentification :";
+$langEditAuthMethod = "Mode d'authentification";
 $langEditAuthSetPass = "Il faut définir un nouveau mot de passe pour l'utilisateur.";
 $langUsersOf = "des utilisateurs"
 ;

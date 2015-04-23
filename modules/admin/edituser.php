@@ -104,7 +104,7 @@ if ($u) {
                             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
                             <fieldset>                        
                             <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langEditAuthMethod</label>
+                            <label class='col-sm-2 control-label'>$langEditAuthMethod:</label>
                               <div class='col-sm-10'>" . selection($auth_names, 'auth', intval($current_auth), "class='form-control'") . "</div>
                             </div>
                             <div class='col-sm-offset-2 col-sm-10'>

@@ -2551,7 +2551,7 @@ $langAdministratorForum = 'Forum Management';
 $langAdministratorGroup = 'Group Management';
 $langAltAuthStudentReq = 'Activate new account requests for students logging in via alternative authentication methods';
 $langEditAuth = 'Change authentication method';
-$langEditAuthMethod = 'Authentication method:';
+$langEditAuthMethod = 'Authentication method';
 $langEditAuthSetPass = 'You need to set a new password for the user.';
 $langUsersOf = "users'";
 $langOfUser = "user's";
@@ -3957,5 +3957,3 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langOpenDelosReplaceInfo = "Already existing links will be refreshed with current metadata.";
-$langOpenDelosDescription = "<p>OpenDelos is an open source platform for live streaming and recording video lectures commissioned by GUNET, the Greek Universities Association.</p>
-<p>The software supports the <a href='http://ocw-project.gunet.gr/'>national Open Courses initiative</a>, complementary to the <a href='http://openeclass.org/'>learning management system Open eClass</a>, and the national portal for aggregating and searching lecture metadata, as a common platform for all Greek educational institutions.</p>";
