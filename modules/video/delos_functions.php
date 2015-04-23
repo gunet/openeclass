@@ -76,10 +76,23 @@ function requestDelosJSON() {
         $jsonbaseurl .= (stringEndsWith($jsonbaseurl, "/")) ? '' : '/';
         $jsonurl = $jsonbaseurl . $course_code;
         // request json from opendelos
-        @$json = file_get_contents($jsonurl);
+        $json = httpGetRequest($jsonurl);        
         $jsonObj = ($json) ? json_decode($json) : null;
     }
     return $jsonObj;
+}
+
+function httpGetRequest($url) {
+    $response = null;
+    if (!extension_loaded('curl')) {
+        $response = file_get_contents($url);
+    } else {
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($ch);
+        curl_close($ch);
+    }
+    return $response;
 }
 
 function displayDelosForm($jsonObj) {
