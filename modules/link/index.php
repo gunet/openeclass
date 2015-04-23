@@ -123,6 +123,14 @@ if (isset($_GET['urlview'])) {
     $urlview = '';
 }
 
+if (isset($_GET['socialview'])) {
+    $socialview = true;
+    $socialview_param = '&amp;socialview';
+} else {
+    $socialview = false;
+    $socialview_param = '';
+}
+
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if ($is_editor) {
@@ -484,12 +492,19 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>";
             if ($numberofsocialcategory !== 0) {
-                $tool_content .= "<tr class='list-header'><th class='text-left'>$langSocialCategory</th>";
+                if (!$socialview) {
+                    $socialview_icon = "&nbsp;&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;socialview'>" . icon('fa-folder', $showall) ."</a>";
+                } else {
+                    $socialview_icon = "&nbsp;&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview'>" . icon('fa-folder-open', $shownone) ."</a>";
+                }
+                $tool_content .= "<tr class='list-header'><th class='text-left'>".$langSocialCategory.$socialview_icon."</th>";
                 if (isset($_SESSION['uid']) && !$is_in_tinymce) {
                     $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
                 }
                 $tool_content .= "</tr>";
-                showlinksofcategory(-2);
+                if ($socialview) {
+                    showlinksofcategory(-2);
+                }
             } else {
                 $tool_content .= "<tr class='list-header'><th class='text-left list-header'>$langSocialCategory</th>";
                 if (isset($_SESSION['uid']) && !$is_in_tinymce) {
@@ -514,9 +529,9 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
 
             $tool_content .= "$langCategorisedLinks&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params."'>" . icon('fa-folder', $showall)."</a>";
+                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params."'>" .icon('fa-folder-open', $shownone)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
             }
             $tool_content .= "</th>";
             if ($display_tools) {
@@ -528,9 +543,9 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
 
             $tool_content .= "$langCategorisedLinks&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params."'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
             } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params."'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
             }$tool_content .= "</th>";
             if ($display_tools) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
@@ -559,7 +574,7 @@ if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params' class='open-category'>" . q($myrow->name) . "</a>";
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {

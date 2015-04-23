@@ -214,7 +214,7 @@ if (!$nbrReports) {
             $res = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $report->id);
             $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$report->id&amp;url=" .
                 urlencode($res->url) . "'>" . q($res->title) . "</a>";
-            $visiturl = $urlServer."modules/link/?course=$course_code";
+            $visiturl = $urlServer."modules/link/?course=$course_code&amp;socialview";
             $editurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->id&amp;action=editlink";
             $deleteurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->id&amp;action=deletelink";
             $options = action_button(array(
