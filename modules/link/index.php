@@ -359,8 +359,7 @@ if ($is_editor) {
                         array('title' => $langBack,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                               'icon' => 'fa-reply',
-                              'level' => 'primary-label',
-                              'show' => $is_editor)));
+                              'level' => 'primary-label')));
             
             } else {
                 $ext = (isset($urlview)? "&amp;urlview=$urlview": '');
