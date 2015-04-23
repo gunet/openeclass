@@ -57,10 +57,10 @@ $head_content .= <<<hContent
             $('#result').html(checkStrength($('#password').val()))
         });
                         
-        $('#selection_auth').change(function() {
+        $('#auth_selection').change(function() {
             var state = $(this).attr('value')!='1';            
             $('#pass_form').prop('disabled', state);             
-        }).change();
+        });
     });
 
 /* ]]> */
@@ -144,8 +144,10 @@ if ($submit) {
             validateNode(intval($depid), isDepartmentAdmin());
             $hasher = new PasswordHash(8, false);
             $password_encrypted = $hasher->HashPassword($password);
+            $mail_message = $password;
         } else {
             $password_encrypted = $auth_ids[$auth_methods_form];
+            $mail_message = $langPassSameAuth;
         }        
         $uid = Database::get()->query("INSERT INTO user
                                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
@@ -179,7 +181,7 @@ if ($submit) {
 $langDestination $givenname_form $surname_form
 
 $langYouAreReg $siteName $type_message, $langSettings $uname
-$langPass : $password
+$langPass : $mail_message
 $langAddress $siteName $langIs: $urlServer
 $langProblem
 
