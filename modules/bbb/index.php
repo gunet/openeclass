@@ -98,7 +98,7 @@ $head_content .= "
 		}
 		
 		$(function() {
-			$('#tags_1').select2({tags:[]});
+			$('#tags_1').select2({tags:[], formatNoMatches: ''});
 		});
 </script>
 ";
