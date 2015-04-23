@@ -28,6 +28,7 @@ require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/pwgen.inc.php';
+require_once 'modules/auth/auth.inc.php';
 require_once 'hierarchy_validations.php';
 
 $tree = new Hierarchy();
@@ -55,6 +56,11 @@ $head_content .= <<<hContent
         $('#password').keyup(function() {
             $('#result').html(checkStrength($('#password').val()))
         });
+                        
+        $('#selection_auth').change(function() {
+            var state = $(this).attr('value')!='1';            
+            $('#pass_form').prop('disabled', state);             
+        }).change();
     });
 
 /* ]]> */
@@ -122,7 +128,7 @@ if ($submit) {
     $proflanguage = $session->validate_language_code(@$_POST['language']);
     $verified_mail = isset($_REQUEST['verified_mail_form']) ? intval($_REQUEST['verified_mail_form']) : 2;
 
-    
+    $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
     // check if user name exists
     $user_exist = Database::get()->querySingle("SELECT username FROM user WHERE username=?s", $uname);
 
@@ -133,10 +139,14 @@ if ($submit) {
         $tool_content .= "<div class='alert alert-danger'>$langUserFree <br /><a href='$backlink'>$langAgain</a></div>";
     } elseif (!email_seems_valid($email_form)) {
         $tool_content .= "<div class='alert alert-danger'>$langEmailWrong <br /><a href='$backlink'>$langAgain</a></div>";        
-    } else {
-        validateNode(intval($depid), isDepartmentAdmin());
-        $hasher = new PasswordHash(8, false);
-        $password_encrypted = $hasher->HashPassword($password);
+    } else {        
+        if ($auth_methods_form == 1) { // eclass authentication
+            validateNode(intval($depid), isDepartmentAdmin());
+            $hasher = new PasswordHash(8, false);
+            $password_encrypted = $hasher->HashPassword($password);
+        } else {
+            $password_encrypted = $auth_ids[$auth_methods_form];
+        }        
         $uid = Database::get()->query("INSERT INTO user
                                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
                                 VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s , " . DBHelper::timeAfter() . "
@@ -241,17 +251,51 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
             <div class='col-sm-10'>
                 <input class='form-control' id='Username' type='text' name='uname' value='" . q($pu) . "' autocomplete='off' placeholder='$langUsername'>
             </div>
-        </div>
-        <div class='form-group'>
+        </div>";
+        
+        $eclass_method_unique = TRUE;        
+        $auth = get_auth_active_methods();
+        foreach ($auth as $methods) {
+            if ($methods != 1) {
+                $eclass_method_unique = FALSE;
+            }
+        }
+        
+        if (!$eclass_method_unique) {
+            $auth_m = array();
+            $tool_content .= "<div class='form-group'>
+            <label for='passsword' class='col-sm-2 control-label'>$langMethods</label>
+            <div class='col-sm-10'>";        
+        
+            foreach ($auth as $methods) { 
+                $auth_text = get_auth_info($methods);
+                $auth_m[$methods] = $auth_text;            
+            }
+            $tool_content .= selection($auth_m, "auth_methods_form", '', "id = 'auth_selection' class='form-control'");
+            $tool_content .= "</div></div>";
+
+            $tool_content .= "<div class='form-group' id='pass_form'>
+            <label for='passsword' class='col-sm-2 control-label'>$langPass:</label>
+                <div class='col-sm-10'>
+                  <input class='form-control' type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  placeholder='$langPass'/><span id='result'></span>
+                </div>
+            </div>";
+            
+        } else {
+        
+        $tool_content .= "<div class='form-group'>
         <label for='passsword' class='col-sm-2 control-label'>$langPass:</label>
             <div class='col-sm-10'>
               <input class='form-control' type='text' name='password' value='" . genPass() . "' id='password' autocomplete='off'  placeholder='$langPass'/><span id='result'></span>
             </div>
-        </div>
+        </div>";
+        }
+        
+        $tool_content .= "
         <div class='form-group'>
         <label for='email' class='col-sm-2 control-label'>$langEmail:</label>
             <div class='col-sm-10'>
-              <input class='form-control' id='email' type='text' name='email_form' value='" . q($pe) . "' palceholder='$langEmail'>
+              <input class='form-control' id='email' type='text' name='email_form' value='" . q($pe) . "' placeholder='$langEmail'>
             </div>
         </div>
         <div class='form-group'>
