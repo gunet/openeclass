@@ -33,6 +33,9 @@ require_once "modules/document/doc_init.php";
 
 load_js('tools.js');
 
+$toolName = $langDoc;
+$pageName = $langCreateDoc;
+
 $uploadPath = $editPath = false;
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
@@ -110,7 +113,7 @@ if ($can_upload) {
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'class' => 'back_btn')
-                            ),false);
+                            ));
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' role='form' action='$upload_target_url' method='post'>
       $htmlPath
@@ -135,7 +138,7 @@ if ($can_upload) {
 	<div class='form-group'>
         <div class='col-xs-offset-2 col-xs-10'>
           <button type='submit' value='" . $langSubmit . "' class='btn btn-primary'>
-            $langSubmit
+            $langSave
           </button>
         </div>
       </div>
