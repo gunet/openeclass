@@ -127,7 +127,8 @@ if ($is_editor) {
             $tool_content .= action_bar(array(
                 array('title' => $langNewBBBSession,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
-                      'icon' => 'fa-calendar',
+                      'icon' => 'fa-plus-circle',
+                      'button-class' => 'btn-success',
                       'level' => 'primary-label',
                       'show' => get_total_bbb_servers())));
         }

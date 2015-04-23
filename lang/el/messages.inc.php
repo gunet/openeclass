@@ -4293,13 +4293,13 @@ $langBBBEnableRecordings = 'Δυνατότητα καταγραφής βιντε
 
 $langNoBBBSesssions = "Δεν υπάρχουν προγραμματισμένες τηλεδιασκέψεις";
 $langBBB = "Τηλεσυνεργασία";
-$langNewBBBSession = "Προγραμματισμός νέας τηλεσυνεργασίας";
+$langNewBBBSession = "Νέα Τηλεσυνεργασία";
 $langNewBBBSessionInfo = "Στοιχεία νέας τηλεσυνεργασίας";
-$langNewBBBSessionStart = "Έναρξη τηλεσυνεργασίας";
-$langNewBBBSessionDesc = "Σύντομη περιγραφή τηλεσυνεργασίας";
+$langNewBBBSessionStart = "Έναρξη";
+$langNewBBBSessionDesc = "Σύντομη περιγραφή";
 $langNewBBBSessionType = "Είδος τηλεσυνεργασίας";
-$langNewBBBSessionPublic = "Μπορούν να συμμετάσχουν όλοι οι εγγεγραμμένοι χρήστες της πλατφόρμας (εκπαιδευόμενοι άλλων μαθημάτων)";
-$langNewBBBSessionPrivate = "Μπορούν να συμμετάσχουν μόνο οι εγγεγραμμένοι χρήστες του μαθήματος";
+$langNewBBBSessionPublic = "Συμμετέχουν <b>όλοι</b> οι εγγεγραμμένοι χρήστες <b>της πλατφόρμας</b>";
+$langNewBBBSessionPrivate = "Συμμετέχουν <b>μόνο</b>  οι εγγεγραμμένοι χρήστες <b>του μαθήματος</b>";
 $langBBBSessionJoin = "Σύνδεση";
 
 $langBBBUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
