@@ -245,7 +245,7 @@ function load_js($file, $init='') {
             $head_content .= css_link('bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
             $file = 'bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js';
         }   elseif ($file == 'spectrum') {
-            $head_content .= js_link('spectrum/spectrum.css');
+            $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
         }
         $head_content .= js_link($file);
