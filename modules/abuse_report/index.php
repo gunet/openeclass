@@ -215,6 +215,8 @@ if (!$nbrReports) {
             $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$report->id&amp;url=" .
                 urlencode($res->url) . "'>" . q($res->title) . "</a>";
             $visiturl = $urlServer."modules/link/?course=$course_code";
+            $editurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->id&amp;action=editlink";
+            $deleteurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->id&amp;action=deletelink";
             $options = action_button(array(
                     array('title' => $langAbuseReportClose,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
@@ -225,6 +227,14 @@ if (!$nbrReports) {
                     array('title' => $langVisitReportedResource,
                             'url' => $visiturl,
                             'icon' => 'fa-external-link'),
+                    array('title' => $langEditReportedResource,
+                          'url' => $editurl,
+                          'icon' => 'fa-edit'),
+                    array('title' => $langDeleteReportedResource,
+                          'url' => $deleteurl,
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmDeleteReportedResource),
             ));
         }
         
