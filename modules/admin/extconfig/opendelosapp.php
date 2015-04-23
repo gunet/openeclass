@@ -42,5 +42,9 @@ class OpenDelosApp extends ExtApp {
     public function getShortDescription() {
         return $GLOBALS['langOpenDelosDescription'];
     }
+    
+    public function getLongDescription() {
+        return $GLOBALS['langOpenDelosDescription'];
+    }
 
 }

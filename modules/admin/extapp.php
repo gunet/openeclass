@@ -36,11 +36,13 @@ $shouldEdit = isset($_GET['edit']);
 $shouldUpdate = isset($_GET['update']);
 $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null);
 
-$tool_content .= action_bar(array(
+if (!$shouldEdit) {
+    $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
+}
 
 if ($appName) {
     $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
@@ -76,7 +78,7 @@ if ($appName) {
 
         $tool_content .= "        <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>\n";
         $tool_content .= "      </fieldset>\n";
-        $tool_content .= "    </form>\n</div>\n</div>\n";
+        $tool_content .= "    </form>\n</div>\n</div>\n</div>\n";
         $tool_content.=$app->getLongDescription();
     }
 } else {
