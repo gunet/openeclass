@@ -361,7 +361,7 @@ if ($is_editor) {
                     'confirm_title' => $langEmtpyGroupsAll,
                     'show' => $num_of_groups > 0)));
 
-    $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
+    $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     $myIterator = 0;
     $num_of_groups = count($groupSelect);
     // groups list
@@ -412,7 +412,7 @@ if ($is_editor) {
 
 } else {
     // Begin student view
-    $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $course_id);
+    $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     if (count($q) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {
