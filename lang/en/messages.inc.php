@@ -3927,6 +3927,7 @@ $langGradebooks = "Gradebooks";
 $langChangeGradebookSuccess = "Gradebook activated successsfully";
 $langCreateGradebookSuccess = "Gradebook created successfully";
 $langNonPublicFile = 'Visible only to registered users';
+$langPrint = "Print";
 $langExerciseCompleted = "Exercise has been successfully completed.";
 $langFillBlanksStrict = "Strict Answer Validation";
 $langFillBlanksTolerant = "Tolerant Answer Validation";

@@ -550,6 +550,7 @@ $langExternalFileInfo = "Διεύθυνση (URL) εξωτερικού αρχε�
 $langCommonDocLink = "Κοινόχρηστο αρχείο";
 $langCommonDocLinkInvisible = "Αόρατο κοινόχρηστο αρχείο";
 $langNonPublicFile = 'Ορατό μόνο στους εγγεγραμμένους χρήστες';
+$langPrint = "Εκτύπωση";
 
 /* * ********************************************************
  * agenda.php

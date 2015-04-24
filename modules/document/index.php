@@ -1243,7 +1243,39 @@ if ($doc_count == 0) {
     if (!count($fileinfo)) {
         $tool_content .= "<tr><td colspan=10><p class='not_visible text-center'> - " . q($langNoDocuments) . " - </td></tr>";
     } else {
-    
+            $head_content .= "<script>
+            $(function(){
+                $('.fileURL').click(function (e)
+                {
+                    e.preventDefault();
+                    var fileURL = $(this).attr('href');
+                    var fileTitle = $(this).attr('title');
+                    bootbox.dialog({
+                        size: 'large',
+                        title: fileTitle,
+                        message: '<div class=\"row\">'+
+                                    '<div class=\"col-sm-12\">'+
+                                        '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                    '</div>'+
+                                '</div>',                          
+                        buttons: {
+                            success: {
+                                label: '<i class=\"fa fa-print\"></i> $langPrint',
+                                className: 'btn-primary',
+                                callback: function (d) {
+                                    var iframe = document.getElementById('fileFrame');
+                                    iframe.contentWindow.print();                                                               
+                                }
+                            },
+                            cancel: {
+                                label: '$langCancel',
+                                className: 'btn-default'
+                            }                        
+                        }
+                    });                    
+                });
+            });
+            </script>";
     // -------------------------------------
     // Display directories first, then files
     // -------------------------------------
