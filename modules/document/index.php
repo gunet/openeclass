@@ -1245,7 +1245,7 @@ if ($doc_count == 0) {
     } else {
             $head_content .= "<script>
             $(function(){
-                $('.fileURL').click(function (e)
+                $('.fileModal').click(function (e)
                 {
                     e.preventDefault();
                     var fileURL = $(this).attr('href');
