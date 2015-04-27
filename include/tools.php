@@ -250,7 +250,7 @@ function loggedInMenu() {
     if ($res2) {
         $status = $res2->status;
     }
-    if (isset($status) and ($status == USER_TEACHER)) {
+    if ((isset($status) and ($status === USER_TEACHER)) || $is_departmentmanage_user) {
         array_push($sideMenuText, $GLOBALS['langCourseCreate']);
         array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
         array_push($sideMenuImg, "fa-plus-circle");

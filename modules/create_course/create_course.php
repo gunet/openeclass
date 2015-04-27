@@ -25,7 +25,7 @@ $helpTopic = 'CreateCourse';
 
 require_once '../../include/baseTheme.php';
 
-if ($session->status !== USER_TEACHER) { // if we are not teachers
+if ($session->status !== USER_TEACHER && !$is_departmentmanage_user) { // if we are not teachers or department managers
     redirect_to_home_page();
 }
 
