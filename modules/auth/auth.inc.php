@@ -86,7 +86,7 @@ function get_auth_primary_method() {
 function check_auth_active($auth_id) {
     
     $auth = Database::get()->querySingle("SELECT auth_id, auth_default, auth_settings FROM auth WHERE auth_id = ?d", $auth_id);
-    if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($authrow->auth_settings))) {
+    if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($auth->auth_settings))) {
             return true;
     }
     return false;
