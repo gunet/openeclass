@@ -67,15 +67,10 @@ if (isset($_POST['submitExercise'])) {
         
         //tags
         if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-                $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "exe", $exerciseId, $tagItem, $course_id);
-                    }
-                }
+            require_once 'modules/tags/moduleElement.class.php';
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($exerciseId);
+            $moduleTag->syncTags($tagsArray);
         }
         
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);        
@@ -113,9 +108,11 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     //initialize the tags
     $answer = "";
     if (isset($exerciseId)) {
-        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
+        require_once 'modules/tags/moduleElement.class.php';
+        $moduleTag = new ModuleElement($exerciseId);
+        $tags_init = $moduleTag->getTags();        
         foreach ($tags_init as $tag) {
-            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
+            $arrayTemp = "{id:\"" . $tag . "\" , text:\"" . $tag . "\"},";
             $answer = $answer . $arrayTemp;
         }
     }
@@ -483,11 +480,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     <strong>$langTags:</strong>
                 </div>
                 <div class='col-sm-9'>";
-                    
-                $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-                    foreach($tags_list as $tag){
-                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
-                    }                   
+                require_once 'modules/tags/moduleElement.class.php';
+                $moduleTag = new ModuleElement($exerciseId);
+                $tags_list = $moduleTag->getTags();                       
+                foreach($tags_list as $tag){
+                    $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag."'>$tag</a> ";
+                }                   
 $tool_content .="</div>                
             </div>
         </div>

@@ -40,42 +40,34 @@ require_once 'include/action.php';
     $tool_content .= "<div class='panel-body'>";
     $tool_content .= "<h3>".$_GET['tag']."</h3>";
         
-    $tags_list = Database::get()->queryArray("SELECT * FROM tags WHERE tag = ?s AND course_id = ?d ORDER BY element_type", $tag, $course_id);
-        
+    $tags_list = Database::get()->queryArray("SELECT * FROM `tag_element_module`, `tags` WHERE `tags`.`name` = ?s AND `tags`.`course_id` = ?d ORDER BY module_id", $tag, $course_id);
         //check the element type
         foreach($tags_list as $tag){
-            if($tag->element_type == "announcement"){
-                
+            if($tag->module_id == MODULE_ID_ANNOUNCE){
                 $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
-                
-                $tool_content .= $langAnnouncement.": ";
-                $tool_content .= "<a href='../../modules/announcements/?course=".$course_code."&an_id=".$tag->element_id."'>$announce->title</a><br>";
+                $row_title = $langAnnouncement;
+                $link = "<a href='../../modules/announcements/?course=".$course_code."&an_id=".$tag->element_id."'>$announce->title</a><br>";            
             }
-            if($tag->element_type == "work"){
-                
+            if($tag->module_id == MODULE_ID_ASSIGN){
                 $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
-                
-                $tool_content .= $langWork.": ";
-                if($work->title){
-                    $title = $work->title;
-                }else{
-                    $title = $langGradebookNoTitle;
-                }
-                $tool_content .= "<a href='../../modules/work/?course=".$course_code."&id=".$tag->element_id."'>$work->title</a><br>";
+                $row_title = $langWork;
+                $link = "<a href='../../modules/work/?course=".$course_code."&id=".$tag->element_id."'>$work->title</a><br>";
             }
-            if($tag->element_type == "exe"){
-                
+            if($tag->module_id == MODULE_ID_EXERCISE){
                 $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
-                
-                $tool_content .= $langWork.": ";
-                if($exe->title){
-                    $title = $exe->title;
-                }else{
-                    $title = $langGradebookNoTitle;
-                }
-                $tool_content .= "<a href='../../modules/exercise/admin.php?course=".$course_code."&exerciseId=".$tag->element_id."'>$exe->title</a><br>";
+                $row_title = $langWork.": ";
+                $link = "<a href='../../modules/exercise/admin.php?course=".$course_code."&exerciseId=".$tag->element_id."'>$exe->title</a><br>";
             }
-        }
+            $tool_content .= "
+                <div class='row'>
+                    <div class='col-xs-2'>
+                        $row_title:
+                    </div>
+                    <div class='col-xs-10'>
+                        $link
+                    </div>
+                </div>";             
+        }       
         $tool_content .= "</div></div>";
 }
     

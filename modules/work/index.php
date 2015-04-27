@@ -348,15 +348,10 @@ function add_assignment() {
             
             // tags
             if (isset($_POST['tags'])) {
-                // delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                require_once 'modules/tags/moduleElement.class.php';
                 $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    // insert all the new ones
-                    if ($tagItem) {
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
-                    }
-                }
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->attachTags($tagsArray);
             }
             
             $secret = work_secret($id);
@@ -612,7 +607,7 @@ function new_assignment() {
         $('#tags').select2({
                 minimumInputLength: 2,
                 tags: true,
-                tokenSeparators: [', ', ' '],
+                tokenSeparators: [', '],
                 createSearchChoice: function(term, data) {
                   if ($(data).filter(function() {
                     return this.text.localeCompare(term) === 0;
@@ -829,9 +824,11 @@ function show_edit_assignment($id) {
     // initialize the tags
     $answer = '';
     if (isset($id)) {
-        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
-        foreach ($tags_init as $tag) {
-            $arrayTemp = "{id:\"" . js_escape($tag->tag) . "\" , text:\"" . js_escape($tag->tag) . "\"},";
+        require_once 'modules/tags/moduleElement.class.php';
+        $moduleTag = new ModuleElement($id);
+        $tags_init = $moduleTag->getTags();
+        foreach ($tags_init as $key => $tag) {
+            $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"" . js_escape($tag) . "\"},";
             $answer = $answer . $arrayTemp;
         }
     }
@@ -1208,15 +1205,10 @@ function edit_assignment($id) {
          
          //tags
          if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
-                $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
-                    }
-                }
+            require_once 'modules/tags/moduleElement.class.php';
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($id);
+            $moduleTag->syncTags($tagsArray);
          }
 
          if ($assign_to_specific && !empty($assigned_to)) {
@@ -1679,9 +1671,11 @@ function assignment_details($id, $row) {
                     <strong>$langTags:</strong>
                 </div>
                 <div class='col-sm-9'>";
-                    $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
+                    require_once 'modules/tags/moduleElement.class.php';
+                    $moduleTag = new ModuleElement($id);
+                    $tags_list = $moduleTag->getTags();
                     foreach($tags_list as $tag){
-                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
+                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag."'>$tag</a> ";
                     }                   
 $tool_content .="</div>                
             </div>   

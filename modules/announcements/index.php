@@ -347,16 +347,10 @@ if ($is_editor) {
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
             
             if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $id, $course_id);
+                require_once 'modules/tags/moduleElement.class.php';
                 $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //echo $tagItem;
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
-                    }
-                }
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->syncTags($tagsArray);                
             }
         } else { // add new announcement
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
@@ -373,13 +367,10 @@ if ($is_editor) {
             $log_type = LOG_INSERT;
             
             if (isset($_POST['tags'])) {
+                require_once 'modules/tags/moduleElement.class.php';
                 $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
-                    }
-                }
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->attachTags($tagsArray);  
             }
         }
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
@@ -576,10 +567,12 @@ if (isset($_GET['an_id'])) {
         $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
         $tool_content .= $row->content;
         
-        $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $row->id, $course_id);
+        require_once 'modules/tags/moduleElement.class.php';
+        $moduleTag = new ModuleElement($row->id);
+        $tags_list = $moduleTag->getTags();        
         $tool_content .= $langTags.": ";
         foreach($tags_list as $tag){
-            $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
+            $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag."'>$tag</a> ";
         }
         $tool_content .= "</div></div>";
     }
@@ -597,9 +590,11 @@ if (isset($_GET['an_id'])) {
 // initialize the tags
 $answer = '';
 if (isset($modify)) {
-    $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $modify, $course_id);
-    foreach ($tags_init as $tag) {
-        $arrayTemp = "{id:\"" . js_escape($tag->tag) . "\" , text:\"". js_escape($tag->tag) . "\"},";
+    require_once 'modules/tags/moduleElement.class.php';
+    $moduleTag = new ModuleElement($modify);
+    $tags_init = $moduleTag->getTags();    
+    foreach ($tags_init as $key => $tag) {
+        $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"". js_escape($tag) . "\"},";
         $answer = $answer . $arrayTemp;
     } 
 }

@@ -29,10 +29,10 @@ require_once 'include/lib/textLib.inc.php';
 
 $q = $_GET['q'];
 
-$taglist = Database::get()->queryArray("SELECT id, tag FROM tags WHERE course_id = ?d AND tag LIKE ?s GROUP BY tag", $course_id, "%$q%");
+$taglist = Database::get()->queryArray("SELECT id, name FROM tags WHERE course_id = ?d AND name LIKE ?s ORDER BY name", $course_id, "%$q%");
 if ($taglist) {
     foreach ($taglist as $tag) {
-        $tags[] = array('id' => $tag->tag, 'text' => $tag->tag);
+        $tags[] = array('id' => $tag->name, 'text' => $tag->name);
     }
 } else {
     $tags[] = array('text' => '');

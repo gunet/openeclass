@@ -1449,14 +1449,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
 #
 # table `tags`
 #
+$db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `module_id` int(11) NOT NULL,
+            `element_id` int(11) NOT NULL,
+            `tag_id` int(11) NOT NULL)");
+
 $db->query("CREATE TABLE IF NOT EXISTS tags (
-    `id` MEDIUMINT(11) NOT NULL auto_increment,
-    `element_type` VARCHAR(255) NOT NULL DEFAULT '',
-    `element_id` MEDIUMINT(11) NOT NULL ,
-    `user_id` VARCHAR(255) NOT NULL DEFAULT '',
-    `tag` TEXT,
-    `date` DATE DEFAULT NULL,
-    `course_id` INT(11) NOT NULL DEFAULT 0,
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `tag` VARCHAR(255) NOT NULL,
+    `course_id` INT(11) NOT NULL,
     PRIMARY KEY (id)) $charset_spec");
 
 
