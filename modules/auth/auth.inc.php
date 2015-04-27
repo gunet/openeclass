@@ -563,8 +563,7 @@ function process_login() {
                 }
             }
             if (!$exists and !$auth_allow) {
-                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
-                                                            'pass' => $pass));
+                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname));
                 $auth_allow = 4;
             }
         }
