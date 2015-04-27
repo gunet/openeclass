@@ -253,7 +253,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         if (isset($active_ui_languages)) {
             set_config('active_ui_languages', implode(' ', $active_ui_languages));
         } else {
-            set_config('active_ui_languages', 'el en';
+            set_config('active_ui_languages', 'el en');
         }
         set_config('phpMyAdminURL', $phpMyAdminURL);
         set_config('phpSysInfoURL', $phpSysInfoURL);
