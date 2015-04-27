@@ -66,12 +66,13 @@ try {
 
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
-    $language = langname_to_code($language);        
+    $language = langname_to_code($language);
     if (isset($_SESSION['langswitch'])) {
         $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
+        $_SESSION['givenname'] = $_SESSION['surname'] = '';
     }
     $session = new Session();
-    $uid = $session->user_id;    
+    $uid = $session->user_id;
     $session->active_ui_languages = array($language);
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
@@ -81,10 +82,10 @@ if (isset($language)) {
     $siteName = get_config('site_name');
     $Institution = get_config('institution');
     $InstitutionUrl = get_config('institution_url');
-    $urlServer = get_config('base_url');    
+    $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;    
+    $language = $session->language;
 }
 //Initializing Valitron (form validation library)
 require_once 'include/Valitron/Validator.php';
@@ -285,7 +286,7 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
                 , $dbname);
-                
+
         if (!isset($course_code) or empty($course_code)) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
             $errorMessagePath = "../../";
@@ -370,9 +371,9 @@ $modules = array(
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
     MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog'),
-    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),    
+    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')        
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
 );
 // ----------------------------------------
 // course admin modules
@@ -470,7 +471,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_WIKI . ",
-                                                " . MODULE_ID_GRADEBOOK . ",                                                  
+                                                " . MODULE_ID_GRADEBOOK . ",
                                                 " . MODULE_ID_ATTENDANCE . ",
                                                 " . MODULE_ID_LP . ")", $course_id);
     } elseif ($is_admin) {

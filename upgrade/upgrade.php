@@ -91,17 +91,17 @@ if (!DBHelper::tableExists('config')) {
 if (!DBHelper::fieldExists('user', 'id')) {
     // check for multiple usernames
     fix_multiple_usernames();
-    
+
     if (DBHelper::indexExists('user', 'user_username')) {
         Database::get()->query("ALTER TABLE user DROP INDEX user_username");
-    }        
+    }
     if (!DBHelper::fieldExists('user', 'whitelist')) {
         Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT");
         Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
     }
     if (!DBHelper::fieldExists('user', 'description')) {
         Database::get()->query("ALTER TABLE `user` ADD description TEXT");
-    }        
+    }
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -250,7 +250,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
         set_config('base_url', $urlServer);
         set_config('default_language', $language);
-        set_config('active_ui_languages', implode(' ', $active_ui_languages));        
+        if (isset($active_ui_languages)) {
+            set_config('active_ui_languages', implode(' ', $active_ui_languages));
+        } else {
+            set_config('active_ui_languages', 'el en';
+        }
         set_config('phpMyAdminURL', $phpMyAdminURL);
         set_config('phpSysInfoURL', $phpSysInfoURL);
 
@@ -358,9 +362,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('cours_user', 'course_id')) {
             Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
             $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
-            foreach ($t as $entry) {                
+            foreach ($t as $entry) {
               Database::get()->query("UPDATE cours_user SET course_id = $entry->cours_id WHERE code_cours = '$entry->code'");
-            }            
+            }
             Database::get()->query("ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)");
             Database::get()->query("CREATE INDEX course_user_id ON cours_user (user_id, course_id)");
             Database::get()->query("ALTER TABLE cours_user DROP code_cours");
@@ -374,7 +378,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
             Database::get()->query('ALTER TABLE annonces DROP code_cours');
         }
-    }    
+    }
     if (version_compare($oldversion, '2.3.1', '<')) {
         if (!DBHelper::fieldExists('prof_request', 'am')) {
             Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
@@ -644,7 +648,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('opencourses_enable', 0)");
 
         DBHelper::fieldExists('document', 'public') or
-                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");        
+                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
         DBHelper::fieldExists('cours', 'course_license') or
                 Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '0' AFTER `course_addon`");
         DBHelper::fieldExists("cours_user", "reviewer") or
@@ -2481,7 +2485,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
-        
+
         if (!DBHelper::fieldExists('auth', 'auth_title')) {
             Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
         }
@@ -2606,9 +2610,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE agenda SET source_event_id = id WHERE source_event_id IS NULL");
         Database::get()->query("UPDATE admin_calendar SET source_event_id = id WHERE source_event_id IS NULL");
         Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE source_event_id IS NULL");
-        
+
     }
-    
+
     // -----------------------------------
     // upgrade queries for 3.1
     // -----------------------------------
@@ -2645,7 +2649,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::fieldExists('blog_post', 'commenting')) {
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
-        }                
+        }
     }
 
     // update eclass version
