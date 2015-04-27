@@ -414,8 +414,10 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         }
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
-                               `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id") != null) && $ok;
+                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, 
+                               NULLIF(`category`, 0) + $videolinkcatid_offset,
+                               COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
+                               `date`, `visible`, `public` FROM video ORDER by id") != null) && $ok;
         
                 
         Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
@@ -439,7 +441,8 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
 
         $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
+                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, 
+                               NULLIF(`category`, 0) + $videolinkcatid_offset,
                                COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
                                `date`, `visible`, `public` FROM videolinks ORDER by id") != null) && $ok;
         
