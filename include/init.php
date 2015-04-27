@@ -409,13 +409,39 @@ if ($is_admin or $is_power_user) {
     $is_course_admin = false;
 }
 
+// the department manager has rights to the courses of his department(s)
+if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($currentCourse)) {
+    require_once 'include/lib/hierarchy.class.php';
+    require_once 'include/lib/course.class.php';
+    require_once 'include/lib/user.class.php';
+    
+    $treeObj = new Hierarchy();
+    $courseObj = new Course();
+    $userObj = new User();
+    
+    $atleastone = false;
+    $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
+    $depIds = $courseObj->getDepartmentIds($course_id);
+    foreach($depIds as $depId) {
+        if (in_array($depId, $subtrees)) {
+            $atleastone = true;
+            break;
+        }
+    }
+    
+    if ($atleastone) {
+        $is_course_admin = true;
+        $_SESSION['courses'][$currentCourse] = USER_DEPARTMENTMANAGER;
+    }
+}
+
 $is_editor = false;
 if (isset($_SESSION['courses'])) {
     if (isset($currentCourse)) {
         if (check_editor()) { // check if user is editor of course
             $is_editor = true;
         }
-        if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER) {
+        if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER || $_SESSION['courses'][$currentCourse] === USER_DEPARTMENTMANAGER) {
             $is_course_admin = true;
             $is_editor = true;
         }
@@ -474,7 +500,7 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_GRADEBOOK . ",
                                                 " . MODULE_ID_ATTENDANCE . ",
                                                 " . MODULE_ID_LP . ")", $course_id);
-    } elseif ($is_admin) {
+    } elseif ($is_admin || $_SESSION['courses'][$currentCourse] === USER_DEPARTMENTMANAGER) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE module_id NOT IN (SELECT module_id FROM module_disable)");
     } else {

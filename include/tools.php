@@ -622,7 +622,7 @@ function lessonToolsMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
 
-    if ($is_editor) {
+    if ($is_editor || $is_course_admin) {
         $tools_sections =
             array(array('type' => 'Public',
                         'title' => $GLOBALS['langActiveTools'],

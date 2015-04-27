@@ -36,6 +36,7 @@ define('COURSE_INACTIVE', 3);
 define('USER_TEACHER', 1);
 define('USER_STUDENT', 5);
 define('USER_GUEST', 10);
+define('USER_DEPARTMENTMANAGER', 11);
 
 // resized user image
 define('IMAGESIZE_LARGE', 256);
@@ -583,11 +584,14 @@ function check_editor($user_id = null, $cid = null) {
  * function to check if user is a course opencourses reviewer
  */
 function check_opencourses_reviewer() {
-    global $uid, $course_id, $is_power_user;
+    global $uid, $course_id, $course_code, $is_power_user;
 
     if (isset($uid) and $uid) {
         if ($is_power_user) {
-            return TRUE;
+            return true;
+        }
+        if ($_SESSION['courses'][$course_code] === USER_DEPARTMENTMANAGER) {
+            return true;
         }
         $r = Database::get()->querySingle("SELECT reviewer FROM course_user
                                     WHERE user_id = ?d
