@@ -1421,7 +1421,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM `rating` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
     Database::get()->query("DELETE FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
     Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $cid);
-    // check if we have guest account. If yes delete him.
+    // check if we have guest account. If yes delete it.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
         deleteUser($guest_user->user_id, true);
@@ -1460,6 +1460,8 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM tag_element_module WHERE tag_id IN (SELECT id FROM tags WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM tags WHERE course_id = ?d", $cid);
 
     $garbage = "$webDir/courses/garbage";
     if (!is_dir($garbage)) {

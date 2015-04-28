@@ -1457,9 +1457,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
 
 $db->query("CREATE TABLE IF NOT EXISTS tags (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `tag` VARCHAR(255) NOT NULL,
-    `course_id` INT(11) NOT NULL,
-    PRIMARY KEY (id)) $charset_spec");
+    `name` VARCHAR(255) NOT NULL,
+    `course_id` INT(11) NOT NULL) $charset_spec");
 
 
 $theme_options = array(
