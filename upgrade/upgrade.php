@@ -883,7 +883,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
-                if (Database::get()->querySingle("SELECT COUNT(*) FROM `$table_name`") > 0) {
+                if (Database::get()->querySingle("SELECT COUNT(*) AS c FROM `$table_name`")->c > 0) {
                     echo "Warning: Database inconsistent - table '$table_name' already",
                     " exists in $mysqlMainDb - renaming it to 'old_$table_name'<br>\n";
                     Database::get()->query("RENAME TABLE `$table_name` TO `old_$table_name`");
@@ -2652,6 +2652,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('blog_post', 'commenting')) {
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
         }
+        Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
     }
 
     // update eclass version
