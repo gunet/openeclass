@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
             $hasher = new PasswordHash(8, false);
             $password_encrypted = $hasher->HashPassword($_POST['password']);
         } else {
-            $password_encrypted = $auth_ids[$_POST['auth']];
+            $password_encrypted = $auth_ids[$_POST['auth_form']];
         }
         $uid = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email, status, phone, am, registered_at, expires_at, lang, description, verified_mail, whitelist)
@@ -271,7 +271,9 @@ if (isDepartmentAdmin()) {
 list($tree_js, $tree_html) = $tree->buildNodePicker($nodePickerParams);
 $head_content .= $tree_js;
 
-if (!$eclass_method_unique) {
+if ($eclass_method_unique) {
+    $tool_content .= "<input type='hidden' name='auth_form' value='1'>";
+} else {
     $auth_m = array();
     foreach ($active_auth_methods as $m) {
         $auth_m[$m] = get_auth_info($m);
@@ -309,7 +311,6 @@ $tool_content .= "
           <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
         </div>
         <input type='hidden' name='pstatus' value='$pstatus'>
-        <input type='hidden' name='auth' value='1'>
       </fieldset>
     </form>
   </div>";
