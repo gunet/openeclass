@@ -2618,8 +2618,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // -----------------------------------
     if (version_compare($oldversion, '3.1', '<')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
-        Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
-        Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
+        DBHelper::fieldExists('assignment', 'submission_type') or
+            Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
+        DBHelper::fieldExists('assignment_submit', 'submission_text') or
+            Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
 
         // improve primary key for table exercise_answer
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
@@ -2627,7 +2629,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     `module_id` int(11) NOT NULL,
                     `element_id` int(11) NOT NULL,
                     `tag_id` int(11) NOT NULL)");
-        //Tag tables upgrade
+        // Tag tables upgrade
         if (DBHelper::fieldExists('tags', 'tag')) {
             $tags = Database::get()->queryArray("SELECT * FROM tags");
             $module_ids = array(
@@ -2638,9 +2640,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             foreach ($tags as $tag) {
                 $first_tag_id = Database::get()->querySingle("SELECT `id` FROM `tags` WHERE `tag` = ?s ORDER BY `id` ASC", $tag->tag)->id;
                 Database::get()->query("INSERT INTO `tag_element_module` (`module_id`,`element_id`, `tag_id`)
-                                        VALUES (?d, ?d, ?d, ?d)", $module_ids[$tag->element_type], $tag->element_id, $first_tag_id);
+                                        VALUES (?d, ?d, ?d)", $module_ids[$tag->element_type], $tag->element_id, $first_tag_id);
             }
-            //keep one instance of each tag (the one with the lowest id)
+            // keep one instance of each tag (the one with the lowest id)
             Database::get()->query("DELETE t1 FROM tags t1, tags t2 WHERE t1.id > t2.id AND t1.tag = t2.tag");
             Database::get()->query("ALTER TABLE tags DROP COLUMN `element_type`, "
                     . "DROP COLUMN `element_id`, DROP COLUMN `user_id`, DROP COLUMN `date`");
