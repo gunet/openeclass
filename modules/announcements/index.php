@@ -32,6 +32,7 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/tags/moduleElement.class.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 
@@ -347,7 +348,6 @@ if ($is_editor) {
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
             
             if (isset($_POST['tags'])) {
-                require_once 'modules/tags/moduleElement.class.php';
                 $tagsArray = explode(',', $_POST['tags']);
                 $moduleTag = new ModuleElement($id);
                 $moduleTag->syncTags($tagsArray);                
@@ -367,7 +367,6 @@ if ($is_editor) {
             $log_type = LOG_INSERT;
             
             if (isset($_POST['tags'])) {
-                require_once 'modules/tags/moduleElement.class.php';
                 $tagsArray = explode(',', $_POST['tags']);
                 $moduleTag = new ModuleElement($id);
                 $moduleTag->attachTags($tagsArray);  
@@ -501,14 +500,7 @@ if ($is_editor) {
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>
-        
-        <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
-        <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-            </div>
-        </div>
-
+        " . Tag::tagInput($AnnouncementToModify) . "
         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
         
         <div class='form-group'>
@@ -567,13 +559,9 @@ if (isset($_GET['an_id'])) {
         $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
         $tool_content .= $row->content;
         
-        require_once 'modules/tags/moduleElement.class.php';
         $moduleTag = new ModuleElement($row->id);
-        $tags_list = $moduleTag->getTags();        
         $tool_content .= $langTags.": ";
-        foreach($tags_list as $tag){
-            $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag."'>$tag</a> ";
-        }
+        $tool_content .= $moduleTag->showTags();
         $tool_content .= "</div></div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
@@ -586,18 +574,6 @@ if (isset($_GET['an_id'])) {
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
     
-    
-// initialize the tags
-$answer = '';
-if (isset($modify)) {
-    require_once 'modules/tags/moduleElement.class.php';
-    $moduleTag = new ModuleElement($modify);
-    $tags_init = $moduleTag->getTags();    
-    foreach ($tags_init as $key => $tag) {
-        $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"". js_escape($tag) . "\"},";
-        $answer = $answer . $arrayTemp;
-    } 
-}
 
 add_units_navigation(TRUE);
 load_js('select2');
@@ -617,35 +593,6 @@ $head_content .= "<script type='text/javascript'>
             var stringVal = [];
             $('#select-recipients').val(stringVal).trigger('change');
         });   
-        $('#tags').select2({
-                minimumInputLength: 2,
-                tags: true,
-                tokenSeparators: [', ', ' '],
-                createSearchChoice: function(term, data) {
-                  if ($(data).filter(function() {
-                    return this.text.localeCompare(term) === 0;
-                  }).length === 0) {
-                    return {
-                      id: term,
-                      text: term
-                    };
-                  }
-                },
-                ajax: {
-                    url: '../tags/feed.php',
-                    dataType: 'json',
-                    data: function(term, page) {
-                        return {
-                            course: '" . js_escape($course_code) . "',
-                            q: term
-                        };
-                    },
-                    results: function(data, page) {
-                        return {results: data};
-                    }
-                }
-        });
-        $('#tags').select2('data', [".$answer."]);
     });
     </script>";
 

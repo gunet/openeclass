@@ -38,6 +38,7 @@ require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/graphics/plotter.php';
 require_once 'include/log.php';
+require_once 'modules/tags/moduleElement.class.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
@@ -348,7 +349,6 @@ function add_assignment() {
             
             // tags
             if (isset($_POST['tags'])) {
-                require_once 'modules/tags/moduleElement.class.php';
                 $tagsArray = explode(',', $_POST['tags']);
                 $moduleTag = new ModuleElement($id);
                 $moduleTag->attachTags($tagsArray);
@@ -575,7 +575,7 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
-    global $langBack, $langStudents, $langMove, $langWorkFile, $langTags, 
+    global $langBack, $langStudents, $langMove, $langWorkFile, 
            $langWorkSubType, $langWorkOnlineText;
     
     load_js('bootstrap-datetimepicker');
@@ -603,37 +603,6 @@ function new_assignment() {
             })               
         });
     
-    $(document).ready(function () {
-        $('#tags').select2({
-                minimumInputLength: 2,
-                tags: true,
-                tokenSeparators: [', '],
-                createSearchChoice: function(term, data) {
-                  if ($(data).filter(function() {
-                    return this.text.localeCompare(term) === 0;
-                  }).length === 0) {
-                    return {
-                      id: term,
-                      text: term
-                    };
-                  }
-                },
-                ajax: {
-                    url: '../tags/feed.php',
-                    dataType: 'json',
-                    data: function(term, page) {
-                        return {
-                            course: '" . js_escape($course_code) . "',
-                            q: term
-                        };
-                    },
-                    results: function(data, page) {
-                        return {results: data};
-                    }
-                }
-        });
-        $('#tags').select2('data', [".$answer."]);
-    });    
     </script>";
     
     $tool_content .= action_bar(array(
@@ -796,12 +765,7 @@ function new_assignment() {
                         </div>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='tags' class='col-sm-2 control-label'>$langTags:</label>
-                    <div class='col-sm-10'>
-                        <input type='hidden' class='form-control' name='tags' id='tags' value=''>
-                    </div>
-                </div>                
+                ".Tag::tagInput()."               
             </div>
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
@@ -819,20 +783,8 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
         $urlAppend, $works_url, $course_id, $head_content, $language, 
         $langStudents, $langMove, $langWorkFile, $themeimg,
-        $langLessOptions, $langMoreOptions, $langTags, $langWorkOnlineText, $langWorkSubType;
+        $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType;
     
-    // initialize the tags
-    $answer = '';
-    if (isset($id)) {
-        require_once 'modules/tags/moduleElement.class.php';
-        $moduleTag = new ModuleElement($id);
-        $tags_init = $moduleTag->getTags();
-        foreach ($tags_init as $key => $tag) {
-            $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"" . js_escape($tag) . "\"},";
-            $answer = $answer . $arrayTemp;
-        }
-    }
-
     load_js('bootstrap-datetimepicker');
     load_js('select2');
     
@@ -856,37 +808,6 @@ function show_edit_assignment($id) {
                 var caret = '<i class=\"fa fa-caret-down\"></i>';
                 $('#hidden-opt-btn').html('$langMoreOptions '+caret);
             })            
-        });
-        
-        $(document).ready(function () {
-            $('#tags').select2({
-                    minimumInputLength: 2,
-                    tags: true,
-                    tokenSeparators: [', ', ' '],
-                    createSearchChoice: function(term, data) {
-                      if ($(data).filter(function() {
-                        return this.text.localeCompare(term) === 0;
-                      }).length === 0) {
-                        return {
-                          id: term,
-                          text: term
-                        };
-                      }
-                    },
-                    ajax: {
-                        url: '../tags/feed.php',
-                        dataType: 'json',
-                        data: function(term, page) {
-                            return {
-                                q: term
-                            };
-                        },
-                        results: function(data, page) {
-                            return {results: data};
-                        }
-                    }
-            });
-        $('#tags').select2('data', [".$answer."]);
         });    
     </script>";
     
@@ -1114,12 +1035,7 @@ function show_edit_assignment($id) {
                         </div>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='tags' class='col-sm-2 control-panel'>$langTags:</label>
-                    <div class='col-sm-10'>
-                        <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-                    </div>
-                </div>                  
+                ".Tag::tagInput($id)."                 
             </div>          
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
@@ -1205,7 +1121,6 @@ function edit_assignment($id) {
          
          //tags
          if (isset($_POST['tags'])) {
-            require_once 'modules/tags/moduleElement.class.php';
             $tagsArray = explode(',', $_POST['tags']);
             $moduleTag = new ModuleElement($id);
             $moduleTag->syncTags($tagsArray);
@@ -1533,8 +1448,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
 function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
-    $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
-    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langTags, $course_id;
+    $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
+    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $course_id;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -1575,7 +1490,9 @@ function assignment_details($id, $row) {
         $deadline_notice = "<br><span>($langDaysLeft " . format_time_duration($row->time) . ")</span>";
     } elseif ((int)$row->deadline) {
         $deadline_notice = "<br><span class='text-danger'>$langEndDeadline</span>";
-    }   
+    }
+    
+    $moduleTag = new ModuleElement($id);    
     $tool_content .= "
     <div class='panel panel-action-btn-primary'>
         <div class='panel-heading'>
@@ -1670,14 +1587,9 @@ function assignment_details($id, $row) {
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
-                <div class='col-sm-9'>";
-                    require_once 'modules/tags/moduleElement.class.php';
-                    $moduleTag = new ModuleElement($id);
-                    $tags_list = $moduleTag->getTags();
-                    foreach($tags_list as $tag){
-                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag."'>$tag</a> ";
-                    }                   
-$tool_content .="</div>                
+                <div class='col-sm-9'>
+                    " . $moduleTag->showTags() . "
+                </div>                
             </div>   
         </div>
     </div>";

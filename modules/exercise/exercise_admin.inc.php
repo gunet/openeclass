@@ -24,6 +24,7 @@
  * @brief Create new exercise or modify an existing one
  */
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/tags/moduleElement.class.php';
 
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
@@ -67,7 +68,6 @@ if (isset($_POST['submitExercise'])) {
         
         //tags
         if (isset($_POST['tags'])) {
-            require_once 'modules/tags/moduleElement.class.php';
             $tagsArray = explode(',', $_POST['tags']);
             $moduleTag = new ModuleElement($exerciseId);
             $moduleTag->syncTags($tagsArray);
@@ -104,19 +104,7 @@ if (isset($_POST['submitExercise'])) {
 
 // shows the form to modify the exercise
 if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
-    
-    //initialize the tags
-    $answer = "";
-    if (isset($exerciseId)) {
-        require_once 'modules/tags/moduleElement.class.php';
-        $moduleTag = new ModuleElement($exerciseId);
-        $tags_init = $moduleTag->getTags();        
-        foreach ($tags_init as $tag) {
-            $arrayTemp = "{id:\"" . $tag . "\" , text:\"" . $tag . "\"},";
-            $answer = $answer . $arrayTemp;
-        }
-    }
-    
+        
     load_js('bootstrap-datetimepicker');
     load_js('select2');
 
@@ -157,36 +145,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 }
             });
         });
-        $(document).ready(function () {
-            $('#tags').select2({
-                    minimumInputLength: 2,
-                    tags: true,
-                    tokenSeparators: [', ', ' '],
-                    createSearchChoice: function(term, data) {
-                      if ($(data).filter(function() {
-                        return this.text.localeCompare(term) === 0;
-                      }).length === 0) {
-                        return {
-                          id: term,
-                          text: term
-                        };
-                      }
-                    },
-                    ajax: {
-                        url: '../tags/feed.php',
-                        dataType: 'json',
-                        data: function(term, page) {
-                            return {
-                                q: term
-                            };
-                        },
-                        results: function(data, page) {
-                            return {results: data};
-                        }
-                    }
-            });
-            $('#tags').select2('data', [".$answer."]);
-        }); 
     </script>";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -348,13 +306,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 
-                 <div class='form-group'>
-                     <label for='dispresults' class='col-sm-2 control-label'>$langTags:</label>
-                     <div class='col-sm-10'>            
-                        <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-                     </div>
-                 </div>
+                 " . Tag::tagInput($exerciseId) . "
 
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>
@@ -374,6 +326,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
+    $moduleTag = new ModuleElement($exerciseId);    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "index.php?course=$course_code",
@@ -479,14 +432,9 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
-                <div class='col-sm-9'>";
-                require_once 'modules/tags/moduleElement.class.php';
-                $moduleTag = new ModuleElement($exerciseId);
-                $tags_list = $moduleTag->getTags();                       
-                foreach($tags_list as $tag){
-                    $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag."'>$tag</a> ";
-                }                   
-$tool_content .="</div>                
+                <div class='col-sm-9'>
+                    " . $moduleTag->showTags() . "                       
+                </div>                
             </div>
         </div>
     </div>";
