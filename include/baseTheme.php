@@ -277,11 +277,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('MY_MESSAGES', q($GLOBALS['langNewMyMessagesSide']));
         $t->set_var('LANG_ANNOUNCEMENTS', q($GLOBALS['langMyAnnouncements']));
         $t->set_var('ANNOUNCEMENTS_LINK', $urlAppend . 'modules/announcements/myannouncements.php');
-        if (get_config('personal_blog')) {
-            $t->set_var('LANG_MYBLOG', q($GLOBALS['langMyBlog']));
-            $t->set_var('MYBLOG_LINK', $urlAppend . 'modules/blog/index.php');
-        } elseif ($menuTypeID > 0) {
-            $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
+        if (!$is_embedonce) {
+            if (get_config('personal_blog')) {
+                $t->set_var('LANG_MYBLOG', q($GLOBALS['langMyBlog']));
+                $t->set_var('MYBLOG_LINK', $urlAppend . 'modules/blog/index.php');
+            } elseif ($menuTypeID > 0) {
+                $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
+            }
         }
         $t->set_var('QUICK_NOTES', q($GLOBALS['langQuickNotesSide']));
         $t->set_var('langSave', q($GLOBALS['langSave']));
