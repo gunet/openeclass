@@ -22,16 +22,21 @@
 require_once 'tag.class.php';
 class ModuleElement {
     
+    private $course_id;
     private $module_id;
     private $element_id;
+    private $user_id;
     
     public function __construct($element_id) {
+        global $course_id, $uid;
+        $this->course_id = $course_id;
         $this->module_id = current_module_id();
         $this->element_id = $element_id;
+        $this->user_id = $uid;
     }
     
     public function getTags() {
-        $attached_tags = Database::get()->queryArray("SELECT `tags`.`id` AS id, `tags`.`name` AS name FROM `tag_element_module`, `tags` WHERE `tag_element_module`.`element_id` = ?d AND `tag_element_module`.`tag_id` = `tags`.`id`", $this->element_id);
+        $attached_tags = Database::get()->queryArray("SELECT `tag`.`id` AS id, `tag`.`name` AS name FROM `tag_element_module`, `tag` WHERE `tag_element_module`.`element_id` = ?d AND `tag_element_module`.`tag_id` = `tag`.`id`", $this->element_id);
         $tags = array();
         if ($attached_tags) {
             foreach ($attached_tags as $attached_tag){
@@ -58,7 +63,7 @@ class ModuleElement {
             $tag = new Tag($tag_name);
             $tag_id = $tag->findOrCreate();
             if($tag_id){
-                Database::get()->query("INSERT INTO `tag_element_module` (`module_id`, `element_id`, `tag_id`) VALUES (?d, ?d, ?d)", $this->module_id, $this->element_id, $tag_id);    
+                Database::get()->query("INSERT INTO `tag_element_module` (`course_id`, `module_id`, `element_id`, `tag_id`) VALUES (?d, ?d, ?d, ?d)", $this->course_id, $this->module_id, $this->element_id, $tag_id);    
             }
         }
     }
@@ -67,7 +72,11 @@ class ModuleElement {
             $tag = new Tag($tag_name);
             $tag_id = $tag->findOrCreate();
             if($tag_id){
-                Database::get()->query("DELETE FROM `tag_element_module` WHERE `module_id` = ?d AND `element_id` = ?d AND `tag_id` = ?d", $this->module_id, $this->element_id, $tag_id);    
+                Database::get()->query("DELETE FROM `tag_element_module` WHERE `course_id` = ?d AND `module_id` = ?d AND `element_id` = ?d AND `tag_id` = ?d", $this->course_id, $this->module_id, $this->element_id, $tag_id);   
+                $tagCount = Database::get()->querySingle("SELECT COUNT(id) AS counter FROM `tag_element_module` WHERE `tag_id` = ?d", $tag_id)->counter;
+                if ($tagCount == 0) {
+                    Database::get()->query("DELETE FROM `tag` WHERE `id` = ?d", $tag_id);   
+                }
             }
         }
     }    

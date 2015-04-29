@@ -1451,14 +1451,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
 #
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` int(11) NOT NULL,
             `module_id` int(11) NOT NULL,
             `element_id` int(11) NOT NULL,
-            `tag_id` int(11) NOT NULL)");
+            `user_id` int(11) NOT NULL,
+            `date` DATE DEFAULT NULL,
+            `tag_id` int(11) NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS tags (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    `name` VARCHAR(255) NOT NULL,
-    `course_id` INT(11) NOT NULL) $charset_spec");
+    `name` VARCHAR(255) NOT NULL) $charset_spec");
 
 
 $theme_options = array(
@@ -1558,6 +1560,8 @@ $db->query('CREATE INDEX `idx_queue_async_uid` ON `idx_queue_async` (user_id)');
 
 $db->query('CREATE INDEX `attendance_users_aid` ON `attendance_users` (attendance_id)');
 $db->query('CREATE INDEX `gradebook_users_gid` ON `gradebook_users` (gradebook_id)');
+
+$db->query("CREATE INDEX `tag_element_index` ON `tag_element_module` (course_id, module_id, element_id)");
 
 // The following tuples have been confirmed
 $db->query('CREATE INDEX `actions_daily_mcd` ON `actions_daily` (module_id, course_id, day)');

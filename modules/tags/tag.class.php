@@ -24,12 +24,9 @@ class Tag {
     
     private $id;
     private $name;
-    private $course_id;
         
     public function __construct($name = '') {
-        global $course_id;
         $this->name = $name;
-        $this->course_id = $course_id;
     }
     public function getID() {
         return $this->id;
@@ -97,14 +94,14 @@ class Tag {
                 </div>             
         ";
         return $input_field;
-    }    
+    }  
     public function findOrCreate(){
        if($this->name){
             if($tag = $this->exists()) {
                 $this->id = $tag->id;
                 return $this->id;
             } else {
-                $this->id = Database::get()->query("INSERT INTO `tags` (`name`, `course_id`) VALUES (?s, ?d)", $this->name, $this->course_id)->lastInsertID;
+                $this->id = Database::get()->query("INSERT INTO `tag` (`name`) VALUES (?s)", $this->name)->lastInsertID;
                 return $this->id;
             }
        } else {
@@ -112,7 +109,7 @@ class Tag {
        }
     }
     private function exists() {
-        $tag = Database::get()->querySingle('SELECT * FROM tags WHERE name = ?s AND course_id = ?d', $this->name, $this->course_id);
+        $tag = Database::get()->querySingle('SELECT * FROM tag WHERE name = ?s', $this->name);
         return $tag;
     }    
 }

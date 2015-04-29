@@ -2626,9 +2626,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         // improve primary key for table exercise_answer
         Database::get()->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
                     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `course_id` int(11) NOT NULL,
                     `module_id` int(11) NOT NULL,
                     `element_id` int(11) NOT NULL,
+                    `user_id` int(11) NOT NULL,
+                    `date` DATE DEFAULT NULL,
                     `tag_id` int(11) NOT NULL)");
+        $db->query("CREATE INDEX `tag_element_index` ON `tag_element_module` (course_id, module_id, element_id)");
         // Tag tables upgrade
         if (DBHelper::fieldExists('tags', 'tag')) {
             $tags = Database::get()->queryArray("SELECT * FROM tags");
@@ -2645,9 +2649,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             // keep one instance of each tag (the one with the lowest id)
             Database::get()->query("DELETE t1 FROM tags t1, tags t2 WHERE t1.id > t2.id AND t1.tag = t2.tag");
             Database::get()->query("ALTER TABLE tags DROP COLUMN `element_type`, "
-                    . "DROP COLUMN `element_id`, DROP COLUMN `user_id`, DROP COLUMN `date`");
+                    . "DROP COLUMN `element_id`, DROP COLUMN `user_id`, DROP COLUMN `date`, DROP COLUMN `course_id`");
             Database::get()->query("ALTER TABLE tags CHANGE `tag` `name` varchar (255)");
             Database::get()->query("ALTER TABLE tags ADD PRIMARY KEY (id)");
+            Database::get()->query("RENAME TABLE `tags` TO `tag`");
         }
         if (!DBHelper::fieldExists('blog_post', 'commenting')) {
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
