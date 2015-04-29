@@ -131,7 +131,7 @@ class Hierarchy {
             Database::get()->query("CALL update_node(?d, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d)", $id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority);
         } else {
             $query = "UPDATE " . $this->dbtable . " SET name = ?s, lft = ?d, rgt = ?d,
-                    code = ?s, allow_course = ?d, allow_user = ?d, 
+                    code = ?s, allow_course = ?d, allow_user = ?d,
                     order_priority = ?d WHERE id = ?d";
             Database::get()->query($query, $name, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $id);
 
@@ -268,12 +268,12 @@ class Hierarchy {
         if ($key === null || intval($key) <= 0) {
             return null;
         }
-        
+
         $node = Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
         if ($node) {
             return self::unserializeLangField($node->name);
         }
-        
+
         return null;
     }
 
@@ -505,7 +505,7 @@ class Hierarchy {
 
     /**
      * Compile an array with the root node ids (nodes of 0 depth).
-     * 
+     *
      * @return array
      */
     public function buildRootsArray() {
@@ -578,16 +578,16 @@ $(document).ready(function() {
     $( "#ndAdd" ).click(function() {
         $( "#treeModal" ).modal( "show" );
     });
-                
+
     $( ".treeModalClose" ).click(function() {
         $( "#treeModal" ).modal( "hide" );
     });
-                
+
     $( "#treeModalSelect" ).click(function() {
         var newnode = $( "#js-tree" ).jstree("get_selected");
         var newnodeid = newnode.attr("id").substring(2);
         var newnodename = newnode.children("a").text();
-                
+
         jQuery.getJSON('{$urlAppend}modules/hierarchy/nodefullpath.php', {nodeid : newnodeid})
         .done(function(data) {
             if (data.nodefullpath !== undefined && data.nodefullpath.length > 0) {
@@ -1027,14 +1027,14 @@ jContent;
      * @return boolean
      */
     private function useProcedures() {
-        global $mysqlMainDb;        
+        global $mysqlMainDb;
         $res = Database::get()->querySingle("SHOW PROCEDURE STATUS WHERE Db = ?s AND Name = 'add_node'", $mysqlMainDb);
         return ($res) ? true : false;
     }
 
     /**
      * Returns Hierarchy DB table
-     * 
+     *
      * @return string
      */
     public function getDbtable() {
@@ -1043,7 +1043,7 @@ jContent;
 
     /**
      * Build an HTML table containing navigation code for the given nodes
-     * 
+     *
      * @param  array    $nodes         - The node ids whose children we want to navigate to
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
@@ -1054,7 +1054,7 @@ jContent;
         global $langAvCours, $langAvCourses;
 
         $ret = '';
-        $res = Database::get()->queryArray("SELECT node.id, node.code, node.name 
+        $res = Database::get()->queryArray("SELECT node.id, node.code, node.name
                           FROM " . $this->dbtable . " AS node
                          WHERE node.id IN (" . implode(', ', $nodes) . ")");
 
@@ -1084,12 +1084,11 @@ jContent;
 
                 if ($showEmpty or $count > 0) {
                     $ret .= "<li class='list-group-item' ><a href='$url.php?fc=" . intval($key) . "'>" .
-                            q($value);
+                            q($value) . '</a>';
                     if (strlen(q($nodecodes[$key])) > 0) {
-                        $ret .= "</a>&nbsp;(" . q($nodecodes[$key]) . ")";
+                        $ret .= "&nbsp;(" . q($nodecodes[$key]) . ")";
                     }
-
-                    $ret .= "</a><small>&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" .
+                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" .
                         ($count == 1 ? $langAvCours : $langAvCourses) . "</small></li>";
                 }
             }
@@ -1100,7 +1099,7 @@ jContent;
 
     /**
      * Build an HTML table containing navigation code for a node's children nodes
-     * 
+     *
      * @param  int      $depid         - The node's id whose children we want to navigate to
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
@@ -1108,7 +1107,7 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
-        
+
         global $langNoCoursesAvailable;
 
 
@@ -1134,13 +1133,13 @@ jContent;
 
     /**
      * Build an HTML Select box for selecting among the root nodes.
-     * 
+     *
      * @param  int    $currentNode - The id of the current node
      * @return string $ret         - The returned HTML output
      */
     public function buildRootsSelection($currentNode, $params = '') {
         // select root nodes
-        $res = Database::get()->queryArray("SELECT node.id, node.name 
+        $res = Database::get()->queryArray("SELECT node.id, node.name
                           FROM " . $this->dbtable . " AS node
                          WHERE node.id IN (" . implode(', ', $this->buildRootsArray()) . ")");
 
@@ -1171,13 +1170,13 @@ jContent;
 
     /**
      * Build an HTML Form/Header box for selecting among the root nodes.
-     * 
+     *
      * @param  int    $currentNode - The id of the current node
      * @return string $ret         - The returned HTML output
      */
     public function buildRootsSelectForm($currentNode) {
         global $langSelectFac;
-        
+
         $ret  = "<div class='row'><div class='col-xs-12'>";
         $ret .= "<div class='form-wrapper'><form class='form-horizontal' role='form' name='depform' action='$_SERVER[SCRIPT_NAME]' method='get'>";
         $ret .= "<div class='form-group' style='margin-bottom: 0px;'>";
