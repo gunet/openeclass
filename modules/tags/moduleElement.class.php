@@ -72,11 +72,8 @@ class ModuleElement {
             $tag = new Tag($tag_name);
             $tag_id = $tag->findOrCreate();
             if($tag_id){
+                Database::get()->query("DELETE FROM tag WHERE id IN (?d) AND id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module HAVING count(tag_id)>1)", $tag_id);
                 Database::get()->query("DELETE FROM `tag_element_module` WHERE `course_id` = ?d AND `module_id` = ?d AND `element_id` = ?d AND `tag_id` = ?d", $this->course_id, $this->module_id, $this->element_id, $tag_id);   
-                $tagCount = Database::get()->querySingle("SELECT COUNT(id) AS counter FROM `tag_element_module` WHERE `tag_id` = ?d", $tag_id)->counter;
-                if ($tagCount == 0) {
-                    Database::get()->query("DELETE FROM `tag` WHERE `id` = ?d", $tag_id);   
-                }
             }
         }
     }    
