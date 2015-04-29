@@ -2651,7 +2651,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE tags DROP COLUMN `element_type`, "
                     . "DROP COLUMN `element_id`, DROP COLUMN `user_id`, DROP COLUMN `date`, DROP COLUMN `course_id`");
             Database::get()->query("ALTER TABLE tags CHANGE `tag` `name` varchar (255)");
-            Database::get()->query("ALTER TABLE tags ADD PRIMARY KEY (id)");
+            Database::get()->query("ALTER TABLE tags ADD UNIQUE KEY (name)");
             Database::get()->query("RENAME TABLE `tags` TO `tag`");
         }
         if (!DBHelper::fieldExists('blog_post', 'commenting')) {
