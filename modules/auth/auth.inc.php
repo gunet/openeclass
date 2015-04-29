@@ -419,7 +419,9 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
             $casusermailattr = $cas['casusermailattr'];
             $casuserfirstattr = $cas['casuserfirstattr'];
             $casuserlastattr = $cas['casuserlastattr'];
-            $casuserstudentid = $cas['casuserstudentid'];
+            if (isset($cas['casuserstudentid']) and $cas['casuserstudentid']) {
+                $casuserstudentid = $cas['casuserstudentid'];
+            }
             $cas_altauth = $cas['cas_altauth'];
         }
     }
