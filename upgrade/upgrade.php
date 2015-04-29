@@ -2630,7 +2630,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     `module_id` int(11) NOT NULL,
                     `element_id` int(11) NOT NULL,
                     `user_id` int(11) NOT NULL,
-                    `date` DATE DEFAULT NULL,
+                    `date` DATETIME DEFAULT NULL,
                     `tag_id` int(11) NOT NULL)");
         $db->query("CREATE INDEX `tag_element_index` ON `tag_element_module` (course_id, module_id, element_id)");
         // Tag tables upgrade

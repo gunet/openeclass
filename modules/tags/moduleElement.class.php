@@ -63,7 +63,7 @@ class ModuleElement {
             $tag = new Tag($tag_name);
             $tag_id = $tag->findOrCreate();
             if($tag_id){
-                Database::get()->query("INSERT INTO `tag_element_module` (`course_id`, `module_id`, `element_id`, `tag_id`) VALUES (?d, ?d, ?d, ?d)", $this->course_id, $this->module_id, $this->element_id, $tag_id);    
+                Database::get()->query("INSERT INTO `tag_element_module` (`course_id`, `module_id`, `element_id`, `user_id`, `date`, `tag_id`) VALUES (?d, ?d, ?d, ?d, NOW(), ?d)", $this->course_id, $this->module_id, $this->element_id, $this->user_id, $tag_id);    
             }
         }
     }

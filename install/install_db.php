@@ -1455,10 +1455,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
             `module_id` int(11) NOT NULL,
             `element_id` int(11) NOT NULL,
             `user_id` int(11) NOT NULL,
-            `date` DATE DEFAULT NULL,
+            `date` DATETIME DEFAULT NULL,
             `tag_id` int(11) NOT NULL) $charset_spec");
 
-$db->query("CREATE TABLE IF NOT EXISTS tags (
+$db->query("CREATE TABLE IF NOT EXISTS tag (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL) $charset_spec");
 
