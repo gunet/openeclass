@@ -1460,7 +1460,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM exercise WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_module WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM tags WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);    
+    Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);    
     Database::get()->query("DELETE FROM tag_element_module WHERE course_id = ?d", $cid);
 
 
