@@ -260,7 +260,7 @@ if ($nbrQuestions) {
 			" . $aType[$objQuestionTmp->selectType() - 1] . "</td>
 			<td class='option-btn-cell'>".            
                     action_button(array(
-                        array('title' => $langModify,
+                        array('title' => $langEditChange,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;editQuestion=$id",
                                 'icon-class' => 'warnLink',
                                 'icon-extra' => $objQuestionTmp->selectNbrExercises()>1? "data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "",

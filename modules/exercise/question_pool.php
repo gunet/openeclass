@@ -312,18 +312,12 @@ if ($is_editor) {
                 }
                 $tool_content .= "<td class='option-btn-cell'>".
                     action_button(array(
-                        array('title' => $langModify,
+                        array('title' => $langEditChange,
                               'url' => "admin.php?course=$course_code&amp;editQuestion=" . $row->id,
                               'icon-class' => 'warnLink',
                               'icon-extra' => ((count($exercise_ids)>0)?
                                     " data-toggle='modal' data-target='#modalWarning' data-remote='false'" : ""),
                               'icon' => 'fa-edit',
-                              'show' => !isset($fromExercise)),
-                        array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langConfirmYourChoice,
                               'show' => !isset($fromExercise)),
                         array('title' => $langReuse,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;recup=$row->id&amp;fromExercise=" .
@@ -331,7 +325,13 @@ if ($is_editor) {
                                     "&amp;exerciseId=$exerciseId",
                               'level' => 'primary',
                               'icon' => 'fa-plus-square',
-                              'show' => isset($fromExercise))
+                              'show' => isset($fromExercise)),
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;delete=$row->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmYourChoice,
+                              'show' => !isset($fromExercise))
                      )) .
                      "</td></tr>";       
             }

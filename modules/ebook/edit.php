@@ -125,7 +125,7 @@ if (isset($_GET['delete'])) {
                 $section_id = q($section->public_id);
                 $section_title = q($section->title);
                 $section_tools = action_button(array(
-                                    array('title' => $langModify,
+                                    array('title' => $langEditChange,
                                           'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;s=$sid&amp;editEbook=1",
                                           'icon' => 'fa-edit'),
                                     array('title' => $langDelete,
