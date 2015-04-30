@@ -268,3 +268,11 @@ top: 8px;
     width: 5px;
     text-align: center;
 }
+
+
+// Video module
+
+.col-sm-10-pt-6 {
+    @extend .col-sm-10;
+    padding-top: 6px;
+}
