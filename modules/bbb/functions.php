@@ -729,7 +729,7 @@ function bbb_session_details() {
                     <td class='text-center'>$type</td>
                     <td class='option-btn-cell'>".
                             action_button(array(
-                                array(  'title' => $langModify,
+                                array(  'title' => $langEditChange,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
                                         'icon' => 'fa-edit'),
                                 array(  'title' => $langBBBImportRecordings,

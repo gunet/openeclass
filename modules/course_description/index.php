@@ -89,7 +89,7 @@ if ($q && count($q) > 0) {
                 action_button(
                         array(
                             array(
-                                'title' => q($langEdit),
+                                'title' => $langEditChange,
                                 'url' => "edit.php?course=$course_code&amp;id=$row->id",
                                 'icon' => 'fa-edit'
                             ),
