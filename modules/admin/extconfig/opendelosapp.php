@@ -35,10 +35,6 @@ class OpenDelosApp extends ExtApp {
         return self::NAME;
     }
     
-    public function getAppIcon() {
-        return null;
-    }
-    
     public function getShortDescription() {
         return $GLOBALS['langOpenDelosDescription'];
     }
