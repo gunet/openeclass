@@ -51,10 +51,10 @@ load_js('bootstrap-datetimepicker');
 $head_content .= "<script type='text/javascript'>
         $(function() {
             $('#user_date_expires_at').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', 
+                format: 'dd-mm-yyyy hh:ii',
+                pickerPosition: 'bottom-left',
                 language: '".$language."',
-                autoclose: true    
+                autoclose: true
             });
         });
     </script>";
@@ -87,7 +87,7 @@ if ($u) {
         Database::get()->query("UPDATE user SET password = ?s WHERE id = ?s", $newpass, $u);
         $info->password = $newpass;
     }
-    
+
     // change user authentication method
     if (isset($_GET['edit']) and $_GET['edit'] = 'auth') {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?u=$u", 'name' => $langEditUser);
@@ -102,14 +102,14 @@ if ($u) {
         }
         $tool_content .= "<div class='form-wrapper'>
                             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]'>
-                            <fieldset>                        
+                            <fieldset>
                             <div class='form-group'>
                             <label class='col-sm-2 control-label'>$langEditAuthMethod:</label>
                               <div class='col-sm-10'>" . selection($auth_names, 'auth', intval($current_auth), "class='form-control'") . "</div>
                             </div>
                             <div class='col-sm-offset-2 col-sm-10'>
                                 <input class='btn btn-primary' type='submit' name='submit_editauth' value='$langModify'>
-                              </div>                            
+                              </div>
                             <input type='hidden' name='u' value='$u'>
                             </fieldset>
                             </form>
@@ -117,7 +117,7 @@ if ($u) {
         draw($tool_content, 3, null, $head_content);
         exit;
     }
-    if (!$u_submitted) { // if the form was not submitted                
+    if (!$u_submitted) { // if the form was not submitted
         // Display Actions Toolbar
         $tool_content .= action_bar(array(
             array('title' => $langUserMerge,
@@ -138,16 +138,16 @@ if ($u) {
                 'url' => "deluser.php?u=$u",
                 'icon' => 'fa-times',
                 'level' => 'primary',
-                'show' => $u > 1),            
+                'show' => $u > 1),
             array('title' => $langBack,
                 'url' => "listusers.php",
                 'icon' => 'fa-reply',
                 'level' => 'primary')
-        ));                             
-               
+        ));
+
         $tool_content .= "<div class='form-wrapper'>
                     <form class='form-horizontal' role='form' name='edituser' method='post' action='$_SERVER[SCRIPT_NAME]' onsubmit='return validateNodePickerForm();'>
-                    <fieldset>                    
+                    <fieldset>
                     <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langSurname</label>
                       <div class='col-sm-10'>
@@ -166,7 +166,7 @@ if ($u) {
             $tool_content .= "<div class='col-sm-10'>
                             <input type='text' name='username' size='50' value='" . q($info->username) . "'>
                         </div>";
-                    
+
         } else {    // means that it is external auth method, so the user cannot change this password
             switch ($info->password) {
                 case "pop3": $auth = 2;
@@ -233,7 +233,7 @@ if ($u) {
         } else {
             $tool_content .= selection(array(USER_TEACHER => $langTeacher,
                 USER_STUDENT => $langStudent), 'newstatus', intval($info->status), "class='form-control'");
-        }           
+        }
         $tool_content .= "</div></div>";
         $reg_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->registered_at);
         $exp_date = DateTime::createFromFormat("Y-m-d H:i:s", $info->expires_at);
@@ -258,13 +258,13 @@ if ($u) {
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserWhitelist</label>
           <div class='col-sm-10'><textarea rows='6' cols='60' name='user_upload_whitelist'>" . q($info->whitelist) . "</textarea></div>
-        </div>        
+        </div>
         <input type='hidden' name='u' value='$u' />
         <input type='hidden' name='u_submitted' value='1' />
         <input type='hidden' name='registered_at' value='" . $info->registered_at . "' />
         <div class='col-sm-offset-2 col-sm-10'>
 	    <input class='btn btn-primary' type='submit' name='submit_edituser' value='$langModify' />
-        </div>     
+        </div>
         </fieldset>
         </form>
         </div>";
@@ -286,7 +286,7 @@ if ($u) {
                     <th>$langCourseRegistrationDate</th>
                     <th>$langProperty</th>
                     <th>$langActions</th>
-                    </tr>";            
+                    </tr>";
             foreach ($sql as $logs) {
                 if ($logs->visible == COURSE_INACTIVE) {
                     $tool_content .= "<tr class='not_visible'>";
@@ -310,14 +310,14 @@ if ($u) {
                     }
                     $tool_content .= "</td><td class='text-center'>" .
                             icon('fa-ban', $langUnregCourse, "unreguser.php?u=$u&amp;c=$logs->id") . "</tr>";
-                }                
+                }
             }
             $tool_content .= "</table></div>";
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langNoStudentParticipation</div>";            
+            $tool_content .= "<div class='alert alert-warning'>$langNoStudentParticipation</div>";
         }
     } else { // if the form was submitted then update user
-    
+
         $tool_content .= action_bar(array(
                         array('title' => $langBack,
                               'url' => "listusers.php",
@@ -326,8 +326,8 @@ if ($u) {
                         array('title' => $langBackAdmin,
                               'url' => "index.php",
                               'icon' => 'fa-reply',
-                              'level' => 'primary-label')));                        
-    
+                              'level' => 'primary-label')));
+
         // get the variables from the form and initialize them
         $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
         $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
@@ -343,8 +343,8 @@ if ($u) {
             $expires_at = DateTime::createFromFormat("d-m-Y H:i", $_POST['user_date_expires_at']);
             $user_expires_at = $expires_at->format("Y-m-d H:i");
             $user_date_expires_at = $expires_at->format("d-m-Y H:i");
-        }        
-        
+        }
+
         $user_upload_whitelist = isset($_POST['user_upload_whitelist']) ? $_POST['user_upload_whitelist'] : '';
         $user_exist = FALSE;
         // check if username is free
@@ -366,8 +366,8 @@ if ($u) {
             draw($tool_content, 3, null, $head_content);
             exit();
         }
-        
-        if ($registered_at > $user_expires_at) {            
+
+        if ($registered_at > $user_expires_at) {
             $tool_content .= "<div class='alert alert-warning'>$langExpireBeforeRegister<br>
                     <a href='edituser.php?u=$u'>$langAgain</a></div>";
         } else {
@@ -395,7 +395,7 @@ if ($u) {
                         validateNode($depId, true);
                     }
                 }
-            }                        
+            }
             $user->refresh(intval($u), $departments);
             $qry = Database::get()->query("UPDATE user SET surname = ?s,
                                     givenname = ?s,
@@ -410,9 +410,9 @@ if ($u) {
                           WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
             if ($qry->affectedRows > 0) {
                     $tool_content .= "<div class='alert alert-info'>$langSuccessfulUpdate</div>";
-            } else {                                                
-                    $tool_content .= "<div class='alert alert-warning'>$langUpdateNoChange</div>";               
-            }            
+            } else {
+                    $tool_content .= "<div class='alert alert-warning'>$langUpdateNoChange</div>";
+            }
         }
     }
 } else {
