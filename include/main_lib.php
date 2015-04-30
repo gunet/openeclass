@@ -1677,43 +1677,58 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
             $filebrowser = "file_browser_callback : openDocsPicker,";
             $url = $urlAppend . "modules/admin/commondocs.php?embedtype=tinymce&docsfilter=";
         }
+        $focus_init = ",
+                init_instance_callback: function(editor) {
+                    var parent = $(editor.contentAreaContainer.parentElement);
+                    (editorToggleSecondToolbar(editor))();
+                    parent.find('.mce-toolbar-grp, .mce-statusbar').attr('style','border:1px solid #ddd');";
         if ($onFocus) {
-            $focus_init = ",
+            $focus_init .= "parent.find('.mce-toolbar-grp').hide();";
+        }
+        $focus_init .= "},";
+        if ($onFocus) {
+            $focus_init .= "
                 statusbar: false,
-                setup: function (theEditor) {
-                    theEditor.on('focus', function () {
-                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').show();
+                setup: function (editor) {
+                    var toolbarGrp;
+                    editorAddButtonToggle(editor);
+                    editor.on('focus', function () {
+                        toolbarGrp.show();
                     });
-                    theEditor.on('blur', function () {
-                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
+                    editor.on('blur', function () {
+                        toolbarGrp.hide();
                     });
-                    theEditor.on('init', function() {
-                        $(this.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').hide();
+                    editor.on('init', function() {
+                        toolbarGrp = $(editor.contentAreaContainer.parentElement).find('div.mce-toolbar-grp');
                     });
                 }";
         } else {
-            $focus_init = ",
+            $focus_init .= "
                 setup: function (editor) {
-                    editor.addButton('toggle', {
-                        title: '".js_escape($langMore)."',
-                        classes: 'toggle',
-                        image: '../../js/tinymce/skins/light/img/toggle.png',
-                        style: 'padding:5px 8px 0 10px;',
-                        onclick: function() {
-                            $('#mceu_49').toggle();
-                        }
-                    });
-
+                    editorAddButtonToggle(editor);
                 },
-                init_instance_callback : function(editor){
-                    $('#mceu_49').hide();
-                    $('div#mceu_32, div#mceu_66').attr('style','border:1px solid #ddd');
-                }
                 ";
         }
         load_js('tinymce/tinymce.gzip.js');
         $head_content .= "
 <script type='text/javascript'>
+
+function editorToggleSecondToolbar(editor) {
+    return function() {
+        var toolbar = $(editor.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').find('.mce-toolbar').eq(1);
+        toolbar.toggle();
+    }
+}
+
+function editorAddButtonToggle (editor) {
+    editor.addButton('toggle', {
+        title: '".js_escape($langMore)."',
+        classes: 'toggle',
+        image: '{$urlAppend}js/tinymce/skins/light/img/toggle.png',
+        style: 'padding: 5px 8px 0 10px;',
+        onclick: editorToggleSecondToolbar(editor),
+    });
+}
 
 function openDocsPicker(field_name, url, type, win) {
     tinymce.activeEditor.windowManager.open({
