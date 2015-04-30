@@ -302,7 +302,7 @@ if ($is_editor) {
             $invalid = 0;
 	    $recipients = array();
             $emailBody = html2text($emailContent);
-            $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+            $linkhere = "&nbsp;<a href='${urlServer}main/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
             $unsubscribe = "<br /><br />$langNote:".sprintf($langLinkUnsubscribe, q($intitule));
             $emailContent .= $unsubscribe.$linkhere;
             $general_to = 'Members of course ' . $currentCourseID;

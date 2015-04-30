@@ -213,7 +213,7 @@ hContent;
 		$body_topic_notify = "$langBodyCatNotify $langInCat '$ctg' \n\n$gunet";
 		while ($r = mysql_fetch_array($sql)) {			
                         if (get_user_email_notification($r['user_id'], $cours_id)) {
-                                $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                                $linkhere = "&nbsp;<a href='${urlServer}main/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
                                 $unsubscribe = "<br /><br />$langNote:".sprintf($langLinkUnsubscribe, $intitule);            
                                 $body_topic_notify .= $unsubscribe.$linkhere;
                                 $emailaddr = uid_to_email($r['user_id']);

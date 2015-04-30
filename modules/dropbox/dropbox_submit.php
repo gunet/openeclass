@@ -181,7 +181,7 @@ if (isset($_POST["submitWork"]))
                         $subject_dropbox = "$c ($currentCourseID) - $dropbox_lang[newDropboxFile]";                        
                         foreach($recipients as $userid) {                         
                                 if (get_user_email_notification($userid, $cours_id)) {
-                                        $linkhere = "&nbsp;<a href='${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
+                                        $linkhere = "&nbsp;<a href='${urlServer}main/emailunsubscribe.php?cid=$cours_id'>$langHere</a>.";
                                         $unsubscribe = "<br /><br />".sprintf($langLinkUnsubscribe, $intitule);            
                                         $body_dropbox_message = "$langSender: $_SESSION[prenom] $_SESSION[nom] <br /><br /> $dropbox_title <br /><br />" . $_POST['description']. "<br />";
                                         if ($dropbox_filesize > 0) {                                            

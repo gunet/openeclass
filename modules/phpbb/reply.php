@@ -188,7 +188,7 @@ if (isset($_POST['submit'])) {
 			WHERE (topic_id = $topic OR forum_id = $forum OR cat_id = $category_id) 
 			AND notify_sent = 1 AND course_id = $cours_id AND user_id != $uid", $mysqlMainDb);
 	$c = course_code_to_title($currentCourseID);
-        $linkhere = "${urlServer}modules/profile/emailunsubscribe.php?cid=$cours_id";
+        $linkhere = "${urlServer}main/emailunsubscribe.php?cid=$cours_id";
         $unsubscribe = sprintf($langLinkUnsubscribe, $intitule);
 
         $body_topic_notify = "<br>$langBodyTopicNotify $langInForum '" . q($topic_title) .
