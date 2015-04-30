@@ -451,7 +451,7 @@ class MultimediaHelper {
      * @return boolean
      */
     public static function isEmbeddableMedialink($medialink) {
-        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns(), self::getDailymotionPatterns());
+        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns(), self::getDailymotionPatterns(), self::getNineSlidesPatterns());
         $ret = false;
 
         foreach ($supported as $pattern) {
@@ -511,6 +511,13 @@ class MultimediaHelper {
             if (preg_match($pattern, $medialink, $matches)) {
                 $sanitized = strip_tags($matches[1]);
                 $medialink = 'http://www.dailymotion.com/embed/video/' . $sanitized . '?autoPlay=1';
+            }
+        }
+        
+        foreach (self::getNineSlidesPatterns() as $pattern) {
+            if (preg_match($pattern, $medialink, $matches)) {
+                $sanitized = strip_tags($matches[1]);
+                $medialink = 'http://www.9slides.com/embed/' . $sanitized;
             }
         }
 
@@ -573,6 +580,10 @@ class MultimediaHelper {
 
     public static function getDailymotionPatterns() {
         return array('/dailymotion\.com.*\/video\/(([^&^\?^_]+))/i');
+    }
+    
+    public static function getNineSlidesPatterns() {
+        return array('/9slides\.com\/talks\/([^&^\?]+)/i');
     }
 
 }
