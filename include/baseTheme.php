@@ -756,6 +756,13 @@ function module_path($path) {
             return 'document';
         }
     }
+    if (strpos($path, 'listreq.php') !== false) {
+        if (strpos($path, '?type=user') !== false) {
+            return 'listreq-user';
+        } else {
+            return 'listreq';
+        }
+    }
 
     $path = preg_replace('/\?[a-zA-Z0-9=&;]+$/', '', $path);
     $path = str_replace(array($urlServer, $urlAppend, 'index.php'),
