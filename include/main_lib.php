@@ -1699,7 +1699,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
                         toolbarGrp.hide();
                     });
                     editor.on('init', function() {
-                        toolbarGrp = $(editor.contentAreaContainer.parentElement).find('div.mce-toolbar-grp');
+                        toolbarGrp = $(editor.contentAreaContainer.parentElement).find('.mce-toolbar-grp');
                     });
                 }";
         } else {
@@ -1715,7 +1715,7 @@ function rich_text_editor($name, $rows, $cols, $text, $onFocus = false) {
 
 function editorToggleSecondToolbar(editor) {
     return function() {
-        var toolbar = $(editor.contentAreaContainer.parentElement).find('div.mce-toolbar-grp').find('.mce-toolbar').eq(1);
+        var toolbar = $(editor.contentAreaContainer.parentElement).find('.mce-toolbar-grp .mce-toolbar').eq(1);
         toolbar.toggle();
     }
 }
