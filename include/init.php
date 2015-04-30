@@ -122,6 +122,23 @@ $purifier->config->set('HTML.SafeObject', true);
 $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
 $purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()));
+$purifier->config->set('HTML.DefinitionID', 'html5-definitions');
+if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
+    // http://htmlpurifier.org/phorum/read.php?2,7417,7417
+    $def->addElement('video', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', array(
+      'src' => 'URI',
+      'type' => 'Text',
+      'width' => 'Length',
+      'height' => 'Length',
+      'poster' => 'URI',
+      'preload' => 'Enum#auto,metadata,none',
+      'controls' => 'Text',
+    ));
+    $def->addElement('source', 'Block', 'Flow', 'Common', array(
+      'src' => 'URI',
+      'type' => 'Text',
+    ));
+}
 // PHP Math Publisher
 require_once 'include/phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
