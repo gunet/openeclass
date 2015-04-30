@@ -1289,7 +1289,7 @@ if ($doc_count == 0) {
             if (!$entry['visible']) {
                 $style = ' class="not_visible"';
             } else {
-                $style = '';
+                $style = ' class="visible"';
             }
             if ($is_dir) {
                 $img_href = icon('fa-folder');

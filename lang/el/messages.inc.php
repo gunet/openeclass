@@ -1215,7 +1215,7 @@ $langMultiCourseCreated = 'το μάθημα δημιουργήθηκε';
  * document.php
  * **************************************************** */
 $langUpload = "Ανέβασμα";
-$langDownload = "Κατέβασμα";
+$langDownload = "Λήψη";
 $langDownloadFile = "Ανέβασμα αρχείου";
 $langCloudFile = "Δικτυακό αρχείο";
 $langPathUploadFile = "Επιλογή αρχείου";
