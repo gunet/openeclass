@@ -191,7 +191,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             <div class='panel-heading'>
                 <div class='pull-right'>".
                     action_button(array(
-                        array('title' => $langModify,
+                        array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
                             'icon' => 'fa-edit'),
                         array('title' => $langDelete,
@@ -262,7 +262,7 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
 
         $tool_content .= "<td class='option-btn-cell'>" .
                 action_button(array(
-                    array('title' => $langModify,
+                    array('title' => $langEditChange,
                         'url' => "$_SERVER[SCRIPT_NAME]?modify=$note->id",
                         'icon' => 'fa-edit'),
                     array('title' => $langDelete,

@@ -323,23 +323,23 @@ if ($displayAnnouncementList == true) {
                 <td>" . standard_text_escape($myrow->body) . "</td>
                 <td width='6'>" .
                     action_button(array(
-                        array('title' => $langModify,
+                        array('title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?modify=$myrow->id",
                             'icon' => 'fa-edit'),
-                        array('title' => $langDelete,
-                            'class' => 'delete',
-                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$myrow->id",
-                            'confirm' => $langConfirmDelete,
-                            'icon' => 'fa-times'),
-                        array('title' => $langVisibility,
+                        array('title' => $visibility == 0 ? $langViewHide : $langViewShow,
                             'url' => "$_SERVER[SCRIPT_NAME]?id=$myrow->id&amp;vis=$visibility",
-                            'icon' => $visibility == 0 ? 'fa-eye' : 'fa-eye-slash'),
+                            'icon' => $visibility == 0 ? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $langUp,
                             'url' => "$_SERVER[SCRIPT_NAME]?up=$myrow->id",
                             'icon' => 'fa-arrow-up'),
                         array('title' => $langDown,
                             'url' => "$_SERVER[SCRIPT_NAME]?down=$myrow->id",
                             'icon' => 'fa-arrow-down'),
+                        array('title' => $langDelete,
+                            'class' => 'delete',
+                            'url' => "$_SERVER[SCRIPT_NAME]?delete=$myrow->id",
+                            'confirm' => $langConfirmDelete,
+                            'icon' => 'fa-times')
                     )) . "
                 </td></tr>";
         }
