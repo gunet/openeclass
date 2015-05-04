@@ -559,7 +559,7 @@ require_once 'include/lib/references.class.php';
         global $course_code, $is_editor, $langDateNow, $dateFormatLong, 
                 $langHour, $langHours, $langDuration, $langAgendaNoTitle, $langDelete, 
                 $langConfirmDeleteEvent, $langConfirmDeleteRecursive, $langConfirmDeleteRecursiveEvents, 
-                $langModify, $langVisible, $id, $is_admin;
+                $langEditChange, $langViewHide, $langViewShow, $id, $is_admin;
         
         $dateNow = date("j-n-Y / H:i", time());
         $barMonth = '';
@@ -631,26 +631,32 @@ require_once 'include/lib/references.class.php';
             if ($type == 'admin' and $is_admin == true) {
                $eventlist .= "<td class='option-btn-cell'>";
                $eventlist .= action_button(array(
-                        array('title' => $langDelete,
-                              'url' => "?delete=$myrow->id&et=admin",
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langConfirmDeleteEvent),
+                        array('title' => $langEditChange,
+                             'url' => "?admin=1&amp;modify=$myrow->id",
+                             'icon' => 'fa-edit'),
                         array('title' => $langConfirmDeleteRecursive,
                                    'url' => "?delete=$myrow->id&et=admin&amp;rep=yes",
                                    'icon' => 'fa-times-circle-o',
                                    'class' => 'delete',
                                    'confirm' => $langConfirmDeleteRecursiveEvents,
-                                   'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
-                        array('title' => $langModify,
-                             'url' => "?admin=1&amp;modify=$myrow->id",
-                             'icon' => 'fa-edit'),                       
+                                   'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),  
+                        array('title' => $langDelete,
+                              'url' => "?delete=$myrow->id&et=admin",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmDeleteEvent)
                    ));
               $eventlist .= "</td>";
-           } else {
+            } else {
                if ($is_editor) {
                     $eventlist .= "<td class='option-btn-cell'>";
                     $eventlist .= action_button(array(
+                        array('title' => $langEditChange,
+                             'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
+                             'icon' => 'fa-edit'),
+                        array('title' => $myrow->visible ?   $langViewHide : $langViewShow,
+                             'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
+                             'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye'),
                        array('title' => $langDelete,
                              'url' => "?course=$course_code&amp;id=$myrow->id&amp;delete=yes",
                              'icon' => 'fa-times',
@@ -661,18 +667,15 @@ require_once 'include/lib/references.class.php';
                              'icon' => 'fa-times-circle-o',
                              'class' => 'delete',
                              'confirm' => $langConfirmDeleteRecursiveEvents,
-                             'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
-                       array('title' => $langModify,
-                             'url' => "?course=$course_code&amp;id=$myrow->id&amp;edit=true",
-                             'icon' => 'fa-edit'),
-                       array('title' => $langVisible,
-                             'url' => "?course=$course_code&amp;id=$myrow->id" . ($myrow->visible? "&amp;mkInvisibl=true" : "&amp;mkVisibl=true"),
-                             'icon' => $myrow->visible ? 'fa-eye-slash' : 'fa-eye')
+                             'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end)))
                    ));
                     $eventlist .= "</td>";              
                 } elseif ($type == 'personal') { // personal or admin event
                     $eventlist .= "<td class='option-btn-cell'>";
                     $eventlist .= action_button(array(
+                            array('title' => $langEditChange,
+                                  'url' => "?modify=$myrow->id",
+                                  'icon' => 'fa-edit'),
                             array('title' => $langDelete,
                                   'url' => "?delete=$myrow->id&et=$type",
                                   'icon' => 'fa-times',
@@ -683,10 +686,7 @@ require_once 'include/lib/references.class.php';
                                   'icon' => 'fa-times-circle-o',
                                   'class' => 'delete',
                                   'confirm' => $langConfirmDeleteRecursiveEvents,
-                                  'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),
-                            array('title' => $langModify,
-                                  'url' => "?modify=$myrow->id",
-                                  'icon' => 'fa-edit'),                       
+                                  'show' => !(is_null($myrow->recursion_period) || is_null($myrow->recursion_end))),                       
                         ));
                    $eventlist .= "</td>";
                 }
