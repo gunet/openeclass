@@ -250,9 +250,6 @@ if (!$nbrExercises) {
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
                           'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
                           'show' => course_status($course_id) == COURSE_OPEN),
-                    array('title' => $langExerciseStats,
-                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
-                          'icon' => 'fa-pie-chart'),
                     array('title' => $langCreateDuplicate,
                           'icon-class' => 'warnLink',
                           'icon-extra' => "data-exerciseid='$row->id'",
@@ -266,7 +263,10 @@ if (!$nbrExercises) {
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
                           'icon' => 'fa-times',
                           'class' => 'delete',
-                          'confirm' => $langConfirmPurgeExercise)                
+                          'confirm' => $langConfirmPurgeExercise),
+                    array('title' => $langExerciseStats,
+                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
+                          'icon' => 'fa-pie-chart')
                     ))."</td></tr>";
             
         // student only

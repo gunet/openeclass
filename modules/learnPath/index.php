@@ -494,7 +494,7 @@ foreach ($result as $list) { // while ... learning path list
                   AND M.`course_id` = ?d
                 ORDER BY LPM.`rank` ASC";
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
-
+        
         $play_img = "<i class='fa fa-play-circle' style='font-size:20px;'></i>";
 
         if (count($resultmodules) > 0) {
@@ -503,9 +503,14 @@ foreach ($result as $list) { // while ... learning path list
         } else {
             $play_button = $play_img;
         }
+        if ($list->lock == 'CLOSE'){
+            $locked_signed = "<i class='fa fa-lock text-danger' style='font-size:20px';></i>&nbsp;&nbsp;";
+        } else {
+            $locked_signed = "";
+        }
 
         $tool_content .= "
-      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$play_button</span></td>\n";
+      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$locked_signed $play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -575,38 +580,16 @@ foreach ($result as $list) { // while ... learning path list
 
         $tool_content .= "      <td class='option-btn-cell'>" .
                 action_button(array(
-                    array('title' => $langBlock,
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id,
-                        'icon' => 'fa-unlock',
-                        'show' => $list->lock == 'OPEN'),
-                    array('title' => $langAltMakeNotBlocking,
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
-                        'icon' => 'fa-lock',
-                        'level' => 'primary',
-                        'show' => !($list->lock == 'OPEN')),
-                    array('title' => $langTracking,
-                        'url' => "details.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-search'),
-                    // VISIBILITY link
-                    array('title' => $langVisible,
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-eye-slash',
-                        'show' => $list->visible == 0),
-                    array('title' => $langVisible,
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-plus-circle',
-                        'confirm' => $list->lock == 'CLOSE' ? $langAlertBlockingPathMadeInvisible : null,
-                        'confirm_title' => "",
-                        'confirm_button' => $langAccept,
-                        'show' => $list->visible != 0),
-                    array('title' => $langModify,
+                    array('title' => $langEditChange,
                         'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
                         'icon' => 'fa-edit'),
-                    array('title' => $langDelete,
-                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
-                        'icon' => 'fa-times',
-                        'class' => 'delete',
-                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete),
+                    // VISIBILITY link
+                    array('title' => !$list->visible == 0? $langViewHide : $langViewShow,
+                        'url' => !$list->visible == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
+                        'icon' => !$list->visible == 0? 'fa-eye-slash': 'fa-eye'),
+                    array('title' => $list->lock == 'OPEN'? $langResourceAccessLock : $langResourceAccessUnlock,
+                        'url' => $list->lock == 'OPEN'? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
+                        'icon' => $list->lock == 'OPEN'? 'fa-lock' : 'fa-unlock'),
                     array('title' => $langUp,
                         'level' => 'primary',
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id,
@@ -617,6 +600,9 @@ foreach ($result as $list) { // while ... learning path list
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveDown&amp;move_path_id=" . $list->learnPath_id,
                         'icon' => 'fa-arrow-down',
                         'disabled' => $iterator >= $LPNumber),
+                    array('title' => $langTracking,
+                        'url' => "details.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-line-chart'),
                     array('title' => $langExport2004,
                         'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=export&amp;path_id=' . $list->learnPath_id,
                         'icon' => 'fa-download'),
@@ -625,7 +611,12 @@ foreach ($result as $list) { // while ... learning path list
                         'icon' => 'fa-download'),
                     array('title' => $langExportIMSCP,
                         'url' => $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;cmd=exportIMSCP&amp;path_id=' . $list->learnPath_id,
-                        'icon' => 'fa-download')                    
+                        'icon' => 'fa-download'),
+                    array('title' => $langDelete,
+                        'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delete&amp;del_path_id=" . $list->learnPath_id,
+                        'icon' => 'fa-times',
+                        'class' => 'delete',
+                        'confirm' => $is_real_dir ? ($langAreYouSureToDeleteScorm . " \"" . $list->name)."\"" : $langDelete)               
                 )) .
                 "</td>\n";
     } elseif ($uid) {

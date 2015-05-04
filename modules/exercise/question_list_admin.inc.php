@@ -265,12 +265,6 @@ if ($nbrQuestions) {
                                 'icon-class' => 'warnLink',
                                 'icon-extra' => $objQuestionTmp->selectNbrExercises()>1? "data-toggle='modal' data-target='#modalWarning' data-remote='false'" : "",
                                 'icon' => 'fa-edit'),
-                        array('title' => $langDelete,
-                                'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
-                                'icon' => 'fa-times',
-                                'class' => 'delete',
-                                'confirm' => $langConfirmYourChoice,
-                                'show' => !isset($fromExercise)),
                         array('title' => $langUp,
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;moveUp=$id",
                                 'level' => 'primary',
@@ -282,7 +276,13 @@ if ($nbrQuestions) {
                                 'level' => 'primary',
                                 'icon' => 'fa-arrow-down',
                                 'disabled' => $i == $nbrQuestions
-                            )                
+                            ),
+                        array('title' => $langDelete,
+                                'url' => "?course=$course_code&amp;exerciseId=$exerciseId&amp;deleteQuestion=$id",
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'confirm' => $langConfirmYourChoice,
+                                'show' => !isset($fromExercise))           
                     ))."</td></tr>";
         $i++;
         unset($objQuestionTmp);

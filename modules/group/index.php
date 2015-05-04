@@ -393,7 +393,7 @@ if ($is_editor) {
             }
             $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
-                        array('title' => $langEdit,
+                        array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),
                         array('title' => $langDelete,
