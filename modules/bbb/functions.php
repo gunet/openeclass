@@ -668,7 +668,7 @@ function bbb_session_details() {
     global $course_id, $tool_content, $is_editor, $langNewBBBSessionStart, $langNewBBBSessionType;
     global $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langBBBSessionJoin, $langNewBBBSessionDesc;
     global $course_code;   
-    global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langModify, $langDelete, $langNoBBBSesssions;
+    global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langEditChange, $langDelete, $langNoBBBSesssions;
     global $langBBBNotServerAvailableStudent, $langBBBNotServerAvailableTeacher;
     global $langBBBImportRecordings;
         

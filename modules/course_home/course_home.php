@@ -567,16 +567,16 @@ if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
-                        array('title' => $langVisibility,
-                              'url' => "$_SERVER[SCRIPT_NAME]?visW=$cu->id",
-                              'icon' => $vis == 1? 'fa-eye' : 'fa-eye-slash'),
-                        array('title' => $langEdit,
+                        array('title' => $langEditChange,
                               'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id",
                               'icon' => 'fa-edit'),
-                        array('title' => $langResourceAccess,
+                        array('title' => $vis == 1? $langViewHide : $langViewShow,
+                              'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
+                              'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
                               'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
-                              'icon' => $access == 1? 'fa-unlock': 'fa-lock',
-                              'show' => $visible == COURSE_OPEN))) .
+                              'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                              'show' => $visible == COURSE_OPEN),)) .
                     '</div>';                    
                 } else {
                     $cunits_content .= "<div class='item-side'>" .
