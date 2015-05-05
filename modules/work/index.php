@@ -583,13 +583,13 @@ function new_assignment() {
 
     $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#WorkEnd').datetimepicker({
+            $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
                 language: '".$language."',
                 autoclose: true    
             });        
-            $('#enableWorkEnd').change(function() {
+            $('#enableWorkEnd, #enableWorkStart').change(function() {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#'+dateType).prop('disabled', false);
