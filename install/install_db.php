@@ -824,7 +824,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `description` TEXT NOT NULL,
                 `comments` TEXT NOT NULL,
                 `submission_type` TINYINT NOT NULL DEFAULT '0',
-                `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `deadline` DATETIME NULL DEFAULT NULL,
                 `late_submission` TINYINT NOT NULL DEFAULT '0', 
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `active` CHAR(1) NOT NULL DEFAULT '1',
