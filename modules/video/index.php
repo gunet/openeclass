@@ -600,14 +600,14 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                 if ($display_tools) {
                     $tool_content .= "<td class='option-btn-cell'>";
                     $tool_content .= action_button(array(
+                        array('title' => $langEditChange,
+                              'icon' => 'fa-edit',
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory"),
                         array('title' => $langDelete,
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat",
-                              'confirm' => $langCatDel),
-                        array('title' => $langModify,
-                              'icon' => 'fa-edit',
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")));
+                              'confirm' => $langCatDel)));
 
                     $tool_content .= '</td>';
                 }

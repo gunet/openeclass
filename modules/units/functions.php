@@ -1135,9 +1135,9 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  * @return string
  */
 function actions($res_type, $resource_id, $status, $res_id = false) {
-    global $is_editor, $langEdit, $langDelete, $langVisibility,
+    global $is_editor, $langEditChange, $langDelete, $langVisibility,
     $langAddToCourseHome, $langDown, $langUp,
-    $langConfirmDelete, $course_code;
+    $langConfirmDelete, $course_code, $langViewHide, $langViewShow;
 
     static $first = true;
 
@@ -1148,23 +1148,19 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     if ($res_type == 'description') {
         $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
         $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
-    } else {        
-        $icon_vis = ($status == 1) ? 'fa-eye' : 'fa-eye-slash';
+    } else {      
+        $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
+        $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
     $content = "<td class='option-btn-cell'>";
     $content .= action_button(array(
-                array('title' => $langEdit,
+                array('title' => $langEditChange,
                       'url' => $edit_link,
                       'icon' => 'fa-edit',
                       'show' => $status != 'del'),
-                array('title' => $langDelete,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
-                      'icon' => 'fa-times',
-                      'confirm' => $langConfirmDelete,
-                      'class' => 'delete'),
-                array('title' => $langVisibility,
+                array('title' => $showorhide,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
@@ -1181,7 +1177,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'level' => 'primary',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
                       'icon' => 'fa-arrow-up',
-                      'disabled' => $first)
+                      'disabled' => $first),
+                array('title' => $langDelete,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
+                      'icon' => 'fa-times',
+                      'confirm' => $langConfirmDelete,
+                      'class' => 'delete')
             ));
     
     $first = false;
@@ -1216,7 +1217,7 @@ function edit_res($resource_id) {
     if ($resource_type != 'text') {
         $content .= "<div class='form-group'>                   
                 <label class='col-sm-2 control-label'>$langTitle:</label>
-                <div class='col-sm-10'><input type='text' name='restitle' size='50' maxlength='255' $restitle></div>
+                <div class='col-sm-10'><input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle></div>
                 </div>";
         $message = $langDescr;
     } else {

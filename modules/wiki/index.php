@@ -424,7 +424,7 @@ switch ($action) {
                         $tool_content.= "<td class='option-btn-cell'>";
                         $tool_content .=
                                  action_button(array(
-                                array(  'title' => $langModify,
+                                array(  'title' => $langEditChange,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gid=$groupId&amp;wikiId=$entry->id&amp;action=rqEdit",
                                         'icon' => 'fa-edit'),
                                 array(  'title' => $langWikiRecentChanges,

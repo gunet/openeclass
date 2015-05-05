@@ -1053,14 +1053,6 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                           'show' => ($is_allowedToEdit || $is_allowedToCreate)
                                       ),
                                       array(
-                                          'title' => $langWikiDeletePage,
-                                          'class' => 'delete',
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
-                                          'icon' => 'fa-times',
-                                          'confirm' => $langWikiDeletePageWarning,
-                                          'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
-                                      ),
-                                      array(
                                           'title' => $langWikiPageHistory,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=history&amp;title=". rawurlencode($wiki_title),
                                           'icon' => 'fa-history'
@@ -1069,7 +1061,15 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                           'title' => $langWikiPagePrintable,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title),
                                           'icon' => 'fa-print'
-                                      )                                        
+                                      )    ,
+                                      array(
+                                          'title' => $langWikiDeletePage,
+                                          'class' => 'delete',
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
+                                          'icon' => 'fa-times',
+                                          'confirm' => $langWikiDeletePageWarning,
+                                          'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
+                                      )                                    
                                     ))."</div>
                                     <h3 class='panel-title'>
                                         ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ." 

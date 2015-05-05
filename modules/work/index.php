@@ -1449,7 +1449,7 @@ function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
     $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
-    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $course_id;
+    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $course_id, $langEditChange;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -1500,7 +1500,7 @@ function assignment_details($id, $row) {
             ". (($is_editor) ? 
                     action_button(array(
                         array(
-                            'title' => $m['edit'],
+                            'title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
                             'level' => 'primary-label',
                             'icon' => 'fa-edit'
@@ -1626,7 +1626,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langWorkOnlineText,
     $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
     $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id, 
-    $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEdit;
+    $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange;
     
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -1755,7 +1755,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td class='option-btn-cell'>".  
                                     action_button(array(
                                         array(
-                                            'title' => $langEdit,
+                                            'title' => $langEditChange,
                                             'url' => "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id",
                                             'level' => 'primary',
                                             'icon' => 'fa-edit'
@@ -1922,7 +1922,7 @@ function show_non_submitted($id) {
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $course_code,
     $langDaysLeft, $langDays, $langNoAssign, $urlServer,
-    $course_code, $themeimg;
+    $course_code, $themeimg, $langEditChange;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -2002,7 +2002,7 @@ function show_student_assignments() {
 
 // show all the assignments
 function show_assignments() {
-    global $tool_content, $m, $langEdit, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
+    global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
     $course_code, $themeimg, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
     $langWarnForSubmissions, $langDelSure;
     
@@ -2059,17 +2059,18 @@ function show_assignments() {
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
               action_button(array(
-                    array('title' => $langEdit,
+                    array('title' => $langEditChange,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
+                  
+                    array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
+                          'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
+                          'icon' => $row->active == 1 ? 'fa-eye-slash': 'fa-eye'),
                     array('title' => $m['WorkSubsDelete'],
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                           'icon' => 'fa-eraser',
                           'confirm' => "$langWarnForSubmissions $langDelSure",
                           'show' => $num_submitted > 0),
-                    array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
-                          'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
-                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'),
                     array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                             'icon' => 'fa-times',
