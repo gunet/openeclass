@@ -4520,14 +4520,14 @@ $langFormErrors = 'Η φόρμα περιέχει λάθη. Παρακαλώ δ�
 $langMoreOptions = 'Περισσότερες επιλογές';
 $langLessOptions = 'Λιγότερες επιλογές';
 
-$langMyCoursesSide = 'Τα μαθηματα μου';
-$langMyMessagesSide = 'Τα μηνυματα μου';
-$langNewMyMessagesSide = 'Νεα Μηνυματα';
-$langQuickNotesSide = 'Γρηγορη σημειωση';
+$langMyCoursesSide = 'Τα μαθήματα μου';
+$langMyMessagesSide = 'Τα μηνύματα μου';
+$langNewMyMessagesSide = 'Νέα Μηνύματα';
+$langQuickNotesSide = 'Γρήγορη σημείωση';
 $langNumOpenCoursesBanner = "ανοικτά<br>μαθήματα";
 $langNumOpenCourseBanner = "ανοικτό<br>μάθημα";
 $langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";
-$langNationalOpenCourses = "Εθνικη πυλη ανοικτων μαθηματων";
+$langNationalOpenCourses = "Εθνική πύλη ανοικτών μαθημάτων";
 $langExtAppName = "Εφαρμογή";
 $langExtAppDescription = "Περιγραφή";
 
@@ -4538,8 +4538,20 @@ $langTag = 'Ετικέτα';
 $langTags = 'Ετικέτες';
 
 //
-// Messages for OpenDelos
+// Messages for external tools
 //
 
 $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα ανοικτού λογισμικού που σχεδιάζει το GUNET για τη Διαχείριση, Καταγραφή και Μετάδοση Βιντεοδιαλέξεων.</p>
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών Μαθημάτων</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης μαθημάτων που επίσης αναπτύσσει το GUNET.</p>";
+$langFtpShortDescription = "Σύνδεση με υπηρεσία FTP";
+$langFtpLongDescription = "Πληκτρολογήστε το σύνδεσμο FTP";
+$langGoogleDriveShortDescription = "Short Description about google drive";
+$langGoogleDriveLongDescription = "Long description about google drive";
+$langOneDriveShortDescription = "Short Description about one drive";
+$langOneDriveLongDescription = "Long description about one drive";
+$langDropboxShortDescription = "Short Description about dropbox";
+$langDropboxLongDescription = "Long description about dropbox";
+$langOwnCloudShortDescription = "Short Description about own cloud";
+$langOwnCloudLongDescription = "Long description about own cloud";
+$langWebDAVShortDescription = "Short Description about web dav";
+$langWebDAVLongDescription = "Long Description about web dav";
