@@ -87,6 +87,7 @@ if ($appName) {
     $tool_content.="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
     $tool_content.="\n";
     foreach (ExtAppManager::getApps() as $app) {
+        if ($app->getName() == 'opendelos') {
         $tool_content .="<tr>\n";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
         //$tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
@@ -100,6 +101,7 @@ if ($appName) {
         
         $tool_content .= "<td>" . $app->getShortDescription() . "</td>\n";
         $tool_content .="</tr>\n";
+        }
     }
     $tool_content .="<tr>\n";
     $tool_content .= "<td style=\"width:90px;\"><a href=\"bbbmoduleconf.php\"><img class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></td>\n";
