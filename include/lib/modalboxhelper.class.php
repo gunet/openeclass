@@ -21,8 +21,8 @@
 
 class ModalBoxHelper {
 
-    private static $modalWidth = 680;
-    private static $modalHeight = 380;
+    private static $modalWidth = 660;
+    private static $modalHeight = 410;
     private static $shadowBoxWidth = 700;
     private static $shadowBoxHeight = 350;
 
@@ -75,6 +75,8 @@ class ModalBoxHelper {
                               $(".colorboxframe").colorbox({
                                       innerWidth  : ' . self::$modalWidth . ',
                                       innerHeight : ' . self::$modalHeight . ',
+                                      maxWidth    : "100%",
+                                      maxHeight   : "100%",
                                       iframe      : true,
                                       scrolling   : false,
                                       opacity     : 0.8,
@@ -95,9 +97,9 @@ class ModalBoxHelper {
                           });
                           </script>';
 
-        if (file_exists(self::getShadowboxDir()))
+        if (file_exists(self::getShadowboxDir())) {
             load_js('shadowbox', $shadowbox_init);
-        else if (file_exists(self::getFancybox2Dir())) {
+        } else if (file_exists(self::getFancybox2Dir())) {
             load_js('fancybox2', $fancybox2_init);
         } else if (file_exists(self::getColorboxDir())) {
             load_js('colorbox', $colorbox_init);
