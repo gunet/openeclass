@@ -122,7 +122,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
         Session::Messages(array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
-            ($auth == 1? " $langAndP": '')), 'alert-success');
+            ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
     }
     redirect_to_home_page('modules/admin/newuseradmin.php');
 }
