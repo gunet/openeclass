@@ -465,7 +465,6 @@ foreach ($result as $list) { // while ... learning path list
     if ($list->visible == 0) {
         if ($is_editor) {
             $style = " class='not_visible'";
-            $image_bullet = "arrow.png";
         } else {
             continue; // skip the display of this file
         }
@@ -475,7 +474,6 @@ foreach ($result as $list) { // while ... learning path list
         } else {
             $style = 'class="odd"';
         }
-        $image_bullet = "arrow.png";
     }
 
 
@@ -567,7 +565,7 @@ foreach ($result as $list) { // while ... learning path list
             }
         }
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "      <td width='20'><img src='$themeimg/arrow.png' alt='' /></td><td>" . $list->name/* .$list['minRaw'] */ . "</td>\n";
+        $tool_content .= "     <td>" . $list->name/* .$list['minRaw'] */ . "</td>\n";
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
