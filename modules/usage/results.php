@@ -21,12 +21,11 @@
 
 /**
  * @file results.php
- * @brief display graph results
+ * @brief produce statistic analysis results in JSON
  */
 
-require_once 'modules/graphics/plotter.php';
 
-if (isset($_POST['user_date_start'])) {
+/*if (isset($_POST['user_date_start'])) {
     $uds = DateTime::createFromFormat('d-m-Y H:i', $_POST['user_date_start']);
     $u_date_start = $uds->format('Y-m-d H:i');
     $user_date_start = $uds->format('d-m-Y H:i');
@@ -95,9 +94,6 @@ switch ($u_interval) {
         $date_group = " GROUP BY YEAR(`day`) ";
         break;
 }
-
-
-$chart = new Plotter(300, 300);
 
 switch ($u_stats_value) {
     case "visits":        
@@ -181,7 +177,53 @@ switch ($u_stats_value) {
         $tool_content .= "<div class='alert alert-info'>$langDurationExpl</div>";
 
         break;
+}*/
+$require_login = TRUE;
+
+require_once '../../include/init.php';
+require_once 'usage.lib.php';
+
+$result = null;
+$intervals = array(1=>'day', 7=>'week', 30=>'month', 365=>'year');
+$interval = (isset($_REQUEST['i']) && isset($intervals[$_REQUEST['i']]))? $intervals[$_REQUEST['i']] : 'month';
+$plotuser = (isset($_REQUEST['u']) && is_numeric($_REQUEST['u']) && $_REQUEST['u']>0)? $_REQUEST['u'] : null;
+$plotcourse = (isset($_REQUEST['c']) && is_numeric($_REQUEST['c']) && $_REQUEST['c']>0)? $_REQUEST['c'] : null;
+$plotmodule = (isset($_REQUEST['m']) && is_numeric($_REQUEST['c']) && $_REQUEST['m']>0)? $_REQUEST['m'] : null;
+
+$ds = DateTime::createFromFormat('Y-n-j', $_REQUEST['s']);
+$de = DateTime::createFromFormat('Y-n-j', $_REQUEST['e']);
+if(($ds && $ds->format('Y-n-j') == $_REQUEST['s']) && ($de && $de->format('Y-n-j') == $_REQUEST['e'])){
+    $enddate = $_REQUEST['e'];
+    $startdate = $_REQUEST['s'];    
+}
+else{
+    $endDate_obj = new DateTime();
+    $enddate = $endDate_obj->format('Y-n-j');
+    $startDate_obj = $endDate_obj->sub(new DateInterval('P1Y'));
+    $startdate = $startDate_obj->format('Y-n-j');
 }
 
-$errorMsg = '<div class="alert alert-warning">' . $langNoStatistics . '</div>';
-$tool_content .= $chart->plot($errorMsg);
+if(isset($_REQUEST['t'])){
+    switch($_REQUEST['t']){
+        case 'cg':
+            $result = get_course_stats($startdate, $enddate,$interval, $plotcourse, $plotuser);
+            break;
+        case 'cmp':
+            $result = get_module_preference_stats($startdate, $enddate, $plotcourse, $plotuser);
+            break;
+        case 'cm':
+            $result = get_course_module_stats($startdate, $enddate, $interval, $plotcourse, $plotmodule, $plotuser);
+            break;
+        case 'ug':
+            $result = get_user_stats($startdate, $enddate, $interval, $plotuser, $plotcourse);
+            break;
+        case 'ucp':
+            $result = get_course_preference_stats($startdate, $enddate, $plotuser, $plotcourse);
+            break;
+        case 'uc':
+            $result = get_user_course_stats($startdate, $enddate, $interval, $plotuser, $plotcourse, $plotmodule);
+            break;
+    }
+    
+}
+echo json_encode($result);

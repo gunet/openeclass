@@ -234,9 +234,9 @@ function load_js($file, $init='') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
             $file = 'bootstrap-timepicker/js/bootstrap-timepicker.min.js';
         } elseif ($file == 'bootstrap-datepicker') {
-            $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
+            $head_content .= css_link('bootstrap-datepicker/css/bootstrap-datepicker3.css') .
                 js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
-            $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
+            $file = "bootstrap-datepicker/locales/bootstrap-datepicker.$language.min.js";
         } elseif ($file == 'bootstrap-slider') {
             $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
             $file = 'bootstrap-slider/js/bootstrap-slider.min.js';

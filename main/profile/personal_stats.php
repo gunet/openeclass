@@ -19,6 +19,7 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+header('Location: ../../modules/usage/?t=u');
 $require_help = TRUE;
 $helpTopic = 'PersonalStats';
 include '../../include/baseTheme.php';

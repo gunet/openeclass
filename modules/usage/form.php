@@ -29,63 +29,65 @@ $require_login = true;
 
 $mod_opts = '<option value="-1">' . $langAllModules . "</option>";
 $result = Database::get()->queryArray("SELECT module_id FROM course_module WHERE visible = 1 AND course_id = ?d", $course_id);
-foreach ($result as $row) {
-    $mid = $row->module_id;
-    $extra = '';
-    if ($u_module_id == $mid) {
-        $extra = 'selected';
+
+$statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>\n" .
+        '<option value="7">' . $langPerWeek . "</option>\n" .
+        '<option value="30" selected>' . $langPerMonth . "</option>\n" .
+        '<option value="365">' . $langPerYear . "</option>\n";
+
+if(isset($course_id) && ($is_editor || $is_admin)){
+    /**Get users of course**/
+    $result = Database::get()->queryArray("SELECT u.id, concat(givenname,' ',surname,' (',username,')') name FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE course_id=?d AND cu.status=5", $course_id);
+    $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>\n";
+    foreach($result as $u){
+       $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>\n"; 
     }
-    $mod_opts .= "<option value=" . $mid . " $extra>" . $modules[$mid]['title'] . "</option>";
 }
-
-$statsValueOptions = '<option value="visits" ' . (($u_stats_value == 'visits') ? ('selected') : ('')) . '>' . $langVisits . "</option>\n" .
-        '<option value="duration" ' . (($u_stats_value == 'duration') ? ('selected') : ('')) . '>' . $langDuration . "</option>\n";
-
-$statsIntervalOptions = '<option value="daily"   ' . (($u_interval == 'daily') ? ('selected') : ('')) . ' >' . $langDaily . "</option>\n" .
-        '<option value="weekly"  ' . (($u_interval == 'weekly') ? ('selected') : ('')) . '>' . $langWeekly . "</option>\n" .
-        '<option value="monthly" ' . (($u_interval == 'monthly') ? ('selected') : ('')) . '>' . $langMonthly . "</option>\n" .
-        '<option value="yearly"  ' . (($u_interval == 'yearly') ? ('selected') : ('')) . '>' . $langYearly . "</option>\n" .
-        '<option value="summary" ' . (($u_interval == 'summary') ? ('selected') : ('')) . '>' . $langSummary . "</option>\n";
+elseif($is_admin){
+    
+}
+else{
+    /**Get courses of user**/
+    $result = Database::get()->queryArray("SELECT c.id, c.code, c.title FROM course_user cu JOIN course c ON cu.course_id=c.id WHERE user_id=?d", $uid);
+    $statsCourseOptions = '<option value="0" >' . $langAllCourses . "</option>\n";
+    foreach($result as $c){
+       $statsCourseOptions .= '<option value="'.$c->id.'" >' . $c->title . "</option>\n"; 
+    }
+}
 
 
 
 $tool_content .= '<div class="form-wrapper">';
-$tool_content .= '<form class="form-horizontal" role="form" method="post" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">';
-$tool_content .= '<div class="form-group">  
-                    <label class="col-sm-2 control-label">' . $langValueType . ':</label>
-                    <div class="col-sm-10"><select name="u_stats_value" class="form-control">' . $statsValueOptions . '</select></div>
-                  </div>';
-$tool_content .= "<div class='input-append date form-group' id='user_date_start' data-date = '" . q($user_date_start) . "' data-date-format='dd-mm-yyyy'>
-    <label class='col-sm-2 control-label'>$langStartDate:</label>
-        <div class='col-xs-10 col-sm-9'>               
-            <input class='form-control' name='user_date_start' type='text' value = '" . q($user_date_start) . "'>
-        </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
+$tool_content .= '<div class="form-group">';  
+        
+$endDate_obj = new DateTime();
+$enddate = $endDate_obj->format('d-m-Y');
+$showUntil = q($enddate);
+$startDate_obj = $endDate_obj->sub(new DateInterval('P1Y'));
+$startdate = $startDate_obj->format('d-m-Y');
+$showFrom = q($startdate);
+
+$tool_content .= "<label class='col-sm-1 control-label'>$langFrom:</label>
+        <div class='col-xs-2 col-sm-2'>               
+            <input class='form-control' name='startdate' id='startdate' type='text' value = '$showFrom'>
         </div>";        
-$tool_content .= "<div class='input-append date form-group' id='user_date_end' data-date= '" . q($user_date_end) . "' data-date-format='dd-mm-yyyy'>
-        <label class='col-sm-2 control-label'>$langEndDate:</label>
-            <div class='col-xs-10 col-sm-9'>
-                <input class='form-control' name='user_date_end' type='text' value= '" . q($user_date_end) . "'>
-            </div>
-        <div class='col-xs-2 col-sm-1'>
-            <span class='add-on'><i class='fa fa-times'></i></span>
-            <span class='add-on'><i class='fa fa-calendar'></i></span>
-        </div>
-        </div>";
-$tool_content .= '<div class="form-group">
-        <label class="col-sm-2 control-label">' . $langModule . ':</label>
-        <div class="col-sm-10"><select name="u_module_id" class="form-control">' . $mod_opts . '</select></div>
-  </div>
-<div class="form-group">
-    <label class="col-sm-2 control-label">' . $langInterval . ':</label>
-     <div class="col-sm-10"><select name="u_interval" class="form-control">' . $statsIntervalOptions . '</select></div>
-  </div>
-  <div class="form-group">
-    <div class="col-sm-offset-2 col-sm-10">
-      <input class="btn btn-primary" type="submit" name="btnUsage" value="' . $langSubmit . '">
-    </div>
-  </div>
-</form></div>';
+$tool_content .= "<label class='col-sm-1 control-label'>$langUntil:</label>
+            <div class='col-xs-2 col-sm-2'>
+                <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
+            </div>";
+$tool_content .= '
+    <div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
+
+if($stats_type == 'course'){
+    $tool_content .= '
+    <div class="col-sm-3 col-xs-3"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
+}
+elseif($is_admin){
+    
+}
+elseif($stats_type == 'user'){
+    $tool_content .= '
+    <div class="col-sm-3 col-xs-3"><select name="course" id="course" class="form-control">' . $statsCourseOptions . '</select></div>';
+}
+
+$tool_content .= '</div></div>';
