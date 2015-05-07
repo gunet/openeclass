@@ -396,20 +396,7 @@ if (isset($level) && !empty($level)) {
             icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
         </div>
     </div>
-
-
-    <table class='tbl_courseid' width='200' style='display: none;'>
-        <tr class='title1'>
-            <td class='title1'></td>
-            <td style='text-align: right; padding-right: 1.2em'><a href='$metadataUrl'>" .
-            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</td>
-        </tr>
-        <tr>
-            <td colspan='2'><div class='center'>".icon('open_courses_logo_small', $langOpenCourses)."</div>
-                <div class='center'><b>${langOpenCoursesLevel}: $level</b></div>
-            </td>
-        </tr>
-    </table>";
+";
 }
 
 $emailnotification = '';
