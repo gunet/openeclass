@@ -224,8 +224,9 @@ function load_js($file, $init='') {
             $file = 'jquery.rateit.min.js';
         } elseif ($file == 'select2') {
             $head_content .= css_link('select2-3.5.1/select2.css') .
-                css_link('select2-3.5.1/select2-bootstrap.css');
-            $file = 'select2-3.5.1/select2.min.js';
+                css_link('select2-3.5.1/select2-bootstrap.css') .
+                js_link('select2-3.5.1/select2.min.js');
+            $file = "select2-3.5.1/select2_locale_$language.js";
         } elseif ($file == 'bootstrap-datetimepicker') {
             $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
                 js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
