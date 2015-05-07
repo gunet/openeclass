@@ -10,9 +10,6 @@
 
 /* GLOBAL STYLES -----------------------------------------------------------------*/
 
-.delete-action {color:$color-red;}
-.delete-action:hover {background:$color-red!important; color:white!important; @include transition(all $transition-time linear);}
-
 .align-left {text-align: left;}
 .align-right {text-align: right;}
 
