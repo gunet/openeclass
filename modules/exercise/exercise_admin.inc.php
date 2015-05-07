@@ -427,15 +427,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 <div class='col-sm-9'>
                     $disp_score_message
                 </div>                
-            </div>
+            </div>";
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list)            
+            $tool_content .= "
             <div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    " . $moduleTag->showTags() . "                       
+                    $tags_list                       
                 </div>                
-            </div>
+            </div>";
+            
+    $tool_content .= "            
         </div>
     </div>";
 }

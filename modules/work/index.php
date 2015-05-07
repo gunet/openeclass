@@ -1613,15 +1613,19 @@ function assignment_details($id, $row) {
                 <div class='col-sm-9'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."                   
                 </div>                
-            </div>
+            </div>";
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list)
+        $tool_content .= "
             <div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    " . $moduleTag->showTags() . "
+                    $tags_list
                 </div>                
-            </div>   
+            </div> ";
+$tool_content .= "        
         </div>
     </div>";
        

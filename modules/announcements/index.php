@@ -556,13 +556,15 @@ if (isset($_GET['an_id'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
         $tool_content .= "<div class='panel'>";
         $tool_content .= "<div class='panel-body'>";
-        $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
+        $tool_content .= "<div class='not_visible margin-bottom-thin'>$langDate: $row->date</div>";
         $tool_content .= $row->content;
         
         $moduleTag = new ModuleElement($row->id);
-        $tool_content .= $langTags.": ";
-        $tool_content .= $moduleTag->showTags();
-        $tool_content .= "</div></div>";
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list) $tool_content .= "<div>$langTags: $tags_list</div>";
+        $tool_content .= "
+                    </div>
+                </div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
         $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table-default'>";
