@@ -101,11 +101,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     // get blocks content from $toolContent array
     if ($perso_tool_content) {
-        $lesson_content = $perso_tool_content ['lessons_content'];
-        $assigns_content = $perso_tool_content ['assigns_content'];
-        $docs_content = $perso_tool_content ['docs_content'];
-        $agenda_content = $perso_tool_content ['agenda_content'];
-        $forum_content = $perso_tool_content ['forum_content'];
+        $lesson_content = $perso_tool_content ['lessons_content'];        
         $personal_calendar_content = $perso_tool_content ['personal_calendar_content'];
     }
 
@@ -591,19 +587,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     if ($perso_tool_content) {
-        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
-        $t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
+        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);        
         $t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
-        $t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
-        $t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
-        $t->set_var('LANG_PERSO_FORUM', $langMyPersoForum);
         $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
-
-        $t->set_var('LESSON_CONTENT', $lesson_content);
-        $t->set_var('ASSIGN_CONTENT', $assigns_content);
-        $t->set_var('DOCS_CONTENT', $docs_content);
-        $t->set_var('AGENDA_CONTENT', $agenda_content);
-        $t->set_var('FORUM_CONTENT', $forum_content);
+        $t->set_var('LESSON_CONTENT', $lesson_content);        
         $t->set_var('URL_PATH', $urlAppend);
         $t->set_var('TOOL_PATH', $urlAppend);
         $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
