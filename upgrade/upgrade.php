@@ -2604,7 +2604,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
         // delete stale course units entries from course modules (27 -> MODULE_ID_UNITS)
         Database::get()->query("DELETE FROM course_module WHERE module_id = 27");
-        // delete secure_url (aka $urlSecure) from table `config`
+        // move secure_url (aka $urlSecure) to base_url if not empty
+        $old_secure_url = get_config('secure_url');
+        if (!empty($old_secure_url)) {
+            set_config('base_url', $old_secure_url);
+        }
         Database::get()->query("DELETE FROM config WHERE `key` = 'secure_url'");
         // fix calendar entries (if any)
         Database::get()->query("UPDATE agenda SET source_event_id = id WHERE source_event_id IS NULL");
