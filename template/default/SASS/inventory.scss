@@ -31,12 +31,6 @@
 .space-after-icon {margin-right:5px;}
 .space-before-icon {margin-left:5px;}
 
-.float-left {float: left;}
-.float-right {float: right;}
-
-.align-left {text-align: left !important;}
-.align-right {text-align: right !important;}
-
 
 /* Extend bootstrap style - gutters and paddings */
 
@@ -61,18 +55,6 @@
   padding-left: 0px;
   padding-right: 0px;
 }
-
-
-.whole-row
-{
-  width:100% !important;
-}
-
-.place-at-toolbox
-{
-  margin: 0em 0.2em 0.65em 0.2em !important;
-}
-
 
 .focused
 {
@@ -1895,12 +1877,6 @@ a.action-btn-link{
 a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited{
     text-decoration: none;
     cursor: pointer;
-}
-.unit-pagination{
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    padding: 7px 7px;
-    margin-bottom: 10px;
 }
 .list-header{
         background-color: #eeeeee !important;
