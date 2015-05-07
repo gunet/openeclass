@@ -10,10 +10,6 @@
 
 /* GLOBAL STYLES -----------------------------------------------------------------*/
 
-.align-left {text-align: left;}
-.align-right {text-align: right;}
-
-
 /* Extend bootstrap style - margins */
 .no-margin {margin: 0px !important;}
 .margin-top {margin-top: 15px !important;}
@@ -61,7 +57,7 @@
   @include box-shadow(0 0px 10px #BBBBBB !important);
 }
 
-.infotext-sm
+.infotext
 {
   font-size: 0.8em;
   font-style: italic;

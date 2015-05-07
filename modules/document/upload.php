@@ -206,7 +206,7 @@ if ($can_upload) {
       </div>      
 
     <div class='row'>
-        <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+        <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
     
     $tool_content .= "

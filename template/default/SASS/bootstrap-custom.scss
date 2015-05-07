@@ -1,14 +1,16 @@
 // customize bootstrap variables here:
 @import "variables";
 @import "bootstrap";
+
 @font-face {
     font-family: 'Open Sans';
     src: url('fonts/OpenSans-Regular.ttf');
     font-weight: normal;
     font-style: normal;
 }
+
 //Quick Fixes for Open eClass 2.x classes... (to be removed in the future)
-.tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other{  
+.tbl, .tbl_alt, #t1, #t3, div.panel_content table{  
     @extend .table, .table-striped;  
 }
 .iframe-container {    
