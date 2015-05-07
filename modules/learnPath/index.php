@@ -405,7 +405,7 @@ if ($l == 0) {
 
 $tool_content .= "
 <div class='table-responsive'>    
-    <table class='table-default'>
+    <table class='table table-default'>
     <tr class='list-header'>
       <th><div align='left'>$langLearningPaths</div></th>\n";
 
@@ -456,12 +456,7 @@ $iterator = 1;
 $is_blocked = false;
 $ind = 1;
 foreach ($result as $list) { // while ... learning path list
-    if ($ind % 2 == 0) {
-        $style = 'class="even"';
-    } else {
-        $style = 'class="odd"';
-    }
-
+    
     if ($list->visible == 0) {
         if ($is_editor) {
             $style = " class='not_visible'";
@@ -494,21 +489,43 @@ foreach ($result as $list) { // while ... learning path list
         $resultmodules = Database::get()->queryArray($modulessql, $list->learnPath_id, CTLABEL_, $course_id);
         
         $play_img = "<i class='fa fa-play-circle' style='font-size:20px;'></i>";
-
-        if (count($resultmodules) > 0) {
-            $firstmodule = $resultmodules[0];
-            $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $firstmodule->module_id . "'>$play_img</a>";
-        } else {
-            $play_button = $play_img;
-        }
-        if ($list->lock == 'CLOSE'){
-            $locked_signed = "<i class='fa fa-lock text-danger' style='font-size:20px';></i>&nbsp;&nbsp;";
-        } else {
-            $locked_signed = "";
+        
+        if(!$is_editor){ // If student
+            if ($list->lock == 'CLOSE'){ // If student and LP is closed
+                $play_url = "<a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>";
+                if (count($resultmodules) > 0) { // If there are modules
+                    $play_button = "<i class='fa fa-minus-circle' style='font-size:20px';></i>";
+                } else {
+                    $play_button = $play_img;
+                }
+            } else { // If student and LP is open
+                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+                if (count($resultmodules) > 0) { // If there are modules
+                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
+                } else { // If there are no modules
+                    $play_button = $play_img;
+                }
+            }
+        } else { // If admin
+            if ($list->lock == 'CLOSE'){ // If admin and LP is closed
+                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+                if (count($resultmodules) > 0) { // If there are modules
+                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'><i class='fa fa-minus-circle text-danger' style='font-size:20px';></i>&nbsp;&nbsp;$play_img</a>";
+                } else {
+                    $play_button = $play_img;
+                }  
+            } else { // If admin and LP is open
+                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+                if (count($resultmodules) > 0) { // If there are modules
+                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
+                } else {
+                    $play_button = $play_img;
+                }
+            }
         }
 
         $tool_content .= "
-      <td><a href='learningPath.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$locked_signed $play_button</span></td>\n";
+      <td>$play_url<span class='pull-right'>$play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -541,9 +558,9 @@ foreach ($result as $list) { // while ... learning path list
         if (($moduleNumber == 0) && ($list->lock == 'CLOSE')) {
             //must block next path because last module of this path never tried!
             if ($uid) {
-                if (!$is_editor) {
+                
                     $is_blocked = true;
-                } // never blocked if allowed to edit
+                 // never blocked if allowed to edit
             } else { // anonymous : don't display the modules that are unreachable
                 $iterator++; // trick to avoid having the "no modules" msg to be displayed
                 break;
@@ -556,16 +573,20 @@ foreach ($result as $list) { // while ... learning path list
             if (($listblock2->credit == "NO-CREDIT") && ($list->lock == 'CLOSE')) {
                 //must block next path because last module of this path not credited yet!
                 if ($uid) {
-                    if (!$is_editor) {
+                    
                         $is_blocked = true;
-                    } // never blocked if allowed to edit
+                     // never blocked if allowed to edit
                 } else { // anonymous : don't display the modules that are unreachable
                     break;
                 }
             }
         }
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
-        $tool_content .= "     <td>" . $list->name/* .$list['minRaw'] */ . "</td>\n";
+        if(!$is_editor){
+            $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
+        } else {
+            $tool_content .=  "<td><a href='learningPath.php?course='.$course_code.'&amp;path_id='.$list->learnPath_id.'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$play_button</span></td>\n";
+        }
     }
 
     // DISPLAY ADMIN LINK-----------------------------------------------------------
@@ -585,9 +606,10 @@ foreach ($result as $list) { // while ... learning path list
                     array('title' => !$list->visible == 0? $langViewHide : $langViewShow,
                         'url' => !$list->visible == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;visibility_path_id=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;visibility_path_id=" . $list->learnPath_id,
                         'icon' => !$list->visible == 0? 'fa-eye-slash': 'fa-eye'),
-                    array('title' => $list->lock == 'OPEN'? $langResourceAccessLock : $langResourceAccessUnlock,
+                    array('title' => $list->lock == 'OPEN'? $langBlock : $langNoBlock,
                         'url' => $list->lock == 'OPEN'? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkBlock&amp;cmdid=" . $list->learnPath_id : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkUnblock&amp;cmdid=" . $list->learnPath_id,
-                        'icon' => $list->lock == 'OPEN'? 'fa-lock' : 'fa-unlock'),
+                        'icon' => $list->lock == 'OPEN'? 'fa-minus-circle' : 'fa-play-circle',
+                        'show' => !($ind == 1)),
                     array('title' => $langUp,
                         'level' => 'primary',
                         'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;move_path_id=" . $list->learnPath_id,
@@ -643,5 +665,17 @@ if (!$is_editor && $iterator != 1 && $uid) {
     </tr>\n";
 }
 $tool_content .= "\n     </table></div>\n";
+$tool_content .= "<div class='modal fade' id='restrictlp' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-body'>".
+        $langRestrictedLPath
+      ."</div>
+      <div class='modal-footer'>
+        <button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>
+      </div>
+    </div>
+  </div>
+</div>";
 
 draw($tool_content, 2, null, $head_content);
