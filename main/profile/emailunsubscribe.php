@@ -70,7 +70,7 @@ $tool_content .= action_bar(array(
         $user_email_status = get_mail_ver_status($uid);
         if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
                 $user_email_status == EMAIL_UNVERIFIED) {
-            $link = "<a href = '../auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+            $link = "<a href = '../../modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
             $tool_content .= "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
         }
     }

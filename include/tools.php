@@ -610,7 +610,7 @@ function adminMenu() {
 function lessonToolsMenu() {
     global $uid, $is_editor, $is_course_admin, $courses,
            $course_code, $langAdministrationTools, $langExternalLinks,
-           $modules, $admin_modules, $urlAppend;
+           $modules, $admin_modules, $urlAppend, $status, $course_id;
 
     $sideMenuGroup = array();
     $sideMenuSubGroup = array();
@@ -648,7 +648,7 @@ function lessonToolsMenu() {
         $sideMenuLink = array();
         $sideMenuImg = array();
         $sideMenuID = array();
-
+        $mail_status = '';
         $arrMenuType = array('type' => 'text',
                              'text' => $section['title'],
                              'class' => $section['class']);
@@ -660,6 +660,11 @@ function lessonToolsMenu() {
             return strcoll($modules[$a->module_id]['title'], $modules[$b->module_id]['title']);
         });
 
+        // check if we have define mail address and want to receive messages
+        if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+            $mail_status = "&nbsp;".icon('fa-exclamation-triangle');
+        }
+        
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;
 
@@ -672,19 +677,24 @@ function lessonToolsMenu() {
             if ($mid == MODULE_ID_BBB and !get_total_bbb_servers()) {
                 continue;
             }
-
-            if ($mid == MODULE_ID_DROPBOX) {
-                $mbox = new Mailbox($uid, course_code_to_id($course_code));
-                $new_msgs = $mbox->unreadMsgsNumber();
-                if ($new_msgs != 0) {
-                    array_push($sideMenuText, "<b>".q($modules[$mid]['title'])." (".$new_msgs.")</b>");
+            
+            // if we are in dropbox or announcements add (if needed) mail address status
+            if ($mid == MODULE_ID_DROPBOX or $mid == MODULE_ID_ANNOUNCE) {
+                if ($mid == MODULE_ID_DROPBOX) {
+                    $mbox = new Mailbox($uid, course_code_to_id($course_code));
+                    $new_msgs = $mbox->unreadMsgsNumber();
+                    if ($new_msgs != 0) {
+                        array_push($sideMenuText, "<b>".q($modules[$mid]['title'])." (".$new_msgs.")$mail_status</b>");
+                    } else {
+                        array_push($sideMenuText, "".q($modules[$mid]['title'])." ".$mail_status);
+                    }
                 } else {
-                    array_push($sideMenuText, q($modules[$mid]['title']));
+                    array_push($sideMenuText, "".q($modules[$mid]['title'])." ".$mail_status);
                 }
             } else {
-                array_push($sideMenuText, q($modules[$mid]['title']));
+                array_push($sideMenuText, "".q($modules[$mid]['title']));
             }
-
+                         
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
                             '/?course=' . $course_code));
             array_push($sideMenuImg, $modules[$mid]['image'] . $section['iconext']);

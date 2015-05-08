@@ -399,13 +399,8 @@ if (isset($level) && !empty($level)) {
 ";
 }
 
-$emailnotification = '';
-if ($uid and $status != USER_GUEST and ! get_user_email_notification($uid, $course_id)) {
-    $emailnotification = "<div class='alert alert-warning'>$langNoUserEmailNotification
-        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
-}
 // display `contact teacher via email` link if teacher actually receives email from his course
-$receive_mail = FALSE;
+/*$receive_mail = FALSE;
 $rec_mail = array();
 $q = Database::get()->queryArray("SELECT user_id FROM course_user WHERE course_id = ?d
                                 AND status = ?d", $course_id, USER_TEACHER);
@@ -418,7 +413,7 @@ foreach ($q as $p) {
 if (!empty($rec_mail)) {
     $receive_mail = TRUE;
 }
-
+*/
 // Contentbox: Course main contentbox
 //Temp commit (waiting for Alex to fix course description issue) 
 if ($course_info->home_layout == 3) {

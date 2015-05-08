@@ -524,6 +524,10 @@ if ($is_editor) {
     }
 } // end: teacher only
 
+if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+    $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+}
 if (isset($_GET['an_id'])) {
     $pageName = $row->title;
     $tool_content .= action_bar(array(
