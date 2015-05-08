@@ -124,7 +124,7 @@ function showlinksofcategory($catid) {
                     $tool_content .= "<td class='option-btn-cell'>";
                     $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
                     $tool_content .= action_button(array(
-                            array('title' => $langModify,
+                            array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
                                     'url' => $editlink),
                             array('title' => $langDelete,
