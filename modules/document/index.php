@@ -464,10 +464,13 @@ if ($can_upload) {
     // Move file or directory: Step 1
     if (isset($_GET['move'])) {
         $move = $_GET['move'];
-        // h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
-        $moveFileNameAlias = Database::get()->querySingle("SELECT filename FROM document
-                                                WHERE $group_sql AND path=?s", $move)->filename;
-        $dialogBox .= directory_selection($move, 'moveTo', my_dirname($move));
+        $curDirPath = my_dirname($move);
+        // $move contains file path - search for filename in db
+        $q = Database::get()->querySingle("SELECT filename, format FROM document
+                                                WHERE $group_sql AND path=?s", $move);
+        $moveFileNameAlias = $q->filename;
+        $exclude = ($q->format == '.dir')? $move: $curDirPath;
+        $dialogBox .= directory_selection($move, 'moveTo', $exclude);
     }
 
     // Delete file or directory
@@ -590,7 +593,7 @@ if ($can_upload) {
 
     // step 1: display a field to enter the new dir name
     if (isset($_GET['createDir'])) {
-        $createDir = q($_GET['createDir']);
+        $curDirPath = $createDir = q($_GET['createDir']);
         $dialogBox .= "
         <div class='row'>
         <div class='col-md-12'>
