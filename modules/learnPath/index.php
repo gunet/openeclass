@@ -454,6 +454,7 @@ $LPNumber = count($result);
 $iterator = 1;
 
 $is_blocked = false;
+$allow = false;
 $ind = 1;
 foreach ($result as $list) { // while ... learning path list
     
@@ -471,8 +472,8 @@ foreach ($result as $list) { // while ... learning path list
         }
     }
 
-
-
+    //$is_blocked = $list->lock == 'CLOSE'? true : false;
+    
     $tool_content .= "    <tr " . $style . ">";
 
     //Display current learning path name
@@ -490,38 +491,38 @@ foreach ($result as $list) { // while ... learning path list
         
         $play_img = "<i class='fa fa-play-circle' style='font-size:20px;'></i>";
         
-        if(!$is_editor){ // If student
-            if ($list->lock == 'CLOSE'){ // If student and LP is closed
-                $play_url = "<a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>";
-                if (count($resultmodules) > 0) { // If there are modules
-                    $play_button = "<i class='fa fa-minus-circle' style='font-size:20px';></i>";
-                } else {
-                    $play_button = $play_img;
-                }
-            } else { // If student and LP is open
+        if(!$is_editor){ // If is student
+//            if ($list->lock == 'CLOSE'){ // If is student and LP is closed
+//                $play_url = "<a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>".intval($is_blocked);
+//                if (count($resultmodules) > 0) { // If there are modules
+//                    $play_button = "<i class='fa fa-minus-circle' style='font-size:20px';></i>";
+//                } else {
+//                    $play_button = $play_img;
+//                }
+//            } else { // If is student and LP is open
                 $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
                 if (count($resultmodules) > 0) { // If there are modules
                     $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
                 } else { // If there are no modules
                     $play_button = $play_img;
                 }
-            }
-        } else { // If admin
-            if ($list->lock == 'CLOSE'){ // If admin and LP is closed
-                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
-                if (count($resultmodules) > 0) { // If there are modules
-                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'><i class='fa fa-minus-circle text-danger' style='font-size:20px';></i>&nbsp;&nbsp;$play_img</a>";
-                } else {
-                    $play_button = $play_img;
-                }  
-            } else { // If admin and LP is open
+            //}
+        } else { // If is admin
+//            if ($list->lock == 'CLOSE'){ // If is admin and LP is closed
+//                $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
+//                if (count($resultmodules) > 0) { // If there are modules
+//                    $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'><i class='fa fa-minus-circle text-danger' style='font-size:20px';></i>&nbsp;&nbsp;$play_img</a>";
+//                } else {
+//                    $play_button = $play_img;
+//                }  
+//            } else { // If is admin and LP is open
                 $play_url = "<a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a>";
                 if (count($resultmodules) > 0) { // If there are modules
                     $play_button = "<a href='viewer.php?course=$course_code&amp;path_id=" . $list->learnPath_id . "&amp;module_id=" . $resultmodules[0]->module_id . "'>$play_img</a>";
                 } else {
                     $play_button = $play_img;
                 }
-            }
+            //}
         }
 
         $tool_content .= "
@@ -553,39 +554,43 @@ foreach ($result as $list) { // while ... learning path list
         } else {
             $moduleNumber = 0;
         }
-
+        
+        
         //2.1 no progression found in DB
-        if (($moduleNumber == 0) && ($list->lock == 'CLOSE')) {
-            //must block next path because last module of this path never tried!
-            if ($uid) {
-                
-                    $is_blocked = true;
-                 // never blocked if allowed to edit
-            } else { // anonymous : don't display the modules that are unreachable
-                $iterator++; // trick to avoid having the "no modules" msg to be displayed
-                break;
-            }
-        }
-
-        //2.2. deal with progression found in DB if at leats one module in this path
-        if ($moduleNumber != 0) {
-            $listblock2 = $resultblock2[0];
-            if (($listblock2->credit == "NO-CREDIT") && ($list->lock == 'CLOSE')) {
-                //must block next path because last module of this path not credited yet!
+        if (isset($result[$ind])){
+            if (($moduleNumber == 0) && ($result[$ind]->lock == 'CLOSE')) {
+                //must block next path because last module of this path never tried!
                 if ($uid) {
-                    
+
                         $is_blocked = true;
                      // never blocked if allowed to edit
                 } else { // anonymous : don't display the modules that are unreachable
+                    $iterator++; // trick to avoid having the "no modules" msg to be displayed
                     break;
                 }
             }
+
+            //2.2. deal with progression found in DB if at leats one module in this path
+            if ($moduleNumber != 0) {
+                $listblock2 = $resultblock2[0];
+                if (($listblock2->credit == "NO-CREDIT") && ($result[$ind]->lock == 'CLOSE')) {
+                    //must block next path because last module of this path not credited yet!
+                    if ($uid) {
+
+                            $is_blocked = true;
+                         // never blocked if allowed to edit
+                    } else { // anonymous : don't display the modules that are unreachable
+                        break;
+                    }
+                }
+            }
         }
+        
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
         if(!$is_editor){
             $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
         } else {
-            $tool_content .=  "<td><a href='learningPath.php?course='.$course_code.'&amp;path_id='.$list->learnPath_id.'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'>$play_button</span></td>\n";
+            $tool_content .=  "<td><a href='learningPath.php?course='.$course_code.'&amp;path_id='.$list->learnPath_id.'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
         }
     }
 
