@@ -8736,6 +8736,93 @@ button.close {
     display: none !important;
   }
 }
+/* 
+================================================================
+    SASS for eclass UI v3.0 - Global styles - version 0.0926a
+================================================================
+*/
+/* COLORS ---------------------------------------------------------------------- */
+/* FONTS ------------------------------------------------------------------------- */
+/* TRANSITIONS ------------------------------------------------------------------- */
+/* MIXINS ------------------------------------------------------------------------------- */
+/* CSS ANIMATIONS -----------------------------------------------------------------*/
+/* line 114, ../SASS/global.scss */
+.transition {
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+
+@-webkit-keyframes NEW-ITEM-FX {
+  /* line 120, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 121, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 122, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-moz-keyframes NEW-ITEM-FX {
+  /* line 128, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 129, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 130, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-o-keyframes NEW-ITEM-FX {
+  /* line 136, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 137, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 138, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@keyframes NEW-ITEM-FX {
+  /* line 144, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 145, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 146, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
 /* ********************
     GLOBAL STYLES
 ******************** */
@@ -8747,8 +8834,14 @@ button.close {
   font-style: normal;
 }
 
+/* line 19, ../SASS/bootstrap-custom.scss */
+body {
+  background: #232c3a;
+  font-family: 'Open Sans';
+}
+
 /* Fluid container styles */
-/* line 18, ../SASS/bootstrap-custom.scss */
+/* line 24, ../SASS/bootstrap-custom.scss */
 .container-fluid {
   padding: 0px;
   max-width: 1920px;
@@ -8756,24 +8849,24 @@ button.close {
 
 /* Default table class */
 /* Form styles */
-/* line 32, ../SASS/bootstrap-custom.scss */
+/* line 38, ../SASS/bootstrap-custom.scss */
 input[type="file"] {
   padding-top: 7px;
 }
 
 /* tinyMCE styles */
-/* line 37, ../SASS/bootstrap-custom.scss */
+/* line 43, ../SASS/bootstrap-custom.scss */
 .mce-toggle:hover {
   cursor: pointer;
 }
 
-/* line 41, ../SASS/bootstrap-custom.scss */
+/* line 47, ../SASS/bootstrap-custom.scss */
 .mce-toggle i.mce-ico.mce-i-none {
   width: 22px;
 }
 
 /* Search button styling */
-/* line 47, ../SASS/bootstrap-custom.scss */
+/* line 53, ../SASS/bootstrap-custom.scss */
 #btn-search {
   color: white;
   background-color: #232c3a;
@@ -8801,32 +8894,32 @@ input[type="file"] {
 }
 
 /* New Alert styles */
-/* line 52, ../SASS/bootstrap-custom.scss */
+/* line 58, ../SASS/bootstrap-custom.scss */
 .alert-default {
   background-image: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
   border-color: #ccc;
 }
 
 /* New Panel Classes (to support action_button() in panel heading) */
-/* line 60, ../SASS/bootstrap-custom.scss */
+/* line 66, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 63, ../SASS/bootstrap-custom.scss */
+/* line 69, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
 
-/* line 70, ../SASS/bootstrap-custom.scss */
+/* line 76, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 73, ../SASS/bootstrap-custom.scss */
+/* line 79, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
 
-/* line 80, ../SASS/bootstrap-custom.scss */
+/* line 86, ../SASS/bootstrap-custom.scss */
 .option-btn-cell .btn-group {
   display: flex;
   display: -webkit-flex;
@@ -8834,27 +8927,27 @@ input[type="file"] {
   display: -ms-flex;
 }
 
-/* line 86, ../SASS/bootstrap-custom.scss */
+/* line 92, ../SASS/bootstrap-custom.scss */
 .popover-content {
   padding: 9px 9px;
 }
-/* line 88, ../SASS/bootstrap-custom.scss */
+/* line 94, ../SASS/bootstrap-custom.scss */
 .popover-content .list-group {
   margin-bottom: 0px;
 }
 
-/* line 92, ../SASS/bootstrap-custom.scss */
+/* line 98, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete {
   color: #CE6B6B;
 }
 
-/* line 95, ../SASS/bootstrap-custom.scss */
+/* line 101, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete:hover {
   background-color: #CE6B6B;
   color: white;
 }
 
-/* line 99, ../SASS/bootstrap-custom.scss */
+/* line 105, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a {
   display: block;
   padding: 3px 20px;
@@ -8866,7 +8959,7 @@ a.list-group-item.delete:hover {
   white-space: nowrap;
 }
 
-/* line 109, ../SASS/bootstrap-custom.scss */
+/* line 115, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   background-color: #e8e8e8;
   background-image: -webkit-linear-gradient(top, whitesmoke 0, #e8e8e8 100%);
@@ -8877,7 +8970,7 @@ a.list-group-item.delete:hover {
   background-repeat: repeat-x;
 }
 
-/* line 118, ../SASS/bootstrap-custom.scss */
+/* line 124, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   text-decoration: none;
   color: #262626;
@@ -8886,8 +8979,128 @@ a.list-group-item.delete:hover {
 }
 
 /* Left navigation styles */
+/* line 132, ../SASS/bootstrap-custom.scss */
+#leftnav {
+  top: -53px;
+  padding: 0;
+}
+/* line 135, ../SASS/bootstrap-custom.scss */
+#leftnav .logo {
+  margin: 0.8em 0.8em 0px;
+}
+/* line 137, ../SASS/bootstrap-custom.scss */
+#leftnav .logo img {
+  margin: 0 auto;
+}
+/* line 139, ../SASS/bootstrap-custom.scss */
+#leftnav .panel {
+  border: none;
+  margin: 0;
+  margin-bottom: 1em;
+  background: inherit;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px 0px 0px 5px;
+}
+/* line 147, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .list-group {
+  border-radius: 0;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+/* line 151, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .panel-heading {
+  border-radius: 4px 0px 0px 0px !important;
+  padding: 10px 7px;
+}
+/* line 154, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .panel-heading .panel-title {
+  text-align: center;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+/* line 159, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .panel-heading:hover {
+  color: #4da1e4;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 164, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a {
+  color: #ADADAD;
+  text-decoration: none;
+}
+/* line 168, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.parent-menu {
+  outline: 0;
+  display: block;
+  background: rgba(0, 0, 0, 0.2);
+}
+/* line 172, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.parent-menu:not(.collapsed) {
+  border-radius: 4px 0px 0px 0px;
+  color: #4da1e4;
+}
+/* line 179, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.parent-menu:hover, #leftnav .panel a.parent-menu:not(.collapsed) {
+  border-radius: 4px 0px 0px 4px;
+}
+/* line 183, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+  padding: 0.6em 15px;
+  background: transparent;
+  text-align: center;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 190, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item > span {
+  font-size: 0.9em;
+  margin-left: 0.5em;
+}
+/* line 194, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item:hover {
+  text-decoration: none;
+  color: #eee;
+  background: #4da1e4;
+  border-radius: 4px 0px 0px 4px;
+  margin-left: 0px;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 202, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item.active {
+  background: #fafafa;
+  text-shadow: none;
+  color: #333;
+  border-radius: 4px 0px 0px 4px;
+  box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+}
+/* line 212, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item:last-child {
+  border-bottom: none;
+}
+/* line 215, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+}
+
 @media (max-width: 992px) {
-  /* line 127, ../SASS/bootstrap-custom.scss */
+  /* line 222, ../SASS/bootstrap-custom.scss */
   .float-menu {
     position: absolute;
     width: 225px;
@@ -8897,19 +9110,19 @@ a.list-group-item.delete:hover {
     background-color: #232C3A;
   }
 
-  /* line 135, ../SASS/bootstrap-custom.scss */
+  /* line 230, ../SASS/bootstrap-custom.scss */
   #leftnav {
     overflow-y: scroll;
     z-index: 8888;
   }
 
-  /* line 139, ../SASS/bootstrap-custom.scss */
+  /* line 234, ../SASS/bootstrap-custom.scss */
   .navbar-toggle {
     display: block;
   }
 }
 /* User menu styles */
-/* line 145, ../SASS/bootstrap-custom.scss */
+/* line 240, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;
@@ -8934,7 +9147,7 @@ a.list-group-item.delete:hover {
 }
 
 /* Speech bubble styles (for chat and comments) */
-/* line 170, ../SASS/bootstrap-custom.scss */
+/* line 265, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -8946,7 +9159,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-/* line 182, ../SASS/bootstrap-custom.scss */
+/* line 277, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -8960,7 +9173,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-/* line 196, ../SASS/bootstrap-custom.scss */
+/* line 291, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -8980,55 +9193,55 @@ a.list-group-item.delete:hover {
 /* PORTFOLIO */
 /* portfolio datatable 'all courses' button fix */
 @media (min-width: 768px) {
-  /* line 216, ../SASS/bootstrap-custom.scss */
+  /* line 311, ../SASS/bootstrap-custom.scss */
   div.all_courses {
     float: left;
   }
 }
 /* THEME OPTIONS */
 /* Theme options legend STYLING*/
-/* line 223, ../SASS/bootstrap-custom.scss */
+/* line 318, ../SASS/bootstrap-custom.scss */
 legend.theme_options_legend {
   font-size: 18px;
   margin-bottom: 30px;
 }
-/* line 226, ../SASS/bootstrap-custom.scss */
+/* line 321, ../SASS/bootstrap-custom.scss */
 legend.theme_options_legend:not(:first-child) {
   margin-top: 30px;
 }
 
 /* ADMIN SETTINGS */
 /* Affix (floating sidebar) styling */
-/* line 233, ../SASS/bootstrap-custom.scss */
+/* line 328, ../SASS/bootstrap-custom.scss */
 .affix {
   top: 15px;
 }
 
-/* line 236, ../SASS/bootstrap-custom.scss */
+/* line 331, ../SASS/bootstrap-custom.scss */
 .affix-bottom {
   position: relative;
 }
 
 @media (min-width: 768px) {
-  /* line 240, ../SASS/bootstrap-custom.scss */
+  /* line 335, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 20%;
   }
 }
 @media (min-width: 992px) {
-  /* line 245, ../SASS/bootstrap-custom.scss */
+  /* line 340, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 18%;
   }
 }
 @media (min-width: 1200px) {
-  /* line 250, ../SASS/bootstrap-custom.scss */
+  /* line 345, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 17%;
   }
 }
 @media (min-width: 1450px) {
-  /* line 255, ../SASS/bootstrap-custom.scss */
+  /* line 350, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 12.4%;
   }
@@ -9036,7 +9249,7 @@ legend.theme_options_legend:not(:first-child) {
 /* DOCUMENTS */
 /* styles for the case that documents 
 open in a modal with the help of an iframe */
-/* line 263, ../SASS/bootstrap-custom.scss */
+/* line 358, ../SASS/bootstrap-custom.scss */
 .iframe-container {
   padding-bottom: 60%;
   padding-top: 30px;
@@ -9044,7 +9257,7 @@ open in a modal with the help of an iframe */
   overflow: hidden;
 }
 
-/* line 270, ../SASS/bootstrap-custom.scss */
+/* line 365, ../SASS/bootstrap-custom.scss */
 .iframe-container iframe,
 .iframe-container object,
 .iframe-container embed {
@@ -9058,7 +9271,7 @@ open in a modal with the help of an iframe */
 
 /* LOGIN */
 @media (max-width: 768px) {
-  /* line 281, ../SASS/bootstrap-custom.scss */
+  /* line 376, ../SASS/bootstrap-custom.scss */
   .login-form {
     margin-right: 5%;
     margin-left: 5%;

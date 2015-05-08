@@ -1,6 +1,7 @@
 // customize bootstrap variables here:
 @import "variables";
 @import "bootstrap";
+@import 'global';
 
 /* ********************
     GLOBAL STYLES
@@ -14,6 +15,11 @@
     font-style: normal;
 }
 
+body
+{
+    background: $color-background;
+    font-family: 'Open Sans';
+}
 /* Fluid container styles */
 .container-fluid {
     padding: 0px;
@@ -123,6 +129,95 @@ cursor: pointer;
 }
 
 /* Left navigation styles */
+#leftnav{
+    top: -53px;
+    padding: 0;
+    .logo{
+        margin: 0.8em 0.8em 0px;
+        img{margin:0 auto;}
+    }
+    .panel{
+        border: none;
+        margin: 0;
+        margin-bottom: 1em;
+        background: inherit;		
+        border-top: 2px solid rgba(255,255,255,.1);
+        border-bottom: 2px solid rgba(255,255,255,.1);
+        border-radius: 5px 0px 0px 5px;
+        .list-group{
+            border-radius:0;
+            @include box-shadow(none);
+        }
+        .panel-heading{
+            border-radius: 4px 0px 0px 0px!important;
+            padding: 10px 7px;
+            .panel-title{
+                text-align: center;
+                font-size: 0.85em;
+                font-weight: bold;
+            }
+            &:hover{
+                color: $color-hover;
+                @include transition(all $transition-time linear);
+            }
+        }
+        a{
+            color: #ADADAD;
+            text-decoration: none;
+        }
+        a.parent-menu{
+            outline: 0;
+            display: block;
+            background: rgba(0, 0, 0, 0.2);
+            &:not(.collapsed){
+                border-radius: 4px 0px 0px 0px;
+                color: $color-hover;
+            }
+            &:hover{
+                //background: rgba(255,255,255,.25);
+            }
+            &:hover, &:not(.collapsed){
+                border-radius: 4px 0px 0px 4px;
+            }
+        }
+        a.list-group-item{
+            border: none;
+            border-top: 1px solid rgba(255,255,255,.075);
+            padding: 0.6em 15px;
+            background: transparent;
+            text-align: center;
+            @include transition(all $transition-time linear);
+            > span{
+                font-size: 0.9em;
+                margin-left: 0.5em;
+            }
+            &:hover{
+                text-decoration: none;
+                color: #eee;
+                background: $color-hover;
+                border-radius: 4px 0px 0px 4px;
+                margin-left: 0px;
+                @include transition(all $transition-time linear);
+            }
+            &.active{
+                background: $color-main-content;
+                text-shadow: none;
+                color: #333;
+                border-radius: 4px 0px 0px 4px;
+                box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+                -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
+                -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+            }
+            //we don't want a border-bottom if it's the last option
+            &:last-child{
+                border-bottom: none;
+            }
+            &:first-child{
+                border-top: 1px solid rgba(255,255,255,.075);
+            }
+        }
+    }
+}
 @media(max-width: $screen-desktop){
    .float-menu {
        position: absolute;
