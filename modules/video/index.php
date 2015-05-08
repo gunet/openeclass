@@ -483,7 +483,7 @@ hContent;
             } elseif ($table_edit == 'video') {
                     $tool_content .= "<input type='hidden' name='url' value='" . q($url) . "'>
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>$langWorkFile:</label><div class='col-sm-10-pt-6'>" . q($url) . "</div>
+                            <label class='col-sm-2 control-label'>$langWorkFile:</label><div class='col-sm-10 margin-top-thin'>" . q($url) . "</div>
                         </div>";
             }
             $tool_content .= "<div class='form-group'>

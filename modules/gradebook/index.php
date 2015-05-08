@@ -1005,7 +1005,7 @@ if ($is_editor) {
         if ($checkForLpNumber > 0) {
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<h4>$langLearningPath</h4>";
-            $tool_content .= "<table class='table-default' id='t1'>";            
+            $tool_content .= "<table class='table-default'>";            
             $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
             $tool_content .= "<th class='text-center'>$langActions</th>";
             $tool_content .= "</tr>";

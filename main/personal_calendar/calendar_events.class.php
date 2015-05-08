@@ -973,7 +973,7 @@ class Calendar_Events {
         //$dateNow = date("j-n-Y", time());
         $numLine = 0;
 
-        $calendar_content .= "<table class='table table-default'>";
+        $calendar_content .= "<table class='table-default'>";
         //                <tr><th colspan='2' class='left'>$langEvents</th>";
         //$calendar_content .= "<th width='50'><b>$langActions</b></th>";
         //$calendar_content .= "</tr>";
@@ -1072,7 +1072,7 @@ class Calendar_Events {
         $calendar_content .= "</table>";
 
         $eventlist = Calendar_Events::get_calendar_events("day", "$year-$month-$day");
-        $calendar_content .= "<table class='table table-default'>";
+        $calendar_content .= "<table class='table-default'>";
 
         $curhour = 0;
         $now = getdate();

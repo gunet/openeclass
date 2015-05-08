@@ -2,6 +2,11 @@
 @import "variables";
 @import "bootstrap";
 
+/* ********************
+    GLOBAL STYLES
+******************** */
+
+/* Font styles */
 @font-face {
     font-family: 'Open Sans';
     src: url('fonts/OpenSans-Regular.ttf');
@@ -9,68 +14,80 @@
     font-style: normal;
 }
 
-//Quick Fixes for Open eClass 2.x classes... (to be removed in the future)
-.tbl, .tbl_alt, #t1, #t3, div.panel_content table{  
-    @extend .table, .table-striped;  
-}
-.iframe-container {    
-    padding-bottom: 60%;
-    padding-top: 30px; height: 0; overflow: hidden;
-}
- 
-.iframe-container iframe,
-.iframe-container object,
-.iframe-container embed {
-    border: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-#btn-search{
-    @include button-variant(white, #232C3A, #111111);
-}
-//Theme options legend
-legend.theme_options_legend {
-   font-size: $font-size-large;
-   margin-bottom: 30px;
-   &:not(:first-child) {
-        margin-top: 30px;
-   }
-}
+/* Fluid container styles */
 .container-fluid {
     padding: 0px;
     max-width: 1920px;
 }
-//Input file global fix
+
+/* Default table class */
+.table-default {
+    @extend .table, .table-striped, .table-bordered;
+}
+
+/* Form styles */
+.form-wrapper {
+    @extend .well, .well-lg;
+}
 input[type="file"] {
     padding-top: 7px;
 }
-//New alert style (probably more styling needed)
+
+/* tinyMCE styles */
+.mce-toggle:hover{
+    cursor: pointer;
+}
+.mce-toggle{
+    i.mce-ico.mce-i-none{
+        width: 22px;
+    }
+}
+
+/* Search button styling */
+#btn-search{
+    @include button-variant(white, #232C3A, #111111);
+}
+
+/* New Alert styles */
 .alert-default {
     background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
     border-color: #ccc;
 }
-// Action Button fix
-.popover-content {
-    padding: 9px 9px;
-    .list-group {
-        margin-bottom: 0px;
+
+/* New Panel Classes (to support action_button() in panel heading) */
+.panel-action-btn-default {
+    @extend .panel-default;   
+    & > .panel-heading {
+        @extend .clearfix;
+        padding: 0 0 0 20px;
+        h3 { 
+            line-height: 45px; 
+        }
     }
 }
-// Affix styles
-.affix {
-    top: 15px;
+.panel-action-btn-primary {
+    @extend .panel-primary;   
+    & > .panel-heading {
+        @extend .clearfix;
+        padding: 0 0 0 20px;
+        h3 { 
+            line-height: 45px;
+        }
+    }
 }
-.affix-bottom {
-position: relative;
-}
+
+// Action button styles
 .option-btn-cell .btn-group {
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;    
+}
+.popover-content {
+    padding: 9px 9px;
+    .list-group {
+        margin-bottom: 0px;
+    }
 }
 a.list-group-item.delete{
     color: #CE6B6B;
@@ -104,25 +121,8 @@ color: #262626;
 background-color: whitesmoke;
 cursor: pointer; 
 }
-//portfolio datatable 'all courses' button fix 
-@media(min-width: $screen-sm){
-    div.all_courses {
-        float: left;
-    }
-}
-@media(min-width: $screen-tablet){
-  .affix {
-    width: 20%;
-  }
-}
 
-  @media(max-width: $screen-tablet){
-  .login-form{
-      margin-right: 5%;
-      margin-left: 5%;
-      width: 90%;
-  }
-}
+/* Left navigation styles */
 @media(max-width: $screen-desktop){
    .float-menu {
        position: absolute;
@@ -140,25 +140,32 @@ cursor: pointer;
       display: block;
   }
 }
-@media(min-width: $screen-desktop){
-   .affix {
-    width: 18%;
-  }
-  .navbar-custom{
-    margin: 15px 15px 0px;
+
+/* User menu styles */
+.navbar-nav .open .dropdown-menu {
+    position: absolute;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color:#ffffff;
+    border-left-color: rgba(0, 0, 0, 0.14902);
+    color: #000;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.14902);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.14902);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    bottom: auto;
+    box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
+    box-sizing: border-box;
 }
-}
-@media(min-width: $screen-lg-desktop){
-   .affix {
-    width: 17%;
-  }   
-}
-@media(min-width: 1450px){
-   .affix {
-    width: 12.4%;
-  }   
-}
-//Speech bubble styles
+
+/* Speech bubble styles (for chat and comments) */
 .bubble 
 {
 position: relative;
@@ -199,82 +206,81 @@ left: -17px;
 top: 8px;
 }
 
-//Custom Form Wrapper class
-.form-wrapper {
-    @extend .well, .well-lg;
-}
-//Custtom default table class
-.table-default {
-    @extend .table, .table-striped, .table-bordered;
-}
-// Custtom Panel Classes to support action_button() in panel heading
-.panel-action-btn-default {
-    @extend .panel-default;   
-    & > .panel-heading {
-        @extend .clearfix;
-        padding: 0 0 0 20px;
-        h3 { 
-            line-height: 45px; 
-        }
-    }
-}
-.panel-action-btn-primary {
-    @extend .panel-primary;   
-    & > .panel-heading {
-        @extend .clearfix;
-        padding: 0 0 0 20px;
-        h3 { 
-            line-height: 45px;
-        }
+/* ******************** 
+   PAGE-SPECIFIC STYLES 
+   ******************** */
+
+/* PORTFOLIO */
+/* portfolio datatable 'all courses' button fix */ 
+@media(min-width: $screen-sm){
+    div.all_courses {
+        float: left;
     }
 }
 
-.navbar-nav .open .dropdown-menu {
+/* THEME OPTIONS */
+/* Theme options legend STYLING*/
+legend.theme_options_legend {
+   font-size: $font-size-large;
+   margin-bottom: 30px;
+   &:not(:first-child) {
+        margin-top: 30px;
+   }
+}
+
+/* ADMIN SETTINGS */
+/* Affix (floating sidebar) styling */
+.affix {
+    top: 15px;
+}
+.affix-bottom {
+    position: relative;
+}
+@media(min-width: $screen-tablet){
+  .affix {
+    width: 20%;
+  }
+}
+@media(min-width: $screen-desktop){
+   .affix {
+    width: 18%;
+  }
+}
+@media(min-width: $screen-lg-desktop){
+   .affix {
+    width: 17%;
+  }   
+}
+@media(min-width: 1450px){
+   .affix {
+    width: 12.4%;
+  }   
+}
+
+/* DOCUMENTS */
+/* styles for the case that documents 
+open in a modal with the help of an iframe */
+.iframe-container {    
+    padding-bottom: 60%;
+    padding-top: 30px; height: 0; overflow: hidden;
+}
+ 
+.iframe-container iframe,
+.iframe-container object,
+.iframe-container embed {
+    border: 0;
     position: absolute;
-    float: none;
-    width: auto;
-    margin-top: 0;
-    background-color:#ffffff;
-    border-left-color: rgba(0, 0, 0, 0.14902);
-    color: #000;
-    border-left-style: solid;
-    border-left-width: 1px;
-    border-right-color: rgba(0, 0, 0, 0.14902);
-    border-right-style: solid;
-    border-right-width: 1px;
-    border-top-color: rgba(0, 0, 0, 0.14902);
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-top-style: solid;
-    border-top-width: 1px;
-    bottom: auto;
-    box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
-    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-//  tinymce css
-
-.mce-toggle:hover{
-    cursor: pointer;
-}
-.mce-toggle{
-    i.mce-ico.mce-i-none{
-        width: 22px;
-    }
-}
-
-
-//  Course Units
-
-.checkbox_cell{
-    width: 5px;
-    text-align: center;
-}
-
-
-// Video module
-
-.col-sm-10-pt-6 {
-    @extend .col-sm-10;
-    padding-top: 6px;
+/* LOGIN */
+@media(max-width: $screen-tablet){
+  .login-form{
+      margin-right: 5%;
+      margin-left: 5%;
+      width: 90%;
+  }
 }

@@ -153,7 +153,7 @@ if (isset($c)) {
     }
     $tool_content .= "</td></tr></table>";
     // Display other available choices
-    $tool_content .= "<table width='100%' class='tbl'><th colspan='2'>$langOtherActions</th>";
+    $tool_content .= "<table class='table-default'><th colspan='2'>$langOtherActions</th>";
     // Users list
     $tool_content .= "
 	<tr>

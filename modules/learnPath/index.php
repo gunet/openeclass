@@ -405,7 +405,7 @@ if ($l == 0) {
 
 $tool_content .= "
 <div class='table-responsive'>    
-    <table class='table table-default'>
+    <table class='table-default'>
     <tr class='list-header'>
       <th><div align='left'>$langLearningPaths</div></th>\n";
 

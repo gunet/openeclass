@@ -245,7 +245,7 @@ function nameBox($type, $mode, $formlabel = FALSE) {
 
             if ($formlabel != FALSE) {                
                 $output .= '<div class="col-xs-10"><div class="input-group">'
-                        . '<input class="form-control" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '" / class="FormData_InputText">' . "\n"
+                        . '<input class="form-control" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">' . "\n"
                         . '<span class="input-group-btn">'
                         . '<button class="btn btn-primary" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
                         . '</span>'

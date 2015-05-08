@@ -272,7 +272,7 @@ $langEmail: $emailhelpdesk";
                 $warning = ($d->status == 5) ? $langWarnReject : $langGoingRejectRequest;
                 $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 			<div class='alert alert-warning'>$warning</div>
-			<table width='100%' class='tbl_border'>
+			<table class='table-default'>
 			<tr><th class='left'>$langName</th>
 			<td>" . q($d->givenname) . "</td></tr>
 			<tr><th class='left'>$langSurname</th>

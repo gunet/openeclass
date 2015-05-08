@@ -2302,7 +2302,7 @@ function create_zip_index($path, $id, $online = FALSE) {
                 </style>
 	</head>
 	<body>
-		<table width="95%" class="tbl">
+		<table class="table-default">
 			<tr>
 				<th>' . $m['username'] . '</th>
 				<th>' . $m['am'] . '</th>

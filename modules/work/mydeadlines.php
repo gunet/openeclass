@@ -26,6 +26,6 @@ require_once 'main/perso.php';
 
 $nameTools = $langMyPersoDeadlines;
 
-$tool_content = "<div class='panel_content'>{%ASSIGN_CONTENT%}</div>";
+$tool_content = "<div class='panel panel-default'><div class='panel-body'>{%ASSIGN_CONTENT%}</div></div>";
 
 draw($tool_content, 1, null, $head_content, null, null, $perso_tool_content);
