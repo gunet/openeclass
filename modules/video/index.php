@@ -481,12 +481,12 @@ hContent;
                         <div class='col-sm-10'><input class='form-control' type='text' name='url' value = '" . q($url) . "'></div>
                     </div>";
             } elseif ($table_edit == 'video') {
-                    $tool_content .= "<input type='hidden' name='url' value='" . q($url) . "'>";
+                    $tool_content .= "<input type='hidden' name='url' value='" . q($url) . "'>
+                        <div class='form-group'>
+                            <label class='col-sm-2 control-label'>$langWorkFile:</label><div class='col-sm-10-pt-6'>" . q($url) . "</div>
+                        </div>";
             }
             $tool_content .= "<div class='form-group'>
-                  <label class='col-sm-2 control-label'>$langWorkFile:</label><div class='col-sm-10-pt-6'>" . q($url) . "</div>
-                </div>
-                <div class='form-group'>
                   <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
                   <div class='col-sm-10'><input class='form-control' type='text' name='title' value= '" . q($title) . "'></div>
                 </div>
