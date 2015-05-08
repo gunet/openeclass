@@ -1372,7 +1372,6 @@ $m['unsub'] = "El curso está cerrado. No está permitido darse de baja ";
 $titreBloc = array("Contenidos del curso", "Actividades educativas", "Libros", "Recursos humanos", "Métodos de evaluación / Exámenes", "Información suplementaria");
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modificar la vista del portafolio";
-$langMyPersoLessons = "MIS CURSOS";
 $langMyPersoDeadlines = "MIS FECHAS DE FINALIZACIÓN";
 $langMyPersoAnnouncements = "MIS ANUNCIOS";
 $langMyPersoDocs = "MIS ÚLTIMOS DOCUMENTOS";

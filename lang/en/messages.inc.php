@@ -1393,7 +1393,6 @@ $titreBloc = array(
     'Additional info');
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modify portfolio view";
-$langMyPersoLessons = "My Courses";
 $langMyPersoDeadlines = "My Deadlines";
 $langMyPersoAnnouncements = "My Announcements";
 $langMyPersoDocs = "My Latest Documents";

@@ -83,7 +83,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langEclass, $langHelp, $langUsageTerms,
         $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyPersoDeadlines,
-        $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
+        $langMyPersoDocs, $langMyPersoForum, $langMyCourses,
         $langPortfolio, $langSearch, $langUser,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
@@ -258,7 +258,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('PROFILE_LINK', $urlAppend . 'main/profile/display_profile.php');
         $t->set_var('LANG_MESSAGES', q($GLOBALS['langMyDropBox']));
         $t->set_var('MESSAGES_LINK', $urlAppend . 'modules/dropbox/index.php');
-        $t->set_var('LANG_COURSES', q($GLOBALS['langMyPersoLessons']));
+        $t->set_var('LANG_COURSES', q($GLOBALS['langMyCourses']));
         $t->set_var('COURSES_LINK', $urlAppend . 'main/my_courses.php');        
         $t->set_var('LANG_AGENDA', q($langMyAgenda));
         $t->set_var('AGENDA_LINK', $urlAppend . 'main/personal_calendar/index.php');
@@ -587,7 +587,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     if ($perso_tool_content) {
-        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);        
+        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyCourses);        
         $t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
         $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
         $t->set_var('LESSON_CONTENT', $lesson_content);        

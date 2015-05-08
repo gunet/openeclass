@@ -268,7 +268,7 @@ function loggedInMenu() {
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
 
-    array_push($sideMenuText, $GLOBALS['langMyPersoLessons']);
+    array_push($sideMenuText, $GLOBALS['langMyCourses']);
     array_push($sideMenuLink, $urlServer . "main/my_courses.php");
     array_push($sideMenuImg, "fa-graduation-cap");
 

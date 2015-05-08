@@ -1359,7 +1359,6 @@ $m['unsub'] = "Il corso è chiuso e non potrai registrarti di nuovo.";
 $titreBloc = array("Contenuto del Corso (Syllabus)", "Obiettivi", "Bibliografia suggerita", "Metodi di didattica e di apprendimento", "Metodi di valutazione / esame", "Prerequisiti", "Informazioni Supplementari");
 $titreBlocNotEditable = array (TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modificare la visualizzazione del portfolio";
-$langMyPersoLessons = "I MIEI CORSI";
 $langMyPersoDeadlines = "LE MIE SCADENZE";
 $langMyPersoAnnouncements = "I MIEI ULTIMI ANNUNCI";
 $langMyPersoDocs = "I MIEI ULTIMI DOCUMENTI";
