@@ -399,6 +399,12 @@ function upgrade_course_2_12($code, $lang, $extramessage = '') {
     } elseif (db_field_type($code, 'exercise_user_record', 'TotalWeighting') != 'float(5,2)'); {
         db_query("ALTER TABLE exercise_user_record CHANGE `TotalWeighting` `TotalWeighting` FLOAT(5,2)");
     }
+    
+    // refresh XML metadata
+    require_once "{$webDir}modules/course_metadata/CourseXML.php";
+    if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
+        CourseXMLElement::refreshCourse(course_code_to_id($code), $code, true);
+    }
 }
 
 function upgrade_course_2_11($code, $lang, $extramessage = '') {
