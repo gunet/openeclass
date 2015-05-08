@@ -63,7 +63,7 @@ function showlinksofcategory($catid) {
     global $is_editor, $course_id, $urlview, $tool_content,
     $urlServer, $course_code,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
-    $langModify, $is_in_tinymce, $links_num, $langLinkSubmittedBy;
+    $langEditChange, $is_in_tinymce, $links_num, $langLinkSubmittedBy;
 
     $tool_content .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `link`
@@ -96,7 +96,7 @@ function showlinksofcategory($catid) {
                 $editlink .= "&amp;category=$category";
             }
             $tool_content .= action_button(array(
-                array('title' => $langModify,
+                array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => $editlink),
                 array('title' => $langUp,
@@ -172,7 +172,7 @@ function showcategoryadmintools($categoryid) {
 
     $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
     $tool_content .= action_button(array(
-                array('title' => $langModify,
+                array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => "$basecaturl" . "action=editcategory"),
                 array('title' => $langUp,

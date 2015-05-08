@@ -439,9 +439,9 @@ if (count($exercise_question_ids)>0){
 if ($displayScore == 1 || $is_editor) {
     $tool_content .= "
     <br/>
-    <table width='100%' class='tbl_alt'>
-    <tr class='odd'>
-	<td class='right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
+    <table class='table table-default'>
+    <tr>
+	<td class='text-right'><b>$langYourTotalScore: <span id='total_score'>$exercise_user_record->total_score</span> / $exercise_user_record->total_weighting</b>
       </td>
     </tr>
     </table>";

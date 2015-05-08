@@ -184,6 +184,7 @@ if ($is_valid) {
                   'givenname_form' => $ext_info,
                   'am' => $am_required,
                   'department' => true,
+                  'usercomment' => $comment_required,
                   'userphone' => $phone_required), 'all');
     }
 
@@ -194,7 +195,9 @@ if ($is_valid) {
     if (isset($_SESSION['auth_user_info'])) {
         $givenname_form = $_SESSION['auth_user_info']['givenname'];
         $surname_form = $_SESSION['auth_user_info']['surname'];
-        $am = $_SESSION['auth_user_info']['studentid'];
+        if (!empty($_SESSION['auth_user_info']['studentid'])) {
+            $am = $_SESSION['auth_user_info']['studentid'];
+        }
         if (!$email and !empty($_SESSION['auth_user_info']['email'])) {
             $email = $_SESSION['auth_user_info']['email'];
         }
@@ -338,12 +341,12 @@ if ($is_valid) {
 
         // Record user request        
         $q1 = Database::get()->query("INSERT INTO user_request SET
-                                        givenname = ?s, surname = ?s, username = ?s, password = '$password',
+                                        givenname = ?s, surname = ?s, username = ?s, password = ?s,
                                         email = ?s, faculty_id = ?d, phone = ?s,
                                         am = ?s, state = 1, status = ?d, verified_mail = ?d,
                                         date_open = " . DBHelper::timeAfter() . ", comment = ?s, lang = ?s,
                                         request_ip = ?s", 
-                            $givenname_form, $surname_form, $uname, $email, $depid, $userphone, 
+                            $givenname_form, $surname_form, $uname, $password, $email, $depid, $userphone, 
                             $am, $status, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
         $request_id = $q1->lastInsertID;
         // email does not need verification -> mail helpdesk

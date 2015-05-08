@@ -312,7 +312,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     $tool_content .= "
     <div class='panel panel-primary'>
       <div class='panel-heading'>
-        <h3 class='panel-title'>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</h3>
+        <h3 class='panel-title'>". (($question->qtype == QTYPE_LABEL) ? $langLabel.' / '.$langComment : $langQuestion) ."&nbsp;".  icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyQuestion=$question->pqid"). "</h3>
       </div>
       <div class='panel-body'>
         <h4>$question->question_text<br><small>".$aType[$question->qtype - 1]."</small></h4>
@@ -322,7 +322,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $tool_content .= "
         <div class='panel panel-info'>
                   <div class='panel-heading'>
-                    <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;" . icon('fa-edit', $langEdit, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$question->pqid") . "</a></h3>
+                    <h3 class='panel-title'>$langQuestionAnswers &nbsp;&nbsp;" . icon('fa-edit', $langEditChange, $_SERVER['SCRIPT_NAME']."?course=$course_code&pid=$pid&modifyAnswers=$question->pqid") . "</a></h3>
                   </div>
         <!--      <div class='panel-body'>
                     Answers should be placed here
@@ -626,7 +626,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                             $aType[$question->qtype - 1]."</td>
                             <td class='option-btn-cell'>".action_button(array(
                                 array(
-                                    'title' => $langEdit,
+                                    'title' => $langEditChange,
                                     'icon' => 'fa-edit',
                                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&pid=$pid&editQuestion=$question->pqid"
                                 ),

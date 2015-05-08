@@ -166,7 +166,6 @@ function show_resource($info) {
             break;
         case 'video':
         case 'videolink':
-        case 'videolinks':   // old table name. keep it for backward compatibility
             $tool_content .= show_video($info->type, $info->title, $info->comments, $info->id, $info->res_id, $info->visible);
             break;
         case 'videolinkcategory':                    
@@ -381,18 +380,15 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
 function show_video($table, $title, $comments, $resource_id, $video_id, $visibility) {
     global $is_editor, $course_id, $tool_content, $langInactiveModule;
 
-    if ($table == 'videolinks') {
-        $table = 'videolink';  // ugly hack for backward compatibility
-    }
     $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
-    if (!$module_visible and ! $is_editor) {
+    if (!$module_visible and !$is_editor) {
         return '';
     }    
     $comment_box = $class_vis = $imagelink = $link = '';
-    $class_vis = ($visibility == 0 or ! $module_visible) ?
+    $class_vis = ($visibility == 0 or !$module_visible) ?
             ' class="not_visible"' : ' ';
 
-    $row = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = $course_id AND id = ?d", $video_id);
+    $row = Database::get()->querySingle("SELECT * FROM `$table` WHERE course_id = ?d AND id = ?d", $course_id, $video_id);
     if ($row) {
         if (!$is_editor and ( !resource_access(1, $row->public))) {
             return '';
@@ -495,7 +491,7 @@ function show_videocat($table, $title, $comments, $resource_id, $videolinkcat_id
                     }
                     $class_vis = ($visibility == 0 or !$module_visible or $status == 'del')? ' class="not_visible"': ' ';                            
                     $ltitle = q(($row->title == '')? $row->url: $row->title);
-                    $linkcontent .= "<br />".icon('fa-film')."&nbsp;&nbsp;$videolink</a>";
+                    $linkcontent .= "<br />".icon('fa-film')."&nbsp;&nbsp;$videolink";
                     if (!$module_visible) {
                             $linkcontent .= " <i>($langInactiveModule)</i>";
                     }
@@ -1139,9 +1135,9 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  * @return string
  */
 function actions($res_type, $resource_id, $status, $res_id = false) {
-    global $is_editor, $langEdit, $langDelete, $langVisibility,
+    global $is_editor, $langEditChange, $langDelete, $langVisibility,
     $langAddToCourseHome, $langDown, $langUp,
-    $langConfirmDelete, $course_code;
+    $langConfirmDelete, $course_code, $langViewHide, $langViewShow;
 
     static $first = true;
 
@@ -1152,23 +1148,19 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
     if ($res_type == 'description') {
         $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
         $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
-    } else {        
-        $icon_vis = ($status == 1) ? 'fa-eye' : 'fa-eye-slash';
+    } else {      
+        $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
+        $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
     $content = "<td class='option-btn-cell'>";
     $content .= action_button(array(
-                array('title' => $langEdit,
+                array('title' => $langEditChange,
                       'url' => $edit_link,
                       'icon' => 'fa-edit',
                       'show' => $status != 'del'),
-                array('title' => $langDelete,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
-                      'icon' => 'fa-times',
-                      'confirm' => $langConfirmDelete,
-                      'class' => 'delete'),
-                array('title' => $langVisibility,
+                array('title' => $showorhide,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
@@ -1185,7 +1177,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'level' => 'primary',
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
                       'icon' => 'fa-arrow-up',
-                      'disabled' => $first)
+                      'disabled' => $first),
+                array('title' => $langDelete,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
+                      'icon' => 'fa-times',
+                      'confirm' => $langConfirmDelete,
+                      'class' => 'delete')
             ));
     
     $first = false;
@@ -1220,7 +1217,7 @@ function edit_res($resource_id) {
     if ($resource_type != 'text') {
         $content .= "<div class='form-group'>                   
                 <label class='col-sm-2 control-label'>$langTitle:</label>
-                <div class='col-sm-10'><input type='text' name='restitle' size='50' maxlength='255' $restitle></div>
+                <div class='col-sm-10'><input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle></div>
                 </div>";
         $message = $langDescr;
     } else {

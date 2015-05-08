@@ -169,7 +169,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $pageName = $langModify;
+        $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -683,14 +683,14 @@ if ($is_editor) {
                         }
                     $tool_content .="</td><td class='option-btn-cell'>".
                             action_button(array(
+                                array('title' => $langGradebookBook,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID"),
                                 array('title' => $langGradebookDelete,
                                         'icon' => 'fa-times',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=$gradebook_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
                                         'class' => 'delete',
-                                        'confirm' => $langConfirmDelete),
-                                array('title' => $langGradebookBook,
-                                        'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID")))
+                                        'confirm' => $langConfirmDelete)))
                                 ."</td></tr>";
                 }
                 $tool_content .= "</tbody></table>";
@@ -1215,7 +1215,7 @@ if ($is_editor) {
                 $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($announce->id, $gradebook_id) . "</td>";
                 $tool_content .= "<td class='option-btn-cell text-center'>".
                         action_button(array(
-                                    array('title' => $langModify,
+                                    array('title' => $langEditChange,
                                         'icon' => 'fa-edit',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"),
                                     array('title' => $langGradebookBook,

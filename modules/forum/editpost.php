@@ -80,7 +80,7 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    $pageName = $langReply;
+    $pageName = $langReplyEdit;
     $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langForums);
     $navigation[] = array('url' => "viewforum.php?course=$course_code&amp;forum=$forum_id", 'name' => q($myrow->name));
     $navigation[] = array('url' => "viewtopic.php?course=$course_code&amp;topic=$topic_id&amp;forum=$forum_id", 'name' => q($myrow->title));
@@ -97,27 +97,39 @@ if (isset($_POST['submit'])) {
                         AND p.topic_id = t.id", $post_id);
     $message = str_replace('{', '&#123;', $myrow->post_text);
     list($day, $time) = explode(' ', $myrow->post_time);
-    $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-                <fieldset>
-                <legend>$langReplyEdit </legend>
-                <table width='100%' class='tbl'>";
     $first_post = is_first_post($topic_id, $post_id);
+    $subject_field = '';
     if ($first_post) {
-        $tool_content .= "<tr><th>$langSubject:<br /><br />
-                <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='FormData_InputText' /></th>
-                </tr>";
-    }
-    $tool_content .= "<tr><td><b>$langBodyMessage:</b><br /><br />" .
-            rich_text_editor('message', 10, 50, $message)
-            . "
-        </td></tr>
-        <tr><td class='right'>";
-    $tool_content .= "<input type='hidden' name='post_id' value='$post_id'>";
-    $tool_content .= "<input type='hidden' name='topic' value='$topic_id'>";
-    $tool_content .= "<input type='hidden' name='forum' value='$forum_id'>";
-    $tool_content .= "<input class='btn btn-primary' type='submit' name='submit' value='$langSubmit' />
-        </td></tr>
-        </table>
-        </fieldset></form>";
+        $subject_field .= "
+                    <div class='form-group'>
+                        <label for='title' class='col-sm-2 control-label'>$langSubject:</label>
+                        <div class='col-sm-10'>
+                            <input type='text' name='subject' size='53' maxlength='100' value='" . q($myrow->title) . "'  class='form-control'>
+                        </div>
+                    </div>";            
+    }    
+    $tool_content .= "
+        <div class='form-wrapper'>
+            <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
+            <input type='hidden' name='post_id' value='$post_id'>
+            <input type='hidden' name='topic' value='$topic_id'>
+            <input type='hidden' name='forum' value='$forum_id'>
+            <fieldset>
+                $subject_field
+                <div class='form-group'>
+                    <label for='title' class='col-sm-2 control-label'>$langBodyMessage:</label>
+                    <div class='col-sm-10'>
+                        " . rich_text_editor('message', 10, 50, $message) . "
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
+                        <a class='btn btn-default' href='viewtopic.php?course=$course_code&topic=$topic_id&forum=$forum_id'>$langCancel</a>
+                    </div>
+                </div>                               
+            </fieldset>
+            </form>
+        </div>";
 }
 draw($tool_content, 2, null, $head_content);

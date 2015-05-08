@@ -10,13 +10,6 @@
 
 /* GLOBAL STYLES -----------------------------------------------------------------*/
 
-.delete-action {color:$color-red;}
-.delete-action:hover {background:$color-red!important; color:white!important; @include transition(all $transition-time linear);}
-
-.align-left {text-align: left;}
-.align-right {text-align: right;}
-
-
 /* Extend bootstrap style - margins */
 .no-margin {margin: 0px !important;}
 .margin-top {margin-top: 15px !important;}
@@ -33,12 +26,6 @@
 .margin-left-fat {margin-left: 20px !important;}
 .space-after-icon {margin-right:5px;}
 .space-before-icon {margin-left:5px;}
-
-.float-left {float: left;}
-.float-right {float: right;}
-
-.align-left {text-align: left !important;}
-.align-right {text-align: right !important;}
 
 
 /* Extend bootstrap style - gutters and paddings */
@@ -65,24 +52,12 @@
   padding-right: 0px;
 }
 
-
-.whole-row
-{
-  width:100% !important;
-}
-
-.place-at-toolbox
-{
-  margin: 0em 0.2em 0.65em 0.2em !important;
-}
-
-
 .focused
 {
   @include box-shadow(0 0px 10px #BBBBBB !important);
 }
 
-.infotext-sm
+.infotext
 {
   font-size: 0.8em;
   font-style: italic;
@@ -239,14 +214,14 @@ hr
 
 
 /* PANEL - Extent bootstrap style (to match old contebox) -------------------------------------------------*/
-#main-content .panel
+/*#main-content .panel
 {
   background: $color-panel !important;
   min-height: 2.4em;
   @include box-sizing(border-box);
   @include border-radius(2px);
   @include box-shadow(0 0px 7px #DDDDDD);
-}
+}*/
 
 
 
@@ -1898,12 +1873,6 @@ a.action-btn-link{
 a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited{
     text-decoration: none;
     cursor: pointer;
-}
-.unit-pagination{
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    padding: 7px 7px;
-    margin-bottom: 10px;
 }
 .list-header{
         background-color: #eeeeee !important;

@@ -120,15 +120,15 @@ if ($total_categories > 0) {
 		<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
 
         $dyntools = (!$is_editor) ? array() : array(
+            array('title' => $langEditChange,
+                'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
+                'icon' => 'fa-edit',
+                'level' => "primary"
+            ),
             array(
                 'title' => $langNewForum,
                 'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
                 'icon' => 'fa-plus-circle',
-                'level' => "primary"
-            ),
-            array('title' => $langModify,
-                'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
-                'icon' => 'fa-edit',
                 'level' => "primary"
             ),
             array('title' => $langDelete,
@@ -140,7 +140,7 @@ if ($total_categories > 0) {
         );
         $dyntools[] = array('title' => $action_notify ? $langStopNotify : $langNotify,
             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
-            'icon' => 'fa-envelope',
+            'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
             'level' => 'primary',
             'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
         );
@@ -234,7 +234,7 @@ if ($total_categories > 0) {
 
                         $dyntools = (!$is_editor) ? array() : array(
                             array(
-                                'title' => $langModify,
+                                'title' => $langEditChange,
                                 'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
                                 'icon' => 'fa-edit'),
                             array(
@@ -245,7 +245,7 @@ if ($total_categories > 0) {
                                 'confirm' => $langConfirmDelete));
                         $dyntools[] = array('title' => $forum_action_notify ? $langStopNotify : $langNotify,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
-                            'icon' => 'fa-envelope');
+                            'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope');
                         $tool_content .= action_button($dyntools);
                     }
                 } else {

@@ -24,6 +24,7 @@
  * @brief Create new exercise or modify an existing one
  */
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/tags/moduleElement.class.php';
 
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
@@ -67,15 +68,9 @@ if (isset($_POST['submitExercise'])) {
         
         //tags
         if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-                $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "exe", $exerciseId, $tagItem, $course_id);
-                    }
-                }
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($exerciseId);
+            $moduleTag->syncTags($tagsArray);
         }
         
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);        
@@ -109,17 +104,7 @@ if (isset($_POST['submitExercise'])) {
 
 // shows the form to modify the exercise
 if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
-    
-    //initialize the tags
-    $answer = "";
-    if (isset($exerciseId)) {
-        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-        foreach ($tags_init as $tag) {
-            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
-            $answer = $answer . $arrayTemp;
-        }
-    }
-    
+        
     load_js('bootstrap-datetimepicker');
     load_js('select2');
 
@@ -160,36 +145,6 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 }
             });
         });
-        $(document).ready(function () {
-            $('#tags').select2({
-                    minimumInputLength: 2,
-                    tags: true,
-                    tokenSeparators: [', ', ' '],
-                    createSearchChoice: function(term, data) {
-                      if ($(data).filter(function() {
-                        return this.text.localeCompare(term) === 0;
-                      }).length === 0) {
-                        return {
-                          id: term,
-                          text: term
-                        };
-                      }
-                    },
-                    ajax: {
-                        url: '../tags/feed.php',
-                        dataType: 'json',
-                        data: function(term, page) {
-                            return {
-                                q: term
-                            };
-                        },
-                        results: function(data, page) {
-                            return {results: data};
-                        }
-                    }
-            });
-            $('#tags').select2('data', [".$answer."]);
-        }); 
     </script>";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -351,13 +306,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 
-                 <div class='form-group'>
-                     <label for='dispresults' class='col-sm-2 control-label'>$langTags:</label>
-                     <div class='col-sm-10'>            
-                        <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-                     </div>
-                 </div>
+                 " . Tag::tagInput($exerciseId) . "
 
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>
@@ -377,6 +326,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
     $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
+    $moduleTag = new ModuleElement($exerciseId);    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "index.php?course=$course_code",
@@ -477,19 +427,20 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 <div class='col-sm-9'>
                     $disp_score_message
                 </div>                
-            </div>
+            </div>";
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list)            
+            $tool_content .= "
             <div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
-                <div class='col-sm-9'>";
-                    
-                $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-                    foreach($tags_list as $tag){
-                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
-                    }                   
-$tool_content .="</div>                
-            </div>
+                <div class='col-sm-9'>
+                    $tags_list                       
+                </div>                
+            </div>";
+            
+    $tool_content .= "            
         </div>
     </div>";
 }

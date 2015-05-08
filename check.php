@@ -201,7 +201,7 @@ $tool_content .= <<<tContent
 			<p>$langCheckIntro</p><br/>
 			<p>$langCheckIntro2</p>
 			<br />
-			<table class="tbl_alt">
+			<table class="table table-default">
 				<tbody>
 					<tr>
 						<th width="50%"><strong>$langSoftware</strong></th>

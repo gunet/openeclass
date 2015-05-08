@@ -91,17 +91,17 @@ if (!DBHelper::tableExists('config')) {
 if (!DBHelper::fieldExists('user', 'id')) {
     // check for multiple usernames
     fix_multiple_usernames();
-    
+
     if (DBHelper::indexExists('user', 'user_username')) {
         Database::get()->query("ALTER TABLE user DROP INDEX user_username");
-    }        
+    }
     if (!DBHelper::fieldExists('user', 'whitelist')) {
         Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT");
         Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
     }
     if (!DBHelper::fieldExists('user', 'description')) {
         Database::get()->query("ALTER TABLE `user` ADD description TEXT");
-    }        
+    }
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -250,7 +250,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
         set_config('base_url', $urlServer);
         set_config('default_language', $language);
-        set_config('active_ui_languages', implode(' ', $active_ui_languages));        
+        if (isset($active_ui_languages)) {
+            set_config('active_ui_languages', implode(' ', $active_ui_languages));
+        } else {
+            set_config('active_ui_languages', 'el en');
+        }
         set_config('phpMyAdminURL', $phpMyAdminURL);
         set_config('phpSysInfoURL', $phpSysInfoURL);
 
@@ -358,9 +362,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('cours_user', 'course_id')) {
             Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
             $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
-            foreach ($t as $entry) {                
+            foreach ($t as $entry) {
               Database::get()->query("UPDATE cours_user SET course_id = $entry->cours_id WHERE code_cours = '$entry->code'");
-            }            
+            }
             Database::get()->query("ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)");
             Database::get()->query("CREATE INDEX course_user_id ON cours_user (user_id, course_id)");
             Database::get()->query("ALTER TABLE cours_user DROP code_cours");
@@ -374,7 +378,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
             Database::get()->query('ALTER TABLE annonces DROP code_cours');
         }
-    }    
+    }
     if (version_compare($oldversion, '2.3.1', '<')) {
         if (!DBHelper::fieldExists('prof_request', 'am')) {
             Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
@@ -644,7 +648,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('opencourses_enable', 0)");
 
         DBHelper::fieldExists('document', 'public') or
-                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");        
+                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
         DBHelper::fieldExists('cours', 'course_license') or
                 Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '0' AFTER `course_addon`");
         DBHelper::fieldExists("cours_user", "reviewer") or
@@ -879,7 +883,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'blog_post', 'comments', 'rating', 'rating_cache', 'abuse_report', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
-                if (Database::get()->querySingle("SELECT COUNT(*) FROM `$table_name`") > 0) {
+                if (Database::get()->querySingle("SELECT COUNT(*) AS c FROM `$table_name`")->c > 0) {
                     echo "Warning: Database inconsistent - table '$table_name' already",
                     " exists in $mysqlMainDb - renaming it to 'old_$table_name'<br>\n";
                     Database::get()->query("RENAME TABLE `$table_name` TO `old_$table_name`");
@@ -2496,7 +2500,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
-        
+
         if (!DBHelper::fieldExists('auth', 'auth_title')) {
             Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
         }
@@ -2615,26 +2619,66 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
         // delete stale course units entries from course modules (27 -> MODULE_ID_UNITS)
         Database::get()->query("DELETE FROM course_module WHERE module_id = 27");
-        // delete secure_url (aka $urlSecure) from table `config`
+        // move secure_url (aka $urlSecure) to base_url if not empty
+        $old_secure_url = get_config('secure_url');
+        if (!empty($old_secure_url)) {
+            set_config('base_url', $old_secure_url);
+        }
         Database::get()->query("DELETE FROM config WHERE `key` = 'secure_url'");
         // fix calendar entries (if any)
         Database::get()->query("UPDATE agenda SET source_event_id = id WHERE source_event_id IS NULL");
         Database::get()->query("UPDATE admin_calendar SET source_event_id = id WHERE source_event_id IS NULL");
         Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE source_event_id IS NULL");
-        
+
     }
-    
+
     // -----------------------------------
     // upgrade queries for 3.1
     // -----------------------------------
     if (version_compare($oldversion, '3.1', '<')) {
         Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
-        Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
-        Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
-        
+        DBHelper::fieldExists('assignment', 'submission_type') or
+            Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
+        DBHelper::fieldExists('assignment_submit', 'submission_text') or
+            Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
+        // default assignment end date value should be null instead of 0000-00-00 00:00:00
+        Database::get()->query("ALTER TABLE `assignment` CHANGE `deadline` `deadline` DATETIME NULL DEFAULT NULL");
+        Database::get()->query("UPDATE `assignment` SET `deadline` = NULL WHERE `deadline` = '0000-00-00 00:00:00'");
+        // improve primary key for table exercise_answer
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
+                    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `course_id` int(11) NOT NULL,
+                    `module_id` int(11) NOT NULL,
+                    `element_id` int(11) NOT NULL,
+                    `user_id` int(11) NOT NULL,
+                    `date` DATETIME DEFAULT NULL,
+                    `tag_id` int(11) NOT NULL)");
+        Database::get()->query("CREATE INDEX `tag_element_index` ON `tag_element_module` (course_id, module_id, element_id)");
+        // Tag tables upgrade
+        if (DBHelper::fieldExists('tags', 'tag')) {
+            $tags = Database::get()->queryArray("SELECT * FROM tags");
+            $module_ids = array(
+                'work'          =>  MODULE_ID_ASSIGN,
+                'announcement'  =>  MODULE_ID_ANNOUNCE,
+                'exe'           =>  MODULE_ID_EXERCISE
+            );
+            foreach ($tags as $tag) {
+                $first_tag_id = Database::get()->querySingle("SELECT `id` FROM `tags` WHERE `tag` = ?s ORDER BY `id` ASC", $tag->tag)->id;
+                Database::get()->query("INSERT INTO `tag_element_module` (`module_id`,`element_id`, `tag_id`)
+                                        VALUES (?d, ?d, ?d)", $module_ids[$tag->element_type], $tag->element_id, $first_tag_id);
+            }
+            // keep one instance of each tag (the one with the lowest id)
+            Database::get()->query("DELETE t1 FROM tags t1, tags t2 WHERE t1.id > t2.id AND t1.tag = t2.tag");
+            Database::get()->query("ALTER TABLE tags DROP COLUMN `element_type`, "
+                    . "DROP COLUMN `element_id`, DROP COLUMN `user_id`, DROP COLUMN `date`, DROP COLUMN `course_id`");
+            Database::get()->query("ALTER TABLE tags CHANGE `tag` `name` varchar (255)");
+            Database::get()->query("ALTER TABLE tags ADD UNIQUE KEY (name)");
+            Database::get()->query("RENAME TABLE `tags` TO `tag`");
+        }       
         if (!DBHelper::fieldExists('blog_post', 'commenting')) {
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
-        }                
+        }
+        Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
     }
 
     // update eclass version

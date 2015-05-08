@@ -1201,6 +1201,9 @@ function unit_map_function(&$data, $maps) {
     // idia symbash/paradoxh me to attendance_gradebook_activities_map_function()
     // des to ekei comment gia ta spasmena FKs
     list($document_map, $link_category_map, $link_map, $ebook_map, $section_map, $subsection_map, $video_map, $videolink_map, $lp_learnPath_map, $wiki_map, $assignments_map, $exercise_map) = $maps;
+    if ($data['type'] == 'videolinks') {
+        $data['type'] == 'videolink';
+    }
     $type = $data['type'];
     if ($type == 'doc') {
         $data['res_id'] = $document_map[$data['res_id']];
@@ -1218,7 +1221,7 @@ function unit_map_function(&$data, $maps) {
         $data['res_id'] = intval($data['res_id']);
     } elseif ($type == 'video') {
         $data['res_id'] = $video_map[$data['res_id']];
-    } elseif ($type == 'videolink' || $type == 'videolinks') {
+    } elseif ($type == 'videolink') {
         $data['res_id'] = $videolink_map[$data['res_id']];
     } elseif ($type == 'lp') {
         $data['res_id'] = $lp_learnPath_map[$data['res_id']];

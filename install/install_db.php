@@ -838,7 +838,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `description` TEXT NOT NULL,
                 `comments` TEXT NOT NULL,
                 `submission_type` TINYINT NOT NULL DEFAULT '0',
-                `deadline` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+                `deadline` DATETIME NULL DEFAULT NULL,
                 `late_submission` TINYINT NOT NULL DEFAULT '0', 
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `active` CHAR(1) NOT NULL DEFAULT '1',
@@ -1463,15 +1463,19 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
 #
 # table `tags`
 #
-$db->query("CREATE TABLE IF NOT EXISTS tags (
-    `id` MEDIUMINT(11) NOT NULL auto_increment,
-    `element_type` VARCHAR(255) NOT NULL DEFAULT '',
-    `element_id` MEDIUMINT(11) NOT NULL ,
-    `user_id` VARCHAR(255) NOT NULL DEFAULT '',
-    `tag` TEXT,
-    `date` DATE DEFAULT NULL,
-    `course_id` INT(11) NOT NULL DEFAULT 0,
-    PRIMARY KEY (id)) $charset_spec");
+$db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` int(11) NOT NULL,
+            `module_id` int(11) NOT NULL,
+            `element_id` int(11) NOT NULL,
+            `user_id` int(11) NOT NULL,
+            `date` DATETIME DEFAULT NULL,
+            `tag_id` int(11) NOT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS tag (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `name` VARCHAR(255) NOT NULL,
+    UNIQUE KEY (name)) $charset_spec");
 
 
 $theme_options = array(
@@ -1571,6 +1575,8 @@ $db->query('CREATE INDEX `idx_queue_async_uid` ON `idx_queue_async` (user_id)');
 
 $db->query('CREATE INDEX `attendance_users_aid` ON `attendance_users` (attendance_id)');
 $db->query('CREATE INDEX `gradebook_users_gid` ON `gradebook_users` (gradebook_id)');
+
+$db->query("CREATE INDEX `tag_element_index` ON `tag_element_module` (course_id, module_id, element_id)");
 
 // The following tuples have been confirmed
 $db->query('CREATE INDEX `actions_daily_mcd` ON `actions_daily` (module_id, course_id, day)');

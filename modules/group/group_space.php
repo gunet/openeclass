@@ -67,11 +67,6 @@ if (!$is_member and !$is_editor) {
 }
 
 $tool_content .= action_bar(array(
-            array('title' => $langEditGroup,
-                'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
-                'icon' => 'fa-edit',
-                'level' => 'primary',
-                'show' => $is_editor or $is_tutor),
             array('title' => $langRegIntoGroup,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;registration=1&amp;group_id=$group_id",
                 'icon' => 'fa-plus-circle',
@@ -135,8 +130,20 @@ if (empty($group_description)) {
 }
 
 $tool_content .= "
-    <div class='panel panel-primary'>
+    <div class='panel panel-action-btn-primary'>
         <div class='panel-heading'>
+            <div class='pull-right'>
+            ". (($is_editor) ? 
+                    action_button(array(
+                        array(
+                            'title' => $langEditGroup,
+                            'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
+                            'level' => 'primary-label',
+                            'icon' => 'fa-edit',
+                            'show' => $is_editor or $is_tutor                            
+                        )
+                    )) : "")."    
+            </div>        
             <h3 class='panel-title'>
             $langGroupInfo
             </h3>

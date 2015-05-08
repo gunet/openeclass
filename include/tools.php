@@ -250,7 +250,7 @@ function loggedInMenu() {
     if ($res2) {
         $status = $res2->status;
     }
-    if (isset($status) and ($status == USER_TEACHER)) {
+    if ((isset($status) and $status == USER_TEACHER) or $is_departmentmanage_user) {
         array_push($sideMenuText, $GLOBALS['langCourseCreate']);
         array_push($sideMenuLink, $urlServer . "modules/create_course/create_course.php");
         array_push($sideMenuImg, "fa-plus-circle");
@@ -622,7 +622,7 @@ function lessonToolsMenu() {
     $arrMenuType = array();
     $arrMenuType['type'] = 'none';
 
-    if ($is_editor) {
+    if ($is_editor || $is_course_admin) {
         $tools_sections =
             array(array('type' => 'Public',
                         'title' => $GLOBALS['langActiveTools'],

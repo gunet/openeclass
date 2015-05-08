@@ -1117,7 +1117,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
 function actions($res_type, $resource_id, $status, $res_id = false) {
     global $is_editor, $langEdit, $langDelete, $langVisibility,
     $langAddToCourseHome, $langDown, $langUp,
-    $langConfirmDelete, $course_code;
+    $langConfirmDelete, $course_code, $langEditChange;
 
     
     static $first = true;
@@ -1130,22 +1130,18 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
         $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
         $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
     } else {        
-        $icon_vis = ($status == 1) ? 'fa-eye' : 'fa-eye-slash';
+        $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
+        $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
         $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
     }
 
     $content = "<td class='option-btn-cell'>";
     $content .= action_button(array(
-                array('title' => $langEdit,
+                array('title' => $langEditChange,
                       'url' => $edit_link,
                       'icon' => 'fa-edit',
                       'show' => $status != 'del'),
-                array('title' => $langDelete,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
-                      'icon' => 'fa-times',
-                      'confirm' => $langConfirmDelete,
-                      'class' => 'delete'),
-                array('title' => $langVisibility,
+                array('title' => $showorhide,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
@@ -1160,7 +1156,12 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                 array('title' => $langUp,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
                       'icon' => 'fa-arrow-up',
-                      'show' => !$first)
+                      'show' => !$first),
+                array('title' => $langDelete,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
+                      'icon' => 'fa-times',
+                      'confirm' => $langConfirmDelete,
+                      'class' => 'delete')
             ));
     
     $first = false;

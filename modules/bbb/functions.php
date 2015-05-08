@@ -668,7 +668,7 @@ function bbb_session_details() {
     global $course_id, $tool_content, $is_editor, $langNewBBBSessionStart, $langNewBBBSessionType;
     global $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langBBBSessionJoin, $langNewBBBSessionDesc;
     global $course_code;   
-    global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langModify, $langDelete, $langNoBBBSesssions;
+    global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langEditChange, $langDelete, $langNoBBBSesssions;
     global $langBBBNotServerAvailableStudent, $langBBBNotServerAvailableTeacher;
     global $langBBBImportRecordings;
         
@@ -687,14 +687,17 @@ function bbb_session_details() {
         if (!$is_editor) {
             $tool_content .= "<div class='alert alert-info'><label>$langNote</label>:<br>$langBBBNoteEnableJoin</div>";
         }    
-        $tool_content .= "<div class='row'><div class='col-md-12'><div class='table-responsive'><table class='table-default'>
-                          <tr>
-                              <th class = 'text-center'>$langTitle</th>
-                              <th class = 'text-center'>$langNewBBBSessionDesc</th>
-                              <th class = 'text-center'>$langNewBBBSessionStart</th>
-                              <th class = 'text-center'>$langNewBBBSessionType</th>
-                              <th class = 'text-center'>".icon('fa-gears')."</th>
-                          </tr>";
+        $tool_content .= "<div class='row'>
+                            <div class='col-md-12'>
+                                <div class='table-responsive'>
+                                    <table class='table-default'>
+                                        <tr>
+                                            <th class='text-center' style='width:25%'>$langTitle</th>
+                                            <th class='text-center'>$langNewBBBSessionDesc</th>
+                                            <th class='text-center'>$langNewBBBSessionStart</th>
+                                            <th class='text-center'>$langNewBBBSessionType</th>
+                                            <th class='text-center'>".icon('fa-gears')."</th>
+                                        </tr>";
 
         foreach ($result as $row) {    
                 // Get participants groups
@@ -726,12 +729,7 @@ function bbb_session_details() {
                     <td class='text-center'>$type</td>
                     <td class='option-btn-cell'>".
                             action_button(array(
-                                array(  'title' => $langDelete,
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
-                                        'icon' => 'fa-times',
-                                        'class' => 'delete',
-                                        'confirm' => $langConfirmDelete),
-                                array(  'title' => $langModify,
+                                array(  'title' => $langEditChange,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
                                         'icon' => 'fa-edit'),
                                 array(  'title' => $langBBBImportRecordings,
@@ -741,6 +739,11 @@ function bbb_session_details() {
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_".
                                                  ($row->active? 'disable' : 'enable'),
                                         'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
+                                array(  'title' => $langDelete,
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                                        'icon' => 'fa-times',
+                                        'class' => 'delete',
+                                        'confirm' => $langConfirmDelete)                                
                                 ));
                     $tool_content.= "</td>";
                 } else {

@@ -155,12 +155,12 @@ function printPolls() {
     global $tool_content, $course_id, $course_code, $langCreatePoll,
     $langPollsActive, $langTitle, $langPollCreator, $langPollCreation, $langCancel,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $themeimg, $langEdit, $langDelete, $langActions, $langSurveyNotStarted,
+    $themeimg, $langEditChange, $langDelete, $langActions, $langSurveyNotStarted,
     $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
     $langParticipate, $langVisible, $user_id, $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langViewHide, $langViewShow;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -288,14 +288,14 @@ function printPolls() {
                         <td class='text-center'>$countAnswers</td>
                         <td class='text-center option-btn-cell'>" .action_button(array(
                             array(
-                                'title' => $langSee,
-                                'icon' => 'fa-search',
-                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
-                            ),
-                            array(
-                                'title' => $langEdit,
+                                'title' => $langEditChange,
                                 'icon' => 'fa-edit',
                                 'url' => "admin.php?course=$course_code&amp;pid=$pid"                              
+                            ),
+                            array(
+                                'title' => $visibility?  $langDeactivate : $langActivate,
+                                'icon' => $visibility ?  'fa-toggle-off' : 'fa-toggle-on',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
                             ),
                             array(
                                 'title' => $langPurgeExercises,
@@ -305,30 +305,30 @@ function printPolls() {
                                 'show' => $total_participants > 0
                             ),
                             array(
-                                'title' => $langDelete,
-                                'icon' => 'fa-times',
-                                'class' => 'delete',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
-                                'confirm' => $langConfirmDelete                               
-                            ),
-                            array(
-                                'title' => $langVisible,
-                                'icon' => $visibility_gif,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
-                            ),
-                            array(
                                 'title' => $langParticipate,
                                 'icon' => 'fa-pie-chart',
                                 'url' => "pollresults.php?course=$course_code&pid=$pid",
                                 'show' => $total_participants > 0
-                            ),                                        
+                            ),
+                            array(
+                                'title' => $langSee,
+                                'icon' => 'fa-search',
+                                'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
+                            ),
                             array(
                                 'title' => $langCreateDuplicate,
                                 'icon' => 'fa-copy',
                                 'icon-class' => 'warnLink',
                                 'icon-extra' => "data-pid='$pid'",
                                 'url' => "#"
-                            )                                        
+                            ),
+                            array(
+                                'title' => $langDelete,
+                                'icon' => 'fa-times',
+                                'class' => 'delete',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmDelete                               
+                            )                                   
                         ))."</td></tr>";
                 } else {
                     $tool_content .= "

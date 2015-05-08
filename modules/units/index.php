@@ -181,20 +181,24 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<div class='$page_btn'><a title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a></div>";
+        $link[$i] = "<a class='btn btn-primary $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
 }
 
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>" .
-            $link['previous'] .
-            $link['next'] . "
-        </div>
-      </div>
-    </div>";
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        $link[previous]
+                        $link[next]
+                    </div>
+                </div>
+            </div>
+        </div>";
 }
 
 $tool_content .= "<div class='row margin-bottom'>
@@ -221,25 +225,35 @@ $tool_content .= "
     </div>
   </div>
 </div>";
-
-$tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>";
-$tool_content .= "<form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
-              <div class='form-group' style='margin-bottom:0px;'>
-              <label class='col-sm-7 control-label'>$langCourseUnits</label>
-              <div class='col-sm-5'>
-              <select name='id' class='form-control' onChange='document.unitselect.submit();'>";
-              $q = Database::get()->queryArray("SELECT id, title FROM course_units
-                           WHERE course_id = ?d AND `order` > 0
-                                 $visibility_check
-                           ORDER BY `order`", $course_id);
-            foreach ($q as $info) {
-                $selected = ($info->id == $id) ? ' selected ' : '';
-                $tool_content .= "<option value='$info->id'$selected>" .
-                        htmlspecialchars(ellipsize($info->title, 50)) .
-                            '</option>';
-            }
-$tool_content .= "</select></div></div>
-      </form></div></div></div>";
+$q = Database::get()->queryArray("SELECT id, title FROM course_units
+             WHERE course_id = ?d AND `order` > 0
+                   $visibility_check
+             ORDER BY `order`", $course_id);
+$course_units_options ='';
+foreach ($q as $info) {
+    $selected = ($info->id == $id) ? ' selected ' : '';
+    $course_units_options .= "<option value='$info->id'$selected>" .
+            htmlspecialchars(ellipsize($info->title, 50)) .
+                '</option>';
+}
+$tool_content .= "
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
+                        <div class='form-group'>
+                            <label class='col-sm-8 control-label'>$langCourseUnits</label>
+                            <div class='col-sm-4'>
+                                <select name='id' class='form-control' onChange='document.unitselect.submit();'>
+                                    $course_units_options
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>";
 
 draw($tool_content, 2, null, $head_content);

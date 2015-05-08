@@ -65,9 +65,9 @@ if (isset($_GET['format']) and $_GET['format'] == 'csv') {
           </div>";
 
     $tool_content .= "
-        <table class='tbl_alt' width='99%'>
+        <table class='table table-default'>
         <tr>
-          <th class='left'>&nbsp;&nbsp;&nbsp;$langSurname $langName</th>
+          <th>$langSurname $langName</th>
           <th>$langAm</th>
           <th>$langGroup</th>
           <th>$langDuration</th>

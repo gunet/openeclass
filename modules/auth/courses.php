@@ -100,7 +100,7 @@ if (isset($_POST['submit'])) {
 } else {
     $fac = getfacfromfc($fc);
     if (!$fac) { // if user does not belong to department
-        $tool_content .= "<p align='justify'>$langAddHereSomeCourses";
+        $tool_content .= $langAddHereSomeCourses;
 
         $roots = $tree->buildRootsArray();
 
@@ -110,7 +110,9 @@ if (isset($_POST['submit'])) {
             header("Location:" . $urlServer . "modules/auth/courses.php?fc=" . intval($roots[0]));
             exit();
         } else {
-            $tool_content .= $tree->buildNodesNavigationHtml($tree->buildRootsArray(), 'opencourses');
+            $tool_content .= '<ul>' .
+                $tree->buildNodesNavigationHtml($tree->buildRootsArray(), 'opencourses') .
+                '</ul>';
         }
     } else {
         // department exists
@@ -137,8 +139,10 @@ if (isset($_POST['submit'])) {
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
-        }
+        } else {
+            $tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
 
+        }
     } // end of else (department exists)
 }
 $tool_content .= "<script type='text/javascript'>$(course_list_init);

@@ -540,7 +540,7 @@ if ($action == "showPost") {
                                 <div class='pull-right'>
                                     ". action_button(array(
                                         array(
-                                            'title' => $langModify,
+                                            'title' => $langEditChange,
                                             'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
                                             'icon' => 'fa-edit',
                                             'show' => $allow_to_edit
@@ -655,7 +655,7 @@ if ($action == "showBlog") {
                                     <div class='pull-right'>
                                         ". action_button(array(
                                             array(
-                                                'title' => $langModify,
+                                                'title' => $langEditChange,
                                                 'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
                                                 'icon' => 'fa-edit',
                                                 'show' => $allow_to_edit

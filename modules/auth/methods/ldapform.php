@@ -45,8 +45,11 @@ if (!empty($ldapdata)) {
         if (isset($ldap[5])) {
             $ldap_login_attr2 = str_replace('ldap_login_attr2=', '', $ldap[5]);
         }
+        if (isset($ldap[6])) {
+            $ldap_id_attr = str_replace('ldap_studentid=', '', $ldap[6]);
+        }
     } else {
-        $ldaphost = $ldap_base = $ldapbind_dn = $ldapbind_pw = $ldap_login_attr2 = '';
+        $ldaphost = $ldap_base = $ldapbind_dn = $ldapbind_pw = $ldap_login_attr2 = $ldap_id_attr = '';
         $ldap_login_attr = "uid";
     }
 } else {
@@ -91,6 +94,12 @@ $tool_content .= "
         <label for='ldap_login_attr2' class='col-sm-2 control-label'>$langldap_login_attr2:</label>
         <div class='col-sm-10'>
             <input class='form-control' name='ldap_login_attr2' id='ldap_login_attr2' type='text' value='" . q($ldap_login_attr2) . "'>
+        </div>
+    </div>
+    <div class='form-group'>
+        <label for='ldap_id_attr' class='col-sm-2 control-label'>$langldap_id_attr:</label>
+        <div class='col-sm-10'>
+            <input class='form-control' name='ldap_id_attr' id='ldap_id_attr' type='text' value='" . q($ldap_id_attr) . "'>
         </div>
     </div>
     <div class='form-group'>

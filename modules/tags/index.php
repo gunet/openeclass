@@ -34,48 +34,44 @@ require_once 'modules/search/indexer.class.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 
- if (isset($_GET['tag']) && strlen($_GET['tag'])) {        
+ if (isset($_GET['tag']) && strlen($_GET['tag'])) {   
     $tag = $_GET['tag'];
-    $tool_content .= "<div class='panel'>";
-    $tool_content .= "<div class='panel-body'>";
-    $tool_content .= "<h3>".$_GET['tag']."</h3>";
-        
-    $tags_list = Database::get()->queryArray("SELECT * FROM tags WHERE tag = ?s AND course_id = ?d ORDER BY element_type", $tag, $course_id);
-        
-        //check the element type
-        foreach($tags_list as $tag){
-            if($tag->element_type == "announcement"){
-                
-                $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
-                
-                $tool_content .= $langAnnouncement.": ";
-                $tool_content .= "<a href='../../modules/announcements/?course=".$course_code."&an_id=".$tag->element_id."'>$announce->title</a><br>";
-            }
-            if($tag->element_type == "work"){
-                
-                $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
-                
-                $tool_content .= $langWork.": ";
-                if($work->title){
-                    $title = $work->title;
-                }else{
-                    $title = $langGradebookNoTitle;
-                }
-                $tool_content .= "<a href='../../modules/work/?course=".$course_code."&id=".$tag->element_id."'>$work->title</a><br>";
-            }
-            if($tag->element_type == "exe"){
-                
-                $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
-                
-                $tool_content .= $langWork.": ";
-                if($exe->title){
-                    $title = $exe->title;
-                }else{
-                    $title = $langGradebookNoTitle;
-                }
-                $tool_content .= "<a href='../../modules/exercise/admin.php?course=".$course_code."&exerciseId=".$tag->element_id."'>$exe->title</a><br>";
-            }
+    $tags_list = Database::get()->queryArray("SELECT * FROM `tag_element_module`, `tag` WHERE `tag`.`name` = ?s AND `tag_element_module`.`course_id` = ?d ORDER BY module_id", $tag, $course_id);
+    $toolName = "$langTag: $tag";
+
+    //check the element type
+    $latest_module_id = 0;
+    foreach($tags_list as $tag){
+        if($tag->module_id !== $latest_module_id && $latest_module_id){
+            $tool_content .= "</div></div>";
         }
+        if($tag->module_id !== $latest_module_id){
+            $tool_content .= "
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
+                            " . $modules[$tag->module_id]['title'] . "
+                        </div>
+                        <div class='panel-body'>";            
+        }
+        if($tag->module_id == MODULE_ID_ANNOUNCE){
+            $announce = Database::get()->querySingle("SELECT title, content FROM announcement WHERE id = ?d ", $tag->element_id);
+            $link = "<a href='../../modules/announcements/?course=".$course_code."&an_id=".$tag->element_id."'>$announce->title</a><br>";            
+        }
+        if($tag->module_id == MODULE_ID_ASSIGN){
+            $work = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d ", $tag->element_id);
+            $link = "<a href='../../modules/work/?course=".$course_code."&id=".$tag->element_id."'>$work->title</a><br>";
+        }
+        if($tag->module_id == MODULE_ID_EXERCISE){
+            $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
+            $link = "<a href='../../modules/exercise/admin.php?course=".$course_code."&exerciseId=".$tag->element_id."'>$exe->title</a><br>";
+        }
+        $tool_content .= "
+                    <ul>
+                        <li>$link</li>
+                    </ul>
+                ";
+        $latest_module_id = $tag->module_id;
+    }       
         $tool_content .= "</div></div>";
 }
     

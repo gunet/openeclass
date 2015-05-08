@@ -449,7 +449,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
-                        array('title' => $langEdit,
+                        array('title' => $langEditChange,
                               'url' => "$edit_url&amp;edit=$g->id",
                               'icon' => 'fa-edit'),
                         array('title' => $langDelete,

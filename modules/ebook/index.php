@@ -181,20 +181,20 @@ draw($tool_content, 2, null, $head_content);
  * @return string
  */
 function tools($id, $k, $num, $vis) {
-    global $is_editor, $langModify, $langDelete, $langMove, $langDown, $langUp, 
-           $langEBookDelConfirm, $course_code, $langVisibility, $langEBookEditStructure;
+    global $is_editor, $langEditChange, $langDelete, $langMove, $langDown, $langUp, 
+           $langEBookDelConfirm, $course_code, $langViewHide, $langViewShow;
 
     if (!$is_editor) {
         return '';
     } else {        
         $num--;
         $content = action_button(array(
-                    array('title' => $langEBookEditStructure,
+                    array('title' => $langEditChange,
                           'url' => "edit.php?course=$course_code&amp;id=$id",
                           'icon' => 'fa-edit'),
-                    array('title' => $langVisibility,
+                    array('title' => $vis ? $langViewHide : $langViewShow,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$id",
-                          'icon' => $vis ? 'fa-eye' : 'fa-eye-slash'),
+                          'icon' => $vis ? 'fa-eye-slash' : 'fa-eye'),
                     array('title' => $langDelete,                          
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$id",
                           'icon' => 'fa-times',

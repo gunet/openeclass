@@ -175,8 +175,9 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
-                    <div class='row'>";
-    if (!$upgrade_begin or get_config('dont_display_login_form')) {
+                    <div class='row'>";   
+    
+    if (!($upgrade_begin or get_config('dont_display_login_form'))) {        
         $tool_content .= "
                         <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
                           <div class='wrapper-login-option'>";

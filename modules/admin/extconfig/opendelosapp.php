@@ -34,5 +34,13 @@ class OpenDelosApp extends ExtApp {
     public function getDisplayName() {
         return self::NAME;
     }
+    
+    public function getShortDescription() {
+        return $GLOBALS['langOpenDelosDescription'];
+    }
+    
+    public function getLongDescription() {
+        return $GLOBALS['langOpenDelosDescription'];
+    }
 
 }

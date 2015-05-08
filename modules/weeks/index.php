@@ -182,23 +182,24 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = $langFrom . " " . nice_format($q->start_week) . " $langUntil " .nice_format($q->finish_week);
-        $link[$i] = "<div class='$page_btn'><a class='btn-default-eclass place-at-toolbox' title='$q_title' data-toggle='tooltip' data-placement='top' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a></div>";
+        $link[$i] = "<a class='btn btn-primary $page_btn' title='$q_title' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
 }
 
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='toolbox whole-row'>";
-        
     $tool_content .= "
-        ". $link['previous'] ."
-        ". $link['next'] ."";
-    
-    $tool_content .= "</div>
-        </div>
-    </div>";
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        $link[previous]
+                        $link[next]
+                    </div>
+                </div>
+            </div>
+        </div>";
 }
 
 $tool_content .= "<div class='row margin-bottom'>
@@ -228,22 +229,28 @@ $tool_content .= "
   </div>
 </div>";
 
-
-$tool_content .= "<div class='form-wrapper'>";
-$tool_content .= "<form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/weeks/' method='get'>
-              <div class='form-group'>
-              <label class='col-sm-4 control-label'>$langWeeks</label>
-              <div class='col-sm-8'>
-              <select name='id' class='form-control' onChange='document.unitselect.submit();'>";
-
-    $q = Database::get()->queryArray("SELECT id, start_week, finish_week, title FROM course_weekly_view
-                   WHERE course_id = ?d $visibility_check", $course_id);
-    foreach ($q as $info) {
-        $selected = ($info->id == $id) ? ' selected ' : '';
-        $tool_content .= "<option value='$info->id'$selected>" .
-                nice_format($info->start_week)." ... " . nice_format($info->finish_week) ."</option>";
-    }
-$tool_content .= "</select></div></div>
-      </form></div>";
+$q = Database::get()->queryArray("SELECT id, start_week, finish_week, title FROM course_weekly_view
+               WHERE course_id = ?d $visibility_check", $course_id);
+$course_weeks_options = "";
+foreach ($q as $info) {
+    $selected = ($info->id == $id) ? ' selected ' : '';
+    $course_weeks_options .= "<option value='$info->id'$selected>" .
+            nice_format($info->start_week)." ... " . nice_format($info->finish_week) ."</option>";
+}
+$tool_content .= "
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/weeks/' method='get'>
+                        <div class='form-group'>
+                            <label class='col-sm-8 control-label'>$langWeeks</label>
+                            <div class='col-sm-4'>
+                                <select name='id' class='form-control' onChange='document.unitselect.submit();'>
+                                    $course_weeks_options
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>";
 
 draw($tool_content, 2, null, $head_content);

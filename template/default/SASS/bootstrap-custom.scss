@@ -1,15 +1,32 @@
 // customize bootstrap variables here:
 @import "variables";
 @import "bootstrap";
+
 @font-face {
     font-family: 'Open Sans';
     src: url('fonts/OpenSans-Regular.ttf');
     font-weight: normal;
     font-style: normal;
 }
+
 //Quick Fixes for Open eClass 2.x classes... (to be removed in the future)
-.tbl, .tbl_1, .tbl_alt, #t1, .tbl_courseid, #t3, .tbl_lesson, div.panel_content table, #t1pre, #t1post, #t1other{  
+.tbl, .tbl_alt, #t1, #t3, div.panel_content table{  
     @extend .table, .table-striped;  
+}
+.iframe-container {    
+    padding-bottom: 60%;
+    padding-top: 30px; height: 0; overflow: hidden;
+}
+ 
+.iframe-container iframe,
+.iframe-container object,
+.iframe-container embed {
+    border: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 #btn-search{
     @include button-variant(white, #232C3A, #111111);
@@ -197,10 +214,7 @@ top: 8px;
         @extend .clearfix;
         padding: 0 0 0 20px;
         h3 { 
-            line-height: 45px 
-        }
-        .opt-btn {
-            background-color: whitesmoke;
+            line-height: 45px; 
         }
     }
 }
@@ -210,10 +224,7 @@ top: 8px;
         @extend .clearfix;
         padding: 0 0 0 20px;
         h3 { 
-            line-height: 45px 
-        }
-        .opt-btn {
-            background-color: #337ab7;
+            line-height: 45px;
         }
     }
 }
@@ -258,4 +269,12 @@ top: 8px;
 .checkbox_cell{
     width: 5px;
     text-align: center;
+}
+
+
+// Video module
+
+.col-sm-10-pt-6 {
+    @extend .col-sm-10;
+    padding-top: 6px;
 }

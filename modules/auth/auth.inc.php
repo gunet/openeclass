@@ -86,7 +86,7 @@ function get_auth_primary_method() {
 function check_auth_active($auth_id) {
     
     $auth = Database::get()->querySingle("SELECT auth_id, auth_default, auth_settings FROM auth WHERE auth_id = ?d", $auth_id);
-    if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($authrow->auth_settings))) {
+    if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($auth->auth_settings))) {
             return true;
     }
     return false;
@@ -254,7 +254,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '4':
-            $ldap = ldap_connect($settings['ldaphost']);
+            $ldap = ldap_connect($settings['ldaphost']);            
             if (!$ldap) {
                 $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
                 return false;
@@ -274,7 +274,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         $user_dn = ldap_get_dn($ldap, $entry_id);
                         if (@ldap_bind($ldap, $user_dn, $test_password)) {
                             $testauth = true;
-                            $userinfo = ldap_get_entries($ldap, $userinforequest);
+                            $userinfo = ldap_get_entries($ldap, $userinforequest);                            
                             if ($userinfo['count'] == 1) {
                                 $surname = get_ldap_attribute($userinfo, 'sn');
                                 $givenname = get_ldap_attribute($userinfo, 'givenname');
@@ -285,7 +285,8 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                                 $_SESSION['auth_user_info'] = array(
                                     'givenname' => $givenname,
                                     'surname' => $surname,
-                                    'email' => get_ldap_attribute($userinfo, 'mail'));
+                                    'email' => get_ldap_attribute($userinfo, 'mail'),
+                                    'studentid' => get_ldap_attribute($userinfo, $settings['ldap_studentid']));
                             }
                         }
                     }
@@ -419,7 +420,9 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
             $casusermailattr = $cas['casusermailattr'];
             $casuserfirstattr = $cas['casuserfirstattr'];
             $casuserlastattr = $cas['casuserlastattr'];
-            $casuserstudentid = $cas['casuserstudentid'];
+            if (isset($cas['casuserstudentid']) and $cas['casuserstudentid']) {
+                $casuserstudentid = $cas['casuserstudentid'];
+            }
             $cas_altauth = $cas['cas_altauth'];
         }
     }
@@ -563,8 +566,7 @@ function process_login() {
                 }
             }
             if (!$exists and !$auth_allow) {
-                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
-                                                            'pass' => $pass));
+                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname));
                 $auth_allow = 4;
             }
         }

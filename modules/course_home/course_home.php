@@ -396,20 +396,7 @@ if (isset($level) && !empty($level)) {
             icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
         </div>
     </div>
-
-
-    <table class='tbl_courseid' width='200' style='display: none;'>
-        <tr class='title1'>
-            <td class='title1'></td>
-            <td style='text-align: right; padding-right: 1.2em'><a href='$metadataUrl'>" .
-            icon('fa-tags', $langCourseMetadata, $metadataUrl) . "</td>
-        </tr>
-        <tr>
-            <td colspan='2'><div class='center'>".icon('open_courses_logo_small', $langOpenCourses)."</div>
-                <div class='center'><b>${langOpenCoursesLevel}: $level</b></div>
-            </td>
-        </tr>
-    </table>";
+";
 }
 
 $emailnotification = '';
@@ -567,32 +554,23 @@ if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
-                        array('title' => $langVisibility,
-                              'url' => "$_SERVER[SCRIPT_NAME]?visW=$cu->id",
-                              'icon' => $vis == 1? 'fa-eye' : 'fa-eye-slash'),
-                        array('title' => $langEdit,
+                        array('title' => $langEditChange,
                               'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id",
                               'icon' => 'fa-edit'),
-                        array('title' => $langResourceAccess,
+                        array('title' => $vis == 1? $langViewHide : $langViewShow,
+                              'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
+                              'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
                               'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
-                              'icon' => $access == 1? 'fa-unlock': 'fa-lock',
-                              'show' => $visible == COURSE_OPEN))) .
+                              'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                              'show' => $visible == COURSE_OPEN),)) .
                     '</div>';                    
                 } else {
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
-                        array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
-                              'icon' => 'fa-times',
-                              'class' => 'delete',
-                              'confirm' => $langCourseUnitDeleteConfirm),
-                        array('title' => $langEdit,
+                        array('title' => $langEditChange,
                               'url' => $urlAppend . "modules/units/info.php?course=$course_code&amp;edit=$cu->id",
                               'icon' => 'fa-edit'),
-                        array('title' => $langResourceAccess,
-                              'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
-                              'icon' => $access == 1? 'fa-unlock': 'fa-lock',
-                              'show' => $visible == COURSE_OPEN),
                         array('title' => $langDown,
                               'level' => 'primary',
                               'url' => "$_SERVER[SCRIPT_NAME]?down=$cu->id",
@@ -603,9 +581,18 @@ if ($is_editor) {
                               'url' => "$_SERVER[SCRIPT_NAME]?up=$cu->id",
                               'icon' => 'fa-arrow-up',
                               'disabled' => $count_index == 1),
-                        array('title' => $langVisibility,
+                        array('title' => $vis == 1? $langViewHide : $langViewShow,
                               'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
-                              'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'))) .
+                              'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
+                        array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
+                              'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
+                              'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
+                              'show' => $visible == COURSE_OPEN),
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langCourseUnitDeleteConfirm))) .
                     '</div>';
                 }
             }

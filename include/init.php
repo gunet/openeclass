@@ -66,12 +66,13 @@ try {
 
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
-    $language = langname_to_code($language);        
+    $language = langname_to_code($language);
     if (isset($_SESSION['langswitch'])) {
         $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
+        $_SESSION['givenname'] = $_SESSION['surname'] = '';
     }
     $session = new Session();
-    $uid = $session->user_id;    
+    $uid = $session->user_id;
     $session->active_ui_languages = array($language);
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
@@ -81,10 +82,10 @@ if (isset($language)) {
     $siteName = get_config('site_name');
     $Institution = get_config('institution');
     $InstitutionUrl = get_config('institution_url');
-    $urlServer = get_config('base_url');    
+    $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;    
+    $language = $session->language;
 }
 //Initializing Valitron (form validation library)
 require_once 'include/Valitron/Validator.php';
@@ -121,6 +122,23 @@ $purifier->config->set('HTML.SafeObject', true);
 $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
 $purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()));
+$purifier->config->set('HTML.DefinitionID', 'html5-definitions');
+if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
+    // http://htmlpurifier.org/phorum/read.php?2,7417,7417
+    $def->addElement('video', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', array(
+      'src' => 'URI',
+      'type' => 'Text',
+      'width' => 'Length',
+      'height' => 'Length',
+      'poster' => 'URI',
+      'preload' => 'Enum#auto,metadata,none',
+      'controls' => 'Text',
+    ));
+    $def->addElement('source', 'Block', 'Flow', 'Common', array(
+      'src' => 'URI',
+      'type' => 'Text',
+    ));
+}
 // PHP Math Publisher
 require_once 'include/phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
@@ -285,7 +303,7 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
                 , $dbname);
-                
+
         if (!isset($course_code) or empty($course_code)) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
             $errorMessagePath = "../../";
@@ -304,7 +322,35 @@ if (isset($require_current_course) and $require_current_course) {
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
+            } else {
+                // the department manager has rights to the courses of his department(s)
+                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($currentCourse)) {
+                    require_once 'include/lib/hierarchy.class.php';
+                    require_once 'include/lib/course.class.php';
+                    require_once 'include/lib/user.class.php';
+
+                    $treeObj = new Hierarchy();
+                    $courseObj = new Course();
+                    $userObj = new User();
+
+                    $atleastone = false;
+                    $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
+                    $depIds = $courseObj->getDepartmentIds($course_id);
+                    foreach ($depIds as $depId) {
+                        if (in_array($depId, $subtrees)) {
+                            $atleastone = true;
+                            break;
+                        }
+                    }
+
+                    if ($atleastone) {
+                        $status = 1;
+                        $is_course_admin = true;
+                        $_SESSION['courses'][$currentCourse] = USER_DEPARTMENTMANAGER;
+                    }
+                }
             }
+
         }
 
         if ($visible != COURSE_OPEN) {
@@ -370,9 +416,9 @@ $modules = array(
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
     MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog'),
-    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),    
+    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')        
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
 );
 // ----------------------------------------
 // course admin modules
@@ -416,7 +462,7 @@ if (isset($_SESSION['courses'])) {
         if (check_editor()) { // check if user is editor of course
             $is_editor = true;
         }
-        if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER) {
+        if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER or $_SESSION['courses'][$currentCourse] == USER_DEPARTMENTMANAGER) {
             $is_course_admin = true;
             $is_editor = true;
         }
@@ -472,12 +518,13 @@ if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
                                                 " . MODULE_ID_FORUM . ",
                                                 " . MODULE_ID_GROUPS . ",
                                                 " . MODULE_ID_WIKI . ",
-                                                " . MODULE_ID_GRADEBOOK . ",                                                  
+                                                " . MODULE_ID_GRADEBOOK . ",
                                                 " . MODULE_ID_ATTENDANCE . ",
                                                 " . MODULE_ID_LP . ")", $course_id);
-    } elseif ($is_admin) {
+    } elseif ($is_editor) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                        WHERE module_id NOT IN (SELECT module_id FROM module_disable)");
+                        WHERE module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              course_id = ?d", $course_id);
     } else {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND

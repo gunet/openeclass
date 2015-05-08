@@ -277,7 +277,7 @@ else {
                 $tool_content .= "<td>$connected_users</td>";
                 $tool_content .= "<td>$srv->weight</td>";
                 $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                                    array('title' => $langEdit,
+                                                    array('title' => $langEditChange,
                                                           'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
                                                           'icon' => 'fa-edit'),
                                                     array('title' => $langDelete,

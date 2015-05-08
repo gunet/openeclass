@@ -38,6 +38,7 @@ require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
 require_once 'modules/graphics/plotter.php';
 require_once 'include/log.php';
+require_once 'modules/tags/moduleElement.class.php';
 
 // For colorbox, fancybox, shadowbox use
 require_once 'include/lib/modalboxhelper.class.php';
@@ -330,9 +331,9 @@ function add_assignment() {
     if($v->validate()) {      
         $title = $_POST['title'];
         $desc = $_POST['desc'];
-        $deadline = (trim($_POST['WorkEnd'])!=FALSE) ? date('Y-m-d H:i', strtotime($_POST['WorkEnd'])) : '0000-00-00 00:00:00';
+        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
         $submission_type = $_POST['submission_type'];
-        $late_submission = ((isset($_POST['late_submission']) &&  trim($_POST['WorkEnd']!=FALSE)) ? 1 : 0);
+        $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
         $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
         $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
@@ -346,17 +347,11 @@ function add_assignment() {
             $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
                     . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
             
-            //tags
+            // tags
             if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
                 $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
-                    }
-                }
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->attachTags($tagsArray);
             }
             
             $secret = work_secret($id);
@@ -580,19 +575,30 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
-    global $langBack, $langStudents, $langMove, $langWorkFile, $langTags, 
-           $langWorkSubType, $langWorkOnlineText;
+    global $langBack, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
+           $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate;
     
     load_js('bootstrap-datetimepicker');
     load_js('select2');
 
     $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#enddatepicker').datetimepicker({
-                format: 'dd-mm-yyyy hh:ii', pickerPosition: 'bottom-left', 
+            $('#WorkEnd, #WorkStart').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
                 language: '".$language."',
-                autoclose: true
-                });               
+                autoclose: true    
+            });        
+            $('#enableWorkEnd, #enableWorkStart').change(function() {
+                var dateType = $(this).prop('id').replace('enable', '');
+                if($(this).prop('checked')) {
+                    $('input#'+dateType).prop('disabled', false);
+                    $('#late_sub_row').removeClass('hide');
+                } else {
+                    $('input#'+dateType).prop('disabled', true);
+                    $('#late_sub_row').addClass('hide');
+                }
+            });         
             $('#hidden-opt-btn').on('click', function(e) {
                 e.preventDefault();
                 $('#hidden-opt').collapse('toggle');
@@ -608,36 +614,6 @@ function new_assignment() {
             })               
         });
     
-    $(document).ready(function () {
-        $('#tags').select2({
-                minimumInputLength: 2,
-                tags: true,
-                tokenSeparators: [', ', ' '],
-                createSearchChoice: function(term, data) {
-                  if ($(data).filter(function() {
-                    return this.text.localeCompare(term) === 0;
-                  }).length === 0) {
-                    return {
-                      id: term,
-                      text: term
-                    };
-                  }
-                },
-                ajax: {
-                    url: '../tags/feed.php',
-                    dataType: 'json',
-                    data: function(term, page) {
-                        return {
-                            q: term
-                        };
-                    },
-                    results: function(data, page) {
-                        return {results: data};
-                    }
-                }
-        });
-        $('#tags').select2('data', [".$answer."]);
-    });    
     </script>";
     
     $tool_content .= action_bar(array(
@@ -649,7 +625,10 @@ function new_assignment() {
     $max_grade_error = Session::getError('max_grade');
     $max_grade = Session::has('max_grade') ? Session::get('max_grade') : 10;
     $submission_type = Session::has('submission_type') ? Session::get('submission_type') : 0;
+    $WorkStart = Session::has('WorkStart') ? Session::get('WorkStart') : (new DateTime('NOW'))->format('d-m-Y H:i');
     $WorkEnd = Session::has('WorkEnd') ? Session::get('WorkEnd') : "";
+    $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
+    $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
     enableCheckFileSize();
     $tool_content .= "
         <div class='row'><div class='col-sm-12'>
@@ -705,38 +684,36 @@ function new_assignment() {
                           </label>
                         </div>
                     </div>
+                </div>
+                <div class='input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
+                    <label for='WorkStart' class='col-sm-2 control-label'>$langStartDate:</label>
+                    <div class='col-sm-10'>
+                       <div class='input-group'>
+                           <span class='input-group-addon'>
+                             <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
+                           </span>                           
+                           <input class='form-control' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">                                                         
+                       </div>
+                       <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
+                    </div>
+                </div>                    
+                <div class='input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
+                    <label for='exerciseEndDate' class='col-sm-2 control-label'>$m[deadline]:</label>
+                    <div class='col-sm-10'>
+                       <div class='input-group'>
+                           <span class='input-group-addon'>
+                             <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
+                           </span>                           
+                           <input class='form-control' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">                                                         
+                       </div>
+                       <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
+                    </div>
                 </div>                
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$m[deadline]:</label>
-                    <div class='col-sm-10'>            
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='is_deadline' value='0'". ($WorkEnd ? "" : " checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
-                            $m[no_deadline]
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='is_deadline' value='1'". ($WorkEnd ? " checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
-                            $m[with_deadline]
-                          </label>
-                        </div>
-                    </div>
-                </div>
-                <div class='input-append date form-group ". ($WorkEnd ? "" : "hide") ."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-8 col-xs-offset-2'>
-                        <div class='input-group'>
-                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$WorkEnd'>
-                            <span class='add-on input-group-addon'><i class='fa fa-times'></i></span>
-                            <span class='add-on input-group-addon'><i class='fa fa-calendar'></i></span>
-                        </div>
-                    </div>
-                </div>
                 <div class='form-group ". ($WorkEnd ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>             
                         <div class='checkbox'>
                           <label>
-                            <input type='checkbox' name='late_submission' value='1'>
+                            <input type='checkbox' id='late_submission' name='late_submission' value='1'>
                             $m[late_submission_enable]
                           </label>
                         </div>
@@ -800,12 +777,7 @@ function new_assignment() {
                         </div>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='tags' class='col-sm-2 control-label'>$langTags:</label>
-                    <div class='col-sm-10'>
-                        <input type='hidden' class='form-control' name='tags' id='tags' value=''>
-                    </div>
-                </div>                
+                ".Tag::tagInput()."               
             </div>
             <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
@@ -821,30 +793,33 @@ function new_assignment() {
 function show_edit_assignment($id) {
     
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
-        $urlAppend, $works_url, $course_id, $head_content, $language, 
-        $langStudents, $langMove, $langWorkFile, $themeimg,
-        $langLessOptions, $langMoreOptions, $langTags, $langWorkOnlineText, $langWorkSubType;
+        $urlAppend, $works_url, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
+        $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
+        $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType;
     
-    //initialize the tags
-    $answer = "";
-    if (isset($id)) {
-        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
-        foreach ($tags_init as $tag) {
-            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
-            $answer = $answer . $arrayTemp;
-        }
-    }
-
     load_js('bootstrap-datetimepicker');
     load_js('select2');
     
     $head_content .= "<script type='text/javascript'>
         $(function() {
-            $('#enddatepicker').datetimepicker({
+            $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
-                pickerPosition: 'bottom-left', language: '".$language."',
-                autoclose: true
-            });
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });        
+            $('#enableWorkEnd, #enableWorkStart').change(function() {
+                var dateType = $(this).prop('id').replace('enable', '');
+                if($(this).prop('checked')) {
+                    $('input#'+dateType).prop('disabled', false);
+                    if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', false);
+                    $('#late_sub_row').removeClass('hide');
+                } else {
+                    $('input#'+dateType).prop('disabled', true);
+                    if (dateType == 'WorkEnd') $('#late_submission').prop('disabled', true);
+                    $('#late_sub_row').addClass('hide');
+                }
+            });   
             $('#hidden-opt-btn').on('click', function(e) {
                 e.preventDefault();
                 $('#hidden-opt').collapse('toggle');
@@ -858,37 +833,6 @@ function show_edit_assignment($id) {
                 var caret = '<i class=\"fa fa-caret-down\"></i>';
                 $('#hidden-opt-btn').html('$langMoreOptions '+caret);
             })            
-        });
-        
-        $(document).ready(function () {
-            $('#tags').select2({
-                    minimumInputLength: 2,
-                    tags: true,
-                    tokenSeparators: [', ', ' '],
-                    createSearchChoice: function(term, data) {
-                      if ($(data).filter(function() {
-                        return this.text.localeCompare(term) === 0;
-                      }).length === 0) {
-                        return {
-                          id: term,
-                          text: term
-                        };
-                      }
-                    },
-                    ajax: {
-                        url: '../tags/feed.php',
-                        dataType: 'json',
-                        data: function(term, page) {
-                            return {
-                                q: term
-                            };
-                        },
-                        results: function(data, page) {
-                            return {results: data};
-                        }
-                    }
-            });
-        $('#tags').select2('data', [".$answer."]);
         });    
     </script>";
     
@@ -935,11 +879,10 @@ function show_edit_assignment($id) {
             }
         }      
     }
-    if ((int)$row->deadline) {
-        $deadline = date('d-m-Y H:i',strtotime($row->deadline));
-    } else {
-        $deadline = '';
-    }
+    $WorkStart = $row->submission_date ? DateTime::createFromFormat('Y-m-d H:i:s', $row->submission_date)->format('d-m-Y H:i') : NULL;
+    $WorkEnd = $row->deadline ? DateTime::createFromFormat('Y-m-d H:i:s', $row->deadline)->format('d-m-Y H:i') : NULL;
+    $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
+    $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
     $comments = trim($row->comments);    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -1017,38 +960,36 @@ function show_edit_assignment($id) {
                           </label>
                         </div>
                     </div>
+                </div>
+                <div class='input-append date form-group".(Session::getError('WorkStart') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkStart' data-date-format='dd-mm-yyyy'>
+                    <label for='WorkStart' class='col-sm-2 control-label'>$langStartDate:</label>
+                    <div class='col-sm-10'>
+                       <div class='input-group'>
+                           <span class='input-group-addon'>
+                             <input style='cursor:pointer;' type='checkbox' id='enableWorkStart' name='enableWorkStart' value='1'".($enableWorkStart ? ' checked' : '').">
+                           </span>                           
+                           <input class='form-control' name='WorkStart' id='WorkStart' type='text' value='$WorkStart'".($enableWorkStart ? '' : ' disabled').">                                                         
+                       </div>
+                       <span class='help-block'>".(Session::hasError('WorkStart') ? Session::getError('WorkStart') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentStartHelpBlock")."</span>
+                    </div>
+                </div>                   
+                <div class='input-append date form-group".(Session::getError('WorkEnd') ? " has-error" : "")."' id='enddatepicker' data-date='$WorkEnd' data-date-format='dd-mm-yyyy'>
+                    <label for='WorkEnd' class='col-sm-2 control-label'>$m[deadline]:</label>
+                    <div class='col-sm-10'>
+                       <div class='input-group'>
+                           <span class='input-group-addon'>
+                             <input style='cursor:pointer;' type='checkbox' id='enableWorkEnd' name='enableWorkEnd' value='1'".($enableWorkEnd ? ' checked' : '').">
+                           </span>                           
+                           <input class='form-control' name='WorkEnd' id='WorkEnd' type='text' value='$WorkEnd'".($enableWorkEnd ? '' : ' disabled').">                                                         
+                       </div>
+                       <span class='help-block'>".(Session::hasError('WorkEnd') ? Session::getError('WorkEnd') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langAssignmentEndHelpBlock")."</span>
+                    </div>
                 </div>                
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$m[deadline]:</label>
-                    <div class='col-sm-10'>            
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='is_deadline' value='0' ". ((!empty($deadline)) ? "" : "checked") ." onclick='$(\"#enddatepicker, #late_sub_row\").addClass(\"hide\");$(\"#deadline\").val(\"\");'>
-                            $m[no_deadline]
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' name='is_deadline' value='1' ". ((!empty($deadline)) ? "checked" : "") ." onclick='$(\"#enddatepicker, #late_sub_row\").removeClass(\"hide\")'>
-                            $m[with_deadline]
-                          </label>
-                        </div>
-                    </div>
-                </div>
-                <div class='input-append date form-group ". (!empty($deadline) ? "" : "hide") ."' id='enddatepicker' data-date='$deadline' data-date-format='dd-mm-yyyy'>
-                    <div class='col-xs-8 col-xs-offset-2'> 
-                        <div class='input-group'>
-                            <input class='form-control' name='WorkEnd' id='deadline' type='text' value='$deadline'>
-                            <span class='add-on input-group-addon'><i class='fa fa-times'></i></span>
-                            <span class='add-on input-group-addon'><i class='fa fa-calendar'></i></span>
-                        </div>
-                    </div>
-                </div>
-                <div class='form-group ". (!empty($deadline) ? "" : "hide") ."' id='late_sub_row'>
+                <div class='form-group ". ($WorkEnd ? "" : "hide") ."' id='late_sub_row'>
                     <div class='col-xs-10 col-xs-offset-2'>             
                         <div class='checkbox'>
                           <label>
-                            <input type='checkbox' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">
+                            <input type='checkbox' id='late_submission' name='late_submission' value='1' ".(($row->late_submission)? 'checked' : '').">
                             $m[late_submission_enable]
                           </label>
                         </div>
@@ -1116,12 +1057,7 @@ function show_edit_assignment($id) {
                         </div>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <label for='tags' class='col-sm-2 control-panel'>$langTags:</label>
-                    <div class='col-sm-10'>
-                        <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-                    </div>
-                </div>                  
+                ".Tag::tagInput($id)."                 
             </div>          
             <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
@@ -1151,8 +1087,9 @@ function edit_assignment($id) {
         $title = $_POST['title'];
         $desc = purify($_POST['desc']);
         $submission_type = $_POST['submission_type'];
-        $deadline = trim($_POST['WorkEnd']) == FALSE ? '0000-00-00 00:00': date('Y-m-d H:i', strtotime($_POST['WorkEnd']));
-        $late_submission = ((isset($_POST['late_submission']) && trim($_POST['WorkEnd']) != FALSE) ? 1 : 0);
+        $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
+        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
+        $late_submission = isset($_POST['late_submission']) ? 1 : 0;
         $group_submissions = $_POST['group_submissions'];
         $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
         $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
@@ -1198,24 +1135,18 @@ function edit_assignment($id) {
              }        
          }   
          Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
-             group_submissions = ?d, comments = ?s, submission_type = ?d, deadline = ?t, late_submission = ?d, max_grade = ?d, 
+             group_submissions = ?d, comments = ?s, submission_type = ?d, deadline = ?t, late_submission = ?d, submission_date = ?t, max_grade = ?d, 
              assign_to_specific = ?d, file_path = ?s, file_name = ?s
              WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
-             $comments, $submission_type, $deadline, $late_submission, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
+             $comments, $submission_type, $deadline, $late_submission, $submission_date, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
 
          Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
          
          //tags
          if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
-                $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "work", $id, $tagItem, $course_id);
-                    }
-                }
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($id);
+            $moduleTag->syncTags($tagsArray);
          }
 
          if ($assign_to_specific && !empty($assigned_to)) {
@@ -1368,6 +1299,14 @@ function show_student_assignment($id) {
     $user_group_info = user_group_info($uid, $course_id);
     $row = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                          FROM assignment WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $WorkStart = new DateTime($row->submission_date);
+    $current_date = new DateTime('NOW');
+    $interval = $WorkStart->diff($current_date);
+    if ($WorkStart > $current_date) {
+        Session::Messages("Η εργασία θα είναι ενεργή ". $WorkStart->format('d-m-Y H:i'));
+        redirect_to_home_page("modules/work/index.php?course=$course_code");
+    }
+
     $tool_content .= action_bar(array(
        array(
            'title' => $langBack,
@@ -1540,8 +1479,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
 function assignment_details($id, $row) {
     global $tool_content, $is_editor, $course_code, $themeimg, $m, $langDaysLeft,
     $langDays, $langWEndDeadline, $langNEndDeadLine, $langNEndDeadline,
-    $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload,
-    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $langTags, $course_id;
+    $langEndDeadline, $langDelAssign, $langAddGrade, $langZipDownload, $langTags,
+    $langSaved, $langGraphResults, $langWorksDelConfirm, $langWorkFile, $course_id, $langEditChange;
 
     if ($is_editor) {
         $tool_content .= action_bar(array(
@@ -1582,15 +1521,17 @@ function assignment_details($id, $row) {
         $deadline_notice = "<br><span>($langDaysLeft " . format_time_duration($row->time) . ")</span>";
     } elseif ((int)$row->deadline) {
         $deadline_notice = "<br><span class='text-danger'>$langEndDeadline</span>";
-    }   
+    }
+    
+    $moduleTag = new ModuleElement($id);    
     $tool_content .= "
-    <div class='panel panel-action-btn-default'>
-        <div class='panel-heading list-header'>
+    <div class='panel panel-action-btn-primary'>
+        <div class='panel-heading'>
             <div class='pull-right'>
             ". (($is_editor) ? 
                     action_button(array(
                         array(
-                            'title' => $m['edit'],
+                            'title' => $langEditChange,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
                             'level' => 'primary-label',
                             'icon' => 'fa-edit'
@@ -1672,18 +1613,19 @@ function assignment_details($id, $row) {
                 <div class='col-sm-9'>
                     ".(($row->group_submissions == '0') ? $m['user_work'] : $m['group_work'])."                   
                 </div>                
-            </div>
+            </div>";
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list)
+        $tool_content .= "
             <div class='row  margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
-                <div class='col-sm-9'>";
-                    $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "work", $id, $course_id);
-                    foreach($tags_list as $tag){
-                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
-                    }                   
-$tool_content .="</div>                
-            </div>   
+                <div class='col-sm-9'>
+                    $tags_list
+                </div>                
+            </div> ";
+$tool_content .= "        
         </div>
     </div>";
        
@@ -1719,7 +1661,7 @@ function show_assignment($id, $display_graph_results = false) {
     $langEndDeadline, $langWEndDeadline, $langNEndDeadline, $langWorkOnlineText,
     $langDays, $langDaysLeft, $langGradeOk, $course_code, $webDir, $urlServer,
     $langGraphResults, $m, $course_code, $themeimg, $works_url, $course_id, 
-    $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEdit;
+    $langDelWarnUserAssignment, $langQuestionView, $langDelete, $langEditChange;
     
     $assign = Database::get()->querySingle("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
                                 FROM assignment
@@ -1829,7 +1771,7 @@ function show_assignment($id, $display_graph_results = false) {
                     $grade = $row->grade;
                 }
                 
-                $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  '<div style="color:red;">$m[late_submission]</div>' : '';
+                $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
                 $tool_content .= "
                                 <tr>
                                 <td align='right' width='4' rowspan='2' valign='top'>$i.</td>
@@ -1848,7 +1790,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td class='option-btn-cell'>".  
                                     action_button(array(
                                         array(
-                                            'title' => $langEdit,
+                                            'title' => $langEditChange,
                                             'url' => "grade_edit.php?course=$course_code&amp;assignment=$id&amp;submission=$row->id",
                                             'level' => 'primary',
                                             'icon' => 'fa-edit'
@@ -2015,7 +1957,7 @@ function show_non_submitted($id) {
 function show_student_assignments() {
     global $tool_content, $m, $uid, $course_id, $course_code,
     $langDaysLeft, $langDays, $langNoAssign, $urlServer,
-    $course_code, $themeimg;
+    $course_code, $themeimg, $langEditChange;
 
     $gids = user_group_info($uid, $course_id);
     if (!empty($gids)) {
@@ -2044,8 +1986,7 @@ function show_student_assignments() {
         $k = 0;
         foreach ($result as $row) {
             $title_temp = q($row->title);
-            $test = (int)$row->deadline;
-            if((int)$row->deadline){
+            if($row->deadline){
                 $deadline = nice_format($row->deadline, true);
             }else{
                 $deadline = $m['no_deadline'];
@@ -2056,7 +1997,7 @@ function show_student_assignments() {
                                     <td class='text-center'>" . $deadline ;
             if ($row->time > 0) {
                 $tool_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
-            } else if((int)$row->deadline){
+            } else if($row->deadline){
                 $tool_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
             }
             $tool_content .= "</td><td class='text-center'>";
@@ -2095,7 +2036,7 @@ function show_student_assignments() {
 
 // show all the assignments
 function show_assignments() {
-    global $tool_content, $m, $langEdit, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
+    global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
     $course_code, $themeimg, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
     $langWarnForSubmissions, $langDelSure;
     
@@ -2152,17 +2093,18 @@ function show_assignments() {
            $tool_content .= "</td>
               <td class='option-btn-cell'>" .
               action_button(array(
-                    array('title' => $langEdit,
+                    array('title' => $langEditChange,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=edit",
                           'icon' => 'fa-edit'),
+                  
+                    array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
+                          'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
+                          'icon' => $row->active == 1 ? 'fa-eye-slash': 'fa-eye'),
                     array('title' => $m['WorkSubsDelete'],
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_purge",
                           'icon' => 'fa-eraser',
                           'confirm' => "$langWarnForSubmissions $langDelSure",
                           'show' => $num_submitted > 0),
-                    array('title' => $row->active == 1 ? $m['deactivate']: $m['activate'],
-                          'url' => $row->active == 1 ? "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=disable&amp;id=$row->id" : "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=enable&amp;id=$row->id",
-                          'icon' => $row->active == 1 ? 'fa-eye': 'fa-eye-slash'),
                     array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
                             'icon' => 'fa-times',

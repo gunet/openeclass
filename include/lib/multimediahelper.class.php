@@ -68,6 +68,8 @@ class MultimediaHelper {
             if (self::isSupportedImage($filename)) {
                 $ahref = "<a href='$mediaDL' class='$class fileURL' title=''".q($title)."'>" . $title . "</a>";
             }
+        } else if(self::isSupportedModalFile($filename)){
+            $ahref = "<a href='$mediaDL' class='fileURL fileModal' target='_blank' title='".q($title)."'>" . $title . "</a>";
         }
 
         return $ahref;
@@ -413,6 +415,16 @@ class MultimediaHelper {
     }
 
     /**
+     * Whether the file is supported by browser (in order to open it via bootsrap modal)
+     *
+     * @param  string  $filename
+     * @return boolean
+     */
+    public static function isSupportedModalFile($filename) {
+        return in_array(get_file_extension($filename), self::getSupportedModalFiles());
+    }
+    
+    /**
      * Whether the media (video or audio) is supported or not
      *
      * @param  string  $filename
@@ -439,7 +451,7 @@ class MultimediaHelper {
      * @return boolean
      */
     public static function isEmbeddableMedialink($medialink) {
-        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns(), self::getDailymotionPatterns());
+        $supported = array_merge(self::getYoutubePatterns(), self::getVimeoPatterns(), self::getGooglePatterns(), self::getMetacafePatterns(), self::getMyspacePatterns(), self::getDailymotionPatterns(), self::getNineSlidesPatterns());
         $ret = false;
 
         foreach ($supported as $pattern) {
@@ -501,6 +513,13 @@ class MultimediaHelper {
                 $medialink = 'http://www.dailymotion.com/embed/video/' . $sanitized . '?autoPlay=1';
             }
         }
+        
+        foreach (self::getNineSlidesPatterns() as $pattern) {
+            if (preg_match($pattern, $medialink, $matches)) {
+                $sanitized = strip_tags($matches[1]);
+                $medialink = 'http://www.9slides.com/embed/' . $sanitized;
+            }
+        }
 
         return urlencode($medialink);
     }
@@ -526,7 +545,11 @@ class MultimediaHelper {
     public static function getSupportedImages() {
         return array("jpg", "jpeg", "png", "gif", "bmp");
     }
-
+    
+    public static function getSupportedModalFiles() {
+        return array("htm", "html", "txt", "pdf");
+    }
+    
     public static function getYoutubePatterns() {
         return array('/youtube\.com\/v\/([^&^\?]+)/i',
             '/youtube\.com\/watch\?v=([^&]+)/i',
@@ -557,6 +580,10 @@ class MultimediaHelper {
 
     public static function getDailymotionPatterns() {
         return array('/dailymotion\.com.*\/video\/(([^&^\?^_]+))/i');
+    }
+    
+    public static function getNineSlidesPatterns() {
+        return array('/9slides\.com\/talks\/([^&^\?]+)/i');
     }
 
 }

@@ -133,7 +133,7 @@ if (isset($_POST['submitCat'])) {
         foreach ($q_cats as $q_cat) {
             $action_button = action_button(array(
                 array(
-                    'title' => $langEdit,
+                    'title' => $langEditChange,
                     'url' => "question_categories.php?course=$course_code&modifyCat=$q_cat->question_cat_id",
                     'icon' => 'fa-edit'
                 ),            

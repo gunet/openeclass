@@ -626,7 +626,7 @@ if (!class_exists('ScormExport')):
             }
             // Copy usual files (.css, .js, .xsd, etc)
             if (
-                    !claro_copy_file('modules/learnPath/export12/APIWrapper.js', $this->destDir) || !claro_copy_file('template/default/css/bootstrap-custom.css', $this->destDir) || !claro_copy_file('modules/learnPath/export12/scores.js', $this->destDir) || !claro_copy_file('modules/learnPath/export12/ims_xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imscp_rootv1p1p2.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imsmd_rootv1p2p1.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/adlcp_rootv1p2.xsd', $this->destDir)) {
+                    !claro_copy_file('modules/learnPath/export12/APIWrapper.js', $this->destDir) || !claro_copy_file('template/default/CSS/bootstrap-custom.css', $this->destDir) || !claro_copy_file('modules/learnPath/export12/scores.js', $this->destDir) || !claro_copy_file('modules/learnPath/export12/ims_xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imscp_rootv1p1p2.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imsmd_rootv1p2p1.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/adlcp_rootv1p2.xsd', $this->destDir)) {
                 $this->error[] = $langErrorCopyScormFiles;
                 return false;
             }

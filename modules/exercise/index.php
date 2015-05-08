@@ -240,19 +240,16 @@ if (!$nbrExercises) {
             $langDelete_temp = htmlspecialchars($langDelete);
             
             $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                    array('title' => $langModify,
+                    array('title' => $langEditChange,
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
-                    array('title' => $langVisible,
+                    array('title' => $row->active ?  $langViewHide : $langViewShow,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable").(isset($page) ? "&amp;page=$page" : "")."&amp;exerciseId=" . $row->id,
-                          'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
-                    array('title' => $langResourceAccess,
+                          'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
+                    array('title' => $row->public ? $langResourceAccessLock : $langResourceAccessUnlock,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
-                          'icon' => $row->public ? 'fa-unlock' : 'fa-lock',
+                          'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
                           'show' => course_status($course_id) == COURSE_OPEN),
-                    array('title' => $langExerciseStats,
-                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
-                          'icon' => 'fa-pie-chart'),
                     array('title' => $langCreateDuplicate,
                           'icon-class' => 'warnLink',
                           'icon-extra' => "data-exerciseid='$row->id'",
@@ -266,7 +263,10 @@ if (!$nbrExercises) {
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
                           'icon' => 'fa-times',
                           'class' => 'delete',
-                          'confirm' => $langConfirmPurgeExercise)                
+                          'confirm' => $langConfirmPurgeExercise),
+                    array('title' => $langExerciseStats,
+                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
+                          'icon' => 'fa-pie-chart')
                     ))."</td></tr>";
             
         // student only

@@ -384,7 +384,7 @@ $tool_content .=
                 'url' => "dumpuser.php?course=$course_code&amp;enc=1253",
                 'icon' => 'fa-file-archive-o'),
             array('title' => $langDelUsers,
-                'url' => "../course_info/refresh_course.php?course=$course_code",
+                'url' => "../course_info/refresh_course.php?course=$course_code&amp;from_user=true",
                 'icon' => 'fa-times',
                 'button-class' => 'btn-danger')
         ));

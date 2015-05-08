@@ -312,19 +312,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             $changetip = q("$langChangeUserAs $logs->username");
             $icon_content = action_button(array(
                 array(
-                    'title' => $langEdit,
+                    'title' => $langEditChange,
                     'icon' => 'fa-edit',
                     'url' => "edituser.php?u=$logs->id"
-                ),
-                array(
-                    'title' => $langDelete,
-                    'icon' => 'fa-times',
-                    'url' => "deluser.php?u=$logs->id"
-                ),
-                array(
-                    'title' => $langStat,
-                    'icon' => 'fa-pie-chart',
-                    'url' => "userstats.php?u=$logs->id"
                 ),
                 array(
                     'title' => $langActions,
@@ -336,6 +326,16 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'icon' => 'fa-key',
                     'url' => 'change_user.php?username=' . urlencode($logs->username),
                     'hide' => isDepartmentAdmin()
+                ),
+                array(
+                    'title' => $langStat,
+                    'icon' => 'fa-pie-chart',
+                    'url' => "userstats.php?u=$logs->id"
+                ),
+                array(
+                    'title' => $langDelete,
+                    'icon' => 'fa-times',
+                    'url' => "deluser.php?u=$logs->id"
                 )
             ));
         }

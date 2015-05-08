@@ -397,11 +397,11 @@ class Log {
      */
     private function login_failure_action_details($details) {
 
-        global $lang_username, $langPassword;
+        global $lang_username;
 
         $details = unserialize($details);
 
-        $content = "$lang_username&nbsp;&laquo;" . q($details['uname']) . "&raquo;&nbsp;$langPassword&nbsp;&laquo;" . q($details['pass']) . "&raquo;";
+        $content = "$lang_username&nbsp;&laquo;" . q($details['uname']) . "&raquo;";
 
         return $content;
     }

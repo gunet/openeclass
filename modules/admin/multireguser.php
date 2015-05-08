@@ -27,7 +27,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
 require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/pwgen.inc.php';
-
+require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
@@ -53,7 +53,12 @@ if (isset($_POST['submit'])) {
     $newstatus = ($_POST['type'] == 'prof') ? 1 : 5;
     $departments = isset($_POST['facid']) ? $_POST['facid'] : array();
     $am = $_POST['am'];
+    $auth_methods_form = isset($_POST['auth_methods_form']) ? $_POST['auth_methods_form'] : 1;
     $fields = preg_split('/[ \t,]+/', $_POST['fields'], -1, PREG_SPLIT_NO_EMPTY);
+    
+    if ($auth_methods_form != 1) {
+        $acceptable_fields = array('first', 'last', 'email', 'id', 'phone', 'username');
+    }
     
     foreach ($fields as $field) {
         if (!in_array($field, $acceptable_fields)) {
@@ -164,8 +169,30 @@ if (isset($_POST['submit'])) {
                     <option value='prof'>$langOfTeachers</option>
                 </select>
             </div>
-        </div>
-        <div class='form-group'>
+        </div>";
+    
+        $eclass_method_unique = TRUE;        
+        $auth = get_auth_active_methods();
+        foreach ($auth as $methods) {
+            if ($methods != 1) {
+                $eclass_method_unique = FALSE;
+            }
+        }
+        if (!$eclass_method_unique) {
+            $auth_m = array();
+            $tool_content .= "<div class='form-group'>
+                <label for='passsword' class='col-sm-3 control-label'>$langMethods</label>
+                <div class='col-sm-9'>";
+        
+            foreach ($auth as $methods) {
+                $auth_text = get_auth_info($methods);
+                $auth_m[$methods] = $auth_text;            
+            }
+            $tool_content .= selection($auth_m, "auth_methods_form", '', "class='form-control'");
+            $tool_content .= "</div></div>";
+        }
+        
+        $tool_content .= "<div class='form-group'>
             <label for='prefix' class='col-sm-3 control-label'>$langMultiRegPrefix:</label>
             <div class='col-sm-9'>
                 <input class='form-control' type='text' name='prefix' id='prefix' value='user'>
@@ -233,10 +260,10 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     global $charset, $langAsProf,
     $langYourReg, $siteName, $langDestination, $langYouAreReg,
     $langSettings, $langPass, $langAddress, $langIs, $urlServer,
-    $langProblem,
+    $langProblem, $langPassSameAuth,
     $langManager, $langTel, $langEmail,
     $profsuccess, $usersuccess,
-    $user;
+    $user, $auth_ids, $auth_methods_form;
 
     if ($status == 1) {
         $message = $profsuccess;
@@ -256,9 +283,16 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     if (empty($phone)) {
         $phone = ' ';
     }
-    $hasher = new PasswordHash(8, false);
-    $password_encrypted = $hasher->HashPassword($password);
-
+    
+    if ($auth_methods_form != 1) { // other authentication methods
+        $password_encrypted = $auth_ids[$auth_methods_form];
+        $mail_message = $langPassSameAuth;
+    } else {
+        $hasher = new PasswordHash(8, false);
+        $password_encrypted = $hasher->HashPassword($password);
+        $mail_message = $password;
+    }
+    
     $id = Database::get()->query("INSERT INTO user
                 (surname, givenname, username, password, email,
                  status, registered_at, expires_at, lang, am, phone,
@@ -269,12 +303,12 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $telephone = get_config('phone');
     $administratorName = get_config('admin_name');
     $emailhelpdesk = get_config('email_helpdesk');
-    $emailsubject = "$langYourReg $siteName $type_message";
+    $emailsubject = "$langYourReg $siteName $type_message"; 
     $emailbody = "
 $langDestination $givenname $surname
 
 $langYouAreReg $siteName$type_message $langSettings $uname
-$langPass : $password
+$langPass : $mail_message
 $langAddress $siteName $langIs: $urlServer
 $langProblem
 
@@ -282,7 +316,7 @@ $administratorName
 $langManager: $siteName
 $langTel: $telephone
 $langEmail: $emailhelpdesk
-";
+";    
     if ($send_mail) {
         send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
     }

@@ -54,10 +54,8 @@ if ($uid) {
 // ----------------------
 // download video
 // ----------------------
-$res2 = Database::get()->querySingle("SELECT * 
-                   FROM video 
-                  WHERE course_id = $course_id
-                    AND id = ?d", $_GET['id']);
+$res2 = Database::get()->querySingle("SELECT * FROM video
+                  WHERE course_id = ?d AND id = ?d", $course_id, $_GET['id']);
 
 if (!$res2) {
     header("Location: ${urlServer}");

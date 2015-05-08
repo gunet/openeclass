@@ -362,7 +362,7 @@ hContent;
                 $tool_content .= "<div class='alert alert-success'>$langGlossaryDeleted</div>";
         } else if (isset($_GET['form_input'])) { // display video form
             $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langVideo);
-            
+
             if ($_GET['form_input'] === 'file' || $_GET['form_input'] === 'url') {
                 // Form
                 $tool_content .= "<div class='row'><div class='col-sm-12'><div class='form-wrapper'>";
@@ -372,7 +372,7 @@ hContent;
                     $tool_content .= "<form class='form-horizontal' role='form' method='POST' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'title');\">";
                 }
                 $tool_content .= "<fieldset>";
-                
+
                 // Main Element
                 if ($_GET['form_input'] === 'file') {
                     enableCheckFileSize();
@@ -390,7 +390,7 @@ hContent;
                           <div class='col-sm-10'><input class='form-control' type='text' name='URL'></div>
                       </div>";
                 }
-                
+
                 // Other fields
                 $tool_content .= "<div class='form-group'>
                     <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
@@ -425,7 +425,7 @@ hContent;
                 $tool_content .=  "</select>
                     </div>
                 </div>";
-                
+
                 // Submit button
                 if ($_GET['form_input'] === 'file') {
                     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
@@ -478,12 +478,15 @@ hContent;
                 $tool_content .= "<div class='form-group'>
                     <label for='Url' class='col-sm-2 control-label'>$langURL:</label>
                         <input type='hidden' name='id' value=''>
-                        <div class='col-sm-10'><input type='text' name='url' value = '" . q($url) . "'></div>
+                        <div class='col-sm-10'><input class='form-control' type='text' name='url' value = '" . q($url) . "'></div>
                     </div>";
             } elseif ($table_edit == 'video') {
                     $tool_content .= "<input type='hidden' name='url' value='" . q($url) . "'>";
             }
             $tool_content .= "<div class='form-group'>
+                  <label class='col-sm-2 control-label'>$langWorkFile:</label><div class='col-sm-10-pt-6'>" . q($url) . "</div>
+                </div>
+                <div class='form-group'>
                   <label for='Title' class='col-sm-2 control-label'>$langTitle:</label>
                   <div class='col-sm-10'><input class='form-control' type='text' name='title' value= '" . q($title) . "'></div>
                 </div>
@@ -597,14 +600,14 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                 if ($display_tools) {
                     $tool_content .= "<td class='option-btn-cell'>";
                     $tool_content .= action_button(array(
+                        array('title' => $langEditChange,
+                              'icon' => 'fa-edit',
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory"),
                         array('title' => $langDelete,
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=delcat",
-                              'confirm' => $langCatDel),
-                        array('title' => $langModify,
-                              'icon' => 'fa-edit',
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;action=editcategory")));
+                              'confirm' => $langCatDel)));
 
                     $tool_content .= '</td>';
                 }
@@ -816,10 +819,10 @@ function showlinksofcategory($cat_id = 0) {
                             $tool_content .= ($emit? ', ': '') . "$langpublisher: " . q($myrow->publisher);
                         }
                     }
-                    $tool_content .= "</small></td>
-                            <td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) .
-                    "</td>";
+                    $tool_content .= "</small>";
                 }
+                $tool_content .= "</td>
+                    <td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
                 if ($display_tools) {
                    $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(

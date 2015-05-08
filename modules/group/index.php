@@ -361,7 +361,7 @@ if ($is_editor) {
                     'confirm_title' => $langEmtpyGroupsAll,
                     'show' => $num_of_groups > 0)));
 
-    $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
+    $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     $myIterator = 0;
     $num_of_groups = count($groupSelect);
     // groups list
@@ -380,7 +380,7 @@ if ($is_editor) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
             $tool_content .= "<td>
-                        <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a></td>";
+                        <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br />";
@@ -393,7 +393,7 @@ if ($is_editor) {
             }
             $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
-                        array('title' => $langEdit,
+                        array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),
                         array('title' => $langDelete,
@@ -412,7 +412,7 @@ if ($is_editor) {
 
 } else {
     // Begin student view
-    $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $course_id);
+    $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     if (count($q) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {

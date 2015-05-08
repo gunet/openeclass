@@ -300,10 +300,9 @@ function upgrade_course($code, $lang) {
  * @global type $webDir
  * @param type $code
  * @param type $extramessage
- * @param type $return_mapping
  * @return type
  */
-function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
+function upgrade_course_3_0($code, $course_id) {
     global $langUpgCourse, $mysqlMainDb, $webDir;
 
     Database::get()->query("USE `$code`");
@@ -366,88 +365,72 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         }
     }
 
-    // move videolink categories to central db and drop table
-    $videolinkcat_map = array();
-    $videolink_map = array();
-    $video_map = array();
+    // move video/multimedia tables to central db and drop them
     if (DBHelper::tableExists('video_category', $code) and DBHelper::tableExists('video', $code) and DBHelper::tableExists('videolinks', $code)) {        
-        $videolinkcatid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video_category")->max;
-        if (is_null($videolinkcatid_offset)) {
-            $videolinkcatid_offset = 0;
-        }
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM video_category ORDER BY id", function ($row) use($videolinkcatid_offset, &$videolinkcat_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $videolinkcatid_offset;
-                $videolinkcat_map[$oldid] = $newid;
-            });
+        // move video_category data
+        $video_category_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video_category")->max;
+        if (is_null($video_category_offset)) {
+            $video_category_offset = 0;
         }
 
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video_category
+        $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.video_category
                         (`id`, `course_id`, `name`, `description`)
-                        SELECT `id` + $videolinkcatid_offset, $course_id, `name`, `description` FROM video_category ORDER by id") != null) && $ok;
-        
-        Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $videolinkcatid_offset
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinkcategory'");
+                        SELECT `id` + ?d, ?d, `name`, `description` FROM video_category ORDER by id",
+                    $video_category_offset, $course_id) && $ok;
+
+        $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + ?d
+                            WHERE units.id = res.unit_id AND course_id = ?d AND type = 'videolinkcategory'",
+                    $video_category_offset, $course_id) && $ok;
            
-        // move video to central db
-        $videoid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video")->max;
-        if (is_null($videoid_offset)) {
-            $videoid_offset = 0;
+        // move video data
+        $video_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video")->max;
+        if (is_null($video_offset)) {
+            $video_offset = 0;
         }
 
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM video ORDER by id", function ($row) use($videoid_offset, &$video_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $videoid_offset;
-                $video_map[$oldid] = $newid;
-            });
-        }
-
-        
         if (!DBHelper::fieldExists('video', 'visible', $code)) {
             Database::get()->query("ALTER TABLE video ADD visible TINYINT(4) NOT NULL DEFAULT 1 AFTER date");
         }
         if (!DBHelper::fieldExists('video', 'public', $code)) {
             Database::get()->query("ALTER TABLE video ADD public TINYINT(4) NOT NULL DEFAULT 1 AFTER visible");
         }
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video
+        $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
-                               `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id") != null) && $ok;
+                        SELECT `id` + ?d, ?d, `path`, `url`, `titre`, `description`, 
+                               NULLIF(`category`, 0) + ?d,
+                               COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
+                               `date`, `visible`, `public` FROM video ORDER by id",
+                    $video_offset, $course_id, $video_category_offset) && $ok;
         
                 
-        Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $videoid_offset
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
+        $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + ?d
+                            WHERE units.id = res.unit_id AND course_id = ?d AND type = 'video'",
+                    $video_offset, $course_id) && $ok;
    
     
-        // move videolinks to central db
-        $linkid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
-        if (is_null($linkid_offset)) {
-            $linkid_offset = 0;
+        // move videolink data
+        $videolink_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
+        if (is_null($videolink_offset)) {
+            $videolink_offset = 0;
         }
 
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM videolinks ORDER by id", function ($row) use ($linkid_offset, &$videolink_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $linkid_offset;
-                $videolink_map[$oldid] = $newid;
-            });
-        }
-
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
+        $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
+                        SELECT `id` + ?d, ?d, `url`, `titre`, `description`, 
+                               NULLIF(`category`, 0) + ?d,
                                COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
-                               `date`, `visible`, `public` FROM videolinks ORDER by id") != null) && $ok;
+                               `date`, `visible`, `public` FROM videolinks ORDER by id",
+                    $videolink_offset, $course_id, $video_category_offset) && $ok;
         
-        Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $linkid_offset
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolink'");
+
+        $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + ?d 
+                            WHERE units.id = res.unit_id AND course_id = ?d AND type IN ('videolink', 'videolinks')",
+                    $videolink_offset, $course_id) && $ok;
         
-        if (false !== $ok) { // drop old tables
+        if ($ok) { // drop old tables
             Database::get()->query("DROP TABLE videolinks");
             Database::get()->query("DROP TABLE video_category");
             Database::get()->query("DROP TABLE video");
@@ -547,14 +530,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         $lpid_offset = Database::get()->querySingle("SELECT MAX(learnPath_id) as max FROM `$mysqlMainDb`.lp_learnPath")->max;
         if (is_null($lpid_offset)) {
             $lpid_offset = 0;
-        }
-
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT learnPath_id FROM lp_learnPath ORDER by learnPath_id", function ($row) use($lpid_offset, &$lp_map) {
-                $oldid = intval($row->learnPath_id);
-                $newid = $oldid + $lpid_offset;
-                $lp_map[$oldid] = $newid;
-            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE lp_map AS
@@ -714,14 +689,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         $wikiid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.wiki_properties")->max;
         if (is_null($wikiid_offset)) {
             $wikiid_offset = 0;
-        }
-
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM wiki_properties ORDER BY id", function ($row) use($wikiid_offset, &$wiki_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $wikiid_offset;
-                $wiki_map[$oldid] = $newid;
-            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE wiki_map AS
@@ -895,14 +862,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
             $assignmentid_offset = 0;
         }
 
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM assignments ORDER by id", function ($row) use($assignmentid_offset, &$assignments_map) {
-                $oldid = intval($row['id']);
-                $newid = $oldid + $assignmentid_offset;
-                $assignments_map[$oldid] = $newid;
-            });
-        }
-
         Database::get()->query("CREATE TEMPORARY TABLE assignments_map AS
                    SELECT old.id AS old_id, old.id + $assignmentid_offset AS new_id
                      FROM assignments AS old ORDER by id");
@@ -985,14 +944,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         $exerciseid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.exercise")->max;
         if (is_null($exerciseid_offset)) {
             $exerciseid_offset = 0;
-        }
-
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM exercices ORDER by id", function ($row) use($exerciseid_offset, &$exercise_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $exerciseid_offset;
-                $exercise_map[$oldid] = $newid;
-            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE exercise_map AS
@@ -1146,11 +1097,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse($course_id, $code, true);
-    }
-
-    // NOTE: no code must occur after this statement or else course upgrade will be broken
-    if ($return_mapping) {
-        return array($video_map, $videolink_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
 }
 
