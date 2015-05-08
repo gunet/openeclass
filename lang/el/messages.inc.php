@@ -4526,7 +4526,7 @@ $langQuickNotesSide = 'Γρήγορη σημείωση';
 $langNumOpenCoursesBanner = "ανοικτά<br>μαθήματα";
 $langNumOpenCourseBanner = "ανοικτό<br>μάθημα";
 $langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";
-$langNationalOpenCourses = "Εθνική πύλη ανοικτών μαθημάτων";
+$langNationalOpenCourses = "ΕΘΝΙΚΗ ΠΥΛΗ ΑΝΟΙΚΤΩΝ ΜΑΘΗΜΑΤΩΝ";
 $langExtAppName = "Εφαρμογή";
 $langExtAppDescription = "Περιγραφή";
 
