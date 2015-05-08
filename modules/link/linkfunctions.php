@@ -55,7 +55,7 @@ function getNumberOfLinks($catid) {
  * @global type $langDelete
  * @global type $langUp
  * @global type $langDown
- * @global type $langModify
+ * @global type $langEditChange
  * @global type $is_in_tinymce
  * @param type $catid
  */
@@ -157,7 +157,7 @@ function showlinksofcategory($catid) {
  * @global type $aantalcategories
  * @global type $catcounter
  * @global type $langDelete
- * @global type $langModify
+ * @global type $langEditChange
  * @global type $langUp
  * @global type $langDown
  * @global type $langCatDel
@@ -167,7 +167,7 @@ function showlinksofcategory($catid) {
  */
 function showcategoryadmintools($categoryid) {
     global $urlview, $aantalcategories, $catcounter, $langDelete,
-    $langModify, $langUp, $langDown, $langCatDel, $tool_content,
+    $langEditChange, $langUp, $langDown, $langCatDel, $tool_content,
     $course_code;
 
     $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
