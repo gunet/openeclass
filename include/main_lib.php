@@ -3239,3 +3239,18 @@ function rss_check_access() {
         forbidden($_SERVER['REQUEST_URI']);
     }
 }
+
+
+/**
+ * @brief Return the directory name of a path
+ *
+ * Makes sure that / is used as directory separator, returns empty for root directory
+ */
+function my_dirname($path) {
+    $path = str_replace('\\', '/', dirname($path));
+    if ($path == '/') {
+        return '';
+    }
+    return $path;
+}
+

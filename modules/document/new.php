@@ -41,7 +41,7 @@ if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
 } elseif (isset($_GET['editPath'])) {
     $editPath = q($_GET['editPath']);
-    $uploadPath = dirname($editPath);
+    $uploadPath = my_dirname($editPath);
 }
 
 if (defined('EBOOK_DOCUMENTS')) {

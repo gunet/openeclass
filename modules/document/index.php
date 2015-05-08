@@ -223,7 +223,7 @@ if ($can_upload) {
         if (isset($_POST['uploadPath'])) {
             $uploadPath = $_POST['uploadPath'];
         } elseif (isset($_POST['editPath'])) {
-            $uploadPath = dirname($_POST['editPath']);
+            $uploadPath = my_dirname($_POST['editPath']);
         } else {
             $uploadPath = '';
         }
@@ -467,13 +467,13 @@ if ($can_upload) {
         // h $move periexei to onoma tou arxeiou. anazhthsh onomatos arxeiou sth vash
         $moveFileNameAlias = Database::get()->querySingle("SELECT filename FROM document
                                                 WHERE $group_sql AND path=?s", $move)->filename;
-        $dialogBox .= directory_selection($move, 'moveTo', dirname($move));
+        $dialogBox .= directory_selection($move, 'moveTo', my_dirname($move));
     }
 
     // Delete file or directory
     if (isset($_GET['delete']) and isset($_GET['filePath'])) {
         $filePath = $_GET['filePath'];
-        $curDirPath = dirname($_GET['filePath']);
+        $curDirPath = my_dirname($_GET['filePath']);
         // Check if file actually exists
         $r = Database::get()->querySingle("SELECT path, extra_path, format, filename FROM document
                                         WHERE $group_sql AND path = ?s", $filePath);
@@ -531,7 +531,7 @@ if ($can_upload) {
                 metaRenameDomDocument($basedir . $_POST['sourceFile'] . '.xml', $_POST['renameTo']);
             }
         }
-        $curDirPath = dirname($_POST['sourceFile']);
+        $curDirPath = my_dirname($_POST['sourceFile']);
         Session::Messages($langElRen, 'alert-success');
         redirect_to_current_dir();
     }
@@ -647,7 +647,7 @@ if ($can_upload) {
                 'filename' => $res->filename,
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
-            $curDirPath = dirname($commentPath);
+            $curDirPath = my_dirname($commentPath);
             Session::Messages($langComMod, 'alert-success');
             redirect_to_current_dir();
         }
@@ -657,7 +657,7 @@ if ($can_upload) {
     // h $metadataPath periexei to path tou arxeiou gia to opoio tha epikyrwthoun ta metadata
     if (isset($_POST['metadataPath'])) {
 
-        $curDirPath = dirname($_POST['metadataPath']);
+        $curDirPath = my_dirname($_POST['metadataPath']);
         $metadataPath = $_POST['metadataPath'] . ".xml";
         $oldFilename = $_POST['meta_filename'] . ".xml";
         $xml_filename = $basedir . str_replace('/..', '', $metadataPath);
@@ -710,7 +710,7 @@ if ($can_upload) {
             $docId = $result->id;
             $oldpath = $result->path;
             $oldformat = $result->format;
-            $curDirPath = dirname($_POST['replacePath']);
+            $curDirPath = my_dirname($_POST['replacePath']);
             // check for disk quota
             $diskUsed = dir_total_space($basedir);
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
@@ -881,7 +881,7 @@ if ($can_upload) {
     // Add comment form
     if (isset($_GET['comment'])) {
         $comment = $_GET['comment'];
-        $curDirPath = dirname($comment);
+        $curDirPath = my_dirname($comment);
         $oldComment = '';
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
@@ -1022,7 +1022,7 @@ if ($can_upload) {
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         Session::Messages($langViMod, 'alert-success');
-        $curDirPath = dirname($visibilityPath);
+        $curDirPath = my_dirname($visibilityPath);
         redirect_to_current_dir();
     }
 
@@ -1036,7 +1036,7 @@ if ($can_upload) {
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $path);
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
         Session::Messages($langViMod, 'alert-success');
-        $curDirPath = dirname($path);
+        $curDirPath = my_dirname($path);
         redirect_to_current_dir();
     }
 } // teacher only
@@ -1051,10 +1051,7 @@ if (!isset($curDirPath)) {
     }
 }
 $curDirName = my_basename($curDirPath);
-$parentDir = dirname($curDirPath);
-if ($parentDir == '\\') {
-    $parentDir = '/';
-}
+$parentDir = my_dirname($curDirPath);
 if (strpos($curDirName, '/../') !== false or ! is_dir(realpath($basedir . $curDirPath))) {
     $tool_content .= $langInvalidDir;
     draw($tool_content, $menuTypeID);
