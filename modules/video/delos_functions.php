@@ -95,7 +95,7 @@ function httpGetRequest($url) {
     return $response;
 }
 
-function displayDelosForm($jsonObj) {
+function displayDelosForm($jsonObj, $currentVideoLinks) {
     global $course_id, $course_code, $langTitle, $langDescr, $langcreator, $langpublisher, $langDate,
            $langSelect, $langAddModulesButton, $langOpenDelosReplaceInfo, $langCategory;
     
@@ -130,6 +130,16 @@ delosform;
         $creator = $vL->rights->creator->name;
         $publisher = $vL->rights->editor->name;
         $date = $vL->date;
+        $dateTS = strtotime($date);
+        $alreadyAdded = '';
+        if (isset($currentVideoLinks[$url])) {
+            $alreadyAdded = '<span style="color:red">*';
+            $currentTS = strtotime($currentVideoLinks[$url]);
+            if ($dateTS > $currentTS) {
+                $alreadyAdded .= '*';
+            }
+            $alreadyAdded .= '</span>';
+        }
                     
         $html .= <<<delosform
             <tr class="$trclass">
@@ -139,7 +149,7 @@ delosform;
                 <td>$publisher</td>
                 <td>$date</td>
                 <td class="center" width="10">
-                    <input name="delosResources[]" value="$rid" type="checkbox">
+                    <input name="delosResources[]" value="$rid" type="checkbox"/> $alreadyAdded
                 </td>
             </tr>
 delosform;
@@ -223,4 +233,13 @@ function storeDelosResources($jsonObj) {
             }
         }
     }
+}
+
+function getCurrentVideoLinks() {
+    global $course_id;
+    $current = array();
+    Database::get()->queryFunc("SELECT url, date FROM videolink WHERE course_id = ?d", function($vl) use (&$current) {
+        $current[$vl->url] = $vl->date;
+    }, $course_id);
+    return $current;
 }

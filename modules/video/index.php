@@ -448,7 +448,7 @@ hContent;
                 $jsonObj = requestDelosJSON();
                 // construct the form/table from the JSON received
                 if ($jsonObj !== null) {
-                    $tool_content .= displayDelosForm($jsonObj);
+                    $tool_content .= displayDelosForm($jsonObj, getCurrentVideoLinks());
                 } else {
                     $tool_content .= "<div class='alert alert-warning' role='alert'>$langNoVideo</div>";
                 }
