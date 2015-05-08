@@ -369,6 +369,7 @@ $langldap_bind_dn = "DN χρήστη για LDAP binding";
 $langldap_bind_pw = "Συνθηματικό για LDAP binding";
 $langldap_login_attr = "Attribute για το username του χρήστη";
 $langldap_login_attr2 = "Εναλλακτικό Attribute για το username του χρήστη";
+$langldap_id_attr = "Attribute για τον αριθμό μητρώου του χρήστη";
 $langcas_host = "Εξυπηρέτης CAS";
 $langcas_port = "Πόρτα λειτουργίας CAS";
 $langcas_context = "Διεύθυνση σελίδας εισόδου";

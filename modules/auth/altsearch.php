@@ -195,7 +195,9 @@ if ($is_valid) {
     if (isset($_SESSION['auth_user_info'])) {
         $givenname_form = $_SESSION['auth_user_info']['givenname'];
         $surname_form = $_SESSION['auth_user_info']['surname'];
-        $am = $_SESSION['auth_user_info']['studentid'];
+        if (!empty($_SESSION['auth_user_info']['studentid'])) {
+            $am = $_SESSION['auth_user_info']['studentid'];
+        }
         if (!$email and !empty($_SESSION['auth_user_info']['email'])) {
             $email = $_SESSION['auth_user_info']['email'];
         }

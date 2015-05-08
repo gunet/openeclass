@@ -254,7 +254,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '4':
-            $ldap = ldap_connect($settings['ldaphost']);
+            $ldap = ldap_connect($settings['ldaphost']);            
             if (!$ldap) {
                 $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
                 return false;
@@ -274,7 +274,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         $user_dn = ldap_get_dn($ldap, $entry_id);
                         if (@ldap_bind($ldap, $user_dn, $test_password)) {
                             $testauth = true;
-                            $userinfo = ldap_get_entries($ldap, $userinforequest);
+                            $userinfo = ldap_get_entries($ldap, $userinforequest);                            
                             if ($userinfo['count'] == 1) {
                                 $surname = get_ldap_attribute($userinfo, 'sn');
                                 $givenname = get_ldap_attribute($userinfo, 'givenname');
@@ -285,7 +285,8 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                                 $_SESSION['auth_user_info'] = array(
                                     'givenname' => $givenname,
                                     'surname' => $surname,
-                                    'email' => get_ldap_attribute($userinfo, 'mail'));
+                                    'email' => get_ldap_attribute($userinfo, 'mail'),
+                                    'studentid' => get_ldap_attribute($userinfo, $settings['ldap_studentid']));
                             }
                         }
                     }
