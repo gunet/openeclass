@@ -57,7 +57,7 @@ abstract class OAuthDrive extends CloudDrive {
     }
 
     public function isPresent() {
-        return ($this->getClientID() && $this->getSecret() && $this->getRedirect());
+        return parent::isPresent() && $this->getClientID() && $this->getSecret() && $this->getRedirect();
     }
 
 }

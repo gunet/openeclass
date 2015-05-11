@@ -44,9 +44,8 @@ final class CloudDriveManager {
             $drives = array();
             foreach (CloudDriveManager::$DRIVENAMES as $driveName) {
                 $drive = new $driveName();
-                if ($drive->isPresent()) {
+                if ($drive->isPresent())
                     $drives[$drive->getName()] = $drive;
-                }
             }
             CloudDriveManager::$DRIVES = $drives;
         }
@@ -160,7 +159,10 @@ abstract class CloudDrive {
         return $result;
     }
 
-    public abstract function isPresent();
+    public function isPresent() {
+        echo $this->getExtApp();
+        return $this->getExtApp() != null;
+    }
 
     public abstract function store($cloudfile, $path);
 

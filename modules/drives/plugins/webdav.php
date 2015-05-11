@@ -43,7 +43,7 @@ final class WebDAV extends CredentialDrive {
     }
 
     public function isPresent() {
-        
+        return parent::isPresent();
     }
 
     public function store($cloudfile, $path) {

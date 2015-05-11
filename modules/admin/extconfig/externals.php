@@ -52,7 +52,7 @@ class ExtAppManager {
      */
     public static function getApp($appname) {
         $apps = ExtAppManager::getApps();
-        return $apps[$appname];
+        return array_key_exists($appname, $apps) ? $apps[$appname] : null;
     }
 
 }
