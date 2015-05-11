@@ -94,8 +94,11 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                 $recipients[] = $r->user_id;
             }
             
+            $reports_cats = array('rudeness' => $langRudeness,
+                                  'spam' => $langSpam,
+                                  'other' => $langOther);
             
-            $msg_body = sprintf($langAbuseReportClosePMBody, $content_type, q($reason), q($message), $content, $url);
+            $msg_body = sprintf($langAbuseReportClosePMBody, $content_type, $reports_cats[$reason], q($message), $content, $url);
             
             $pm = new Msg($uid, $course_id, $langMsgRe.$langAbuseReport, $msg_body, $recipients);
             

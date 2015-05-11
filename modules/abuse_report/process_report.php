@@ -139,7 +139,11 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $url = $urlServer."modules/link/?course=".course_id_to_code($cid);
         }
         
-        $msg_body = sprintf($langAbuseReportPMBody, $content_type, q($reason), q($msg), $content, $url);
+        $reports_cats = array('rudeness' => $langRudeness,
+                              'spam' => $langSpam,
+                              'other' => $langOther);
+        
+        $msg_body = sprintf($langAbuseReportPMBody, $content_type, $reports_cats[$reason], q($msg), $content, $url);
         
         $pm = new Msg($uid, $cid, $langAbuseReport, $msg_body, $editors);
         
