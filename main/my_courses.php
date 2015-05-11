@@ -29,7 +29,7 @@ $require_login = true;
 include '../include/baseTheme.php';
 require_once 'perso_functions.php';
 
-$pageName = $langMyPersoLessons;
+$pageName = $langMyCourses;
 //  Get user's course info
     if ($session->status == USER_TEACHER) {
         $myCourses = Database::get()->queryArray("SELECT course.id course_id,

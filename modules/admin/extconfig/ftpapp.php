@@ -35,4 +35,12 @@ class FTPApp extends ExtApp {
         return "FTP";
     }
 
+    public function getShortDescription() {
+        return $GLOBALS['langFtpShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langFtpLongDescription'];
+    }
+
 }

@@ -69,8 +69,19 @@ $head_content = '<script type="text/javascript">
 
 $toolName = $langDropBox;
 
+if ($course_id != 0) {
+    if ($status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+    }
+} else {
+    if (!get_mail_ver_status($uid)) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+    }
+}
 // action bar 
-if (!isset($_GET['showQuota'])) {    
+if (!isset($_GET['showQuota'])) {   
     if (isset($_GET['upload'])) {
         $navigation[] = array('url' => "index.php", 'name' => $langDropBox);
         if (isset($_GET['type'])) {

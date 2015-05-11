@@ -138,7 +138,7 @@ function list_docs() {
                 "<th class='text-left'>$langName</th>" .
                 "<th class='text-center'>$langSize</th>" .
                 "<th class='text-center'>$langDate</th>" .
-                "<th class='checkbox_cell'>$langChoice</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         $counter = 0;
         foreach (array(true, false) as $is_dir) {

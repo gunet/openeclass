@@ -91,7 +91,7 @@ if ($is_editor) {
         foreach ($lpaths as $lp) {
                 if ($lp->lock == 'CLOSE') {
                     $prog = get_learnPath_progress($lp->learnPath_id, $_SESSION['uid']);                    
-                    if ($prog < 100) {                                                    
+                    if ($prog != 0) {                                                    
                         header("Location: ./index.php?course=$course_code");
                     }
                 }

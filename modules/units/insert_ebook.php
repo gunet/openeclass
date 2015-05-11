@@ -47,7 +47,7 @@ function list_ebooks() {
                 "<table class='table-default'>" .
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langEBook</th>" .
-                "<th class='text-center checkbox_cell'>$langChoice</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         $unit_parameter = 'unit=' . $id;
         foreach ($result as $catrow) {        

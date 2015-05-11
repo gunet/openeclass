@@ -1,12 +1,12 @@
 .browsearea {
-    width: 400px;
-    height: 300px;
+/*    width: 400px;
+    height: 300px;*/
     border-top: solid 1px #BBB;
     border-left: solid 1px #BBB;
     border-bottom: solid 1px #FFF;
     border-right: solid 1px #FFF;
     background: #f1e2d1;
-    overflow: scroll;
+    overflow: auto;
     padding: 5px;
 }
 

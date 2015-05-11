@@ -42,7 +42,7 @@ ul.menu {
 
 li.mie {
 	height: 20px;
-	background-image: url(template/classic/img/check/ie.png);
+	background-image: url(template/default/img/check/ie.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -54,7 +54,7 @@ li.mie {
 
 li.mfir {
 	height: 20px;
-	background-image: url(template/classic/img/check/firefox.png);
+	background-image: url(template/default/img/check/firefox.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -66,7 +66,7 @@ li.mfir {
 
 li.msaf {
 	height: 20px;
-	background-image: url(template/classic/img/check/safari.png);
+	background-image: url(template/default/img/check/safari.png);
 	background-repeat: no-repeat;
 	background-position: 0 .06em;
 	padding: 0px 0px 0px 20px;
@@ -78,7 +78,7 @@ li.msaf {
 
 li.mchr {
 	height: 20px;
-	background-image: url(template/classic/img/check/chrome.png);
+	background-image: url(template/default/img/check/chrome.png);
 	background-repeat: no-repeat;
 	background-position: 0 .05em;
 	padding: 0px 0px 0px 20px;
@@ -90,7 +90,7 @@ li.mchr {
 
 li.moper {
 	height: 20px;
-	background-image: url(template/classic/img/check/opera.png);
+	background-image: url(template/default/img/check/opera.png);
 	background-repeat: no-repeat;
 	background-position: 0 .09em;
 	padding: 0px 0px 0px 20px;
@@ -115,7 +115,7 @@ ul.fmenu {
 
 li.mflash {
 	height: 20px;
-	background-image: url(template/classic/img/check/FlashPlayer.png);
+	background-image: url(template/default/img/check/FlashPlayer.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -137,7 +137,7 @@ ul.smenu {
 
 li.sflash {
 	height: 20px;
-	background-image: url(template/classic/img/check/Shockwave.png);
+	background-image: url(template/default/img/check/Shockwave.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -162,7 +162,7 @@ ul.pdfmenu {
 
 li.mpdf {
 	height: 20px;
-	background-image: url(template/classic/img/check/acrobat_reader.png);
+	background-image: url(template/default/img/check/acrobat_reader.png);
 	background-repeat: no-repeat;
 	background-position: 0 .1em;
 	padding: 0px 0px 0px 20px;
@@ -201,7 +201,7 @@ $tool_content .= <<<tContent
 			<p>$langCheckIntro</p><br/>
 			<p>$langCheckIntro2</p>
 			<br />
-			<table class="table table-default">
+			<table class="table-default">
 				<tbody>
 					<tr>
 						<th width="50%"><strong>$langSoftware</strong></th>
@@ -220,10 +220,10 @@ $tool_content .= <<<tContent
 							</div></td>
 						<td>
 							<p id="browsersupported" style="display: none; color: green; font-size: 11px;">
-								<img src="template/classic/img/tick_1.png" border="0" alt="browser supported"/> $langBrowserSupported
+								<img src="template/default/img/tick.png" border="0" alt="browser supported"/> $langBrowserSupported
 							</p>
 							<p id="browsernotsupported" style="display: none; color: red; font-size: 11px;">
-								<img src="template/classic/img/error.png" border="0" alt="browser not supported"/> $langBrowserNotSupported:<br /> <br />
+								<img src="template/default/img/delete.png" border="0" alt="browser not supported"/> $langBrowserNotSupported:<br /> <br />
 								<a href="http://www.microsoft.com/windows/internet-explorer/worldwide-sites.aspx" target="_blank">Internet Explorer</a><br />
 								<a href="http://www.mozilla.org" target="_blank">Mozilla Firefox</a><br />
 								<a href="http://www.apple.com/safari/" target="_blank">Safari</a><br />
@@ -241,10 +241,10 @@ $tool_content .= <<<tContent
 						</td>
 						<td>
 							<p id="acrobatreaderinstalled" style="display: none; color: green; font-size: 11px;">
-								<img src="template/classic/img/tick_1.png" border="0" alt="acrobat reader installed"/> $langAcrobatReaderInstalled
+								<img src="template/default/img/tick.png" border="0" alt="acrobat reader installed"/> $langAcrobatReaderInstalled
 							</p>
 							<p id="acrobatreadernotinstalled" style="display: none; color: red; font-size: 11px;">
-								<img src="template/classic/img/error.png" border="0" alt="acrobat reader not installed"/> $langAcrobatReaderNotInstalled
+								<img src="template/default/img/delete.png" border="0" alt="acrobat reader not installed"/> $langAcrobatReaderNotInstalled
 								<a href="http://get.adobe.com/reader/" target="_blank">$langHere</a>.
 								$langAgreeAndInstall
 							</p>
@@ -259,10 +259,10 @@ $tool_content .= <<<tContent
 							</div></td>
 						<td>
 							<p id="flashplayerinstalled" style="display: none; color: green; font-size: 11px;">
-								<img src="template/classic/img/tick_1.png" border="0" alt="flash player installed"/> $langFlashPlayer
+								<img src="template/default/img/tick.png" border="0" alt="flash player installed"/> $langFlashPlayer
 							</p>
 							<p id="flashplayernotinstalled" style="display: none; color: red; font-size: 11px;">
-								<img src="template/classic/img/error.png" border="0" alt="flash player not installed"/> $langFlashPlayerNotInstalled 
+								<img src="template/default/img/delete.png" border="0" alt="flash player not installed"/> $langFlashPlayerNotInstalled 
 								<a href="http://get.adobe.com/flashplayer/" target="_blank">$langHere</a>.
 								$langAgreeAndInstall
 							</p>
@@ -277,10 +277,10 @@ $tool_content .= <<<tContent
 							</div></td>
 						<td>
 							<p id="shockinstalled" style="display: none; color: green; font-size: 11px;">
-								<img src="template/classic/img/tick_1.png" border="0" alt="shockwave installed"/> $langShockInstalled
+								<img src="template/default/img/tick.png" border="0" alt="shockwave installed"/> $langShockInstalled
 							</p>
 							<p id="shocknotinstalled" style="display: none; color: red; font-size: 11px;">
-								<img src="template/classic/img/error.png" border="0" alt="shockwave not installed"/> $langShockNotInstalled
+								<img src="template/default/img/delete.png" border="0" alt="shockwave not installed"/> $langShockNotInstalled
 								<a href="http://get.adobe.com/shockwave/" target="_blank">$langHere</a>.
 								$langAgreeAndInstall
 							</p>

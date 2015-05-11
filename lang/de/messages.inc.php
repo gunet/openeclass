@@ -1331,7 +1331,6 @@ $m['unsub'] = "Der Kurs ist geschlossen und Sie können sich nicht abmelden";
 $titreBloc = array("Kursinhalt", "Objektive Zielsetzungen", "Empfohlene Literatur", "Pädagogische- und Lehrmethodik", "Evaluierungsmethoden / Prüfungen", "Voraussetzungen", "ergänzende Angaben");
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Ändern der Darstellung des Portfolios";
-$langMyPersoLessons = "MEINE KURSE";
 $langMyPersoDeadlines = "MEINE ABGABEFRISTEN";
 $langMyPersoAnnouncements = "MEINE ANKÜNDIGUNGEN";
 $langMyPersoDocs = "MEINE AKTUELLSTEN DOKUMENTE";

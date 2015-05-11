@@ -434,37 +434,37 @@ else {
                         <div class='form-group'>
                            <label for='formurlServer' class='col-sm-2 control-label'>$langSiteUrl:</label>
                            <div class='col-sm-10'>
-                                <input class='FormData_InputText form-control' type='text' name='formurlServer' id='formurlServer' value='" . q($urlServer) . "'>
+                                <input class='form-control' type='text' name='formurlServer' id='formurlServer' value='" . q($urlServer) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formphpMyAdminURL' class='col-sm-2 control-label'>$langphpMyAdminURL:</label>
                            <div class='col-sm-10'>
-                                <input class='FormData_InputText form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
+                                <input class='form-control' type='text' name='formphpMyAdminURL' id='formphpMyAdminURL' value='" . q(get_config('phpMyAdminURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formphpSysInfoURL' class='col-sm-2 control-label'>$langSystemInfoURL:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='" . q(get_config('phpSysInfoURL')) . "'>
+                               <input class='form-control' type='text' name='formphpSysInfoURL' id='formphpSysInfoURL' value='" . q(get_config('phpSysInfoURL')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formemailAdministrator' class='col-sm-2 control-label'>$langAdminEmail:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='" . q(get_config('email_sender')) . "'>
+                               <input class='form-control' type='text' name='formemailAdministrator' id='formemailAdministrator' value='" . q(get_config('email_sender')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formemailAdministrator' class='col-sm-2 control-label'>$langDefaultAdminName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
+                               <input class='form-control' type='text' name='formadministratorName' id='formadministratorName' value='" . q(get_config('admin_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formsiteName' class='col-sm-2 control-label'>$langCampusName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formsiteName' id='formsiteName' value='" . q(get_config('site_name')) . "'>
+                               <input class='form-control' type='text' name='formsiteName' id='formsiteName' value='" . q(get_config('site_name')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
@@ -476,31 +476,31 @@ else {
                         <div class='form-group'>
                            <label for='formtelephone' class='col-sm-2 control-label'>$langPhone:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formtelephone' id='formtelephone' value='" . q(get_config('phone')) . "'>
+                               <input class='form-control' type='text' name='formtelephone' id='formtelephone' value='" . q(get_config('phone')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formfax' class='col-sm-2 control-label'>$langFax</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
+                               <input class='form-control' type='text' name='formfax' id='formfax' value='" . q(get_config('fax')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formemailhelpdesk' class='col-sm-2 control-label'>$langHelpDeskEmail:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='" . q(get_config('email_helpdesk')) . "'>
+                               <input class='form-control' type='text' name='formemailhelpdesk' id='formemailhelpdesk' value='" . q(get_config('email_helpdesk')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formInstitution' class='col-sm-2 control-label'>$langInstituteShortName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formInstitution' id='formInstitution' value='" . $Institution . "'>
+                               <input class='form-control' type='text' name='formInstitution' id='formInstitution' value='" . $Institution . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='formInstitutionUrl' class='col-sm-2 control-label'>$langInstituteName:</label>
                            <div class='col-sm-10'>
-                               <input class='FormData_InputText form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
+                               <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
                            </div>
                         </div>
                     </fieldset>     
@@ -916,25 +916,25 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                         <div class='form-group'>
                            <label for='doc_quota' class='col-sm-4 control-label'>$langDocQuota (Mb):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='doc_quota' id='doc_quota' value='" . get_config('doc_quota') . "'>
+                                <input class='form-control' type='text' name='doc_quota' id='doc_quota' value='" . get_config('doc_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='video_quota' class='col-sm-4 control-label'>$langVideoQuota (Mb):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='video_quota' id='video_quota' value='" . get_config('video_quota') . "'>
+                                <input class='form-control' type='text' name='video_quota' id='video_quota' value='" . get_config('video_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='group_quota' class='col-sm-4 control-label'>$langGroupQuota (Mb):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='group_quota' id='group_quota' value='" . get_config('group_quota') . "'>
+                                <input class='form-control' type='text' name='group_quota' id='group_quota' value='" . get_config('group_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
                            <label for='dropbox_quota' class='col-sm-4 control-label'>$langDropboxQuota (Mb):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
+                                <input class='form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
                            </div>
                         </div>                         
                     </fieldset>
@@ -1030,19 +1030,19 @@ $tool_content .= "
                         <div class='form-group' id='login_fail_threshold'>
                            <label for='login_fail_threshold' class='col-sm-4 control-label'>$langLoginFailThreshold:</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='login_fail_threshold' id='login_fail_threshold' value='" . get_config('login_fail_threshold') . "'>
+                                <input class='form-control' type='text' name='login_fail_threshold' id='login_fail_threshold' value='" . get_config('login_fail_threshold') . "'>
                            </div>                          
                         </div>
                         <div class='form-group' id='login_fail_deny_interval'>
                            <label for='login_fail_deny_interval' class='col-sm-4 control-label'>$langLoginFailDenyInterval ($langMinute):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='login_fail_deny_interval' id='login_fail_deny_interval' value='" . get_config('login_fail_deny_interval') . "'>
+                                <input class='form-control' type='text' name='login_fail_deny_interval' id='login_fail_deny_interval' value='" . get_config('login_fail_deny_interval') . "'>
                            </div>                          
                         </div>
                         <div class='form-group' id='login_fail_forgive_interval'>
                            <label for='login_fail_forgive_interval' class='col-sm-4 control-label'>$langLoginFailForgiveInterval ($langHours):</label>
                            <div class='col-sm-8'>
-                                <input class='FormData_InputText form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
+                                <input class='form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
                            </div>                          
                         </div>                         
                     </fieldset>

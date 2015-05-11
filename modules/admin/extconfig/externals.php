@@ -23,10 +23,12 @@
 foreach (ExtAppManager::$AppNames as $appName)
     require_once strtolower($appName) . '.php';
 require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
+require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");    
+    public static $AppNames = array("OpenDelosApp", "OneDriveApp");
+    //public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");
     private static $APPS = null;
 
     /**
@@ -51,7 +53,7 @@ class ExtAppManager {
      */
     public static function getApp($appname) {
         $apps = ExtAppManager::getApps();
-        return $apps[$appname];
+        return array_key_exists($appname, $apps) ? $apps[$appname] : null;
     }
 
 }
@@ -110,60 +112,14 @@ abstract class ExtApp {
     }
 
     protected function getBaseURL() {
-        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
+        return get_config('base_url');
     }
 
     public abstract function getDisplayName();
 
-    public function getShortDescription() {
-        
-        global $langGoogleDriveShortDescription, $langOneDriveShortDescription,
-                $langDropBoxShortDescription, $langOwnCloudShortDescription,
-                $langWebDAVShortDescription, $langFtpShortDescription;
-        
-        $desc = '';
-        switch ($this->getDisplayName()) {
-            
-            case "GoogleDrive": $desc = $langGoogleDriveShortDescription;
-                        break;
-            case "OneDrive": $desc = $langOneDriveShortDescription;
-                        break;
-            case "DropBox": $desc = $langDropBoxShortDescription;
-                        break;
-            case "OwnCloud": $desc = $langOwnCloudShortDescription;
-                        break;
-            case "WebDAV": $desc = $langWebDAVShortDescription;
-                        break;
-            case "FTP": $desc = $langFtpShortDescription;
-                        break;            
-        }
-        return $desc;
-    }
+    public abstract function getShortDescription();
 
-    public function getLongDescription() {
-        
-        global $langGoogleDriveLongDescription, $langOneDriveLongDescription,
-                $langDropBoxLongDescription, $langOwnCloudLongDescription,
-                $langWebDAVLongDescription, $langFtpLongDescription;
-        
-        $desc = '';
-        switch ($this->getDisplayName()) {
-            
-            case "GoogleDrive": $desc = $langGoogleDriveLongDescription;
-                        break;
-            case "OneDrive": $desc = $langOneDriveLongDescription;
-                        break;
-            case "DropBox": $desc = $langDropBoxLongDescription;
-                        break;
-            case "OwnCloud": $desc = $langOwnCloudLongDescription;
-                        break;
-            case "WebDAV": $desc = $langWebDAVLongDescription;
-                        break;
-            case "FTP": $desc = $langFtpLongDescription;
-                        break;            
-        }
-        return $desc;       
-    }
+    public abstract function getLongDescription();
 
     public function getAppIcon() {
         return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";

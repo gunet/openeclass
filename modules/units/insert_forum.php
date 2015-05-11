@@ -54,7 +54,7 @@ function list_forums() {
                 "<tr class='list-header'>" .
                 "<th>$langForums</th>" .
                 "<th>$langComments</th>" .
-                "<th class='checkbox_cell text-center'>$langChoice</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
 
         foreach ($foruminfo as $entry) {

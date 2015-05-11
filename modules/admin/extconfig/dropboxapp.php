@@ -28,6 +28,14 @@ class DropBoxApp extends OAuthDriveApp {
         return "DropBox";
     }
 
+    public function getShortDescription() {
+        return $GLOBALS['langDropboxShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langDropboxLongDescription'];
+    }
+
     protected function getURLDefaultValue() {
         return $this->getBaseURL() . "modules/drives/plugins/dropbox_callback.php";
     }

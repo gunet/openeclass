@@ -162,13 +162,13 @@ function checkbox_input($name) {
 
 function text_input($name, $size) {
     $GLOBALS['input_fields'][$name] = true;
-    return "<input class='form-control' type='text' class='FormData_InputText' size='$size' name='$name' value='" .
+    return "<input class='form-control' type='text' size='$size' name='$name' value='" .
             q($GLOBALS[$name]) . "' />";
 }
 
 function textarea_input($name, $rows, $cols) {
     $GLOBALS['input_fields'][$name] = true;
-    return "<textarea class='form-control' rows='$rows' cols='$cols' class='FormData_InputText' name='$name'>" .
+    return "<textarea class='form-control' rows='$rows' cols='$cols' name='$name'>" .
             q($GLOBALS[$name]) . "</textarea>";
 }
 
@@ -416,6 +416,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 	<br /><br />
 	<form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
     }
+    $_SESSION['langswitch'] = $lang;
     draw($tool_content);
 }
 

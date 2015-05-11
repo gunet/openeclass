@@ -1,7 +1,13 @@
 // customize bootstrap variables here:
 @import "variables";
 @import "bootstrap";
+@import 'global';
 
+/* ********************
+    GLOBAL STYLES
+******************** */
+
+/* Font styles */
 @font-face {
     font-family: 'Open Sans';
     src: url('fonts/OpenSans-Regular.ttf');
@@ -9,68 +15,94 @@
     font-style: normal;
 }
 
-//Quick Fixes for Open eClass 2.x classes... (to be removed in the future)
-.tbl, .tbl_alt, #t1, #t3, div.panel_content table{  
-    @extend .table, .table-striped;  
+body
+{
+    background: $color-background;
+    font-family: 'Open Sans';
 }
-.iframe-container {    
-    padding-bottom: 60%;
-    padding-top: 30px; height: 0; overflow: hidden;
-}
- 
-.iframe-container iframe,
-.iframe-container object,
-.iframe-container embed {
-    border: 0;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-#btn-search{
-    @include button-variant(white, #232C3A, #111111);
-}
-//Theme options legend
-legend.theme_options_legend {
-   font-size: $font-size-large;
-   margin-bottom: 30px;
-   &:not(:first-child) {
-        margin-top: 30px;
-   }
-}
+/* Fluid container styles */
 .container-fluid {
     padding: 0px;
     max-width: 1920px;
 }
-//Input file global fix
+
+/* Styles for headings, hr and titles --------------------------------------------------*/
+
+h1.page-title
+{
+  margin:0em;
+  font-weight: 400!important;
+  color: #333;
+  font-size: 20px;
+}
+/* Default table class */
+.table-default {
+    @extend .table, .table-striped, .table-bordered;
+}
+
+/* Form styles */
+.form-wrapper {
+    @extend .well, .well-lg;
+}
 input[type="file"] {
     padding-top: 7px;
 }
-//New alert style (probably more styling needed)
+
+/* tinyMCE styles */
+.mce-toggle:hover{
+    cursor: pointer;
+}
+.mce-toggle{
+    i.mce-ico.mce-i-none{
+        width: 22px;
+    }
+}
+
+/* Search button styling */
+#btn-search{
+    @include button-variant(white, #232C3A, #111111);
+}
+
+/* New Alert styles */
 .alert-default {
     background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
     border-color: #ccc;
 }
-// Action Button fix
-.popover-content {
-    padding: 9px 9px;
-    .list-group {
-        margin-bottom: 0px;
+
+/* New Panel Classes (to support action_button() in panel heading) */
+.panel-action-btn-default {
+    @extend .panel-default;   
+    & > .panel-heading {
+        @extend .clearfix;
+        padding: 0 0 0 20px;
+        h3 { 
+            line-height: 45px; 
+        }
     }
 }
-// Affix styles
-.affix {
-    top: 15px;
+.panel-action-btn-primary {
+    @extend .panel-primary;   
+    & > .panel-heading {
+        @extend .clearfix;
+        padding: 0 0 0 20px;
+        h3 { 
+            line-height: 45px;
+        }
+    }
 }
-.affix-bottom {
-position: relative;
-}
+
+// Action button styles
 .option-btn-cell .btn-group {
   display: flex;
   display: -webkit-flex;
   display: -moz-flex;
   display: -ms-flex;    
+}
+.popover-content {
+    padding: 9px 9px;
+    .list-group {
+        margin-bottom: 0px;
+    }
 }
 a.list-group-item.delete{
     color: #CE6B6B;
@@ -104,24 +136,96 @@ color: #262626;
 background-color: whitesmoke;
 cursor: pointer; 
 }
-//portfolio datatable 'all courses' button fix 
-@media(min-width: $screen-sm){
-    div.all_courses {
-        float: left;
-    }
-}
-@media(min-width: $screen-tablet){
-  .affix {
-    width: 20%;
-  }
-}
 
-  @media(max-width: $screen-tablet){
-  .login-form{
-      margin-right: 5%;
-      margin-left: 5%;
-      width: 90%;
-  }
+/* Left navigation styles */
+#leftnav{
+    top: -53px;
+    padding: 0;
+    .logo{
+        margin: 0.8em 0.8em 0px;
+        img{margin:0 auto;}
+    }
+    .panel{
+        border: none;
+        margin: 0;
+        margin-bottom: 1em;
+        background: inherit;		
+        border-top: 2px solid rgba(255,255,255,.1);
+        border-bottom: 2px solid rgba(255,255,255,.1);
+        border-radius: 5px 0px 0px 5px;
+        .list-group{
+            border-radius:0;
+            @include box-shadow(none);
+        }
+        .panel-heading{
+            border-radius: 4px 0px 0px 0px!important;
+            padding: 10px 7px;
+            .panel-title{
+                text-align: center;
+                font-size: 0.85em;
+                font-weight: bold;
+            }
+            &:hover{
+                color: $color-hover;
+                @include transition(all $transition-time linear);
+            }
+        }
+        a{
+            color: #ADADAD;
+            text-decoration: none;
+        }
+        a.parent-menu{
+            outline: 0;
+            display: block;
+            background: rgba(0, 0, 0, 0.2);
+            &:not(.collapsed){
+                border-radius: 4px 0px 0px 0px;
+                color: $color-hover;
+            }
+            &:hover{
+                //background: rgba(255,255,255,.25);
+            }
+            &:hover, &:not(.collapsed){
+                border-radius: 4px 0px 0px 4px;
+            }
+        }
+        a.list-group-item{
+            border: none;
+            border-top: 1px solid rgba(255,255,255,.075);
+            padding: 0.6em 15px;
+            background: transparent;
+            text-align: center;
+            @include transition(all $transition-time linear);
+            > span{
+                font-size: 0.9em;
+                margin-left: 0.5em;
+            }
+            &:hover{
+                text-decoration: none;
+                color: #eee;
+                background: $color-hover;
+                border-radius: 4px 0px 0px 4px;
+                margin-left: 0px;
+                @include transition(all $transition-time linear);
+            }
+            &.active{
+                background: $color-main-content;
+                text-shadow: none;
+                color: #333;
+                border-radius: 4px 0px 0px 4px;
+                box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+                -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
+                -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+            }
+            //we don't want a border-bottom if it's the last option
+            &:last-child{
+                border-bottom: none;
+            }
+            &:first-child{
+                border-top: 1px solid rgba(255,255,255,.075);
+            }
+        }
+    }
 }
 @media(max-width: $screen-desktop){
    .float-menu {
@@ -140,25 +244,32 @@ cursor: pointer;
       display: block;
   }
 }
-@media(min-width: $screen-desktop){
-   .affix {
-    width: 18%;
-  }
-  .navbar-custom{
-    margin: 15px 15px 0px;
+
+/* User menu styles */
+.navbar-nav .open .dropdown-menu {
+    position: absolute;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color:#ffffff;
+    border-left-color: rgba(0, 0, 0, 0.14902);
+    color: #000;
+    border-left-style: solid;
+    border-left-width: 1px;
+    border-right-color: rgba(0, 0, 0, 0.14902);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-top-color: rgba(0, 0, 0, 0.14902);
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    border-top-style: solid;
+    border-top-width: 1px;
+    bottom: auto;
+    box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
+    box-sizing: border-box;
 }
-}
-@media(min-width: $screen-lg-desktop){
-   .affix {
-    width: 17%;
-  }   
-}
-@media(min-width: 1450px){
-   .affix {
-    width: 12.4%;
-  }   
-}
-//Speech bubble styles
+
+/* Speech bubble styles (for chat and comments) */
 .bubble 
 {
 position: relative;
@@ -199,82 +310,81 @@ left: -17px;
 top: 8px;
 }
 
-//Custom Form Wrapper class
-.form-wrapper {
-    @extend .well, .well-lg;
-}
-//Custtom default table class
-.table-default {
-    @extend .table, .table-striped, .table-bordered;
-}
-// Custtom Panel Classes to support action_button() in panel heading
-.panel-action-btn-default {
-    @extend .panel-default;   
-    & > .panel-heading {
-        @extend .clearfix;
-        padding: 0 0 0 20px;
-        h3 { 
-            line-height: 45px; 
-        }
-    }
-}
-.panel-action-btn-primary {
-    @extend .panel-primary;   
-    & > .panel-heading {
-        @extend .clearfix;
-        padding: 0 0 0 20px;
-        h3 { 
-            line-height: 45px;
-        }
+/* ******************** 
+   PAGE-SPECIFIC STYLES 
+   ******************** */
+
+/* PORTFOLIO */
+/* portfolio datatable 'all courses' button fix */ 
+@media(min-width: $screen-sm){
+    div.all_courses {
+        float: left;
     }
 }
 
-.navbar-nav .open .dropdown-menu {
+/* THEME OPTIONS */
+/* Theme options legend STYLING*/
+legend.theme_options_legend {
+   font-size: $font-size-large;
+   margin-bottom: 30px;
+   &:not(:first-child) {
+        margin-top: 30px;
+   }
+}
+
+/* ADMIN SETTINGS */
+/* Affix (floating sidebar) styling */
+.affix {
+    top: 15px;
+}
+.affix-bottom {
+    position: relative;
+}
+@media(min-width: $screen-tablet){
+  .affix {
+    width: 20%;
+  }
+}
+@media(min-width: $screen-desktop){
+   .affix {
+    width: 18%;
+  }
+}
+@media(min-width: $screen-lg-desktop){
+   .affix {
+    width: 17%;
+  }   
+}
+@media(min-width: 1450px){
+   .affix {
+    width: 12.4%;
+  }   
+}
+
+/* DOCUMENTS */
+/* styles for the case that documents 
+open in a modal with the help of an iframe */
+.iframe-container {    
+    padding-bottom: 60%;
+    padding-top: 30px; height: 0; overflow: hidden;
+}
+ 
+.iframe-container iframe,
+.iframe-container object,
+.iframe-container embed {
+    border: 0;
     position: absolute;
-    float: none;
-    width: auto;
-    margin-top: 0;
-    background-color:#ffffff;
-    border-left-color: rgba(0, 0, 0, 0.14902);
-    color: #000;
-    border-left-style: solid;
-    border-left-width: 1px;
-    border-right-color: rgba(0, 0, 0, 0.14902);
-    border-right-style: solid;
-    border-right-width: 1px;
-    border-top-color: rgba(0, 0, 0, 0.14902);
-    border-top-left-radius: 0px;
-    border-top-right-radius: 0px;
-    border-top-style: solid;
-    border-top-width: 1px;
-    bottom: auto;
-    box-shadow: rgba(0, 0, 0, 0.172549) 0px 6px 12px 0px;
-    box-sizing: border-box;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }
 
-//  tinymce css
-
-.mce-toggle:hover{
-    cursor: pointer;
-}
-.mce-toggle{
-    i.mce-ico.mce-i-none{
-        width: 22px;
-    }
-}
-
-
-//  Course Units
-
-.checkbox_cell{
-    width: 5px;
-    text-align: center;
-}
-
-
-// Video module
-
-.col-sm-10-pt-6 {
-    @extend .col-sm-10;
-    padding-top: 6px;
+/* LOGIN */
+@media(max-width: $screen-tablet){
+  .login-form{
+      margin-right: 5%;
+      margin-left: 5%;
+      width: 90%;
+  }
 }

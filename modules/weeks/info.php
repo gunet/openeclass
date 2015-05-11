@@ -73,7 +73,7 @@ $tool_content .= "<div class='form-group'>
                 </div>
             </div>
             <div class='form-group'>
-                <div class='col-sm-offset-5 col-sm-12'>
+                <div class='col-sm-offset-2 col-sm-12'>
                     <input class='btn btn-primary' type='submit' name='edit_submitW' value='" . q($langSubmit) . "'>
                 </div>
             </div>            

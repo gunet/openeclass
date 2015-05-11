@@ -78,7 +78,7 @@ if (empty($search_terms)) {
         <form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
         <legend>$langSearchCriteria</legend>
-        <table width='100%' class='tbl'>
+        <table class='table-default'>
         <tr>
           <th class='left' width='120'>$langOR</th>
           <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
@@ -128,7 +128,7 @@ if (empty($search_terms)) {
 
         if (count($announceHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-              <table width='99%' class='sortable' id='t1' align='left'>
+              <table class='table-default sortable' align='left'>
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
               </tr>";
@@ -197,7 +197,7 @@ if (empty($search_terms)) {
 
         if (count($documentHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table width='99%' class='sortable' id='t3' align='left'>
+                  <table class='table-default sortable'>
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
                   </tr>";
@@ -389,7 +389,7 @@ if (empty($search_terms)) {
 
         if (count($unitHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable' id='t11' align='left'>
+                <table class='table-default sortable' align='left'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
@@ -412,7 +412,7 @@ if (empty($search_terms)) {
         if (count($uresHits) > 0) {
             $tool_content .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable' id='t11' align='left'>
+                <table class='table-default sortable' align='left'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";

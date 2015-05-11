@@ -352,17 +352,12 @@ th {
   }
 
   /* line 91, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_print.scss */
-  .table, .tbl, .tbl_alt, #t1, #t3, div.panel_content table, .table-default {
+  .table, .table-default {
     border-collapse: collapse !important;
   }
   /* line 95, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_print.scss */
-  .table td, .tbl td, .tbl_alt td, #t1 td, #t3 td, div.panel_content table td, .table-default td,
+  .table td, .table-default td,
   .table th,
-  .tbl th,
-  .tbl_alt th,
-  #t1 th,
-  #t3 th,
-  div.panel_content table th,
   .table-default th {
     background-color: #fff !important;
   }
@@ -2414,7 +2409,7 @@ pre code {
 }
 
 /* line 11, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_grid-framework.scss */
-.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-sm-10-pt-6, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
   position: relative;
   min-height: 1px;
   padding-left: 15px;
@@ -2683,7 +2678,7 @@ pre code {
 
 @media (min-width: 768px) {
   /* line 27, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_grid-framework.scss */
-  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-10-pt-6, .col-sm-11, .col-sm-12 {
+  .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
     float: left;
   }
 
@@ -2733,7 +2728,7 @@ pre code {
   }
 
   /* line 35, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_grid-framework.scss */
-  .col-sm-10, .col-sm-10-pt-6 {
+  .col-sm-10 {
     width: 83.33333333%;
   }
 
@@ -3483,47 +3478,22 @@ th {
 }
 
 /* line 22, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-.table, .tbl, .tbl_alt, #t1, #t3, div.panel_content table, .table-default {
+.table, .table-default {
   width: 100%;
   max-width: 100%;
   margin-bottom: 20px;
 }
 /* line 32, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-.table > thead > tr > th, .tbl > thead > tr > th, .tbl_alt > thead > tr > th, #t1 > thead > tr > th, #t3 > thead > tr > th, div.panel_content table > thead > tr > th, .table-default > thead > tr > th,
+.table > thead > tr > th, .table-default > thead > tr > th,
 .table > thead > tr > td,
-.tbl > thead > tr > td,
-.tbl_alt > thead > tr > td,
-#t1 > thead > tr > td,
-#t3 > thead > tr > td,
-div.panel_content table > thead > tr > td,
 .table-default > thead > tr > td,
 .table > tbody > tr > th,
-.tbl > tbody > tr > th,
-.tbl_alt > tbody > tr > th,
-#t1 > tbody > tr > th,
-#t3 > tbody > tr > th,
-div.panel_content table > tbody > tr > th,
 .table-default > tbody > tr > th,
 .table > tbody > tr > td,
-.tbl > tbody > tr > td,
-.tbl_alt > tbody > tr > td,
-#t1 > tbody > tr > td,
-#t3 > tbody > tr > td,
-div.panel_content table > tbody > tr > td,
 .table-default > tbody > tr > td,
 .table > tfoot > tr > th,
-.tbl > tfoot > tr > th,
-.tbl_alt > tfoot > tr > th,
-#t1 > tfoot > tr > th,
-#t3 > tfoot > tr > th,
-div.panel_content table > tfoot > tr > th,
 .table-default > tfoot > tr > th,
 .table > tfoot > tr > td,
-.tbl > tfoot > tr > td,
-.tbl_alt > tfoot > tr > td,
-#t1 > tfoot > tr > td,
-#t3 > tfoot > tr > td,
-div.panel_content table > tfoot > tr > td,
 .table-default > tfoot > tr > td {
   padding: 8px;
   line-height: 1.42857143;
@@ -3531,55 +3501,30 @@ div.panel_content table > tfoot > tr > td,
   border-top: 1px solid #dddddd;
 }
 /* line 41, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-.table > thead > tr > th, .tbl > thead > tr > th, .tbl_alt > thead > tr > th, #t1 > thead > tr > th, #t3 > thead > tr > th, div.panel_content table > thead > tr > th, .table-default > thead > tr > th {
+.table > thead > tr > th, .table-default > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 2px solid #dddddd;
 }
 /* line 51, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-.table > caption + thead > tr:first-child > th, .tbl > caption + thead > tr:first-child > th, .tbl_alt > caption + thead > tr:first-child > th, #t1 > caption + thead > tr:first-child > th, #t3 > caption + thead > tr:first-child > th, div.panel_content table > caption + thead > tr:first-child > th, .table-default > caption + thead > tr:first-child > th,
+.table > caption + thead > tr:first-child > th, .table-default > caption + thead > tr:first-child > th,
 .table > caption + thead > tr:first-child > td,
-.tbl > caption + thead > tr:first-child > td,
-.tbl_alt > caption + thead > tr:first-child > td,
-#t1 > caption + thead > tr:first-child > td,
-#t3 > caption + thead > tr:first-child > td,
-div.panel_content table > caption + thead > tr:first-child > td,
 .table-default > caption + thead > tr:first-child > td,
 .table > colgroup + thead > tr:first-child > th,
-.tbl > colgroup + thead > tr:first-child > th,
-.tbl_alt > colgroup + thead > tr:first-child > th,
-#t1 > colgroup + thead > tr:first-child > th,
-#t3 > colgroup + thead > tr:first-child > th,
-div.panel_content table > colgroup + thead > tr:first-child > th,
 .table-default > colgroup + thead > tr:first-child > th,
 .table > colgroup + thead > tr:first-child > td,
-.tbl > colgroup + thead > tr:first-child > td,
-.tbl_alt > colgroup + thead > tr:first-child > td,
-#t1 > colgroup + thead > tr:first-child > td,
-#t3 > colgroup + thead > tr:first-child > td,
-div.panel_content table > colgroup + thead > tr:first-child > td,
 .table-default > colgroup + thead > tr:first-child > td,
 .table > thead:first-child > tr:first-child > th,
-.tbl > thead:first-child > tr:first-child > th,
-.tbl_alt > thead:first-child > tr:first-child > th,
-#t1 > thead:first-child > tr:first-child > th,
-#t3 > thead:first-child > tr:first-child > th,
-div.panel_content table > thead:first-child > tr:first-child > th,
 .table-default > thead:first-child > tr:first-child > th,
 .table > thead:first-child > tr:first-child > td,
-.tbl > thead:first-child > tr:first-child > td,
-.tbl_alt > thead:first-child > tr:first-child > td,
-#t1 > thead:first-child > tr:first-child > td,
-#t3 > thead:first-child > tr:first-child > td,
-div.panel_content table > thead:first-child > tr:first-child > td,
 .table-default > thead:first-child > tr:first-child > td {
   border-top: 0;
 }
 /* line 57, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-.table > tbody + tbody, .tbl > tbody + tbody, .tbl_alt > tbody + tbody, #t1 > tbody + tbody, #t3 > tbody + tbody, div.panel_content table > tbody + tbody, .table-default > tbody + tbody {
+.table > tbody + tbody, .table-default > tbody + tbody {
   border-top: 2px solid #dddddd;
 }
 /* line 62, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-.table .table, .tbl .table, .tbl_alt .table, #t1 .table, #t3 .table, div.panel_content table .table, .table-default .table, .table .tbl, .tbl .tbl, .tbl_alt .tbl, #t1 .tbl, #t3 .tbl, div.panel_content table .tbl, .table-default .tbl, .table .tbl_alt, .tbl .tbl_alt, .tbl_alt .tbl_alt, #t1 .tbl_alt, #t3 .tbl_alt, div.panel_content table .tbl_alt, .table-default .tbl_alt, .table #t1, .tbl #t1, .tbl_alt #t1, #t1 #t1, #t3 #t1, div.panel_content table #t1, .table-default #t1, .table #t3, .tbl #t3, .tbl_alt #t3, #t1 #t3, #t3 #t3, div.panel_content table #t3, .table-default #t3, .table div.panel_content table, div.panel_content .table table, .tbl div.panel_content table, div.panel_content .tbl table, .tbl_alt div.panel_content table, div.panel_content .tbl_alt table, #t1 div.panel_content table, div.panel_content #t1 table, #t3 div.panel_content table, div.panel_content #t3 table, div.panel_content table table, .table-default div.panel_content table, div.panel_content .table-default table, .table .table-default, .tbl .table-default, .tbl_alt .table-default, #t1 .table-default, #t3 .table-default, div.panel_content table .table-default, .table-default .table-default {
+.table .table, .table-default .table, .table .table-default, .table-default .table-default {
   background-color: white;
 }
 
@@ -3619,7 +3564,7 @@ div.panel_content table > thead:first-child > tr:first-child > td,
 }
 
 /* line 114, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-.table-striped > tbody > tr:nth-of-type(odd), .tbl > tbody > tr:nth-of-type(odd), .tbl_alt > tbody > tr:nth-of-type(odd), #t1 > tbody > tr:nth-of-type(odd), #t3 > tbody > tr:nth-of-type(odd), div.panel_content table > tbody > tr:nth-of-type(odd), .table-default > tbody > tr:nth-of-type(odd) {
+.table-striped > tbody > tr:nth-of-type(odd), .table-default > tbody > tr:nth-of-type(odd) {
   background-color: #f9f9f9;
 }
 
@@ -3644,69 +3589,24 @@ table th[class*="col-"] {
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.active, .tbl > thead > tr > td.active, .tbl_alt > thead > tr > td.active, #t1 > thead > tr > td.active, #t3 > thead > tr > td.active, div.panel_content table > thead > tr > td.active, .table-default > thead > tr > td.active,
+.table > thead > tr > td.active, .table-default > thead > tr > td.active,
 .table > thead > tr > th.active,
-.tbl > thead > tr > th.active,
-.tbl_alt > thead > tr > th.active,
-#t1 > thead > tr > th.active,
-#t3 > thead > tr > th.active,
-div.panel_content table > thead > tr > th.active,
-.table-default > thead > tr > th.active, .table > thead > tr.active > td, .tbl > thead > tr.active > td, .tbl_alt > thead > tr.active > td, #t1 > thead > tr.active > td, #t3 > thead > tr.active > td, div.panel_content table > thead > tr.active > td, .table-default > thead > tr.active > td, .table > thead > tr.active > th, .tbl > thead > tr.active > th, .tbl_alt > thead > tr.active > th, #t1 > thead > tr.active > th, #t3 > thead > tr.active > th, div.panel_content table > thead > tr.active > th, .table-default > thead > tr.active > th,
+.table-default > thead > tr > th.active, .table > thead > tr.active > td, .table-default > thead > tr.active > td, .table > thead > tr.active > th, .table-default > thead > tr.active > th,
 .table > tbody > tr > td.active,
-.tbl > tbody > tr > td.active,
-.tbl_alt > tbody > tr > td.active,
-#t1 > tbody > tr > td.active,
-#t3 > tbody > tr > td.active,
-div.panel_content table > tbody > tr > td.active,
 .table-default > tbody > tr > td.active,
 .table > tbody > tr > th.active,
-.tbl > tbody > tr > th.active,
-.tbl_alt > tbody > tr > th.active,
-#t1 > tbody > tr > th.active,
-#t3 > tbody > tr > th.active,
-div.panel_content table > tbody > tr > th.active,
 .table-default > tbody > tr > th.active,
 .table > tbody > tr.active > td,
-.tbl > tbody > tr.active > td,
-.tbl_alt > tbody > tr.active > td,
-#t1 > tbody > tr.active > td,
-#t3 > tbody > tr.active > td,
-div.panel_content table > tbody > tr.active > td,
 .table-default > tbody > tr.active > td,
 .table > tbody > tr.active > th,
-.tbl > tbody > tr.active > th,
-.tbl_alt > tbody > tr.active > th,
-#t1 > tbody > tr.active > th,
-#t3 > tbody > tr.active > th,
-div.panel_content table > tbody > tr.active > th,
 .table-default > tbody > tr.active > th,
 .table > tfoot > tr > td.active,
-.tbl > tfoot > tr > td.active,
-.tbl_alt > tfoot > tr > td.active,
-#t1 > tfoot > tr > td.active,
-#t3 > tfoot > tr > td.active,
-div.panel_content table > tfoot > tr > td.active,
 .table-default > tfoot > tr > td.active,
 .table > tfoot > tr > th.active,
-.tbl > tfoot > tr > th.active,
-.tbl_alt > tfoot > tr > th.active,
-#t1 > tfoot > tr > th.active,
-#t3 > tfoot > tr > th.active,
-div.panel_content table > tfoot > tr > th.active,
 .table-default > tfoot > tr > th.active,
 .table > tfoot > tr.active > td,
-.tbl > tfoot > tr.active > td,
-.tbl_alt > tfoot > tr.active > td,
-#t1 > tfoot > tr.active > td,
-#t3 > tfoot > tr.active > td,
-div.panel_content table > tfoot > tr.active > td,
 .table-default > tfoot > tr.active > td,
 .table > tfoot > tr.active > th,
-.tbl > tfoot > tr.active > th,
-.tbl_alt > tfoot > tr.active > th,
-#t1 > tfoot > tr.active > th,
-#t3 > tfoot > tr.active > th,
-div.panel_content table > tfoot > tr.active > th,
 .table-default > tfoot > tr.active > th {
   background-color: whitesmoke;
 }
@@ -3718,69 +3618,24 @@ div.panel_content table > tfoot > tr.active > th,
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.success, .tbl > thead > tr > td.success, .tbl_alt > thead > tr > td.success, #t1 > thead > tr > td.success, #t3 > thead > tr > td.success, div.panel_content table > thead > tr > td.success, .table-default > thead > tr > td.success,
+.table > thead > tr > td.success, .table-default > thead > tr > td.success,
 .table > thead > tr > th.success,
-.tbl > thead > tr > th.success,
-.tbl_alt > thead > tr > th.success,
-#t1 > thead > tr > th.success,
-#t3 > thead > tr > th.success,
-div.panel_content table > thead > tr > th.success,
-.table-default > thead > tr > th.success, .table > thead > tr.success > td, .tbl > thead > tr.success > td, .tbl_alt > thead > tr.success > td, #t1 > thead > tr.success > td, #t3 > thead > tr.success > td, div.panel_content table > thead > tr.success > td, .table-default > thead > tr.success > td, .table > thead > tr.success > th, .tbl > thead > tr.success > th, .tbl_alt > thead > tr.success > th, #t1 > thead > tr.success > th, #t3 > thead > tr.success > th, div.panel_content table > thead > tr.success > th, .table-default > thead > tr.success > th,
+.table-default > thead > tr > th.success, .table > thead > tr.success > td, .table-default > thead > tr.success > td, .table > thead > tr.success > th, .table-default > thead > tr.success > th,
 .table > tbody > tr > td.success,
-.tbl > tbody > tr > td.success,
-.tbl_alt > tbody > tr > td.success,
-#t1 > tbody > tr > td.success,
-#t3 > tbody > tr > td.success,
-div.panel_content table > tbody > tr > td.success,
 .table-default > tbody > tr > td.success,
 .table > tbody > tr > th.success,
-.tbl > tbody > tr > th.success,
-.tbl_alt > tbody > tr > th.success,
-#t1 > tbody > tr > th.success,
-#t3 > tbody > tr > th.success,
-div.panel_content table > tbody > tr > th.success,
 .table-default > tbody > tr > th.success,
 .table > tbody > tr.success > td,
-.tbl > tbody > tr.success > td,
-.tbl_alt > tbody > tr.success > td,
-#t1 > tbody > tr.success > td,
-#t3 > tbody > tr.success > td,
-div.panel_content table > tbody > tr.success > td,
 .table-default > tbody > tr.success > td,
 .table > tbody > tr.success > th,
-.tbl > tbody > tr.success > th,
-.tbl_alt > tbody > tr.success > th,
-#t1 > tbody > tr.success > th,
-#t3 > tbody > tr.success > th,
-div.panel_content table > tbody > tr.success > th,
 .table-default > tbody > tr.success > th,
 .table > tfoot > tr > td.success,
-.tbl > tfoot > tr > td.success,
-.tbl_alt > tfoot > tr > td.success,
-#t1 > tfoot > tr > td.success,
-#t3 > tfoot > tr > td.success,
-div.panel_content table > tfoot > tr > td.success,
 .table-default > tfoot > tr > td.success,
 .table > tfoot > tr > th.success,
-.tbl > tfoot > tr > th.success,
-.tbl_alt > tfoot > tr > th.success,
-#t1 > tfoot > tr > th.success,
-#t3 > tfoot > tr > th.success,
-div.panel_content table > tfoot > tr > th.success,
 .table-default > tfoot > tr > th.success,
 .table > tfoot > tr.success > td,
-.tbl > tfoot > tr.success > td,
-.tbl_alt > tfoot > tr.success > td,
-#t1 > tfoot > tr.success > td,
-#t3 > tfoot > tr.success > td,
-div.panel_content table > tfoot > tr.success > td,
 .table-default > tfoot > tr.success > td,
 .table > tfoot > tr.success > th,
-.tbl > tfoot > tr.success > th,
-.tbl_alt > tfoot > tr.success > th,
-#t1 > tfoot > tr.success > th,
-#t3 > tfoot > tr.success > th,
-div.panel_content table > tfoot > tr.success > th,
 .table-default > tfoot > tr.success > th {
   background-color: #dff0d8;
 }
@@ -3792,69 +3647,24 @@ div.panel_content table > tfoot > tr.success > th,
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.info, .tbl > thead > tr > td.info, .tbl_alt > thead > tr > td.info, #t1 > thead > tr > td.info, #t3 > thead > tr > td.info, div.panel_content table > thead > tr > td.info, .table-default > thead > tr > td.info,
+.table > thead > tr > td.info, .table-default > thead > tr > td.info,
 .table > thead > tr > th.info,
-.tbl > thead > tr > th.info,
-.tbl_alt > thead > tr > th.info,
-#t1 > thead > tr > th.info,
-#t3 > thead > tr > th.info,
-div.panel_content table > thead > tr > th.info,
-.table-default > thead > tr > th.info, .table > thead > tr.info > td, .tbl > thead > tr.info > td, .tbl_alt > thead > tr.info > td, #t1 > thead > tr.info > td, #t3 > thead > tr.info > td, div.panel_content table > thead > tr.info > td, .table-default > thead > tr.info > td, .table > thead > tr.info > th, .tbl > thead > tr.info > th, .tbl_alt > thead > tr.info > th, #t1 > thead > tr.info > th, #t3 > thead > tr.info > th, div.panel_content table > thead > tr.info > th, .table-default > thead > tr.info > th,
+.table-default > thead > tr > th.info, .table > thead > tr.info > td, .table-default > thead > tr.info > td, .table > thead > tr.info > th, .table-default > thead > tr.info > th,
 .table > tbody > tr > td.info,
-.tbl > tbody > tr > td.info,
-.tbl_alt > tbody > tr > td.info,
-#t1 > tbody > tr > td.info,
-#t3 > tbody > tr > td.info,
-div.panel_content table > tbody > tr > td.info,
 .table-default > tbody > tr > td.info,
 .table > tbody > tr > th.info,
-.tbl > tbody > tr > th.info,
-.tbl_alt > tbody > tr > th.info,
-#t1 > tbody > tr > th.info,
-#t3 > tbody > tr > th.info,
-div.panel_content table > tbody > tr > th.info,
 .table-default > tbody > tr > th.info,
 .table > tbody > tr.info > td,
-.tbl > tbody > tr.info > td,
-.tbl_alt > tbody > tr.info > td,
-#t1 > tbody > tr.info > td,
-#t3 > tbody > tr.info > td,
-div.panel_content table > tbody > tr.info > td,
 .table-default > tbody > tr.info > td,
 .table > tbody > tr.info > th,
-.tbl > tbody > tr.info > th,
-.tbl_alt > tbody > tr.info > th,
-#t1 > tbody > tr.info > th,
-#t3 > tbody > tr.info > th,
-div.panel_content table > tbody > tr.info > th,
 .table-default > tbody > tr.info > th,
 .table > tfoot > tr > td.info,
-.tbl > tfoot > tr > td.info,
-.tbl_alt > tfoot > tr > td.info,
-#t1 > tfoot > tr > td.info,
-#t3 > tfoot > tr > td.info,
-div.panel_content table > tfoot > tr > td.info,
 .table-default > tfoot > tr > td.info,
 .table > tfoot > tr > th.info,
-.tbl > tfoot > tr > th.info,
-.tbl_alt > tfoot > tr > th.info,
-#t1 > tfoot > tr > th.info,
-#t3 > tfoot > tr > th.info,
-div.panel_content table > tfoot > tr > th.info,
 .table-default > tfoot > tr > th.info,
 .table > tfoot > tr.info > td,
-.tbl > tfoot > tr.info > td,
-.tbl_alt > tfoot > tr.info > td,
-#t1 > tfoot > tr.info > td,
-#t3 > tfoot > tr.info > td,
-div.panel_content table > tfoot > tr.info > td,
 .table-default > tfoot > tr.info > td,
 .table > tfoot > tr.info > th,
-.tbl > tfoot > tr.info > th,
-.tbl_alt > tfoot > tr.info > th,
-#t1 > tfoot > tr.info > th,
-#t3 > tfoot > tr.info > th,
-div.panel_content table > tfoot > tr.info > th,
 .table-default > tfoot > tr.info > th {
   background-color: #d9edf7;
 }
@@ -3866,69 +3676,24 @@ div.panel_content table > tfoot > tr.info > th,
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.warning, .tbl > thead > tr > td.warning, .tbl_alt > thead > tr > td.warning, #t1 > thead > tr > td.warning, #t3 > thead > tr > td.warning, div.panel_content table > thead > tr > td.warning, .table-default > thead > tr > td.warning,
+.table > thead > tr > td.warning, .table-default > thead > tr > td.warning,
 .table > thead > tr > th.warning,
-.tbl > thead > tr > th.warning,
-.tbl_alt > thead > tr > th.warning,
-#t1 > thead > tr > th.warning,
-#t3 > thead > tr > th.warning,
-div.panel_content table > thead > tr > th.warning,
-.table-default > thead > tr > th.warning, .table > thead > tr.warning > td, .tbl > thead > tr.warning > td, .tbl_alt > thead > tr.warning > td, #t1 > thead > tr.warning > td, #t3 > thead > tr.warning > td, div.panel_content table > thead > tr.warning > td, .table-default > thead > tr.warning > td, .table > thead > tr.warning > th, .tbl > thead > tr.warning > th, .tbl_alt > thead > tr.warning > th, #t1 > thead > tr.warning > th, #t3 > thead > tr.warning > th, div.panel_content table > thead > tr.warning > th, .table-default > thead > tr.warning > th,
+.table-default > thead > tr > th.warning, .table > thead > tr.warning > td, .table-default > thead > tr.warning > td, .table > thead > tr.warning > th, .table-default > thead > tr.warning > th,
 .table > tbody > tr > td.warning,
-.tbl > tbody > tr > td.warning,
-.tbl_alt > tbody > tr > td.warning,
-#t1 > tbody > tr > td.warning,
-#t3 > tbody > tr > td.warning,
-div.panel_content table > tbody > tr > td.warning,
 .table-default > tbody > tr > td.warning,
 .table > tbody > tr > th.warning,
-.tbl > tbody > tr > th.warning,
-.tbl_alt > tbody > tr > th.warning,
-#t1 > tbody > tr > th.warning,
-#t3 > tbody > tr > th.warning,
-div.panel_content table > tbody > tr > th.warning,
 .table-default > tbody > tr > th.warning,
 .table > tbody > tr.warning > td,
-.tbl > tbody > tr.warning > td,
-.tbl_alt > tbody > tr.warning > td,
-#t1 > tbody > tr.warning > td,
-#t3 > tbody > tr.warning > td,
-div.panel_content table > tbody > tr.warning > td,
 .table-default > tbody > tr.warning > td,
 .table > tbody > tr.warning > th,
-.tbl > tbody > tr.warning > th,
-.tbl_alt > tbody > tr.warning > th,
-#t1 > tbody > tr.warning > th,
-#t3 > tbody > tr.warning > th,
-div.panel_content table > tbody > tr.warning > th,
 .table-default > tbody > tr.warning > th,
 .table > tfoot > tr > td.warning,
-.tbl > tfoot > tr > td.warning,
-.tbl_alt > tfoot > tr > td.warning,
-#t1 > tfoot > tr > td.warning,
-#t3 > tfoot > tr > td.warning,
-div.panel_content table > tfoot > tr > td.warning,
 .table-default > tfoot > tr > td.warning,
 .table > tfoot > tr > th.warning,
-.tbl > tfoot > tr > th.warning,
-.tbl_alt > tfoot > tr > th.warning,
-#t1 > tfoot > tr > th.warning,
-#t3 > tfoot > tr > th.warning,
-div.panel_content table > tfoot > tr > th.warning,
 .table-default > tfoot > tr > th.warning,
 .table > tfoot > tr.warning > td,
-.tbl > tfoot > tr.warning > td,
-.tbl_alt > tfoot > tr.warning > td,
-#t1 > tfoot > tr.warning > td,
-#t3 > tfoot > tr.warning > td,
-div.panel_content table > tfoot > tr.warning > td,
 .table-default > tfoot > tr.warning > td,
 .table > tfoot > tr.warning > th,
-.tbl > tfoot > tr.warning > th,
-.tbl_alt > tfoot > tr.warning > th,
-#t1 > tfoot > tr.warning > th,
-#t3 > tfoot > tr.warning > th,
-div.panel_content table > tfoot > tr.warning > th,
 .table-default > tfoot > tr.warning > th {
   background-color: #fcf8e3;
 }
@@ -3940,69 +3705,24 @@ div.panel_content table > tfoot > tr.warning > th,
 }
 
 /* line 12, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/mixins/_table-row.scss */
-.table > thead > tr > td.danger, .tbl > thead > tr > td.danger, .tbl_alt > thead > tr > td.danger, #t1 > thead > tr > td.danger, #t3 > thead > tr > td.danger, div.panel_content table > thead > tr > td.danger, .table-default > thead > tr > td.danger,
+.table > thead > tr > td.danger, .table-default > thead > tr > td.danger,
 .table > thead > tr > th.danger,
-.tbl > thead > tr > th.danger,
-.tbl_alt > thead > tr > th.danger,
-#t1 > thead > tr > th.danger,
-#t3 > thead > tr > th.danger,
-div.panel_content table > thead > tr > th.danger,
-.table-default > thead > tr > th.danger, .table > thead > tr.danger > td, .tbl > thead > tr.danger > td, .tbl_alt > thead > tr.danger > td, #t1 > thead > tr.danger > td, #t3 > thead > tr.danger > td, div.panel_content table > thead > tr.danger > td, .table-default > thead > tr.danger > td, .table > thead > tr.danger > th, .tbl > thead > tr.danger > th, .tbl_alt > thead > tr.danger > th, #t1 > thead > tr.danger > th, #t3 > thead > tr.danger > th, div.panel_content table > thead > tr.danger > th, .table-default > thead > tr.danger > th,
+.table-default > thead > tr > th.danger, .table > thead > tr.danger > td, .table-default > thead > tr.danger > td, .table > thead > tr.danger > th, .table-default > thead > tr.danger > th,
 .table > tbody > tr > td.danger,
-.tbl > tbody > tr > td.danger,
-.tbl_alt > tbody > tr > td.danger,
-#t1 > tbody > tr > td.danger,
-#t3 > tbody > tr > td.danger,
-div.panel_content table > tbody > tr > td.danger,
 .table-default > tbody > tr > td.danger,
 .table > tbody > tr > th.danger,
-.tbl > tbody > tr > th.danger,
-.tbl_alt > tbody > tr > th.danger,
-#t1 > tbody > tr > th.danger,
-#t3 > tbody > tr > th.danger,
-div.panel_content table > tbody > tr > th.danger,
 .table-default > tbody > tr > th.danger,
 .table > tbody > tr.danger > td,
-.tbl > tbody > tr.danger > td,
-.tbl_alt > tbody > tr.danger > td,
-#t1 > tbody > tr.danger > td,
-#t3 > tbody > tr.danger > td,
-div.panel_content table > tbody > tr.danger > td,
 .table-default > tbody > tr.danger > td,
 .table > tbody > tr.danger > th,
-.tbl > tbody > tr.danger > th,
-.tbl_alt > tbody > tr.danger > th,
-#t1 > tbody > tr.danger > th,
-#t3 > tbody > tr.danger > th,
-div.panel_content table > tbody > tr.danger > th,
 .table-default > tbody > tr.danger > th,
 .table > tfoot > tr > td.danger,
-.tbl > tfoot > tr > td.danger,
-.tbl_alt > tfoot > tr > td.danger,
-#t1 > tfoot > tr > td.danger,
-#t3 > tfoot > tr > td.danger,
-div.panel_content table > tfoot > tr > td.danger,
 .table-default > tfoot > tr > td.danger,
 .table > tfoot > tr > th.danger,
-.tbl > tfoot > tr > th.danger,
-.tbl_alt > tfoot > tr > th.danger,
-#t1 > tfoot > tr > th.danger,
-#t3 > tfoot > tr > th.danger,
-div.panel_content table > tfoot > tr > th.danger,
 .table-default > tfoot > tr > th.danger,
 .table > tfoot > tr.danger > td,
-.tbl > tfoot > tr.danger > td,
-.tbl_alt > tfoot > tr.danger > td,
-#t1 > tfoot > tr.danger > td,
-#t3 > tfoot > tr.danger > td,
-div.panel_content table > tfoot > tr.danger > td,
 .table-default > tfoot > tr.danger > td,
 .table > tfoot > tr.danger > th,
-.tbl > tfoot > tr.danger > th,
-.tbl_alt > tfoot > tr.danger > th,
-#t1 > tfoot > tr.danger > th,
-#t3 > tfoot > tr.danger > th,
-div.panel_content table > tfoot > tr.danger > th,
 .table-default > tfoot > tr.danger > th {
   background-color: #f2dede;
 }
@@ -4028,45 +3748,20 @@ div.panel_content table > tfoot > tr.danger > th,
     border: 1px solid #dddddd;
   }
   /* line 183, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table, .table-responsive > .tbl, .table-responsive > .tbl_alt, .table-responsive > #t1, .table-responsive > #t3, div.panel_content .table-responsive > table, .table-responsive > .table-default {
+  .table-responsive > .table, .table-responsive > .table-default {
     margin-bottom: 0;
   }
   /* line 192, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_tables.scss */
-  .table-responsive > .table > thead > tr > th, .table-responsive > .tbl > thead > tr > th, .table-responsive > .tbl_alt > thead > tr > th, .table-responsive > #t1 > thead > tr > th, .table-responsive > #t3 > thead > tr > th, div.panel_content .table-responsive > table > thead > tr > th, .table-responsive > .table-default > thead > tr > th,
+  .table-responsive > .table > thead > tr > th, .table-responsive > .table-default > thead > tr > th,
   .table-responsive > .table > thead > tr > td,
-  .table-responsive > .tbl > thead > tr > td,
-  .table-responsive > .tbl_alt > thead > tr > td,
-  .table-responsive > #t1 > thead > tr > td,
-  .table-responsive > #t3 > thead > tr > td,
-  div.panel_content .table-responsive > table > thead > tr > td,
   .table-responsive > .table-default > thead > tr > td,
   .table-responsive > .table > tbody > tr > th,
-  .table-responsive > .tbl > tbody > tr > th,
-  .table-responsive > .tbl_alt > tbody > tr > th,
-  .table-responsive > #t1 > tbody > tr > th,
-  .table-responsive > #t3 > tbody > tr > th,
-  div.panel_content .table-responsive > table > tbody > tr > th,
   .table-responsive > .table-default > tbody > tr > th,
   .table-responsive > .table > tbody > tr > td,
-  .table-responsive > .tbl > tbody > tr > td,
-  .table-responsive > .tbl_alt > tbody > tr > td,
-  .table-responsive > #t1 > tbody > tr > td,
-  .table-responsive > #t3 > tbody > tr > td,
-  div.panel_content .table-responsive > table > tbody > tr > td,
   .table-responsive > .table-default > tbody > tr > td,
   .table-responsive > .table > tfoot > tr > th,
-  .table-responsive > .tbl > tfoot > tr > th,
-  .table-responsive > .tbl_alt > tfoot > tr > th,
-  .table-responsive > #t1 > tfoot > tr > th,
-  .table-responsive > #t3 > tfoot > tr > th,
-  div.panel_content .table-responsive > table > tfoot > tr > th,
   .table-responsive > .table-default > tfoot > tr > th,
   .table-responsive > .table > tfoot > tr > td,
-  .table-responsive > .tbl > tfoot > tr > td,
-  .table-responsive > .tbl_alt > tfoot > tr > td,
-  .table-responsive > #t1 > tfoot > tr > td,
-  .table-responsive > #t3 > tfoot > tr > td,
-  div.panel_content .table-responsive > table > tfoot > tr > td,
   .table-responsive > .table-default > tfoot > tr > td {
     white-space: nowrap;
   }
@@ -7472,351 +7167,141 @@ a.list-group-item-danger.active, a.list-group-item-danger.active:hover, a.list-g
 }
 
 /* line 106, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table, .panel > .tbl, .panel > .tbl_alt, .panel > #t1, .panel > #t3, div.panel_content .panel > table, .panel > .table-default,
+.panel > .table, .panel > .table-default,
 .panel > .table-responsive > .table,
-.panel > .table-responsive > .tbl,
-.panel > .table-responsive > .tbl_alt,
-.panel > .table-responsive > #t1,
-.panel > .table-responsive > #t3,
-div.panel_content .panel > .table-responsive > table,
 .panel > .table-responsive > .table-default,
 .panel > .panel-collapse > .table,
-.panel > .panel-collapse > .tbl,
-.panel > .panel-collapse > .tbl_alt,
-.panel > .panel-collapse > #t1,
-.panel > .panel-collapse > #t3,
-div.panel_content .panel > .panel-collapse > table,
 .panel > .panel-collapse > .table-default {
   margin-bottom: 0;
 }
 /* line 109, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table caption, .panel > .tbl caption, .panel > .tbl_alt caption, .panel > #t1 caption, .panel > #t3 caption, div.panel_content .panel > table caption, .panel > .table-default caption,
+.panel > .table caption, .panel > .table-default caption,
 .panel > .table-responsive > .table caption,
-.panel > .table-responsive > .tbl caption,
-.panel > .table-responsive > .tbl_alt caption,
-.panel > .table-responsive > #t1 caption,
-.panel > .table-responsive > #t3 caption,
-div.panel_content .panel > .table-responsive > table caption,
 .panel > .table-responsive > .table-default caption,
 .panel > .panel-collapse > .table caption,
-.panel > .panel-collapse > .tbl caption,
-.panel > .panel-collapse > .tbl_alt caption,
-.panel > .panel-collapse > #t1 caption,
-.panel > .panel-collapse > #t3 caption,
-div.panel_content .panel > .panel-collapse > table caption,
 .panel > .panel-collapse > .table-default caption {
   padding-left: 15px;
   padding-right: 15px;
 }
 /* line 116, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:first-child, .panel > .tbl:first-child, .panel > .tbl_alt:first-child, .panel > #t1:first-child, .panel > #t3:first-child, div.panel_content .panel > table:first-child, .panel > .table-default:first-child,
+.panel > .table:first-child, .panel > .table-default:first-child,
 .panel > .table-responsive:first-child > .table:first-child,
-.panel > .table-responsive:first-child > .tbl:first-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child,
-.panel > .table-responsive:first-child > #t1:first-child,
-.panel > .table-responsive:first-child > #t3:first-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child,
 .panel > .table-responsive:first-child > .table-default:first-child {
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
 /* line 121, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:first-child > thead:first-child > tr:first-child, .panel > .tbl:first-child > thead:first-child > tr:first-child, .panel > .tbl_alt:first-child > thead:first-child > tr:first-child, .panel > #t1:first-child > thead:first-child > tr:first-child, .panel > #t3:first-child > thead:first-child > tr:first-child, div.panel_content .panel > table:first-child > thead:first-child > tr:first-child, .panel > .table-default:first-child > thead:first-child > tr:first-child,
+.panel > .table:first-child > thead:first-child > tr:first-child, .panel > .table-default:first-child > thead:first-child > tr:first-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child,
-.panel > .tbl:first-child > tbody:first-child > tr:first-child,
-.panel > .tbl_alt:first-child > tbody:first-child > tr:first-child,
-.panel > #t1:first-child > tbody:first-child > tr:first-child,
-.panel > #t3:first-child > tbody:first-child > tr:first-child,
-div.panel_content .panel > table:first-child > tbody:first-child > tr:first-child,
 .panel > .table-default:first-child > tbody:first-child > tr:first-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child,
-.panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > thead:first-child > tr:first-child,
-.panel > .table-responsive:first-child > #t1:first-child > thead:first-child > tr:first-child,
-.panel > .table-responsive:first-child > #t3:first-child > thead:first-child > tr:first-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > thead:first-child > tr:first-child,
 .panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child,
-.panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > tbody:first-child > tr:first-child,
-.panel > .table-responsive:first-child > #t1:first-child > tbody:first-child > tr:first-child,
-.panel > .table-responsive:first-child > #t3:first-child > tbody:first-child > tr:first-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > tbody:first-child > tr:first-child,
 .panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child {
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
 /* line 126, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl:first-child > thead:first-child > tr:first-child td:first-child, .panel > .tbl_alt:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t1:first-child > thead:first-child > tr:first-child td:first-child, .panel > #t3:first-child > thead:first-child > tr:first-child td:first-child, div.panel_content .panel > table:first-child > thead:first-child > tr:first-child td:first-child, .panel > .table-default:first-child > thead:first-child > tr:first-child td:first-child,
+.panel > .table:first-child > thead:first-child > tr:first-child td:first-child, .panel > .table-default:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > .tbl:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > .tbl_alt:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > #t1:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > #t3:first-child > thead:first-child > tr:first-child th:first-child,
-div.panel_content .panel > table:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-default:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > .tbl:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > .tbl_alt:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > #t1:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > #t3:first-child > tbody:first-child > tr:first-child td:first-child,
-div.panel_content .panel > table:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-default:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > .tbl:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > .tbl_alt:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > #t1:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > #t3:first-child > tbody:first-child > tr:first-child th:first-child,
-div.panel_content .panel > table:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-default:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > thead:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > #t1:first-child > thead:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > #t3:first-child > thead:first-child > tr:first-child td:first-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > #t1:first-child > thead:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > #t3:first-child > thead:first-child > tr:first-child th:first-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > #t1:first-child > tbody:first-child > tr:first-child td:first-child,
-.panel > .table-responsive:first-child > #t3:first-child > tbody:first-child > tr:first-child td:first-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child td:first-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > #t1:first-child > tbody:first-child > tr:first-child th:first-child,
-.panel > .table-responsive:first-child > #t3:first-child > tbody:first-child > tr:first-child th:first-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > tbody:first-child > tr:first-child th:first-child,
 .panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child th:first-child {
   border-top-left-radius: 3px;
 }
 /* line 130, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl:first-child > thead:first-child > tr:first-child td:last-child, .panel > .tbl_alt:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t1:first-child > thead:first-child > tr:first-child td:last-child, .panel > #t3:first-child > thead:first-child > tr:first-child td:last-child, div.panel_content .panel > table:first-child > thead:first-child > tr:first-child td:last-child, .panel > .table-default:first-child > thead:first-child > tr:first-child td:last-child,
+.panel > .table:first-child > thead:first-child > tr:first-child td:last-child, .panel > .table-default:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > .tbl:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > .tbl_alt:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > #t1:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > #t3:first-child > thead:first-child > tr:first-child th:last-child,
-div.panel_content .panel > table:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-default:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > .tbl:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > .tbl_alt:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > #t1:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > #t3:first-child > tbody:first-child > tr:first-child td:last-child,
-div.panel_content .panel > table:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-default:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > .tbl:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > .tbl_alt:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > #t1:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > #t3:first-child > tbody:first-child > tr:first-child th:last-child,
-div.panel_content .panel > table:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-default:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > thead:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > #t1:first-child > thead:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > #t3:first-child > thead:first-child > tr:first-child td:last-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .table:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > .tbl:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > #t1:first-child > thead:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > #t3:first-child > thead:first-child > tr:first-child th:last-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .table-default:first-child > thead:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > #t1:first-child > tbody:first-child > tr:first-child td:last-child,
-.panel > .table-responsive:first-child > #t3:first-child > tbody:first-child > tr:first-child td:last-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child td:last-child,
 .panel > .table-responsive:first-child > .table:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > .tbl:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > .tbl_alt:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > #t1:first-child > tbody:first-child > tr:first-child th:last-child,
-.panel > .table-responsive:first-child > #t3:first-child > tbody:first-child > tr:first-child th:last-child,
-div.panel_content .panel > .table-responsive:first-child > table:first-child > tbody:first-child > tr:first-child th:last-child,
 .panel > .table-responsive:first-child > .table-default:first-child > tbody:first-child > tr:first-child th:last-child {
   border-top-right-radius: 3px;
 }
 /* line 138, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:last-child, .panel > .tbl:last-child, .panel > .tbl_alt:last-child, .panel > #t1:last-child, .panel > #t3:last-child, div.panel_content .panel > table:last-child, .panel > .table-default:last-child,
+.panel > .table:last-child, .panel > .table-default:last-child,
 .panel > .table-responsive:last-child > .table:last-child,
-.panel > .table-responsive:last-child > .tbl:last-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child,
-.panel > .table-responsive:last-child > #t1:last-child,
-.panel > .table-responsive:last-child > #t3:last-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child,
 .panel > .table-responsive:last-child > .table-default:last-child {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
 /* line 143, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:last-child > tbody:last-child > tr:last-child, .panel > .tbl:last-child > tbody:last-child > tr:last-child, .panel > .tbl_alt:last-child > tbody:last-child > tr:last-child, .panel > #t1:last-child > tbody:last-child > tr:last-child, .panel > #t3:last-child > tbody:last-child > tr:last-child, div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child,
+.panel > .table:last-child > tbody:last-child > tr:last-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child,
-.panel > .tbl:last-child > tfoot:last-child > tr:last-child,
-.panel > .tbl_alt:last-child > tfoot:last-child > tr:last-child,
-.panel > #t1:last-child > tfoot:last-child > tr:last-child,
-.panel > #t3:last-child > tfoot:last-child > tr:last-child,
-div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child,
 .panel > .table-default:last-child > tfoot:last-child > tr:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tbody:last-child > tr:last-child,
-.panel > .table-responsive:last-child > #t1:last-child > tbody:last-child > tr:last-child,
-.panel > .table-responsive:last-child > #t3:last-child > tbody:last-child > tr:last-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tbody:last-child > tr:last-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tfoot:last-child > tr:last-child,
-.panel > .table-responsive:last-child > #t1:last-child > tfoot:last-child > tr:last-child,
-.panel > .table-responsive:last-child > #t3:last-child > tfoot:last-child > tr:last-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tfoot:last-child > tr:last-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child {
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
 }
 /* line 148, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .tbl_alt:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t1:last-child > tbody:last-child > tr:last-child td:first-child, .panel > #t3:last-child > tbody:last-child > tr:last-child td:first-child, div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child td:first-child,
+.panel > .table:last-child > tbody:last-child > tr:last-child td:first-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > .tbl:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > .tbl_alt:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > #t1:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > #t3:last-child > tbody:last-child > tr:last-child th:first-child,
-div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-default:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > .tbl:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > .tbl_alt:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > #t1:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > #t3:last-child > tfoot:last-child > tr:last-child td:first-child,
-div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-default:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > .tbl:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > .tbl_alt:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > #t1:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > #t3:last-child > tfoot:last-child > tr:last-child th:first-child,
-div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-default:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tbody:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > #t1:last-child > tbody:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > #t3:last-child > tbody:last-child > tr:last-child td:first-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > #t1:last-child > tbody:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > #t3:last-child > tbody:last-child > tr:last-child th:first-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > #t1:last-child > tfoot:last-child > tr:last-child td:first-child,
-.panel > .table-responsive:last-child > #t3:last-child > tfoot:last-child > tr:last-child td:first-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child td:first-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > #t1:last-child > tfoot:last-child > tr:last-child th:first-child,
-.panel > .table-responsive:last-child > #t3:last-child > tfoot:last-child > tr:last-child th:first-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tfoot:last-child > tr:last-child th:first-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child th:first-child {
   border-bottom-left-radius: 3px;
 }
 /* line 152, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .tbl_alt:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t1:last-child > tbody:last-child > tr:last-child td:last-child, .panel > #t3:last-child > tbody:last-child > tr:last-child td:last-child, div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child td:last-child,
+.panel > .table:last-child > tbody:last-child > tr:last-child td:last-child, .panel > .table-default:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > .tbl:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > .tbl_alt:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > #t1:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > #t3:last-child > tbody:last-child > tr:last-child th:last-child,
-div.panel_content .panel > table:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-default:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > .tbl:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > .tbl_alt:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > #t1:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > #t3:last-child > tfoot:last-child > tr:last-child td:last-child,
-div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-default:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > .tbl:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > .tbl_alt:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > #t1:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > #t3:last-child > tfoot:last-child > tr:last-child th:last-child,
-div.panel_content .panel > table:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-default:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tbody:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > #t1:last-child > tbody:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > #t3:last-child > tbody:last-child > tr:last-child td:last-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > #t1:last-child > tbody:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > #t3:last-child > tbody:last-child > tr:last-child th:last-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tbody:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > #t1:last-child > tfoot:last-child > tr:last-child td:last-child,
-.panel > .table-responsive:last-child > #t3:last-child > tfoot:last-child > tr:last-child td:last-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child td:last-child,
 .panel > .table-responsive:last-child > .table:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > .tbl:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > .tbl_alt:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > #t1:last-child > tfoot:last-child > tr:last-child th:last-child,
-.panel > .table-responsive:last-child > #t3:last-child > tfoot:last-child > tr:last-child th:last-child,
-div.panel_content .panel > .table-responsive:last-child > table:last-child > tfoot:last-child > tr:last-child th:last-child,
 .panel > .table-responsive:last-child > .table-default:last-child > tfoot:last-child > tr:last-child th:last-child {
   border-bottom-right-radius: 3px;
 }
 /* line 161, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .panel-body + .table, .panel > .panel-body + .tbl, .panel > .panel-body + .tbl_alt, .panel > .panel-body + #t1, .panel > .panel-body + #t3, div.panel_content .panel > .panel-body + table, .panel > .panel-body + .table-default,
+.panel > .panel-body + .table, .panel > .panel-body + .table-default,
 .panel > .panel-body + .table-responsive,
 .panel > .table + .panel-body,
-.panel > .tbl + .panel-body,
-.panel > .tbl_alt + .panel-body,
-.panel > #t1 + .panel-body,
-.panel > #t3 + .panel-body,
-div.panel_content .panel > table + .panel-body,
 .panel > .table-default + .panel-body,
 .panel > .table-responsive + .panel-body {
   border-top: 1px solid #dddddd;
 }
 /* line 165, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_panels.scss */
-.panel > .table > tbody:first-child > tr:first-child th, .panel > .tbl > tbody:first-child > tr:first-child th, .panel > .tbl_alt > tbody:first-child > tr:first-child th, .panel > #t1 > tbody:first-child > tr:first-child th, .panel > #t3 > tbody:first-child > tr:first-child th, div.panel_content .panel > table > tbody:first-child > tr:first-child th, .panel > .table-default > tbody:first-child > tr:first-child th,
+.panel > .table > tbody:first-child > tr:first-child th, .panel > .table-default > tbody:first-child > tr:first-child th,
 .panel > .table > tbody:first-child > tr:first-child td,
-.panel > .tbl > tbody:first-child > tr:first-child td,
-.panel > .tbl_alt > tbody:first-child > tr:first-child td,
-.panel > #t1 > tbody:first-child > tr:first-child td,
-.panel > #t3 > tbody:first-child > tr:first-child td,
-div.panel_content .panel > table > tbody:first-child > tr:first-child td,
 .panel > .table-default > tbody:first-child > tr:first-child td {
   border-top: 0;
 }
@@ -9251,6 +8736,97 @@ button.close {
     display: none !important;
   }
 }
+/* 
+================================================================
+    SASS for eclass UI v3.0 - Global styles - version 0.0926a
+================================================================
+*/
+/* COLORS ---------------------------------------------------------------------- */
+/* FONTS ------------------------------------------------------------------------- */
+/* TRANSITIONS ------------------------------------------------------------------- */
+/* MIXINS ------------------------------------------------------------------------------- */
+/* CSS ANIMATIONS -----------------------------------------------------------------*/
+/* line 114, ../SASS/global.scss */
+.transition {
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  -o-transition: all 150ms linear;
+  -ms-transition: all 150ms linear;
+  transition: all 150ms linear;
+}
+
+@-webkit-keyframes NEW-ITEM-FX {
+  /* line 120, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 121, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 122, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-moz-keyframes NEW-ITEM-FX {
+  /* line 128, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 129, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 130, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@-o-keyframes NEW-ITEM-FX {
+  /* line 136, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 137, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 138, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+@keyframes NEW-ITEM-FX {
+  /* line 144, ../SASS/global.scss */
+  0% {
+    background: #e8ffcb;
+  }
+
+  /* line 145, ../SASS/global.scss */
+  20% {
+    background: #e8ffcb;
+  }
+
+  /* line 146, ../SASS/global.scss */
+  100% {
+    background: rgba(232, 255, 203, 0);
+  }
+}
+
+/* ********************
+    GLOBAL STYLES
+******************** */
+/* Font styles */
 @font-face {
   font-family: 'Open Sans';
   src: url("fonts/OpenSans-Regular.ttf");
@@ -9258,27 +8834,48 @@ button.close {
   font-style: normal;
 }
 
-/* line 16, ../SASS/bootstrap-custom.scss */
-.iframe-container {
-  padding-bottom: 60%;
-  padding-top: 30px;
-  height: 0;
-  overflow: hidden;
+/* line 19, ../SASS/bootstrap-custom.scss */
+body {
+  background: #232c3a;
+  font-family: 'Open Sans';
 }
 
-/* line 23, ../SASS/bootstrap-custom.scss */
-.iframe-container iframe,
-.iframe-container object,
-.iframe-container embed {
-  border: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+/* Fluid container styles */
+/* line 24, ../SASS/bootstrap-custom.scss */
+.container-fluid {
+  padding: 0px;
+  max-width: 1920px;
 }
 
-/* line 31, ../SASS/bootstrap-custom.scss */
+/* Styles for headings, hr and titles --------------------------------------------------*/
+/* line 32, ../SASS/bootstrap-custom.scss */
+h1.page-title {
+  margin: 0em;
+  font-weight: 400 !important;
+  color: #333;
+  font-size: 20px;
+}
+
+/* Default table class */
+/* Form styles */
+/* line 47, ../SASS/bootstrap-custom.scss */
+input[type="file"] {
+  padding-top: 7px;
+}
+
+/* tinyMCE styles */
+/* line 52, ../SASS/bootstrap-custom.scss */
+.mce-toggle:hover {
+  cursor: pointer;
+}
+
+/* line 56, ../SASS/bootstrap-custom.scss */
+.mce-toggle i.mce-ico.mce-i-none {
+  width: 22px;
+}
+
+/* Search button styling */
+/* line 62, ../SASS/bootstrap-custom.scss */
 #btn-search {
   color: white;
   background-color: #232c3a;
@@ -9305,53 +8902,33 @@ button.close {
   background-color: white;
 }
 
-/* line 35, ../SASS/bootstrap-custom.scss */
-legend.theme_options_legend {
-  font-size: 18px;
-  margin-bottom: 30px;
-}
-/* line 38, ../SASS/bootstrap-custom.scss */
-legend.theme_options_legend:not(:first-child) {
-  margin-top: 30px;
-}
-
-/* line 42, ../SASS/bootstrap-custom.scss */
-.container-fluid {
-  padding: 0px;
-  max-width: 1920px;
-}
-
-/* line 47, ../SASS/bootstrap-custom.scss */
-input[type="file"] {
-  padding-top: 7px;
-}
-
-/* line 51, ../SASS/bootstrap-custom.scss */
+/* New Alert styles */
+/* line 67, ../SASS/bootstrap-custom.scss */
 .alert-default {
   background-image: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
   border-color: #ccc;
 }
 
-/* line 56, ../SASS/bootstrap-custom.scss */
-.popover-content {
-  padding: 9px 9px;
+/* New Panel Classes (to support action_button() in panel heading) */
+/* line 75, ../SASS/bootstrap-custom.scss */
+.panel-action-btn-default > .panel-heading {
+  padding: 0 0 0 20px;
 }
-/* line 58, ../SASS/bootstrap-custom.scss */
-.popover-content .list-group {
-  margin-bottom: 0px;
-}
-
-/* line 63, ../SASS/bootstrap-custom.scss */
-.affix {
-  top: 15px;
+/* line 78, ../SASS/bootstrap-custom.scss */
+.panel-action-btn-default > .panel-heading h3 {
+  line-height: 45px;
 }
 
-/* line 66, ../SASS/bootstrap-custom.scss */
-.affix-bottom {
-  position: relative;
+/* line 85, ../SASS/bootstrap-custom.scss */
+.panel-action-btn-primary > .panel-heading {
+  padding: 0 0 0 20px;
+}
+/* line 88, ../SASS/bootstrap-custom.scss */
+.panel-action-btn-primary > .panel-heading h3 {
+  line-height: 45px;
 }
 
-/* line 69, ../SASS/bootstrap-custom.scss */
+/* line 95, ../SASS/bootstrap-custom.scss */
 .option-btn-cell .btn-group {
   display: flex;
   display: -webkit-flex;
@@ -9359,18 +8936,27 @@ input[type="file"] {
   display: -ms-flex;
 }
 
-/* line 75, ../SASS/bootstrap-custom.scss */
+/* line 101, ../SASS/bootstrap-custom.scss */
+.popover-content {
+  padding: 9px 9px;
+}
+/* line 103, ../SASS/bootstrap-custom.scss */
+.popover-content .list-group {
+  margin-bottom: 0px;
+}
+
+/* line 107, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete {
   color: #CE6B6B;
 }
 
-/* line 78, ../SASS/bootstrap-custom.scss */
+/* line 110, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete:hover {
   background-color: #CE6B6B;
   color: white;
 }
 
-/* line 82, ../SASS/bootstrap-custom.scss */
+/* line 114, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a {
   display: block;
   padding: 3px 20px;
@@ -9382,7 +8968,7 @@ a.list-group-item.delete:hover {
   white-space: nowrap;
 }
 
-/* line 92, ../SASS/bootstrap-custom.scss */
+/* line 124, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   background-color: #e8e8e8;
   background-image: -webkit-linear-gradient(top, whitesmoke 0, #e8e8e8 100%);
@@ -9393,7 +8979,7 @@ a.list-group-item.delete:hover {
   background-repeat: repeat-x;
 }
 
-/* line 101, ../SASS/bootstrap-custom.scss */
+/* line 133, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   text-decoration: none;
   color: #262626;
@@ -9401,28 +8987,129 @@ a.list-group-item.delete:hover {
   cursor: pointer;
 }
 
-@media (min-width: 768px) {
-  /* line 109, ../SASS/bootstrap-custom.scss */
-  div.all_courses {
-    float: left;
-  }
+/* Left navigation styles */
+/* line 141, ../SASS/bootstrap-custom.scss */
+#leftnav {
+  top: -53px;
+  padding: 0;
 }
-@media (min-width: 768px) {
-  /* line 114, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 20%;
-  }
+/* line 144, ../SASS/bootstrap-custom.scss */
+#leftnav .logo {
+  margin: 0.8em 0.8em 0px;
 }
-@media (max-width: 768px) {
-  /* line 120, ../SASS/bootstrap-custom.scss */
-  .login-form {
-    margin-right: 5%;
-    margin-left: 5%;
-    width: 90%;
-  }
+/* line 146, ../SASS/bootstrap-custom.scss */
+#leftnav .logo img {
+  margin: 0 auto;
 }
+/* line 148, ../SASS/bootstrap-custom.scss */
+#leftnav .panel {
+  border: none;
+  margin: 0;
+  margin-bottom: 1em;
+  background: inherit;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px 0px 0px 5px;
+}
+/* line 156, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .list-group {
+  border-radius: 0;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+/* line 160, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .panel-heading {
+  border-radius: 4px 0px 0px 0px !important;
+  padding: 10px 7px;
+}
+/* line 163, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .panel-heading .panel-title {
+  text-align: center;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+/* line 168, ../SASS/bootstrap-custom.scss */
+#leftnav .panel .panel-heading:hover {
+  color: #4da1e4;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 173, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a {
+  color: #ADADAD;
+  text-decoration: none;
+}
+/* line 177, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.parent-menu {
+  outline: 0;
+  display: block;
+  background: rgba(0, 0, 0, 0.2);
+}
+/* line 181, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.parent-menu:not(.collapsed) {
+  border-radius: 4px 0px 0px 0px;
+  color: #4da1e4;
+}
+/* line 188, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.parent-menu:hover, #leftnav .panel a.parent-menu:not(.collapsed) {
+  border-radius: 4px 0px 0px 4px;
+}
+/* line 192, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+  padding: 0.6em 15px;
+  background: transparent;
+  text-align: center;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 199, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item > span {
+  font-size: 0.9em;
+  margin-left: 0.5em;
+}
+/* line 203, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item:hover {
+  text-decoration: none;
+  color: #eee;
+  background: #4da1e4;
+  border-radius: 4px 0px 0px 4px;
+  margin-left: 0px;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 211, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item.active {
+  background: #fafafa;
+  text-shadow: none;
+  color: #333;
+  border-radius: 4px 0px 0px 4px;
+  box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+  -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
+}
+/* line 221, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item:last-child {
+  border-bottom: none;
+}
+/* line 224, ../SASS/bootstrap-custom.scss */
+#leftnav .panel a.list-group-item:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+}
+
 @media (max-width: 992px) {
-  /* line 127, ../SASS/bootstrap-custom.scss */
+  /* line 231, ../SASS/bootstrap-custom.scss */
   .float-menu {
     position: absolute;
     width: 225px;
@@ -9432,99 +9119,19 @@ a.list-group-item.delete:hover {
     background-color: #232C3A;
   }
 
-  /* line 135, ../SASS/bootstrap-custom.scss */
+  /* line 239, ../SASS/bootstrap-custom.scss */
   #leftnav {
     overflow-y: scroll;
     z-index: 8888;
   }
 
-  /* line 139, ../SASS/bootstrap-custom.scss */
+  /* line 243, ../SASS/bootstrap-custom.scss */
   .navbar-toggle {
     display: block;
   }
 }
-@media (min-width: 992px) {
-  /* line 144, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 18%;
-  }
-
-  /* line 147, ../SASS/bootstrap-custom.scss */
-  .navbar-custom {
-    margin: 15px 15px 0px;
-  }
-}
-@media (min-width: 1200px) {
-  /* line 152, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 17%;
-  }
-}
-@media (min-width: 1450px) {
-  /* line 157, ../SASS/bootstrap-custom.scss */
-  .affix {
-    width: 12.4%;
-  }
-}
-/* line 163, ../SASS/bootstrap-custom.scss */
-.bubble {
-  position: relative;
-  width: 100%;
-  padding: 5px 20px 5px 20px;
-  background: #FFFFFF;
-  -webkit-border-radius: 7px;
-  -moz-border-radius: 7px;
-  border-radius: 7px;
-  border: #dddddd solid 2px;
-}
-
-/* line 175, ../SASS/bootstrap-custom.scss */
-.bubble:after {
-  content: '';
-  position: absolute;
-  border-style: solid;
-  border-width: 10px 14px 10px 0;
-  border-color: transparent #FFFFFF;
-  display: block;
-  width: 0;
-  z-index: 1;
-  left: -14px;
-  top: 9px;
-}
-
-/* line 189, ../SASS/bootstrap-custom.scss */
-.bubble:before {
-  content: '';
-  position: absolute;
-  border-style: solid;
-  border-width: 11px 15px 11px 0;
-  border-color: transparent #dddddd;
-  display: block;
-  width: 0;
-  z-index: 0;
-  left: -17px;
-  top: 8px;
-}
-
-/* line 213, ../SASS/bootstrap-custom.scss */
-.panel-action-btn-default > .panel-heading {
-  padding: 0 0 0 20px;
-}
-/* line 216, ../SASS/bootstrap-custom.scss */
-.panel-action-btn-default > .panel-heading h3 {
-  line-height: 45px;
-}
-
-/* line 223, ../SASS/bootstrap-custom.scss */
-.panel-action-btn-primary > .panel-heading {
-  padding: 0 0 0 20px;
-}
-/* line 226, ../SASS/bootstrap-custom.scss */
-.panel-action-btn-primary > .panel-heading h3 {
-  line-height: 45px;
-}
-
-/* line 232, ../SASS/bootstrap-custom.scss */
+/* User menu styles */
+/* line 249, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;
@@ -9548,23 +9155,135 @@ a.list-group-item.delete:hover {
   box-sizing: border-box;
 }
 
-/* line 257, ../SASS/bootstrap-custom.scss */
-.mce-toggle:hover {
-  cursor: pointer;
+/* Speech bubble styles (for chat and comments) */
+/* line 274, ../SASS/bootstrap-custom.scss */
+.bubble {
+  position: relative;
+  width: 100%;
+  padding: 5px 20px 5px 20px;
+  background: #FFFFFF;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  border-radius: 7px;
+  border: #dddddd solid 2px;
 }
 
-/* line 261, ../SASS/bootstrap-custom.scss */
-.mce-toggle i.mce-ico.mce-i-none {
-  width: 22px;
+/* line 286, ../SASS/bootstrap-custom.scss */
+.bubble:after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 10px 14px 10px 0;
+  border-color: transparent #FFFFFF;
+  display: block;
+  width: 0;
+  z-index: 1;
+  left: -14px;
+  top: 9px;
 }
 
-/* line 269, ../SASS/bootstrap-custom.scss */
-.checkbox_cell {
-  width: 5px;
-  text-align: center;
+/* line 300, ../SASS/bootstrap-custom.scss */
+.bubble:before {
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 11px 15px 11px 0;
+  border-color: transparent #dddddd;
+  display: block;
+  width: 0;
+  z-index: 0;
+  left: -17px;
+  top: 8px;
 }
 
-/* line 277, ../SASS/bootstrap-custom.scss */
-.col-sm-10-pt-6 {
-  padding-top: 6px;
+/* ******************** 
+   PAGE-SPECIFIC STYLES 
+   ******************** */
+/* PORTFOLIO */
+/* portfolio datatable 'all courses' button fix */
+@media (min-width: 768px) {
+  /* line 320, ../SASS/bootstrap-custom.scss */
+  div.all_courses {
+    float: left;
+  }
+}
+/* THEME OPTIONS */
+/* Theme options legend STYLING*/
+/* line 327, ../SASS/bootstrap-custom.scss */
+legend.theme_options_legend {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+/* line 330, ../SASS/bootstrap-custom.scss */
+legend.theme_options_legend:not(:first-child) {
+  margin-top: 30px;
+}
+
+/* ADMIN SETTINGS */
+/* Affix (floating sidebar) styling */
+/* line 337, ../SASS/bootstrap-custom.scss */
+.affix {
+  top: 15px;
+}
+
+/* line 340, ../SASS/bootstrap-custom.scss */
+.affix-bottom {
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  /* line 344, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 20%;
+  }
+}
+@media (min-width: 992px) {
+  /* line 349, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 18%;
+  }
+}
+@media (min-width: 1200px) {
+  /* line 354, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 17%;
+  }
+}
+@media (min-width: 1450px) {
+  /* line 359, ../SASS/bootstrap-custom.scss */
+  .affix {
+    width: 12.4%;
+  }
+}
+/* DOCUMENTS */
+/* styles for the case that documents 
+open in a modal with the help of an iframe */
+/* line 367, ../SASS/bootstrap-custom.scss */
+.iframe-container {
+  padding-bottom: 60%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+}
+
+/* line 374, ../SASS/bootstrap-custom.scss */
+.iframe-container iframe,
+.iframe-container object,
+.iframe-container embed {
+  border: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* LOGIN */
+@media (max-width: 768px) {
+  /* line 385, ../SASS/bootstrap-custom.scss */
+  .login-form {
+    margin-right: 5%;
+    margin-left: 5%;
+    width: 90%;
+  }
 }

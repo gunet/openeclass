@@ -129,7 +129,7 @@ if (isset($_REQUEST['u']) and isset($_REQUEST['h'])) {
                 <input type='hidden' name='h' value='" . q($_REQUEST['h']) . "'>
                 <fieldset>
                 <legend>$langPassword</legend>
-                <table class='tbl'>
+                <table class='table-default'>
                 <tr>
                    <th>$langNewPass1</th>
                    <td><input type='password' size='40' name='newpass' value='' id='password' autocomplete='off'/>&nbsp;<span id='result'></span></td>

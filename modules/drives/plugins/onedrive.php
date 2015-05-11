@@ -29,9 +29,11 @@ final class OneDrive extends OAuthDrive {
     private $client_secret;
 
     public function __construct() {
-        $this->client_id = $this->getClientID();
-        $this->redirect_url = $this->getRedirect();
-        $this->client_secret = $this->getSecret();
+        if ($this->isPresent()) {
+            $this->client_id = $this->getClientID();
+            $this->redirect_url = $this->getRedirect();
+            $this->client_secret = $this->getSecret();
+        }
     }
 
     public function isValid() {

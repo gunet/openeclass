@@ -74,11 +74,11 @@ function form() {
     $message = $langInfoAboutRegistration;
     $hidden = "<input type='hidden' name='course_id' value='$course_id'>";
      
-    $ret = "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+    $ret = "<form method='post' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
 	<fieldset>
 	<legend>$langIntroMessage</legend>
 	$hidden
-	<table class='tbl' width='100%'>
+	<table class='table-default'>
 	<tbody>
 	<tr>
 	  <td class='smaller'>$message</td>

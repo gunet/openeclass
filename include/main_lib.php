@@ -446,7 +446,7 @@ function group_secret($gid) {
 
     $r = Database::get()->querySingle("SELECT secret_directory FROM `group` WHERE id = ?d", $gid);
     if ($r) {
-        return $r->secret;
+        return $r->secret_directory;
     } else {
         return '';
     }

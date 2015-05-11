@@ -35,4 +35,12 @@ class WebDAVApp extends ExtApp {
         return "WebDAV";
     }
 
+    public function getShortDescription() {
+        return $GLOBALS['langWebDAVShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langWebDAVLongDescription'];
+    }
+
 }

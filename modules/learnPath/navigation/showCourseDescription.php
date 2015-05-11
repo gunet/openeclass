@@ -55,9 +55,9 @@ $pageName = $langCourseProgram;
             if ($q && count($q) > 0) {
                 foreach ($q as $row) {
                     echo "
-			<table width='100%' class='tbl_border'>
-			<tr class='odd'>
-			<td class='bold'>" . q($row->title) . "</td>\n
+			<table class='table-default'>
+			<tr>
+			<td><strong>" . q($row->title) . "</strong></td>\n
 			</tr>
 			<tr>";
 

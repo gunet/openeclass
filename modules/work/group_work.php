@@ -110,7 +110,7 @@ function show_assignments() {
                     <div class='form-group'>
                         <label for='title' class='col-sm-2 control-label'>$langWorks ($m[select]):</label>
                         <div class='col-sm-10'>
-                            <table class='table table-default'>
+                            <table class='table-default'>
                                 <tr>
                                     <th class='left' colspan='2'>$m[title]</th>
                                     <th align='center' width='30%'>$m[deadline]</th>

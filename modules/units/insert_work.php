@@ -50,7 +50,7 @@ function list_assignments() {
                 "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langTitle</th>" .
                 "<th width='120'>$langGroupWorkDeadline_of_Submission</th>" .
-                "<th class='checkbox_cell text-center'>$langChoice</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";        
         foreach ($result as $row) {
             

@@ -1212,7 +1212,7 @@ function edit_res($resource_id) {
             "<input type='hidden' name='id' value='$id'>" .
             "<input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {
-        $tool_content .= "<table class='tbl'>" .
+        $tool_content .= "<table class='table-default'>" .
                 "<tr>" .
                 "<th>$langTitle:</th>" .
                 "<td><input type='text' name='restitle' size='50' maxlength='255' $restitle></td>" .

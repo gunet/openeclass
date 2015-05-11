@@ -140,7 +140,7 @@ class Log {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }            
-            $tool_content .= "<table id = 'log_results_table' class='tbl'>";
+            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
             $tool_content .= "<thead>";
             // log header
             $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";

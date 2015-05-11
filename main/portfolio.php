@@ -75,8 +75,6 @@ jQuery(document).ready(function() {
        }    
   });
   $('div.all_courses').html('<a class=\"btn btn-xs btn-default\" href=\"{$urlServer}main/my_courses.php\">$langAllCourses</a>');  
-  jQuery('.panel_content').hide();
-   jQuery('.panel_content_open').show();
   jQuery('.panel_title').click(function()
   {
     var mypanel = $(this).next();

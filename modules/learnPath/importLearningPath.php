@@ -1166,7 +1166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
     $tool_content .= "\n<div class=\"col-xs-12\">";
     $tool_content .= "\n<form class='form-wrapper' action='importFromDocument.php?course=$course_code' method='post'>";
     $tool_content .= "\n  <h4 class='form-heading'>$langLearningPathImportFromDocuments</h4>";
-    $tool_content .= "\n  <table width=\"100%\" class=\"tbl_alt_bordless\">";
+    $tool_content .= "\n  <table class=\"table-default\">";
     $tool_content .= "\n  <tbody>";
 
     if (count($documents) <= 0) {

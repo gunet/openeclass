@@ -277,11 +277,19 @@ function directory_list() {
 
     $dirArray = array();
 
-    $r = Database::get()->queryArray("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir' ORDER BY filename");
+    $r = Database::get()->queryArray("SELECT filename, path FROM document WHERE $group_sql AND format = '.dir'");
     foreach ($r as $row) {
-        $dirArray[$row->path] = $row->filename;
+        $dirArray[] = array($row->path, $row->filename,
+            public_file_path($row->path, $row->filename));
     }
-    return $dirArray;
+    setlocale(LC_COLLATE, $GLOBALS['langLocale']);
+    usort($dirArray, function ($a, $b) {
+        return strcoll($a[2], $b[2]);
+    });
+    foreach ($dirArray as $dir) {
+        $sortedDirs[$dir[0]] = $dir[1];
+    }
+    return $sortedDirs;
 }
 
 /*
@@ -308,17 +316,19 @@ function directory_selection($source_value, $command, $entryToExclude) {
                                     <label for='$command' class='col-sm-4 control-label word-wrapping' >$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:</label>
                                     <div class='col-sm-8'>
                                         <select name='$command' class='form-control'>";
-                                        if ($entryToExclude != '/') {
+                                        if ($entryToExclude !== '/' and $entryToExclude !== '') {
                                             $dialogBox .= "<option value=''>$langParentDir</option>";
                                         }
 
                                         /* build html form inputs */
+                                        $disabled = '';
                                         foreach ($dirList as $path => $filename) {
                                             $depth = substr_count($path, '/');
                                             $tab = str_repeat('&nbsp;&nbsp;&nbsp;', $depth);
-                                            if ($path != $entryToExclude) {
-                                                $dialogBox .= "<option value='$path'>$tab$filename</option>";
+                                            if ($entryToExclude !== '/' and $entryToExclude !== '') {
+                                                $disabled = (strpos($path, $entryToExclude) === 0)? ' disabled': '';
                                             }
+                                            $dialogBox .= "<option$disabled value='$path'>$tab$filename</option>";
                                         }
                                     $dialogBox .= "</select>
                                         </div>

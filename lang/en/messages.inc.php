@@ -1399,7 +1399,6 @@ $titreBloc = array(
     'Additional info');
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
 $langPerso = "Modify portfolio view";
-$langMyPersoLessons = "My Courses";
 $langMyPersoDeadlines = "My Deadlines";
 $langMyPersoAnnouncements = "My Announcements";
 $langMyPersoDocs = "My Latest Documents";
@@ -4001,3 +4000,4 @@ $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
 $langOpenDelosReplaceInfo = "Already existing links will be refreshed with current metadata.";
+$langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with current metadata.</p><p><span style='color:red'>*</span> The link already exists in course videolinks.</p><p><span style='color:red'>**</span> The link already exists, but OpenDelos platform holds a newer version.</p>";

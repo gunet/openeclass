@@ -361,7 +361,7 @@ if (!isset($_POST['create_course'])) {
                 <div class='form-group'>
                     <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
                     <div class='col-sm-10'>
-                          <input class='form-control FormData_InputText' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
+                          <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
                     </div>
                 </div>
                 <div class='form-group'>
