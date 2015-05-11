@@ -60,7 +60,7 @@ function getNumberOfLinks($catid) {
  * @param type $catid
  */
 function showlinksofcategory($catid) {
-    global $is_editor, $course_id, $urlview, $tool_content,
+    global $is_editor, $course_id, $urlview, $socialview_param, $tool_content,
     $urlServer, $course_code,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
     $langEditChange, $is_in_tinymce, $links_num, $langLinkSubmittedBy;
@@ -91,7 +91,7 @@ function showlinksofcategory($catid) {
         
         if ($is_editor && !$is_in_tinymce) {   
             $tool_content .= "<td class='option-btn-cell'>";
-            $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
+            $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param;
             if (isset($category)) {
                 $editlink .= "&amp;category=$category";
             }
@@ -103,18 +103,18 @@ function showlinksofcategory($catid) {
                       'level' => 'primary',
                       'icon' => 'fa-arrow-up',
                       'disabled' => $links_num == 1,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id".$socialview_param,
                       ),
                 array('title' => $langDown,
                       'level' => 'primary',
                       'icon' => 'fa-arrow-down',
                       'disabled' => $links_num >= $numberoflinks,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id".$socialview_param,
                       ),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param,
                       'confirm' => $langLinkDelconfirm)
             ));
             $tool_content .= "</td>";
@@ -122,7 +122,7 @@ function showlinksofcategory($catid) {
             if (isset($_SESSION['uid'])) {
                 if (is_link_creator($myrow->id)) {
                     $tool_content .= "<td class='option-btn-cell'>";
-                    $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview";
+                    $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param;
                     $tool_content .= action_button(array(
                             array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
@@ -130,7 +130,7 @@ function showlinksofcategory($catid) {
                             array('title' => $langDelete,
                                     'icon' => 'fa-times',
                                     'class' => 'delete',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param,
                                     'confirm' => $langLinkDelconfirm)
                     ));
                     $tool_content .= "</td>";
