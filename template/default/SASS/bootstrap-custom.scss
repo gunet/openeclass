@@ -26,6 +26,15 @@ body
     max-width: 1920px;
 }
 
+/* Styles for headings, hr and titles --------------------------------------------------*/
+
+h1.page-title
+{
+  margin:0em;
+  font-weight: 400!important;
+  color: #333;
+  font-size: 20px;
+}
 /* Default table class */
 .table-default {
     @extend .table, .table-striped, .table-bordered;

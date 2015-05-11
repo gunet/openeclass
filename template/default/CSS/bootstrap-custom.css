@@ -8847,26 +8847,35 @@ body {
   max-width: 1920px;
 }
 
+/* Styles for headings, hr and titles --------------------------------------------------*/
+/* line 32, ../SASS/bootstrap-custom.scss */
+h1.page-title {
+  margin: 0em;
+  font-weight: 400 !important;
+  color: #333;
+  font-size: 20px;
+}
+
 /* Default table class */
 /* Form styles */
-/* line 38, ../SASS/bootstrap-custom.scss */
+/* line 47, ../SASS/bootstrap-custom.scss */
 input[type="file"] {
   padding-top: 7px;
 }
 
 /* tinyMCE styles */
-/* line 43, ../SASS/bootstrap-custom.scss */
+/* line 52, ../SASS/bootstrap-custom.scss */
 .mce-toggle:hover {
   cursor: pointer;
 }
 
-/* line 47, ../SASS/bootstrap-custom.scss */
+/* line 56, ../SASS/bootstrap-custom.scss */
 .mce-toggle i.mce-ico.mce-i-none {
   width: 22px;
 }
 
 /* Search button styling */
-/* line 53, ../SASS/bootstrap-custom.scss */
+/* line 62, ../SASS/bootstrap-custom.scss */
 #btn-search {
   color: white;
   background-color: #232c3a;
@@ -8894,32 +8903,32 @@ input[type="file"] {
 }
 
 /* New Alert styles */
-/* line 58, ../SASS/bootstrap-custom.scss */
+/* line 67, ../SASS/bootstrap-custom.scss */
 .alert-default {
   background-image: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
   border-color: #ccc;
 }
 
 /* New Panel Classes (to support action_button() in panel heading) */
-/* line 66, ../SASS/bootstrap-custom.scss */
+/* line 75, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 69, ../SASS/bootstrap-custom.scss */
+/* line 78, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
 
-/* line 76, ../SASS/bootstrap-custom.scss */
+/* line 85, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 79, ../SASS/bootstrap-custom.scss */
+/* line 88, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
 
-/* line 86, ../SASS/bootstrap-custom.scss */
+/* line 95, ../SASS/bootstrap-custom.scss */
 .option-btn-cell .btn-group {
   display: flex;
   display: -webkit-flex;
@@ -8927,27 +8936,27 @@ input[type="file"] {
   display: -ms-flex;
 }
 
-/* line 92, ../SASS/bootstrap-custom.scss */
+/* line 101, ../SASS/bootstrap-custom.scss */
 .popover-content {
   padding: 9px 9px;
 }
-/* line 94, ../SASS/bootstrap-custom.scss */
+/* line 103, ../SASS/bootstrap-custom.scss */
 .popover-content .list-group {
   margin-bottom: 0px;
 }
 
-/* line 98, ../SASS/bootstrap-custom.scss */
+/* line 107, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete {
   color: #CE6B6B;
 }
 
-/* line 101, ../SASS/bootstrap-custom.scss */
+/* line 110, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete:hover {
   background-color: #CE6B6B;
   color: white;
 }
 
-/* line 105, ../SASS/bootstrap-custom.scss */
+/* line 114, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a {
   display: block;
   padding: 3px 20px;
@@ -8959,7 +8968,7 @@ a.list-group-item.delete:hover {
   white-space: nowrap;
 }
 
-/* line 115, ../SASS/bootstrap-custom.scss */
+/* line 124, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   background-color: #e8e8e8;
   background-image: -webkit-linear-gradient(top, whitesmoke 0, #e8e8e8 100%);
@@ -8970,7 +8979,7 @@ a.list-group-item.delete:hover {
   background-repeat: repeat-x;
 }
 
-/* line 124, ../SASS/bootstrap-custom.scss */
+/* line 133, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   text-decoration: none;
   color: #262626;
@@ -8979,20 +8988,20 @@ a.list-group-item.delete:hover {
 }
 
 /* Left navigation styles */
-/* line 132, ../SASS/bootstrap-custom.scss */
+/* line 141, ../SASS/bootstrap-custom.scss */
 #leftnav {
   top: -53px;
   padding: 0;
 }
-/* line 135, ../SASS/bootstrap-custom.scss */
+/* line 144, ../SASS/bootstrap-custom.scss */
 #leftnav .logo {
   margin: 0.8em 0.8em 0px;
 }
-/* line 137, ../SASS/bootstrap-custom.scss */
+/* line 146, ../SASS/bootstrap-custom.scss */
 #leftnav .logo img {
   margin: 0 auto;
 }
-/* line 139, ../SASS/bootstrap-custom.scss */
+/* line 148, ../SASS/bootstrap-custom.scss */
 #leftnav .panel {
   border: none;
   margin: 0;
@@ -9002,25 +9011,25 @@ a.list-group-item.delete:hover {
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px 0px 0px 5px;
 }
-/* line 147, ../SASS/bootstrap-custom.scss */
+/* line 156, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .list-group {
   border-radius: 0;
   box-shadow: none;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 151, ../SASS/bootstrap-custom.scss */
+/* line 160, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .panel-heading {
   border-radius: 4px 0px 0px 0px !important;
   padding: 10px 7px;
 }
-/* line 154, ../SASS/bootstrap-custom.scss */
+/* line 163, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .panel-heading .panel-title {
   text-align: center;
   font-size: 0.85em;
   font-weight: bold;
 }
-/* line 159, ../SASS/bootstrap-custom.scss */
+/* line 168, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .panel-heading:hover {
   color: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -9029,27 +9038,27 @@ a.list-group-item.delete:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 164, ../SASS/bootstrap-custom.scss */
+/* line 173, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a {
   color: #ADADAD;
   text-decoration: none;
 }
-/* line 168, ../SASS/bootstrap-custom.scss */
+/* line 177, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.parent-menu {
   outline: 0;
   display: block;
   background: rgba(0, 0, 0, 0.2);
 }
-/* line 172, ../SASS/bootstrap-custom.scss */
+/* line 181, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.parent-menu:not(.collapsed) {
   border-radius: 4px 0px 0px 0px;
   color: #4da1e4;
 }
-/* line 179, ../SASS/bootstrap-custom.scss */
+/* line 188, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.parent-menu:hover, #leftnav .panel a.parent-menu:not(.collapsed) {
   border-radius: 4px 0px 0px 4px;
 }
-/* line 183, ../SASS/bootstrap-custom.scss */
+/* line 192, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.075);
@@ -9062,12 +9071,12 @@ a.list-group-item.delete:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 190, ../SASS/bootstrap-custom.scss */
+/* line 199, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item > span {
   font-size: 0.9em;
   margin-left: 0.5em;
 }
-/* line 194, ../SASS/bootstrap-custom.scss */
+/* line 203, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item:hover {
   text-decoration: none;
   color: #eee;
@@ -9080,7 +9089,7 @@ a.list-group-item.delete:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 202, ../SASS/bootstrap-custom.scss */
+/* line 211, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item.active {
   background: #fafafa;
   text-shadow: none;
@@ -9090,17 +9099,17 @@ a.list-group-item.delete:hover {
   -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
 }
-/* line 212, ../SASS/bootstrap-custom.scss */
+/* line 221, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item:last-child {
   border-bottom: none;
 }
-/* line 215, ../SASS/bootstrap-custom.scss */
+/* line 224, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.075);
 }
 
 @media (max-width: 992px) {
-  /* line 222, ../SASS/bootstrap-custom.scss */
+  /* line 231, ../SASS/bootstrap-custom.scss */
   .float-menu {
     position: absolute;
     width: 225px;
@@ -9110,19 +9119,19 @@ a.list-group-item.delete:hover {
     background-color: #232C3A;
   }
 
-  /* line 230, ../SASS/bootstrap-custom.scss */
+  /* line 239, ../SASS/bootstrap-custom.scss */
   #leftnav {
     overflow-y: scroll;
     z-index: 8888;
   }
 
-  /* line 234, ../SASS/bootstrap-custom.scss */
+  /* line 243, ../SASS/bootstrap-custom.scss */
   .navbar-toggle {
     display: block;
   }
 }
 /* User menu styles */
-/* line 240, ../SASS/bootstrap-custom.scss */
+/* line 249, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;
@@ -9147,7 +9156,7 @@ a.list-group-item.delete:hover {
 }
 
 /* Speech bubble styles (for chat and comments) */
-/* line 265, ../SASS/bootstrap-custom.scss */
+/* line 274, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9159,7 +9168,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-/* line 277, ../SASS/bootstrap-custom.scss */
+/* line 286, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9173,7 +9182,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-/* line 291, ../SASS/bootstrap-custom.scss */
+/* line 300, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -9193,55 +9202,55 @@ a.list-group-item.delete:hover {
 /* PORTFOLIO */
 /* portfolio datatable 'all courses' button fix */
 @media (min-width: 768px) {
-  /* line 311, ../SASS/bootstrap-custom.scss */
+  /* line 320, ../SASS/bootstrap-custom.scss */
   div.all_courses {
     float: left;
   }
 }
 /* THEME OPTIONS */
 /* Theme options legend STYLING*/
-/* line 318, ../SASS/bootstrap-custom.scss */
+/* line 327, ../SASS/bootstrap-custom.scss */
 legend.theme_options_legend {
   font-size: 18px;
   margin-bottom: 30px;
 }
-/* line 321, ../SASS/bootstrap-custom.scss */
+/* line 330, ../SASS/bootstrap-custom.scss */
 legend.theme_options_legend:not(:first-child) {
   margin-top: 30px;
 }
 
 /* ADMIN SETTINGS */
 /* Affix (floating sidebar) styling */
-/* line 328, ../SASS/bootstrap-custom.scss */
+/* line 337, ../SASS/bootstrap-custom.scss */
 .affix {
   top: 15px;
 }
 
-/* line 331, ../SASS/bootstrap-custom.scss */
+/* line 340, ../SASS/bootstrap-custom.scss */
 .affix-bottom {
   position: relative;
 }
 
 @media (min-width: 768px) {
-  /* line 335, ../SASS/bootstrap-custom.scss */
+  /* line 344, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 20%;
   }
 }
 @media (min-width: 992px) {
-  /* line 340, ../SASS/bootstrap-custom.scss */
+  /* line 349, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 18%;
   }
 }
 @media (min-width: 1200px) {
-  /* line 345, ../SASS/bootstrap-custom.scss */
+  /* line 354, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 17%;
   }
 }
 @media (min-width: 1450px) {
-  /* line 350, ../SASS/bootstrap-custom.scss */
+  /* line 359, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 12.4%;
   }
@@ -9249,7 +9258,7 @@ legend.theme_options_legend:not(:first-child) {
 /* DOCUMENTS */
 /* styles for the case that documents 
 open in a modal with the help of an iframe */
-/* line 358, ../SASS/bootstrap-custom.scss */
+/* line 367, ../SASS/bootstrap-custom.scss */
 .iframe-container {
   padding-bottom: 60%;
   padding-top: 30px;
@@ -9257,7 +9266,7 @@ open in a modal with the help of an iframe */
   overflow: hidden;
 }
 
-/* line 365, ../SASS/bootstrap-custom.scss */
+/* line 374, ../SASS/bootstrap-custom.scss */
 .iframe-container iframe,
 .iframe-container object,
 .iframe-container embed {
@@ -9271,7 +9280,7 @@ open in a modal with the help of an iframe */
 
 /* LOGIN */
 @media (max-width: 768px) {
-  /* line 376, ../SASS/bootstrap-custom.scss */
+  /* line 385, ../SASS/bootstrap-custom.scss */
   .login-form {
     margin-right: 5%;
     margin-left: 5%;
