@@ -53,8 +53,8 @@ final class CloudDriveManager {
     }
 
     public static function renderAsButtons() {
-        $result = "\n<script src=\"../../js/colorbox/jquery.colorbox.min.js\"></script>
-<link rel=\"stylesheet\" href=\"../../js/colorbox/colorbox.css\"/>
+        global $langPathUploadFile;
+        $result = "
 <script>
     function authorizeDrive(driveType) {
         win = window.open('../drives/popup.php?" . CloudDriveManager::DRIVE . "=' + driveType, 'Connecting... ' ,'height=600,width=400,scrollbars=yes');
@@ -64,19 +64,40 @@ final class CloudDriveManager {
                 window.location.reload();
             }
         }, 1000);
-    }
-    $(function ()
-    {
-        $(\".driveconn\").colorbox({iframe:true, innerWidth:424, innerHeight:330});    
-    })
+    }    
     function callback(file) {
         window.location.href = window.location.href + '&" . CloudDriveManager::FILEPENDING . "=' + encodeURIComponent(file);
     }
-</script>\n";
+    $(document).ready(function(){
+        $('#tree_container').on('show.bs.modal', function (event) {
+            var source = $(event.relatedTarget); 
+            $('#fileTreeDemo').fileTree({root: '/', script: '../drives/fileprovider.php?' + source.data('drive') , loadMessage: 'Please wait...'}, function (file) {
+                $('tree_container').modal('hide');
+                callback(file);
+            });
+        });
+    });
+</script>
+<script src='../drives/jquery_filetree/jqueryFileTree.js' type='text/javascript'></script>
+        <link href='../drives/jquery_filetree/jqueryFileTree.css' rel='stylesheet' type='text/css' media='screen' />
 
+<div class='modal fade' id='tree_container' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+  <div class='modal-dialog'>
+    <div class='modal-content'>
+      <div class='modal-header'>
+        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+        <h4 class='modal-title' id='myModalLabel'>".$langPathUploadFile."</h4>
+      </div>
+      <div class='modal-body' style=' overflow:auto;'>
+        <div id='fileTreeDemo' class='browsearea' ></div>
+      </div>      
+    </div>
+  </div>
+</div>";
+        //href=\"../drives/filebrowser.php?" . $drive->getDriveDefaultParameter() . "\"
         foreach (CloudDriveManager::getValidDrives() as $drive) {
             if ($drive->isAuthorized()) {
-                $result .="<a class='btn btn-default driveconn' href=\"../drives/filebrowser.php?" . $drive->getDriveDefaultParameter() . "\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
+                $result .="<a class='btn btn-default vagelis' href='javascript:void(0);'  data-toggle=\"modal\" data-target=\"#tree_container\" data-drive=\"".$drive->getDriveDefaultParameter()."\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
             } else {
                 $result .="<a class='btn btn-default' href=\"javascript:void(0)\" onclick=\"authorizeDrive('" . $drive->getName() . "')\"><i class='fa fa-plug space-after-icon'></i>" . $drive->getDisplayName() . "</a> \n";
             }
