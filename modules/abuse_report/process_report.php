@@ -139,13 +139,19 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $url = $urlServer."modules/link/?course=".course_id_to_code($cid);
         }
         
-        $reports_cats = array('rudeness' => $langRudeness,
-                              'spam' => $langSpam,
-                              'other' => $langOther);
+        $v = Database::get()->querySingle("SELECT visible FROM course_module
+                                WHERE module_id = ?d AND
+                                course_id = ?d", MODULE_ID_DROPBOX, $cid)->visible;
         
-        $msg_body = sprintf($langAbuseReportPMBody, $content_type, $reports_cats[$reason], q($msg), $content, $url);
-        
-        $pm = new Msg($uid, $cid, $langAbuseReport, $msg_body, $editors);
+        if ($v == 1) {
+            $reports_cats = array('rudeness' => $langRudeness,
+                                  'spam' => $langSpam,
+                                  'other' => $langOther);
+            
+            $msg_body = sprintf($langAbuseReportPMBody, $content_type, $reports_cats[$reason], q($msg), $content, $url);
+            
+            $pm = new Msg($uid, $cid, $langAbuseReport, $msg_body, $editors);
+        }
         
         $response[0] = 'succes';
         $response[1] = '<p class="text-success">'.$langAbuseReportSaveSuccess.'</p>';

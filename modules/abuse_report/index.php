@@ -85,22 +85,24 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
             
             Database::get()->query("UPDATE abuse_report SET status = ?d WHERE id = ?d", 0, $id);
             
-            //send PM to user that created the report and other course editors
-            $result = Database::get()->queryArray("SELECT user_id FROM course_user
-                WHERE course_id = ?d AND (status = ?d OR editor = ?d) AND user_id <> ?d", $course_id, 1, 1, $uid);
-            $recipients = array();
-            $recipients[] = $user_id;
-            foreach ($result as $r) {
-                $recipients[] = $r->user_id;
+            if (visible_module(MODULE_ID_DROPBOX)) {
+                //send PM to user that created the report and other course editors
+                $result = Database::get()->queryArray("SELECT user_id FROM course_user
+                    WHERE course_id = ?d AND (status = ?d OR editor = ?d) AND user_id <> ?d", $course_id, 1, 1, $uid);
+                $recipients = array();
+                $recipients[] = $user_id;
+                foreach ($result as $r) {
+                    $recipients[] = $r->user_id;
+                }
+                
+                $reports_cats = array('rudeness' => $langRudeness,
+                                      'spam' => $langSpam,
+                                      'other' => $langOther);
+                
+                $msg_body = sprintf($langAbuseReportClosePMBody, $content_type, $reports_cats[$reason], q($message), $content, $url);
+                
+                $pm = new Msg($uid, $course_id, $langMsgRe.$langAbuseReport, $msg_body, $recipients);
             }
-            
-            $reports_cats = array('rudeness' => $langRudeness,
-                                  'spam' => $langSpam,
-                                  'other' => $langOther);
-            
-            $msg_body = sprintf($langAbuseReportClosePMBody, $content_type, $reports_cats[$reason], q($message), $content, $url);
-            
-            $pm = new Msg($uid, $course_id, $langMsgRe.$langAbuseReport, $msg_body, $recipients);
             
             Session::Messages($langCloseReportSuccess, 'alert-success');
             redirect_to_home_page("modules/abuse_report/index.php?course=$course_code");
