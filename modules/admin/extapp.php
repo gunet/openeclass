@@ -99,12 +99,12 @@ if ($appName) {
         }
         $tool_content .= $app->getDisplayName() . "</a></div><div class=\"mini-dashbord text-center text-success\" style=\"font-size:20px; margin-bottom: 10px;\"><i class=\"fa fa-toggle-on\"></i></div></td>\n";
 
-        $tool_content .= "<td>" . $app->getShortDescription() . "</td>\n";
+        $tool_content .= "<td class=\"text-muted\">" . $app->getShortDescription() . "</td>\n";
         $tool_content .="</tr>\n";
     }
     $tool_content .="<tr>\n";
     $tool_content .= "<td style=\"width:90px; padding:0px;\"><div class=\"text-center\" style=\"padding:10px;\"><a href=\"bbbmoduleconf.php\"><img class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></div><div class=\"mini-dashbord text-center text-danger\" style=\"font-size : 20px; margin-bottom: 10px;\"><i class=\"fa fa-toggle-on fa-flip-horizontal\"></i></div></td>\n";
-    $tool_content .= "<td class=\"text-muted\"><p>Το υποσύστημα <b>Τηλεσυνεργασίας</b> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p><p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p></td>\n";
+    $tool_content .= "<td class=\"text-muted\">$langBBBDescription</td>\n";
     $tool_content .="</tr>\n";
 
     $tool_content.="</table>\n";
