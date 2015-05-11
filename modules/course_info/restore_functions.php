@@ -673,6 +673,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         //Abuse Report
         if (file_exists("$restoreThis/abuse_report")) {
             restore_table($restoreThis, 'abuse_report', array('delete' => array('id'),
+            'set' => array('course_id' => $new_course_id),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'abuse_report_map_function',
             'map_function_data' => array($forum_post_map, 
