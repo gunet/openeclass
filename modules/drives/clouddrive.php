@@ -159,8 +159,7 @@ abstract class CloudDrive {
         return $result;
     }
 
-    public function isPresent() {
-        echo $this->getExtApp();
+    public function isPresent() {        
         return $this->getExtApp() != null;
     }
 
