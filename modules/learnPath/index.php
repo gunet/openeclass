@@ -556,13 +556,10 @@ foreach ($result as $list) { // while ... learning path list
         }
         
         //2.1 no progression found in DB
-        if (isset($result[$ind])){
-            if (($moduleNumber == 0) && (($result[$ind]->lock == 'CLOSE'))) {
+            if (($moduleNumber == 0) && ( isset($result[$ind]) && ($result[$ind]->lock == 'CLOSE'))) {
                 //must block next path because last module of this path never tried!
                 if ($uid) {
-                    if (!$is_editor) {
-                        $is_blocked = true;
-                    } // never blocked if allowed to edit
+                    $is_blocked = true;
                 } else { // anonymous : don't display the modules that are unreachable
                     $iterator++; // trick to avoid having the "no modules" msg to be displayed
                     break;
@@ -572,24 +569,21 @@ foreach ($result as $list) { // while ... learning path list
             //2.2. deal with progression found in DB if at leats one module in this path
             if ($moduleNumber != 0) {
                 $listblock2 = $resultblock2[0];
-                if (($listblock2->credit == "NO-CREDIT") && ($result[$ind]->lock == 'CLOSE')) {
+                if (($listblock2->credit == "NO-CREDIT") && (isset($result[$ind]) && $result[$ind]->lock == 'CLOSE')) {
                     //must block next path because last module of this path not credited yet!
                     if ($uid) {
-                        if (!$is_editor) {
-                            $is_blocked = true;
-                        } // never blocked if allowed to edit
+                        $is_blocked = true;
                     } else { // anonymous : don't display the modules that are unreachable
                         break;
                     }
                 }
             }
-        }
         
     } else {  //else of !$is_blocked condition , we have already been blocked before, so we continue beeing blocked : we don't display any links to next paths any longer
         if(!$is_editor){
             $tool_content .= "<td><a href='javascript:void(0)' class='restrict_learn_path' data-toggle='modal' data-target='#restrictlp'>".htmlspecialchars($list->name)."</a>"/* .$list['minRaw'] */ . "<span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i></span></td>\n";
-        } else {
-            $tool_content .=  "<td><a href='learningPath.php?course='.$course_code.'&amp;path_id='.$list->learnPath_id.'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
+        } else { // if is editor he can access the learning path even if it is restricted
+            $tool_content .=  "<td><a href='learningPath.php?course=".$course_code."&amp;path_id=".$list->learnPath_id."'>" . htmlspecialchars($list->name) . "</a><span class='pull-right'><i class='fa fa-minus-circle' style='font-size:20px';></i>&nbsp;&nbsp;$play_button</span></td>\n";
         }
     }
 
