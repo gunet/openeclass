@@ -555,15 +555,14 @@ foreach ($result as $list) { // while ... learning path list
             $moduleNumber = 0;
         }
         
-        
         //2.1 no progression found in DB
         if (isset($result[$ind])){
-            if (($moduleNumber == 0) && ($result[$ind]->lock == 'CLOSE')) {
+            if (($moduleNumber == 0) && (($result[$ind]->lock == 'CLOSE'))) {
                 //must block next path because last module of this path never tried!
                 if ($uid) {
-
+                    if (!$is_editor) {
                         $is_blocked = true;
-                     // never blocked if allowed to edit
+                    } // never blocked if allowed to edit
                 } else { // anonymous : don't display the modules that are unreachable
                     $iterator++; // trick to avoid having the "no modules" msg to be displayed
                     break;
@@ -576,9 +575,9 @@ foreach ($result as $list) { // while ... learning path list
                 if (($listblock2->credit == "NO-CREDIT") && ($result[$ind]->lock == 'CLOSE')) {
                     //must block next path because last module of this path not credited yet!
                     if ($uid) {
-
+                        if (!$is_editor) {
                             $is_blocked = true;
-                         // never blocked if allowed to edit
+                        } // never blocked if allowed to edit
                     } else { // anonymous : don't display the modules that are unreachable
                         break;
                     }
