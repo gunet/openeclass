@@ -416,6 +416,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 	<br /><br />
 	<form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
     }
+    $_SESSION['langswitch'] = $lang;
     draw($tool_content);
 }
 
