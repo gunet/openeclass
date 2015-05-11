@@ -111,7 +111,7 @@ abstract class ExtApp {
     }
 
     protected function getBaseURL() {
-        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
+        return get_config('base_url');
     }
 
     public abstract function getDisplayName();
