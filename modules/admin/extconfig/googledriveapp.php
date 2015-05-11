@@ -35,6 +35,14 @@ class GoogleDriveApp extends OAuthDriveApp {
         return "GoogleDrive";
     }
 
+    public function getShortDescription() {
+        return $GLOBALS['langGoogleDriveShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langGoogleDriveLongDescription'];
+    }
+
     public function validateApp() {
         $keyPath = realpath(dirname(__FILE__) . "/../../drives/plugins") . "/googledrive_key.p12";
         if (file_exists($keyPath))

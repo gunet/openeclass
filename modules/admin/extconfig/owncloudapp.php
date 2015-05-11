@@ -35,4 +35,12 @@ class OwnCloudApp extends ExtApp {
         return "OwnCloud";
     }
 
+    public function getShortDescription() {
+        return $GLOBALS['langOwnCloudShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langOwnCloudLongDescription'];
+    }
+
 }
