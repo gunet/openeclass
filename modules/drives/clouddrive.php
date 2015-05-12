@@ -27,6 +27,8 @@ require_once $path . '/../admin/extconfig/externals.php';
 foreach (CloudDriveManager::$DRIVENAMES as $driveName)
     require_once 'plugins/' . strtolower($driveName) . '.php';
 
+load_js('filetree');
+
 final class CloudDriveManager {
 
     public static $DRIVENAMES = array("GoogleDrive", "OneDrive", "Dropbox");
@@ -78,9 +80,6 @@ final class CloudDriveManager {
         });
     });
 </script>
-<script src='../drives/jquery_filetree/jqueryFileTree.js' type='text/javascript'></script>
-        <link href='../drives/jquery_filetree/jqueryFileTree.css' rel='stylesheet' type='text/css' media='screen' />
-
 <div class='modal fade' id='tree_container' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
   <div class='modal-dialog'>
     <div class='modal-content'>
