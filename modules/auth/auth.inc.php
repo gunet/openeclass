@@ -204,7 +204,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
-            $unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = ";
+            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = " : "COLLATE utf8_bin = ";
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
             if ($result) {
                 $hasher = new PasswordHash(8, false);
@@ -214,14 +214,14 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
                     $password_encrypted = $hasher->HashPassword($test_password);
-                    Database::get()->query("UPDATE user SET password = ?s WHERE username COLLATE utf8_bin = ?s" ,$password_encrypted, $test_username);
+                    Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $result->id);
                 }
             }
             break;
 
         case '2':
             $pop3 = new pop3_class;
-            $pop3->hostname = $settings['pop3host'];                // POP 3 server host name
+            $pop3->hostname = $settings['pop3host'];    // POP 3 server host name
             $pop3->port = 110;                          // POP 3 server host port
             $user = $test_username;                     // Authentication user name
             $password = $test_password;                 // Authentication password
@@ -534,7 +534,7 @@ function process_login() {
             $sqlLogin = "SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username ";
             if (get_config('case_insensitive_usernames')) {
-                $sqlLogin = "= ?s";
+                $sqlLogin = "COLLATE utf8_general_ci = ?s";
             } else {
                 $sqlLogin = "COLLATE utf8_bin = ?s";
             }
@@ -812,7 +812,7 @@ function shib_cas_login($type) {
     }
     // user is authenticated, now let's see if he is registered also in db
     if (get_config('case_insensitive_usernames')) {
-        $sqlLogin = "= ?s";
+        $sqlLogin = "COLLATE utf8_general_ci = ?s";
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }

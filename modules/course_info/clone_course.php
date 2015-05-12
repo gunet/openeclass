@@ -43,7 +43,7 @@ if (isset($_POST['create_restored_course'])) {
     $success = doArchive($course_id, $course_code);
     
     if ($success !== 0) {
-        $retArr = unpack_zip_inner($webDir . "/courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip");
+        $retArr = unpack_zip_inner($webDir . "/courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip", TRUE);
         $restoreEntry = null;
         
         foreach ($retArr as $entry) {

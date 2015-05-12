@@ -643,7 +643,7 @@ function user_exists($login) {
     if (get_config('case_insensitive_usernames')) {
         $qry = "COLLATE utf8_general_ci = ?s";
     } else {
-        $qry = "= ?s";
+        $qry = "COLLATE utf8_bin = ?s";
     }
     $username_check = Database::get()->querySingle("SELECT id FROM user WHERE username $qry", $login);
     if ($username_check) {
@@ -664,7 +664,7 @@ function user_app_exists($login) {
     if (get_config('case_insensitive_usernames')) {
         $qry = "COLLATE utf8_general_ci = ?s";
     } else {
-        $qry = "= ?s";
+        $qry = "COLLATE utf8_bin = ?s";
     }
     $username_check = Database::get()->querySingle("SELECT id FROM user_request WHERE state = 1 AND username $qry", $login);
     if ($username_check) {
