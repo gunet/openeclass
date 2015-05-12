@@ -179,7 +179,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     
     if (!($upgrade_begin or get_config('dont_display_login_form'))) {        
         $tool_content .= "
-                        <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
+                        <div class='col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right login-form'>
                           <div class='wrapper-login-option'>";
         
         $show_seperator = count($authLink) > 1;

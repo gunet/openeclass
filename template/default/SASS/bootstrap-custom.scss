@@ -26,7 +26,283 @@ body
     max-width: 1920px;
 }
 
-/* Styles for headings, hr and titles --------------------------------------------------*/
+/* Navbar styles */
+.navbar-default
+{
+  border-radius: 4px 4px 0px 0px; 
+}
+
+/* Right Sidebar styles */
+a.toggle-active{
+    background-color: #e3e4e6 !important;
+}
+
+#sidebar-container{
+    display: none;
+    position: absolute;
+    width: 20.5em;
+    right: 0px;
+    overflow: hidden;
+    border-bottom: #c9c9c9;
+    z-index:300;
+
+    #sidebar{
+        position: relative;
+        width: 18.5em;
+        right: -18.5em;
+        //padding: 1.6em 0;
+        background-color: $color-sidebar;
+        word-wrap:break-word;
+        box-shadow: -3px 6px 7px 0px #999;
+        @include user-select(none);
+
+        .panel-group.outerpanel{
+            padding: 0px;
+            margin: 0px;
+            
+            > .panel{
+                padding-bottom: 5px;
+                background-color: $color-sidebar;
+                box-shadow: none !important;
+            }
+            .sidebar-mymessages{
+                color: #333;
+                font-size: 12px;
+            }
+            .sidebar-mymessages .list-item{
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border-bottom: 1px solid #ccc;
+            }
+            .sidebar-mymessages .list-item:last-child{
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                border-bottom: none;
+            }
+            .panel-body{
+                padding: 0px 8px;
+                border: none;
+            }
+            
+            .input-group{
+                margin: 5px 0;
+            }
+            .title
+            {
+                margin: 0;
+                padding: 2em 0em!important;
+                font-weight: 700;
+                font-size: 0.85em;
+                text-align: center;
+                overflow: hidden;
+
+                i.fa
+                {
+                    padding-right: 10px;
+                    opacity:.9;
+                    font-size: 16px;
+                }
+            }
+            .course-btn{
+                color: #888;
+                padding: 8px 0;
+                width: 24px;
+                
+                i{
+                    cursor: pointer;
+                }
+            }
+            #up.course-btn{
+                padding-bottom: 0px;
+            }
+            #down.course-btn{
+                padding-top: 0px;
+            }
+            .panel{ 
+                border: none;
+                margin: 0px;
+                @include border-radius(0px);
+            }
+
+            .panel-heading{
+                background-image: none;
+                border: none;
+                background-color: #DEE0E2;
+
+                h4{
+                    cursor: pointer;
+                }
+            }
+            .goto{
+                    display: inline-block;
+                    float: right;
+                    margin-right: 0.5em;
+                    font-size: 0.75em;
+                }
+                .goto:hover{
+                    text-decoration: none;
+                }
+            .innerpanel{
+                margin-bottom:0px;
+                
+                #innerpanel-container{
+                    position: relative;
+                    top: -1px;
+                    padding: 1px 0;
+                }
+                 
+                 .panel{
+                     margin: 6px 3px;
+                     box-shadow: none;
+                 }
+                 .panel:first-child{
+                     margin-top: 3px;
+                 }
+                 .panel:last-child{
+                     margin-bottom: 3px;
+                 }
+
+                .panel-heading{
+                    margin: 0px;
+                    padding: 0px;
+
+                    &>div{
+                        margin-left: 0px;
+                        margin-right: 0px;
+                    }
+                }
+                .panel-body{
+                    background-color: #efefef;
+                    border-top: none;
+                    color: #999;
+                }
+                a.lesson-title-link
+                {
+                    display: block;
+                    float: left;
+                    height: 37px;
+                    line-height: 37px;
+                    width: 80%;
+                    padding-left: 10px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    color: #4da1e4;
+                }
+                a.lesson-title-link:hover, a.lesson-title-link.active
+                {
+                    text-decoration: none;
+                    color: #1a70b1;
+                }
+                i.lesson-title-caret
+                {
+                    background-color: #efefef;
+                    display: block;
+                    float: right;
+                    height: 37px;
+                    width: 20%;
+                    text-align: center;
+                    line-height: 37px;
+                    border-left: solid 1px #ececec;
+                    color: #666;
+                }
+            }
+        }
+    }
+    h1,h2,h3,h4,h5,h6{
+        color: #686868;
+        font-weight: 600;
+    }
+    ul,li{
+        list-style-type: none;
+        padding: 0em;
+        margin: 0em;
+    }
+}
+#sidebar
+{
+    .side-list{
+        background: #f7f7f7;
+        border-top: none;
+        color: rgba(255,255,255,.9);
+        .panel-body{
+            padding: 6px 8px 10px !important;
+        }
+        .lesson-title{
+            height: 37px;
+            background: #fff;
+            font-size: 0.85em;
+            margin:0px;
+            padding: 0px;
+            cursor: pointer;
+            position: relative;
+            color: rgba(255,255,255,0.5);
+            font-weight: 600;      
+            margin: 0 16px;
+            border-top-width: 0px;
+            @include transition(all $transition-time linear);
+        }
+        ul{
+            font-size: 0.75em;
+
+            >li{
+                padding: 5px 5px;          
+            }
+        }
+        .lesson-id{
+            opacity: 0.5;
+            font-size:0.85em;
+            font-weight:700;
+        }
+        .lesson-professor{
+            color: #333;
+        }
+        .lesson-notifications{
+            margin-top:1em;
+            i{
+                color: #444 !important;
+            }
+            .item{
+                margin-right:1.5em;
+                position: relative;
+                .count{
+                    position: absolute;
+                    left: 0.8em;
+                    bottom: 0.8em;
+                    display: inline-block;
+                    text-align: center;
+                    background: $color-red;
+                    color: white;
+                    width: 1.5em;
+                    height: 1.5em;
+                    font-size:0.75em;
+                    font-weight: 600;
+                    //border: 2px solid #253447;
+                    @include border-radius(0.75em);
+                }
+                .fa{
+                    font-size: 1.2em;
+                    color: rgba(255,255,255,.8);
+                }    
+            }
+        }
+    }
+}
+
+/* Footer styles*/
+footer.footer
+{
+    text-align: center;
+    padding: 1em;
+    background: $color-footer;
+    color: rgb(167, 167, 167);
+    border-top: 1px solid #DBDBDB;
+    border-radius: 0 0 4px 4px;
+    height: 49px;
+    font-size: 12px;
+}
+
+/* Styles for headings, hr and titles */
 
 h1.page-title
 {
@@ -381,6 +657,183 @@ open in a modal with the help of an iframe */
 }
 
 /* LOGIN */
+.login-form{
+  position:relative;
+  overflow:hidden;
+}
+div.login-form {
+  font-size: 0.85em;
+  position: relative;
+  z-index: 99;
+  background: white;
+  border-radius: 25px;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  padding: 2em 2em;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+div.login-form:hover {
+  box-shadow: 0px 0px 20px 3px black;
+  -moz-box-shadow: 0px 0px 20px 3px black;
+  -webkit-box-shadow: 0px 0px 20px 3px black;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+div.login-form h2 {
+  text-align: center;
+  font-size: 1.8em;
+  margin: 2rem 0rem;
+  margin-top: 0rem;
+  color: #232c3a;
+}
+div.login-form .form-group {
+  margin: 0rem;
+}
+div.login-form .form-group > * {
+  display: inline-block;
+  float: none;
+}
+div.login-form .form-group input {
+  width: 82%;
+  border-bottom: 1px solid #eeeeee;
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-radius: 0px;
+  border-width: 1px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+  outline: none;
+  font-size: 1.1em;
+  padding: 0.4em;
+  line-height: 1.42857143;
+  color: #444444;
+}
+div.login-form .form-group input:focus {
+  border-color: #4da1e4;
+}
+div.login-form .form-group label {
+  width: 17%;
+  margin: 0;
+  text-align: center;
+}
+div.login-form .form-group i.fa {
+  font-size: 1.2em;
+  margin: 0;
+  color: #aaaaaa;
+}
+div.login-form .login-settings {
+  margin: 5px 0px 0px 0px;
+  font-size: 0.9em;
+}
+div.login-form .login-settings > div:first-child {
+  text-align: right;
+  padding: 5px 0;
+}
+div.login-form .login-settings > hr {
+  margin: 5px 0 10px;
+}
+div.login-form .login-settings .alt_login span:first-child {
+  font-weight: bold;
+}
+/* line 685, ../SASS/structure.scss */
+div.login-form .login-settings > * {
+  margin: 0;
+}
+div.login-form .login-settings .checkbox,
+div.login-form .login-settings .link {
+  color: rgba(0, 0, 0, 0.5);
+}
+div.login-form .login-settings .checkbox label,
+div.login-form .login-settings .link label {
+  font-weight: bold;
+}
+div.login-form .login-settings .link a {
+  float: right;
+  margin-top: 0.3em;
+  color: rgba(0, 0, 0, 0.5);
+}
+div.login-form .login-settings .checkbox label span {
+  margin-top: 0.3em;
+  display: inline-block;
+}
+div.login-form .btn.btn-login {
+  margin: 15px 0 5px;
+  width: 100%;
+  height: 4rem;
+  border-radius: 4rem;
+  font-weight: 600;
+  color: white;
+  background: #428bca;
+  letter-spacing: 0.1em;
+  outline: none;
+}
+div.login-form .btn.btn-login:hover {
+  background: #3071a9;
+}
+.wrapper-login-option{
+  width:300%;
+  transition:250ms margin ease-out;
+  -webkit-transition:250ms margin ease-out;
+  -moz-transition:250ms margin ease-out;
+  -o-transition:250ms margin ease-out;
+}
+
+.wrapper-login-option:after{  
+   content: "."; 
+   visibility: hidden; 
+   display: block; 
+   height: 0; 
+   clear: both;
+}
+
+.wrapper-login-option .login-option{
+  width:33.3%;
+  float:left;
+}
+
+
+.jumbotron.jumbotron-login{
+
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  margin-bottom:60px;
+  margin-top:10px;
+  min-height: 315px;
+
+  margin-left: -15px;
+  margin-right: -15px;
+
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+
+  background-color: #025694;
+  /* fallback from css grandient */
+  
+  background: url('../img/jumbotron-bg.png') repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  background-repeat: no-repeat;
+  background: url('../img/indexlogo.png') 10% 60% no-repeat, radial-gradient(closest-corner at 30% 60%, #009BCF, #025694);
+  background-size: 353px, cover;
+
+}
+
 @media(max-width: $screen-tablet){
   .login-form{
       margin-right: 5%;
