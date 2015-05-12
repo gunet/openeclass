@@ -848,7 +848,6 @@ $langSubTitle = "<br><strong>Tip: </strong>If you want to add a link to a page,
 $langLink = "Lien";
 $langInvalidLink = "Le lien n'a pas été ajouté. Le lien (ou son descriptif) est vide !";
 $langNotAllowed = "Opération non autorisée";
-$langListFaculteActions = "Liste $langOfFaculties – Actions";
 $langCodeFaculte1 = "Code $langOfFaculty";
 $langCodeFaculte2 = "(en caractères latins uniquement, p. ex. MATH)"
 ;
@@ -1047,7 +1046,6 @@ $langContact = 'Nous contacter';
 $lang_forgot_pass = "Avez-vous oublié votre mot de passe ?";
 $langNewAnnounce = "Nouveau !";
 $langUnregUser = "Supprimer le compte";
-$langListFaculte = "Liste de Départements";
 $langListCourses = "Liste des Cours"
 ;
 $langAsynchronous = "Équipe de Télé-enseignement Asynchrone"
@@ -2930,7 +2928,7 @@ $langReturnToEditNode = '$langReturnToEditNode';
 $langEmptyNodeSelect = '$langEmptyNodeSelect';
 $langEmptyAddNode = '$langEmptyAddNode';
 $langSelect = '$langSelect';
-$langHierarchy = '$langHierarchy';
+$langHierarchy = 'Catégories des courses';
 $lang_course_multidep = '$lang_course_multidep';
 $lang_user_multidep = '$lang_user_multidep';
 $langManageDepartment = '$langManageDepartment';

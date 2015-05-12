@@ -1675,7 +1675,6 @@ $langExternalLinks = "Εξωτερικοί Σύνδεσμοι";
 /* * *********************************************
  * faculte.php
  * ********************************************* */
-$langListFaculteActions = "Κατάλογος $langOfFaculties - Ενέργειες";
 $langCodeFaculte1 = "Κωδικός $langOfFaculty";
 $langCodeFaculte2 = "(με λατινικούς χαρακτήρες μόνο, π.χ. MATH)";
 $langAddFaculte = "Προσθήκη $langOfFaculties";
@@ -1921,7 +1920,6 @@ $langContact = 'Επικοινωνία';
 $lang_forgot_pass = "Ξεχάσατε το συνθηματικό σας;";
 $langNewAnnounce = "Νέα!";
 $langUnregUser = "Διαγραφή λογαριασμού";
-$langListFaculte = "Κατάλογος Τμημάτων";
 $langListCourses = "Μαθήματα";
 $langHierarchy = "Ιεραρχία Τμημάτων";
 $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης";
@@ -2801,7 +2799,6 @@ $langToUser = "στον χρήστη";
 // search_user.php
 $langUserNoneMasc = "-";
 $langTutor = "Υπεύθυνος Ομάδας";
-$langEditor = "Βοηθός εκπαιδευτή";
 $langTutorDefinition = "Διδάσκων (δικαίωμα να επιβλέπει τις ομάδες χρηστών)";
 $langAdminDefinition = "Διαχειριστής (δικαίωμα να αλλάζει το περιεχόμενο των μαθημάτων)";
 $langDeleteUserDefinition = "Διαγραφή (διαγραφή από τον κατάλογο χρηστών του <b>παρόντος</b> μαθήματος)";
