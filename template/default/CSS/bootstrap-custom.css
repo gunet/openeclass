@@ -9595,9 +9595,10 @@ open in a modal with the help of an iframe */
 .login-form {
   position: relative;
   overflow: hidden;
+  padding: 0em !important;
 }
 
-/* line 664, ../SASS/bootstrap-custom.scss */
+/* line 665, ../SASS/bootstrap-custom.scss */
 div.login-form {
   font-size: 0.85em;
   position: relative;
@@ -9617,7 +9618,7 @@ div.login-form {
   transition: all 120ms linear;
 }
 
-/* line 682, ../SASS/bootstrap-custom.scss */
+/* line 683, ../SASS/bootstrap-custom.scss */
 div.login-form:hover {
   box-shadow: 0px 0px 20px 3px black;
   -moz-box-shadow: 0px 0px 20px 3px black;
@@ -9629,7 +9630,7 @@ div.login-form:hover {
   transition: all 120ms linear;
 }
 
-/* line 692, ../SASS/bootstrap-custom.scss */
+/* line 693, ../SASS/bootstrap-custom.scss */
 div.login-form h2 {
   text-align: center;
   font-size: 1.8em;
@@ -9638,18 +9639,18 @@ div.login-form h2 {
   color: #232c3a;
 }
 
-/* line 699, ../SASS/bootstrap-custom.scss */
+/* line 700, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group {
   margin: 0rem;
 }
 
-/* line 702, ../SASS/bootstrap-custom.scss */
+/* line 703, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group > * {
   display: inline-block;
   float: none;
 }
 
-/* line 706, ../SASS/bootstrap-custom.scss */
+/* line 707, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group input {
   width: 82%;
   border-bottom: 1px solid #eeeeee;
@@ -9668,79 +9669,79 @@ div.login-form .form-group input {
   color: #444444;
 }
 
-/* line 723, ../SASS/bootstrap-custom.scss */
+/* line 724, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group input:focus {
   border-color: #4da1e4;
 }
 
-/* line 726, ../SASS/bootstrap-custom.scss */
+/* line 727, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group label {
   width: 17%;
   margin: 0;
   text-align: center;
 }
 
-/* line 731, ../SASS/bootstrap-custom.scss */
+/* line 732, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group i.fa {
   font-size: 1.2em;
   margin: 0;
   color: #aaaaaa;
 }
 
-/* line 736, ../SASS/bootstrap-custom.scss */
+/* line 737, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings {
   margin: 5px 0px 0px 0px;
   font-size: 0.9em;
 }
 
-/* line 740, ../SASS/bootstrap-custom.scss */
+/* line 741, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings > div:first-child {
   text-align: right;
   padding: 5px 0;
 }
 
-/* line 744, ../SASS/bootstrap-custom.scss */
+/* line 745, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings > hr {
   margin: 5px 0 10px;
 }
 
-/* line 747, ../SASS/bootstrap-custom.scss */
+/* line 748, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .alt_login span:first-child {
   font-weight: bold;
 }
 
 /* line 685, ../SASS/structure.scss */
-/* line 751, ../SASS/bootstrap-custom.scss */
+/* line 752, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings > * {
   margin: 0;
 }
 
-/* line 755, ../SASS/bootstrap-custom.scss */
+/* line 756, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .checkbox,
 div.login-form .login-settings .link {
   color: rgba(0, 0, 0, 0.5);
 }
 
-/* line 759, ../SASS/bootstrap-custom.scss */
+/* line 760, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .checkbox label,
 div.login-form .login-settings .link label {
   font-weight: bold;
 }
 
-/* line 762, ../SASS/bootstrap-custom.scss */
+/* line 763, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .link a {
   float: right;
   margin-top: 0.3em;
   color: rgba(0, 0, 0, 0.5);
 }
 
-/* line 767, ../SASS/bootstrap-custom.scss */
+/* line 768, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .checkbox label span {
   margin-top: 0.3em;
   display: inline-block;
 }
 
-/* line 771, ../SASS/bootstrap-custom.scss */
+/* line 772, ../SASS/bootstrap-custom.scss */
 div.login-form .btn.btn-login {
   margin: 15px 0 5px;
   width: 100%;
@@ -9753,12 +9754,12 @@ div.login-form .btn.btn-login {
   outline: none;
 }
 
-/* line 782, ../SASS/bootstrap-custom.scss */
+/* line 783, ../SASS/bootstrap-custom.scss */
 div.login-form .btn.btn-login:hover {
   background: #3071a9;
 }
 
-/* line 785, ../SASS/bootstrap-custom.scss */
+/* line 786, ../SASS/bootstrap-custom.scss */
 .wrapper-login-option {
   width: 300%;
   transition: 250ms margin ease-out;
@@ -9767,7 +9768,7 @@ div.login-form .btn.btn-login:hover {
   -o-transition: 250ms margin ease-out;
 }
 
-/* line 793, ../SASS/bootstrap-custom.scss */
+/* line 794, ../SASS/bootstrap-custom.scss */
 .wrapper-login-option:after {
   content: ".";
   visibility: hidden;
@@ -9776,13 +9777,14 @@ div.login-form .btn.btn-login:hover {
   clear: both;
 }
 
-/* line 801, ../SASS/bootstrap-custom.scss */
+/* line 802, ../SASS/bootstrap-custom.scss */
 .wrapper-login-option .login-option {
   width: 33.3%;
   float: left;
+  padding: 2em;
 }
 
-/* line 807, ../SASS/bootstrap-custom.scss */
+/* line 809, ../SASS/bootstrap-custom.scss */
 .jumbotron.jumbotron-login {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -9807,7 +9809,7 @@ div.login-form .btn.btn-login:hover {
 }
 
 @media (max-width: 768px) {
-  /* line 838, ../SASS/bootstrap-custom.scss */
+  /* line 840, ../SASS/bootstrap-custom.scss */
   .login-form {
     margin-right: 5%;
     margin-left: 5%;

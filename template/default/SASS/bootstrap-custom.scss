@@ -660,6 +660,7 @@ open in a modal with the help of an iframe */
 .login-form{
   position:relative;
   overflow:hidden;
+  padding:0em!important;
 }
 div.login-form {
   font-size: 0.85em;
@@ -801,6 +802,7 @@ div.login-form .btn.btn-login:hover {
 .wrapper-login-option .login-option{
   width:33.3%;
   float:left;
+  padding: 2em;
 }
 
 
