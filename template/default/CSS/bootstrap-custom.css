@@ -2372,7 +2372,7 @@ pre code {
 @media (min-width: 1200px) {
   /* line 10, ../../../../../../Ruby200-x64/lib/ruby/gems/2.0.0/gems/bootstrap-sass-3.3.4.1/assets/stylesheets/bootstrap/_grid.scss */
   .container {
-    width: 1170px;
+    width: 1340px;
   }
 }
 
@@ -8840,26 +8840,101 @@ body {
   font-family: 'Open Sans';
 }
 
-/* Fluid container styles */
+/* Container styles */
 /* line 24, ../SASS/bootstrap-custom.scss */
 .container-fluid {
   padding: 0px;
   max-width: 1920px;
 }
 
+@media (max-width: 1339px) {
+  /* line 30, ../SASS/bootstrap-custom.scss */
+  .container {
+    width: 100%;
+  }
+}
+@media (max-width: 992px) {
+  /* line 35, ../SASS/bootstrap-custom.scss */
+  body > .container {
+    padding: 0;
+    margin: 0;
+  }
+}
+/*@media (min-width: 1340px){
+  .container {
+    width: 1340px;
+  }
+}*/
 /* Navbar styles */
-/* line 31, ../SASS/bootstrap-custom.scss */
+/* line 47, ../SASS/bootstrap-custom.scss */
+#header_section .nav-container {
+  border-bottom: 1px solid #DBDBDB;
+}
+
+/* line 51, ../SASS/bootstrap-custom.scss */
+#header.navbar {
+  margin-bottom: 0px;
+  padding: 0;
+  border: 0;
+  background-color: #eeeeee;
+}
+/* line 56, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav {
+  margin: 0;
+  float: right;
+}
+/* line 59, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav > li {
+  border-left: 1px solid #e7e7e7;
+  float: left;
+  cursor: pointer;
+}
+/* line 63, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav > li ul li a {
+  padding: 6px 17px 6px 4px;
+}
+/* line 66, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav > li a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  line-height: 22px;
+  -webkit-transition: all 120ms linear;
+  -moz-transition: all 120ms linear;
+  -o-transition: all 120ms linear;
+  -ms-transition: all 120ms linear;
+  transition: all 120ms linear;
+}
+/* line 71, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav > li a i.fa {
+  margin: 0 1em;
+}
+/* line 75, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav > li a:hover, #header.navbar .navbar-nav > li a:focus {
+  background: #4da1e4;
+  color: white;
+}
+/* line 81, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav > li .user-icon {
+  width: 20px;
+  margin-right: 10px;
+}
+/* line 85, ../SASS/bootstrap-custom.scss */
+#header.navbar .navbar-nav > li:last-child > a {
+  border-radius: 0 4px 0px 0px;
+}
+
+/* line 93, ../SASS/bootstrap-custom.scss */
 .navbar-default {
   border-radius: 4px 4px 0px 0px;
 }
 
 /* Right Sidebar styles */
-/* line 36, ../SASS/bootstrap-custom.scss */
+/* line 98, ../SASS/bootstrap-custom.scss */
 a.toggle-active {
   background-color: #e3e4e6 !important;
 }
 
-/* line 40, ../SASS/bootstrap-custom.scss */
+/* line 102, ../SASS/bootstrap-custom.scss */
 #sidebar-container {
   display: none;
   position: absolute;
@@ -8869,7 +8944,7 @@ a.toggle-active {
   border-bottom: #c9c9c9;
   z-index: 300;
 }
-/* line 49, ../SASS/bootstrap-custom.scss */
+/* line 111, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar {
   position: relative;
   width: 18.5em;
@@ -8883,44 +8958,44 @@ a.toggle-active {
   -o-user-select: none;
   user-select: none;
 }
-/* line 59, ../SASS/bootstrap-custom.scss */
+/* line 121, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel {
   padding: 0px;
   margin: 0px;
 }
-/* line 63, ../SASS/bootstrap-custom.scss */
+/* line 125, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel > .panel {
   padding-bottom: 5px;
   background-color: #eaeaea;
   box-shadow: none !important;
 }
-/* line 68, ../SASS/bootstrap-custom.scss */
+/* line 130, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-mymessages {
   color: #333;
   font-size: 12px;
 }
-/* line 72, ../SASS/bootstrap-custom.scss */
+/* line 134, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-mymessages .list-item {
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
 }
-/* line 77, ../SASS/bootstrap-custom.scss */
+/* line 139, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .sidebar-mymessages .list-item:last-child {
   padding-bottom: 10px;
   margin-bottom: 10px;
   border-bottom: none;
 }
-/* line 82, ../SASS/bootstrap-custom.scss */
+/* line 144, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-body {
   padding: 0px 8px;
   border: none;
 }
-/* line 87, ../SASS/bootstrap-custom.scss */
+/* line 149, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .input-group {
   margin: 5px 0;
 }
-/* line 91, ../SASS/bootstrap-custom.scss */
+/* line 153, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title {
   margin: 0;
   padding: 2em 0em !important;
@@ -8929,31 +9004,31 @@ a.toggle-active {
   text-align: center;
   overflow: hidden;
 }
-/* line 100, ../SASS/bootstrap-custom.scss */
+/* line 162, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .title i.fa {
   padding-right: 10px;
   opacity: .9;
   font-size: 16px;
 }
-/* line 106, ../SASS/bootstrap-custom.scss */
+/* line 168, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .course-btn {
   color: #888;
   padding: 8px 0;
   width: 24px;
 }
-/* line 111, ../SASS/bootstrap-custom.scss */
+/* line 173, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .course-btn i {
   cursor: pointer;
 }
-/* line 115, ../SASS/bootstrap-custom.scss */
+/* line 177, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel #up.course-btn {
   padding-bottom: 0px;
 }
-/* line 118, ../SASS/bootstrap-custom.scss */
+/* line 180, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel #down.course-btn {
   padding-top: 0px;
 }
-/* line 121, ../SASS/bootstrap-custom.scss */
+/* line 183, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel {
   border: none;
   margin: 0px;
@@ -8961,67 +9036,67 @@ a.toggle-active {
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
 }
-/* line 127, ../SASS/bootstrap-custom.scss */
+/* line 189, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-heading {
   background-image: none;
   border: none;
   background-color: #DEE0E2;
 }
-/* line 132, ../SASS/bootstrap-custom.scss */
+/* line 194, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .panel-heading h4 {
   cursor: pointer;
 }
-/* line 136, ../SASS/bootstrap-custom.scss */
+/* line 198, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .goto {
   display: inline-block;
   float: right;
   margin-right: 0.5em;
   font-size: 0.75em;
 }
-/* line 142, ../SASS/bootstrap-custom.scss */
+/* line 204, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .goto:hover {
   text-decoration: none;
 }
-/* line 145, ../SASS/bootstrap-custom.scss */
+/* line 207, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel {
   margin-bottom: 0px;
 }
-/* line 148, ../SASS/bootstrap-custom.scss */
+/* line 210, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel #innerpanel-container {
   position: relative;
   top: -1px;
   padding: 1px 0;
 }
-/* line 154, ../SASS/bootstrap-custom.scss */
+/* line 216, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel {
   margin: 6px 3px;
   box-shadow: none;
 }
-/* line 158, ../SASS/bootstrap-custom.scss */
+/* line 220, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel:first-child {
   margin-top: 3px;
 }
-/* line 161, ../SASS/bootstrap-custom.scss */
+/* line 223, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel:last-child {
   margin-bottom: 3px;
 }
-/* line 165, ../SASS/bootstrap-custom.scss */
+/* line 227, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading {
   margin: 0px;
   padding: 0px;
 }
-/* line 169, ../SASS/bootstrap-custom.scss */
+/* line 231, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-heading > div {
   margin-left: 0px;
   margin-right: 0px;
 }
-/* line 174, ../SASS/bootstrap-custom.scss */
+/* line 236, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel .panel-body {
   background-color: #efefef;
   border-top: none;
   color: #999;
 }
-/* line 180, ../SASS/bootstrap-custom.scss */
+/* line 242, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link {
   display: block;
   float: left;
@@ -9034,12 +9109,12 @@ a.toggle-active {
   text-overflow: ellipsis;
   color: #4da1e4;
 }
-/* line 193, ../SASS/bootstrap-custom.scss */
+/* line 255, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link:hover, #sidebar-container #sidebar .panel-group.outerpanel .innerpanel a.lesson-title-link.active {
   text-decoration: none;
   color: #1a70b1;
 }
-/* line 198, ../SASS/bootstrap-custom.scss */
+/* line 260, ../SASS/bootstrap-custom.scss */
 #sidebar-container #sidebar .panel-group.outerpanel .innerpanel i.lesson-title-caret {
   background-color: #efefef;
   display: block;
@@ -9051,29 +9126,29 @@ a.toggle-active {
   border-left: solid 1px #ececec;
   color: #666;
 }
-/* line 212, ../SASS/bootstrap-custom.scss */
+/* line 274, ../SASS/bootstrap-custom.scss */
 #sidebar-container h1, #sidebar-container h2, #sidebar-container h3, #sidebar-container h4, #sidebar-container h5, #sidebar-container h6 {
   color: #686868;
   font-weight: 600;
 }
-/* line 216, ../SASS/bootstrap-custom.scss */
+/* line 278, ../SASS/bootstrap-custom.scss */
 #sidebar-container ul, #sidebar-container li {
   list-style-type: none;
   padding: 0em;
   margin: 0em;
 }
 
-/* line 224, ../SASS/bootstrap-custom.scss */
+/* line 286, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list {
   background: #f7f7f7;
   border-top: none;
   color: rgba(255, 255, 255, 0.9);
 }
-/* line 228, ../SASS/bootstrap-custom.scss */
+/* line 290, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .panel-body {
   padding: 6px 8px 10px !important;
 }
-/* line 231, ../SASS/bootstrap-custom.scss */
+/* line 293, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-title {
   height: 37px;
   background: #fff;
@@ -9092,38 +9167,38 @@ a.toggle-active {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 245, ../SASS/bootstrap-custom.scss */
+/* line 307, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list ul {
   font-size: 0.75em;
 }
-/* line 248, ../SASS/bootstrap-custom.scss */
+/* line 310, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list ul > li {
   padding: 5px 5px;
 }
-/* line 252, ../SASS/bootstrap-custom.scss */
+/* line 314, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-id {
   opacity: 0.5;
   font-size: 0.85em;
   font-weight: 700;
 }
-/* line 257, ../SASS/bootstrap-custom.scss */
+/* line 319, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-professor {
   color: #333;
 }
-/* line 260, ../SASS/bootstrap-custom.scss */
+/* line 322, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-notifications {
   margin-top: 1em;
 }
-/* line 262, ../SASS/bootstrap-custom.scss */
+/* line 324, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-notifications i {
   color: #444 !important;
 }
-/* line 265, ../SASS/bootstrap-custom.scss */
+/* line 327, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-notifications .item {
   margin-right: 1.5em;
   position: relative;
 }
-/* line 268, ../SASS/bootstrap-custom.scss */
+/* line 330, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-notifications .item .count {
   position: absolute;
   left: 0.8em;
@@ -9140,14 +9215,14 @@ a.toggle-active {
   -webkit-border-radius: 0.75em;
   -moz-border-radius: 0.75em;
 }
-/* line 283, ../SASS/bootstrap-custom.scss */
+/* line 345, ../SASS/bootstrap-custom.scss */
 #sidebar .side-list .lesson-notifications .item .fa {
   font-size: 1.2em;
   color: rgba(255, 255, 255, 0.8);
 }
 
 /* Footer styles*/
-/* line 294, ../SASS/bootstrap-custom.scss */
+/* line 356, ../SASS/bootstrap-custom.scss */
 footer.footer {
   text-align: center;
   padding: 1em;
@@ -9159,8 +9234,14 @@ footer.footer {
   font-size: 12px;
 }
 
+@media (max-width: 992px) {
+  /* line 367, ../SASS/bootstrap-custom.scss */
+  footer.footer {
+    border-radius: 0px;
+  }
+}
 /* Styles for headings, hr and titles */
-/* line 308, ../SASS/bootstrap-custom.scss */
+/* line 374, ../SASS/bootstrap-custom.scss */
 h1.page-title {
   margin: 0em;
   font-weight: 400 !important;
@@ -9170,24 +9251,24 @@ h1.page-title {
 
 /* Default table class */
 /* Form styles */
-/* line 323, ../SASS/bootstrap-custom.scss */
+/* line 389, ../SASS/bootstrap-custom.scss */
 input[type="file"] {
   padding-top: 7px;
 }
 
 /* tinyMCE styles */
-/* line 328, ../SASS/bootstrap-custom.scss */
+/* line 394, ../SASS/bootstrap-custom.scss */
 .mce-toggle:hover {
   cursor: pointer;
 }
 
-/* line 332, ../SASS/bootstrap-custom.scss */
+/* line 398, ../SASS/bootstrap-custom.scss */
 .mce-toggle i.mce-ico.mce-i-none {
   width: 22px;
 }
 
 /* Search button styling */
-/* line 338, ../SASS/bootstrap-custom.scss */
+/* line 404, ../SASS/bootstrap-custom.scss */
 #btn-search {
   color: white;
   background-color: #232c3a;
@@ -9215,32 +9296,32 @@ input[type="file"] {
 }
 
 /* New Alert styles */
-/* line 343, ../SASS/bootstrap-custom.scss */
+/* line 409, ../SASS/bootstrap-custom.scss */
 .alert-default {
   background-image: linear-gradient(to bottom, #ffffff 0%, #e0e0e0 100%);
   border-color: #ccc;
 }
 
 /* New Panel Classes (to support action_button() in panel heading) */
-/* line 351, ../SASS/bootstrap-custom.scss */
+/* line 417, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 354, ../SASS/bootstrap-custom.scss */
+/* line 420, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-default > .panel-heading h3 {
   line-height: 45px;
 }
 
-/* line 361, ../SASS/bootstrap-custom.scss */
+/* line 427, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading {
   padding: 0 0 0 20px;
 }
-/* line 364, ../SASS/bootstrap-custom.scss */
+/* line 430, ../SASS/bootstrap-custom.scss */
 .panel-action-btn-primary > .panel-heading h3 {
   line-height: 45px;
 }
 
-/* line 371, ../SASS/bootstrap-custom.scss */
+/* line 437, ../SASS/bootstrap-custom.scss */
 .option-btn-cell .btn-group {
   display: flex;
   display: -webkit-flex;
@@ -9248,27 +9329,27 @@ input[type="file"] {
   display: -ms-flex;
 }
 
-/* line 377, ../SASS/bootstrap-custom.scss */
+/* line 443, ../SASS/bootstrap-custom.scss */
 .popover-content {
   padding: 9px 9px;
 }
-/* line 379, ../SASS/bootstrap-custom.scss */
+/* line 445, ../SASS/bootstrap-custom.scss */
 .popover-content .list-group {
   margin-bottom: 0px;
 }
 
-/* line 383, ../SASS/bootstrap-custom.scss */
+/* line 449, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete {
   color: #CE6B6B;
 }
 
-/* line 386, ../SASS/bootstrap-custom.scss */
+/* line 452, ../SASS/bootstrap-custom.scss */
 a.list-group-item.delete:hover {
   background-color: #CE6B6B;
   color: white;
 }
 
-/* line 390, ../SASS/bootstrap-custom.scss */
+/* line 456, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a {
   display: block;
   padding: 3px 20px;
@@ -9280,7 +9361,7 @@ a.list-group-item.delete:hover {
   white-space: nowrap;
 }
 
-/* line 400, ../SASS/bootstrap-custom.scss */
+/* line 466, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   background-color: #e8e8e8;
   background-image: -webkit-linear-gradient(top, whitesmoke 0, #e8e8e8 100%);
@@ -9291,7 +9372,7 @@ a.list-group-item.delete:hover {
   background-repeat: repeat-x;
 }
 
-/* line 409, ../SASS/bootstrap-custom.scss */
+/* line 475, ../SASS/bootstrap-custom.scss */
 .dropdown-menu > li > form > a:hover, .dropdown-menu > li > form > a:focus {
   text-decoration: none;
   color: #262626;
@@ -9300,20 +9381,20 @@ a.list-group-item.delete:hover {
 }
 
 /* Left navigation styles */
-/* line 417, ../SASS/bootstrap-custom.scss */
+/* line 483, ../SASS/bootstrap-custom.scss */
 #leftnav {
   top: -53px;
   padding: 0;
 }
-/* line 420, ../SASS/bootstrap-custom.scss */
+/* line 486, ../SASS/bootstrap-custom.scss */
 #leftnav .logo {
   margin: 0.8em 0.8em 0px;
 }
-/* line 422, ../SASS/bootstrap-custom.scss */
+/* line 488, ../SASS/bootstrap-custom.scss */
 #leftnav .logo img {
   margin: 0 auto;
 }
-/* line 424, ../SASS/bootstrap-custom.scss */
+/* line 490, ../SASS/bootstrap-custom.scss */
 #leftnav .panel {
   border: none;
   margin: 0;
@@ -9323,25 +9404,25 @@ a.list-group-item.delete:hover {
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 5px 0px 0px 5px;
 }
-/* line 432, ../SASS/bootstrap-custom.scss */
+/* line 498, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .list-group {
   border-radius: 0;
   box-shadow: none;
   -moz-box-shadow: none;
   -webkit-box-shadow: none;
 }
-/* line 436, ../SASS/bootstrap-custom.scss */
+/* line 502, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .panel-heading {
   border-radius: 4px 0px 0px 0px !important;
   padding: 10px 7px;
 }
-/* line 439, ../SASS/bootstrap-custom.scss */
+/* line 505, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .panel-heading .panel-title {
-  text-align: center;
+  text-align: left;
   font-size: 0.85em;
   font-weight: bold;
 }
-/* line 444, ../SASS/bootstrap-custom.scss */
+/* line 510, ../SASS/bootstrap-custom.scss */
 #leftnav .panel .panel-heading:hover {
   color: #4da1e4;
   -webkit-transition: all 120ms linear;
@@ -9350,45 +9431,45 @@ a.list-group-item.delete:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 449, ../SASS/bootstrap-custom.scss */
+/* line 515, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a {
   color: #ADADAD;
   text-decoration: none;
 }
-/* line 453, ../SASS/bootstrap-custom.scss */
+/* line 519, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.parent-menu {
   outline: 0;
   display: block;
   background: rgba(0, 0, 0, 0.2);
 }
-/* line 457, ../SASS/bootstrap-custom.scss */
+/* line 523, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.parent-menu:not(.collapsed) {
   border-radius: 4px 0px 0px 0px;
   color: #4da1e4;
 }
-/* line 464, ../SASS/bootstrap-custom.scss */
+/* line 530, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.parent-menu:hover, #leftnav .panel a.parent-menu:not(.collapsed) {
   border-radius: 4px 0px 0px 4px;
 }
-/* line 468, ../SASS/bootstrap-custom.scss */
+/* line 534, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item {
   border: none;
   border-top: 1px solid rgba(255, 255, 255, 0.075);
   padding: 0.6em 15px;
   background: transparent;
-  text-align: center;
+  text-align: left;
   -webkit-transition: all 120ms linear;
   -moz-transition: all 120ms linear;
   -o-transition: all 120ms linear;
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 475, ../SASS/bootstrap-custom.scss */
+/* line 541, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item > span {
   font-size: 0.9em;
   margin-left: 0.5em;
 }
-/* line 479, ../SASS/bootstrap-custom.scss */
+/* line 545, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item:hover {
   text-decoration: none;
   color: #eee;
@@ -9401,7 +9482,7 @@ a.list-group-item.delete:hover {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 487, ../SASS/bootstrap-custom.scss */
+/* line 553, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item.active {
   background: #fafafa;
   text-shadow: none;
@@ -9411,17 +9492,17 @@ a.list-group-item.delete:hover {
   -moz-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
   -webkit-box-shadow: -8px 0px 10px -4px rgba(0, 0, 0, 0.8);
 }
-/* line 497, ../SASS/bootstrap-custom.scss */
+/* line 563, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item:last-child {
   border-bottom: none;
 }
-/* line 500, ../SASS/bootstrap-custom.scss */
+/* line 566, ../SASS/bootstrap-custom.scss */
 #leftnav .panel a.list-group-item:first-child {
   border-top: 1px solid rgba(255, 255, 255, 0.075);
 }
 
 @media (max-width: 992px) {
-  /* line 507, ../SASS/bootstrap-custom.scss */
+  /* line 573, ../SASS/bootstrap-custom.scss */
   .float-menu {
     position: absolute;
     width: 225px;
@@ -9431,19 +9512,19 @@ a.list-group-item.delete:hover {
     background-color: #232C3A;
   }
 
-  /* line 515, ../SASS/bootstrap-custom.scss */
+  /* line 581, ../SASS/bootstrap-custom.scss */
   #leftnav {
     overflow-y: scroll;
     z-index: 8888;
   }
 
-  /* line 519, ../SASS/bootstrap-custom.scss */
+  /* line 585, ../SASS/bootstrap-custom.scss */
   .navbar-toggle {
     display: block;
   }
 }
 /* User menu styles */
-/* line 525, ../SASS/bootstrap-custom.scss */
+/* line 591, ../SASS/bootstrap-custom.scss */
 .navbar-nav .open .dropdown-menu {
   position: absolute;
   float: none;
@@ -9468,7 +9549,7 @@ a.list-group-item.delete:hover {
 }
 
 /* Speech bubble styles (for chat and comments) */
-/* line 550, ../SASS/bootstrap-custom.scss */
+/* line 616, ../SASS/bootstrap-custom.scss */
 .bubble {
   position: relative;
   width: 100%;
@@ -9480,7 +9561,7 @@ a.list-group-item.delete:hover {
   border: #dddddd solid 2px;
 }
 
-/* line 562, ../SASS/bootstrap-custom.scss */
+/* line 628, ../SASS/bootstrap-custom.scss */
 .bubble:after {
   content: '';
   position: absolute;
@@ -9494,7 +9575,7 @@ a.list-group-item.delete:hover {
   top: 9px;
 }
 
-/* line 576, ../SASS/bootstrap-custom.scss */
+/* line 642, ../SASS/bootstrap-custom.scss */
 .bubble:before {
   content: '';
   position: absolute;
@@ -9514,55 +9595,55 @@ a.list-group-item.delete:hover {
 /* PORTFOLIO */
 /* portfolio datatable 'all courses' button fix */
 @media (min-width: 768px) {
-  /* line 596, ../SASS/bootstrap-custom.scss */
+  /* line 662, ../SASS/bootstrap-custom.scss */
   div.all_courses {
     float: left;
   }
 }
 /* THEME OPTIONS */
 /* Theme options legend STYLING*/
-/* line 603, ../SASS/bootstrap-custom.scss */
+/* line 669, ../SASS/bootstrap-custom.scss */
 legend.theme_options_legend {
   font-size: 18px;
   margin-bottom: 30px;
 }
-/* line 606, ../SASS/bootstrap-custom.scss */
+/* line 672, ../SASS/bootstrap-custom.scss */
 legend.theme_options_legend:not(:first-child) {
   margin-top: 30px;
 }
 
 /* ADMIN SETTINGS */
 /* Affix (floating sidebar) styling */
-/* line 613, ../SASS/bootstrap-custom.scss */
+/* line 679, ../SASS/bootstrap-custom.scss */
 .affix {
   top: 15px;
 }
 
-/* line 616, ../SASS/bootstrap-custom.scss */
+/* line 682, ../SASS/bootstrap-custom.scss */
 .affix-bottom {
   position: relative;
 }
 
 @media (min-width: 768px) {
-  /* line 620, ../SASS/bootstrap-custom.scss */
+  /* line 686, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 20%;
   }
 }
 @media (min-width: 992px) {
-  /* line 625, ../SASS/bootstrap-custom.scss */
+  /* line 691, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 18%;
   }
 }
 @media (min-width: 1200px) {
-  /* line 630, ../SASS/bootstrap-custom.scss */
+  /* line 696, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 17%;
   }
 }
 @media (min-width: 1450px) {
-  /* line 635, ../SASS/bootstrap-custom.scss */
+  /* line 701, ../SASS/bootstrap-custom.scss */
   .affix {
     width: 12.4%;
   }
@@ -9570,7 +9651,7 @@ legend.theme_options_legend:not(:first-child) {
 /* DOCUMENTS */
 /* styles for the case that documents 
 open in a modal with the help of an iframe */
-/* line 643, ../SASS/bootstrap-custom.scss */
+/* line 709, ../SASS/bootstrap-custom.scss */
 .iframe-container {
   padding-bottom: 60%;
   padding-top: 30px;
@@ -9578,7 +9659,7 @@ open in a modal with the help of an iframe */
   overflow: hidden;
 }
 
-/* line 650, ../SASS/bootstrap-custom.scss */
+/* line 716, ../SASS/bootstrap-custom.scss */
 .iframe-container iframe,
 .iframe-container object,
 .iframe-container embed {
@@ -9591,14 +9672,14 @@ open in a modal with the help of an iframe */
 }
 
 /* LOGIN */
-/* line 660, ../SASS/bootstrap-custom.scss */
+/* line 726, ../SASS/bootstrap-custom.scss */
 .login-form {
   position: relative;
   overflow: hidden;
   padding: 0em !important;
 }
 
-/* line 665, ../SASS/bootstrap-custom.scss */
+/* line 732, ../SASS/bootstrap-custom.scss */
 div.login-form {
   font-size: 0.85em;
   position: relative;
@@ -9618,7 +9699,7 @@ div.login-form {
   transition: all 120ms linear;
 }
 
-/* line 683, ../SASS/bootstrap-custom.scss */
+/* line 750, ../SASS/bootstrap-custom.scss */
 div.login-form:hover {
   box-shadow: 0px 0px 20px 3px black;
   -moz-box-shadow: 0px 0px 20px 3px black;
@@ -9630,7 +9711,7 @@ div.login-form:hover {
   transition: all 120ms linear;
 }
 
-/* line 693, ../SASS/bootstrap-custom.scss */
+/* line 760, ../SASS/bootstrap-custom.scss */
 div.login-form h2 {
   text-align: center;
   font-size: 1.8em;
@@ -9639,18 +9720,18 @@ div.login-form h2 {
   color: #232c3a;
 }
 
-/* line 700, ../SASS/bootstrap-custom.scss */
+/* line 767, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group {
   margin: 0rem;
 }
 
-/* line 703, ../SASS/bootstrap-custom.scss */
+/* line 770, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group > * {
   display: inline-block;
   float: none;
 }
 
-/* line 707, ../SASS/bootstrap-custom.scss */
+/* line 774, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group input {
   width: 82%;
   border-bottom: 1px solid #eeeeee;
@@ -9669,79 +9750,79 @@ div.login-form .form-group input {
   color: #444444;
 }
 
-/* line 724, ../SASS/bootstrap-custom.scss */
+/* line 791, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group input:focus {
   border-color: #4da1e4;
 }
 
-/* line 727, ../SASS/bootstrap-custom.scss */
+/* line 794, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group label {
   width: 17%;
   margin: 0;
   text-align: center;
 }
 
-/* line 732, ../SASS/bootstrap-custom.scss */
+/* line 799, ../SASS/bootstrap-custom.scss */
 div.login-form .form-group i.fa {
   font-size: 1.2em;
   margin: 0;
   color: #aaaaaa;
 }
 
-/* line 737, ../SASS/bootstrap-custom.scss */
+/* line 804, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings {
   margin: 5px 0px 0px 0px;
   font-size: 0.9em;
 }
 
-/* line 741, ../SASS/bootstrap-custom.scss */
+/* line 808, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings > div:first-child {
   text-align: right;
   padding: 5px 0;
 }
 
-/* line 745, ../SASS/bootstrap-custom.scss */
+/* line 812, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings > hr {
   margin: 5px 0 10px;
 }
 
-/* line 748, ../SASS/bootstrap-custom.scss */
+/* line 815, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .alt_login span:first-child {
   font-weight: bold;
 }
 
 /* line 685, ../SASS/structure.scss */
-/* line 752, ../SASS/bootstrap-custom.scss */
+/* line 819, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings > * {
   margin: 0;
 }
 
-/* line 756, ../SASS/bootstrap-custom.scss */
+/* line 823, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .checkbox,
 div.login-form .login-settings .link {
   color: rgba(0, 0, 0, 0.5);
 }
 
-/* line 760, ../SASS/bootstrap-custom.scss */
+/* line 827, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .checkbox label,
 div.login-form .login-settings .link label {
   font-weight: bold;
 }
 
-/* line 763, ../SASS/bootstrap-custom.scss */
+/* line 830, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .link a {
   float: right;
   margin-top: 0.3em;
   color: rgba(0, 0, 0, 0.5);
 }
 
-/* line 768, ../SASS/bootstrap-custom.scss */
+/* line 835, ../SASS/bootstrap-custom.scss */
 div.login-form .login-settings .checkbox label span {
   margin-top: 0.3em;
   display: inline-block;
 }
 
-/* line 772, ../SASS/bootstrap-custom.scss */
+/* line 839, ../SASS/bootstrap-custom.scss */
 div.login-form .btn.btn-login {
   margin: 15px 0 5px;
   width: 100%;
@@ -9754,12 +9835,12 @@ div.login-form .btn.btn-login {
   outline: none;
 }
 
-/* line 783, ../SASS/bootstrap-custom.scss */
+/* line 850, ../SASS/bootstrap-custom.scss */
 div.login-form .btn.btn-login:hover {
   background: #3071a9;
 }
 
-/* line 786, ../SASS/bootstrap-custom.scss */
+/* line 853, ../SASS/bootstrap-custom.scss */
 .wrapper-login-option {
   width: 300%;
   transition: 250ms margin ease-out;
@@ -9768,7 +9849,7 @@ div.login-form .btn.btn-login:hover {
   -o-transition: 250ms margin ease-out;
 }
 
-/* line 794, ../SASS/bootstrap-custom.scss */
+/* line 861, ../SASS/bootstrap-custom.scss */
 .wrapper-login-option:after {
   content: ".";
   visibility: hidden;
@@ -9777,14 +9858,14 @@ div.login-form .btn.btn-login:hover {
   clear: both;
 }
 
-/* line 802, ../SASS/bootstrap-custom.scss */
+/* line 869, ../SASS/bootstrap-custom.scss */
 .wrapper-login-option .login-option {
   width: 33.3%;
   float: left;
   padding: 2em;
 }
 
-/* line 809, ../SASS/bootstrap-custom.scss */
+/* line 876, ../SASS/bootstrap-custom.scss */
 .jumbotron.jumbotron-login {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -9809,7 +9890,7 @@ div.login-form .btn.btn-login:hover {
 }
 
 @media (max-width: 768px) {
-  /* line 840, ../SASS/bootstrap-custom.scss */
+  /* line 907, ../SASS/bootstrap-custom.scss */
   .login-form {
     margin-right: 5%;
     margin-left: 5%;

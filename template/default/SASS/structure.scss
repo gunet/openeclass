@@ -8,68 +8,11 @@
 
 
 /* MAIN-CONTENT -------------------------------------------------------*/
-#main-content
+/*#main-content
 {
   background-color: $color-main-content;
   overflow: hidden;
-}
-#header_section .nav-container{
-    border-bottom: 1px solid #DBDBDB;
-}
-
-#header.navbar{
-    margin-bottom: 0px;
-    padding: 0;
-    border: 0;
-    background-color: $color-header;
-    
-		.navbar-nav{
-			margin: 0;
-			float:right;
-
-			>li{
-				border-left: 1px solid rgb(231, 231, 231);
-				float: left;
-                                cursor: pointer;
-                                ul li a{
-                                    padding: 6px 17px 6px 4px;
-                                }
-				a {
-					padding-top: 15px;
-					padding-bottom: 15px;
-                                        line-height: 22px;
-
-/*          @include transition(all $transition-time linear);*/
-
-					i.fa{
-						margin:0 1em;		
-					}
-
-					&:hover,
-					&:focus{
-						background: $color-hover;
-						color: white;
-					}
-				}
-
-        .user-icon
-        {
-          width: 20px;
-          margin-right: 10px;
-        }
-
-				&:last-child > a{
-					border-radius: 0 4px 0px 0px;
-				}
-			}
-		}
-
-	}
-
-/* INDEX --------------------------------------------------------------------------- */
-
-
-
+}*/
 
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 
@@ -77,53 +20,15 @@
 
 /* No breakpoints bellow 1366 or smth */
 
-@media (max-width: 1339px){
-  body > .container {
-    width: 100%;
-  }
-}
-
-@media (min-width: 1340px){
-  .container {
-    width: 1340px;
-  }
-}
-
-@media (min-width: 992px){
-  #leftnav .panel a.list-group-item,
-  #leftnav .panel .panel-heading .panel-title{
-    text-align: left;
-  }
-}
 
 @media (max-width: 992px){
-  body>.container{
-    padding:0;
-    margin:0;
-  }
-#leftnav .panel a.list-group-item,
-  #leftnav .panel .panel-heading .panel-title{
-    text-align: left;
-  }
   .navbar .navbar-nav > li a{
     padding: 15px 0.5em;    
   }
 
   #main-content,
   #header.navbar .navbar-nav > li:last-child > a,
-  .navbar-default, .footer{
-    border-radius: 0px!important;
+  .navbar-default {
+    border-radius: 0px;
   }
-}
-
-@media
-only screen and (-webkit-min-device-pixel-ratio: 2)      and (min-width: 992px),
-only screen and (   min--moz-device-pixel-ratio: 2)      and (min-width: 992px),
-only screen and (     -o-min-device-pixel-ratio: 2/1)    and (min-width: 992px),
-only screen and (        min-device-pixel-ratio: 2)      and (min-width: 992px),
-only screen and (                min-resolution: 192dpi) and (min-width: 992px),
-only screen and (                min-resolution: 2dppx)  and (min-width: 992px) { 
-
-  /* Medium screen, retina, stuff to override above media query */
-
 }

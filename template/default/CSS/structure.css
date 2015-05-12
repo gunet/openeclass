@@ -91,112 +91,23 @@
 }
 
 /* MAIN-CONTENT -------------------------------------------------------*/
-/* line 12, ../SASS/structure.scss */
-#main-content {
-  background-color: #fafafa;
+/*#main-content
+{
+  background-color: $color-main-content;
   overflow: hidden;
-}
-
-/* line 16, ../SASS/structure.scss */
-#header_section .nav-container {
-  border-bottom: 1px solid #DBDBDB;
-}
-
-/* line 20, ../SASS/structure.scss */
-#header.navbar {
-  margin-bottom: 0px;
-  padding: 0;
-  border: 0;
-  background-color: #eeeeee;
-}
-/* line 26, ../SASS/structure.scss */
-#header.navbar .navbar-nav {
-  margin: 0;
-  float: right;
-}
-/* line 30, ../SASS/structure.scss */
-#header.navbar .navbar-nav > li {
-  border-left: 1px solid #e7e7e7;
-  float: left;
-  cursor: pointer;
-}
-/* line 34, ../SASS/structure.scss */
-#header.navbar .navbar-nav > li ul li a {
-  padding: 6px 17px 6px 4px;
-}
-/* line 37, ../SASS/structure.scss */
-#header.navbar .navbar-nav > li a {
-  padding-top: 15px;
-  padding-bottom: 15px;
-  line-height: 22px;
-  /*          @include transition(all $transition-time linear);*/
-}
-/* line 44, ../SASS/structure.scss */
-#header.navbar .navbar-nav > li a i.fa {
-  margin: 0 1em;
-}
-/* line 49, ../SASS/structure.scss */
-#header.navbar .navbar-nav > li a:hover, #header.navbar .navbar-nav > li a:focus {
-  background: #4da1e4;
-  color: white;
-}
-/* line 56, ../SASS/structure.scss */
-#header.navbar .navbar-nav > li .user-icon {
-  width: 20px;
-  margin-right: 10px;
-}
-/* line 61, ../SASS/structure.scss */
-#header.navbar .navbar-nav > li:last-child > a {
-  border-radius: 0 4px 0px 0px;
-}
-
-/* INDEX --------------------------------------------------------------------------- */
+}*/
 /* MEDIA QUERIES -------------------------------------------------------------------*/
 /* No breakpoints bellow 1366 or smth */
-@media (max-width: 1339px) {
-  /* line 81, ../SASS/structure.scss */
-  body > .container {
-    width: 100%;
-  }
-}
-@media (min-width: 1340px) {
-  /* line 87, ../SASS/structure.scss */
-  .container {
-    width: 1340px;
-  }
-}
-@media (min-width: 992px) {
-  /* line 94, ../SASS/structure.scss */
-  #leftnav .panel a.list-group-item,
-  #leftnav .panel .panel-heading .panel-title {
-    text-align: left;
-  }
-}
 @media (max-width: 992px) {
-  /* line 100, ../SASS/structure.scss */
-  body > .container {
-    padding: 0;
-    margin: 0;
-  }
-
-  /* line 105, ../SASS/structure.scss */
-  #leftnav .panel a.list-group-item,
-  #leftnav .panel .panel-heading .panel-title {
-    text-align: left;
-  }
-
-  /* line 108, ../SASS/structure.scss */
+  /* line 25, ../SASS/structure.scss */
   .navbar .navbar-nav > li a {
     padding: 15px 0.5em;
   }
 
-  /* line 114, ../SASS/structure.scss */
+  /* line 31, ../SASS/structure.scss */
   #main-content,
   #header.navbar .navbar-nav > li:last-child > a,
-  .navbar-default, .footer {
-    border-radius: 0px !important;
+  .navbar-default {
+    border-radius: 0px;
   }
-}
-@media only screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min--moz-device-pixel-ratio: 2) and (min-width: 992px), only screen and (-o-min-device-pixel-ratio: 2 / 1) and (min-width: 992px), only screen and (min-device-pixel-ratio: 2) and (min-width: 992px), only screen and (min-resolution: 192dpi) and (min-width: 992px), only screen and (min-resolution: 2dppx) and (min-width: 992px) {
-  /* Medium screen, retina, stuff to override above media query */
 }

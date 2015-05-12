@@ -294,7 +294,7 @@ $screen-md-max:              ($screen-lg-min - 1);
 //* Number of columns in the grid.
 // $grid-columns:              12
 //* Padding between columns. Gets divided in half for the left and right.
-// $grid-gutter-width:         30px
+$grid-gutter-width:         30px;
 // Navbar collapse
 //* Point at which the navbar becomes uncollapsed.
 // $grid-float-breakpoint:     $screen-sm-min
@@ -316,9 +316,9 @@ $screen-md-max:              ($screen-lg-min - 1);
 // $container-md:                 $container-desktop
 
 // Large screen / wide desktop
-// $container-large-desktop:      ((1140px + $grid-gutter-width))
+$container-large-desktop:      ((1310px + $grid-gutter-width));
 //* For `$screen-lg-min` and up.
-// $container-lg:                 $container-large-desktop
+$container-lg:                 $container-large-desktop;
 
 //== Navbar
 //
