@@ -37,7 +37,7 @@ if (isset($_REQUEST['username'])) {
                 WHERE username ";
 
     if (get_config('case_insensitive_usernames')) {
-        $sql .= '= ?s';
+        $sql .= 'COLLATE utf8_general_ci = ?s';
     } else {
         $sql .= 'COLLATE utf8_bin = ?s';
     }
