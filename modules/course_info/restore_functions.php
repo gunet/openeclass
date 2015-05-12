@@ -37,12 +37,14 @@ function visibility_select($current) {
 }
 
 // Unzip backup file
-function unpack_zip_inner($zipfile) {
+function unpack_zip_inner($zipfile, $clone) {
     global $webDir, $uid;
     require_once 'include/lib/fileUploadLib.inc.php';
     
     $zip = new pclZip($zipfile);
-    validateUploadedZipFile($zip->listContent(), 3);
+    if (!$clone) {
+        validateUploadedZipFile($zip->listContent(), 3);
+    }
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
     mkpath($destdir);
@@ -65,7 +67,7 @@ function unpack_zip_inner($zipfile) {
 function unpack_zip_show_files($zipfile) {
     global $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
     
-    $retArr = unpack_zip_inner($zipfile);
+    $retArr = unpack_zip_inner($zipfile, FALSE);
     $retString = '';
     
     if (count($retArr) > 0) {    
