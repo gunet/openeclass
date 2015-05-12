@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-03-30 11:02:31
+// Generated 2015-05-12 15:35:23
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -177,7 +177,6 @@ $langVideo = "Multimédia";
 $langReturnToSearch = "Retour aux résultats de la recherche";
 $langReturnSearch = "Retour à la recherche";
 $langNoChangeHappened = "Aucun changement n'a été effectué !";
-$langFaculteCatalog = "Liste des Facultés";
 $langManyExist = "Il existe";
 $langReturnToAddFaculte = "Retour à : Ajouter";
 $langReturnToEditFaculte = "Retour à : Modifier";
@@ -688,7 +687,7 @@ $langCategoryTheory = "Τhéorie";
 $langCategoryLecture = "Conférence";
 $langCategoryNotes = "Notes";
 $langCategoryOther = "Autre";
-$langNotRequired = "Filling-in the fields is not mandatory";
+$langNotRequired = "Fields are optional.";
 $langCommands = "Actions";
 $langQuotaBar = "Visualiser l'espace disque";
 $langQuotaUsed = "Espace disque utilisé"
@@ -895,8 +894,8 @@ $langNewGroupCreate = "Créer un nouveau groupe d'utilisateurs";
 $langNewGroups = "Nombre de groupes d'utlisateurs";
 $langNewGroupMembers = "Nombre de participants";
 $langMax = "Max.";
-$langPlaces = "participants au groupe d'utilisateurs";
-$langGroupPlacesThis = "participants";
+$langPlaces = "participants au groupe d'utilisateurs (facultatif)";
+$langGroupPlacesThis = "participants (facultatif)";
 $langDeleteGroups = "Supprimer tous les groupes";
 $langGroupsAdded = "des groupes ont été ajoutés";
 $langGroupAdded = "un groupe d'utilisateurs a été ajouté";
@@ -936,6 +935,7 @@ $langGroupNoGroup = "".$langsStudents." non inscrits";
 $langGroupUsersList = "<a href=../user/user.php>Utilisateurs</a>";
 $langGroupNoTutor = "personne";
 $langGroupNone = "n'existe pas";
+$langGroupNoneMasc = "personne";
 $langAddTutors = "Gestion de la liste d'utilisateurs";
 $langForumGroup = "Forum du groupe";
 $langMyGroup = "mon groupe";
@@ -1478,13 +1478,7 @@ $m['unsub'] = "Le cours est fermé et vous n'avez plus le droit de vous en dési
 ;
 $titreBloc = array("Contenu du cours (Syllabus)", "Objectifs", "Bibliographie à étudier", "Méthodes didactiques et pédagogiques", "Méthodes d’évaluation / Examens", "Pré-requis recommandés", "Informations supplémentaires");
 $titreBlocNotEditable = array(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE);
-$langPerso = "Modifier l'apparence du portfolio";
-$langMyPersoDeadlines = "MES DÉLAIS";
 $langMyPersoAnnouncements = "MES DERNIÈRES ANNONCES";
-$langMyPersoDocs = "MES DERNIERS DOCUMENTS";
-$langMyPersoAgenda = "MON AGENDA";
-$langMyPersoForum = "MES FORUMS (MES DERNIERS POSTS)"
-;
 $langAssignment = "Devoir";
 $langDeadline = "Date limite";
 $langNoEventsExist = "Il n'y a pas d'événements";
@@ -1636,8 +1630,8 @@ $langSurname = "Nom";
 $langUsername = "Nom d'utilisateur (username)";
 $langConfirmation = "Confirmation du mot de passe";
 $langUserNotice = "max. 30 caractères";
-$langEmailNotice = "e-mail address is not required but, keep in mind that without it, " . $langsTeacher . "cannot send
-announcements to your mail box, neither you can use the feature 'forgot your password'";
+$langEmailNotice = "An email address is not required, but keep in mind that without it, you won't be able to receive
+announcements and notifications by email";
 $langAm = "Numéro d'étudiant";
 $langUserDetails = "Inscription $langStudent"
 ;
@@ -1988,7 +1982,7 @@ $langExplUpgrade = "The upgrade script will modify configuration file <em>config
    Please make sure that web server have access to <em>config.php</em>. For security reasons, current configuration of <em>config.php</em> will remain in file <em>config_backup.php</em>.";
 $langExpl2Upgrade = "De plus, pour des raisons de sécurité assurez-vous que vous avez gardé des copies de sauvegarde des bases de données.";
 $langWarnUpgrade = "ATTENTION !";
-$langUpgradeCont = "Tο continue upgrade process, please enter platform administrator username / password:";
+$langUpgradeCont = "Tο begin the upgrade process, please enter the username and password of the platform administrator.";
 $langUpgDetails = "Détails de connexion (nom d'utilisateur / mot de passe)";
 $langUpgMan = "instructions sur la mise à niveau";
 $langUpgLastStep = "avant de passer à l'étape suivante.";
@@ -2699,7 +2693,7 @@ $langAdministratorForum = 'Gestion des Forums';
 $langAdministratorGroup = "Gestion des Groupes d'apprenants";
 $langAltAuthStudentReq = "Activer la demande $langsOfStudent qui se connecte via un mode alternatif d'authentification";
 $langEditAuth = "Changer le mode d'authentification";
-$langEditAuthMethod = "Mode d'authentification";
+$langEditAuthMethod = "Mode d'authentification :";
 $langEditAuthSetPass = "Il faut définir un nouveau mot de passe pour l'utilisateur.";
 $langUsersOf = "des utilisateurs"
 ;
@@ -2928,7 +2922,7 @@ $langReturnToEditNode = '$langReturnToEditNode';
 $langEmptyNodeSelect = '$langEmptyNodeSelect';
 $langEmptyAddNode = '$langEmptyAddNode';
 $langSelect = '$langSelect';
-$langHierarchy = 'Catégories des courses';
+$langHierarchy = '$langHierarchy';
 $lang_course_multidep = '$lang_course_multidep';
 $lang_user_multidep = '$lang_user_multidep';
 $langManageDepartment = '$langManageDepartment';
@@ -3488,8 +3482,8 @@ $langNoBBBSesssions = "No teleconferences scheduled";
 $langBBB = "Teleconference";
 $langNewBBBSession = "Νew Τeleconference";
 $langNewBBBSessionInfo = "New teleconference info";
-$langNewBBBSessionStart = "Teleconference start";
-$langNewBBBSessionDesc = "Teleconference short description";
+$langNewBBBSessionStart = "Start";
+$langNewBBBSessionDesc = "Short description";
 $langNewBBBSessionType = "Teleconference type";
 $langNewBBBSessionPublic = "All platform users, even if only registered to other courses, can participate";
 $langNewBBBSessionPrivate = "Only users registered to this course can participate";
@@ -3900,8 +3894,8 @@ $langBlogPostNotAllowedDel = "You don't have permission to delete the blog post"
 $langBlogPostNotAllowedEdit = "You don't have permission to edit the blog post";
 $langReturnBlog = "Return to blog";
 $langBlogPerm = "Blog post authoring permissions";
-$langBlogPermStudents = "Teacher and students are allowed to author";
-$langBlogPermTeacher = "Only teacher is allowed to author";
+$langBlogPermStudents = "The $langsTeacher and $langsStudents are allowed to author";
+$langBlogPermTeacher = "Only $langsTeacher is allowed to author";
 $langCommentsDelConfirm = "Are you sure you want to delete the comment?";
 $langCommentsDelSuccess = "The comment was successfully deleted";
 $langCommentsDelFail = "Comment could not be deleted";
@@ -3961,13 +3955,13 @@ $langGeneralSettings = 'General Settings';
 $langLogo = 'Logo';
 $langLogoNormal = "(Normal)";
 $langLogoSmall = "(Small displays)";
-$langMainMenuLinkColor = "Main Menu Link Color";
-$langMainMenuBgColor = "Main Menu Background Color";
-$langMainMenuLinkHoverColor = "Main Menu Link Hover Color";
-$langMainMenuActiveLinkColor = "Main Menu Active Link Color";
-$langSubMenuLinkColor = "Submenu Link Color";
-$langSubMenuLinkHoverColor = "Submenu Link Hover Color";
-$langSubMenuLinkBgHoverColor = "Submenu Link Background Hover Color";
+$langMainMenuLinkColor = "Choice Group Link Color";
+$langMainMenuBgColor = "Menu Group Background Color";
+$langMainMenuLinkHoverColor = "Menu Group Link Hover Color";
+$langMainMenuActiveLinkColor = "Menu Group Active Link Color";
+$langSubMenuLinkColor = "Menu Group Item Link Color";
+$langSubMenuLinkHoverColor = "Menu Group Item Link Hover Color";
+$langSubMenuLinkBgHoverColor = "Menu Group Item Link Background Hover Color";
 $langBgColor = 'Background Color';
 $langBgImg = "Background Image";
 $langRepeatedImg = 'Repeated Image';
@@ -4119,3 +4113,63 @@ $langNoEBookSections = 'There are no sections specified';
 $langEBookPages = $langEBook. ' ' .$langPages;
 $langNewEBookPage = "New Page";
 $langEBookInfoEdit = "Edit e-Books' Info/Sections";
+$langDisableModules = 'Modules';
+$langDisableModulesHelp = 'You can select which modules will be disabled
+    for all courses platform-wide.';
+$langldap_id_attr = "Attribute for student ID";
+$langcasuserstudentid = "CAS SAML attribute for student ID";
+$langPrint = "Print";
+$langPurgeExercisesResults = 'Purge exercise results';
+$langPurgeExercisesResultsSuccess = 'Exercise results purged';
+$langDownload = 'Download';
+$langEditChange = 'Edit';
+$langResourceAccessLock = 'Lock';
+$langResourceAccessUnlock = 'Unlock';
+$langCancelAndEnter = 'Skip and enter';
+$langNoBlock = 'No block';
+$langRestrictedLPath = 'To progress to this and subsequent steps of the Learning Path, you need to have completed the previous steps';
+$langViewShow = 'Show';
+$langViewHide = 'Hide';
+$langLinksAdded = "The links have been added";
+$langAssignmentStartHelpBlock = "Click if you want to assign a different (i.e. future) assignment start date";
+$langAssignmentEndHelpBlock = "Click if you want to assign an assignment end date";
+$langEmailInfo = 'You can enter an email address in the following form.';
+$langUpgradeInProgress = 'Use is temporary restricted, because the platform is
+    being upgraded since %s ago. Please wait for the upgrade to finish before trying
+    to login.';
+$langAddOpenDelosVideoLink = "Add OpenDelos video link";
+$langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with current metadata.</p><p><span style='color:red'>*</span> The link already exists in course videolinks.</p><p><span style='color:red'>**</span> The link already exists, but OpenDelos platform holds a newer version.</p>";
+$langWorkSubType = "Submission Type";
+$langWorkOnlineText = "Online Text";
+$lang_personal_blog = "Activate personal blog";
+$lang_personal_blog_commenting = "Activate commenting on personal blog posts";
+$lang_personal_blog_rating = "Activate rating on personal blog posts";
+$lang_personal_blog_sharing = "Activate sharing on personal blog posts";
+$langPersoBlogDisabled = "Personal Blogs are disabled from the platform 's administrators.";
+$langMyBlog = "My Blog";
+$langUserBlog = "Personal Blog";
+$langBlogUserNotExist = "The owner of this personal blog does not exist";
+$langBlogPostCommenting = "Post Commenting";
+$langLayoutConfig = 'Layout Configuration';
+$langLogoConfig = 'Logo Configuration';
+$langMainMenuConfiguration = "Menu Group Configuration";
+$langSubMenuConfig = "Menu Group Item Configuration";
+$langBgColorConfig = 'Background Color Configuration';
+$langLinksCongiguration = 'Links Configuration';
+$langLoginConfiguration = "Login Screen Configuration";
+$langTag = 'Tag';
+$langOpenDelosDescription = "<p>OpenDelos is the open-source platform designed by GUnet for the administration, recording and play-back of videolectures.</p>
+<p>The platform supports the <a href='http://ocw-project.gunet.gr/'>Open Academic Courses</a> project along with the <a href='http://openeclass.org/'>Open eClass platform</a> and the national course seach portal also developed by GUnet.</p>";
+$langBBBDescription = "<p>Operation of the <b>Teleconference</b> Open eClass module is based on the open source <a href='http://www.bigbluebutton.org/' target='_blank'>BigBlueButton</a> platform which is a complete system of direct web-based communication and collaboration between instructors and trainees.</p> <p>BigBlueButton does not require the installation of additional software or hardware and runs directly from an Internet browser (Internet Explorer, Firefox, Chrome, Safari, etc.) via Adobe Flash Player. To connect Open eClass with a BigBlueButton installation plase select <a href='bbbmoduleconf.php'>Settings</a>.</p>";
+$langFtpShortDescription = "Link to FTP service";
+$langFtpLongDescription = "Enter the FTP link";
+$langGoogleDriveShortDescription = "Short Description about google drive";
+$langGoogleDriveLongDescription = "Long description about google drive";
+$langOneDriveShortDescription = "Short Description about one drive";
+$langOneDriveLongDescription = "Long description about one drive";
+$langDropboxShortDescription = "Short Description about dropbox";
+$langDropboxLongDescription = "Long description about dropbox";
+$langOwnCloudShortDescription = "Short Description about own cloud";
+$langOwnCloudLongDescription = "Long description about own cloud";
+$langWebDAVShortDescription = "Short Description about web dav";
+$langWebDAVLongDescription = "Long Description about web dav";
