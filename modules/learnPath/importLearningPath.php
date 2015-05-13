@@ -1255,9 +1255,11 @@ EOF;
 
     $tool_content .= "
             <div class='row'>
-                <div class='col-xs-12 notice add-gutter'>
-                    <p class='notice-header'>$langNote:</p>
-                    <p class='notice-body text-muted'>$langScormIntroTextForDummies</p>
+                <div class='col-xs-12'>
+                    <div class='alert alert-info'>
+                        <p>$langNote:</p>
+                        <p>$langScormIntroTextForDummies</p>
+                    </div>
                 </div>
             </div>
             ";

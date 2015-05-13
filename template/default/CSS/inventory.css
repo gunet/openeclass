@@ -91,1231 +91,24 @@
 }
 
 /* GLOBAL STYLES -----------------------------------------------------------------*/
-/* Extend bootstrap style - margins */
-/* line 14, ../SASS/inventory.scss */
-.no-margin {
-  margin: 0px !important;
-}
-
-/* line 15, ../SASS/inventory.scss */
-.margin-top {
-  margin-top: 15px !important;
-}
-
-/* line 16, ../SASS/inventory.scss */
-.margin-top-thin {
-  margin-top: 10px !important;
-}
-
-/* line 17, ../SASS/inventory.scss */
-.margin-top-fat {
-  margin-top: 20px !important;
-}
-
-/* line 18, ../SASS/inventory.scss */
-.margin-bottom {
-  margin-bottom: 15px !important;
-}
-
-/* line 19, ../SASS/inventory.scss */
-.margin-bottom-thin {
-  margin-bottom: 10px !important;
-}
-
-/* line 20, ../SASS/inventory.scss */
-.margin-bottom-fat {
-  margin-bottom: 20px !important;
-}
-
-/* line 21, ../SASS/inventory.scss */
-.margin-right {
-  margin-right: 15px !important;
-}
-
-/* line 22, ../SASS/inventory.scss */
-.margin-right-thin {
-  margin-right: 10px !important;
-}
-
-/* line 23, ../SASS/inventory.scss */
-.margin-right-fat {
-  margin-right: 20px !important;
-}
-
-/* line 24, ../SASS/inventory.scss */
-.margin-left {
-  margin-left: 15px  !important;
-}
-
-/* line 25, ../SASS/inventory.scss */
-.margin-left-thin {
-  margin-left: 10px !important;
-}
-
-/* line 26, ../SASS/inventory.scss */
-.margin-left-fat {
-  margin-left: 20px !important;
-}
-
-/* line 27, ../SASS/inventory.scss */
-.space-after-icon {
-  margin-right: 5px;
-}
-
-/* line 28, ../SASS/inventory.scss */
-.space-before-icon {
-  margin-left: 5px;
-}
-
-/* Extend bootstrap style - gutters and paddings */
-/* line 33, ../SASS/inventory.scss */
-.padding {
-  padding: 15px;
-}
-
-/* line 34, ../SASS/inventory.scss */
-.padding-thin {
-  padding: 10px;
-}
-
-/* line 35, ../SASS/inventory.scss */
-.padding-fat {
-  padding: 20px;
-}
-
-/* line 36, ../SASS/inventory.scss */
-.no-padding {
-  padding: 0px;
-}
-
-/* line 39, ../SASS/inventory.scss */
-.no-gutters {
-  padding-right: 0;
-  padding-left: 0;
-}
-
-/* line 44, ../SASS/inventory.scss */
-.add-gutter {
-  padding-left: 30px;
-  padding-right: 30px;
-}
-
-/* line 50, ../SASS/inventory.scss */
-.remove-gutter {
-  padding-left: 0px;
-  padding-right: 0px;
-}
-
-/* line 56, ../SASS/inventory.scss */
-.focused {
-  box-shadow: 0 0px 10px #bbbbbb !important;
-  -moz-box-shadow: 0 0px 10px #bbbbbb !important;
-  -webkit-box-shadow: 0 0px 10px #bbbbbb !important;
-}
-
-/* line 61, ../SASS/inventory.scss */
-.infotext {
-  font-size: 0.8em;
-  font-style: italic;
-  color: #888888;
-}
-
-/* Style for links -------------------------------------------------*/
-/* line 73, ../SASS/inventory.scss */
-a {
-  text-decoration: none;
-  color: #4da1e4;
-  outline: 0;
-}
-/* line 79, ../SASS/inventory.scss */
-a:hover {
-  text-decoration: underline;
-  outline: 0;
-}
-/* line 85, ../SASS/inventory.scss */
-a:focus {
-  outline: 0;
-}
-
-/* line 91, ../SASS/inventory.scss */
-#header_section, #footer_section {
-  padding: 0px;
-  margin: 0px;
-}
-
-/* line 95, ../SASS/inventory.scss */
-#header_section > div, #footer_section > div {
-  padding: 0px;
-}
-
-/* Styles for headings, hr and titles --------------------------------------------------*/
-/* line 102, ../SASS/inventory.scss */
-.descr_title {
-  float: right;
-}
-
 /* Font awesome icons seem to be looking better on specific sizes */
 /*.fa
 {
   font-size:1em !important;
 }*/
-/* line 116, ../SASS/inventory.scss */
-.content-title {
-  color: #888888;
-  font-weight: 500;
-  font-size: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-/* line 126, ../SASS/inventory.scss */
-.page-subtitle {
-  color: #555555;
-  font-size: 16px;
-  margin: 10px 0;
-}
-/* line 132, ../SASS/inventory.scss */
-.page-subtitle a {
-  text-decoration: none;
-}
-
-/* line 138, ../SASS/inventory.scss */
-.page-subtitle-name {
-  color: #555555;
-  font-size: 18px;
-  margin: 10px 0;
-}
-
-/* Extend bootstrap style - forms */
-/* line 147, ../SASS/inventory.scss */
-.form-control {
-  border-radius: 2px 2px 2px 2px !important;
-  -webkit-border-radius: 2px 2px 2px 2px !important;
-  -moz-border-radius: 2px 2px 2px 2px !important;
-}
-
-/* BREADCRUMB - Extend bootstrap style -------------------------------------------------------------------*/
-/* line 159, ../SASS/inventory.scss */
-.breadcrumb {
-  padding-left: 0px !important;
-  background-color: transparent !important;
-  margin-bottom: 1em !important;
-  color: #a7a7a7 !important;
-  font-size: 0.8em !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
-}
-
-/* TOOLBOX PANEL -----------------------------------------------------------------------------------------------*/
-/* line 171, ../SASS/inventory.scss */
-.toolbox {
-  padding: 0.65em 0.65em 0em 0.65em;
-  color: #333;
-  background: #f0f4f6;
-  border-top: 1px solid #d8d8d8;
-  border-bottom: 1px solid #f8f8f8;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  box-shadow: inset 0px -2px 8px #dddddd;
-  -moz-box-shadow: inset 0px -2px 8px #dddddd;
-  -webkit-box-shadow: inset 0px -2px 8px #dddddd;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  position: relative;
-  text-align: right;
-  margin-right: 0em;
-  display: inline-block;
-}
-/* line 186, ../SASS/inventory.scss */
-.toolbox ul:not(.dropdown-menu) {
-  display: block;
-  display: inline-block;
-  margin: 0px;
-  padding: 0px;
-}
-/* line 194, ../SASS/inventory.scss */
-.toolbox li {
-  list-style-type: none;
-}
-/* line 200, ../SASS/inventory.scss */
-.toolbox ul.toolbox-submenu {
-  display: none;
-}
-
-/* line 208, ../SASS/inventory.scss */
-.toolbox:hover .toolbox-submenu {
-  display: inline-block;
-}
-
-/* tiny-icons actions--------------------------------------------------------------------------- */
-/* line 216, ../SASS/inventory.scss */
-.tiny-icon {
-  color: #666;
-  font-size: 15px !important;
-  text-decoration: none;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 223, ../SASS/inventory.scss */
-.tiny-icon .tiny-icon-text {
-  font-size: 12px !important;
-}
-
-/* line 229, ../SASS/inventory.scss */
-.tiny-icon:hover {
-  color: #4da1e4;
-  text-decoration: none;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* line 236, ../SASS/inventory.scss */
-.tiny-icon-rss:hover {
-  color: #FFBB4F !important;
-  text-decoration: none;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* line 243, ../SASS/inventory.scss */
-.tiny-icon-green:hover {
-  color: #6bce6b !important;
-  text-decoration: none;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* line 250, ../SASS/inventory.scss */
-.tiny-icon-red:hover {
-  color: #ce6b6b !important;
-  text-decoration: none;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* TOOGLES -----------------------------------------------------------------------------*/
-/* line 262, ../SASS/inventory.scss */
-.btn-toggle {
-  padding: 0px;
-  height: 3rem;
-  width: 6rem;
-  position: relative;
-  border-radius: 5rem;
-  overflow: hidden;
-  background: #f0f4f6;
-  box-shadow: inset -3px 0px 2px #dddddd;
-  -moz-box-shadow: inset -3px 0px 2px #dddddd;
-  -webkit-box-shadow: inset -3px 0px 2px #dddddd;
-  border: 1px solid #d8d8d8;
-  outline: none !important;
-}
-
-/* line 277, ../SASS/inventory.scss */
-.btn-toggle.btn-toggle-on {
-  background: #4da1e4;
-  box-shadow: inset 3px 0px 2px #555555;
-  -moz-box-shadow: inset 3px 0px 2px #555555;
-  -webkit-box-shadow: inset 3px 0px 2px #555555;
-}
-
-/* line 282, ../SASS/inventory.scss */
-.btn-toggle:hover span {
-  background: #4da1e4;
-  color: white;
-  box-shadow: 0px 0px 4px black;
-  -moz-box-shadow: 0px 0px 4px black;
-  -webkit-box-shadow: 0px 0px 4px black;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* line 289, ../SASS/inventory.scss */
-.btn-toggle span.on {
-  display: none;
-}
-
-/* line 293, ../SASS/inventory.scss */
-.btn-toggle span.off {
-  display: inline-block;
-}
-
-/* line 297, ../SASS/inventory.scss */
-.btn-toggle.btn-toggle-on span.on {
-  display: inline-block;
-}
-
-/* line 301, ../SASS/inventory.scss */
-.btn-toggle.btn-toggle-on span.off {
-  display: none;
-}
-
-/* line 305, ../SASS/inventory.scss */
-.btn-toggle span {
-  border-radius: 5rem;
-  text-align: center;
-  vertical-align: middle;
-  line-height: 3rem;
-  display: inline-block;
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  left: 0px;
-  top: 0px;
-  background: white;
-  color: #555555;
-  box-shadow: 2px 0px 2px #dddddd;
-  -moz-box-shadow: 2px 0px 2px #dddddd;
-  -webkit-box-shadow: 2px 0px 2px #dddddd;
-}
-
-/* line 322, ../SASS/inventory.scss */
-.btn-toggle .on {
-  right: 0;
-  left: auto;
-}
-
-/* TABLE LIST -----------------------------------------------------------------------------------------------*/
-/* line 329, ../SASS/inventory.scss */
-ul.tablelist {
-  font-size: 0.8em;
-  margin: 0px;
-  padding: 0px;
-  cursor: default;
-  /*  li.list-item:first-child,
-     li.list-item:first-child .item-date{
-    -webkit-animation: NEW-ITEM-FX 3s 1;
-    -moz-animation:    NEW-ITEM-FX 3s 1;
-    -o-animation:      NEW-ITEM-FX 3s 1;
-    animation:         NEW-ITEM-FX 3s 1;
-    }*/
-}
-/* line 336, ../SASS/inventory.scss */
-ul.tablelist li.list-item {
-  position: relative;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  list-style-type: none;
-  border-bottom: 1px solid #eee;
-  background: white;
-  overflow: hidden;
-}
-/* line 346, ../SASS/inventory.scss */
-ul.tablelist li.list-item:last-child {
-  border-bottom: none;
-}
-/* line 351, ../SASS/inventory.scss */
-ul.tablelist li.list-item .max-height {
-  max-height: 3.35em;
-}
-/* line 356, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span:not(:last-child) {
-  border-right: 1px solid #eee;
-}
-/* line 361, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span:first-child {
-  border-left: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-}
-/* line 367, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols {
-  float: right;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  max-width: 95%;
-}
-/* line 377, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols > span,
-ul.tablelist li.list-item .item-title {
-  display: inline-block;
-}
-/* line 382, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-wholeline {
-  padding: 0.7em 0;
-  /*padding-right: 60px;*/
-  display: inline-block;
-}
-/* line 389, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-content {
-  font-size: 0.9em;
-}
-/* line 394, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols a {
-  width: 1em;
-  padding: 1em 1.4em;
-  display: inline-block;
-  text-align: center;
-  cursor: pointer;
-}
-/* line 404, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-date {
-  color: rgba(0, 0, 0, 0.6);
-  background: white;
-  width: 4.5em;
-  text-align: center;
-  vertical-align: top;
-}
-/* line 413, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options {
-  padding: 0px;
-  margin-left: -0.26em;
-  padding-right: 3.8em;
-}
-/* line 420, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options .options-icon {
-  position: absolute;
-  display: inline-block;
-  top: 0px;
-  right: 0px;
-  width: 1em;
-  text-align: center;
-  padding: 1em 1.4em;
-  color: #7E7E7E;
-  background: #F8F8F8;
-}
-/* line 433, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options:hover .options-icon {
-  background: #4da1e4;
-  color: white;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 440, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .options-content {
-  display: block;
-  margin-right: -25em;
-  background: #333333;
-  color: white;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 449, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-options:hover .options-content {
-  margin-right: 0em;
-  background: #333333;
-}
-/* line 455, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options a {
-  color: white;
-}
-/* line 459, ../SASS/inventory.scss */
-ul.tablelist li.list-item .item-right-cols .item-options a:hover {
-  color: white;
-  background: #4da1e4;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 466, ../SASS/inventory.scss */
-ul.tablelist li.list-item .text-title {
-  font-size: 1.3em;
-  padding-bottom: 5px;
-}
-/* line 472, ../SASS/inventory.scss */
-ul.tablelist li.list-item .text-grey {
-  font-style: italic;
-  color: #999999;
-}
-/* line 490, ../SASS/inventory.scss */
-ul.tablelist li.list-item:hover {
-  background: #FCFCFC;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* BOX LIST -----------------------------------------------------------------------------------------------*/
-/* line 503, ../SASS/inventory.scss */
-.boxlist {
-  padding: 0px;
-}
-/* line 508, ../SASS/inventory.scss */
-.boxlist .list-item {
-  display: block;
-  position: relative;
-  width: 100%;
-  padding: 0em;
-  margin-bottom: 1em;
-  overflow: hidden;
-  /*important for the transition*/
-  list-style-type: none;
-  background: white;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-/* line 521, ../SASS/inventory.scss */
-.boxlist .list-item.hidden {
-  background: rgba(255, 255, 255, 0.6);
-}
-/* line 526, ../SASS/inventory.scss */
-.boxlist .list-item.hidden .item-content {
-  opacity: 0.6;
-}
-/* line 531, ../SASS/inventory.scss */
-.boxlist .list-item:hover .side-header {
-  color: #eee;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 537, ../SASS/inventory.scss */
-.boxlist .list-item .item-content {
-  /*width: 93%;*/
-  /* a fallback for calc */
-  /*width: -webkit-calc(100% - 4em);
-  width: -moz-calc(100% - 4em);
-  width: calc(100% - 4em);*/
-  width: 100%;
-  position: relative;
-  display: inline-block;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-}
-/* line 550, ../SASS/inventory.scss */
-.boxlist .item-header {
-  padding: 0em 4em 1em 0em;
-  border-bottom: 1px solid #ccc;
-  margin-top: 1em;
-}
-/* line 557, ../SASS/inventory.scss */
-.boxlist .item-header h4.item-title {
-  margin: 0px;
-  font-size: 15px;
-  width: 85%;
-}
-/* line 564, ../SASS/inventory.scss */
-.boxlist .item-header .item-date {
-  font-size: 0.8em;
-  color: rgba(0, 0, 0, 0.4);
-}
-/* line 570, ../SASS/inventory.scss */
-.boxlist .item-body {
-  padding: 1em 1em 1em 0em;
-  min-height: 5em;
-  font-size: 14px;
-}
-/* line 577, ../SASS/inventory.scss */
-.boxlist .list-item .item-side {
-  display: inline-block;
-  position: absolute;
-  top: 1em;
-  right: 0px;
-  color: #eee;
-  -webkit-transition: all 50ms linear;
-  -moz-transition: all 50ms linear;
-  -o-transition: all 50ms linear;
-  -ms-transition: all 50ms linear;
-  transition: all 50ms linear;
-}
-/* line 592, ../SASS/inventory.scss */
-.boxlist .list-item .option-button {
-  display: inline-block;
-  position: relative;
-  z-index: 9;
-  padding: 1em 1.4em;
-  background: #F8F8F8;
-  color: #7E7E7E;
-  text-align: center;
-  width: 1em;
-  /* as long as its a content box... */
-  border-radius: 0px 2px 0px 0px;
-  -webkit-border-radius: 0px 2px 0px 0px;
-  -moz-border-radius: 0px 2px 0px 0px;
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-}
-/* line 606, ../SASS/inventory.scss */
-.boxlist .list-item .item-side .item-options:hover .option-button {
-  background: #4da1e4;
-  color: white;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 614, ../SASS/inventory.scss */
-.boxlist .list-item .item-side .item-options ul {
-  position: relative;
-  z-index: 2;
-  list-style-type: none;
-  margin: 0px;
-  padding: 0px;
-  margin-right: -100%;
-  background: #333333;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-/* line 626, ../SASS/inventory.scss */
-.boxlist .list-item .item-side .item-options:hover ul {
-  margin-right: 0%;
-}
-/* line 631, ../SASS/inventory.scss */
-.boxlist .list-item .item-side .item-options > * {
-  float: right;
-}
-/* line 636, ../SASS/inventory.scss */
-.boxlist .list-item .item-side:hover .item-options ul {
-  display: block;
-}
-/* line 641, ../SASS/inventory.scss */
-.boxlist .list-item .item-options ul li {
-  display: inline-block;
-  padding: 1em 1.4em;
-  z-index: 2;
-  width: 1em;
-  font-weight: 600;
-  text-align: center;
-  cursor: pointer;
-  box-sizing: content-box;
-  -moz-box-sizing: content-box;
-  -webkit-box-sizing: content-box;
-}
-/* line 654, ../SASS/inventory.scss */
-.boxlist .list-item .item-options ul li:hover {
-  background: #4da1e4;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* line 660, ../SASS/inventory.scss */
-.boxlist.no-list .panel {
-  border: none;
-}
-/* line 663, ../SASS/inventory.scss */
-.boxlist.no-list .item-side {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-}
-/* line 667, ../SASS/inventory.scss */
-.boxlist.no-list .item-side .btn-group a {
-  border-top: none !important;
-}
-/* line 670, ../SASS/inventory.scss */
-.boxlist.no-list .item-side .btn-group a:last-child {
-  border-right: none !important;
-}
-/* line 673, ../SASS/inventory.scss */
-.boxlist.no-list .item-side .btn-group a:first-child {
-  border-top-left-radius: 0px !important;
-}
-/* line 676, ../SASS/inventory.scss */
-.boxlist.no-list .item-side .btn-group a:last-child {
-  border-top-right-radius: 0px !important;
-  border-bottom-right-radius: 0px !important;
-}
-
-/* Course-home lesson banner */
-/* line 688, ../SASS/inventory.scss */
-.banner-image-wrapper {
-  overflow: hidden;
-  padding: 0;
-}
-
-/*.banner-image-wrapper img.banner-image{
-    max-width: none;
-}*/
-/* Course-home licence box */
-/* line 700, ../SASS/inventory.scss */
-.license_info_box {
-  text-align: center;
-}
-/* line 704, ../SASS/inventory.scss */
-.license_info_box img {
-  width: 100px;
-  margin: 8px 0 5px 0;
-}
-
-/* COURSE MAIN INFO CONTAINER - TODO - CAN I REMOVE THIS? -------------------------------------------------------*/
-/*
-#lesson-banner
-{
-  position: relative;
-  min-height: 13em;
-
-  .banner-left
-  {
-    width: 40%;    
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    margin-right:1em;
-    padding: 1em;
-
-    .banner-image
-    {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      @include border-radius(2px 0px 0px 2px);
-      @include background-size(cover);
-
-      &:after
-      {
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        content: "";
-        display: block;
-        width: 100%;
-        height: 100%;
-       
-      }
-
-    }
-  }
-
-  .banner-content
-  {
-    margin-left: 40%;
-    padding:1em;
-    @include box-sizing(border-box);
-
-    .banner-description
-    {
-      font-size:0.8em;
-      min-height: 6em;
-      line-height: 1.7em;
-    }
-
-    hr
-    {
-      margin-bottom: 0.8em;
-    }
-
-  }
-}*/
-/* LABEL -------------------------------------------------------------------------------- */
-/*.label
-{
-  font-size: 0.75em !important;
-  display: inline-block;
-  margin: 0 0.5em 0.8em 0;
-  position: relative;
-
-  border: 1px solid rgb(231, 231, 231);
-  padding: .5em;
-  border-radius: 2px;
-
-  cursor: default;
-
-  color:#A7A7A7;
-
-  @include transition(background 100ms linear);
-
-  > span{        
-    font-weight: 600;
-    color: #808080;
-  }
-
-  &:hover{
-    background: #e7e7e7;
-    color: #3D3D3D;
-  }
-}*/
-/* DROPDOWN */
-/*
-.button.dropdown.opened{
-
-  background: $color-hover!important;
-
-  border-bottom-color: #3F87C1;
-
-  color:white;
-
-  .dropdown-menu{
-    display:block;
-
-    @include transition(all 150ms linear 1s);
-  }
-
-}
-
-.button.dropdown.open-on-hover:hover{
-  .dropdown-menu{
-    display: block;
-  }
-}
-
-ul.dropdown-menu{
-  display: none;
-
-  position: absolute;
-
-  top: calc(100% + 0.1em);
-
-  left: -1px;
-  z-index: 1000;
-  float: left;
-
-  min-width: 100%;
-
-  padding: 5px 0;
-  margin: 2px 0 0;
-
-  list-style: none;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0,0,0,.15);
-
-  background-clip: padding-box;
-
-  @include border-radius(2px);
-
-  @include box-shadow(0px 6px 12px rgba(0,0,0,.175));
-}
-
-
-ul.dropdown-menu:before{
-  content: "";
-  position: absolute;
-  background: transparent;
-  height:100%;
-  width:100%;
-  top:-0.4em;
-  left:0px;
-  z-index:-1;
-}
-
-ul.dropdown-menu li a{
-  display: block;
-  text-align: left;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: 400;
-  line-height: 1.42857143;
-  color: #333;
-  white-space: nowrap;
-}
-
-
-.dropdown-menu>li>a:hover, .dropdown-menu>li>a:focus {
-  text-decoration: none;
-  color: white;
-  background-color: #4da1e4;
-}*/
-/* PAGINATION ------------------------------------------------------------------- */
-/*
-.my-pager
-{
-  margin:1em 0em;
-  text-align: right;
-
-  font-size: 0.85em;
-}
-
-.my-pager .items > .button
-{
-  padding:0.5em 0.8em;
-  vertical-align: middle;
-  cursor:pointer;
-}
-
-.my-pager .page-number
-{
-}
-
-.my-pager .active
-{  
-  color: $color-hover!important;
-  border-top: none;
-  border-bottom: none;
-  background: #E4E4E4;
-  cursor:default!important;
-
-  border: 1px solid #CECECE;
-
-  @include box-shadow(inset 0px 2px 5px #D3D3D3);
-}
-
-.my-pager .items > span:hover
-{
-  color:$color-hover;
-}*/
-/* INPUT TEXTAREA SELECT ----------------------------------------------------------------- */
-/*
-input,
-textarea{
-  width: 100%;
-}
-
-input,
-textarea,select
-{
-  font-family: $font-default;
-  padding: 0.5em;
-  
-  border: 1px solid #D5D5D5;
-  @include border-radius(2px);
-  
-  box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  
-  @inlcude transition(all 150ms linear);
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color: #66afe9;
-  outline: 0;
-  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-}
-
-textarea{
-  resize: vertical;
-}*/
-/* TAG & LABEL ------------------------------------------------------------------- */
-/*
-.tag {
-  display: inline;
-  padding: 0.4em;
-  font-size: 0.8em;
-  line-height: 1;
-  color: #fff;
-  background: #999;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  @include border-radius(.25em);
-}
-
-.label-group{
-    padding:2em 0em;
-    padding-top:2.5em;
-  .title{
-    display:inline-block;
-    margin-right: 1em;
-    font-weight: 600;
-    font-size:0.85em;
-    opacity: 0.6;
-
-  }  
-}
-
-}*/
-/* MODAL WINDOWS - http://tympanus.net/Development/ModalWindowEffects/ -------------------------------------------*/
-/*
-.md-modal.color-dark .md-content{
-  background: #2E3033!important;
-}
-
-.md-modal .md-content p{
-  font-size: 0.65em;
-}
-
-.md-modal .modal-icon{
-  margin-right:10px;
-}
-
-.md-modal .md-close{
-  background:rgba(0,0,0,.2);
-
-  border:none;
-
-  text-transform: uppercase;
-
-  color:#eee;
-
-  padding:0.5em 1em;
-
-  font-size:0.75em;
-
-  cursor:pointer;
-
-  @include border-radius(2px);
-}
-
-.md-modal .md-close:hover{  
-  background:rgba(0,0,0,.3);
-  color:white;
-}
-
-.modal-overlay-bg-dark{
-  background: rgba(35, 35, 35, 0.8)!important;
-}*/
-/* Action Button ------------------------------------------------------------------- */
-/* line 1080, ../SASS/inventory.scss */
-.opt-btn-wrapper {
-  position: relative;
-  width: 56px;
-  height: 48px;
-}
-
-/* line 1086, ../SASS/inventory.scss */
-.opt-btn {
-  position: absolute;
-  background-color: #F8F8F8;
-}
-
-/* line 1091, ../SASS/inventory.scss */
-.opt-btn:hover {
-  background-color: #4da1e4 !important;
-  color: white !important;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* line 1097, ../SASS/inventory.scss */
-.opt-btn-more-wrapper {
-  position: absolute;
-  width: 56px;
-  height: 48px;
-  right: 0px;
-  overflow: hidden;
-}
-
-/* line 1105, ../SASS/inventory.scss */
-.opt-btn-more-tool {
-  float: left;
-}
-
-/* line 1109, ../SASS/inventory.scss */
-.tool-btn {
-  width: 56px;
-  height: 48px;
-  cursor: pointer;
-  text-align: center;
-  line-height: 48px;
-  color: #7e7e7e;
-}
-
-/* line 1118, ../SASS/inventory.scss */
-.tool-btn a {
-  display: block;
-  width: 56px;
-  height: 48px;
-  color: white;
-  background-color: #232C3A;
-}
-
-/* line 1126, ../SASS/inventory.scss */
-.tool-btn.delete a {
-  color: #ce6b6b;
-}
-
-/* line 1130, ../SASS/inventory.scss */
-.tool-btn.delete a:hover {
-  color: white;
-  background-color: #ce6b6b;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* line 1137, ../SASS/inventory.scss */
-.tool-btn a:hover {
-  color: white;
-  background-color: #4da1e4;
-  -webkit-transition: all 120ms linear;
-  -moz-transition: all 120ms linear;
-  -o-transition: all 120ms linear;
-  -ms-transition: all 120ms linear;
-  transition: all 120ms linear;
-}
-
-/* Action Bar ------------------------------------------------------------------- */
-/* line 1146, ../SASS/inventory.scss */
-.action-bar-wrapper ul {
-  padding: 0px;
-  margin: 0px;
-  /*li a{
-      color: #333;
-  }*/
-}
-
-/* line 1155, ../SASS/inventory.scss */
-ul.expandable {
-  display: none;
-  margin-top: 9px;
-}
-/* line 1159, ../SASS/inventory.scss */
-ul.expandable.secondary-active {
-  display: block;
-}
-
-/* Datatables ---------------------------------------------------------*/
-/* line 1165, ../SASS/inventory.scss */
-.not_visible {
-  color: rgba(3, 3, 3, 0.3) !important;
-  font-style: italic;
-}
-
-/* line 1170, ../SASS/inventory.scss */
-tr.not_visible td:not(:last-child) {
-  color: rgba(3, 3, 3, 0.3);
-  font-style: italic;
-}
-/* line 1173, ../SASS/inventory.scss */
-tr.not_visible td:not(:last-child) a {
-  color: rgba(3, 3, 3, 0.3);
-  font-style: italic;
-}
-
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
-/* line 1183, ../SASS/inventory.scss */
+/* line 26, ../SASS/inventory.scss */
 .row {
   position: relative !important;
 }
 
-/* line 1186, ../SASS/inventory.scss */
+/* line 29, ../SASS/inventory.scss */
 .row-main {
   padding-bottom: 2em;
   padding-top: 1em;
 }
 
-/* line 1191, ../SASS/inventory.scss */
+/* line 34, ../SASS/inventory.scss */
 #background-cheat {
   position: absolute;
   background-color: #fafafa;
@@ -1324,7 +117,7 @@ tr.not_visible td:not(:last-child) a {
   padding: 0px;
 }
 
-/* line 1199, ../SASS/inventory.scss */
+/* line 42, ../SASS/inventory.scss */
 #background-cheat-leftnav {
   position: absolute;
   background: #232c3a;
@@ -1335,14 +128,14 @@ tr.not_visible td:not(:last-child) a {
   padding: 0px;
 }
 
-/* line 1208, ../SASS/inventory.scss */
+/* line 51, ../SASS/inventory.scss */
 #bgr-cheat-footer {
   background: #232c3a;
   height: 49px;
   border-radius: 0px 0px 4px 4px;
 }
 
-/* line 1213, ../SASS/inventory.scss */
+/* line 56, ../SASS/inventory.scss */
 #bgr-cheat-header {
   background: #232c3a;
   height: 53px;
@@ -1350,81 +143,41 @@ tr.not_visible td:not(:last-child) a {
   border-radius: 4px 4px 0px 0px;
 }
 
-/* line 1221, ../SASS/inventory.scss */
+/* line 64, ../SASS/inventory.scss */
 #my-courses .panel .alert {
   margin: 15px;
 }
 
-/*# sourceMappingURL=inventory.css.map */
-/* line 1227, ../SASS/inventory.scss */
-th.option-btn-cell {
-  width: 42px;
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-}
-
-/* line 1233, ../SASS/inventory.scss */
-td.option-btn-cell {
-  width: 42px;
-  padding: 0px !important;
-}
-
-/* line 1237, ../SASS/inventory.scss */
-.container {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
-/* line 1242, ../SASS/inventory.scss */
-.overlayed {
-  position: relative;
-  width: 259px;
-}
-/* line 1247, ../SASS/inventory.scss */
-.overlayed div.spinner-div {
-  position: absolute;
-  z-index: 9999;
-  background-color: rgba(100, 100, 100, 0.9);
-  text-align: center;
-  padding-top: 50px;
-  width: 100%;
-  height: 100%;
-}
-/* line 1256, ../SASS/inventory.scss */
-.overlayed div.spinner-div p {
-  font-size: 16px;
-}
-
-/* line 1262, ../SASS/inventory.scss */
+/* line 68, ../SASS/inventory.scss */
 td.forum_td:first-child {
   width: 45% !important;
 }
 
-/* line 1265, ../SASS/inventory.scss */
+/* line 71, ../SASS/inventory.scss */
 th.forum_td:first-child {
   width: 35% !important;
 }
 
-/* line 1269, ../SASS/inventory.scss */
+/* line 75, ../SASS/inventory.scss */
 .forum-anchor-link {
   font-size: 16px;
 }
 
-/* line 1272, ../SASS/inventory.scss */
+/* line 78, ../SASS/inventory.scss */
 table.nocategory-links td.nocategory-link, table.category-links td.nocategory-link {
   padding: 15px 30px;
 }
-/* line 1275, ../SASS/inventory.scss */
+/* line 81, ../SASS/inventory.scss */
 table.nocategory-links td.nocategory-link a:hover, table.category-links td.nocategory-link a:hover {
   text-decoration: none;
 }
 
-/* line 1279, ../SASS/inventory.scss */
+/* line 85, ../SASS/inventory.scss */
 table.category-links th.category-link {
   padding-top: 15px;
   padding-bottom: 15px;
 }
-/* line 1283, ../SASS/inventory.scss */
+/* line 89, ../SASS/inventory.scss */
 table.category-links th.category-link span.link-description {
   padding-left: 17px;
   font-size: 14px;
@@ -1432,136 +185,72 @@ table.category-links th.category-link span.link-description {
   font-weight: normal;
 }
 
-/* line 1290, ../SASS/inventory.scss */
+/* line 96, ../SASS/inventory.scss */
 table.nocategory-links tr.link-category-title, table.category-links tr.link-category-title {
   background-color: #eaeaea;
 }
 
-/* line 1293, ../SASS/inventory.scss */
+/* line 99, ../SASS/inventory.scss */
 table.category-links tr.link-subcategory-title {
   background-color: #f3f3f3;
 }
 
-/* line 1297, ../SASS/inventory.scss */
+/* line 103, ../SASS/inventory.scss */
 .open-category, .open-category:hover {
   color: #333;
   text-decoration: none;
 }
 
-/* line 1301, ../SASS/inventory.scss */
+/* line 107, ../SASS/inventory.scss */
 table.category-links td.category-link {
   padding: 15px 20px;
 }
 
-/* line 1306, ../SASS/inventory.scss */
-#Frame {
-  padding: 0 0;
-  margin: 0 0;
-}
-
-/*.no-embed{
-    top: -53px;
-}*/
-/* line 1313, ../SASS/inventory.scss */
-.descr_title div {
-  display: inline-block;
-  padding-top: 10px;
-}
-
-/* line 1317, ../SASS/inventory.scss */
-#descr_collapse {
-  height: 260px;
-  overflow: hidden;
-}
-
-/* line 1321, ../SASS/inventory.scss */
-#header .navbar-brand {
-  padding: 0px;
-}
-
-/* line 1324, ../SASS/inventory.scss */
-#quick-search-wrapper {
-  padding: 15px;
-  margin: 15px 0;
-}
-
-/* line 1329, ../SASS/inventory.scss */
-#quick-search-wrapper input.form-control {
-  background-color: rgba(0, 0, 0, 0.2);
-  border: 1px solid #111111;
-  box-shadow: 0 1px 3px 0 #111111 inset;
-  color: #aaaaaa;
-}
-
-/* line 1336, ../SASS/inventory.scss */
-#quick-search-wrapper .advanced-search a:hover {
-  text-decoration: none !important;
-}
-
-/* line 1340, ../SASS/inventory.scss */
-#rename_doc_file label {
-  word-wrap: break-word;
-}
-
-/* line 1344, ../SASS/inventory.scss */
-.small-logo {
-  padding-left: 10px !important;
-}
-
-/* line 1347, ../SASS/inventory.scss */
+/* line 111, ../SASS/inventory.scss */
 .checkbox-padding {
   padding-right: 15px;
 }
 
-/* line 1351, ../SASS/inventory.scss */
+/* line 115, ../SASS/inventory.scss */
 div.row.oc-metedata-list ul li:first-child {
   padding-left: 10px;
 }
-/* line 1354, ../SASS/inventory.scss */
+/* line 118, ../SASS/inventory.scss */
 div.row.oc-metedata-list ul li {
   padding-left: 25px;
 }
-/* line 1356, ../SASS/inventory.scss */
+/* line 120, ../SASS/inventory.scss */
 div.row.oc-metedata-list ul li .badge.valid {
   background-color: #006400;
 }
-/* line 1359, ../SASS/inventory.scss */
+/* line 123, ../SASS/inventory.scss */
 div.row.oc-metedata-list ul li .badge.not-valid {
   background-color: #ad2121;
 }
 
-/* line 1365, ../SASS/inventory.scss */
-.mobile-apps .col-xs-6:first-child {
-  padding-right: 7px;
-}
-/* line 1368, ../SASS/inventory.scss */
-.mobile-apps .col-xs-6:last-child {
-  padding-left: 7px;
-}
-
-/* line 1375, ../SASS/inventory.scss */
+/* line 132, ../SASS/inventory.scss */
 .opencourses .inner_opencourses span.opencourse_header {
   display: block;
   font-size: 18px;
   color: #aaa;
   text-align: center;
 }
-/* line 1382, ../SASS/inventory.scss */
+/* line 139, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .num_sub_wrapper {
   padding-top: 15px;
 }
-/* line 1385, ../SASS/inventory.scss */
+/* line 142, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div span {
   display: block;
 }
-/* line 1388, ../SASS/inventory.scss */
+/* line 145, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_link {
   font-size: 16px;
   color: #444;
   padding: 8px 0px 14px 0;
   text-align: center;
 }
-/* line 1394, ../SASS/inventory.scss */
+/* line 151, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_num {
   font-size: 40px;
   float: left;
@@ -1570,19 +259,19 @@ div.row.oc-metedata-list ul li .badge.not-valid {
   line-height: 40px;
   padding: 0 3px;
 }
-/* line 1402, ../SASS/inventory.scss */
+/* line 159, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_num_text {
   padding: 0px;
 }
-/* line 1405, ../SASS/inventory.scss */
+/* line 162, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_num_text a {
   display: block;
 }
-/* line 1409, ../SASS/inventory.scss */
+/* line 166, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div > div > div {
   float: right;
 }
-/* line 1412, ../SASS/inventory.scss */
+/* line 169, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_sub {
   float: left;
   background-color: #428bca;
@@ -1591,7 +280,7 @@ div.row.oc-metedata-list ul li .badge.not-valid {
   font-size: 13px;
   padding: 0px 15px;
 }
-/* line 1420, ../SASS/inventory.scss */
+/* line 177, ../SASS/inventory.scss */
 .opencourses .inner_opencourses div .opencourse_triangle {
   float: left;
   border-top: 20px solid transparent;
@@ -1600,42 +289,42 @@ div.row.oc-metedata-list ul li .badge.not-valid {
   width: 0px;
   height: 0px;
 }
-/* line 1429, ../SASS/inventory.scss */
+/* line 186, ../SASS/inventory.scss */
 .opencourses .inner_opencourses a:hover {
   text-decoration: none;
 }
 
-/* line 1434, ../SASS/inventory.scss */
+/* line 191, ../SASS/inventory.scss */
 div.glossary-categories a:hover {
   text-decoration: none;
 }
-/* line 1437, ../SASS/inventory.scss */
+/* line 194, ../SASS/inventory.scss */
 div.glossary-categories td.space-left {
   padding-left: 25px;
 }
 
-/* line 1441, ../SASS/inventory.scss */
+/* line 198, ../SASS/inventory.scss */
 a.action-btn-link {
   color: #23527c;
 }
 
-/* line 1444, ../SASS/inventory.scss */
+/* line 201, ../SASS/inventory.scss */
 a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited {
   text-decoration: none;
   cursor: pointer;
 }
 
-/* line 1448, ../SASS/inventory.scss */
+/* line 205, ../SASS/inventory.scss */
 .list-header {
   background-color: #eeeeee !important;
   color: #777777 !important;
 }
 
-/* line 1452, ../SASS/inventory.scss */
+/* line 209, ../SASS/inventory.scss */
 .panel.opencourses-national {
   min-height: 2px;
 }
-/* line 1456, ../SASS/inventory.scss */
+/* line 213, ../SASS/inventory.scss */
 .panel.opencourses-national a {
   display: block;
   font-size: 14px;
@@ -1646,28 +335,28 @@ a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited {
   height: 100%;
   text-align: center;
 }
-/* line 1466, ../SASS/inventory.scss */
+/* line 223, ../SASS/inventory.scss */
 .panel.opencourses-national a:hover {
   text-decoration: none;
   color: white;
 }
 
-/* line 1471, ../SASS/inventory.scss */
+/* line 228, ../SASS/inventory.scss */
 .no-borders {
   border: 0px;
 }
 
-/* line 1475, ../SASS/inventory.scss */
+/* line 232, ../SASS/inventory.scss */
 #dropboxTabs .nav-tabs {
   margin-bottom: 15px;
 }
 
-/* line 1479, ../SASS/inventory.scss */
+/* line 236, ../SASS/inventory.scss */
 #profile_menu_dropdown ul li:last-child {
   border-top: 1px #ddd solid;
 }
 
-/* line 1482, ../SASS/inventory.scss */
+/* line 239, ../SASS/inventory.scss */
 .add-unit-btn {
   line-height: 37px;
   font-size: 22px;
@@ -1675,11 +364,11 @@ a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited {
   color: #5cb85c;
 }
 
-/* line 1488, ../SASS/inventory.scss */
+/* line 245, ../SASS/inventory.scss */
 .course-info-title {
   margin-bottom: 10px;
 }
-/* line 1490, ../SASS/inventory.scss */
+/* line 247, ../SASS/inventory.scss */
 .course-info-title h4 {
   line-height: 30px;
   font-size: 16px;
@@ -1687,11 +376,11 @@ a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited {
   margin: 0px;
   color: #666;
 }
-/* line 1498, ../SASS/inventory.scss */
+/* line 255, ../SASS/inventory.scss */
 .course-info-title .edit-course-title {
   margin: 0px 15px;
 }
-/* line 1500, ../SASS/inventory.scss */
+/* line 257, ../SASS/inventory.scss */
 .course-info-title .edit-course-title i {
   font-size: 16px;
   line-height: 30px;
@@ -1699,74 +388,74 @@ a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited {
   text-decoration: none;
   font-weight: bold;
 }
-/* line 1507, ../SASS/inventory.scss */
+/* line 264, ../SASS/inventory.scss */
 .course-info-title .edit-course-title i:hover {
   color: #4DA1E4;
 }
 
-/* line 1512, ../SASS/inventory.scss */
+/* line 269, ../SASS/inventory.scss */
 ul.sharinglist li a i {
   color: #666;
 }
 
-/* line 1515, ../SASS/inventory.scss */
+/* line 272, ../SASS/inventory.scss */
 ul.sharinglist li a i:hover {
   color: #333;
 }
 
-/* line 1519, ../SASS/inventory.scss */
+/* line 276, ../SASS/inventory.scss */
 ul.front-announcements, .single_announcement {
   list-style: none;
   padding-left: 0px;
 }
-/* line 1522, ../SASS/inventory.scss */
+/* line 279, ../SASS/inventory.scss */
 ul.front-announcements li, .single_announcement li {
   padding: 15px 0;
   border-bottom: 1px solid #ddd;
 }
-/* line 1525, ../SASS/inventory.scss */
+/* line 282, ../SASS/inventory.scss */
 ul.front-announcements li a:hover, .single_announcement li a:hover {
   text-decoration: none;
 }
-/* line 1529, ../SASS/inventory.scss */
+/* line 286, ../SASS/inventory.scss */
 ul.front-announcements li:first-child, .single_announcement li:first-child {
   padding-top: 0px;
 }
-/* line 1532, ../SASS/inventory.scss */
+/* line 289, ../SASS/inventory.scss */
 ul.front-announcements li:last-child, .single_announcement li:last-child {
   padding-bottom: 0px !important;
 }
-/* line 1535, ../SASS/inventory.scss */
+/* line 292, ../SASS/inventory.scss */
 ul.front-announcements .announcement-title, .single_announcement .announcement-title {
   font-weight: bold;
   font-size: 15px;
 }
-/* line 1539, ../SASS/inventory.scss */
+/* line 296, ../SASS/inventory.scss */
 ul.front-announcements .announcement-date, .single_announcement .announcement-date {
   font-style: italic;
   color: #777;
   font-size: 13px;
   line-height: 30px;
 }
-/* line 1545, ../SASS/inventory.scss */
+/* line 302, ../SASS/inventory.scss */
 ul.front-announcements .announcement-main, .single_announcement .announcement-main {
   padding: 10px;
 }
-/* line 1548, ../SASS/inventory.scss */
+/* line 305, ../SASS/inventory.scss */
 ul.front-announcements .announcements-more, .single_announcement .announcements-more {
   text-align: right;
 }
-/* line 1554, ../SASS/inventory.scss */
+/* line 311, ../SASS/inventory.scss */
 ul.front-announcements li:last-child, .single_announcement li:last-child {
   border-bottom: none;
   padding-bottom: 10px;
 }
 
-/* line 1561, ../SASS/inventory.scss */
+/* line 318, ../SASS/inventory.scss */
 .dataTables_filter {
   position: relative;
 }
-/* line 1563, ../SASS/inventory.scss */
+/* line 320, ../SASS/inventory.scss */
 .dataTables_filter:before {
   position: absolute;
   font-family: FontAwesome;
@@ -1775,23 +464,23 @@ ul.front-announcements li:last-child, .single_announcement li:last-child {
   content: "\f002";
   color: #999;
 }
-/* line 1571, ../SASS/inventory.scss */
+/* line 328, ../SASS/inventory.scss */
 .dataTables_filter label {
   margin: 0 0 10px 0;
   width: 100%;
 }
-/* line 1575, ../SASS/inventory.scss */
+/* line 332, ../SASS/inventory.scss */
 .dataTables_filter input {
   margin: 0px !important;
   padding-right: 25px;
 }
 
-/* line 1581, ../SASS/inventory.scss */
+/* line 338, ../SASS/inventory.scss */
 table#portfolio-lessons tr {
   padding: 5px 0;
 }
 
-/* line 1585, ../SASS/inventory.scss */
+/* line 342, ../SASS/inventory.scss */
 .navbar-toggle {
   border: none;
   margin-left: 8px;
@@ -1803,13 +492,13 @@ table#portfolio-lessons tr {
   height: 52px;
 }
 
-/* line 1596, ../SASS/inventory.scss */
+/* line 353, ../SASS/inventory.scss */
 .quick-change-pwd {
   text-align: right;
   font-size: 11px;
 }
 
-/* line 1600, ../SASS/inventory.scss */
+/* line 357, ../SASS/inventory.scss */
 #scrollToTop {
   display: none;
   position: fixed;
@@ -1818,24 +507,24 @@ table#portfolio-lessons tr {
   bottom: 15px;
 }
 
-/* line 1607, ../SASS/inventory.scss */
+/* line 364, ../SASS/inventory.scss */
 #scrollToTop i {
   padding: 0 0 10px 0;
   color: #a7a7a7;
   cursor: pointer;
 }
 
-/* line 1613, ../SASS/inventory.scss */
+/* line 370, ../SASS/inventory.scss */
 .footer span {
   line-height: 24px;
 }
 
-/* line 1616, ../SASS/inventory.scss */
+/* line 373, ../SASS/inventory.scss */
 .panel-footer .event-legend > div {
   margin-bottom: 5px;
 }
 
-/* line 1620, ../SASS/inventory.scss */
+/* line 377, ../SASS/inventory.scss */
 .panel-footer .event {
   display: inline-block;
   margin-right: 8px;
@@ -1844,14 +533,14 @@ table#portfolio-lessons tr {
   border-radius: 5px;
 }
 
-/* line 1628, ../SASS/inventory.scss */
+/* line 385, ../SASS/inventory.scss */
 p.link-to-more {
   text-align: right;
   font-size: 12px;
   margin: 0px;
 }
 
-/* line 1634, ../SASS/inventory.scss */
+/* line 391, ../SASS/inventory.scss */
 table.dataTable tbody td.right-cell {
   border-left: 1px solid #ddd;
   line-height: 56px;
@@ -1860,7 +549,7 @@ table.dataTable tbody td.right-cell {
   width: 40px;
 }
 
-/* line 1641, ../SASS/inventory.scss */
+/* line 398, ../SASS/inventory.scss */
 div.profile-pers-info-name {
   font-size: 16px;
   font-weight: bold;
@@ -1868,64 +557,64 @@ div.profile-pers-info-name {
   padding-top: 10px;
 }
 
-/* line 1647, ../SASS/inventory.scss */
+/* line 404, ../SASS/inventory.scss */
 div#profile-about-me {
   padding-top: 20px;
   padding-bottom: 20px;
 }
 
-/* line 1653, ../SASS/inventory.scss */
+/* line 410, ../SASS/inventory.scss */
 .extapp table.extapp-table thead.list-header td {
   padding: 10px;
 }
-/* line 1658, ../SASS/inventory.scss */
+/* line 415, ../SASS/inventory.scss */
 .extapp table.extapp-table tr td {
   padding: 20px;
 }
 
-/* line 1663, ../SASS/inventory.scss */
+/* line 420, ../SASS/inventory.scss */
 #calendar_wrapper {
   margin-bottom: 25px;
 }
-/* line 1666, ../SASS/inventory.scss */
+/* line 423, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header {
   margin-bottom: 15px;
 }
-/* line 1670, ../SASS/inventory.scss */
+/* line 427, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header #calendar-header {
   border-bottom: 1px #999 solid;
 }
-/* line 1674, ../SASS/inventory.scss */
+/* line 431, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header h4 {
   margin: 0px;
   padding: 0px;
   line-height: 50px;
 }
-/* line 1680, ../SASS/inventory.scss */
+/* line 437, ../SASS/inventory.scss */
 #calendar_wrapper .calendar-header .form-inline {
   padding: 10px 0;
 }
 
 /* Calendar - Extend style of bootstrap calendar ------------------------------------------------------------------*/
-/* line 1690, ../SASS/inventory.scss */
+/* line 447, ../SASS/inventory.scss */
 span[data-cal-date] {
   margin-right: 5px !important;
   margin-top: 5px !important;
 }
 
-/* line 1695, ../SASS/inventory.scss */
+/* line 452, ../SASS/inventory.scss */
 .event-legend {
   font-size: 11px;
   color: #666;
   line-height: 10px;
 }
-/* line 1699, ../SASS/inventory.scss */
+/* line 456, ../SASS/inventory.scss */
 .event-legend .event {
   margin-top: 0px !important;
   margin-bottom: 0px !important;
 }
 
-/* line 1706, ../SASS/inventory.scss */
+/* line 463, ../SASS/inventory.scss */
 .event {
   width: 14px;
   height: 14px;
@@ -1942,7 +631,7 @@ span[data-cal-date] {
   -ms-transition: all 120ms linear;
   transition: all 120ms linear;
 }
-/* line 1717, ../SASS/inventory.scss */
+/* line 474, ../SASS/inventory.scss */
 .event:hover {
   opacity: 1 !important;
   -webkit-transition: all 120ms linear;
@@ -1952,239 +641,8 @@ span[data-cal-date] {
   transition: all 120ms linear;
 }
 
-/* line 1724, ../SASS/inventory.scss */
+/* line 481, ../SASS/inventory.scss */
 #cal-slide-content {
   background: #232c3a !important;
   background-image: none;
-}
-
-/* line 208, styles.scss */
-/* line 1732, ../SASS/inventory.scss */
-.jumbotron.jumbotron-login .graphic {
-  position: absolute;
-  z-index: 9;
-  width: 77%;
-  max-width: 100%;
-  top: -2.8rem;
-}
-
-/* RESPONSIVE */
-@media only screen and (min-width: 768px) and (max-width: 992px) {
-  /* Styles */
-  /* line 351, styles.scss */
-  /* line 1745, ../SASS/inventory.scss */
-  .jumbotron.jumbotron-login img.graphic {
-    top: 7.1rem;
-    left: -2rem;
-    width: 100%;
-  }
-}
-@media only screen and (min-width: 992px) and (max-width: 1200px) {
-  /* line 360, styles.scss */
-  /* line 1753, ../SASS/inventory.scss */
-  .jumbotron.jumbotron-login img.graphic {
-    width: 94%;
-  }
-}
-/* line 1759, ../SASS/inventory.scss */
-div.login-form .btn.btn-login {
-  border-radius: 1rem !important;
-}
-
-/* line 1764, ../SASS/inventory.scss */
-.or-separator {
-  text-align: center !important;
-  position: relative;
-  padding: 2px 5px;
-  z-index: 9;
-  width: 100%;
-  margin-bottom: 0.4em !important;
-}
-
-/* line 1773, ../SASS/inventory.scss */
-.or-separator span {
-  content: "";
-  display: inline-block;
-  position: relative;
-  z-index: 99;
-}
-
-/* line 1780, ../SASS/inventory.scss */
-.or-separator span:before {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  z-index: -1;
-  width: calc(100% + 2em);
-  height: 1em;
-  top: calc(50% - 0.5em);
-  left: -1em;
-  background: white;
-}
-
-/* line 1792, ../SASS/inventory.scss */
-.or-separator:after {
-  width: 100%;
-  height: 1px;
-  position: absolute;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: 1;
-  content: "";
-  top: 47%;
-  left: 0px;
-}
-
-/* line 1803, ../SASS/inventory.scss */
-.option-btn-login {
-  display: inline-block;
-  width: 90%;
-  border-radius: 6px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: none;
-  padding: 0.5em 1em;
-  font-weight: normal;
-  outline: none;
-  margin: 0 5px;
-}
-
-/* line 1815, ../SASS/inventory.scss */
-.option-btn-login:first-child:nth-last-child(2), .option-btn-login:first-child:nth-last-child(2) ~ button {
-  width: 45%;
-}
-
-/* line 1819, ../SASS/inventory.scss */
-.option-btn-login:hover {
-  background: #3071a9;
-  color: white;
-  border-color: transparent;
-}
-
-/* line 1825, ../SASS/inventory.scss */
-.option-btn-login > span {
-  font-weight: 700;
-  display: block;
-}
-
-/* line 1830, ../SASS/inventory.scss */
-div.login-form .login-option-sso .btn-login {
-  height: 8rem;
-  line-height: 7rem;
-}
-
-/* line 1835, ../SASS/inventory.scss */
-.head-text {
-  text-align: center;
-  display: block;
-}
-
-/* line 1840, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn {
-  width: 100%;
-  margin-top: 0.5em;
-  color: white;
-}
-
-/* line 1846, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn i.fa {
-  float: left;
-  font-size: 1.6em;
-  position: relative;
-}
-
-/* line 1852, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn i.fa:after {
-  content: "";
-  display: inline-block;
-  position: absolute;
-  right: -0.6em;
-  height: 100%;
-  width: 1px;
-  background: rgba(255, 255, 255, 0.25);
-}
-
-/* line 1862, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn:first-of-type {
-  margin-top: 0.8em;
-}
-
-/* line 1866, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn:last-of-type {
-  margin-bottom: 0.8em;
-}
-
-/* line 1870, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn.social-btn-fb {
-  background: rgba(97, 152, 224, 0.8);
-}
-
-/* line 1874, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn.social-btn-fb:hover {
-  background: #6198e0;
-}
-
-/* line 1878, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn.social-btn-google {
-  background: rgba(224, 84, 84, 0.8);
-}
-
-/* line 1882, ../SASS/inventory.scss */
-div.login-form .login-option-social .social-btn.social-btn-google:hover {
-  background: #e05454;
-}
-
-/* line 1889, ../SASS/inventory.scss */
-#main-content .login-page .panel {
-  margin-bottom: 0px !important;
-}
-/* line 1892, ../SASS/inventory.scss */
-#main-content .login-page .login-page-option {
-  min-height: 200px;
-}
-/* line 1895, ../SASS/inventory.scss */
-#main-content .login-page .form-group input {
-  border-top: none;
-  border-right: none;
-  border-left: none;
-  box-shadow: none;
-}
-/* line 1902, ../SASS/inventory.scss */
-#main-content .login-page .btn-block a {
-  line-height: 40px;
-}
-/* line 1906, ../SASS/inventory.scss */
-#main-content .login-page .or-separator span:before, #main-content .login-page .or-separator span:after {
-  background-color: #fafafa;
-}
-/* line 1909, ../SASS/inventory.scss */
-#main-content .login-page .row > .col-sm-6:first-child {
-  border-right: 1px solid #ddd !important;
-}
-/* line 1912, ../SASS/inventory.scss */
-#main-content .login-page .row > .col-sm-4:first-child, #main-content .login-page .row > .col-sm-4:nth-last-child(2) {
-  border-right: 1px solid #ddd !important;
-}
-
-/* line 1918, ../SASS/inventory.scss */
-.form-wrapper h4.form-heading {
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 10px;
-  color: #000;
-  margin-bottom: 20px;
-}
-
-/* line 1926, ../SASS/inventory.scss */
-.notice .notice-header {
-  color: black;
-  margin-bottom: 5px;
-  text-decoration: underline;
-}
-/* line 1931, ../SASS/inventory.scss */
-.notice .notice-body {
-  color: #777777;
-}
-
-/* line 1936, ../SASS/inventory.scss */
-.lp-module-show .row {
-  padding-bottom: 7px;
-  padding-top: 7px;
 }

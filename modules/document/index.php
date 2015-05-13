@@ -546,7 +546,7 @@ if ($can_upload) {
                                                    path = ?s", $_GET['rename'])->filename;
         $dialogBox .= "
 
-            <div id='rename_doc_file' class='row'>
+            <div class='row'>
                 <div class='col-xs-12'>
                     <div class='form-wrapper'>
                         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
@@ -554,8 +554,8 @@ if ($can_upload) {
                                     <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
                                     $group_hidden_input
                                     <div class='form-group'>
-                                        <label for='renameTo' class='col-sm-2 control-label word-wrapping' >" . q($fileName) . "</label>
-                                        <div class='col-sm-10 input-group'>
+                                        <label for='renameTo' class='col-sm-3 control-label word-wrapping' >" . q($fileName) . "</label>
+                                        <div class='col-sm-9 input-group'>
                                             <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
                                             <div class='input-group-btn'><button class='btn btn-primary' type='submit' value='$langRename' >$langRename</button></div>
                                         </div>
@@ -597,26 +597,28 @@ if ($can_upload) {
         $dialogBox .= "
         <div class='row'>
         <div class='col-md-12'>
-                <div class='panel padding-thin focused'>
-                    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
-                        $group_hidden_input
-                        <input type='hidden' name='newDirPath' value='$createDir' />
-                        <div class='row'>
-                        <div class='col-sm-12'>
-                        <div class='input-group'>
-                            <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
-                            <span class='input-group-btn'>
-                                <button type='submit' class='btn btn-primary'>
-                                    $langCreate
-                                </button>
-                                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                                    $langCancel
-                                </a>
-                            </span>
-                        </div>
-                        </div>
-                        </div>
-                    </form>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
+                            $group_hidden_input
+                            <input type='hidden' name='newDirPath' value='$createDir' />
+                            <div class='row'>
+                            <div class='col-sm-12'>
+                            <div class='input-group'>
+                                <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
+                                <span class='input-group-btn'>
+                                    <button type='submit' class='btn btn-primary'>
+                                        $langCreate
+                                    </button>
+                                    <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                                        $langCancel
+                                    </a>
+                                </span>
+                            </div>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>";

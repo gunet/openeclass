@@ -1,14 +1,3 @@
-// Action Button function
-function animate_btn() {
-    $(".opt-btn-wrapper").hover(
-            function () {
-                tool_btn_offset = ((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length) + 1) * 56) + "px";
-                $(this).children(".opt-btn-more-wrapper").animate({width: tool_btn_offset}, 150);
-            },
-            function () {
-                $(this).children(".opt-btn-more-wrapper").animate({width: "56px"}, 150);
-            });
-}
 function act_confirm() {
     $('.confirmAction').on('click', function (e) {
         var message = $(this).attr('data-message');
@@ -70,7 +59,6 @@ $(document).ready(function () {
 
     // Initialisations
     act_confirm();
-    animate_btn();
     tooltip_init();
     popover_init();
 
@@ -210,11 +198,6 @@ $(document).ready(function () {
     $('.panel-collapse').on('shown.bs.collapse', function () {
         //scrollToTop($(this).prev('a'),500);  // Uncomment this if you want to make anchor the Parent Menu Item
         scrollToTop("html, body", 500);
-    });
-
-    // Action Bar - More Options Button
-    $(".expandable-btn").click(function () {
-        $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
     });
 
 
