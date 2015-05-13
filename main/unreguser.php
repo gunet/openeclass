@@ -66,7 +66,7 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     if (isset($uid)) {
         $un = uid_to_name($uid, 'username');
         $n = uid_to_name($uid);
-        deleteUser($id, false);
+        deleteUser($uid, false);
         // action logging
         Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
             'username' => $un,

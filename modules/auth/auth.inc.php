@@ -285,8 +285,11 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                                 $_SESSION['auth_user_info'] = array(
                                     'givenname' => $givenname,
                                     'surname' => $surname,
-                                    'email' => get_ldap_attribute($userinfo, 'mail'),
-                                    'studentid' => get_ldap_attribute($userinfo, $settings['ldap_studentid']));
+                                    'email' => get_ldap_attribute($userinfo, 'mail'));
+                                if (isset($settings['ldap_studentid']) and !empty($settings['ldap_studentid'])) {
+                                    $_SESSION['auth_user_info']['studentid'] =
+                                        get_ldap_attribute($userinfo, $settings['ldap_studentid']);
+                                }
                             }
                         }
                     }

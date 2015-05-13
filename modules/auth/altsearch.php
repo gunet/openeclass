@@ -308,7 +308,7 @@ if ($is_valid) {
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname;
             $_SESSION['surname'] = $surname;
-            $_SESSION['uname'] = canonicalize_whitespace($username);            
+            $_SESSION['uname'] = canonicalize_whitespace($uname);            
 
             $tool_content .= "<div class='alert alert-success'><p>$greeting,</p><p>";
             $tool_content .=!empty($email) ? $langPersonalSettings : $langPersonalSettingsLess;
