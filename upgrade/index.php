@@ -37,10 +37,13 @@ if ($language == 'el') {
     $link_changes_file = 'http://wiki.openeclass.org/en:changes';
 }
 
-// Main body
-$tool_content .= "
-  <div class='alert alert-warning'>
-    <h4>$langWarnUpgrade</h4>
+// check PHP version
+if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+    $tool_content .= "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+}
+
+$tool_content .= "    
+  <div class='alert alert-info'>   
     <p class='margin-bottom-thin'>$langExplUpgrade</p>
     <p class='margin-top-thin margin-bottom-thin text-danger'>$langExpl2Upgrade</p>
     <p class='margin-top-thin margin-bottom-thin'>$langUpgToSee <a href='$link_changes_file' target=_blank>$langHere</a>.

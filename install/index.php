@@ -451,9 +451,17 @@ elseif (isset($_POST['install1'])) {
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 	<h3>$langCheckReq</h3>
 	<ul class='list-unstyled'>
-        <li>" . icon('fa-check') . " <b>Webserver</b> ($langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em>)
-        $langWithPHP ($langFoundIt <em>PHP " . phpversion() . "</em>).";
-    $tool_content .= "</li></ul>";
+        <li>" . icon('fa-check') . " <b>Webserver</b> $langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>";
+    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+        $info_icon = icon('fa-check');
+        $info_text = '';
+    } else {
+        $info_icon = icon('fa-ban');
+        $info_text = "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+    }
+    $tool_content .= "<li>$info_icon <b>$langPHPVersion</b> $langFoundIt <em>" . PHP_VERSION . "</em></li>";
+    $tool_content .= "</ul>";
+    $tool_content .= $info_text;
     $tool_content .= "<h3>$langRequiredPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('standard');

@@ -232,8 +232,7 @@ if (!isset($_POST['submit'])) {
             $verified_mail = 2;
             $vmail = FALSE;
         }
-
-        $password = unescapeSimple($password);
+        
         $hasher = new PasswordHash(8, false);
         $password_encrypted = $hasher->HashPassword($password);
 

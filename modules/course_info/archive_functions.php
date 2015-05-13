@@ -35,7 +35,7 @@ function doArchive($course_id, $course_code) {
     }
 
     $basedir = "$webDir/courses/archive/$course_code";
-    mkpath($basedir);
+    mkdir($basedir, 0755);
 
     // Remove previous back-ups older than 10 minutes
     cleanup("$webDir/courses/archive", 600);
@@ -44,7 +44,7 @@ function doArchive($course_id, $course_code) {
     $backup_date_short = date('Ymd');
 
     $archivedir = $basedir . '/' . $backup_date;
-    mkpath($archivedir);
+    mkdir($archivedir, 0755);
 
     $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
 

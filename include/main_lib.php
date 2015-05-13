@@ -149,14 +149,6 @@ function q_math($s) {
     return mathfilter($text, 12, $urlAppend . 'courses/mathimg/');
 }
 
-function unescapeSimple($str) {
-    if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        return stripslashes($str);
-    } else {
-        return $str;
-    }
-}
-
 // Escape string to use as JavaScript argument
 function js_escape($s) {
     return q(str_replace("'", "\\'", $s));
@@ -862,6 +854,7 @@ function randomkeys($length) {
 // it returns a formated number string, with unit identifier.
 function format_bytesize($kbytes, $dec_places = 2) {
     global $text;
+    
     if ($kbytes > 1048576) {
         $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
         $result .= '&nbsp;Gb';
@@ -890,33 +883,6 @@ function is_javascript_enabled() {
 
 function add_check_if_javascript_enabled_js() {
     return '<script type="text/javascript">document.cookie="javascriptEnabled=true";</script>';
-}
-
-/*
- * to create missing directory in a gived path
- *
- * @returns a resource identifier or false if the query was not executed correctly.
- * @author KilerCris@Mail.com original function from  php manual
- * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team
- * @since  28-Aug-2001 09:12
- * @param sting         $path           wanted path
- */
-
-function mkpath($path) {
-    $path = str_replace("/", "\\", $path);
-    $dirs = explode("\\", $path);
-    $path = $dirs[0];
-    for ($i = 1; $i < count($dirs); $i++) {
-        $path .= "/" . $dirs[$i];
-        if (file_exists($path)) {
-            if (!is_dir($path)) {
-                return false;
-            }
-        } elseif (!@mkdir($path, 0755)) {
-            return false;
-        }
-    }
-    return true;
 }
 
 // Check if we can display activation link (e.g. module_id is one of our modules)

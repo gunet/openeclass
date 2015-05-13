@@ -39,6 +39,7 @@ function visibility_select($current) {
 // Unzip backup file
 function unpack_zip_inner($zipfile, $clone) {
     global $webDir, $uid;
+    
     require_once 'include/lib/fileUploadLib.inc.php';
     
     $zip = new pclZip($zipfile);
@@ -47,7 +48,7 @@ function unpack_zip_inner($zipfile, $clone) {
     }
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
-    mkpath($destdir);
+    mkdir($destdir, 0755);
     chdir($destdir);
     $zip->extract();
     

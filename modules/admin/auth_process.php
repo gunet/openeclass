@@ -48,8 +48,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
     'test_username' => true), 'all', 'autounquote');
 
-// unescapeSimple() preserves whitespace in password
-$test_password = isset($_POST['test_password']) ? unescapeSimple($_POST['test_password']) : '';
+$test_password = isset($_POST['test_password']) ? $_POST['test_password'] : '';
 
 if ($auth == 7) {
     if ($submit) {
@@ -157,7 +156,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     break;
                 case '6':
                     if ($checkseparator) {
-                        $auth_settings = unescapeSimple($_POST['shibseparator']);
+                        $auth_settings = $_POST['shibseparator'];
                     } else {
                         $auth_settings = 'shibboleth';
                     }
