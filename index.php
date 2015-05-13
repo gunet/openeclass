@@ -28,6 +28,26 @@ session_start();
  *
  */
 
+// Handle alias of .../courses/<CODE>/... to index.php for course homes
+if (preg_match('|/courses/([a-zA-Z_-]+\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
+	$dbname = $matches[1];
+	if (!@chdir('courses/' . $dbname)) {
+		header('HTTP/1.0 404 Not Found');
+		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL ',$_SERVER['REQUEST_URI'],' was not found on this server.</p>
+</body></html>
+';
+		exit;
+	}
+	$_SESSION['dbname'] = $dbname;
+	require_once '../../modules/course_home/course_home.php';
+    exit;
+}
+
 define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
