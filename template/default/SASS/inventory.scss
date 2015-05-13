@@ -22,95 +22,7 @@
 
 /* theme.html Leftnav and Maincontent Columns equal heights -------------------------------------------*/
 
-.row
-{
-    position: relative !important;
-}
-.row-main{
-    padding-bottom: 2em;
-    padding-top: 1em;
-}
-#background-cheat
-{
-    position: absolute;
-    background-color: #fafafa;
-    height: 100%;
-    right: 0px;
-    padding: 0px;
-}
-#background-cheat-leftnav
-{
-    position: absolute;
-    background: $color-background;
-    height: 100%;
-    padding-bottom: 49px;
-    left: 0px;
-    top: 0px;
-    padding: 0px;
-}
-#bgr-cheat-footer{
-    background: $color-background;
-    height: 49px;
-    border-radius: 0px 0px 4px 4px;
-}
-#bgr-cheat-header{
-    background: $color-background;
-    height: 53px;
-    border-bottom: 1px solid transparent;
-    border-radius: 4px 4px 0px 0px;
-}
 
-#my-courses .panel .alert
-{
-    margin:15px;
-}
-
-td.forum_td:first-child{
-    width: 45% !important;
-}
-th.forum_td:first-child{
-    width: 35% !important;
-}
-.forum-anchor-link
-{
-    font-size: 16px;
-}
-table.nocategory-links td.nocategory-link, table.category-links td.nocategory-link{
-    padding: 15px 30px;
-    
-    a:hover{
-        text-decoration: none;
-    }
-}
-table.category-links th.category-link{
-    padding-top: 15px;
-    padding-bottom: 15px;
-    
-    span.link-description{
-        padding-left: 17px;
-        font-size: 14px;
-        color: #666;
-        font-weight: normal;
-    }
-}
-table.nocategory-links tr.link-category-title, table.category-links tr.link-category-title{
-    background-color: #eaeaea;
-}
-table.category-links tr.link-subcategory-title{
-    background-color: #f3f3f3;
-}
-.open-category, .open-category:hover
-{
-    color: #333;
-    text-decoration: none;
-}
-table.category-links td.category-link{
-    padding: 15px 20px;
-    
-}
-.checkbox-padding{
-    padding-right: 15px;
-}
 div.row.oc-metedata-list{
     ul li:first-child{
         padding-left: 10px;
@@ -195,13 +107,7 @@ div.glossary-categories{
         padding-left: 25px;
     }
 }
-a.action-btn-link{
-    color: #23527c;
-}
-a.action-btn-link:hover, a.action-btn-link:active, a.action-btn-link:visited{
-    text-decoration: none;
-    cursor: pointer;
-}
+
 .list-header{
         background-color: #eeeeee !important;
         color: #777777 !important;

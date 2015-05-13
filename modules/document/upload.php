@@ -186,11 +186,13 @@ if ($can_upload) {
     if (!isset($_GET['ext'])) {
         $tool_content .= "
         <div class='form-group'>
-          <div class='col-sm-offset-2 col-sm-10'>
-            <span class='checkbox-padding'>
-                <input type='checkbox' name='uncompress' value='1'>
-            </span>
-          <label for='inputFileCompression' class='control-label'>$langUncompress:</label>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='uncompress' value='1'>
+                        <strong>$langUncompress</strong>
+                    </label>
+                </div>          
               </div>
         </div>";
     }
@@ -198,10 +200,12 @@ if ($can_upload) {
     $tool_content .= "
       <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>
-          <span class='checkbox-padding'>
-              <input type='checkbox' name='replace' value='1'>
-          </span>
-          <label for='inputFileReplaceSameName' class='control-label'>$langReplaceSameName:</label>
+            <div class='checkbox'>
+                <label>
+                    <input type='checkbox' name='replace' value='1'>
+                    <strong>$langReplaceSameName</strong>
+                </label>
+            </div>         
         </div>
       </div>      
 
