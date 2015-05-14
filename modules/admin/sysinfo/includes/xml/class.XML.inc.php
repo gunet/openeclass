@@ -136,6 +136,39 @@ class XML
         if ($this->_sysinfo->getEncoding() !== null) {
             $vitals->addAttribute('CodePage', $this->_sysinfo->getEncoding());
         }
+
+        //processes
+        if (($procss = $this->_sys->getProcesses()) !== null) {
+            if (isset($procss['*']) && (($procall = $procss['*']) > 0)) {
+                $vitals->addAttribute('Processes', $procall);
+                if (!isset($procss[' ']) || !($procss[' '] > 0)) { // not unknown
+                    $procsum = 0;
+                    if (isset($procss['R']) && (($proctmp = $procss['R']) > 0)) {
+                        $vitals->addAttribute('ProcessesRunning', $proctmp);
+                        $procsum += $proctmp;
+                    }
+                    if (isset($procss['S']) && (($proctmp = $procss['S']) > 0)) {
+                        $vitals->addAttribute('ProcessesSleeping', $proctmp);
+                        $procsum += $proctmp;
+                    }
+                    if (isset($procss['T']) && (($proctmp = $procss['T']) > 0)) {
+                        $vitals->addAttribute('ProcessesStopped', $proctmp);
+                        $procsum += $proctmp;
+                    }
+                    if (isset($procss['Z']) && (($proctmp = $procss['Z']) > 0)) {
+                        $vitals->addAttribute('ProcessesZombie', $proctmp);
+                        $procsum += $proctmp;
+                    }
+                    if (isset($procss['D']) && (($proctmp = $procss['D']) > 0)) {
+                        $vitals->addAttribute('ProcessesWaiting', $proctmp);
+                        $procsum += $proctmp;
+                    }
+                    if (($proctmp = $procall - $procsum) > 0) {
+                        $vitals->addAttribute('ProcessesOther', $proctmp);
+                    }
+                }
+            }
+        }
         $vitals->addAttribute('OS', PSI_OS);
     }
 
@@ -146,15 +179,18 @@ class XML
      */
     private function _buildNetwork()
     {
+        $hideDevices = array();
         $network = $this->_xml->addChild('Network');
-        if ( defined('PSI_HIDE_NETWORK_INTERFACE') && is_string(PSI_HIDE_NETWORK_INTERFACE) ) {
-            if (preg_match(ARRAY_EXP, PSI_HIDE_NETWORK_INTERFACE)) {
-                $hideDevices = eval(PSI_HIDE_NETWORK_INTERFACE);
-            } else {
-                $hideDevices = array(PSI_HIDE_NETWORK_INTERFACE);
+        if (defined('PSI_HIDE_NETWORK_INTERFACE')) {
+            if (is_string(PSI_HIDE_NETWORK_INTERFACE)) {
+                if (preg_match(ARRAY_EXP, PSI_HIDE_NETWORK_INTERFACE)) {
+                    $hideDevices = eval(PSI_HIDE_NETWORK_INTERFACE);
+                } else {
+                    $hideDevices = array(PSI_HIDE_NETWORK_INTERFACE);
+                }
+            } elseif (PSI_HIDE_NETWORK_INTERFACE === true) {
+                return;
             }
-        } else {
-            $hideDevices = array();
         }
         foreach ($this->_sys->getNetDevices() as $dev) {
             if (!in_array(trim($dev->getName()), $hideDevices)) {
@@ -179,6 +215,9 @@ class XML
     {
         $dev = new HWDevice();
         $hardware = $this->_xml->addChild('Hardware');
+        if ($this->_sys->getMachine() != "") {
+            $hardware->addAttribute('Name', $this->_sys->getMachine());
+        }
         $pci = $hardware->addChild('PCI');
         foreach (System::removeDupsAndCount($this->_sys->getPciDevices()) as $dev) {
             $tmp = $pci->addChild('Device');
@@ -256,18 +295,20 @@ class XML
         $memory->addAttribute('Used', $this->_sys->getMemUsed());
         $memory->addAttribute('Total', $this->_sys->getMemTotal());
         $memory->addAttribute('Percent', $this->_sys->getMemPercentUsed());
-        $details = $memory->addChild('Details');
-        if ($this->_sys->getMemApplication() !== null) {
-            $details->addAttribute('App', $this->_sys->getMemApplication());
-            $details->addAttribute('AppPercent', $this->_sys->getMemPercentApplication());
-        }
-        if ($this->_sys->getMemBuffer() !== null) {
-            $details->addAttribute('Buffers', $this->_sys->getMemBuffer());
-            $details->addAttribute('BuffersPercent', $this->_sys->getMemPercentBuffer());
-        }
-        if ($this->_sys->getMemCache() !== null) {
-            $details->addAttribute('Cached', $this->_sys->getMemCache());
-            $details->addAttribute('CachedPercent', $this->_sys->getMemPercentCache());
+        if (($this->_sys->getMemApplication() !== null) || ($this->_sys->getMemBuffer() !== null) || ($this->_sys->getMemCache() !== null)) {
+            $details = $memory->addChild('Details');
+            if ($this->_sys->getMemApplication() !== null) {
+                $details->addAttribute('App', $this->_sys->getMemApplication());
+                $details->addAttribute('AppPercent', $this->_sys->getMemPercentApplication());
+            }
+            if ($this->_sys->getMemBuffer() !== null) {
+                $details->addAttribute('Buffers', $this->_sys->getMemBuffer());
+                $details->addAttribute('BuffersPercent', $this->_sys->getMemPercentBuffer());
+            }
+            if ($this->_sys->getMemCache() !== null) {
+                $details->addAttribute('Cached', $this->_sys->getMemCache());
+                $details->addAttribute('CachedPercent', $this->_sys->getMemPercentCache());
+            }
         }
         if (count($this->_sys->getSwapDevices()) > 0) {
             $swap = $memory->addChild('Swap');
@@ -337,11 +378,15 @@ class XML
                 $hideFstypes = array(PSI_HIDE_FS_TYPES);
             }
         }
-        if ( defined('PSI_HIDE_DISKS') && is_string(PSI_HIDE_DISKS) ) {
-            if (preg_match(ARRAY_EXP, PSI_HIDE_DISKS)) {
-                $hideDisks = eval(PSI_HIDE_DISKS);
-            } else {
-                $hideDisks = array(PSI_HIDE_DISKS);
+        if (defined('PSI_HIDE_DISKS')) {
+            if (is_string(PSI_HIDE_DISKS)) {
+                if (preg_match(ARRAY_EXP, PSI_HIDE_DISKS)) {
+                    $hideDisks = eval(PSI_HIDE_DISKS);
+                } else {
+                    $hideDisks = array(PSI_HIDE_DISKS);
+                }
+            } elseif (PSI_HIDE_DISKS === true) {
+                return;
             }
         }
         $fs = $this->_xml->addChild('FileSystem');
@@ -361,75 +406,101 @@ class XML
     private function _buildMbinfo()
     {
         $mbinfo = $this->_xml->addChild('MBInfo');
-        if ((sizeof(unserialize(PSI_MBINFO))>0) || PSI_HDDTEMP) {
-            $temp = $mbinfo->addChild('Temperature');
-            if (sizeof(unserialize(PSI_MBINFO))>0) {
-                foreach (unserialize(PSI_MBINFO) as $mbinfoclass) {
-                    $mbinfo_data = new $mbinfoclass();
-                    $mbinfo_detail = $mbinfo_data->getMBInfo();
-                    foreach ($mbinfo_detail->getMbTemp() as $dev) {
-                        $item = $temp->addChild('Item');
-                        $item->addAttribute('Label', $dev->getName());
-                        $item->addAttribute('Value', $dev->getValue());
-                        if ($dev->getMax() !== null) {
-                            $item->addAttribute('Max', $dev->getMax());
-                        }
+        $temp = $fan = $volt = $power = $current = null;
+
+        if (sizeof(unserialize(PSI_MBINFO))>0) {
+            foreach (unserialize(PSI_MBINFO) as $mbinfoclass) {
+                $mbinfo_data = new $mbinfoclass();
+                $mbinfo_detail = $mbinfo_data->getMBInfo();
+
+                foreach ($mbinfo_detail->getMbTemp() as $dev) {
+                    if ($temp == null) {
+                        $temp = $mbinfo->addChild('Temperature');
                     }
-                }
-            }
-            if (PSI_HDDTEMP) {
-                $hddtemp = new HDDTemp();
-                $hddtemp_data = $hddtemp->getMBInfo();
-                foreach ($hddtemp_data->getMbTemp() as $dev) {
                     $item = $temp->addChild('Item');
                     $item->addAttribute('Label', $dev->getName());
                     $item->addAttribute('Value', $dev->getValue());
                     if ($dev->getMax() !== null) {
                         $item->addAttribute('Max', $dev->getMax());
                     }
+                    if ( defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && $dev->getEvent() !== "" ) {
+                        $item->addAttribute('Event', $dev->getEvent());
+                    }
+                }
+
+                foreach ($mbinfo_detail->getMbFan() as $dev) {
+                    if ($fan == null) {
+                        $fan = $mbinfo->addChild('Fans');
+                    }
+                    $item = $fan->addChild('Item');
+                    $item->addAttribute('Label', $dev->getName());
+                    $item->addAttribute('Value', $dev->getValue());
+                    if ($dev->getMin() !== null) {
+                        $item->addAttribute('Min', $dev->getMin());
+                    }
+                    if ( defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && $dev->getEvent() !== "" ) {
+                        $item->addAttribute('Event', $dev->getEvent());
+                    }
+                }
+
+                foreach ($mbinfo_detail->getMbVolt() as $dev) {
+                    if ($volt == null) {
+                        $volt = $mbinfo->addChild('Voltage');
+                    }
+                    $item = $volt->addChild('Item');
+                    $item->addAttribute('Label', $dev->getName());
+                    $item->addAttribute('Value', $dev->getValue());
+                    if ($dev->getMin() !== null) {
+                        $item->addAttribute('Min', $dev->getMin());
+                    }
+                    if ($dev->getMax() !== null) {
+                        $item->addAttribute('Max', $dev->getMax());
+                    }
+                    if ( defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && $dev->getEvent() !== "") {
+                        $item->addAttribute('Event', $dev->getEvent());
+                    }
+                }
+
+                foreach ($mbinfo_detail->getMbPower() as $dev) {
+                    if ($power == null) {
+                        $power = $mbinfo->addChild('Power');
+                    }
+                    $item = $power->addChild('Item');
+                    $item->addAttribute('Label', $dev->getName());
+                    $item->addAttribute('Value', $dev->getValue());
+                    if ($dev->getMax() !== null) {
+                        $item->addAttribute('Max', $dev->getMax());
+                    }
+                    if ( defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && $dev->getEvent() !== "") {
+                        $item->addAttribute('Event', $dev->getEvent());
+                    }
+                }
+
+                foreach ($mbinfo_detail->getMbCurrent() as $dev) {
+                    if ($current == null) {
+                        $current = $mbinfo->addChild('Current');
+                    }
+                    $item = $current->addChild('Item');
+                    $item->addAttribute('Label', $dev->getName());
+                    $item->addAttribute('Value', $dev->getValue());
+                    if ($dev->getMax() !== null) {
+                        $item->addAttribute('Max', $dev->getMax());
+                    }
+                    if ( defined('PSI_SENSOR_EVENTS') && PSI_SENSOR_EVENTS && $dev->getEvent() !== "") {
+                        $item->addAttribute('Event', $dev->getEvent());
+                    }
                 }
             }
         }
-        if (sizeof(unserialize(PSI_MBINFO))>0) {
-            $fan = $mbinfo->addChild('Fans');
-            foreach ($mbinfo_detail->getMbFan() as $dev) {
-                $item = $fan->addChild('Item');
-                $item->addAttribute('Label', $dev->getName());
-                $item->addAttribute('Value', $dev->getValue());
-                if ($dev->getMin() !== null) {
-                    $item->addAttribute('Min', $dev->getMin());
+
+        if (PSI_HDDTEMP) {
+            $hddtemp = new HDDTemp();
+            $hddtemp_data = $hddtemp->getMBInfo();
+            foreach ($hddtemp_data->getMbTemp() as $dev) {
+                if ($temp == null) {
+                    $temp = $mbinfo->addChild('Temperature');
                 }
-            }
-        }
-        if (sizeof(unserialize(PSI_MBINFO))>0) {
-            $volt = $mbinfo->addChild('Voltage');
-            foreach ($mbinfo_detail->getMbVolt() as $dev) {
-                $item = $volt->addChild('Item');
-                $item->addAttribute('Label', $dev->getName());
-                $item->addAttribute('Value', $dev->getValue());
-                if ($dev->getMin() !== null) {
-                    $item->addAttribute('Min', $dev->getMin());
-                }
-                if ($dev->getMax() !== null) {
-                    $item->addAttribute('Max', $dev->getMax());
-                }
-            }
-        }
-        if (sizeof(unserialize(PSI_MBINFO))>0) {
-            $volt = $mbinfo->addChild('Power');
-            foreach ($mbinfo_detail->getMbPower() as $dev) {
-                $item = $volt->addChild('Item');
-                $item->addAttribute('Label', $dev->getName());
-                $item->addAttribute('Value', $dev->getValue());
-                if ($dev->getMax() !== null) {
-                    $item->addAttribute('Max', $dev->getMax());
-                }
-            }
-        }
-        if (sizeof(unserialize(PSI_MBINFO))>0) {
-            $volt = $mbinfo->addChild('Current');
-            foreach ($mbinfo_detail->getMbCurrent() as $dev) {
-                $item = $volt->addChild('Item');
+                $item = $temp->addChild('Item');
                 $item->addAttribute('Label', $dev->getName());
                 $item->addAttribute('Value', $dev->getValue());
                 if ($dev->getMax() !== null) {
@@ -457,9 +528,13 @@ class XML
                 foreach ($upsinfo_detail->getUpsDevices() as $ups) {
                     $item = $upsinfo->addChild('UPS');
                     $item->addAttribute('Name', $ups->getName());
-                    $item->addAttribute('Model', $ups->getModel());
+                    if ($ups->getModel() !== "") {
+                        $item->addAttribute('Model', $ups->getModel());
+                    }
                     $item->addAttribute('Mode', $ups->getMode());
-                    $item->addAttribute('StartTime', $ups->getStartTime());
+                    if ($ups->getStartTime() !== "") {
+                        $item->addAttribute('StartTime', $ups->getStartTime());
+                    }
                     $item->addAttribute('Status', $ups->getStatus());
                     if ($ups->getTemperatur() !== null) {
                         $item->addAttribute('Temperature', $ups->getTemperatur());
@@ -475,6 +550,9 @@ class XML
                     }
                     if ($ups->getLineVoltage() !== null) {
                         $item->addAttribute('LineVoltage', $ups->getLineVoltage());
+                    }
+                    if ($ups->getLineFrequency() !== null) {
+                        $item->addAttribute('LineFrequency', $ups->getLineFrequency());
                     }
                     if ($ups->getLoad() !== null) {
                         $item->addAttribute('LoadPercent', $ups->getLoad());
@@ -572,7 +650,10 @@ class XML
             foreach ($plugins as $plugin) {
                 $object = new $plugin($this->_sysinfo->getEncoding());
                 $object->execute();
-                $pluginroot->combinexml($object->xml());
+                $oxml = $object->xml();
+                if (sizeof($oxml) > 0) {
+                    $pluginroot->combinexml($oxml);
+                }
             }
         }
     }
@@ -620,13 +701,23 @@ class XML
         }
         $options->addAttribute('showPickListTemplate', defined('PSI_SHOW_PICKLIST_TEMPLATE') ? (PSI_SHOW_PICKLIST_TEMPLATE ? 'true' : 'false') : 'false');
         $options->addAttribute('showPickListLang', defined('PSI_SHOW_PICKLIST_LANG') ? (PSI_SHOW_PICKLIST_LANG ? 'true' : 'false') : 'false');
-        $plug = $this->_xml->addChild('UsedPlugins');
-        if ($this->_complete_request && count($this->_plugins) > 0) {
-            foreach ($this->_plugins as $plugin) {
-                $plug->addChild('Plugin')->addAttribute('name', $plugin);
+        $options->addAttribute('showCPUListExpanded', defined('PSI_SHOW_CPULIST_EXPANDED') ? (PSI_SHOW_CPULIST_EXPANDED ? 'true' : 'false') : 'true');
+        $options->addAttribute('showCPUInfoExpanded', defined('PSI_SHOW_CPUINFO_EXPANDED') ? (PSI_SHOW_CPUINFO_EXPANDED ? 'true' : 'false') : 'false');
+        if (count($this->_plugins) > 0) {
+            if ($this->_plugin_request) {
+                $plug = $this->_xml->addChild('UsedPlugins');
+                $plug->addChild('Plugin')->addAttribute('name', $this->_plugin);
+            } elseif ($this->_complete_request) {
+                $plug = $this->_xml->addChild('UsedPlugins');
+                foreach ($this->_plugins as $plugin) {
+                    $plug->addChild('Plugin')->addAttribute('name', $plugin);
+                }
+            } else {
+                $plug = $this->_xml->addChild('UnusedPlugins');
+                foreach ($this->_plugins as $plugin) {
+                    $plug->addChild('Plugin')->addAttribute('name', $plugin);
+                }
             }
-        } elseif ($this->_plugin_request && count($this->_plugins) > 0) {
-            $plug->addChild('Plugin')->addAttribute('name', $this->_plugin);
         }
     }
 }

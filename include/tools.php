@@ -383,8 +383,6 @@ function loggedOutMenu() {
  * Creates the administrator menu
  *
  * @global type $language
- * @global type $phpSysInfoURL
- * @global type $phpMyAdminURL
  * @global type $urlServer
  * @global type $is_admin
  * @global type $is_power_user
@@ -393,8 +391,7 @@ function loggedOutMenu() {
  */
 function adminMenu() {
 
-    global $language, $phpSysInfoURL, $phpMyAdminURL;
-    global $urlServer;
+    global $language, $urlServer;
     global $is_admin, $is_power_user, $is_departmentmanage_user;
 
     $sideMenuGroup = array();
@@ -513,20 +510,19 @@ function adminMenu() {
         array_push($sideMenuSubGroup, $arrMenuType);
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
         array_push($sideMenuLink, "../admin/cleanup.php");
-        array_push($sideMenuImg, "arrow.png");
-
-        if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
+        array_push($sideMenuImg, "arrow.png");       
+        if (get_config('phpSysInfoURL')) {
             array_push($sideMenuText, $GLOBALS['langSysInfo']);
-            array_push($sideMenuLink, $phpSysInfoURL);
+            array_push($sideMenuLink, get_config('phpSysInfoURL'));
             array_push($sideMenuImg, "arrow.png");
         }
         array_push($sideMenuText, $GLOBALS['langPHPInfo']);
         array_push($sideMenuLink, "../admin/phpInfo.php");
         array_push($sideMenuImg, "arrow.png");
 
-        if (isset($phpMyAdminURL)) {
+        if (get_config('phpMyAdminURL')) {
             array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
-            array_push($sideMenuLink, $phpMyAdminURL);
+            array_push($sideMenuLink, get_config('phpMyAdminURL'));
             array_push($sideMenuImg, "arrow.png");
         }
 
