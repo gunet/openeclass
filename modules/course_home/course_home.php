@@ -699,8 +699,8 @@ $tool_content .="<div class='row'>";
                                         <ul class='tablelist'>" . course_announcements() . "
                                         </ul>
                                     </div>
-                                    <div class='panel-footer'>
-                                        <p class='link-to-more'><a href='{$urlAppend}modules/announcements/?course=$course_code'>$langMore&hellip;</a></p>
+                                    <div class='panel-footer clearfix'>
+                                        <div class='pull-right'><a href='{$urlAppend}modules/announcements/?course=$course_code'><small>$langMore&hellip;</small></a></div>
                                     </div>
                                 </div>
                             </div>

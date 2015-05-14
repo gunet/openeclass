@@ -158,8 +158,8 @@ $tool_content .= "
                             }
                             $tool_content.="</ul>
                     </div>
-                    <div class='panel-footer'>
-                        <p class='link-to-more'><a href='../modules/announcements/myannouncements.php'>$langMore&hellip;</a></p>
+                    <div class='panel-footer clearfix'>
+                        <div class='pull-right'><a href='../modules/announcements/myannouncements.php'><small>$langMore&hellip;</small></a></div>
                     </div>
                 </div>
             </div>
@@ -209,8 +209,8 @@ $tool_content .= "
                             }
                             $tool_content.="</ul>
                         </div>
-                        <div class='panel-footer'>
-                            <p class='link-to-more'><a href='{$urlAppend}modules/dropbox/'>$langMore&hellip;</a></p>
+                        <div class='panel-footer clearfix'>
+                            <div class='pull-right'><a href='{$urlAppend}modules/dropbox/'><small>$langMore&hellip;</small></a></div>
                         </div>
                     </div>
                 </div>
@@ -255,7 +255,7 @@ $tool_content .= "
                               <span class='text-muted'>$langSumCoursesSupport</span>
                             </li>
                         </ul>
-                        <div class='quick-change-pwd'><a href='".$urlServer."main/profile/password.php'>$langProfileQuickPassword</a></div>
+                        <div class='pull-right'><a href='".$urlServer."main/profile/password.php'><small>$langProfileQuickPassword</small></a></div>
                     </div>
                 </div>
             </div>

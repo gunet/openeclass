@@ -607,8 +607,43 @@ a
 }
 /*# END OF BOOTSTRAP THEME CSS */
 
-/* Header and Footer styles */
+/* List Group header styles */
+.list-header{
+    background-color: #eeeeee !important;
+    color: #777777 !important;
+}
 
+/* Share Module styles */
+ul.sharinglist li a i{
+    color: #666;
+}
+ul.sharinglist li a i:hover{
+    color: #333;
+}
+
+/* DataTables styles */
+.dataTables_filter
+{
+    position: relative;
+    &:before{
+        position:absolute;
+        font-family: FontAwesome;
+        top:6px;
+        right:10px;
+        content: "\f002";
+        color: #999;
+    }
+    label{
+        margin: 0 0 10px 0;
+        width: 100%;
+    }
+    input{
+        margin: 0px !important;
+        padding-right: 25px;
+    }
+}
+
+/* Header and Footer styles */
 #header_section, #footer_section{
     padding: 0px;
     margin: 0px;
@@ -627,12 +662,26 @@ footer.footer
     height: 49px;
     font-size: 12px;
 }
+.footer span{
+    line-height: 24px;
+}
 @media (max-width: 992px){
     footer.footer {
         border-radius: 0px;
     }
 }
 /* Navbar styles */
+.navbar-toggle{
+    border: none;
+    margin-left: 8px;
+    border-right: 1px solid #e7e7e7;
+    border-radius: 0px;
+    margin: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 52px;
+}
+
 #header .navbar-brand{
     padding: 0px;
 }
@@ -1551,6 +1600,20 @@ ul.tablelist
     @include button-variant(white, #232C3A, #111111);
 }
 
+/* Scroll-to-top styles */
+#scrollToTop{
+    display: none;
+    position: fixed;
+    right: 0px;
+    padding-right: 45px;
+    bottom: 15px;
+}
+#scrollToTop i{
+    padding: 0 0 10px 0;
+    color: #a7a7a7;
+    cursor: pointer;
+}
+
 /* New Alert styles */
 .alert-default {
     background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
@@ -1805,7 +1868,52 @@ top: 8px;
    PAGE-SPECIFIC STYLES 
    ******************** */
 
+/* COMMON PORTFOLIO AND COURSE HOME STYLES */
+.panel-footer .event-legend > div{
+    margin-bottom: 5px;
+}
+.panel-footer .event
+{
+    display: inline-block;
+    margin-right: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
 /* COURSE HOME */
+/* Course description title */
+.course-info-title{
+    margin-bottom: 10px;
+    h4{
+        line-height: 30px;
+        font-size: 16px;
+        padding: 0px;
+        margin: 0px;
+        color: #666;
+    }
+
+    .edit-course-title{
+        margin: 0px 15px;
+        i{
+            font-size: 16px;
+            line-height: 30px;
+            color : #666;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        i:hover{
+            color: #4DA1E4;
+        }
+    }
+}
+/* add unit button */
+.add-unit-btn{
+    line-height: 37px;
+    font-size: 22px;
+    margin: 0px 10px;
+    color: #5cb85c;
+}
 /* Lesson banner */
 .banner-image-wrapper{
      overflow:hidden;
@@ -1824,6 +1932,14 @@ top: 8px;
 }
 
 /* PORTFOLIO */
+/* portfolio datatable right cell fix */ 
+table.dataTable tbody td.right-cell{
+    border-left: 1px solid #ddd;
+    line-height:56px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 40px;
+}
 /* portfolio datatable 'all courses' button fix */ 
 @media(min-width: $screen-sm){
     div.all_courses {
@@ -1890,6 +2006,128 @@ open in a modal with the help of an iframe */
 }
 
 /* Home Page */
+/* Open Courses National Label */
+.panel.opencourses-national{
+
+    min-height: 2px;
+
+    a{
+        display: block;
+        font-size: 14px;
+        text-transform: uppercase;
+        background-color: #666;
+        color: white;
+        padding: 15px 5px;
+        height: 100%;
+        text-align: center;
+    }
+    a:hover{
+        text-decoration: none;
+        color: white;
+    }
+}
+/* Home Announcements styles */
+ul.front-announcements, .single_announcement
+{
+    list-style: none;
+    padding-left: 0px;
+    li{
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+        a:hover{
+            text-decoration: none;
+        }
+    }
+    li:first-child{
+        padding-top: 0px;
+    }
+    li:last-child{
+        padding-bottom: 0px !important;
+    }
+    .announcement-title{
+        font-weight: bold;
+        font-size: 15px;
+    }
+    .announcement-date{
+        font-style: italic;
+        color: #777;
+        font-size: 13px;
+        line-height: 30px;
+    }
+    .announcement-main{
+        padding: 10px;
+    }
+    .announcements-more{
+        text-align: right;
+    }
+    li:first-child{
+
+    }
+    li:last-child{
+        border-bottom: none;
+        padding-bottom: 10px;
+    }
+}
+.opencourses .inner_opencourses{
+    
+    span.opencourse_header{
+            display: block;
+            font-size: 18px;
+            color: #aaa;
+            text-align: center;
+        }
+    div{
+        .num_sub_wrapper{
+            padding-top: 15px;
+        }
+        span{
+            display: block;
+        }
+        .opencourse_link{
+            font-size: 16px;
+            color: #444;
+            padding: 8px 0px 14px 0;
+            text-align: center;
+        }
+        .opencourse_num{
+            font-size: 40px;
+            float: left;
+            font-weight: 900;
+            height: 40px;
+            line-height: 40px;
+            padding: 0 3px;
+        }
+        .opencourse_num_text{
+            padding: 0px;
+            
+            a{
+                display: block;
+            }
+        }
+        >div>div{
+            float: right;
+        }
+        .opencourse_sub{
+            float: left;
+            background-color: #428bca;
+            height: 40px;
+            color: white;
+            font-size: 13px;
+            padding: 0px 15px;
+        }
+        .opencourse_triangle{
+            float: left;
+            border-top: 20px solid transparent;
+            border-bottom: 20px solid transparent;
+            border-left: 20px solid #428bca;
+            width: 0px;
+            height: 0px;
+        }
+    }
+    a:hover{
+        text-decoration:none;
+    }
+}
 .mobile-apps{
     .col-xs-6:first-child{
         padding-right: 7px;
@@ -2304,4 +2542,127 @@ table.category-links tr.link-subcategory-title{
 table.category-links td.category-link{
     padding: 15px 20px;
     
+}
+
+/* Course Metadata styles */
+div.row.oc-metedata-list{
+    ul li:first-child{
+        padding-left: 10px;
+    }
+    ul li{
+        padding-left: 25px;
+        .badge.valid{
+            background-color: #006400;
+        }
+        .badge.not-valid{
+            background-color: #ad2121;
+        }
+    }
+}
+
+/* Glossary styles */
+div.glossary-categories{
+    a:hover{
+        text-decoration:none;
+    }
+    td.space-left{
+        padding-left: 25px;
+    }
+}
+
+/* Agenda styles */
+#calendar_wrapper{
+    margin-bottom: 25px;
+
+    .calendar-header{
+        //margin-top: 20px;
+        margin-bottom: 15px;
+
+        #calendar-header{
+            border-bottom: 1px #999 solid;
+        }
+
+        h4{
+            margin: 0px;
+            padding: 0px;
+            line-height: 50px;
+        }
+
+        .form-inline{
+            padding: 10px 0;
+        }
+    }
+}
+#cal-slide-content
+{
+  background: $color-background !important;
+  background-image: none;
+}
+span[data-cal-date]
+{
+  margin-right: 5px !important;
+  margin-top: 5px !important;
+}
+
+.event-legend{
+    font-size: 11px;
+    color: #666;
+    line-height: 10px;
+    .event{
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+    }
+}
+
+.event
+{
+  width: 14px;
+  height: 14px;
+  opacity: 0.7 !important;
+  border-radius: 7px;
+  border: 0px !important;
+  margin-bottom: 4px;
+
+  @include box-shadow(0 0px 0px #BBBBBB !important);
+  @include transition(all $transition-time linear);
+
+  &:hover{
+    opacity: 1 !important;
+    @include transition(all $transition-time linear);
+  }
+}
+
+/* Dropbox styles */
+#dropboxTabs .nav-tabs{
+    margin-bottom: 15px;
+}
+
+#profile_menu_dropdown ul li:last-child{
+    border-top: 1px #ddd solid;
+}
+
+/* External Applications styles */
+.extapp{
+    table.extapp-table thead.list-header{
+        td{
+            padding: 10px;
+        }
+    }
+    table.extapp-table tr{
+        td{
+            padding: 20px;
+        }
+    }
+}
+
+/* Profile page styles */
+div.profile-pers-info-name{
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 15px;
+    padding-top: 10px;
+}
+div#profile-about-me{
+    padding-top: 20px;
+    padding-bottom: 20px;
 }

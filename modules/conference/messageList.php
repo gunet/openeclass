@@ -125,12 +125,7 @@ require_once 'include/lib/textLib.inc.php';
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-custom.css">
-        
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-theme.min.css">
-    
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/inventory.css">
-        
+               
     <style type="text/css">
         span { color: #727266; font-size: 11px; }
         div { font-size: 12px; }
