@@ -48,7 +48,9 @@ function unpack_zip_inner($zipfile, $clone) {
     }
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
-    mkdir($destdir, 0755);
+    if (!is_dir($destdir)) {
+        mkdir($destdir, 0755);
+    }
     chdir($destdir);
     $zip->extract();
     
