@@ -573,7 +573,11 @@ if (isset($_GET['an_id'])) {
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
         $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table-default'>";
         $tool_content .= "<thead>";
-        $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
+        if ($is_editor) {
+            $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
+        } else {
+            $tool_content .= "<tr><th>$langDate</th><th>$langAnnouncement</th>";
+        }
         if ($is_editor) {
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         }
