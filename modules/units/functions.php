@@ -304,7 +304,7 @@ function show_description($title, $comments, $id, $res_id, $visibility) {
 /**
  * @brief display resource learning path
  * @global type $id
- * @global type $urlServer
+ * @global type $urlAppend
  * @global type $course_id
  * @global type $is_editor
  * @global type $langWasDeleted
@@ -317,7 +317,7 @@ function show_description($title, $comments, $id, $res_id, $visibility) {
  * @return string
  */
 function show_lp($title, $comments, $resource_id, $lp_id) {
-    global $id, $urlServer, $course_id, $is_editor,
+    global $id, $urlAppend, $course_id, $is_editor,
     $langWasDeleted, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
@@ -340,18 +340,25 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         }
     } else {        
         $status = $lp->visible;
-        $link = "<a href='${urlServer}modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$lp_id&amp;unit=$id'>";
-        if (!$module_visible) {
-            $link .= " <i>($langInactiveModule)</i>";
+        if ($is_editor) {
+            $link = "<a href='${urlAppend}modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$lp_id&amp;unit=$id'>";
+            if (!$module_visible) {
+                $link .= " <i>($langInactiveModule)</i> ";
+            }
+        } else {
+            if ($status == 0) {
+                return '';
+            }
+            $module_id = Database::get()->querySingle(
+                "SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1",
+                $lp_id)->module_id;
+            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
         }
         $imagelink = icon('fa-ellipsis-h');
     }
-    if ($status != '1' and ! $is_editor) {
-        return '';
-    }
 
     if (!empty($comments)) {
-        $comment_box = "<br />$comments";
+        $comment_box = "<br>$comments";
     } else {
         $comment_box = '';
     }
