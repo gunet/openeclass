@@ -135,7 +135,7 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
-    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name) VALUES(?s)", $theme_options_name)->lastInsertID;
+    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
     clear_default_settings();
     
     clone_images(); //clone images
