@@ -130,8 +130,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } else {
         foreach ($result as $myrow) {
             $data['aaData'][] = array(
-                '0' => date('d-m-Y', strtotime($myrow->date)),
-                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>');
+                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>',
+                '1' => date('d-m-Y', strtotime($myrow->date))
+                );
         }
     }
     echo json_encode($data);
@@ -573,11 +574,8 @@ if (isset($_GET['an_id'])) {
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
         $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table-default'>";
         $tool_content .= "<thead>";
-        if ($is_editor) {
-            $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
-        } else {
-            $tool_content .= "<tr><th>$langDate</th><th>$langAnnouncement</th>";
-        }
+        $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
+
         if ($is_editor) {
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         }
