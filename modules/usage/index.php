@@ -27,6 +27,14 @@
 $require_help = true;
 if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
     $require_current_course = true;
+    $stats_type = 'course';
+}
+elseif(isset($_REQUEST['t']) || $_REQUEST['t'] == 'u'){
+    $stats_type = 'user';
+}
+else{ // expecting $_REQUEST['t'] == 'a'
+    $require_admin = true;
+    $stats_type = 'admin';
 }
 $helpTopic = 'Usage';
 $require_login = true;
@@ -44,6 +52,7 @@ $head_content .= "
 <script type='text/javascript'>
     var lang = '$language'; 
     var maxintervals = 20;
+    var views = {plots:{class: 'fa fa-bar-chart', title: '$langPlots'}, list:{class: 'fa fa-list', title: '$langDetails'}};
 </script>";
 load_js('statistics.js');
 
@@ -52,19 +61,15 @@ $pageName = $langUsage;
 ob_start();
 
 if(isset($course_id) && ($is_editor || $is_admin)){
-    $stats_type = 'course';
     require_once "course.php";
 }
 elseif($is_admin){
-    $stats_type = 'admin';
     require_once "admin.php";
 }
 else{
-    $stats_type = 'user';
     require_once "user.php";
 }
 
-//require_once "form.php";
 add_units_navigation(true);
 
 if($stats_type == 'course'){

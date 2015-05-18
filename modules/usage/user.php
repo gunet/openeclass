@@ -39,4 +39,5 @@ $tool_content .= "<div id='coursepref_pie' style='width:40%;float:left;'></div>"
 $tool_content .= "<div id='course' style='width:60%;float:left;'>".
         "<ul class='list-group'><li class='list-group-item'><label id='coursetitle'></label></li><li class='list-group-item'><div id='course_stats'></div></li></ul>".
         "</div>";
+$tool_content .= "<div id='details' style='width:100%;'></div>";
 $tool_content .= "</div></div></div></div>";

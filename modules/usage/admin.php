@@ -20,3 +20,20 @@
  * ======================================================================== 
  */
 
+$head_content .= 
+    "<script type='text/javascript'>
+        startdate = null;
+        interval = null;
+        enddate = null;
+        module = null;
+        user = null;
+        course = null;
+    </script>";
+require_once('form.php');
+$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+$tool_content .= "<ul class='list-group'><li class='list-group-item'><label id='depuser_title'>$langUsers</label></li><li class='list-group-item'><div id='depuser_stats'></div></li></ul>";
+$tool_content .= "<ul class='list-group'><li class='list-group-item'><label id='depcourse_title'>$langCoursesHeader</label></li><li class='list-group-item'><div id='depcourse_stats'></div></li></ul>";
+$tool_content .= "</div></div></div></div>";
+$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+$tool_content .= "<ul class='list-group'><li class='list-group-item'><label id='userlogins_title'>$langNbLogin</label></li><li class='list-group-item'><div id='userlogins_stats'></div></li></ul>";
+$tool_content .= "</div></div></div></div>";

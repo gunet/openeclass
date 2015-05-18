@@ -78,6 +78,8 @@ $tool_content .= "<label class='col-sm-1 control-label'>$langUntil:</label>
 $tool_content .= '
     <div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
 
+$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
+
 if($stats_type == 'course'){
     $tool_content .= '
     <div class="col-sm-3 col-xs-3"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';

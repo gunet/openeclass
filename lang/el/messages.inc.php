@@ -3396,6 +3396,9 @@ $langStatAccueil = "Για το χρονικό διάστημα που ζητή�
 $langHost = "Υπολογιστής";
 $langGroupUsage = 'Στατιστικά ομάδων χρηστών';
 $langNoStats = "Δεν υπάρχουν διαθέσιμα στατιστικά";
+$langDetails = "Αναλυτικά";
+$langPlots = "Γραφήματα";
+
 
 #for platform Statistics
 $langUsersCourse = "Χρήστες ανά μάθημα";

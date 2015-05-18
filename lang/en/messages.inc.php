@@ -3595,6 +3595,9 @@ $langIndexCreation = "Index creation";
 $langUpgradeMulUsernames = 'The following changes were performed due to users with conflicting usernames:';
 $langUpgradeChangeUsername = "Username changed from %s to %s";
 $langNoStats = "No statistics available";
+$langDetails = "Details";
+$langPlots = "Plots";
+
 $langCatVideoDirectory = "Multimedia file categories";
 $langCatVideoDirectoryCreated = "Category added";
 $langMyProfile = "Μy Profile";

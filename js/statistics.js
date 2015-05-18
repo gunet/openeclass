@@ -26,8 +26,12 @@ var edate = null;
 var course = null;
 var module = null;
 var user = null;
+//var views = {plots:{class: 'fa fa-bar-chart', title: '$langPlots'}, list:{class: 'fa fa-list', title: '$langDetails'}};
+var selectedview = 'plots';
 //var maxintervals = 20;
 //var lang = $language;
+var xAxisDateFormat = {1:'%d-%m-%Y', 7:'%d-%m-%Y', 30:'%m-%Y', 365:'%Y'};
+var xAxisLabels = {1:'day', 7:'week', 30:'month', 365:'year'};
 
 $(document).ready(function(){
     $('#startdate').datepicker({
@@ -54,6 +58,16 @@ $(document).ready(function(){
     $('#enddate').blur(function(){
         adjust_interval_options();
         refresh_plots();
+    });
+    $('#toggle-view').click(function(){
+        $(this).children("i").attr('class', views[selectedview].class);
+        $(this).children("i").attr('data-original-title', views[selectedview].title);
+        if(selectedview == 'plots'){
+            selectedview = 'list';
+        }
+        else{
+            selectedview = 'plots';
+        }
     });
     sdate = $('#startdate').datepicker("getDate");
     startdate = sdate.getFullYear()+"-"+(sdate.getMonth()+1)+"-"+sdate.getDate();
@@ -94,6 +108,9 @@ function refresh_plots(){
     if($("#generic_userstats").length){
         refresh_generic_user_plot();
     }
+    if($("#depcourse_stats").length){
+        refresh_department_user_plot();
+    }
 }
 
 function adjust_interval_options(){
@@ -108,7 +125,6 @@ function adjust_interval_options(){
             $(this).show();
         }
     });
-    console.log(edate+"-"+sdate+"="+diffInDays);
 }
 
 function refresh_generic_course_plot(){
@@ -117,6 +133,7 @@ function refresh_generic_course_plot(){
             data: {
                 json: data,
                 x: 'time',
+                xFormat: '%Y-%m-%d',
                 axes: {
                     hits: 'y',
                     duration: 'y2'
@@ -126,11 +143,12 @@ function refresh_generic_course_plot(){
                     duration: 'spline'
                 }
             },
-            axis:{ x: {type:'category', label: 'month', padding:{left:0, right:0}}, y:{label:'hits', min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:'duration (sec)', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval]}, label: xAxisLabels[interval]}, y:{label:'hits', min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
             bindto: '#generic_stats'
         });
         refresh_module_pref_plot();
     });
+    console.log('For interval '+interval+' format:'+xAxisDateFormat[interval]+', label'+xAxisLabels[interval]);
 }
 
 function refresh_module_pref_plot(){
@@ -154,6 +172,7 @@ function refresh_course_module_plot(mdl){
             data: {
                 json: data.chartdata,
                 x: 'time',
+                xFormat: '%Y-%m-%d',
                 axes: {
                     hits: 'y',
                     duration: 'y2'
@@ -163,7 +182,7 @@ function refresh_course_module_plot(mdl){
                     duration: 'spline'
                 }
             },
-            axis:{ x: {type:'category', label: 'month', padding:{left:0, right:0}}, y:{label:'hits', min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'duration (sec)', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval]}, label: xAxisLabels[interval], padding:{left:0, right:0}}, y:{label:'hits', min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
             bindto: '#module_stats'
         });
     });
@@ -177,6 +196,7 @@ function refresh_generic_user_plot(){
             data: {
                 json: data,
                 x: 'time',
+                xFormat: '%Y-%m-%d',
                 axes: {
                     hits: 'y',
                     duration: 'y2'
@@ -186,7 +206,7 @@ function refresh_generic_user_plot(){
                     duration: 'spline'
                 }
             },
-            axis:{ x: {type:'category', label: 'month', padding:{left:0, right:0}}, y:{label:'hits', min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:'duration (sec)', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval]}, label: xAxisLabels[interval], padding:{left:0, right:0}}, y:{label:'hits', min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:'duration sec', min: 0, padding:{top:0, bottom:0}}},
             bindto: '#generic_userstats'
         });
         refresh_course_pref_plot();
@@ -235,6 +255,7 @@ function refresh_user_course_plot(){
             data: {
                 json: chartdata,
                 x: 'time',
+                xFormat: '%Y-%m-%d',
                 axes: {
                     hits: 'y',
                     duration: 'y2'
@@ -244,12 +265,63 @@ function refresh_user_course_plot(){
                     duration: 'spline'
                 }
             },
-            axis:{ x: {type:'category', label: 'month', padding:{left:0, right:0}}, y:{label:'hits', min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'duration (sec)', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval]}, label: xAxisLabels[interval], padding:{left:0, right:0}}, y:{label:'hits', min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
             bindto: '#course_stats'
         });
     });
 }
 
+function refresh_department_user_plot(){
+    $.getJSON('results.php',{t:'du', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
+        c3.generate({
+            data: {
+                json: data,
+                x: 'department',
+                type:'bar',
+                groups:[['status1','status5']]
+            },
+            size:{height:250},
+            bar:{width:50},
+            axis:{ x: {type:'category', label:'department'}, y:{label:'users', min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
+            bindto: '#depuser_stats'
+        });
+        refresh_department_course_plot();
+    });
+}
+function refresh_department_course_plot(){
+    $.getJSON('results.php',{t:'dc', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
+        c3.generate({
+            data: {
+                json: data,
+                x: 'department',
+                type:'bar',
+                groups:[['visibility1','visibility2','visibility3','visibility4']]
+            },
+            size:{height:250},
+            bar:{width:50},
+            axis:{ x: {type:'category', label:'department'}, y:{label:'courses', min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
+            bindto: '#depcourse_stats'
+        });
+        refresh_user_login_plot();
+    });
+}
+
+function refresh_user_login_plot(){
+    $.getJSON('results.php',{t:'ul', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
+        c3.generate({
+            data: {
+                json: data,
+                x: 'time',
+                xFormat: '%Y-%m-%d',
+                type:'area',
+                groups:[['logins']]
+            },
+            size:{height:250},
+            axis:{ x: {type:'timeseries', label:'time'}, y:{label:'logins', min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
+            bindto: '#userlogins_stats'
+        });
+    });
+}
 
 
 
