@@ -1898,7 +1898,7 @@ function units_set_maxorder() {
 function handle_unit_info_edit() {
 
     global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code, $webDir;
-
+    require_once 'modules/tags/moduleElement.class.php';
     $title = $_REQUEST['unittitle'];
     $descr = $_REQUEST['unitdescr'];
     if (isset($_REQUEST['unit_id'])) { // update course unit
@@ -1907,6 +1907,12 @@ function handle_unit_info_edit() {
                                         title = ?s,
                                         comments = ?s
                                     WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->syncTags($tagsArray);
+        }        
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = $maxorder + 1;
@@ -1915,6 +1921,12 @@ function handle_unit_info_edit() {
                                  `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
         $successmsg = $langCourseUnitAdded;
         $unit_id = $q->lastInsertID;
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->attachTags($tagsArray);
+        }              
     }
     // update index
     require_once 'modules/search/indexer.class.php';
@@ -1925,6 +1937,7 @@ function handle_unit_info_edit() {
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
     Session::Messages($successmsg, 'alert-success');
+    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
 }
 
 function math_unescape($matches) {

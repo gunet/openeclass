@@ -35,13 +35,12 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/action.php';
 
 // Special case for static modules
-$modules[MODULE_ID_UNITS] = array('title' => $langUnits, 'link' => 'units', 'image' => '');
+$modules[MODULE_ID_UNITS] = array('title' => $langCourseUnits, 'link' => 'units', 'image' => '');
 
 if (isset($_GET['tag']) && strlen($_GET['tag'])) {   
     $tag = $_GET['tag'];
-    $tags_list = Database::get()->queryArray("SELECT * FROM `tag_element_module`, `tag` WHERE `tag`.`name` = ?s AND `tag_element_module`.`course_id` = ?d ORDER BY module_id", $tag, $course_id);
+    $tags_list = Database::get()->queryArray("SELECT * FROM `tag_element_module`, `tag` WHERE `tag`.`name` = ?s AND `tag`.`id` =  `tag_element_module`.`tag_id` AND `tag_element_module`.`course_id` = ?d ORDER BY module_id", $tag, $course_id);
     $toolName = "$langTag: $tag";
-
     //check the element type
     $latest_module_id = 0;
     foreach($tags_list as $tag){
@@ -68,6 +67,10 @@ if (isset($_GET['tag']) && strlen($_GET['tag'])) {
             $exe = Database::get()->querySingle("SELECT title FROM exercise WHERE id = ?d ", $tag->element_id);
             $link = "<a href='../../modules/exercise/admin.php?course=".$course_code."&exerciseId=".$tag->element_id."'>$exe->title</a><br>";
         }
+        if($tag->module_id == MODULE_ID_UNITS){
+            $unit = Database::get()->querySingle("SELECT title FROM course_units WHERE id = ?d ", $tag->element_id);
+            $link = "<a href='../../modules/units/index.php?course=".$course_code."&id=".$tag->element_id."'>$unit->title</a><br>";
+        }        
         $tool_content .= "
                     <ul>
                         <li>$link</li>

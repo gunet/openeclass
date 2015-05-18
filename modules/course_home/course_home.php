@@ -217,9 +217,7 @@ if ($is_editor) {
     require_once 'modules/search/indexer.class.php';
     require_once 'modules/course_metadata/CourseXML.php';
 
-    if (isset($_REQUEST['edit_submit'])) {
-        $main_content .= handle_unit_info_edit();
-    } elseif (isset($_REQUEST['edit_submitW'])){
+    if (isset($_REQUEST['edit_submitW'])){
         $title = $_REQUEST['weektitle'];
         $descr = $_REQUEST['weekdescr'];
         if (isset($_REQUEST['week_id'])) { //edit week
@@ -236,7 +234,8 @@ if ($is_editor) {
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYUNIT, Indexer::RESOURCE_UNITRESOURCE, $id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            $main_content .= "<div class='alert alert-success'>$langCourseUnitDeleted</div>";
+            Session::Messages($langCourseUnitDeleted, 'alert-success');
+            redirect_to_home_page("courses/$course_code/");
         } else {
             $res_id = intval($_GET['del']);
             if (($id = check_admin_unit_resource($res_id))) {
