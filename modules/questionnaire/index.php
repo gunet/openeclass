@@ -305,8 +305,8 @@ function printPolls() {
                                 'show' => $total_participants > 0
                             ),
                             array(
-                                'title' => $langParticipate,
-                                'icon' => 'fa-pie-chart',
+                                'title' => $langUsage,
+                                'icon' => 'fa-line-chart',
                                 'url' => "pollresults.php?course=$course_code&pid=$pid",
                                 'show' => $total_participants > 0
                             ),
