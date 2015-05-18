@@ -34,7 +34,10 @@ require_once 'modules/search/indexer.class.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 
- if (isset($_GET['tag']) && strlen($_GET['tag'])) {   
+// Special case for static modules
+$modules[MODULE_ID_UNITS] = array('title' => $langUnits, 'link' => 'units', 'image' => '');
+
+if (isset($_GET['tag']) && strlen($_GET['tag'])) {   
     $tag = $_GET['tag'];
     $tags_list = Database::get()->queryArray("SELECT * FROM `tag_element_module`, `tag` WHERE `tag`.`name` = ?s AND `tag_element_module`.`course_id` = ?d ORDER BY module_id", $tag, $course_id);
     $toolName = "$langTag: $tag";
