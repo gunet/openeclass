@@ -931,7 +931,7 @@ function current_module_id() {
     if (isset($static_module_paths[$link])) {
         $module_id = $static_module_paths[$link];
         define('STATIC_MODULE', true);
-        return false;
+        return $module_id;
     }
 
     foreach ($modules as $mid => $info) {
