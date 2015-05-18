@@ -1245,39 +1245,7 @@ if ($doc_count == 0) {
     if (!count($fileinfo)) {
         $tool_content .= "<tr><td colspan=10><p class='not_visible text-center'> - " . q($langNoDocuments) . " - </td></tr>";
     } else {
-            $head_content .= "<script>
-            $(function(){
-                $('.fileModal').click(function (e)
-                {
-                    e.preventDefault();
-                    var fileURL = $(this).attr('href');
-                    var fileTitle = $(this).attr('title');
-                    bootbox.dialog({
-                        size: 'large',
-                        title: fileTitle,
-                        message: '<div class=\"row\">'+
-                                    '<div class=\"col-sm-12\">'+
-                                        '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
-                                    '</div>'+
-                                '</div>',                          
-                        buttons: {
-                            success: {
-                                label: '<i class=\"fa fa-print\"></i> $langPrint',
-                                className: 'btn-primary',
-                                callback: function (d) {
-                                    var iframe = document.getElementById('fileFrame');
-                                    iframe.contentWindow.print();                                                               
-                                }
-                            },
-                            cancel: {
-                                label: '$langCancel',
-                                className: 'btn-default'
-                            }                        
-                        }
-                    });                    
-                });
-            });
-            </script>";
+
     // -------------------------------------
     // Display directories first, then files
     // -------------------------------------
@@ -1357,7 +1325,7 @@ if ($doc_count == 0) {
             }
             
             $tool_content .= "<tr $style><td class='text-center'>$img_href</td>
-                              <td>$link_href $link_title_extra";
+                              <td><input type='hidden' value='$download_url'>$link_href $link_title_extra";
             // comments
             if (!empty($entry['comment'])) {
                 $tool_content .= "<br><span class='comment text-muted'><small>" .
@@ -1430,7 +1398,49 @@ if ($doc_count == 0) {
         
         }
     }
-    }
+    $head_content .= "<script>
+    $(function(){
+        $('.fileModal').click(function (e)
+        {
+            e.preventDefault();
+            var fileURL = $(this).attr('href');
+            var downloadURL = $(this).prev('input').val();
+            var fileTitle = $(this).attr('title');
+            bootbox.dialog({
+                size: 'large',
+                title: fileTitle,
+                message: '<div class=\"row\">'+
+                            '<div class=\"col-sm-12\">'+
+                                '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                            '</div>'+
+                        '</div>',                          
+                buttons: {
+                    download: {
+                        label: '<i class=\"fa fa-download\"></i> $langDownload',
+                        className: 'btn-success',
+                        callback: function (d) {                      
+                            window.location = downloadURL;                                                            
+                        }
+                    },                        
+                    print: {
+                        label: '<i class=\"fa fa-print\"></i> $langPrint',
+                        className: 'btn-primary',
+                        callback: function (d) {
+                            var iframe = document.getElementById('fileFrame');
+                            iframe.contentWindow.print();                                                               
+                        }
+                    },
+                    cancel: {
+                        label: '$langCancel',
+                        className: 'btn-default'
+                    }                        
+                }
+            });                    
+        });
+    });
+    </script>";    
+    
+}
     $tool_content .= "</table>
             </div>
         </div>
