@@ -51,7 +51,7 @@ function new_bbb_session() {
     global $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langNewBBBSessionActive, $langNewBBBSessionInActive;
     global $langNewBBBSessionStatus, $langBBBSessionAvailable, $langBBBMinutesBefore;
     global $start_session;
-    global $langTitle;
+    global $langTitle, $langBBBNotifyExternalUsersHelpBlock;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;    
     global $langAllUsers, $langParticipants, $langBBBRecord, $langBBBRecordTrue, $langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
@@ -144,16 +144,17 @@ function new_bbb_session() {
             <div class='col-sm-10'>
                     <div class='radio'>
                       <label>
-                        <input type='radio' id='public_button' name='type' value='1' checked>
+                        <input type='radio' id='private_button' name='type' value='0' checked>
+                       $langNewBBBSessionPrivate
+                      </label>
+                    </div>            
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='public_button' name='type' value='1'>
                         $langNewBBBSessionPublic
                       </label>
                     </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='private_button' name='type' value='0'>
-                       $langNewBBBSessionPrivate
-                      </label>
-                    </div>
+
             </div>
         </div>
         <div class='form-group'>
@@ -194,6 +195,7 @@ function new_bbb_session() {
             <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
             <div class='col-sm-10'>
                 <input class='form-control' id='tags_1' name='external_users' type='text' class='tags' value=''>
+                <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>
             </div>
         </div>
         <div class='form-group'>
@@ -454,7 +456,7 @@ function edit_bbb_session($session_id) {
     global $langNewBBBSessionDesc, $langNewBBBSessionStart;
     global $langNewBBBSessionType, $langNewBBBSessionPublic, $langNewBBBSessionPrivate;
     global $langNewBBBSessionStatus, $langNewBBBSessionActive, $langNewBBBSessionInActive,$langBBBSessionAvailable,$langBBBMinutesBefore;       
-    global $langTitle;
+    global $langTitle, $langBBBNotifyExternalUsersHelpBlock;
     global $langBBBNotifyUsers,$langBBBNotifyExternalUsers;
     global $langAllUsers,$langParticipants,$langBBBRecord,$langBBBRecordTrue,$langBBBRecordFalse,$langBBBSessionMaxUsers;
     global $langBBBSessionSuggestedUsers,$langBBBSessionSuggestedUsers2;
@@ -566,14 +568,14 @@ function edit_bbb_session($session_id) {
                         <div class='col-sm-10'>
                                 <div class='radio'>
                                   <label>
-                                    <input type='radio' id='public_button' name='type' value='1' ".(($type==1) ? "checked" : "").">
-                                    $langNewBBBSessionPublic
-                                  </label>
-                                </div>
-                                <div class='radio'>
-                                  <label>
                                     <input type='radio' id='private_button' name='type' value='0' ".(($type==0) ? "checked" : "").">
                                    $langNewBBBSessionPrivate
+                                  </label>
+                                </div>                        
+                                <div class='radio'>
+                                  <label>
+                                    <input type='radio' id='public_button' name='type' value='1' ".(($type==1) ? "checked" : "").">
+                                    $langNewBBBSessionPublic
                                   </label>
                                 </div>
                         </div>
@@ -616,6 +618,7 @@ function edit_bbb_session($session_id) {
                         <label for='tags_1' class='col-sm-2 control-label'>$langBBBNotifyExternalUsers:</label>
                         <div class='col-sm-10'>
                             <input class='form-control tags' id='tags_1' name='external_users' type='text' value='".trim($row->external_users)."'>
+                            <span class='help-block'>&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langBBBNotifyExternalUsersHelpBlock</span>                                
                         </div>
                     </div>                    
                     <div class='form-group'>
@@ -691,8 +694,8 @@ function bbb_session_details() {
                             <div class='col-md-12'>
                                 <div class='table-responsive'>
                                     <table class='table-default'>
-                                        <tr>
-                                            <th class='text-center' style='width:25%'>$langTitle</th>
+                                        <tr class='list-header'>
+                                            <th style='width:25%'>$langTitle</th>
                                             <th class='text-center'>$langNewBBBSessionDesc</th>
                                             <th class='text-center'>$langNewBBBSessionStart</th>
                                             <th class='text-center'>$langNewBBBSessionType</th>
@@ -802,12 +805,11 @@ function bbb_session_details() {
  */
 function disable_bbb_session($id)
 {
-    global $langBBBUpdateSuccessful, $tool_content;
+    global $langBBBUpdateSuccessful, $course_code;
     
     Database::get()->querySingle("UPDATE bbb_session set active='0' WHERE id=?d",$id);
-    $tool_content .= "<div class='alert alert-success'>$langBBBUpdateSuccessful</div>";
-    
-    return;    
+    Session::Messages($langBBBUpdateSuccessful, 'alert-success');
+    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
 
 /**
@@ -819,12 +821,11 @@ function disable_bbb_session($id)
  */
 function enable_bbb_session($id)
 {
-    global $langBBBUpdateSuccessful, $tool_content;
+    global $langBBBUpdateSuccessful, $course_code;
     
     Database::get()->querySingle("UPDATE bbb_session SET active='1' WHERE id=?d",$id);
-    $tool_content .= "<div class='alert alert-success'>$langBBBUpdateSuccessful</div>";
-    
-    return;
+    Session::Messages($langBBBUpdateSuccessful, 'alert-success');
+    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
 
 
@@ -837,12 +838,11 @@ function enable_bbb_session($id)
  */
 function delete_bbb_session($id)
 {
-    global $langBBBDeleteSuccessful, $tool_content;
+    global $langBBBDeleteSuccessful, $course_code;
     
     Database::get()->querySingle("DELETE FROM bbb_session WHERE id=?d",$id);
-    $tool_content .= "<div class='alert alert-success'>$langBBBDeleteSuccessful</div>";
-    
-    return;
+    Session::Messages($langBBBDeleteSuccessful, 'alert-success');
+    redirect_to_home_page("modules/bbb/index.php?course=$course_code");
 }
 
 /**

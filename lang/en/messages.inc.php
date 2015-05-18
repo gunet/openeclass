@@ -3306,6 +3306,7 @@ $langBBBNoteEnableJoin = "The link to join is active only for currently running 
 $langBBBNoteEnableJoinEditor = "The link to join is activated 15 minutes before the scheduled start time";
 $langBBBNotifyUsers = "Notify users for teleconference schedule";
 $langBBBNotifyExternalUsers = "Notify external participants";
+$langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
 $langBBBSessionAvailable = "Session availability";
 $langBBBMinutesBefore = "minutes before the scheduled start time";
 $langBBBScheduledSession = "Teleconference scheduling";
