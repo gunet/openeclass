@@ -181,7 +181,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<a class='btn btn-primary $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
+        $link[$i] = "<a class='btn btn-default $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
