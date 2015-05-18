@@ -133,7 +133,7 @@ require_once 'include/lib/textLib.inc.php';
         body { font-family: Verdana, Arial, Helvetica, sans-serif; }
     </style>
 </head>
-<body>
+<body style='background: white;'>
 <?php
     // display message list
     $fileContent = file($fileChatName);
