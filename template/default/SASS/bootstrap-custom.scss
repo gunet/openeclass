@@ -1592,12 +1592,15 @@ ul.tablelist
 #quick-search-wrapper input.form-control
 {
     background-color: rgba(0, 0, 0, 0.2);
-    border: 1px solid #111111;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 3px 0 #111111 inset;
+    @include box-shadow(0 1px 3px 0 rgba(0, 0, 0, 0.2) inset);
     color: #aaaaaa;
 }
 #btn-search{
-    @include button-variant(white, #232C3A, #111111);
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: rgba(0, 0, 0, 0.2);
+    color: #fff
 }
 
 /* Scroll-to-top styles */
@@ -1715,6 +1718,7 @@ cursor: pointer;
             .panel-title{
                 text-align: left;
                 font-size: 1em;
+                line-height: 1.2em;
                 i{
                     display: inline-block;
                     width: 9%;
