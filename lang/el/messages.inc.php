@@ -255,7 +255,6 @@ $langReturnSearch = "Επιστροφή στην αναζήτηση";
 $langNoChangeHappened = "Δεν πραγματοποιήθηκε καμία αλλαγή!";
 
 // addfaculte
-$langFaculteCatalog = "Κατάλογος Σχολών";
 $langManyExist = "Υπάρχουν";
 $langReturnToAddFaculte = "Επιστροφή στην προσθήκη";
 $langReturnToEditFaculte = "Επιστροφή στην επεξεργασία";
@@ -1282,12 +1281,6 @@ $langCopyrighted = "Πνευματικά Δικαιώματα";
 $langCopyrightedFree = "Ελεύθερο δικαιωμάτων";
 $langCopyrightedNotFree = "Προστατεύονται όλα τα δικαιώματα";
 $langCopyrightedUnknown = "Άγνωστο";
-$langCreativeCommonsCCBY = "CC - Αναφορά Δημιουργού";
-$langCreativeCommonsCCBYSA = "CC - Παρόμοια Διανομή";
-$langCreativeCommonsCCBYND = "CC - Όχι Παράγωγα Έργα";
-$langCreativeCommonsCCBYNC = "CC - Μη Εμπορική Χρήση";
-$langCreativeCommonsCCBYNCSA = "CC - Μη Εμπορική Χρήση - Παρόμοια Διανομή";
-$langCreativeCommonsCCBYNCND = "CC - Μη Εμπορική Χρήση - Όχι Παράγωγα Έργα";
 $langChangeMetadata = "Αλλαγή πληροφοριών εγγράφου";
 $langEditMeta = "Επεξεργασία<br>Πληροφοριών";
 $langCategoryExcercise = "Άσκηση";
