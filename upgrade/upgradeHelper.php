@@ -3,7 +3,7 @@
 function getInfoAreas() {
     return "<div class='progress'>
       <div id='progress-bar' class='progress-bar progress-bar-striped active' role='progressbar' aria-valuenow='45' aria-valuemin='0' aria-valuemax='100' style='width: 100%'>
-        <span class='sr-only'>45% Complete</span>
+        0%
       </div>
     </div><div id='progressbar-info'></div>";
 }
@@ -13,9 +13,11 @@ function updateInfo($percent, $infoText, $debug = true) {
     echo '<script language="javascript">';
     if ($percent >= 0) {
         echo 'document.getElementById("progress-bar").style="width:' . ($percent * 100) . '%;";';
+        echo 'document.getElementById("progress-bar").innerHTML ="' . ($percent * 100) . '%";';
     }
     if ($percent == 1) {
         echo 'document.getElementById("progress-bar").className = "progress-bar progress-bar-striped";';
+        echo 'document.getElementById("progress-bar").innerHTML ="' . ($percent * 100) . '%";';
     }
     echo 'document.getElementById("progressbar-info").innerHTML="' . addslashes($infoText) . '";</script>
 ';
