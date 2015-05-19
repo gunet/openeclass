@@ -287,15 +287,7 @@ if ($is_editor) {
         Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
     }
 
-    if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
-        $title = $_REQUEST['weektitle'];
-        $descr = $_REQUEST['weekdescr'];
-        $unit_id = $_REQUEST['week_id'];
-        Database::get()->query("UPDATE course_weekly_view SET
-                                        title = ?s,
-                                        comments = ?s
-                                    WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
-    }
+
 }
 //style='color:#999999; font-size:13px;'
 $bar_content .= "<b>" . $langCode . ":</b> " . q($public_code) . "" .
@@ -544,7 +536,7 @@ if ($is_editor) {
                               'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id&amp;cnt=$count_index",
                               'icon' => 'fa-edit'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
+                              'url' => "$_SERVER[SCRIPT_NAME]?visW=$cu->id",
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
                               'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",

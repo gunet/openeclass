@@ -55,9 +55,20 @@ $lang_editor = $language;
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
 
-if (isset($_REQUEST['edit_submit'])) {
-    units_set_maxorder();
-    $tool_content .= handle_unit_info_edit();
+if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
+    $title = $_REQUEST['weektitle'];
+    $descr = $_REQUEST['weekdescr'];
+    $unit_id = $_REQUEST['week_id'];
+    // tags
+    if (isset($_POST['tags'])) {
+        $tagsArray = explode(',', $_POST['tags']);
+        $moduleTag = new ModuleElement($unit_id);
+        $moduleTag->syncTags($tagsArray);
+    }          
+    Database::get()->query("UPDATE course_weekly_view SET
+                                    title = ?s,
+                                    comments = ?s
+                                WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
 }
 
 $form = process_actions();
