@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-05-12 15:35:21
+// Generated 2015-05-19 10:50:10
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -3303,7 +3303,6 @@ $langBBBNoteEnableJoin = "The link to join is active only for currently running 
 $langBBBNoteEnableJoinEditor = "The link to join is activated 15 minutes before the scheduled start time";
 $langBBBNotifyUsers = "Notify users for teleconference schedule";
 $langBBBNotifyExternalUsers = "Notify external participants";
-$langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
 $langBBBSessionAvailable = "Session availability";
 $langBBBMinutesBefore = "minutes before the scheduled start time";
 $langBBBScheduledSession = "Teleconference scheduling";
@@ -3979,3 +3978,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
+$langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
+$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 5.4.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
+$langPHPVersion = 'PHP version';

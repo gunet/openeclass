@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language it
-// Generated 2015-05-12 15:35:24
+// Generated 2015-05-19 10:50:13
 
 $langCourse = "Corso";
 $langIntro = "La piattaforma <b>$siteName</b> è un Sistema Integrato di Gestione di Corsi Elettronici e supporta il Servizio di E-learning Asincrono su <a href=\"$InstitutionUrl\" target =\"_blank\" class=mainpage>$Institution</a>.";
@@ -1042,8 +1042,6 @@ $langWillWrite = "Le informazioni sottoscritte sarnno scritte nel file <b>config
 $langProtect = "Consiglio: Per proteggere il tuo Open eClass, modifica le autorizzazioni di accesso dei file <tt>/config/config.php</tt> e <tt>/install/index.php</tt> e permetti solo la lettura (CHMOD 444).";
 $langInstallSuccess = "L'installazione è completata con successo! Clicca qui sotto per accedere all' Open eClass";
 $langEnterFirstTime = "Accedere all' Open eClass";
-$langMCU = "MCU (unità di controllo per teleconferenza - Multipoint Conferencing Unit)";
-$langVod = "Vod Server";
 $langSiteUrl = "URL dell' Open eClass";
 $langInstall = "Installazione dell' Open eClass";
 $langAddOnStreaming = "Funzionalità aggiuntiva";
@@ -1059,7 +1057,6 @@ $langChooseLang = "Scegliere lingua";
 $langBeforeInstall1 = "Prima dell'installazione leggi attentamente e stampa le ";
 $langBeforeInstall2 = "Inoltre, istruzioni generali per la piattaforma puoi leggere ";
 $langInstallInstr = "Istruzioni per l'installazione";
-$langWithPHP = "con supporto PHP";
 $langAddComment = "Aggiungere / Modificare commento";
 $langLearningModule = "Sezione";
 $langLearningObjects = "Oggetti Didattici";
@@ -2812,7 +2809,7 @@ $langCheckNotOk3 = "You have to install all required programs which don't have t
 $langCheckNotOk4 = "After completing the installation of all required software tools, please check installation by clicking";
 $langCheckNotOk5 = 'If there are no messages in red letters in the diagnostics table, all installations will have been performed correctly and a message to that effect will be displayed.';
 $langCheckOk = "You have all required programs installed on your computer and you can use the platform without problems.";
-$langPurgeExerciseResults = "Delete exercise results";
+$langPurgeExerciseResults = "Clear results";
 $langClearStats = "Clear Statistics";
 $langStatsCleared = "Statistics cleared";
 $langMultiCourse = 'Multiple course creation';
@@ -2841,7 +2838,7 @@ $langDropboxMailNotify = "you have received a new message. You will find it in '
 $langNewDropboxFile = "New message notification";
 $langMaxMessageSize = "Max. characters: 500";
 $langAttachedFile = "Attached file";
-$langPurgeExercises = "Delete results";
+$langPurgeExercises = "Clear results";
 $langConfirmPurgeExercises = "Confirm results deletion";
 $langInGroup = "in group";
 $langErrorConfigAlt = "Alternatively, you can manually create the <b>config.php</b> file in the <b>%s</b> subdirectory with the following contents:";
@@ -3211,7 +3208,7 @@ $langSureToMakeWikiPageCurrent = "Are you sure you want to make this version the
 $langWikiPageRevertedVersion = "Reverted version";
 $langWikiPageDeleted = "The Wiki Page was deleted succesfully";
 $langWikiPageNotLoaded = "Wiki Page %s could not be loaded";
-$langWikiPagePrintable = "Printable version";
+$langWikiPagePrintable = "Printable friendly version";
 $langWikiSearchInPages = "Search in Wiki Pages";
 $langWikiSearchResults = "Search results";
 $langWikiSearchMissingKeywords = "No search keywords given";
@@ -3461,7 +3458,7 @@ $langDropboxNoMessage = "No recent messages";
 $langDropboxMassDelete = 'Delete all messages';
 $langNewLa = "New Label/Comments";
 $langInfoLabel = "Label/Comment Structure";
-$langExerciseStats = 'Exercise Statistics';
+$langExerciseStats = 'Statistics';
 $langAttempts = "Attempts";
 $langAttemptsCompleted = "Completed";
 $langAttemptsPaused = "Temporarly Saved";
@@ -3900,7 +3897,7 @@ $langEditChange = 'Edit';
 $langResourceAccessLock = 'Lock';
 $langResourceAccessUnlock = 'Unlock';
 $langCancelAndEnter = 'Skip and enter';
-$langNoBlock = 'No block';
+$langNoBlock = 'Unblock';
 $langRestrictedLPath = 'To progress to this and subsequent steps of the Learning Path, you need to have completed the previous steps';
 $langViewShow = 'Show';
 $langViewHide = 'Hide';
@@ -3947,3 +3944,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
+$langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
+$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 5.4.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
+$langPHPVersion = 'PHP version';

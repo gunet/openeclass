@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-05-12 15:35:21
+// Generated 2015-05-19 10:50:10
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -1054,8 +1054,6 @@ $langProtect = "Aviso: Para proteger Open eClass, cambia los derechos de acceso 
            <tt>/config/config.php</tt> y <tt>/install/index.php</tt> y tranformala solo de lectura (CHMOD 444).";
 $langInstallSuccess = "¡La instalación completada ha sido un éxito! Haz clic para entrar en Open eClass";
 $langEnterFirstTime = "Entra en Open eClass";
-$langMCU = "MCU (Unidad de Conferencia de multiples puntos)";
-$langVod = "Vod Servicio";
 $langSiteUrl = "Open eClass URL του ";
 $langInstall = "Instalaciónn de Open eClass";
 $langAddOnStreaming = "Addon Funcionalidad";
@@ -1071,7 +1069,6 @@ $langChooseLang = "Escoge el idioma";
 $langBeforeInstall1 = "Antes de proceder con la instalación por favor imprime y lee cuidadosamente el ";
 $langBeforeInstall2 = "Además, algunas instrucciones generles sobre la plataforma pueden encontrase ";
 $langInstallInstr = "Instrucciones de instalación";
-$langWithPHP = "con PHP Soporte";
 $langAddComment = "Añade un comentario";
 $langLearningModule = "Sección";
 $langLearningObjects = "Objetos de aprendizaje";
@@ -1397,7 +1394,7 @@ $langNewTopic = "Nuevo tópico";
 $langTopicData = "Elementos del tópico";
 $langTopicAnswer = "Respuesta al tópico";
 $langGroupDocumentsLink = "Documentos del grupo";
-$langNotify = "Notification via email if replies are posted";
+$langNotify = "Notify me of replies via email";
 $langNotifyActions = "Notifications";
 $langGoToPage = "Go to page";
 $langClick = "Click here";
@@ -2322,7 +2319,7 @@ $langCASnochange = "Please close your browser in order to change CAS settings";
 $langBeforeRegDate = "registered before";
 $langInfoAboutRegistration = "You are trying to access a closed course. To register, you need to contact the course administrator.<br />
 Please note that you should mention your full name or username on the platform so that administrator can register you to the course.";
-$langReplace = "File replacement";
+$langReplace = "Replace";
 $langReplaceFile = "Replace %s with";
 $langReplaceOK = "File replaced successfully";
 $langDownloadDir = "Download directory";
@@ -2827,7 +2824,7 @@ $langCheckNotOk3 = "You have to install all required programs which don't have t
 $langCheckNotOk4 = "After completing the installation of all required software tools, please check installation by clicking";
 $langCheckNotOk5 = 'If there are no messages in red letters in the diagnostics table, all installations will have been performed correctly and a message to that effect will be displayed.';
 $langCheckOk = "You have all required programs installed on your computer and you can use the platform without problems.";
-$langPurgeExerciseResults = "Delete exercise results";
+$langPurgeExerciseResults = "Clear results";
 $langClearStats = "Clear Statistics";
 $langStatsCleared = "Statistics cleared";
 $langMultiCourse = 'Multiple course creation';
@@ -2856,7 +2853,7 @@ $langDropboxMailNotify = "you have received a new message. You will find it in '
 $langNewDropboxFile = "New message notification";
 $langMaxMessageSize = "Max. characters: 500";
 $langAttachedFile = "Attached file";
-$langPurgeExercises = "Delete results";
+$langPurgeExercises = "Clear results";
 $langConfirmPurgeExercises = "Confirm results deletion";
 $langInGroup = "in group";
 $langErrorConfigAlt = "Alternatively, you can manually create the <b>config.php</b> file in the <b>%s</b> subdirectory with the following contents:";
@@ -3226,7 +3223,7 @@ $langSureToMakeWikiPageCurrent = "Are you sure you want to make this version the
 $langWikiPageRevertedVersion = "Reverted version";
 $langWikiPageDeleted = "The Wiki Page was deleted succesfully";
 $langWikiPageNotLoaded = "Wiki Page %s could not be loaded";
-$langWikiPagePrintable = "Printable version";
+$langWikiPagePrintable = "Printable friendly version";
 $langWikiSearchInPages = "Search in Wiki Pages";
 $langWikiSearchResults = "Search results";
 $langWikiSearchMissingKeywords = "No search keywords given";
@@ -3476,7 +3473,7 @@ $langDropboxNoMessage = "No recent messages";
 $langDropboxMassDelete = 'Delete all messages';
 $langNewLa = "New Label/Comments";
 $langInfoLabel = "Label/Comment Structure";
-$langExerciseStats = 'Exercise Statistics';
+$langExerciseStats = 'Statistics';
 $langAttempts = "Attempts";
 $langAttemptsCompleted = "Completed";
 $langAttemptsPaused = "Temporarly Saved";
@@ -3915,7 +3912,7 @@ $langEditChange = 'Edit';
 $langResourceAccessLock = 'Lock';
 $langResourceAccessUnlock = 'Unlock';
 $langCancelAndEnter = 'Skip and enter';
-$langNoBlock = 'No block';
+$langNoBlock = 'Unblock';
 $langRestrictedLPath = 'To progress to this and subsequent steps of the Learning Path, you need to have completed the previous steps';
 $langViewShow = 'Show';
 $langViewHide = 'Hide';
@@ -3962,3 +3959,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
+$langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
+$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 5.4.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
+$langPHPVersion = 'PHP version';
