@@ -1063,8 +1063,6 @@ $langProtect = "Notice: To protect Open eClass, change access rights of
            <tt>/config/config.php</tt> and <tt>/install/index.php</tt> and make it read only (CHMOD 444).";
 $langInstallSuccess = "Installation completed successfully! Click below to enter Open eClass";
 $langEnterFirstTime = "Enter Open eClass";
-$langMCU = "MCU (Multipoint Conferencing Unit)";
-$langVod = "Vod Server";
 $langSiteUrl = " URL of Open eClass";
 $langInstall = "Installation of Open eClass";
 $langAddOnStreaming = "Addon Functionality";
@@ -1080,7 +1078,6 @@ $langChooseLang = "Choose language";
 $langBeforeInstall1 = "Before proceed with the installation please print and read carefully the ";
 $langBeforeInstall2 = "In addition, some general instructions about the platform can be found ";
 $langInstallInstr = "Install Instructions";
-$langWithPHP = "with PHP Support";
 $langAddComment = "Add a comment";
 $langLearningModule = "Section";
 $langLearningObjects = "Learning Objects";
