@@ -1699,22 +1699,21 @@ cursor: pointer;
     .panel{
         border: none;
         margin: 0;
-        margin-bottom: 1em;
+        //margin-bottom: 1em;
         background: inherit;		
-        border-top: 2px solid rgba(255,255,255,.1);
-        border-bottom: 2px solid rgba(255,255,255,.1);
-        border-radius: 5px 0px 0px 5px;
+        //border-top: 2px solid rgba(255,255,255,.1);
+        border-bottom: 1px solid rgba(255,255,255,.1);
+        //border-radius: 5px 0px 0px 5px;
         .list-group{
             border-radius:0;
             @include box-shadow(none);
         }
         .panel-heading{
-            border-radius: 4px 0px 0px 0px!important;
-            padding: 10px 7px;
+            //border-radius: 4px 0px 0px 0px!important;
+            padding: 16px 7px;
             .panel-title{
                 text-align: left;
-                font-size: 0.85em;
-                font-weight: bold;
+                font-size: 1em;
             }
             &:hover{
                 color: $color-hover;
@@ -1730,15 +1729,18 @@ cursor: pointer;
             display: block;
             background: rgba(0, 0, 0, 0.2);
             &:not(.collapsed){
-                border-radius: 4px 0px 0px 0px;
+                //border-radius: 4px 0px 0px 0px;
                 color: $color-hover;
             }
             &:hover{
                 //background: rgba(255,255,255,.25);
             }
             &:hover, &:not(.collapsed){
-                border-radius: 4px 0px 0px 4px;
+                //border-radius: 4px 0px 0px 4px;
             }
+        }
+        .list-group{
+            margin: 0 5px;
         }
         a.list-group-item{
             border: none;
@@ -1755,7 +1757,7 @@ cursor: pointer;
                 text-decoration: none;
                 color: #eee;
                 background: $color-hover;
-                border-radius: 4px 0px 0px 4px;
+                border-radius: 4px;
                 margin-left: 0px;
                 @include transition(all $transition-time linear);
             }
@@ -1763,10 +1765,10 @@ cursor: pointer;
                 background: $color-main-content;
                 text-shadow: none;
                 color: #333;
-                border-radius: 4px 0px 0px 4px;
-                box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
-                -moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
-                -webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+                border-radius: 4px;
+                //box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
+                //-moz-box-shadow: -8px -0px 10px -4px rgba(0,0,0,.8);
+                //-webkit-box-shadow: -8px 0px 10px -4px rgba(0,0,0,.8);
             }
             //we don't want a border-bottom if it's the last option
             &:last-child{
