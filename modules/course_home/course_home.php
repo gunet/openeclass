@@ -217,15 +217,7 @@ if ($is_editor) {
     require_once 'modules/search/indexer.class.php';
     require_once 'modules/course_metadata/CourseXML.php';
 
-    if (isset($_REQUEST['edit_submitW'])){
-        $title = $_REQUEST['weektitle'];
-        $descr = $_REQUEST['weekdescr'];
-        if (isset($_REQUEST['week_id'])) { //edit week
-            $weekid = $_REQUEST['week_id'];
-            Database::get()->query("UPDATE course_weekly_view SET title = ?s, comments = ?s
-                                    WHERE id = ?d ", $title, $descr, $weekid);
-        }
-    } elseif (isset($_REQUEST['del'])) { // delete course unit
+    if (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
         if ($course_info->view_type == 'units') {
             Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
@@ -549,7 +541,7 @@ if ($is_editor) {
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
                         array('title' => $langEditChange,
-                              'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id",
+                              'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id&amp;cnt=$count_index",
                               'icon' => 'fa-edit'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
                               'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",

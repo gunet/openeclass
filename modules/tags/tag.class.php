@@ -45,6 +45,7 @@ class Tag {
         if (isset($id)) {
             require_once 'modules/tags/moduleElement.class.php';
             $moduleTag = new ModuleElement($id);
+
             $tags_init = $moduleTag->getTags();
             foreach ($tags_init as $key => $tag) {
                 $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"" . js_escape($tag) . "\"},";

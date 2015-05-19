@@ -213,11 +213,15 @@ $tool_content .= "<div class='row margin-bottom'>
             <div class='panel-heading'>
                 <h3 class='panel-title'>$pageName</h3>
             </div>
-            <div class='panel-body'>
-                $comments
-                <div>
-                $langTags: $tags_list
-                </div>
+            <div class='panel-body'>$comments";
+if (!empty($tags_list)) {
+    $tool_content .= "
+                    <div>
+                        $langTags: $tags_list
+                    </div>
+                    ";
+}
+    $tool_content .= "    
             </div>          
         </div>
       </div>

@@ -1230,11 +1230,16 @@ function edit_res($resource_id) {
     } else {
         $message = $langContents;
     }
-    $content .= "<div class='form-group'><label class='col-sm-2 control-label'>$message:</label>
-                              <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
-                </div>                         
-                <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'></div>
-                </fieldset>
-                </form></div>";
+    $content .= "
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$message:</label>
+                <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
+            </div>                         
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
+            </div>
+        </fieldset>
+    </form>
+</div>";
     return $content;
 }
