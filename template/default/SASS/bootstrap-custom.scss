@@ -1706,6 +1706,7 @@ cursor: pointer;
         //border-radius: 5px 0px 0px 5px;
         .list-group{
             border-radius:0;
+            margin: 2px 5px 1px 5px;
             @include box-shadow(none);
         }
         .panel-heading{
@@ -1738,9 +1739,6 @@ cursor: pointer;
             &:hover, &:not(.collapsed){
                 //border-radius: 4px 0px 0px 4px;
             }
-        }
-        .list-group{
-            margin: 0 5px;
         }
         a.list-group-item{
             border: none;
