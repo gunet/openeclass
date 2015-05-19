@@ -1743,13 +1743,26 @@ cursor: pointer;
         a.list-group-item{
             border: none;
             border-top: 1px solid rgba(255,255,255,.075);
-            padding: 0.6em 15px;
+            padding: 0.6em 10px;
             background: transparent;
             text-align: left;
             @include transition(all $transition-time linear);
+            i{
+                display: inline-block;
+                width: 10%;
+                padding-top: 2px;
+                font-size: 1em;
+                vertical-align: top;
+            }
+            span{
+                display: inline-block;
+                width: 85%;
+                font-size: 1em;
+                padding-left: 4px;
+            }
             > span{
                 font-size: 0.9em;
-                margin-left: 0.5em;
+                //margin-left: 0.5em;
             }
             &:hover{
                 text-decoration: none;
