@@ -152,15 +152,15 @@ draw($tool_content, 2, null, $head_content);
  * ************************************************************************************************** */
 
 function printPolls() {
-    global $tool_content, $course_id, $course_code, $langCreatePoll,
-    $langPollsActive, $langTitle, $langPollCreator, $langPollCreation, $langCancel,
+    global $tool_content, $course_id, $course_code,
+    $langTitle, $langCancel,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $themeimg, $langEditChange, $langDelete, $langActions, $langSurveyNotStarted,
-    $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
-    $langParticipate, $langVisible, $user_id, $langHasParticipated, $langSee,
+    $langEditChange, $langDelete, $langSurveyNotStarted,
+    $langDeactivate, $langPollHasEnded, $langActivate,
+    $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langViewHide, $langViewShow;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";

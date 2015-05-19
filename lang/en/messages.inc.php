@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-05-12 15:35:21
+// Generated 2015-05-19 10:50:10
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -1063,8 +1063,6 @@ $langProtect = "Notice: To protect Open eClass, change access rights of
            <tt>/config/config.php</tt> and <tt>/install/index.php</tt> and make it read only (CHMOD 444).";
 $langInstallSuccess = "Installation completed successfully! Click below to enter Open eClass";
 $langEnterFirstTime = "Enter Open eClass";
-$langMCU = "MCU (Multipoint Conferencing Unit)";
-$langVod = "Vod Server";
 $langSiteUrl = " URL of Open eClass";
 $langInstall = "Installation of Open eClass";
 $langAddOnStreaming = "Addon Functionality";
@@ -1080,7 +1078,6 @@ $langChooseLang = "Choose language";
 $langBeforeInstall1 = "Before proceed with the installation please print and read carefully the ";
 $langBeforeInstall2 = "In addition, some general instructions about the platform can be found ";
 $langInstallInstr = "Install Instructions";
-$langWithPHP = "with PHP Support";
 $langAddComment = "Add a comment";
 $langLearningModule = "Section";
 $langLearningObjects = "Learning Objects";
@@ -1261,7 +1258,7 @@ $langTo = "to";
 $langTotalTimeSpent = "Total time";
 $langTrackAllPathExplanation = "Progression of  " . $langsOfStudents;
 $langTrackUser = "User Tracking";
-$langTracking = "Tracking";
+$langTracking = "Track progress";
 $langTypeOfModule = "Module type";
 $langUnamedModule = "Unamed module";
 $langUnamedPath = "Unamed path";
@@ -3306,7 +3303,6 @@ $langBBBNoteEnableJoin = "The link to join is active only for currently running 
 $langBBBNoteEnableJoinEditor = "The link to join is activated 15 minutes before the scheduled start time";
 $langBBBNotifyUsers = "Notify users for teleconference schedule";
 $langBBBNotifyExternalUsers = "Notify external participants";
-$langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
 $langBBBSessionAvailable = "Session availability";
 $langBBBMinutesBefore = "minutes before the scheduled start time";
 $langBBBScheduledSession = "Teleconference scheduling";
@@ -3982,3 +3978,6 @@ $langOwnCloudShortDescription = "Short Description about own cloud";
 $langOwnCloudLongDescription = "Long description about own cloud";
 $langWebDAVShortDescription = "Short Description about web dav";
 $langWebDAVLongDescription = "Long Description about web dav";
+$langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
+$langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 5.4.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
+$langPHPVersion = 'PHP version';
