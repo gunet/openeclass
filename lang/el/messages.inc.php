@@ -4293,7 +4293,7 @@ $langNewBBBSessionStart = "Έναρξη";
 $langNewBBBSessionDesc = "Σύντομη περιγραφή";
 $langNewBBBSessionType = "Είδος τηλεσυνεργασίας";
 $langNewBBBSessionPublic = "Συμμετέχουν <b>όλοι</b> οι εγγεγραμμένοι χρήστες <b>της πλατφόρμας</b>";
-$langNewBBBSessionPrivate = "Συμμετέχουν <b>μόνο</b>  οι εγγεγραμμένοι χρήστες <b>του μαθήματος</b>";
+$langNewBBBSessionPrivate = "Συμμετέχουν <b>μόνο</b>  εγγεγραμμένοι χρήστες <b>του μαθήματος</b>";
 $langBBBSessionJoin = "Σύνδεση";
 
 $langBBBUpdateSuccessful = "Η ενημέρωση ολοκληρώθηκε με επιτυχία";
