@@ -360,6 +360,22 @@ function uid_to_am($uid) {
     }
 }
 
+
+/**
+ * @brief returns group name
+ * @param type $gid
+ * @return boolean
+ */
+function gid_to_name($gid) {
+
+    $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
+    if ($res) {
+        return $res->name;
+    } else {
+        return false;
+    }
+}
+
 /**
  * @brief Return the URL for a user profile image
  * @param int $uid user id

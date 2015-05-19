@@ -138,8 +138,7 @@ function new_bbb_session() {
                       </label>
                     </div>
             </div>
-        </div>";
-        /*
+        </div>
         <div class='form-group'>
             <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
             <div class='col-sm-10'>
@@ -158,8 +157,7 @@ function new_bbb_session() {
 
             </div>
         </div>
-        */
-        $tool_content .= "<div class='form-group'>
+        <div class='form-group'>
             <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
             <div class='col-sm-10'>
                     <div class='radio'>
@@ -564,8 +562,7 @@ function edit_bbb_session($session_id) {
                                   </label>
                                 </div>
                         </div>
-                    </div>";
-                    /*
+                    </div>
                     <div class='form-group'>
                         <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
                         <div class='col-sm-10'>
@@ -583,8 +580,7 @@ function edit_bbb_session($session_id) {
                                 </div>
                         </div>
                     </div>
-                    */
-                    $tool_content .= "<div class='form-group'>
+                    <div class='form-group'>
                         <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
                         <div class='col-sm-10'>
                                 <div class='radio'>
@@ -672,25 +668,23 @@ function edit_bbb_session($session_id) {
  * @global type $langDelete
  */        
 function bbb_session_details() {
-    global $course_id, $tool_content, $is_editor, $langNewBBBSessionStart, $langNewBBBSessionType;
+    global $course_id, $tool_content, $is_editor, $langNewBBBSessionStart, $langNewBBBSessionType, $langParticipants;
     global $langConfirmDelete, $langNewBBBSessionPublic, $langNewBBBSessionPrivate, $langBBBSessionJoin, $langNewBBBSessionDesc;
     global $course_code;   
     global $langNote, $langBBBNoteEnableJoin, $langTitle,$langActivate, $langDeactivate, $langEditChange, $langDelete, $langNoBBBSesssions;
     global $langBBBNotServerAvailableStudent, $langBBBNotServerAvailableTeacher;
-    global $langBBBImportRecordings;
+    global $langBBBImportRecordings, $showall, $shownone;
         
     $myGroups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id=?d", $_SESSION['uid']);
 
-    $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s ORDER BY id DESC", $course_id);
-
-    if (get_total_bbb_servers() == '0')
-        {
-            if ($is_editor) {
-                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";                
-            } else {
-                $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";                
-            }
-    }elseif (($result)) {
+    $result = Database::get()->queryArray("SELECT * FROM bbb_session WHERE course_id = ?s ORDER BY id DESC", $course_id);    
+    if (get_total_bbb_servers() == '0') {
+        if ($is_editor) {
+            $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableTeacher</p>";                
+        } else {
+            $tool_content .= "<p class='alert alert-danger'><b>$langNote</b>:<br />$langBBBNotServerAvailableStudent</p>";                
+        }
+    } elseif (($result)) {
         if (!$is_editor) {
             $tool_content .= "<div class='alert alert-info'><label>$langNote</label>:<br>$langBBBNoteEnableJoin</div>";
         }    
@@ -702,18 +696,27 @@ function bbb_session_details() {
                                             <th style='width:25%'>$langTitle</th>
                                             <th class='text-center'>$langNewBBBSessionDesc</th>
                                             <th class='text-center'>$langNewBBBSessionStart</th>
-                                            <th class='text-center'>$langNewBBBSessionType</th>
+                                            <th class='text-center'>$langParticipants</th>
                                             <th class='text-center'>".icon('fa-gears')."</th>
                                         </tr>";
 
-        foreach ($result as $row) {    
-                // Get participants groups
-                $r_group = explode(",",$row->participants);
-                
+        foreach ($result as $row) {
+                $participants = '';
+                // Get participants
+                $r_group = explode(",",$row->participants);                
+                foreach ($r_group as $participant_uid) {
+                    $participant_uid = str_replace("'", '', $participant_uid);
+                    if (preg_match('/^_/', $participant_uid)) {
+                        $participants .= gid_to_name(str_replace("_", '', $participant_uid)) . ", ";
+                    } else {
+                        $participants .= uid_to_name($participant_uid, 'fullname') . ", ";
+                    }
+                }
+                $ellipsized_participants = q(ellipsize($participants, 40));
                 $id = $row->id;
                 $title = $row->title;
-                $start_date = $row->start_date;
-                $row->public == '1' ? $type = $langNewBBBSessionPublic: $type = $langNewBBBSessionPrivate;
+                $start_date = $row->start_date; 
+                //$row->public == '1' ? $type = $langNewBBBSessionPublic: $type = $langNewBBBSessionPrivate;
                 $meeting_id = $row->meeting_id;
                 $att_pw = $row->att_pw;
                 $mod_pw = $row->mod_pw;
@@ -725,16 +728,26 @@ function bbb_session_details() {
                     // If there no available bbb servers, disable join link. Otherwise, enable    
                     if(get_total_bbb_servers()=='0' || date_diff_in_minutes(date('Y-m-d H:i:s'),$start_date) > 1440 )
                     {
-                        $tool_content .= "
-                        <td>".q($title)."</td>";
+                        $tool_content .= "<td>".q($title)."</td>";
                     } else {
                         $tool_content .= "
                         <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>".q($title)."</a></td>";
                     }
-                    $tool_content.="<td class='text-center'>".$desc."</td>
+                    $tool_content .= "<td class='text-center'>".$desc."</td>
                     <td class='text-center'>".q($start_date)."</td>
-                    <td class='text-center'>$type</td>
-                    <td class='option-btn-cell'>".
+                    <td width='30%' class='text-center'>";
+                    if ($ellipsized_participants != $participants) {
+                        $tool_content .= $ellipsized_participants .
+                                '<a href="#" class="trigger_names" id="show">' .
+                                   $showall . '</a>' .
+                                '<div class="hidden_names" style="display:none;">' .
+                                   $participants .
+                                '<a href="#" class="trigger_names" id="hide">'.$shownone.'</a></div';            
+                    } else {
+                        $tool_content .= $participants;
+                    }                                                 
+                        
+                    $tool_content .= "</td><td class='option-btn-cell'>".
                             action_button(array(
                                 array(  'title' => $langEditChange,
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
@@ -774,7 +787,7 @@ function bbb_session_details() {
                         }
                         $tool_content .="<td>".$desc."</td>
                             <td class='text-center'>".q($start_date)."</td>
-                            <td class='text-center'>$type</td>
+                            <td class='text-center'>$ellipsized_participants</td>
                             <td class='text-center'>";
                         // Join url will be active only X minutes before scheduled time and if session is visible for users
                         if ($row->active=='1' && date_diff_in_minutes($start_date,date('Y-m-d H:i:s'))<= $row->unlock_interval && get_total_bbb_servers()<>'0' ) {

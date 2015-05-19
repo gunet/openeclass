@@ -112,14 +112,3 @@ function user_group_info($uid, $course_id, $as_id = NULL) {
     }
     return $gids;
 }
-
-// returns group name gives its group id
-function gid_to_name($gid) {
-
-    $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
-    if ($res) {
-        return $res->name;
-    } else {
-        return false;
-    }
-}

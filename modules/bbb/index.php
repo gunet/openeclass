@@ -63,6 +63,7 @@ $('#start_session').datetimepicker({
 });
 </script>";
 load_js('select2');
+         
 $head_content .= "<script type='text/javascript'>
     $(document).ready(function () {
         $('#select-groups').select2();       
@@ -79,10 +80,18 @@ $head_content .= "<script type='text/javascript'>
             var stringVal = [];
             $('#select-groups').val(stringVal).trigger('change');
         });         
+    
+    $('a.trigger_names').click(function(e){
+        e.preventDefault();
+        var action = $(this).attr('id');        
+        if (action == 'show') {
+            $(this).closest('td').siblings('.hidden_row').show('slow');            
+        } else {  
+            $(this).closest('td').siblings('.hidden_row').hide('slow');                        
+        }
+      });
     });
-
-    </script>
-";
+    </script>";
         
 $head_content .= "
 <script type='text/javascript'>
