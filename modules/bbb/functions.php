@@ -138,7 +138,8 @@ function new_bbb_session() {
                       </label>
                     </div>
             </div>
-        </div>
+        </div>";
+        /*
         <div class='form-group'>
             <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
             <div class='col-sm-10'>
@@ -157,7 +158,8 @@ function new_bbb_session() {
 
             </div>
         </div>
-        <div class='form-group'>
+        */
+        $tool_content .= "<div class='form-group'>
             <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
             <div class='col-sm-10'>
                     <div class='radio'>
@@ -562,7 +564,8 @@ function edit_bbb_session($session_id) {
                                   </label>
                                 </div>
                         </div>
-                    </div>
+                    </div>";
+                    /*
                     <div class='form-group'>
                         <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
                         <div class='col-sm-10'>
@@ -580,7 +583,8 @@ function edit_bbb_session($session_id) {
                                 </div>
                         </div>
                     </div>
-                    <div class='form-group'>
+                    */
+                    $tool_content .= "<div class='form-group'>
                         <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
                         <div class='col-sm-10'>
                                 <div class='radio'>
