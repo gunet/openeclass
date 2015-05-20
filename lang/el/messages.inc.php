@@ -3358,6 +3358,8 @@ $langPerDay = "ανά ημέρα";
 $langPerWeek = "ανά εβδομάδα";
 $langPerMonth = "ανά μήνα";
 $langPerYear = "ανά έτος";
+$langStatsUserStatus = array(1=>"Εκπαιδευτές",5=>"Εκπειδευόμενοι");
+$langCourseVisibility = array(0=>$langCourseInactiveShort,1=>$langPrivOpen,2=>$langPublic,3=>$langClosedCourseShort);
 $langHits = "επισκέψεις";
 $langDuration = "διάρκεια επισκέψεων";
 $langDurationVisits = "Χρονική Διάρκεια Επισκέψεων";

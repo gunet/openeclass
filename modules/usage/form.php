@@ -35,7 +35,7 @@ $statsIntervalOptions = '<option value="1" >' . $langPerDay . "</option>\n" .
         '<option value="30" selected>' . $langPerMonth . "</option>\n" .
         '<option value="365">' . $langPerYear . "</option>\n";
 
-if(isset($course_id) && ($is_editor || $is_admin)){
+if($stats_type == 'course'){
     /**Get users of course**/
     $result = Database::get()->queryArray("SELECT u.id, concat(givenname,' ',surname,' (',username,')') name FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE course_id=?d AND cu.status=5", $course_id);
     $statsUserOptions = '<option value="0" >' . $langAllUsers . "</option>\n";
@@ -43,7 +43,7 @@ if(isset($course_id) && ($is_editor || $is_admin)){
        $statsUserOptions .= '<option value="'.$u->id.'" >' . $u->name . "</option>\n"; 
     }
 }
-elseif($is_admin){
+elseif($stats_type == 'admin'){
     
 }
 else{
@@ -75,8 +75,10 @@ $tool_content .= "<label class='col-sm-1 control-label'>$langUntil:</label>
             <div class='col-xs-2 col-sm-2'>
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
             </div>";
-$tool_content .= '
-    <div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
+if($stats_type == 'course' || $stats_type == 'user'){
+    $tool_content .= '
+        <div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
+}
 
 $tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
 
@@ -84,7 +86,7 @@ if($stats_type == 'course'){
     $tool_content .= '
     <div class="col-sm-3 col-xs-3"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
 }
-elseif($is_admin){
+elseif($stats_type == 'admin'){
     
 }
 elseif($stats_type == 'user'){

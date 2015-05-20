@@ -29,12 +29,12 @@ if(!isset($_REQUEST['t']) || $_REQUEST['t'] == 'c'){
     $require_current_course = true;
     $stats_type = 'course';
 }
-elseif(isset($_REQUEST['t']) || $_REQUEST['t'] == 'u'){
-    $stats_type = 'user';
-}
-else{ // expecting $_REQUEST['t'] == 'a'
+elseif(isset($_REQUEST['t']) && $_REQUEST['t'] == 'a'){
     $require_admin = true;
     $stats_type = 'admin';
+}
+else{ // expecting $_REQUEST['t'] == 'u'
+    $stats_type = 'user';
 }
 $helpTopic = 'Usage';
 $require_login = true;
@@ -60,14 +60,15 @@ $pageName = $langUsage;
 
 ob_start();
 
-if(isset($course_id) && ($is_editor || $is_admin)){
+if($stats_type == 'course' && isset($course_id) && ($is_editor || $is_admin)){
     require_once "course.php";
 }
-elseif($is_admin){
+elseif($stats_type == 'admin' && $is_admin){
     require_once "admin.php";
 }
 else{
     require_once "user.php";
+    $stats_type = 'user';
 }
 
 add_units_navigation(true);

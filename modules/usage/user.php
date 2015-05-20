@@ -28,6 +28,7 @@ $head_content .=
         module = null;
         user = $uid;
         course = null;
+        stats = 'u';
     </script>";
 require_once('form.php');
 $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";

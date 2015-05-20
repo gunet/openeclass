@@ -227,68 +227,91 @@ function build_group_selector_cond($interval = 'month')
     return array('groupby'=>$groupby,'select'=>$select);
 }
 
-function get_department_course_stats(){
-    $q = "SELECT did, dname, visible, SUM(courses) courses_count
-      FROM (SELECT toph.id did, toph.name dname, c.visible, count(*) courses FROM course_department cd 
-      JOIN hierarchy ch ON cd.department=ch.id
-      JOIN course c ON cd.course=c.id 
-      RIGHT JOIN (SELECT h1.id, h1.name, h1.lft, h1.rgt, count(*) c 
-        FROM hierarchy h1 
-        JOIN 
-        hierarchy h2 ON h1.lft>h2.lft AND h1.lft<=h2.rgt GROUP BY h1.id having c=1
-    ) toph ON ch.lft>toph.lft AND ch.lft<=toph.rgt 
-    GROUP BY cd.department, c.visible) x 
-    GROUP BY did, visible ORDER BY did";
+function get_department_course_stats($root_department = 1){
+    global $langCourseVisibility;
+    $q = "SELECT lft, rgt INTO @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
+    Database::get()->query($q, $root_department);
     
+    $q = "SELECT toph.id did, toph.name dname, visible, SUM(courses) courses_count
+      FROM (SELECT ch.lft, ch.rgt, c.visible, count(c.id) courses 
+            FROM course_department cd 
+            JOIN hierarchy ch ON cd.department=ch.id
+            JOIN course c ON cd.course=c.id 
+            GROUP BY cd.department, c.visible ) ch
+          RIGHT JOIN 
+          (SELECT descendant.id, descendant.name, descendant.lft, descendant.rgt, count(*) c 
+            FROM hierarchy descendant 
+            JOIN 
+            hierarchy ancestor ON descendant.lft>ancestor.lft AND descendant.lft<=ancestor.rgt 
+            WHERE ancestor.lft>=@rootlft AND ancestor.rgt<=@rootrgt AND descendant.lft>=@rootlft AND descendant.rgt<=@rootrgt
+            GROUP BY descendant.id having c=1) toph 
+     ON ch.lft>=toph.lft AND ch.lft<=toph.rgt 
+    GROUP BY toph.id, ch.visible ORDER BY did";
     $r = Database::get()->queryArray($q);
-    $formattedr = array('department'=>array(),'visibility'.COURSE_CLOSED=>array(),'visibility'.COURSE_REGISTRATION=>array(), 'visibility'.COURSE_OPEN=>array(), 'visibility'.COURSE_INACTIVE=>array());
+$formattedr = array('department'=>array(),$langCourseVisibility[COURSE_CLOSED]=>array(),$langCourseVisibility[COURSE_REGISTRATION]=>array(), $langCourseVisibility[COURSE_OPEN]=>array(), $langCourseVisibility[COURSE_INACTIVE]=>array());
+    $depids = array();
     $d = '';
     $i = -1;
     foreach($r as $record){
         if($record->dname != $d){
             $i++;
+            $depids[] = $record->did;
             $formattedr['department'][] = $record->dname;
             $d = $record->dname;
-            $formattedr['visibility'.COURSE_CLOSED][] = 0;
-            $formattedr['visibility'.COURSE_REGISTRATION][] = 0;
-            $formattedr['visibility'.COURSE_OPEN][] = 0;
-            $formattedr['visibility'.COURSE_INACTIVE][] = 0;
+            $formattedr[$langCourseVisibility[COURSE_CLOSED]][] = 0;
+            $formattedr[$langCourseVisibility[COURSE_REGISTRATION]][] = 0;
+            $formattedr[$langCourseVisibility[COURSE_OPEN]][] = 0;
+            $formattedr[$langCourseVisibility[COURSE_INACTIVE]][] = 0;
         }
-        $formattedr['visibility'.$record->visible][$i] = $record->courses_count;
+        if(!is_null($record->visible)){
+           $formattedr[$langCourseVisibility[$record->visible]][$i] = $record->courses_count;
+        }
     }
-    return $formattedr;
+    return  array('deps'=>$depids,'chartdata'=>$formattedr);
 
 }
 
-function get_department_user_stats(){
-    $q = "SELECT did, dname, status, SUM(users) users_count
-      FROM (SELECT toph.id did, toph.name dname, cu.status,count(distinct cu.user_id) users FROM course_department cd 
-      JOIN course_user cu on cd.course=cu.course_id
-      JOIN hierarchy ch ON cd.department=ch.id
-      JOIN course c ON cd.course=c.id 
-      RIGHT JOIN (SELECT h1.id, h1.name, h1.lft, h1.rgt, count(*) c 
-        FROM hierarchy h1 
-        JOIN 
-        hierarchy h2 ON h1.lft>h2.lft AND h1.lft<=h2.rgt GROUP BY h1.id having c=1
-    ) toph ON ch.lft>toph.lft AND ch.lft<=toph.rgt 
-    GROUP BY toph.id, cu.status) x 
+function get_department_user_stats($root_department = 1){
+    global $langStatsUserStatus;
+    $q = "SELECT lft, rgt INTO @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
+    Database::get()->query($q, $root_department);
+    
+    $q = "SELECT toph.id did, toph.name dname, status, SUM(users) users_count
+      FROM (SELECT ch.id did, ch.name dname, ch.lft, ch.rgt, cu.status,count(distinct cu.user_id) users 
+          FROM course_department cd 
+          JOIN course_user cu on cd.course=cu.course_id
+          JOIN hierarchy ch ON cd.department=ch.id
+          JOIN course c ON cd.course=c.id 
+          GROUP BY ch.id, cu.status) chh 
+          RIGHT JOIN (SELECT descendant.id, descendant.name, descendant.lft, descendant.rgt, count(*) c 
+            FROM hierarchy descendant 
+            JOIN 
+            hierarchy ancestor ON descendant.lft>ancestor.lft AND descendant.lft<=ancestor.rgt 
+            WHERE ancestor.lft>=@rootlft AND ancestor.rgt<=@rootrgt AND descendant.lft>=@rootlft AND descendant.rgt<=@rootrgt
+            GROUP BY descendant.id having c=1
+          ) toph ON chh.lft>=toph.lft AND chh.lft<=toph.rgt 
     GROUP BY did, status ORDER BY did";
     
-    $r = Database::get()->queryArray($q);
-    $formattedr = array('department'=>array(),'status'.USER_TEACHER=>array(),'status'.USER_STUDENT=>array());
+    $r = Database::get()->queryArray($q);//,$root_department);
+    $langStatus = array(1=>"Tutors",5=>"Students");
+    $formattedr = array('department'=>array(),$langStatsUserStatus[USER_TEACHER]=>array(),$langStatsUserStatus[USER_STUDENT]=>array());
+    $depids = array();
     $d = '';
     $i = -1;
     foreach($r as $record){
         if($record->dname != $d){
             $i++;
+            $depids[] = $record->did;
             $formattedr['department'][] = $record->dname;
             $d = $record->dname;
-            $formattedr['status'.USER_TEACHER][] = 0;
-            $formattedr['status'.USER_STUDENT][] = 0;
+            $formattedr[$langStatsUserStatus[USER_TEACHER]][] = 0;
+            $formattedr[$langStatsUserStatus[USER_STUDENT]][] = 0;
        }
-       $formattedr['status'.$record->status][$i] = $record->users_count;
+       if(!is_null($record->status)){
+           $formattedr[$langStatsUserStatus[$record->status]][$i] = $record->users_count;
+       }
     }
-    return $formattedr;
+    return array('deps'=>$depids,'chartdata'=>$formattedr);
 
 }
 

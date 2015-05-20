@@ -2011,6 +2011,8 @@ $langPerWeek = "per week";
 $langPerMonth = "per month";
 $langPerYear = "per year";
 $langHits = "visits";
+$langStatsUserStatus = array(1=>"Tutors",5=>"Students");
+$langCourseVisibility = array(0=>$langCourseInactiveShort,1=>$langPrivOpen,2=>$langPublic,3=>$langClosedCourseShort);
 $langDuration = "duration";
 $langDurationVisits = "Time Duration of Visits";
 $langDurationExpl = "Duration of visits on each module is computed appoximately in minutes.";
