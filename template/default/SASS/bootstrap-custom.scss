@@ -593,6 +593,9 @@ a
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffebcccc', GradientType=0);
     background-repeat: repeat-x;
 }
+.well{
+    @include box-shadow(0 1px 3px rgba(0, 0, 0, .05) inset, 0 1px 0 rgba(255, 255, 255, .1));
+}
 
 /*# END OF BOOTSTRAP THEME CSS */
 
@@ -1148,7 +1151,6 @@ tr.not_visible{
 /* Form styles */
 .form-wrapper {
     @extend .well;
-    @extend .well-lg;
     h4.form-heading{
         border-bottom: 1px solid #ccc;
         padding-bottom: 10px;
@@ -1179,7 +1181,7 @@ input[type="file"] {
     border-radius: 5rem;
     overflow: hidden;
     background: $color-toolbox;
-    @include box-shadow(inset -3px 0px 2px rgb(221, 221, 221));
+    @include box-shadow(-3px 0px 2px rgb(221, 221, 221) inset);
     border: 1px solid rgb(216, 216, 216);
     outline:none!important;
 

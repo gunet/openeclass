@@ -53,7 +53,7 @@ $transition-time: 120ms;
   -webkit-box-sizing: $type;
 }
 
-@mixin box-shadow($value)
+@mixin box-shadow($value...)
 {
   box-shadow: $value;
   -moz-box-shadow: $value;
