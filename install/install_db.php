@@ -830,7 +830,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `active` CHAR(1) NOT NULL DEFAULT '1',
                 `secret_directory` VARCHAR(30) NOT NULL,
                 `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
-                `max_grade` FLOAT DEFAULT NULL,
+                `max_grade` FLOAT DEFAULT '10' NOT NULL,
                 `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                 `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
                 `file_name` VARCHAR(200) DEFAULT '' NOT NULL) $charset_spec");
