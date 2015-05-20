@@ -65,11 +65,7 @@ load_js('bootstrap-calendar-master/components/underscore/underscore-min.js');
 ModalBoxHelper::loadModalBox();
 $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bootstrap-calendar-master/css/calendar_small.css' />
 <script type='text/javascript'>
-    $(document).ready(function() {  
-    
-        
-
-            $('.inline').colorbox({ inline: true, width: '50%', rel: 'info', current: '' });"
+    $(document).ready(function() {  "
 //Calendar stuff
 .'var calendar = $("#bootstrapcalendar").calendar({
                     tmpl_path: "'.$urlAppend.'js/bootstrap-calendar-master/tmpls/",
@@ -124,16 +120,26 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
-$tool_content .= "<div style='display: none'>";
-
 if(count($res)>0){
     $course_info_extra = "";
     foreach ($res as $row) {
         $desctype = intval($row->type) - 1;    
         $hidden_id = "hidden_" . $row->id;
-        $tool_content .= "<div id='$hidden_id'><h1>" . q($row->title) . "</h1>" .
-                standard_text_escape($row->comments) . "</div>";    
-        $course_info_extra .= "<li><a class='md-trigger inline' data-modal='syllabus-prof' href='#$hidden_id'>".q($row->title) ."</a></li>";
+   
+        $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                        <h4 class='modal-title' id='myModalLabel'>" . q($row->title) . "</h4>
+                                    </div>
+                                    <div class='modal-body'>".
+                                      standard_text_escape($row->comments)
+                                    ."</div>
+                                  </div>
+                                </div>
+                              </div>";
+        $course_info_extra .= "<li><a data-modal='syllabus-prof' data-toggle='modal' data-target='#$hidden_id' href='javascript:void(0);'>".q($row->title) ."</a></li>";
     }
     $course_info_btn = "
             <div class='btn-group' role='group'>
@@ -149,10 +155,6 @@ if(count($res)>0){
 } else {
    $course_info_btn = ''; 
 }
-
-$tool_content .= "</div>";
-
-
 
 $main_content .= "<div class='course_info'>";
 if ($course_info->description) {
