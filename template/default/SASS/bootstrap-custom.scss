@@ -1157,8 +1157,6 @@ tr.not_visible{
 /* Form styles */
 .form-wrapper {
     @extend .well, .well-lg;
-}
-.form-wrapper{
     h4.form-heading{
         border-bottom: 1px solid #ccc;
         padding-bottom: 10px;
@@ -1171,79 +1169,67 @@ input[type="file"] {
 }
 
 /* tinyMCE styles */
-.mce-toggle:hover{
-    cursor: pointer;
-}
 .mce-toggle{
     i.mce-ico.mce-i-none{
         width: 22px;
+    }
+    &:hover{
+        cursor: pointer;
     }
 }
 
 /* toggle view button style */
 .btn-toggle{
-  padding: 0px;
-  height: 3rem;
-  width: 6rem;
-  position: relative;
-  border-radius: 5rem;
-  overflow: hidden;
-  
-  background: $color-toolbox;
-  @include box-shadow(inset -3px 0px 2px rgb(221, 221, 221));
-  border: 1px solid rgb(216, 216, 216);
-  
-  outline:none!important;
-}
+    padding: 0px;
+    height: 3rem;
+    width: 6rem;
+    position: relative;
+    border-radius: 5rem;
+    overflow: hidden;
+    background: $color-toolbox;
+    @include box-shadow(inset -3px 0px 2px rgb(221, 221, 221));
+    border: 1px solid rgb(216, 216, 216);
+    outline:none!important;
 
-.btn-toggle.btn-toggle-on{
-  background:$color-hover;
-  @include box-shadow(inset 3px 0px 2px #555555);
-}
+    &.btn-toggle-on{
+        background:$color-hover;
+        @include box-shadow(3px 0px 2px #555555 inset);
+    }
 
-.btn-toggle:hover span{
-  background:$color-hover;
-  color: white;
-  @include box-shadow(0px 0px 4px #000000);
-  @include transition(all $transition-time linear);
-}
+    span{
+        border-radius: 5rem;
+        text-align:center;
+        vertical-align: middle;
+        line-height: 3rem;
+        display: inline-block;
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        left: 0px;
+        top: 0px;
+        background: $color-panel;
+        color: #555555;
+        @include box-shadow(2px 0px 2px rgb(221, 221, 221));
+    }
 
-.btn-toggle span.on{
-  display: none;
-}
+    &:hover span{
+        background:$color-hover;
+        color: white;
+        @include box-shadow(0px 0px 4px #000000);
+        @include transition(all $transition-time linear);
+    }
+    span.on, &.btn-toggle-on span.off{
+        display: none;
+    }
 
-.btn-toggle span.off{
-  display: inline-block;
-}
+    span.off, &.btn-toggle-on span.on{
+        display: inline-block;
+    }
 
-.btn-toggle.btn-toggle-on span.on{
-  display: inline-block;
-}
-
-.btn-toggle.btn-toggle-on span.off{
-  display: none;
-}
-
-.btn-toggle span{
-  border-radius: 5rem;
-  text-align:center;
-  vertical-align: middle;
-  line-height: 3rem;
-  display: inline-block;
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  left: 0px;
-  top: 0px;
-  background: $color-panel;
-  color: #555555;
-
-  @include box-shadow(2px 0px 2px rgb(221, 221, 221));
-}
-
-.btn-toggle .on{
-  right:0;
-  left:auto;
+    .on{
+        right:0;
+        left:auto;
+    }
 }
 
 /* Table List styles*/
@@ -2457,7 +2443,7 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
 
   padding-top: 3rem;
   padding-bottom: 3rem;
-  margin-bottom:60px;
+  margin-bottom:45px;
   margin-top:10px;
   min-height: 315px;
 
