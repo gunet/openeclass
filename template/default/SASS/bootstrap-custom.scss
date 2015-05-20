@@ -76,9 +76,12 @@ body
     }
 }
 @media (max-width: $screen-desktop){
-    body>.container{
-        padding:0;
-        margin:0;
+    body{
+        background: none !important;
+        &>.container{
+            padding:0;
+            margin:0;
+        }
     }
 }
 #Frame
@@ -650,7 +653,7 @@ footer.footer
     background: $color-footer;
     color: rgb(167, 167, 167);
     border-top: 1px solid #DBDBDB;
-    @include border-radius(0 0 4px 0);
+    @include border-radius(0 0 4px 4px);
     height: 49px;
     font-size: 12px;
 }
