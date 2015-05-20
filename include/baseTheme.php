@@ -148,6 +148,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $t->set_var('LANG', $language);
+    $t->set_var('ECLASS_VERSION', ECLASS_VERSION);
 
     if (!$is_embedonce) {
         // Remove search if not enabled
