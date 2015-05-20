@@ -24,21 +24,16 @@ if (is_array($METADATAFORMATS[$metadataPrefix])
 }
 
 $identifier = $args['identifier'];
-$query = selectallQuery($metadataPrefix, $identifier);
-
-debug_message("Query: $query") ;
-
-$res = $db->query($query);
+$res = Database::get()->queryArray("SELECT * FROM " . $SQL['table'] . " WHERE " . $SQL['metadataPrefix'] . " LIKE ?s AND " . $SQL['identifier'] . " = ?s", $metadataPrefix, $identifier);
 
 if ($res===false) {
 	if (SHOW_QUERY_ERROR) {
 		echo __FILE__.','.__LINE__."<br />";
-		echo "Query: $query<br />\n";
-		die($db->errorInfo());
+		die();
 	} else {
 		$errors[] = oai_error('idDoesNotExist', '', $identifier); 
 	}
-} elseif (!$res->rowCount()) { // based on PHP manual, it might only work for some DBs
+} elseif (!count($res)) {
 	$errors[] = oai_error('idDoesNotExist', '', $identifier); 
 }
 
@@ -47,18 +42,17 @@ if (!empty($errors)) {
 	oai_exit();
 }
 
-$record = $res->fetch(PDO::FETCH_ASSOC);
+$record = $res[0];
 if ($record===false) {
 	if (SHOW_QUERY_ERROR) {
 		echo __FILE__.','.__LINE__."<br />";
-		echo "Query: $query<br />\n";
 	}
 	$errors[] = oai_error('idDoesNotExist', '', $identifier);	
 }
 
-$datestamp = formatDatestamp($record[$SQL['datestamp']]); 
+$datestamp = formatDatestamp($record->{$SQL['datestamp']}); 
 
-if (isset($record[$SQL['deleted']]) && (intval($record[$SQL['deleted']]) === 1) &&
+if (isset($record->{$SQL['deleted']}) && (intval($record->{$SQL['deleted']}) === 1) &&
         ($deletedRecord == 'transient' || $deletedRecord == 'persistent')) {
 	$status_deleted = TRUE;
 } else {
@@ -67,11 +61,11 @@ if (isset($record[$SQL['deleted']]) && (intval($record[$SQL['deleted']]) === 1) 
 
 $outputObj = new ANDS_Response_XML($args);
 $cur_record = $outputObj->create_record();
-$cur_header = $outputObj->create_header($record[$SQL['identifier']], $datestamp, $record[$SQL['set']], $cur_record);
+$cur_header = $outputObj->create_header($record->{$SQL['identifier']}, $datestamp, $record->{$SQL['set']}, $cur_record);
 // return the metadata record itself
 if (!$status_deleted) {
 	include($inc_record); // where the metadata node is generated.
-	create_metadata($outputObj, $cur_record, $record[$SQL['identifier']], $record[$SQL['set']], $db);
+	create_metadata($outputObj, $cur_record, $record->{$SQL['identifier']}, $record->{$SQL['set']});
 }	else {
 	$cur_header->setAttribute("status","deleted");
 }  
