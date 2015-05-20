@@ -80,35 +80,22 @@ $head_content .= "<script type='text/javascript'>
             var stringVal = [];
             $('#select-groups').val(stringVal).trigger('change');
         });         
-    
-    $('a.trigger_names').click(function(e){
-        e.preventDefault();
-        var action = $(this).attr('id');        
-        if (action == 'show') {
-            $(this).closest('td').siblings('.hidden_row').show('slow');            
-        } else {  
-            $(this).closest('td').siblings('.hidden_row').hide('slow');                        
-        }
-      });
     });
-    </script>";
-        
-$head_content .= "
-<script type='text/javascript'>
-		function onAddTag(tag) {
-			alert('Added a tag: ' + tag);
-		}
-		function onRemoveTag(tag) {
-			alert('Removed a tag: ' + tag);
-		}
-		
-		function onChangeTag(input,tag) {
-			alert('Changed a tag: ' + tag);
-		}
-		
-		$(function() {
-			$('#tags_1').select2({tags:[], formatNoMatches: ''});
-		});
+
+    function onAddTag(tag) {
+        alert('Added a tag: ' + tag);
+    }
+    function onRemoveTag(tag) {
+        alert('Removed a tag: ' + tag);
+    }
+    
+    function onChangeTag(input,tag) {
+        alert('Changed a tag: ' + tag);
+    }
+    
+    $(function() {
+        $('#tags_1').select2({tags:[], formatNoMatches: ''});
+    });
 </script>
 ";
 

@@ -268,7 +268,7 @@ else {
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $srv) {
-                $enabled_bbb_server = ($srv->enabled)? $langYes : $langNo;
+                $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
                 $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip) . '/' . $srv->max_rooms;
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>$srv->hostname</td>";
