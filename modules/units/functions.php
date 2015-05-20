@@ -222,9 +222,52 @@ function show_resource($info) {
  * @return string
  */
 function show_doc($title, $comments, $resource_id, $file_id) {
-    global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code;
+    global $is_editor, $course_id, $langWasDeleted, $urlServer,
+           $id, $course_code, $head_content, $langCancel, $langPrint, $langDownload;
 
-    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);    
+    $head_content .= "<script>
+    $(function(){
+        $('.fileModal').click(function (e)
+        {
+            e.preventDefault();
+            var fileURL = $(this).attr('href');
+            var downloadURL = $(this).prev('input').val();
+            var fileTitle = $(this).attr('title');
+            bootbox.dialog({
+                size: 'large',
+                title: fileTitle,
+                message: '<div class=\"row\">'+
+                            '<div class=\"col-sm-12\">'+
+                                '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                            '</div>'+
+                        '</div>',                          
+                buttons: {
+                    download: {
+                        label: '<i class=\"fa fa-download\"></i> $langDownload',
+                        className: 'btn-success',
+                        callback: function (d) {                      
+                            window.location = downloadURL;                                                            
+                        }
+                    },                        
+                    print: {
+                        label: '<i class=\"fa fa-print\"></i> $langPrint',
+                        className: 'btn-primary',
+                        callback: function (d) {
+                            var iframe = document.getElementById('fileFrame');
+                            iframe.contentWindow.print();                                                               
+                        }
+                    },
+                    cancel: {
+                        label: '$langCancel',
+                        className: 'btn-default'
+                    }                        
+                }
+            });                    
+        });
+    });
+    </script>";    
+    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
+
     if (!$file) {
         if (!$is_editor) {
             return '';
@@ -239,10 +282,16 @@ function show_doc($title, $comments, $resource_id, $file_id) {
         }
         if ($file->format == '.dir') {
             $image = 'fa-folder-o';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>";
+            $download_hidden_link = '';
+            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>$file->filename</a>";
         } else {
             $image = choose_image('.' . $file->format);
-            $link = "<a href='" . file_url($file->path, $file->filename) . "' target='_blank'>";
+            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&download=$file->path";
+            $download_hidden_link = "<input type='hidden' value='$download_url'>";
+            $file_obj = MediaResourceFactory::initFromDocument($file);
+            $file_obj->setAccessURL(file_url($file->path, $file->filename));
+            $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+            $link = MultimediaHelper::chooseMediaAhref($file_obj);            
         }
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
@@ -251,10 +300,11 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     } else {
         $comment = '';
     }
+
     return "
         <tr$class_vis>
-          <td width='1'>$link" . icon($image, '') . "</a></td>
-          <td align='left'>$link" . q($title) . "</a>$comment</td>" .
+          <td width='1'>" . icon($image, '') . "</td>
+          <td align='left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
             '</tr>';
 }
