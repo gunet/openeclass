@@ -1637,7 +1637,7 @@ ul.tablelist
 }
 .popover-content {
     a{
-        white-space: pre-wrap;
+       min-width: 150px; 
     }
     padding: 3px 3px;
     
