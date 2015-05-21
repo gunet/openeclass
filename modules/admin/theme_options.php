@@ -371,7 +371,7 @@ if (isset($_POST['optionsSave'])) {
             'class' => 'uploadTheme',
             'level' => 'primary-label'),        
         array('title' => $langBack,
-            'url' => "$urlAppend/modules/admin/index.php",
+            'url' => "{$urlAppend}modules/admin/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
         ),false);
