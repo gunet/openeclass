@@ -119,7 +119,9 @@ if ($total_categories > 0) {
         $tool_content .= "
 		<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
 
-        $dyntools = array(
+       
+        $tool_content .= action_button(
+                array(
             array(
                 'title' => $langEditChange,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
@@ -143,14 +145,15 @@ if ($total_categories > 0) {
             ),
             array('title' => $langDelete,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
-                'icon' => 'fa-times',
+                'icon' => 'fa-times text-danger',
                 'class' => 'delete',
                 'confirm' => $langConfirmDelete,
+                'level' => 'primary',
                 'show' => $is_editor
             )
-        );
-        $tool_content .= action_button($dyntools)."</div></caption>";
-
+        )
+                );
+        $tool_content .= "</div></caption>";
         $tool_content .= "<tr class='list-header'>
             <td class='forum_td'>$langForums</td>
             <td class='text-center forum_td' width='100'>$langSubjects</td>
@@ -237,7 +240,8 @@ if ($total_categories > 0) {
                         }
                         $tool_content .= "<td class='option-btn-cell'>";
 
-                        $dyntools =  array(
+                        $tool_content .= action_button(
+                            array(
                             array(
                                 'title' => $langEditChange,
                                 'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
@@ -253,8 +257,8 @@ if ($total_categories > 0) {
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
                                 'confirm' => $langConfirmDelete,
-                                'show' => $is_editor));
-                        $tool_content .= action_button($dyntools);
+                                'show' => $is_editor))    
+                            );
                     }
                 } else {
                     $tool_content .= "<tr>" .
