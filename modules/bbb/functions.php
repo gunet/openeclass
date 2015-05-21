@@ -138,26 +138,26 @@ function new_bbb_session() {
                       </label>
                     </div>
             </div>
-        </div>
-        <div class='form-group'>
-            <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
-            <div class='col-sm-10'>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='private_button' name='type' value='0' checked>
-                       $langNewBBBSessionPrivate
-                      </label>
-                    </div>
-                    <div class='radio'>
-                      <label>
-                        <input type='radio' id='public_button' name='type' value='1'>
-                        $langNewBBBSessionPublic
-                      </label>
-                    </div>
+        </div>";
+        //<div class='form-group'>
+          //  <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
+           // <div class='col-sm-10'>
+            //        <div class='radio'>
+          //            <label>
+          //              <input type='radio' id='private_button' name='type' value='0' checked>
+          //             $langNewBBBSessionPrivate
+          //            </label>
+          //          </div>
+          //         <div class='radio'>
+          //            <label>
+          //              <input type='radio' id='public_button' name='type' value='1'>
+          //              $langNewBBBSessionPublic
+          //           </label>
+          //          </div>
 
-            </div>
-        </div>
-        <div class='form-group'>
+          //  </div>
+        //</div>
+        $tool_content .= "<div class='form-group'>
             <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
             <div class='col-sm-10'>
                     <div class='radio'>
@@ -562,25 +562,25 @@ function edit_bbb_session($session_id) {
                                   </label>
                                 </div>
                         </div>
-                    </div>
-                    <div class='form-group'>
-                        <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
-                        <div class='col-sm-10'>
-                                <div class='radio'>
-                                  <label>
-                                    <input type='radio' id='private_button' name='type' value='0' ".(($type==0) ? "checked" : "").">
-                                   $langNewBBBSessionPrivate
-                                  </label>
-                                </div>
-                                <div class='radio'>
-                                  <label>
-                                    <input type='radio' id='public_button' name='type' value='1' ".(($type==1) ? "checked" : "").">
-                                    $langNewBBBSessionPublic
-                                  </label>
-                                </div>
-                        </div>
-                    </div>
-                    <div class='form-group'>
+                    </div>";
+            //      <div class='form-group'>
+            //            <label for='public_button' class='col-sm-2 control-label'>$langNewBBBSessionType:</label>
+            //            <div class='col-sm-10'>
+            //                   <div class='radio'>
+            //                      <label>
+            //                        <input type='radio' id='private_button' name='type' value='0' ".(($type==0) ? "checked" : "").">
+            //                       $langNewBBBSessionPrivate
+            //                     </label>
+            //                    </div>
+            //                    <div class='radio'>
+            //                      <label>
+            //                        <input type='radio' id='public_button' name='type' value='1' ".(($type==1) ? "checked" : "").">
+            //                        $langNewBBBSessionPublic
+            //                      </label>
+            //                    </div>
+            //            </div>
+            //        </div>
+                    $tool_content .= "<div class='form-group'>
                         <label for='active_button' class='col-sm-2 control-label'>$langNewBBBSessionStatus:</label>
                         <div class='col-sm-10'>
                                 <div class='radio'>
