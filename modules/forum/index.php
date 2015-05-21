@@ -119,30 +119,35 @@ if ($total_categories > 0) {
         $tool_content .= "
 		<caption><strong>$langCategory :</strong> $cat_title<div class='pull-right'>";
 
-        $dyntools = (!$is_editor) ? array() : array(
-            array('title' => $langEditChange,
+        $dyntools = array(
+            array(
+                'title' => $langEditChange,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatedit=yes&amp;cat_id=$catNum",
                 'icon' => 'fa-edit',
-                'level' => "primary"
+                'level' => "primary",
+                'show' => $is_editor
             ),
             array(
                 'title' => $langNewForum,
                 'url' => "forum_admin.php?course=$course_code&amp;forumgo=yes&amp;cat_id=$catNum",
                 'icon' => 'fa-plus-circle',
-                'level' => "primary"
+                'level' => "primary",
+                'show' => $is_editor
+            ),
+            array(
+                'title' => $action_notify ? $langStopNotify : $langNotify,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
+                'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
+                'level' => 'primary',
+                'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
             ),
             array('title' => $langDelete,
                 'url' => "forum_admin.php?course=$course_code&amp;forumcatdel=yes&amp;cat_id=$catNum",
                 'icon' => 'fa-times',
                 'class' => 'delete',
-                'confirm' => $langConfirmDelete
+                'confirm' => $langConfirmDelete,
+                'show' => $is_editor
             )
-        );
-        $dyntools[] = array('title' => $action_notify ? $langStopNotify : $langNotify,
-            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumcatnotify=$link_notify&amp;cat_id=$catNum",
-            'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope',
-            'level' => 'primary',
-            'btn_class' => $action_notify ? 'btn-primary' : 'btn-default'
         );
         $tool_content .= action_button($dyntools)."</div></caption>";
 
@@ -232,20 +237,23 @@ if ($total_categories > 0) {
                         }
                         $tool_content .= "<td class='option-btn-cell'>";
 
-                        $dyntools = (!$is_editor) ? array() : array(
+                        $dyntools =  array(
                             array(
                                 'title' => $langEditChange,
                                 'url' => "forum_admin.php?course=$course_code&amp;forumgoedit=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
-                                'icon' => 'fa-edit'),
+                                'icon' => 'fa-edit',
+                                'show' => $is_editor),
+                            array(
+                                'title' => $forum_action_notify ? $langStopNotify : $langNotify,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
+                                'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope'),
                             array(
                                 'title' => $langDelete,
                                 'url' => "forum_admin.php?course=$course_code&amp;forumgodel=yes&amp;forum_id=$forum_id&amp;cat_id=$catNum",
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
-                                'confirm' => $langConfirmDelete));
-                        $dyntools[] = array('title' => $forum_action_notify ? $langStopNotify : $langNotify,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forumnotify=$forum_link_notify&amp;forum_id=$forum_id",
-                            'icon' => $action_notify ? 'fa-envelope-o' : 'fa-envelope');
+                                'confirm' => $langConfirmDelete,
+                                'show' => $is_editor));
                         $tool_content .= action_button($dyntools);
                     }
                 } else {
