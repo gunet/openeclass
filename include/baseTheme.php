@@ -609,9 +609,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     $t->set_var('EXTRA_FOOTER_CONTENT', get_config('extra_footer_content'));
 
+    // Hack to leave HTML body unclosed
+    if (defined('TEMPLATE_REMOVE_CLOSING_TAGS')) {
+        $t->set_block('mainBlock', 'closingTagsBlock', 'delete');
+    }
+
     //	At this point all variables are set and we are ready to send the final output
     //	back to the browser
     $t->parse('main', 'mainBlock', false);
+
     $t->pparse('Output', 'fh');
 }
 

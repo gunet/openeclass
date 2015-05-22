@@ -215,6 +215,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     set_config('upgrade_begin', time());
 
     $tool_content .= getInfoAreas();
+    define('TEMPLATE_REMOVE_CLOSING_TAGS', true);
     draw($tool_content, 0);
     updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
     Debug::setOutput(function ($message, $level) use (&$debug_output, &$debug_error) {
@@ -2712,4 +2713,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     updateInfo(1, $output_result, false);
     $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
     file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
+
+    // Close HTML body
+    echo "</body></html>\n";
 } // end of if not submit
