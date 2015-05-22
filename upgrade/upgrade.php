@@ -2533,15 +2533,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
 
-        // add or upgrade default theme options
-        foreach ($theme_options as $theme) {
-            if ($q = Database::get()->querySingle("SELECT id FROM theme_options WHERE name = ?s", $theme['name'])) {
-                Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $theme['styles'], $q->id);
-            } else {
-                Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)", $theme['name'], $theme['styles']);
-            }
-        }
-        copyThemeImages();
+        // add default theme options
+        importThemes();
 
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
@@ -2667,6 +2660,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
         }
         Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
+        
+        $new_themes = array();
+        importThemes($new_themes);
     }
 
     // update eclass version
