@@ -2671,18 +2671,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         $new_themes = array();
         importThemes($new_themes);
         //unlinking files that were used with the old theme import mechanism
-        @unlink("$webDir/template/default/imgbcgr_lines_petrol_les saturation.png");
-        @unlink("$webDir/template/default/eclass-new-logo_atoms.png");
-        @unlink("$webDir/template/default/OpenCourses_banner_Color_theme1-1.png");      
-        @unlink("$webDir/template/default/banner_Sketch_empty-1-2.png");
-        @unlink("$webDir/template/default/eclass-new-logo_sketchy.png");
-        @unlink("$webDir/template/default/Light_sketch_bcgr2-1.png");       
-        @unlink("$webDir/template/default/Open-eClass-4-1-1.jpg");
-        @unlink("$webDir/template/default/eclass_ice.png");
-        @unlink("$webDir/template/default/eclass-new-logo_ice.png"); 
-        @unlink("$webDir/template/default/ice.png");
-        @unlink("$webDir/template/default/eclass_classic2-1-1.png");
-        @unlink("$webDir/template/default/eclass-new-logo_classic.png");         
+        @unlink("$webDir/template/default/img/bcgr_lines_petrol_les saturation.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_atoms.png");
+        @unlink("$webDir/template/default/img/OpenCourses_banner_Color_theme1-1.png");      
+        @unlink("$webDir/template/default/img/banner_Sketch_empty-1-2.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_sketchy.png");
+        @unlink("$webDir/template/default/img/Light_sketch_bcgr2-1.png");       
+        @unlink("$webDir/template/default/img/Open-eClass-4-1-1.jpg");
+        @unlink("$webDir/template/default/img/eclass_ice.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_ice.png"); 
+        @unlink("$webDir/template/default/img/ice.png");
+        @unlink("$webDir/template/default/img/eclass_classic2-1-1.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");         
     }
 
     // update eclass version
