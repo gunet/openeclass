@@ -2534,7 +2534,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 PRIMARY KEY (`id`)) $charset_spec");
 
         // add default theme options
-        importThemes();
+        $themes = array(
+            'courses-theme_data-Open Courses Atoms.zip',
+            'courses-theme_data-Open Courses Sketchy.zip',
+            'courses-theme_data-Open eClass Classic.zip',
+            'courses-theme_data-Open eClass City Lights.zip',
+            'courses-theme_data-Open eClass Classic Ice.zip');
+        importThemes($themes);
 
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
@@ -2661,8 +2667,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
         
+        //importing new theme
         $new_themes = array();
         importThemes($new_themes);
+        //unlinking files that were used with the old theme import mechanism
+        @unlink("$webDir/template/default/imgbcgr_lines_petrol_les saturation.png");
+        @unlink("$webDir/template/default/eclass-new-logo_atoms.png");
+        @unlink("$webDir/template/default/OpenCourses_banner_Color_theme1-1.png");      
+        @unlink("$webDir/template/default/banner_Sketch_empty-1-2.png");
+        @unlink("$webDir/template/default/eclass-new-logo_sketchy.png");
+        @unlink("$webDir/template/default/Light_sketch_bcgr2-1.png");       
+        @unlink("$webDir/template/default/Open-eClass-4-1-1.jpg");
+        @unlink("$webDir/template/default/eclass_ice.png");
+        @unlink("$webDir/template/default/eclass-new-logo_ice.png"); 
+        @unlink("$webDir/template/default/ice.png");
+        @unlink("$webDir/template/default/eclass_classic2-1-1.png");
+        @unlink("$webDir/template/default/eclass-new-logo_classic.png");         
     }
 
     // update eclass version

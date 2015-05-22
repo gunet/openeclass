@@ -1714,27 +1714,23 @@ function fix_multiple_usernames()  {
 
 function importThemes($themes = array()) {
     global $webDir;
-    require_once '../include/pclzip/pclzip.lib.php';
-    $themesDir = "$webDir/template/$_SESSION[theme]/themes";
-    if(!is_dir("$webDir/courses/theme_data")) mkdir("$webDir/courses/theme_data", 0755, true);
-    if (is_dir($themesDir) && $handle = opendir($themesDir)) {
-        while (false !== ($file_name = readdir($handle))) {
-            if (empty($themes)) {
-                if ($file_name != "." && $file_name != "..") {
-                    installTheme($themesDir, $file_name);
-                }                
-            } else {
+    if (!empty($themes)) {
+        require_once "$webDir/include/pclzip/pclzip.lib.php";
+        $themesDir = "$webDir/template/$_SESSION[theme]/themes";
+        if(!is_dir("$webDir/courses/theme_data")) mkdir("$webDir/courses/theme_data", 0755, true);
+        if (is_dir($themesDir) && $handle = opendir($themesDir)) {
+            while (false !== ($file_name = readdir($handle))) {
                 if ($file_name != "." && $file_name != ".." && in_array($file_name, $themes)) {
                     installTheme($themesDir, $file_name);
                 }                 
             }
+            closedir($handle);
         }
-        closedir($handle);
-    }    
+    }
 }
 function installTheme($themesDir, $file_name) {
     global $webDir;
-    if (rename("$themesDir/$file_name", "$webDir/courses/theme_data/$file_name")) {                   
+    if (copy("$themesDir/$file_name", "$webDir/courses/theme_data/$file_name")) {                   
         $archive = new PclZip("$webDir/courses/theme_data/$file_name");
         if (!$archive->extract(PCLZIP_OPT_PATH, "$webDir/courses/theme_data/temp")) {
             die("Error : ".$archive->errorInfo(true));

@@ -19,8 +19,7 @@ function updateInfo($percent, $infoText, $debug = true) {
         echo 'document.getElementById("progress-bar").className = "progress-bar progress-bar-striped";';
         echo 'document.getElementById("progress-bar").innerHTML ="' . ($percent * 100) . '%";';
     }
-    echo 'document.getElementById("progressbar-info").innerHTML="' . addslashes($infoText) . '";</script>
-';
+    echo 'document.getElementById("progressbar-info").innerHTML="' . addslashes($infoText) . '";</script>';
     // This is for the buffer achieve the minimum size in order to flush data
 //    echo str_repeat(' ', 1024 * 64);
     // Send output to browser immediately
