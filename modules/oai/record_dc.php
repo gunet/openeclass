@@ -28,11 +28,11 @@
  *
  * \sa oaidp-config.php 
  */
-function create_metadata($outputObj, $cur_record, $identifier, $setspec, $db) {
+function create_metadata($outputObj, $cur_record, $identifier, $setspec) {
     // debug_message('In '.__FILE__.' function '.__FUNCTION__.' was called.');
     // debug_var_dump('metadata_node', $metadata_node);
     $metadata_node = $outputObj->create_metadata($cur_record);
-    $obj_node = new ECLASS_OAIDC($outputObj, $metadata_node, $db);
+    $obj_node = new ECLASS_OAIDC($outputObj, $metadata_node);
     try {
         $obj_node->create_obj_node($setspec, $identifier);
     } catch (Exception $e) {

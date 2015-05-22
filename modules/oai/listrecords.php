@@ -67,29 +67,22 @@ if (!empty($errors)) {
 }
 
 if (empty($errors)) {
-	$query = selectallQuery($metadataPrefix) . $extquery;
-	debug_message("Query: $query") ;
-
-	$res = $db->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_SCROLL));
-	$r = $res->execute();
+ 	$r = $res = Database::get()->queryArray("SELECT * FROM " . $SQL['table'] . " WHERE " . $SQL['metadataPrefix'] . " LIKE ?s" . $extquery, $metadataPrefix);
  	if ($r===false) {
 		if (SHOW_QUERY_ERROR) {
 			echo __FILE__.','.__LINE__."<br />";
-			echo "Query: $query<br />\n";
-			print_r($db->errorInfo());
 			exit();
 		} else {
 			$errors[] = oai_error('noRecordsMatch');
 		}		
 	} else {
-		$r = $res->setFetchMode(PDO::FETCH_ASSOC);
 		if ($r===false) {
 			exit("FetchMode is not supported");
 		}
-		$num_rows = rowCount($metadataPrefix, $extquery, $db);  
+		$num_rows = count($res);
 		if ($num_rows==0) {
 			if (SHOW_QUERY_ERROR) {
-				echo "Cannot find records: $query\n";
+				echo "Cannot find records\n";
 			}
 			$errors[] = oai_error('noRecordsMatch');
 		}
@@ -121,32 +114,32 @@ elseif (isset($args['resumptionToken'])) {
 	unset($expirationdatetime);
 }
 
+// Record counter
+$countrec  = 0;
 
 if (isset($args['resumptionToken'])) {
 	debug_message("Try to resume because a resumptionToken supplied.") ;
-	$record = $res->fetch(PDO::FETCH_ASSOC, PDO::FETCH_ORI_ABS, $deliveredrecords); 
+	$countrec += $deliveredrecords;
+	$maxrec += $deliveredrecords;
 }
-// Record counter
-$countrec  = 0;
 
 // Publish a batch to $maxrec number of records
 $outputObj = new ANDS_Response_XML($args);
 while ($countrec++ < $maxrec) {
-	$record = $res->fetch(PDO::FETCH_ASSOC);
+	$record = $res[$countrec-1];
 	if ($record===false) {
 		if (SHOW_QUERY_ERROR) {
 			echo __FILE__.",". __LINE__."<br />";
-			print_r($db->errorInfo());
 			exit();
 		}
 	}
 
-	$identifier = $oaiprefix.$record[$SQL['identifier']];
-	$datestamp = formatDatestamp($record[$SQL['datestamp']]);
-	$setspec = $record[$SQL['set']];
+	$identifier = $oaiprefix.$record->{$SQL['identifier']};
+	$datestamp = formatDatestamp($record->{$SQL['datestamp']});
+	$setspec = $record->{$SQL['set']};
 	
 	// debug_var_dump('record', $record);
-	if (isset($record[$SQL['deleted']]) && (intval($record[$SQL['deleted']]) === 1 ) &&
+	if (isset($record->{$SQL['deleted']}) && (intval($record->{$SQL['deleted']}) === 1 ) &&
 		($deletedRecord == 'transient' || $deletedRecord == 'persistent')) {
 		$status_deleted = TRUE;
 	} else {
@@ -160,7 +153,7 @@ while ($countrec++ < $maxrec) {
 	// return the metadata record itself
 		if (!$status_deleted) {
 			debug_var_dump('inc_record',$inc_record);
-			create_metadata($outputObj, $cur_record, $identifier, $setspec, $db);
+			create_metadata($outputObj, $cur_record, $identifier, $setspec);
 		}	
 	} else { // for ListIdentifiers, only identifiers will be returned.
 		$cur_header = $outputObj->create_header($identifier, $datestamp,$setspec);

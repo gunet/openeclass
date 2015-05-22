@@ -231,3 +231,7 @@ SecureImage - Copyright 2009 Drew Phillips
 Class HtmlCutString - Based on code provided by Prajwala  <m.prajwala@gmail.com>
   Licenced under GPL
   http://code.google.com/p/cut-html-string/
+
+trunk8 v1.3.3 - Copyright 2012 Rick Viscomi
+  Released under the MIT License.
+  https://github.com/rviscomi/trunk8

@@ -13,10 +13,10 @@
     <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="{%template_base%}/js/bootstrap.min.js"></script>
+    <script src="{%template_base%}/js/bootstrap.min.js?v={%ECLASS_VERSION%}"></script>
 
      <!-- BootBox -->
-    <script src="{%URL_PATH%}js/bootbox/bootbox.min.js"></script>
+    <script src="{%URL_PATH%}js/bootbox/bootbox.min.js?v={%ECLASS_VERSION%}"></script>
     
     <!-- SlimScroll -->
     <script src="{%URL_PATH%}js/jquery.slimscroll.min.js"></script>
@@ -27,10 +27,10 @@
     var sidebarConfig = { notesLink: '{%NOTES_LINK%}', messagesLink: '{%URL_PATH%}main/ajax_sidebar.php', courseCode: '{%COURSE_CODE%}', courseId: '{%COURSE_ID%}', note_fail_messge: '{%langFieldsRequ%}' };
     </script>
     <!-- Our javascript -->
-    <script type="text/javascript" src="{%template_base%}/js/main.js"></script>
+    <script type="text/javascript" src="{%template_base%}/js/main.js?v={%ECLASS_VERSION%}"></script>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-custom.css">
+    <link rel="stylesheet" href="{%template_base%}/CSS/bootstrap-custom.css?v={%ECLASS_VERSION%}">
 
     <!-- Font Awesome - A font of icons -->
     <link href="{%template_base%}/CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
@@ -378,6 +378,8 @@
         <!-- END footerBlock -->
 
     </div>
+<!-- BEGIN closingTagsBlock -->
 </body>
 </html>
+<!-- END closingTagsBlock -->
 <!-- END mainBlock -->

@@ -68,7 +68,7 @@ class MultimediaHelper {
             if (self::isSupportedImage($filename)) {
                 $ahref = "<a href='$mediaDL' class='$class fileURL' title=''".q($title)."'>" . $title . "</a>";
             }
-        } else if(self::isSupportedModalFile($filename)){
+        } else if(self::isSupportedModalFile($filename)){            
             $ahref = "<a href='$mediaDL' class='fileURL fileModal' target='_blank' title='".q($title)."'>" . $title . "</a>";
         }
 

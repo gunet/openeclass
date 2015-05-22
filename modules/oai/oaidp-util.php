@@ -230,48 +230,6 @@ function readResumToken($resumptionToken) {
 // your needs. Normally, if you have correctly named the columns above,
 // this does not need to be done.
 
-/** this function should generate a query which will return
- * all records
- * the useless condition id_column = id_column is just there to ease
- * further extensions to the query, please leave it as it is.
- */
-function selectallQuery ($metadPrefix = "rif", $id = '')
-{
-	global $SQL;
-	$query = "SELECT * FROM ".$SQL['table'] . " WHERE ".$SQL['metadataPrefix']." LIKE '%$metadPrefix%'";
-	if ($id != '') {
-		$query .= " AND ".$SQL['identifier']." ='$id'";
-	}
-	return $query;
-}
-
-/** this function will return metadataFormat of a record */
-function idFormatQuery($id)
-{
-	global $SQL;
-	return 'select '.$SQL['metadataPrefix'].' FROM '.$SQL['table']. " WHERE ".$SQL['identifier']." = '".$id."'";
-}
-
-/** this function will return identifier and datestamp for all records
- * not very useful
- */
-function idQuery ($metadPrefix = "rif", $id = '')
-{
-	global $SQL;
-
-	if ($SQL['set'] != '') {
-		$query = 'select '.$SQL['identifier'].','.$SQL['datestamp'].','.$SQL['set'].' FROM '.$SQL['table']. " WHERE ".$SQL['metadataPrefix']." LIKE '%$metadPrefix%'";
-	} else {
-		$query = 'select '.$SQL['identifier'].','.$SQL['datestamp'].' FROM '.$SQL['table']. " WHERE ".$SQL['metadataPrefix']." LIKE '%$metadPrefix%'";
-	}
-	
-	if ($id != '') {
-		$query .= " AND ".$SQL['identifier']." = '$id'";
-	}
-
-	return $query;
-}
-
 /** filter for until, appends to the end of SQL query */
 function untilQuery($until) 
 {
@@ -295,38 +253,5 @@ function setQuery($set)
 	// strip off "class:" which is not saved in database
 	if(strstr($set,"class:")) $set = substr($set,6);
 	return ' AND '.$SQL['set']." LIKE '%$set%'";
-}
-
-/** for accurately to assess how many records satisfy conditions for all DBs */
-function rowCount($metadataPrefix, $extQuery, $db) {
-	global $SQL;
-	$n = 0;
-	$sql = "SELECT COUNT(*) FROM ".$SQL['table'] . " WHERE ".$SQL['metadataPrefix']." LIKE '%$metadataPrefix%'" . $extQuery;
-	if ($res = $db->query($sql)) {
-  	$n = $res->fetchColumn();
-	}
-	return $n;
-}
-
-/** A worker function for processing an error when a query was executed
- * \param $query string, original query
- * \param $e PDOException, the PDOException object
-*/
-function process_pdo_error($query, $e) {
-			echo $query.' was failed\n';
-			echo $e->getMessage();
-}
-
-/** When query return no result, throw an Exception of Not found.
- * \param $db PDO
- * \param $query string
- * \return $res PDOStatement
- */
-function exec_pdo_query($db, $query)
-{
-	$res = $db->query($query);
-	if ($res===false) {
-		throw new Exception($query.":\nIt found nothing.\n");			
-	} else return $res;
 }			
 ?>

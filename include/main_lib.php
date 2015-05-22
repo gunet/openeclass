@@ -242,6 +242,28 @@ function load_js($file, $init='') {
         } elseif ($file == 'filetree') {
             $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
             $file = 'jquery_filetree/jqueryFileTree.js';            
+        } elseif ($file == 'trunk8') {
+            $head_content .= "
+<script>
+    $(function () { $('.trunk8').trunk8({
+        lines: 3,
+        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
+    });
+
+    $(document).on('click', '.read-more', function (event) {
+        $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
+        event.preventDefault();
+    });
+
+    $(document).on('click', '.read-less', function (event) {
+console.log('aaa');
+        $(this).parent().trunk8();
+        event.preventDefault();
+    });
+
+});
+</script>";
+            $file = 'trunk8.js';
         }
 
         $head_content .= js_link($file);
@@ -1262,7 +1284,7 @@ function add_units_navigation($entry_page = false) {
 // the $postfix (default: ellipsis "...") if so
 function ellipsize($string, $maxlen, $postfix = '...') {
     if (mb_strlen($string, 'UTF-8') > $maxlen) {
-        return (mb_substr($string, 0, $maxlen, 'UTF-8')) . $postfix;
+        return trim(mb_substr($string, 0, $maxlen, 'UTF-8')) . $postfix;
     } else {
         return $string;
     }
@@ -1768,7 +1790,7 @@ tinymce.init({
     menu : 'false',
     // Toolbar options
     toolbar1: 'toggle | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
-    toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
+    toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | cut | copy | paste | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
     //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',

@@ -890,6 +890,15 @@ if (!class_exists('Exercise')) {
             Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d",$id);
         }
         /**
+         * Purge exercise user attempt
+         */
+        function purgeAttempt($eurid) {
+            $id = $this->id;
+            
+            Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
+            Database::get()->query("DELETE FROM exercise_user_record WHERE eid = ?d AND eurid = ?d", $id, $eurid);
+        }        
+        /**
          * Clone an Exercise
          */
         function duplicate() {
