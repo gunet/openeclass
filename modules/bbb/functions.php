@@ -1285,7 +1285,8 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
     );
 
     // Now get meeting info and display it:    
-    $result = $bbb->getMeetingInfoWithXmlResponseArray($infoParams);
+    $result = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,$infoParams);
+    
     // If it's all good, then we've interfaced with our BBB php api OK:
     if ($result == null) {
         // If we get a null response, then we're not getting any XML back from BBB.

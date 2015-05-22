@@ -331,7 +331,7 @@ if($xml) {
 
 }
 
-public function getMeetingInfoUrl($infoParams) {
+public function getMeetingInfoUrl($bbb_url,$salt,$infoParams) {
     /* USAGE:
     $infoParams = array(
     'meetingId' => '1234', -- REQUIRED - The unique id for the meeting
@@ -340,21 +340,26 @@ public function getMeetingInfoUrl($infoParams) {
     */
     $this->_meetingId = $this->_requiredParam($infoParams['meetingId']);
     $this->_password = $this->_requiredParam($infoParams['password']);	
-    $infoUrl = $this->_bbbServerBaseUrl."api/getMeetingInfo?";
+    $infoUrl = $bbb_url."api/getMeetingInfo?";
+    $securitySalt = $salt;
+    
     $params =
     'meetingID='.urlencode($this->_meetingId).
     '&password='.urlencode($this->_password);
-    return ($infoUrl.$params.'&checksum='.sha1("getMeetingInfo".$params.$this->_securitySalt));	
+    
+    return ($infoUrl.$params.'&checksum='.sha1("getMeetingInfo".$params.$securitySalt));	
 }
 
-public function getMeetingInfoWithXmlResponseArray($infoParams) {
+public function getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,$infoParams) {
 /* USAGE:
 $infoParams = array(
 'meetingId' => '1234', -- REQUIRED - The unique id for the meeting
 'password' => 'mp' -- REQUIRED - The moderator password for the meeting
 );
 */
-$xml = $this->_processXmlResponse($this->getMeetingInfoUrl($infoParams));
+
+$xml = $bbb->_processXmlResponse($bbb->getMeetingInfoUrl($bbb_url,$salt,$infoParams));
+
 if($xml) {
 // If we don't get a success code or messageKey, find out why:
 if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
