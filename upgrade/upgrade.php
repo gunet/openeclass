@@ -2621,6 +2621,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.1
     // -----------------------------------
     if (version_compare($oldversion, '3.1', '<')) {
+        // Fix wiki last_version id's
+        Database::get()->queryFunc("SELECT id FROM wiki_pages",
+            function ($entry) {
+                Database::get()->query("UPDATE wiki_pages
+                    SET last_version = (SELECT MAX(id) FROM wiki_pages_content WHERE pid = ?d)
+                    WHERE id = ?d", $entry->id, $entry->id);
+            });
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
         DBHelper::fieldExists('assignment', 'submission_type') or
             Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
