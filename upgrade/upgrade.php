@@ -2704,7 +2704,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
-    $logdate = date("Y-m-d_G:i:s");
+    $logdate = date("Y-m-d_G.i:s");
 
     $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
     if ($debug_error) {
