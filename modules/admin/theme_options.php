@@ -220,6 +220,19 @@ if (isset($_POST['optionsSave'])) {
                     }
                 });
             });
+            var optionsSaveCallback = function (d) {
+                var themeOptionsName = $('#themeOptionsName').val();
+                if (themeOptionsName) {
+                    var input = $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'themeOptionsName').val(themeOptionsName);
+                    $('#theme_options_form').append($(input)).submit();
+                } else {
+                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
+                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
+                    return false;
+                }
+            };
             $('#optionsSaveAs').click(function (e)
             {
                 e.preventDefault();
@@ -240,19 +253,7 @@ if (isset($_POST['optionsSave'])) {
                         success: {
                             label: '$langSave',
                             className: 'btn-success',
-                            callback: function (d) {
-                                var themeOptionsName = $('#themeOptionsName').val();
-                                if(themeOptionsName) {
-                                    var input = $('<input>')
-                                                   .attr('type', 'hidden')
-                                                   .attr('name', 'themeOptionsName').val(themeOptionsName);
-                                    $('#theme_options_form').append($(input)).submit();
-                                } else {
-                                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
-                                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
-                                    return false;
-                                }
-                            }
+                            callback: optionsSaveCallback,
                         },
                         cancel: {
                             label: '$langCancel',
@@ -260,7 +261,13 @@ if (isset($_POST['optionsSave'])) {
                         }                        
                     }
                 });
-            })
+                $('#themeOptionsName').keypress(function (e) {
+                    if (e.which == 13) {
+                        e.preventDefault();
+                        optionsSaveCallback();
+                    }
+                });
+            });
             $('select#theme_selection').change(function ()
             {
                 var cur_val = $(this).val();
