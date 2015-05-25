@@ -165,10 +165,12 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'title' => "<b>$langLogInWith</b><br>Credentials",
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
-                               <input type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
+                                <label for='uname' class='sr-only'>$langUsername</label>
+                                <input type='text' id='uname' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
                              </div>
                              <div class='form-group'>
-                               <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                <label for='pass' class='sr-only'>$langPass</label>
+                                <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                            </form>
