@@ -750,7 +750,8 @@ function bbb_session_details() {
                     $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
                 }else
                 {
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                    //$joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
                 }
             } else {
                 $joinLink = q($title);
@@ -1186,7 +1187,7 @@ function get_connected_users($salt, $bbb_url, $ip)
             $mid = $meeting['meetingId'];
             $pass = $meeting['moderatorPw'];
             if ($mid != null) {
-                $info = $bbb->getMeetingInfoWithXmlResponseArray(array('meetingId' => $mid, 'password' => $pass));
+                $info = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,array('meetingId' => $mid, 'password' => $pass));
                 $sum += $info['participantCount'];
             }
         }
