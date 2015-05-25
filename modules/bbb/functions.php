@@ -1177,11 +1177,12 @@ function get_connected_users($salt, $bbb_url, $ip)
     } else {
         // Instatiate the BBB class:
         $bbb = new BigBlueButton($salt,$bbb_url);
-
+/*
         $meetings = $bbb->getMeetingsWithXmlResponseArray();
         if (!$meetings) {
             $meetings = array();
         }
+ */
         $sum = 0;
         foreach ($meetings as $meeting) {
             $mid = $meeting['meetingId'];
