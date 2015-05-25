@@ -471,10 +471,10 @@ function edit_bbb_session($session_id) {
     $start = $startDate_obj->format('d-m-Y H:i');
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
     $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
-    if ($c>20) {
+    if ($c>80) {
         $c = $c/2;
 
-    } // If more than 20 course users, we suggest 50% of them
+    } // If more than 80 course users, we suggest 50% of them
     $tool_content .= "
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post'>
@@ -745,7 +745,13 @@ function bbb_session_details() {
                 -$timeLeft < DAY_MINUTES &&
                 get_total_bbb_servers() <> '0';
             if ($canJoin) {
-                $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                if($is_editor)
+                {
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                }else
+                {
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                }
             } else {
                 $joinLink = q($title);
             }
@@ -782,10 +788,15 @@ function bbb_session_details() {
             } else {
                 // Allow access to session only if user is in participant group or session is scheduled for everyone
                 $access = false;
-                foreach ($myGroups as $mg) {
-                    if (in_array("'_" . $mg->group_id . "'", $r_group)) {
-                        $access = true;
-                    }
+                if(!empty($r_group) && count($r_group)>0 && $r_group[0]<>'')
+                {
+                    foreach ($myGroups as $mg) {
+                        if (in_array("'_" . $mg->group_id . "'", $r_group)) {
+                            $access = true;
+                        }
+                }
+                }else{
+                    $access = true;
                 }
                 // Always allow access to editor switched to student view
                 $access = $access || in_array("'".$_SESSION['uid']."'", $r_group) ||
@@ -804,7 +815,7 @@ function bbb_session_details() {
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
-                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
+                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank");
                     } else {
                         $tool_content .= "-</td>";
                     }
