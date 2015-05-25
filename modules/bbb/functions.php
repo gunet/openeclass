@@ -703,6 +703,7 @@ function bbb_session_details() {
                                <th class='text-center'>".icon('fa-gears')."</th>
                              </tr>";
 
+        define('DAY_MINUTES', 24 * 40);
         foreach ($result as $row) {
             $participants = '';
             // Get participants
@@ -728,7 +729,7 @@ function bbb_session_details() {
                 $timeLabel .= "<br><span class='label label-warning'><small>$langDaysLeft " .
                     format_time_duration($timeLeft * 60) .
                     "</small></span>";
-            } elseif (-$timeLeft > 60) {
+            } elseif (-$timeLeft > DAY_MINUTES) {
                 $timeLabel .= "<br><span class='label label-danger'><small>$m[expired]</small></span>";
             }
 
@@ -741,7 +742,7 @@ function bbb_session_details() {
 
             $canJoin = $row->active == '1' &&
                 $timeLeft < $row->unlock_interval &&
-                -$timeLeft < 60 &&
+                -$timeLeft < DAY_MINUTES &&
                 get_total_bbb_servers() <> '0';
             if ($canJoin) {
                 $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
