@@ -474,7 +474,7 @@ function edit_bbb_session($session_id) {
     if ($c>80) {
         $c = $c/2;
 
-    } // If more than 20 course users, we suggest 50% of them
+    } // If more than 80 course users, we suggest 50% of them
     $tool_content .= "
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post'>
