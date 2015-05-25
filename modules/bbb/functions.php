@@ -815,7 +815,7 @@ function bbb_session_details() {
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
-                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
+                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank");
                     } else {
                         $tool_content .= "-</td>";
                     }
