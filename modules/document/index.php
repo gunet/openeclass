@@ -1218,8 +1218,8 @@ if ($doc_count == 0) {
     }
     $download_path = empty($curDirPath) ? '/' : $curDirPath;
     $download_dir = (!$is_in_tinymce and $uid) ? icon('fa-download', $langDownloadDir, "{$base_url}download=$download_path") : '';
-    $tool_content .= "<div><b>$langDirectory:</b> " . make_clickable_path($curDirPath) .
-            "&nbsp;$download_dir</div>";
+    $tool_content .= "<div>".make_clickable_path($curDirPath) .
+            "&nbsp;&nbsp;$download_dir</div>";
     if ($dirComment) {
         $tool_content .= '<div>' . q($dirComment) . '</div>';
     }
@@ -1358,12 +1358,6 @@ if ($doc_count == 0) {
                                           'url' => "{$urlAppend}modules/work/group_work.php?course=$course_code&amp;group_id=$group_id&amp;submit=$cmdDirName",
                                           'icon' => 'fa-book',
                                           'show' => $subsystem == GROUP and isset($is_member) and $is_member),
-                                    array('title' => $langDownload,
-                                          'url' => $download_url,
-                                          'icon' => 'fa-download'),
-                                    array('title' => $entry['visible'] ? $langViewHide : $langViewShow,
-                                          'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
-                                          'icon' => $entry['visible'] ? 'fa-eye-slash' : 'fa-eye' ),
                                     array('title' => $langMove,
                                           'url' => "{$base_url}move=$cmdDirName",
                                           'icon' => 'fa-arrows',
@@ -1380,9 +1374,15 @@ if ($doc_count == 0) {
                                           'url' =>  "{$base_url}metadata=$xmlCmdDirName",
                                           'icon' => 'fa-tags',
                                           'show' => get_config("insert_xml_metadata")),
+                                    array('title' => $entry['visible'] ? $langViewHide : $langViewShow,
+                                          'url' => "{$base_url}" . ($entry['visible']? "mkInvisibl=$cmdDirName" : "mkVisibl=$cmdDirName"),
+                                          'icon' => $entry['visible'] ? 'fa-eye-slash' : 'fa-eye' ),
                                     array('title' => $entry['public'] ? $langResourceAccessLock : $langResourceAccessUnlock,
                                           'url' => $entry['public'] ? "{$base_url}limited=$cmdDirName" : "{$base_url}public=$cmdDirName",
                                           'icon' => $entry['public'] ? 'fa-lock' : 'fa-unlock'),
+                                    array('title' => $langDownload,
+                                          'url' => $download_url,
+                                          'icon' => 'fa-download'),
                                     array('title' => $langDelete,
                                           'url' => "{$base_url}filePath=$cmdDirName&amp;delete=1",
                                           'icon' => 'fa-times',
