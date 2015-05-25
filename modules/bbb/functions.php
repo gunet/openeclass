@@ -745,7 +745,13 @@ function bbb_session_details() {
                 -$timeLeft < DAY_MINUTES &&
                 get_total_bbb_servers() <> '0';
             if ($canJoin) {
-                $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                if($is_editor)
+                {
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                }else
+                {
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                }
             } else {
                 $joinLink = q($title);
             }
