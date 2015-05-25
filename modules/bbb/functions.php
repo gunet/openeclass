@@ -471,7 +471,7 @@ function edit_bbb_session($session_id) {
     $start = $startDate_obj->format('d-m-Y H:i');
     $textarea = rich_text_editor('desc', 4, 20, $row->description);
     $c = Database::get()->querySingle("SELECT COUNT(*) count FROM course_user WHERE course_id=(SELECT id FROM course WHERE code=?s)",$course_code)->count;
-    if ($c>20) {
+    if ($c>80) {
         $c = $c/2;
 
     } // If more than 20 course users, we suggest 50% of them
