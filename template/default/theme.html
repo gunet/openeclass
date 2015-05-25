@@ -71,7 +71,7 @@
                         <!-- END normalViewOpenDiv -->
                         <!-- BEGIN logoBlock -->
                         <a href='{%URL_PATH%}' class="navbar-brand small-logo">
-                            <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt=''>
+                            <img class="img-responsive hidden-md hidden-lg" src="{%logo_img_small%}" style="height: 36px;margin-top:8px;" alt='{%PAGE_TITLE%} logo'>
                             </a>
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
@@ -222,7 +222,7 @@
                 <!-- BEGIN logoBlock -->
                     <div class="logo">
                         <a href='{%URL_PATH%}'>
-                        <img class="img-responsive hidden-xs hidden-sm" src="{%logo_img%}" alt=''>
+                        <img class="img-responsive hidden-xs hidden-sm" src="{%logo_img%}" alt='{%PAGE_TITLE%} logo'>
                         </a>
                     </div>
                     <!-- END logoBlock -->
@@ -231,9 +231,10 @@
                     <!-- BEGIN searchBlock -->
                     <form action='{%URL_PATH%}modules/search/search.php' method='post' >
                         <div class="input-group">
-                            <input type="text" class="form-control input-sm" name="search_terms" placeholder="{%SEARCH_TITLE%}...">
+                            <label class='sr-only' for='search_terms'>{%SEARCH_TITLE%}</label>
+                            <input type="text" class="form-control input-sm" id="search_terms" name="search_terms" placeholder="{%SEARCH_TITLE%}...">
                             <span class="input-group-btn">
-                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch"><i class="fa fa-search"></i></button>
+                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch"><span class="fa fa-search"></span></button>
                             </span>
                         </div>
                     </form>
