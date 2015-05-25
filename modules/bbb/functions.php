@@ -788,10 +788,15 @@ function bbb_session_details() {
             } else {
                 // Allow access to session only if user is in participant group or session is scheduled for everyone
                 $access = false;
-                foreach ($myGroups as $mg) {
-                    if (in_array("'_" . $mg->group_id . "'", $r_group)) {
-                        $access = true;
-                    }
+                if(!empty($r_group) && count($r_group)>0 && $r_group[0]<>'')
+                {
+                    foreach ($myGroups as $mg) {
+                        if (in_array("'_" . $mg->group_id . "'", $r_group)) {
+                            $access = true;
+                        }
+                }
+                }else{
+                    $access = true;
                 }
                 // Always allow access to editor switched to student view
                 $access = $access || in_array("'".$_SESSION['uid']."'", $r_group) ||
