@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,26 +17,27 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
+
 /* get the config values */
 //require_once "config.php";
 
 class BigBlueButton {
 
-private $_securitySalt;	
-private $_bbbServerBaseUrl;	
+private $_securitySalt;
+private $_bbbServerBaseUrl;
 
 /* ___________ General Methods for the BigBlueButton Class __________ */
 
-function __construct($salt,$bbb_url) {
-/*
-Establish just our basic elements in the constructor:
-*/
-// BASE CONFIGS - set these for your BBB server in config.php and they will
-// simply flow in here via the constants:
-$this->_securitySalt = $salt;
-$this->_bbbServerBaseUrl = $bbb_url;	
+function __construct($salt, $bbb_url) {
+    /*
+    Establish just our basic elements in the constructor:
+     */
+    // BASE CONFIGS - set these for your BBB server in config.php and they will
+    // simply flow in here via the constants:
+    $this->_securitySalt = $salt;
+    $this->_bbbServerBaseUrl = $bbb_url;
 }
 
 private function _processXmlResponse($url){
@@ -44,21 +45,27 @@ private function _processXmlResponse($url){
     A private utility method used by other public methods to process XML responses.
     */
     if (extension_loaded('curl')) {
-        $ch = curl_init() or die ( curl_error() );
+        $ch = curl_init() or die(curl_error());
         $timeout = 10;
-        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);	
-        curl_setopt( $ch, CURLOPT_URL, $url );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $data = curl_exec( $ch );
-        curl_close( $ch );
-        
-        if($data)
-        return (new SimpleXMLElement($data));
-        else
-        return false;
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $data = curl_exec($ch);
+        curl_close($ch);
+
+        if ($data) {
+            try {
+                $element = @new SimpleXMLElement($data);
+            } catch (Exception $e) {
+                return false;
+            }
+            return (new SimpleXMLElement($data));
+        } else {
+            return false;
+        }
     }
-    return (simplexml_load_file($url));	
+    return (simplexml_load_file($url));
 }
 
 private function _requiredParam($param) {
@@ -96,30 +103,31 @@ public function getCreateMeetingUrl($creationParams) {
     /*
     USAGE:
     (see $creationParams array in createMeetingArray method.)
-    */
+     */
     $this->_meetingId = $this->_requiredParam($creationParams['meetingId']);
-    $this->_meetingName = $this->_requiredParam($creationParams['meetingName']);	
+    $this->_meetingName = $this->_requiredParam($creationParams['meetingName']);
     // Set up the basic creation URL:
     $creationUrl = $this->_bbbServerBaseUrl."api/create?";
     // Add params:
     $params =
-    'name='.urlencode($this->_meetingName).
-    '&meetingID='.urlencode($this->_meetingId).
-    '&attendeePW='.urlencode($creationParams['attendeePw']).
-    '&moderatorPW='.urlencode($creationParams['moderatorPw']).
-    '&dialNumber='.urlencode($creationParams['dialNumber']).
-    '&voiceBridge='.urlencode($creationParams['voiceBridge']).
-    '&webVoice='.urlencode($creationParams['webVoice']).
-    '&logoutURL='.urlencode($creationParams['logoutUrl']).
-    '&maxParticipants='.urlencode($creationParams['maxParticipants']).
-    '&record='.urlencode($creationParams['record']).
-    '&duration='.urlencode($creationParams['duration']).
-    //'&meta_category='.urlencode($creationParams['meta_category']);
-    $welcomeMessage = $creationParams['welcomeMsg'];
-    if(trim($welcomeMessage))
-    $params .= '&welcome='.urlencode($welcomeMessage);
+        'name='.urlencode($this->_meetingName).
+        '&meetingID='.urlencode($this->_meetingId).
+        '&attendeePW='.urlencode($creationParams['attendeePw']).
+        '&moderatorPW='.urlencode($creationParams['moderatorPw']).
+        '&dialNumber='.urlencode($creationParams['dialNumber']).
+        '&voiceBridge='.urlencode($creationParams['voiceBridge']).
+        '&webVoice='.urlencode($creationParams['webVoice']).
+        '&logoutURL='.urlencode($creationParams['logoutUrl']).
+        '&maxParticipants='.urlencode($creationParams['maxParticipants']).
+        '&record='.urlencode($creationParams['record']).
+        '&duration='.urlencode($creationParams['duration']);
+        //'&meta_category='.urlencode($creationParams['meta_category']);
+        $welcomeMessage = $creationParams['welcomeMsg'];
+    if (trim($welcomeMessage)) {
+        $params .= '&welcome=' . urlencode($welcomeMessage);
+    }
     // Return the complete URL:
-    return ( $creationUrl.$params.'&checksum='.sha1("create".$params.$this->_securitySalt) );
+    return $creationUrl.$params.'&checksum='.sha1("create".$params.$this->_securitySalt);
 }
 
 public function createMeetingWithXmlResponseArray($creationParams) {
@@ -143,26 +151,26 @@ public function createMeetingWithXmlResponseArray($creationParams) {
     */
     $xml = $this->_processXmlResponse($this->getCreateMeetingURL($creationParams));
 
-    if($xml) {
-        if($xml->meetingID)
-        return array(
-        'returncode' => $xml->returncode,
-        'message' => $xml->message,
-        'messageKey' => $xml->messageKey,
-        'meetingId' => $xml->meetingID,
-        'attendeePw' => $xml->attendeePW,
-        'moderatorPw' => $xml->moderatorPW,
-        'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded,
-        'createTime' => $xml->createTime
-        );
-        else
-        return array(
-        'returncode' => $xml->returncode,
-        'message' => $xml->message,
-        'messageKey' => $xml->messageKey
-        );
-    }
-    else {
+    if ($xml) {
+        if ($xml->meetingID) {
+            return array(
+                'returncode' => $xml->returncode,
+                'message' => $xml->message,
+                'messageKey' => $xml->messageKey,
+                'meetingId' => $xml->meetingID,
+                'attendeePw' => $xml->attendeePW,
+                'moderatorPw' => $xml->moderatorPW,
+                'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded,
+                'createTime' => $xml->createTime
+            );
+        } else {
+            return array(
+                'returncode' => $xml->returncode,
+                'message' => $xml->message,
+                'messageKey' => $xml->messageKey
+            );
+        }
+    } else {
         return null;
     }
 }
@@ -184,38 +192,38 @@ public function getJoinMeetingURL($joinParams) {
     */
     $this->_meetingId = $this->_requiredParam($joinParams['meetingId']);
     $this->_username = $this->_requiredParam($joinParams['username']);
-    $this->_password = $this->_requiredParam($joinParams['password']);	
+    $this->_password = $this->_requiredParam($joinParams['password']);
     // Establish the basic join URL:
     $joinUrl = $this->_bbbServerBaseUrl."api/join?";
     // Add parameters to the URL:
     $params =
-    'meetingID='.urlencode($this->_meetingId).
-    '&fullName='.urlencode($this->_username).
-    '&password='.urlencode($this->_password).
-    '&userID='.urlencode($joinParams['userId']).
-    '&webVoiceConf='.urlencode($joinParams['webVoiceConf']);	
+        'meetingID='.urlencode($this->_meetingId).
+        '&fullName='.urlencode($this->_username).
+        '&password='.urlencode($this->_password).
+        '&userID='.urlencode($joinParams['userId']).
+        '&webVoiceConf='.urlencode($joinParams['webVoiceConf']);
     // Only use createTime if we really want to use it. If it's '', then don't pass it:
     if (((isset($joinParams['createTime'])) && ($joinParams['createTime'] != ''))) {
         $params .= '&createTime='.urlencode($joinParams['createTime']);
     }
     // Return the URL:
-    return ($joinUrl.$params.'&checksum='.sha1("join".$params.$this->_securitySalt));
+    return $joinUrl.$params.'&checksum='.sha1("join".$params.$this->_securitySalt);
 }
 
 public function getEndMeetingURL($endParams) {
     /* USAGE:
-    $endParams = array (
-    'meetingId' => '1234', -- REQUIRED - The unique id for the meeting
-    'password' => 'mp' -- REQUIRED - The moderator password for the meeting
-    );
-    */
+        $endParams = array (
+            'meetingId' => '1234', -- REQUIRED - The unique id for the meeting
+            'password' => 'mp' -- REQUIRED - The moderator password for the meeting
+        );
+     */
     $this->_meetingId = $this->_requiredParam($endParams['meetingId']);
-    $this->_password = $this->_requiredParam($endParams['password']);	
+    $this->_password = $this->_requiredParam($endParams['password']);
     $endUrl = $this->_bbbServerBaseUrl."api/end?";
     $params =
-    'meetingID='.urlencode($this->_meetingId).
-    '&password='.urlencode($this->_password);
-    return ($endUrl.$params.'&checksum='.sha1("end".$params.$this->_securitySalt));
+        'meetingID='.urlencode($this->_meetingId).
+        '&password='.urlencode($this->_password);
+    return $endUrl.$params.'&checksum='.sha1("end".$params.$this->_securitySalt);
 }
 
 public function endMeetingWithXmlResponseArray($endParams) {
@@ -226,11 +234,11 @@ public function endMeetingWithXmlResponseArray($endParams) {
     );
     */
     $xml = $this->_processXmlResponse($this->getEndMeetingURL($endParams));
-    if($xml) {
+    if ($xml) {
         return array(
-        'returncode' => $xml->returncode,
-        'message' => $xml->message,
-        'messageKey' => $xml->messageKey
+            'returncode' => $xml->returncode,
+            'message' => $xml->message,
+            'messageKey' => $xml->messageKey
         );
     } else {
         return null;
@@ -249,11 +257,10 @@ public function getIsMeetingRunningUrl($meetingId) {
     /* USAGE:
     $meetingId = '1234' -- REQUIRED - The unique id for the meeting
     */
-    $this->_meetingId = $this->_requiredParam($meetingId);	
+    $this->_meetingId = $this->_requiredParam($meetingId);
     $runningUrl = $this->_bbbServerBaseUrl."api/isMeetingRunning?";
-    $params =
-    'meetingID='.urlencode($this->_meetingId);
-    return ($runningUrl.$params.'&checksum='.sha1("isMeetingRunning".$params.$this->_securitySalt));
+    $params = 'meetingID='.urlencode($this->_meetingId);
+    return $runningUrl.$params.'&checksum='.sha1("isMeetingRunning".$params.$this->_securitySalt);
 }
 
 public function isMeetingRunningWithXmlResponseArray($meetingId) {
@@ -261,10 +268,10 @@ public function isMeetingRunningWithXmlResponseArray($meetingId) {
     $meetingId = '1234' -- REQUIRED - The unique id for the meeting
     */
     $xml = $this->_processXmlResponse($this->getIsMeetingRunningUrl($meetingId));
-    if($xml) {
+    if ($xml) {
         return array(
-        'returncode' => $xml->returncode,
-        'running' => $xml->running // -- Returns true/false.
+            'returncode' => $xml->returncode,
+            'running' => $xml->running // -- Returns true/false.
         );
     } else {
         return null;
@@ -285,49 +292,49 @@ public function getMeetingsWithXmlResponseArray() {
 /* USAGE:
 We don't need to pass any parameters with this one, so we just send the query URL off to BBB
 and then handle the results that we get in the XML response.
-*/
-$xml = $this->_processXmlResponse($this->getGetMeetingsUrl());
-if($xml) {
-    // If we don't get a success code, stop processing and return just the returncode:
-    if ($xml->returncode != 'SUCCESS') {
-    $result = array(
-    'returncode' => $xml->returncode
-    );
-    return $result;
-    }	
-    elseif ($xml->messageKey == 'noMeetings') {
-    /* No meetings on server, so return just this info: */	
-    $result = array(
-    'returncode' => $xml->returncode,
-    'messageKey' => $xml->messageKey,
-    'message' => $xml->message
-    );	
-    return $result;
-    }
-    else {
-        // In this case, we have success and meetings. First return general response:
-        $result = array(
-        'returncode' => $xml->returncode,
-        'messageKey' => $xml->messageKey,
-        'message' => $xml->message
-        );
-        // Then interate through meeting results and return them as part of the array:
-        foreach ($xml->meetings->meeting as $m) {
-            $result[] = array(
-            'meetingId' => $m->meetingID,
-            'meetingName' => $m->meetingName,
-            'createTime' => $m->createTime,
-            'attendeePw' => $m->attendeePW,
-            'moderatorPw' => $m->moderatorPW,
-            'hasBeenForciblyEnded' => $m->hasBeenForciblyEnded,
-            'running' => $m->running
+ */
+    $xml = $this->_processXmlResponse($this->getGetMeetingsUrl());
+    if ($xml) {
+        // If we don't get a success code, stop processing and return just the returncode:
+        if ($xml->returncode != 'SUCCESS') {
+            $result = array(
+                'returncode' => $xml->returncode
             );
-        }	
-        return $result;	
+            return $result;
+        }
+        elseif ($xml->messageKey == 'noMeetings') {
+            /* No meetings on server, so return just this info: */
+            $result = array(
+                'returncode' => $xml->returncode,
+                'messageKey' => $xml->messageKey,
+                'message' => $xml->message
+            );
+            return $result;
+        }
+        else {
+            // In this case, we have success and meetings. First return general response:
+            $result = array(
+                'returncode' => $xml->returncode,
+                'messageKey' => $xml->messageKey,
+                'message' => $xml->message
+            );
+            // Then interate through meeting results and return them as part of the array:
+            foreach ($xml->meetings->meeting as $m) {
+                $result[] = array(
+                    'meetingId' => $m->meetingID,
+                    'meetingName' => $m->meetingName,
+                    'createTime' => $m->createTime,
+                    'attendeePw' => $m->attendeePW,
+                    'moderatorPw' => $m->moderatorPW,
+                    'hasBeenForciblyEnded' => $m->hasBeenForciblyEnded,
+                    'running' => $m->running
+                );
+            }
+            return $result;
+        }
+    } else {
+        return null;
     }
-} else { 
-    return null;
-}
 
 }
 
@@ -339,15 +346,15 @@ public function getMeetingInfoUrl($bbb_url,$salt,$infoParams) {
     );
     */
     $this->_meetingId = $this->_requiredParam($infoParams['meetingId']);
-    $this->_password = $this->_requiredParam($infoParams['password']);	
+    $this->_password = $this->_requiredParam($infoParams['password']);
     $infoUrl = $bbb_url."api/getMeetingInfo?";
     $securitySalt = $salt;
-    
+
     $params =
-    'meetingID='.urlencode($this->_meetingId).
-    '&password='.urlencode($this->_password);
-    
-    return ($infoUrl.$params.'&checksum='.sha1("getMeetingInfo".$params.$securitySalt));	
+        'meetingID='.urlencode($this->_meetingId).
+        '&password='.urlencode($this->_password);
+
+    return ($infoUrl.$params.'&checksum='.sha1("getMeetingInfo".$params.$securitySalt));
 }
 
 public function getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,$infoParams) {
@@ -356,53 +363,53 @@ $infoParams = array(
 'meetingId' => '1234', -- REQUIRED - The unique id for the meeting
 'password' => 'mp' -- REQUIRED - The moderator password for the meeting
 );
-*/
+ */
 
-$xml = $bbb->_processXmlResponse($bbb->getMeetingInfoUrl($bbb_url,$salt,$infoParams));
+    $xml = $bbb->_processXmlResponse($bbb->getMeetingInfoUrl($bbb_url,$salt,$infoParams));
 
-if($xml) {
-// If we don't get a success code or messageKey, find out why:
-if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-$result = array(
-'returncode' => $xml->returncode,
-'messageKey' => $xml->messageKey,
-'message' => $xml->message
-);
-return $result;
-}	
-else {
-// In this case, we have success and meeting info:
-$result = array(
-'returncode' => $xml->returncode,
-'meetingName' => $xml->meetingName,
-'meetingId' => $xml->meetingID,
-'createTime' => $xml->createTime,
-'voiceBridge' => $xml->voiceBridge,
-'attendeePw' => $xml->attendeePW,
-'moderatorPw' => $xml->moderatorPW,
-'running' => $xml->running,
-'recording' => $xml->recording,
-'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded,
-'startTime' => $xml->startTime,
-'endTime' => $xml->endTime,
-'participantCount' => $xml->participantCount,
-'maxUsers' => $xml->maxUsers,
-'moderatorCount' => $xml->moderatorCount,	
-);
-// Then interate through attendee results and return them as part of the array:
-foreach ($xml->attendees->attendee as $a) {
-$result[] = array(
-'userId' => $a->userID,
-'fullName' => $a->fullName,
-'role' => $a->role
-);
-}	
-return $result;	
-}
-}
-else {
-return null;
-}
+    if ($xml) {
+        // If we don't get a success code or messageKey, find out why:
+        if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
+            $result = array(
+                'returncode' => $xml->returncode,
+                'messageKey' => $xml->messageKey,
+                'message' => $xml->message
+            );
+            return $result;
+        }
+        else {
+            // In this case, we have success and meeting info:
+            $result = array(
+                'returncode' => $xml->returncode,
+                'meetingName' => $xml->meetingName,
+                'meetingId' => $xml->meetingID,
+                'createTime' => $xml->createTime,
+                'voiceBridge' => $xml->voiceBridge,
+                'attendeePw' => $xml->attendeePW,
+                'moderatorPw' => $xml->moderatorPW,
+                'running' => $xml->running,
+                'recording' => $xml->recording,
+                'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded,
+                'startTime' => $xml->startTime,
+                'endTime' => $xml->endTime,
+                'participantCount' => $xml->participantCount,
+                'maxUsers' => $xml->maxUsers,
+                'moderatorCount' => $xml->moderatorCount,
+            );
+            // Then interate through attendee results and return them as part of the array:
+            foreach ($xml->attendees->attendee as $a) {
+                $result[] = array(
+                    'userId' => $a->userID,
+                    'fullName' => $a->fullName,
+                    'role' => $a->role
+                );
+            }
+            return $result;
+        }
+    }
+    else {
+        return null;
+    }
 
 }
 
@@ -414,121 +421,121 @@ return null;
 */
 
 public function getRecordingsUrl($recordingParams) {
-/* USAGE:
-$recordingParams = array(
-'meetingId' => '1234', -- OPTIONAL - comma separate if multiple ids
-);
-*/
-$recordingsUrl = $this->_bbbServerBaseUrl."api/getRecordings?";
-$params =
-'meetingID='.urlencode($recordingParams['meetingId']);
-return ($recordingsUrl.$params.'&checksum='.sha1("getRecordings".$params.$this->_securitySalt));
+    /* USAGE:
+    $recordingParams = array(
+    'meetingId' => '1234', -- OPTIONAL - comma separate if multiple ids
+    );
+     */
+    $recordingsUrl = $this->_bbbServerBaseUrl."api/getRecordings?";
+    $params =
+        'meetingID='.urlencode($recordingParams['meetingId']);
+    return ($recordingsUrl.$params.'&checksum='.sha1("getRecordings".$params.$this->_securitySalt));
 
 }
 
 public function getRecordingsWithXmlResponseArray($recordingParams) {
-/* USAGE:
-$recordingParams = array(
-'meetingId' => '1234', -- OPTIONAL - comma separate if multiple ids
-);
-NOTE: 'duration' DOES work when creating a meeting, so if you set duration
-when creating a meeting, it will kick users out after the duration. Should
-probably be required in user code when 'recording' is set to true.
-*/
-$xml = $this->_processXmlResponse($this->getRecordingsUrl($recordingParams));
-if($xml) {
-// If we don't get a success code or messageKey, find out why:
-if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
-$result = array(
-'returncode' => $xml->returncode,
-'messageKey' => $xml->messageKey,
-'message' => $xml->message
-);
-return $result;
-}	
-else {
-// In this case, we have success and recording info:
-$result = array(
-'returncode' => $xml->returncode,
-'messageKey' => $xml->messageKey,
-'message' => $xml->message	
-);
+    /* USAGE:
+        $recordingParams = array(
+            'meetingId' => '1234', -- OPTIONAL - comma separate if multiple ids
+        );
+    NOTE: 'duration' DOES work when creating a meeting, so if you set duration
+        when creating a meeting, it will kick users out after the duration. Should
+        probably be required in user code when 'recording' is set to true.
+     */
+    $xml = $this->_processXmlResponse($this->getRecordingsUrl($recordingParams));
+    if ($xml) {
+        // If we don't get a success code or messageKey, find out why:
+        if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
+            $result = array(
+                'returncode' => $xml->returncode,
+                'messageKey' => $xml->messageKey,
+                'message' => $xml->message
+            );
+            return $result;
+        }
+        else {
+            // In this case, we have success and recording info:
+            $result = array(
+                'returncode' => $xml->returncode,
+                'messageKey' => $xml->messageKey,
+                'message' => $xml->message
+            );
 
-foreach ($xml->recordings->recording as $r) {
-$result[] = array(
-'recordId' => $r->recordID,
-'meetingId' => $r->meetingID,
-'name' => $r->name,
-'published' => $r->published,
-'startTime' => $r->startTime,
-'endTime' => $r->endTime,
-'playbackFormatType' => $r->playback->format->type,
-'playbackFormatUrl' => $r->playback->format->url,
-'playbackFormatLength' => $r->playback->format->length,
-'metadataTitle' => $r->metadata->title,
-'metadataSubject' => $r->metadata->subject,
-'metadataDescription' => $r->metadata->description,
-'metadataCreator' => $r->metadata->creator,
-'metadataContributor' => $r->metadata->contributor,
-'metadataLanguage' => $r->metadata->language,
-// Add more here as needed for your app depending on your
-// use of metadata when creating recordings.
-);
-}	
-return $result;	
-}
-}
-else {
-return null;
-}
+            foreach ($xml->recordings->recording as $r) {
+                $result[] = array(
+                    'recordId' => $r->recordID,
+                    'meetingId' => $r->meetingID,
+                    'name' => $r->name,
+                    'published' => $r->published,
+                    'startTime' => $r->startTime,
+                    'endTime' => $r->endTime,
+                    'playbackFormatType' => $r->playback->format->type,
+                    'playbackFormatUrl' => $r->playback->format->url,
+                    'playbackFormatLength' => $r->playback->format->length,
+                    'metadataTitle' => $r->metadata->title,
+                    'metadataSubject' => $r->metadata->subject,
+                    'metadataDescription' => $r->metadata->description,
+                    'metadataCreator' => $r->metadata->creator,
+                    'metadataContributor' => $r->metadata->contributor,
+                    'metadataLanguage' => $r->metadata->language,
+                    // Add more here as needed for your app depending on your
+                    // use of metadata when creating recordings.
+                );
+            }
+            return $result;
+        }
+    }
+    else {
+        return null;
+    }
 }
 
 public function getPublishRecordingsUrl($recordingParams) {
-/* USAGE:
-$recordingParams = array(
-'recordId' => '1234', -- REQUIRED - comma separate if multiple ids
-'publish' => 'true', -- REQUIRED - boolean: true/false
-);
-*/
-$recordingsUrl = $this->_bbbServerBaseUrl."api/publishRecordings?";
-$params =
-'recordID='.urlencode($recordingParams['recordId']).
-'&publish='.urlencode($recordingParams['publish']);
-return ($recordingsUrl.$params.'&checksum='.sha1("publishRecordings".$params.$this->_securitySalt));
+    /* USAGE:
+    $recordingParams = array(
+    'recordId' => '1234', -- REQUIRED - comma separate if multiple ids
+    'publish' => 'true', -- REQUIRED - boolean: true/false
+    );
+     */
+    $recordingsUrl = $this->_bbbServerBaseUrl."api/publishRecordings?";
+    $params =
+        'recordID='.urlencode($recordingParams['recordId']).
+        '&publish='.urlencode($recordingParams['publish']);
+    return ($recordingsUrl.$params.'&checksum='.sha1("publishRecordings".$params.$this->_securitySalt));
 
 }
 
 public function publishRecordingsWithXmlResponseArray($recordingParams) {
-/* USAGE:
-$recordingParams = array(
-'recordId' => '1234', -- REQUIRED - comma separate if multiple ids
-'publish' => 'true', -- REQUIRED - boolean: true/false
-);
-*/
-$xml = $this->_processXmlResponse($this->getPublishRecordingsUrl($recordingParams));
-if($xml) {
-return array(
-'returncode' => $xml->returncode,
-'published' => $xml->published // -- Returns true/false.
-);
-}
-else {
-return null;
-}
+    /* USAGE:
+    $recordingParams = array(
+    'recordId' => '1234', -- REQUIRED - comma separate if multiple ids
+    'publish' => 'true', -- REQUIRED - boolean: true/false
+    );
+     */
+    $xml = $this->_processXmlResponse($this->getPublishRecordingsUrl($recordingParams));
+    if ($xml) {
+        return array(
+            'returncode' => $xml->returncode,
+            'published' => $xml->published // -- Returns true/false.
+        );
+    }
+    else {
+        return null;
+    }
 
 
 }
 
 public function getDeleteRecordingsUrl($recordingParams) {
-/* USAGE:
-$recordingParams = array(
-'recordId' => '1234', -- REQUIRED - comma separate if multiple ids
-);
-*/
-$recordingsUrl = $this->_bbbServerBaseUrl."api/deleteRecordings?";
-$params =
-'recordID='.urlencode($recordingParams['recordId']);
-return ($recordingsUrl.$params.'&checksum='.sha1("deleteRecordings".$params.$this->_securitySalt));
+    /* USAGE:
+    $recordingParams = array(
+    'recordId' => '1234', -- REQUIRED - comma separate if multiple ids
+    );
+     */
+    $recordingsUrl = $this->_bbbServerBaseUrl."api/deleteRecordings?";
+    $params =
+        'recordID='.urlencode($recordingParams['recordId']);
+    return ($recordingsUrl.$params.'&checksum='.sha1("deleteRecordings".$params.$this->_securitySalt));
 }
 
 public function deleteRecordingsWithXmlResponseArray($recordingParams) {
@@ -536,22 +543,20 @@ public function deleteRecordingsWithXmlResponseArray($recordingParams) {
     $recordingParams = array(
     'recordId' => '1234', -- REQUIRED - comma separate if multiple ids
     );
-    */
+     */
 
     $xml = $this->_processXmlResponse($this->getDeleteRecordingsUrl($recordingParams));
-    if($xml) {
+    if ($xml) {
         return array(
-        'returncode' => $xml->returncode,
-        'deleted' => $xml->deleted // -- Returns true/false.
+            'returncode' => $xml->returncode,
+            'deleted' => $xml->deleted // -- Returns true/false.
         );
     } else {
-    return null;
+        return null;
     }
 
 }
 
 
-
 } // END OF BIGBLUEBUTTON CLASS
 
-?>
