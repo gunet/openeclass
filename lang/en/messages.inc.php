@@ -963,7 +963,7 @@ $langExplanation_4 = "External link info";
 $langNoticeExpl = "Note: Maximum size allowed is 20MB";
 $langPgTitle = "Page title";
 $langHomePage = "Home page";
-$langInvalidId = "Login failed.<br>If you are not registered, create a new account using the <a href='%s'>registration form</a>.";
+$langInvalidId = "Login failed.<br>If you are not registered please create a new account using the <a href='%s'>registration form</a>.";
 $langInvalidGuestAccount = "Course with guest account not exists anymore.";
 $langAccountInactive1 = "Inactive Account.";
 $langAccountInactive2 = "Please contact the administrator to activate your account.";

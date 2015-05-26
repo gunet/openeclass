@@ -2666,7 +2666,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE tags ADD UNIQUE KEY (name)");
             Database::get()->query("RENAME TABLE `tags` TO `tag`");
         }       
-        $db->query("CREATE TABLE IF NOT EXISTS tag (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS tag (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` VARCHAR(255) NOT NULL,
             UNIQUE KEY (name)) $charset_spec");
