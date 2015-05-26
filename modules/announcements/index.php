@@ -544,9 +544,8 @@ if (isset($_GET['an_id'])) {
         array('title' => $langDelete,
               'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
               'icon' => 'fa-times',
-              'level' => 'primary',
               'confirm' => $langSureToDelAnnounce,
-              'show' => $is_editor),));
+              'show' => $is_editor)));
     } elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
         $tool_content .= action_bar(array(
             array('title' => $langAddAnn,
