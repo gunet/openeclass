@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-05-19 10:50:10
+// Generated 2015-05-26 15:50:21
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -3962,3 +3962,7 @@ $langWebDAVLongDescription = "Long Description about web dav";
 $langBBBNotifyExternalUsersHelpBlock = "Add email addresses of external participants";
 $langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP version >= 5.4.0 is required. You can continue with the installation but PHP needs to be upgraded. Otherwise, some modules will not function correctly.";
 $langPHPVersion = 'PHP version';
+$langGuestLoginLabel = 'Course guest accounts';
+$langGuestLogin = 'Login with guest account';
+$langGuestLoginLinks = 'Activate guest login links in course list';
+$langGuestWarnEmptyPassword = 'Caution! You have entered an empty password for the guest user. This means that it is possible to access your course without entering a password.';
