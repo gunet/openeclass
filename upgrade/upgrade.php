@@ -2658,6 +2658,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE tags ADD UNIQUE KEY (name)");
             Database::get()->query("RENAME TABLE `tags` TO `tag`");
         }       
+        Database::get()->query("CREATE TABLE IF NOT EXISTS tag (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            UNIQUE KEY (name)) $charset_spec");
+
         if (!DBHelper::fieldExists('blog_post', 'commenting')) {
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
         }

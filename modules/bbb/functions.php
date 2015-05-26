@@ -816,7 +816,7 @@ function bbb_session_details() {
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
-                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank");
+                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
                     } else {
                         $tool_content .= "-</td>";
                     }
@@ -1177,18 +1177,17 @@ function get_connected_users($salt, $bbb_url, $ip)
     } else {
         // Instatiate the BBB class:
         $bbb = new BigBlueButton($salt,$bbb_url);
-/*
+
         $meetings = $bbb->getMeetingsWithXmlResponseArray();
         if (!$meetings) {
             $meetings = array();
         }
- */
         $sum = 0;
         foreach ($meetings as $meeting) {
             $mid = $meeting['meetingId'];
             $pass = $meeting['moderatorPw'];
             if ($mid != null) {
-                $info = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,array('meetingId' => $mid, 'password' => $pass));
+                $info = $bbb->getMeetingInfoWithXmlResponseArray($bbb,$bbb_url,$salt,array('meetingId' => $mid, 'password' => $pass));
                 $sum += $info['participantCount'];
             }
         }
