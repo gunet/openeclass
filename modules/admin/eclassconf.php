@@ -32,13 +32,13 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
-        
+
 function loginFailPanel(e) {
     duration = null;
     if (e) {
         duration = 400;
     }
-        
+
     if ($('#login_fail_check').is(":checked")) {
         $('#login_fail_threshold').show(duration);
         $('#login_fail_deny_interval').show(duration);
@@ -62,7 +62,7 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
     stickywidget.on('affix.bs.affix',function(){
         stickywidget.removeAttr('style');
         explicitlySetAffixPosition();
-    }); 
+    });
     stickywidget.on('affixed-bottom.bs.affix',function(){
         stickywidget.css('left', 'auto');
     });
@@ -90,13 +90,13 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
         }
         $('#hide_login_link_check').prop('disabled', !$('#hide_login_check').is(":checked"));
     });
-    
+
     // Login Fail Panel
     loginFailPanel();
     $('#login_fail_check').click(function(event) {
         loginFailPanel(true);
     });
-    
+
     // Open Courses checkboxes
     $('#opencourses_enable').click(function(event) {
         if ($('#opencourses_enable').is(":checked")) {
@@ -112,18 +112,18 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#course_metadata').prop('disabled', false);
         }
     });
-    
+
     if ($('#opencourses_enable').is(":checked")) {
         $('#course_metadata').prop('disabled', true);
     }
-    
+
     // Search Engine checkboxes
     $('#confirmIndexDialog').modal({
         show: false,
         keyboard: false,
         backdrop: 'static'
     });
-        
+
     $("#confirmIndexCancel").click(function() {
         $('#index_enable')
             .prop('checked', false)
@@ -131,11 +131,11 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
         $('#search_enable').prop('checked', false);
         $("#confirmIndexDialog").modal("hide");
     });
-        
+
     $("#confirmIndexOk").click(function() {
         $("#confirmIndexDialog").modal("hide");
     });
-    
+
     $('#search_enable').change(function(event) {
         if ($('#search_enable').is(":checked")) {
             if ($('#index_enable').is(":checked")) {
@@ -150,17 +150,17 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#index_enable').prop('disabled', false);
         }
     });
-    
+
     if ($('#search_enable').is(":checked")) {
         $('#index_enable').prop('disabled', true);
     }
-    
+
     $('#index_enable').change(function(event) {
         if ($('#index_enable').is(":checked")) {
             $("#confirmIndexDialog").modal("show");
         }
     });
-    
+
     $('#social_sharing_links').change(function(event) {
         if ($('#social_sharing_links').is(":checked")) {
             if ($('#personal_blog_enable').is(":checked")) {
@@ -170,11 +170,11 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#personal_blog_sharing_enable').prop('disabled', true);
         }
     });
-        
+
     if (!$('#social_sharing_links').is(":checked")) {
         $('#personal_blog_sharing_enable').prop('disabled', true);
-    }   
-    
+    }
+
     $('#personal_blog_enable').change(function(event) {
         if ($('#personal_blog_enable').is(":checked")) {
             $('#personal_blog_commenting_enable').prop('disabled', false);
@@ -187,36 +187,36 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
             $('#personal_blog_rating_enable').prop('disabled', true);
             $('#personal_blog_sharing_enable').prop('disabled', true);
         }
-    });    
-    
+    });
+
     if (!$('#personal_blog_enable').is(":checked")) {
         $('#personal_blog_commenting_enable').prop('disabled', true);
         $('#personal_blog_rating_enable').prop('disabled', true);
         $('#personal_blog_sharing_enable').prop('disabled', true);
     }
-        
+
     $('input[name=submit]').click(function() {
         $('#personal_blog_commenting_enable').prop('disabled', false);
         $('#personal_blog_rating_enable').prop('disabled', false);
         $('#personal_blog_sharing_enable').prop('disabled', false);
     });
-        
-    // Mobile API Confirmations    
+
+    // Mobile API Confirmations
     $('#confirmMobileAPIDialog').modal({
         show: false,
         keyboard: false,
         backdrop: 'static'
     });
-        
+
     $("#confirmMobileAPICancel").click(function() {
         $('#mobileapi_enable').prop('checked', false);
         $("#confirmMobileAPIDialog").modal("hide");
     });
-        
+
     $("#confirmMobileAPIOk").click(function() {
         $("#confirmMobileAPIDialog").modal("hide");
     });
-        
+
     $('#mobileapi_enable').change(function(event) {
         if ($('#mobileapi_enable').is(":checked")) {
             $("#confirmMobileAPIDialog").modal("show");
@@ -234,7 +234,7 @@ define('MONTHS', 30 * 24 * 60 * 60);
 // schedule indexing if necessary
 if (Session::get('scheduleIndexing')) {
     $tool_content .= "<div class='alert alert-warning'>{$langIndexingNeeded} <a id='idxpbut' href='../search/idxpopup.php' onclick=\"return idxpopup('../search/idxpopup.php', 600, 500)\">{$langHere}.</a></div>";
-    
+
     $head_content .= <<<EOF
 <script type='text/javascript'>
 /* <![CDATA[ */
@@ -304,7 +304,7 @@ if (isset($_POST['submit'])) {
     set_config('student_upload_whitelist', $_POST['student_upload_whitelist']);
     set_config('teacher_upload_whitelist', $_POST['teacher_upload_whitelist']);
     set_config('email_announce', $_POST['email_announce']);
-    
+
     $config_vars = array('email_required' => true,
         'email_verification_required' => true,
         'dont_mail_unverified_mails' => true,
@@ -326,7 +326,7 @@ if (isset($_POST['submit'])) {
         'group_quota' => true,
         'video_quota' => true,
         'dropbox_quota' => true,
-        'max_glossary_terms' => true,        
+        'max_glossary_terms' => true,
         'case_insensitive_usernames' => true,
         'course_multidep' => true,
         'user_multidep' => true,
@@ -356,7 +356,13 @@ if (isset($_POST['submit'])) {
         'opencourses_enable' => true);
 
     register_posted_variables($config_vars, 'all', 'intval');
-    
+
+    if (!in_array($_POST['course_guest'], array('on', 'off', 'link'))) {
+        set_config('course_guest', 'off');
+    } else {
+        set_config('course_guest', $_POST['course_guest']);
+    }
+
     if ($GLOBALS['opencourses_enable'] == 1) {
         $GLOBALS['course_metadata'] = 1;
     }
@@ -412,7 +418,7 @@ else {
             'url' => "index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
-    
+
     if (function_exists('imagettfbbox')) {
         $cbox_display_captcha = get_config('display_captcha') ? 'checked' : '';
         $message_display_captcha = $disable_display_captcha = '';
@@ -503,7 +509,7 @@ else {
                                <input class='form-control' type='text' name='formInstitutionUrl' id='formInstitutionUrl' value='" . $InstitutionUrl . "'>
                            </div>
                         </div>
-                    </fieldset>     
+                    </fieldset>
                 </div>
             </div>
             <div class='panel panel-default' id='two'>
@@ -529,16 +535,16 @@ else {
                            <div class='col-sm-9'>
                                 ". selection(array('0' => $langDisableEclassStudReg, '1' => $langReqRegUser, '2' => $langDisableEclassStudRegType), 'alt_auth_stud_reg', get_config('alt_auth_stud_reg'), "class='form-control' id='alt_auth_stud_reg'") ."
                            </div>
-                        </div> 
+                        </div>
                         <div class='form-group'>
                            <label for='eclass_prof_reg' class='col-sm-3 control-label'>$langProfAccount $langViaeClass:</label>
                            <div class='col-sm-9'>
                                 ". selection(
                                         array(
-                                            '0' => $langDisableEclassProfReg, 
+                                            '0' => $langDisableEclassProfReg,
                                             '1' => $langReqRegProf
-                                        ), 
-                                        'eclass_prof_reg', 
+                                        ),
+                                        'eclass_prof_reg',
                                         get_config('eclass_prof_reg'),
                                         "class='form-control' id='eclass_prof_reg'"
                                     ) ."
@@ -551,8 +557,8 @@ else {
                                         array(
                                                 '0' => $langDisableEclassProfReg,
                                                 '1' => $langReqRegProf
-                                            ), 
-                                        'alt_auth_prof_reg', 
+                                            ),
+                                        'alt_auth_prof_reg',
                                         get_config('alt_auth_prof_reg'),
                                         "class='form-control' id='alt_auth_prof_reg'"
                                     ) ."
@@ -563,7 +569,7 @@ else {
                            <div class='col-sm-9'>
                                 <input type='text' class='form-control' name='formdurationAccount' id='formdurationAccount' maxlength='3' value='" . intval(get_config('account_duration') / MONTHS) . "'>
                            </div>
-                        </div>                         
+                        </div>
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$lang_display_captcha_label:</label>
                             <div class='checkbox col-sm-9'>
@@ -573,7 +579,18 @@ else {
                                 </label>$message_display_captcha
                             </div>
                         </div>
-                    </fieldset>    
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langGuestLoginLabel:</label>
+                            <div class='col-sm-9'>" .
+                                selection(array('off' => $m['deactivate'],
+                                                'on' => $m['activate'],
+                                                'link' => $langGuestLoginLinks),
+                                    'course_guest',
+                                    get_config('course_guest', 'on'),
+                                    "class='form-control'") . "
+                            </div>
+                        </div>
+                    </fieldset>
                 </div>
             </div>";
         $active_ui_languages = explode(' ', get_config('active_ui_languages'));
@@ -595,9 +612,9 @@ else {
                                 $loclangname
                             </label>
                         </div>";
-                            
+
             }
-        }   
+        }
 $tool_content .= "<div class='panel panel-default' id='three'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langEclassThemes</h2>
@@ -610,30 +627,30 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                selection($selectable_langs, 'default_language', get_config('language'),
                                          "class='form-control' id='default_language'") .
                            "</div>
-                        </div> 
+                        </div>
                         <div class='form-group'>
                             <label class='col-sm-3 control-label'>$langSupportedLanguages:</label>
-                            <div class='col-sm-9'>            
+                            <div class='col-sm-9'>
                             " . implode(' ', $sel) . "
                             </div>
-                        </div>                        
+                        </div>
                         <div class='form-group'>
                            <label for='theme' class='col-sm-3 control-label'>$lang_login_form: </label>
                            <div class='col-sm-9'>
                                 <div class='checkbox'>
                                     <label>
-                                        <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>    
+                                        <input id='hide_login_check' type='checkbox' name='dont_display_login_form' value='1' $cbox_dont_display_login_form>
                                         $lang_dont_display_login_form
                                     </label>
-                                </div>                              
+                                </div>
                                 <div class='checkbox'>
                                     <label>
-                                        <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>    
+                                        <input id='hide_login_link_check' type='checkbox' name='hide_login_link' value='1' $cbox_hide_login_link>
                                         $lang_hide_login_link
                                     </label>
-                                </div>                              
+                                </div>
                            </div>
-                        </div>                        
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -651,7 +668,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-12'>
                                 <div class='checkbox'>
                                     <label>
-                                        <input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails>    
+                                        <input type='checkbox' name='dont_mail_unverified_mails' value='1' $cbox_dont_mail_unverified_mails>
                                         $lang_dont_mail_unverified_mails
                                     </label>
                                 </div>
@@ -660,7 +677,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' name='email_from' value='1' $cbox_email_from>
                                         $lang_email_from
                                     </label>
-                                </div>                                
+                                </div>
                            </div>
                         </div>
                         <div class='form-group'>
@@ -722,7 +739,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                     </label>
                                 </div>
                            </div>
-                        </div>                        
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -751,7 +768,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' id='opencourses_enable' name='opencourses_enable' value='1' $cbox_opencourses_enable>
                                         $lang_opencourses_enable
                                     </label>
-                                </div>                                  
+                                </div>
                             </div>
                         </div>
                     </fieldset>
@@ -804,7 +821,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' name='email_verification_required' value='1' $cbox_email_verification_required>
                                         $lang_email_verification_required
                                     </label>
-                                </div>  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='am_required' value='1' $cbox_am_required>
@@ -828,7 +845,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input type='checkbox' name='dropbox_allow_student_to_student' value='1' $cbox_dropbox_allow_student_to_student>
                                         $lang_dropbox_allow_student_to_student
                                     </label>
-                                </div>  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='dropbox_allow_personal_messages' value='1' $cbox_dropbox_allow_personal_messages>
@@ -858,38 +875,38 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                         <input id='personal_blog_sharing_enable' type='checkbox' name='personal_blog_sharing' value='1' $cbox_personal_blog_sharing>
                                         $lang_personal_blog_sharing
                                     </label>
-                                </div>  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='block_username_change' value='1' $cbox_block_username_change>
                                         $lang_block_username_change
                                     </label>
-                                </div>                                  
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input $id_enable_mobileapi type='checkbox' name='enable_mobileapi' value='1' $cbox_enable_mobileapi>
                                         $lang_enable_mobileapi
                                     </label>
-                                </div>      
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
                                         $langEnableCommonDocs
                                     </label>
-                                </div>      
+                                </div>
                                 <div class='checkbox'>
                                     <label>
                                         <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links>
                                         $langEnableSocialSharingLiks
                                     </label>
-                                </div>                                      
-                           </div>                           
+                                </div>
+                           </div>
                         </div>
                         <hr><br>
                         <div class='form-group'>
                            <label for='min_password_len' class='col-sm-4 control-label'>$langMinPasswordLen: </label>
                            <div class='col-sm-8'>
-                                <input type='text' class='form-control' name='min_password_len' id='min_password_len' value='" . intval(get_config('min_password_len')) . "'>                            
+                                <input type='text' class='form-control' name='min_password_len' id='min_password_len' value='" . intval(get_config('min_password_len')) . "'>
                            </div>
                         </div>
                         <div class='form-group'>
@@ -903,7 +920,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-8'>
                                 <input type='text' class='form-control' name='actions_expire_interval' value='" . get_config('actions_expire_interval') . "'>
                            </div>
-                        </div>                         
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -936,7 +953,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
                            </div>
-                        </div>                         
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -957,7 +974,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                            <div class='col-sm-8'>
                                 <textarea class='form-control' rows='6' name='teacher_upload_whitelist' id='teacher_upload_whitelist'>" . get_config('teacher_upload_whitelist') . "</textarea>
                            </div>
-                        </div>                         
+                        </div>
                     </fieldset>
                 </div>
             </div>";
@@ -965,8 +982,8 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_disable_log_actions = get_config('disable_log_actions') ? 'checked' : '';
     $cbox_disable_log_course_actions = get_config('disable_log_course_actions') ? 'checked' : '';
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
-    
-$tool_content .= "    
+
+$tool_content .= "
             <div class='panel panel-default' id='ten'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLogActions</h2>
@@ -992,7 +1009,7 @@ $tool_content .= "
                                         <input type='checkbox' name='disable_log_system_actions' value='1' $cbox_disable_log_system_actions>
                                         $lang_disable_log_system_actions
                                     </label>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                         <hr><br>
@@ -1007,7 +1024,7 @@ $tool_content .= "
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='log_purge_interval' id='log_purge_interval' value='" . get_config('log_purge_interval') . "'>
                            </div>
-                        </div>                        
+                        </div>
                     </fieldset>
                 </div>
             </div>
@@ -1031,25 +1048,25 @@ $tool_content .= "
                            <label for='login_fail_threshold' class='col-sm-4 control-label'>$langLoginFailThreshold:</label>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='login_fail_threshold' id='login_fail_threshold' value='" . get_config('login_fail_threshold') . "'>
-                           </div>                          
+                           </div>
                         </div>
                         <div class='form-group' id='login_fail_deny_interval'>
                            <label for='login_fail_deny_interval' class='col-sm-4 control-label'>$langLoginFailDenyInterval ($langMinute):</label>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='login_fail_deny_interval' id='login_fail_deny_interval' value='" . get_config('login_fail_deny_interval') . "'>
-                           </div>                          
+                           </div>
                         </div>
                         <div class='form-group' id='login_fail_forgive_interval'>
                            <label for='login_fail_forgive_interval' class='col-sm-4 control-label'>$langLoginFailForgiveInterval ($langHours):</label>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='login_fail_forgive_interval' id='login_fail_forgive_interval' value='" . get_config('login_fail_forgive_interval') . "'>
-                           </div>                          
-                        </div>                         
+                           </div>
+                        </div>
                     </fieldset>
                 </div>
             </div>
             <div class='form-group'>
-                <div class='col-sm-12'>            
+                <div class='col-sm-12'>
                     <input class='btn btn-primary' type='submit' name='submit' value='$langModify'>
                     <a class='btn btn-default' href='index.php'>$langCancel</a>
                 </div>
@@ -1082,7 +1099,7 @@ $tool_content .= "
                 <li><a href='#eight'>$langDefaultQuota</a></li>
                 <li><a href='#nine'>$langUploadWhitelist</a></li>
                 <li><a href='#ten'>$langLogActions</a></li>
-                <li><a href='#eleven'>$langLoginFailCheck</a></li>     
+                <li><a href='#eleven'>$langLoginFailCheck</a></li>
             </ul>
         </div>
     </div>";

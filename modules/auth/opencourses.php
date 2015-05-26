@@ -169,12 +169,27 @@ if (count($courses) > 0) {
     }
 
     $tool_content .= "</tr>";
-    
+
+    $displayGuestLoginLinks = $uid == 0 && get_config('course_guest') == 'link';    
     foreach ($courses as $mycours) {
         if ($mycours->visible == COURSE_OPEN) {
             $codelink = "<a href='../../courses/" . urlencode($mycours->k) . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . q($mycours->c) . ")</small>";
         } else {
             $codelink = q($mycours->i) . "&nbsp;<small>(" . q($mycours->c) . ")</small>";
+        }
+
+        if ($displayGuestLoginLinks) {
+            $guestUser = Database::get()->querySingle('SELECT username FROM course_user, user
+                WHERE course_user.user_id = user.id AND user.status = ?d and course_id = ?d',
+                USER_GUEST, $mycours->id);
+            if ($guestUser) {
+                $codelink .= " <div class='pull-right'>" .
+                    icon('fa-plane', $langGuestLogin,
+                        "{$urlAppend}main/login_form.php?user=" .
+                        $guestUser->username . "&amp;next=%2Fcourses%2F" .
+                        $mycours->c . "%2F") .
+                    "</div>";
+            }
         }
                 
         $tool_content .= "<td>" . $codelink . "</td>";

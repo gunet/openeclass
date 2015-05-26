@@ -12,6 +12,9 @@ $warning = '';
 $next = isset($_GET['next'])?
     ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>"):
     '';
+
+$userValue = isset($_GET['user'])? (" value='" . q($_GET['user']) . "' readonly"): '';
+
 $authLink = array();
 $extAuthMethods = array('cas', 'shibboleth');
 $loginFormEnabled = false;
@@ -37,7 +40,7 @@ foreach ($q as $l) {
                 $next
                 <div class='form-group'>
                     <div class='col-xs-12'>
-                        <input class='form-control' name='uname' placeholder='$langUsername'>
+                        <input class='form-control' name='uname' placeholder='$langUsername'$userValue>
                     </div>
                 </div>
                 <div class='form-group'>

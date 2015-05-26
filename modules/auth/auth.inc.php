@@ -370,7 +370,7 @@ header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["
 
 /* * **************************************************************
   Check if an account is active or not. Apart from admin, everybody has
-  a registration unix timestamp and an expiration unix timestamp.
+  a registration timestamp and an expiration timestamp.
   By default is set to last a year
 
   $userid : the id of the account
@@ -543,14 +543,15 @@ function process_login() {
             }
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username $sqlLogin", $posted_uname);
-            //print_r($result);
+            $guest_user = get_config('course_guest') != 'off' && $myrow and $myrow->status == USER_GUEST;
+
             // cas might have alternative authentication defined
             $exists = 0;
             if (!isset($_COOKIE) or count($_COOKIE) == 0) {
                 // Disallow login when cookies are disabled
                 $auth_allow = 5;
-            } elseif ($pass === '') {
-                // Disallow login with empty password
+            } elseif ($pass === '' and !$guest_user) {
+                // Disallow login with empty password except for course guest users
                 $auth_allow = 4;
             } else {
                 if ($myrow) {
@@ -559,6 +560,9 @@ function process_login() {
                         if (in_array($myrow->password, $auth_ids)) {
                             // alternate methods login
                             $auth_allow = alt_login($myrow, $posted_uname, $pass);
+                        } elseif ($guest_user and $myrow->password === $pass and $pass === '') {
+                            // allow guest user login with empty password
+                            $auth_allow = 1;
                         } else {
                             // eclass login
                             $auth_allow = login($myrow, $posted_uname, $pass);
@@ -577,12 +581,13 @@ function process_login() {
         $invalidIdMessage = sprintf($langInvalidId, $urlAppend . 'modules/auth/registration.php');
         if (!isset($_SESSION['uid'])) {
             switch ($auth_allow) {
-                case 1: $warning .= "";
+                case 1:
                     session_regenerate_id();
                     break;
                 case 2:
-                    if(isset($_GET['login_page'])) {
-                        die('ehllo');
+                    if (isset($_GET['login_page'])) {
+                        Session::flash('login_error', $invalidIdMessage);
+                        redirect_to_home_page('main/login_form.php');
                     } else {
                         $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
                     }
@@ -592,7 +597,7 @@ function process_login() {
                             token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></div>";
                     break;
                 case 4:
-                    if(isset($_GET['login_page'])) {
+                    if (isset($_GET['login_page'])) {
                         Session::flash('login_error', $invalidIdMessage);
                         redirect_to_home_page('main/login_form.php');
                     } else {
@@ -652,18 +657,23 @@ function login($user_info_object, $posted_uname, $pass) {
 
     if ($pass_match) {
         // check if account is active
-        $is_active = check_activity($user_info_object->id);
-        // check for admin privileges
-        $admin_rights = get_admin_rights($user_info_object->id);
-        if ($admin_rights == ADMIN_USER) {
-            $is_active = 1;   // admin user is always active
-            $_SESSION['is_admin'] = 1;
-        } elseif ($admin_rights == POWER_USER) {
-            $_SESSION['is_power_user'] = 1;
-        } elseif ($admin_rights == USERMANAGE_USER) {
-            $_SESSION['is_usermanage_user'] = 1;
-        } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
-            $_SESSION['is_departmentmanage_user'] = 1;
+        if ($user_info_object->status == USER_GUEST) {
+            $is_active = get_config('course_guest') != 'off';
+        } else {
+            $is_active = check_activity($user_info_object->id);
+
+            // check for admin privileges
+            $admin_rights = get_admin_rights($user_info_object->id);
+            if ($admin_rights == ADMIN_USER) {
+                $is_active = 1;   // admin user is always active
+                $_SESSION['is_admin'] = 1;
+            } elseif ($admin_rights == POWER_USER) {
+                $_SESSION['is_power_user'] = 1;
+            } elseif ($admin_rights == USERMANAGE_USER) {
+                $_SESSION['is_usermanage_user'] = 1;
+            } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
+                $_SESSION['is_departmentmanage_user'] = 1;
+            }
         }
         if ($is_active) {
             $_SESSION['uid'] = $user_info_object->id;

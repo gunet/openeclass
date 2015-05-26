@@ -125,9 +125,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         //create date field with unregister button
         $date_field = ($myrow->reg_date == '0000-00-00') ? $langUnknownDate : nice_format($myrow->reg_date);
 
-        //Create appropriate role control buttons
+        // Create appropriate role control buttons
         // Admin right
-        $user_role_controls ="";
+        $user_role_controls = '';
         if ($myrow->id != $_SESSION["uid"] && $myrow->reviewer == '1') {
             $user_role_controls .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;removeReviewer=$myrow->id'><img src='$themeimg/reviewer_remove.png' alt='$langRemoveRightReviewer' title='$langRemoveRightReviewer'></a>";
         } else {
@@ -373,7 +373,7 @@ $tool_content .=
             array('title' => $langAddGUser,
                 'url' => "guestuser.php?course=$course_code",
                 'icon' => 'fa-plane',
-                'show' => $eclass_stud_reg != 0),
+                'show' => ($eclass_stud_reg != 0 && get_config('course_guest') != 'off')),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),
