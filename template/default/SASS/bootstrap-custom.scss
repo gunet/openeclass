@@ -704,7 +704,7 @@ footer.footer
                 padding-bottom: 15px;
                 line-height: 22px;
                 @include transition(all $transition-time linear);
-                i.fa{
+                span.fa{
                     margin:0 1em;		
                 }
                 &:hover,
@@ -2270,7 +2270,7 @@ div.login-form .form-group label {
     margin: 0;
     text-align: center;
 }
-div.login-form .form-group i.fa {
+div.login-form .form-group span.fa {
     font-size: 1.2em;
     margin: 0;
     color: #aaaaaa;

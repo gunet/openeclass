@@ -66,7 +66,7 @@
                     <nav id="header" class="navbar navbar-default" role="navigation">
                         <!-- BEGIN normalViewOpenDiv -->
                         <button class="navbar-toggle pull-left">
-                            <i class="fa fa-bars" style='color: #777;'></i>
+                            <span class="fa fa-bars" style='color: #777;'></span>
                         </button>
                         <!-- END normalViewOpenDiv -->
                         <!-- BEGIN logoBlock -->
@@ -76,7 +76,7 @@
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
                             <!-- BEGIN LoggedInBlock -->
-                            <li><a href="{%URL_PATH%}main/portfolio.php"><i class="fa fa-home"></i></a></li>
+                            <li><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span></a></li>
                             <li id="profile_menu_dropdown" class="dropdown">
                                <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
                                    <img alt="" class="img-circle user-icon" src="{%USER_ICON%}" style="display: block; float: left;"><div style="display: block; float: left;">{%USERNAME%}</div>
@@ -84,43 +84,43 @@
 
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><i class="fa fa-user fa-fw"></i>{%LANG_PROFILE%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%PROFILE_LINK%}"><span class="fa fa-user fa-fw"></span>{%LANG_PROFILE%}</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%COURSES_LINK%}"><i class="fa fa-graduation-cap fa-fw"></i>{%LANG_COURSES%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%COURSES_LINK%}"><span class="fa fa-graduation-cap fa-fw"></span>{%LANG_COURSES%}</a>
                                     </li>                                    
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><i class="fa fa-envelope-o fa-fw"></i>{%LANG_MESSAGES%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%MESSAGES_LINK%}"><span class="fa fa-envelope-o fa-fw"></span>{%LANG_MESSAGES%}</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%ANNOUNCEMENTS_LINK%}"><i class="fa fa-bullhorn fa-fw"></i>{%LANG_ANNOUNCEMENTS%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%ANNOUNCEMENTS_LINK%}"><span class="fa fa-bullhorn fa-fw"></span>{%LANG_ANNOUNCEMENTS%}</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%AGENDA_LINK%}"><i class="fa fa-calendar fa-fw"></i>{%LANG_AGENDA%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%AGENDA_LINK%}"><span class="fa fa-calendar fa-fw"></span>{%LANG_AGENDA%}</a>
                                     </li>
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%NOTES_LINK%}"><i class="fa fa-edit fa-fw"></i>{%LANG_NOTES%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%NOTES_LINK%}"><span class="fa fa-edit fa-fw"></span>{%LANG_NOTES%}</a>
                                     </li>
                                     <!-- BEGIN PersoBlogBlock -->
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%MYBLOG_LINK%}"><i class="fa fa-columns fa-fw"></i>{%LANG_MYBLOG%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%MYBLOG_LINK%}"><span class="fa fa-columns fa-fw"></span>{%LANG_MYBLOG%}</a>
                                     </li>
                                     <!-- END PersoBlogBlock -->
                                     <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="{%STATS_LINK%}"><i class="fa fa-area-chart fa-fw"></i>{%LANG_STATS%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%STATS_LINK%}"><span class="fa fa-area-chart fa-fw"></span>{%LANG_STATS%}</a>
                                     </li>                                    
                                     <li role="presentation" style="border-top: 1px solid #ddd">
-                                        <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><i class="fa fa-unlock fa-fw"></i>{%LANG_LOGOUT%}</a>
+                                        <a role="menuitem" tabindex="-1" href="{%LOGOUT_LINK%}"><span class="fa fa-unlock fa-fw"></span>{%LANG_LOGOUT%}</a>
                                     </li>                                    
                                 </ul>
                             </li>
 
-                            <li><a id="toggle-sidebar"><i class="fa fa-sliders"></i></a></li>
+                            <li><a id="toggle-sidebar"><span class="fa fa-sliders"></span></a></li>
                             <!-- END LoggedInBlock -->
                             <!-- BEGIN LoggedOutBlock -->
                             {%LANG_SELECT%}
                             <!-- BEGIN LoginIconBlock -->
-                            <li><a href="{%LOGOUT_LINK%}"><i class="fa fa-lock"></i></a></li>
+                            <li><a href="{%LOGOUT_LINK%}"><span class="fa fa-lock"></span></a></li>
                             <!-- END LoginIconBlock -->
                             <!-- END LoggedOutBlock -->
                         </ul>

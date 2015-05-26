@@ -80,7 +80,7 @@ function template_callback($template, $menuTypeID, $embed)
     if ($menuTypeID != 2) {
         $lang_select = "<li class='dropdown'>
           <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
-              <i class='fa fa-globe'></i>
+              <span class='fa fa-globe'></span>
           </a>
           <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
         foreach ($session->active_ui_languages as $code) {
