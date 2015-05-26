@@ -179,16 +179,27 @@ if (count($courses) > 0) {
         }
 
         if ($displayGuestLoginLinks) {
-            $guestUser = Database::get()->querySingle('SELECT username FROM course_user, user
+            $guestUser = Database::get()->querySingle('SELECT username, password FROM course_user, user
                 WHERE course_user.user_id = user.id AND user.status = ?d and course_id = ?d',
                 USER_GUEST, $mycours->id);
             if ($guestUser) {
-                $codelink .= " <div class='pull-right'>" .
-                    icon('fa-plane', $langGuestLogin,
-                        "{$urlAppend}main/login_form.php?user=" .
-                        $guestUser->username . "&amp;next=%2Fcourses%2F" .
-                        $mycours->c . "%2F") .
-                    "</div>";
+                $codelink .= " <div class='pull-right'>";
+                if ($guestUser->password === '') {
+                    $codelink .= "
+                        <form method='post' action='$urlAppend'>
+                            <input type='hidden' name='uname' value='{$guestUser->username}'>
+                            <input type='hidden' name='pass' value=''>
+                            <input type='hidden' name='next' value='/courses/{$mycours->k}/'>
+                            <button type='submit' title='" . q($langGuestLogin) . "' name='submit' data-toggle='tooltip'>
+                                <i class='fa fa-plane'></i></button>
+                        </form>";
+                } else {
+                    $codelink .= "<button type='button' title='" . q($langGuestLogin) . "' data-toggle='tooltip'><a href='" .
+                        "{$urlAppend}main/login_form.php?user={q($guestUser->username}&amp;next=%2Fcourses%2F" .
+                            $mycours->k . "%2F'>
+                                <i class='fa fa-plane'></i></a></button>";
+                }
+                $codelink .= "</div>";
             }
         }
                 
