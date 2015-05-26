@@ -2534,14 +2534,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
 
-        // add default theme options
-        $themes = array(
-            'courses-theme_data-Open Courses Atoms.zip',
-            'courses-theme_data-Open Courses Sketchy.zip',
-            'courses-theme_data-Open eClass Classic.zip',
-            'courses-theme_data-Open eClass City Lights.zip',
-            'courses-theme_data-Open eClass Classic Ice.zip');
-        importThemes($themes);
 
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
@@ -2672,7 +2664,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
         
         //importing new theme
-        $new_themes = array();
+        $new_themes = array(
+            "courses_theme_data_OpeneClass3 - Atoms (OpenCourses).zip",
+            "courses_theme_data_OpeneClass3 - School A.zip",
+            "courses_theme_data_OpeneClass3 - Sketch Icons.zip",
+            "courses_theme_data_OpeneClass3 - Sketchy (OpenCourses).zip",
+            "courses_theme_data_OpeneClass3 - Sketcy.zip"
+            );
         importThemes($new_themes);
         //unlinking files that were used with the old theme import mechanism
         @unlink("$webDir/template/default/img/bcgr_lines_petrol_les saturation.png");
