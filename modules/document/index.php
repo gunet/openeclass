@@ -909,6 +909,7 @@ if ($can_upload) {
             $fileName = my_basename($comment);
             if (empty($oldFilename))
                 $oldFilename = $fileName;
+            
                 $dialogBox .= "<div class='form-wrapper'>
                         <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                         <fieldset>
@@ -1182,6 +1183,8 @@ if ($can_upload) {
     // Dialog Box
     if (!empty($dialogBox)) {
         $tool_content .= $dialogBox;
+        draw($tool_content, $menuTypeID);
+        exit;
     }
 }
 
