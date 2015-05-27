@@ -2141,8 +2141,8 @@ function submit_grade_comments() {
     ));
     if($v->validate()) {
         $grade = $_POST['grade'];
-        $comment = $_POST['comments'];         
-        if(empty($grade)) $grade = null;
+        $comment = $_POST['comments'];
+        $grade = is_numeric($grade) ? $grade : null;
         if (Database::get()->query("UPDATE assignment_submit 
                                     SET grade = ?f, grade_comments = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
@@ -2186,9 +2186,7 @@ function submit_grades($grades_id, $grades, $email = false) {
         $v->labels(array(
             'grade' => "$langTheField $m[grade]"
         ));        
-        if($v->validate()) {
-
-        } else {
+        if(!$v->validate()) {
             $valitron_errors = $v->errors();
             $errors["grade.$key"] = $valitron_errors['grade'];
         }
@@ -2197,10 +2195,10 @@ function submit_grades($grades_id, $grades, $email = false) {
         foreach ($grades as $sid => $grade) {
             $sid = intval($sid);
             $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
-            
-            if (empty($grade)) $grade = NULL;
-            
-            if ($val != $grade) {
+
+            $grade = is_numeric($grade['grade']) ? $grade['grade'] : null;
+
+            if ($val !== $grade) {               
                 if (Database::get()->query("UPDATE assignment_submit
                                             SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
                                             WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
