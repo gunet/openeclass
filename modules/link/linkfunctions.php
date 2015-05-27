@@ -131,7 +131,7 @@ function showlinksofcategory($catid) {
  */
 function showcategoryadmintools($categoryid) {
     global $urlview, $aantalcategories, $catcounter, $langDelete,
-    $langModify, $langUp, $langDown, $langCatDel, $tool_content,
+    $langEditChange, $langUp, $langDown, $langCatDel, $tool_content,
     $course_code;
 
     $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
