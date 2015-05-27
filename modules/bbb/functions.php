@@ -763,7 +763,7 @@ function bbb_session_details() {
                     $headingsSent = true;
                 }
                 $tool_content .= '<tr' . ($row->active? '': " class='not_visible'") . ">
-                    <td class='text-center'>$joinLink</td>
+                    <td class='text-left'>$joinLink</td>
                     <td>$desc</td>
                     <td class='text-center'>$timeLabel</td>
                     <td style='width: 30%'>$participants</td>

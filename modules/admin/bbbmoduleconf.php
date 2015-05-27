@@ -198,11 +198,11 @@ else {
         if ($server->enable_recordings == "false") {
             $checkedfalse = " checked='true' ";
         } else $checkedfalse = '';
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo:</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo</label></div>";
         if ($server->enable_recordings == "true") {
             $checkedtrue = " checked='true' ";
         } else $checkedtrue = '';
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes:</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes</label></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
 
