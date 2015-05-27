@@ -195,7 +195,7 @@ if (count($courses) > 0) {
                         </form>";
                 } else {
                     $codelink .= "<button type='button' title='" . q($langGuestLogin) . "' data-toggle='tooltip'><a href='" .
-                        "{$urlAppend}main/login_form.php?user={q($guestUser->username}&amp;next=%2Fcourses%2F" .
+                        "{$urlAppend}main/login_form.php?user=" . urlencode($guestUser->username) . "&amp;next=%2Fcourses%2F" .
                             $mycours->k . "%2F'>
                                 <i class='fa fa-plane'></i></a></button>";
                 }
