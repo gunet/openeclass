@@ -463,8 +463,8 @@ if ($can_upload) {
         $q = Database::get()->querySingle("SELECT filename, format FROM document
                                                 WHERE $group_sql AND path=?s", $move);
         $moveFileNameAlias = $q->filename;
-        $exclude = ($q->format == '.dir')? $move: $curDirPath;
-        $dialogBox .= directory_selection($move, 'moveTo', $exclude);
+        $exclude = ($q->format == '.dir')? $move: '';
+        $dialogBox .= directory_selection($move, 'moveTo', $curDirPath, $exclude);
     }
 
     // Delete file or directory

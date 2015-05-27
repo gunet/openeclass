@@ -294,10 +294,9 @@ function directory_list() {
 
 /*
  * Returns HTML form select element listing all directories in current course documents
- * excluding the one with path $entryToExclude
+ * excluding the one with path $entryToExclude and all under $directoryToExclude
  */
-
-function directory_selection($source_value, $command, $entryToExclude) {
+function directory_selection($source_value, $command, $entryToExclude, $directoryToExclude) {
     global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
     global $groupset;
 
@@ -321,12 +320,15 @@ function directory_selection($source_value, $command, $entryToExclude) {
                                         }
 
                                         /* build html form inputs */
-                                        $disabled = '';
                                         foreach ($dirList as $path => $filename) {
+                                            $disabled = '';
                                             $depth = substr_count($path, '/');
                                             $tab = str_repeat('&nbsp;&nbsp;&nbsp;', $depth);
-                                            if ($entryToExclude !== '/' and $entryToExclude !== '') {
-                                                $disabled = (strpos($path, $entryToExclude) === 0)? ' disabled': '';
+                                            if ($directoryToExclude !== '/' and $directoryToExclude !== '') {
+                                                $disabled = (strpos($path, $directoryToExclude) === 0)? ' disabled': '';
+                                            }
+                                            if ($disabled === '' and $entryToExclude !== '/' and $entryToExclude !== '') {
+                                                $disabled = ($path === $entryToExclude)? ' disabled': '';
                                             }
                                             $dialogBox .= "<option$disabled value='$path'>$tab$filename</option>";
                                         }
