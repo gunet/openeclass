@@ -560,9 +560,6 @@ function process_login() {
                         if (in_array($myrow->password, $auth_ids)) {
                             // alternate methods login
                             $auth_allow = alt_login($myrow, $posted_uname, $pass);
-                        } elseif ($guest_user and $myrow->password === $pass and $pass === '') {
-                            // allow guest user login with empty password
-                            $auth_allow = 1;
                         } else {
                             // eclass login
                             $auth_allow = login($myrow, $posted_uname, $pass);
@@ -645,13 +642,16 @@ function login($user_info_object, $posted_uname, $pass) {
     if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
         if ($hasher->CheckPassword($pass, $user_info_object->password)) {
             $pass_match = true;
-        } else if (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
+        } elseif (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
             $pass_match = true;
             // password is in old md5 format, update transparently
             $password_encrypted = $hasher->HashPassword($pass);
             $user_info_object->password = $password_encrypted;
             Database::core()->query("SET sql_mode = TRADITIONAL");
             Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
+        } elseif ($user_info_object->status == USER_GUEST and $user_info_object->password === $pass and $pass === '') {
+            // allow guest user login with empty password
+            $pass_match = true;
         }
     }
 

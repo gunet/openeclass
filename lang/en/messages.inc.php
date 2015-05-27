@@ -3983,5 +3983,5 @@ $langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP v
 $langPHPVersion = 'PHP version';
 $langGuestLoginLabel = 'Course guest accounts';
 $langGuestLogin = 'Login with guest account';
-$langGuestLoginLinks = 'Activate guest login links in course list';
+$langGuestLoginLinks = 'Activate and add guest links in course list';
 $langGuestWarnEmptyPassword = 'Caution! You have entered an empty password for the guest user. This means that it is possible to access your course without entering a password.';
