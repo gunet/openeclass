@@ -334,7 +334,7 @@ function directory_selection($source_value, $command, $entryToExclude) {
                                         </div>
                                 </div>
                                 <div class='form-group'>
-                                    <div class='col-sm-offset-3 col-sm-9'>
+                                    <div class='col-sm-offset-4 col-sm-8'>
                                         <input class='btn btn-primary' type='submit' value='$langMove' >
                                     </div>
                                 </div>

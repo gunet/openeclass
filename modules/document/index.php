@@ -771,7 +771,7 @@ if ($can_upload) {
                             <div class='col-sm-7'><input type='file' name='newFile' size='35' /></div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-sm-offset-3 col-sm-9'>
+                            <div class='col-sm-offset-4 col-sm-8'>
                                 <input class='btn btn-primary' type='submit' value='$langReplace' />
                             </div>
                         </div>
@@ -1070,8 +1070,6 @@ if ($can_upload) {
     // Dialog Box
     if (!empty($dialogBox)) {
         $tool_content .= $dialogBox;
-        draw($tool_content, $menuTypeID);
-        exit;
     }
 }
 
