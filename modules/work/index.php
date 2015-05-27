@@ -1670,7 +1670,7 @@ function show_assignment($id, $display_graph_results = false) {
     $nav[] = $works_url;
     assignment_details($id, $assign);
     
-    $rev = (@($_REQUEST['rev'] == 1)) ? ' DESC' : '';
+    $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
     if (isset($_REQUEST['sort'])) {
         if ($_REQUEST['sort'] == 'am') {
             $order = 'am';
@@ -1687,11 +1687,11 @@ function show_assignment($id, $display_graph_results = false) {
         $order = 'surname';
     }
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment_submit AS assign, user
+    $result1 = Database::get()->queryArray("SELECT * FROM assignment_submit AS assign, user
                                  WHERE assign.assignment_id = ?d AND user.id = assign.uid
                                  ORDER BY ?s ?s", $id, $order, $rev);
 
-    $num_results = count($result);
+    $num_results = count($result1);
     if ($num_results > 0) {
         if ($num_results == 1) {
             $num_of_submissions = $m['one_submission'];
@@ -1701,7 +1701,7 @@ function show_assignment($id, $display_graph_results = false) {
 
         $gradeOccurances = array(); // Named array to hold grade occurances/stats
         $gradesExists = 0;
-        foreach ($result as $row) {
+        foreach ($result1 as $row) {
             $theGrade = $row->grade;
             if ($theGrade) {
                 $gradesExists = 1;
@@ -1715,6 +1715,7 @@ function show_assignment($id, $display_graph_results = false) {
             }
         }
         if (!$display_graph_results) {
+            
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                    assign.uid uid, assign.group_id group_id, 
                                                    assign.submission_date submission_date,
@@ -1724,8 +1725,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assignment.deadline deadline 
                                                    FROM assignment_submit AS assign, user, assignment
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
-                                                   ORDER BY ?s ?s", $id, $order, $rev);
-
+                                                   ORDER BY $order $rev", $id);
             $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
                         <input type='hidden' name='grades_id' value='$id' />
