@@ -85,9 +85,9 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         }
         
     }
-    $order_sql = 'ORDER BY ';
-    $order_sql .= ($_GET['iSortCol_0'] == 0) ? 'user.givenname ' : 'course_user.reg_date ';
-    $order_sql .= $_GET['sSortDir_0'];
+    $sortDir = ($_GET['sSortDir_0'] == 'desc')? 'DESC': '';
+    $order_sql = 'ORDER BY ' . 
+        (($_GET['iSortCol_0'] == 0) ? "user.surname $sortDir, user.givenname $sortDir" : "course_user.reg_date $sortDir");
 
     $limit_sql = ($limit > 0) ? "LIMIT $offset,$limit" : "";
 
@@ -194,7 +194,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
             '4' => $user_role_controls
         );
     }
-    echo json_encode($data);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
 }
 
