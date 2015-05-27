@@ -67,6 +67,7 @@
                         <!-- BEGIN normalViewOpenDiv -->
                         <button class="navbar-toggle pull-left">
                             <span class="fa fa-bars" style='color: #777;'></span>
+                            <span class="sr-only">$langMenu</span>
                         </button>
                         <!-- END normalViewOpenDiv -->
                         <!-- BEGIN logoBlock -->
@@ -120,7 +121,7 @@
                             <!-- BEGIN LoggedOutBlock -->
                             {%LANG_SELECT%}
                             <!-- BEGIN LoginIconBlock -->
-                            <li><a href="{%LOGOUT_LINK%}"><span class="fa fa-lock"></span></a></li>
+                            <li><a href="{%LOGOUT_LINK%}"><span class="fa fa-lock"></span><span class="sr-only">{%LANG_LOGOUT%}</span></a></li>
                             <!-- END LoginIconBlock -->
                             <!-- END LoggedOutBlock -->
                         </ul>
@@ -146,7 +147,7 @@
                     <div class="col-md-12 add-gutter">
                         <!-- BEGIN breadCrumbs -->
                         <div class="row">
-                            <div class="col-xs-12"> 
+                            <nav role="navigation" class="col-xs-12"> 
                                 <ol class="breadcrumb">
                                     <!-- BEGIN breadCrumbLinkBlock -->
                                     <li><a href='{%BREAD_HREF%}'>{%BREAD_TEXT%}</a></li>
@@ -155,7 +156,7 @@
                                     <li>{%BREAD_TEXT%}</li>
                                     <!-- END breadCrumbEntryBlock -->
                                 </ol>
-                            </div>
+                            </nav>
                         </div>
                         <!-- END breadCrumbs -->
 
@@ -230,7 +231,7 @@
                             <label class='sr-only' for='search_terms'>{%SEARCH_TITLE%}</label>
                             <input type="text" class="form-control input-sm" id="search_terms" name="search_terms" placeholder="{%SEARCH_TITLE%}...">
                             <span class="input-group-btn">
-                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch"><span class="fa fa-search"></span></button>
+                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch" alt="{%SEARCH_TITLE%}"><span class="fa fa-search"></span><span class="sr-only">{%SEARCH_TITLE%}</span></button>
                             </span>
                         </div>
                     </form>
@@ -245,7 +246,7 @@
                         <a class="collapsed parent-menu" data-toggle="collapse" data-parent="#sidebar-accordion" href="#collapse{%TOOL_GROUP_ID%}">
                             <div class="panel-heading">
                                 <h3 class="panel-title">
-                                    <i class="fa fa-chevron-right"></i>
+                                    <span class="fa fa-chevron-right"></span>
                                     <span>{%ACTIVE_TOOLS%}</span>
                                 </h3>
                             </div>
@@ -255,7 +256,7 @@
                         <div id="collapse{%TOOL_GROUP_ID%}" class="panel-collapse list-group collapse {%GROUP_CLASS%}">
                             <!-- BEGIN leftNavLinkBlock -->
                             <a href="{%TOOL_LINK%}" class="list-group-item {%TOOL_CLASS%}" {%TOOL_EXTRA%}>
-                                <i class="fa {%IMG_CLASS%} fa-fw"></i>
+                                <span class="fa {%IMG_CLASS%} fa-fw"></span>
                                 <span>{%TOOL_TEXT%}</span>
                             </a>
                             <!-- END leftNavLinkBlock -->
@@ -365,7 +366,7 @@
             <div class="col-xs-12">
             <!-- END mobileViewOpenDiv -->
                 <div id="scrollToTop">
-                    <i class='fa fa-caret-square-o-up fa-2x'></i>
+                    <span class='fa fa-caret-square-o-up fa-2x'></span>
                 </div>
                 <footer class="footer">
                     <span>{%COPYRIGHT%} &mdash; <a href="{%TERMS_URL%}">{%LANG_TERMS%}</a></span>

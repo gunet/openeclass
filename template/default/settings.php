@@ -35,7 +35,7 @@ $theme_settings = array(
 function template_callback($template, $menuTypeID, $embed)
 {
     global $uid, $session, $native_language_names_init, $course_id, $professor,
-           $modules, $admin_modules, $theme_settings;
+           $modules, $admin_modules, $theme_settings, $langChooseLang;
 
     if ($uid and !defined('UPGRADE')) {
         if (!$embed) {
@@ -80,7 +80,7 @@ function template_callback($template, $menuTypeID, $embed)
     if ($menuTypeID != 2) {
         $lang_select = "<li class='dropdown'>
           <a href='#' class='dropdown-toggle' role='button' id='dropdownMenuLang' data-toggle='dropdown'>
-              <span class='fa fa-globe'></span>
+              <span class='fa fa-globe'></span><span class='sr-only'>$langChooseLang</span>
           </a>
           <ul class='dropdown-menu' role='menu' aria-labelledby='dropdownMenuLang'>";
         foreach ($session->active_ui_languages as $code) {

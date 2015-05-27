@@ -166,11 +166,11 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
                                 <label for='uname' class='sr-only'>$langUsername</label>
-                                <input type='text' id='uname' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><span class='fa fa-user'></span></label>
+                                <input type='text' id='uname' name='uname' placeholder='$langUsername'><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
                              </div>
                              <div class='form-group'>
                                 <label for='pass' class='sr-only'>$langPass</label>
-                                <input type='password' id='pass' name='pass' placeholder='$langPass'><span id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></span>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><span class='fa fa-lock'></span></label>
+                                <input type='password' id='pass' name='pass' placeholder='$langPass'><span id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></span>&nbsp;&nbsp;<span class='col-xs-2 col-sm-2 col-md-2 fa fa-lock'></span>
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                            </form>
@@ -295,7 +295,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     if ($online_users > 0) {
         $tool_content .= "<div class='panel'>
                <div class='panel-body'>
-                   <i class='fa fa-group space-after-icon'></i> &nbsp;$langOnlineUsers: $online_users
+                   <span class='fa fa-group space-after-icon'></span> &nbsp;$langOnlineUsers: $online_users
                </div>
            </div>";
     }

@@ -1594,7 +1594,7 @@ ul.tablelist
     padding-right: 45px;
     bottom: 15px;
 }
-#scrollToTop i{
+#scrollToTop span{
     padding: 0 0 10px 0;
     color: #a7a7a7;
     cursor: pointer;
@@ -1706,14 +1706,14 @@ a.list-group-item.delete:hover{
                 text-align: left;
                 font-size: 0.9em;
                 line-height: 1.2em;
-                i{
+                span.fa{
                     display: inline-block;
                     width: 9%;
                     padding-top: 2px;
                     font-size: 1em;
                     vertical-align: top;
                 }
-                i.fa-rotate-90{
+                span.fa-rotate-90{
                     padding-left: 5px;
                     padding-top: 0px;
                     width: 10%;
@@ -1757,7 +1757,7 @@ a.list-group-item.delete:hover{
             background: transparent;
             text-align: left;
             @include transition(all $transition-time linear);
-            i{
+            span.fa{
                 display: inline-block;
                 width: 10%;
                 padding-top: 2px;
