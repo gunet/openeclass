@@ -48,7 +48,7 @@ if ($id != -1) {
         draw('', 2, null, $head_content);
         exit;
     }    
-    $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$id", "name" => htmlspecialchars($q->title));
+    $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", 'name' => $q->title);
 }
 
 

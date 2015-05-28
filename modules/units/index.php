@@ -138,7 +138,7 @@ if ($is_editor) {
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
     if ($info) {
-        $pageName = q($info->title);
+        $pageName = $info->title;
         $comments = trim($info->comments);
     } else {
         Session::Messages($langUnknownResType);

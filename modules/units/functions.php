@@ -286,7 +286,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
             $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>$file->filename</a>";
         } else {
             $image = choose_image('.' . $file->format);
-            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&download=$file->path";
+            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
             $download_hidden_link = "<input type='hidden' value='$download_url'>";
             $file_obj = MediaResourceFactory::initFromDocument($file);
             $file_obj->setAccessURL(file_url($file->path, $file->filename));
@@ -304,7 +304,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     return "
         <tr$class_vis>
           <td width='1'>" . icon($image, '') . "</td>
-          <td align='left'>$download_hidden_link$link$comment</td>" .
+          <td class='text-left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
             '</tr>';
 }
