@@ -788,8 +788,7 @@ if ($can_upload) {
         if ($row) {
             $curDirPath = my_dirname($comment);
             $backUrl = documentBackLink($curDirPath);
-            $navigation[] = array('url' => $backUrl, 'name' => $pageName);
-            $oldComment = '';
+            $navigation[] = array('url' => $backUrl, 'name' => $pageName);            
             $oldFilename = q($row->filename);
             $oldComment = q($row->comment);
             $oldCategory = $row->category;
@@ -801,7 +800,8 @@ if ($can_upload) {
             $oldAuthor = q($row->author);
             $oldLanguage = q($row->language);
             $oldCopyrighted = $row->copyrighted;
-
+            $oldFormat = $row->format;
+            
             $dialogBox .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
@@ -809,20 +809,23 @@ if ($can_upload) {
                   <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
                   $group_hidden_input
                   <div class='form-group'>
-                  <label class='col-sm-2 control-label'>$langWorkFile:</label>
-                  <div class='col-sm-10'>
-                      <p class='form-control-static'>$oldFilename</p>
-                  </div>
-                  </div>
-                  <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langWorkFile:</label>
+                    <div class='col-sm-10'>
+                        <p class='form-control-static'>$oldFilename</p>
+                    </div>
+                  </div>";
+            if ($row->format != '.dir') { // if we are editing files file info
+                  $dialogBox .= "<div class='form-group'>
                     <label class='col-sm-2 control-label'>$langTitle:</label>
                     <div class='col-sm-10'><input class='form-control' type='text' name='file_title' value='$oldTitle'></div>
-                  </div>
-                  <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langComment:</label>
-                    <div class='col-sm-10'><input class='form-control' type='text' name='file_comment' value='$oldComment'></div>
-                  </div>
-                  <div class='form-group'>
+                  </div>";
+            }
+                $dialogBox .= "<div class='form-group'>
+                  <label class='col-sm-2 control-label'>$langComment:</label>
+                  <div class='col-sm-10'><input class='form-control' type='text' name='file_comment' value='$oldComment'></div>
+                </div>";
+            if ($row->format != '.dir') { // if we are editing files file info
+                $dialogBox .= "<div class='form-group'>
                     <label class='col-sm-2 control-label'>$langCategory:</label>
                     <div class='col-sm-10'>" .
                         selection(array('0' => $langCategoryOther,
@@ -861,8 +864,17 @@ if ($can_upload) {
                                 'it' => $langItalian,
                                 'es' => $langSpanish), 'file_language', $oldLanguage, "class='form-control'") .
                         "</div>
-                </div>
-                <div class='form-group'>
+                </div>";
+            } else {
+                $dialogBox .= "<input type='hidden' size='80' name='file_title' value='$oldTitle'>
+                               <input type='hidden' size='80' name='file_category' value='$oldCategory'>
+                               <input type='hidden' size='80' name='file_subject' value='$oldSubject'>
+                               <input type='hidden' size='80' name='file_description' value='$oldDescription'>
+                               <input type='hidden' size='80' name='file_author' value='$oldAuthor'>
+                               <input type='hidden' size='80' name='file_copyrighted' value='$oldCopyrighted'>
+                               <input type='hidden' size='80' name='file_language' value='$oldLanguage'>";
+            }
+            $dialogBox .= "<div class='form-group'>
                     <div class='col-sm-offset-2 col-sm-10'>
                         <button class='btn btn-primary' type='submit' value='$langOkComment'>$langSave</button>
                         <a class='btn btn-default' href='$backUrl'>$langCancel</a>
@@ -872,10 +884,9 @@ if ($can_upload) {
                     <div class='col-sm-offset-2 col-sm-10'>
                         <span class='help-block'>$langNotRequired</span>
                     </div>
-                </div>
-                <input type='hidden' size='80' name='file_creator' value='$oldCreator'>
+                </div>";                                    
+                $dialogBox .= "<input type='hidden' size='80' name='file_creator' value='$oldCreator'>
                 <input type='hidden' size='80' name='file_date' value='$oldDate'>
-                <input type='hidden' size='80' name='file_oldLanguage' value='$oldLanguage'>
                 </fieldset>
                 </form></div>";
         } else {
