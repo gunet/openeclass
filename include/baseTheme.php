@@ -77,9 +77,9 @@ require_once 'tools.php';
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
     global $course_code, $course_id, $helpTopic,
-        $is_editor, $langActivate,
+        $is_editor, $langActivate, $langNote,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
-        $langChooseLang, $langDeactivate,
+        $langChooseLang, $langDeactivate, $langProfileMenu,
         $langEclass, $langHelp, $langUsageTerms,
         $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyPersoDeadlines,
@@ -90,7 +90,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
         $status, $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
-        $theme_settings, $language, $saved_is_editor,
+        $theme_settings, $language, $saved_is_editor, $langProfileImage,
         $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
 
     // negative course_id might be set in common documents
@@ -253,6 +253,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('LANG_USER', q($langUserHeader));
         $t->set_var('USER_NAME', q($_SESSION['givenname']));
         $t->set_var('USER_SURNAME', q($_SESSION['surname']));
+        $t->set_var('LANG_USER_ICON', $langProfileMenu);
         $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
         $t->set_var('USERNAME', q($_SESSION['uname']));
         $t->set_var('LANG_PROFILE', q($GLOBALS['langMyProfile']));
@@ -286,6 +287,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('langAllNotes', q($GLOBALS['langAllNotes']));
         $t->set_var('langAllMessages', q($GLOBALS['langAllMessages']));
         $t->set_var('langNoteTitle', q($langNoteTitle));
+        $t->set_var('langEnterNoteLabel', $langNote);
         $t->set_var('langEnterNote', q($langEnterNote));
         $t->set_var('langFieldsRequ', q($langFieldsRequ));
 
@@ -360,6 +362,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_ADVANCED_URL', $searchAdvancedURL);
     $t->set_var('SEARCH_TITLE', $langSearch);
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
+    $t->set_var('LANG_PORTFOLIO', $langPortfolio);
 
     $t->set_var('TOOL_NAME', $toolName);
 
@@ -385,7 +388,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         // Breadcrumb first entry (home / portfolio)
         if ($status != USER_GUEST) {
             if (isset($_SESSION['uid'])) {
-                $t->set_var('BREAD_TEXT', '<i class="fa fa-home"></i> ' . $langPortfolio);
+                $t->set_var('BREAD_TEXT', '<span class="fa fa-home"></span> ' . $langPortfolio);
                 $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');
             } else {
                 $t->set_var('BREAD_TEXT', $langHomePage);

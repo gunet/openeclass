@@ -77,10 +77,10 @@
                         <!-- END logoBlock -->
                         <ul class="nav navbar-nav navbar-right">
                             <!-- BEGIN LoggedInBlock -->
-                            <li><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span></a></li>
+                            <li><a href="{%URL_PATH%}main/portfolio.php"><span class="fa fa-home"></span><span class="sr-only">{%LANG_PORTFOLIO%}</span></a></li>
                             <li id="profile_menu_dropdown" class="dropdown">
                                <a class="dropdown-toggle clearfix" role="button" id="dropdownMenu1" data-toggle="dropdown">
-                                   <img alt="" class="img-circle user-icon" src="{%USER_ICON%}" style="display: block; float: left;"><div style="display: block; float: left;">{%USERNAME%}</div>
+                                   <img alt="{%LANG_USER_ICON%}" class="img-circle user-icon" src="{%USER_ICON%}" style="display: block; float: left;"><div style="display: block; float: left;">{%USERNAME%}</div>
                                 </a>
 
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
@@ -231,7 +231,7 @@
                             <label class='sr-only' for='search_terms'>{%SEARCH_TITLE%}</label>
                             <input type="text" class="form-control input-sm" id="search_terms" name="search_terms" placeholder="{%SEARCH_TITLE%}...">
                             <span class="input-group-btn">
-                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch" aria-label='{%SEARCH_TITLE%}'><span class="fa fa-search"></span></button>
+                                <button id="btn-search" class="btn btn-sm" type="submit" name="quickSearch"><span class="fa fa-search"></span><span class="sr-only">{%SEARCH_TITLE%}</span></button>
                             </span>
                         </div>
                     </form>
@@ -342,6 +342,7 @@
                                     </div>
                                     <div class="input-parent input-group">
                                         <span class="input-group-addon"><i class="fa fa-pencil"></i></span>
+                                        <label class="sr-only" for="text-note">{%langEnterNoteLabel%}</label>
                                         <textarea id="text-note" class="form-control" rows="6" placeholder="{%langEnterNote%}..."></textarea>
                                     </div>
                                     <button id="save_note" data-label="Save" class="btn btn-default btn-xs">{%langSave%}</button>

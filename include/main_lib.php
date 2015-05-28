@@ -2216,7 +2216,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false) {
+function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false) {
     global $themeimg;
 
     if (isset($title)) {
@@ -2225,8 +2225,11 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
     } else {
         $extra = '';
     }
-
-    $img = (isset($title) && $with_title) ? "<i class='fa $name' $extra></i> $title" : "<i class='fa $name' $extra></i>";
+    if (isset($title) && $with_title) {
+        $img = $sr_only ? "<i class='fa $name' $extra></i><span class='sr-only'>$title</span>" : "<i class='fa $name' $extra></i> $title";
+    } else {
+        $img = "<i class='fa $name' $extra></i>";
+    }
     if (isset($link)) {
         return "<a href='$link'$link_attrs>$img</a>";
     } else {
