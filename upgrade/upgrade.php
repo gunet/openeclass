@@ -2623,6 +2623,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             set_config('course_guest', 'link');
         }
 
+        // fix agenda entries without duration
+        Database::get()->query("UPDATE agenda SET duration = '0:00' WHERE duration = ''");
         // Fix wiki last_version id's
         Database::get()->query("UPDATE wiki_pages SET last_version = (SELECT MAX(id) FROM wiki_pages_content WHERE pid = wiki_pages.id)");
 
