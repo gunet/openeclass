@@ -809,7 +809,7 @@ if ($can_upload) {
                   <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
                   $group_hidden_input
                   <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$langWorkFile:</label>
+                    <label class='col-sm-2 control-label'>".($row->format != '.dir'? $langWorkFile : $langDirectory).":</label>
                     <div class='col-sm-10'>
                         <p class='form-control-static'>$oldFilename</p>
                     </div>
@@ -879,12 +879,14 @@ if ($can_upload) {
                         <button class='btn btn-primary' type='submit' value='$langOkComment'>$langSave</button>
                         <a class='btn btn-default' href='$backUrl'>$langCancel</a>
                     </div>
-                </div>
-                <div class='form-group'>
+                </div>";
+            if ($row->format != '.dir') { // if we are editing files file info
+                $dialogBox .= "<div class='form-group'>
                     <div class='col-sm-offset-2 col-sm-10'>
                         <span class='help-block'>$langNotRequired</span>
                     </div>
-                </div>";                                    
+                </div>";
+            }
                 $dialogBox .= "<input type='hidden' size='80' name='file_creator' value='$oldCreator'>
                 <input type='hidden' size='80' name='file_date' value='$oldDate'>
                 </fieldset>
