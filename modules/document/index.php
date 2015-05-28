@@ -408,7 +408,7 @@ if ($can_upload) {
             } else {
                 Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
                 if (isset($_GET['ebook_id']) && isset($_POST['section_id'])){
-                    $append_to_url = isset($_GET['from']) and $_GET['from'] == 'ebookEdit' ? "&from=ebookEdit" : "";
+                    $append_to_url = isset($_GET['from']) && $_GET['from'] == 'ebookEdit' ? "&from=ebookEdit" : "";
                     $redirect_url = "modules/ebook/new.php?course=$course_code&ebook_id=$ebook_id$append_to_url";
                 } else {
                     $append_to_url = isset($_POST['editPath']) ? "&editPath=$_POST[editPath]" : "&uploadPath=$curDirPath";
