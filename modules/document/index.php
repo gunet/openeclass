@@ -787,6 +787,7 @@ if ($can_upload) {
 
     // Add comment form
     if (isset($_GET['comment'])) {
+        
         $comment = $_GET['comment'];
         // Retrieve the old comment and metadata
         $row = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $comment);
@@ -807,6 +808,8 @@ if ($can_upload) {
             $oldCopyrighted = $row->copyrighted;
             $oldFormat = $row->format;
             
+            $is_file = $row->format != '.dir'? 1 : 0 ;
+            
             $dialogBox .= "<div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
                 <fieldset>
@@ -814,12 +817,12 @@ if ($can_upload) {
                   <input type='hidden' size='80' name='file_filename' value='$oldFilename' />
                   $group_hidden_input
                   <div class='form-group'>
-                    <label class='col-sm-2 control-label'>".($row->format != '.dir'? $langWorkFile : $langDirectory).":</label>
+                    <label class='col-sm-2 control-label'>".($is_file? $langWorkFile : $langDirectory).":</label>
                     <div class='col-sm-10'>
                         <p class='form-control-static'>$oldFilename</p>
                     </div>
                   </div>";
-            if ($row->format != '.dir') { // if we are editing files file info
+            if ($is_file) { // if we are editing files file info
                   $dialogBox .= "<div class='form-group'>
                     <label class='col-sm-2 control-label'>$langTitle:</label>
                     <div class='col-sm-10'><input class='form-control' type='text' name='file_title' value='$oldTitle'></div>
@@ -829,7 +832,7 @@ if ($can_upload) {
                   <label class='col-sm-2 control-label'>$langComment:</label>
                   <div class='col-sm-10'><input class='form-control' type='text' name='file_comment' value='$oldComment'></div>
                 </div>";
-            if ($row->format != '.dir') { // if we are editing files file info
+            if ($is_file) { // if we are editing files file info
                 $dialogBox .= "<div class='form-group'>
                     <label class='col-sm-2 control-label'>$langCategory:</label>
                     <div class='col-sm-10'>" .
@@ -885,7 +888,7 @@ if ($can_upload) {
                         <a class='btn btn-default' href='$backUrl'>$langCancel</a>
                     </div>
                 </div>";
-            if ($row->format != '.dir') { // if we are editing files file info
+            if ($is_file) { // if we are editing files file info
                 $dialogBox .= "<div class='form-group'>
                     <div class='col-sm-offset-2 col-sm-10'>
                         <span class='help-block'>$langNotRequired</span>
@@ -1088,6 +1091,10 @@ if ($can_upload) {
     // Dialog Box
     if (!empty($dialogBox)) {
         $tool_content .= $dialogBox;
+        if(isset($comment) && $is_file){
+            draw($tool_content, $menuTypeID);
+            exit;
+        }
     }
 }
 
