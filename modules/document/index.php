@@ -592,27 +592,28 @@ if ($can_upload) {
         $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
         $dialogBox .= "
         <div class='row'>
-        <div class='col-md-12'>
+            <div class='col-md-12'>
                 <div class='form-wrapper'>
-                        <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
-                            $group_hidden_input
-                            <input type='hidden' name='newDirPath' value='$createDir' />
-                            <div class='row'>
-                            <div class='col-sm-12'>
-                            <div class='input-group'>
-                                <input type='text' class='form-control' id='newDirName' name='newDirName' placeholder='$langNameDir'>
-                                <span class='input-group-btn'>
-                                    <button type='submit' class='btn btn-primary'>
-                                        $langCreate
-                                    </button>
-                                    <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-                                        $langCancel
-                                    </a>
-                                </span>
+                    <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-horizontal' role='form'>
+                        $group_hidden_input
+                        <input type='hidden' name='newDirPath' value='$createDir' />
+                        <div class='form-group'>
+                            <label for='newDirName' class='col-sm-2 control-label'>$langNameDir :</label>
+                            <div class='col-xs-10'>
+                                <input type='text' class='form-control' id='newDirName' name='newDirName'>
                             </div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-offset-2 col-xs-10'>
+                                <button type='submit' class='btn btn-primary'>
+                                    $langCreate
+                                </button>
+                                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                                    $langCancel
+                                </a>
                             </div>
-                            </div>
-                        </form>
+                        </div>
+                    </form>
                     
                 </div>
             </div>
