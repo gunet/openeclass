@@ -508,6 +508,7 @@ if ($can_upload) {
      ******************************************/
     // Step 2: Rename file by updating record in database
     if (isset($_POST['renameTo'])) {
+        
 
         $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_POST['sourceFile']);
 
@@ -535,11 +536,15 @@ if ($can_upload) {
 
     // Step 1: Show rename dialog box
     if (isset($_GET['rename'])) {
+        
+        $r = Database::get()->querySingle("SELECT id, filename, format FROM document WHERE $group_sql AND path = ?s", $_GET['rename']);
+        
         $fileName = Database::get()->querySingle("SELECT filename FROM document
                                              WHERE $group_sql AND
                                                    path = ?s", $_GET['rename'])->filename;
         $curDirPath = my_dirname($_GET['rename']);
-        $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
+        $backUrl = documentBackLink($curDirPath);
+        $navigation[] = array('url' => $backUrl, 'name' => $pageName);
         $dialogBox .= "
             <div class='row'>
                 <div class='col-xs-12'>
@@ -549,15 +554,15 @@ if ($can_upload) {
                                     <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
                                     $group_hidden_input
                                     <div class='form-group'>
-                                        <label for='renameTo' class='col-sm-3 control-label word-wrapping' >" . q($fileName) . "</label>
-                                        <div class='col-sm-9 input-group'>
-                                            <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
-                                            <div class='input-group-btn'><button class='btn btn-primary' type='submit' value='$langRename' >$langRename</button></div>
+                                        <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). " :</label>
+                                        <div class='col-xs-10'>
+                                            <input class='form-control' type='text' name='renameTo' placeholder='" . q($fileName) . "' />
                                         </div>
                                     </div>
                                     <div class='form-group'>
-                                        <div class='col-sm-offset-2 col-sm-10'>
-
+                                        <div class='col-xs-offset-2 col-xs-10'>
+                                            <button class='btn btn-primary' type='submit' value='$langRename' >$langRename</button>
+                                            <a class='btn btn-default' href='$backUrl'>$langCancel</a>
                                         </div>
                                     </div>
                             </fieldset>

@@ -3582,6 +3582,7 @@ $m['late_submission'] = "Εκπρόθεσμη Υποβολή";
 $m['late_submission_enable'] = "Ενεργοποίηση εκπρόθεσμης υποβολής";
 $m['username'] = "Όνομα " . $langsOfStudent . " ";
 $m['filename'] = "Όνομα αρχείου";
+$m['dirname'] = "Όνομα καταλόγου";
 $m['sub_date'] = "Ημ/νία αποστολής";
 $m['comments'] = "Σχόλια";
 $m['gradecomments'] = "Σχόλια βαθμολογητή";
