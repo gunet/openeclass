@@ -228,8 +228,9 @@ $db->query("CREATE TABLE course_user (
       `tutor` INT(11) NOT NULL DEFAULT 0,
       `editor` INT(11) NOT NULL DEFAULT 0,
       `reviewer` INT(11) NOT NULL DEFAULT 0,
-      `reg_date` DATE NOT NULL,
+      `reg_date` DATETIME NOT NULL,
       `receive_mail` BOOL NOT NULL DEFAULT 1,
+      `document_timestamp` datetime NOT NULL,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
 
 //
@@ -1254,6 +1255,7 @@ $default_config = array(
     'opencourses_enable', 0,
     'enable_indexing', 1,
     'enable_search', 1,
+    'course_guest', 'link',
     'version', ECLASS_VERSION);
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
     implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')),

@@ -2613,6 +2613,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.1
     // -----------------------------------
     if (version_compare($oldversion, '3.1', '<')) {
+        if (!DBHelper::fieldExists('course_user', 'document_timestamp')) {
+            Database::get()->query("ALTER TABLE `course_user` ADD document_timestamp DATETIME NOT NULL,
+                CHANGE `reg_date` `reg_date` DATETIME NOT NULL");
+            Database::get()->query("UPDATE `course_user` SET document_timestamp = NOW()");
+        }
+
+        if (get_config('course_guest') == '') {
+            set_config('course_guest', 'link');
+        }
+
         // Fix wiki last_version id's
         Database::get()->query("UPDATE wiki_pages SET last_version = (SELECT MAX(id) FROM wiki_pages_content WHERE pid = wiki_pages.id)");
 
@@ -2657,7 +2667,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE tags CHANGE `tag` `name` varchar (255)");
             Database::get()->query("ALTER TABLE tags ADD UNIQUE KEY (name)");
             Database::get()->query("RENAME TABLE `tags` TO `tag`");
-        }       
+        }
         Database::get()->query("CREATE TABLE IF NOT EXISTS tag (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `name` VARCHAR(255) NOT NULL,
@@ -2667,7 +2677,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
         }
         Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
-        
+
         //importing new theme
         $new_themes = array(
             "courses_theme_data_OpeneClass3 - Atoms (OpenCourses).zip",
@@ -2680,16 +2690,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         //unlinking files that were used with the old theme import mechanism
         @unlink("$webDir/template/default/img/bcgr_lines_petrol_les saturation.png");
         @unlink("$webDir/template/default/img/eclass-new-logo_atoms.png");
-        @unlink("$webDir/template/default/img/OpenCourses_banner_Color_theme1-1.png");      
+        @unlink("$webDir/template/default/img/OpenCourses_banner_Color_theme1-1.png");
         @unlink("$webDir/template/default/img/banner_Sketch_empty-1-2.png");
         @unlink("$webDir/template/default/img/eclass-new-logo_sketchy.png");
-        @unlink("$webDir/template/default/img/Light_sketch_bcgr2-1.png");       
+        @unlink("$webDir/template/default/img/Light_sketch_bcgr2-1.png");
         @unlink("$webDir/template/default/img/Open-eClass-4-1-1.jpg");
         @unlink("$webDir/template/default/img/eclass_ice.png");
-        @unlink("$webDir/template/default/img/eclass-new-logo_ice.png"); 
+        @unlink("$webDir/template/default/img/eclass-new-logo_ice.png");
         @unlink("$webDir/template/default/img/ice.png");
         @unlink("$webDir/template/default/img/eclass_classic2-1-1.png");
-        @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");         
+        @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");
     }
 
     // update eclass version
