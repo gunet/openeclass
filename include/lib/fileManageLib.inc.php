@@ -297,9 +297,11 @@ function directory_list() {
  * excluding the one with path $entryToExclude and all under $directoryToExclude
  */
 function directory_selection($source_value, $command, $entryToExclude, $directoryToExclude) {
-    global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
+    global $langParentDir, $langTo, $langMove, $langCancel;
     global $groupset;
 
+    $backUrl = documentBackLink($entryToExclude);
+    
     if (!empty($groupset)) {
         $groupset = '?' . $groupset;
     }
@@ -312,8 +314,8 @@ function directory_selection($source_value, $command, $entryToExclude, $director
                         <fieldset>
                                 <input type='hidden' name='source' value='$source_value'>
                                 <div class='form-group'>
-                                    <label for='$command' class='col-sm-4 control-label word-wrapping' >$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:</label>
-                                    <div class='col-sm-8'>
+                                    <label for='$command' class='col-sm-2 control-label' >$langMove $langTo:</label>
+                                    <div class='col-sm-10'>
                                         <select name='$command' class='form-control'>";
                                         if ($entryToExclude !== '/' and $entryToExclude !== '') {
                                             $dialogBox .= "<option value=''>$langParentDir</option>";
@@ -336,8 +338,9 @@ function directory_selection($source_value, $command, $entryToExclude, $director
                                         </div>
                                 </div>
                                 <div class='form-group'>
-                                    <div class='col-sm-offset-4 col-sm-8'>
+                                    <div class='col-sm-offset-2 col-sm-10'>
                                         <input class='btn btn-primary' type='submit' value='$langMove' >
+                                        <a href='$backUrl' class='btn btn-default' >$langCancel</a>
                                     </div>
                                 </div>
                         </fieldset>
