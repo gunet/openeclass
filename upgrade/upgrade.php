@@ -2678,15 +2678,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
 
-        //importing new theme
-        $new_themes = array(
-            "courses_theme_data_OpeneClass3 - Atoms (OpenCourses).zip",
-            "courses_theme_data_OpeneClass3 - School A.zip",
-            "courses_theme_data_OpeneClass3 - Sketch Icons.zip",
-            "courses_theme_data_OpeneClass3 - Sketchy (OpenCourses).zip",
-            "courses_theme_data_OpeneClass3 - Sketcy.zip"
-            );
-        importThemes($new_themes);
+        //importing new themes
+        importThemes();
         //unlinking files that were used with the old theme import mechanism
         @unlink("$webDir/template/default/img/bcgr_lines_petrol_les saturation.png");
         @unlink("$webDir/template/default/img/eclass-new-logo_atoms.png");

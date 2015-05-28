@@ -1468,14 +1468,7 @@ $db->query("CREATE TABLE IF NOT EXISTS tag (
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';
-$install_themes = array(
-    "courses_theme_data_OpeneClass3 - Atoms (OpenCourses).zip",
-    "courses_theme_data_OpeneClass3 - School A.zip",
-    "courses_theme_data_OpeneClass3 - Sketch Icons.zip",
-    "courses_theme_data_OpeneClass3 - Sketchy (OpenCourses).zip",
-    "courses_theme_data_OpeneClass3 - Sketcy.zip"
-    );
-importThemes($install_themes);
+importThemes();
 
 // create indices
 $db->query("CREATE INDEX `actions_daily_index` ON actions_daily(user_id, module_id, course_id)");
