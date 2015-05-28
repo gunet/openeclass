@@ -593,8 +593,7 @@ if ($can_upload) {
         $dialogBox .= "
         <div class='row'>
         <div class='col-md-12'>
-                <div class='panel panel-default'>
-                    <div class='panel-body'>
+                <div class='form-wrapper'>
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline' role='form'>
                             $group_hidden_input
                             <input type='hidden' name='newDirPath' value='$createDir' />
@@ -614,7 +613,7 @@ if ($can_upload) {
                             </div>
                             </div>
                         </form>
-                    </div>
+                    
                 </div>
             </div>
         </div>";
@@ -1200,7 +1199,7 @@ if ($doc_count == 0) {
                 if (($copyid = $entry['copyrighted']) && $entry['copyrighted'] != 2) {
                     $copyicon = ($copyid == 1) ? 'fa-copyright' : 'fa-cc';
                     $link_title_extra .= "&nbsp;" .
-                        icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], 'target="_blank" style="color:#555555;"');
+                        icon($copyicon, $copyright_titles[$copyid], $copyright_links[$copyid], ' target="_blank" style="color:#555555;"');
                 }
                 $dload_msg = $langSave;
 
