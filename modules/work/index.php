@@ -59,11 +59,23 @@ $toolName = $langWorks;
 // main program
 //-------------------------------------------
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    $sid = $_POST['sid'];
-    $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
+    if (isset($_POST['sid'])) {
+        $sid = $_POST['sid'];
+        $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;        
+    } elseif ($_POST['assign_type']) {
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);                
+    } else {
+        $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                FROM user, course_user
+                                WHERE user.id = course_user.user_id 
+                                AND course_user.course_id = ?d AND course_user.status = 5 
+                                AND user.id", $course_id);                
+
+    }
     echo json_encode($data);
-    exit();    
+    exit;    
 }
+
 //Gets the student's assignment file ($file_type=NULL) 
 //or the teacher's assignment ($file_type=1)
 if (isset($_GET['get'])) {
@@ -184,19 +196,7 @@ if ($is_editor) {
         $pageName = $langNewAssign;
         $navigation[] = $works_url;        
         new_assignment();
-    } elseif (isset($_POST['assign_type'])) {
-        if ($_POST['assign_type']) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);                
-        } else {
-            $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                    FROM user, course_user
-                                    WHERE user.id = course_user.user_id 
-                                    AND course_user.course_id = ?d AND course_user.status = 5 
-                                    AND user.id", $course_id);                
-               
-        }
-        echo json_encode($data);
-        exit;      
+  
     } elseif (isset($_POST['new_assign'])) {
         add_assignment();
     } elseif (isset($_GET['as_id'])) {
