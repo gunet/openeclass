@@ -43,14 +43,14 @@ if (!$success) {
     $tool_content.="<br /><div class='alert alert-success'>$langBackupSuccesfull</div>";
     $tool_content .= action_bar(array(
         array('title' => $langDownloadIt,
-            'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
-            'icon' => 'fa-download',
-            'button-class' => 'btn-success',
-            'level' => 'primary-label'),
+              'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
+              'icon' => 'fa-download',
+              'button-class' => 'btn-success',
+              'level' => 'primary-label'),
         array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+              'url' => "index.php?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')), false);
 }
 
 draw($tool_content, 2);

@@ -310,6 +310,7 @@ if ($can_upload) {
                 'comment' => $_POST['file_comment'],
                 'title' => $_POST['file_title']));
             Session::Messages($langDownloadEnd, 'alert-success');
+            $session->setDocumentTimestamp($course_id);
             redirect_to_current_dir();
         } elseif (isset($_POST['file_content'])) {
             $v = new Valitron\Validator($_POST);
@@ -397,6 +398,7 @@ if ($can_upload) {
                         '  <title>' . q($title) . "</title>\n</head>\n<body>\n" .
                         purify($_POST['file_content']) .
                         "\n</body>\n</html>\n");
+                    $session->setDocumentTimestamp($course_id);
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $id);
                     Session::Messages($langDownloadEnd, 'alert-success');
                     if (isset($_GET['from']) and $_GET['from'] == 'ebookEdit') {
@@ -585,6 +587,7 @@ if ($can_upload) {
             if ($path_already_exists) {
                 Session::Messages($langFileExists, 'alert-danger');
             } else {
+                $session->setDocumentTimestamp($course_id);
                 $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $newDirPath);
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $r->id);
                 Session::Messages($langDirCr, 'alert-success');
@@ -597,7 +600,8 @@ if ($can_upload) {
     // step 1: display a field to enter the new dir name
     if (isset($_GET['createDir'])) {
         $curDirPath = $createDir = q($_GET['createDir']);
-        $navigation[] = array('url' => documentBackLink($curDirPath), 'name' => $pageName);
+        $backLink = documentBackLink($curDirPath);
+        $navigation[] = array('url' => $backLink, 'name' => $pageName);
         $dialogBox .= "
         <div class='row'>
             <div class='col-md-12'>
@@ -616,7 +620,7 @@ if ($can_upload) {
                                 <button type='submit' class='btn btn-primary'>
                                     $langCreate
                                 </button>
-                                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                                <a class='btn btn-default' href='$backLink'>
                                     $langCancel
                                 </a>
                             </div>
@@ -745,6 +749,7 @@ if ($can_upload) {
                         Database::get()->query("UPDATE document SET path = ?s, filename=?s WHERE $group_sql AND path = ?s"
                                 , ($newpath . ".xml"), ($_FILES['newFile']['name'] . ".xml"), ($oldpath . ".xml"));
                     }
+                    $session->setDocumentTimestamp($course_id);
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_DOCUMENT, $docId);
                     Log::record($course_id, MODULE_ID_DOCS, LOG_MODIFY, array('oldpath' => $oldpath,
                         'newpath' => $newpath,
@@ -933,7 +938,7 @@ if ($can_upload) {
             $newVisibilityStatus = 0;
             $visibilityPath = $_GET['mkInvisibl'];
         }
-        Database::get()->query("UPDATE document SET visible=?d
+        Database::get()->query("UPDATE document SET visible = ?d
                                           WHERE $group_sql AND
                                                 path = ?s", $newVisibilityStatus, $visibilityPath);
         $r = Database::get()->querySingle("SELECT id FROM document WHERE $group_sql AND path = ?s", $visibilityPath);
@@ -994,14 +999,21 @@ if (isset($_GET['rev'])) {
 
 list($filter, $compatiblePlugin) = (isset($_REQUEST['docsfilter'])) ? select_proper_filters($_REQUEST['docsfilter']) : array('', true);
 
+if (!$is_in_tinymce) {
+    $document_timestamp = $session->getDocumentTimestamp($course_id);
+} else {
+    $document_timestamp = false;
+}
+
 /* * * Retrieve file info for current directory from database and disk ** */
 $result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, course_id, date_modified, public, visible, editable, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
                         WHERE $group_sql AND
-                                path LIKE '$curDirPath/%' AND
-                                path NOT LIKE '$curDirPath/%/%' $filter $order");
+                              path LIKE '$curDirPath/%' AND
+                              path NOT LIKE '$curDirPath/%/%' $filter $order");
 
 $fileinfo = array();
 foreach ($result as $row) {
+    $is_dir = $row->format == '.dir';
     if ($real_path = common_doc_path($row->extra_path, true)) {
         // common docs
         if (!$common_doc_visible and !$is_admin) {
@@ -1018,8 +1030,22 @@ foreach ($result as $row) {
     } else {
         $size = file_exists($path)? filesize($path): 0;
     }
+    if (!$document_timestamp) {
+        $updated = false;
+    } elseif ($row->date_modified > $document_timestamp) {
+        $updated = true;
+    } elseif ($is_dir) {
+        $updated = Database::get()->querySingle("SELECT COUNT(*) AS c FROM document
+            WHERE $group_sql AND
+                  path LIKE ?s AND
+                  date_modified > ?t" .
+                  ($can_upload? '': ' AND visible=1'), 
+            $row->path . '/%', $document_timestamp)->c;
+    } else {
+        $updated = false;
+    }
     $fileinfo[] = array(
-        'is_dir' => ($row->format == '.dir'),
+        'is_dir' => $is_dir,
         'size' => $size,
         'title' => $row->title,
         'filename' => $row->filename,
@@ -1032,7 +1058,8 @@ foreach ($result as $row) {
         'copyrighted' => $row->copyrighted,
         'date' => $row->date_modified,
         'object' => MediaResourceFactory::initFromDocument($row),
-        'editable' => $row->editable);
+        'editable' => $row->editable,
+        'updated' => $updated);
 }
 // end of common to teachers and students
 // ----------------------------------------------
@@ -1228,6 +1255,13 @@ if ($doc_count == 0) {
                     $dObj->setPlayURL($dObj->getAccessURL());
 
                 $link_href = MultimediaHelper::chooseMediaAhref($dObj);
+            }
+            if ($entry['updated']) {
+                if ($entry['is_dir'] and $entry['updated'] > 1) {
+                    $link_title_extra .= '&nbsp;' . "<span class='label label-success'>$entry[updated] new items!</span>";
+                } else {
+                    $link_title_extra .= '&nbsp;' . "<span class='label label-success'>New item!</span>";
+                }
             }
             if (!$entry['extra_path'] or common_doc_path($entry['extra_path'])) {
                 // Normal or common document
@@ -1506,3 +1540,4 @@ function newPageFileName($uploadPath, $prefix, $suffix) {
         preg_quote($prefix) . '[0-9]+' . preg_quote($suffix))->newPageId;
     return $prefix . $newId . $suffix;
 }
+
