@@ -330,7 +330,7 @@ $bar_content_2 = "<br><b>$langConfidentiality:</b> $lessonStatus";
 if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/?course=$course_code'>$numUsers $langRegistered</a>";
 } else {
-    $link = "$numUsers $langRegistered";
+    $link = "<a href='{$urlAppend}modules/user/userslist.php?course=$course_code'>$numUsers $langRegistered</a>";
 }
 $bar_content_2 .= "<br><b>$langUsers:</b> $link";
 
