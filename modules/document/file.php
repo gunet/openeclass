@@ -86,16 +86,16 @@ require_once 'include/lib/forcedownload.php';
 
 if (defined('GROUP_DOCUMENTS')) {
     if (!$uid) {
-        error($langNoRead);
+        forbidden();
     }
     if (!($is_editor or $is_member)) {
-        error($langNoRead);
+        forbidden();
     }
 }
 
 $file_info = public_path_to_disk_path($path_components);
-if (!$is_editor and ! resource_access($file_info->visible, $file_info->public)) {
-    error($langNoRead);
+if (!$is_editor and !resource_access($file_info->visible, $file_info->public)) {
+    forbidden();
 }
 
 if ($file_info->extra_path) {
