@@ -1272,7 +1272,7 @@ function add_units_navigation($entry_page = false) {
                        WHERE id = $unit_id AND course_id = ?d $visibility_check", $course_id);
         if ($q) {
             $unit_name = $q->title;
-            $navigation[] = array("url" => "../units/index.php?course=$course_code&amp;id=$unit_id", "name" => htmlspecialchars($unit_name));
+            $navigation[] = array('url' => "../units/index.php?course=$course_code&amp;id=$unit_id", 'name' => $unit_name);
         }
         return true;
     } else {
