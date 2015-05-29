@@ -159,13 +159,13 @@ $(document).ready(function () {
 
     // Leftnav - rotate Category Menu Item icon
     if ($(".collapse.in").length > 0) { //when page first loads the show.bs.collapse event is not triggered
-        $(".collapse.in").prev("a").find("i").addClass("fa-rotate-90");
+        $(".collapse.in").prev("a").find("span.fa").addClass("fa-rotate-90");
     }
     $('.panel-collapse').on('show.bs.collapse', function () {
-        $(this).prev("a").find("i").addClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").addClass("fa-rotate-90");
     });
     $('.panel-collapse').on('hide.bs.collapse', function () {
-        $(this).prev("a").find("i").removeClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").removeClass("fa-rotate-90");
     });
 
     // ScrollTop - When page is scrolled down and we click on menu item then the menu is collapsed
@@ -256,7 +256,7 @@ $(document).ready(function () {
                             var id = $(this).data('id');
                             if (data.notifications[id]) {
                                 $(this).html(data.notifications[id]);
-                                $(this).closest('.panel').find('i.lesson-title-caret').removeClass('fa-caret-down').addClass('fa-bell alert-info').attr('rel', 'tooltip').attr('title', data.langNotificationsExist);
+                                $(this).closest('.panel').find('span.lesson-title-caret').removeClass('fa-caret-down').addClass('fa-bell alert-info').attr('rel', 'tooltip').attr('title', data.langNotificationsExist);
                             }
                         });
                         tooltip_init();
