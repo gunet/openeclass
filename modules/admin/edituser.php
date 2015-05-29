@@ -268,7 +268,7 @@ if ($u) {
         </fieldset>
         </form>
         </div>";
-        $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, b.reg_date, b.status
+        $sql = Database::get()->queryArray("SELECT a.code, a.title, a.id, a.visible, DATE(b.reg_date) AS reg_date, b.status
                             FROM course AS a
                             JOIN course_department ON a.id = course_department.course
                             JOIN hierarchy ON course_department.department = hierarchy.id

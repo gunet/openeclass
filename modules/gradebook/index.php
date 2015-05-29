@@ -646,7 +646,7 @@ if ($is_editor) {
         } else {  // display all students
             $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, 
                                                                 gradebook_users.uid as userID,                                                             
-                                                                user.am as am, course_user.reg_date as reg_date 
+                                                                user.am as am, DATE(course_user.reg_date) as reg_date 
                                                      FROM gradebook_users, user, course_user 
                                                         WHERE gradebook_id = ?d 
                                                         AND gradebook_users.uid = user.id 
@@ -1062,7 +1062,7 @@ if ($is_editor) {
         $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
 
         //show all the students
-        $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM gradebook_users, user, course_user  WHERE gradebook_id = ?d AND gradebook_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
+        $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, DATE(course_user.reg_date) as reg_date   FROM gradebook_users, user, course_user  WHERE gradebook_id = ?d AND gradebook_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
 
         if ($resultUsers) {
             //table to display the users

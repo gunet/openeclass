@@ -508,10 +508,10 @@ function get_cas_attrs($phpCASattrs, $settings) {
  * ************************************************************** */
 
 function process_login() {
-    global $warning, $surname, $givenname, $email, $status, $is_admin, $language,
-    $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-    $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
-    $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
+    global $warning, $surname, $givenname, $email, $status, $is_admin,
+        $language, $session, $langInvalidId, $langAccountInactive1,
+        $langAccountInactive2, $langNoCookies, $langEnterPlatform, $urlServer,
+        $langHere, $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
 
     if (isset($_POST['uname'])) {
         $posted_uname = canonicalize_whitespace($_POST['uname']);
@@ -616,6 +616,7 @@ function process_login() {
         } else {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
                     . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+            $session->setLoginTimestamp();
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
@@ -636,6 +637,8 @@ function process_login() {
  * ************************************************************** */
 
 function login($user_info_object, $posted_uname, $pass) {
+    global $session;
+
     $pass_match = false;
     $hasher = new PasswordHash(8, false);
 
@@ -684,6 +687,7 @@ function login($user_info_object, $posted_uname, $pass) {
             $_SESSION['email'] = $user_info_object->email;
             $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
             $auth_allow = 1;
+            $session->setLoginTimestamp();
         } else {
             $auth_allow = 3;
             $GLOBALS['inactive_uid'] = $user_info_object->id;
@@ -790,8 +794,9 @@ function alt_login($user_info_object, $uname, $pass) {
  * ************************************************************** */
 
 function shib_cas_login($type) {
-    global $surname, $givenname, $email, $status, $language, $urlServer,
-    $is_admin, $is_power_user, $is_usermanage_user, $is_departmentmanage_user, $langUserAltAuth;
+    global $surname, $givenname, $email, $status, $language, $session,
+        $urlServer, $is_admin, $is_power_user, $is_usermanage_user,
+        $is_departmentmanage_user, $langUserAltAuth;
 
     $alt_auth_stud_reg = get_config('alt_auth_stud_reg');
 
@@ -924,7 +929,7 @@ function shib_cas_login($type) {
 
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
-
+    $session->setLoginTimestamp();
     if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
         $_SESSION['mail_verification_required'] = 1;

@@ -379,8 +379,8 @@ if (isset($_POST['submit'])) {
     if (get_config('allow_teacher_clone_course') || $is_admin) {
         $action_bar_array0 = array_merge($action_bar_array0, array(
             array('title' => $langCloneCourse,
-                'url' => "clone_course.php?course=$course_code",
-                'icon' => 'fa-archive')
+                  'url' => "clone_course.php?course=$course_code",
+                  'icon' => 'fa-archive')
         ));
     }
     

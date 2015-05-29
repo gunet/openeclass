@@ -81,7 +81,6 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'course_vis' => true,
         'course_prof' => true), 'all', 'autounquote');
     create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
-    $tool_content .= "</p><br /><center><p><a href='../admin/index.php'>" . $GLOBALS['langBack'] . "</a></p></center>";
 } elseif (isset($_POST['do_restore'])) {
     $base = $_POST['restoreThis'];
     if (!file_exists($base . '/config_vars')) {

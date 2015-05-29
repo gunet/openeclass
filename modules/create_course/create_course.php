@@ -535,7 +535,7 @@ if (!isset($_POST['create_course'])) {
     //=======================================================
 
 
-    // create course  modules
+    // create course modules
     create_modules($new_course_id);
 
     Database::get()->query("INSERT INTO course_user SET
@@ -543,7 +543,9 @@ if (!isset($_POST['create_course'])) {
                                         user_id = ?d,
                                         status = 1,
                                         tutor = 1,
-                                        reg_date = CURDATE()", intval($new_course_id), intval($uid));
+                                        reg_date = NOW(),
+                                        document_timestamp = NOW()",
+                           intval($new_course_id), intval($uid));
 
     Database::get()->query("INSERT INTO group_properties SET
                                         course_id = ?d,
@@ -556,11 +558,10 @@ if (!isset($_POST['create_course'])) {
                                         agenda = 0", intval($new_course_id));
     $course->refresh($new_course_id, $departments);
 
-
-    // creation of course index.php
+    // create courses/<CODE>/index.php
     course_index($code);
 
-    //add a default forum category
+    // add a default forum category
     Database::get()->query("INSERT INTO forum_category
                             SET cat_title = ?s,
                             course_id = ?d", $langForumDefaultCat, $new_course_id);
@@ -570,11 +571,11 @@ if (!isset($_POST['create_course'])) {
     $tool_content .= "<div class='alert alert-success'><b>$langJustCreated:</b> " . q($title) . "<br>
                         <span class='smaller'>$langEnterMetadata</span></div>";
     $tool_content .= action_bar(array(
-                array('title' => $langEnter,
-                    'url' => "../../courses/$code/index.php",
-                    'icon' => 'fa-arrow-right',
-                    'level' => 'primary-label',
-                    'button-class' => 'btn-success')));
+        array('title' => $langEnter,
+              'url' => $urlAppend . "courses/$code/",
+              'icon' => 'fa-arrow-right',
+              'level' => 'primary-label',
+              'button-class' => 'btn-success')));
     
     // logging
     Log::record(0, 0, LOG_CREATE_COURSE, array('id' => $new_course_id,
