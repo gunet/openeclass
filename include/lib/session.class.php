@@ -111,7 +111,7 @@ class Session {
     }
 
     public function getDocumentTimestamp($course_id) {
-        if ($this->user_id and $this->status != USER_GUEST) {
+        if ($this->user_id and $this->status != USER_GUEST and isset($this->login_timestamp)) {
             if (!isset($_SESSION['document_timestamp'][$course_id])) {
                 // First time in this login session we check the document timestamp
                 // for this course, so get the previous value and update the
