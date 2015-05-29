@@ -15,7 +15,7 @@
  *
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greeceαψτι
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
@@ -391,15 +391,15 @@ if (isset($_POST['submit'])) {
         array('title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',
-            'show' => get_config('course_metadata')),
-        array('title' => $langDelCourse,
-            'url' => "delete_course.php?course=$course_code",
-            'icon' => 'fa-times',
-            'button-class' => 'btn-danger'),                
+            'show' => get_config('course_metadata')),                
         array('title' => $langCourseMetadataControlPanel,
             'url' => "../course_metadata/control.php?course=$course_code",
             'icon' => 'fa-list',
             'show' => get_config('opencourses_enable') && $is_opencourses_reviewer),
+        array('title' => $langDelCourse,
+            'url' => "delete_course.php?course=$course_code",
+            'icon' => 'fa-times',
+            'button-class' => 'btn-danger')
     ));
     
     $tool_content .= "
