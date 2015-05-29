@@ -269,6 +269,7 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
     if (!$file) {
+        $download_hidden_link = '';
         if (!$is_editor) {
             return '';
         }
