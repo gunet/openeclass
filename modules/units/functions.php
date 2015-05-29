@@ -120,10 +120,52 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resources($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources, $is_editor;
+    global $tool_content, $max_resource_id, $langAvailableUnitResources, 
+           $is_editor, $head_content, $langDownload, $langPrint, $langCancel;
     
-    $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
+    $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);    
     if (count($req) > 0) {
+        $head_content .= "<script>
+        $(function(){
+            $('.fileModal').click(function (e)
+            {
+                e.preventDefault();
+                var fileURL = $(this).attr('href');
+                var downloadURL = $(this).prev('input').val();
+                var fileTitle = $(this).attr('title');
+                bootbox.dialog({
+                    size: 'large',
+                    title: fileTitle,
+                    message: '<div class=\"row\">'+
+                                '<div class=\"col-sm-12\">'+
+                                    '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                '</div>'+
+                            '</div>',                          
+                    buttons: {
+                        download: {
+                            label: '<i class=\"fa fa-download\"></i> $langDownload',
+                            className: 'btn-success',
+                            callback: function (d) {                      
+                                window.location = downloadURL;                                                            
+                            }
+                        },                        
+                        print: {
+                            label: '<i class=\"fa fa-print\"></i> $langPrint',
+                            className: 'btn-primary',
+                            callback: function (d) {
+                                var iframe = document.getElementById('fileFrame');
+                                iframe.contentWindow.print();                                                               
+                            }
+                        },
+                        cancel: {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        }                        
+                    }
+                });                    
+            });
+        });
+        </script>";        
         $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
@@ -152,7 +194,7 @@ function show_resource($info) {
         return;
     }    
     switch ($info->type) {
-        case 'doc':
+        case 'doc':            
             $tool_content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
             break;
         case 'text':
@@ -223,49 +265,8 @@ function show_resource($info) {
  */
 function show_doc($title, $comments, $resource_id, $file_id) {
     global $is_editor, $course_id, $langWasDeleted, $urlServer,
-           $id, $course_code, $head_content, $langCancel, $langPrint, $langDownload;
-
-    $head_content .= "<script>
-    $(function(){
-        $('.fileModal').click(function (e)
-        {
-            e.preventDefault();
-            var fileURL = $(this).attr('href');
-            var downloadURL = $(this).prev('input').val();
-            var fileTitle = $(this).attr('title');
-            bootbox.dialog({
-                size: 'large',
-                title: fileTitle,
-                message: '<div class=\"row\">'+
-                            '<div class=\"col-sm-12\">'+
-                                '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
-                            '</div>'+
-                        '</div>',                          
-                buttons: {
-                    download: {
-                        label: '<i class=\"fa fa-download\"></i> $langDownload',
-                        className: 'btn-success',
-                        callback: function (d) {                      
-                            window.location = downloadURL;                                                            
-                        }
-                    },                        
-                    print: {
-                        label: '<i class=\"fa fa-print\"></i> $langPrint',
-                        className: 'btn-primary',
-                        callback: function (d) {
-                            var iframe = document.getElementById('fileFrame');
-                            iframe.contentWindow.print();                                                               
-                        }
-                    },
-                    cancel: {
-                        label: '$langCancel',
-                        className: 'btn-default'
-                    }                        
-                }
-            });                    
-        });
-    });
-    </script>";    
+           $id, $course_code;
+    
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
     if (!$file) {
