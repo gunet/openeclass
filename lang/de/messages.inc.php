@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language de
-// Generated 2015-05-26 15:50:22
+// Generated 2015-05-29 13:46:04
 
 $langCourse = "Kurs";
 $langIntro = "Die <b>$siteName</b> Plattform ist ein vollständiges System zur Verwaltung von eKursen, welches den asynchronen eLearning Dienst unterstützt in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -3161,7 +3161,7 @@ $m['NoneWorkGroupNoSubmission'] = 'There are no user groups that haven\'t submit
 $m['WorkUserNoSubmission'] = 'Users that haven\'t submitted their assignment' ;
 $m['NoneWorkUserNoSubmission'] = 'There are no users that haven\'t submitted their assignment' ;
 $m['WorkTitleValidation'] = 'Please enter Assignment Title';
-$langNewAssignSuccess = "The Assignment was successfully added!";
+$langNewAssignSuccess = "Assignment created successfully!";
 $langAssignmentSubsDeleted = "Assignment's submissions have been deleted";
 $langAllAssignmentSubsDeleted = "All Assignments' submissions have been deleted";
 $langDelError = "Assignment was not deleted. Please try again.";
@@ -3463,8 +3463,6 @@ $langUpgradeChangeUsername = "Username changed from %s to %s";
 $langNoStats = "No statistics available";
 $langCatVideoDirectory = "Multimedia file categories";
 $langCatVideoDirectoryCreated = "Category added";
-$langProfileMenu = "User Profile Menu";
-$langProfileImage = "Profile Image";
 $langMyProfile = "Μy Profile";
 $m['with_deadline'] = "With Submission Deadline";
 $m['late_submission'] = "Late Submission";
@@ -3878,5 +3876,15 @@ $langWarnAboutPHP = "Attention! For the correct operation of the platform, PHP v
 $langPHPVersion = 'PHP version';
 $langGuestLoginLabel = 'Course guest accounts';
 $langGuestLogin = 'Login with guest account';
-$langGuestLoginLinks = 'Activate guest login links in course list';
+$langGuestLoginLinks = 'Activate and add guest links in course list';
 $langGuestWarnEmptyPassword = 'Caution! You have entered an empty password for the guest user. This means that it is possible to access your course without entering a password.';
+$langInvalidArchive = 'Invalid course archive';
+$langPreviousMonth = "Previous $langMonth";
+$langNextMonth = "Next $langMonth";
+$langNew = 'New';
+$langNewAddedSingular = '%d added';
+$langNewAddedPlural = '%d added';
+$langProfileMenu = "User Profile Menu";
+$langProfileImage = "Profile Image";
+$m['dirname'] = "Directory name";
+$langEBookNoPages = "There are no pages at the moment in this ebook.";
