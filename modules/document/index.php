@@ -1006,11 +1006,10 @@ if (!$is_in_tinymce) {
 }
 
 /* * * Retrieve file info for current directory from database and disk ** */
-$result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, course_id, date_modified, public, visible, editable, copyrighted, comment, IF(title = '', filename, title) AS sort_key FROM document
+$result = Database::get()->queryArray("SELECT id, path, filename, format, title, extra_path, course_id, date_modified, public, visible, editable, copyrighted, comment, IF((title = '' OR title IS NULL), filename, title) AS sort_key FROM document
                         WHERE $group_sql AND
                               path LIKE '$curDirPath/%' AND
                               path NOT LIKE '$curDirPath/%/%' $filter $order");
-
 $fileinfo = array();
 foreach ($result as $row) {
     $is_dir = $row->format == '.dir';
