@@ -269,7 +269,6 @@ if (isset($_GET['an_id'])) {
 }
 if ($is_editor) {
   $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
-  $displayForm = true;
   /* up and down commands */
   if (isset($_GET['down'])) {
     $thisAnnouncementId = $_GET['down'];
@@ -426,21 +425,16 @@ if ($is_editor) {
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
             }
             $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
-            $message = "<div class='alert alert-success'>$langAnnAdd $langEmailSent<br />$messageInvalid</div>";
+            Session::Messages("$langAnnAdd $langEmailSent<br>$messageInvalid", 'alert-success');
         } // if $emailOption==1
         else {
-            $message = "<div class='alert alert-success'>$langAnnAdd</div>";
+            Session::Messages($langAnnAdd, 'alert-success');
         }
+        redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } // end of if $submit
 
-
-    // teacher display
-    if (isset($message) && $message) {
-        $tool_content .= $message . "<br/>";
-        $displayForm = false; //do not show form
-    }
     /* display form */
-    if ($displayForm && (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
+    if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
         
         if (isset($_GET['modify'])) {
             $langAdd = $pageName = $langModifAnn;
