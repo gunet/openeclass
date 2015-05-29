@@ -190,14 +190,14 @@ if (count($courses) > 0) {
                             <input type='hidden' name='uname' value='{$guestUser->username}'>
                             <input type='hidden' name='pass' value=''>
                             <input type='hidden' name='next' value='/courses/{$mycours->k}/'>
-                            <button type='submit' title='" . q($langGuestLogin) . "' name='submit' data-toggle='tooltip'>
-                                <i class='fa fa-plane'></i></button>
+                            <button class='btn btn-default' type='submit' title='" . q($langGuestLogin) .
+                                "' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
                         </form>";
                 } else {
                     $codelink .= "<a class='btn btn-default' role='button' href='" .
                         "{$urlAppend}main/login_form.php?user=" . urlencode($guestUser->username) . "&amp;next=%2Fcourses%2F" .
                             $mycours->k . "%2F' title='" . q($langGuestLogin) . "' data-toggle='tooltip'>
-                                <i class='fa fa-plane'></i></a>";
+                                <span class='fa fa-plane'></span></a>";
                 }
                 $codelink .= "</div>";
             }
