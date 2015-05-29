@@ -1259,6 +1259,9 @@ $langRoot = "Αρχικός κατάλογος";
 $langNoDocuments = "Δεν υπάρχουν έγγραφα";
 $langNoRead = "Δεν έχετε δικαίωμα ανάγνωσης σε αυτή την περιοχή";
 $langDownloadDir = "Λήψη όλου του καταλόγου";
+$langNew = 'Νέο';
+$langNewAddedSingular = 'Προστέθηκε %d';
+$langNewAddedPlural = 'Προστέθηκαν %d';
 
 // Special for group documents
 $langGroupSpace = "Περιοχή ομάδας χρηστών";

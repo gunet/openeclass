@@ -110,8 +110,9 @@ class Session {
         }
     }
 
-    public function getDocumentTimestamp($course_id) {
+    public function getDocumentTimestamp($course_id, $save=true) {
         if ($this->user_id and $this->status != USER_GUEST and isset($this->login_timestamp)) {
+            $_SESSION['document_timestamp_saved'][$course_id] = false;
             if (!isset($_SESSION['document_timestamp'][$course_id])) {
                 // First time in this login session we check the document timestamp
                 // for this course, so get the previous value and update the
@@ -120,10 +121,13 @@ class Session {
                     'SELECT document_timestamp FROM course_user
                         WHERE user_id = ?d AND course_id = ?d',
                     $this->user_id, $course_id)->document_timestamp;
+            }
+            if (!$_SESSION['document_timestamp_saved'][$course_id] and $save) {
                 Database::get()->query('UPDATE course_user
                         SET document_timestamp = ?t
                         WHERE user_id = ?d AND course_id = ?d',
                     $this->login_timestamp, $this->user_id, $course_id);
+                $_SESSION['document_timestamp_saved'][$course_id] = true;
             }
             return $_SESSION['document_timestamp'][$course_id];
         } else {

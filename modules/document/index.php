@@ -150,16 +150,15 @@ if ($can_upload) {
     $error = false;
     $uploaded = false;
     if (isset($_POST['uploadPath'])) {
-        $uploadPath = str_replace('\'', '', $_POST['uploadPath']);
-    } else {
-        $uploadPath = '';
+        $curDirPath = $uploadPath = $_POST['uploadPath'];
+    } elseif (isset($_POST['editPath'])) {
+        $curDirPath = $uploadPath = my_dirname($_POST['editPath']);
     }
     // Check if upload path exists
     if (!empty($uploadPath)) {
-        $result = Database::get()->querySingle("SELECT count(*) as total FROM document
-                        WHERE $group_sql AND
-                        path = ?s", $uploadPath);
-        if (!$result || !$result->total) {
+        $result = Database::get()->querySingle("SELECT id FROM document
+                        WHERE $group_sql AND path = ?s LIMIT 1", $uploadPath);
+        if (!$result or !$result->id) {
             $error = $langImpossible;
         }
     }
@@ -192,10 +191,12 @@ if ($can_upload) {
                 $realFileSize = 0;
                 $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
                 if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-                    $action_message .= "<div class='alert alert-danger'>$langNoSpace</div>";
+                    Session::Messages($langNoSpace, 'alert-danger');
                 } else {
-                    $action_message .= "<div class='alert alert-success'>$langDownloadAndZipEnd</div><br />";
+                    $session->setDocumentTimestamp($course_id);
+                    Session::Messages($langDownloadAndZipEnd, 'alert-success');
                 }
+                redirect_to_current_dir();
             } else {
                 $fileName = canonicalize_whitespace($_FILES['userFile']['name']);
                 $uploaded = true;
@@ -212,13 +213,6 @@ if ($can_upload) {
         $components = explode('/', $extra_path);
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
-        if (isset($_POST['uploadPath'])) {
-            $uploadPath = $_POST['uploadPath'];
-        } elseif (isset($_POST['editPath'])) {
-            $uploadPath = my_dirname($_POST['editPath']);
-        } else {
-            $uploadPath = '';
-        }
         $diskUsed = dir_total_space($basedir);
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
             Session::Messages($langNoSpace, 'alert-danger');
@@ -253,10 +247,6 @@ if ($can_upload) {
         redirect_to_current_dir();
     } elseif ($uploaded) {
         // No errors, so proceed with upload
-
-        // Will return here after upload
-        $curDirPath = $uploadPath;
-
         // File date is current date
         $file_date = date("Y\-m\-d G\:i\:s");
         // Try to add an extension to files witout extension,
@@ -429,7 +419,7 @@ if ($can_upload) {
         $moveTo = $_POST['moveTo'];
         $source = $_POST['source'];
         $sourceXml = $source . '.xml';
-        //check if source and destination are the same
+        // check if source and destination are the same
         if ($basedir . $source != $basedir . $moveTo or $basedir . $source != $basedir . $moveTo) {
             $r = Database::get()->querySingle("SELECT filename, extra_path FROM document WHERE $group_sql AND path=?s", $source);
             $filename = $r->filename;
@@ -1040,6 +1030,7 @@ foreach ($result as $row) {
                   date_modified > ?t" .
                   ($can_upload? '': ' AND visible=1'), 
             $row->path . '/%', $document_timestamp)->c;
+        $updated = intval($updated);
     } else {
         $updated = false;
     }
@@ -1256,11 +1247,15 @@ if ($doc_count == 0) {
                 $link_href = MultimediaHelper::chooseMediaAhref($dObj);
             }
             if ($entry['updated']) {
-                if ($entry['is_dir'] and $entry['updated'] > 1) {
-                    $link_title_extra .= '&nbsp;' . "<span class='label label-success'>$entry[updated] new items!</span>";
+                $link_title_extra .= "<span class='label label-success pull-right'>";
+                if (is_integer($entry['updated'])) {
+                    $link_title_extra .= sprintf(
+                        ($entry['updated'] > 1? $langNewAddedPlural: $langNewAddedSingular),
+                        $entry['updated']);
                 } else {
-                    $link_title_extra .= '&nbsp;' . "<span class='label label-success'>New item!</span>";
+                    $link_title_extra .= $langNew;
                 }
+                $link_title_extra .= "</span>";
             }
             if (!$entry['extra_path'] or common_doc_path($entry['extra_path'])) {
                 // Normal or common document
