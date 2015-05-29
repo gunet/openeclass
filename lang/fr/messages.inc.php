@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language fr
-// Generated 2015-05-29 13:46:05
+// Generated 2015-05-29 14:19:37
 
 $langCourse = "Cours";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -1519,7 +1519,7 @@ $langOfForum = "du forum";
 $langSubjects = "Sujets";
 $langPosts = "Posts";
 $langMessage = "Message";
-$langMessages = "Messages";
+$langMessages = 'Messages';
 $langAllOfThem = "tout";
 $langBodyMessage = "Corps du message";
 $langPostTitle = "Sujet de la publication";

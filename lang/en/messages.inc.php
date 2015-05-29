@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-05-29 13:46:02
+// Generated 2015-05-29 14:19:36
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -1429,8 +1429,8 @@ $langBodyCatNotify = "A new forum has been added";
 $langOfForum = "of forum";
 $langSubjects = "Topics";
 $langPosts = "Posts";
-$langMessage = "When you remove the test forum, it will remove all messages in that forum too.";
-$langMessages = "Messages";
+$langMessage = 'Message';
+$langMessages = 'Messages';
 $langAllOfThem = "all";
 $langBodyMessage = "Message body";
 $langPostTitle = "Post title";

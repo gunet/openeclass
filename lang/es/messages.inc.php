@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-05-29 13:46:02
+// Generated 2015-05-29 14:19:36
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -1410,8 +1410,8 @@ $langBodyCatNotify = "A new forum has been added";
 $langOfForum = "of forum";
 $langSubjects = "Topics";
 $langPosts = "Demo";
-$langMessage = "Cuando elimines el test del foro, también borrarás todos los mensajes del foro.";
-$langMessages = "Messages";
+$langMessage = 'Mensaje';
+$langMessages = 'Mensajes';
 $langAllOfThem = "all";
 $langBodyMessage = "Message body";
 $langPostTitle = "Post title";
