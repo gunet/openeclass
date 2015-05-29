@@ -2643,6 +2643,7 @@ $langMailVerifySuccessReq = "Creating account request has been renewed.";
 $langMailVerifySuccessU = "Your account has been enabled.";
 $langGlossaryIndex = 'Glossary Index';
 $langEBookNoSections = "No Ebook pages have been assigned to sections";
+$langEBookNoPages = "There are no pages at the moment in this ebook.";
 $langAdmins = "Administrators";
 $langManageUser = "Users administrator";
 $langHelpAdministrator = "Administrator can administrate platform";

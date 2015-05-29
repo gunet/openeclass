@@ -472,7 +472,7 @@ if ($can_upload) {
         $filePath = $_GET['filePath'];
         $curDirPath = my_dirname($_GET['filePath']);
         // Check if file actually exists
-        $r = Database::get()->querySingle("SELECT path, extra_path, format, filename FROM document
+        $r = Database::get()->querySingle("SELECT id, path, extra_path, format, filename FROM document
                                         WHERE $group_sql AND path = ?s", $filePath);
         $delete_ok = true;
         if ($r) {
@@ -493,6 +493,9 @@ if ($can_upload) {
                 }
             } else {
                 update_db_info('document', 'delete', $filePath, $r->filename);
+            }
+            if(isset($_GET['ebook_id'])){
+                Database::get()->query("DELETE FROM ebook_subsection WHERE file_id = ?d", $r->id);
             }
             if ($delete_ok) {
                 Session::Messages($langDocDeleted, 'alert-success');
