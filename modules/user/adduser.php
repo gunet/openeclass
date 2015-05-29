@@ -44,7 +44,8 @@ if (isset($_GET['add'])) {
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
     if ($result) {
-        $tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
+        Session::Messages( $langTheU . $langAdded, "alert alert-success");
+        //$tool_content .= "<div class='alert alert-success'>$langTheU $langAdded</div>";
         // notify user via email
         $email = uid_to_email($uid_to_add);
         if (!empty($email) and email_seems_valid($email)) {
@@ -53,9 +54,11 @@ if (isset($_GET['add'])) {
             send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
         }
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
+        Session::Messages( $langAddError, "alert alert-warning");
+        //$tool_content .= "<div class='alert alert-warning'>$langAddError</div>";
     }
-    $tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
+    redirect_to_home_page("modules/user/index.php?course=$course_code");
+    //$tool_content .= "<br /><p><a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAddBack</a></p><br />\n";
 } else {    
     register_posted_variables(array('search_surname' => true,
                                     'search_givenname' => true,
@@ -93,9 +96,11 @@ if (isset($_GET['add'])) {
                 <div class='col-sm-10'>
                     <input class='form-control' id='am' type='text' name='search_am' value='" . q($search_am) . "' placeholder='$langAm'></div>
                 </div>
+                <div class='form-group'>
                 <div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='search' value='$langSearch'>
                     <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                </div>
                 </div>
                 </fieldset>
                 </form>
