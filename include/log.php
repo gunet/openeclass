@@ -141,7 +141,7 @@ class Log {
             $tool_content .= "<table id = 'log_results_table' class='table-default'>";
             $tool_content .= "<thead>";
             // log header
-            $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
+            $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
             if ($course_id == -1) {
                 $tool_content .= "<th>$langCourse</th>";
             }
