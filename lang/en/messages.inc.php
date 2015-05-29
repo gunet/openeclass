@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language en
-// Generated 2015-05-29 14:19:36
+// Generated 2015-05-29 15:12:41
 
 $langCourse = "Course";
 $langIntro = "The <b>$siteName</b> platform is a complete eCourses Management System supporting the Asynchronous eLearning Service in <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -1558,7 +1558,7 @@ You can also:<ul><li>navigate the platform and your personal selections,</li><li
 $langYourRegTo = "Your are registered to";
 $langIsReg = "Your modifications have been registered";
 $langCanEnter = "Enter the classroom";
-$langChoice = "Choise";
+$langChoice = "Select";
 $langLessonName = "Course Name";
 $langPassTwo = "You have typed two different passwords";
 $langAgain = "Try again!";
@@ -2656,10 +2656,10 @@ $langInfoAboutEclass = "Info about $siteName";
 $lang_dont_mail_unverified_mails = "Don't send e-mail to $langUsersS with unverified e-mail addresses";
 $lang_email_from = "emails will be sent with sender email address";
 $langInsertMyMediaToolName = "Insert Multimedia";
-$langMediaAlreadyUsed = "This media file is already used in this learning path";
+$langMediaAlreadyUsed = "already used in this learning path";
 $langMediaAsModule = "Use Media File";
 $langMediaAsModuleLabel = "Multimedia";
-$langMediaInsertedAsModule = "Has added as course units of learning path";
+$langMediaInsertedAsModule = "added as learning path module";
 $langMediaTypeDesc = "Multimedia";
 $langAddRole = "Add Role";
 $langGiveRightTutor = "Add group tutor right";

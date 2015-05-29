@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-05-29 14:19:36
+// Generated 2015-05-29 15:12:42
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -2637,10 +2637,10 @@ $langInfoAboutEclass = "Info about $siteName";
 $lang_dont_mail_unverified_mails = "Don't send e-mail to $langUsersS with unverified e-mail addresses";
 $lang_email_from = "emails will be sent with sender email address";
 $langInsertMyMediaToolName = "Insert Multimedia";
-$langMediaAlreadyUsed = "This media file is already used in this learning path";
+$langMediaAlreadyUsed = "already used in this learning path";
 $langMediaAsModule = "Use Media File";
 $langMediaAsModuleLabel = "Multimedia";
-$langMediaInsertedAsModule = "Has added as course units of learning path";
+$langMediaInsertedAsModule = "added as learning path module";
 $langMediaTypeDesc = "Multimedia";
 $langAddRole = "Add Role";
 $langGiveRightTutor = "Add group tutor right";
