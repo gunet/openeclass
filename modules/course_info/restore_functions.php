@@ -271,22 +271,21 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
     }
     if (is_array($faculty)) {
         foreach ($faculty as $entry) {
-            $old_faculty_names[] = q($entry['name']);
+            $old_faculty_names[] = q(Hierarchy::unserializeLangField($entry['name']));
         }
         $old_faculty = implode('<br>', $old_faculty_names);
     } else {
-        $old_faculty = q($faculty . $type_label);
+        $old_faculty = q(Hierarchy::unserializeLangField($faculty) . $type_label);
     }
     $formAction = $_SERVER['SCRIPT_NAME'];
     if (isset($GLOBALS['course_code'])) {
         $formAction .= '?course=' . $GLOBALS['course_code'];
     }
-    $action_btn = action_bar(array(
+    return action_bar(array(
         array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
-    return $action_btn."
+              'url' => "index.php?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label'))) . "
         <div class='alert alert-info'>$langInfo1 <br> $langInfo2</div>  
                 <div class='row'>
                 <div class='col-md-12'>
@@ -321,7 +320,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                     <div class='form-group'>
                         <label class='col-sm-3 control-label'>$langFaculty:</label>
                         <div class='col-sm-9'>
-                            " . $tree_html . "<br>$langOldValue: <i> " . hierarchy::unserializeLangField($old_faculty) . "</i>
+                            " . $tree_html . "<br>$langOldValue: <i>$old_faculty</i>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -368,7 +367,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
 }
 
 function create_restored_course(&$tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof) {
-    global $webDir, $urlServer, $urlAppend;
+    global $webDir, $urlServer, $urlAppend, $langEnter, $langBack, $currentCourseCode;
     require_once 'modules/create_course/functions.php';
     require_once 'modules/course_info/restorehelper.class.php';
     require_once 'include/lib/fileManageLib.inc.php';
@@ -396,6 +395,9 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             exit;
         }
 
+        if (!file_exists($restoreThis)) {
+            redirect_to_home_page('modules/course_info/restore_course.php');
+        }
         $config_data = unserialize(file_get_contents($restoreThis . '/config_vars'));
         // If old $urlAppend didn't end in /, add it
         if (substr($config_data['urlAppend'], -1) !== '/') {
@@ -424,6 +426,11 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 floatval($course_data['dropbox_quota']), 
                 intval($course_data[$restoreHelper->getField('course', 'glossary_expand')])
             );
+            if (isset($course_data['home_layout']) and isset($course_data['course_image'])) {
+                $upd_course_sql .= ', home_layout = ?d, course_image = ?s ';
+                $upd_course_args[] = $course_data['home_layout'];
+                $upd_course_args[] = $course_data['course_image'];
+            }
             // Set keywords to '' if NULL
             if (!isset($upd_course_args[0])) {
                 $upd_course_args[0] = '';
@@ -460,7 +467,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             move_dir($restoreThis . '/video_files', $videodir);
         }
         course_index($new_course_code);
-        $tool_content .= "<p>" . $GLOBALS['langCopyFiles'] . " $coursedir</p>";
+        $tool_content .= "<div class='alert alert-info'>" . $GLOBALS['langCopyFiles'] . " $coursedir</div>";
 
         require_once 'upgrade/functions.php';
         load_global_messages();
@@ -909,6 +916,18 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
                 unlink($videodir . "/" . $videofile);
             }
         }
+        $backUrl = $urlAppend . (isset($currentCourseCode)? "courses/$currentCourseCode/": 'modules/admin/');
+        $tool_content .= action_bar(array(
+            array('title' => $langEnter,
+                  'url' => $urlAppend . "courses/$new_course_code/",
+                  'icon' => 'fa-arrow-right',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success'),
+            array('title' => $langBack,
+                  'url' => $backUrl,
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')), false);
+
     }
 }
 
@@ -937,6 +956,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $add_only_profs = false;
     }
 
+    require_once 'include/lib/user.class.php';
     foreach ($users as $data) {
         if ($add_only_profs and !$is_prof[$data[$restoreHelper->getField('user', 'id')]]) {
             continue;
@@ -944,32 +964,37 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
         $u = Database::get()->querySingle("SELECT * FROM user WHERE BINARY username = ?s", $data['username']);
         if ($u) {
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $u->id;
-            $tool_content .= "<p>" .
-                    sprintf($langRestoreUserExists, 
-                            '<b>' . q($data['username']) . '</b>', 
-                            '<i>' . q($u->givenname . " " . $u->surname) . '</i>', 
-                            '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] . " " . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
-                    "</p>\n";
+            $tool_content .= "<div class='alert alert-info'>" .
+                sprintf($langRestoreUserExists, 
+                    '<b>' . q($data['username']) . '</b>', 
+                    '<i>' . q(trim($u->givenname . ' ' . $u->surname)) . '</i>', 
+                    '<i>' . q(trim($data[$restoreHelper->getField('user', 'givenname')] .
+                        ' ' . $data[$restoreHelper->getField('user', 'surname')])) . '</i>') .
+                "</div>\n";
         } elseif (isset($_POST['create_users'])) {
+            $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
-                    . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
-                    . "registered_at = ?t, expires_at = ?t", 
-                    (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '', 
-                    (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '', 
-                    $data['username'], 
-                    (isset($data['password'])) ? $data['password'] : 'empty', 
-                    (isset($data['email'])) ? $data['email'] : '', 
-                    intval($data[$restoreHelper->getField('course_user', 'status')]), 
-                    (isset($data['phone'])) ? $data['phone'] : '', 
-                    date('Y-m-d H:i:s', time()), 
-                    date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
+                . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
+                . "registered_at = ?t, expires_at = ?t, document_timestamp = ?t", 
+                (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '', 
+                (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '', 
+                $data['username'], 
+                isset($data['password'])? $data['password']: 'empty', 
+                isset($data['email'])? $data['email']: '', 
+                intval($data[$restoreHelper->getField('course_user', 'status')]), 
+                isset($data['phone'])? $data['phone']: '', 
+                $now, 
+                date('Y-m-d H:i:s', time() + get_config('account_duration')),
+                isset($data['document_timestamp'])? $data['document_timestamp']: $now)->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
-            require_once 'include/lib/user.class.php';
             $user = new User();
             $user->refresh($user_id, $departments);
-            $tool_content .= "<p>" .
-                    sprintf($langRestoreUserNew, '<b>' . q($data['username']) . '</b>', '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] . " " . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
-                    "</p>\n";
+            $tool_content .= "<div class='alert alert-info'>" .
+                sprintf($langRestoreUserNew,
+                    '<b>' . q($data['username']) . '</b>',
+                    '<i>' . q($data[$restoreHelper->getField('user', 'givenname')] .
+                        ' ' . $data[$restoreHelper->getField('user', 'surname')]) . '</i>') .
+                "</div>\n";
         }
     }
     return $userid_map;
@@ -991,12 +1016,14 @@ function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
             $reviewer[$old_id] = (isset($cudata['reviewer'])) ? $cudata['reviewer'] : 0;
             $reg_date[$old_id] = $cudata['reg_date'];
             $receive_mail[$old_id] = $cudata['receive_mail'];
+            $document_timestamp[$old_id] = isset($cudata['document_timestamp'])?
+                $cudata['document_timestamp']: date('Y-m-d H:i:s', time());
         }
     }
 
     foreach ($userid_map as $old_id => $new_id) {
         Database::get()->query("INSERT INTO course_user SET course_id = ?d, user_id = ?d, status = ?d, tutor = ?d, editor = ?d, "
-                . "reviewer = ?d, reg_date = ?t, receive_mail = ?d",
+                . "reviewer = ?d, reg_date = ?t, receive_mail = ?d, document_timestamp = ?t",
                 intval($course_id),
                 intval($new_id),
                 intval($status[$old_id]), 
@@ -1004,8 +1031,8 @@ function register_users($course_id, $userid_map, $cours_user, $restoreHelper) {
                 intval($editor[$old_id]), 
                 intval($reviewer[$old_id]), 
                 $reg_date[$old_id], 
-                intval($receive_mail[$old_id]));
-        $tool_content .= "<p>$langPrevId=$old_id, $langNewId=$new_id</p>\n";
+                intval($receive_mail[$old_id]),
+                $document_timestamp[$old_id]);
     }
 }
 

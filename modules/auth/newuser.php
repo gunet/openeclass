@@ -289,6 +289,7 @@ if (!isset($_POST['submit'])) {
             $_SESSION['givenname'] = $givenname_form;
             $_SESSION['surname'] = $surname_form;
             $_SESSION['uname'] = $uname;
+            $session->setLoginTimestamp();
             $tool_content .= "<p>$langDear " . q("$givenname_form $surname_form") . ",</p>";
         }
         // user msg

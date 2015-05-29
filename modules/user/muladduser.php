@@ -134,7 +134,7 @@ function adduser($userid, $cid) {
         return false;
     } else {
         Database::get()->query("INSERT INTO course_user (user_id, course_id, status, reg_date)
-                                   VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $userid, $cid);
+                                   VALUES (?d, ?d, " . USER_STUDENT . ", NOW())", $userid, $cid);
 
         Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $userid,
                                                              'right' => '+5'));

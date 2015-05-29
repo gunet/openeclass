@@ -100,7 +100,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     $result = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname, user.email,
                            user.am, user.has_icon, course_user.status,
                            course_user.tutor, course_user.editor, course_user.reviewer, 
-                           course_user.reg_date
+                           DATE(course_user.reg_date) AS reg_date
                     FROM course_user, user
                     WHERE `user`.`id` = `course_user`.`user_id` 
                     AND `course_user`.`course_id` = ?d
