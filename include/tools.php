@@ -263,7 +263,7 @@ function loggedInMenu() {
     if ($new_msgs == 0) {
         array_push($sideMenuText, $GLOBALS['langMyDropBox']);
     } else {
-        array_push($sideMenuText, "<b>".$GLOBALS['langMyDropBox']." (".$new_msgs.")</b>");
+        array_push($sideMenuText, "<b>".$GLOBALS['langMyDropBox']." <span class='badge pull-right'>".$new_msgs."</span></b>");
     }
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
@@ -680,7 +680,7 @@ function lessonToolsMenu() {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
-                        array_push($sideMenuText, "<b>".q($modules[$mid]['title'])." (".$new_msgs.")$mail_status</b>");
+                        array_push($sideMenuText, "<b>".q($modules[$mid]['title'])." $mail_status<span class='badge pull-right'>".$new_msgs."</span></b>");
                     } else {
                         array_push($sideMenuText, "".q($modules[$mid]['title'])." ".$mail_status);
                     }

@@ -1759,7 +1759,7 @@ a.list-group-item.delete:hover{
                 font-size: 1em;
                 vertical-align: top;
             }
-            span{
+            &>span{
                 display: inline-block;
                 width: 87%;
                 font-size: 1em;
