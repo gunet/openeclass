@@ -45,6 +45,7 @@ class Tag {
         if (isset($id)) {
             require_once 'modules/tags/moduleElement.class.php';
             $moduleTag = new ModuleElement($id);
+
             $tags_init = $moduleTag->getTags();
             foreach ($tags_init as $key => $tag) {
                 $arrayTemp = "{id:\"" . js_escape($tag) . "\" , text:\"" . js_escape($tag) . "\"},";
@@ -89,7 +90,7 @@ class Tag {
                 <div class='form-group'>
                     <label for='tags' class='col-sm-2 control-label'>$langTags:</label>
                     <div class='col-sm-10'>
-                        <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
+                        <input type='hidden' id='tags' class='form-control' name='tags' class='form-control' id='tags' value=''>
                     </div>
                 </div>             
         ";

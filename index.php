@@ -28,6 +28,26 @@ session_start();
  *
  */
 
+// Handle alias of .../courses/<CODE>/... to index.php for course homes
+if (preg_match('|/courses/([a-zA-Z_-]+\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
+	$dbname = $matches[1];
+	if (!@chdir('courses/' . $dbname)) {
+		header('HTTP/1.0 404 Not Found');
+		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL ',$_SERVER['REQUEST_URI'],' was not found on this server.</p>
+</body></html>
+';
+		exit;
+	}
+	$_SESSION['dbname'] = $dbname;
+	require_once '../../modules/course_home/course_home.php';
+    exit;
+}
+
 define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
@@ -145,10 +165,12 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'title' => "<b>$langLogInWith</b><br>Credentials",
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
-                               <input type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
+                                <label for='uname' class='sr-only'>$langUsername</label>
+                                <input type='text' id='uname' name='uname' placeholder='$langUsername'><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
                              </div>
                              <div class='form-group'>
-                               <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                <label for='pass' class='sr-only'>$langPass</label>
+                                <input type='password' id='pass' name='pass' placeholder='$langPass'><span id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></span>&nbsp;&nbsp;<span class='col-xs-2 col-sm-2 col-md-2 fa fa-lock'></span>
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                            </form>
@@ -273,7 +295,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     if ($online_users > 0) {
         $tool_content .= "<div class='panel'>
                <div class='panel-body'>
-                   <i class='fa fa-group space-after-icon'></i> &nbsp;$langOnlineUsers: $online_users
+                   <span class='fa fa-group space-after-icon'></span> &nbsp;$langOnlineUsers: $online_users
                </div>
            </div>";
     }
@@ -301,7 +323,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
             <div class='panel' id='openeclass-banner'>
                 <div class='panel-body'>
                     <a href='http://www.openeclass.org/' target='_blank'>
-                        <img class='img-responsive center-block' src='$themeimg/open_eclass_banner.png' alt=''>
+                        <img class='img-responsive center-block' src='$themeimg/open_eclass_banner.png' alt='Open eClass Banner'>
                     </a>
                 </div>
             </div>";

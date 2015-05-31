@@ -15,7 +15,7 @@
  *
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greeceαψτι
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
@@ -382,8 +382,8 @@ if (isset($_POST['submit'])) {
     if (get_config('allow_teacher_clone_course') || $is_admin) {
         $action_bar_array0 = array_merge($action_bar_array0, array(
             array('title' => $langCloneCourse,
-                'url' => "clone_course.php?course=$course_code",
-                'icon' => 'fa-archive')
+                  'url' => "clone_course.php?course=$course_code",
+                  'icon' => 'fa-archive')
         ));
     }
     
@@ -394,15 +394,15 @@ if (isset($_POST['submit'])) {
         array('title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',
-            'show' => get_config('course_metadata')),
-        array('title' => $langDelCourse,
-            'url' => "delete_course.php?course=$course_code",
-            'icon' => 'fa-times',
-            'button-class' => 'btn-danger'),                
+            'show' => get_config('course_metadata')),                
         array('title' => $langCourseMetadataControlPanel,
             'url' => "../course_metadata/control.php?course=$course_code",
             'icon' => 'fa-list',
             'show' => get_config('opencourses_enable') && $is_opencourses_reviewer),
+        array('title' => $langDelCourse,
+            'url' => "delete_course.php?course=$course_code",
+            'icon' => 'fa-times',
+            'button-class' => 'btn-danger')
     ));
     
     $tool_content .= "

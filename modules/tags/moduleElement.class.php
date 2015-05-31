@@ -36,7 +36,11 @@ class ModuleElement {
     }
     
     public function getTags() {
-        $attached_tags = Database::get()->queryArray("SELECT `tag`.`id` AS id, `tag`.`name` AS name FROM `tag_element_module`, `tag` WHERE `tag_element_module`.`element_id` = ?d AND `tag_element_module`.`tag_id` = `tag`.`id`", $this->element_id);
+        $attached_tags = Database::get()->queryArray("SELECT `tag`.`id` AS id, `tag`.`name` AS name "
+                . "FROM `tag_element_module`, `tag` "
+                . "WHERE `tag_element_module`.`element_id` = ?d "
+                . "AND `tag_element_module`.`module_id` = ?d "
+                . "AND `tag_element_module`.`tag_id` = `tag`.`id`", $this->element_id, $this->module_id);
         $tags = array();
         if ($attached_tags) {
             foreach ($attached_tags as $attached_tag){
@@ -52,7 +56,7 @@ class ModuleElement {
         $tag_list = '';
         $i=1;
         foreach($tags_array as $tag){
-            $tag_list .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag."'>$tag</a> ";
+            $tag_list .= "<a href='../../modules/tags/?course=".$course_code."&amp;tag=".$tag."'>$tag</a> ";
             if ($i !== $total_tags) $tag_list .= ', ';
             $i++;
         }

@@ -59,11 +59,23 @@ $toolName = $langWorks;
 // main program
 //-------------------------------------------
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    $sid = $_POST['sid'];
-    $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;
+    if (isset($_POST['sid'])) {
+        $sid = $_POST['sid'];
+        $data['submission_text'] = Database::get()->querySingle("SELECT submission_text FROM assignment_submit WHERE id = ?d", $sid)->submission_text;        
+    } elseif ($_POST['assign_type']) {
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);                
+    } else {
+        $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                FROM user, course_user
+                                WHERE user.id = course_user.user_id 
+                                AND course_user.course_id = ?d AND course_user.status = 5 
+                                AND user.id", $course_id);                
+
+    }
     echo json_encode($data);
-    exit();    
+    exit;    
 }
+
 //Gets the student's assignment file ($file_type=NULL) 
 //or the teacher's assignment ($file_type=1)
 if (isset($_GET['get'])) {
@@ -184,19 +196,7 @@ if ($is_editor) {
         $pageName = $langNewAssign;
         $navigation[] = $works_url;        
         new_assignment();
-    } elseif (isset($_POST['assign_type'])) {
-        if ($_POST['assign_type']) {
-            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);                
-        } else {
-            $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                    FROM user, course_user
-                                    WHERE user.id = course_user.user_id 
-                                    AND course_user.course_id = ?d AND course_user.status = 5 
-                                    AND user.id", $course_id);                
-               
-        }
-        echo json_encode($data);
-        exit;      
+  
     } elseif (isset($_POST['new_assign'])) {
         add_assignment();
     } elseif (isset($_GET['as_id'])) {
@@ -1670,7 +1670,7 @@ function show_assignment($id, $display_graph_results = false) {
     $nav[] = $works_url;
     assignment_details($id, $assign);
     
-    $rev = (@($_REQUEST['rev'] == 1)) ? ' DESC' : '';
+    $rev = (@($_REQUEST['rev'] == 1)) ? 'DESC' : 'ASC';
     if (isset($_REQUEST['sort'])) {
         if ($_REQUEST['sort'] == 'am') {
             $order = 'am';
@@ -1687,11 +1687,11 @@ function show_assignment($id, $display_graph_results = false) {
         $order = 'surname';
     }
 
-    $result = Database::get()->queryArray("SELECT * FROM assignment_submit AS assign, user
+    $result1 = Database::get()->queryArray("SELECT * FROM assignment_submit AS assign, user
                                  WHERE assign.assignment_id = ?d AND user.id = assign.uid
                                  ORDER BY ?s ?s", $id, $order, $rev);
 
-    $num_results = count($result);
+    $num_results = count($result1);
     if ($num_results > 0) {
         if ($num_results == 1) {
             $num_of_submissions = $m['one_submission'];
@@ -1701,7 +1701,7 @@ function show_assignment($id, $display_graph_results = false) {
 
         $gradeOccurances = array(); // Named array to hold grade occurances/stats
         $gradesExists = 0;
-        foreach ($result as $row) {
+        foreach ($result1 as $row) {
             $theGrade = $row->grade;
             if ($theGrade) {
                 $gradesExists = 1;
@@ -1715,6 +1715,7 @@ function show_assignment($id, $display_graph_results = false) {
             }
         }
         if (!$display_graph_results) {
+            
             $result = Database::get()->queryArray("SELECT assign.id id, assign.file_name file_name,
                                                    assign.uid uid, assign.group_id group_id, 
                                                    assign.submission_date submission_date,
@@ -1724,8 +1725,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assignment.deadline deadline 
                                                    FROM assignment_submit AS assign, user, assignment
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
-                                                   ORDER BY ?s ?s", $id, $order, $rev);
-
+                                                   ORDER BY $order $rev", $id);
             $tool_content .= "
                         <form action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post' class='form-inline'>
                         <input type='hidden' name='grades_id' value='$id' />
@@ -2141,8 +2141,8 @@ function submit_grade_comments() {
     ));
     if($v->validate()) {
         $grade = $_POST['grade'];
-        $comment = $_POST['comments'];         
-        if(empty($grade)) $grade = null;
+        $comment = $_POST['comments'];
+        $grade = is_numeric($grade) ? $grade : null;
         if (Database::get()->query("UPDATE assignment_submit 
                                     SET grade = ?f, grade_comments = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
@@ -2186,9 +2186,7 @@ function submit_grades($grades_id, $grades, $email = false) {
         $v->labels(array(
             'grade' => "$langTheField $m[grade]"
         ));        
-        if($v->validate()) {
-
-        } else {
+        if(!$v->validate()) {
             $valitron_errors = $v->errors();
             $errors["grade.$key"] = $valitron_errors['grade'];
         }
@@ -2197,10 +2195,10 @@ function submit_grades($grades_id, $grades, $email = false) {
         foreach ($grades as $sid => $grade) {
             $sid = intval($sid);
             $val = Database::get()->querySingle("SELECT grade from assignment_submit WHERE id = ?d", $sid)->grade;
-            
-            if (empty($grade)) $grade = NULL;
-            
-            if ($val != $grade) {
+
+            $grade = is_numeric($grade['grade']) ? $grade['grade'] : null;
+
+            if ($val !== $grade) {               
                 if (Database::get()->query("UPDATE assignment_submit
                                             SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
                                             WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {

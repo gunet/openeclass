@@ -140,7 +140,7 @@ hContent;
                 }
             }
             if (isset($_GET['id']) and isset($_GET['table_edit']))  {
-                $pageName = $langModify;
+                $pageName = $langEditChange;
             }
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
@@ -519,7 +519,7 @@ hContent;
                 </div>
                 <div class='form-group'>
                     <div class='col-sm-offset-2 col-sm-10'>
-                        <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langModify) . "'>
+                        <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langEditChange) . "'>
                         <input type='hidden' name='id' value='$id'>
                         <input type='hidden' name='table' value='$table_edit'>
                         <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
@@ -750,12 +750,13 @@ function delete_video_category($id)
  * @global type $course_id
  * @global type $course_code
  * @global type $langDelete
- * @global type $langVisible
+ * @global type $langViewHide
+  * @global type $langViewShow
  * @global type $langPreview
- * @global type $langSave
- * @global type $langResourceAccess
- * @global type $langResourceAccess
- * @global type $langModify
+ * @global type $langDownload
+ * @global type langResourceAccessLock
+ * @global type langResourceAccessUnlock
+ * @global type $langEditChange
  * @global type $langConfirmDelete
  * @global type $filterv
  * @global type $filterl
@@ -763,9 +764,9 @@ function delete_video_category($id)
  */
 function showlinksofcategory($cat_id = 0) {
 
-    global $course_id, $is_in_tinymce, $themeimg, $tool_content, $is_editor, $course_code;
-    global $langDelete, $langVisible, $langConfirmDelete, $display_tools;
-    global $langPreview, $langSave, $langResourceAccess, $langResourceAccess, $langModify;
+    global $course_id, $is_in_tinymce, $tool_content, $is_editor, $course_code;
+    global $langDelete, $langViewHide, $langViewShow, $langConfirmDelete, $display_tools;
+    global $langDownload, $langResourceAccessLock, $langResourceAccessUnlock, $langEditChange;
     global $filterv, $filterl, $compatiblePlugin, $langcreator, $langpublisher;
 
     if ($is_editor) {
@@ -826,27 +827,27 @@ function showlinksofcategory($cat_id = 0) {
                 if ($display_tools) {
                    $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
+                        array('title' => $langEditChange,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table",
+                              'icon' => 'fa-edit',
+                              'show' => !$is_in_tinymce and $is_editor),
+                        array('title' => $myrow->visible? $langViewHide : $langViewShow,
+                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;vis=" .
+                                       ($myrow->visible? '0': '1'),
+                              'icon' => $myrow->visible? 'fa-eye-slash' : 'fa-eye' ),
+                        array('title' => $myrow->public? $langResourceAccessLock : $langResourceAccessUnlock,
+                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;" .
+                                       ($myrow->public? 'limited=1': 'public=1'),
+                               'icon' => $myrow->public? 'fa-lock' : 'fa-unlock',
+                               'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN),
+                        array('title' => $langDownload,
+                              'url' => $link_to_save,
+                              'icon' => 'fa-download'),
                         array('title' => $langDelete,
                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table",
                               'icon' => 'fa-times',
                               'confirm' => $langConfirmDelete,
-                              'class' => 'delete'),
-                        array('title' => $langSave,
-                              'url' => $link_to_save,
-                              'icon' => 'fa-floppy-o'),
-                        array('title' => $langModify,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table",
-                              'icon' => 'fa-edit',
-                              'show' => !$is_in_tinymce and $is_editor),
-                        array('title' => $langVisible,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;vis=" .
-                                       ($myrow->visible? '0': '1'),
-                              'icon' => $myrow->visible? 'fa-eye-slash': 'fa-eye'),
-                        array('title' => $langResourceAccess,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;" .
-                                       ($myrow->public? 'limited=1': 'public=1'),
-                              'icon' => $myrow->public? 'fa-unlock': 'fa-lock',
-                              'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN))) .
+                              'class' => 'delete'))) .
                     "</td>";
                 }
                 $tool_content .= "</tr>";

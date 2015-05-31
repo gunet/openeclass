@@ -43,7 +43,7 @@ require_once 'modules/dropbox/class.msg.php';
  * @return string
  */
 function getUserLessonInfo($uid) {
-    global $teacher_courses_count, $student_courses_count;
+    global $teacher_courses_count, $student_courses_count, $langCourse, $langActions;
     global $session, $lesson_ids, $urlServer, $langUnregCourse, $langAdm;
     global $langNotEnrolledToLessons, $langWelcomeProfPerso, $langWelcomeStudPerso, $langWelcomeSelect;
 
@@ -83,7 +83,7 @@ function getUserLessonInfo($uid) {
     $student_courses_count = 0;
     if ($myCourses) {
         $lesson_content .= "<table id='portfolio_lessons' class='table table-striped'>";
-        $lesson_content .= "<thead style='display:none'><tr><th></th><th></th></tr></thead>";
+        $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
             $lesson_content .= "<tr>
@@ -95,7 +95,7 @@ function getUserLessonInfo($uid) {
                 $lesson_content .= icon('fa-sign-out', $langUnregCourse, "${urlServer}main/unregcours.php?cid=$data->course_id&amp;uid=$uid");
                 $student_courses_count++;
             } elseif ($data->status == USER_TEACHER) {
-                $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code);
+                $lesson_content .= icon('fa-wrench', $langAdm, "${urlServer}modules/course_info/?from_home=true&amp;course=" . $data->code, '', true, true);
                 $teacher_courses_count++;
             }
             $lesson_content .= "</td></tr>";

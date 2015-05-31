@@ -36,6 +36,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
 require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
@@ -54,9 +55,20 @@ $lang_editor = $language;
 load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
 
-if (isset($_REQUEST['edit_submit'])) {
-    units_set_maxorder();
-    $tool_content .= handle_unit_info_edit();
+if (isset($_REQUEST['edit_submitW'])) { //update title and comments for week
+    $title = $_REQUEST['weektitle'];
+    $descr = $_REQUEST['weekdescr'];
+    $unit_id = $_REQUEST['week_id'];
+    // tags
+    if (isset($_POST['tags'])) {
+        $tagsArray = explode(',', $_POST['tags']);
+        $moduleTag = new ModuleElement($unit_id);
+        $moduleTag->syncTags($tagsArray);
+    }          
+    Database::get()->query("UPDATE course_weekly_view SET
+                                    title = ?s,
+                                    comments = ?s
+                                WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
 }
 
 $form = process_actions();
@@ -68,7 +80,7 @@ if ($is_editor) {
         <div class='col-md-12'>" .
         action_bar(array(
             array('title' => $langEditUnitSection,
-                  'url' => "info.php?course=$course_code&amp;edit=$id&amp;next=1",
+                  'url' => "info.php?course=$course_code&amp;edit=$id&amp;cnt=$cnt",
                   'icon' => 'fa fa-edit',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success'),
@@ -151,14 +163,14 @@ foreach (array('previous', 'next') as $i) {
         $dir = 'DESC';
         $arrow1 = "<i class='fa fa-arrow-left space-after-icon'></i>";
         $arrow2 = '';        
-        $cnt--;
+        $link_count = $cnt - 1;
         $page_btn = 'pull-left';
     } else {
         $op = '>=';
         $dir = '';
         $arrow1 = '';
         $arrow2 = "<i class='fa fa-arrow-right space-before-icon'></i>";
-        $cnt += 2;
+        $link_count = $cnt + 1;
         $page_btn = 'pull-right';
     }
     
@@ -182,7 +194,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = $langFrom . " " . nice_format($q->start_week) . " $langUntil " .nice_format($q->finish_week);
-        $link[$i] = "<a class='btn btn-primary $page_btn' title='$q_title' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$cnt'>$arrow1 $q_title $arrow2</a>";
+        $link[$i] = "<a class='btn btn-default $page_btn' title='$q_title' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id&amp;cnt=$link_count'>$arrow1 $q_title $arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
@@ -201,24 +213,29 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
             </div>
         </div>";
 }
-
-$tool_content .= "<div class='row margin-bottom'>
-      <div class='col-md-12'>
-        <h4 class='text-center'>$pageName</h4>
-      </div>
-    </div>";
-
-
-
-if (!empty($comments)) {
-    $tool_content .= "<div class='row'>
-      <div class='col-md-12'>
-        <div class='panel padding'>
-              $comments
-        </div>
-      </div>
-    </div>";
+$moduleTag = new ModuleElement($id);
+$tags_list = $moduleTag->showTags();
+$tool_content .= "
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$pageName</h3>
+                </div>
+                <div class='panel-body'>$comments";
+                    
+if (!empty($tags_list)) {                            
+    $tool_content .= "                            
+                    <div>
+                        $langTags: $tags_list
+                    </div>
+                ";
 }
+$tool_content .= "                            
+                </div>
+            </div>
+        </div>
+    </div>";
 
 $tool_content .= "<div class='row'>
   <div class='col-md-12'>

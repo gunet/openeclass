@@ -3,8 +3,7 @@
  * \file
  * \brief Response to Verb ListMetadataFormats
  *
- * The information of supported metadata formats is saved in database and retrieved by calling function <B>idFormatQuery</B>.
- * \sa idFormatQuery
+ * The information of supported metadata formats is saved in database.
  */
 
 /**
@@ -26,22 +25,19 @@ function addMetedataFormat(&$outputObj,$key,$val) {
 
 if (isset($args['identifier'])) {
 	$identifier = $args['identifier'];
-	$query = idFormatQuery($identifier);
-	$res = $db->query($query);
+	$record = $res = Database::get()->querySingle('select ' . $SQL['metadataPrefix'] . ' FROM ' . $SQL['table'] . " WHERE " . $SQL['identifier'] . " = ?s", $identifier);
  	if ($res==false) {
 		if (SHOW_QUERY_ERROR) {
 			echo __FILE__.','.__LINE__."<br />";
-			echo "Query: $query<br />\n";
-			die($db->errorInfo());
+			die();
 		} else {
 			$errors[] = oai_error('idDoesNotExist','', $identifier);
 		}
 	} else {
-		$record = $res->fetch();
 		if($record===false) {
 			$errors[] = oai_error('idDoesNotExist', '', $identifier);
 		} else {
-			$mf = explode(",",$record[$SQL['metadataPrefix']]);    
+			$mf = explode(",",$record->{$SQL['metadataPrefix']});
 		}
 	}
 }

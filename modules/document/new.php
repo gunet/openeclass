@@ -51,7 +51,7 @@ if (defined('EBOOK_DOCUMENTS')) {
 $backUrl = documentBackLink($uploadPath);
 
 if ($can_upload) {
-    $navigation[] = array('url' => $backUrl, 'name' => $pageName);
+    $navigation[] = array('url' => $backUrl, 'name' => $toolName);
     if ($editPath) {
         $pageName = $langEditDoc;
         $info = Database::get()->querySingle("SELECT * FROM document WHERE $group_sql AND path = ?s", $editPath);
@@ -72,7 +72,7 @@ if ($can_upload) {
         $fileContent = Session::has('file_content') ? Session::get('file_content') : '';
         $htmlPath = "<input type='hidden' name='uploadPath' value='$uploadPath'>";
     }
-    if(isset($_GET['ebook_id'])){
+    if (isset($_GET['ebook_id'])){
         $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
                            WHERE ebook_id = ?d
                            ORDER BY CONVERT(public_id, UNSIGNED), public_id", $_GET['ebook_id']);
@@ -109,7 +109,7 @@ if ($can_upload) {
     $action = defined('COMMON_DOCUMENTS')? 'commondocs': 'document';
     $tool_content .= action_bar(array(
                                 array('title' => $langBack,
-                                      'url' => '#',
+                                      'url' => $backUrl,
                                       'icon' => 'fa-reply',
                                       'level' => 'primary-label',
                                       'class' => 'back_btn')

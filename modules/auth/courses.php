@@ -85,7 +85,7 @@ if (isset($_POST['submit'])) {
                 $restrictedCourses[] = $course_info->public_code;
             } else {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                        VALUES (?d, ?d, ?d, CURDATE())", $cid, intval($uid), USER_STUDENT);
+                                        VALUES (?d, ?d, ?d, NOW())", $cid, intval($uid), USER_STUDENT);
             }
         }
     }

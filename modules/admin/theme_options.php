@@ -135,7 +135,7 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
-    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name) VALUES(?s)", $theme_options_name)->lastInsertID;
+    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
     clear_default_settings();
     
     clone_images(); //clone images
@@ -220,6 +220,19 @@ if (isset($_POST['optionsSave'])) {
                     }
                 });
             });
+            var optionsSaveCallback = function (d) {
+                var themeOptionsName = $('#themeOptionsName').val();
+                if (themeOptionsName) {
+                    var input = $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'themeOptionsName').val(themeOptionsName);
+                    $('#theme_options_form').append($(input)).submit();
+                } else {
+                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
+                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
+                    return false;
+                }
+            };
             $('#optionsSaveAs').click(function (e)
             {
                 e.preventDefault();
@@ -240,19 +253,7 @@ if (isset($_POST['optionsSave'])) {
                         success: {
                             label: '$langSave',
                             className: 'btn-success',
-                            callback: function (d) {
-                                var themeOptionsName = $('#themeOptionsName').val();
-                                if(themeOptionsName) {
-                                    var input = $('<input>')
-                                                   .attr('type', 'hidden')
-                                                   .attr('name', 'themeOptionsName').val(themeOptionsName);
-                                    $('#theme_options_form').append($(input)).submit();
-                                } else {
-                                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
-                                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
-                                    return false;
-                                }
-                            }
+                            callback: optionsSaveCallback,
                         },
                         cancel: {
                             label: '$langCancel',
@@ -260,7 +261,13 @@ if (isset($_POST['optionsSave'])) {
                         }                        
                     }
                 });
-            })
+                $('#themeOptionsName').keypress(function (e) {
+                    if (e.which == 13) {
+                        e.preventDefault();
+                        optionsSaveCallback();
+                    }
+                });
+            });
             $('select#theme_selection').change(function ()
             {
                 var cur_val = $(this).val();
@@ -371,7 +378,7 @@ if (isset($_POST['optionsSave'])) {
             'class' => 'uploadTheme',
             'level' => 'primary-label'),        
         array('title' => $langBack,
-            'url' => "$urlAppend/modules/admin/index.php",
+            'url' => "{$urlAppend}modules/admin/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
         ),false);

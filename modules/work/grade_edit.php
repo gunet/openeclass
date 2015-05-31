@@ -54,9 +54,9 @@ function show_edit_form($id, $sid, $assign) {
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
         if (!empty($sub->group_id)) {
-            $group_submission = "($m[groupsubmit] " .
-                    "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" .
-                    "$m[ofgroup] " . gid_to_name($sub->group_id) . "</a>)";
+            $group_submission = "($m[groupsubmit] $m[ofgroup] " .
+                    "<a href='../group/group_space.php?course=$course_code&amp;group_id=$sub->group_id'>" 
+                     . gid_to_name($sub->group_id) . "</a>)";
         } else {
             $group_submission = '';
         }
@@ -99,7 +99,7 @@ function show_edit_form($id, $sid, $assign) {
                     <div class='form-group'>
                         <label class='col-sm-3 control-label'>$m[username]:</label>
                         <div class='col-sm-9'>
-                        $uid_2_name ".q($group_submission)."
+                        $uid_2_name $group_submission
                         </div>
                     </div>
                     <div class='form-group'>

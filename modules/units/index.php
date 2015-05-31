@@ -36,6 +36,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
 require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
@@ -136,15 +137,13 @@ if ($is_editor) {
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
-}
-if (!$info) {
-    $pageName = $langUnitUnknown;
-    $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
-    draw($tool_content, 2, null, $head_content);
-    exit;
-} else {
-    $pageName = q($info->title);
-    $comments = trim($info->comments);
+    if ($info) {
+        $pageName = $info->title;
+        $comments = trim($info->comments);
+    } else {
+        Session::Messages($langUnknownResType);
+        redirect_to_home_page("courses/$course_code/");        
+    }
 }
 
 // Links for next/previous unit
@@ -181,7 +180,7 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<a class='btn btn-primary $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
+        $link[$i] = "<a class='btn btn-default $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
@@ -200,7 +199,8 @@ if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
             </div>
         </div>";
 }
-
+$moduleTag = new ModuleElement($id);
+$tags_list = $moduleTag->showTags();
 $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
         
@@ -209,11 +209,20 @@ $tool_content .= "<div class='row margin-bottom'>
 
     <div class='row'>
       <div class='col-md-12'>
-        <div class='panel padding'>
-          <div class='margin-bottom-fat'>
-            <h4 class='text-center'>$pageName</h4>
-          </div>
-          $comments
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <h3 class='panel-title'>$pageName</h3>
+            </div>
+            <div class='panel-body'>$comments";
+if (!empty($tags_list)) {
+    $tool_content .= "
+                    <div>
+                        $langTags: $tags_list
+                    </div>
+                    ";
+}
+    $tool_content .= "    
+            </div>          
         </div>
       </div>
     </div>

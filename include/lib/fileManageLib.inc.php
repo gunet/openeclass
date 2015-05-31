@@ -294,13 +294,14 @@ function directory_list() {
 
 /*
  * Returns HTML form select element listing all directories in current course documents
- * excluding the one with path $entryToExclude
+ * excluding the one with path $entryToExclude and all under $directoryToExclude
  */
-
-function directory_selection($source_value, $command, $entryToExclude) {
-    global $langParentDir, $langTo, $langMoveFrom, $langMove, $moveFileNameAlias;
+function directory_selection($source_value, $command, $entryToExclude, $directoryToExclude) {
+    global $langParentDir, $langTo, $langMove, $langCancel;
     global $groupset;
 
+    $backUrl = documentBackLink($entryToExclude);
+    
     if (!empty($groupset)) {
         $groupset = '?' . $groupset;
     }
@@ -313,20 +314,23 @@ function directory_selection($source_value, $command, $entryToExclude) {
                         <fieldset>
                                 <input type='hidden' name='source' value='$source_value'>
                                 <div class='form-group'>
-                                    <label for='$command' class='col-sm-4 control-label word-wrapping' >$langMoveFrom &nbsp;&nbsp;<b>$moveFileNameAlias</b>&nbsp;&nbsp; $langTo:</label>
-                                    <div class='col-sm-8'>
+                                    <label for='$command' class='col-sm-2 control-label' >$langMove $langTo:</label>
+                                    <div class='col-sm-10'>
                                         <select name='$command' class='form-control'>";
                                         if ($entryToExclude !== '/' and $entryToExclude !== '') {
                                             $dialogBox .= "<option value=''>$langParentDir</option>";
                                         }
 
                                         /* build html form inputs */
-                                        $disabled = '';
                                         foreach ($dirList as $path => $filename) {
+                                            $disabled = '';
                                             $depth = substr_count($path, '/');
                                             $tab = str_repeat('&nbsp;&nbsp;&nbsp;', $depth);
-                                            if ($entryToExclude !== '/' and $entryToExclude !== '') {
-                                                $disabled = (strpos($path, $entryToExclude) === 0)? ' disabled': '';
+                                            if ($directoryToExclude !== '/' and $directoryToExclude !== '') {
+                                                $disabled = (strpos($path, $directoryToExclude) === 0)? ' disabled': '';
+                                            }
+                                            if ($disabled === '' and $entryToExclude !== '/' and $entryToExclude !== '') {
+                                                $disabled = ($path === $entryToExclude)? ' disabled': '';
                                             }
                                             $dialogBox .= "<option$disabled value='$path'>$tab$filename</option>";
                                         }
@@ -334,8 +338,9 @@ function directory_selection($source_value, $command, $entryToExclude) {
                                         </div>
                                 </div>
                                 <div class='form-group'>
-                                    <div class='col-sm-offset-3 col-sm-9'>
+                                    <div class='col-sm-offset-2 col-sm-10'>
                                         <input class='btn btn-primary' type='submit' value='$langMove' >
+                                        <a href='$backUrl' class='btn btn-default' >$langCancel</a>
                                     </div>
                                 </div>
                         </fieldset>

@@ -19,7 +19,7 @@ require_once 'include/lib/multimediahelper.class.php';
  */
 function process_actions() {
     global $tool_content, $id, $langResourceCourseUnitDeleted, $langResourceUnitModified,
-    $course_id, $course_code, $webDir;
+    $course_id, $course_code, $webDir, $cnt, $langBack, $urlAppend, $head_content;
 
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
@@ -28,7 +28,15 @@ function process_actions() {
     if (isset($_REQUEST['edit'])) {
         $res_id = intval($_GET['edit']);
         if ($id = check_admin_unit_resource($res_id)) {
-            return edit_res($res_id); 
+            $tool_content .= action_bar(array(
+                array(
+                    'title' => $langBack,
+                    'url' => "{$urlAppend}modules/weeks/index.php?course=$course_code&amp;id=$id&amp;cnt=$cnt",
+                    'icon' => 'fa-reply',
+                    'level' => 'primary-label')));
+            $tool_content .= edit_res($res_id);
+            draw($tool_content, 2, null, $head_content);
+            exit;            
         }
     } elseif (isset($_REQUEST['edit_res_submit'])) { // edit resource
         $res_id = intval($_REQUEST['resource_id']);
@@ -42,6 +50,7 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
+            redirect_to_home_page("modules/weeks/index.php?course=$course_code&id=$id&cnt=$cnt");
         }
         $tool_content .= "<div class='alert alert-success'>$langResourceUnitModified</div>";
     } elseif (isset($_REQUEST['del'])) { // delete resource from course unit
@@ -51,7 +60,8 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
-            $tool_content .= "<div class='alert alert-success'>$langResourceCourseUnitDeleted</div>";
+            Session::Messages($langResourceCourseUnitDeleted, 'alert-success');
+            redirect_to_home_page("modules/weeks/index.php?course=$course_code&id=$id&cnt=$cnt");
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility in text resources only
         $res_id = intval($_REQUEST['vis']);
@@ -62,16 +72,19 @@ function process_actions() {
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
             Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_COURSE, $course_id);
             CourseXMLElement::refreshCourse($course_id, $course_code);
+            redirect_to_home_page("modules/weeks/index.php?course=$course_code&id=$id&cnt=$cnt");
         }
     } elseif (isset($_REQUEST['down'])) { // change order down
         $res_id = intval($_REQUEST['down']);
         if ($id = check_admin_unit_resource($res_id)) {
             move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
+            redirect_to_home_page("modules/weeks/index.php?course=$course_code&id=$id&cnt=$cnt");
         }
     } elseif (isset($_REQUEST['up'])) { // change order up
         $res_id = intval($_REQUEST['up']);
         if ($id = check_admin_unit_resource($res_id)) {
             move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
+            redirect_to_home_page("modules/weeks/index.php?course=$course_code&id=$id&cnt=$cnt");
         }
     }
     return '';
@@ -109,10 +122,52 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resourcesWeeks($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources;
+    global $tool_content, $max_resource_id, $langAvailableUnitResources,
+           $head_content, $langDownload, $langPrint, $langCancel;
     
     $req = Database::get()->queryArray("SELECT * FROM course_weekly_view_activities WHERE course_weekly_view_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
     if (count($req) > 0) {
+        $head_content .= "<script>
+        $(function(){
+            $('.fileModal').click(function (e)
+            {
+                e.preventDefault();
+                var fileURL = $(this).attr('href');
+                var downloadURL = $(this).prev('input').val();
+                var fileTitle = $(this).attr('title');
+                bootbox.dialog({
+                    size: 'large',
+                    title: fileTitle,
+                    message: '<div class=\"row\">'+
+                                '<div class=\"col-sm-12\">'+
+                                    '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                '</div>'+
+                            '</div>',                          
+                    buttons: {
+                        download: {
+                            label: '<i class=\"fa fa-download\"></i> $langDownload',
+                            className: 'btn-success',
+                            callback: function (d) {                      
+                                window.location = downloadURL;                                                            
+                            }
+                        },                        
+                        print: {
+                            label: '<i class=\"fa fa-print\"></i> $langPrint',
+                            className: 'btn-primary',
+                            callback: function (d) {
+                                var iframe = document.getElementById('fileFrame');
+                                iframe.contentWindow.print();                                                               
+                            }
+                        },
+                        cancel: {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        }                        
+                    }
+                });                    
+            });
+        });
+        </script>";          
         $max_resource_id = Database::get()->querySingle("SELECT id FROM course_weekly_view_activities
                                 WHERE course_weekly_view_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;                     
         $tool_content .= "<div class='table-responsive'>";
@@ -201,8 +256,9 @@ function show_resourceWeek($info) {
  * @return string
  */
 function show_doc($title, $comments, $resource_id, $file_id) {
-    global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code;
-
+    global $is_editor, $course_id, $langWasDeleted, $head_content,
+           $urlServer, $id, $course_code;
+ 
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);    
     if (!$file) {
         if (!$is_editor) {
@@ -218,10 +274,16 @@ function show_doc($title, $comments, $resource_id, $file_id) {
         }
         if ($file->format == '.dir') {
             $image = 'fa-folder-o';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>";
+            $download_hidden_link = '';
+            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>$file->filename</a>";            
         } else {
             $image = choose_image('.' . $file->format);
-            $link = "<a href='" . file_url($file->path, $file->filename) . "' target='_blank'>";
+            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
+            $download_hidden_link = "<input type='hidden' value='$download_url'>";
+            $file_obj = MediaResourceFactory::initFromDocument($file);
+            $file_obj->setAccessURL(file_url($file->path, $file->filename));
+            $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+            $link = MultimediaHelper::chooseMediaAhref($file_obj);              
         }
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
@@ -232,8 +294,8 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     }
     return "
         <tr$class_vis>
-          <td width='1'>$link" . icon($image, '') . "</a></td>
-          <td align='left'>$link" . q($title) . "</a>$comment</td>" .
+          <td width='1'>" . icon($image, '') . "</a></td>
+          <td align='left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
             '</tr>';
 }
@@ -1115,8 +1177,8 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
  * @return string
  */
 function actions($res_type, $resource_id, $status, $res_id = false) {
-    global $is_editor, $langEdit, $langDelete, $langVisibility,
-    $langAddToCourseHome, $langDown, $langUp,
+    global $is_editor, $langEdit, $langDelete, $cnt,
+    $langAddToCourseHome, $langDown, $langUp, $langViewHide, $langViewShow,
     $langConfirmDelete, $course_code, $langEditChange;
 
     
@@ -1128,11 +1190,11 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
 
     if ($res_type == 'description') {
         $icon_vis = ($status == 1) ? 'fa-send' : 'fa-send-o';
-        $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id";
+        $edit_link = "edit.php?course=$course_code&amp;numBloc=$res_id&amp;cnt=$cnt";
     } else {        
         $showorhide = ($status == 1) ? $langViewHide : $langViewShow;
         $icon_vis = ($status == 1) ? 'fa-eye-slash' : 'fa-eye';
-        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id";
+        $edit_link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;edit=$resource_id&amp;cnt=$cnt";
     }
 
     $content = "<td class='option-btn-cell'>";
@@ -1142,23 +1204,23 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
                       'icon' => 'fa-edit',
                       'show' => $status != 'del'),
                 array('title' => $showorhide,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id&amp;cnt=$cnt",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('text', 'video', 'forum', 'topic'))),
                 array('title' => $langAddToCourseHome,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vis=$resource_id&amp;cnt=$cnt",
                       'icon' => $icon_vis,
                       'show' => $status != 'del' and in_array($res_type, array('description'))),
                 array('title' => $langDown,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;down=$resource_id&amp;cnt=$cnt",
                       'icon' => 'fa-arrow-down',
                       'show' => $resource_id != $GLOBALS['max_resource_id']),
                 array('title' => $langUp,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;up=$resource_id&amp;cnt=$cnt",
                       'icon' => 'fa-arrow-up',
                       'show' => !$first),
                 array('title' => $langDelete,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;del=$resource_id&amp;cnt=$cnt",
                       'icon' => 'fa-times',
                       'confirm' => $langConfirmDelete,
                       'class' => 'delete')
@@ -1198,7 +1260,8 @@ function actions($res_type, $resource_id, $status, $res_id = false) {
  * @return string
  */
 function edit_res($resource_id) {
-    global $id, $urlServer, $langTitle, $langDescr, $langEditForum, $langContents, $langModify, $course_code;
+    global $id, $urlServer, $langTitle, $langDescr, $langEditForum, 
+           $langContents, $langModify, $course_code, $cnt;
 
     $ru = Database::get()->querySingle("SELECT id, title, comments, type FROM course_weekly_view_activities WHERE id = ?d", $resource_id);   
     $restitle = " value='" . htmlspecialchars($ru->title, ENT_QUOTES) . "'";
@@ -1206,28 +1269,35 @@ function edit_res($resource_id) {
     $resource_id = $ru->id;
     $resource_type = $ru->type;
 
-    $tool_content = "<form method='post' action='${urlServer}modules/weeks/?course=$course_code'>" .
-            "<fieldset>" .
-            "<legend>$langEditForum</legend>" .
-            "<input type='hidden' name='id' value='$id'>" .
-            "<input type='hidden' name='resource_id' value='$resource_id'>";
+    $tool_content = "
+        <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='${urlServer}modules/weeks/?course=$course_code&cnt=$cnt'>
+            <fieldset>
+                <input type='hidden' name='id' value='$id'>
+                <input type='hidden' name='resource_id' value='$resource_id'>";
     if ($resource_type != 'text') {
-        $tool_content .= "<table class='table-default'>" .
-                "<tr>" .
-                "<th>$langTitle:</th>" .
-                "<td><input type='text' name='restitle' size='50' maxlength='255' $restitle></td>" .
-                "</tr>";
+        $tool_content .= "
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langTitle:</label>
+                    <div class='col-sm-10'>
+                        <input class='form-control' type='text' name='restitle' size='50' maxlength='255' $restitle>
+                    </div>
+                </div>";
         $message = $langDescr;
     } else {
         $message = $langContents;
     }
-    $tool_content .= "<tr><th>$message:</th>
-                              <td>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</td></tr>
-                          <tr><th>&nbsp;</th>
-                              <td><input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'></td></tr>
-                        </table>
-                      </fieldset>
-                    </form>";
+    $tool_content .= "
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$message:</label>
+                    <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>                    
+                </div>
+                <div class='col-sm-offset-2 col-sm-10'>
+                    <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
+                </div>            
+            </fieldset>
+            </form>
+        </div>";
 
     return $tool_content;
 }

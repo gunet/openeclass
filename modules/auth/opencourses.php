@@ -169,12 +169,38 @@ if (count($courses) > 0) {
     }
 
     $tool_content .= "</tr>";
-    
+
+    $displayGuestLoginLinks = $uid == 0 && get_config('course_guest') == 'link';    
     foreach ($courses as $mycours) {
         if ($mycours->visible == COURSE_OPEN) {
             $codelink = "<a href='../../courses/" . urlencode($mycours->k) . "/'>" . q($mycours->i) . "</a>&nbsp;<small>(" . q($mycours->c) . ")</small>";
         } else {
             $codelink = q($mycours->i) . "&nbsp;<small>(" . q($mycours->c) . ")</small>";
+        }
+
+        if ($displayGuestLoginLinks) {
+            $guestUser = Database::get()->querySingle('SELECT username, password FROM course_user, user
+                WHERE course_user.user_id = user.id AND user.status = ?d and course_id = ?d',
+                USER_GUEST, $mycours->id);
+            if ($guestUser) {
+                $codelink .= " <div class='pull-right'>";
+                if ($guestUser->password === '') {
+                    $codelink .= "
+                        <form method='post' action='$urlAppend'>
+                            <input type='hidden' name='uname' value='{$guestUser->username}'>
+                            <input type='hidden' name='pass' value=''>
+                            <input type='hidden' name='next' value='/courses/{$mycours->k}/'>
+                            <button class='btn btn-default' type='submit' title='" . q($langGuestLogin) .
+                                "' name='submit' data-toggle='tooltip'><span class='fa fa-plane'></span></button>
+                        </form>";
+                } else {
+                    $codelink .= "<a class='btn btn-default' role='button' href='" .
+                        "{$urlAppend}main/login_form.php?user=" . urlencode($guestUser->username) . "&amp;next=%2Fcourses%2F" .
+                            $mycours->k . "%2F' title='" . q($langGuestLogin) . "' data-toggle='tooltip'>
+                                <span class='fa fa-plane'></span></a>";
+                }
+                $codelink .= "</div>";
+            }
         }
                 
         $tool_content .= "<td>" . $codelink . "</td>";

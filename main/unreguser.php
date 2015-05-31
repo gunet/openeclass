@@ -21,14 +21,14 @@
 
 
 $require_login = TRUE;
-include '../include/baseTheme.php';
+require_once '../include/baseTheme.php';
 require_once 'include/log.php';
 
 $toolName = $langMyProfile;
 $pageName = $langUnregUser;
-$navigation[] = array("url" => "profile/profile.php", "name" => $langModifyProfile);
+$navigation[] = array('url' => 'profile/profile.php', 'name' => $langModifyProfile);
 
-if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
+if (!isset($_POST['doit'])) {
     // admin cannot be deleted
     if ($is_admin) {
         $tool_content .= action_bar(array(
@@ -42,31 +42,45 @@ if (!isset($_GET['doit']) or $_GET['doit'] != "yes") {
     } else {
         $q = Database::get()->querySingle("SELECT code, visible FROM course, course_user
 			WHERE course.id = course_user.course_id
-                        AND course.visible != " . COURSE_INACTIVE . "
-			AND user_id = ?d LIMIT 1", $uid);
+                AND course.visible != " . COURSE_INACTIVE . "
+                AND user_id = ?d LIMIT 1", $uid);
         if (!$q) {
-            $tool_content .= "<p><b>$langConfirm</b></p>";
-            $tool_content .= "<ul class='listBullet'>";
-            $tool_content .= "<li>$langYes: ";
-            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?doit=yes'>$langDelete</a>";
-            $tool_content .= "</li>";
-            $tool_content .= "<li>$langNo: <a href='profile/profile.php'>$langBack</a>";
-            $tool_content .= "</li></ul>";
+            $tool_content .= "
+              <div class='form-wrapper'>
+                <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]'>
+                  <div class='form-group'>
+                    <div class='col-sm-12'>
+                      $langConfirm
+                    </div>
+                  </div>
+                  <div class='form-group'>
+                    <label class='col-sm-2'>$langYes:</label>
+                    <div class='col-sm-10'>
+                      <button class='btn btn-danger' name='doit'><i class='fa fa-times'></i> $langUnregUser</button>
+                    </div>
+                  </div>
+                  <div class='form-group'>
+                    <label class='col-sm-2'>$langNo:</label>
+                    <div class='col-sm-10'>
+                      <a href='{$urlAppend}main/profile/display_profile.php' class='btn btn-default'><i class='fa fa-reply'></i> $langCancel</a>
+                    </div>
+                  </div>
+                </form>
+              </div>";
         } else {
             $tool_content .= action_bar(array(
                 array('title' => $langBack,
                     'url' => "profile/profile.php",
                     'icon' => 'fa-reply',
                     'level' => 'primary-label')));
-            $tool_content .= "<div class='alert alert-danger'>$langNotice:</br> ";
-            $tool_content .= "$langExplain</div>";
+            $tool_content .= "<div class='alert alert-danger'>$langNotice:</br>$langExplain</div>";
         }
     }  //endif is admin
 } else {
     if (isset($uid)) {
         $un = uid_to_name($uid, 'username');
         $n = uid_to_name($uid);
-        deleteUser($id, false);
+        deleteUser($uid, false);
         // action logging
         Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
             'username' => $un,

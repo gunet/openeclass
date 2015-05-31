@@ -250,6 +250,9 @@ if (!$nbrExercises) {
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
                           'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
                           'show' => course_status($course_id) == COURSE_OPEN),
+                    array('title' => $langUsage,
+                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
+                          'icon' => 'fa-line-chart'),
                     array('title' => $langCreateDuplicate,
                           'icon-class' => 'warnLink',
                           'icon-extra' => "data-exerciseid='$row->id'",
@@ -257,16 +260,13 @@ if (!$nbrExercises) {
                           'icon' => 'fa-copy'),
                     array('title' => $langPurgeExerciseResults,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
-                          'icon' => 'fa-trash',
+                          'icon' => 'fa-eraser',
                           'confirm' => $langConfirmPurgeExerciseResults),
-                    array('title' => $langPurgeExercise,
+                    array('title' => $langDelete,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
                           'icon' => 'fa-times',
                           'class' => 'delete',
-                          'confirm' => $langConfirmPurgeExercise),
-                    array('title' => $langExerciseStats,
-                          'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
-                          'icon' => 'fa-pie-chart')
+                          'confirm' => $langConfirmPurgeExercise)
                     ))."</td></tr>";
             
         // student only
@@ -274,13 +274,12 @@ if (!$nbrExercises) {
             if (!resource_access($row->active, $row->public)) {
                 continue;
             }
-            $currentDate = date("Y-m-d H:i");
-			//These convertions do not seem to be necessary
-            $temp_StartDate = mktime(substr($row->start_date, 11, 2), substr($row->start_date, 14, 2), 0, substr($row->start_date, 5, 2), substr($row->start_date, 8, 2), substr($row->start_date, 0, 4));
-            $temp_EndDate = mktime(substr($row->end_date, 11, 2), substr($row->end_date, 14, 2), 0, substr($row->end_date, 5, 2), substr($row->end_date, 8, 2), substr($row->end_date, 0, 4));
-            $currentDate = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5, 2), substr($currentDate, 8, 2), substr($currentDate, 0, 4));
-        
-            if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
+
+            $currentDate = new DateTime('NOW');
+            $temp_StartDate = new DateTime($row->start_date);
+            $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
+
+            if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
                 $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>";
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
                 $tool_content .= "<td class='not_visible'>" . q($row->title) . "&nbsp;&nbsp;";
@@ -289,7 +288,7 @@ if (!$nbrExercises) {
             }
             $tool_content .= "<br />" . $row->description . "</td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
-                                " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</td>";          														  
+                                " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";          														  
             if ($row->time_constraint > 0) {
                 $tool_content .= "<td class='text-center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
             } else {

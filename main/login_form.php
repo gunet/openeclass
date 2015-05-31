@@ -12,6 +12,9 @@ $warning = '';
 $next = isset($_GET['next'])?
     ("<input type='hidden' name='next' value='" . q($_GET['next']) . "'>"):
     '';
+
+$userValue = isset($_GET['user'])? (" value='" . q($_GET['user']) . "' readonly"): '';
+
 $authLink = array();
 $extAuthMethods = array('cas', 'shibboleth');
 $loginFormEnabled = false;
@@ -23,21 +26,21 @@ foreach ($q as $l) {
     if ($extAuth) {
         $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');
         $authTitle = empty($l->auth_title)? "<b>$langLogInWith</b><br>{$l->auth_name}": q($l->auth_title);
-        $authLink[] = "
+        $authLink[] = array(false, "
             <div class='col-sm-6'>
                 <p>$authTitle</p>
             </div>
             <div class='col-sm-offset-1 col-sm-5'>
                 <a class='btn btn-primary btn-block' href='$authUrl'>$langEnter</a>
-            </div>";
+            </div>");
     } elseif (!$loginFormEnabled) {
         $loginFormEnabled = true;
-        $authLink[] = "
+        $authLink[] = array(true, "
             <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
                 $next
                 <div class='form-group'>
                     <div class='col-xs-12'>
-                        <input class='form-control' name='uname' placeholder='$langUsername'>
+                        <input class='form-control' name='uname' placeholder='$langUsername'$userValue>
                     </div>
                 </div>
                 <div class='form-group'>
@@ -53,7 +56,7 @@ foreach ($q as $l) {
                         <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                     </div>
                 </div>
-            </form>";
+            </form>");
     }
 }
 
@@ -69,14 +72,14 @@ $tool_content .= action_bar(array(
 $tool_content .= "<div class='login-page'>
                     <div class='row'>";
 $boxTitle = $langUserLogin;
-foreach ($authLink as $html) {
+foreach ($authLink as $authInfo) {
     $tool_content .= "
       <div class='col-sm-$columns'>
         <div class='panel panel-default '>
           <div class='panel-heading'><span>$boxTitle</span></div>
             <div class='panel-body login-page-option'>" .
-              $html;
-    if (Session::has('login_error')) {
+              $authInfo[1];
+    if (Session::has('login_error') and $authInfo[0]) {
         $tool_content .= "<div class='alert alert-warning' role='alert'>".Session::get('login_error')."</div>";
     }
     $tool_content .= "

@@ -238,8 +238,9 @@ if (isset($_GET['addNote']) or isset($_GET['modify'])) {
             <div class='table-responsive'>
                 <table class='table-default'>";
     if ($noteNumber > 0) {
-        $tool_content .= "<tr>";
-        $tool_content .= "<th colspan='2' class='text-right'>".icon('fa-gears')."</th>";
+        $tool_content .= "<tr class='list-header'>";
+        $tool_content .= "<th class='text-left'>$langCategoryNotes</th>";
+        $tool_content .= "<th class='text-center'>".icon('fa-gears')."</th>";
         $tool_content .= "</tr>";
     }
 

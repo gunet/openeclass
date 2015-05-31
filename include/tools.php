@@ -263,7 +263,7 @@ function loggedInMenu() {
     if ($new_msgs == 0) {
         array_push($sideMenuText, $GLOBALS['langMyDropBox']);
     } else {
-        array_push($sideMenuText, "<b>".$GLOBALS['langMyDropBox']." (".$new_msgs.")</b>");
+        array_push($sideMenuText, "<b>$GLOBALS[langMyDropBox]<span class='badge pull-right'>$new_msgs</span></b>");
     }
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
@@ -295,7 +295,7 @@ function loggedInMenu() {
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
         array_push($sideMenuImg, "blog");
     }
-    
+
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
     array_push($sideMenuLink, $urlServer . "main/profile/display_profile.php");
     array_push($sideMenuImg, "fa-user");
@@ -383,8 +383,6 @@ function loggedOutMenu() {
  * Creates the administrator menu
  *
  * @global type $language
- * @global type $phpSysInfoURL
- * @global type $phpMyAdminURL
  * @global type $urlServer
  * @global type $is_admin
  * @global type $is_power_user
@@ -393,8 +391,7 @@ function loggedOutMenu() {
  */
 function adminMenu() {
 
-    global $language, $phpSysInfoURL, $phpMyAdminURL;
-    global $urlServer;
+    global $language, $urlServer;
     global $is_admin, $is_power_user, $is_departmentmanage_user;
 
     $sideMenuGroup = array();
@@ -514,19 +511,18 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
         array_push($sideMenuLink, "../admin/cleanup.php");
         array_push($sideMenuImg, "arrow.png");
-
-        if (isset($phpSysInfoURL) && PHP_OS == "Linux") {
+        if (get_config('phpSysInfoURL')) {
             array_push($sideMenuText, $GLOBALS['langSysInfo']);
-            array_push($sideMenuLink, $phpSysInfoURL);
+            array_push($sideMenuLink, get_config('phpSysInfoURL'));
             array_push($sideMenuImg, "arrow.png");
         }
         array_push($sideMenuText, $GLOBALS['langPHPInfo']);
         array_push($sideMenuLink, "../admin/phpInfo.php");
         array_push($sideMenuImg, "arrow.png");
 
-        if (isset($phpMyAdminURL)) {
+        if (get_config('phpMyAdminURL')) {
             array_push($sideMenuText, $GLOBALS['langDBaseAdmin']);
-            array_push($sideMenuLink, $phpMyAdminURL);
+            array_push($sideMenuLink, get_config('phpMyAdminURL'));
             array_push($sideMenuImg, "arrow.png");
         }
 
@@ -662,9 +658,9 @@ function lessonToolsMenu() {
 
         // check if we have define mail address and want to receive messages
         if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
-            $mail_status = "&nbsp;".icon('fa-exclamation-triangle');
+            $mail_status = '&nbsp;' . icon('fa-exclamation-triangle');
         }
-        
+
         foreach ($result as $toolsRow) {
             $mid = $toolsRow->module_id;
 
@@ -677,24 +673,28 @@ function lessonToolsMenu() {
             if ($mid == MODULE_ID_BBB and !get_total_bbb_servers()) {
                 continue;
             }
-            
+
             // if we are in dropbox or announcements add (if needed) mail address status
             if ($mid == MODULE_ID_DROPBOX or $mid == MODULE_ID_ANNOUNCE) {
                 if ($mid == MODULE_ID_DROPBOX) {
                     $mbox = new Mailbox($uid, course_code_to_id($course_code));
                     $new_msgs = $mbox->unreadMsgsNumber();
                     if ($new_msgs != 0) {
-                        array_push($sideMenuText, "<b>".q($modules[$mid]['title'])." (".$new_msgs.")$mail_status</b>");
+                        array_push($sideMenuText, '<b>' . q($modules[$mid]['title']) .
+                            " $mail_status<span class='badge pull-right'>$new_msgs</span></b>");
                     } else {
-                        array_push($sideMenuText, "".q($modules[$mid]['title'])." ".$mail_status);
+                        array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                     }
                 } else {
-                    array_push($sideMenuText, "".q($modules[$mid]['title'])." ".$mail_status);
+                    array_push($sideMenuText, q($modules[$mid]['title']).' '.$mail_status);
                 }
+            } elseif ($mid == MODULE_ID_DOCS and ($new_docs = get_new_document_count($course_id))) {
+                array_push($sideMenuText, '<b>' . q($modules[$mid]['title']) .
+                    "<span class='badge pull-right'>$new_docs</span></b>");
             } else {
-                array_push($sideMenuText, "".q($modules[$mid]['title']));
+                array_push($sideMenuText, q($modules[$mid]['title']));
             }
-                         
+
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $modules[$mid]['link'] .
                             '/?course=' . $course_code));
             array_push($sideMenuImg, $modules[$mid]['image'] . $section['iconext']);
@@ -823,7 +823,7 @@ function openCoursesExtra() {
     }
     $menuGroup = false;
     if (get_config('opencourses_enable') and $openCoursesExtraHTML) {
-        $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) as count FROM course_review WHERE is_certified = 1")->count;
+        $openCoursesNum = Database::get()->querySingle("SELECT COUNT(id) AS count FROM course_review WHERE is_certified = 1")->count;
 
         if ($openCoursesNum > 0) {
             $openFacultiesUrl = $urlAppend . 'modules/course_metadata/openfaculties.php';
@@ -852,4 +852,24 @@ function displayExtrasLeft() {
     if (isset($langExtrasLeft) and !empty($langExtrasLeft)) {
         $leftNavExtras .= $langExtrasLeft;
     }
+}
+
+// Get number of new documents for current user
+function get_new_document_count($course_id) {
+    global $session;
+
+    $document_timestamp = $session->getDocumentTimestamp($course_id, false);
+
+    if ($document_timestamp) {
+        $count = Database::get()->querySingle('SELECT COUNT(*) AS count
+            FROM document WHERE course_id = ?d AND
+                date_modified > ?t AND
+                subsystem = ?d AND
+                format <> ?s',
+            $course_id, $document_timestamp, MAIN, '.dir');
+        if ($count) {
+            return $count->count;
+        }
+    }
+    return 0;
 }

@@ -1,14 +1,3 @@
-// Action Button function
-function animate_btn() {
-    $(".opt-btn-wrapper").hover(
-            function () {
-                tool_btn_offset = ((($(this).children(".opt-btn-more-wrapper").children(".opt-btn-more-tool").length) + 1) * 56) + "px";
-                $(this).children(".opt-btn-more-wrapper").animate({width: tool_btn_offset}, 150);
-            },
-            function () {
-                $(this).children(".opt-btn-more-wrapper").animate({width: "56px"}, 150);
-            });
-}
 function act_confirm() {
     $('.confirmAction').on('click', function (e) {
         var message = $(this).attr('data-message');
@@ -70,7 +59,6 @@ $(document).ready(function () {
 
     // Initialisations
     act_confirm();
-    animate_btn();
     tooltip_init();
     popover_init();
 
@@ -171,13 +159,13 @@ $(document).ready(function () {
 
     // Leftnav - rotate Category Menu Item icon
     if ($(".collapse.in").length > 0) { //when page first loads the show.bs.collapse event is not triggered
-        $(".collapse.in").prev("a").find("i").addClass("fa-rotate-90");
+        $(".collapse.in").prev("a").find("span.fa").addClass("fa-rotate-90");
     }
     $('.panel-collapse').on('show.bs.collapse', function () {
-        $(this).prev("a").find("i").addClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").addClass("fa-rotate-90");
     });
     $('.panel-collapse').on('hide.bs.collapse', function () {
-        $(this).prev("a").find("i").removeClass("fa-rotate-90");
+        $(this).prev("a").find("span.fa").removeClass("fa-rotate-90");
     });
 
     // ScrollTop - When page is scrolled down and we click on menu item then the menu is collapsed
@@ -203,18 +191,13 @@ $(document).ready(function () {
         }
     });
 
-    $("#scrollToTop i").on('click', function () {
+    $("#scrollToTop span").on('click', function () {
         scrollToTop("html, body", 500);
     });
 
     $('.panel-collapse').on('shown.bs.collapse', function () {
         //scrollToTop($(this).prev('a'),500);  // Uncomment this if you want to make anchor the Parent Menu Item
         scrollToTop("html, body", 500);
-    });
-
-    // Action Bar - More Options Button
-    $(".expandable-btn").click(function () {
-        $(this).toggleClass("active").parents(".action-bar-wrapper").children(".expandable").toggleClass("secondary-active");
     });
 
 
@@ -273,7 +256,7 @@ $(document).ready(function () {
                             var id = $(this).data('id');
                             if (data.notifications[id]) {
                                 $(this).html(data.notifications[id]);
-                                $(this).closest('.panel').find('i.lesson-title-caret').removeClass('fa-caret-down').addClass('fa-bell alert-info').attr('rel', 'tooltip').attr('title', data.langNotificationsExist);
+                                $(this).closest('.panel').find('span.lesson-title-caret').removeClass('fa-caret-down').addClass('fa-bell alert-info').attr('rel', 'tooltip').attr('title', data.langNotificationsExist);
                             }
                         });
                         tooltip_init();

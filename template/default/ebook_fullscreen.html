@@ -11,9 +11,6 @@
         
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="{%template_base%}CSS/bootstrap-custom.css">
-
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="{%template_base%}CSS/bootstrap-theme.min.css">
         
         <!-- Font Awesome - A font of icons -->
         <link href="{%template_base%}CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
@@ -43,23 +40,15 @@
         </script>
     </head>
 
-    <body>
+    <body style="background:whitesmoke;">
         <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
             <div class="container">
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#"><img class="img-responsive" style='height:20px;' src="{%img_base%}/eclass-new-logo-small.png" alt='{%ds_logo%}' title='{%ds_logo%}'></a>
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
+                  <a class="navbar-brand pull-left" href="#" style="padding-top:3px;"><img class="img-responsive" style='height:30px;' src="{%img_base%}/eclass-new-logo-small.png" alt='{%ds_logo%}' title='{%ds_logo%}'></a>
+                
                   <!-- BEGIN chapter_select -->
-                  <div class="nav navbar-nav navbar-form">
+                  <div class=" pull-left">
                     <div class='form-group'>
-                            <select class='form-control' name='section' onChange="change_section();">
+                            <select class='form-control' name='section' onChange="change_section();" style='width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>
                                 <!-- BEGIN chapter_select_options -->
                                 <option value='{%chapter_id%}'{%chapter_selected%}>{%chapter_title%}</option>
                                 <!-- END chapter_select_options -->
@@ -67,22 +56,22 @@
                     </div>
                   </div>
                   <!-- END chapter_select -->
-                  <ul class="nav navbar-nav navbar-right">
+                  <ul class="list-inline  pull-right" >
                     <!-- BEGIN back_link_active -->
-                    <li><a href='{%back_chapter_link%}' title='{%back_chapter_title%}'><i class='fa fa-arrow-circle-left fa-lg'></i></a></li>
+                    <li><a href='{%back_chapter_link%}' title='{%back_chapter_title%}' style='color:white;'><i class='fa fa-arrow-circle-left fa-lg'></i></a></li>
                     <!-- END back_link_active -->
                     <!-- BEGIN back_link_inactive -->
-                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-left'></i></a></li>
+                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-left' style='color:white;'></i></a></li>
                     <!-- END back_link_inactive -->              
                     <!-- BEGIN next_link_active -->
-                    <li><a href='{%next_chapter_link%}' title='{%next_chapter_title%}'><i class='fa fa-arrow-circle-right fa-lg'></i></a></li>
+                    <li><a href='{%next_chapter_link%}' title='{%next_chapter_title%}' style='color:white;'><i class='fa fa-arrow-circle-right fa-lg'></i></a></li>
                     <!-- END next_link_active -->
                     <!-- BEGIN next_link_inactive -->
-                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right'></i></a></li>
+                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right' style='color:white;'></i></a></li>
                     <!-- END next_link_inactive -->
-                    <li><a href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}'><i class='fa fa-times fa-lg nofullscreen'></i> {%langBack%}</a></li>
+                    <li><a href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}' style='color:white;'><i class='fa fa-times fa-lg nofullscreen'></i> {%langBack%}</a></li>
                   </ul>
-                </div><!--/.nav-collapse -->
+                <!--/.nav-collapse -->
             </div>
         </nav>        
         <div class="container">

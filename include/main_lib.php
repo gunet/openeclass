@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.0');
+define('ECLASS_VERSION', '3.1');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -150,14 +150,6 @@ function q_math($s) {
     return mathfilter($text, 12, $urlAppend . 'courses/mathimg/');
 }
 
-function unescapeSimple($str) {
-    if (phpversion() < '5.4' and get_magic_quotes_gpc()) {
-        return stripslashes($str);
-    } else {
-        return $str;
-    }
-}
-
 // Escape string to use as JavaScript argument
 function js_escape($s) {
     return q(str_replace("'", "\\'", $s));
@@ -230,7 +222,7 @@ function load_js($file, $init='') {
             $file = "select2-3.5.1/select2_locale_$language.js";
         } elseif ($file == 'bootstrap-datetimepicker') {
             $head_content .= css_link('bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css') .
-                js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
+            js_link('bootstrap-datetimepicker/js/bootstrap-datetimepicker.js');
             $file = "bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.$language.js";
         } elseif ($file == 'bootstrap-timepicker') {
             $head_content .= css_link('bootstrap-timepicker/css/bootstrap-timepicker.min.css');
@@ -248,7 +240,33 @@ function load_js($file, $init='') {
         }   elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
+        } elseif ($file == 'filetree') {
+            $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
+            $file = 'jquery_filetree/jqueryFileTree.js';            
+        } elseif ($file == 'trunk8') {
+            $head_content .= "
+<script>
+    $(function () { $('.trunk8').trunk8({
+        lines: 3,
+        fill: '&hellip; <a class=\"read-more\" href=\"#\">" . js_escape($GLOBALS['showall']) . "</a>',
+    });
+
+    $(document).on('click', '.read-more', function (event) {
+        $(this).parent().trunk8('revert').append(' <a class=\"read-less\" href=\"#\">" . js_escape($GLOBALS['shownone']) . "</a>');
+        event.preventDefault();
+    });
+
+    $(document).on('click', '.read-less', function (event) {
+console.log('aaa');
+        $(this).parent().trunk8();
+        event.preventDefault();
+    });
+
+});
+</script>";
+            $file = 'trunk8.js';
         }
+
         $head_content .= js_link($file);
     }
 
@@ -360,6 +378,22 @@ function uid_to_am($uid) {
     $r = Database::get()->querySingle("SELECT am from user WHERE id = ?d", $uid);
     if ($r) {
         return $r->am;
+    } else {
+        return false;
+    }
+}
+
+
+/**
+ * @brief returns group name
+ * @param type $gid
+ * @return boolean
+ */
+function gid_to_name($gid) {
+
+    $res = Database::get()->querySingle("SELECT name FROM `group` WHERE id = ?d", $gid);
+    if ($res) {
+        return $res->name;
     } else {
         return false;
     }
@@ -859,6 +893,7 @@ function randomkeys($length) {
 // it returns a formated number string, with unit identifier.
 function format_bytesize($kbytes, $dec_places = 2) {
     global $text;
+    
     if ($kbytes > 1048576) {
         $result = sprintf('%.' . $dec_places . 'f', $kbytes / 1048576);
         $result .= '&nbsp;Gb';
@@ -887,33 +922,6 @@ function is_javascript_enabled() {
 
 function add_check_if_javascript_enabled_js() {
     return '<script type="text/javascript">document.cookie="javascriptEnabled=true";</script>';
-}
-
-/*
- * to create missing directory in a gived path
- *
- * @returns a resource identifier or false if the query was not executed correctly.
- * @author KilerCris@Mail.com original function from  php manual
- * @author Christophe Gesche gesche@ipm.ucl.ac.be Claroline Team
- * @since  28-Aug-2001 09:12
- * @param sting         $path           wanted path
- */
-
-function mkpath($path) {
-    $path = str_replace("/", "\\", $path);
-    $dirs = explode("\\", $path);
-    $path = $dirs[0];
-    for ($i = 1; $i < count($dirs); $i++) {
-        $path .= "/" . $dirs[$i];
-        if (file_exists($path)) {
-            if (!is_dir($path)) {
-                return false;
-            }
-        } elseif (!@mkdir($path, 0755)) {
-            return false;
-        }
-    }
-    return true;
 }
 
 // Check if we can display activation link (e.g. module_id is one of our modules)
@@ -962,7 +970,7 @@ function current_module_id() {
     if (isset($static_module_paths[$link])) {
         $module_id = $static_module_paths[$link];
         define('STATIC_MODULE', true);
-        return false;
+        return $module_id;
     }
 
     foreach ($modules as $mid => $info) {
@@ -1265,7 +1273,7 @@ function add_units_navigation($entry_page = false) {
                        WHERE id = $unit_id AND course_id = ?d $visibility_check", $course_id);
         if ($q) {
             $unit_name = $q->title;
-            $navigation[] = array("url" => "../units/index.php?course=$course_code&amp;id=$unit_id", "name" => htmlspecialchars($unit_name));
+            $navigation[] = array('url' => "../units/index.php?course=$course_code&amp;id=$unit_id", 'name' => $unit_name);
         }
         return true;
     } else {
@@ -1277,7 +1285,7 @@ function add_units_navigation($entry_page = false) {
 // the $postfix (default: ellipsis "...") if so
 function ellipsize($string, $maxlen, $postfix = '...') {
     if (mb_strlen($string, 'UTF-8') > $maxlen) {
-        return (mb_substr($string, 0, $maxlen, 'UTF-8')) . $postfix;
+        return trim(mb_substr($string, 0, $maxlen, 'UTF-8')) . $postfix;
     } else {
         return $string;
     }
@@ -1796,7 +1804,7 @@ tinymce.init({
     menu : 'false',
     // Toolbar options
     toolbar1: 'toggle | bold | italic | link | image | media | eclmedia | alignleft | aligncenter | alignright | alignjustify | bullist | numlist | outdent | indent',
-    toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
+    toolbar2: 'underline | strikethrough | superscript | subscript | table | undo | redo | pastetext | cut | copy | paste | removeformat | formatselect | fontsizeselect | fullscreen | preview | searchreplace | code',
     // Replace values for the template plugin
      // Toolbar options
     //toolbar: 'undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media eclmedia code',
@@ -1942,7 +1950,7 @@ function units_set_maxorder() {
 function handle_unit_info_edit() {
 
     global $langCourseUnitModified, $langCourseUnitAdded, $maxorder, $course_id, $course_code, $webDir;
-
+    require_once 'modules/tags/moduleElement.class.php';
     $title = $_REQUEST['unittitle'];
     $descr = $_REQUEST['unitdescr'];
     if (isset($_REQUEST['unit_id'])) { // update course unit
@@ -1951,6 +1959,12 @@ function handle_unit_info_edit() {
                                         title = ?s,
                                         comments = ?s
                                     WHERE id = ?d AND course_id = ?d", $title, $descr, $unit_id, $course_id);
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->syncTags($tagsArray);
+        }        
         $successmsg = $langCourseUnitModified;
     } else { // add new course unit
         $order = $maxorder + 1;
@@ -1959,6 +1973,12 @@ function handle_unit_info_edit() {
                                  `order` = ?d, course_id = ?d", $title, $descr, $order, $course_id);
         $successmsg = $langCourseUnitAdded;
         $unit_id = $q->lastInsertID;
+        // tags
+        if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($unit_id);
+            $moduleTag->attachTags($tagsArray);
+        }              
     }
     // update index
     require_once 'modules/search/indexer.class.php';
@@ -1969,6 +1989,7 @@ function handle_unit_info_edit() {
     CourseXMLElement::refreshCourse($course_id, $course_code);
 
     Session::Messages($successmsg, 'alert-success');
+    redirect_to_home_page("modules/units/index.php?course=$course_code&id=$unit_id");
 }
 
 function math_unescape($matches) {
@@ -2209,7 +2230,7 @@ function copy_resized_image($source_file, $type, $maxwidth, $maxheight, $target_
 }
 
 // Produce HTML source for an icon
-function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false) {
+function icon($name, $title = null, $link = null, $link_attrs = '', $with_title = false, $sr_only = false) {
     global $themeimg;
 
     if (isset($title)) {
@@ -2218,8 +2239,11 @@ function icon($name, $title = null, $link = null, $link_attrs = '', $with_title 
     } else {
         $extra = '';
     }
-
-    $img = (isset($title) && $with_title) ? "<i class='fa $name' $extra></i> $title" : "<i class='fa $name' $extra></i>";
+    if (isset($title) && $with_title) {
+        $img = $sr_only ? "<i class='fa $name' $extra></i><span class='sr-only'>$title</span>" : "<i class='fa $name' $extra></i> $title";
+    } else {
+        $img = "<i class='fa $name' $extra></i>";
+    }
     if (isset($link)) {
         return "<a href='$link'$link_attrs>$img</a>";
     } else {

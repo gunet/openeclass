@@ -120,10 +120,52 @@ function check_admin_unit_resource($resource_id) {
  * @param type $unit_id
  */
 function show_resources($unit_id) {
-    global $tool_content, $max_resource_id, $langAvailableUnitResources, $is_editor;
+    global $tool_content, $max_resource_id, $langAvailableUnitResources, 
+           $is_editor, $head_content, $langDownload, $langPrint, $langCancel;
     
-    $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);
+    $req = Database::get()->queryArray("SELECT * FROM unit_resources WHERE unit_id = ?d AND `order` >= 0 ORDER BY `order`", $unit_id);    
     if (count($req) > 0) {
+        $head_content .= "<script>
+        $(function(){
+            $('.fileModal').click(function (e)
+            {
+                e.preventDefault();
+                var fileURL = $(this).attr('href');
+                var downloadURL = $(this).prev('input').val();
+                var fileTitle = $(this).attr('title');
+                bootbox.dialog({
+                    size: 'large',
+                    title: fileTitle,
+                    message: '<div class=\"row\">'+
+                                '<div class=\"col-sm-12\">'+
+                                    '<div class=\"iframe-container\"><iframe id=\"fileFrame\" src=\"'+fileURL+'\"></iframe></div>'+
+                                '</div>'+
+                            '</div>',                          
+                    buttons: {
+                        download: {
+                            label: '<i class=\"fa fa-download\"></i> $langDownload',
+                            className: 'btn-success',
+                            callback: function (d) {                      
+                                window.location = downloadURL;                                                            
+                            }
+                        },                        
+                        print: {
+                            label: '<i class=\"fa fa-print\"></i> $langPrint',
+                            className: 'btn-primary',
+                            callback: function (d) {
+                                var iframe = document.getElementById('fileFrame');
+                                iframe.contentWindow.print();                                                               
+                            }
+                        },
+                        cancel: {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        }                        
+                    }
+                });                    
+            });
+        });
+        </script>";        
         $max_resource_id = Database::get()->querySingle("SELECT id FROM unit_resources
                                 WHERE unit_id = ?d ORDER BY `order` DESC LIMIT 1", $unit_id)->id;
         $tool_content .= "<div class='table-responsive'>";
@@ -152,7 +194,7 @@ function show_resource($info) {
         return;
     }    
     switch ($info->type) {
-        case 'doc':
+        case 'doc':            
             $tool_content .= show_doc($info->title, $info->comments, $info->id, $info->res_id);
             break;
         case 'text':
@@ -222,10 +264,13 @@ function show_resource($info) {
  * @return string
  */
 function show_doc($title, $comments, $resource_id, $file_id) {
-    global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code;
+    global $is_editor, $course_id, $langWasDeleted, $urlServer,
+           $id, $course_code;
+    
+    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);
 
-    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $file_id);    
     if (!$file) {
+        $download_hidden_link = '';
         if (!$is_editor) {
             return '';
         }
@@ -239,10 +284,16 @@ function show_doc($title, $comments, $resource_id, $file_id) {
         }
         if ($file->format == '.dir') {
             $image = 'fa-folder-o';
-            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>";
+            $download_hidden_link = '';
+            $link = "<a href='{$urlServer}modules/document/index.php?course=$course_code&amp;openDir=$file->path&amp;unit=$id'>$file->filename</a>";
         } else {
             $image = choose_image('.' . $file->format);
-            $link = "<a href='" . file_url($file->path, $file->filename) . "' target='_blank'>";
+            $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
+            $download_hidden_link = "<input type='hidden' value='$download_url'>";
+            $file_obj = MediaResourceFactory::initFromDocument($file);
+            $file_obj->setAccessURL(file_url($file->path, $file->filename));
+            $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+            $link = MultimediaHelper::chooseMediaAhref($file_obj);            
         }
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
@@ -251,10 +302,11 @@ function show_doc($title, $comments, $resource_id, $file_id) {
     } else {
         $comment = '';
     }
+
     return "
         <tr$class_vis>
-          <td width='1'>$link" . icon($image, '') . "</a></td>
-          <td align='left'>$link" . q($title) . "</a>$comment</td>" .
+          <td width='1'>" . icon($image, '') . "</td>
+          <td class='text-left'>$download_hidden_link$link$comment</td>" .
             actions('doc', $resource_id, $status) .
             '</tr>';
 }
@@ -304,7 +356,7 @@ function show_description($title, $comments, $id, $res_id, $visibility) {
 /**
  * @brief display resource learning path
  * @global type $id
- * @global type $urlServer
+ * @global type $urlAppend
  * @global type $course_id
  * @global type $is_editor
  * @global type $langWasDeleted
@@ -317,7 +369,7 @@ function show_description($title, $comments, $id, $res_id, $visibility) {
  * @return string
  */
 function show_lp($title, $comments, $resource_id, $lp_id) {
-    global $id, $urlServer, $course_id, $is_editor,
+    global $id, $urlAppend, $course_id, $is_editor,
     $langWasDeleted, $course_code, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_LP); // checks module visibility
@@ -340,18 +392,25 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         }
     } else {        
         $status = $lp->visible;
-        $link = "<a href='${urlServer}modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$lp_id&amp;unit=$id'>";
-        if (!$module_visible) {
-            $link .= " <i>($langInactiveModule)</i>";
+        if ($is_editor) {
+            $link = "<a href='${urlAppend}modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$lp_id&amp;unit=$id'>";
+            if (!$module_visible) {
+                $link .= " <i>($langInactiveModule)</i> ";
+            }
+        } else {
+            if ($status == 0) {
+                return '';
+            }
+            $module_id = Database::get()->querySingle(
+                "SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1",
+                $lp_id)->module_id;
+            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
         }
         $imagelink = icon('fa-ellipsis-h');
     }
-    if ($status != '1' and ! $is_editor) {
-        return '';
-    }
 
     if (!empty($comments)) {
-        $comment_box = "<br />$comments";
+        $comment_box = "<br>$comments";
     } else {
         $comment_box = '';
     }
@@ -1223,11 +1282,16 @@ function edit_res($resource_id) {
     } else {
         $message = $langContents;
     }
-    $content .= "<div class='form-group'><label class='col-sm-2 control-label'>$message:</label>
-                              <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
-                </div>                         
-                <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'></div>
-                </fieldset>
-                </form></div>";
+    $content .= "
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$message:</label>
+                <div class='col-sm-10'>" . rich_text_editor('rescomments', 4, 20, $rescomments) . "</div>
+            </div>                         
+            <div class='col-sm-offset-2 col-sm-10'>
+                <input class='btn btn-primary' type='submit' name='edit_res_submit' value='$langModify'>
+            </div>
+        </fieldset>
+    </form>
+</div>";
     return $content;
 }

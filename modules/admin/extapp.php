@@ -97,13 +97,13 @@ if ($appName) {
         if ($app->getAppIcon() !== null) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
-        $tool_content .= $app->getDisplayName() . "</a></div><div class=\"mini-dashbord text-center text-success\" style=\"font-size:20px; margin-bottom: 10px;\"><i class=\"fa fa-toggle-on\"></i></div></td>\n";
+        $tool_content .= $app->getDisplayName() . "</a></div><div class=\"mini-dashbord text-center text-success\" style=\"font-size:20px; margin-bottom: 10px;\"><!--<i class=\"fa fa-toggle-on\"></i>--></div></td>\n";
 
         $tool_content .= "<td class=\"text-muted\">" . $app->getShortDescription() . "</td>\n";
         $tool_content .="</tr>\n";
     }
     $tool_content .="<tr>\n";
-    $tool_content .= "<td style=\"width:90px; padding:0px;\"><div class=\"text-center\" style=\"padding:10px;\"><a href=\"bbbmoduleconf.php\"><img class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></div><div class=\"mini-dashbord text-center text-danger\" style=\"font-size : 20px; margin-bottom: 10px;\"><i class=\"fa fa-toggle-on fa-flip-horizontal\"></i></div></td>\n";
+    $tool_content .= "<td style=\"width:90px; padding:0px;\"><div class=\"text-center\" style=\"padding:10px;\"><a href=\"bbbmoduleconf.php\"><img height=\"50\" width=\"89\"  class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></div><div class=\"mini-dashbord text-center text-success\" style=\"font-size : 20px; margin-bottom: 10px;\"><!--<i class=\"fa fa-toggle-on\">--></i></div></td>\n";
     $tool_content .= "<td class=\"text-muted\">$langBBBDescription</td>\n";
     $tool_content .="</tr>\n";
 

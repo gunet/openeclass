@@ -277,7 +277,7 @@ $tool_content .= "<div class='form-wrapper'>
             </div>
       </div>
     </div>
-    <div class='group-control'>
+    <div class='form-group'>
     <div class='col-sm-10 col-sm-offset-2'>      
       <input class='btn btn-primary' type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\">
     </div>  

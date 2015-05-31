@@ -215,6 +215,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     set_config('upgrade_begin', time());
 
     $tool_content .= getInfoAreas();
+    define('TEMPLATE_REMOVE_CLOSING_TAGS', true);
     draw($tool_content, 0);
     updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
     Debug::setOutput(function ($message, $level) use (&$debug_output, &$debug_error) {
@@ -2533,15 +2534,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
 
-        // add or upgrade default theme options
-        foreach ($theme_options as $theme) {
-            if ($q = Database::get()->querySingle("SELECT id FROM theme_options WHERE name = ?s", $theme['name'])) {
-                Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $theme['styles'], $q->id);
-            } else {
-                Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)", $theme['name'], $theme['styles']);
-            }
-        }
-        copyThemeImages();
 
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
@@ -2635,11 +2627,28 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
         DBHelper::fieldExists('link', 'user_id') or
             Database::get()->query("ALTER TABLE `link` ADD `user_id` INT(11) NOT NULL DEFAULT 0");
+        if (!DBHelper::fieldExists('course_user', 'document_timestamp')) {
+            Database::get()->query("ALTER TABLE `course_user` ADD document_timestamp DATETIME NOT NULL,
+                CHANGE `reg_date` `reg_date` DATETIME NOT NULL");
+            Database::get()->query("UPDATE `course_user` SET document_timestamp = NOW()");
+        }
+
+        if (get_config('course_guest') == '') {
+            set_config('course_guest', 'link');
+        }
+
+        // fix agenda entries without duration
+        Database::get()->query("UPDATE agenda SET duration = '0:00' WHERE duration = ''");
+        // Fix wiki last_version id's
+        Database::get()->query("UPDATE wiki_pages SET last_version = (SELECT MAX(id) FROM wiki_pages_content WHERE pid = wiki_pages.id)");
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
         DBHelper::fieldExists('assignment', 'submission_type') or
             Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
         DBHelper::fieldExists('assignment_submit', 'submission_text') or
             Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
+        Database::get()->query("UPDATE `assignment` SET `max_grade` = 10 WHERE `max_grade` IS NULL");
+        Database::get()->query("ALTER TABLE `assignment` CHANGE `max_grade` `max_grade` FLOAT NOT NULL DEFAULT '10'");
         // default assignment end date value should be null instead of 0000-00-00 00:00:00
         Database::get()->query("ALTER TABLE `assignment` CHANGE `deadline` `deadline` DATETIME NULL DEFAULT NULL");
         Database::get()->query("UPDATE `assignment` SET `deadline` = NULL WHERE `deadline` = '0000-00-00 00:00:00'");
@@ -2674,11 +2683,32 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("ALTER TABLE tags CHANGE `tag` `name` varchar (255)");
             Database::get()->query("ALTER TABLE tags ADD UNIQUE KEY (name)");
             Database::get()->query("RENAME TABLE `tags` TO `tag`");
-        }       
+        }
+        Database::get()->query("CREATE TABLE IF NOT EXISTS tag (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            UNIQUE KEY (name)) $charset_spec");
+
         if (!DBHelper::fieldExists('blog_post', 'commenting')) {
             Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
         }
         Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
+
+        //importing new themes
+        importThemes();
+        //unlinking files that were used with the old theme import mechanism
+        @unlink("$webDir/template/default/img/bcgr_lines_petrol_les saturation.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_atoms.png");
+        @unlink("$webDir/template/default/img/OpenCourses_banner_Color_theme1-1.png");
+        @unlink("$webDir/template/default/img/banner_Sketch_empty-1-2.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_sketchy.png");
+        @unlink("$webDir/template/default/img/Light_sketch_bcgr2-1.png");
+        @unlink("$webDir/template/default/img/Open-eClass-4-1-1.jpg");
+        @unlink("$webDir/template/default/img/eclass_ice.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_ice.png");
+        @unlink("$webDir/template/default/img/ice.png");
+        @unlink("$webDir/template/default/img/eclass_classic2-1-1.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");
     }
 
     // update eclass version
@@ -2699,7 +2729,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
-    $logdate = date("Y-m-d_G:i:s");
+    $logdate = date("Y-m-d_G.i:s");
 
     $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
     if ($debug_error) {
@@ -2708,4 +2738,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     updateInfo(1, $output_result, false);
     $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
     file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
+
+    // Close HTML body
+    echo "</body></html>\n";
 } // end of if not submit

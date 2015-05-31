@@ -29,40 +29,38 @@ $require_editor = true;
 $require_help = true;
 $helpTopic = 'AddCourseUnits';
 require_once '../../include/baseTheme.php';
-
+require_once 'modules/tags/moduleElement.class.php';
 $pageName = $langEditUnit;
 
 load_js('tools.js');
+load_js('select2');
 
 if (isset($_GET['edit'])) { // display form for editing course unit
     $id = $_GET['edit'];
     $cu = Database::get()->querySingle("SELECT id, title, comments FROM course_units WHERE id = ?d AND course_id = ?d",$id, $course_id);   
     if (!$cu) {
-        $pageName = $langUnitUnknown;
-        $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
-        draw($tool_content, 2, null, $head_content);
-        exit;
+        Session::Messages($langUnknownResType);
+        redirect_to_home_page("courses/$course_code/");
     } 
     $unittitle = " value='" . htmlspecialchars($cu->title, ENT_QUOTES) . "'";
+    $tagsInput = Tag::tagInput($id);
     $unitdescr = $cu->comments;
     $unit_id = $cu->id;
 } else {
     $pageName = $langAddUnit;
+    $tagsInput = Tag::tagInput();
     $unitdescr = $unittitle = '';
 }
 
-if (isset($_GET['next'])) {
-    $action = "index.php?course=$course_code&amp;id=$unit_id";
-} else {
-    $action = "${urlServer}courses/$course_code/";
-}
+$actionAppend = isset($unit_id) ? "&amp;id=$unit_id" : "";
+
 $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "${urlServer}courses/$course_code",
             'icon' => 'fa-reply',
             'level' => 'primary-label')),false);
 $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='$action' onsubmit=\"return checkrequired(this, 'unittitle');\">";
+        <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code$actionAppend' onsubmit=\"return checkrequired(this, 'unittitle');\">";
 
 if (isset($unit_id)) {
     $tool_content .= "<input type='hidden' name='unit_id' value='$unit_id'>";
@@ -74,11 +72,12 @@ $tool_content .= "<div class='form-group'>
                     </div>
                   </div>
             <div class='form-group'>
-                <label for='unitTitle' class='col-sm-2 control-label'>$langUnitDescr</label>
+                <label for='unitdescr' class='col-sm-2 control-label'>$langUnitDescr</label>
                 <div class='col-sm-10'>
                     " . rich_text_editor('unitdescr', 10, 20, $unitdescr) . "
                 </div>
             </div>
+            " . $tagsInput . "
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langSubmit) . "'>

@@ -66,9 +66,9 @@ class MultimediaHelper {
             }
             $ahref = "<a href='$mediaPlay' class='$class fileURL' $extraParams title='".q($title)."'>" . $title . "</a>";
             if (self::isSupportedImage($filename)) {
-                $ahref = "<a href='$mediaDL' class='$class fileURL' title=''".q($title)."'>" . $title . "</a>";
+                $ahref = "<a href='$mediaDL' class='$class fileURL' title='".q($title)."'>" . $title . "</a>";
             }
-        } else if(self::isSupportedModalFile($filename)){
+        } else if(self::isSupportedModalFile($filename)){            
             $ahref = "<a href='$mediaDL' class='fileURL fileModal' target='_blank' title='".q($title)."'>" . $title . "</a>";
         }
 
@@ -317,12 +317,12 @@ class MultimediaHelper {
     public static function serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv) {
         global $urlAppend;
         $ret = '';
-        $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5-5.5.2/skin/minimalist.css'>";
+        $ret .= "<link rel='stylesheet' href='{$urlAppend}js/flowplayer/html5-6.0.1/skin/minimalist.css'>";
         $ret .= "<script type='text/javascript' src='{$urlAppend}js/jquery-" . JQUERY_VERSION . ".min.js'></script>";
-        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5-5.5.2/flowplayer.min.js'></script>";
+        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/html5-6.0.1/flowplayer.min.js'></script>";
         $ret .= $startdiv;
         $ret .= '<div class="flowplayer"
-                      data-swf="' . $urlAppend . 'js/flowplayer/html5-5.5.2/flowplayer.swf" 
+                      data-swf="' . $urlAppend . 'js/flowplayer/html5-6.0.1/flowplayer.swf" 
                       data-fullscreen="true"
                       data-embed="false"
                       style="max-width: ' . (self::getObjectWidth() - 4) . 'px;">

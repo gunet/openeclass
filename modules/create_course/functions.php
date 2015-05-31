@@ -97,15 +97,15 @@ function create_course_dirs($code) {
     $base = "courses/$code";
     umask(0);
     if (!(mkdir("$base") and
-            mkdir("$base/image", 0755) and
-            mkdir("$base/document", 0755) and
-            mkdir("$base/dropbox", 0755) and
-            mkdir("$base/page", 0755) and
-            mkdir("$base/work", 0755) and
-            mkdir("$base/group", 0755) and
-            mkdir("$base/temp", 0755) and
-            mkdir("$base/scormPackages", 0755) and
-            mkdir("video/$code", 0755))) {
+          mkdir("$base/image", 0755) and
+          mkdir("$base/document", 0755) and
+          mkdir("$base/dropbox", 0755) and
+          mkdir("$base/page", 0755) and
+          mkdir("$base/work", 0755) and
+          mkdir("$base/group", 0755) and
+          mkdir("$base/temp", 0755) and
+          mkdir("$base/scormPackages", 0755) and
+          mkdir("video/$code", 0755))) {
         return false;
     }
     return true;
