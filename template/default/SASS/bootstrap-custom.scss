@@ -2484,6 +2484,11 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
         width: 90%;
     }
 }
+@media print {
+  a[href]:after {
+    content: none;
+  }
+}
 
 /* LOGIN page*/
 #main-content .login-page{
