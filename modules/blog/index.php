@@ -30,8 +30,8 @@ if (isset($_GET['course'])) { //course blog
 $require_help = TRUE;
 $helpTopic = 'Blog';
 require_once '../../include/baseTheme.php';
-require_once 'modules/comments/class.comment.php';
 require_once 'modules/comments/class.commenting.php';
+require_once 'modules/comments/class.comment.php';
 require_once 'modules/rating/class.rating.php';
 require_once 'modules/blog/class.blog.php';
 require_once 'modules/blog/class.blogpost.php';

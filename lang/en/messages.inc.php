@@ -1306,6 +1306,12 @@ $shownone = "Show none";
 $langProfNoLinksExist = "No links exist! <br /><p align=\"center\">You may use the tool operations to add links.";
 $langNoLinksExist = "The " . $langsTeacher . " has not added any links.";
 $langEmptyLinkURL = "Link URL is empty";
+$langLinkSettings = "Link module settings";
+$langLinkSettingsSucc = "Settings were succesfully saved";
+$langSocialBookmarksFunct = "Social bookmarking functionality";
+$langSocialCategory = "Social bookmarks";
+$langLinkNotOwner = "Failuer! You are not the owner of this link.";
+$langLinkSubmittedBy = "submitted by";
 $lang_remind_pass = 'Reset password';
 $lang_pass_intro = '<p>If you have forgotten you passwrd, please fill in your <em>username</em>
 and email.
@@ -3539,6 +3545,7 @@ $langForumDefaultCat = "General Forums";
 $langEditTopic = "Edit Topic";
 $langChangeTopicForum = "Change Forum";
 $langTopicDataChanged = "Topic data changed succesfully";
+$langForumPost = "Forum post";
 $langForumPostReply = "Reply to this post";
 $langForumPostParent = "This post is a reply to post ";
 $langForumPostParentDel = "This post is a reply to a post that has been deleted";
@@ -3734,6 +3741,40 @@ $langShare = "Share it";
 $langSharingDisAdmin = "Social sharing is globally disabled by the platform's administrator.";
 $langSharingDisCourse = "Social sharing is disabled for non-open courses.";
 $langEnableSocialSharingLiks = "Enable social sharing links";
+$langAbuseReport = 'Abuse reporting';
+$langAbuseReports = 'Abuse reports';
+$langAbuseReportEn = 'Enabled abuse reporting';
+$langAbuseReportDis = 'Disabled abuse reporting';
+$langAbuseReportCat = 'Reason for abuse report';
+$langSpam = 'Spam';
+$langRudeness = 'Rudeness';
+$langAbuseReportCatError = 'You did not select a reason for this abuse report';
+$langAbuseReportMsgError = 'You have to complete a justification message in order to submit an abuse report';
+$langAbuseReportSaveSuccess = 'The abuse report was succesfully sent to the course administrators. They were informed with a message sent via the Messages subsystem.';
+$langAbuseReportPMBody = 'I have just sumbitted an abuse report for %s. <br/>
+<b>Reason:</b><br/> %s <br/>
+<b>Justification:</b><br/> %s <br/>
+<b>Content:</b><br/> %s <br/>
+<a class="outtabs" href="%s">Go to content</a>';
+$langAbuseReportClosePMBody = 'I have just closed an abuse report for %s. <br/>
+<b>Reason:</b><br/> %s <br/>
+<b>Justification:</b><br/> %s <br/>
+<b>Content:</b><br/> %s <br/>
+<a class="outtabs" href="%s">Go to content</a>';
+$langAComment = 'a comment';
+$langAForumPost = 'a forum post';
+$langNoAbuseReports = 'There are no abuse reports for this course';
+$langAbuseResourceType = 'Content type';
+$langAbuseReportClose = 'Close report';
+$langVisitReportedResource = 'Visit reported content';
+$langEditReportedResource = 'Edit reported content';
+$langDeleteReportedResource = 'Delete reported content';
+$langConfirmAbuseReportClose = 'Are you sure you want to mark this report as resolved?';
+$langConfirmDeleteReportedResource = 'Are you sure you want to delete reported content?';
+$langCloseReportSuccess = 'The report was marked as resolved.';
+$langAbuseReportStatus = 'Abuse report status';
+$langAbuseReportOpen = 'Open report';
+$langAbuseReportClosed = 'Closed report';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';

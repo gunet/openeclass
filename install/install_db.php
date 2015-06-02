@@ -521,6 +521,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `link` (
                 `category` INT(6) DEFAULT 0 NOT NULL,
                 `order` INT(6) DEFAULT 0 NOT NULL,
                 `hits` INT(6) DEFAULT 0 NOT NULL,
+                `user_id` INT(11) DEFAULT 0 NOT NULL,
                 PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `link_category` (
                 `id` INT(6) NOT NULL AUTO_INCREMENT,
@@ -785,6 +786,19 @@ $db->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
                 `count` INT(11) NOT NULL DEFAULT 0,
                 `tag` VARCHAR(50),
                 INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `rid` INT(11) NOT NULL,
+                `rtype` VARCHAR(50) NOT NULL,
+                `course_id` INT(11) NOT NULL,
+                `reason` VARCHAR(50) NOT NULL DEFAULT '',
+                `message` TEXT NOT NULL,
+                `timestamp` INT(11) NOT NULL DEFAULT 0,
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `status` TINYINT(1) NOT NULL DEFAULT 1,
+                INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
+                INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

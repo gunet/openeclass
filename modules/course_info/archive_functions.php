@@ -150,10 +150,11 @@ function doArchive($course_id, $course_code) {
         'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
         'rating' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR 
                      (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
-                     WHERE forum.course_id = $course_id))",
+                     WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id))",
         'rating_cache' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR 
                      (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
-                     WHERE forum.course_id = $course_id))",
+                     WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id))",
+        'abuse_report' => "id IN (SELECT id FROM abuse_report WHERE course_id = $course_id)",                     
         'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)");
 
     foreach ($archive_conditions as $table => $condition) {
