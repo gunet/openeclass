@@ -643,7 +643,7 @@ foreach ($flatElementList as $module) {
                 array('title' => $langDelete, // DELETE ROW. In case of SCORM module, the pop-up window to confirm must be different as the action will be different on the server
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=delModule&amp;cmdid=" . $module['learnPath_module_id'],
                     'class' => 'delete',
-                    'confirm' => $del_conf_text + " " + $module['name'],
+                    'confirm' => $langAreYouSureDeleteModule,
                     'icon' => 'fa-times')               
             )) .
             "</td>";
