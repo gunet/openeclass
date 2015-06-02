@@ -352,6 +352,7 @@ foreach ($result as $myrow) {
     if (!empty($dyntools)) {
         if (isset($report_modal)) {
             $tool_content .= "<td valign='center'>" . action_button($dyntools) . $report_modal . "</td>";
+            unset($report_modal);
         } else {
             $tool_content .= "<td valign='center'>" . action_button($dyntools) . "</td>";
         }

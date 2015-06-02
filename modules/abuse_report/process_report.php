@@ -43,8 +43,9 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
                                       <div class="form-group has-error">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
                                           <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
-                                              <option value="spam">'.$langSpam.'</option>
                                               <option value="rudeness">'.$langRudeness.'</option>
+                                              <option value="spam">'.$langSpam.'</option>
+                                              <option value="other">'.$langOther.'</option>
                                           </select>
                                       </div>
                                       <div class="form-group">
@@ -63,8 +64,9 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
                                       <div class="form-group">
                                           <label for="abuse_form_select'.$rtype.'_'.$rid.'">'.$langAbuseReportCat.'</label>
                                           <select class="form-control" name="abuse_report_reason" id="abuse_form_select'.$rtype.'_'.$rid.'">
-                                              <option value="spam">'.$langSpam.'</option>
                                               <option value="rudeness">'.$langRudeness.'</option>
+                                              <option value="spam">'.$langSpam.'</option>
+                                              <option value="other">'.$langOther.'</option>
                                           </select>
                                       </div>
                                       <div class="form-group has-error">
