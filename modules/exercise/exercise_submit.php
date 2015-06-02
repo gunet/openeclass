@@ -305,7 +305,7 @@ if (isset($_POST['formSent'])) {
     // keeps the exercise in a pending/uncompleted state and returns to the exercise list    
     if (isset($_POST['buttonSave']) && $exerciseTempSave) {
         $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId];
-        $secs_remaining = $_POST['secsRemaining'];
+        $secs_remaining = isset($_POST['secsRemaining']) ? $_POST['secsRemaining'] : 0;
         $totalScore = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_answer_record WHERE eurid = ?d", $eurid)->weight;
         if ($objExercise->isRandom()) {
             $totalWeighting = Database::get()->querySingle("SELECT SUM(weight) AS weight FROM exercise_question WHERE id IN (
@@ -386,7 +386,7 @@ if (!$questionList) {
 } else {
     $tool_content .= "
         <br>
-        <div class='pull-right'><input class='btn btn-primary' type='submit' value='";
+        <div class='pull-right'><input class='btn btn-default' type='submit' name='buttonCancel' value='$langCancel'>&nbsp;<input class='btn btn-primary' type='submit' value='";
     if ($exerciseType == 1 || $nbrQuestions == $questionNum) {
         $tool_content .= "$langCont' />";
     } else {
@@ -395,7 +395,7 @@ if (!$questionList) {
     if ($exerciseTempSave && !($exerciseType == 2 && ($questionNum == $nbrQuestions))) {
         $tool_content .= "&nbsp;<input class='btn btn-primary' type='submit' name='buttonSave' value='$langTemporarySave' />";   
     }
-    $tool_content .= "&nbsp;<input class='btn btn-primary' type='submit' name='buttonCancel' value='$langCancel' /></div>";
+    $tool_content .= "</div>";
 }
 $tool_content .= "</form>";
 if ($questionList) {

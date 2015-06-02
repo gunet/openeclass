@@ -144,6 +144,17 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $('.questionDrawnRadio').prop('disabled', false); 
                 }
             });
+            $('#exerciseAttemptsAllowed').blur(function(){
+                var attempts = $(this).val();
+                if (attempts ==0) {
+                    $('#answersDispLastAttempt').addClass('hidden');
+                    if ($('input[name=\"dispresults\"]:checked').val() == 3) {
+                        $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
+                    }
+                } else {
+                    $('#answersDispLastAttempt').removeClass('hidden');
+                }
+            });
         });
     </script>";
     $tool_content .= action_bar(array(
@@ -287,6 +298,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                              $langAnswersNotDisp
                            </label>
                          </div>
+                         <div id='answersDispLastAttempt' class='radio".($exerciseAttemptsAllowed ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispresults' value='3' ".(($displayResults == 3)? 'checked' : '').">
+                             $langAnswersDispLastAttempt
+                           </label>
+                         </div>                         
                      </div>
                  </div>
                  <div class='form-group'>
@@ -318,8 +335,14 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
              </fieldset>
              </form>
         </div>";    
-} else {  
-    $disp_results_message = ($displayResults == 1) ? $langAnswersDisp : $langAnswersNotDisp;
+} else {
+    if ($displayResults == 1) {
+        $disp_results_message = $langAnswersDisp;
+    } elseif ($displayResults == 0) {
+        $disp_results_message = $langAnswersNotDisp;
+    } else {
+        $disp_results_message = $langAnswersDispLastAttempt;
+    }
     $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
     $exerciseDescription = standard_text_escape($exerciseDescription);
     $exerciseStartDate = $exerciseStartDate;
