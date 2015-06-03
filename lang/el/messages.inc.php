@@ -1857,8 +1857,8 @@ $mailbody7 = "$langFaculty:";
 $mailbody8 = "ως $langStudent.";
 $logo = "Πλατφόρμα Ασύγχρονης Τηλεκπαίδευσης $siteName";
 $gunet = "Ομάδα Ασύγχρονης Τηλεκπαίδευσης $siteName";
-$langSendInfoMail = "Αποστολή ενημερωτικού e-mail στους $langsTeachers του $siteName";
-$langInfoAboutEclass = "Ενημερωτικό δελτίο πλατφόρμας $siteName";
+$langSendInfoMail = "Αποστολή ενημερωτικού e-mail στους χρήστες";
+$langAdminMessage = "Μήνυμα Διαχειριστή $siteName";
 
 // contact.php
 $introcontact = "Μπορείτε να επικοινωνείτε με την Ομάδα Υποστήριξης της πλατφόρμας <b>" . $siteName . "</b> με τους παρακάτω τρόπους:";
