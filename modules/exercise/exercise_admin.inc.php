@@ -115,13 +115,34 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 pickerPosition: 'bottom-left', 
                 language: '".$language."',
                 autoclose: true    
+            }).on('changeDate', function(ev){
+                if($(this).attr('id') === 'exerciseEndDate') {
+                    $('#answersDispEndDate').removeClass('hidden');
+                }
+            }).on('blur', function(ev){
+                if($(this).attr('id') === 'exerciseEndDate') {
+                    var end_date = $(this).val();
+                    if (end_date === '') {
+                        if ($('input[name=\"dispresults\"]:checked').val() == 4) {
+                            $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
+                        }                          
+                        $('#answersDispEndDate').addClass('hidden');
+                    }
+                }
             });
             $('#enableEndDate, #enableStartDate').change(function() {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#exercise'+dateType).prop('disabled', false);
+                    if ($('input#exercise'+dateType).val() !== '') {
+                        $('#answersDispEndDate').removeClass('hidden');
+                    }
                 } else {
                     $('input#exercise'+dateType).prop('disabled', true);
+                    if ($('input[name=\"dispresults\"]:checked').val() == 4) {
+                        $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
+                    }                    
+                    $('#answersDispEndDate').addClass('hidden');
                 }
             });
             
@@ -303,7 +324,13 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                              <input type='radio' name='dispresults' value='3' ".(($displayResults == 3)? 'checked' : '').">
                              $langAnswersDispLastAttempt
                            </label>
-                         </div>                         
+                         </div>
+                         <div id='answersDispEndDate' class='radio".(!empty($exerciseEndDate) ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispresults' value='4' ".(($displayResults == 4)? 'checked' : '').">
+                             $langAnswersDispEndDate
+                           </label>
+                         </div>                          
                      </div>
                  </div>
                  <div class='form-group'>

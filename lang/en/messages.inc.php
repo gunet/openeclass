@@ -717,6 +717,7 @@ $langTake = "Take";
 $langAnswersNotDisp = "Hide answers after exercise end";
 $langAnswersDisp = "Display correct answers after exercise end";
 $langAnswersDispLastAttempt = "Display correct answers after student's last attempt";
+$langAnswersDispEndDate = "Display correct answers after exercise's end date";
 $langScoreNotDisp = "Hide scoring after exercise end";
 $langScoreDisp = "Display scoring after exercise end";
 $langExerciseManagement = "Exercise Management";

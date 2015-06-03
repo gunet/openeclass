@@ -149,6 +149,13 @@ $displayScore = $objExercise->selectScore();
 $exerciseAttemptsAllowed = $objExercise->selectAttemptsAllowed();
 $userAttempts = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exercise_user_record->eid, $uid)->count;
 
+$cur_date = new DateTime("now");
+$end_date = new DateTime($objExercise->selectEndDate());
+
+$showResults = $displayResults == 1 
+               || $is_editor 
+               || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts 
+               || $displayResults == 4 && $end_date < $cur_date;
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
@@ -218,7 +225,7 @@ if (count($exercise_question_ids)>0){
         }
         $questionScore = 0;
 
-        if ($displayResults == 1 || $is_editor || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts) {
+        if ($showResults) {
             if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                 $tool_content .= "
                             <tr class='even'>
@@ -344,7 +351,7 @@ if (count($exercise_question_ids)>0){
                         }
                         break;
                 } // end switch()
-                if ($displayResults == 1 || $is_editor || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts) {
+                if ($showResults) {
                     if ($answerType != MATCHING || $answerCorrect) {
                         if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER || $answerType == TRUE_FALSE) {
                             $tool_content .= "
