@@ -21,9 +21,9 @@
 /**
  * @file question_list_admin.inc.php
  */
+$exerciseId = $_GET['exerciseId'];
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
     $action = $_POST['action'];
-    $exerciseId = $_GET['exerciseId'];
     $category = $_POST['category'];
     $difficulty = $_POST['difficulty'];
     $query_vars = array($course_id);
@@ -64,7 +64,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     exit();
 }
 $q_cats = Database::get()->queryArray("SELECT * FROM exercise_question_cats WHERE course_id = ?d", $course_id);
-$total_questions = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_question WHERE course_id = ?d", $course_id)->count;
+$total_questions = Database::get()->querySingle("SELECT count(*) AS count FROM exercise_question WHERE course_id = ?d AND id NOT IN (SELECT question_id FROM exercise_with_questions WHERE exercise_id = ?d)", $course_id, $exerciseId)->count;
 $q_number_options = "<option value=\"0\">0 $langQuestions</option>";
 for($i=1;$i<=$total_questions;$i++){
     $q_number_options .= "<option value=\"$i\">$i $langQuestions</option>";
