@@ -156,6 +156,8 @@ $showResults = $displayResults == 1
                || $is_editor 
                || $displayResults == 3 && $exerciseAttemptsAllowed == $userAttempts 
                || $displayResults == 4 && $end_date < $cur_date;
+
+$showScore = $displayScore == 1 || $is_editor;
 $tool_content .= "<div class='panel panel-primary'>
   <div class='panel-heading'>
     <h3 class='panel-title'>" . q_math($exerciseTitle) . "</h3>
@@ -417,7 +419,7 @@ if (count($exercise_question_ids)>0){
                 }
             }
         }        
-        if ($displayScore == 1 || $is_editor) {
+        if ($showScore) {
             if (intval($questionScore) == $questionScore) {
                 $questionScore = intval($questionScore);
             }
@@ -444,7 +446,7 @@ if (count($exercise_question_ids)>0){
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
-if ($displayScore == 1 || $is_editor) {
+if ($showScore) {
     $tool_content .= "
     <br/>
     <table class='table-default'>
