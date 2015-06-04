@@ -36,7 +36,7 @@ if (!get_config('opencourses_enable') || !$is_opencourses_reviewer) {
 $xml = CourseXMLElement::init($cours_id, $code_cours);
 $xmlData = $xml->asFlatArray();
 list($visible) = mysql_fetch_row(db_query("SELECT visible FROM `$mysqlMainDb`.cours WHERE code = '$currentCourseID'"));
-$hasOpenAccess = ($visible == 2);
+$hasOpenAccess = ($visible == 2 || $visible == 1);
 $hasMandatoryMetadata = $xml->hasMandatoryMetadata();
 $clang = langname_to_code($currentCourseLanguage);
 $hasLicense = (isset($xmlData['course_license_' . $clang]) && !empty($xmlData['course_license_' . $clang]));

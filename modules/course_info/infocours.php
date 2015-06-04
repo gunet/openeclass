@@ -328,12 +328,12 @@ if (isset($_POST['submit'])) {
 	    </tr>
 	    <tr>
 		<th width='170'><img src='$themeimg/lock_open.png' alt='$m[legopen]' title='$m[legopen]' width='16' height='16' />&nbsp;$m[legopen]:</th>
-		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] $disabledVisibility /></td>
+		<td width='1'><input id='courseopen' type='radio' name='formvisible' value='2' $visibleChecked[2] /></td>
 		<td class='smaller'>$langPublic</td>
 	    </tr>
 	    <tr>
 		<th><img src='$themeimg/lock_registration.png' alt='$m[legrestricted]' title='$m[legrestricted]' width='16' height='16' />&nbsp;$m[legrestricted]:</th>
-		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] $disabledVisibility /></td>
+		<td><input id='coursewithregistration' type='radio' name='formvisible' value='1' $visibleChecked[1] /></td>
 		<td class='smaller'>$langPrivOpen</td>
 	    </tr>
 	    <tr>
