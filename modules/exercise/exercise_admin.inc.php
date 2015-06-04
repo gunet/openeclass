@@ -363,12 +363,19 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
              </form>
         </div>";    
 } else {
-    if ($displayResults == 1) {
-        $disp_results_message = $langAnswersDisp;
-    } elseif ($displayResults == 0) {
-        $disp_results_message = $langAnswersNotDisp;
-    } else {
-        $disp_results_message = $langAnswersDispLastAttempt;
+    switch ($displayResults) {
+        case 0:
+            $disp_results_message = $langAnswersNotDisp;
+            break;
+        case 1:
+            $disp_results_message = $langAnswersDisp;
+            break;
+        case 3:
+            $disp_results_message = $langAnswersDispLastAttempt;
+            break;
+        case 4:
+            $disp_results_message = $langAnswersDispEndDate;
+            break;          
     }
     $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
     $exerciseDescription = standard_text_escape($exerciseDescription);
@@ -390,7 +397,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             <h3 class='panel-title'>$langInfoExercise &nbsp;". icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes") ."</h3>
         </div>
         <div class='panel-body'>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseName:</strong>
                 </div>
@@ -398,7 +405,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     " . q($exerciseTitle) . "
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseDescription:</strong>
                 </div>
@@ -406,7 +413,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseDescription
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseType:</strong>
                 </div>
@@ -414,7 +421,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseType
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseStart:</strong>
                 </div>
@@ -422,7 +429,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseStartDate
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseEnd:</strong>
                 </div>
@@ -430,7 +437,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseEndDate
                 </div>                
             </div>  
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTemporarySave:</strong>
                 </div>
@@ -438,7 +445,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseTempSave
                 </div>                
             </div> 
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseConstrain:</strong>
                 </div>
@@ -446,7 +453,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseTimeConstraint $langExerciseConstrainUnit
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseAttemptsAllowed:</strong>
                 </div>
@@ -454,7 +461,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langRandomQuestions:</strong>
                 </div>
@@ -462,7 +469,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $langSelection $randomQuestions $langFromRandomQuestions
                 </div>                
             </div> 
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langAnswers:</strong>
                 </div>
@@ -470,7 +477,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $disp_results_message
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langScore:</strong>
                 </div>
@@ -481,7 +488,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
         $tags_list = $moduleTag->showTags();
         if ($tags_list)            
             $tool_content .= "
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
