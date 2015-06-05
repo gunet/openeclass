@@ -50,9 +50,6 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www
     <!-- Latest compiled and minified CSS -->
     <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-custom.css'>
 
-    <!-- Optional theme -->
-    <link rel='stylesheet' href='{$urlAppend}template/default/CSS/bootstrap-theme.min.css'>
-
     <!-- Font Awesome - A font of icons -->
     <link href='{$urlAppend}template/default/CSS/font-awesome-4.2.0/css/font-awesome.css' rel='stylesheet'>  
         
@@ -128,6 +125,8 @@ for ($i = 0; $i < sizeof($flatElementList); $i++) {
     }
 }
 
+$unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
+
 // -------------------------- learning path list header ----------------------------
 echo "<ul><li class='category'>$langContents</li>";
 
@@ -193,7 +192,7 @@ foreach ($flatElementList as $module) {
         if ($_SESSION['lp_module_id'] == $module['module_id']) {
             echo "&nbsp;<em>" . htmlspecialchars($module['name']) . "</em>";
         } else {
-            echo "&nbsp;<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]'" . $style . " target='scoFrame'>" . htmlspecialchars($module['name']) . "</a>";
+            echo "&nbsp;<a href='navigation/viewModule.php?course=$course_code&amp;viewModule_id=$module[module_id]$unitParam'" . $style . " target='scoFrame'>" . htmlspecialchars($module['name']) . "</a>";
         }
         if (isset($imagePassed)) {
             echo "&nbsp;&nbsp;" . $imagePassed;

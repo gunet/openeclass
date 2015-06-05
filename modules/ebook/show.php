@@ -31,12 +31,16 @@ if (count($path_components) >= 4) {
         if ($path_components[4] == '_') {
             $show_orphan_file = true;
         } else {
-            $ids = explode(',', $path_components[4]);
-            $current_sid = intval($ids[0]);
-            if (isset($ids[1])) {
-                $current_ssid = intval($ids[1]);
-                $full_url_found = true;
-                $current_display_id = $current_sid . ',' . $current_ssid;
+            if (preg_match('/^unit=([0-9]+)$/', $path_components[4], $matches)) {
+                $unit = intval($matches[1]);
+            } else {
+                $ids = explode(',', $path_components[4]);
+                $current_sid = intval($ids[0]);
+                if (isset($ids[1])) {
+                    $current_ssid = intval($ids[1]);
+                    $full_url_found = true;
+                    $current_display_id = $current_sid . ',' . $current_ssid;
+                }
             }
         }
     }
