@@ -44,8 +44,9 @@ $require_current_course = true;
 require_once '../../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
-$TOCurl = "../viewer_toc.php?course=$course_code";
-$TOCleft = "../toc.php?course=$course_code";
+$unitParam = isset($_GET['unit'])? ('&unit=' . intval($_GET['unit']): '';
+$TOCurl = "../viewer_toc.php?course=$course_code$unitParam";
+$TOCleft = "../toc.php?course=$course_code$unitParam";
 
 /* * ****************** */
 /* HANDLING API FORM */
@@ -111,7 +112,6 @@ if (isset($_POST['ump_id'])) {
 // display the form to accept new commit and
 // refresh TOC frame, has to be done here to show recorded progression as soon as it is recorded
 ?>
-
 <!-- API form -->
 <html>
     <head>
@@ -130,7 +130,7 @@ if (isset($_POST['ump_id'])) {
         ?>
     </head>
     <body>
-        <form name="cmiForm" method="POST" action="<?php echo $_SERVER["SCRIPT_NAME"] . "?course=$course_code" ?>">
+        <form name="cmiForm" method="POST" action="<?php echo $_SERVER["SCRIPT_NAME"] . "?course=$course_code$unitParam" ?>">
             <input type="hidden" name="ump_id" />
             <input type="hidden" name="lesson_status" />
             <input type="hidden" name="lesson_location" />

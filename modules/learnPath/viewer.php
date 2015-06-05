@@ -61,9 +61,11 @@ check_LPM_validity($is_editor, $course_code, true);
 
 $nameTools = $langPreview;
 if (!add_units_navigation()) {
-    $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langLearningPaths);
-    $navigation[] = array("url" => "learningPath.php?course=$course_code", "name" => $langAdm);
+    $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langLearningPaths);
+    $navigation[] = array('url' => "learningPath.php?course=$course_code", 'name' => $langAdm);
 }
+
+$unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
 
 if (!isset($titlePage)) {
     $titlePage = '';
@@ -84,7 +86,7 @@ if (isset($_GET['fullscreen']) && is_numeric($_GET['fullscreen'])) {
     $displayFull = FULL_SCREEN;
 }
 if ($displayFull == 0) {
-    $tool_content .= "<iframe src=\"navigation/startModule.php?course=$course_code\" name=\"mainFrame\" "
+    $tool_content .= "<iframe src=\"navigation/startModule.php?course=$course_code$unitParam\" name=\"mainFrame\" "
             . "width=\"100%\" height=\"550\" scrolling=\"no\" frameborder=\"0\">"
             . $langBrowserCannotSeeFrames
             . "<br />" . "\n"
@@ -101,7 +103,7 @@ if ($displayFull == 0) {
     . "<title>" . q($titlePage) . "</title>" . "\n"
     . "</head>" . "\n"
     . "<frameset cols=\"*\" border=\"0\" frameborder=\"0\">" . "\n"
-    . "<frame src=\"navigation/startModule.php?course=$course_code\" name=\"mainFrame\" />" . "\n"
+    . "<frame src=\"navigation/startModule.php?course=$course_code$unitParam\" name=\"mainFrame\" />" . "\n"
     . "</frameset>" . "\n"
     . "<noframes>" . "\n"
     . "<body>" . "\n"
