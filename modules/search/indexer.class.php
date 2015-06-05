@@ -435,7 +435,7 @@ class Indexer {
         $(document).ready(function() {
             $.ajax({
                 type: 'POST',
-                url: '{$urlAppend}/modules/search/idxasync.php'
+                url: '{$urlAppend}modules/search/idxasync.php'
             });
         })
         </script>";

@@ -33,27 +33,18 @@ if (isset($_GET['reindex'])) {
     });
 }
 
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title><?php echo $logo; ?></title>
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <link href='<?php echo $urlAppend; ?>install/install.css' rel='stylesheet' type='text/css' />
-    <?php echo $head_content; ?>
-    <script type='text/javascript'>
+$head_content .= "
+  <script>
     /* <![CDATA[ */
-    
-    var langIndexingDone = '<?php echo $langIndexingDone; ?>';
+
+    var langIndexingDone = '" . js_escape($langIndexingDone) . "';
     
     // confirm window closing
     // from https://developer.mozilla.org/en-US/docs/Web/Events/beforeunload
     var confirmClose = function (e) {
-        var confirmationMessage = "\o/";
-
-        (e || window.event).returnValue = confirmationMessage;     //Gecko + IE
-        return confirmationMessage;                                //Webkit, Safari, Chrome etc.
+        var confirmationMessage = '\o/';
+        (e || window.event).returnValue = confirmationMessage;   // Gecko + IE
+        return confirmationMessage;                              // Webkit, Safari, Chrome etc.
     };
         
     var doProc = function() {
@@ -64,32 +55,30 @@ if (isset($_GET['reindex'])) {
             if (data.remaining > 0) {
                 setTimeout(doProc, 0);
             } else {
-                $("#idxinfo").attr('class', 'success');
+                $('#idxinfo').attr('class', 'success');
                 $('#idxresul').html(langIndexingDone);
-                window.removeEventListener("beforeunload", confirmClose);
+                window.removeEventListener('beforeunload', confirmClose);
             }
         })
         .fail(function(jqxhr, textStatus, error) {
-            //console.debug("jqxhr Request Failed: " + textStatus + ', ' + error);
+            //console.debug('jqxhr Request Failed: ' + textStatus + ', ' + error);
         });
     };
     
     $(document).ready(function() {
-        window.addEventListener("beforeunload", confirmClose);
+        window.addEventListener('beforeunload', confirmClose);
         doProc();
     });
     
     /* ]]> */
-    </script>
-  </head>
-  <body style='background-color: #ffffff;'>
-    <div class='container'>
-      <p align='center'><img src='<?php echo $urlAppend; ?>template/default/img/logo_eclass_small.png' alt='logo' /></p>
-      <div id='idxinfo' class='alert' align='center'>
-        <p><?php echo $langIndexingAlert1; ?></p>
-        <p id="idxresul"><?php echo $langIndexingAlert2; ?></p>
-        <p><?php echo $langIndexingRemain; ?>: <span id="idxremaining"></span></p>
-      </div>
-    </div>
-  </body>
-</html>
+  </script>";
+
+$tool_content .= "
+    <p>$langIndexingAlert1</p>
+    <p id='idxresul'>$langIndexingAlert2</p>
+    <p>$langIndexingRemain: <span id='idxremaining'></span></p>";
+
+$toolName = $logo;
+
+draw_popup();
+
