@@ -77,8 +77,8 @@ body
 }
 @media (max-width: $screen-desktop){
     body{
-        background: none !important;
         &>.container{
+            margin-bottom: 0;
             padding:0;
             margin:0;
         }
