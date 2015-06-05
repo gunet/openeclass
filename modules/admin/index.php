@@ -46,42 +46,52 @@ $tool_content .= "
             <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <h3 class='panel-title'>$langPlatformIdentity</h3>
+                </div>                
+                <div class='panel-body'>                
+                    <div class='row margin-bottom-thin'>
+                    <div class='col-sm-3'>
+                        " . icon('fa-check') . " <strong>$langWebServerVersion</strong> 
+                    </div>
+                    <div class='col-sm-9'>
+                        <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em>
+                    </div>
                 </div>
-                <div class='panel-body'>
-                    <div class='row margin-bottom-thin'>
-                        <div class='col-sm-2'>
-                        <strong>Version:</strong>
-                        </div>
-                        <div class='col-sm-10'>
-                        $langAboutText <b>$siteName " . ECLASS_VERSION . "</b>
-                        </div>                        
+                <div class='row margin-bottom-thin'>
+                <div class='col-sm-3'>";
+                if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+                    $info_icon = icon('fa-check');
+                    $info_text = '';
+                } else {
+                    $info_icon = icon('fa-ban');
+                    $info_text = "<div class='row margin-bottom-thin'>
+                                    <div class='col-sm-12'>
+                                        <div class='alert alert-danger'>$langWarnAboutPHP</div>
+                                    </div>
+                                  </div>";
+                }
+                $tool_content .= "$info_icon <strong>$langPHPVersion</strong></div>";                
+                $tool_content .= "<div class='col-sm-9'>";
+                $tool_content .= "<em>" . PHP_VERSION . "</em>";                
+                $tool_content .= "</div></div>";
+                $tool_content .= $info_text;
+                $tool_content .= "<div class='row margin-bottom-thin'>
+                    <div class='col-sm-3'>" . icon('fa-check') . "
+                        <strong>$langMySqlVersion</strong>
                     </div>
-                    <div class='row margin-bottom-thin'>
-                        <div class='col-sm-2'>
-                        <strong>IP Host:</strong>
-                        </div>
-                        <div class='col-sm-10'>
-                        $langHostName <b>$_SERVER[SERVER_NAME]</b>
-                        </div>                        
+                    <div class='col-sm-9'>
+                        <em>" . Database::get()->attributes()->serverVersion() . "</em>
                     </div>
-                    <div class='row margin-bottom-thin'>
-                        <div class='col-sm-2'>
-                        <strong>Web Server:</strong>
-                        </div>
-                        <div class='col-sm-10'>
-                        $langWebVersion <b>$_SERVER[SERVER_SOFTWARE]</b>
-                        </div>                        
-                    </div>
-                    <div class='row margin-bottom-thin'>
-                        <div class='col-sm-2'>
-                        <strong>Data Base Server:</strong>
-                        </div>
-                        <div class='col-sm-10'>
-                        $langMySqlVersion<b>" . Database::get()->attributes()->serverVersion() . "</b>
-                        </div>                        
-                    </div>                       
                 </div>
-            </div>";
+                <div class='row margin-bottom-thin'>
+                    <div class='col-sm-3'>
+                        <strong>$langVersion:</strong>
+                    </div>
+                    <div class='col-sm-9'>
+                        <em>$siteName " . ECLASS_VERSION . "</em>
+                    </div>
+                </div>
+            </div>
+        </div>";
 
 
 // Count prof requests with status = 1
