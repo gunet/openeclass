@@ -400,7 +400,7 @@ if (isset($_GET['modifyAnswers'])) {
                         <h3 class='panel-title'>$langQuestion</h3>
                       </div>
                       <div class='panel-body'>
-                            <h4>" . nl2br(q_math($questionName)) . "<br><small>$questionTypeWord</small></h4>                         
+                            <h4><small>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h4>                         
                       </div>
                     </div>";
    $tool_content .= "<div class='panel panel-info'>

@@ -46,8 +46,8 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 <h3 class='panel-title'>$langQuestion : $i ($questionWeight $message)".(($exerciseType == 2) ? " / " . $nbrQuestions : "")."</h3>
               </div>
               <div class='panel-body'>
-                    <h4>" . q_math($questionName) . "<br>
-                        <small>$questionTypeWord</small>
+                    <h4>
+                        <small>$questionTypeWord</small><br>" . q_math($questionName) . " 
                     </h4>
                     $questionDescription
                     <div class='text-center'>
