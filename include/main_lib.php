@@ -3292,3 +3292,73 @@ function my_dirname($path) {
     return $path;
 }
 
+/**
+ * @brief IP address and IP CIDR validation functions
+ *
+ */
+function isIPv4($ip) {
+    return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
+}
+function isIPv4cidr($ip) {
+    return preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$/", $ip);
+}
+function isIPv6($ip) {
+    return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
+}
+function isIPv6cidr($ip) {
+    return preg_match("/^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\/(d|dd|1[0-1]d|12[0-8]))$/", $ip);
+}
+function ip_v4_cidr_match($ip, $range)
+{
+    list ($subnet, $bits) = explode('/', $range);
+    $ip = ip2long($ip);
+    $subnet = ip2long($subnet);
+    $mask = -1 << (32 - $bits);
+    $subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
+    return ($ip & $mask) == $subnet;
+}
+// converts inet_pton output to string with bits
+function inet_to_bits($inet) 
+{
+   $unpacked = unpack('A16', $inet);
+   $unpacked = str_split($unpacked[1]);
+   $binaryip = '';
+   foreach ($unpacked as $char) {
+             $binaryip .= str_pad(decbin(ord($char)), 8, '0', STR_PAD_LEFT);
+   }
+   return $binaryip;
+}
+function ip_v6_cidr_match($ip, $range)
+{
+    $ip = inet_pton($ip);
+    $binaryip=inet_to_bits($ip);
+
+    list($net,$maskbits)=explode('/',$range);
+    $net=inet_pton($net);
+    $binarynet=inet_to_bits($net);
+
+    $ip_net_bits = substr($binaryip,0,$maskbits);
+    $net_bits    = substr($binarynet,0,$maskbits);
+
+    return $ip_net_bits == $net_bits;
+}
+function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array){
+    if(isIPv4($ip)){
+        foreach ($ips_or_cidr_array as $ip_or_cidr) {
+            if (isIPv4cidr($ip_or_cidr)) {
+                if (ip_v4_cidr_match($ip, $ip_or_cidr)) return true;
+            } elseif (isIPv4($ip_or_cidr)) {
+                if ($ip == $ip_or_cidr) return true;
+            }
+        }
+    } else {
+        foreach ($ips_or_cidr_array as $ip_or_cidr) {
+            if (isIPv6cidr($ip_or_cidr)) {
+                if (ip_v6_cidr_match($ip, $ip_or_cidr)) return true;
+            } elseif (isIPv6($ip_or_cidr)) {
+                if ($ip == $ip_or_cidr) return true;
+            }
+        }        
+    }
+    return false;
+}

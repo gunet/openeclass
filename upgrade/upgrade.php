@@ -2710,6 +2710,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         @unlink("$webDir/template/default/img/eclass_classic2-1-1.png");
         @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");
     }
+    // -----------------------------------
+    // upgrade queries for 3.2
+    // -----------------------------------
+    if (version_compare($oldversion, '3.2', '<')) {
+        if (!DBHelper::fieldExists('exercise', 'ip_lock')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `ip_lock` TEXT NULL DEFAULT NULL");
+        }
+    }    
 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");

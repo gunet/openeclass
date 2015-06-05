@@ -889,7 +889,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
                 `active` TINYINT(4) DEFAULT NULL,
                 `public` TINYINT(4) NOT NULL DEFAULT 1,
                 `results` TINYINT(1) NOT NULL DEFAULT 1,
-                `score` TINYINT(1) NOT NULL DEFAULT 1) $charset_spec");
+                `score` TINYINT(1) NOT NULL DEFAULT 1,
+                `ip_lock` TEXT NULL DEFAULT NULL) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `eid` INT(11) NOT NULL DEFAULT 0,

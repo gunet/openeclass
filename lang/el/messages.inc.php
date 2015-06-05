@@ -1625,6 +1625,9 @@ $langYourTotalScore = "Συνολική βαθμολογία άσκησης";
 $langDoAnEx = "Κάντε μια άσκηση";
 $langCorrect = "Σωστό";
 $langExerciseNotFound = "Η άσκηση δεν βρέθηκε";
+$langIPUnlock = "Ξεκλείδωμα σε συγκεκριμένες IP(s) ή IP CIDR(s)";
+$langIPHasNoAccess = "Η IP διεύθυνση σας δεν έχει πρόσβαση στην συγκεκριμένη άσκηση.";
+$langIPInvalid = "περιέχει μη έγκυρη IP ή IP CIDR";
 $langAlreadyAnswered = "Απαντήσατε ήδη στην ερώτηση";
 $langRemainingTime = "Υπολειπόμενος χρόνος";
 

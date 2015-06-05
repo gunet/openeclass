@@ -29,15 +29,27 @@ require_once 'modules/tags/moduleElement.class.php';
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
+    $v->addRule('ipORcidr', function($field, $value, array $params) {
+        //explode here and run a loop
+        $IPs = explode(',', $value);
+        //matches IPv4/6 and IPv4/6 CIDR ranges
+        foreach ($IPs as $ip){
+            $valid = isIPv4($ip) || isIPv4cidr($ip) || isIPv6($ip) || isIPv6cidr($ip);
+            if (!$valid) return false;
+        }
+        return true;
+    }, $langIPInvalid);      
     $v->rule('required', array('exerciseTitle'));
     $v->rule('numeric', array('exerciseTimeConstraint', 'exerciseAttemptsAllowed'));
     $v->rule('date', array('exerciseEndDate', 'exerciseStartDate'));
+    $v->rule('ipORcidr', array('exerciseIPLock')); 
     $v->labels(array(
         'exerciseTitle' => "$langTheField $langExerciseName",
         'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",
         'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed",
         'exerciseEndDate' => "$langTheField $langExerciseEnd",
-        'exerciseStartDate' => "$langTheField $langExerciseStart"
+        'exerciseStartDate' => "$langTheField $langExerciseStart",
+        'exerciseIPLock' => "$langTheField IPs"
     ));
     if($v->validate()) {
         $exerciseTitle = trim($exerciseTitle);
@@ -46,6 +58,7 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($exerciseDescription);
         $objExercise->updateType($exerciseType);
+        $objExercise->updateIPlock($_POST['exerciseIPLock']);
         if (isset($exerciseStartDate) and !empty($exerciseStartDate)) {
             $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $exerciseStartDate);
         } else {
@@ -100,6 +113,7 @@ if (isset($_POST['submitExercise'])) {
     $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
+    $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPlock();
 }
 
 // shows the form to modify the exercise
@@ -175,6 +189,12 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 } else {
                     $('#answersDispLastAttempt').removeClass('hidden');
                 }
+            });
+            $('#exerciseIPLock').select2({
+                dropdownCssClass : 'hidden',
+                minimumResultsForSearch: 1,
+                tags: false,
+                tokenSeparators: [' ']
             });
         });
     </script>";
@@ -350,6 +370,13 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
+                 <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
+                   <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
+                   <div class='col-sm-10'>
+                     <input name='exerciseIPLock' type='hidden' class='form-control' id='exerciseIPLock' value='$exerciseIPLock' placeholder=''>
+                     <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
+                   </div>
+                 </div>                 
                  " . Tag::tagInput($exerciseId) . "
 
                  <div class='form-group'>

@@ -43,7 +43,6 @@ ModalBoxHelper::loadModalBox();
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
-
 function unset_exercise_var($exerciseId){
             unset($_SESSION['exerciseUserRecordID'][$exerciseId]);
             unset($_SESSION['objExercise'][$exerciseId]);
@@ -83,6 +82,13 @@ if (isset($_REQUEST['exerciseId'])) {
             session::Messages($langExerciseNotFound);
             redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
         }
+        if ($ips = $objExercise->selectIPlock()){
+            $user_ip = $_SERVER["REMOTE_ADDR"];
+            if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
+                Session::Messages($langIPHasNoAccess);
+                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);                
+            }           
+        }           
         // saves the object into the session
         $_SESSION['objExercise'][$exerciseId] = $objExercise;        
     }
