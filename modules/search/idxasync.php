@@ -23,26 +23,7 @@
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/cronutil.class.php';
 
-?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title><?php echo $logo; ?></title>
-    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
-    <link href='<?php echo $urlAppend; ?>/install/install.css' rel='stylesheet' type='text/css' />
-  </head>
-  <body style='background-color: #ffffff;'>
-    <div class='container'>
-      <p align='center'><img src='<?php echo $urlAppend; ?>/template/classic/img/logo_openeclass.png' alt='logo' /></p>
-      <div class='alert' align='center'>
-        <p>Processing ...</p>
-      </div>
-    </div>
-  </body>
-</html>
-
-<?php
+echo "<p>Processing ...</p>";
 
 session_write_close();
 ignore_user_abort(true);
