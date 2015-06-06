@@ -47,7 +47,7 @@ final class FTP extends CredentialDrive {
     protected function connect($url, $username, $password) {
         if (substr(strtolower($url), 0, 6) == "ftp://")
             $url = substr($url, 6);
-        $connection = ftp_connect($url);
+        $connection = @ftp_connect($url);
         if ($connection) {
             try {
                 if (@ftp_login($connection, $username, $password)) {
