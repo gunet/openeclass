@@ -47,12 +47,17 @@ final class FTP extends CredentialDrive {
     protected function connect($url, $username, $password) {
         if (substr(strtolower($url), 0, 6) == "ftp://")
             $url = substr($url, 6);
-        $conn_id = ftp_connect($url);
-        $login_result = ftp_login($conn_id, $username, $password);
-        if ((!$conn_id) || (!$login_result))
-            return null;
-        else
-            return $conn_id;
+        $connection = ftp_connect($url);
+        if ($connection) {
+            try {
+                if (@ftp_login($connection, $username, $password)) {
+                    return $connection;
+                }
+            } catch (Exception $exc) {
+            }
+            ftp_close($connection);
+        }
+        return null;
     }
 
     protected function getFileList($connection, $path) {

@@ -33,6 +33,10 @@ if ($drive->checkCredentials($url, $username, $password)) {
     die();
 }
 
+if ($username) {
+    echo "<div>Unable to login with given credentials</div>";
+}
+
 echo '<form action="credential_auth.php?' . $drive->getDriveDefaultParameter() . '" method="POST">';
 echo '<div>URL <input type="url" id="url" name="url" value="' . $url . '"></div>';
 echo '<div>Username <input type="text" id="username" name="username" value="' . $username . '"></div>';
