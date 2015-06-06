@@ -27,8 +27,8 @@ require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("OpenDelosApp");
-//    public static $AppNames = array("OpenDelosApp", "OwnCloudApp", "WebDAVApp", "FTPApp");
+//    public static $AppNames = array("OpenDelosApp");
+    public static $AppNames = array("OpenDelosApp", "OwnCloudApp", "WebDAVApp", "FTPApp");
     //public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");
     private static $APPS = null;
 
@@ -77,6 +77,11 @@ abstract class ExtApp {
         return $this->params;
     }
 
+    /**
+     * 
+     * @param string $paramName
+     * @return ExtParam
+     */
     public function getParam($paramName) {
         return $this->params[$paramName];
     }

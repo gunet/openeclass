@@ -31,7 +31,7 @@ load_js('filetree');
 
 final class CloudDriveManager {
 
-    public static $DRIVENAMES = array("GoogleDrive", "OneDrive", "Dropbox");
+    public static $DRIVENAMES = array("GoogleDrive", "OneDrive", "Dropbox", "OwnCloud", "WebDAV", "FTP");
 
     const DRIVE = "clouddrive";
     const FILEPENDING = "pendingcloud";
@@ -85,7 +85,7 @@ final class CloudDriveManager {
     <div class='modal-content'>
       <div class='modal-header'>
         <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
-        <h4 class='modal-title' id='myModalLabel'>".$langPathUploadFile."</h4>
+        <h4 class='modal-title' id='myModalLabel'>" . $langPathUploadFile . "</h4>
       </div>
       <div class='modal-body' style=' overflow:auto;'>
         <div id='fileTreeDemo' class='browsearea' ></div>
@@ -96,7 +96,7 @@ final class CloudDriveManager {
         //href=\"../drives/filebrowser.php?" . $drive->getDriveDefaultParameter() . "\"
         foreach (CloudDriveManager::getValidDrives() as $drive) {
             if ($drive->isAuthorized()) {
-                $result .="<a class='btn btn-default vagelis' href='javascript:void(0);'  data-toggle=\"modal\" data-target=\"#tree_container\" data-drive=\"".$drive->getDriveDefaultParameter()."\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
+                $result .="<a class='btn btn-default vagelis' href='javascript:void(0);'  data-toggle=\"modal\" data-target=\"#tree_container\" data-drive=\"" . $drive->getDriveDefaultParameter() . "\"><i class='fa fa-file space-after-icon'/></i>" . $drive->getDisplayName() . "</a> \n";
             } else {
                 $result .="<a class='btn btn-default' href=\"javascript:void(0)\" onclick=\"authorizeDrive('" . $drive->getName() . "')\"><i class='fa fa-plug space-after-icon'></i>" . $drive->getDisplayName() . "</a> \n";
             }
@@ -144,13 +144,15 @@ abstract class CloudDrive {
         return $this->extapp;
     }
 
-    protected function downloadToFile($url, $filename, $post = null) {
+    protected function downloadToFile($url, $filename, $post = null, $credentials = null) {
         try {
             $fout = fopen($filename, "w+b");
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $url);
             if ($post)
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+            if ($credentials)
+                curl_setopt($ch, CURLOPT_USERPWD, $credentials);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($ch, CURLOPT_MAXREDIRS, 20);
@@ -179,8 +181,30 @@ abstract class CloudDrive {
         return $result;
     }
 
-    public function isPresent() {        
+    public function isPresent() {
         return $this->getExtApp() != null;
+    }
+
+    public function getCallbackName() {
+        return "code";
+    }
+
+    public function getCallbackToken() {
+        $name = $this->getCallbackName();
+        return isset($_GET[$name]) ? $_GET[$name] : null;
+    }
+
+    protected function getAuthorizeName() {
+        return $this->getName() . "_session_authorize";
+    }
+
+    protected function setAuthorizeToken($code) {
+        $_SESSION[$this->getAuthorizeName()] = $code;
+    }
+
+    public function getAuthorizeToken() {
+        $name = $this->getAuthorizeName();
+        return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
     }
 
     public abstract function store($cloudfile, $path);

@@ -20,34 +20,74 @@
  * ======================================================================== 
  */
 
-final class WebDAV extends CredentialDrive {
+use Sabre\DAV\Client;
 
-    public function authorize($callbackToken) {
-        
-    }
+require_once 'credentialdrive.php';
+include "SabreDAV/vendor/autoload.php";
 
-    public function getAuthURL() {
-        
-    }
+class WebDAV extends CredentialDrive {
 
     public function getDisplayName() {
-        
+        return "WebDAV";
     }
 
-    public function getFiles($dir) {
-        
-    }
-
-    public function isAuthorized() {
-        
-    }
-
-    public function isPresent() {
-        return parent::isPresent();
-    }
-
+    /**
+     * 
+     * @param CloudFile $cloudfile
+     * @param string $path
+     */
     public function store($cloudfile, $path) {
-        
+        if (!$this->isAuthorized())
+            return CloudDriveResponse::AUTHORIZATION_ERROR;
+        list($baseURL, $pathURL) = $this->tokenizeURL($this->url());
+        return $this->downloadToFile($baseURL . $cloudfile->id(), $path, null, $this->username() . ":" . $this->password());
+    }
+
+    protected function connect($url, $username, $password) {
+        $client = new Client(array(
+            'baseUri' => $url,
+            'userName' => $username,
+            'password' => $password,
+        ));
+        try {
+            $response = $client->options();
+            return $response ? $client : null;
+        } catch (Exception $exc) {
+            return null;
+        }
+    }
+
+    protected function getFileList($connection, $path) {
+        $url = $this->url();
+        list($baseURL, $pathURL) = $this->tokenizeURL($url);
+        if (strlen($path) < 1) {
+            $requrl = $url;
+            $reqpath = $pathURL;
+        } else {
+            $requrl = $baseURL . $path;
+            $reqpath = $path;
+        }
+        $suffixlen = strlen($reqpath);
+        $response = $connection->propfind($requrl, array('{DAV:}getcontentlength'), 1);
+        $files = array();
+        if ($response)
+            foreach ($response as $fullname => $meta) {
+                $size = array_key_exists('{DAV:}getcontentlength', $meta) ? $meta['{DAV:}getcontentlength'] : null;
+                $filename = substr($fullname, $suffixlen);
+                if (strcmp(substr($filename, strlen($filename) - 1), "/") == 0)
+                    $filename = substr($filename, 0, strlen($filename) - 1);
+                $files[] = new CloudFile(urldecode($filename), $fullname, $size == null, $size, $this->getName());
+            }
+        return $files;
+    }
+
+    private function tokenizeURL($url) {
+        $host = parse_url($url);
+        $path = $host['path'];
+        $base = substr($url, 0, strlen($url) - strlen($path));
+        if (strcmp(substr($path, strlen($path) - 1), "/") != 0)
+            $path .= "/";
+        return array($base, $path);
     }
 
 }

@@ -20,16 +20,9 @@
  * ======================================================================== 
  */
 
-require_once 'genericrequiredparam.php';
+require_once 'credentialdriveapp.php';
 
-class WebDAVApp extends ExtApp {
-
-    const URL = "url";
-
-    public function __construct() {
-        $drivename = $this->getName();
-        $this->registerParam(new GenericRequiredParam($drivename, "WebDAV URL", WebDAVApp::URL));
-    }
+class WebDAVApp extends CredentialDriveApp {
 
     public function getDisplayName() {
         return "WebDAV";

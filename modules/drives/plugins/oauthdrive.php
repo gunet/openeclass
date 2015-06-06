@@ -22,28 +22,6 @@
 
 abstract class OAuthDrive extends CloudDrive {
 
-    protected function getCallbackName() {
-        return "code";
-    }
-
-    public function getCallbackToken() {
-        $name = $this->getCallbackName();
-        return isset($_GET[$name]) ? $_GET[$name] : null;
-    }
-
-    protected function getAuthorizeName() {
-        return $this->getName() . "_session_authorize";
-    }
-
-    protected function setAuthorizeToken($code) {
-        $_SESSION[$this->getAuthorizeName()] = $code;
-    }
-
-    public function getAuthorizeToken() {
-        $name = $this->getAuthorizeName();
-        return isset($_SESSION[$name]) ? $_SESSION[$name] : null;
-    }
-
     protected function getClientID() {
         return $this->getExtApp()->getParam(OAuthDriveApp::CLIENTID)->value();
     }
