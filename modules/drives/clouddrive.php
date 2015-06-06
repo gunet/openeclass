@@ -183,7 +183,8 @@ abstract class CloudDrive {
     }
 
     public function isPresent() {
-        return $this->getExtApp() != null;
+        $extApp = $this->getExtApp();
+        return $extApp != null && $extApp->getParam(ExtApp::ENABLED) && strcmp($extApp->getParam(ExtApp::ENABLED)->value(), "1") == 0;
     }
 
     public function getCallbackName() {

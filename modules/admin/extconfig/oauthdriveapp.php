@@ -29,6 +29,7 @@ abstract class OAuthDriveApp extends ExtApp {
     const REDIRECT = "redirect";
 
     public function __construct() {
+        parent::__construct();
         $drivename = $this->getName();
         $this->registerParam(new GenericRequiredParam($drivename, $this->getAppParamName(), OAuthDriveApp::CLIENTID));
         $this->registerParam(new GenericRequiredParam($drivename, $this->getKeyParamName(), OAuthDriveApp::SECRET));

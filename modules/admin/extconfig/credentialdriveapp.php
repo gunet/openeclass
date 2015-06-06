@@ -27,8 +27,8 @@ abstract class CredentialDriveApp extends ExtApp {
     const URL = "url";
 
     public function __construct() {
-        $drivename = $this->getName();
-        $this->registerParam(new GenericParam($drivename, "URL", WebDAVApp::URL));
+        parent::__construct();
+        $this->registerParam(new GenericParam($this->getName(), "URL", CredentialDriveApp::URL));
     }
 
 }

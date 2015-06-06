@@ -27,9 +27,7 @@ require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-//    public static $AppNames = array("OpenDelosApp");
-    public static $AppNames = array("OpenDelosApp", "OwnCloudApp", "WebDAVApp", "FTPApp");
-    //public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");
+    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");
     private static $APPS = null;
 
     /**
@@ -61,7 +59,13 @@ class ExtAppManager {
 
 abstract class ExtApp {
 
+    const ENABLED = "enabled";
+
     private $params = array();
+
+    public function __construct() {
+        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::ENABLED, ExtParam::TYPE_BOOLEAN));
+    }
 
     /**
      * @param ExtParam $param
@@ -83,7 +87,7 @@ abstract class ExtApp {
      * @return ExtParam
      */
     public function getParam($paramName) {
-        return $this->params[$paramName];
+        return array_key_exists($paramName, $this->params) ? $this->params[$paramName] : null;
     }
 
     /**
@@ -140,15 +144,17 @@ abstract class ExtParam {
     private $name;
     private $value;
     private $defaultValue;
+    private $type;
 
     const TYPE_STRING = 0;
     const TYPE_BOOLEAN = 1;
 
-    function __construct($display, $name, $defaultValue = "") {
+    function __construct($display, $name, $defaultValue = "", $type = ExtParam::TYPE_STRING) {
         $this->display = $display;
         $this->name = $name;
         $this->value = ExtParam::$UNSET;
         $this->defaultValue = $defaultValue;
+        $this->type = $type;
     }
 
     function display() {
@@ -173,6 +179,10 @@ abstract class ExtParam {
 
     public function validateParam() {
         return null;
+    }
+
+    function getType() {
+        return $this->type;
     }
 
     abstract protected function retrieveValue();

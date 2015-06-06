@@ -28,17 +28,18 @@ class OpenDelosApp extends ExtApp {
     const NAME = "OpenDelos";
 
     public function __construct() {
+        parent::__construct();
         $this->registerParam(new GenericRequiredParam($this->getName(), "OpenDelos URL", OpenDelosApp::URL));
     }
 
     public function getDisplayName() {
         return self::NAME;
     }
-    
+
     public function getShortDescription() {
         return $GLOBALS['langOpenDelosDescription'];
     }
-    
+
     public function getLongDescription() {
         return $GLOBALS['langOpenDelosDescription'];
     }
