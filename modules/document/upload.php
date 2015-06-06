@@ -37,7 +37,7 @@ $toolName = $langDoc;
 
 if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
-} 
+}
 
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
@@ -212,7 +212,7 @@ if ($can_upload) {
     <div class='row'>
         <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
-    
+
     $tool_content .= "
       <div class='form-group'>
         <div class='col-xs-offset-2 col-xs-10'>
@@ -229,6 +229,4 @@ if ($can_upload) {
     $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
-draw($tool_content,
-    defined('COMMON_DOCUMENTS')? 3: 2,
-    null, $head_content);
+draw($tool_content, defined('COMMON_DOCUMENTS') ? 3 : 2, null, $head_content);
