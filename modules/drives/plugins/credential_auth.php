@@ -33,7 +33,7 @@ if ($drive->checkCredentials($url, $username, $password)) {
     die();
 }
 
-if ($username) {
+if ($username || $password) {
     echo "<div>Unable to login with given credentials</div>";
 }
 
