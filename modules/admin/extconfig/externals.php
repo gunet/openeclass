@@ -64,7 +64,7 @@ abstract class ExtApp {
     private $params = array();
 
     public function __construct() {
-        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::ENABLED, ExtParam::TYPE_BOOLEAN));
+        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::ENABLED, "0", ExtParam::TYPE_BOOLEAN));
     }
 
     /**
