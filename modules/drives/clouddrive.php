@@ -35,6 +35,7 @@ final class CloudDriveManager {
 
     const DRIVE = "clouddrive";
     const FILEPENDING = "pendingcloud";
+    const CALLBACK = "callbackcloud";
 
     private static $DRIVES = null;
 
@@ -59,7 +60,7 @@ final class CloudDriveManager {
         $result = "
 <script>
     function authorizeDrive(driveType) {
-        win = window.open('../drives/popup.php?" . CloudDriveManager::DRIVE . "=' + driveType, 'Connecting... ' ,'height=600,width=400,scrollbars=yes');
+        win = window.open('../drives/popup.php?" . CloudDriveManager::CALLBACK . "=' + encodeURIComponent(window.location.href) + '&" . CloudDriveManager::DRIVE . "=' + driveType, 'Connecting... ' ,'height=600,width=400,scrollbars=yes');
         var timer = setInterval(function() {   
             if(win.closed) {  
                 clearInterval(timer);
