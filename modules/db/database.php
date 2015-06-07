@@ -132,7 +132,7 @@ final class Database {
      * @param function $callback_error An *optional* argument with a callback function in case error trapping is required.
      * If the second argument is a callable, then this argument is handled as an error callback. If it is any other type (including null), then it is passed as a binding argument.
      * @param anytype $argument... A variable argument list of each binded argument
-     * @return int Last inserted ID
+     * @return DBResult Result of this query
      */
     public function query($statement) {
         return $this->queryI(func_get_args(), true);
