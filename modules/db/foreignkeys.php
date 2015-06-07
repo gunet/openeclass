@@ -41,24 +41,29 @@ final class ForeignKeys {
         $detailIDFieldName = DBHelper::primaryKeyOf($detailTableName);
         $defaultEntryID = $defaultEntryResolver ? $defaultEntryResolver() : null;
 
-        Database::get()->queryFunc("select `$detailIDFieldName`,`$detailFieldName`  from `$detailTableName`"
-                , function ($entry) use($masterTableName, $masterIDFieldName, $detailTableName, $detailIDFieldName, $detailFieldName, $defaultEntryID) {
-            $masterID = $entry->$detailFieldName;
-            if (!is_null($masterID)) {
-                $master = Database::get()->querySingle("select `$masterIDFieldName` from `$masterTableName` where `$masterIDFieldName` = ?d", $masterID);
-                if (!$master) {
-                    $masterID = null;
+        // Could not use functional interface, since sub-transaction is needed and this is not supported by MySQL, so paging is performed.
+        $size = Database::get()->querySingle("select count(*) as count from `$detailTableName`")->count;
+        $from = 0;
+        while ($from < $size) {
+            $to = ($size - $from) > 100 ? 100 : $size - $from;
+            foreach (Database::get()->queryArray("select `$detailIDFieldName`,`$detailFieldName` from `$detailTableName` limit $to offset $from") as $entry) {
+                $masterID = $entry->$detailFieldName;
+                if (!is_null($masterID)) {
+                    $master = Database::get()->querySingle("select `$masterIDFieldName` from `$masterTableName` where `$masterIDFieldName` = ?d", $masterID);
+                    if (!$master) {
+                        $masterID = null;
+                    }
+                }
+                if (!$masterID) {   // Master wasn't found
+                    if (is_null($defaultEntryID)) {
+                        Recycle::deleteObject($detailTableName, $entry->$detailIDFieldName, $detailIDFieldName);
+                    } else {
+                        Database::get()->query("update `" . $detailTableName . "` set `" . $detailFieldName . "` = ?d", $defaultEntryID);
+                    }
                 }
             }
-            if (!$masterID) {   // Master wasn't found
-                if (is_null($defaultEntryID)) {
-                    Recycle::deleteObject($detailTableName, $entry->$detailIDFieldName, $detailIDFieldName);
-                } else {
-                    Database::get()->query("update `" . $detailTableName . "` set `" . $detailFieldName . "` = ?d", $defaultEntryID);
-                }
-            }
-        });
-
+            $from+=100;
+        }
         DBHelper::createForeignKey($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
     }
 

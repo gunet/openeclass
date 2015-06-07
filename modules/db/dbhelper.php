@@ -225,8 +225,6 @@ class _DBHelper_MYSQL extends DBHelper {
     }
 
     protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {
-        if ($this->foreignKeyExists($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName))
-            return;
         Database::get()->query("
             ALTER TABLE " . $detailTableName . "
             ADD CONSTRAINT " . $this->getForeignKeyName($detailTableName, $detailFieldName, $masterTableName) . "
@@ -235,18 +233,18 @@ class _DBHelper_MYSQL extends DBHelper {
     }
 
     protected function foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {
-        if (true)   // there is a problem with permissions: not all users are able to perform the following query
-            return false;
-
-        $constrInfo = Database::get()->query("select CONSTRAINT_NAME from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+        $constrInfo = Database::get()->querySingle("select CONSTRAINT_NAME as name from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
                 where TABLE_NAME = ?s 
                 and COLUMN_NAME = ?s 
                 and REFERENCED_TABLE_NAME = ?s 
                 and REFERENCED_COLUMN_NAME = ?s 
-        ", $masterTableName, $masterIDFieldName, $detailTableName, $detailFieldName);
-        $name = is_null($constrInfo) ? null : $constrInfo->CONSTRAINT_NAME;
-        return is_null($name) ? false :
-                strcmp($name, $this->getForeignKeyName($detailTableName, $detailFieldName, $masterTableName)) == 0;
+        ", $detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+        if ($constrInfo) {
+            $name = $constrInfo->name;
+            return is_null($name) ? false :
+                    strcmp($name, $this->getForeignKeyName($detailTableName, $detailFieldName, $masterTableName)) == 0;
+        }
+        return false;
     }
 
 }
