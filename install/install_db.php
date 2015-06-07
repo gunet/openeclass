@@ -1,4 +1,5 @@
 <?php
+
 /* ========================================================================
  * Open eClass 3.0
  * E-learning and Course Management System
@@ -22,13 +23,12 @@
  * @file install_db.php
  * @brief installation data base queries
  */
-
 require_once '../include/phpass/PasswordHash.php';
 require_once '../modules/db/database.php';
 require_once '../modules/admin/debug.php';
 
 if (!defined('ECLASS_VERSION')) {
-        exit;
+    exit;
 }
 
 set_time_limit(0);
@@ -68,7 +68,6 @@ $db->query("DROP TABLE IF EXISTS bbb_session");
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
 // create tables
-
 #
 # table `course_module`
 #
@@ -309,7 +308,7 @@ $db->query("CREATE TABLE user (
       password VARCHAR(60) NOT NULL DEFAULT 'empty',
       email VARCHAR(100) NOT NULL DEFAULT '',
       parent_email VARCHAR(100) NOT NULL DEFAULT '',
-      status TINYINT(4) NOT NULL DEFAULT ".USER_STUDENT.",
+      status TINYINT(4) NOT NULL DEFAULT " . USER_STUDENT . ",
       phone VARCHAR(20) DEFAULT '',
       am VARCHAR(20) DEFAULT '',
       registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
@@ -317,7 +316,7 @@ $db->query("CREATE TABLE user (
       lang VARCHAR(16) NOT NULL DEFAULT 'el',
       description TEXT,
       has_icon TINYINT(1) NOT NULL DEFAULT 0,
-      verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
+      verified_mail TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
       receive_mail TINYINT(1) NOT NULL DEFAULT 1,
       email_public TINYINT(1) NOT NULL DEFAULT 0,
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
@@ -359,7 +358,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
         `reference_obj_id` int(11) DEFAULT NULL,
         `reference_obj_course` int(11) DEFAULT NULL,
         PRIMARY KEY (`id`))");
- 
+
 $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar_settings` (
         `user_id` int(11) NOT NULL,
         `view_type` enum('day','month','week') DEFAULT 'month',
@@ -477,22 +476,22 @@ $db->query("CREATE TABLE IF NOT EXISTS `glossary` (
                `category_id` INT(11) DEFAULT NULL,
                `notes` TEXT NOT NULL) $charset_spec");
 
- $db->query("CREATE TABLE IF NOT EXISTS `glossary_category` (
+$db->query("CREATE TABLE IF NOT EXISTS `glossary_category` (
                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `course_id` INT(11) NOT NULL,
                `name` VARCHAR(255) NOT NULL,
                `description` TEXT NOT NULL,
                `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
- $db->query("CREATE TABLE IF NOT EXISTS `attendance` (
+$db->query("CREATE TABLE IF NOT EXISTS `attendance` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `course_id` INT(11) NOT NULL,
                `limit` TINYINT(4) NOT NULL DEFAULT 0,
                `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
                `active` TINYINT(1) NOT NULL DEFAULT 0,
                 `title` VARCHAR(250) DEFAULT NULL) $charset_spec");
- 
- $db->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
+
+$db->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_id` MEDIUMINT(11) NOT NULL,
                `title` VARCHAR(250) DEFAULT NULL,
@@ -511,7 +510,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
                `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                `attendance_id` MEDIUMINT(11) NOT NULL,
                `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
-  
+
 $db->query("CREATE TABLE IF NOT EXISTS `link` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT,
                 `course_id` INT(11) NOT NULL,
@@ -669,7 +668,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_module` (
                 `startAsset_id` INT(11) NOT NULL DEFAULT 0,
                 `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
                 `launch_data` TEXT NOT NULL)  $charset_spec");
-                //COMMENT='List of available modules used in learning paths';
+//COMMENT='List of available modules used in learning paths';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
                 `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `course_id` INT(11) NOT NULL,
@@ -678,7 +677,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
                 `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
                 `visible` TINYINT(4) NOT NULL DEFAULT 0,
                 `rank` INT(11) NOT NULL DEFAULT 0)  $charset_spec");
-                //COMMENT='List of learning Paths';
+//COMMENT='List of learning Paths';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
                 `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `learnPath_id` INT(11) NOT NULL DEFAULT 0,
@@ -689,13 +688,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
                 `rank` INT(11) NOT NULL DEFAULT 0,
                 `parent` INT(11) NOT NULL DEFAULT 0,
                 `raw_to_pass` TINYINT(4) NOT NULL DEFAULT 50)  $charset_spec");
-                //COMMENT='This table links module to the learning path using them';
+//COMMENT='This table links module to the learning path using them';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_asset` (
                 `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `module_id` INT(11) NOT NULL DEFAULT 0,
                 `path` VARCHAR(255) NOT NULL DEFAULT '',
                 `comment` VARCHAR(255) default NULL)  $charset_spec");
-                //COMMENT='List of resources of module of learning paths';
+//COMMENT='List of resources of module of learning paths';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
                 `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
@@ -711,7 +710,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
                 `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
                 `suspend_data` TEXT NOT NULL,
                 `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT')  $charset_spec");
-                //COMMENT='Record the last known status of the user in the course';
+//COMMENT='Record the last known status of the user in the course';
 
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
                 `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -978,8 +977,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                 `department` int(11) NOT NULL references hierarchy(id) )");
 
 // hierarchy stored procedures
-    $db->query("DROP VIEW IF EXISTS `hierarchy_depth`");
-    $db->query("CREATE VIEW `hierarchy_depth` AS
+$db->query("DROP VIEW IF EXISTS `hierarchy_depth`");
+$db->query("CREATE VIEW `hierarchy_depth` AS
                     SELECT node.id, node.code, node.name, node.number, node.generator,
                            node.lft, node.rgt, node.allow_course, node.allow_user, node.order_priority,
                            COUNT(parent.id) - 1 AS depth
@@ -989,8 +988,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                     GROUP BY node.id
                     ORDER BY node.lft");
 
-    $db->query("DROP PROCEDURE IF EXISTS `add_node`");
-    $db->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
+$db->query("DROP PROCEDURE IF EXISTS `add_node`");
+$db->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
                         IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
@@ -1004,8 +1003,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                         INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-    $db->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
+$db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
+$db->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
                         IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11),
                         IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
@@ -1020,8 +1019,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                         INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `update_node`");
-    $db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
+$db->query("DROP PROCEDURE IF EXISTS `update_node`");
+$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
                         IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
                         IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
@@ -1035,8 +1034,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                         END IF;
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `delete_node`");
-    $db->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `delete_node`");
+$db->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
                     LANGUAGE SQL
                     BEGIN
                         DECLARE p_lft, p_rgt INT(11);
@@ -1047,8 +1046,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                         CALL delete_nodes(p_lft, p_rgt);
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `shift_right`");
-    $db->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `shift_right`");
+$db->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
                     LANGUAGE SQL
                     BEGIN
                         IF maxrgt > 0 THEN
@@ -1064,8 +1063,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                         END IF;
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `shift_left`");
-    $db->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `shift_left`");
+$db->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
                     LANGUAGE SQL
                     BEGIN
                         IF maxrgt > 0 THEN
@@ -1081,8 +1080,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                         END IF;
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `shift_end`");
-    $db->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `shift_end`");
+$db->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
                     LANGUAGE SQL
                     BEGIN
                         UPDATE `hierarchy`
@@ -1090,22 +1089,22 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                             rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
-    $db->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
+$db->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
                     LANGUAGE SQL
                     BEGIN
                         SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `get_parent`");
-    $db->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `get_parent`");
+$db->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
                     LANGUAGE SQL
                     BEGIN
                         SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
-    $db->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
+$db->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
                     LANGUAGE SQL
                     BEGIN
                         DECLARE node_width INT(11);
@@ -1116,8 +1115,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `user_department` (
                         UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
                     END");
 
-    $db->query("DROP PROCEDURE IF EXISTS `move_nodes`");
-    $db->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
+$db->query("DROP PROCEDURE IF EXISTS `move_nodes`");
+$db->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
                     LANGUAGE SQL
                     BEGIN
                         DECLARE node_width, maxrgt INT(11);
@@ -1150,12 +1149,9 @@ $admin_uid = $db->query("INSERT INTO `user`
     (`givenname`, `surname`, `username`, `password`, `email`, `status`, `lang`,
      `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, " . DBHelper::timeAfter() . ", " .
-        DBHelper::timeAfter(5*365*24*60*60) . ", ?d, ?s, ?s)",
-    $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1,
-        '*,,', 'Administrator')->lastInsertID;
+                DBHelper::timeAfter(5 * 365 * 24 * 60 * 60) . ", ?d, ?s, ?s)", $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1, '*,,', 'Administrator')->lastInsertID;
 $db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
-    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
-    $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
+    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)", $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
 
 $db->query("INSERT INTO admin (user_id, privilege) VALUES (?d, ?d)", $admin_uid, 0);
 
@@ -1170,7 +1166,7 @@ $db->query("CREATE TABLE user_request (
                 username VARCHAR(50) NOT NULL DEFAULT '',
                 password VARCHAR(255) NOT NULL DEFAULT '',
                 email VARCHAR(100) NOT NULL DEFAULT '',
-                verified_mail TINYINT(1) NOT NULL DEFAULT ".EMAIL_UNVERIFIED.",
+                verified_mail TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
                 faculty_id INT(11) NOT NULL DEFAULT 0,
                 phone VARCHAR(20) NOT NULL DEFAULT '',
                 am VARCHAR(20) NOT NULL DEFAULT '',
@@ -1242,7 +1238,7 @@ $default_config = array(
     'restrict_teacher_owndep', 0,
     'allow_teacher_clone_course', 0,
     'max_glossary_terms', '250',
-    'phpSysInfoURL', $phpSysInfoURL, 
+    'phpSysInfoURL', $phpSysInfoURL,
     'email_sender', $emailForm,
     'admin_name', $nameForm,
     'email_helpdesk', $helpdeskmail,
@@ -1273,8 +1269,7 @@ $default_config = array(
     'course_guest', 'link',
     'version', ECLASS_VERSION);
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
-    implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')),
-    $default_config);
+        implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')), $default_config);
 
 // table for cron parameters
 $db->query("CREATE TABLE `cron_params` (
@@ -1479,6 +1474,16 @@ $db->query("CREATE TABLE IF NOT EXISTS tag (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     UNIQUE KEY (name)) $charset_spec");
+
+#
+# Recycle object table
+
+$db->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `tablename` varchar(100) NOT NULL,
+            `entryid` int(11) NOT NULL,
+            `entrydata` varchar(4000) NOT NULL,
+            KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
 
 
 $_SESSION['theme'] = 'default';
