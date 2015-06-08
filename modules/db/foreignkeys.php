@@ -33,25 +33,33 @@ final class ForeignKeys {
      * @param type $defaultEntryResolver A numeric value or a function which 
      * returns a numeric value, in order to get the master id field value. This
      * will be used as default for those entries of the detail table, who are
-     * orphaned (null reference or broken reference). If this value is null, or
-     * if the function returns null, then the orphaned entries will be removed
-     * from the detail table and recycled to the recyclebin table.
+     * orphaned (have a wrong reference). If this value is null, or if the
+     * function returns null, and the field does not accept null values, then
+     * the orphaned entries will be removed from the detail table and recycled
+     * to the recyclebin table.
      */
     public static function create($detailTableName, $detailFieldName, $masterTableName, $defaultEntryResolver) {
         $masterIDFieldName = DBHelper::primaryKeyOf($masterTableName);
+        if (DBHelper::foreignKeyExists($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName))
+            return;
         $detailIDFieldName = DBHelper::primaryKeyOf($detailTableName);
         $defaultEntryID = is_null($defaultEntryResolver) ? null :
                 (is_numeric($defaultEntryResolver) ? $defaultEntryResolver :
                         is_callable($defaultEntryResolver) ? $defaultEntryResolver() :
                                 null);
+        $nullable = DBHelper::isColumnNullable($detailTableName, $detailFieldName);
 
-        $missingIDs = Database::get()->queryArray("select `$detailTableName`.`$detailIDFieldName` as detailid from `$detailTableName`
-                left join `$masterTableName` on $detailTableName.`$detailFieldName` = `$masterTableName`.`$masterIDFieldName`
-                where `$masterTableName`.`$masterIDFieldName` is null");
-        if ($missingIDs) {
-            foreach ($missingIDs as $entry) {
+        $wrongIDs = Database::get()->queryArray("select `$detailTableName`.`$detailIDFieldName` as detailid from `$detailTableName`
+                left join `$masterTableName` on `$detailTableName`.`$detailFieldName` = `$masterTableName`.`$masterIDFieldName`
+                where `$detailTableName`.`$detailFieldName` is not null and `$masterTableName`.`$masterIDFieldName` is null");
+        if ($wrongIDs) {
+            foreach ($wrongIDs as $entry) {
                 if (is_null($defaultEntryID)) {
-                    Recycle::deleteObject($detailTableName, $entry->detailid, $detailIDFieldName);
+                    if ($nullable)
+                        Database::get()->query("update `" . $detailTableName . "` set `" . $detailFieldName . "` = NULL where $detailIDFieldName = ?d"
+                                , $entry->detailid);
+                    else
+                        Recycle::deleteObject($detailTableName, $entry->detailid, $detailIDFieldName);
                 } else {
                     Database::get()->query("update `" . $detailTableName . "` set `" . $detailFieldName . "` = ?d where $detailIDFieldName = ?d"
                             , $defaultEntryID, $entry->detailid);
