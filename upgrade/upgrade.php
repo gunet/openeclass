@@ -2717,6 +2717,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('exercise', 'ip_lock')) {
             Database::get()->query("ALTER TABLE `exercise` ADD `ip_lock` TEXT NULL DEFAULT NULL");
         }
+
+        # Recycle object table
+        $db->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `tablename` varchar(100) NOT NULL,
+            `entryid` int(11) NOT NULL,
+            `entrydata` varchar(4000) NOT NULL,
+            KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
     }    
 
     // update eclass version
