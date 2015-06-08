@@ -44,7 +44,7 @@ $require_current_course = true;
 require_once '../../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 
-$unitParam = isset($_GET['unit'])? ('&unit=' . intval($_GET['unit']): '';
+$unitParam = isset($_GET['unit'])? ('&unit=' . intval($_GET['unit'])): '';
 $TOCurl = "../viewer_toc.php?course=$course_code$unitParam";
 $TOCleft = "../toc.php?course=$course_code$unitParam";
 
