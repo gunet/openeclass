@@ -853,7 +853,7 @@ function showlinksofcategory($cat_id = 0) {
                         "</td>";
                     } else {
                         $tool_content .= "<td class='text-center'>" .
-                            icon('fa-download', $langDownload, $link_to_save) .
+                            ($table == 'video'? icon('fa-download', $langDownload, $link_to_save): '&nbsp;') .
                             '</td>';
                     }
                 }
