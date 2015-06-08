@@ -44,24 +44,6 @@ $action->record(MODULE_ID_EXERCISE);
 
 $pageName = $langExercices;
 
-/* * **************************** */
-/* Clears the exercise session */
-/* * **************************** */
-if (isset($_SESSION['objExercise'])) {
-    unset($_SESSION['objExercise']);
-}
-if (isset($_SESSION['objQuestion'])) {
-    unset($_SESSION['objQuestion']);
-}
-if (isset($_SESSION['objAnswer'])) {
-    unset($_SESSION['objAnswer']);
-}
-if (isset($_SESSION['questionList'])) {
-    unset($_SESSION['questionList']);
-}
-if (isset($_SESSION['exerciseResult'])) {
-    unset($_SESSION['exerciseResult']);
-}
 //Unsetting the redirect cookie which is set in case of exercise page unload event
 //More info in exercise_submit.php comments
 if (isset($_COOKIE['inExercise'])) {
