@@ -118,7 +118,7 @@ if ($is_editor) {
             "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
-$paused_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
+$paused_exercises = Database::get()->queryArray("SELECT eurid, eid, title FROM exercise_user_record a "
         . "JOIN exercise b ON a.eid = b.id WHERE b.course_id = ?d AND a.uid = ?d "
         . "AND a.attempt_status = ?d", $course_id, $uid, ATTEMPT_PAUSED);
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
@@ -126,7 +126,7 @@ $nbrExercises = count($result); //Getting number of limited (offset and limit) e
 if (count($paused_exercises) > 0) {
     foreach ($paused_exercises as $row) {       
         $paused_exercises_ids[] = $row->eid;        
-        $tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice " . q($row->title) . ". <a href='exercise_submit.php?course=$course_code&exerciseId=$row->eid'>($langCont)</a></div>";
+        $tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice " . q($row->title) . ". <a class='paused_exercise' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>($langCont)</a></div>";
     }
 }
 if ($is_editor) {
@@ -207,7 +207,7 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td><a ".(isset($paused_exercises_ids) && in_array($row->id,$paused_exercises_ids)?'class="paused_exercise"':'')." href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
+            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
             $eid = $row->id;
 			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
 

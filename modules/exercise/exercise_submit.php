@@ -43,13 +43,6 @@ ModalBoxHelper::loadModalBox();
 if (!add_units_navigation()) {
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langExercices);
 }
-//Attempts unique value
-if(isset($_POST['attempt_value'])){
-    $attempt_value = $_POST['attempt_value'];
-} else {
-    $objDateTime = new DateTime('NOW');
-    $attempt_value = $objDateTime->getTimestamp();
-}
 
 function unset_exercise_var($exerciseId){
     global $attempt_value;
@@ -116,6 +109,23 @@ if (isset($_REQUEST['exerciseId'])) {
     redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
 }
 
+//Initialize attempts timestamp
+if(isset($_POST['attempt_value'])){
+    $attempt_value = $_POST['attempt_value'];
+}elseif (isset($_GET['eurId'])) { //reinitialize paused attempt
+    //If there is a paused attempt get it
+    $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d AND uid = ?d", $exerciseId, ATTEMPT_PAUSED, $uid);
+    if ($paused_attempt) {
+        $objDateTime = new DateTime($paused_attempt->record_start_date);
+        $attempt_value = $objDateTime->getTimestamp();          
+    } else {
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+    }
+} else {
+    $objDateTime = new DateTime('NOW');
+    $attempt_value = $objDateTime->getTimestamp();
+}
+
 // if the user has clicked on the "Cancel" button
 // ends the exercise and returns to the exercise list
 if (isset($_POST['buttonCancel'])) {
@@ -171,15 +181,12 @@ if (($temp_CurrentDate < $exercise_StartDate->getTimestamp()) || isset($exercise
     }
 }
 
-//If there is a paused attempt get it
-$paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d AND uid = ?d", $exerciseId, ATTEMPT_PAUSED, $uid);
-
 //If question list exists in the Session get it for there
 //else get it using the apropriate object method and save it to the session
 if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
     $questionList = $_SESSION['questionList'][$exerciseId][$attempt_value];
 } else {
-    if ($paused_attempt) {
+    if (isset($paused_attempt)) {
         $record_question_ids = Database::get()->queryArray("SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d ORDER BY answer_record_id ASC", $paused_attempt->eurid);
         $i=1;
         foreach ($record_question_ids as $row) {
@@ -202,14 +209,14 @@ $nbrQuestions = count($questionList);
 // 		and exerciseTimeConstrain hasn't yet passed,
 // either start a new attempt and count now() as begin time.
 
-if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || $paused_attempt) {
+if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || isset($paused_attempt)) {
     
-    $eurid = ($paused_attempt) ? $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $paused_attempt->eurid : $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
+    $eurid = isset($paused_attempt) ? $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value] = $paused_attempt->eurid : $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];
     $recordStartDate = Database::get()->querySingle("SELECT record_start_date FROM exercise_user_record WHERE eurid = ?d", $eurid)->record_start_date;
     $recordStartDate = strtotime($recordStartDate); 
     // if exerciseTimeConstrain has not passed yet calculate the remaining time 
     if ($exerciseTimeConstraint>0) {
-        $timeleft = ($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
+        $timeleft = isset($paused_attempt) ? $paused_attempt->secs_remaining : ($exerciseTimeConstraint*60) - ($temp_CurrentDate - $recordStartDate);
     }
 } elseif (!isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) && $nbrQuestions > 0) {
     $attempt = Database::get()->querySingle("SELECT COUNT(*) AS count FROM exercise_user_record WHERE eid = ?d AND uid= ?d", $exerciseId, $uid)->count;
@@ -233,7 +240,7 @@ if (isset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]) || $pa
     if (isset($_SESSION['exerciseResult'][$exerciseId][$attempt_value])) {
             $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value];
     } else {
-        if ($paused_attempt) {
+        if (isset($paused_attempt)) {
             $exerciseResult = $_SESSION['exerciseResult'][$exerciseId][$attempt_value]= $objExercise->get_attempt_results_array($eurid);
         } else {
             $exerciseResult = array();
@@ -249,13 +256,13 @@ if (isset($_POST['formSent'])) {
     if (isset($exerciseTimeConstraint) && $exerciseTimeConstraint != 0) {
         $nowTime = new DateTime();
         $startTime = new DateTime();
-        if ($paused_attempt) {
+        if (isset($paused_attempt)) {
             $startTime->setTimestamp($exercise_EndDate);
         } else {
             $startTime->setTimestamp($recordStartDate);
         }
         $endTime = new DateTime($startTime->format('Y-m-d H:i:s'));       
-        $interval = ($paused_attempt) ? 'PT'.$paused_attempt->secs_remaining.'S' :'PT'.$exerciseTimeConstraint.'M';
+        $interval = isset($paused_attempt) ? 'PT'.$paused_attempt->secs_remaining.'S' :'PT'.$exerciseTimeConstraint.'M';
         $endTime->add(new DateInterval($interval));
         if ($endTime < $nowTime) {
             $time_expired = TRUE;                     
@@ -263,7 +270,7 @@ if (isset($_POST['formSent'])) {
     }
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
-    $action = ($paused_attempt) ? 'update' : 'insert';
+    $action = isset($paused_attempt) ? 'update' : 'insert';
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
 
     $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $exerciseResult;
@@ -326,7 +333,7 @@ if (isset($_POST['formSent'])) {
             $totalWeighting = $objExercise->selectTotalWeighting();
         }      
         //if we are currently in a previously paused attempt (so this is not the first pause), unanswered are already saved in the DB and they onky need an update
-        if (!$paused_attempt) {
+        if (!isset($paused_attempt)) {
             $objExercise->save_unanswered(0); //passing 0 to save like unanswered
         }
         Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), total_score = ?d, total_weighting = ?d, attempt_status = ?d, secs_remaining = ?d
