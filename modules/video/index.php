@@ -32,11 +32,9 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 
-/**** The following is added for statistics purposes ***/
 require_once 'include/action.php';
 $action = new action();
 $action->record('MODULE_ID_VIDEO');
-/**************************************/
 
 require_once 'include/lib/forcedownload.php';
 require_once 'include/lib/modalboxhelper.class.php';
@@ -68,7 +66,7 @@ if ($is_in_tinymce) {
     load_js('tinymce.popup.urlgrabber.min.js');
 }
 
-if($display_tools) {
+if ($display_tools) {
     load_js('tools.js');
     ModalBoxHelper::loadModalBox(true);
     $head_content .= <<<hContent
@@ -549,12 +547,12 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                                                 <th>$langVideoDirectory</th>
                                                 <th class='text-center' style='width:100px'>$langDate</th>";
 
-        if ($display_tools) {
+        if (!$is_in_tinymce) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . '</th>';
         }
         $tool_content .= "</tr>";
 
-        //display uncategorized links
+        // display uncategorized links
         showlinksofcategory();
         $tool_content .="</table></div></div></div>";
 
@@ -564,11 +562,13 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                                       <table class='table-default category-links'>";
 
         if ($num_of_categories > 0) { // categories found ?
-            $tool_content .= "<tr class='list-header'><th>$langCatVideoDirectory&nbsp;&nbsp;&nbsp;".($expand_all?
+            $tool_content .= "<tr class='list-header'><th>$langCatVideoDirectory&nbsp;&nbsp;&nbsp;" .
+                ($expand_all?
                     icon('fa-folder-open', $showall, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=0"):
-                    icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1"))."</th>
-                    <th class='text-center' style='width:100px;'>$langDate</th>";
-            if ($display_tools) {
+                    icon('fa-folder', $shownone, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;d=1")) .
+                "</th>
+                 <th class='text-center' style='width:100px;'>$langDate</th>";
+            if (!$is_in_tinymce) {
                 $tool_content .= "<th class='text-center'>" . icon('fa-gears') . '</th>';
             }
             $tool_content .= '</tr>';
@@ -581,7 +581,7 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                 } else {
                     $folder_icon = icon('fa-folder-o', $showall);
                 }
-                $colspan = $display_tools? " colspan='2'": '';
+                $colspan = $is_in_tinymce? " colspan='2'": " colspan='3'";
                 $tool_content .= "<tr class='link-subcategory-title'><th class='category-link'$colspan>$folder_icon ";
                 if (isset($_REQUEST['embedtype'])) {
                     $embedParam = '&amp;embedtype=' . q($_REQUEST['embedtype']);
@@ -764,10 +764,11 @@ function delete_video_category($id)
  */
 function showlinksofcategory($cat_id = 0) {
 
-    global $course_id, $is_in_tinymce, $tool_content, $is_editor, $course_code;
-    global $langDelete, $langViewHide, $langViewShow, $langConfirmDelete, $display_tools;
-    global $langDownload, $langResourceAccessLock, $langResourceAccessUnlock, $langEditChange;
-    global $filterv, $filterl, $compatiblePlugin, $langcreator, $langpublisher;
+    global $course_id, $is_in_tinymce, $tool_content, $is_editor, $course_code,
+        $langDelete, $langViewHide, $langViewShow, $langConfirmDelete,
+        $display_tools, $is_in_tinymce, $langDownload, $langResourceAccessLock,
+        $langResourceAccessUnlock, $langEditChange, $filterv, $filterl,
+        $compatiblePlugin, $langcreator, $langpublisher;
 
     if ($is_editor) {
         $vis_q = '';
@@ -824,31 +825,37 @@ function showlinksofcategory($cat_id = 0) {
                 }
                 $tool_content .= "</td>
                     <td class='text-center'>". nice_format(date('Y-m-d', strtotime($myrow->date))) . "</td>";
-                if ($display_tools) {
-                   $tool_content .= "<td class='option-btn-cell'>" .
-                    action_button(array(
-                        array('title' => $langEditChange,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table",
-                              'icon' => 'fa-edit',
-                              'show' => !$is_in_tinymce and $is_editor),
-                        array('title' => $myrow->visible? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;vis=" .
-                                       ($myrow->visible? '0': '1'),
-                              'icon' => $myrow->visible? 'fa-eye-slash' : 'fa-eye' ),
-                        array('title' => $myrow->public? $langResourceAccessLock : $langResourceAccessUnlock,
-                               'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;" .
-                                       ($myrow->public? 'limited=1': 'public=1'),
-                               'icon' => $myrow->public? 'fa-lock' : 'fa-unlock',
-                               'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN),
-                        array('title' => $langDownload,
-                              'url' => $link_to_save,
-                              'icon' => 'fa-download'),
-                        array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table",
-                              'icon' => 'fa-times',
-                              'confirm' => $langConfirmDelete,
-                              'class' => 'delete'))) .
-                    "</td>";
+                if (!$is_in_tinymce) {
+                    if ($display_tools) {
+                    $tool_content .= "<td class='option-btn-cell'>" .
+                        action_button(array(
+                            array('title' => $langEditChange,
+                                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;table_edit=$table",
+                                  'icon' => 'fa-edit',
+                                  'show' => !$is_in_tinymce and $is_editor),
+                            array('title' => $myrow->visible? $langViewHide : $langViewShow,
+                                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;vis=" .
+                                           ($myrow->visible? '0': '1'),
+                                  'icon' => $myrow->visible? 'fa-eye-slash' : 'fa-eye' ),
+                            array('title' => $myrow->public? $langResourceAccessLock : $langResourceAccessUnlock,
+                                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;vid=$myrow->id&amp;table=$table&amp;" .
+                                           ($myrow->public? 'limited=1': 'public=1'),
+                                   'icon' => $myrow->public? 'fa-lock' : 'fa-unlock',
+                                   'show' => !$is_in_tinymce and $is_editor and course_status($course_id) == COURSE_OPEN),
+                            array('title' => $langDownload,
+                                  'url' => $link_to_save,
+                                  'icon' => 'fa-download'),
+                            array('title' => $langDelete,
+                                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$myrow->id&amp;delete=yes&amp;table=$table",
+                                  'icon' => 'fa-times',
+                                  'confirm' => $langConfirmDelete,
+                                  'class' => 'delete'))) .
+                        "</td>";
+                    } else {
+                        $tool_content .= "<td class='text-center'>" .
+                            icon('fa-download', $langDownload, $link_to_save) .
+                            '</td>';
+                    }
                 }
                 $tool_content .= "</tr>";
             } // end of check resource access
