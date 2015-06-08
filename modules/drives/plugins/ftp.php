@@ -61,7 +61,7 @@ final class FTP extends CredentialDrive {
     }
 
     protected function getFileList($connection, $path) {
-        ftp_chdir($connection, $path);
+        @ftp_chdir($connection, $path);
         $list = ftp_nlist($connection, ".");
         $files = array();
         if ($list) {
