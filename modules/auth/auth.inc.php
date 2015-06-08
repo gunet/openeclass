@@ -519,7 +519,7 @@ function process_login() {
         $posted_uname = '';
     }
 
-    $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
+    $pass = isset($_POST['pass']) ? trim($_POST['pass']): '';
     $auth = get_auth_active_methods();
 
     if (isset($_POST['submit'])) {
