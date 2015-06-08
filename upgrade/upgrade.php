@@ -2719,7 +2719,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
 
         # Recycle object table
-        $db->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `tablename` varchar(100) NOT NULL,
             `entryid` int(11) NOT NULL,
