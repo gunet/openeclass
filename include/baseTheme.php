@@ -40,15 +40,6 @@ $pageName = '';
 $toolName = '';
 require_once 'init.php';
 
-if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
-    $eclass_module_id = intval($_GET['eclass_module_id']);
-    $cid = course_code_to_id($course_code);
-    $visible = ($_GET['hide'] == 0) ? 0 : 1;
-    Database::get()->query("UPDATE course_module SET visible = ?d
-        WHERE module_id = ?d AND
-        course_id = ?d", $visible, $eclass_module_id, $cid);
-}
-
 if (isset($toolContent_ErrorExists)) {
     Session::Messages($toolContent_ErrorExists);
     if (!$uid) {
@@ -345,16 +336,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $module_id = current_module_id();
         if (display_activation_link($module_id)) {
             if (visible_module($module_id)) {
-                $mod_activation = "
-                <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                  <i class='fa fa-minus-square tiny-icon tiny-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
-                </a>";
+                $modIconClass = 'fa-minus-square tiny-icon-red';
+                $modIconTitle = q($langDeactivate);
+                $modState = 0;
             } else {
-                $mod_activation = "
-                <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                  <i class='fa fa-check-square tiny-icon tiny-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
-                </a>";
+                $modIconClass = 'fa-check-square tiny-icon-green';
+                $modIconTitle = q($langActivate);
+                $modState = 1;
             }
+            $mod_activation = "<a href='{$urlAppend}main/module_toggle.php?course=$course_code&amp;module_id=$module_id' id='module_toggle' data-state='$modState' data-toggle='tooltip' data-placement='top' title='$modIconTitle'><span class='fa tiny-icon $modIconClass'></span></a>";
         }
     }
 
