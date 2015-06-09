@@ -63,6 +63,9 @@ if ($appName) {
         }
         redirect_to_home_page('modules/admin/extapp.php?edit=' . $appName);
     }
+    
+    $boolean_field = "";
+    
     if ($shouldEdit) {
         $tool_content .= "\n<div class='row extapp'>\n<div class='col-xs-12'>\n";
         $tool_content .= "  <div class='form-wrapper'>\n";
@@ -70,16 +73,28 @@ if ($appName) {
         $tool_content .= "      <fieldset>\n";
 
         foreach ($app->getParams() as $param) {
-            $tool_content .= "        <div class='form-group'>\n";
-            $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
-            $tool_content .= "          <div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . $param->value() . "'></div>";
-            $tool_content .= "        </div>\n";
+            
+            if($param->getType() == ExtParam::TYPE_BOOLEAN){
+                $boolean_field .= "        <div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>\n";
+                $boolean_field .= "          <label><input type='checkbox' name='" . $param->name() . "' value='" . $param->value() . "'>". $param->display()."</label>";
+                $boolean_field .= "        </div></div></div>\n";
+            }else{
+                $tool_content .= "        <div class='form-group'>\n";
+                $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
+                $tool_content .= "          <div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . $param->value() . "'></div>";
+                $tool_content .= "        </div>\n";
+            }
         }
-
-        $tool_content .= "        <div class='form-group'><div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div></div>\n";
+        
+        $tool_content .= $boolean_field;
+        $tool_content .= "          <div class='form-group'>\n";
+        $tool_content .= "              <div class='col-sm-offset-2 col-sm-10'>";
+        $tool_content .= "                  <button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='$langCancel'>$langCancel</button>";
+        $tool_content .= "              </div>\n";
+        $tool_content .= "          </div>\n";
         $tool_content .= "      </fieldset>\n";
         $tool_content .= "    </form>\n</div>\n</div>\n</div>\n";
-        $tool_content.=$app->getLongDescription();
+        //$tool_content .= "<p>".$app->getLongDescription()."</p>";
     }
 } else {
     $tool_content .= "<div class=\"row extapp\">\n<div class='col-xs-12'>\n";
