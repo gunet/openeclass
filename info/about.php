@@ -35,7 +35,8 @@ $tool_content .= action_bar(array(
                                       'button-class' => 'btn-default')
                             ),false);
 $tool_content .= "<div class='row'><div class='col-sm-12'><div class='panel'><div class='panel-body'>
-<div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;(<a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a>)</div>
+<div><label>$langInstituteShortName:&nbsp;</label><a href='$InstitutionUrl' target='_blank' class='mainpage'>$Institution</a></div>
+<div><label>$langCampusName:&nbsp;</label>$siteName&nbsp;</div>
 <div><label>$langVersion:&nbsp;</label><a href='http://www.openeclass.org/' title='Open eClass Portal' target='_blank'>Open eClass " . ECLASS_VERSION . "&raquo;</a></div>
 <div><label>$langSupportUser&nbsp;</label>" . q(get_config('admin_name')) . "</div>
 </div></div></div>";
