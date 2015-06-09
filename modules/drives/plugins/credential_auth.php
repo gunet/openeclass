@@ -27,19 +27,48 @@ $drive = CloudDriveManager::getSessionDrive();
 $url = trim(addslashes(array_key_exists('url', $_POST) ? $_POST['url'] : $drive->getDefaultURL()));
 $username = trim(addslashes(array_key_exists('username', $_POST) ? $_POST['username'] : ""));
 $password = array_key_exists('password', $_POST) ? $_POST['password'] : "";
+$username_value = ($username == "")? "value='' placeholder='Username'" : "value='$username'";
 
 if ($drive->checkCredentials($url, $username, $password)) {
     header('Location: ' . '../popup.php?' . $drive->getDriveDefaultParameter() . "&" . $drive->getCallbackName() . '=' . $drive->encodeCredentials($url, $username, $password));
     die();
 }
 
+echo '<head>';
+echo '<title>User Login</title>';
+echo '<link rel="stylesheet" href="../../../template/default/CSS/bootstrap-custom.css?v=3.1">';
+echo '</head>';
+
+echo '<body style="background-color: #e9e9e9; padding-top:30px;">';
+echo '<div class="container">';
+echo '<div class="col-xs-12">';
+
+echo '<h4 class="text-center"> - Login Form - </h4>';
+echo '<p class="text-center">Please enter your credentials</p><br>';
+
 if ($username || $password) {
-    echo "<div>Unable to login with given credentials</div>";
+    echo '<div class="alert alert-warning">Unable to login with given credentials</div>';
 }
 
 echo '<form action="credential_auth.php?' . $drive->getDriveDefaultParameter() . '" method="POST">';
-echo '<div>URL <input type="url" id="url" name="url" value="' . $url . '"></div>';
-echo '<div>Username <input type="text" id="username" name="username" value="' . $username . '"></div>';
-echo '<div>Password <input type="password" id="password" name="password"></div>';
-echo '<div><input type="submit" value="Submit">';
+
+echo '<div class="form-group">';
+echo '<input type="url" class="form-control text-center" id="url" name="url" value="' . $url . '" readonly>';
+echo '</div>';
+
+echo '<div class="form-group">';
+echo '<input type="text" class="form-control text-center" id="username" name="username" '.$username_value.'>';
+echo '</div>';
+
+echo '<div class="form-group">';
+echo '<input type="password" class="form-control text-center" id="password" name="password" placeholder="Password...">';
+echo '</div>';
+
+echo '<div class="form-group">';
+echo '<input type="submit" class="btn btn-primary btn-block" value="Submit">';
+echo '</div>';
+
 echo '</form>';
+echo '</div>';
+echo '</div>';
+echo '</body>';
