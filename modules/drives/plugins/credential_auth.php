@@ -39,7 +39,7 @@ echo '<title>User Login</title>';
 echo '<link rel="stylesheet" href="../../../template/default/CSS/bootstrap-custom.css?v=3.1">';
 echo '</head>';
 
-echo '<body style="background-color: #e9e9e9; padding-top:30px;">';
+echo '<body style="background-color: #efefef; padding-top:30px;">';
 echo '<div class="container">';
 echo '<div class="col-xs-12">';
 
