@@ -75,8 +75,9 @@ if ($appName) {
         foreach ($app->getParams() as $param) {
             
             if($param->getType() == ExtParam::TYPE_BOOLEAN){
+                $checked = $param->value() == 1? "checked" : "" ;
                 $boolean_field .= "        <div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='checkbox'>\n";
-                $boolean_field .= "          <label><input type='checkbox' name='" . $param->name() . "' value='" . $param->value() . "'>". $param->display()."</label>";
+                $boolean_field .= "          <label><input type='checkbox' name='" . $param->name() . "' value='" . $param->value() . "' $checked>". $param->display()."</label>";
                 $boolean_field .= "        </div></div></div>\n";
             }else{
                 $tool_content .= "        <div class='form-group'>\n";
