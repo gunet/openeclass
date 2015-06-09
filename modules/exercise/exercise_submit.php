@@ -120,7 +120,8 @@ if(isset($_POST['attempt_value'])){
     $attempt_value = $objDateTime->getTimestamp();
 }
 //If the exercise is password protected
-if ($password = $objExercise->selectPasswordLock() && !$is_editor) {
+$password = $objExercise->selectPasswordLock();
+if ($password && !$is_editor) {
     if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
         if (isset($_POST['password']) && $password === $_POST['password']) {
             $_SESSION['password'][$exerciseId][$attempt_value] = 1;
@@ -131,7 +132,8 @@ if ($password = $objExercise->selectPasswordLock() && !$is_editor) {
     }
 }
 //If the exercise is IP protected
-if ($ips = $objExercise->selectIPLock() && !$is_editor){
+$ips = $objExercise->selectIPLock();
+if ($ips && !$is_editor){
     $user_ip = $_SERVER["REMOTE_ADDR"];
     if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
         Session::Messages($langIPHasNoAccess);
