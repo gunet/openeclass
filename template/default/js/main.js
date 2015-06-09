@@ -107,7 +107,6 @@ $(document).ready(function () {
         }
     });
 
-
     $(".navbar-toggle").on("click", function (e) {
         if ($("#sidebar").hasClass("in")) {
             $("#sidebar").animate(
@@ -155,6 +154,18 @@ $(document).ready(function () {
             'name': 'next',
             'value': window.location.pathname + window.location.search,
             'type': 'hidden'})).submit();
+    });
+
+    // Module toggle button
+    $('#module_toggle').on('click', function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $(this).removeAttr('href').find('span')
+            .removeClass('fa-minus-square fa-check-square tiny-icon-red tiny-icon-green')
+            .addClass('fa-spinner fa-spin');
+        $.post(url,
+            { hide: $(this).data('state') },
+            function () { location.reload(); });
     });
 
     // Leftnav - rotate Category Menu Item icon

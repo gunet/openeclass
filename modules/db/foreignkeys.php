@@ -30,39 +30,41 @@ final class ForeignKeys {
      * @param type $detailTableName The detail table name
      * @param type $detailFieldName The detail table's field name, which connects with the master table
      * @param type $masterTableName The master table name
-     * @param type $defaultEntryResolver A function which returns the master id 
-     * field, which will be used as default for all entries of detail table,
-     * which are orphaned or where the reference is missing. If this function
-     * return null, or is null itself, then the orphaned entries will be removed
-     * from the detail table and recycled to the recyclebin table.
+     * @param type $defaultEntryResolver A numeric value or a function which 
+     * returns a numeric value, in order to get the master id field value. This
+     * will be used as default for those entries of the detail table, who are
+     * orphaned (have a wrong reference). If this value is null, or if the
+     * function returns null, and the field does not accept null values, then
+     * the orphaned entries will be removed from the detail table and recycled
+     * to the recyclebin table.
      */
     public static function create($detailTableName, $detailFieldName, $masterTableName, $defaultEntryResolver) {
         $masterIDFieldName = DBHelper::primaryKeyOf($masterTableName);
+        if (DBHelper::foreignKeyExists($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName))
+            return;
         $detailIDFieldName = DBHelper::primaryKeyOf($detailTableName);
-        $defaultEntryID = $defaultEntryResolver ? $defaultEntryResolver() : null;
+        $defaultEntryID = is_null($defaultEntryResolver) ? null :
+                (is_numeric($defaultEntryResolver) ? $defaultEntryResolver :
+                        is_callable($defaultEntryResolver) ? $defaultEntryResolver() :
+                                null);
+        $nullable = DBHelper::isColumnNullable($detailTableName, $detailFieldName);
 
-        // Could not use functional interface, since sub-transaction is needed and this is not supported by MySQL, so paging is performed.
-        $size = Database::get()->querySingle("select count(*) as count from `$detailTableName`")->count;
-        $from = 0;
-        while ($from < $size) {
-            $to = ($size - $from) > 100 ? 100 : $size - $from;
-            foreach (Database::get()->queryArray("select `$detailIDFieldName`,`$detailFieldName` from `$detailTableName` limit $to offset $from") as $entry) {
-                $masterID = $entry->$detailFieldName;
-                if (!is_null($masterID)) {
-                    $master = Database::get()->querySingle("select `$masterIDFieldName` from `$masterTableName` where `$masterIDFieldName` = ?d", $masterID);
-                    if (!$master) {
-                        $masterID = null;
-                    }
-                }
-                if (!$masterID) {   // Master wasn't found
-                    if (is_null($defaultEntryID)) {
-                        Recycle::deleteObject($detailTableName, $entry->$detailIDFieldName, $detailIDFieldName);
-                    } else {
-                        Database::get()->query("update `" . $detailTableName . "` set `" . $detailFieldName . "` = ?d", $defaultEntryID);
-                    }
+        $wrongIDs = Database::get()->queryArray("select `$detailTableName`.`$detailIDFieldName` as detailid from `$detailTableName`
+                left join `$masterTableName` on `$detailTableName`.`$detailFieldName` = `$masterTableName`.`$masterIDFieldName`
+                where `$detailTableName`.`$detailFieldName` is not null and `$masterTableName`.`$masterIDFieldName` is null");
+        if ($wrongIDs) {
+            foreach ($wrongIDs as $entry) {
+                if (is_null($defaultEntryID)) {
+                    if ($nullable)
+                        Database::get()->query("update `" . $detailTableName . "` set `" . $detailFieldName . "` = NULL where $detailIDFieldName = ?d"
+                                , $entry->detailid);
+                    else
+                        Recycle::deleteObject($detailTableName, $entry->detailid, $detailIDFieldName);
+                } else {
+                    Database::get()->query("update `" . $detailTableName . "` set `" . $detailFieldName . "` = ?d where $detailIDFieldName = ?d"
+                            , $defaultEntryID, $entry->detailid);
                 }
             }
-            $from+=100;
         }
         DBHelper::createForeignKey($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
     }

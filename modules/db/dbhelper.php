@@ -98,6 +98,10 @@ abstract class DBHelper {
         return DBHelper::impl()->primaryKeyOfImpl($table);
     }
 
+    public static function isColumnNullable($table, $column) {
+        return DBHelper::impl()->isColumnNullableImpl($table, $column);
+    }
+
     /**
      * Create a foreign key which connects the detail table's field $detailFieldName with master table's $masterIDFieldName
      * @param type $detailTableName The detail table name
@@ -148,7 +152,9 @@ abstract class DBHelper {
 
     abstract protected function writeLockTablesImpl($function, $tables);
 
-    abstract protected function primaryKeyOfImpl($tables);
+    abstract protected function primaryKeyOfImpl($table);
+
+    abstract protected function isColumnNullableImpl($table, $column);
 
     abstract protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
 
@@ -215,9 +221,14 @@ class _DBHelper_MYSQL extends DBHelper {
         }
     }
 
+    public function isColumnNullableImpl($tableName, $columnname) {
+        $result = Database::get()->querySingle("select IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = ?s and COLUMN_NAME = ?s", $tableName, $columnname);
+        return $result ? strcmp($result->IS_NULLABLE, 'YES') == 0 : false;
+    }
+
     public function primaryKeyOfImpl($tableName) {
         $result = Database::get()->querySingle("show keys from `" . $tableName . "` where `Key_name` = 'PRIMARY'");
-        return $result->Column_name;
+        return $result ? $result->Column_name : null;
     }
 
     private function getForeignKeyName($detailTableName, $detailFieldName, $masterTableName) {

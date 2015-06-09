@@ -76,7 +76,7 @@ if ($appName) {
             $tool_content .= "        </div>\n";
         }
 
-        $tool_content .= "        <div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div>\n";
+        $tool_content .= "        <div class='form-group'><div class='col-sm-offset-2 col-sm-10'><input class='btn btn-primary' type='submit' name='submit' value='$langModify'></div></div>\n";
         $tool_content .= "      </fieldset>\n";
         $tool_content .= "    </form>\n</div>\n</div>\n</div>\n";
         $tool_content.=$app->getLongDescription();
