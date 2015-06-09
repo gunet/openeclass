@@ -43,8 +43,7 @@ echo '<body style="background-color: #efefef; padding-top:30px;">';
 echo '<div class="container">';
 echo '<div class="col-xs-12">';
 
-echo '<h4 class="text-center"> - Login Form - </h4>';
-echo '<p class="text-center">Please enter your credentials</p><br>';
+echo '<h4 class="text-center"> - Login Form - </h4><br>';
 
 if ($username || $password) {
     echo '<div class="alert alert-warning">Unable to login with given credentials</div>';
@@ -61,7 +60,7 @@ echo '<input type="text" class="form-control text-center" id="username" name="us
 echo '</div>';
 
 echo '<div class="form-group">';
-echo '<input type="password" class="form-control text-center" id="password" name="password" placeholder="Password...">';
+echo '<input type="password" class="form-control text-center" id="password" name="password" placeholder="Password">';
 echo '</div>';
 
 echo '<div class="form-group">';
