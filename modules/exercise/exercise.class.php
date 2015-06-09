@@ -53,6 +53,7 @@ if (!class_exists('Exercise')) {
         var $results;
         var $score;
         var $ip_lock;
+        var $password_lock;
         var $questionList;  // array with the list of this exercise's questions
 
         /**
@@ -77,6 +78,7 @@ if (!class_exists('Exercise')) {
             $this->results = 1;
             $this->score = 1;
             $this->ip_lock = null;
+            $this->password_lock = null;
             $this->questionList = array();
         }
 
@@ -91,7 +93,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
-			attempts_allowed, random, active, results, score, ip_lock
+			attempts_allowed, random, active, results, score, ip_lock, password_lock
 			FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -110,6 +112,7 @@ if (!class_exists('Exercise')) {
                 $this->results = $object->results;
                 $this->score = $object->score;
                 $this->ip_lock = $object->ip_lock;
+                $this->password_lock = $object->password_lock;
 
                 $result = Database::get()->queryArray("SELECT question_id, q_position FROM `exercise_with_questions`, `exercise_question`
 				WHERE course_id = ?d AND question_id = id AND exercise_id = ?d ORDER BY q_position", $course_id, $id);
@@ -230,9 +233,12 @@ if (!class_exists('Exercise')) {
         function selectScore() {
             return $this->score;
         }
-        function selectIPlock() {
+        function selectIPLock() {
             return $this->ip_lock;
         }
+        function selectPasswordLock() {
+            return $this->password_lock;
+        }        
         /**
          * tells if questions are selected randomly, and if so returns the draws
          *
@@ -388,9 +394,12 @@ if (!class_exists('Exercise')) {
         function updateScore($score) {
             $this->score = $score;
         }
-        function updateIPlock($ips) {
+        function updateIPLock($ips) {
             $this->ip_lock = (empty($ips)) ? null : $ips;
         }
+        function updatePasswordLock($password) {
+            $this->password_lock = (empty($password)) ? null : $password;
+        }        
         /**
          * sets to 0 if questions are not selected randomly
          * if questions are selected randomly, sets the draws
@@ -457,14 +466,15 @@ if (!class_exists('Exercise')) {
             $results = $this->results;
             $score = $this->score;
             $ip_lock = $this->ip_lock;
+            $password_lock = $this->password_lock; 
             // exercise already exists
             if ($id) {
                 $affected_rows = Database::get()->query("UPDATE `exercise`
 				SET title = ?s, description = ?s, type = ?d," .
                         "start_date = ?t, end_date = ?t, temp_save = ?d, time_constraint = ?d," .
-                        "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d, ip_lock = ?s
+                        "attempts_allowed = ?d, random = ?d, active = ?d, public = ?d, results = ?d, score = ?d, ip_lock = ?s, password_lock = ?s
                         WHERE course_id = ?d AND id = ?d", 
-                        $exercise, $description, $type, $startDate, $endDate, $tempSave, $timeConstraint, $attemptsAllowed, $random, $active, $public, $results, $score, $ip_lock, $course_id, $id)->affectedRows;
+                        $exercise, $description, $type, $startDate, $endDate, $tempSave, $timeConstraint, $attemptsAllowed, $random, $active, $public, $results, $score, $ip_lock, $password_lock, $course_id, $id)->affectedRows;
                 if ($affected_rows > 0) {
                     Log::record($course_id, MODULE_ID_EXERCISE, LOG_MODIFY, array('id' => $id,
                         'title' => $exercise,
@@ -474,10 +484,10 @@ if (!class_exists('Exercise')) {
             // creates a new exercise
             else {
                 $this->id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date, 
-                        end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock) 
-			VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s)", 
+                        end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock) 
+			VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s)", 
                         $course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
-                        $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock)->lastInsertID;
+                        $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock)->lastInsertID;
 
                 Log::record($course_id, MODULE_ID_EXERCISE, LOG_INSERT, array('id' => $this->id,
                     'title' => $exercise,
@@ -934,11 +944,12 @@ if (!class_exists('Exercise')) {
             $results = $this->results;
             $score = $this->score;
             $ip_lock = $this->ip_lock;
+            $password_lock = $this->password_lock;
             $clone_id = Database::get()->query("INSERT INTO `exercise` (course_id, title, description, type, start_date, 
-                                    end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock) 
-                                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", 
+                                    end_date, temp_save, time_constraint, attempts_allowed, random, active, results, score, ip_lock, password_lock) 
+                                    VALUES (?d, ?s, ?s, ?d, ?t, ?t, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?s, ?s)", 
                                     $clone_course_id, $exercise, $description, $type, $startDate, $endDate, $tempSave, 
-                                    $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock)->lastInsertID;        
+                                    $timeConstraint, $attemptsAllowed, $random, $active, $results, $score, $ip_lock, $password_lock)->lastInsertID;        
             if ($clone_course_id != $course_id) {
                 // copy questions and answers to new course question pool
                 Database::get()->queryFunc("SELECT question_id AS id FROM exercise_with_questions

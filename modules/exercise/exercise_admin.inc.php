@@ -58,7 +58,8 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($exerciseDescription);
         $objExercise->updateType($exerciseType);
-        $objExercise->updateIPlock($_POST['exerciseIPLock']);
+        $objExercise->updateIPLock($_POST['exerciseIPLock']);
+        $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
         if (isset($exerciseStartDate) and !empty($exerciseStartDate)) {
             $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $exerciseStartDate);
         } else {
@@ -113,7 +114,8 @@ if (isset($_POST['submitExercise'])) {
     $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
-    $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPlock();
+    $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPLock();
+    $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
 }
 
 // shows the form to modify the exercise
@@ -370,6 +372,13 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
+                 <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
+                   <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPasswordUnlock:</label>
+                   <div class='col-sm-10'>
+                     <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
+                     <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
+                   </div>
+                 </div>                   
                  <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
                    <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
                    <div class='col-sm-10'>

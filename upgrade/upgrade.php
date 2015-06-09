@@ -2717,7 +2717,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('exercise', 'ip_lock')) {
             Database::get()->query("ALTER TABLE `exercise` ADD `ip_lock` TEXT NULL DEFAULT NULL");
         }
-
+        if (!DBHelper::fieldExists('exercise', 'password_lock')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `password_lock` VARCHAR(255) NULL DEFAULT NULL");
+        }
         # Recycle object table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

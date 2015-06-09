@@ -50,6 +50,7 @@ function unset_exercise_var($exerciseId){
     unset($_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]);
     unset($_SESSION['exerciseResult'][$exerciseId][$attempt_value]);
     unset($_SESSION['questionList'][$exerciseId][$attempt_value]);
+    unset($_SESSION['password'][$exerciseId][$attempt_value]);
 }
 // setting a cookie in OnBeforeUnload event in order to redirect user to the exercises page in case of refresh
 // as the synchronous ajax call in onUnload event doen't work the same in all browsers in case of refresh 
@@ -95,13 +96,6 @@ if (isset($_REQUEST['exerciseId'])) {
             session::Messages($langExerciseNotFound);
             redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
         }
-        if ($ips = $objExercise->selectIPlock()){
-            $user_ip = $_SERVER["REMOTE_ADDR"];
-            if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
-                Session::Messages($langIPHasNoAccess);
-                redirect_to_home_page('modules/exercise/index.php?course='.$course_code);                
-            }           
-        }           
         // saves the object into the session
         $_SESSION['objExercise'][$exerciseId] = $objExercise;        
     }
@@ -125,7 +119,25 @@ if(isset($_POST['attempt_value'])){
     $objDateTime = new DateTime('NOW');
     $attempt_value = $objDateTime->getTimestamp();
 }
-
+//If the exercise is password protected
+if ($password = $objExercise->selectPasswordLock() && !$is_editor) {
+    if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
+        if (isset($_POST['password']) && $password === $_POST['password']) {
+            $_SESSION['password'][$exerciseId][$attempt_value] = 1;
+        } else {
+            Session::Messages($langCaptchaWrong);
+            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
+        }
+    }
+}
+//If the exercise is IP protected
+if ($ips = $objExercise->selectIPLock() && !$is_editor){
+    $user_ip = $_SERVER["REMOTE_ADDR"];
+    if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
+        Session::Messages($langIPHasNoAccess);
+        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);                
+    }           
+}
 // if the user has clicked on the "Cancel" button
 // ends the exercise and returns to the exercise list
 if (isset($_POST['buttonCancel'])) {
