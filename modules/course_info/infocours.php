@@ -162,9 +162,11 @@ if (isset($_POST['submit'])) {
                     }
                 }
 
-                // disable visibility if it is opencourses certified
+                // disable visibility other than 1 or 2 if it is opencourses certified
                 if (get_config('opencourses_enable') && $isOpenCourseCertified) {
-                    $_POST['formvisible'] = '2';
+                    if ($_POST['formvisible'] != '1' && $_POST['formvisible'] != '2') {
+                        $_POST['formvisible'] = '1';
+                    }
                 }
 
                 $department = intval($_POST['department']);
