@@ -853,7 +853,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         foreach ($crevres as $crev) {
             $crevres2 = Database::get()->queryArray("SELECT * FROM course_review WHERE course_id = ?d ORDER BY last_review DESC", intval($crev->course_id));
             $crevcnt = 0;
-            foreach ($revres2 as $crev2) {
+            foreach ($crevres2 as $crev2) {
                 if ($crevcnt > 0) {
                     Database::get()->query("DELETE FROM course_review WHERE id = ?d", intval($crev2['id']));
                 }
