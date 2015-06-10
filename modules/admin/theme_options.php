@@ -137,9 +137,9 @@ if (isset($_POST['optionsSave'])) {
     $theme_options_name = $_POST['themeOptionsName'];
     $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
     clear_default_settings();
-    
-    clone_images(); //clone images
-    upload_images(); //upload new images
+
+    clone_images($new_theme_id); //clone images
+    upload_images($new_theme_id); //upload new images
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $new_theme_id);
     $_SESSION['theme_options_id'] = $new_theme_id;
@@ -656,8 +656,8 @@ function initialize_settings() {
         }
     }    
 }
-function clone_images() {
-    global $webDir, $theme, $new_theme_id, $theme_id;
+function clone_images($new_theme_id = null) {
+    global $webDir, $theme, $theme_id;
     if(!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         mkdir("$webDir/courses/theme_data/$new_theme_id", 0755);
     }     
@@ -671,11 +671,12 @@ function clone_images() {
         }
     }
 }
-function upload_images() {
+function upload_images($new_theme_id = null) {
     global $webDir, $theme, $theme_id;
+    if (isset($new_theme_id)) $theme_id = $new_theme_id;
     if(!is_dir("$webDir/courses/theme_data/$theme_id")) {
         mkdir("$webDir/courses/theme_data/$theme_id", 0755);
-    } 
+    }
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {
