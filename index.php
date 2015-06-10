@@ -162,7 +162,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 $authLink[] = array(
                     'showTitle' => false,
                     'class' => 'login-option',
-                    'title' => "<b>$langLogInWith</b><br>Credentials",
+                    'title' => empty($l->auth_title)? "<b>$langLogInWith</b><br>Credentials": q($l->auth_title),
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
                                 <label for='uname' class='sr-only'>$langUsername</label>
@@ -208,7 +208,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
-                                <div>" . ($l['showTitle']? "<span class='head-text'>$l[title]</span>": '') .
+                                <div>" . ($l['showTitle']? "<span class='head-text' style='font-size:14px;'>$l[title]</span>": '') .
                                    $l['html'] . "
                                 </div>";
             if ($show_seperator) {
@@ -219,7 +219,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                                     <span>";
                 foreach ($authLink as $j => $otherAuth) {
                     if ($j != $i) {
-                        $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
+                        $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide' style='font-size:14px;'>$otherAuth[title]</button>";
                     }
                 }
                 $tool_content .= "
