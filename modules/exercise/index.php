@@ -209,6 +209,7 @@ if (!$nbrExercises) {
         
         $tool_content .= "<tr ".($is_editor && !$row->active ? "class='not_visible'" : "").">";
         $row->description = standard_text_escape($row->description);
+        $exclamation_icon = '';
         $lock_icon = '';
         $link_class = '';
         if (isset($row->password_lock) || isset($row->ip_lock)) {
@@ -221,7 +222,10 @@ if (!$nbrExercises) {
                 $lock_description .= "<li>$langIPUnlock</li>";
             }
             $lock_description .= "</ul>";
-            $lock_icon = "&nbsp;&nbsp;<span class='fa fa-lock' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'><span>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'><span>";
+        }
+        if (!$row->public) {
+            $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'><span>";
         }
         // prof only
         if ($is_editor) {
@@ -230,7 +234,7 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$descr</td>";
+            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
             $eid = $row->id;
 			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
 
