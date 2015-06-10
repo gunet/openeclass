@@ -133,7 +133,7 @@ delosform;
         $title = $vL->title;
         $description = $vL->description;
         $creator = $vL->rights->creator->name;
-        $publisher = $vL->rights->editor->name;
+        $publisher = $vL->organization->name;
         $date = $vL->date;
         $dateTS = strtotime($date);
         $alreadyAdded = '';
@@ -213,7 +213,7 @@ function storeDelosResources($jsonObj) {
                 $title = $vL->title;
                 $description = $vL->description;
                 $creator = $vL->rights->creator->name;
-                $publisher = $vL->rights->editor->name;
+                $publisher = $vL->organization->name;
                 $date = $vL->date;
 
                 if ($stored) {
