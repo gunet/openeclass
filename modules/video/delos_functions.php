@@ -31,9 +31,14 @@ function getDelosURL() {
     return $opendelosapp->getParam(OpenDelosApp::URL)->value();
 }
 
+function getDelosExtEnabled() {
+    global $opendelosapp;
+    return $opendelosapp->getParam(OpenDelosApp::ENABLED)->value();
+}
+
 function isDelosEnabled() {
     global $opendelosapp;
-    if ($opendelosapp && getDelosURL()) {
+    if ($opendelosapp && getDelosExtEnabled() && getDelosURL()) {
         return true;
     }
     return false;

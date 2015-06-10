@@ -52,7 +52,7 @@ if ($username || $password) {
 echo '<form action="credential_auth.php?' . $drive->getDriveDefaultParameter() . '" method="POST">';
 
 echo '<div class="form-group">';
-echo '<input type="url" class="form-control text-center" id="url" name="url" value="' . $url . '" readonly>';
+echo '<input type="url" class="form-control text-center" id="url" name="url" value="' . $url . '">';
 echo '</div>';
 
 echo '<div class="form-group">';
