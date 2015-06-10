@@ -93,7 +93,7 @@ if (!class_exists('Exercise')) {
             global $course_id;
 
             $object = Database::get()->querySingle("SELECT title, description, type, start_date, end_date, temp_save, time_constraint,
-			attempts_allowed, random, active, results, score, ip_lock, password_lock
+			attempts_allowed, random, active, public, results, score, ip_lock, password_lock
 			FROM `exercise` WHERE course_id = ?d AND id = ?d", $course_id, $id);
 
             // if the exercise has been found
@@ -109,6 +109,7 @@ if (!class_exists('Exercise')) {
                 $this->attemptsAllowed = $object->attempts_allowed;
                 $this->random = $object->random;
                 $this->active = $object->active;
+                $this->public = $object->public;
                 $this->results = $object->results;
                 $this->score = $object->score;
                 $this->ip_lock = $object->ip_lock;

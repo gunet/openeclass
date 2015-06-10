@@ -95,17 +95,16 @@ if ($is_editor) {
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    break;
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'limited':  // make exercise limited
                     $objExerciseTmp->makelimited();
                     $objExerciseTmp->save();
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    break;
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'clone':  // make exercise limited
                     $objExerciseTmp->duplicate();
                     Session::Messages($langCopySuccess, 'alert-success');
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;                
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);              
             }
         }
         // destruction of Exercise
