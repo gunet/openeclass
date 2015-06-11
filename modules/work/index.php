@@ -2377,7 +2377,7 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     if ($comments) {
         $body .= "$m[gradecomments]: $comments\n";
     }
-    $body .= "\n$m[link_follows]\n{$urlServer}modules/work/work.php?course=$course_code&id=$assignment_id\n";
+    $body .= "\n$m[link_follows]\n{$urlServer}modules/work/index.php?course=$course_code&id=$assignment_id\n";
     if (!$group or !$info->group_id) {
         send_mail_to_user_id($info->uid, $subject, $body);
     } else {
