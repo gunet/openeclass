@@ -36,6 +36,8 @@ if ($drive->checkCredentials($url, $username, $password)) {
 
 echo '<head>';
 echo '<title>User Login</title>';
+echo '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">';
+echo '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 echo '<link rel="stylesheet" href="../../../template/default/CSS/bootstrap-custom.css?v=3.1">';
 echo '</head>';
 

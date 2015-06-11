@@ -167,6 +167,28 @@ $(document).ready(function () {
             { hide: $(this).data('state') },
             function () { location.reload(); });
     });
+    
+    // External Apps activate/deactivate button
+    $('.extapp-status').on('click', function () {
+        var url = window.location.href;
+        var button = $(this).children('i');
+        var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
+        var appName = button.parent('button').attr('data-app');
+        alert(appName);
+        
+        button.removeClass(state).addClass('fa-spinner fa-spin');
+        
+        $.post( url,
+                {state: state,
+                 appName: appName},
+                function (data) {
+                    button.removeClass('fa-spinner fa-spin').addClass(data);
+                    var btnColor = (data === 'fa-toggle-on')?'btn-success':'btn-danger';
+                    btnColorState = button.parent('button').hasClass('btn-success')?'btn-success':'btn-danger';
+                    newBtnColorState = button.parent('button').hasClass('btn-success')?'btn-danger':'btn-success';
+                    button.parent('button').removeClass(btnColorState).addClass(newBtnColorState);
+                });
+    });
 
     // Leftnav - rotate Category Menu Item icon
     if ($(".collapse.in").length > 0) { //when page first loads the show.bs.collapse event is not triggered

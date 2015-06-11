@@ -36,6 +36,16 @@ $shouldEdit = isset($_GET['edit']);
 $shouldUpdate = isset($_GET['update']);
 $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null);
 
+if(isset($_POST['state'])){
+    $newState = $_POST['state'] == 'fa-toggle-on'?'fa-toggle-off':'fa-toggle-on';
+    
+    $appName = $_POST['appName'];
+    $app = ExtAppManager::getApp($appName);
+    
+    echo $newState;
+    exit;
+}
+
 if (!$shouldEdit) {
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -113,15 +123,15 @@ if ($appName) {
         if ($app->getAppIcon() !== null) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
-        $app_active = ($app->getParams()[ExtApp::ENABLED]->value()== 1)?"<i class=\"fa fa-power-off\"></i>":"";
-        $tool_content .= $app->getDisplayName() . "</a></div><div class=\"mini-dashbord text-center text-success\" style=\"font-size:20px; margin-bottom: 10px;\">$app_active</div></td>\n";
+        $app_active = ($app->getParams()[ExtApp::ENABLED]->value()== 1)?"<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".$app->getName()."\"> <i class=\"fa fa-toggle-on\"></i> </button>":"<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"".$app->getName()."\"> <i class=\"fa fa-toggle-off\"></i> </button>";
+        $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 
-        $tool_content .= "<td class=\"text-muted\">" . $app->getShortDescription() . "</td>\n";
+        $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "<div class=\"extapp-controls\"><div class=\"btn-group btn-group-xs\">".$app_active."<a href=\"extapp.php?edit=" . $app->getName() . "\" class=\"btn btn-default\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></div></td>\n";
         $tool_content .="</tr>\n";
     }
     $tool_content .="<tr>\n";
-    $tool_content .= "<td style=\"width:90px; padding:0px;\"><div class=\"text-center\" style=\"padding:10px;\"><a href=\"bbbmoduleconf.php\"><img height=\"50\" width=\"89\"  class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></div><div class=\"mini-dashbord text-center text-success\" style=\"font-size : 20px; margin-bottom: 10px;\"><i class=\"fa fa-power-off\"></i></div></td>\n";
-    $tool_content .= "<td class=\"text-muted\">$langBBBDescription</td>\n";
+    $tool_content .= "<td style=\"width:90px; padding:0px;\"><div class=\"text-center\" style=\"padding:10px;\"><a href=\"bbbmoduleconf.php\"><img height=\"50\" width=\"89\"  class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></div></td>\n";
+    $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">$langBBBDescription<div class=\"extapp-controls\"><div class=\"btn-group btn-group-xs\"><span class=\"btn btn-success\"><i class=\"fa fa-toggle-on fw\"></i></span> <a href=\"bbbmoduleconf.php\" class=\"btn btn-default\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></div></td>\n";
     $tool_content .="</tr>\n";
 
     $tool_content.="</table>\n";
