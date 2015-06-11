@@ -2727,11 +2727,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `entryid` int(11) NOT NULL,
             `entrydata` varchar(4000) NOT NULL,
             KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
+        
+        // delete old key 'language' (it has been replaced by 'default_language')
+        Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
     }    
-
-    
-    // delete old key 'language' (it has been replaced by 'default_language')
-    Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
+       
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
