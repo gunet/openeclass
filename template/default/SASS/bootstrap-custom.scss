@@ -77,8 +77,8 @@ body
 }
 @media (max-width: $screen-desktop){
     body{
+        background: none !important;
         &>.container{
-            margin-bottom: 0;
             padding:0;
             margin:0;
         }
@@ -2674,15 +2674,7 @@ span[data-cal-date]
     }
     table.extapp-table tr{
         td{
-            padding: 25px 55px 20px 20px;
-            .extapp-dscr-wrapper{
-                position: relative;
-                .extapp-controls{
-                    position: absolute;
-                    right: -52px;
-                    top: -22px;
-                }
-            }
+            padding: 20px;
         }
     }
 }

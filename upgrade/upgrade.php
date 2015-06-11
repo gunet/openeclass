@@ -2086,7 +2086,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         DROP COLUMN `code_cours`');
         }
     }
-    
+
     DBHelper::fieldExists('ebook', 'visible') or
             Database::get()->query("ALTER TABLE `ebook` ADD `visible` BOOL NOT NULL DEFAULT 1");
     DBHelper::fieldExists('admin', 'privilege') or
@@ -2613,20 +2613,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.1
     // -----------------------------------
     if (version_compare($oldversion, '3.1', '<')) {
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
-                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `rid` INT(11) NOT NULL,
-                                `rtype` VARCHAR(50) NOT NULL,
-                                `course_id` INT(11) NOT NULL,
-                                `reason` VARCHAR(50) NOT NULL DEFAULT '',
-                                `message` TEXT NOT NULL,
-                                `timestamp` INT(11) NOT NULL DEFAULT 0,
-                                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                                `status` TINYINT(1) NOT NULL DEFAULT 1,
-                                INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
-                                INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
-        DBHelper::fieldExists('link', 'user_id') or
-            Database::get()->query("ALTER TABLE `link` ADD `user_id` INT(11) NOT NULL DEFAULT 0");
         if (!DBHelper::fieldExists('course_user', 'document_timestamp')) {
             Database::get()->query("ALTER TABLE `course_user` ADD document_timestamp DATETIME NOT NULL,
                 CHANGE `reg_date` `reg_date` DATETIME NOT NULL");
@@ -2714,6 +2700,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.2
     // -----------------------------------
     if (version_compare($oldversion, '3.2', '<')) {
+	// delete old key 'language' (replaced by 'default_language')
+	Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
+
         if (!DBHelper::fieldExists('exercise', 'ip_lock')) {
             Database::get()->query("ALTER TABLE `exercise` ADD `ip_lock` TEXT NULL DEFAULT NULL");
         }
