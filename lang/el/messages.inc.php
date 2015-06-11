@@ -4585,6 +4585,7 @@ $langDropboxNumUnreadMessages = "Μη αναγνωσμένα μηνύματα";
 $langNationalOpenCourses = "ΕΘΝΙΚΗ ΠΥΛΗ ΑΝΟΙΚΤΩΝ ΜΑΘΗΜΑΤΩΝ";
 $langExtAppName = "Εφαρμογή";
 $langExtAppDescription = "Περιγραφή";
+$langClearSettings = "Καθαρισμός Ρυθμίσεων";
 
 /* * ***********************************************************
  * Tags

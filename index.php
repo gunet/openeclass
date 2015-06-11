@@ -219,7 +219,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                                     <span>";
                 foreach ($authLink as $j => $otherAuth) {
                     if ($j != $i) {
-                        $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide' style='font-size:14px;'>$otherAuth[title]</button>";
+                        $tool_content .= "<button type='button' data-target='$j' class='option-btn-login hide'>$otherAuth[title]</button>";
                     }
                 }
                 $tool_content .= "

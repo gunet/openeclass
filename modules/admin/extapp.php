@@ -90,7 +90,7 @@ if ($appName) {
         $tool_content .= $boolean_field;
         $tool_content .= "          <div class='form-group'>\n";
         $tool_content .= "              <div class='col-sm-offset-2 col-sm-10'>";
-        $tool_content .= "                  <button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='$langCancel'>$langCancel</button>";
+        $tool_content .= "                  <button class='btn btn-primary' type='submit' name='submit' value='$langModify'>$langModify</button> <button class='btn btn-danger' type='submit' name='submit' value='$langClearSettings'>$langClearSettings</button>";
         $tool_content .= "              </div>\n";
         $tool_content .= "          </div>\n";
         $tool_content .= "      </fieldset>\n";

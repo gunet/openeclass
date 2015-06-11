@@ -3928,6 +3928,7 @@ $langFluidContainerWidth = 'Max Container Width';
 $langLoginBanner = "Login Screen Open eClass Banner";
 $langExtAppName = "Application";
 $langExtAppDescription = "Description";
+$langClearSettings = "Reset settings";
 $langTags = 'Tags';
 $langLocale = 'en_US.UTF-8';
 $langPrimaryAuthType = "Primary authentication method";
