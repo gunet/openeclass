@@ -283,7 +283,7 @@ if (isset($_POST['submit'])) {
     }
     if (isset($_POST['default_language']) and
             isset($language_codes[$_POST['default_language']])) {
-        set_config('language', $_POST['default_language']);
+        set_config('default_language', $_POST['default_language']);
     }
 
     set_config('active_ui_languages', implode(' ', $active_lang_codes));
@@ -624,7 +624,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                         <div class='form-group'>
                            <label for='default_language' class='col-sm-3 control-label'>$langMainLang: </label>
                            <div class='col-sm-9'>" .
-                               selection($selectable_langs, 'default_language', get_config('language'),
+                               selection($selectable_langs, 'default_language', get_config('default_language'),
                                          "class='form-control' id='default_language'") .
                            "</div>
                         </div>
