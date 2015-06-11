@@ -621,8 +621,8 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         $nbrQuestions = count($questions);
         foreach ($questions as $question) {
         $tool_content .= "<tr class='even'>
-                            <td align='right' width='1'>$i.</td>
-                            <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text) : $question->question_text)."<br>".
+                            <td align='text-right' width='1'>$i.</td>
+                            <td>".(($question->qtype != QTYPE_LABEL) ? q($question->question_text).'<br>' : $question->question_text).
                             $aType[$question->qtype - 1]."</td>
                             <td class='option-btn-cell'>".action_button(array(
                                 array(
