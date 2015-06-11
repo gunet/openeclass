@@ -543,7 +543,7 @@ function process_login() {
             }
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username $sqlLogin", $posted_uname);
-            $guest_user = get_config('course_guest') != 'off' && $myrow and $myrow->status == USER_GUEST;
+            $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
 
             // cas might have alternative authentication defined
             $exists = 0;
