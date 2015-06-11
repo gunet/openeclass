@@ -39,8 +39,7 @@ $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null
 if(isset($_POST['state'])){
     $newState = $_POST['state'] == 'fa-toggle-on'?'fa-toggle-off':'fa-toggle-on';
     
-    $appName = $_POST['appName'];
-    $app = ExtAppManager::getApp($appName);
+    $appNameAjax = $_POST['appName'];
     
     echo $newState;
     exit;
@@ -117,7 +116,6 @@ if ($appName) {
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
         //$tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
         //$tool_content .= "<td style=\"vertical-align:middle; text-align:center; width:1px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>" . $app->getDisplayName() . "</a></td>\n";
-
         $tool_content .= "<td style=\"width:90px; padding:0px;\">";
         $tool_content .= "<div class=\"text-center\" style=\"padding:10px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'>";
         if ($app->getAppIcon() !== null) {

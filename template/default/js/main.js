@@ -174,7 +174,6 @@ $(document).ready(function () {
         var button = $(this).children('i');
         var state = button.hasClass('fa-toggle-on') ? "fa-toggle-on" : "fa-toggle-off";
         var appName = button.parent('button').attr('data-app');
-        alert(appName);
         
         button.removeClass(state).addClass('fa-spinner fa-spin');
         
