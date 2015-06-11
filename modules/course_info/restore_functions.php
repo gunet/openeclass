@@ -36,37 +36,6 @@ function visibility_select($current) {
     return $ret;
 }
 
-// Unzip backup file
-function unpack_zip_inner($zipfile, $clone) {
-    global $webDir, $uid;
-
-    require_once 'include/lib/fileUploadLib.inc.php';
-
-    $zip = new pclZip($zipfile);
-    if (!$clone) {
-        validateUploadedZipFile($zip->listContent(), 3);
-    }
-
-    $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
-    if (!is_dir($destdir)) {
-        mkdir($destdir, 0755);
-    }
-    chdir($destdir);
-    $zip->extract();
-
-    $retArr = array();
-    foreach (find_backup_folders($destdir) as $folder) {
-        $retArr[] = array(
-            'path' => $folder['path'] . '/' . $folder['dir'],
-            'file' => $folder['dir'],
-            'course' => preg_replace('|^.*/|', '', $folder['path'])
-        );
-    }
-
-    chdir($webDir);
-    return $retArr;
-}
-
 function unpack_zip_show_files($zipfile) {
     global $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
 
@@ -1231,43 +1200,43 @@ function unit_map_function(&$data, $maps) {
     }
     $type = $data['type'];
     if ($type == 'doc') {
-        $data['res_id'] = $document_map[$data['res_id']];
+        $data['res_id'] = @$document_map[$data['res_id']];
     } elseif ($type == 'linkcategory') {
-        $data['res_id'] = $link_category_map[$data['res_id']];
+        $data['res_id'] = @$link_category_map[$data['res_id']];
     } elseif ($type == 'link') {
-        $data['res_id'] = $link_map[$data['res_id']];
+        $data['res_id'] = @$link_map[$data['res_id']];
     } elseif ($type == 'ebook') {
-        $data['res_id'] = $ebook_map[$data['res_id']];
+        $data['res_id'] = @$ebook_map[$data['res_id']];
     } elseif ($type == 'section') {
-        $data['res_id'] = $section_map[$data['res_id']];
+        $data['res_id'] = @$section_map[$data['res_id']];
     } elseif ($type == 'subsection') {
-        $data['res_id'] = $subsection_map[$data['res_id']];
+        $data['res_id'] = @$subsection_map[$data['res_id']];
     } elseif ($type == 'description') {
         $data['res_id'] = intval($data['res_id']);
     } elseif ($type == 'video') {
-        $data['res_id'] = $video_map[$data['res_id']];
+        $data['res_id'] = @$video_map[$data['res_id']];
     } elseif ($type == 'videolink') {
-        $data['res_id'] = $videolink_map[$data['res_id']];
+        $data['res_id'] = @$videolink_map[$data['res_id']];
     } elseif ($type == 'lp') {
-        $data['res_id'] = $lp_learnPath_map[$data['res_id']];
+        $data['res_id'] = @$lp_learnPath_map[$data['res_id']];
     } elseif ($type == 'wiki') {
-        $data['res_id'] = $wiki_map[$data['res_id']];
+        $data['res_id'] = @$wiki_map[$data['res_id']];
     } elseif ($type == 'work') {
         if (isset($assignments_map[$data['res_id']])) {
-            $data['res_id'] = $assignments_map[$data['res_id']];
+            $data['res_id'] = @$assignments_map[$data['res_id']];
         } else {
             $data['res_id'] = $assignments_map[0];
         }
     } elseif ($type == 'exercise') {
         if (isset($exercise_map[$data['res_id']])) {
-            $data['res_id'] = $exercise_map[$data['res_id']];
+            $data['res_id'] = @$exercise_map[$data['res_id']];
         } else {
             $data['res_id'] = $exercise_map[0];
         }
     } elseif ($type == 'forum') {
-        $data['res_id'] = $forum_map[$data['res_id']];
+        $data['res_id'] = @$forum_map[$data['res_id']];
     } elseif ($type == 'topic') {
-        $data['res_id'] = $forum_topic_map[$data['res_id']];
+        $data['res_id'] = @$forum_topic_map[$data['res_id']];
     }
     return true;
 }

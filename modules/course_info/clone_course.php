@@ -40,31 +40,23 @@ $_POST['restoreThis'] = null; // satisfy course_details_form()
 
 if (isset($_POST['create_restored_course'])) {
     $currentCourseCode = $course_code;
-    $success = doArchive($course_id, $course_code);
-    
-    if ($success !== 0) {
-        $retArr = unpack_zip_inner($webDir . "/courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip", TRUE);
-        $restoreEntry = null;
-        
-        foreach ($retArr as $entry) {
-            if ($entry['course'] === $course_code) {
-                $restoreEntry = $entry;
-            }
-        }
 
-        if ($restoreEntry !== null) {
-            $_POST['restoreThis'] = $restoreEntry['path']; // assign the real value to the variable, but no real essence here
-            register_posted_variables(array('restoreThis' => true,
-                'course_code' => true,
-                'course_lang' => true,
-                'course_title' => true,
-                'course_desc' => true,
-                'course_vis' => true,
-                'course_prof' => true), 'all', 'autounquote');
-            create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
-            $course_code = $currentCourseCode; // revert course code to the correct value
-        }
-    }
+    $restoreThis = $webDir . '/courses/tmpUnzipping/' .
+        $uid . '/' . safe_filename();
+    mkdir($restoreThis, 0755, true);
+    archiveTables($course_id, $course_code, $restoreThis);
+    recurse_copy($webDir . '/courses/' . $course_code,
+        $restoreThis . '/html');
+
+    register_posted_variables(array(
+        'course_code' => true,
+        'course_lang' => true,
+        'course_title' => true,
+        'course_desc' => true,
+        'course_vis' => true,
+        'course_prof' => true), 'all');
+    create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
+    $course_code = $currentCourseCode; // revert course code to the correct value
 } else {
     $desc = Database::get()->querySingle("SELECT description FROM course WHERE id = ?d", $course_id)->description;
     $old_deps = array();
