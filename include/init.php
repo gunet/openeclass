@@ -63,7 +63,6 @@ try {
 } catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
-
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
     $language = langname_to_code($language);
@@ -85,7 +84,7 @@ if (isset($language)) {
     $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
-    $language = $session->language;
+    $language = $session->language;    
 }
 //Initializing Valitron (form validation library)
 require_once 'include/Valitron/Validator.php';

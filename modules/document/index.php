@@ -169,39 +169,37 @@ if ($can_upload) {
 
     $action_message = $dialogBox = '';
     $extra_path = '';
-    if (isset($_POST['fileCloudInfo'])) {
-        $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
-        $uploaded = true;
-        $fileName = $cloudfile->name();
-    } else if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) {
-        validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
-        $userFile = $_FILES['userFile']['tmp_name'];
+    if (isset($_POST['fileCloudInfo']) or isset($_FILES['userFile'])) {
+        if (isset($_POST['fileCloudInfo'])) { // upload cloud file
+            $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
+            $uploaded = true;
+            $fileName = $cloudfile->name();
+        } else if (isset($_FILES['userFile']) and is_uploaded_file($_FILES['userFile']['tmp_name'])) { // upload local file
+            $fileName = $_FILES['userFile']['name'];     
+            $userFile = $_FILES['userFile']['tmp_name'];
+        }
+        validateUploadedFile($fileName, $menuTypeID); // check file type
         // check for disk quotas
         $diskUsed = dir_total_space($basedir);
         if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
             $action_message .= "<div class='alert alert-danger'>$langNoSpace</div>";
-        } else {
-            if (unwanted_file($_FILES['userFile']['name'])) {
-                $action_message .= "<div class='alert alert-danger'>$langUnwantedFiletype: " .
-                        q($_FILES['userFile']['name']) . "</div>";
-            } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
-                /* ** Unzipping stage ** */
-                $zipFile = new pclZip($userFile);
-                validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
-                $realFileSize = 0;
-                $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
-                if ($diskUsed + $realFileSize > $diskQuotaDocument) {
-                    Session::Messages($langNoSpace, 'alert-danger');
-                } else {
-                    $session->setDocumentTimestamp($course_id);
-                    Session::Messages($langDownloadAndZipEnd, 'alert-success');
-                }
-                redirect_to_current_dir();
+        } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
+            /* ** Unzipping stage ** */            
+            $zipFile = new pclZip($userFile);
+            validateUploadedZipFile($zipFile->listContent(), $menuTypeID);
+            $realFileSize = 0;
+            $zipFile->extract(PCLZIP_CB_PRE_EXTRACT, 'process_extracted_file');
+            if ($diskUsed + $realFileSize > $diskQuotaDocument) {
+                Session::Messages($langNoSpace, 'alert-danger');
             } else {
-                $fileName = canonicalize_whitespace($_FILES['userFile']['name']);
-                $uploaded = true;
+                $session->setDocumentTimestamp($course_id);
+                Session::Messages($langDownloadAndZipEnd, 'alert-success');
             }
-        }
+            redirect_to_current_dir();
+        } else {
+            $fileName = canonicalize_whitespace($fileName);
+            $uploaded = true;
+        }        
     } elseif (isset($_POST['fileURL']) and ($fileURL = trim($_POST['fileURL']))) {
         $extra_path = canonicalize_url($fileURL);
         if (preg_match('/^javascript/', $extra_path)) {

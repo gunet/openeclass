@@ -260,13 +260,8 @@ hContent;
             $tool_content .= "<div class='alert alert-success'>$langGlossaryUpdated</div>";
         }
     }
-    if (isset($_POST['add_submit'])) {  // add
-        if (isset($_POST['fileCloudInfo'])) {
-            $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
-            echo "should upload file properly";
-            $fileUploadOK = ($cloudfile->storeToLocalFile("Localfile") == CloudDriveResponse::OK);
-            die(0);
-        } else
+    if (isset($_POST['add_submit'])) {  // add        
+        $uploaded = false;
         if (isset($_POST['URL'])) { // add videolink
             $url = $_POST['URL'];
             if ($_POST['title'] == '') {
@@ -285,46 +280,49 @@ hContent;
                 'description' => $txt_description));
             $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div>";
         } else {  // add video
-            if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) {
-
-                validateUploadedFile($_FILES['userFile']['name'], $menuTypeID);
-
-                if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
-                    $tool_content .= "<div class='alert alert-danger'>$langNoSpace<br>
-                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
+                if (isset($_POST['fileCloudInfo'])) { // upload cloud file
+                    $cloudfile = CloudFile::fromJSON($_POST['fileCloudInfo']);
+                    $file_name = $cloudfile->name();
+                } else if (isset($_FILES['userFile']) && is_uploaded_file($_FILES['userFile']['tmp_name'])) { // upload local file
+                    $file_name = $_FILES['userFile']['name'];
+                    if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaVideo) {
+                        $tool_content .= "<div class='alert alert-danger'>$langNoSpace<br>
+                                                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
+                        draw($tool_content, $menuTypeID, null, $head_content);
+                        exit;
+                    } else {
+                        $tmpfile = $_FILES['userFile']['tmp_name'];
+                    }
+                }
+                validateUploadedFile($file_name, $menuTypeID);
+                // convert php file in phps to protect the platform against malicious codes
+                $file_name = preg_replace("/\.php.*$/", ".phps", $file_name);                    
+                $file_name = str_replace(" ", "%20", $file_name);
+                $file_name = str_replace("%20", "", $file_name);
+                $file_name = str_replace("\'", "", $file_name);
+                $uploaded = true;
+            if ($uploaded) {
+                $safe_filename = sprintf('%x', time()) . randomkeys(16) . "." . get_file_extension($file_name);
+                if (isset($cloudfile)) {
+                    $iscopy = ($cloudfile->storeToLocalFile("$updir/$safe_filename") == CloudDriveResponse::OK);                    
+                } else {                    
+                    $iscopy = copy("$tmpfile", "$updir/$safe_filename");
+                }
+                if (!$iscopy) {
+                    $tool_content .= "<div class='alert alert-success'>$langFileNot<br>
+                                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
                     draw($tool_content, $menuTypeID, null, $head_content);
                     exit;
-                } else {
-                    $file_name = $_FILES['userFile']['name'];
-                    $tmpfile = $_FILES['userFile']['tmp_name'];
-                    // convert php file in phps to protect the platform against malicious codes
-                    $file_name = preg_replace("/\.php.*$/", ".phps", $file_name);
-                    // check for dangerous file extensions
-                    if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $file_name)) {
-                        $tool_content .= "<div class='alert alert-danger'>$langUnwantedFiletype:  $file_name<br>";
-                        $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div><br>";
-                        draw($tool_content, $menuTypeID, null, $head_content);
-                        exit;
-                    }
-                    $file_name = str_replace(" ", "%20", $file_name);
-                    $file_name = str_replace("%20", "", $file_name);
-                    $file_name = str_replace("\'", "", $file_name);
-                    $safe_filename = sprintf('%x', time()) . randomkeys(16) . "." . get_file_extension($file_name);
-                    $iscopy = copy("$tmpfile", "$updir/$safe_filename");
-                    if (!$iscopy) {
-                        $tool_content .= "<div class='alert alert-success'>$langFileNot<br>
-                                                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langBack</a></div>";
-                        draw($tool_content, $menuTypeID, null, $head_content);
-                        exit;
-                    }
-                    $path = '/' . $safe_filename;
-                    $url = $file_name;
-                    $id = Database::get()->query('INSERT INTO video
-                                                           (course_id, path, url, title, description, category, creator, publisher, date)
-                                                           VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s)'
-                                    , $course_id, $path, $url, $_POST['title'], $_POST['description'], $_POST['selectcategory']
-                                    , $_POST['creator'], $_POST['publisher'], $_POST['date'])->lastInsertID;
                 }
+                
+                $path = '/' . $safe_filename;
+                $url = $file_name;
+                $id = Database::get()->query('INSERT INTO video
+                                                       (course_id, path, url, title, description, category, creator, publisher, date)
+                                                       VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, ?s, ?s)'
+                                , $course_id, $path, $url, $_POST['title'], $_POST['description'], $_POST['selectcategory']
+                                , $_POST['creator'], $_POST['publisher'], $_POST['date'])->lastInsertID;
+
                 Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_VIDEO, $id);
                 $txt_description = ellipsize(canonicalize_whitespace(strip_tags($_POST['description'])), 50, '+');
                 Log::record($course_id, MODULE_ID_VIDEO, LOG_INSERT, @array('id' => $id,
