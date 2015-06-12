@@ -401,7 +401,8 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
     } else {
         $status = $lp->visible;
         if ($is_editor) {
-            $link = "<a href='${urlAppend}modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$lp_id&amp;unit=$id'>";
+            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
+            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";            
             if (!$module_visible) {
                 $link .= " <i>($langInactiveModule)</i> ";
             }
@@ -409,9 +410,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
             if ($status == 0) {
                 return '';
             }
-            $module_id = Database::get()->querySingle(
-                "SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1",
-                $lp_id)->module_id;
+            $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
             $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
         }
         $imagelink = icon('fa-ellipsis-h');
@@ -609,7 +608,7 @@ function show_work($title, $comments, $resource_id, $work_id, $visibility) {
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "".icon('fa-flask')."</a>";
+        $imagelink = $link . "</a>".icon('fa-flask')."";
     }
 
     if (!empty($comments)) {
@@ -670,7 +669,7 @@ function show_exercise($title, $comments, $resource_id, $exercise_id, $visibilit
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "" . icon('fa-pencil-square-o'). "</a>";
+        $imagelink = $link . "</a>" . icon('fa-pencil-square-o'). "";
     }
     $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : ' ';
 
@@ -725,7 +724,7 @@ function show_forum($type, $title, $comments, $resource_id, $ft_id, $visibility)
         }
     }
 
-    $imagelink = $link . "" . icon('fa-comments'). "</a>";
+    $imagelink = $link . "</a>" . icon('fa-comments'). "";
 
     if (!empty($comments)) {
         $comment_box = "<br />$comments";
@@ -780,7 +779,7 @@ function show_poll($title, $comments, $resource_id, $poll_id, $visibility) {
         if (!$module_visible) {
             $polllink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . icon('fa-question-circle') . '</a>';
+        $imagelink = $link . "</a>" . icon('fa-question-circle') . "";
     }
 
     if (!empty($comments)) {
@@ -843,7 +842,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
         if (!$module_visible) {
             $wikilink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "" .icon('fa-wikipedia') . "</a>";
+        $imagelink = $link . "</a>" .icon('fa-wikipedia') . "";
     }
 
     if (!empty($comments)) {
@@ -909,7 +908,7 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "" . icon('fa-link') . "</a>";
+        $imagelink = $link . "</a>" . icon('fa-link') . "";
     }
 
     if (!empty($comments)) {
@@ -1037,7 +1036,7 @@ function show_ebook($title, $comments, $resource_id, $ebook_id, $visibility) {
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "" .icon('fa-book') . "</a>";
+        $imagelink = $link . "</a>" .icon('fa-book') . "";
     }
 
     if (!empty($comments)) {
@@ -1159,7 +1158,7 @@ function show_ebook_resource($title, $comments, $resource_id, $ebook_id, $displa
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
         }
-        $imagelink = $link . "" .icon('fa-book'). "</a>";
+        $imagelink = $link . "</a>" .icon('fa-book'). "";
     }
 
 
