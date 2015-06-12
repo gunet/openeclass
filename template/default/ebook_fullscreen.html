@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{%page_title%}</title>
+         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- jQuery -->
         <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
 
@@ -74,15 +75,17 @@
                 <!--/.nav-collapse -->
             </div>
         </nav>        
-        <div class="container">
+        <div class="container" style="padding:15px;">
             <div class='row'>
-                <div class='col-xs-12'>
+                <div class='col-xs-12 col-md-8 col-md-offset-2'>
                 <ol class="breadcrumb">
                   <li><a href="{%course_home_link%}">{%course_title_short%}</a></li>
                   <li><a href="{%course_ebook_link%}">{%course_ebook%}</a></li>
                   <li class="active">{%ebook_title_short%}</li>
-                </ol>                    
+                </ol>
+                    <div>
                     {%ebook_body%}
+                    </div>
                 </div>
                 
             </div>

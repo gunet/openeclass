@@ -121,7 +121,7 @@ if ($appName) {
         if ($app->getAppIcon() !== null) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
-        $app_active = ($app->getParams()[ExtApp::ENABLED]->value()== 1)?"<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".$app->getName()."\"> <i class=\"fa fa-toggle-on\"></i> </button>":"<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"".$app->getName()."\"> <i class=\"fa fa-toggle-off\"></i> </button>";
+        $app_active = ($app->getParam(ExtApp::ENABLED)->value()== 1)?"<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"".$app->getName()."\"> <i class=\"fa fa-toggle-on\"></i> </button>":"<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"".$app->getName()."\"> <i class=\"fa fa-toggle-off\"></i> </button>";
         $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 
         $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "<div class=\"extapp-controls\"><div class=\"btn-group btn-group-xs\">".$app_active."<a href=\"extapp.php?edit=" . $app->getName() . "\" class=\"btn btn-default\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></div></td>\n";
