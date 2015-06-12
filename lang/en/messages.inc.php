@@ -2579,6 +2579,7 @@ $langAuthChangeUser = "Change authentication method";
 $langAuthChangeto = "Change to";
 $langAuthChangeno = "There is no other active authentication method";
 $langAuthChangeYes = "Authentication method updated";
+$langAuthWarnInactive = 'Caution: Inactive authentication method';
 $langNoUserEmailNotification = "You are not receiving email notifications from this course.";
 $langReplaceSameName = "Replace files with the same name";
 $langDropBoxIncompatible = "Attention! 'Dropbox' probably hasn't been restored due to compatibility reasons. Please check id of table
