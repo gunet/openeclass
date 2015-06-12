@@ -23,16 +23,13 @@ $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
     ORDER BY auth_default DESC, auth_id");
 foreach ($q as $l) {
     $extAuth = in_array($l->auth_name, $extAuthMethods);
+    $authTitle = empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q($l->auth_title);
     if ($extAuth) {
-        $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');
-        $authTitle = empty($l->auth_title)? "<b>$langLogInWith</b><br>{$l->auth_name}": q($l->auth_title);
+        $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');        
         $authLink[] = array(false, "
-            <div class='col-sm-6'>
-                <p>$authTitle</p>
-            </div>
-            <div class='col-sm-offset-1 col-sm-5'>
-                <a class='btn btn-primary btn-block' href='$authUrl'>$langEnter</a>
-            </div>");
+            <div class='col-sm-8 col-sm-offset-2' style='padding-top:40px;'>
+                <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
+            </div>", $authTitle);
     } elseif (!$loginFormEnabled) {
         $loginFormEnabled = true;
         $authLink[] = array(true, "
@@ -56,7 +53,7 @@ foreach ($q as $l) {
                         <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
                     </div>
                 </div>
-            </form>");
+            </form>", $authTitle);
     }
 }
 
@@ -71,12 +68,11 @@ $tool_content .= action_bar(array(
           'button-class' => 'btn-default')), false);
 $tool_content .= "<div class='login-page'>
                     <div class='row'>";
-$boxTitle = $langUserLogin;
-foreach ($authLink as $authInfo) {
+foreach ($authLink as $authInfo) {    
     $tool_content .= "
       <div class='col-sm-$columns'>
         <div class='panel panel-default '>
-          <div class='panel-heading'><span>$boxTitle</span></div>
+          <div class='panel-heading'><span>".q($authInfo[2])."</span></div>
             <div class='panel-body login-page-option'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {
@@ -86,7 +82,7 @@ foreach ($authLink as $authInfo) {
                                 </div>
                             </div>
                         </div>";
-    $boxTitle = $langAlternateLogin;
+    
 }
 $tool_content .= "</div></div>";
 
