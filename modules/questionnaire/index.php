@@ -298,13 +298,6 @@ function printPolls() {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
                             ),
                             array(
-                                'title' => $langPurgeExercises,
-                                'icon' => 'fa-eraser',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
-                                'confirm' => $langConfirmPurgeExercises,
-                                'show' => $total_participants > 0
-                            ),
-                            array(
                                 'title' => $langUsage,
                                 'icon' => 'fa-line-chart',
                                 'url' => "pollresults.php?course=$course_code&pid=$pid",
@@ -322,6 +315,13 @@ function printPolls() {
                                 'icon-extra' => "data-pid='$pid'",
                                 'url' => "#"
                             ),
+                            array(
+                                'title' => $langPurgeExercises,
+                                'icon' => 'fa-eraser',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
+                                'confirm' => $langConfirmPurgeExercises,
+                                'show' => $total_participants > 0
+                            ),                                        
                             array(
                                 'title' => $langDelete,
                                 'icon' => 'fa-times',
