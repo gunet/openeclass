@@ -23,7 +23,7 @@ $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
     ORDER BY auth_default DESC, auth_id");
 foreach ($q as $l) {
     $extAuth = in_array($l->auth_name, $extAuthMethods);
-    $authTitle = empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q($l->auth_title);
+    $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": $l->auth_title;
     if ($extAuth) {
         $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');        
         $authLink[] = array(false, "
@@ -72,7 +72,7 @@ foreach ($authLink as $authInfo) {
     $tool_content .= "
       <div class='col-sm-$columns'>
         <div class='panel panel-default '>
-          <div class='panel-heading'><span>".q($authInfo[2])."</span></div>
+          <div class='panel-heading'><span>" . q($authInfo[2]) . "</span></div>
             <div class='panel-body login-page-option'>" .
               $authInfo[1];
     if (Session::has('login_error') and $authInfo[0]) {
