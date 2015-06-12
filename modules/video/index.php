@@ -46,6 +46,7 @@ require_once 'modules/search/indexer.class.php';
 require_once 'modules/admin/extconfig/externals.php';
 require_once 'modules/admin/extconfig/opendelosapp.php';
 require_once 'delos_functions.php';
+require_once 'custom_sort.php';
 
 $toolName = $langVideo;
 
@@ -60,6 +61,19 @@ list($filterv, $filterl, $compatiblePlugin) =
     isset($_REQUEST['docsfilter'])?
         select_proper_filters($_REQUEST['docsfilter']):
         array('WHERE true', 'WHERE true', true);
+
+// custom sort
+$order = 'ORDER BY title';
+$sort = 'title';
+$reverse = false;
+if (isset($_GET['sort']) && $_GET['sort'] === 'date') {
+    $order = 'ORDER BY date';
+    $sort = 'date';
+}
+if (isset($_GET['rev'])) {
+    $order .= ' DESC';
+    $reverse = true;
+}
 
 if ($is_in_tinymce) {
     $_SESSION['embedonce'] = true; // necessary for baseTheme
@@ -557,8 +571,8 @@ if (!isset($_GET['form_input']) && !isset($_GET['action']) && !isset($_GET['tabl
                                     <div class='table-responsive'>
                                         <table class='table-default nocategory-links'>
                                             <tr class='list-header'>
-                                                <th>$langVideoDirectory</th>
-                                                <th class='text-center' style='width:100px'>$langDate</th>";
+                                                <th>" . headlink($langVideoDirectory, 'title') . "</th>
+                                                <th class='text-center' style='width:134px'>" . headlink($langDate, 'date') . "</th>";
 
         if (!$is_in_tinymce) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . '</th>';
@@ -770,7 +784,7 @@ function showlinksofcategory($cat_id = 0) {
     global $course_id, $is_in_tinymce, $tool_content, $is_editor, $course_code,
         $langDelete, $langViewHide, $langViewShow, $langConfirmDelete,
         $display_tools, $is_in_tinymce, $langDownload, $langResourceAccessLock,
-        $langResourceAccessUnlock, $langEditChange, $filterv, $filterl,
+        $langResourceAccessUnlock, $langEditChange, $filterv, $filterl, $order,
         $compatiblePlugin, $langcreator, $langpublisher;
 
     if ($is_editor) {
@@ -779,14 +793,13 @@ function showlinksofcategory($cat_id = 0) {
         $vis_q = "AND visible = 1";
     }
     if ($cat_id > 0) {
-        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND category = ?d $vis_q ORDER BY title", $course_id, $cat_id);
-        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND category = ?d $vis_q ORDER BY title", $course_id, $cat_id);
+        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND category = ?d $vis_q $order", $course_id, $cat_id);
+        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND category = ?d $vis_q $order", $course_id, $cat_id);
     } else {
-        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q ORDER BY title", $course_id);
-        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q ORDER BY title", $course_id);
+        $results['video'] = Database::get()->queryArray("SELECT * FROM video $filterv AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q $order", $course_id);
+        $results['videolink'] = Database::get()->queryArray("SELECT * FROM videolink $filterl AND course_id = ?d AND (category IS NULL OR category = 0) $vis_q $order", $course_id);
     }
 
-    $i = 0;
     foreach ($results as $table => $result) {
         foreach ($result as $myrow) {
             $myrow->course_id = $course_id;
