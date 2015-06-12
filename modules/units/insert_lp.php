@@ -65,12 +65,17 @@ function list_lps() {
             } else {
                 $vis = '';
                 $disabled = '';
+            }            
+            $m_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d 
+                                                    AND rank = (SELECT MIN(rank) FROM lp_rel_learnPath_module WHERE learnPath_id = ?d)", 
+                                                $entry['id'], $entry['id']);
+            if (($m_id) and $m_id->module_id > 0) {
+                $tool_content .= "<tr class='$vis'>";
+                $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$entry[id]&amp;module_id=$m_id->module_id'>" . q($entry['name']) . "</a></td>";
+                $tool_content .= "<td>" . $entry['comment'] . "</td>";
+                $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
+                $tool_content .= "</tr>";            
             }
-            $tool_content .= "<tr class='$vis'>";
-            $tool_content .= "<td>&nbsp;".icon('fa-ellipsis-h')."&nbsp;&nbsp;<a href='${urlServer}/modules/learnPath/learningPath.php?course=$course_code&amp;path_id=$entry[id]'>" . q($entry['name']) . "</a></td>";
-            $tool_content .= "<td>" . q($entry['comment']) . "</td>";
-            $tool_content .= "<td class='text-center'><input type='checkbox' name='lp[]' value='$entry[id]' $disabled></td>";
-            $tool_content .= "</tr>";            
         }
         $tool_content .= "</table>\n";
         $tool_content .= "<div class='text-right'>";
