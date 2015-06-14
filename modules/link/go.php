@@ -32,7 +32,7 @@ $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 $course_id = course_code_to_id($_GET['course']);
 
-$id = $_GET['id'];
+$id = getDirectReference($_GET['id']);
 if ($course_id !== false) {
     Database::get()->query("UPDATE link SET hits = hits + 1 WHERE course_id = ?d AND id = ?d", $course_id, $id);
     $q = Database::get()->querySingle("SELECT url FROM link WHERE course_id = ?d AND id = ?d",  $course_id, $id);

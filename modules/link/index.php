@@ -106,13 +106,13 @@ function checkrequired(which, entry) {
 hContent;
 
 if (isset($_GET['category'])) {
-    $category = intval($_GET['category']);
+    $category = intval(getDirectReference($_GET['category']));
 } else {
     unset($category);
 }
 
 if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
+    $id = intval(getDirectReference($_GET['id']));
 } else {
     unset($id);
 }
@@ -203,7 +203,7 @@ if ($is_editor) {
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
         if ($action == 'editlink') {
-            $tool_content .= "<input type='hidden' name='id' value='$id' />";
+            $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
             link_form_defaults($id);
             $form_legend = $langLinkModify;
             $submit_label = $langLinkModify;
@@ -236,7 +236,7 @@ if ($is_editor) {
                 <select class='form-control' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         if ($social_bookmarks_enabled) {
-            $tool_content .= "<option value='-2'";
+            $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
             if (isset($category) and -2 == $category) {
                 $tool_content .= " selected='selected'";
             }
@@ -244,7 +244,7 @@ if ($is_editor) {
         }
         $resultcategories = Database::get()->queryArray("SELECT * FROM link_category WHERE course_id = ?d ORDER BY `order`", $course_id);
         foreach ($resultcategories as $myrow) {
-            $tool_content .= "<option value='$myrow->id'";
+            $tool_content .= "<option value='" . getIndirectReference($myrow->id) . "'";
             if (isset($category) and $myrow->id == $category) {
                 $tool_content .= " selected='selected'";
             }
@@ -268,7 +268,7 @@ if ($is_editor) {
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
         if ($action == 'editcategory') {
-            $tool_content .= "<input type='hidden' name='id' value='$id' />";
+            $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
             category_form_defaults($id);
             $form_legend = $langCategoryMod;
         } else {
@@ -340,10 +340,10 @@ if ($is_editor) {
         $result = Database::get()->querySingle("SELECT COUNT(*) as c FROM course_user WHERE course_id = ?d AND user_id = ?d", $course_id, $uid);
         if ($result->c > 0) {
             if (isset($_POST['submitLink'])) {
-                if (isset($_POST['id']) && !is_link_creator($_POST['id'])) {
+                if (isset($_POST['id']) && !is_link_creator(getDirectReference($_POST['id']))) {
                     Session::Messages($langLinkNotOwner, 'alert-error');
                 } else {
-                    $_POST['selectcategory'] = -2; //ensure that simple users cannot change category
+                    $_POST['selectcategory'] = getIndirectReference(-2); //ensure that simple users cannot change category
                     submit_link();
                     $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
                     Session::Messages($message, 'alert-success');
@@ -385,7 +385,7 @@ if ($is_editor) {
                     $tool_content .= "<div class = 'form-wrapper'>";
                     $tool_content .= "<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview' onsubmit=\"return checkrequired(this, 'urllink');\">";
                     if ($action == 'editlink') {
-                        $tool_content .= "<input type='hidden' name='id' value='$id' />";
+                        $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
                         link_form_defaults($id);
                         $form_legend = $langLinkModify;
                         $submit_label = $langLinkModify;
@@ -435,13 +435,13 @@ if ($is_editor) {
 }
 
 if (isset($_GET['down'])) {
-    move_order('link', 'id', intval($_GET['down']), 'order', 'down', "course_id = $course_id");
+    move_order('link', 'id', intval(getDirectReference($_GET['down'])), 'order', 'down', "course_id = $course_id");
 } elseif (isset($_GET['up'])) {
-    move_order('link', 'id', intval($_GET['up']), 'order', 'up', "course_id = $course_id");
+    move_order('link', 'id', intval(getDirectReference($_GET['up'])), 'order', 'up', "course_id = $course_id");
 } elseif (isset($_GET['cdown'])) {
-    move_order('link_category', 'id', intval($_GET['cdown']), 'order', 'down', "course_id = $course_id");
+    move_order('link_category', 'id', intval(getDirectReference($_GET['cdown'])), 'order', 'down', "course_id = $course_id");
 } elseif (isset($_GET['cup'])) {
-    move_order('link_category', 'id', intval($_GET['cup']), 'order', 'up', "course_id = $course_id");
+    move_order('link_category', 'id', intval(getDirectReference($_GET['cup'])), 'order', 'up', "course_id = $course_id");
 }
 $display_tools = $is_editor && !$is_in_tinymce;
 if (!in_array($action, array('addlink', 'editlink', 'addcategory', 'editcategory', 'settings'))) {

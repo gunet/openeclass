@@ -74,7 +74,7 @@ function showlinksofcategory($catid) {
     foreach ($result as $myrow) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=$myrow->id&amp;url=" .
+        $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=" . getIndirectReference($myrow->id) . "&amp;url=" .
                 urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if ($catid == -2 && $myrow->user_id != 0) {
             $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
@@ -91,9 +91,9 @@ function showlinksofcategory($catid) {
         
         if ($is_editor && !$is_in_tinymce) {   
             $tool_content .= "<td class='option-btn-cell'>";
-            $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param;
+            $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
             if (isset($category)) {
-                $editlink .= "&amp;category=$category";
+                $editlink .= "&amp;category=" . getIndirectReference($category);
             }
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
@@ -103,18 +103,18 @@ function showlinksofcategory($catid) {
                       'level' => 'primary',
                       'icon' => 'fa-arrow-up',
                       'disabled' => $links_num == 1,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=$myrow->id".$socialview_param,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=" . getIndirectReference($myrow->id) . $socialview_param,
                       ),
                 array('title' => $langDown,
                       'level' => 'primary',
                       'icon' => 'fa-arrow-down',
                       'disabled' => $links_num >= $numberoflinks,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=$myrow->id".$socialview_param,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=" . getIndirectReference($myrow->id) . $socialview_param,
                       ),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
                       'confirm' => $langLinkDelconfirm)
             ));
             $tool_content .= "</td>";
@@ -122,7 +122,7 @@ function showlinksofcategory($catid) {
             if (isset($_SESSION['uid'])) {
                 if (is_link_creator($myrow->id)) {
                     $tool_content .= "<td class='option-btn-cell'>";
-                    $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param;
+                    $editlink = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editlink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
                     $tool_content .= action_button(array(
                             array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
@@ -130,12 +130,12 @@ function showlinksofcategory($catid) {
                             array('title' => $langDelete,
                                     'icon' => 'fa-times',
                                     'class' => 'delete',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=$myrow->id&amp;urlview=$urlview".$socialview_param,
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletelink&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
                                     'confirm' => $langLinkDelconfirm)
                     ));
                     $tool_content .= "</td>";
                 } else {
-                    if (abuse_report_show_flag('link', $myrow->id, $course_id, $is_editor)) {
+                    if (abuse_report_show_flag('link', $myrow->id , $course_id, $is_editor)) {
                         $flag_arr = abuse_report_action_button_flag('link', $myrow->id, $course_id);
                     
                         $tool_content .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
@@ -170,7 +170,7 @@ function showcategoryadmintools($categoryid) {
     $langEditChange, $langUp, $langDown, $langCatDel, $tool_content,
     $course_code;
 
-    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$categoryid&amp;urlview=$urlview&amp;";
+    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($categoryid) . "&amp;urlview=$urlview&amp;";
     $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
@@ -179,12 +179,12 @@ function showcategoryadmintools($categoryid) {
                       'level' => 'primary',
                       'icon' => 'fa-arrow-up',
                       'disabled' => $catcounter == 0,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=$categoryid",),
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=" . getIndirectReference($categoryid)),
                 array('title' => $langDown,
                        'level' => 'primary',
                        'icon' => 'fa-arrow-down',
                        'disabled' => $catcounter == $aantalcategories-1,
-                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=$categoryid" ),
+                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=" . getIndirectReference($categoryid)),
                 array('title' => $langDelete,
                               'icon' => 'fa-times',
                               'url' => "$basecaturl" . "action=deletecategory",
@@ -213,29 +213,28 @@ function submit_link() {
 
     register_posted_variables(array('urllink' => true,
         'title' => true,
-        'description' => true,
-        'selectcategory' => true), 'all', 'trim');
+        'description' => true), 'all', 'trim');
     $urllink = canonicalize_url($urllink);
     if (!is_url_accepted($urllink,"(https?|ftp)")){
         $message = $langLinkNotPermitted;
         if (isset($_POST['id'])) {
-            $id = $_POST['id'];
-            redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=$id&urlview=");
+            $id =  getDirectReference($_POST['id']);
+            redirect_to_home_page("modules/link/index.php?course=$course_code&action=editlink&id=" . getIndirectReference($id) . "&urlview=");
         } else {
             redirect_to_home_page("modules/link/index.php?course=$course_code&action=addlink&urlview=");
         }
     }
     $set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
-    $terms = array($urllink, $title, purify($description), $selectcategory);
+    $terms = array($urllink, $title, purify($description), getDirectReference($_POST['selectcategory']));
 
     if (isset($_POST['id'])) {
-        $id = intval($_POST['id']);
+        $id = intval(getDirectReference($_POST['id']));
         Database::get()->query("UPDATE `link` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
 
         $log_type = LOG_MODIFY;
     } else {
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link`
-                                      WHERE course_id = ?d AND category = ?d", $course_id, $selectcategory)->maxorder;
+                                      WHERE course_id = ?d AND category = ?d", $course_id, getDirectReference($_POST['selectcategory']))->maxorder;
         $order++;
         $id = Database::get()->query("INSERT INTO `link` $set_sql, course_id = ?d, `order` = ?d, user_id = ?d", $terms, $course_id, $order, $uid)->lastInsertID;
         $log_type = LOG_INSERT;
@@ -320,7 +319,7 @@ function submit_category() {
     $terms = array($categoryname, purify($description));
 
     if (isset($_POST['id'])) {
-        $id = $_POST['id'];
+        $id = getDirectReference($_POST['id']);
         Database::get()->query("UPDATE `link_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
         $log_type = LOG_MODIFY;
     } else {

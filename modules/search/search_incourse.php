@@ -323,7 +323,7 @@ if (empty($search_terms)) {
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $tool_content .= "<a href='" . $urlServer . "modules/link/go.php?course=" . course_id_to_code($linkHit->courseid) . "&amp;id=$linkHit->pkid&amp;url=" .
+                $tool_content .= "<a href='" . $urlServer . "modules/link/go.php?course=" . course_id_to_code($linkHit->courseid) . "&amp;id=" . getIndirectReference($linkHit->pkid) . "&amp;url=" .
                 urlencode($linkHit->url) . "' target=_blank> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
