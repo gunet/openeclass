@@ -28,17 +28,26 @@ var module = null;
 var user = null;
 var department = 1;
 var stats = 'u';
+var plotsgenerated = false;
 //var views = {plots:{class: 'fa fa-bar-chart', title: '$langPlots'}, list:{class: 'fa fa-list', title: '$langDetails'}};
 var selectedview = 'plots';
 //var maxintervals = 20;
 //var lang = $language;
 var xAxisDateFormat = {1:'%d-%m-%Y', 7:'%d-%m-%Y', 30:'%m-%Y', 365:'%Y'};
-var xAxisLabels = {1:'day', 7:'week', 30:'month', 365:'year'};
+var xAxisLabels = {1:langDay, 7:langWeek, 30:langMonth, 365:langYear};
 var xMinVal = null;
 var xMaxVal = null;
 var xTicks = null;
+var department_details = new Array();
+var tableOptions = {'a': {1:{sumCols:[3,4,5,6]}, 2:{sumCols:[]}}, 'u':{1:{sumCols:[3,4]}}, 'c':{1:{sumCols:[3,4]}}};
+    
+
+charts = new Object();
 
 $(document).ready(function(){
+    $("#toggle-view").children("i").attr('class', views['list'].class);
+    $("#toggle-view").children("i").attr('data-original-title', views['list'].title);   
+    
     $('#startdate').datepicker({
         format: 'dd-mm-yyyy',
         pickerPosition: 'bottom-left',
@@ -69,9 +78,14 @@ $(document).ready(function(){
         $(this).children("i").attr('data-original-title', views[selectedview].title);
         if(selectedview == 'plots'){
             selectedview = 'list';
+            $('.plotscontainer').hide();
+            $('.detailscontainer').show();
+            redrawflashbuttons();
         }
         else{
             selectedview = 'plots';
+            $('.plotscontainer').show();
+            $('.detailscontainer').hide();
         }
     });
     sdate = $('#startdate').datepicker("getDate");
@@ -104,27 +118,145 @@ $(document).ready(function(){
             refresh_plots();
         });
     }
+    detailsTables = new Object();
+    tableTools = new Object();
+    /*******************/
+    
+    function footerCB(tabId,tabEl){
+        return function(){
+            tabApi = $('#'+tabEl).dataTable().api();
+            for(i=0;i<tableOptions[stats][tabId].sumCols.length;i++){
+                       c = tableOptions[stats][tabId].sumCols[i];
+                       $( tabApi.columns( c ).footer() ).html(
+                            tabApi.column( c ).data().reduce( function ( a, b ) {
+                                return parseInt(a) + parseInt(b);
+                            }, 0 )
+                        );
+                    }
+        }
+    }
+    
+    for(tableid in tableOptions[stats]){
+        tableElId = stats+'details'+tableid;
+        detailsTables[tableElId] = $('#'+tableElId).DataTable({
+           'sPaginationType': 'full_numbers',
+            'bAutoWidth': true,                
+            'footerCallback': footerCB(tableid, tableElId),
+            'oLanguage': {
+            'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
+            'sZeroRecords':  langNoResult,
+            'sInfo':         langDisplayed+' _START_ '+langTill+' _END_ '+langFrom+' _TOTAL_ '+langTotalResults,
+            'sInfoEmpty':    langDisplayed+' 0 '+langTill+' 0 '+langFrom+' 0 '+langResults,
+            'sInfoFiltered': '',
+            'sInfoPostFix':  '',
+            'sSearch':       langSearch+' ',
+            'searchDelay' : 1000,
+            'sUrl':          '',
+            'oPaginate': {
+                'sFirst':    '&laquo;',
+                'sPrevious': '&lsaquo;',
+                'sNext':     '&rsaquo;',
+                'sLast':     '&raquo;'
+            }
+           }
+        });
+        tableTools[tableElId] = new $.fn.dataTable.TableTools( detailsTables[tableElId], {
+            "sSwfPath": "http://eclass.test.noc.ntua.gr/newui/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+        });
+        $( tableTools[tableElId].fnContainer() ).insertBefore('#'+tableElId);
+    }
+    /**************/
+    /*************
+    intColumns = [];
+    detailsTables[stats+'details1']= $('#'+stats+'details1').DataTable ({                                
+        'sPaginationType': 'full_numbers',
+        'bAutoWidth': true,                
+        'footerCallback': function() {
+               for(i=0;i<intColumns.length;i++){
+                   c = intColumns[i];
+                   console.log('sum col:'+c+' for table '+stats+'details1');
+                   console.log('το καλό: '+$(this.api().column( c ).header()).text()+' rows are '+this.api().column( c ).data().length);
+                   $( this.api().columns( c ).footer() ).html(
+                        this.api().column( c ).data().reduce( function ( a, b ) {
+                            console.log('reduce');
+                            return parseInt(a) + parseInt(b);
+                        }, 0 )
+                    );
+                }
+        },
+        'oLanguage': {
+        'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
+        'sZeroRecords':  langNoResult,
+        'sInfo':         langDisplayed+' _START_ '+langTill+' _END_ '+langFrom+' _TOTAL_ '+langTotalResults,
+        'sInfoEmpty':    langDisplayed+' 0 '+langTill+' 0 '+langFrom+' 0 '+langResults,
+        'sInfoFiltered': '',
+        'sInfoPostFix':  '',
+        'sSearch':       langSearch+' ',
+        'searchDelay' : 1000,
+        'sUrl':          '',
+        'oPaginate': {
+            'sFirst':    '&laquo;',
+            'sPrevious': '&lsaquo;',
+            'sNext':     '&rsaquo;',
+            'sLast':     '&raquo;'
+        }
+       }
+    });
+    tableTools[stats+'details1'] = new $.fn.dataTable.TableTools( detailsTables[stats+'details1'], {
+        "sSwfPath": "http://eclass.test.noc.ntua.gr/newui/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+    } );
+    //$( tableTools1.fnContainer() ).insertAfter('#toggle-view');
+    $( tableTools[stats+'details1'].fnContainer() ).insertBefore('#'+stats+'details1');
+    detailsTables[stats+'details2'] = $('#'+stats+'details2').DataTable ({                                
+        'sPaginationType': 'full_numbers',
+        'bAutoWidth': true,                
+        'oLanguage': {
+           'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
+           'sZeroRecords':  langNoResult,
+           'sInfo':         langDisplayed+' _START_ '+langTill+' _END_ '+langFrom+' _TOTAL_ '+langTotalResults,
+           'sInfoEmpty':    langDisplayed+' 0 '+langTill+' 0 '+langFrom+' 0 '+langResults,
+           'sInfoFiltered': '',
+           'sInfoPostFix':  '',
+           'sSearch':       langSearch+' ',
+           'searchDelay' : 1000,
+           'sUrl':          '',
+           'oPaginate': {
+               'sFirst':    '&laquo;',
+               'sPrevious': '&lsaquo;',
+               'sNext':     '&rsaquo;',
+               'sLast':     '&raquo;'
+           }
+       }
+    });
+    tableTools[stats+'details2'] = new $.fn.dataTable.TableTools( detailsTables[stats+'details2'], {
+        "sSwfPath": "http://eclass.test.noc.ntua.gr/newui/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
+    } );
+    $( tableTools[stats+'details2'].fnContainer() ).insertBefore('#'+stats+'details2');
+    *************/
+    $('.detailscontainer').hide();
     refresh_plots();
     
-});
+    
+});//document ready   
 
 function refresh_plots(){
     xAxisTicksAdjust();
-    if(stats == 'c'){
+    if(stats === 'c'){
         refresh_generic_course_plot();
     }
-    if(stats == 'u'){
+    if(stats === 'u'){
         refresh_generic_user_plot();
     }
-    if(stats == 'a'){
-        refresh_department_user_plot(department);
+    if(stats === 'a'){
         refresh_user_login_plot();
+        refresh_department_user_plot(department, 0);
     }
+    plotsgenerated = true;
 }
 
 function refresh_generic_course_plot(){
     $.getJSON('results.php',{t:'cg', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
-        c3.generate({
+        var options = {
             data: {
                 json: data,
                 x: 'time',
@@ -136,34 +268,51 @@ function refresh_generic_course_plot(){
                 types:{
                     hits: 'bar',
                     duration: 'spline'
+                },
+                names:{
+                    hits: langHits,
+                    duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:'hits', min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#generic_stats'
-        });
+        };
+        /*if(typeof charts.gc !== "undefined"){
+           charts.gc.destroy();
+        }*/
+        charts.gc = refreshChart("cp", options);
         refresh_module_pref_plot();
     });
 }
 
 function refresh_module_pref_plot(){
     $.getJSON('results.php',{t:'cmp', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
-        c3.generate({
+        var options = {
             data: {
                 json: data.chartdata,
                 type:'pie',
                 onclick: function (d,i){refresh_course_module_plot(data.modules[d.index]);}
                 },
-            bindto: '#modulepref_pie'
-        });
+            bindto: '#modulepref_pie',
+            tooltip: {
+                format: {
+                    value: function (value, ratio, id, index) { return Math.round(ratio*1000,1)/10+'% ('+value+' '+langHits+')'; }
+                }
+            }
+        };
+        /*if(typeof charts.mp !== "undefined"){
+             charts.mp.destroy();
+        }*/
+        charts.mp = refreshChart("mp", options);
         refresh_course_module_plot(data.pmid);
     });
 }
+
 function refresh_course_module_plot(mdl){
     module = mdl;
     $.getJSON('results.php',{t:'cm', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
-        $("#moduletitle").text(data.charttitle);
-        c3.generate({
+        var options = {
             data: {
                 json: data.chartdata,
                 x: 'time',
@@ -175,20 +324,30 @@ function refresh_course_module_plot(mdl){
                 types:{
                     hits: 'bar',
                     duration: 'spline'
+                },
+                names:{
+                    hits: langHits,
+                    duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:'hits', min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#module_stats'
+        };
+        $("#moduletitle").text(data.charttitle);
+        /*if(typeof charts.cm !== "undefined"){
+             charts.cm.destroy();
+        }*/
+        charts.cm = refreshChart("cm", options);
+        $.getJSON('results.php',{t:'cd', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
+            refreshDataTable($('#cdetails1'), data);
         });
     });
 }
 
-
-
 function refresh_generic_user_plot(){
     $.getJSON('results.php',{t:'ug', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
-        c3.generate({
+        var options = {
             data: {
                 json: data,
                 x: 'time',
@@ -200,12 +359,20 @@ function refresh_generic_user_plot(){
                 types:{
                     hits: 'bar',
                     duration: 'spline'
+                },
+                names:{
+                    hits: langHits,
+                    duration: langDuration
                 }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:'hits', min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:'duration sec', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0,padding:{top:0, bottom:0}}, y2: {show: true, label:langDuration+' (sec)', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#generic_userstats'
-        });
+        };
+        /*if(typeof charts.gu !== "undefined"){
+             charts.gu.destroy();
+        }*/
+        charts.gu = refreshChart("gu", options);
         refresh_course_pref_plot();
     });
 }
@@ -213,31 +380,39 @@ function refresh_generic_user_plot(){
 function refresh_course_pref_plot(){
     $.getJSON('results.php',{t:'ucp', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
         if(data.pcid != null){
-            c3.generate({
+            var options = {
                 data: {
                     json: data.chartdata,
                     type:'pie',
                     onclick: function (d,i){course = data.courses[d.index];refresh_user_course_plot();}
                     },
-                bindto: '#coursepref_pie'
-            });
+                bindto: '#coursepref_pie',
+                tooltip: {
+                    format: {
+                        value: function (value, ratio, id, index) { return Math.round(ratio*1000,1)/10+'% ('+value+' '+langHits+')'; }
+                    }
+                }
+            };
             course = data.pcid;
         }
         else{
             encapsulateddata = data.chartdata;
             module = encapsulateddata.pmid;
-            c3.generate({
+            var options = {
                 data: {
                     json: encapsulateddata.chartdata,
                     type:'pie',
                     onclick: function (d,i){module = encapsulateddata.modules[d.index];refresh_user_course_plot();}
                     },
                 bindto: '#coursepref_pie'
-            });    
+            };
         }
+        charts.cp = refreshChart("cp", options);
+           
         refresh_user_course_plot();
     });
 }
+
 function refresh_user_course_plot(){
     $.getJSON('results.php',{t:'uc', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
         if(data.chartdata.chartdata == null){
@@ -248,7 +423,7 @@ function refresh_user_course_plot(){
             $("#coursetitle").text(data.charttitle+': '+data.chartdata.charttitle);
             chartdata = data.chartdata.chartdata;
         }
-        c3.generate({
+        var options = {
             data: {
                 json: chartdata,
                 x: 'time',
@@ -261,70 +436,132 @@ function refresh_user_course_plot(){
                     hits: 'bar',
                     duration: 'spline'
                 },
+                names:{
+                    hits: langHits,
+                    duration: langDuration
+                }
             },
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:'hits', min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false, rotate:60}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min:0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
             bar:{width:{ratio:0.3}},
             bindto: '#course_stats'
-        });
-    });
-}
-
-function refresh_department_user_plot(depid){
-    department = depid;
-    $.getJSON('results.php',{t:'du', s:startdate, e:enddate, i:interval, u:user, c:course, m:module, d:department},function(data){
-        c3.generate({
-            data: {
-                json: data.chartdata,
-                x: 'department',
-                type:'bar',
-                groups:[['status1','status5']],
-                onclick: function (d,i){refresh_department_user_plot(data.deps[d.index]);}
-            },
-            size:{height:250},
-            //bar:{width:50},
-            axis:{ x: {type:'category', label:'department'}, y:{label:'users', min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
-            bindto: '#depuser_stats'
-        });
-        refresh_department_course_plot(department);
-    });
-}
-function refresh_department_course_plot(depid){
-    department = depid;
-    $.getJSON('results.php',{t:'dc', s:startdate, e:enddate, i:interval, u:user, c:course, m:module, d:department},function(data){
-        c3.generate({
-            data: {
-                json: data.chartdata,
-                x: 'department',
-                type:'bar',
-                groups:[['visibility1','visibility2','visibility3','visibility4']],
-                onclick: function (d,i){console.log('department '+d.index+' was pressed');refresh_department_user_plot(data.deps[d.index]);}
-            },
-            size:{height:250},
-            axis:{ x: {type:'category', label:'department'}, y:{label:'courses', min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
-            //bar:{width:{ratio:0.3}},
-            bindto: '#depcourse_stats'
+        };
+        charts.uc = refreshChart("uc", options);
+        $.getJSON('results.php',{t:'ud', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
+            refreshDataTable($('#udetails1'), data);
         });
     });
 }
 
 function refresh_user_login_plot(){
     $.getJSON('results.php',{t:'ul', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
-        c3.generate({
+        var options = {
             data: {
                 json: data,
                 x: 'time',
                 xFormat: '%Y-%m-%d',
-                type:'area',
-                groups:[['logins']]
+                type:'area'
             },
             zoom:{enabled:true},
             size:{height:250},
-            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], rotate:60, values:xTicks, fit:false}, min: xMinVal, label: xAxisLabels[interval]}, y:{label:'logins', padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], rotate:60, values:xTicks, fit:false}, min: xMinVal, label: xAxisLabels[interval]}, y:{label:'logins', padding:{top:0, bottom:0}}},
             bindto: '#userlogins_stats'
+        };
+        /*if(typeof charts.ul !== "undefined"){
+           charts.ul.destroy();
+        }*/
+        charts.ul = refreshChart("ul", options);
+        
+    });
+}
+
+function refresh_department_user_plot(depid, leafdepartment){
+    if(leafdepartment>0){
+        return null;
+    }
+    department = depid;
+    $.getJSON('results.php',{t:'du', s:startdate, e:enddate, i:interval, u:user, c:course, m:module, d:department},function(data){
+        var options = {
+            data: {
+                json: data.chartdata,
+                x: 'department',
+                type:'bar',
+                groups:[['status1','status5']],
+                onclick: function (d,i){refresh_department_user_plot(data.deps[d.index], data.leafdeps[d.index]);}
+            },
+            size:{height:250},
+            //bar:{width:50},
+            axis:{ x: {type:'category', label:'department'}, y:{label:langUsers, min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
+            bindto: '#depuser_stats'
+        };
+        charts.du = refreshChart("du", options);
+        
+        department_details = new Array();
+        
+        for(i=0;i<data.chartdata.department.length;i++){
+            department_details.push(new Array);
+        }
+        for(var column in data.chartdata){
+            $.each(data.chartdata[column], function(rowid, val){
+                department_details[rowid].push(val);
+            });
+        }
+        refresh_department_course_plot(department, leafdepartment);
+        $.getJSON('results.php',{t:'uld', s:startdate, e:enddate, i:interval, u:user, c:course, m:module, d:department},function(data){
+            refreshDataTable($('#adetails2'), data);
         });
     });
 }
 
+function refresh_department_course_plot(depid, leafdepartment){
+    if(leafdepartment>0){
+        return null;
+    }
+    department = depid;
+    $.getJSON('results.php',{t:'dc', s:startdate, e:enddate, i:interval, u:user, c:course, m:module, d:department},function(data){
+       var options = {
+            data: {
+                json: data.chartdata,
+                x: 'department',
+                type:'bar',
+                groups:[['visibility1','visibility2','visibility3','visibility4']],
+                onclick: function (d,i){refresh_department_user_plot(data.deps[d.index], data.leafdeps[d.index]);}
+            },
+            size:{height:250},
+            axis:{ x: {type:'category', label:langDepartment}, y:{label:langCourses, min: 0, padding:{top:0, bottom:0}, tick:{format: d3.format('d')}}},
+            //bar:{width:{ratio:0.3}},
+            bindto: '#depcourse_stats'
+        };
+        charts.dc = refreshChart("dc", options);
+        
+        for(var column in data.chartdata){
+            $.each(data.chartdata[column], function(rowid, val){
+                if(column !== 'department'){
+                    department_details[rowid].push(val);
+                }
+            });
+        }
+        refreshDataTable($('#adetails1'), department_details);
+        fillTableTotalUsers();
+    });
+}
+
+/*"sDom": 'lfrtip<"clear spacer">T',
+      "oTableTools": {
+            "aButtons": [
+                {
+                    "sExtends": "csv",
+                    "fnClick": function( nButton, oConfig, flash ) {
+                            var s = '';
+                            var a = TableTools.fnGetMasters();
+                            for ( var i=0, iLen=a.length ; i<iLen ; i++ ) {
+                                s += a[i].fnGetTableData( oConfig ) +"\n";
+                            }
+                            this.fnSetText(flash, s);  
+                    }
+                }      
+            ]
+        }
+       }*/
 function adjust_interval_options(){
     if($('#interval').length){
         dayMilliseconds = 24*60*60*1000;
@@ -340,6 +577,7 @@ function adjust_interval_options(){
         });
     }
 }
+
 function xAxisTicksAdjust()
 {
 	var xmin = sdate;
@@ -392,6 +630,40 @@ function xAxisTicksAdjust()
 	xTicks.push(xMaxVal);
 }
 
+function refreshDataTable(datatableel, datarows)
+{
+    datatableel.DataTable().clear();
+    datatableel.DataTable().rows.add(datarows).draw();
+}
 
+function refreshChart(c, opt){
+    if(typeof charts[c] !== "undefined"){
+           charts[c].destroy();
+    }
+    return c3.generate(opt);
+}
 
+function fillTableTotalUsers(){
+    $.getJSON('results.php',{t:'du', s:startdate, e:enddate, i:interval, u:user, c:course, m:module, d:department, o:1},function(data){
+        detailsTable1api = $('#adetails1').dataTable().api();
+        header = $(detailsTable1api.columns(1).header()).text();
+        $(detailsTable1api.columns(1).footer()).html(data.chartdata[header][0]);
+        header = $(detailsTable1api.columns(2).header()).text();
+        $(detailsTable1api.columns(2).footer()).html(data.chartdata[header][0]);
+    });
+}
+
+function redrawflashbuttons(){
+    var datatables = $('table.table');
+    var oTableTools = null;
+    if(datatables.length > 0){
+        for(i=0;i<datatables.length;i++){
+            oTableTools = TableTools.fnGetInstance( datatables[i] );
+            if ( oTableTools != null && oTableTools.fnResizeRequired() )
+            {
+                oTableTools.fnResizeButtons();
+            }
+        }
+    }
+}
 

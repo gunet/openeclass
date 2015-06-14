@@ -30,13 +30,29 @@ $head_content .=
         stats = 'c';
     </script>";
 require_once('form.php');
-$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+/****   Plots   ****/
+$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
 $tool_content .= "<div id='generic_stats'></div>";
 $tool_content .= "</div></div></div></div>";
-$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
 $tool_content .= "<div id='modulepref_pie' style='width:40%;float:left;'></div>";
 //$tool_content .= "<div id='module' style='width:60%;float:left;'><div id='moduletitle' style='margin:auto;'></div><div id='module_stats'></div></div>";
 $tool_content .= "<div id='module' style='width:60%;float:left;'>".
         "<ul class='list-group'><li class='list-group-item'><label id='moduletitle'></label></li><li class='list-group-item'><div id='module_stats'></div></li></ul>".
         "</div>";
 $tool_content .= "</div></div></div></div>";
+/****   Datatables   ****/
+$tool_content .= "<div class='row detailscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+$tool_content .= "<table id='cdetails1' class='table table-striped table-bordered'><caption class='well'>$langHits $langAnd $langDuration</caption>"
+        . "<thead><tr>"
+        . "<th>$langDate</th>"
+        . "<th>$langUser</th>"
+        . "<th>$langModule</th>"
+        . "<th>$langHits</th>"
+        . "<th>$langDuration</th>"
+        . "</tr></thead>"
+        . "<tbody></tbody>"
+        . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>"       
+        . "</table>";
+$tool_content .= "</div></div></div></div>";
+

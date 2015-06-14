@@ -36,6 +36,7 @@ $plotuser = (isset($_REQUEST['u']) && is_numeric($_REQUEST['u']) && $_REQUEST['u
 $plotcourse = (isset($_REQUEST['c']) && is_numeric($_REQUEST['c']) && $_REQUEST['c']>0)? $_REQUEST['c'] : null;
 $plotmodule = (isset($_REQUEST['m']) && is_numeric($_REQUEST['m']) && $_REQUEST['m']>0)? $_REQUEST['m'] : null;
 $department = (isset($_REQUEST['d']) && is_numeric($_REQUEST['d']) && $_REQUEST['d']>0)? $_REQUEST['d'] : null;
+$total = (isset($_REQUEST['o']) && is_numeric($_REQUEST['o']) && $_REQUEST['o']>0)? true : false;
 
 $ds = DateTime::createFromFormat('Y-n-j', $_REQUEST['s']);
 $de = DateTime::createFromFormat('Y-n-j', $_REQUEST['e']);
@@ -61,6 +62,9 @@ if(isset($_REQUEST['t'])){
         case 'cm':
             $result = get_course_module_stats($startdate, $enddate, $interval, $plotcourse, $plotmodule, $plotuser);
             break;
+        case 'cd':
+            $result = get_course_details($startdate, $enddate,$interval, $plotcourse, $plotuser);
+            break;
         case 'ug':
             $result = get_user_stats($startdate, $enddate, $interval, $plotuser, $plotcourse);
             break;
@@ -70,14 +74,20 @@ if(isset($_REQUEST['t'])){
         case 'uc':
             $result = get_user_course_stats($startdate, $enddate, $interval, $plotuser, $plotcourse, $plotmodule);
             break;
+        case 'ud':
+            $result = get_user_details($startdate, $enddate, $interval, $plotuser, $plotcourse);
+            break;
         case 'du':
-            $result = get_department_user_stats($department);
+            $result = get_department_user_stats($department, $total);
             break;
         case 'dc':
             $result = get_department_course_stats($department);
             break;
         case 'ul':
-            $result = get_user_login_stats();
+            $result = get_user_login_stats($startdate, $enddate, $interval, $plotuser, $plotcourse, $plotmodule);
+            break;
+        case 'uld':
+            $result = get_user_login_details($startdate, $enddate, $interval, $plotuser, $plotcourse, $plotmodule);
             break;
     }
     

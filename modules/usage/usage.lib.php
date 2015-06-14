@@ -124,6 +124,24 @@ function get_course_module_stats($start = null, $end = null, $interval, $cid, $m
     return array('charttitle'=>$mtitle, 'chartdata'=>$formattedr);
 }
 
+function get_course_details($start = null, $end = null, $interval, $cid, $user_id = null)
+{
+    global $modules;
+    if(is_numeric($user_id)){
+        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname,' (',email,')') uname, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t AND user_id=?d ORDER BY day, module_id";
+        $r = Database::get()->queryArray($q, $cid, $start, $end, $user_id);    
+    }
+    else{
+        $q = "SELECT day, hits, duration, CONCAT(surname, ' ', givenname,' (',email,')') uname, module_id FROM actions_daily a JOIN user u ON a.user_id=u.id WHERE course_id=?d AND day BETWEEN ?t AND ?t ORDER BY day, module_id";
+        $r = Database::get()->queryArray($q, $cid, $start, $end);
+    }
+    $formattedr = array();
+    foreach($r as $record){
+       $mtitle = (isset($modules[$record->module_id]))? $modules[$record->module_id]['title']:'module '.$record->module_id;
+       $formattedr[] = array($record->day, $mtitle, $record->uname, $record->hits, $record->duration);
+    }
+    return $formattedr;
+}
 
 /*** User personal stats ***/
 
@@ -184,59 +202,37 @@ function get_user_course_stats($start = null, $end = null, $interval, $user, $co
     return array('charttitle'=>$ctitle, 'chartdata'=>$formattedr);
 }
 
-/*** admin stats ***/
-function get_admin_stats($start = null, $end = null, $interval, $user, $course, $module)
+function get_user_details($start = null, $end = null, $interval, $user, $course = null)
 {
-    $g = build_group_selector_cond($interval);
-    $groupby = $g['groupby'];
-    $date_components = $g['select'];
-    $q = "SELECT $date_components, sum(hits) hits, sum(duration) dur FROM actions_daily WHERE day BETWEEN ?t AND ?t $groupby";
-    
-    $r = Database::get()->queryArray($q, $start, $end);
-    $formattedr = array('time'=>array(),'hits'=>array(),'duration'=>array());
+    global $modules;
+    if(is_numeric($course)){
+        $q = "SELECT day, hits hits, duration dur, module_id, c.title FROM actions_daily a JOIN course c ON a.course_id=c.id WHERE user_id = ?d AND day BETWEEN ?t AND ?t AND course_id = ?d ORDER BY day";
+        $r = Database::get()->queryArray($q, $user, $start, $end, $course);    
+    }
+    else{
+        $q = "SELECT day, hits hits, duration dur, c.title, module_id FROM actions_daily a JOIN course c ON a.course_id=c.id where user_id = ?d AND day BETWEEN ?t AND ?t ORDER BY day";
+        $r = Database::get()->queryArray($q, $user, $start, $end);
+    }
+    $formattedr = array();
     foreach($r as $record){
-       $formattedr['time'][] = $record->cat_title;
-       $formattedr['hits'][] = $record->hits;
-       $formattedr['duration'][] = $record->dur;
+        $mtitle = (isset($modules[$record->module_id]))? $modules[$record->module_id]['title']:'module '.$record->module_id;
+        $formattedr[] = array($record->day, $record->title, $mtitle, $record->hits, $record->dur);
     }
     return $formattedr;
 }
 
-function build_group_selector_cond($interval = 'month')
-{
-    $groupby = "";
-    $select = "";
-    switch($interval){
-        case 'year':
-            $select = "DATE_FORMAT(day, '%Y-01-01') cat_title, DATE_FORMAT(day,'%d') d, DATE_FORMAT(day,'%u') w, DATE_FORMAT(day, '%m') m, DATE_FORMAT(day, '%Y') y";
-            $groupby = "GROUP BY y";
-            break;
-        case 'month':
-            $select = "DATE_FORMAT(day, '%Y-%m-01') cat_title, DATE_FORMAT(day,'%d') d, DATE_FORMAT(day,'%u') w, DATE_FORMAT(day, '%m') m, DATE_FORMAT(day, '%Y') y";
-            $groupby = "GROUP BY y, m";
-            break;
-        case 'week':
-            $select = "STR_TO_DATE(DATE_FORMAT(day, '%Y%u Monday'), '%X%V %W') cat_title, DATE_FORMAT(day,'%d') d, DATE_FORMAT(day,'%u') w, DATE_FORMAT(day, '%m') m, DATE_FORMAT(day, '%Y') y";
-            $groupby = "GROUP BY y, w";
-            break;
-        case 'day':
-            $select = "DATE_FORMAT(day, '%Y-%m-%d') cat_title, DATE_FORMAT(day,'%d') d, DATE_FORMAT(day,'%u') w, DATE_FORMAT(day, '%m') m, DATE_FORMAT(day, '%Y') y";
-            $groupby = "GROUP BY y, m, d";
-            break;
-    }
-    return array('groupby'=>$groupby,'select'=>$select);
-}
-
+/*** admin stats ***/
 function get_department_course_stats($root_department = 1){
     global $langCourseVisibility;
     $q = "SELECT lft, rgt INTO @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
     
-    $q = "SELECT toph.id did, toph.name dname, visible, SUM(courses) courses_count
+    $q = "SELECT toph.id did, toph.name dname, IF((toph.rgt-toph.lft)>1, 0, 1) leaf, visible, SUM(courses) courses_count
       FROM (SELECT ch.lft, ch.rgt, c.visible, count(c.id) courses 
             FROM course_department cd 
             JOIN hierarchy ch ON cd.department=ch.id
             JOIN course c ON cd.course=c.id 
+            WHERE ch.lft BETWEEN @rootlft AND @rootrgt
             GROUP BY cd.department, c.visible ) ch
           RIGHT JOIN 
           (SELECT descendant.id, descendant.name, descendant.lft, descendant.rgt, count(*) c 
@@ -248,14 +244,16 @@ function get_department_course_stats($root_department = 1){
      ON ch.lft>=toph.lft AND ch.lft<=toph.rgt 
     GROUP BY toph.id, ch.visible ORDER BY did";
     $r = Database::get()->queryArray($q);
-$formattedr = array('department'=>array(),$langCourseVisibility[COURSE_CLOSED]=>array(),$langCourseVisibility[COURSE_REGISTRATION]=>array(), $langCourseVisibility[COURSE_OPEN]=>array(), $langCourseVisibility[COURSE_INACTIVE]=>array());
+    $formattedr = array('department'=>array(),$langCourseVisibility[COURSE_CLOSED]=>array(),$langCourseVisibility[COURSE_REGISTRATION]=>array(), $langCourseVisibility[COURSE_OPEN]=>array(), $langCourseVisibility[COURSE_INACTIVE]=>array());
     $depids = array();
+    $leaves = array();
     $d = '';
     $i = -1;
     foreach($r as $record){
         if($record->dname != $d){
             $i++;
             $depids[] = $record->did;
+            $leaves[] = $record->leaf;
             $formattedr['department'][] = $record->dname;
             $d = $record->dname;
             $formattedr[$langCourseVisibility[COURSE_CLOSED]][] = 0;
@@ -267,41 +265,47 @@ $formattedr = array('department'=>array(),$langCourseVisibility[COURSE_CLOSED]=>
            $formattedr[$langCourseVisibility[$record->visible]][$i] = $record->courses_count;
         }
     }
-    return  array('deps'=>$depids,'chartdata'=>$formattedr);
+    return  array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
 
 }
 
-function get_department_user_stats($root_department = 1){
+function get_department_user_stats($root_department = 1, $total = false){
     global $langStatsUserStatus;
-    $q = "SELECT lft, rgt INTO @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
+    /*Simple case to get total users of the platform*/
+    $q = "SELECT id, lft, rgt INTO @rootid, @rootlft, @rootrgt FROM hierarchy WHERE id=?d;";
     Database::get()->query($q, $root_department);
-    
-    $q = "SELECT toph.id did, toph.name dname, status, SUM(users) users_count
-      FROM (SELECT ch.id did, ch.name dname, ch.lft, ch.rgt, cu.status,count(distinct cu.user_id) users 
-          FROM course_department cd 
-          JOIN course_user cu on cd.course=cu.course_id
-          JOIN hierarchy ch ON cd.department=ch.id
-          JOIN course c ON cd.course=c.id 
-          GROUP BY ch.id, cu.status) chh 
-          RIGHT JOIN (SELECT descendant.id, descendant.name, descendant.lft, descendant.rgt, count(*) c 
-            FROM hierarchy descendant 
-            JOIN 
-            hierarchy ancestor ON descendant.lft>ancestor.lft AND descendant.lft<=ancestor.rgt 
-            WHERE ancestor.lft>=@rootlft AND ancestor.rgt<=@rootrgt AND descendant.lft>=@rootlft AND descendant.rgt<=@rootrgt
-            GROUP BY descendant.id having c=1
-          ) toph ON chh.lft>=toph.lft AND chh.lft<=toph.rgt 
-    GROUP BY did, status ORDER BY did";
-    
+    if($total && $root_department == 1){
+        $q = "SELECT @rootid root, @rootid did, 'platform' dname, 0 leaf, status, count(distinct user_id) users_count FROM course_user GROUP BY status;";
+    }
+    else{
+        $group_field = ($total)? "root":"toph.id";
+        $q = "SELECT @rootid root, toph.id did, toph.name dname, IF((toph.rgt-toph.lft)>1, 0, 1) leaf, status, count(distinct user_id) users_count
+        FROM (SELECT ch.id did, ch.name dname, ch.lft, ch.rgt, cu.status, cu.user_id
+            FROM course_department cd 
+            JOIN course_user cu on cd.course=cu.course_id
+            JOIN hierarchy ch ON cd.department=ch.id
+            JOIN course c ON cd.course=c.id
+            WHERE ch.lft BETWEEN @rootlft AND @rootrgt) chh 
+            RIGHT JOIN (SELECT descendant.id, descendant.name, descendant.lft, descendant.rgt, count(*) c 
+              FROM hierarchy descendant 
+              JOIN 
+              hierarchy ancestor ON descendant.lft>ancestor.lft AND descendant.lft<=ancestor.rgt 
+              WHERE ancestor.lft>=@rootlft AND ancestor.rgt<=@rootrgt AND descendant.lft>=@rootlft AND descendant.rgt<=@rootrgt
+              GROUP BY descendant.id having c=1
+            ) toph ON chh.lft>=toph.lft AND chh.lft<=toph.rgt 
+        GROUP BY ".$group_field.", status ORDER BY did";
+    }
     $r = Database::get()->queryArray($q);//,$root_department);
-    $langStatus = array(1=>"Tutors",5=>"Students");
     $formattedr = array('department'=>array(),$langStatsUserStatus[USER_TEACHER]=>array(),$langStatsUserStatus[USER_STUDENT]=>array());
     $depids = array();
+    $leaves = array();
     $d = '';
     $i = -1;
     foreach($r as $record){
         if($record->dname != $d){
             $i++;
-            $depids[] = $record->did;
+            $depids[] = ($total)? $record->root:$record->did;
+            $leaves[] = $record->leaf;
             $formattedr['department'][] = $record->dname;
             $d = $record->dname;
             $formattedr[$langStatsUserStatus[USER_TEACHER]][] = 0;
@@ -311,18 +315,60 @@ function get_department_user_stats($root_department = 1){
            $formattedr[$langStatsUserStatus[$record->status]][$i] = $record->users_count;
        }
     }
-    return array('deps'=>$depids,'chartdata'=>$formattedr);
+    return array('deps'=>$depids,'leafdeps'=>$leaves,'chartdata'=>$formattedr);
 
 }
 
-function get_user_login_stats(){
-    $q = "SELECT DATE_FORMAT(date_time,'%Y-%m-%d') logtime, COUNT(*) c FROM logins GROUP BY DATE_FORMAT(date_time,'%Y-%m-%d') ORDER BY date_format(date_time,'%Y-%m-%d');";
-
-    $r = Database::get()->queryArray($q);
+function get_user_login_stats($start = null, $end = null, $interval, $user, $course, $module){
+    $g = build_group_selector_cond($interval, 'date_time');
+    $groupby = $g['groupby'];
+    $date_components = $g['select'];
+    $q = "SELECT $date_components, COUNT(*) c FROM logins WHERE date_time BETWEEN ?t AND ?t $groupby";
+    $r = Database::get()->queryArray($q, $start, $end);
     $formattedr = array('time'=>array(),'logins'=>array());
     foreach($r as $record){
-        $formattedr['time'][] = $record->logtime;
+        $formattedr['time'][] = $record->cat_title;
         $formattedr['logins'][] = $record->c;
     }
     return $formattedr;
 }
+
+function get_user_login_details($start = null, $end = null, $interval, $user, $course, $module){
+    $q = "SELECT l.date_time, concat(u.surname, ' ', u.givenname, ' (',u.email,')') user_name, c.title course_title, l.ip 
+            FROM logins l 
+            JOIN user u ON l.user_id=u.id 
+            JOIN course c ON l.course_id=c.id 
+            WHERE l.date_time BETWEEN ?t AND ?t";
+    $r = Database::get()->queryArray($q, $start, $end);
+    $formattedr = array();
+    foreach($r AS $record){
+        $formattedr[] = array($record->date_time, $record->user_name, $record->course_title, $record->ip);
+    }
+    return $formattedr;
+}
+
+function build_group_selector_cond($interval = 'month', $date_field = 'day')
+{
+    $groupby = "";
+    $select = "";
+    switch($interval){
+        case 'year':
+            $select = "DATE_FORMAT($date_field, '%Y-01-01') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $groupby = "GROUP BY y";
+            break;
+        case 'month':
+            $select = "DATE_FORMAT($date_field, '%Y-%m-01') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $groupby = "GROUP BY y, m";
+            break;
+        case 'week':
+            $select = "STR_TO_DATE(DATE_FORMAT($date_field, '%Y%u Monday'), '%X%V %W') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $groupby = "GROUP BY y, w";
+            break;
+        case 'day':
+            $select = "DATE_FORMAT($date_field, '%Y-%m-%d') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $groupby = "GROUP BY y, m, d";
+            break;
+    }
+    return array('groupby'=>$groupby,'select'=>$select);
+}
+

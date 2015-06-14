@@ -220,6 +220,9 @@ function load_js($file, $init='') {
             $file = 'datatables/media/js/dataTables.bootstrap.js';
         } elseif ($file == 'datatables_filtering_delay') {
             $file = 'datatables/media/js/jquery.dataTables_delay.js';
+        } elseif ($file == 'datatables_tabletools') {
+            $file = 'datatables/extensions/TableTools/js/dataTables.tableTools.js';
+            $head_content .= css_link('datatables/extensions/TableTools/css/dataTables.tableTools.css');
         } elseif ($file == 'RateIt') {
             $file = 'jquery.rateit.min.js';
         } elseif ($file == 'select2') {

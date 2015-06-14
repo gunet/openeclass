@@ -301,7 +301,7 @@ function loggedInMenu() {
     array_push($sideMenuImg, "fa-user");
 
     array_push($sideMenuText, $GLOBALS['langMyStats']);
-    array_push($sideMenuLink, $urlServer . "main/profile/personal_stats.php");
+    array_push($sideMenuLink, $urlServer . "modules/usage/?t=u");
     array_push($sideMenuImg, "fa-area-chart");
 
     array_push($sideMenuSubGroup, $sideMenuText);
@@ -571,7 +571,7 @@ function adminMenu() {
         array_push($sideMenuImg, "arrow.png");
 
         array_push($sideMenuText, $GLOBALS['langStat']);
-        array_push($sideMenuLink, "../admin/stateclass.php");
+        array_push($sideMenuLink, "../usage/?t=a");
         array_push($sideMenuImg, "arrow.png");
 
         if (get_config('enable_common_docs')) {

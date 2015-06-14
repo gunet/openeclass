@@ -26,7 +26,7 @@ $theme_settings = array(
         'course_info' => 'fa-cogs',
         'users' => 'fa-user',
         'tooladmin' => 'fa-cogs',
-        'usage' => 'fa-cogs',
+        'usage' => 'fa-area-chart',
         'attendance' => 'fa-check-square-o',
         'gradebook' => 'fa-sort-numeric-desc',
     ),

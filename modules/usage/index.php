@@ -34,12 +34,12 @@ elseif(isset($_REQUEST['t']) && $_REQUEST['t'] == 'a'){
     $stats_type = 'admin';
 }
 else{ // expecting $_REQUEST['t'] == 'u'
+    $require_valid_uid = TRUE;
     $stats_type = 'user';
 }
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
-require_once "statistics_tools_bar.php";
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');
@@ -49,13 +49,40 @@ load_js('d3/d3.min.js');
 load_js('c3-0.4.10/c3.min.js');
 load_js('bootstrap-datepicker');
 $head_content .= "
+
 <script type='text/javascript'>
     var lang = '$language'; 
+    var langHits = '$langHits';
+    var langDuration = '$langDuration';
+    var langDay = '$langDay';
+    var langWeek = '$langWeek';
+    var langMonth = '$langMonth';
+    var langYear = '$langYear';
+    var langDepartment = '';
+    var langCourses = '$langCourses';
+    var langUsers = '$langUsers';
     var maxintervals = 20;
     var views = {plots:{class: 'fa fa-bar-chart', title: '$langPlots'}, list:{class: 'fa fa-list', title: '$langDetails'}};
+    var langNoResult = '$langNoResult';
+    var langDisplay ='$langDisplay';
+    var langResults = '$langResults2';
+    var langNoResult = '$langNoResult';
+    var langDisplayed = '$langDisplayed';   
+    var langTill = '$langTill';   
+    var langFrom = '$langFrom2';   
+    var langTotalResults = '$langTotalResults';
+    var langDisplayed= '$langDisplayed';   
+    var langTill = '$langTill'; 
+    var langFrom = '$langFrom2';
+    var langResults = '$langResults2';
+    var langSearch = '$langSearch';
 </script>";
+load_js('datatables');
+load_js('datatables_filtering_delay');
+load_js('datatables_bootstrap');
+load_js('datatables_tabletools');
+load_js('bootstrap-datetimepicker');
 load_js('statistics.js');
-
 $pageName = $langUsage;
 
 ob_start();

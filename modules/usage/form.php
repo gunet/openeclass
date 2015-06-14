@@ -75,10 +75,7 @@ $tool_content .= "<label class='col-sm-1 control-label'>$langUntil:</label>
             <div class='col-xs-2 col-sm-2'>
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
             </div>";
-if($stats_type == 'course' || $stats_type == 'user'){
-    $tool_content .= '
-        <div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
-}
+$tool_content .= '<div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
 
 $tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
 
