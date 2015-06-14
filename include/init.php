@@ -156,6 +156,12 @@ if ($extra_messages) {
     include $extra_messages;
 }
 
+
+
+if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = generate_csrf_token();
+}
+
 if (($upgrade_begin = get_config('upgrade_begin'))) {
     if (!defined('UPGRADE')) {
         Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');

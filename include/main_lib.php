@@ -2835,6 +2835,157 @@ function add_framebusting_headers() {
 
 
 /**
+ * 
+ * @param int $num_bytes [optional]
+ * @return string
+*/
+function generate_csrf_token($num_bytes = 16) {
+    require_once('lib/srand.php');
+
+    return bin2hex(secure_random_bytes($num_bytes));
+}
+
+/**
+ * Check the validity of the csrf token for the current session.
+ *
+ * @param string $token 
+ * @return Boolean
+ */
+function validate_csrf_token($token) {
+
+    if ($token !== $_SESSION['csrf_token']) {
+        return False;
+    }
+    return True;
+}
+
+/**
+* Generate an input form field for the csrf token.
+*
+* return string
+*/
+function generate_csrf_token_form_field()
+{
+    return "<input type='hidden' name='token' value='{$_SESSION['csrf_token']}'";
+}
+
+function generate_csrf_token_link_parameter()
+{
+    return "token={$_SESSION['csrf_token']}";
+}
+
+function csrf_token_error() {
+   redirect_to_home_page();
+}
+
+
+
+
+
+
+/**
+ * Indirect Reference to Direct Reference Map
+ * 
+ * @return ArrayObject
+ */
+function getIndirectReferencesMap(){
+    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){  
+        $_SESSION['IRMAP'] = new ArrayObject(); 
+        $_SESSION['DRMAP'] = new ArrayObject(); 
+    }
+    return $_SESSION['IRMAP'];
+}  
+
+/**
+ * Direct Reference to Indirect Reference Map
+ * 
+ * @return ArrayObject
+ */
+function getDirectReferencesMap(){
+    if(!isset($_SESSION['IRMAP']) || !isset($_SESSION['DRMAP'])){  
+        $_SESSION['IRMAP'] = new ArrayObject(); 
+        $_SESSION['DRMAP'] = new ArrayObject(); 
+    }
+    return $_SESSION['DRMAP'];
+}    
+
+/**
+ * Simple Random Number Generation for indirect References
+ *
+ * @param int
+ * @return string
+ */
+function getIndirectRandom($length) {
+    $allowable_characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+    $pass = "";
+    for ($i = 0; $i < $length; $i++) {
+        $nextChar = $allowable_characters[mt_rand(0, strlen($allowable_characters) - 1)];
+        $pass .= $nextChar;
+    }
+    return $pass;
+}
+
+/**
+ * hash for object references
+ *
+ * @param object reference
+ * @return string
+ */
+function directHash($direct) {
+    return md5(serialize($direct));
+}
+
+
+/**
+ * Direct reference to Indirect reference
+ *
+ * @param object reference
+ * @return string
+ */
+function getIndirectReference($directReference){
+    if(getDirectReferencesMap()->offsetExists(directHash($directReference))){
+        return getDirectReferencesMap()->offsetGet(directHash($directReference));
+    }
+    else{
+        $indirect = null;
+        do {
+            $indirect = getIndirectRandom(6);
+        } while (getIndirectReferencesMap()->offsetExists($indirect));
+        getIndirectReferencesMap()->offsetSet($indirect, $directReference);
+        getDirectReferencesMap()->offsetSet(directHash($directReference), $indirect);
+        return $indirect;
+    }
+}
+
+/**
+ * Indirect reference to direct reference
+ *
+ * @param string
+ * @return object reference
+ */
+function getDirectReference($indirectReference){
+
+    if (!empty($indirectReference) && getIndirectReferencesMap()->offsetExists($indirectReference) )
+    {
+        return getIndirectReferencesMap()->offsetGet($indirectReference);
+    }
+}
+
+/**
+ * Indirect reference to direct reference, Delete any relevant record
+ *
+ * @param string
+ * @return object reference
+ */
+function getAndUnsetDirectReference($indirectReference){
+    $direct = getDirectReference($indirectReference);
+    getIndirectReferencesMap()->offsetUnset($indirectReference);
+    getDirectReferencesMap()->offsetUnset(directHash($direct));
+    return $direct;
+}
+
+
+/**
  * @brief returns HTTP 403 status code
  * @param type $path
  */
