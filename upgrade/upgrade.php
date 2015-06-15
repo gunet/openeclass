@@ -2718,7 +2718,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
         
         // delete old key 'language' (it has been replaced by 'default_language')
-        Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
+        Database::get()->query("DELETE FROM config WHERE `key` = 'language'");
+        
+        //add show results to participants field
+        if (!DBHelper::fieldExists('poll', 'show_results')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `show_results` TINYINT NOT NULL DEFAULT '0'");
+        }
     }    
        
     // update eclass version

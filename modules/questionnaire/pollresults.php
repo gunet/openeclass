@@ -63,21 +63,32 @@ $head_content .= "<script type = 'text/javascript'>
     });  
 </script>";
 
-if (!$is_editor) {
-    Session::Messages($langPollResultsAccess);
-    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
-}
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
     redirect_to_home_page();
 }
 $pid = intval($_GET['pid']);
 $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+if (!$is_editor && !$thePoll->show_results) {
+    Session::Messages($langPollResultsAccess);
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
+}
 if(!$thePoll){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $pid)->total;
 if(!$total_participants) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
+$export_box = "";
+if ($is_editor) {
+    $export_box .= "
+        <div class='alert alert-info'>
+            <b>$langDumpUserDurationToFile:</b><br>
+            <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
+               <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
+            <b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
+               <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
+        </div>";
 }
 $tool_content .= action_bar(array(
             array(
@@ -87,13 +98,7 @@ $tool_content .= action_bar(array(
                 'level' => 'primary-label'
             )
         ))."
-<div class='alert alert-info'>
-    <b>$langDumpUserDurationToFile:</b><br>
-    <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
-       <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
-    <b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
-       <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
-</div>
+$export_box
 <div class='panel panel-primary'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$langInfoPoll</h3>

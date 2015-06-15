@@ -70,16 +70,17 @@ if (isset($_POST['submitPoll'])) {
         $PollEnd = date('Y-m-d H:i', strtotime($_POST['PollEnd']));
         $PollDescription = purify($_POST['PollDescription']);
         $PollEndMessage = purify($_POST['PollEndMessage']);    
-        $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;   
+        $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;
+        $PollShowResults = (isset($_POST['PollShowResults'])) ? $_POST['PollShowResults'] : 0;
         if(isset($_GET['pid'])) {
             Database::get()->query("UPDATE poll SET name = ?s,
-                    start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $course_id, $pid);
+                    start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d, show_results = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $course_id, $pid);
             Session::Messages($langPollEdited, 'alert-success');
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized)
-                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized)->lastInsertID;
+                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results)
+                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults)->lastInsertID;
             Session::Messages($langPollCreated, 'alert-success');
         }
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
@@ -261,11 +262,22 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>
             </div>
             <div class='form-group'>
-              <label for='PollAnonymized' class='col-sm-2 control-label'>$langPollAnonymize:</label>
-              <div class='col-sm-10'>
-                <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '')."> 
+                <label class='col-sm-2 control-label'>$langResults:</label>
+                <div class='col-sm-10'>
+                    <div class='checkbox'>
+                        <label>   
+                            <input type='checkbox' name='PollAnonymized' id='PollAnonymized' value='1' ".((isset($poll->anonymized) && $poll->anonymized) ? 'checked' : '').">
+                            $langPollAnonymize    
+                        </label>
+                    </div>
+                    <div class='checkbox'>
+                        <label>   
+                            <input type='checkbox' name='PollShowResults' id='PollShowResults' value='1' ".((isset($poll->show_results) && $poll->show_results) ? 'checked' : '').">
+                            $langPollShowResults
+                        </label>
+                    </div>                    
               </div>
-            </div>            
+            </div>              
             <div class='form-group'>
               <label for='PollDescription' class='col-sm-2 control-label'>$langDescription:</label>
               <div class='col-sm-10'>
@@ -573,10 +585,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>            
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langPollAnonymize:</strong>
+                    <strong>$langResults:</strong>
                 </div>
                 <div class='col-sm-9'>
-                    ".(($poll->anonymized)? icon('fa-check-square-o') : icon('fa-square-o'))."
+                    ".(($poll->anonymized) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langPollAnonymize <br>
+                    ".(($poll->show_results) ? icon('fa-check-square-o') : icon('fa-square-o'))." $langPollShowResults   
                 </div>                
             </div>
             <div class='row margin-bottom-fat'>

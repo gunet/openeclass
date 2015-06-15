@@ -218,11 +218,11 @@ function printPolls() {
 			<th class='text-center'>$langPollEnd</th>";
 
         if ($is_editor) {
-            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>"
-                           . "<th class='text-center'>".icon('fa-cogs')."</th>";
+            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
         } else {
             $tool_content .= "<th class='text-center'>$langParticipate</th>";
         }
+        $tool_content .= "<th class='text-center'>".icon('fa-cogs')."</th>";
         $tool_content .= "</tr>";
         $index_aa = 1;
         $k = 0;
@@ -344,7 +344,16 @@ function printPolls() {
                             $tool_content .= $langHasParticipated;
                         }
                     }
-                    $tool_content .= "</td></tr>";
+                    $tool_content .= "</td>";
+                     $tool_content .= "
+                        <td class='text-center option-btn-cell'>" .action_button(array(
+                            array(
+                                'title' => $langUsage,
+                                'icon' => 'fa-line-chart',
+                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+                                'show' => $has_participated
+                            )         
+                        ))."</td></tr>";
                 }
             }
             $index_aa ++;
