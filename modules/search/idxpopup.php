@@ -22,7 +22,7 @@
 
 $require_admin = true;
 require_once '../../include/baseTheme.php';
-load_js('jquery-' . JQUERY_VERSION . '.min');
+load_js('jquery-' . JQUERY_VERSION . '.min.js');
 
 if (isset($_GET['reindex'])) {
     require_once 'modules/search/indexer.class.php';
