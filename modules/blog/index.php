@@ -66,7 +66,7 @@ if ($blog_type == 'course_blog') {
     $is_blog_editor = false;
     
     if (isset($_GET['user_id'])) {
-        $user_id = intval($_GET['user_id']);
+        $user_id = intval(getDirectReference($_GET['user_id']));
         if ($user_id == $_SESSION['uid']) {
             $is_blog_editor = true;
         } elseif (isset($is_admin) && $is_admin) {
@@ -98,7 +98,7 @@ if ($blog_type == 'course_blog') {
     $sharing_allowed = get_config('enable_social_sharing_links');
     $sharing_enabled = get_config('personal_blog_sharing');
     
-    $url_params = "user_id=$user_id";
+    $url_params = "user_id=".getIndirectReference($user_id);
 }
 
 
@@ -112,7 +112,7 @@ $allowed_actions = array("showBlog", "showPost", "createPost", "editPost", "delP
 
 //initialize $_REQUEST vars
 $action = (isset($_REQUEST['action']) && in_array($_REQUEST['action'], $allowed_actions))? $_REQUEST['action'] : "showBlog";
-$pId = isset($_REQUEST['pId']) ? intval($_REQUEST['pId']) : 0;
+$pId = isset($_REQUEST['pId']) ? intval(getDirectReference($_REQUEST['pId'])) : 0;
 $page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : 0;
 
 //config setting allowing students to create posts and edit/delete own posts
@@ -279,7 +279,7 @@ if ($blog_type == 'course_blog' && $is_editor) {
 } elseif ($blog_type == 'perso_blog' && $is_blog_editor) {
     $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?user=$user_id&amp;action=showBlog",
+                  'url' => "$_SERVER[SCRIPT_NAME]?user=".getIndirectReference($user_id)."&amp;action=showBlog",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label',
                   'show' => isset($action) and $action != "showBlog" and $action != "showPost" and $action != "savePost" and $action != "delPost")
@@ -431,7 +431,7 @@ if ($action == "editPost") {
                     </div>
                 </div>              
                 <input type='hidden' name='action' value='savePost'>
-                <input type='hidden' name='pId' value='".$post->getId()."'>
+                <input type='hidden' name='pId' value='".getIndirectReference($post->getId())."'>
                 </fieldset>
             </form>
         </div>";
@@ -472,7 +472,7 @@ if ($action == "savePost") {
         }
     } elseif (isset($_POST['submitBlogPost']) && $_POST['submitBlogPost'] == $langModifBlogPost) {
         $post = new BlogPost();
-        if ($post->loadFromDB($_POST['pId'])) {
+        if ($post->loadFromDB(getDirectReference($_POST['pId']))) {
             //different criteria regarding creating posts for different blog types
             if ($blog_type == 'course_blog') {
                 $allow_to_edit = $post->permEdit($is_editor, $stud_allow_create, $uid);
@@ -541,13 +541,13 @@ if ($action == "showPost") {
                                     ". action_button(array(
                                         array(
                                             'title' => $langEditChange,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
+                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".getIndirectReference($post->getId()),
                                             'icon' => 'fa-edit',
                                             'show' => $allow_to_edit
                                         ),
                                         array(
                                             'title' => $langDelete,
-                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
+                                            'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".getIndirectReference($post->getId()),
                                             'icon' => 'fa-times',
                                             'class' => 'delete',
                                             'confirm' => $langSureToDelBlogPost,
@@ -646,7 +646,7 @@ if ($action == "showBlog") {
             }
             if ($comments_enabled && ($post->getCommenting() == 1)) {
                 $comm = new Commenting('blogpost', $post->getId());
-                $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
+                $comment_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".getIndirectReference($post->getId())."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
             } else {
                 $comment_content = "<div class=\"blog_post_empty_space\"></div>";
             }            
@@ -656,13 +656,13 @@ if ($action == "showBlog") {
                                         ". action_button(array(
                                             array(
                                                 'title' => $langEditChange,
-                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".$post->getId(),
+                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=editPost&amp;pId=".getIndirectReference($post->getId()),
                                                 'icon' => 'fa-edit',
                                                 'show' => $allow_to_edit
                                             ),
                                             array(
                                                 'title' => $langDelete,
-                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".$post->getId(),
+                                                'url' => "$_SERVER[SCRIPT_NAME]?$url_params&amp;action=delPost&amp;pId=".getIndirectReference($post->getId()),
                                                 'icon' => 'fa-times',
                                                 'class' => 'delete',
                                                 'confirm' => $langSureToDelBlogPost,
@@ -671,11 +671,11 @@ if ($action == "showBlog") {
                                         ))."
                                     </div>
                                     <h3 class='panel-title'>
-                                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'>".q($post->getTitle())."</a>
+                                        <a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".getIndirectReference($post->getId())."'>".q($post->getTitle())."</a>
                                     </h3>                                    
                                 </div>
                                 <div class='panel-body'>
-                                    <div class='label label-success'>" . nice_format($post->getTime(), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".$post->getId()."'> <span class='smaller'>[$langMore]</span></a></strong>"))."
+                                    <div class='label label-success'>" . nice_format($post->getTime(), true). "</div><small>".$langBlogPostUser.display_user($post->getAuthor(), false, false)."</small><br><br>".standard_text_escape(ellipsize_html($post->getContent(), $num_chars_teaser_break, "<strong>&nbsp;...<a href='$_SERVER[SCRIPT_NAME]?$url_params&amp;action=showPost&amp;pId=".getIndirectReference($post->getId())."'> <span class='smaller'>[$langMore]</span></a></strong>"))."
                                     $comment_content
                                 </div>
                                 <div class='panel-footer'>
