@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html style="background-color: #f0f0f0;">
     <head>
         <title>{%page_title%}</title>
          <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -22,6 +22,7 @@
         </style>
         {%ebook_head%}
         <script type='text/javascript'>
+            
             function change_section() {
                 top.location = '{%ebook_url_base%}' + document.getElementsByName('section')[0].value + '/{%unit_parameter%}';
             }
@@ -38,11 +39,26 @@
                      }                      
                 });
             });
+            
+            $(document).ready(function(){
+                var bookHeight = $("#book-container").height();
+                var windowHeight = $(window).height();
+                var offsetHeight = $("nav").height() + 150;
+                var newBookHeight = windowHeight - offsetHeight;
+                
+                //alert(navHeight);
+
+                if ( bookHeight < newBookHeight ){
+                    $("#book-container").height(newBookHeight);
+                }
+            });
+
+
         </script>
     </head>
 
     <body style="background:whitesmoke;">
-        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin: 0px;">
             <div class="container">
                   <a class="navbar-brand pull-left" href="#" style="padding-top:3px;"><img class="img-responsive" style='height:30px;' src="{%img_base%}/eclass-new-logo-small.png" alt='{%ds_logo%}' title='{%ds_logo%}'></a>
                 
@@ -75,7 +91,7 @@
                 <!--/.nav-collapse -->
             </div>
         </nav>        
-        <div class="container" style="padding:15px;">
+        <div class="container" style="padding:15px; background-color: #f0f0f0; margin: 0px;">
             <div class='row'>
                 <div class='col-xs-12 col-md-8 col-md-offset-2'>
                 <ol class="breadcrumb">
@@ -83,7 +99,7 @@
                   <li><a href="{%course_ebook_link%}">{%course_ebook%}</a></li>
                   <li class="active">{%ebook_title_short%}</li>
                 </ol>
-                    <div>
+                    <div id="book-container" style="border: 1px solid #ccc; border-radius: 2px; padding: 20px; background-color: white;">
                     {%ebook_body%}
                     </div>
                 </div>
