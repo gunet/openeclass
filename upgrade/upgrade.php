@@ -2700,16 +2700,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.2
     // -----------------------------------
     if (version_compare($oldversion, '3.2', '<')) {
-	// delete old key 'language' (replaced by 'default_language')
-	Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
+        // delete old key 'language' (replaced by 'default_language')
+        Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
 
+        if (!DBHelper::fieldExists('link', 'user_id')) {
+            Database::get()->query("ALTER TABLE `link` ADD `user_id` INT(11) DEFAULT 0 NOT NULL");
+        }
         if (!DBHelper::fieldExists('exercise', 'ip_lock')) {
             Database::get()->query("ALTER TABLE `exercise` ADD `ip_lock` TEXT NULL DEFAULT NULL");
         }
         if (!DBHelper::fieldExists('exercise', 'password_lock')) {
             Database::get()->query("ALTER TABLE `exercise` ADD `password_lock` VARCHAR(255) NULL DEFAULT NULL");
         }
-        # Recycle object table
+        // Recycle object table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `tablename` varchar(100) NOT NULL,

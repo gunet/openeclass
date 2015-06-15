@@ -225,7 +225,7 @@ function submit_link() {
         }
     }
     $set_sql = "SET url = ?s, title = ?s, description = ?s, category = ?d";
-    $terms = array($urllink, $title, purify($description), getDirectReference($_POST['selectcategory']));
+    $terms = array($urllink, $title, purify($description), intval(getDirectReference($_POST['selectcategory'])));
 
     if (isset($_POST['id'])) {
         $id = intval(getDirectReference($_POST['id']));
