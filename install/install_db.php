@@ -810,7 +810,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `active` INT(11) NOT NULL DEFAULT 0,
                 `description` MEDIUMTEXT NULL DEFAULT NULL,
                 `end_message` MEDIUMTEXT NULL DEFAULT NULL,
-                `anonymized` INT(1) NOT NULL DEFAULT 0) $charset_spec");
+                `anonymized` INT(1) NOT NULL DEFAULT 0,
+                `show_results` INT(1) NOT NULL DEFAULT 0) $charset_spec");
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,
