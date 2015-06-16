@@ -154,7 +154,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 $authLink[] = array(
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
-                    'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q($l->auth_title),
+                    'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
                     'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
                               ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
             } elseif (!$loginFormEnabled) {
@@ -162,7 +162,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                 $authLink[] = array(
                     'showTitle' => false,
                     'class' => 'login-option',
-                    'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q($l->auth_title),
+                    'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q(getSerializedMessage($l->auth_title)),
                     'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
                                 <label for='uname' class='sr-only'>$langUsername</label>

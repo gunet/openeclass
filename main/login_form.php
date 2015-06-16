@@ -23,7 +23,7 @@ $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
     ORDER BY auth_default DESC, auth_id");
 foreach ($q as $l) {
     $extAuth = in_array($l->auth_name, $extAuthMethods);
-    $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": $l->auth_title;
+    $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": getSerializedMessage($l->auth_title);
     if ($extAuth) {
         $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');        
         $authLink[] = array(false, "
