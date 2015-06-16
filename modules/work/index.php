@@ -553,9 +553,11 @@ function submit_work($id, $on_behalf_of = null) {
                 'comments' => $stud_comments,
                 'group_id' => $group_id));
 
+            $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
             // update attendance book as well
-            update_attendance_book($row->id, 'assignment');
-
+            update_attendance_book($quserid, $row->id, 'assignment');
+            //update gradebook if needed
+            update_gradebook_book($quserid, $id, $grade, 'assignment');
             if ($on_behalf_of and isset($_POST['email'])) {
                 $email_grade = $_POST['grade'];
                 $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];

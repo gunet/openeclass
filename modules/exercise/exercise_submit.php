@@ -320,7 +320,7 @@ if (isset($_POST['formSent'])) {
         
         if ($attempt_status == ATTEMPT_COMPLETED) {
             // update attendance book
-            update_attendance_book($exerciseId, 'exercise');
+            update_attendance_book($uid, $exerciseId, 'exercise');
             // update gradebook
             update_gradebook_book($uid, $exerciseId, $totalScore, 'exercise');
         }

@@ -2530,9 +2530,7 @@ function removeDir($dirPath) {
  * @param type $activity
  * @return type
  */
-function update_attendance_book($id, $activity) {
-
-    global $uid;
+function update_attendance_book($uid, $id, $activity) {
 
     if ($activity == 'assignment') {
         $type = 1;
