@@ -980,7 +980,6 @@ $langUnregUser = "Usuario no registrado";
 $langListCourses = "Lista de cursos";
 $langAsynchronous = "Grupo Asincrónico de eLearning";
 $langUserLogin = "Identicación del usuario";
-$langWelcomeToEclass = "Bienvenido a $siteName!";
 $langWelcomeToPortfolio = "Bienvenido a tu portafolio personalizado";
 $langUnregCourse = "Curso sin registro";
 $langUnCourse = "Sin registro";

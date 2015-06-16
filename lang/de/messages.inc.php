@@ -949,7 +949,6 @@ $langUnregUser = "Löschen des Benutzerkontos";
 $langListCourses = "Liste aller Kurse";
 $langAsynchronous = "Asynchrone eLearning Arbeitsgruppe";
 $langUserLogin = "Benutzer Einwählvorgang (login)";
-$langWelcomeToEclass = "Willkommen im $siteName!";
 $langWelcomeToPortfolio = "Willkommen in Ihrer persönlichen Mappe (portfolio)";
 $langUnregCourse = "Deregistrirung (Abmeldung) vom Kurs";
 $langUnCourse = "Deregistrirung (Abmeldung)";

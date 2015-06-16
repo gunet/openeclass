@@ -1937,7 +1937,6 @@ $langAsynchronous = "Ομάδα Ασύγχρονης Τηλεκπαίδευση�
 $langUserLogin = "Σύνδεση χρήστη";
 $langLoginSSO = "Σύνδεση μέσω SSO λογαριασμού";
 $langLoginSocialNetwork = "Σύνδεση μέσω κοινωνικών δικτύων";
-$langWelcomeToEclass = "Καλωσορίσατε στο " . $siteName . "!";
 $langWelcomeToPortfolio = "Καλωσορίσατε στο προσωπικό σας χαρτοφυλάκιο";
 $langUnregCourse = "Απεγγραφή από μάθημα";
 $langUnCourse = "Απεγγραφή";

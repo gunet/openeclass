@@ -969,7 +969,6 @@ $langUnregUser = "Eliminare conto";
 $langListCourses = "Lista di corsi";
 $langAsynchronous = "Gruppo di E-learning Asincrono";
 $langUserLogin = "Login Utente";
-$langWelcomeToEclass = "Benvenuto a $siteName!";
 $langWelcomeToPortfolio = "Benvenuto al tuo portfolio personale";
 $langUnregCourse = "Cancellarsi dal corso";
 $langUnCourse = "Cancelarsi";

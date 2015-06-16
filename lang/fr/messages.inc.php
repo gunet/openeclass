@@ -1051,7 +1051,6 @@ $langListCourses = "Liste des Cours"
 $langAsynchronous = "Équipe de Télé-enseignement Asynchrone"
 ;
 $langUserLogin = "Connexion de l'utilisateur";
-$langWelcomeToEclass = "Bienvenue sur $siteName!";
 $langWelcomeToPortfolio = "Bienvenus à votre portfolio personnel";
 $langUnregCourse = "Se désinscrire d'un cours";
 $langUnCourse = "Désinscription";

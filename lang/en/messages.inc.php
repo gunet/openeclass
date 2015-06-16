@@ -996,7 +996,6 @@ $langUnregUser = "Unregister User";
 $langListCourses = "Courses";
 $langAsynchronous = "Asynchronous eLearning Group";
 $langUserLogin = "User login";
-$langWelcomeToEclass = "Welcome to $siteName!";
 $langWelcomeToPortfolio = "Welcome to your personalized portfolio";
 $langUnregCourse = "Course Unregister";
 $langUnCourse = "Unregister";
