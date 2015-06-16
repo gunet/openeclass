@@ -91,10 +91,9 @@ function getSideMenu($menuTypeID) {
  */
 
 function getToolsArray($cat) {
-    global $currentCourse, $course_code;
+    global $course_code;
 
-    $currentCourse = $course_code;
-    $cid = course_code_to_id($currentCourse);
+    $cid = course_code_to_id($course_code);
 
     switch ($cat) {
         case 'Public':
@@ -168,7 +167,7 @@ function getExternalLinks() {
  */
 function loggedInMenu() {
     global $uid, $is_admin, $is_power_user, $is_usermanage_user,
-    $is_departmentmanage_user, $urlServer, $course_code;
+    $is_departmentmanage_user, $urlServer, $course_code, $session;
 
     $sideMenuGroup = array();
 
@@ -294,6 +293,14 @@ function loggedInMenu() {
         array_push($sideMenuText, $GLOBALS['langMyBlog']);
         array_push($sideMenuLink, $urlServer . "modules/blog/index.php");
         array_push($sideMenuImg, "blog");
+    }
+
+    // link for my documents
+    if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
+        ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
+        array_push($sideMenuText, q($GLOBALS['langMyDocs']));
+        array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php'));
+        array_push($sideMenuImg, 'docs.png');
     }
 
     array_push($sideMenuText, $GLOBALS['langMyProfile']);
@@ -761,7 +768,7 @@ function lessonToolsMenu() {
  */
 function pickerMenu() {
 
-    global $urlServer, $course_code, $course_id, $is_editor, $modules;
+    global $urlServer, $course_code, $course_id, $is_editor, $modules, $session;
 
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? '&docsfilter=' . q($_REQUEST['docsfilter']) : '';
     $params = "?course=$course_code&embedtype=tinymce" . $docsfilter;
@@ -796,10 +803,19 @@ function pickerMenu() {
             array_push($sideMenuImg, $modules[$mid]['image'] . "_on.png");
         }
     }
-    /* link for common documents */
+
+    // link for common documents
     if (get_config('enable_common_docs')) {
         array_push($sideMenuText, q($GLOBALS['langCommonDocs']));
         array_push($sideMenuLink, q($urlServer . 'modules/admin/commondocs.php' . $params));
+        array_push($sideMenuImg, 'docs.png');
+    }
+
+    // link for my documents
+    if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
+        ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
+        array_push($sideMenuText, q($GLOBALS['langMyDocs']));
+        array_push($sideMenuLink, q($urlServer . 'main/mydocs/index.php' . $params));
         array_push($sideMenuImg, 'docs.png');
     }
 

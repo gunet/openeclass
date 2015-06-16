@@ -116,11 +116,13 @@ define('ATTEMPT_CANCELED', 4);
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL', 2); //
+
 // Subsystem types (used in documents)
 define('MAIN', 0);
 define('GROUP', 1);
 define('EBOOK', 2);
 define('COMMON', 3);
+define('MYDOCS', 4);
 
 // interval in minutes for counting online users
 define('MAX_IDLE_TIME', 10);
@@ -3345,8 +3347,8 @@ function documentBackLink($path) {
         $opts .= ($opts? '&amp;': '') . "openDir=$path";
     }
     if ($opts) {
-        return $upload_target_url .
-            (defined('COMMON_DOCUMENTS')? '?': '&amp;') . $opts;
+        $initial = defined('COMMON_DOCUMENTS') || defined('MY_DOCUMENTS');
+        return $upload_target_url . ($initial? '?': '&amp;') . $opts;
     } else {
         return $upload_target_url;
     }

@@ -23,17 +23,26 @@
  * @brief Create / edit HTML document
  */
 
-if (!defined('COMMON_DOCUMENTS')) {
-    $require_current_course = true;
-    $require_login = true;
-}
+$require_admin = defined('COMMON_DOCUMENTS');
+$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+$require_login = true;
 
 require_once "../../include/baseTheme.php";
 require_once "modules/document/doc_init.php";
 
+if (defined('COMMON_DOCUMENTS')) {
+    $menuTypeID = 3;
+    $toolName = $langCommonDocs;
+} elseif (defined('MY_DOCUMENTS')) {
+    $menuTypeID = 1;
+    $toolName = $langMyDocs;
+} else {
+    $menuTypeID = 2;
+    $toolName = $langDoc;
+}
+
 load_js('tools.js');
 
-$toolName = $langDoc;
 $pageName = $langCreateDoc;
 
 $uploadPath = $editPath = false;
@@ -147,9 +156,7 @@ if ($can_upload) {
 	$tool_content .= "<div class='alert alert-danger'>$langNotAllowed</div>";
 }
 
-draw($tool_content,
-    defined('COMMON_DOCUMENTS')? 3: 2,
-    null, $head_content);
+draw($tool_content, $menuTypeID, null, $head_content);
 
 
 function getHtmlBody($path) {

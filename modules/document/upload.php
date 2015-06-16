@@ -23,17 +23,27 @@
  * @file upload.php
  * @brief upload form for subsystem documents
  */
-if (!defined('COMMON_DOCUMENTS')) {
-    $require_current_course = TRUE;
-    $require_login = true;
-}
-require_once '../../include/baseTheme.php';
-require_once 'modules/document/doc_init.php';
+
+$require_admin = defined('COMMON_DOCUMENTS');
+$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+$require_login = true;
+
+require_once "../../include/baseTheme.php";
+require_once "modules/document/doc_init.php";
 require_once 'modules/drives/clouddrive.php';
 
-enableCheckFileSize();
+if (defined('COMMON_DOCUMENTS')) {
+    $menuTypeID = 3;
+    $toolName = $langCommonDocs;
+} elseif (defined('MY_DOCUMENTS')) {
+    $menuTypeID = 1;
+    $toolName = $langMyDocs;
+} else {
+    $menuTypeID = 2;
+    $toolName = $langDoc;
+}
 
-$toolName = $langDoc;
+enableCheckFileSize();
 
 if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
@@ -229,4 +239,4 @@ if ($can_upload) {
     $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
-draw($tool_content, defined('COMMON_DOCUMENTS') ? 3 : 2, null, $head_content);
+draw($tool_content, $menuTypeID, null, $head_content);

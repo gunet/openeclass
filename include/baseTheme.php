@@ -67,7 +67,7 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $course_code, $course_id, $helpTopic,
+    global $session, $course_code, $course_id, $helpTopic,
         $is_editor, $langActivate, $langNote,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
         $langChooseLang, $langDeactivate, $langProfileMenu,
@@ -79,7 +79,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
-        $status, $switchLangURL, $theme, $themeimg,
+        $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
         $theme_settings, $language, $saved_is_editor, $langProfileImage,
         $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
@@ -272,6 +272,13 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             } elseif ($menuTypeID > 0) {
                 $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
             }
+            if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
+                ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
+                $t->set_var('LANG_MYDOCS', q($GLOBALS['langMyDocs']));
+                $t->set_var('MYDOCS_LINK', $urlAppend . 'main/mydocs/index.php');
+            } elseif ($menuTypeID > 0) {
+                $t->set_block('mainBlock', 'MyDocsBlock', 'delete');
+            }
         }
         $t->set_var('QUICK_NOTES', q($GLOBALS['langQuickNotesSide']));
         $t->set_var('langSave', q($GLOBALS['langSave']));
@@ -376,7 +383,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
 
         // Breadcrumb first entry (home / portfolio)
-        if ($status != USER_GUEST) {
+        if ($session->status != USER_GUEST) {
             if (isset($_SESSION['uid'])) {
                 $t->set_var('BREAD_TEXT', '<span class="fa fa-home"></span> ' . $langPortfolio);
                 $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');

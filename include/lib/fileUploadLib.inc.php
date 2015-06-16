@@ -390,7 +390,11 @@ function showquota($quota, $used) {
     $retstring = '';
     
     // pososto xrhsimopoioumenou xorou se %
-    $diskUsedPercentage = round(($used / $quota) * 100) . "%";
+    if ($quota == 0) {
+        $diskUsedPercentage = ($used > 0)? '100%': '0%';
+    } else {
+        $diskUsedPercentage = round(($used / $quota) * 100) . '%';
+    }
     // morfopoihsh tou synolikou diathesimou megethous tou quota
     $quota = format_bytesize($quota / 1024);
     // morfopoihsh tou synolikou megethous pou xrhsimopoieitai

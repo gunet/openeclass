@@ -518,7 +518,10 @@ $langLoginFailDenyInterval = "Διάστημα αποκλεισμού";
 $langLoginFailForgiveInterval = "Διάστημα καραντίνας";
 $langActionsExpireInterval = "Διάστημα διατήρησης στατιστικών";
 $langLogActions = "Καταγραφή ενεργειών";
+$langDocumentSettings = 'Ρυθμίσεις αρχείων';
 $langEnableCommonDocs = "Ενεργοποίηση λειτουργίας «Κοινόχρηστων Αρχείων»";
+$langEnableMyDocs = 'Ενεργοποίηση προσωπικών αρχείων';
+$langMyDocsQuota = 'Όριο αποθηκευτικού χώρου προσωπικών αρχείων';
 $langEmailAnnounce = "Διεύθυνση κοινοποίησης ανακοινώσεων";
 
 // admin announcements
@@ -551,6 +554,7 @@ $langCommonDocLink = "Κοινόχρηστο αρχείο";
 $langCommonDocLinkInvisible = "Αόρατο κοινόχρηστο αρχείο";
 $langNonPublicFile = 'Ορατό μόνο στους εγγεγραμμένους χρήστες';
 $langPrint = "Εκτύπωση";
+$langMyDocs = 'Προσωπικά Αρχεία';
 
 /* * ********************************************************
  * agenda.php

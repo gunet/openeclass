@@ -21,17 +21,8 @@
 
 $is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
 
-if (!defined('COMMON_DOCUMENTS')) {
-    $require_current_course = TRUE;
-    $menuTypeID = ($is_in_tinymce) ? 5 : 2;
-} else {
-    if ($is_in_tinymce) {
-        $menuTypeID = 5;
-    } else {
-        $require_admin = TRUE;
-        $menuTypeID = 3;
-    }
-}
+$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+
 $guest_allowed = true;
 require_once '../../include/baseTheme.php';
 /* * ** The following is added for statistics purposes ** */
@@ -51,7 +42,29 @@ require_once 'modules/search/indexer.class.php';
 require_once 'include/log.php';
 require_once 'modules/drives/clouddrive.php';
 
+$require_help = true;
+$helpTopic = 'Doc';
+if (defined('COMMON_DOCUMENTS')) {
+    $menuTypeID = 3;
+    $toolName = $langCommonDocs;
+    $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
+} elseif (defined('MY_DOCUMENTS')) {
+    $menuTypeID = 1;
+    $toolName = $langMyDocs;
+    if ($session->status == USER_TEACHER) {
+        $diskQuotaDocument = get_config('mydocs_teacher_quota') * 1024 * 1024;
+    } else {
+        $diskQuotaDocument = get_config('mydocs_student_quota') * 1024 * 1024;
+    } 
+} else {
+    $menuTypeID = 2;
+    $toolName = $langDoc;
+    $type = ($subsystem == GROUP) ? 'group_quota' : 'doc_quota';
+    $diskQuotaDocument = Database::get()->querySingle("SELECT $type AS quotatype FROM course WHERE id = ?d", $course_id)->quotatype;
+}
+
 if ($is_in_tinymce) {
+    $menuTypeID = 5;
     $_SESSION['embedonce'] = true; // necessary for baseTheme
     $docsfilter = (isset($_REQUEST['docsfilter'])) ? 'docsfilter=' . $_REQUEST['docsfilter'] . '&amp;' : '';
     $base_url .= 'embedtype=tinymce&amp;' . $docsfilter;
@@ -63,22 +76,12 @@ load_js('tools.js');
 ModalBoxHelper::loadModalBox(true);
 copyright_info_init();
 
-$require_help = TRUE;
-$helpTopic = 'Doc';
-$toolName = $langDoc;
-// check for quotas
-$diskUsed = dir_total_space($basedir);
-if (defined('COMMON_DOCUMENTS')) {
-    $diskQuotaDocument = $diskUsed + ini_get('upload_max_filesize') * 1024 * 1024;
-} else {
-    $type = ($subsystem == GROUP) ? 'group_quota' : 'doc_quota';
-    $d = Database::get()->querySingle("SELECT $type AS quotatype FROM course WHERE id = ?d", $course_id);
-    $diskQuotaDocument = $d->quotatype;
-}
-
 if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
 }
+
+// Used to check for quotas
+$diskUsed = dir_total_space($basedir);
 
 if (isset($_GET['showQuota'])) {
     $navigation[] = array('url' => documentBackLink(''), 'name' => $pageName);
@@ -180,9 +183,9 @@ if ($can_upload) {
         }
         validateUploadedFile($fileName, $menuTypeID); // check file type
         // check for disk quotas
-        $diskUsed = dir_total_space($basedir);
         if ($diskUsed + @$_FILES['userFile']['size'] > $diskQuotaDocument) {
-            $action_message .= "<div class='alert alert-danger'>$langNoSpace</div>";
+            Session::Messages($langNoSpace, 'alert-danger');
+            redirect_to_current_dir();
         } elseif (isset($_POST['uncompress']) and $_POST['uncompress'] == 1 and preg_match('/\.zip$/i', $fileName)) {
             /* ** Unzipping stage ** */            
             $zipFile = new pclZip($userFile);
@@ -211,7 +214,6 @@ if ($can_upload) {
         $components = explode('/', $extra_path);
         $fileName = end($components);
     } elseif (isset($_POST['file_content'])) {
-        $diskUsed = dir_total_space($basedir);
         if ($diskUsed + strlen($_POST['file_content']) > $diskQuotaDocument) {
             Session::Messages($langNoSpace, 'alert-danger');
             redirect_to_current_dir();
@@ -713,7 +715,6 @@ if ($can_upload) {
             $oldformat = $result->format;
             $curDirPath = my_dirname($_POST['replacePath']);
             // check for disk quota
-            $diskUsed = dir_total_space($basedir);
             if ($diskUsed - filesize($basedir . $oldpath) + $_FILES['newFile']['size'] > $diskQuotaDocument) {
                 Session::Messages($langNoSpace, 'alert-danger');
                 redirect_to_current_dir();

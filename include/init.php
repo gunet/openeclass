@@ -277,7 +277,7 @@ if (isset($require_current_course) and $require_current_course) {
         $toolContent_ErrorExists = $langSessionIsLost;
         $errorMessagePath = "../../";
     } else {
-        $currentCourse = $dbname = $_SESSION['dbname'];
+        $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
                 course.title as title, course.prof_names as prof_names, course.lang as lang,
                 course.visible as visible, hierarchy.name AS faculte
@@ -329,7 +329,7 @@ if (isset($require_current_course) and $require_current_course) {
                 $status = $stat->status;
             } else {
                 // the department manager has rights to the courses of his department(s)
-                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($currentCourse)) {
+                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
                     require_once 'include/lib/hierarchy.class.php';
                     require_once 'include/lib/course.class.php';
                     require_once 'include/lib/user.class.php';
@@ -351,7 +351,7 @@ if (isset($require_current_course) and $require_current_course) {
                     if ($atleastone) {
                         $status = 1;
                         $is_course_admin = true;
-                        $_SESSION['courses'][$currentCourse] = USER_DEPARTMENTMANAGER;
+                        $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
                     }
                 }
             }
@@ -454,8 +454,8 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {
     $is_course_admin = true;
-    if (isset($currentCourse)) {
-        $_SESSION['courses'][$currentCourse] = USER_TEACHER;
+    if (isset($course_code)) {
+        $_SESSION['courses'][$course_code] = USER_TEACHER;
     }
 } else {
     $is_course_admin = false;
@@ -463,11 +463,11 @@ if ($is_admin or $is_power_user) {
 
 $is_editor = false;
 if (isset($_SESSION['courses'])) {
-    if (isset($currentCourse)) {
+    if (isset($course_code)) {
         if (check_editor()) { // check if user is editor of course
             $is_editor = true;
         }
-        if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER or $_SESSION['courses'][$currentCourse] == USER_DEPARTMENTMANAGER) {
+        if (@$_SESSION['courses'][$course_code] == USER_TEACHER or @$_SESSION['courses'][$course_code] == USER_DEPARTMENTMANAGER) {
             $is_course_admin = true;
             $is_editor = true;
         }
@@ -488,7 +488,7 @@ if (isset($_SESSION['student_view'])) {
 }
 
 $is_opencourses_reviewer = FALSE;
-if (get_config('opencourses_enable') && isset($currentCourse) && check_opencourses_reviewer()) {
+if (get_config('opencourses_enable') && isset($course_code) && check_opencourses_reviewer()) {
     $is_opencourses_reviewer = TRUE;
 }
 

@@ -2830,6 +2830,7 @@ $langActionsExpireInterval = "Statistics retention period";
 $langLogActions = "Action logging";
 $langEnableCommonDocs = "Enable 'Common Docs'";
 $langCommonDocs = "Common Documents";
+$langMyDocs = 'Personal Documents';
 $langExplainCommonDocs = "File will be accessible to all courses via 'Documents'";
 $langExternalFile = 'External File Link';
 $langExternalFileInfo = 'External file URL';

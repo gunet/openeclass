@@ -53,6 +53,9 @@ $cinfo = addslashes(array_shift($path_components));
 $cinfo_components = explode(',', $cinfo);
 if ($cinfo_components[0] == 'common') {
     define('COMMON_DOCUMENTS', true);
+} elseif ($cinfo_components[0] == 'user') {
+    define('MY_DOCUMENTS', true);
+    $mydocs_uid = $cinfo_components[1];
 } else {
     $require_current_course = true;
     $_SESSION['dbname'] = $cinfo_components[0];
@@ -65,23 +68,28 @@ if ($cinfo_components[0] == 'common') {
 }
 
 $guest_allowed = true;
-
 require_once '../../include/init.php';
 require_once 'include/action.php';
 require_once 'include/lib/fileManageLib.inc.php';
 
-if (!defined('COMMON_DOCUMENTS')) {
+if (!(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'))) {
     // check user's access to cours
     check_cours_access();
     // record file access
     if ($uid) {
         $action = new action();
         $action->record(MODULE_ID_DOCS);
-    } else
+    } else {
         $course_id = $_SESSION['course_id']; // anonymous with access token needs course id set
+    }
 }
 
+if (defined('MY_DOCUMENTS')) {
+    // temporary change, uid is used to get the full path in doc_init
+    $uid = $mydocs_uid;
+}
 require_once 'doc_init.php';
+$uid = $session->user_id;
 require_once 'include/lib/forcedownload.php';
 
 if (defined('GROUP_DOCUMENTS')) {
@@ -115,7 +123,11 @@ if ($file_info->extra_path) {
 
 if (file_exists($disk_path)) {
     if (!$is_in_playmode) {
-        $valid = ($uid || course_status($course_id) == COURSE_OPEN) ? true : token_validate($file_info->path, $_GET['token'], 30);
+        $valid = $uid ||
+            defined('COMMON_DOCUMENTS') ||
+            defined('MY_DOCUMENTS') ||
+            course_status($course_id) == COURSE_OPEN ||
+            (isset($_GET['token']) && token_validate($file_info->path, $_GET['token'], 30));
         if (!$valid) {
             not_found(preg_replace('/^.*file\.php/', '', $uri));
             exit();

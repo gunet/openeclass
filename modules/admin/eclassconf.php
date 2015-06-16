@@ -117,6 +117,15 @@ if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('
         $('#course_metadata').prop('disabled', true);
     }
 
+    // MyDocs checkboxes and inputs
+    function mydocsCheckboxQuota(checkbox, input) {
+        $(checkbox).change(function (event) {
+            $(input).prop('disabled', !$(this).is(':checked'));
+        }).change();
+    }
+    mydocsCheckboxQuota('#mydocs_teacher_enable_id', '#mydocs_teacher_quota_id');
+    mydocsCheckboxQuota('#mydocs_student_enable_id', '#mydocs_student_quota_id');
+
     // Search Engine checkboxes
     $('#confirmIndexDialog').modal({
         show: false,
@@ -353,9 +362,14 @@ if (isset($_POST['submit'])) {
         'log_expire_interval' => true,
         'log_purge_interval' => true,
         'course_metadata' => true,
-        'opencourses_enable' => true);
+        'opencourses_enable' => true,
+        'mydocs_student_enable' => true,
+        'mydocs_teacher_enable' => true);
 
     register_posted_variables($config_vars, 'all', 'intval');
+
+    set_config('mydocs_student_quota', floatval($_POST['mydocs_student_quota']));
+    set_config('mydocs_teacher_quota', floatval($_POST['mydocs_teacher_quota']));
 
     if (!in_array($_POST['course_guest'], array('on', 'off', 'link'))) {
         set_config('course_guest', 'off');
@@ -791,6 +805,10 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_enable_indexing = get_config('enable_indexing') ? 'checked' : '';
     $cbox_enable_search = get_config('enable_search') ? 'checked' : '';
     $cbox_enable_common_docs = get_config('enable_common_docs') ? 'checked' : '';
+    $cbox_mydocs_student_enable = get_config('mydocs_student_enable') ? 'checked' : '';
+    $cbox_mydocs_teacher_enable = get_config('mydocs_teacher_enable') ? 'checked' : '';
+    $mydocs_student_quota = floatval(get_config('mydocs_student_quota'));
+    $mydocs_teacher_quota = floatval(get_config('mydocs_teacher_quota'));
     $cbox_enable_social_sharing_links = get_config('enable_social_sharing_links') ? 'checked' : '';
     $cbox_login_fail_check = get_config('login_fail_check') ? 'checked' : '';
     $id_enable_mobileapi = (check_auth_active(7) || check_auth_active(6)) ? "id='mobileapi_enable'" : '';
@@ -890,12 +908,6 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                                 </div>
                                 <div class='checkbox'>
                                     <label>
-                                        <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
-                                        $langEnableCommonDocs
-                                    </label>
-                                </div>
-                                <div class='checkbox'>
-                                    <label>
                                         <input id='social_sharing_links' type='checkbox' name='enable_social_sharing_links' value='1' $cbox_enable_social_sharing_links>
                                         $langEnableSocialSharingLiks
                                     </label>
@@ -924,32 +936,79 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                     </fieldset>
                 </div>
             </div>
+
             <div class='panel panel-default' id='eight'>
+                <div class='panel-heading'>
+                    <h2 class='panel-title'>$langDocumentSettings</h2>
+                </div>
+                <div class='panel-body'>
+                    <fieldset>
+                        <div class='form-group'>
+                           <label class='col-sm-4 control-label'>$langEnableMyDocs:</label>
+                           <div class='col-sm-8'>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='mydocs_teacher_enable' id='mydocs_teacher_enable_id' value='1' $cbox_mydocs_teacher_enable>
+                                        $langTeachers
+                                    </label>
+                                </div>
+                                <div class='checkbox'>
+                                    <label>
+                                        <input type='checkbox' name='mydocs_student_enable' id='mydocs_student_enable_id' value='1' $cbox_mydocs_student_enable>
+                                        $langStudents
+                                    </label>
+                                </div>
+                           </div>
+                        </div>
+                        <div class='form-group'>
+                           <label class='col-sm-4 control-label'>$langMyDocsQuota (MB):</label>
+                           <div class='col-sm-8'>
+                                <label>
+                                    <input type='text' name='mydocs_teacher_quota' id='mydocs_teacher_quota_id' value='$mydocs_teacher_quota'>
+                                    $langTeachers
+                                </label>
+                                <label>
+                                    <input type='text' name='mydocs_student_quota' id='mydocs_student_quota_id' value='$mydocs_student_quota'>
+                                    $langStudents
+                                </label>
+                           </div>
+                        </div>
+                        <div class='checkbox'>
+                            <label>
+                                <input type='checkbox' name='enable_common_docs' value='1' $cbox_enable_common_docs>
+                                $langEnableCommonDocs
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class='panel panel-default' id='nine'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langDefaultQuota</h2>
                 </div>
                 <div class='panel-body'>
                     <fieldset>
                         <div class='form-group'>
-                           <label for='doc_quota' class='col-sm-4 control-label'>$langDocQuota (Mb):</label>
+                           <label for='doc_quota' class='col-sm-4 control-label'>$langDocQuota (MB):</label>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='doc_quota' id='doc_quota' value='" . get_config('doc_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='video_quota' class='col-sm-4 control-label'>$langVideoQuota (Mb):</label>
+                           <label for='video_quota' class='col-sm-4 control-label'>$langVideoQuota (MB):</label>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='video_quota' id='video_quota' value='" . get_config('video_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='group_quota' class='col-sm-4 control-label'>$langGroupQuota (Mb):</label>
+                           <label for='group_quota' class='col-sm-4 control-label'>$langGroupQuota (MB):</label>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='group_quota' id='group_quota' value='" . get_config('group_quota') . "'>
                            </div>
                         </div>
                         <div class='form-group'>
-                           <label for='dropbox_quota' class='col-sm-4 control-label'>$langDropboxQuota (Mb):</label>
+                           <label for='dropbox_quota' class='col-sm-4 control-label'>$langDropboxQuota (MB):</label>
                            <div class='col-sm-8'>
                                 <input class='form-control' type='text' name='dropbox_quota' id='dropbox_quota' value='" . get_config('dropbox_quota') . "'>
                            </div>
@@ -957,7 +1016,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='nine'>
+            <div class='panel panel-default' id='ten'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langUploadWhitelist</h2>
                 </div>
@@ -984,7 +1043,7 @@ $tool_content .= "<div class='panel panel-default' id='three'>
     $cbox_disable_log_system_actions = get_config('disable_log_system_actions') ? 'checked' : '';
 
 $tool_content .= "
-            <div class='panel panel-default' id='ten'>
+            <div class='panel panel-default' id='eleven'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLogActions</h2>
                 </div>
@@ -1028,7 +1087,7 @@ $tool_content .= "
                     </fieldset>
                 </div>
             </div>
-            <div class='panel panel-default' id='eleven'>
+            <div class='panel panel-default' id='twelve'>
                 <div class='panel-heading'>
                     <h2 class='panel-title'>$langLoginFailCheck</h2>
                 </div>
@@ -1096,10 +1155,11 @@ $tool_content .= "
                 <li><a href='#five'>$langCourseSettings</a></li>
                 <li><a href='#six'>$langMetaCommentary</a></li>
                 <li><a href='#seven'>$langOtherOptions</a></li>
-                <li><a href='#eight'>$langDefaultQuota</a></li>
-                <li><a href='#nine'>$langUploadWhitelist</a></li>
-                <li><a href='#ten'>$langLogActions</a></li>
-                <li><a href='#eleven'>$langLoginFailCheck</a></li>
+                <li><a href='#eight'>$langDocumentSettings</a></li>
+                <li><a href='#nine'>$langDefaultQuota</a></li>
+                <li><a href='#ten'>$langUploadWhitelist</a></li>
+                <li><a href='#eleven'>$langLogActions</a></li>
+                <li><a href='#twelve'>$langLoginFailCheck</a></li>
             </ul>
         </div>
     </div>";

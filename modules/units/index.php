@@ -162,7 +162,7 @@ foreach (array('previous', 'next') as $i) {
         $page_btn = 'pull-right';
     }
     
-    if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
+    if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
             $access_check = "";
     } else {
         $access_check = "AND public = 1";
