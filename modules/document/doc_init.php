@@ -93,7 +93,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $group_hidden_input = '';
     $basedir = $webDir . '/courses/mydocs/' . $uid;
     if (!is_dir($basedir)) {
-        mkdir($basedir, 0775);
+        mkdir($basedir, 0775, true);
     }
     $pageName = $langMyDocs;
     // Saved course code so that file picker menu doesn't lose
