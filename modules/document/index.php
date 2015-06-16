@@ -1101,7 +1101,7 @@ if ($can_upload) {
             array('title' => $langCommonDocs,
                   'url' => "../units/insert.php?course=$course_code&amp;dir=$curDirPath&amp;type=doc&amp;id=-1",
                   'icon' => 'fa-share-alt',
-                  'show' => !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
+                  'show' => !defined('MY_DOCUMENTS') && !defined('COMMON_DOCUMENTS') && get_config('enable_common_docs')),
             array('title' => $langQuotaBar,
                   'url' => "{$base_url}showQuota=true",
                   'icon' => 'fa-pie-chart')
