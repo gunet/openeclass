@@ -362,7 +362,8 @@ function register($uid, $course_code) {
     if ($result) {
         Database::get()->query("INSERT INTO course_user
                                  SET course_id = ?d, user_id = ?d, status = "  . USER_STUDENT . ",
-                                     reg_date = " . DBHelper::timeAfter() . "", $result->id, $uid);
+                                     reg_date = " . DBHelper::timeAfter() . ", 
+                                     document_timestamp = " . DBHelper::timeAfter() . "", $result->id, $uid);
         return true;
     }
     return false;

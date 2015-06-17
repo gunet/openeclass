@@ -543,8 +543,8 @@ if (!isset($_POST['create_course'])) {
                                         user_id = ?d,
                                         status = 1,
                                         tutor = 1,
-                                        reg_date = NOW(),
-                                        document_timestamp = NOW()",
+                                        reg_date = " . DBHelper::timeAfter() . ",
+                                        document_timestamp = " . DBHelper::timeAfter() . "",
                            intval($new_course_id), intval($uid));
 
     Database::get()->query("INSERT INTO group_properties SET
