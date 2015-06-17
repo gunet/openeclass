@@ -19,6 +19,11 @@
             .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
             .navbar-inverse .navbar-nav > li > a.inactive, .navbar-inverse .navbar-nav > li > a.inactive:hover, .navbar-inverse .navbar-nav > li > a.inactive:focus {color: #9d9d9d; cursor: default;}
             .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus { color: #9BCCF7; }
+            .navbar-inverse ul li{padding: 1px 7px;}
+            .navbar-inverse ul li:last-child{border-left: 1px solid #999; margin-left: 3px; padding-left: 10px; font-family: sans-serif;}
+            .navbar-inverse ul li a {color: whitesmoke;}
+            .navbar-inverse ul li a:hover {text-decoration: none;}
+            .navbar-inverse ul li a {vertical-align: middle;}
         </style>
         {%ebook_head%}
         <script type='text/javascript'>
@@ -73,23 +78,21 @@
                     </div>
                   </div>
                   <!-- END chapter_select -->
-                  <div class="pull-right">
-                      <div class="btn-group" role="group" aria-label="...">
-                          <!-- BEGIN back_link_active -->
-                          <a class="btn btn-default" href='{%back_chapter_link%}' title='{%back_chapter_title%}'><i class='fa fa-arrow-left fa-lg fw'></i></a>
-                          <!-- END back_link_active -->
-                          <!-- BEGIN back_link_inactive -->
-                          <a class="btn btn-default inactive" href='#'><i class='fa fa-arrow-left fw'></i></a>
-                          <!-- END back_link_inactive -->
-                          <!-- BEGIN next_link_active -->
-                          <a class="btn btn-default" href='{%next_chapter_link%}' title='{%next_chapter_title%}'><i class='fa fa-arrow-right fa-lg fw'></i></a></li>
-                          <!-- END next_link_active -->
-                          <!-- BEGIN next_link_inactive -->
-                          <a class="btn btn-default inactive" href='#'><i class='fa fa-arrow-right fw'></i></a></li>
-                          <!-- END next_link_inactive -->
-                          <a class="btn btn-info" href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}'><i class='fa fa-times fa-lg nofullscreen space-after-icon fw'></i>{%langBack%}</a>
-                      </div>
-                  </div>
+                  <ul class="list-inline  pull-right" >
+                    <!-- BEGIN back_link_active -->
+                    <li><a href='{%back_chapter_link%}' title='{%back_chapter_title%}'><i class='fa fa-arrow-circle-left fa-lg'></i></a></li>
+                    <!-- END back_link_active -->
+                    <!-- BEGIN back_link_inactive -->
+                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-left'></i></a></li>
+                    <!-- END back_link_inactive -->              
+                    <!-- BEGIN next_link_active -->
+                    <li><a href='{%next_chapter_link%}' title='{%next_chapter_title%}'><i class='fa fa-arrow-circle-right fa-lg'></i></a></li>
+                    <!-- END next_link_active -->
+                    <!-- BEGIN next_link_inactive -->
+                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right' ></i></a></li>
+                    <!-- END next_link_inactive -->
+                    <li><a href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}'><i class='fa fa-times fa-lg nofullscreen'></i> {%langBack%}</a></li>
+                  </ul>
                 <!--/.nav-collapse -->
             </div>
         </nav>        
