@@ -347,7 +347,7 @@ $level = ($levres = Database::get()->querySingle("SELECT level FROM course_revie
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $head_content .= "
-<link rel='stylesheet' type='text/css' href='course_metadata.css'>
+<link rel='stylesheet' type='text/css' href='{$urlAppend}modules/course_metadata/course_metadata.css'>
 <style type='text/css'></style>
 <script type='text/javascript'>
 /* <![CDATA[ */

@@ -228,7 +228,7 @@ if (count($courses) > 0) {
 
 if ($isInOpenCoursesMode) {
     $head_content .= <<<EOF
-<link rel="stylesheet" type="text/css" href="course_metadata.css">
+<link rel="stylesheet" type="text/css" href="{$urlAppend}modules/course_metadata/course_metadata.css">
 <style type="text/css"></style>
 <script type="text/javascript">
 /* <![CDATA[ */
