@@ -76,7 +76,8 @@ if (isset($_POST['submit'])) {
                                     user_id = $prof_uid,
                                     status = 1,
                                     tutor = 1,
-                                    reg_date = NOW()");
+                                    reg_date = " . DBHelper::timeAfter() . " ,
+                                    document_timestamp = " . DBHelper::timeAfter() . "");
                 }
                 Database::get()->query("INSERT INTO group_properties SET
                             course_id = $cid,

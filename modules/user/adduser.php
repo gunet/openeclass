@@ -38,8 +38,8 @@ $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langU
 
 if (isset($_GET['add'])) {
     $uid_to_add = intval($_GET['add']);
-    $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date)
-                                    VALUES (?d, ?d, " . USER_STUDENT . ", NOW())", $uid_to_add, $course_id);
+    $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
+                                    VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $uid_to_add, $course_id);
 
     Log::record($course_id, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid_to_add,
                                                                'right' => '+5'));
