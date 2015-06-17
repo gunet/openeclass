@@ -57,7 +57,7 @@ if ($auth == 7) {
         foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
                         'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
                         'cas_altauth', 'cas_logout', 'cas_ssout', 'casuserstudentid', 
-                        'auth_instructions') as $var) {
+                        'auth_instructions', 'auth_title') as $var) {
             if (isset($_POST[$var])) {
                 $_SESSION[$var] = $_POST[$var];
             }
@@ -177,6 +177,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'cas_ssout' => $_SESSION['cas_ssout'],
                         'casuserstudentid' => $_SESSION['casuserstudentid']);
                     $auth_instructions = $_SESSION['auth_instructions'];
+                    $auth_title = $_SESSION['auth_title'];
                     break;
                 default:
                     break;
