@@ -577,10 +577,9 @@ if ($is_editor) {
                 }
             }
                         $cunits_content .= "</div>	
-                                        <div class='item-body'>
-                                            $cu->comments
-                                        </div>			
-                                    </div>";
+                                        <div class='item-body'>";
+                        $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
+                        $cunits_content .= "</div></div>";
             $cunits_content .= "</div></div></div>";            
         }
     } else {
