@@ -73,21 +73,23 @@
                     </div>
                   </div>
                   <!-- END chapter_select -->
-                  <ul class="list-inline  pull-right" >
-                    <!-- BEGIN back_link_active -->
-                    <li><a href='{%back_chapter_link%}' title='{%back_chapter_title%}' style='color:white;'><i class='fa fa-arrow-circle-left fa-lg'></i></a></li>
-                    <!-- END back_link_active -->
-                    <!-- BEGIN back_link_inactive -->
-                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-left' style='color:white;'></i></a></li>
-                    <!-- END back_link_inactive -->              
-                    <!-- BEGIN next_link_active -->
-                    <li><a href='{%next_chapter_link%}' title='{%next_chapter_title%}' style='color:white;'><i class='fa fa-arrow-circle-right fa-lg'></i></a></li>
-                    <!-- END next_link_active -->
-                    <!-- BEGIN next_link_inactive -->
-                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right' style='color:white;'></i></a></li>
-                    <!-- END next_link_inactive -->
-                    <li><a href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}' style='color:white;'><i class='fa fa-times fa-lg nofullscreen'></i> {%langBack%}</a></li>
-                  </ul>
+                  <div class="pull-right">
+                      <div class="btn-group" role="group" aria-label="...">
+                          <!-- BEGIN back_link_active -->
+                          <a class="btn btn-default" href='{%back_chapter_link%}' title='{%back_chapter_title%}'><i class='fa fa-arrow-left fa-lg fw'></i></a>
+                          <!-- END back_link_active -->
+                          <!-- BEGIN back_link_inactive -->
+                          <a class="btn btn-default inactive" href='#'><i class='fa fa-arrow-left fw'></i></a>
+                          <!-- END back_link_inactive -->
+                          <!-- BEGIN next_link_active -->
+                          <a class="btn btn-default" href='{%next_chapter_link%}' title='{%next_chapter_title%}'><i class='fa fa-arrow-right fa-lg fw'></i></a></li>
+                          <!-- END next_link_active -->
+                          <!-- BEGIN next_link_inactive -->
+                          <a class="btn btn-default inactive" href='#'><i class='fa fa-arrow-right fw'></i></a></li>
+                          <!-- END next_link_inactive -->
+                          <a class="btn btn-info" href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}'><i class='fa fa-times fa-lg nofullscreen space-after-icon fw'></i>{%langBack%}</a>
+                      </div>
+                  </div>
                 <!--/.nav-collapse -->
             </div>
         </nav>        
