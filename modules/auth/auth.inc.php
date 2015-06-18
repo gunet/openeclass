@@ -52,7 +52,7 @@ $auth_ids = array(1 => 'eclass',
  * @return type
  */
 function get_auth_active_methods() {
-    
+
     $auth_methods = array();
     $q = Database::get()->queryArray("SELECT auth_id FROM auth
                             WHERE auth_default <> 0 AND (auth_settings <> '' OR auth_id = 1)");
@@ -67,7 +67,7 @@ function get_auth_active_methods() {
  * @return int
  */
 function get_auth_primary_method() {
-    
+
     $q = Database::get()->querySingle("SELECT auth_id FROM auth WHERE auth_default = 2");
     if ($q) {
         $auth_primary_method = $q->auth_id;
@@ -75,7 +75,7 @@ function get_auth_primary_method() {
     } else {
         return 0;
     }
-           
+
 }
 
 /**
@@ -84,7 +84,7 @@ function get_auth_primary_method() {
  * @return boolean
  */
 function check_auth_active($auth_id) {
-    
+
     $auth = Database::get()->querySingle("SELECT auth_id, auth_default, auth_settings FROM auth WHERE auth_id = ?d", $auth_id);
     if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($auth->auth_settings))) {
             return true;
@@ -254,7 +254,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '4':
-            $ldap = ldap_connect($settings['ldaphost']);            
+            $ldap = ldap_connect($settings['ldaphost']);
             if (!$ldap) {
                 $GLOBALS['auth_errors'] = 'Error connecting to LDAP host';
                 return false;
@@ -274,7 +274,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         $user_dn = ldap_get_dn($ldap, $entry_id);
                         if (@ldap_bind($ldap, $user_dn, $test_password)) {
                             $testauth = true;
-                            $userinfo = ldap_get_entries($ldap, $userinforequest);                            
+                            $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
                                 $surname = get_ldap_attribute($userinfo, 'sn');
                                 $givenname = get_ldap_attribute($userinfo, 'givenname');
@@ -479,6 +479,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 
     $attrs = array();
     foreach ($phpCASattrs as $key => $value) {
+        $key = strtolower($key);
         // multivalue: get only the first attribute
         if (is_array($value))
             $attrs[$key] = $value[0];
@@ -493,7 +494,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
                    'studentid' => 'casuserstudentid') as $name => $attrname) {
         $_SESSION['auth_user_info'][$name] = $ret[$attrname] = '';
         if (isset($settings[$attrname]) and $settings[$attrname]) {
-            $setting = $settings[$attrname];
+            $setting = strtolower($settings[$attrname]);
             if (isset($attrs[$setting])) {
                 $_SESSION['auth_user_info'][$name] = $ret[$attrname] = $attrs[$setting];
             }
@@ -887,18 +888,13 @@ function shib_cas_login($type) {
             }
         }
     } elseif ($autoregister and !get_config('am_required')) {
-    // if user not found and autoregister enabled, create user
+        // if user not found and autoregister enabled, create user
 	    $verified_mail = EMAIL_UNVERIFIED;
     	if (isset($_SESSION['cas_email'])) {
     	    $verified_mail = EMAIL_VERIFIED;
     	} else { // redirect user to mail_verify_change.php
 	    	$_SESSION['mail_verification_required'] = 1;
-    		/*        if (get_config('email_verification_required')) {
-            	$verified_mail = 0;
-            	$_SESSION['mail_verification_required'] = 1;
-        	} */    	    
     	}
-        
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
@@ -915,7 +911,7 @@ function shib_cas_login($type) {
             unset($_SESSION[$key]);
         }
         session_destroy();
-        header("Location: {$urlServer}modules/auth/registration.php");
+        redirect_to_home_page('modules/auth/registration.php');
         exit;
     }
 
@@ -934,7 +930,7 @@ function shib_cas_login($type) {
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
         $_SESSION['mail_verification_required'] = 1;
         // init.php is already loaded so redirect from here
-        header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+        redirect_to_home_page('modules/auth/mail_verify_change.php');
     }
 }
 
