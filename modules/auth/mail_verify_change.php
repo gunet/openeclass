@@ -73,7 +73,14 @@ if (!empty($_POST['submit'])) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;
         } else {
-            $tool_content .= "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
+            $tool_content .= 
+                action_bar(array(
+                    array(
+                        'title' => $langBack,
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label',
+                        'url' => $urlAppend))) .
+                "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
         }
     }
     // email wrong or empty
@@ -88,7 +95,6 @@ if (!empty($_POST['submit'])) {
 	}
 }
 
-//var_dump($_SESSION);
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
     $tool_content .= "<div class='form-wrapper'>
     	<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
@@ -110,10 +116,6 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
     </div>";
 }
 
-if (isset($_GET['from_profile'])) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 0);
-}
+draw($tool_content, $uid? 1: 0);
 
 exit;
