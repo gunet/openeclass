@@ -86,7 +86,7 @@ function show_edit_form($id, $sid, $assign) {
         if ($assign->grading_scale_id) {
             $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
             $scales = unserialize($serialized_scale_data);
-            $scale_options = "<option value>-- $m[grade] --</option>";
+            $scale_options = "<option value> - </option>";
             $scale_values = array_value_recursive('scale_item_value', $scales);
             if (!in_array($sub->grade, $scale_values) && !is_null($sub->grade)) {
                 $sub->grade = closest($sub->grade, $scale_values)['value'];

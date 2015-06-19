@@ -1549,7 +1549,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
     if ($assignment->grading_scale_id) {
         $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
         $scales = unserialize($serialized_scale_data);
-        $scale_options = "<option value>-- $m[grade] --</option>";
+        $scale_options = "<option value> - </option>";
         foreach ($scales as $scale) {
             $scale_options .= "<option value='$scale[scale_item_value]'>$scale[scale_item_name]</option>";
         }
@@ -1933,7 +1933,7 @@ function show_assignment($id, $display_graph_results = false) {
                 if ($row->grading_scale_id) {
                     $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
                     $scales = unserialize($serialized_scale_data);
-                    $scale_options = "<option value>-- $m[grade] --</option>";
+                    $scale_options = "<option value> - </option>";
                     $scale_values = array_value_recursive('scale_item_value', $scales);
                     if (!in_array($grade, $scale_values) && !is_null($grade)) {
                         $grade = closest($grade, $scale_values)['value'];
