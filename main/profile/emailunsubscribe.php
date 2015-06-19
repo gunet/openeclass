@@ -64,7 +64,7 @@ $tool_content .= action_bar(array(
     array('title' => $langBack,
           'url' => 'display_profile.php',
           'icon' => 'fa-reply',
-          'level' => 'primary-label')));    
+          'level' => 'primary-label')));
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
     if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);

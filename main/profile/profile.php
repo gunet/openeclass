@@ -47,9 +47,9 @@ $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
 load_js('jstree');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>
-var lang = { 
+var lang = {
         addPicture: '" . js_escape($langAddPicture) . "',
-        confirmDelete: '" . js_escape($langConfirmDelete) . "'}; 
+        confirmDelete: '" . js_escape($langConfirmDelete) . "'};
 $(profile_init);</script>";
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
@@ -98,7 +98,7 @@ if (isset($_POST['submit'])) {
     $subscribe = (isset($_POST['subscribe']) and $_POST['subscribe'] == 'yes') ? '1' : '0';
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
-    Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);    
+    Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);
 
     $all_ok = register_posted_variables(array(
         'am_form' => get_config('am_required') and $myrow->status != 1,
@@ -134,29 +134,29 @@ if (isset($_POST['submit'])) {
 
         if (!copy_resized_image($image_file, $type, IMAGESIZE_LARGE, IMAGESIZE_LARGE, $image_path . '_' . IMAGESIZE_LARGE . '.jpg')) {
             Session::Messages($langInvalidPicture);
-            redirect_to_home_page("main/profile/profile.php");             
+            redirect_to_home_page("main/profile/profile.php");
         }
         if (!copy_resized_image($image_file, $type, IMAGESIZE_SMALL, IMAGESIZE_SMALL, $image_path . '_' . IMAGESIZE_SMALL . '.jpg')) {
             Session::Messages($langInvalidPicture);
-            redirect_to_home_page("main/profile/profile.php"); 
+            redirect_to_home_page("main/profile/profile.php");
         }
-        Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);        
+        Database::get()->query("UPDATE user SET has_icon = 1 WHERE id = ?d", $_SESSION['uid']);
         Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
                                              'addimage' => 1,
                                              'imagetype' => $type));
     }
 
     // check if email is valid
-    if ((get_config('email_required') | get_config('email_verification_required')) and !email_seems_valid($email_form)) {
+    if ((get_config('email_required') or get_config('email_verification_required')) and !email_seems_valid($email_form)) {
 
         Session::Messages($langEmailWrong);
-        redirect_to_home_page("main/profile/profile.php");         
+        redirect_to_home_page("main/profile/profile.php");
     }
 
     // check if there are empty fields
     if (!$all_ok) {
         Session::Messages($langFieldsMissing);
-        redirect_to_home_page("main/profile/profile.php");        
+        redirect_to_home_page("main/profile/profile.php");
     }
 
     if (!$allow_username_change) {
@@ -164,9 +164,9 @@ if (isset($_POST['submit'])) {
     }
 
     $username_form = canonicalize_whitespace($username_form);
-        // check if username exists        
-    if ($username_form != $_SESSION['uname']) {        
-        $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $username_form);        
+        // check if username exists
+    if ($username_form != $_SESSION['uname']) {
+        $username_check = Database::get()->querySingle("SELECT username FROM user WHERE username = ?s", $username_form);
         if ($username_check) {
             Session::Messages($langUserFree);
             redirect_to_home_page("main/profile/profile.php");
@@ -194,7 +194,7 @@ if (isset($_POST['submit'])) {
                              receive_mail = ?d,
                              am_public = ?d
                              $verified_mail_sql
-                         WHERE id = ?d", 
+                         WHERE id = ?d",
                             $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
         if ($q->affectedRows > 0 or isset($departments)) {
             $userObj->refresh($uid, $departments);
@@ -229,7 +229,7 @@ $icon = $myrow->has_icon;
 $sec = $urlServer . 'main/profile/profile.php';
 $passurl = $urlServer . 'main/profile/password.php';
 
-$tool_content .= 
+$tool_content .=
         action_bar(array(
             array('title' => $langBack,
                 'url' => "display_profile.php",
@@ -237,8 +237,8 @@ $tool_content .=
                 'level' => 'primary-label')));
         $tool_content .=
             "<div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>                
-                <fieldset>     
+                <form class='form-horizontal' role='form' method='post' enctype='multipart/form-data' action='$sec' onsubmit='return validateNodePickerForm();'>
+                <fieldset>
                     <div class='form-group'>
                     <label for='givenname_form' class='col-sm-2 control-label'>$langName:</label>
                         <div class='col-sm-10'>";
@@ -281,7 +281,7 @@ $tool_content .= "<div class='form-group'>
                     </div>
                     <div class='col-sm-5'>
                         " . selection($access_options, 'email_public', $myrow->email_public, "class='form-control'") . "
-                    </div>                    
+                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='am_form' class='col-sm-2 control-label'>$langAm:</label>
@@ -290,7 +290,7 @@ $tool_content .= "<div class='form-group'>
                     </div>
                     <div class='col-sm-5'>
                         " . selection($access_options, 'am_public', $myrow->am_public, "class='form-control'") . "
-                    </div>                    
+                    </div>
                 </div>
                 <div class='form-group'>
                     <label for='phone_form' class='col-sm-2 control-label'>$langPhone</label>
@@ -299,7 +299,7 @@ $tool_content .= "<div class='form-group'>
                     </div>
                     <div class='col-sm-5'>
                         " . selection($access_options, 'phone_public', $myrow->phone_public, "class='form-control'") . "
-                    </div>                        
+                    </div>
                 </div>";
 
 if (get_user_email_notification_from_courses($uid)) {
@@ -372,14 +372,14 @@ $tool_content .= "<div class='form-group'>
             <div class='col-sm-10'><span>$picture$delete</span>" . fileSizeHidenInput() . "
             <input type='file' name='userimage' size='30'></div>
         </div>
-        <div class='form-group'>      
+        <div class='form-group'>
           <label for='desription' class='col-sm-2 control-label'>$langDescription:</label>
           <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
         </div>
-        <div class='col-sm-offset-2 col-sm-10'>        
+        <div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
-        </div>      
+        </div>
       </fieldset>
       </form>
       </div>";
@@ -388,7 +388,7 @@ draw($tool_content, 1, null, $head_content);
 
 
 /**
- * 
+ *
  * @param type $val
  * @return int
  */
