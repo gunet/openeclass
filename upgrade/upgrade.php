@@ -2727,8 +2727,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('poll', 'show_results')) {
             Database::get()->query("ALTER TABLE `poll` ADD `show_results` TINYINT NOT NULL DEFAULT '0'");
         }
+        // Add grading scales table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `title` varchar(255) NOT NULL,
+            `scales` text NOT NULL,
+            `course_id` int(11) NOT NULL,
+            KEY `course_id` (`course_id`)) $charset_spec");   
     }    
-       
+    //add grading_scale_id field to assignments
+    if (!DBHelper::fieldExists('assignment', 'grading_scale_id')) {
+        Database::get()->query("ALTER TABLE `assignment` ADD `grading_scale_id` INT(11) NOT NULL DEFAULT '0' AFTER `max_grade`");
+    }       
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 

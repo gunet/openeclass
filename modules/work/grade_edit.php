@@ -49,7 +49,7 @@ function get_assignment_details($id) {
 // $assign contains an array with the assignment's details
 function show_edit_form($id, $sid, $assign) {
     global $m, $langGradeOk, $tool_content, $course_code, $langCancel, 
-           $langBack, $assign, $langWorkOnlineText;
+           $langBack, $assign, $langWorkOnlineText, $course_id;
     $sub = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE id = ?d",$sid);
     if (count($sub)>0) {
         $uid_2_name = display_user($sub->uid);
@@ -82,7 +82,25 @@ function show_edit_form($id, $sid, $assign) {
                             <a href='index.php?course=$course_code&amp;get=$sub->id'>".q($sub->file_name)."</a>
                         </div>
                     </div>";                
-        }        
+        }
+        if ($assign->grading_scale_id) {
+            $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
+            $scales = unserialize($serialized_scale_data);
+            $scale_options = "<option value>-- $m[grade] --</option>";
+            $scale_values = array_value_recursive('scale_item_value', $scales);
+            if (!in_array($sub->grade, $scale_values) && !is_null($sub->grade)) {
+                $sub->grade = closest($sub->grade, $scale_values)['value'];
+            }            
+            foreach ($scales as $scale) {
+                $scale_options .= "<option value='$scale[scale_item_value]'".($sub->grade == $scale['scale_item_value'] ? " selected" : "").">$scale[scale_item_name]</option>";
+            }
+            $grade_field = "  
+                    <select name='grade' class='form-control' id='scales'>
+                        $scale_options
+                    </select>";        
+        } else {
+            $grade_field = "<input class='form-control' type='text' name='grade' maxlength='3' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)";
+        }         
         $tool_content .= action_bar(array(
                 array(
                     'title' => $langBack,
@@ -112,7 +130,7 @@ function show_edit_form($id, $sid, $assign) {
                     <div class='form-group".(Session::getError('grade') ? " has-error" : "")."'>
                         <label for='grade' class='col-sm-3 control-label'>$m[grade]:</label>
                         <div class='col-sm-4'>
-                            <input class='form-control' type='text' name='grade' id='grade' maxlength='3' value='$grade'>
+                            $grade_field
                             <span class='help-block'>".(Session::hasError('grade') ? Session::getError('grade') : "")."</span>    
                         </div>
                     </div>

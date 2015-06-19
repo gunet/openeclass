@@ -322,21 +322,34 @@ function add_assignment() {
            $course_code, $langFormErrors, $langNewAssignSuccess;
     
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('title', 'max_grade'));
-    $v->rule('numeric', array('max_grade'));
-    $v->labels(array(
-        'title' => "$langTheField $m[title]",
-        'max_grade' => "$langTheField $m[max_grade]"
-    ));
+    $v->rule('required', array('title'));
+    $v->rule('integer', array('group_submissions', 'assign_to_specific'));
+    if (isset($_POST['max_grade'])) {
+        $v->rule('required', array('max_grade'));
+        $v->rule('numeric', array('max_grade'));
+        $v->labels(array('max_grade' => "$langTheField $m[max_grade]"));
+    }
+    if (isset($_POST['scale'])) {
+        $v->rule('required', array('scale'));
+        $v->rule('numeric', array('scale')); 
+        $v->labels(array('scale' => "$langTheField Κλίμακες"));
+    }    
+    $v->labels(array('title' => "$langTheField $m[title]"));
     if($v->validate()) {      
         $title = $_POST['title'];
         $desc = $_POST['desc'];
         $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
         $submission_type = $_POST['submission_type'];
         $late_submission = isset($_POST['late_submission']) ? 1 : 0;
-        $group_submissions = filter_input(INPUT_POST, 'group_submissions', FILTER_VALIDATE_INT);
-        $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
-        $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
+        $group_submissions = $_POST['group_submissions'];
+        if (isset($_POST['scale'])) {
+            $max_grade = max_grade_from_scale($_POST['scale']);
+            $grading_scale_id = $_POST['scale'];
+        } else {
+            $max_grade = $_POST['max_grade'];
+            $grading_scale_id = 0;
+        }
+        $assign_to_specific = $_POST['assign_to_specific'];
         $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
         $secret = uniqid('');
 
@@ -344,8 +357,8 @@ function add_assignment() {
             $assign_to_specific = 0;
         }
         if (@mkdir("$workPath/$secret", 0777) && @mkdir("$workPath/admin_files/$secret", 0777, true)) {       
-            $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, assign_to_specific) "
-                    . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $assign_to_specific)->lastInsertID;
+            $id = Database::get()->query("INSERT INTO assignment (course_id, title, description, deadline, late_submission, comments, submission_type, submission_date, secret_directory, group_submissions, max_grade, grading_scale_id, assign_to_specific) "
+                    . "VALUES (?d, ?s, ?s, ?t, ?d, ?s, ?d, ?t, ?s, ?d, ?f, ?d, ?d)", $course_id, $title, $desc, $deadline, $late_submission, '', $submission_type, date("Y-m-d H:i:s"), $secret, $group_submissions, $max_grade, $grading_scale_id, $assign_to_specific)->lastInsertID;
             
             // tags
             if (isset($_POST['tags'])) {
@@ -411,7 +424,124 @@ function add_assignment() {
         redirect_to_home_page("modules/work/index.php?course=$course_code&add=1");
     }
 }
+// edit assignment
+function edit_assignment($id) {
 
+    global $tool_content, $langBackAssignment, $langEditSuccess, $m, $langTheField,
+    $langEditError, $course_code, $works_url, $course_id, $uid, $workPath, $langFormErrors;
+    
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('title'));
+    $v->rule('integer', array('group_submissions', 'assign_to_specific'));
+    if (isset($_POST['max_grade'])) {
+        $v->rule('required', array('max_grade'));
+        $v->rule('numeric', array('max_grade'));
+        $v->labels(array('max_grade' => "$langTheField $m[max_grade]"));
+    }
+    if (isset($_POST['scale'])) {
+        $v->rule('required', array('scale'));
+        $v->rule('numeric', array('scale')); 
+        $v->labels(array('scale' => "$langTheField Κλίμακες"));
+    }
+    $v->labels(array('title' => "$langTheField $m[title]"));
+    if($v->validate()) {
+        $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+        $title = $_POST['title'];
+        $desc = purify($_POST['desc']);
+        $submission_type = $_POST['submission_type'];
+        $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
+        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
+        $late_submission = isset($_POST['late_submission']) ? 1 : 0;
+        $group_submissions = $_POST['group_submissions'];
+        if (isset($_POST['scale'])) {
+            $max_grade = max_grade_from_scale($_POST['scale']);
+            $grading_scale_id = $_POST['scale'];
+        } else {
+            $max_grade = $_POST['max_grade'];
+            $grading_scale_id = 0;
+        }
+        $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
+        $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY); 
+       
+        if ($assign_to_specific == 1 && empty($assigned_to)) {
+             $assign_to_specific = 0;
+         }
+
+         if (!isset($_POST['comments'])) {
+             $comments = '';
+         } else {
+             $comments = purify($_POST['comments']);
+         }
+
+         if (!isset($_FILES) || !$_FILES['userfile']['size']) {
+             $_FILES['userfile']['name'] = '';
+             $_FILES['userfile']['tmp_name'] = '';
+             $filename = $row->file_path;
+             $file_name = $row->file_name;
+         } else {
+             validateUploadedFile($_FILES['userfile']['name'], 2);
+             if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
+                                'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
+                                'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
+                 $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
+                 $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
+                 return;
+             }
+             $local_name = uid_to_name($uid);
+             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
+             if (!empty($am)) {
+                 $local_name .= $am;
+             }                
+             $local_name = greek_to_latin($local_name);
+             $local_name = replace_dangerous_char($local_name);
+             $secret = $row->secret_directory;
+             $ext = get_file_extension($_FILES['userfile']['name']);
+             $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);                
+             if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
+                 @chmod("$workPath/admin_files/$filename", 0644);
+                 $file_name = $_FILES['userfile']['name'];
+             }        
+         }   
+         Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
+             group_submissions = ?d, comments = ?s, submission_type = ?d, deadline = ?t, late_submission = ?d, submission_date = ?t, max_grade = ?f, 
+             grading_scale_id = ?d, assign_to_specific = ?d, file_path = ?s, file_name = ?s
+             WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
+             $comments, $submission_type, $deadline, $late_submission, $submission_date, $max_grade, $grading_scale_id, $assign_to_specific, $filename, $file_name, $course_id, $id);
+
+         Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
+         
+         //tags
+         if (isset($_POST['tags'])) {
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($id);
+            $moduleTag->syncTags($tagsArray);
+         }
+
+         if ($assign_to_specific && !empty($assigned_to)) {
+             if ($group_submissions == 1) {
+                 $column = 'group_id';
+                 $other_column = 'user_id';
+             } else {
+                 $column = 'user_id';
+                 $other_column = 'group_id';
+             }
+             foreach ($assigned_to as $assignee_id) {
+                 Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
+             }
+         }    
+         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
+                 'title' => $title,
+                 'description' => $desc,
+                 'deadline' => $deadline,
+                 'group' => $group_submissions));   \
+         
+        Session::Messages($langEditSuccess,'alert-success');         
+        redirect_to_home_page("modules/work/index.php?course=$course_code");
+    } else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");        
+    }
+}
 function submit_work($id, $on_behalf_of = null) {
     global $course_id, $uid, $langOnBehalfOfGroupComment, 
            $works_url, $langOnBehalfOfUserComment, $workPath, 
@@ -573,13 +703,42 @@ function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
     global $langBack, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
-           $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate;
+           $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
+           $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales;
     
     load_js('bootstrap-datetimepicker');
     load_js('select2');
-
+    
+    $scales = Database::get()->queryArray('SELECT * FROM grading_scale WHERE course_id = ?d', $course_id);
+    $scale_options = "<option value>-- $langGradeScalesSelect --</option>";
+    foreach ($scales as $scale) {
+        $scale_options .= "<option value='$scale->id'>$scale->title</option>";
+    }
     $head_content .= "<script type='text/javascript'>
         $(function() {
+            $('#scales').select2();
+            $('input[name=grading_type]').on('change', function(e){
+                var choice = $(this).val();
+                if (choice == 0) {
+                    $('#max_grade')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#scales')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');                    
+                } else {
+                    $('#max_grade')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#scales')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');                    
+                }
+            });        
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
@@ -620,8 +779,11 @@ function new_assignment() {
               'icon' => 'fa-reply')));
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');
+    $scale_error = Session::getError('scale');
     $max_grade = Session::has('max_grade') ? Session::get('max_grade') : 10;
+    $scale = Session::getError('scale');
     $submission_type = Session::has('submission_type') ? Session::get('submission_type') : 0;
+    $grading_type = Session::has('grading_type') ? Session::get('grading_type') : 0;
     $WorkStart = Session::has('WorkStart') ? Session::get('WorkStart') : (new DateTime('NOW'))->format('d-m-Y H:i');
     $WorkEnd = Session::has('WorkEnd') ? Session::get('WorkEnd') : "";
     $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
@@ -658,7 +820,33 @@ function new_assignment() {
                       <input type='file' id='userfile' name='userfile'>
                     </div>
                 </div>
-                <div class='form-group ".($max_grade_error ? "has-error" : "")."'>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langGradeType:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='grading_type' value='0'". ($grading_type ? "" : " checked") .">
+                             $langGradeNumbers
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='grading_type' value='1'". ($grading_type ? " checked" : "") .">
+                            $langGradeScales
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
+                    <div class='col-sm-10'>
+                      <select name='scale' class='form-control' id='scales'>
+                            $scale_options
+                      </select>
+                      <span class='help-block'>$scale_error</span>
+                    </div>
+                </div>                
+                <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type ? " hidden" : "")."'>
                     <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
                     <div class='col-sm-10'>
                       <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
@@ -792,13 +980,37 @@ function show_edit_assignment($id) {
     global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
         $urlAppend, $works_url, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
-        $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType;
+        $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType,
+        $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales ;
     
     load_js('bootstrap-datetimepicker');
     load_js('select2');
-    
+
     $head_content .= "<script type='text/javascript'>
         $(function() {
+            $('#scales').select2();
+            $('input[name=grading_type]').on('change', function(e){
+                var choice = $(this).val();
+                if (choice == 0) {
+                    $('#max_grade')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');
+                    $('#scales')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');                    
+                } else {
+                    $('#max_grade')
+                        .prop('disabled', true)
+                        .closest('div.form-group')
+                        .addClass('hidden');
+                    $('#scales')
+                        .prop('disabled', false)
+                        .closest('div.form-group')
+                        .removeClass('hidden');                    
+                }
+            });        
             $('#WorkEnd, #WorkStart').datetimepicker({
                 format: 'dd-mm-yyyy hh:ii', 
                 pickerPosition: 'bottom-left', 
@@ -834,6 +1046,13 @@ function show_edit_assignment($id) {
     </script>";
     
     $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+    
+    $scales = Database::get()->queryArray('SELECT * FROM grading_scale WHERE course_id = ?d', $course_id);
+    $scale_options = "<option value>-- $langGradeScalesSelect --</option>";
+    foreach ($scales as $scale) {
+        $scale_options .= "<option value='$scale->id'".($row->grading_scale_id == $scale->id ? " selected" : "").">$scale->title</option>";
+    }
+    
     if ($row->assign_to_specific) {
         //preparing options in select boxes for assigning to speficic users/groups
         $assignee_options='';
@@ -878,6 +1097,8 @@ function show_edit_assignment($id) {
     }
     $WorkStart = $row->submission_date ? DateTime::createFromFormat('Y-m-d H:i:s', $row->submission_date)->format('d-m-Y H:i') : NULL;
     $WorkEnd = $row->deadline ? DateTime::createFromFormat('Y-m-d H:i:s', $row->deadline)->format('d-m-Y H:i') : NULL;
+    $max_grade = Session::has('max_grade') ? Session::get('max_grade') : ($row->max_grade ? $row->max_grade : 10);
+    $grading_type = Session::has('grading_type') ? Session::get('grading_type') : ($row->grading_scale_id ? 1 : 0);
     $enableWorkStart = Session::has('enableWorkStart') ? Session::get('enableWorkStart') : null;
     $enableWorkEnd = Session::has('enableWorkEnd') ? Session::get('enableWorkEnd') : ($WorkEnd ? 1 : 0);
     $comments = trim($row->comments);    
@@ -890,6 +1111,7 @@ function show_edit_assignment($id) {
     //Get possible validation errors
     $title_error = Session::getError('title');
     $max_grade_error = Session::getError('max_grade');  
+    $scale_error = Session::getError('scale');
     
     $tool_content .= "
     <div class='form-wrapper'>
@@ -934,11 +1156,37 @@ function show_edit_assignment($id) {
                                      <img src='$themeimg/delete.png' title='$m[WorkDeleteAssignmentFile]' /></a>" : "<input type='file' id='userfile' name='userfile' />")."
                     </div>
                 </div>
-                <div class='form-group ".($max_grade_error ? "has-error" : "")."'>
-                    <label for='max_grade' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langGradeType:</label>
+                    <div class='col-sm-10'>            
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='grading_type' value='0'". ($grading_type ? "" : " checked") .">
+                             $langGradeNumbers
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' name='grading_type' value='1'". ($grading_type ? " checked" : "") .">
+                            $langGradeScales
+                          </label>
+                        </div>
+                    </div>
+                </div>
+                <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
                     <div class='col-sm-10'>
-                        <input name='max_grade' type='text' class='form-control' id='max_grade' value='$row->max_grade' placeholder='$m[max_grade]'>
-                        <span class='help-block'>$max_grade_error</span>
+                      <select name='scale' class='form-control' id='scales'>
+                            $scale_options
+                      </select>
+                      <span class='help-block'>$scale_error</span>
+                    </div>
+                </div>                
+                <div class='form-group".($max_grade_error ? " has-error" : "").($grading_type ? " hidden" : "")."'>
+                    <label for='title' class='col-sm-2 control-label'>$m[max_grade]:</label>
+                    <div class='col-sm-10'>
+                      <input name='max_grade' type='text' class='form-control' id='max_grade' placeholder='$m[max_grade]' value='$max_grade'>
+                      <span class='help-block'>$max_grade_error</span>    
                     </div>
                 </div>
                 <div class='form-group'>
@@ -1066,111 +1314,7 @@ function show_edit_assignment($id) {
     </form></div>";
 }
 
-// edit assignment
-function edit_assignment($id) {
 
-    global $tool_content, $langBackAssignment, $langEditSuccess, $m, $langTheField,
-    $langEditError, $course_code, $works_url, $course_id, $uid, $workPath, $langFormErrors;
-    
-    $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('title', 'max_grade'));
-    $v->rule('numeric', array('max_grade'));
-    $v->labels(array(
-        'title' => "$langTheField $m[title]",
-        'max_grade' => "$langTheField $m[max_grade]"
-    ));
-    if($v->validate()) {
-        $row = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
-        $title = $_POST['title'];
-        $desc = purify($_POST['desc']);
-        $submission_type = $_POST['submission_type'];
-        $submission_date = isset($_POST['WorkStart']) && !empty($_POST['WorkStart']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkStart'])->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
-        $deadline = isset($_POST['WorkEnd']) && !empty($_POST['WorkEnd']) ? DateTime::createFromFormat('d-m-Y H:i', $_POST['WorkEnd'])->format('Y-m-d H:i:s') : NULL;
-        $late_submission = isset($_POST['late_submission']) ? 1 : 0;
-        $group_submissions = $_POST['group_submissions'];
-        $max_grade = filter_input(INPUT_POST, 'max_grade', FILTER_VALIDATE_FLOAT);
-        $assign_to_specific = filter_input(INPUT_POST, 'assign_to_specific', FILTER_VALIDATE_INT);
-        $assigned_to = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY); 
-       
-        if ($assign_to_specific == 1 && empty($assigned_to)) {
-             $assign_to_specific = 0;
-         }
-
-         if (!isset($_POST['comments'])) {
-             $comments = '';
-         } else {
-             $comments = purify($_POST['comments']);
-         }
-
-         if (!isset($_FILES) || !$_FILES['userfile']['size']) {
-             $_FILES['userfile']['name'] = '';
-             $_FILES['userfile']['tmp_name'] = '';
-             $filename = $row->file_path;
-             $file_name = $row->file_name;
-         } else {
-             validateUploadedFile($_FILES['userfile']['name'], 2);
-             if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' .
-                                'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' .
-                                'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                 $tool_content .= "<p class=\"caution\">$langUnwantedFiletype: {$_FILES['userfile']['name']}<br />";
-                 $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
-                 return;
-             }
-             $local_name = uid_to_name($uid);
-             $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
-             if (!empty($am)) {
-                 $local_name .= $am;
-             }                
-             $local_name = greek_to_latin($local_name);
-             $local_name = replace_dangerous_char($local_name);
-             $secret = $row->secret_directory;
-             $ext = get_file_extension($_FILES['userfile']['name']);
-             $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);                
-             if (move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/admin_files/$filename")) {
-                 @chmod("$workPath/admin_files/$filename", 0644);
-                 $file_name = $_FILES['userfile']['name'];
-             }        
-         }   
-         Database::get()->query("UPDATE assignment SET title = ?s, description = ?s, 
-             group_submissions = ?d, comments = ?s, submission_type = ?d, deadline = ?t, late_submission = ?d, submission_date = ?t, max_grade = ?d, 
-             assign_to_specific = ?d, file_path = ?s, file_name = ?s
-             WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
-             $comments, $submission_type, $deadline, $late_submission, $submission_date, $max_grade, $assign_to_specific, $filename, $file_name, $course_id, $id);
-
-         Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
-         
-         //tags
-         if (isset($_POST['tags'])) {
-            $tagsArray = explode(',', $_POST['tags']);
-            $moduleTag = new ModuleElement($id);
-            $moduleTag->syncTags($tagsArray);
-         }
-
-         if ($assign_to_specific && !empty($assigned_to)) {
-             if ($group_submissions == 1) {
-                 $column = 'group_id';
-                 $other_column = 'user_id';
-             } else {
-                 $column = 'user_id';
-                 $other_column = 'group_id';
-             }
-             foreach ($assigned_to as $assignee_id) {
-                 Database::get()->query("INSERT INTO assignment_to_specific ({$column}, {$other_column}, assignment_id) VALUES (?d, ?d, ?d)", $assignee_id, 0, $id);
-             }
-         }    
-         Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $id,
-                 'title' => $title,
-                 'description' => $desc,
-                 'deadline' => $deadline,
-                 'group' => $group_submissions));   \
-         
-        Session::Messages($langEditSuccess,'alert-success');         
-        redirect_to_home_page("modules/work/index.php?course=$course_code");
-    } else {
-        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id&choice=edit");        
-    }
-}
 
 /**
  * @brief delete assignment
@@ -1341,7 +1485,8 @@ function show_student_assignment($id) {
 function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
     global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, 
     $langNotice3, $gid, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, 
-    $course_code, $langBack, $is_editor, $langCancel, $langWorkOnlineText;
+    $course_code, $course_id, $langBack, $is_editor, $langCancel, $langWorkOnlineText,
+    $langGradeScalesSelect;
     
     $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
     
@@ -1400,12 +1545,26 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
             }
     }
     $notice = ($submissions_exist)?
-        "<div class='alert alert-info'>" . icon('fa-info-circle') . " $langNotice3</div>": '';
+    "<div class='alert alert-info'>" . icon('fa-info-circle') . " $langNotice3</div>": '';
+    if ($assignment->grading_scale_id) {
+        $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assignment->grading_scale_id, $course_id)->scales;
+        $scales = unserialize($serialized_scale_data);
+        $scale_options = "<option value>-- $m[grade] --</option>";
+        foreach ($scales as $scale) {
+            $scale_options .= "<option value='$scale[scale_item_value]'>$scale[scale_item_name]</option>";
+        }
+        $grade_field = "  
+                <select name='grade' class='form-control' id='scales'>
+                    $scale_options
+                </select>";        
+    } else {
+        $grade_field = "<input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]: $assignment->max_grade)";
+    }    
     $extra = $on_behalf_of ? "                        
                         <div class='form-group'>
                             <label class='col-sm-2 control-label'>$m[grade]:</label>
                             <div class='col-sm-10'>
-                              <input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]: $assignment->max_grade)
+                              $grade_field
                               <input type='hidden' name='on_behalf_of' value='1'>
                             </div>
                         </div>
@@ -1722,6 +1881,7 @@ function show_assignment($id, $display_graph_results = false) {
                                                    assign.grade_submission_date grade_submission_date,
                                                    assign.grade grade, assign.comments comments,
                                                    assign.grade_comments grade_comments,
+                                                   assignment.grading_scale_id grading_scale_id,
                                                    assignment.deadline deadline 
                                                    FROM assignment_submit AS assign, user, assignment
                                                    WHERE assign.assignment_id = ?d AND assign.assignment_id = assignment.id AND user.id = assign.uid
@@ -1770,7 +1930,24 @@ function show_assignment($id, $display_graph_results = false) {
                 } else {
                     $grade = $row->grade;
                 }
-                
+                if ($row->grading_scale_id) {
+                    $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $row->grading_scale_id, $course_id)->scales;
+                    $scales = unserialize($serialized_scale_data);
+                    $scale_options = "<option value>-- $m[grade] --</option>";
+                    $scale_values = array_value_recursive('scale_item_value', $scales);
+                    if (!in_array($grade, $scale_values) && !is_null($grade)) {
+                        $grade = closest($grade, $scale_values)['value'];
+                    }
+                    foreach ($scales as $scale) {
+                        $scale_options .= "<option value='$scale[scale_item_value]'".($scale['scale_item_value'] == $grade ? " selected" : "").">$scale[scale_item_name]</option>";
+                    }
+                    $grade_field = "  
+                            <select name='grades[$row->id][grade]' class='form-control' id='scales'>
+                                $scale_options
+                            </select>";        
+                } else {
+                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='3' size='3'>";
+                }                    
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
                 $tool_content .= "
                                 <tr>
@@ -1783,7 +1960,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 <td width='100'>" . nice_format($row->submission_date, TRUE) .$late_sub_text. "</td>
                                 <td width='5'>
                                     <div class='form-group ".(Session::getError("grade.$row->id") ? "has-error" : "")."'>
-                                        <input class='form-control' type='text' value='$grade' maxlength='3' size='3' name='grades[$row->id][grade]'>
+                                        $grade_field
                                         <span class='help-block'>".Session::getError("grade.$row->id")."</span>
                                     </div>
                                 </td>
@@ -1854,11 +2031,20 @@ function show_assignment($id, $display_graph_results = false) {
                 // Used to display grades distribution chart
                 $graded_submissions_count = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit AS assign, user
                                                              WHERE assign.assignment_id = ?d AND user.id = assign.uid AND
-                                                             assign.grade <> ''", $id)->count;                
+                                                             assign.grade <> ''", $id)->count;    
                 $chart = new Plotter();
                 $chart->setTitle("$langGraphResults");
+                if ($assign->grading_scale_id) {
+                    $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
+                    $scales = unserialize($serialized_scale_data);
+                    $scale_values = array_value_recursive('scale_item_value', $scales);
+                }
                 foreach ($gradeOccurances as $gradeValue => $gradeOccurance) {
                     $percentage = round((100.0 * $gradeOccurance / $graded_submissions_count),2);
+                    if ($assign->grading_scale_id) {
+                        $key = closest($gradeValue, $scale_values, true)['key']; 
+                        $gradeValue = $scales[$key]['scale_item_name'];
+                    }
                     $chart->growWithPoint("$gradeValue ($percentage%)", $percentage);
                 }
                 $tool_content .= $chart->plot();
@@ -2038,7 +2224,7 @@ function show_student_assignments() {
 function show_assignments() {
     global $tool_content, $m, $langEditChange, $langDelete, $langNoAssign, $langNewAssign, $langCommands,
     $course_code, $themeimg, $course_id, $langWorksDelConfirm, $langDaysLeft, $m,
-    $langWarnForSubmissions, $langDelSure;
+    $langWarnForSubmissions, $langDelSure, $langGradeScales;
     
 
     $result = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
@@ -2048,7 +2234,11 @@ function show_assignments() {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=1",
                   'button-class' => 'btn-success',
                   'icon' => 'fa-plus-circle',
-                  'level' => 'primary-label')  
+                  'level' => 'primary-label'),
+            array('title' => $langGradeScales,
+                  'url' => "grading_scales.php?course=$course_code",
+                  'icon' => 'fa-sort-alpha-asc',
+                  'level' => 'primary-label'),       
             ),false);
 
     if (count($result)>0) {
@@ -2281,7 +2471,7 @@ function download_assignments($id) {
 // Set $online to TRUE to get an online view (on the web) - else the
 // index.html works for the zip file
 function create_zip_index($path, $id, $online = FALSE) {
-    global $charset, $m;
+    global $charset, $m, $course_id;
 
     $fp = fopen($path, "w");
     if (!$fp) {
@@ -2309,13 +2499,22 @@ function create_zip_index($path, $id, $online = FALSE) {
 				<th>' . $m['grade'] . '</th>
 			</tr>');
 
+    $assign = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
+    if ($assign->grading_scale_id) {
+        $serialized_scale_data = Database::get()->querySingle('SELECT scales FROM grading_scale WHERE id = ?d AND course_id = ?d', $assign->grading_scale_id, $course_id)->scales;
+        $scales = unserialize($serialized_scale_data);
+        $scale_values = array_value_recursive('scale_item_value', $scales);
+    }
     $result = Database::get()->queryArray("SELECT a.uid, a.file_path, a.submission_date, a.grade, a.comments, a.grade_comments, a.group_id, b.deadline FROM assignment_submit a, assignment b WHERE a.assignment_id = ?d AND a.assignment_id = b.id ORDER BY a.id", $id);
-
     foreach ($result as $row) {
         $filename = basename($row->file_path);
         $filelink = empty($filename) ? '&nbsp;' :
                 ("<a href='$filename'>" . htmlspecialchars($filename) . '</a>');
         $late_sub_text = ((int) $row->deadline && $row->submission_date > $row->deadline) ?  "<div style='color:red;'>$m[late_submission]</div>" : '';
+        if ($assign->grading_scale_id) {
+            $key = closest($row->grade, $scale_values, true)['key']; 
+            $row->grade = $scales[$key]['scale_item_name'];
+        }        
         fputs($fp, '
 			<tr class="sep">
 				<td>' . q(uid_to_name($row->uid)) . '</td>
@@ -2439,4 +2638,17 @@ function groups_with_no_submissions($id) {
         }
     }
     return $groups;
+}
+
+function max_grade_from_scale($scale_id) {
+    global $course_id;
+    $scale_data = Database::get()->querySingle("SELECT * FROM grading_scale WHERE id = ?d AND course_id = ?d", $scale_id, $course_id);
+    $unserialized_scale_items = unserialize($scale_data->scales);
+    $max_scale_item_value = 0;
+    foreach ($unserialized_scale_items as $item) {
+        if ($item['scale_item_value'] > $max_scale_item_value) {
+            $max_scale_item_value = $item['scale_item_value'];
+        }
+    }
+    return $max_scale_item_value;
 }

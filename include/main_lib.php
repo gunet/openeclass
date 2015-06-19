@@ -233,6 +233,8 @@ function load_js($file, $init='') {
             $head_content .= css_link('bootstrap-datepicker/css/datepicker3.css') .
                 js_link('bootstrap-datepicker/js/bootstrap-datepicker.js');
             $file = "bootstrap-datepicker/js/locales/bootstrap-datepicker.$language.js";
+        } elseif ($file == 'bootstrap-validator') {
+            $file = "bootstrap-validator/validator.js";
         } elseif ($file == 'bootstrap-slider') {
             $head_content .= css_link('bootstrap-slider/css/bootstrap-slider.min.css');
             $file = 'bootstrap-slider/js/bootstrap-slider.min.js';
@@ -3512,4 +3514,41 @@ function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array){
         }        
     }
     return false;
+}
+/**
+* Get nearest value from specific key of a multidimensional array
+*
+* @param $key integer
+* @param $arr array
+* @return array
+*/
+function closest($search, $arr) {
+   $closest = null;
+   $position = null;
+   
+   foreach($arr as $key => $item) {
+      if($closest == null || abs($search - $closest) > abs($item - $search)) {
+         $closest = $item;
+         $position = $key;
+      }
+   }
+    return   
+       array(
+           'key' => $position,
+           'value' => $closest
+        );
+}
+/**
+* Get all values from specific key in a multidimensional array
+*
+* @param $key string
+* @param $arr array
+* @return null|string|array
+*/
+function array_value_recursive($key, array $arr){
+    $val = array();
+    array_walk_recursive($arr, function($v, $k) use($key, &$val){
+        if($k == $key) array_push($val, $v);
+    });
+    return count($val) > 1 ? $val : array_pop($val);
 }

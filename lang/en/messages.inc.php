@@ -2217,6 +2217,8 @@ $langEmptyAsTitle = "You didn't fill assignment title";
 $langEditSuccess = "Successful editing!";
 $langEditError = "An error occured during the editing !";
 $langNewAssign = "New assignment";
+$langGradeScales = "Grading Scales";
+$langNewGradeScale = "New Grading Scale";
 $langDeleted = "Assignment deleted";
 $langDelAssign = "Delete Assignment";
 $langDelWarn1 = "You are going to delete the assignment";
@@ -3996,6 +3998,9 @@ $langUpgradeInProgress = 'Use is temporary restricted, because the platform is
     to login.';
 $langAddOpenDelosVideoLink = "Add OpenDelos video link";
 $langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with current metadata.</p><p><span style='color:red'>*</span> The link already exists in course videolinks.</p><p><span style='color:red'>**</span> The link already exists, but OpenDelos platform holds a newer version.</p>";
+$langGradeType = "Grade Type";
+$langGradeNumbers = "Numbers";
+$langGradeScalesSelect = "Scales Select";
 $langWorkSubType = "Submission Type";
 $langWorkOnlineText = "Online Text";
 $lang_personal_blog = "Activate personal blog";
