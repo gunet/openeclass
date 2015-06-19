@@ -86,11 +86,11 @@ if (!empty($_POST['submit'])) {
         $tool_content .= "<div class='alert alert-danger'>$langMailVerificationWrong</div> ";
     }
 } else {
-	if (get_config('alt_auth_stud_reg') == 2) {
-			$tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
-	} else if (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
-	    	$tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
-	}
+    if (get_config('alt_auth_stud_reg') == 2) {
+        $tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
+    } else if (isset($_SESSION['mail_verification_required'])) {
+        $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+    }
 }
 
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
