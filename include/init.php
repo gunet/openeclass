@@ -25,9 +25,8 @@
  *        It is included in every file via baseTheme.php
  */
 
-if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
-    date_default_timezone_set("Europe/Athens");
-}
+// set default time zone
+date_default_timezone_set("Europe/Athens");
 
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
