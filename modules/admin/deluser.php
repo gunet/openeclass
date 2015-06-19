@@ -20,45 +20,59 @@
  * ======================================================================== */
 
 
-$require_usermanage_user = TRUE;
+$require_usermanage_user = true;
 include '../../include/baseTheme.php';
 $toolName = $langUnregUser;
-$navigation[] = array("url" => "index.php", "name" => $langAdmin);
+$navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
-$tool_content .= action_bar(array(    
+$pageName = $langConfirmDelete;
+$tool_content .= action_bar(array(
         array('title' => $langBackAdmin,
               'url' => "index.php",
               'icon' => 'fa-reply',
               'level' => 'primary-label')));
 
 // get the incoming values and initialize them
-$u = isset($_GET['u']) ? intval($_GET['u']) : false;
-$doit = isset($_GET['doit']);
-
-$u_account = $u ? q(uid_to_name($u, 'username')) : '';
-$u_realname = $u ? q(uid_to_name($u)) : '';
-$t = 0;
-
-if (!$doit) {
-    if ($u_account) {
-        $tool_content .= "<p class='title1'>$langConfirmDelete</p>
-            <div class='alert alert-warning'>$langConfirmDeleteQuestion1 <em>$u_realname ($u_account)</em><br/>
-            $langConfirmDeleteQuestion3
-            </div>
-            <p class='eclass_button'><a href='$_SERVER[SCRIPT_NAME]?u=$u&amp;doit=yes'>$langDelete</a></p>";
-    } else {
-        $tool_content .= "<p>$langErrorDelete</p>";
-    }    
+if (isset($_GET['u'])) {
+    $user = getDirectReference($_GET['u']);
+    $iuid = $_GET['u'];
 } else {
-    if ($u == 1) {
-        $tool_content .= "<div class='alert alert-danger'>$langTryDeleteAdmin</div>";
-    } else {
-        $success = deleteUser($u, true);
-        if ($success === true) {
-            $tool_content .= "<div class='alert alert-info'>$langUserWithId $u $langWasDeleted.</div>";
+    forbidden();
+}
+
+$u_account = q(uid_to_name($user, 'username'));
+$u_realname = q(uid_to_name($user));
+
+if (!isset($_POST['doit'])) {
+    if ($u_account) {
+        $u_desc = "<em>$u_realname ($u_account)</em>";
+        if (get_admin_rights($user) > 0) {
+            $tool_content .= "<div class='alert alert-warning'>" .
+                sprintf($langCantDeleteAdmin, $u_desc) . ' ' .
+                $langIfDeleteAdmin .
+                "</div>";
         } else {
-            $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
+            $tool_content .= "<div class='alert alert-warning'>$langConfirmDeleteQuestion1 $u_desc<br>
+                $langConfirmDeleteQuestion3
+              </div>
+              <form method='post' action='$_SERVER[SCRIPT_NAME]?u=$iuid'>
+                <input class='btn btn-danger' type='submit' name='doit' value='$langDelete'>
+              </form>";
         }
-    }    
+    } else {
+        $tool_content .= "<div class='alert alert-danger'>$langErrorDelete</div>";
+    }
+} else {
+    if (get_admin_rights($user) > 0) {
+        Session::Messages($langTryDeleteAdmin, 'alert-danger');
+        redirect_to_home_page("modules/admin/deluser.php?u=$iuid");
+    } else {
+        if (deleteUser($user, true)) {
+            Session::Messages("$langUserWithId $user $langWasDeleted.", 'alert-info');
+        } else {
+            Session::Messages($langErrorDelete, 'alert-danger');
+        }
+        redirect_to_home_page('modules/admin/');
+    }
 }
 draw($tool_content, 3);

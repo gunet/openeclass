@@ -160,6 +160,15 @@ $langDisableModules = 'Υποσυστήματα';
 $langDisableModulesHelp = 'Μπορείτε να επιλέξετε ποια από τα παρακάτω
     υποσυστήματα επιθυμείτε να απενεργοποιηθούν από όλα τα μαθήματα της
     πλατφόρμας.';
+$langAutoEnroll = 'Αυτόματη εγγραφή';
+$langAutoEnrollNew = 'Προσθήκη κανόνα';
+$langAutoEnrollAdded = 'Ο κανόνας προστέθηκε';
+$langAutoEnrollCourse = 'Αυτόματη εγγραφή στα μαθήματα';
+$langAutoEnrollDepartment = 'Αυτόματη εγγραφή σε όλα τα μαθήματς των τμημάτων';
+$langAutoEnrollRule = 'Κανόνας';
+$langApplyTo = 'Αφορά τους';
+$langApplyDepartments = 'που εγγράφονται στα τμήματα';
+$langApplyAnyDepartment = 'που εγγράφονται σε οποιοδήποτε τμήμα';
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;
@@ -451,7 +460,9 @@ $langConfirmDelete = "Επιβεβαίωση διαγραφής";
 $langConfirmDeleteQuestion1 = "Θέλετε σίγουρα να διαγράψετε τον χρήστη";
 $langConfirmDeleteQuestion2 = "από το μάθημα";
 $langConfirmDeleteQuestion3 = "Η ενέργεια αυτή θα διαγράψει επίσης όλα τα ίχνη του χρήστη στην πλατφόρμα, όπως στατιστικά, συμμετοχές στα forums, κ.α.";
-$langTryDeleteAdmin = "Προσπαθήσατε να διαγράψετε τον χρήστη με user id = 1(Admin)!";
+$langTryDeleteAdmin = "Επιχειρήσατε να διαγράψετε ένα χρήστη με δικαιώματα διαχειριστή.";
+$langCantDeleteAdmin = "Ο χρήστης %s έχει δικαιώματα διαχειριστή.";
+$langIfDeleteAdmin = 'Αν επιθυμείτε να προχωρήσετε στη διαγραφή, θα πρέπει να αφαιρέσετε πρώτα τα διαχειριστικά δικαιώματα.';
 $langUserWithId = "Ο χρήστης με id";
 $langWasDeleted = "διαγράφηκε";
 $langWasAdmin = "ήταν διαχειριστής";

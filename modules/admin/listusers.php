@@ -305,10 +305,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 break;
         }
 
-        //$width = (!isDepartmentAdmin()) ? 100 : 80;
         if ($logs->id == 1) { // don't display actions for admin user
             $icon_content = "&mdash;&nbsp;";
         } else {
+            $iuid = getIndirectReference($logs->id);
             $changetip = q("$langChangeUserAs $logs->username");
             $icon_content = action_button(array(
                 array(
@@ -335,7 +335,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 array(
                     'title' => $langDelete,
                     'icon' => 'fa-times',
-                    'url' => "deluser.php?u=$logs->id"
+                    'url' => "deluser.php?u=$iuid"
                 )
             ));
         }
