@@ -119,27 +119,6 @@ if(isset($_POST['attempt_value']) && !isset($_GET['eurId'])){
     $objDateTime = new DateTime('NOW');
     $attempt_value = $objDateTime->getTimestamp();
 }
-//If the exercise is password protected
-$password = $objExercise->selectPasswordLock();
-if ($password && !$is_editor) {
-    if(!isset($_SESSION['password'][$exerciseId][$attempt_value])) {
-        if (isset($_POST['password']) && $password === $_POST['password']) {
-            $_SESSION['password'][$exerciseId][$attempt_value] = 1;
-        } else {
-            Session::Messages($langCaptchaWrong);
-            redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-        }
-    }
-}
-//If the exercise is IP protected
-$ips = $objExercise->selectIPLock();
-if ($ips && !$is_editor){
-    $user_ip = $_SERVER["REMOTE_ADDR"];
-    if(!match_ip_to_ip_or_cidr($user_ip, explode(',', $ips))){
-        Session::Messages($langIPHasNoAccess);
-        redirect_to_home_page('modules/exercise/index.php?course='.$course_code);                
-    }           
-}
 // if the user has clicked on the "Cancel" button
 // ends the exercise and returns to the exercise list
 if (isset($_POST['buttonCancel'])) {
