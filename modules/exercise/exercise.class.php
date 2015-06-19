@@ -618,6 +618,7 @@ if (!class_exists('Exercise')) {
         function record_answers($choice, $exerciseResult, $record_type = 'insert') {
             global $is_editor;
             $action = $record_type.'_answer_records'; 
+
             // if the user has answered at least one question
             if (is_array($choice)) {
                 //if all questions on the same page

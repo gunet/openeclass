@@ -104,14 +104,14 @@ if (isset($_REQUEST['exerciseId'])) {
 }
 
 //Initialize attempts timestamp
-if(isset($_POST['attempt_value'])){
+if(isset($_POST['attempt_value']) && !isset($_GET['eurId'])){
     $attempt_value = $_POST['attempt_value'];
 }elseif (isset($_GET['eurId'])) { //reinitialize paused attempt
     //If there is a paused attempt get it
-    $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eid = ?d AND attempt_status = ?d AND uid = ?d", $exerciseId, ATTEMPT_PAUSED, $uid);
+    $paused_attempt = Database::get()->querySingle("SELECT eurid, record_start_date, secs_remaining FROM exercise_user_record WHERE eurid = ?d AND eid = ?d AND attempt_status = ?d AND uid = ?d", $_GET['eurId'], $exerciseId, ATTEMPT_PAUSED, $uid);
     if ($paused_attempt) {
         $objDateTime = new DateTime($paused_attempt->record_start_date);
-        $attempt_value = $objDateTime->getTimestamp();          
+        $attempt_value = $objDateTime->getTimestamp();    
     } else {
         redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
     }
@@ -284,7 +284,9 @@ if (isset($_POST['formSent'])) {
     }
 
     // inserts user's answers in the database and adds them in the $exerciseResult array which is returned
+
     $action = isset($paused_attempt) ? 'update' : 'insert';
+
     $exerciseResult = $objExercise->record_answers($choice, $exerciseResult, $action);
 
     $_SESSION['exerciseResult'][$exerciseId][$attempt_value] = $exerciseResult;
@@ -378,7 +380,7 @@ $tool_content .= "</div><br>";
 
   
 $tool_content .= "
-  <form class='form-horizontal exercise' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId'>
+  <form class='form-horizontal exercise' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId".(isset($paused_attempt) ? "&amp;eurId=$eurid" : "")."'>
   <input type='hidden' name='formSent' value='1'>
   <input type='hidden' name='attempt_value' value='$attempt_value'>
   <input type='hidden' name='nbrQuestions' value='$nbrQuestions'>";
