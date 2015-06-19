@@ -117,7 +117,7 @@ if ($is_editor) {
             "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
-$paused_exercises = Database::get()->queryArray("SELECT eurid, eid, title, attempt FROM exercise_user_record a "
+$paused_exercises = Database::get()->queryArray("SELECT eurid, eid, title, attempt, password_lock FROM exercise_user_record a "
         . "JOIN exercise b ON a.eid = b.id WHERE b.course_id = ?d AND a.uid = ?d "
         . "AND a.attempt_status = ?d ORDER BY eid, attempt", $course_id, $uid, ATTEMPT_PAUSED);
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
@@ -131,7 +131,9 @@ if (count($paused_exercises) > 0) {
             }
             $tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice ". q($row->title) .": <ul>";
         }
-        $tool_content .= "<li><a class='paused_exercise' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>$langAttempt $row->attempt</a></li>";
+        $password_protected = isset($row->password_lock) && !$is_editor ? " password_lock": "";
+
+        $tool_content .= "<li><a class='paused_exercise$password_protected' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>$langAttempt $row->attempt</a></li>";
         
         $paused_exercise_id = $row->eid; 
         //$tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice " . q($row->title) . ". <a class='paused_exercise' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>($langCont)</a></div>";
@@ -369,10 +371,15 @@ $head_content .= "<script type='text/javascript'>
     $(document).ready(function(){
         $('.paused_exercise').click(function(e){
             e.preventDefault();
+            var exercise = $(this);
             var link = $(this).attr('href');
             bootbox.confirm('$langTemporarySaveNotice2', function(result) {
                 if(result) {
-                    password_bootbox(link);
+                    if(exercise.hasClass('password_lock')) {
+                        password_bootbox(link);
+                    } else {
+                        window.location = link;
+                    }
                 }
             });             
         });
