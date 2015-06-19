@@ -45,13 +45,11 @@ if (empty($uid)) {
 // user might already verified mail account or verification is no more needed
 if (!get_config('email_verification_required') or
     get_mail_ver_status($uid) == EMAIL_VERIFIED or
-    isset($_SESSION['cas_email']) or
     isset($_POST['enter'])) {
-    	if (isset($_SESSION['mail_verification_required'])) {
-        	unset($_SESSION['mail_verification_required']);
-    	}
-    	header("Location:" . $urlServer);
-    	exit;
+    if (isset($_SESSION['mail_verification_required'])) {
+        unset($_SESSION['mail_verification_required']);
+    }
+    redirect_to_home_page('main/portfolio.php');
 }
 
 if (!empty($_POST['submit'])) {
