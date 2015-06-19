@@ -243,7 +243,7 @@ if (!isset($guest_allowed) || $guest_allowed != true) {
 if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded)) {
     // don't redirect to mail verification on logout
     if (!isset($_GET['logout'])) {
-        header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+        redirect_to_home_page('modules/auth/mail_verify_change.php');
     }
 }
 

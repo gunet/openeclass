@@ -621,7 +621,7 @@ function process_login() {
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
-                $next = "modules/auth/mail_verify_change.php";
+                $next = 'modules/auth/mail_verify_change.php';
             } elseif (isset($_POST['next'])) {
                 $next = $_POST['next'];
             } else {
