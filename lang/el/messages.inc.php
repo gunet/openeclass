@@ -1499,6 +1499,7 @@ $langConfirmPurgeExercises = "Επιβεβαίωση διαγραφής αποτ
 $langAnswerUngraded = "Η απάντηση δεν έχει ακόμα βαθμολογηθεί";
 $langExerciseStats = 'Στατιστικά';
 $langAttempts = "Προσπάθειες";
+$langAttempt = "Προσπάθεια";
 $langAttemptCompleted = "Oλοκληρωμένη";
 $langAttemptsCompleted = "Oλοκληρωμένες";
 $langAttemptPending = "Προς Βαθμολόγηση";

@@ -117,7 +117,7 @@ if ($is_editor) {
             "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
-$paused_exercises = Database::get()->queryArray("SELECT eurid, eid, title FROM exercise_user_record a "
+$paused_exercises = Database::get()->queryArray("SELECT eurid, attempt, eid, title FROM exercise_user_record a "
         . "JOIN exercise b ON a.eid = b.id WHERE b.course_id = ?d AND a.uid = ?d "
         . "AND a.attempt_status = ?d", $course_id, $uid, ATTEMPT_PAUSED);
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
