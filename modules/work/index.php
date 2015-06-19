@@ -472,7 +472,7 @@ function submit_work($id, $on_behalf_of = null) {
                 $local_name = greek_to_latin($local_name);            
             }
             $local_name = replace_dangerous_char($local_name);
-            if (isset($on_behalf_of) and (!isset($_FILES) or !$_FILES['userfile']['size'])) {
+            if (isset($on_behalf_of) and !isset($_FILES)) {
                 $_FILES['userfile']['name'] = '';
                 $_FILES['userfile']['tmp_name'] = '';
                 $no_files = true;
@@ -481,14 +481,9 @@ function submit_work($id, $on_behalf_of = null) {
             }
             $file_name = $_FILES['userfile']['name'];
             validateUploadedFile($file_name, 2);
-            if (preg_match('/\.(ade|adp|bas|bat|chm|cmd|com|cpl|crt|exe|hlp|hta|' . 'inf|ins|isp|jse|lnk|mdb|mde|msc|msi|msp|mst|pcd|pif|reg|scr|sct|shs|' . 'shb|url|vbe|vbs|wsc|wsf|wsh)$/', $_FILES['userfile']['name'])) {
-                Session::Messages("$langUnwantedFiletype: ".$file_name, 'alert-warning');
-                redirect_to_home_page("modules/work/index.php?course=$course_code&id=".$row->id);
-            }
             $secret = work_secret($row->id);
             $ext = get_file_extension($file_name);
             $filename = "$secret/$local_name" . (empty($ext) ? '' : '.' . $ext);
-
             if ($no_files or move_uploaded_file($_FILES['userfile']['tmp_name'], "$workPath/$filename")) {
                 if ($no_files) {
                     $filename = '';
@@ -1318,6 +1313,7 @@ function show_student_assignment($id) {
     assignment_details($id, $row);
 
     $submit_ok = ($row->time > 0 || !(int) $row->deadline || $row->time <= 0 && $row->late_submission);
+    $submissions_exist = false;
 
     if (!$uid) {
         $tool_content .= "<p>$langUserOnly</p>";
@@ -1327,6 +1323,7 @@ function show_student_assignment($id) {
         $submit_ok = FALSE;;
     } else {
         foreach (find_submissions($row->group_submissions, $uid, $id, $user_group_info) as $sub) {
+            $submissions_exist = true;
             if ($sub->grade != '') {
                 $submit_ok = false;
             
@@ -1335,11 +1332,11 @@ function show_student_assignment($id) {
         }
     }
     if ($submit_ok) {
-        show_submission_form($id, $user_group_info);
+        show_submission_form($id, $user_group_info, false, $submissions_exist);
     }
 }
 
-function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
+function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
     global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, 
     $langNotice3, $gid, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, 
     $course_code, $langBack, $is_editor, $langCancel, $langWorkOnlineText;
@@ -1400,7 +1397,8 @@ function show_submission_form($id, $user_group_info, $on_behalf_of = false) {
                 redirect_to_home_page('modules/work/index.php?course='.$course_code.'&id='.$id);
             }
     }
-    $notice = $on_behalf_of ? '' : "<div class='alert alert-info'>".icon('fa-info-circle')." $langNotice3</div>";   
+    $notice = ($submissions_exist)?
+        "<div class='alert alert-info'>" . icon('fa-info-circle') . " $langNotice3</div>": '';
     $extra = $on_behalf_of ? "                        
                         <div class='form-group'>
                             <label class='col-sm-2 control-label'>$m[grade]:</label>
