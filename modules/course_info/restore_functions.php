@@ -36,6 +36,39 @@ function visibility_select($current) {
     return $ret;
 }
 
+
+// Unzip backup file
+function unpack_zip_inner($zipfile, $clone) {
+    global $webDir, $uid;
+
+    require_once 'include/lib/fileUploadLib.inc.php';
+
+    $zip = new pclZip($zipfile);
+    if (!$clone) {
+        validateUploadedZipFile($zip->listContent(), 3);
+    }
+
+    $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
+    if (!is_dir($destdir)) {
+        mkdir($destdir, 0755);
+    }
+    chdir($destdir);
+    $zip->extract();
+
+    $retArr = array();
+    foreach (find_backup_folders($destdir) as $folder) {
+        $retArr[] = array(
+            'path' => $folder['path'] . '/' . $folder['dir'],
+            'file' => $folder['dir'],
+            'course' => preg_replace('|^.*/|', '', $folder['path'])
+        );
+    }
+
+    chdir($webDir);
+    return $retArr;
+}
+
+
 function unpack_zip_show_files($zipfile) {
     global $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
 
@@ -948,7 +981,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
             $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
                 . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
-                . "registered_at = ?t, expires_at = ?t, document_timestamp = ?t",
+                . "registered_at = ?t, expires_at = ?t, description = '', whitelist= ''",
                 (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '',
                 (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '',
                 $data['username'],
@@ -957,8 +990,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
                 intval($data[$restoreHelper->getField('course_user', 'status')]),
                 isset($data['phone'])? $data['phone']: '',
                 $now,
-                date('Y-m-d H:i:s', time() + get_config('account_duration')),
-                isset($data['document_timestamp'])? $data['document_timestamp']: $now)->lastInsertID;
+                date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
             $user = new User();
             $user->refresh($user_id, $departments);
