@@ -2601,7 +2601,7 @@ function update_gradebook_book($uid, $id, $grade, $activity)
                 if ($grade == '') {
                     $grade = 0;
                 }
-                Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?d", $uid, $grade);
+                Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?d, comments = ''", $uid, $grade);
             }
         }
     }

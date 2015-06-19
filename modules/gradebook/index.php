@@ -473,13 +473,18 @@ if ($is_editor) {
         $weight = $_POST['weight'];
         $type = $_POST['activity_type'];
         $actDate = $_POST['date'];
+        if (empty($_POST['date'])) {
+            $actDate = '0000-00-00 00:00:00';
+        } else {
+            $actDate = $_POST['date'];    
+        }
         $visible = isset($_POST['visible']) ? 1 : 0;
         
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))){
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
             $tool_content .= $message . "<br/>";
-        } else {            
-            if ($_POST['id']) {               
+        } else {
+            if ($_POST['id']) {                
                 //update
                 $id = $_POST['id'];
                 Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
