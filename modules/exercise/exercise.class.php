@@ -656,7 +656,8 @@ if (!class_exists('Exercise')) {
          */
         function save_unanswered($as_answered = 1) {
             $id = $this->id;
-            $eurid = $_SESSION['exerciseUserRecordID'][$id];
+            $attempt_value = $_POST['attempt_value'];
+            $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
             $question_ids = Database::get()->queryArray('SELECT DISTINCT question_id FROM exercise_answer_record WHERE eurid = ?d AND is_answered = 1', $eurid);
             if (count($question_ids) > 0) {
                 foreach ($question_ids as $row) {
@@ -665,7 +666,7 @@ if (!class_exists('Exercise')) {
             } else {
                 $answered_question_ids = array();
             }
-            $questionList = $_SESSION['questionList'][$id];
+            $questionList = $_SESSION['questionList'][$id][$attempt_value];
             $unanswered_questions = array_diff($questionList, $answered_question_ids);
             foreach ($unanswered_questions as $question_id) {
                 // construction of the Question object
@@ -716,7 +717,8 @@ if (!class_exists('Exercise')) {
            $objQuestionTmp->read($key);
            $question_type = $objQuestionTmp->selectType();
            $id = $this->id;
-           $eurid = $_SESSION['exerciseUserRecordID'][$id];
+           $attempt_value = $_POST['attempt_value'];
+           $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
            if ($objQuestionTmp->selectType() == FREE_TEXT) {
                if (!empty($value)) {
                    Database::get()->query("INSERT INTO exercise_answer_record (eurid, question_id, answer, answer_id, is_answered)
@@ -801,7 +803,8 @@ if (!class_exists('Exercise')) {
            $objQuestionTmp->read($key);
            $question_type = $objQuestionTmp->selectType();
            $id = $this->id;
-           $eurid = $_SESSION['exerciseUserRecordID'][$id];
+           $attempt_value = $_POST['attempt_value'];
+           $eurid = $_SESSION['exerciseUserRecordID'][$id][$attempt_value];
            if ($question_type == FREE_TEXT) {
                if (!empty($value)) {                 
                    Database::get()->query("UPDATE exercise_answer_record SET answer = ?s, answer_id = 1, weight = NULL,
