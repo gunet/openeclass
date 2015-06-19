@@ -2413,21 +2413,21 @@ div.login-form .login-option-social .social-btn.social-btn-google:hover{
     -webkit-transition:250ms margin ease-out;
     -moz-transition:250ms margin ease-out;
     -o-transition:250ms margin ease-out;
+
+    &:after{  
+        content: "."; 
+        visibility: hidden; 
+        display: block; 
+        height: 0; 
+        clear: both;
+    }
+    .login-option{
+        width:33.3%;
+        float:left;
+        padding: 2em;
+    }
 }
 
-.wrapper-login-option:after{  
-    content: "."; 
-    visibility: hidden; 
-    display: block; 
-    height: 0; 
-    clear: both;
-}
-
-.wrapper-login-option .login-option{
-    width:33.3%;
-    float:left;
-    padding: 2em;
-}
 .jumbotron.jumbotron-login .graphic {
     position: absolute;
     z-index: 9;
