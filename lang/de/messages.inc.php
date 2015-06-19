@@ -272,7 +272,6 @@ $langConfirmDelete = "Bestätigen Sie das Löschen von ";
 $langConfirmDeleteQuestion1 = "Möchten Sie wirklich den Benutzer löschen";
 $langConfirmDeleteQuestion2 = "von dem Kurs mit Kennzeichen";
 $langTryDeleteAdmin = "Sie haben versucht, den Benutzer mit Benutzer id = 1 (Admin) zu löschen!";
-$langUserWithId = "Der Benutzer mit id";
 $langWasDeleted = "wurde gelöscht";
 $langWasAdmin = "war Administrator";
 $langWasCourseDeleted = "wurde von diesem Kurs gelöscht";

@@ -40,12 +40,14 @@ if (isset($_GET['u'])) {
     forbidden();
 }
 
-$u_account = q(uid_to_name($user, 'username'));
-$u_realname = q(uid_to_name($user));
+if ($user) {
+    $u_account = q(uid_to_name($user, 'username'));
+    $u_realname = q(uid_to_name($user));
+    $u_desc = "<em>$u_realname ($u_account)</em>";
+}
 
 if (!isset($_POST['doit'])) {
-    if ($u_account) {
-        $u_desc = "<em>$u_realname ($u_account)</em>";
+    if ($user) {
         if (get_admin_rights($user) > 0) {
             $tool_content .= "<div class='alert alert-warning'>" .
                 sprintf($langCantDeleteAdmin, $u_desc) . ' ' .
@@ -68,7 +70,7 @@ if (!isset($_POST['doit'])) {
         redirect_to_home_page("modules/admin/deluser.php?u=$iuid");
     } else {
         if (deleteUser($user, true)) {
-            Session::Messages("$langUserWithId $user $langWasDeleted.", 'alert-info');
+            Session::Messages("$langWithUsername \"$u_account\" ($u_realname) $langWasDeleted.", 'alert-info');
         } else {
             Session::Messages($langErrorDelete, 'alert-danger');
         }

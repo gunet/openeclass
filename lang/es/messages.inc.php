@@ -288,7 +288,6 @@ $langConfirmDelete = "Confirma el borrado de ";
 $langConfirmDeleteQuestion1 = "Estás seguro que quieres borrar el usuario";
 $langConfirmDeleteQuestion2 = "desde el curso con id";
 $langTryDeleteAdmin = "Has probado de borrar el usuario con usuario id = 1 (Admin)!";
-$langUserWithId = "El usuario con id";
 $langWasDeleted = "fue borrado";
 $langWasAdmin = "era administrador";
 $langWasCourseDeleted = "fue borrado desde el curso";

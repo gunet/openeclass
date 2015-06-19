@@ -80,7 +80,7 @@ if (!$doit) {
             Database::get()->query("DELETE FROM group_members
                             WHERE user_id = ?d AND
                             group_id IN (SELECT id FROM `group` WHERE course_id = ?d)", $u, $c);
-            $tool_content .= "<div class='alert alert-info'>$langUserWithId $u $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></div>";
+            $tool_content .= "<div class='alert alert-info'>$langWithUsername \"$u_account\" $langWasCourseDeleted <em>" . q(course_id_to_title($c)) . "</em></div>";
             $m = 1;
         }
     } else {

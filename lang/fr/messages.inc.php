@@ -316,7 +316,6 @@ $langConfirmDelete = "Confirmer la suppresion";
 $langConfirmDeleteQuestion1 = "Êtes-vous sûr de vouloir supprimer l'utilisateur ?";
 $langConfirmDeleteQuestion2 = "du cours";
 $langTryDeleteAdmin = "Vous avez essayé de supprimer l'utilisateur avec user id = 1(Admin)!";
-$langUserWithId = "L'utilisateur avec l'ID";
 $langWasDeleted = "a été supprimé";
 $langWasAdmin = "was administrator";
 $langWasCourseDeleted = "a été supprimé du cours";

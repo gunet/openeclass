@@ -463,7 +463,6 @@ $langConfirmDeleteQuestion3 = "Η ενέργεια αυτή θα διαγράψ�
 $langTryDeleteAdmin = "Επιχειρήσατε να διαγράψετε ένα χρήστη με δικαιώματα διαχειριστή.";
 $langCantDeleteAdmin = "Ο χρήστης %s έχει δικαιώματα διαχειριστή.";
 $langIfDeleteAdmin = 'Αν επιθυμείτε να προχωρήσετε στη διαγραφή, θα πρέπει να αφαιρέσετε πρώτα τα διαχειριστικά δικαιώματα.';
-$langUserWithId = "Ο χρήστης με id";
 $langWasDeleted = "διαγράφηκε";
 $langWasAdmin = "ήταν διαχειριστής";
 $langWasCourseDeleted = "διαγράφηκε από το Μάθημα";

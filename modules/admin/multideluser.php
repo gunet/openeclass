@@ -50,12 +50,12 @@ if (isset($_POST['submit'])) {
                 $success = deleteUser($u, true);
                 // progress report
                 if ($success === true) {
-                    $success_mgs[] = "$langUserWithId $line $langWasDeleted";                   
+                    $success_mgs[] = "$langWithUsername " . q($line) . " $langWasDeleted";                   
                 } else {
-                    $error_mgs[] = "$langErrorDelete: $line";
+                    $error_mgs[] = "$langErrorDelete: " . q($line);
                 }
             } else {
-                $error_mgs[] = "$langErrorDelete: $line";
+                $error_mgs[] = "$langErrorDelete: " . q($line);
             }
         }
         $line = strtok("\n");

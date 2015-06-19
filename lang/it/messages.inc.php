@@ -284,7 +284,6 @@ $langConfirmDelete = "Convalidare l' eliminazione ";
 $langConfirmDeleteQuestion1 = "Sei sicuro che vuoi eliminare l' utente";
 $langConfirmDeleteQuestion2 = "dal corso con id";
 $langTryDeleteAdmin = "Hai cercato di eliminare l'utente con id = 1 (Admin)!";
-$langUserWithId = "L'utente con id";
 $langWasDeleted = "è eliminato";
 $langWasAdmin = "è stato gestore";
 $langWasCourseDeleted = "è cancellato dal corso";
