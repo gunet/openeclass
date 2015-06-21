@@ -48,8 +48,15 @@ if ($id != -1) {
         draw('', 2, null, $head_content);
         exit;
     }    
-    $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$id", "name" => htmlspecialchars($q->title));
+    $navigation[] = array('url' => "index.php?course=$course_code&amp;id=$id", 'name' => $q->title);
 }
+
+
+$tool_content .= action_bar(array(
+                array('title' => $langBack,
+                      'url' => "index.php?course=$course_code&amp;id=$id",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')));
 
 if (isset($_POST['submit_doc'])) {
     insert_docs($id);

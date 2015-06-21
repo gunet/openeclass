@@ -249,7 +249,7 @@ foreach ($result as $list) {
     $tool_content .= action_button(array(
                 array('title' => $langRename,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqRename&amp;module_id=$list->module_id",
-                      'icon' => 'fa-repeat'),
+                      'icon' => 'fa-pencil'),
                 array('title' => $langComments,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;cmd=rqComment&amp;module_id=$list->module_id",
                       'icon' => 'fa-comment-o'),

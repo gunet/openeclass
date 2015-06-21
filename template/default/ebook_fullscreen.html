@@ -1,8 +1,9 @@
 <!DOCTYPE HTML>
-<html>
+<html style="background-color: #f0f0f0;">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title>{%page_title%}</title>
+         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- jQuery -->
         <script type="text/javascript" src="{%URL_PATH%}js/jquery-2.1.1.min.js"></script>
 
@@ -11,9 +12,6 @@
         
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="{%template_base%}CSS/bootstrap-custom.css">
-
-        <!-- Optional theme -->
-        <link rel="stylesheet" href="{%template_base%}CSS/bootstrap-theme.min.css">
         
         <!-- Font Awesome - A font of icons -->
         <link href="{%template_base%}CSS/font-awesome-4.2.0/css/font-awesome.css" rel="stylesheet">
@@ -21,9 +19,15 @@
             .navbar-inverse .navbar-nav > li > a {color: whitesmoke;}
             .navbar-inverse .navbar-nav > li > a.inactive, .navbar-inverse .navbar-nav > li > a.inactive:hover, .navbar-inverse .navbar-nav > li > a.inactive:focus {color: #9d9d9d; cursor: default;}
             .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus { color: #9BCCF7; }
+            .navbar-inverse ul li{padding: 1px 7px;}
+            .navbar-inverse ul li:last-child{border-left: 1px solid #999; margin-left: 3px; padding-left: 10px; font-family: sans-serif;}
+            .navbar-inverse ul li a {color: whitesmoke;}
+            .navbar-inverse ul li a:hover {text-decoration: none;}
+            .navbar-inverse ul li a {vertical-align: middle;}
         </style>
         {%ebook_head%}
         <script type='text/javascript'>
+            
             function change_section() {
                 top.location = '{%ebook_url_base%}' + document.getElementsByName('section')[0].value + '/{%unit_parameter%}';
             }
@@ -40,32 +44,41 @@
                      }                      
                 });
             });
+            
+            $(window).load(function(){
+                var bookHeight = $("#book-container").height();
+                var windowHeight = $(window).height();
+                var offsetHeight = $("nav").height() + 150;
+                var newBookHeight = windowHeight - offsetHeight;
+                
+                //alert(navHeight);
+
+                if ( bookHeight < newBookHeight ){
+                    $("#book-container").height(newBookHeight);
+                }
+            });
+
+
         </script>
     </head>
 
-    <body>
-        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <body style="background:whitesmoke;">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation" style="margin: 0px;">
             <div class="container">
-                <div class="navbar-header">
-                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                  </button>
-                  <a class="navbar-brand" href="#"><img class="img-responsive" style='height:20px;' src="{%img_base%}/eclass-new-logo-small.png" alt='{%ds_logo%}' title='{%ds_logo%}'></a>
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                  <div class="nav navbar-nav navbar-form">
+                  <a class="navbar-brand pull-left" href="#" style="padding-top:3px;"><img class="img-responsive" style='height:30px;' src="{%img_base%}/eclass-new-logo-small.png" alt='{%ds_logo%}' title='{%ds_logo%}'></a>
+                
+                  <!-- BEGIN chapter_select -->
+                  <div class=" pull-left">
                     <div class='form-group'>
-                            <select class='form-control' name='section' onChange="change_section();">
+                            <select class='form-control' name='section' onChange="change_section();" style='width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;'>
                                 <!-- BEGIN chapter_select_options -->
                                 <option value='{%chapter_id%}'{%chapter_selected%}>{%chapter_title%}</option>
                                 <!-- END chapter_select_options -->
                             </select>
                     </div>
                   </div>
-                  <ul class="nav navbar-nav navbar-right">
+                  <!-- END chapter_select -->
+                  <ul class="list-inline  pull-right" >
                     <!-- BEGIN back_link_active -->
                     <li><a href='{%back_chapter_link%}' title='{%back_chapter_title%}'><i class='fa fa-arrow-circle-left fa-lg'></i></a></li>
                     <!-- END back_link_active -->
@@ -76,24 +89,25 @@
                     <li><a href='{%next_chapter_link%}' title='{%next_chapter_title%}'><i class='fa fa-arrow-circle-right fa-lg'></i></a></li>
                     <!-- END next_link_active -->
                     <!-- BEGIN next_link_inactive -->
-                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right'></i></a></li>
+                    <li><a class='inactive' href='#'><i class='fa fa-arrow-circle-right' ></i></a></li>
                     <!-- END next_link_inactive -->
                     <li><a href='{%exit_fullscreen_link%}' title='{%$langBackCourse%}'><i class='fa fa-times fa-lg nofullscreen'></i> {%langBack%}</a></li>
                   </ul>
-                </div><!--/.nav-collapse -->
+                <!--/.nav-collapse -->
             </div>
         </nav>        
-        <div class="container">
+        <div class="container" style="padding:15px; background-color: #f0f0f0; margin: 0px;">
             <div class='row'>
-                <div class='col-xs-12'>
+                <div class='col-xs-12 col-md-8 col-md-offset-2'>
                 <ol class="breadcrumb">
                   <li><a href="{%course_home_link%}">{%course_title_short%}</a></li>
                   <li><a href="{%course_ebook_link%}">{%course_ebook%}</a></li>
                   <li class="active">{%ebook_title_short%}</li>
-                </ol>                    
+                </ol>
+                    <div id="book-container" style="border: 1px solid #ccc; border-radius: 2px; padding: 20px; background-color: white;">
                     {%ebook_body%}
+                    </div>
                 </div>
-                
             </div>
         </div>
     </body>

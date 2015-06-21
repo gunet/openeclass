@@ -222,7 +222,7 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply space-after-icon',)
             ));
     } else {
-        $pageName = $attendance->title ? $attendance->title : $langAttendanceNoTitle2;
+        $pageName = ($attendance && $attendance->title) ? $attendance->title : $langAttendanceNoTitle2;
         $tool_content .= action_bar(
             array(         
                 array('title' => $langConfig,
@@ -597,7 +597,7 @@ if ($is_editor) {
             //======================
             //show all the students
             //======================
-            $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
+            $resultUsers = Database::get()->queryArray("SELECT attendance_users.id as recID, attendance_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, DATE(course_user.reg_date) as reg_date   FROM attendance_users, user, course_user  WHERE attendance_id = ?d AND attendance_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $attendance_id, $course_id);
 
             if ($resultUsers) {
                 //table to display the users
@@ -625,14 +625,14 @@ if ($is_editor) {
                             <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
                             <td class='option-btn-cell'>"
                                . action_button(array(
-                                    array('title' => $langAttendanceDelete,
+                                    array('title' => $langAttendanceBook,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID),
+                                   array('title' => $langAttendanceDelete,
                                         'icon' => 'fa-times',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
                                         'confirm' => $langConfirmDelete,
-                                        'class' => 'delete'),
-                                    array('title' => $langAttendanceBook,
-                                        'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID)))."</td>
+                                        'class' => 'delete')))."</td>
                         </tr>";
                 }
                 $tool_content .= "</tbody></table>";
@@ -1049,7 +1049,7 @@ if ($is_editor) {
                 $tool_content .= "<td>" . userAttendTotalActivityStats($announce->id, $participantsNumber, $attendance_id) . "</td>";
                 $tool_content .= "<td class='text-center option-btn-cell'>".                        
                         action_button(array(
-                                    array('title' => $langModify,
+                                    array('title' => $langEditChange,
                                         'icon' => 'fa-edit',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"
                                         ),                            

@@ -46,16 +46,16 @@ if (isset($_POST['submit'])) {
             $u = usernameToUid($line);
             // for real uids not equal to admin
             if ($u !== false && $u > 1) {
-                // full deletion
+                // delete user
                 $success = deleteUser($u, true);
                 // progress report
                 if ($success === true) {
-                    $success_mgs[] = "$langUserWithId $line $langWasDeleted";                   
+                    $success_mgs[] = "$langWithUsername " . q($line) . " $langWasDeleted";                   
                 } else {
-                    $error_mgs[] = "$langErrorDelete: $line";
+                    $error_mgs[] = "$langErrorDelete: " . q($line);
                 }
             } else {
-                $error_mgs[] = "$langErrorDelete: $line";
+                $error_mgs[] = "$langErrorDelete: " . q($line);
             }
         }
         $line = strtok("\n");
@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
 
     $usernames = '';
 
-    if (isset($_POST['dellall_submit'])) {
+    if (isset($_POST['dellall_submit'])) {       
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $c = isset($_POST['c']) ? intval($_POST['c']) : '';
@@ -82,7 +82,6 @@ if (isset($_POST['submit'])) {
         $reg_flag = isset($_POST['reg_flag']) ? intval($_POST['reg_flag']) : '';
         $hour = isset($_POST['hour']) ? $_POST['hour'] : 0;
         $minute = isset($_POST['minute']) ? $_POST['minute'] : 0;
-
         // Criteria/Filters
         $criteria = array();
         $terms = array();
@@ -115,35 +114,35 @@ if (isset($_POST['submit'])) {
             $terms[] = '%' . $uname . '%';
         }
 
-        if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or $verified_mail === EMAIL_VERIFIED or $verified_mail === EMAIL_UNVERIFIED)
+        if ($verified_mail === EMAIL_VERIFICATION_REQUIRED or $verified_mail === EMAIL_VERIFIED or $verified_mail === EMAIL_UNVERIFIED) {
             $criteria[] = 'verified_mail = ?d';
-        $terms[] = $verified_mail;
-    }
-
-    if (!empty($am)) {
-        $criteria[] = 'am LIKE ?d';
-        $terms[] = '%' . $am . '%';
-    }
-
-    if (!empty($user_type)) {
-        $criteria[] = 'status = ?d';
-        $terms[] = $user_type;
-    }
-
-    if (!empty($auth_type)) {
-        if ($auth_type >= 2) {
-            $criteria[] = 'password = ?s';
-            $terms[] = $auth_ids[$auth_type];
-        } elseif ($auth_type == 1) {
-            $criteria[] = 'password NOT IN (' . implode(', ', array_fill(0, count($auth_ids), '?s')) . ')';
-            $terms = array_merge($terms, $auth_ids);
+            $terms[] = $verified_mail;
         }
-    }
 
-    if (!empty($email)) {
-        $criteria[] = 'email LIKE ?s';
-        $terms[] = '%' . $email . '%';
+        if (!empty($am)) {
+            $criteria[] = 'am LIKE ?d';
+            $terms[] = '%' . $am . '%';
+        }
 
+        if (!empty($user_type)) {
+            $criteria[] = 'status = ?d';
+            $terms[] = $user_type;
+        }
+
+        if (!empty($auth_type)) {
+            if ($auth_type >= 2) {
+                $criteria[] = 'password = ?s';
+                $terms[] = $auth_ids[$auth_type];
+            } elseif ($auth_type == 1) {
+                $criteria[] = 'password NOT IN (' . implode(', ', array_fill(0, count($auth_ids), '?s')) . ')';
+                $terms = array_merge($terms, $auth_ids);
+            }
+        }
+
+        if (!empty($email)) {
+            $criteria[] = 'email LIKE ?s';
+            $terms[] = '%' . $email . '%';
+        }
         if ($search == 'inactive') {
             $criteria[] = 'expires_at < ' . DBHelper::timeAfter();
         }
@@ -203,11 +202,11 @@ if (isset($_POST['submit'])) {
         }, $terms);
     }
 
-$tool_content .= action_bar(array(
-    array('title' => $langBack,
-        'url' => "index.php",
-        'icon' => 'fa-reply',
-        'level' => 'primary-label')));
+    $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                'url' => "index.php",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label')));
 
     $tool_content .= "
     <div class='alert alert-info'>$langMultiDelUserInfo</div>
@@ -230,10 +229,14 @@ $tool_content .= action_bar(array(
         </form>
     </div>";
 }
+draw($tool_content, 3, '', $head_content);
 
-draw($tool_content, 3, 'admin', $head_content);
 
-// Translate username to uid
+/**
+ * @brief Translate username to uid
+ * @param type $uname
+ * @return boolean
+ */
 function usernameToUid($uname) {
     $r = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $uname);
     if ($r)

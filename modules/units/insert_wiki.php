@@ -53,7 +53,7 @@ function list_wikis() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
                 <input type='hidden' name='id' value='$id'>
                 <table class='table-default'>
-                    <tr>
+                    <tr class='list-header'>
                         <th class='text-leftt'>$langWikis</th>
                         <th>$langWikiDescriptionForm</th>
                         <th>$langChoice</th>
@@ -64,14 +64,10 @@ function list_wikis() {
                                 <td align='center'><input type='checkbox' name='wiki[]' value='$entry[id]'></td>
                             </tr>";            
         }
-        $tool_content .= "<tr>
-                            <th colspan='3'>
-                                <div align='right'>
-                                    <input class='btn btn-primary' type='submit' name='submit_wiki' value='$langAddModulesButton'>
-                                </div>
-                            </th>
-                        </tr>
+        $tool_content .= "
                     </table>
-                </form>";
+                <div class='text-right'>
+                    <input class='btn btn-primary' type='submit' name='submit_wiki' value='$langAddModulesButton'>
+                </div></form>";
     }
 }

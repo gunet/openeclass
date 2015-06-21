@@ -36,6 +36,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'include/action.php';
 require_once 'functions.php';
 require_once 'modules/document/doc_init.php';
+require_once 'modules/tags/moduleElement.class.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 
@@ -136,15 +137,13 @@ if ($is_editor) {
 }
 if (isset($id) and $id !== false) {
     $info = Database::get()->querySingle("SELECT * FROM course_units WHERE id = ?d AND course_id = ?d $visibility_check", $id, $course_id);
-}
-if (!$info) {
-    $pageName = $langUnitUnknown;
-    $tool_content .= "<div class='alert alert-danger'>$langUnknownResType</div>";
-    draw($tool_content, 2, null, $head_content);
-    exit;
-} else {
-    $pageName = q($info->title);
-    $comments = trim($info->comments);
+    if ($info) {
+        $pageName = $info->title;
+        $comments = trim($info->comments);
+    } else {
+        Session::Messages($langUnknownResType);
+        redirect_to_home_page("courses/$course_code/");        
+    }
 }
 
 // Links for next/previous unit
@@ -163,7 +162,7 @@ foreach (array('previous', 'next') as $i) {
         $page_btn = 'pull-right';
     }
     
-    if (isset($_SESSION['uid']) and (isset($_SESSION['status'][$currentCourse]) and $_SESSION['status'][$currentCourse])) {
+    if (isset($_SESSION['uid']) and isset($_SESSION['status'][$course_code]) and $_SESSION['status'][$course_code]) {
             $access_check = "";
     } else {
         $access_check = "AND public = 1";
@@ -181,22 +180,27 @@ foreach (array('previous', 'next') as $i) {
     if ($q) {
         $q_id = $q->id;
         $q_title = htmlspecialchars($q->title);         
-        $link[$i] = "<div class='$page_btn'><a title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a></div>";
+        $link[$i] = "<a class='btn btn-default $page_btn' title='$q_title'  href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$q_id'>$arrow1". ellipsize($q_title, 30) ."$arrow2</a>";
     } else {
         $link[$i] = '&nbsp;';
     }
 }
 
 if ($link['previous'] != '&nbsp;' or $link['next'] != '&nbsp;') {
-    $tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>" .
-            $link['previous'] .
-            $link['next'] . "
-        </div>
-      </div>
-    </div>";
+    $tool_content .= "
+        <div class='row'>
+            <div class='col-md-12'>
+                <div class='panel panel-default'>
+                    <div class='panel-body'>
+                        $link[previous]
+                        $link[next]
+                    </div>
+                </div>
+            </div>
+        </div>";
 }
-
+$moduleTag = new ModuleElement($id);
+$tags_list = $moduleTag->showTags();
 $tool_content .= "<div class='row margin-bottom'>
       <div class='col-md-12'>
         
@@ -205,11 +209,20 @@ $tool_content .= "<div class='row margin-bottom'>
 
     <div class='row'>
       <div class='col-md-12'>
-        <div class='panel padding'>
-          <div class='margin-bottom-fat'>
-            <h4 class='text-center'>$pageName</h4>
-          </div>
-          $comments
+        <div class='panel panel-default'>
+            <div class='panel-heading'>
+                <h3 class='panel-title'>$pageName</h3>
+            </div>
+            <div class='panel-body'>$comments";
+if (!empty($tags_list)) {
+    $tool_content .= "
+                    <div>
+                        $langTags: $tags_list
+                    </div>
+                    ";
+}
+    $tool_content .= "    
+            </div>          
         </div>
       </div>
     </div>
@@ -221,25 +234,35 @@ $tool_content .= "
     </div>
   </div>
 </div>";
-
-$tool_content .= "<div class='row'>
-        <div class='col-md-12'><div class='whole-row unit-pagination list-header clearfix'>";
-$tool_content .= "<form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
-              <div class='form-group' style='margin-bottom:0px;'>
-              <label class='col-sm-7 control-label'>$langCourseUnits</label>
-              <div class='col-sm-5'>
-              <select name='id' class='form-control' onChange='document.unitselect.submit();'>";
-              $q = Database::get()->queryArray("SELECT id, title FROM course_units
-                           WHERE course_id = ?d AND `order` > 0
-                                 $visibility_check
-                           ORDER BY `order`", $course_id);
-            foreach ($q as $info) {
-                $selected = ($info->id == $id) ? ' selected ' : '';
-                $tool_content .= "<option value='$info->id'$selected>" .
-                        htmlspecialchars(ellipsize($info->title, 50)) .
-                            '</option>';
-            }
-$tool_content .= "</select></div></div>
-      </form></div></div></div>";
+$q = Database::get()->queryArray("SELECT id, title FROM course_units
+             WHERE course_id = ?d AND `order` > 0
+                   $visibility_check
+             ORDER BY `order`", $course_id);
+$course_units_options ='';
+foreach ($q as $info) {
+    $selected = ($info->id == $id) ? ' selected ' : '';
+    $course_units_options .= "<option value='$info->id'$selected>" .
+            htmlspecialchars(ellipsize($info->title, 50)) .
+                '</option>';
+}
+$tool_content .= "
+    <div class='row'>
+        <div class='col-md-12'>
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <form class='form-horizontal' name='unitselect' action='" . $urlServer . "modules/units/' method='get'>
+                        <div class='form-group'>
+                            <label class='col-sm-8 control-label'>$langCourseUnits</label>
+                            <div class='col-sm-4'>
+                                <select name='id' class='form-control' onChange='document.unitselect.submit();'>
+                                    $course_units_options
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>";
 
 draw($tool_content, 2, null, $head_content);

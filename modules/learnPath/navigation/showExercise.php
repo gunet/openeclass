@@ -210,8 +210,6 @@ echo '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"   "http://www.w
  . '<meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">' . "\n"
  . "<link href='{$urlAppend}template/$theme/CSS/lp.css' rel='stylesheet'>\n"
  . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-custom.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/CSS/bootstrap-theme.min.css' rel='stylesheet'>\n"
- . "<link href='{$urlAppend}template/$theme/CSS/inventory.css' rel='stylesheet'>\n"
  . '<title>' . $langExercice . '</title>' . "\n"
  . $head_content
  . '</head>' . "\n"
@@ -351,7 +349,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answer = mathfilter($answer, 12, '../../courses/mathimg/');
         $answerCorrect = $objAnswerTmp->isCorrect($answerId);
-        if ($answerType == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
+        if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             // splits text and weightings that are joined with the character '::'
             list($answer) = explode('::', $answer);
             // replaces [blank] by an input field
@@ -379,7 +377,7 @@ function showQuestion($questionId, $onlyAnswers = false) {
                         </div>");
         }
         // fill in blanks
-        elseif ($answerType == FILL_IN_BLANKS || $qtype == FILL_IN_BLANKS_TOLERANT) {
+        elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
             echo ($answer);
         }
         // matching

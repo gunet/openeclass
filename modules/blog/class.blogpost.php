@@ -30,6 +30,7 @@ Class BlogPost {
     private $authorId = 0;
     private $views = 0;
     private $courseId = 0;
+    private $commenting = 0;
 
     /**
      * Load a blog post from db
@@ -47,6 +48,7 @@ Class BlogPost {
             $this->id = $postId;
             $this->views = $result->views;
             $this->courseId = $result->course_id;
+            $this->commenting = $result->commenting;
             return true;
         } else {
             return false;
@@ -70,6 +72,7 @@ Class BlogPost {
             $ret[$i]->views = $a->views;
             $ret[$i]->courseId = $a->course_id;
             $ret[$i]->creationTime = $a->time;
+            $ret[$i]->commenting = $a->commenting;
             $i++; 
         }
         return $ret;
@@ -83,10 +86,16 @@ Class BlogPost {
      * @param course_id the id of the course
      * @return boolean true on success, false on failure
      */
-    public function create($title, $content, $authorId, $course_id) {
-        $sql = 'INSERT INTO `blog_post` (`title`, `content`, `user_id`, `course_id`, `time`, `views`) '
-                .'VALUES(?s,?s,?d,?d,NOW(),0)';
-        $id = Database::get()->query($sql, $title, $content, $authorId, $course_id)->lastInsertID;
+    public function create($title, $content, $authorId, $course_id, $commenting = NULL) {
+        if (!is_null($commenting)) {
+            $sql = 'INSERT INTO `blog_post` (`title`, `content`, `user_id`, `course_id`, `time`, `views`, `commenting`) '
+                    .'VALUES(?s,?s,?d,?d,NOW(),0,?d)';
+            $id = Database::get()->query($sql, $title, $content, $authorId, $course_id, $commenting)->lastInsertID;
+        } else {
+            $sql = 'INSERT INTO `blog_post` (`title`, `content`, `user_id`, `course_id`, `time`, `views`) '
+                    .'VALUES(?s,?s,?d,?d,NOW(),0)';
+            $id = Database::get()->query($sql, $title, $content, $authorId, $course_id)->lastInsertID;
+        }
         //load the blog post after creation
         if ($this->loadFromDB($id)) {
             return true;
@@ -115,17 +124,31 @@ Class BlogPost {
      * Update a blog post in database
      * @param title the blog post title
      * @param content the blog post content
+     * @param commenting the value of the specific blog post commenting setting
      * @return boolean true on success, false on failure
      */
-    public function edit($title, $content) {
-        $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE `title` = ?s AND `content` = ?s AND `id`= ?d';
-        $result = Database::get()->querySingle($sql, $title, $content, $this->id);
+    public function edit($title, $content, $commenting = NULL) {
+        if (!is_null($commenting)) {
+            $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE `title` = ?s AND `content` = ?s AND `commenting`= ?d AND `id`= ?d';
+            $result = Database::get()->querySingle($sql, $title, $content, $commenting, $this->id);
+        } else {
+            $sql = 'SELECT COUNT(`id`) as c FROM `blog_post` WHERE `title` = ?s AND `content` = ?s AND `id`= ?d';
+            $result = Database::get()->querySingle($sql, $title, $content, $this->id);
+        }
         if ($result->c == 0) {
-            $sql = 'UPDATE `blog_post` SET `title` = ?s, `content` = ?s WHERE `id` = ?d';
-            $numrows = Database::get()->query($sql, $title, $content, $this->id)->affectedRows;
+            if (!is_null($commenting)) {
+                $sql = 'UPDATE `blog_post` SET `title` = ?s, `content` = ?s, `commenting` = ?d WHERE `id` = ?d';
+                $numrows = Database::get()->query($sql, $title, $content, $commenting, $this->id)->affectedRows;
+            } else {
+                $sql = 'UPDATE `blog_post` SET `title` = ?s, `content` = ?s WHERE `id` = ?d';
+                $numrows = Database::get()->query($sql, $title, $content, $this->id)->affectedRows;
+            }
             if ($numrows == 1) {
                 $this->title = $title;
                 $this->content = $content;
+                if (!is_null($commenting)) {
+                    $this->commenting = $commenting;
+                }
             	return true;
             } else {
             	return false;
@@ -206,7 +229,15 @@ Class BlogPost {
     }
     
     /**
-     * Check if a user has permission to edit/delete blog posts
+     * Get blog post commenting setting value
+     * @return DateTime
+     */
+    public function getCommenting() {
+        return $this->commenting;
+    }
+    
+    /**
+     * Check if a user has permission to edit/delete course blog posts
      * @param isEditor boolean showing if user is teacher
      * @param studConfigVal boolean based on the config value allowing users to create posts
      * @param uid the user id

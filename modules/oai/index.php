@@ -12,17 +12,14 @@
  * This package has been inspired by PHP OAI Data Provider developed by Heinrich Stamerjohanns at University of Oldenburg.  
  * Some of the functions and algorithms used in this code were transplanted from his  implementation at http://physnet.uni-oldenburg.de/oai/.
  *
- * Database support is supported through PDO (PHP Data Objects included in 
- * the PHP distribution), so almost any popular SQL-database can be 
- * used without any change in the code. Only thing need to do is to configure
- * database connection and define a suitable data structure.
+ * Database support is supported through Open eClass Database subsystem.
  *
  * The repository can be quite easily configured by just editing 
  * oaidp-config.php, most possible values and options are explained.
  *
  * \section req_sec Requirements
  * - A running web server + PHP version 5.0 or above.
- * - A databse can be connected by PDO. 
+ * - A database can be connected by via Open eClass.
  *
  * \section install_sec Installation
  *
@@ -54,7 +51,7 @@
   - xml_creater.php which includes classess ANDS_XML, ANDS_Error_XML, ANDS_Response_XML
   - Utility functions
   - oaidp-util.php
-  - Support to different metadataformats in your own systems. Two examples provided with the package are: record_dc.php and record_rif.php. They are helpers and need information from the real records. They need to be devloped for your particular system.
+  - Support to different metadataformats in your own systems. One example is provided with the package: record_dc.php. They are helpers and need information from the real records. They need to be devloped for your particular system.
   - Configurations
   - oaidp-config.php
 

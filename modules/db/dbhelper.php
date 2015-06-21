@@ -90,6 +90,47 @@ abstract class DBHelper {
     }
 
     /**
+     * Find the primary key of a table.
+     * @param string $table The table name
+     * @return string The name of the primary key field
+     */
+    public static function primaryKeyOf($table) {
+        return DBHelper::impl()->primaryKeyOfImpl($table);
+    }
+
+    public static function isColumnNullable($table, $column) {
+        return DBHelper::impl()->isColumnNullableImpl($table, $column);
+    }
+
+    /**
+     * Create a foreign key which connects the detail table's field $detailFieldName with master table's $masterIDFieldName
+     * @param type $detailTableName The detail table name
+     * @param type $detailFieldName The detail table's field name, which connects with master table
+     * @param type $masterTableName The master table name
+     * @param type $masterIDFieldName The master table's primary key field name
+     */
+    public static function createForeignKey($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName = null) {
+        if (is_null($masterIDFieldName))
+            $masterIDFieldName = DBHelper::primaryKeyOf($masterTableName);
+        if (DBHelper::foreignKeyExists($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName))
+            return;
+        return DBHelper::impl()->createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+    }
+
+    /**
+     * Check if a foreign key which connects the detail table's field $detailFieldName with master table's $masterIDFieldName already exists.
+     * @param type $detailTableName The detail table name
+     * @param type $detailFieldName The detail table's field name, which connects with the master table
+     * @param type $masterTableName The master table name
+     * @param type $masterIDFieldName The master table's primary key field name
+     */
+    public static function foreignKeyExists($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName = null) {
+        if (is_null($masterIDFieldName))
+            $masterIDFieldName = DBHelper::primaryKeyOf($masterTableName);
+        return DBHelper::impl()->foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+    }
+
+    /**
      * Specifically lock a table and release this lock when execution has finished
      * @param callable $function The code inside this function will be called while the database has locked the given tables
      * @param String... $table a list of tables to lock. It could be more than one table
@@ -110,6 +151,14 @@ abstract class DBHelper {
     abstract protected function indexExistsImpl($table, $index_name, $db);
 
     abstract protected function writeLockTablesImpl($function, $tables);
+
+    abstract protected function primaryKeyOfImpl($table);
+
+    abstract protected function isColumnNullableImpl($table, $column);
+
+    abstract protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+
+    abstract protected function foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
 }
 
 /**
@@ -170,6 +219,43 @@ class _DBHelper_MYSQL extends DBHelper {
             $backtrace_info = $backtrace_entry[1];
             Debug::message("Lock needs a function as parameter", $backtrace_info['file'], $backtrace_info['line']);
         }
+    }
+
+    public function isColumnNullableImpl($tableName, $columnname) {
+        $result = Database::get()->querySingle("select IS_NULLABLE from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = ?s and COLUMN_NAME = ?s", $tableName, $columnname);
+        return $result ? strcmp($result->IS_NULLABLE, 'YES') == 0 : false;
+    }
+
+    public function primaryKeyOfImpl($tableName) {
+        $result = Database::get()->querySingle("show keys from `" . $tableName . "` where `Key_name` = 'PRIMARY'");
+        return $result ? $result->Column_name : null;
+    }
+
+    private function getForeignKeyName($detailTableName, $detailFieldName, $masterTableName) {
+        return "fk_" . $masterTableName . "_" . $detailTableName . "_" . $detailFieldName;
+    }
+
+    protected function createForeignKeyImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {
+        Database::get()->query("
+            ALTER TABLE " . $detailTableName . "
+            ADD CONSTRAINT " . $this->getForeignKeyName($detailTableName, $detailFieldName, $masterTableName) . "
+            FOREIGN KEY (" . $detailFieldName . ")
+            REFERENCES " . $masterTableName . "(" . $masterIDFieldName . ")");
+    }
+
+    protected function foreignKeyExistsImpl($detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName) {
+        $constrInfo = Database::get()->querySingle("select CONSTRAINT_NAME as name from INFORMATION_SCHEMA.KEY_COLUMN_USAGE 
+                where TABLE_NAME = ?s 
+                and COLUMN_NAME = ?s 
+                and REFERENCED_TABLE_NAME = ?s 
+                and REFERENCED_COLUMN_NAME = ?s 
+        ", $detailTableName, $detailFieldName, $masterTableName, $masterIDFieldName);
+        if ($constrInfo) {
+            $name = $constrInfo->name;
+            return is_null($name) ? false :
+                    strcmp($name, $this->getForeignKeyName($detailTableName, $detailFieldName, $masterTableName)) == 0;
+        }
+        return false;
     }
 
 }

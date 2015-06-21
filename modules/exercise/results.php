@@ -58,15 +58,21 @@ if (isset($_SESSION['objExercise'][$exerciseId])) {
     $objExercise = $_SESSION['objExercise'][$exerciseId];
 }
 
+if ($is_editor && isset($_GET['purgeAttempID'])) {
+    $eurid = $_GET['purgeAttempID'];
+    $objExercise->purgeAttempt($eurid);
+    Session::Messages($langPurgeExerciseResultsSuccess);
+    redirect_to_home_page("modules/exercise/results.php?course=$course_code&exerciseId=$exerciseId");  
+}
 $exerciseTitle = $objExercise->selectTitle();
 $exerciseDescription = $objExercise->selectDescription();
 $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
-
+ 
 $tool_content .= "
 <div class='table-responsive'>
     <table class='table-default'>
     <tr>
-    <th>" . q($exerciseTitle) . "</th>
+    <th>" . q_math($exerciseTitle) . "</th>
     </tr>";
 if($exerciseDescription_temp) {
     $tool_content .= "
@@ -102,7 +108,7 @@ foreach ($result as $row) {
                 FROM `exercise_user_record` a, exercise b WHERE a.uid = ?d AND a.eid = ?d AND a.eid = b.id $extra_sql", $sid, $exerciseId);
     if (count($result2) > 0) { // if users found
         $tool_content .= "<div class='table-responsive'><table class='table-default'>";
-        $tool_content .= "<tr><td colspan='4'>";
+        $tool_content .= "<tr><td colspan='".($is_editor ? 5 : 4)."'>";
         if (!$sid) {
             $tool_content .= "$langNoGroupStudents";
         } else {
@@ -119,6 +125,7 @@ foreach ($result as $row) {
                   <th class='text-center'>" . $langExerciseDuration . "</td>
                   <th class='text-center'>" . $langYourTotalScore2 . "</td>
                   <th class='text-center'>" . $langCurrentStatus. "</th>
+                  ". ($is_editor ? "<th class='text-center'>" . icon('fa-gears'). "</th>" : "") ."
                 </tr>";
 
         $k = 0;
@@ -152,7 +159,22 @@ foreach ($result as $row) {
             } elseif ($row2->attempt_status == ATTEMPT_CANCELED) {
                 $status = $langAttemptCanceled;
             }
-            $tool_content .= "<td class='text-center'>$status</td></tr>";            
+            $tool_content .= "
+                    <td class='text-center'>$status</td>";
+            if ($is_editor) {
+            $tool_content .= "
+                    <td class='option-btn-cell'>" . action_button(array(
+                        array(
+                            'title' => $langDelete,
+                            'url' => "results.php?course=$course_code&exerciseId=$exerciseId&purgeAttempID=$row2->eurid",
+                            'icon' => "fa-times",
+                            'confirm' => $langQuestionCatDelConfirrm,
+                            'class' => 'delete'
+                        )
+                    )) . "</td>";
+            }
+            $tool_content .= "            
+                </tr>";            
             $k++;
         }
         $tool_content .= "</table></div><br>";

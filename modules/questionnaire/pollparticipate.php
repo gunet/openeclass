@@ -207,7 +207,8 @@ function printPollForm() {
 }
 
 function submitPoll() {
-    global $tool_content, $course_code, $user_id, $langPollSubmitted, $langBack;
+    global $tool_content, $course_code, $user_id, $langPollSubmitted, $langBack,
+           $langUsage;
 
     // first populate poll_answer
     $user_id = $GLOBALS['uid'];
@@ -249,5 +250,5 @@ function submitPoll() {
     if (!empty($end_message)) {
         $tool_content .=  $end_message;
     }
-    $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a></div>";
+    $tool_content .= "<br><div class=\"text-center\"><a class='btn btn-default' href=\"index.php?course=$course_code\">".$langBack."</a> <a class='btn btn-primary' href=\"pollresults.php?course=$course_code&amp;pid=$pid\">".$langUsage."</a></div>";
 }

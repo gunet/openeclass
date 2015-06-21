@@ -37,7 +37,7 @@ function list_videos() {
         $video_found = TRUE;
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'><input type='hidden' name='id' value='$id' />";
                     $tool_content .= "<table class='table-default'>";
-                    $tool_content .= "<tr>" .
+                    $tool_content .= "<tr class='list-header'>" .
                                      "<th width='200' class='text-left'>&nbsp;$langTitle</th>" .
                                      "<th class='text-left'>$langDescr</th>" .
                                      "<th width='100'>$langDate</th>" .
@@ -63,7 +63,6 @@ function list_videos() {
         }
         $sql = Database::get()->queryArray("SELECT * FROM video_category WHERE course_id = ?d ORDER BY name", $course_id);
         if ($sql) {
-            $tool_content .= "<tr><td colspan='3' class='bold'>&nbsp;$langCatVideoDirectory</td></tr>";
             foreach ($sql as $videocat) {
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>".icon('fa-folder-o')."&nbsp;&nbsp;" .
@@ -85,7 +84,7 @@ function list_videos() {
                 }
             }
         }
-        $tool_content .= "<tr><th colspan='4'><div align='right'><input class='btn btn-primary' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></th></tr></table></form>";
+        $tool_content .= "</table><div class='text-right'><input class='btn btn-primary' type='submit' name='submit_video' value='".q($langAddModulesButton)."' />&nbsp;&nbsp;</div></form>";
     }
     if (!$video_found) {
         $tool_content .= "<div class='alert alert-warning'>$langNoVideo</div>";

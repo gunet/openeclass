@@ -52,7 +52,7 @@ if (defined('GROUP_DOCUMENTS')) {
     $groupset = "ebook_id=$ebook_id&amp;";
     $group_id = '';
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;' . $groupset;
-    $upload_target_url = 'document.php?course=' . $course_code;
+    $upload_target_url = 'document.php?course=' . $course_code . '&amp;ebook_id=' . $ebook_id . (isset($_REQUEST['from']) ? '&amp;from=ebookEdit' : '');
     $group_sql = "course_id = $course_id AND subsystem = $subsystem AND subsystem_id = $subsystem_id";
     $group_hidden_input = "<input type='hidden' name='ebook_id' value='$ebook_id' />";
     $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
@@ -82,6 +82,30 @@ if (defined('GROUP_DOCUMENTS')) {
     }
     $course_id = -1;
     $course_code = '';
+} elseif (defined('MY_DOCUMENTS')) {
+    $subsystem = MYDOCS;
+    $subsystem_id = $uid;
+    $groupset = '';
+    $base_url = $_SERVER['SCRIPT_NAME'] . '?';
+    $upload_target_url = 'index.php';
+    $group_id = '';
+    $group_sql = "subsystem = $subsystem AND subsystem_id = $uid";
+    $group_hidden_input = '';
+    $basedir = $webDir . '/courses/mydocs/' . $uid;
+    if (!is_dir($basedir)) {
+        mkdir($basedir, 0775, true);
+    }
+    $pageName = $langMyDocs;
+    // Saved course code so that file picker menu doesn't lose
+    // the current course if we're in a course
+    if (isset($_GET['course']) and $_GET['course']) {
+        define('SAVED_COURSE_CODE', $_GET['course']);
+        define('SAVED_COURSE_ID', course_code_to_id(SAVED_COURSE_CODE));
+        $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . SAVED_COURSE_CODE . '&amp;';
+    }
+    $course_id = -1;
+    $course_code = '';
+    $can_upload = $session->user_id == $uid;
 } else {
     $subsystem = MAIN;
     $base_url = $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '&amp;';

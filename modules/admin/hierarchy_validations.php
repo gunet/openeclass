@@ -40,8 +40,9 @@ function validateNode($id, $checkOwn) {
 
     $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
 
-    if ($id <= 0)
+    if ($id <= 0) {
         exitWithError($notallowed);
+    }
 
     if (!Database::get()->querySingle("SELECT * FROM " . $tree->getDbtable() . " WHERE id = ?d", $id)) {
         exitWithError($notallowed);
@@ -50,8 +51,9 @@ function validateNode($id, $checkOwn) {
     if ($checkOwn) {
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
-        if (!in_array($id, $subtrees))
+        if (!in_array($id, $subtrees)) {
             exitWithError($notallowed);
+        }
     }
 }
 
@@ -69,20 +71,23 @@ function validateParentLft($nodelft, $checkOwn) {
 
     $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
 
-    if ((!$checkOwn && $nodelft < 0) || ($checkOwn && $nodelft <= 0))
+    if ((!$checkOwn && $nodelft < 0) || ($checkOwn && $nodelft <= 0)) {
         exitWithError($notallowed);
+    }
 
     $result = Database::get()->querySingle("SELECT * FROM " . $tree->getDbtable() . " WHERE lft = ?d", $nodelft);
 
-    if (!$result && $nodelft > 0)
+    if (!$result && $nodelft > 0) {
         exitWithError($notallowed);
+    }
 
     if ($checkOwn) {
         $parentid = $result->id;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
-        if (!in_array($parentid, $subtrees))
+        if (!in_array($parentid, $subtrees)) {
             exitWithError($notallowed);
+        }
     }
 }
 
@@ -100,25 +105,29 @@ function validateUserNodes($userId, $checkOwn) {
 
     $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
 
-    if ($userId <= 0)
+    if ($userId <= 0) {
         exitWithError($notallowed);
+    }
 
     $deps = $user->getDepartmentIds(intval($userId));
 
-    if (empty($deps))
+    if (empty($deps)) {
         exitWithError($notallowed);
+    }
 
     if ($checkOwn) {
         $atleastone = false;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
         foreach ($deps as $depId) {
-            if (in_array($depId, $subtrees))
+            if (in_array($depId, $subtrees)) {
                 $atleastone = true;
+            }
         }
 
-        if (!$atleastone)
+        if (!$atleastone) {
             exitWithError($notallowed);
+        }
     }
 }
 
@@ -135,25 +144,29 @@ function validateCourseNodes($courseId, $checkOwn) {
 
     $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
 
-    if ($courseId <= 0)
+    if ($courseId <= 0) {
         exitWithError($notallowed);
+    }
 
     $deps = $course->getDepartmentIds(intval($courseId));
 
-    if (empty($deps))
+    if (empty($deps)) {
         exitWithError($notallowed);
+    }
 
     if ($checkOwn) {
         $atleastone = false;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
         foreach ($deps as $depId) {
-            if (in_array($depId, $subtrees))
+            if (in_array($depId, $subtrees)) {
                 $atleastone = true;
+            }
         }
 
-        if (!$atleastone)
+        if (!$atleastone) {
             exitWithError($notallowed);
+        }
     }
 }
 
@@ -183,8 +196,9 @@ function isDepartmentAdmin() {
     $checkOwn = false;
 
     // check if department manager
-    if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin)
+    if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin) {
         $checkOwn = true;
+    }
 
     return $checkOwn;
 }

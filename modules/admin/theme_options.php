@@ -135,11 +135,11 @@ if (isset($_POST['optionsSave'])) {
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_POST['themeOptionsName'])) {
     $theme_options_name = $_POST['themeOptionsName'];
-    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name) VALUES(?s)", $theme_options_name)->lastInsertID;
+    $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, '')", $theme_options_name)->lastInsertID;
     clear_default_settings();
-    
-    clone_images(); //clone images
-    upload_images(); //upload new images
+
+    clone_images($new_theme_id); //clone images
+    upload_images($new_theme_id); //upload new images
     $serialized_data = serialize($_POST);
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $new_theme_id);
     $_SESSION['theme_options_id'] = $new_theme_id;
@@ -220,6 +220,19 @@ if (isset($_POST['optionsSave'])) {
                     }
                 });
             });
+            var optionsSaveCallback = function (d) {
+                var themeOptionsName = $('#themeOptionsName').val();
+                if (themeOptionsName) {
+                    var input = $('<input>')
+                        .attr('type', 'hidden')
+                        .attr('name', 'themeOptionsName').val(themeOptionsName);
+                    $('#theme_options_form').append($(input)).submit();
+                } else {
+                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
+                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
+                    return false;
+                }
+            };
             $('#optionsSaveAs').click(function (e)
             {
                 e.preventDefault();
@@ -240,19 +253,7 @@ if (isset($_POST['optionsSave'])) {
                         success: {
                             label: '$langSave',
                             className: 'btn-success',
-                            callback: function (d) {
-                                var themeOptionsName = $('#themeOptionsName').val();
-                                if(themeOptionsName) {
-                                    var input = $('<input>')
-                                                   .attr('type', 'hidden')
-                                                   .attr('name', 'themeOptionsName').val(themeOptionsName);
-                                    $('#theme_options_form').append($(input)).submit();
-                                } else {
-                                    $('#themeOptionsName').closest('.form-group').addClass('has-error');
-                                    $('#themeOptionsName').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
-                                    return false;
-                                }
-                            }
+                            callback: optionsSaveCallback,
                         },
                         cancel: {
                             label: '$langCancel',
@@ -260,7 +261,13 @@ if (isset($_POST['optionsSave'])) {
                         }                        
                     }
                 });
-            })
+                $('#themeOptionsName').keypress(function (e) {
+                    if (e.which == 13) {
+                        e.preventDefault();
+                        optionsSaveCallback();
+                    }
+                });
+            });
             $('select#theme_selection').change(function ()
             {
                 var cur_val = $(this).val();
@@ -371,7 +378,7 @@ if (isset($_POST['optionsSave'])) {
             'class' => 'uploadTheme',
             'level' => 'primary-label'),        
         array('title' => $langBack,
-            'url' => "$urlAppend/modules/admin/index.php",
+            'url' => "{$urlAppend}modules/admin/index.php",
             'icon' => 'fa-reply',
             'level' => 'primary-label')
         ),false);
@@ -429,6 +436,7 @@ $tool_content .= "
   <div class='tab-content'>
     <div role='tabpanel' class='tab-pane in active fade' id='generalsetting'>
         <div class='form-wrapper'>
+            <legend class='theme_options_legend'>$langLayoutConfig</legend>
             <div class='form-group'>
                 <label class='col-sm-3 control-label'>$langLayout:</label>
                 <div class='form-inline col-sm-9'>
@@ -452,7 +460,8 @@ $tool_content .= "
                     <input id='fluidContainerWidth' name='fluidContainerWidth' data-slider-id='ex1Slider' type='text' data-slider-min='1340' data-slider-max='1920' data-slider-step='10' data-slider-value='$theme_options_styles[fluidContainerWidth]' ".(($theme_options_styles['containerType'] == 'boxed')? ' disabled' : '').">
                     <span style='margin-left:10px;' id='pixelCounter'></span>
                 </div>
-            </div>                        
+            </div>
+            <legend class='theme_options_legend'>$langLogoConfig</legend>
             <div class='form-group'>
                 <label for='imageUpload' class='col-sm-3 control-label'>$langLogo <small>$langLogoNormal</small>:</label>
                 <div class='col-sm-9'>
@@ -464,7 +473,8 @@ $tool_content .= "
                 <div class='col-sm-9'>
                    $small_logo_field
                 </div>
-            </div>              
+            </div>
+            <legend class='theme_options_legend'>$langBgColorConfig</legend>
             <div class='form-group'>
               <label for='bgColor' class='col-sm-3 control-label'>$langBgColor:</label>
               <div class='col-sm-9'>
@@ -497,6 +507,7 @@ $tool_content .= "
                       </div>              
                 </div>                
             </div>
+            <legend class='theme_options_legend'>$langLinksCongiguration</legend>
             <div class='form-group'>
               <label for='linkColor' class='col-sm-3 control-label'>$langLinkColor:</label>
               <div class='col-sm-9'>
@@ -508,7 +519,8 @@ $tool_content .= "
               <div class='col-sm-9'>
                 <input name='linkHoverColor' type='text' class='form-control colorpicker' id='linkHoverColor' value='$theme_options_styles[linkHoverColor]'>
               </div>
-            </div>                 
+            </div>
+            <legend class='theme_options_legend'>$langLoginConfiguration</legend>
             <div class='form-group'>
               <label for='loginJumbotronBgColor' class='col-sm-3 control-label'>$langLoginBgGradient:</label>
               <div class='col-xs-4 col-sm-1'>
@@ -558,12 +570,14 @@ $tool_content .= "
     </div>
     <div role='tabpanel' class='tab-pane fade' id='navsettings'>
         <div class='form-wrapper'>
+            <legend class='theme_options_legend'>$langBgColorConfig</legend>
             <div class='form-group'>
               <label for='leftNavBgColor' class='col-sm-3 control-label'>$langBgColor:</label>
               <div class='col-sm-9'>
                 <input name='leftNavBgColor' type='text' class='form-control colorpicker' id='leftNavBgColor' value='$theme_options_styles[leftNavBgColor]'>
               </div>
             </div>
+            <legend class='theme_options_legend'>$langMainMenuConfiguration</legend>
             <div class='form-group'>
               <label for='leftMenuBgColor' class='col-sm-3 control-label'>$langMainMenuBgColor:</label>
               <div class='col-sm-9'>
@@ -587,7 +601,8 @@ $tool_content .= "
               <div class='col-sm-9'>
                 <input name='leftMenuSelectedFontColor' type='text' class='form-control colorpicker' id='leftMenuSelectedFontColor' value='$theme_options_styles[leftMenuSelectedFontColor]'>
               </div>
-            </div>               
+            </div>
+            <legend class='theme_options_legend'>Ρυθμίσεις Επιλογών</legend>
             <div class='form-group'>
               <label for='leftSubMenuFontColor' class='col-sm-3 control-label'>$langSubMenuLinkColor:</label>
               <div class='col-sm-9'>
@@ -641,8 +656,8 @@ function initialize_settings() {
         }
     }    
 }
-function clone_images() {
-    global $webDir, $theme, $new_theme_id, $theme_id;
+function clone_images($new_theme_id = null) {
+    global $webDir, $theme, $theme_id;
     if(!is_dir("$webDir/courses/theme_data/$new_theme_id")) {
         mkdir("$webDir/courses/theme_data/$new_theme_id", 0755);
     }     
@@ -656,11 +671,12 @@ function clone_images() {
         }
     }
 }
-function upload_images() {
+function upload_images($new_theme_id = null) {
     global $webDir, $theme, $theme_id;
+    if (isset($new_theme_id)) $theme_id = $new_theme_id;
     if(!is_dir("$webDir/courses/theme_data/$theme_id")) {
         mkdir("$webDir/courses/theme_data/$theme_id", 0755);
-    } 
+    }
     $images = array('bgImage','imageUpload','imageUploadSmall','loginImg');
     foreach($images as $image) {
         if (isset($_FILES[$image]) && is_uploaded_file($_FILES[$image]['tmp_name'])) {

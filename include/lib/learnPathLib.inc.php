@@ -115,11 +115,8 @@ function commentBox($type, $mode) {
     // - update and show the comment and the pencil and the delete cross (UPDATE_)
     // - update and nothing displayed after form sent (UPDATENOTSHOWN_)
     if (( $mode == UPDATE_ || $mode == UPDATENOTSHOWN_ ) && $is_editor) {
-        if (isset($_POST['insertCommentBox'])) {
-            $sql = "UPDATE `" . $tbl_name . "`
-                           SET `" . $col_name . "` = \"" . addslashes($_POST['insertCommentBox']) . "\"
-                         WHERE " . $where_cond;
-            Database::get()->query($sql);
+        if (isset($_POST['insertCommentBox'])) {            
+            Database::get()->query("UPDATE $tbl_name SET $col_name = ?s WHERE " . $where_cond . "", $_POST['insertCommentBox']);
 
             if ($mode == UPDATE_) {
                 $dsp = true;
@@ -247,9 +244,13 @@ function nameBox($type, $mode, $formlabel = FALSE) {
             $output .= '<form method="POST" action="' . $_SERVER['SCRIPT_NAME'] . '?course=' . $course_code . '">' . "\n";
 
             if ($formlabel != FALSE) {                
-                $output .= '<input type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '" / class="FormData_InputText">' . "\n"
+                $output .= '<div class="col-xs-10"><div class="input-group">'
+                        . '<input class="form-control" type="text" name="newName" size="50" maxlength="255" value="' . htmlspecialchars($oldName) . '">' . "\n"
+                        . '<span class="input-group-btn">'
+                        . '<button class="btn btn-primary" type="submit" value="'.$langModify.'">'.$langModify.'</button>'
+                        . '</span>'
+                        . '</div></div>'
                         . '<input type="hidden" name="cmd" value="updateName" />' . ""
-                        . '<input class="btn btn-primary" type="submit" value="' . $langModify . '" />' . ""
                         . '</form>';
             }
         }

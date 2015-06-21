@@ -198,11 +198,11 @@ else {
         if ($server->enable_recordings == "false") {
             $checkedfalse = " checked='true' ";
         } else $checkedfalse = '';
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo:</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_off' name='enable_recordings' value='false' $checkedfalse>$langNo</label></div>";
         if ($server->enable_recordings == "true") {
             $checkedtrue = " checked='true' ";
         } else $checkedtrue = '';
-        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes:</label></div>";
+        $tool_content .= "<div class='col-sm-9 radio'><label><input  type='radio' id='recordings_on' name='enable_recordings' value='true' $checkedtrue>$langYes</label></div>";
         $tool_content .= "</div>";
         $tool_content .= "<div class='form-group'>";
 
@@ -268,7 +268,7 @@ else {
                     <th class = 'text-center'>".icon('fa-gears')."</th></tr>
                 </thead>";
             foreach ($q as $srv) {
-                $enabled_bbb_server = ($srv->enabled)? $langYes : $langNo;
+                $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
                 $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip) . '/' . $srv->max_rooms;
                 $tool_content .= "<tr>";
                 $tool_content .= "<td>$srv->hostname</td>";
@@ -277,7 +277,7 @@ else {
                 $tool_content .= "<td>$connected_users</td>";
                 $tool_content .= "<td>$srv->weight</td>";
                 $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                                    array('title' => $langEdit,
+                                                    array('title' => $langEditChange,
                                                           'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
                                                           'icon' => 'fa-edit'),
                                                     array('title' => $langDelete,

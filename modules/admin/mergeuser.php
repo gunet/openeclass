@@ -70,7 +70,7 @@ if (isset($_REQUEST['u'])) {
             $target_field .= "<div class='form-group'><label class='col-sm-3 control-label'>$langUserMergeTarget:</label>
                                               <div class='col-sm-9'>" . display_user($target['id']) .
                     " (" . q($target['username']) . ")</div></div>
-                                    <div class='form-group'><label class='col-sm-3 control-label'>$langEditAuthMethod</label>
+                                    <div class='form-group'><label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
                                               <div class='col-sm-9'>" . get_auth_info($target_auth_id) . "</div></div>
                                                   <div class='form-group'><label class='col-sm-3 control-label'>$langProperty:</label>                                          
                                               <div class='col-sm-9'>" . q($status_names[$target['status']]) . "</div></div>";
@@ -98,7 +98,7 @@ if (isset($_REQUEST['u'])) {
                         <div class='col-sm-9'>" . display_user($info['id']) . "</div>
                     </div>
                     <div class='form-group'>
-                    <label class='col-sm-3 control-label'>$langEditAuthMethod</label>
+                    <label class='col-sm-3 control-label'>$langEditAuthMethod:</label>
                          <div class='col-sm-9'>" . get_auth_info($auth_id) . "</div>
                     </div>
                     <div class='form-group'>

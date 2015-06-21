@@ -70,35 +70,39 @@ $passUrl = $urlServer . 'main/profile/password.php';
 $passLocation = 'Location: ' . $passUrl;
 
 if (isset($_POST['submit'])) {
-    if (empty($_POST['password_form']) or empty($_POST['password_form1']) or empty($_POST['old_pass'])) {
-        Session::Messages($langFieldsMissing);
-        header($passLocation);
-        exit;
-    }
-    if (count($error_messages = acceptable_password($_POST['password_form'], $_POST['password_form1'])) > 0) {
-        Session::Messages($langPassTwo);
-        header($passLocation);
-        exit;
-    }
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('password_form', 'password_form1', 'old_pass'));
+    $v->rule('equals', 'password_form', 'password_form1');
+    $v->rule('lengthMin', 'password_form', get_config('min_password_len'));
+    $v->labels(array(
+        'old_pass' => "$langTheField $langOldPass",
+        'password_form' => "$langTheField $langNewPass1",
+        'password_form1' => "$langTheField $langNewPass2"
+    ));
+    if($v->validate()) { 
+        // all checks ok. Change password!    
+       $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
 
-    // all checks ok. Change password!    
-    $myrow = Database::get()->querySingle("SELECT password FROM user WHERE id= ?d", $_SESSION['uid']);
+       $hasher = new PasswordHash(8, false);
+       $new_pass = $hasher->HashPassword($_REQUEST['password_form']);
 
-    $hasher = new PasswordHash(8, false);
-    $new_pass = $hasher->HashPassword($_REQUEST['password_form']);
-
-    if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow->password)) {
-        Database::get()->query("UPDATE user SET password = ?s
-                                 WHERE id = ?d", $new_pass, $_SESSION['uid']);
-        Log::record(0, 0, LOG_PROFILE,
-            array('uid' => $_SESSION['uid'], 'pass_change' => 1));
-        Session::Messages($langPassChanged, 'alert-success');
-        redirect_to_home_page('main/profile/display_profile.php');
-        exit;
+       if ($hasher->CheckPassword($_REQUEST['old_pass'], $myrow->password)) {
+           Database::get()->query("UPDATE user SET password = ?s
+                                    WHERE id = ?d", $new_pass, $_SESSION['uid']);
+           Log::record(0, 0, LOG_PROFILE,
+               array('uid' => $_SESSION['uid'], 'pass_change' => 1));
+           Session::Messages($langPassChanged, 'alert-success');
+           redirect_to_home_page('main/profile/display_profile.php');
+           exit;
+       } else {
+           Session::Messages($langPassOldWrong);
+           redirect_to_home_page('main/profile/password.php');
+       }       
     } else {
-        Session::Messages($langPassOldWrong);
-        redirect_to_home_page('main/profile/profile.php');
-    }
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page('main/profile/password.php');
+    } 
+
 }
 
 $tool_content .= action_bar(array(
@@ -108,28 +112,37 @@ $tool_content .= action_bar(array(
           'level' => 'primary-label')));
 
 if (!isset($_POST['changePass'])) {
+    $old_pass_error = Session::getError('old_pass');
+    $old_pass = Session::has('old_pass') ? Session::get('old_pass') : '';
+    $password_form_error = Session::getError('password_form');
+    $password_form = Session::has('password_form') ? Session::get('password_form') : '';
+    $password_form1_error = Session::getError('password_form1');
+    $password_form1 = Session::has('password_form1') ? Session::get('password_form1') : '';
     $tool_content .= "<div class='form-wrapper'>
     <form class='form-horizontal' role='form' method='post' action='$passUrl'>
     <fieldset>
-    <div class='form-group'>
+    <div class='form-group".($old_pass_error ? " has-error" : "")."'>
       <label for='old_pass' class='col-sm-2 control-label'>$langOldPass: </label>
       <div class='col-sm-8'>
-	    <input type='password' class='form-control' id='old_pass' name='old_pass' value='' autocomplete='off'>
+	    <input type='password' class='form-control' id='old_pass' name='old_pass' value='$old_pass' autocomplete='off'>
+            <span class='help-block'>$old_pass_error</span>
       </div>
     </div>
-    <div class='form-group'>
+    <div class='form-group".($password_form_error ? " has-error" : "")."'>
       <label for='password_form' class='col-sm-2 control-label'>$langNewPass1: </label>
       <div class='col-sm-8'>
-	    <input type='password' class='form-control' id='password_form' name='password_form' value='' autocomplete='off'>
+	    <input type='password' class='form-control' id='password_form' name='password_form' value='$password_form' autocomplete='off'>
+            <span class='help-block'>$password_form_error</span>
       </div>
       <div class='col-sm-2 text-center padding-thin'>
         <span id='result'></span>
       </div>
     </div>
-    <div class='form-group'>
+    <div class='form-group".($password_form1_error ? " has-error" : "")."'>
       <label for='password_form1' class='col-sm-2 control-label'>$langNewPass2: </label>
       <div class='col-sm-8'>
-        <input type='password' class='form-control' id='password_form1' name='password_form1' value='' autocomplete='off'>
+        <input type='password' class='form-control' id='password_form1' name='password_form1' value='$password_form1' autocomplete='off'>
+        <span class='help-block'>$password_form1_error</span>
       </div>
     </div>
     <div class='form-group'>

@@ -112,32 +112,28 @@ require_once 'include/lib/textLib.inc.php';
         redirect_to_home_page("modules/conference/messageList.php?course=$course_code");
     }
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
+<html>
 <head>
     <base target="_parent">
     <meta http-equiv="refresh" content="30; url=<?php echo $_SERVER['SCRIPT_NAME']; ?>" />
     <title>Chat messages</title>
     <!-- jQuery -->
-    <script type="text/javascript" src="<?php echo $urlServer;?>/js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
+    <script src="<?php echo $urlServer;?>js/jquery-<?php echo JQUERY_VERSION; ?>.min.js"></script>
 
     <!-- Latest compiled and minified JavaScript -->
-    <script src="<?php echo $urlServer;?>/template/default/js/bootstrap.min.js"></script>
+    <script src="<?php echo $urlServer;?>template/default/js/bootstrap.min.js"></script>
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-custom.css">
-        
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/bootstrap-theme.min.css">
-    
-    <link rel="stylesheet" href="<?php echo $urlServer;?>/template/default/CSS/inventory.css">
-        
+    <link rel="stylesheet" href="<?php echo $urlServer;?>template/default/CSS/bootstrap-custom.css">
+               
     <style type="text/css">
         span { color: #727266; font-size: 11px; }
         div { font-size: 12px; }
         body { font-family: Verdana, Arial, Helvetica, sans-serif; }
     </style>
 </head>
-<body>
+<body style='background: white;'>
 <?php
     // display message list
     $fileContent = file($fileChatName);
@@ -180,7 +176,7 @@ require_once 'include/lib/textLib.inc.php';
                 echo "<div class='row margin-right-thin margin-left-thin margin-top-thin'>
                             <div class='col-xs-12'>
                                 <div class='media'>
-                                    <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&token=$token'>
+                                    <a class='media-left' href='{$urlServer}main/profile/display_profile.php?id=$user_id&amp;token=$token'>
                                         ". profile_image($user_id, IMAGESIZE_SMALL) ."
                                     </a>
                                     <div class='media-body bubble'>

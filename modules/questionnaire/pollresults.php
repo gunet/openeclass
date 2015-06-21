@@ -63,21 +63,32 @@ $head_content .= "<script type = 'text/javascript'>
     });  
 </script>";
 
-if (!$is_editor) {
-    Session::Messages($langPollResultsAccess);
-    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
-}
 if (!isset($_GET['pid']) || !is_numeric($_GET['pid'])) {
     redirect_to_home_page();
 }
 $pid = intval($_GET['pid']);
 $thePoll = Database::get()->querySingle("SELECT * FROM poll WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);
+if (!$is_editor && !$thePoll->show_results) {
+    Session::Messages($langPollResultsAccess);
+    redirect_to_home_page('modules/questionnaire/index.php?course='.$course_code);    
+}
 if(!$thePoll){
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
 }
 $total_participants = Database::get()->querySingle("SELECT COUNT(DISTINCT user_id) AS total FROM poll_answer_record WHERE pid = ?d", $pid)->total;
 if(!$total_participants) {
     redirect_to_home_page("modules/questionnaire/index.php?course=$course_code");
+}
+$export_box = "";
+if ($is_editor) {
+    $export_box .= "
+        <div class='alert alert-info'>
+            <b>$langDumpUserDurationToFile:</b><br>
+            <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
+               <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
+            <b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
+               <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
+        </div>";
 }
 $tool_content .= action_bar(array(
             array(
@@ -87,13 +98,7 @@ $tool_content .= action_bar(array(
                 'level' => 'primary-label'
             )
         ))."
-<div class='alert alert-info'>
-    <b>$langDumpUserDurationToFile:</b><br>
-    <b>$langPollPercentResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid'>$langcsvenc2</a>,
-       <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid'>$langcsvenc1</a><br>
-    <b>$langPollFullResults:</b> <a href='dumppollresults.php?course=$course_code&amp;pid=$pid&amp;full=1'>$langcsvenc2</a>,
-       <a href='dumppollresults.php?course=$course_code&amp;enc=1253&amp;pid=$pid&amp;full=1'>$langcsvenc1</a>
-</div>
+$export_box
 <div class='panel panel-primary'>
     <div class='panel-heading'>
         <h3 class='panel-title'>$langInfoPoll</h3>
@@ -172,7 +177,7 @@ foreach ($questions as $theQuestion) {
                 <table class='table-default'>
                     <tr>
                         <th>$langAnswer</th>
-                        <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."</tr>";            
+                        <th>$langSurveyTotalAnswers</th>".(($thePoll->anonymized) ? '' : '<th>' . $langStudents . '</th>')."</tr>";            
             foreach ($answers as $answer) {              
                 $percentage = round(100 * ($answer->count / $answer_total),2);
                 if(isset($answer->answer_text)){
@@ -227,8 +232,18 @@ foreach ($questions as $theQuestion) {
                 }
                 $answers_table .= "
                     <tr>
-                            <td>".q($answer->answer_text)."</td>
-                            <td>$answer->count</td>".(($thePoll->anonymized == 1)?'':'<td>'.$ellipsized_names_str.(($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').'</td><td class="hidden_names" style="display:none;">'.q($names_str).' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a></td>')."</tr>";     
+                        <td>".q($answer->answer_text)."</td>
+                        <td>$answer->count</td>"
+                        . (($thePoll->anonymized == 1) ? 
+                        '' :
+                        '<td>'.$ellipsized_names_str.
+                            (($ellipsized_names_str != $names_str)? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
+                        '</td>
+                        <td class="hidden_names" style="display:none;">'
+                            . q($names_str) .
+                            ' <a href="#" class="trigger_names" data-type="multiple" id="hide">'.$shownone.'</a>
+                        </td>').
+                    "</tr>";     
                 unset($names_array);                
             }
             $answers_table .= "</table>";
@@ -236,42 +251,51 @@ foreach ($questions as $theQuestion) {
             $tool_content .= $chart->plot();            
             $tool_content .= $answers_table;
         } elseif ($theQuestion->qtype == QTYPE_FILL) {
-            $answers = Database::get()->queryArray("SELECT answer_text, user_id FROM poll_answer_record
-                                WHERE qid = ?d", $theQuestion->pqid);
-                 
+            $answers = Database::get()->queryArray("SELECT COUNT(arid) AS count, answer_text, user_id FROM poll_answer_record
+                                        WHERE qid = ?d GROUP BY answer_text", $theQuestion->pqid);                   
             $tool_content .= "<table class='table-default'>
                     <tbody>
                     <tr>
-                            <th>$langUser</th>
                             <th>$langAnswer</th>
-                    </tr>";  
-            if ($thePoll->anonymized==1) {
-                $k=1;
-                foreach ($answers as $theAnswer) {     
-                    $tool_content .= "
-                    <tr>
-                            <td>$langStudent $k</td>
-                            <td>".q($theAnswer->answer_text)."</td>
-                    </tr>";                
-                    $k++;    
-                }           
-            } else {
-                $k=1;
-                foreach ($answers as $theAnswer) { 
-                    $tool_content .= "
-                    <tr ".(($k>3) ? 'class="hidden_row" style="display:none;"' : '').">
-                            <td>" . q(uid_to_name($theAnswer->user_id)) ."</td>
-                            <td>".q($theAnswer->answer_text)."</td>
+                            <th>$langSurveyTotalAnswers</th>
+                            ".(($thePoll->anonymized == 1)?'':'<th>'.$langStudents.'</th>')."    
                     </tr>";
-                    $k++;
+            $k=1;
+            foreach ($answers as $answer) {             
+                if (!$thePoll->anonymized) {
+                    $names = Database::get()->queryArray("SELECT CONCAT(b.surname, ' ', b.givenname) AS fullname FROM poll_answer_record AS a, user AS b WHERE a.answer_text = ?s AND a.user_id = b.id", $answer->answer_text);
+                    foreach($names as $name) {
+                      $names_array[] = $name->fullname;
+                    }
+                    $names_str = implode(', ', $names_array);  
+                    $ellipsized_names_str = q(ellipsize($names_str, 60));
                 }
-                if ($k>4) {
-                 $tool_content .= "
-                    <tr>
-                            <td colspan='2'><a href='#' class='trigger_names' data-type='fill' id='show'>$showall</a></td>
-                    </tr>";                       
-                }                
+                $row_class = ($k>3) ? 'class="hidden_row" style="display:none;"' : '';
+                $extra_column = !$thePoll->anonymized ? 
+                        "<td>"
+                        . $ellipsized_names_str
+                        . (($ellipsized_names_str != $names_str) ? ' <a href="#" class="trigger_names" data-type="multiple" id="show">'.$showall.'</a>' : '').
+                        "</td>
+                        <td class='hidden_names' style='display:none;'>'
+                           . q($names_str) .
+                           ' <a href='#' class='trigger_names' data-type='multiple' id='hide'>'.$shownone.'</a>
+                       </td>" : "";                       
+                $tool_content .= "
+                <tr $row_class>
+                        <td>".q($answer->answer_text)."</td>
+                        <td>$answer->count</td>
+                        $extra_column
+                </tr>";                               
+                $k++;
+                if (!$thePoll->anonymized) unset($names_array);
             }
+            if ($k>4) {
+             $tool_content .= "
+                <tr>
+                        <td colspan='".($thePoll->anonymized ? 2 : 3)."'><a href='#' class='trigger_names' data-type='fill' id='show'>$showall</a></td>
+                </tr>";                       
+            }             
+
             $tool_content .= '</tbody></table><br>';
         }
         $tool_content .= "</div></div>"; 

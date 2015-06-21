@@ -247,7 +247,7 @@ if (!class_exists('ScormExport')):
 <meta http-equiv="Content-Type" content="text/html; charset=' . $charset . '">
 <meta http-equiv="expires" content="Tue, 05 DEC 2000 07:00:00 GMT">
 <meta http-equiv="Pragma" content="no-cache">
-<link rel="stylesheet" type="text/css" href="compatible.css" />
+<link rel="stylesheet" type="text/css" href="bootstrap-custom.css" />
 <link rel="stylesheet" type="text/css" href="' . $claro_stylesheet . '" media="screen, projection, tv" />
 <script language="javascript" type="text/javascript" src="APIWrapper.js"></script>
 <script language="javascript" type="text/javascript" src="scores.js"></script>
@@ -256,7 +256,7 @@ if (!class_exists('ScormExport')):
 
             $pageBody = '<body onload="loadPage()">
     <div id="claroBody"><form id="quiz">
-    <table width="99%" border="0" cellpadding="1" cellspacing="0"><tr><td>' . "\n";
+    <table class="table-default"><tr><td>' . "\n";
 
 
             // read the exercise
@@ -297,7 +297,7 @@ if (!class_exists('ScormExport')):
                 $questionPonderationList[$questionId] = $question->selectWeighting();
 
                 // Generic display, valid for all kind of question
-                $pageBody .= '<table width="99%">
+                $pageBody .= '<table class="table-default">
     <tr><th valign="top" colspan="2">' . $langQuestion . ' ' . $questionCount . '</th></tr>
     <tfoot>
         <tr><td valign="top" colspan="2">' . $qtitle . '</td></tr>
@@ -513,7 +513,7 @@ if (!class_exists('ScormExport')):
             // No more questions, add the button.
             $pageEnd = '</td></tr>
             <tr>
-                <td align="center"><br><input type="button" value="' . $langOk . '" onClick="calcScore()"></td>
+                <td align="center"><br><input class="btn btn-primary" type="button" value="' . $langOk . '" onClick="calcScore()"></td>
             </tr>
             </table>
             </form>
@@ -626,7 +626,7 @@ if (!class_exists('ScormExport')):
             }
             // Copy usual files (.css, .js, .xsd, etc)
             if (
-                    !claro_copy_file('modules/learnPath/export12/APIWrapper.js', $this->destDir) || !claro_copy_file('modules/learnPath/export12/scores.js', $this->destDir) || !claro_copy_file('modules/learnPath/export12/ims_xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imscp_rootv1p1p2.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imsmd_rootv1p2p1.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/adlcp_rootv1p2.xsd', $this->destDir)) {
+                    !claro_copy_file('modules/learnPath/export12/APIWrapper.js', $this->destDir) || !claro_copy_file('template/default/CSS/bootstrap-custom.css', $this->destDir) || !claro_copy_file('modules/learnPath/export12/scores.js', $this->destDir) || !claro_copy_file('modules/learnPath/export12/ims_xml.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imscp_rootv1p1p2.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/imsmd_rootv1p2p1.xsd', $this->destDir) || !claro_copy_file('modules/learnPath/export12/adlcp_rootv1p2.xsd', $this->destDir)) {
                 $this->error[] = $langErrorCopyScormFiles;
                 return false;
             }

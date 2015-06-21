@@ -24,19 +24,32 @@
  * @brief Create new exercise or modify an existing one
  */
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/tags/moduleElement.class.php';
 
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
+    $v->addRule('ipORcidr', function($field, $value, array $params) {
+        //explode here and run a loop
+        $IPs = explode(',', $value);
+        //matches IPv4/6 and IPv4/6 CIDR ranges
+        foreach ($IPs as $ip){
+            $valid = isIPv4($ip) || isIPv4cidr($ip) || isIPv6($ip) || isIPv6cidr($ip);
+            if (!$valid) return false;
+        }
+        return true;
+    }, $langIPInvalid);      
     $v->rule('required', array('exerciseTitle'));
     $v->rule('numeric', array('exerciseTimeConstraint', 'exerciseAttemptsAllowed'));
     $v->rule('date', array('exerciseEndDate', 'exerciseStartDate'));
+    $v->rule('ipORcidr', array('exerciseIPLock')); 
     $v->labels(array(
         'exerciseTitle' => "$langTheField $langExerciseName",
         'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",
         'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed",
         'exerciseEndDate' => "$langTheField $langExerciseEnd",
-        'exerciseStartDate' => "$langTheField $langExerciseStart"
+        'exerciseStartDate' => "$langTheField $langExerciseStart",
+        'exerciseIPLock' => "$langTheField IPs"
     ));
     if($v->validate()) {
         $exerciseTitle = trim($exerciseTitle);
@@ -45,9 +58,16 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->updateTitle($exerciseTitle);
         $objExercise->updateDescription($exerciseDescription);
         $objExercise->updateType($exerciseType);
-        $startDateTime_obj = isset($exerciseStartDate) && !empty($exerciseStartDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseStartDate)->format('Y-m-d H:i:s') : (new DateTime('NOW'))->format('Y-m-d H:i:s');
+        $objExercise->updateIPLock($_POST['exerciseIPLock']);
+        $objExercise->updatePasswordLock($_POST['exercisePasswordLock']);
+        if (isset($exerciseStartDate) and !empty($exerciseStartDate)) {
+            $startDateTime_obj = DateTime::createFromFormat('d-m-Y H:i', $exerciseStartDate);
+        } else {
+            $startDateTime_obj = new DateTime('NOW');
+        }
+        $startDateTime_obj = $startDateTime_obj->format('Y-m-d H:i:s');
         $objExercise->updateStartDate($startDateTime_obj);
-        $endDateTime_obj = isset($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
+        $endDateTime_obj = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : NULL;
         $objExercise->updateEndDate($endDateTime_obj);
         $objExercise->updateTempSave($exerciseTempSave);
         $objExercise->updateTimeConstraint($exerciseTimeConstraint);
@@ -62,15 +82,9 @@ if (isset($_POST['submitExercise'])) {
         
         //tags
         if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-                $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "exe", $exerciseId, $tagItem, $course_id);
-                    }
-                }
+            $tagsArray = explode(',', $_POST['tags']);
+            $moduleTag = new ModuleElement($exerciseId);
+            $moduleTag->syncTags($tagsArray);
         }
         
         redirect_to_home_page('modules/exercise/admin.php?course='.$course_code.'&exerciseId='.$exerciseId);        
@@ -91,28 +105,22 @@ if (isset($_POST['submitExercise'])) {
         $exerciseEndDate = '';
     } else {
         $exerciseEndDate = Session::has('exerciseEndDate') ? Session::get('exerciseEndDate') : DateTime::createFromFormat('Y-m-d H:i:s', $objExercise->selectEndDate())->format('d-m-Y H:i');
-    }   
+    }
+    $enableStartDate = Session::has('enableStartDate') ? Session::get('enableStartDate') : null;
+    $enableEndDate = Session::has('enableEndDate') ? Session::get('enableEndDate') : ($exerciseEndDate ? 1 : 0);
     $exerciseTempSave = Session::has('exerciseTempSave') ? Session::get('exerciseTempSave') : $objExercise->selectTempSave();
     $exerciseTimeConstraint = Session::has('exerciseTimeConstraint') ? Session::get('exerciseTimeConstraint') : $objExercise->selectTimeConstraint();
     $exerciseAttemptsAllowed = Session::has('exerciseAttemptsAllowed') ? Session::get('exerciseAttemptsAllowed') : $objExercise->selectAttemptsAllowed();
     $randomQuestions = Session::has('questionDrawn') ? Session::get('questionDrawn') : $objExercise->isRandom();
     $displayResults = Session::has('dispresults') ? Session::get('dispresults') : $objExercise->selectResults();
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
+    $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPLock();
+    $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
 }
 
 // shows the form to modify the exercise
 if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
-    
-    //initialize the tags
-    $answer = "";
-    if (isset($exerciseId)) {
-        $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-        foreach ($tags_init as $tag) {
-            $arrayTemp = "{id:\"" . $tag->tag . "\" , text:\"" . $tag->tag . "\"},";
-            $answer = $answer . $arrayTemp;
-        }
-    }
-    
+        
     load_js('bootstrap-datetimepicker');
     load_js('select2');
 
@@ -123,13 +131,34 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 pickerPosition: 'bottom-left', 
                 language: '".$language."',
                 autoclose: true    
+            }).on('changeDate', function(ev){
+                if($(this).attr('id') === 'exerciseEndDate') {
+                    $('#answersDispEndDate').removeClass('hidden');
+                }
+            }).on('blur', function(ev){
+                if($(this).attr('id') === 'exerciseEndDate') {
+                    var end_date = $(this).val();
+                    if (end_date === '') {
+                        if ($('input[name=\"dispresults\"]:checked').val() == 4) {
+                            $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
+                        }                          
+                        $('#answersDispEndDate').addClass('hidden');
+                    }
+                }
             });
             $('#enableEndDate, #enableStartDate').change(function() {
                 var dateType = $(this).prop('id').replace('enable', '');
                 if($(this).prop('checked')) {
                     $('input#exercise'+dateType).prop('disabled', false);
+                    if ($('input#exercise'+dateType).val() !== '') {
+                        $('#answersDispEndDate').removeClass('hidden');
+                    }
                 } else {
                     $('input#exercise'+dateType).prop('disabled', true);
+                    if ($('input[name=\"dispresults\"]:checked').val() == 4) {
+                        $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
+                    }                    
+                    $('#answersDispEndDate').addClass('hidden');
                 }
             });
             
@@ -152,37 +181,24 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $('.questionDrawnRadio').prop('disabled', false); 
                 }
             });
-        });
-        $(document).ready(function () {
-            $('#tags').select2({
-                    minimumInputLength: 2,
-                    tags: true,
-                    tokenSeparators: [', ', ' '],
-                    createSearchChoice: function(term, data) {
-                      if ($(data).filter(function() {
-                        return this.text.localeCompare(term) === 0;
-                      }).length === 0) {
-                        return {
-                          id: term,
-                          text: term
-                        };
-                      }
-                    },
-                    ajax: {
-                        url: '../tags/feed.php',
-                        dataType: 'json',
-                        data: function(term, page) {
-                            return {
-                                q: term
-                            };
-                        },
-                        results: function(data, page) {
-                            return {results: data};
-                        }
+            $('#exerciseAttemptsAllowed').blur(function(){
+                var attempts = $(this).val();
+                if (attempts ==0) {
+                    $('#answersDispLastAttempt').addClass('hidden');
+                    if ($('input[name=\"dispresults\"]:checked').val() == 3) {
+                        $('input[name=\"dispresults\"][value=\"1\"]').prop('checked', true);
                     }
+                } else {
+                    $('#answersDispLastAttempt').removeClass('hidden');
+                }
             });
-            $('#tags').select2('data', [".$answer."]);
-        }); 
+            $('#exerciseIPLock').select2({
+                dropdownCssClass : 'hidden',
+                minimumResultsForSearch: 1,
+                tags: false,
+                tokenSeparators: [' ']
+            });
+        });
     </script>";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -227,26 +243,26 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                  </div>              
                  <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
                      <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
-                     <div class='col-xs-10'>
-                        <div class='input-group'>   
-                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate' disabled>
+                     <div class='col-sm-10'>
+                        <div class='input-group'>
                             <span class='input-group-addon'>
-                              <input type='checkbox' id='enableStartDate'>
-                            </span>
+                                <input style='cursor:pointer;' type='checkbox' id='enableStartDate' name='enableStartDate' value='1'".($enableStartDate ? ' checked' : '').">
+                            </span>                        
+                            <input class='form-control' name='exerciseStartDate' id='exerciseStartDate' type='text' value='$exerciseStartDate'".($enableStartDate ? '' : ' disabled').">
                         </div>
-                        <span class='help-block'>".Session::getError('exerciseStartDate')."</span>
+                        <span class='help-block'>".(Session::hasError('exerciseStartDate') ? Session::getError('exerciseStartDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseStartHelpBlock")."</span>
                      </div>
                  </div>            
                  <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseEndDate' class='col-xs-2 control-label'>$langExerciseEnd:</label>
-                     <div class='col-xs-10'>
-                        <div class='input-group'>                   
-                            <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate' disabled>
+                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd:</label>
+                     <div class='col-sm-10'>
+                        <div class='input-group'>
                             <span class='input-group-addon'>
-                              <input type='checkbox' id='enableEndDate'>
-                            </span>                                                            
+                              <input style='cursor:pointer;' type='checkbox' id='enableEndDate' name='enableEndDate' value='1'".($enableEndDate ? ' checked' : '').">
+                            </span>                           
+                            <input class='form-control' name='exerciseEndDate' id='exerciseEndDate' type='text' value='$exerciseEndDate'".($enableEndDate ? '' : ' disabled').">                                                         
                         </div>
-                        <span class='help-block'>".Session::getError('exerciseEndDate')."</span>
+                        <span class='help-block'>".(Session::hasError('exerciseEndDate') ? Session::getError('exerciseEndDate') : "&nbsp;&nbsp;&nbsp;<i class='fa fa-share fa-rotate-270'></i> $langExerciseEndHelpBlock")."</span>
                      </div>
                  </div>
                  <div class='form-group'>
@@ -325,6 +341,18 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                              $langAnswersNotDisp
                            </label>
                          </div>
+                         <div id='answersDispLastAttempt' class='radio".($exerciseAttemptsAllowed ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispresults' value='3' ".(($displayResults == 3)? 'checked' : '').">
+                             $langAnswersDispLastAttempt
+                           </label>
+                         </div>
+                         <div id='answersDispEndDate' class='radio".(!empty($exerciseEndDate) ? '' : ' hidden')."'>
+                           <label>
+                             <input type='radio' name='dispresults' value='4' ".(($displayResults == 4)? 'checked' : '').">
+                             $langAnswersDispEndDate
+                           </label>
+                         </div>                          
                      </div>
                  </div>
                  <div class='form-group'>
@@ -344,13 +372,21 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                          </div>
                      </div>
                  </div>
-                 
-                 <div class='form-group'>
-                     <label for='dispresults' class='col-sm-2 control-label'>$langTags:</label>
-                     <div class='col-sm-10'>            
-                        <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-                     </div>
-                 </div>
+                 <div class='form-group ".(Session::getError('exercisePasswordLock') ? "has-error" : "")."'>
+                   <label for='exercisePasswordLock' class='col-sm-2 control-label'>$langPasswordUnlock:</label>
+                   <div class='col-sm-10'>
+                     <input name='exercisePasswordLock' type='text' class='form-control' id='exercisePasswordLock' value='$exercisePasswordLock' placeholder=''>
+                     <span class='help-block'>".Session::getError('exercisePasswordLock')."</span>
+                   </div>
+                 </div>                   
+                 <div class='form-group ".(Session::getError('exerciseIPLock') ? "has-error" : "")."'>
+                   <label for='exerciseIPLock' class='col-sm-2 control-label'>$langIPUnlock:</label>
+                   <div class='col-sm-10'>
+                     <input name='exerciseIPLock' type='hidden' class='form-control' id='exerciseIPLock' value='$exerciseIPLock' placeholder=''>
+                     <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
+                   </div>
+                 </div>                 
+                 " . Tag::tagInput($exerciseId) . "
 
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>
@@ -363,15 +399,27 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
              </form>
         </div>";    
 } else {
-    
-    $disp_results_message = ($displayResults == 1) ? $langAnswersDisp : $langAnswersNotDisp;
+    switch ($displayResults) {
+        case 0:
+            $disp_results_message = $langAnswersNotDisp;
+            break;
+        case 1:
+            $disp_results_message = $langAnswersDisp;
+            break;
+        case 3:
+            $disp_results_message = $langAnswersDispLastAttempt;
+            break;
+        case 4:
+            $disp_results_message = $langAnswersDispEndDate;
+            break;          
+    }
     $disp_score_message = ($displayScore == 1) ? $langScoreDisp : $langScoreNotDisp;
     $exerciseDescription = standard_text_escape($exerciseDescription);
-    $exerciseStartDate = nice_format(date("Y-m-d H:i", strtotime($exerciseStartDate)), true);
-
-    $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? DateTime::createFromFormat('d-m-Y H:i',$exerciseEndDate)->format('Y-m-d H:i:s') : $m['no_deadline'];
+    $exerciseStartDate = $exerciseStartDate;
+    $exerciseEndDate = isset($exerciseEndDate) && !empty($exerciseEndDate) ? $exerciseEndDate : $m['no_deadline'];
     $exerciseType = ($exerciseType == 1) ? $langSimpleExercise : $langSequentialExercise ;
     $exerciseTempSave = ($exerciseTempSave ==1) ? $langActive : $langDeactivate;
+    $moduleTag = new ModuleElement($exerciseId);    
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "index.php?course=$course_code",
@@ -385,7 +433,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             <h3 class='panel-title'>$langInfoExercise &nbsp;". icon('fa-edit', $langModify, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;exerciseId=$exerciseId&amp;modifyExercise=yes") ."</h3>
         </div>
         <div class='panel-body'>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseName:</strong>
                 </div>
@@ -393,7 +441,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     " . q($exerciseTitle) . "
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseDescription:</strong>
                 </div>
@@ -401,7 +449,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseDescription
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseType:</strong>
                 </div>
@@ -409,7 +457,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseType
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseStart:</strong>
                 </div>
@@ -417,7 +465,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseStartDate
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseEnd:</strong>
                 </div>
@@ -425,7 +473,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseEndDate
                 </div>                
             </div>  
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTemporarySave:</strong>
                 </div>
@@ -433,7 +481,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseTempSave
                 </div>                
             </div> 
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseConstrain:</strong>
                 </div>
@@ -441,7 +489,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseTimeConstraint $langExerciseConstrainUnit
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langExerciseAttemptsAllowed:</strong>
                 </div>
@@ -449,7 +497,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $exerciseAttemptsAllowed $langExerciseAttemptsAllowedUnit
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langRandomQuestions:</strong>
                 </div>
@@ -457,7 +505,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $langSelection $randomQuestions $langFromRandomQuestions
                 </div>                
             </div> 
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langAnswers:</strong>
                 </div>
@@ -465,26 +513,27 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                     $disp_results_message
                 </div>                
             </div>
-            <div class='row  margin-bottom-fat'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langScore:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $disp_score_message
                 </div>                
-            </div>
-            <div class='row  margin-bottom-fat'>
+            </div>";
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list)            
+            $tool_content .= "
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTags:</strong>
                 </div>
-                <div class='col-sm-9'>";
-                    
-                $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "exe", $exerciseId, $course_id);
-                    foreach($tags_list as $tag){
-                        $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
-                    }                   
-$tool_content .="</div>                
-            </div>
+                <div class='col-sm-9'>
+                    $tags_list                       
+                </div>                
+            </div>";
+            
+    $tool_content .= "            
         </div>
     </div>";
 }

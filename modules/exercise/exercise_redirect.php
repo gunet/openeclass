@@ -88,7 +88,7 @@ $exerciseDescription_temp = nl2br(make_clickable($exerciseDescription));
 $tool_content .= "<table class='Exercise' width='99%'>
 <thead><tr>
   <td colspan='2'>
-  <b>" . q($exerciseTitle) . "</b>
+  <b>" . q_math($exerciseTitle) . "</b>
   <br/><br/>
   " . q($exerciseDescription_temp) . "
   </td>

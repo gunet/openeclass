@@ -23,11 +23,11 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     global $tool_content, $picturePath, $langNoAnswer, $langQuestion,
     $langColumnA, $langColumnB, $langMakeCorrespond, $langInfoGrades, $i,
     $exerciseType, $nbrQuestions, $langInfoGrade;
-    
+
     $questionId = $objQuestionTmp->id;
     $questionWeight = $objQuestionTmp->selectWeighting();
     $answerType = $objQuestionTmp->selectType();
-    
+
     $message = $langInfoGrades;
     if (intval($questionWeight) == $questionWeight) {
         $questionWeight = intval($questionWeight);
@@ -35,11 +35,10 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     if ($questionWeight == 1) {
         $message = $langInfoGrade;
     }
-    
+
 
     $questionName = $objQuestionTmp->selectTitle();
-    $questionDescription = $objQuestionTmp->selectDescription();
-    $questionDescription_temp = $questionDescription;
+    $questionDescription = standard_text_escape($objQuestionTmp->selectDescription());
     $questionTypeWord = $objQuestionTmp->selectTypeWord($answerType);
     $tool_content .= "
             <div class='panel panel-success'>
@@ -47,21 +46,21 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                 <h3 class='panel-title'>$langQuestion : $i ($questionWeight $message)".(($exerciseType == 2) ? " / " . $nbrQuestions : "")."</h3>
               </div>
               <div class='panel-body'>
-                    <h4>$questionName <br> 
-                        <small>$questionTypeWord</small>
+                    <h4>
+                        <small>$questionTypeWord</small><br>" . q_math($questionName) . " 
                     </h4>
-                    $questionDescription_temp
+                    $questionDescription
                     <div class='text-center'>
                         ".(file_exists($picturePath . '/quiz-' . $questionId) ? "<img src='../../$picturePath/quiz-$questionId'>" : "")."
                     </div>";
-    
+
     // construction of the Answer object
     $objAnswerTmp = new Answer($questionId);
     $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-    
+
     if ($answerType == FREE_TEXT) {
             $text = (isset($exerciseResult[$questionId])) ? $exerciseResult[$questionId] : '';
-            $tool_content .= rich_text_editor('choice['.$questionId.']', 14, 90, $text);            
+            $tool_content .= rich_text_editor('choice['.$questionId.']', 14, 90, $text);
     }
     if ($answerType == UNIQUE_ANSWER || $answerType == MULTIPLE_ANSWER ||$answerType == TRUE_FALSE) {
          $tool_content .= "<input type='hidden' name='choice[${questionId}]' value='0' />";
@@ -79,11 +78,10 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                         <th>$langColumnB</th>
                       </tr>";
     }
-    
+
     if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         $tool_content .= "<div class='form-inline'>";
     }
-
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
@@ -103,7 +101,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         }
         // unique answer
         if ($answerType == UNIQUE_ANSWER) {
-            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';            
+            $checked = (isset($exerciseResult[$questionId]) && $exerciseResult[$questionId] == $answerId) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='radio'>
                           <label>
@@ -114,7 +112,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
         }
         // multiple answers
         elseif ($answerType == MULTIPLE_ANSWER) {
-            $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';         
+            $checked = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == 1) ? 'checked="checked"' : '';
             $tool_content .= "
                         <div class='checkbox'>
                           <label>
@@ -144,7 +142,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
 
                 // fills the list-box
                 foreach ($Select as $key => $val) {
-                $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';    
+                $selected = (isset($exerciseResult[$questionId][$answerId]) && $exerciseResult[$questionId][$answerId] == $key) ? 'selected="selected"' : '';
                     $tool_content .= "
 					<option value=\"" . q($key) . "\" $selected>${val['Lettre']}</option>";
                 }
@@ -187,7 +185,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                             <input type='radio' name='choice[${questionId}]' value='${answerId}' $checked>
                             " . standard_text_escape($answer) . "
                           </label>
-                        </div>";            
+                        </div>";
         }
     } // end for()
     if ($answerType == MATCHING && $nbrAnswers>0) {
@@ -195,13 +193,13 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     }
     if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         $tool_content .= "</div>";
-    } 
+    }
     if (!$nbrAnswers && $answerType != FREE_TEXT) {
         $tool_content .= "<div class='alert alert-danger'>$langNoAnswer</div>";
     }
-    $tool_content .= "          
+    $tool_content .= "
                 </div>
-            </div>";    
+            </div>";
     // destruction of the Answer object
     unset($objAnswerTmp);
     // destruction of the Question object

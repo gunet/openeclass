@@ -39,6 +39,7 @@ class Session {
     public $language;
     public $active_ui_languages;
     public $native_language_names;
+    public $login_timestamp;
 
     public function __construct() {
         global $native_language_names_init;
@@ -69,6 +70,11 @@ class Session {
         } else {
             $this->status = 0;
         }
+        if (isset($_SESSION['login_timestamp'])) {
+            $this->login_timestamp = $_SESSION['login_timestamp'];
+        } else {
+            $this->login_timestamp = false;
+        }
     }
 
     public function logout() {
@@ -80,6 +86,53 @@ class Session {
         unset($this->status);
         unset($this->courses);
         unset($this->language);
+        unset($this->login_timestamp);
+    }
+
+    public function setLoginTimestamp() {
+        $_SESSION['login_timestamp'] = $this->login_timestamp = date('Y-m-d H:i:s', time());
+    }
+
+    public function setDocumentTimestamp($course_id, $timestamp=null) {
+        if ($this->user_id and $this->status != USER_GUEST) {
+            if ($timestamp) {
+                Database::get()->query('UPDATE course_user
+                    SET document_timestamp = ?t 
+                    WHERE user_id = ?d AND course_id = ?d',
+                    $timestamp, $this->user_id, $course_id);
+            } else {
+                Database::get()->query('UPDATE course_user
+                    SET document_timestamp = ' . DBHelper::timeAfter() . '
+                    WHERE user_id = ?d AND course_id = ?d',
+                    $this->user_id, $course_id);
+            }
+            $_SESSION['document_timestamp'][$course_id] = $timestamp? $timestamp: date('Y-m-d H:i:s', time());
+        }
+    }
+
+    public function getDocumentTimestamp($course_id, $save=true) {
+        if ($course_id > 0 and $this->user_id and $this->status != USER_GUEST and isset($this->login_timestamp)) {
+            $_SESSION['document_timestamp_saved'][$course_id] = false;
+            if (!isset($_SESSION['document_timestamp'][$course_id])) {
+                // First time in this login session we check the document timestamp
+                // for this course, so get the previous value and update the
+                // database with current login timestamp
+                $_SESSION['document_timestamp'][$course_id] = Database::get()->querySingle(
+                    'SELECT document_timestamp FROM course_user
+                        WHERE user_id = ?d AND course_id = ?d',
+                    $this->user_id, $course_id)->document_timestamp;
+            }
+            if (!$_SESSION['document_timestamp_saved'][$course_id] and $save) {
+                Database::get()->query('UPDATE course_user
+                        SET document_timestamp = ?t
+                        WHERE user_id = ?d AND course_id = ?d',
+                    $this->login_timestamp, $this->user_id, $course_id);
+                $_SESSION['document_timestamp_saved'][$course_id] = true;
+            }
+            return $_SESSION['document_timestamp'][$course_id];
+        } else {
+            return false;
+        }
     }
     
     // Sets flash data
@@ -97,7 +150,7 @@ class Session {
             return FALSE;
         }   
     }    
-    //Sets automatically generated on next request messages
+    // Sets automatically generated on next request messages
     public static function Messages($messages, $class='alert-warning'){
         if(!is_array($messages)) $messages = array($messages);
         
@@ -147,6 +200,13 @@ class Session {
             }
         }
         return FALSE;
+    }
+    public static function hasError($key) {
+        if (isset($_SESSION[$key]['errors'][0])){
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }    
     public static function getError($key) {
         if (isset($_SESSION[$key]['errors'][0])){

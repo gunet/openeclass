@@ -94,6 +94,17 @@ if ($userdata) {
                     ));
         }
     }
+    if (get_config('personal_blog')) {
+        $perso_blog_html = "<div class='row'>
+                                <div class='col-xs-12'>
+                                    <div>
+                                        <a href='".$urlServer."modules/blog/index.php?user_id=$id'>$langUserBlog</a>
+                                    </div>
+                                </div>
+                            </div>";
+    } else {
+        $perso_blog_html = "";
+    }
     /*if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
         $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}
     if (!empty($userdata->phone) and allow_access($userdata->phone_public)) { // Phone Number
@@ -131,6 +142,7 @@ if ($userdata) {
                                     <div class='not_visible'>(".q($userdata->username).")</div>
                                 </div>
                             </div>
+                            $perso_blog_html
                             <div class='row'>
                                 <div class='col-xs-6'>
                                     <h4>$langProfilePersInfo</h4>
@@ -163,6 +175,7 @@ if ($userdata) {
                                   <div class='profile-pers-info-data'>
                                     <span class='tag'>$langAm :</span>";
                 if (!empty($userdata->am) and allow_access($userdata->am_public)) {
+
                     $tool_content .= " <span class='tag-value'>" . q($userdata->am) . "</span>";
 
                 } else {

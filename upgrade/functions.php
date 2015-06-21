@@ -300,10 +300,9 @@ function upgrade_course($code, $lang) {
  * @global type $webDir
  * @param type $code
  * @param type $extramessage
- * @param type $return_mapping
  * @return type
  */
-function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
+function upgrade_course_3_0($code, $course_id) {
     global $langUpgCourse, $mysqlMainDb, $webDir;
 
     Database::get()->query("USE `$code`");
@@ -366,88 +365,72 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         }
     }
 
-    // move videolink categories to central db and drop table
-    $videolinkcat_map = array();
-    $videolink_map = array();
-    $video_map = array();
+    // move video/multimedia tables to central db and drop them
     if (DBHelper::tableExists('video_category', $code) and DBHelper::tableExists('video', $code) and DBHelper::tableExists('videolinks', $code)) {        
-        $videolinkcatid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video_category")->max;
-        if (is_null($videolinkcatid_offset)) {
-            $videolinkcatid_offset = 0;
-        }
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM video_category ORDER BY id", function ($row) use($videolinkcatid_offset, &$videolinkcat_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $videolinkcatid_offset;
-                $videolinkcat_map[$oldid] = $newid;
-            });
+        // move video_category data
+        $video_category_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video_category")->max;
+        if (is_null($video_category_offset)) {
+            $video_category_offset = 0;
         }
 
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video_category
+        $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.video_category
                         (`id`, `course_id`, `name`, `description`)
-                        SELECT `id` + $videolinkcatid_offset, $course_id, `name`, `description` FROM video_category ORDER by id") != null) && $ok;
-        
-        Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $videolinkcatid_offset
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolinkcategory'");
+                        SELECT `id` + ?d, ?d, `name`, `description` FROM video_category ORDER by id",
+                    $video_category_offset, $course_id) && $ok;
+
+        $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + ?d
+                            WHERE units.id = res.unit_id AND course_id = ?d AND type = 'videolinkcategory'",
+                    $video_category_offset, $course_id) && $ok;
            
-        // move video to central db
-        $videoid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video")->max;
-        if (is_null($videoid_offset)) {
-            $videoid_offset = 0;
+        // move video data
+        $video_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.video")->max;
+        if (is_null($video_offset)) {
+            $video_offset = 0;
         }
 
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM video ORDER by id", function ($row) use($videoid_offset, &$video_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $videoid_offset;
-                $video_map[$oldid] = $newid;
-            });
-        }
-
-        
         if (!DBHelper::fieldExists('video', 'visible', $code)) {
             Database::get()->query("ALTER TABLE video ADD visible TINYINT(4) NOT NULL DEFAULT 1 AFTER date");
         }
         if (!DBHelper::fieldExists('video', 'public', $code)) {
             Database::get()->query("ALTER TABLE video ADD public TINYINT(4) NOT NULL DEFAULT 1 AFTER visible");
         }
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.video
+        $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.video
                         (`id`, `course_id`, `path`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $videoid_offset, $course_id, `path`, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
-                               `creator`, `publisher`, `date`, `visible`, `public` FROM video ORDER by id") != null) && $ok;
+                        SELECT `id` + ?d, ?d, `path`, `url`, `titre`, `description`, 
+                               NULLIF(`category`, 0) + ?d,
+                               COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
+                               `date`, `visible`, `public` FROM video ORDER by id",
+                    $video_offset, $course_id, $video_category_offset) && $ok;
         
                 
-        Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $videoid_offset
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'video'");
+        $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + ?d
+                            WHERE units.id = res.unit_id AND course_id = ?d AND type = 'video'",
+                    $video_offset, $course_id) && $ok;
    
     
-        // move videolinks to central db
-        $linkid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
-        if (is_null($linkid_offset)) {
-            $linkid_offset = 0;
+        // move videolink data
+        $videolink_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.videolink")->max;
+        if (is_null($videolink_offset)) {
+            $videolink_offset = 0;
         }
 
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM videolinks ORDER by id", function ($row) use ($linkid_offset, &$videolink_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $linkid_offset;
-                $videolink_map[$oldid] = $newid;
-            });
-        }
-
-        $ok = (Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
+        $ok = Database::get()->query("INSERT INTO `$mysqlMainDb`.videolink
                         (`id`, `course_id`, `url`, `title`, `description`, `category`, `creator`, `publisher`, `date`, `visible`, `public`)
-                        SELECT `id` + $linkid_offset, $course_id, `url`, `titre`, `description`, `category` + $videolinkcatid_offset,
+                        SELECT `id` + ?d, ?d, `url`, `titre`, `description`, 
+                               NULLIF(`category`, 0) + ?d,
                                COALESCE(`creator`, ''), COALESCE(`publisher`, ''),
-                               `date`, `visible`, `public` FROM videolinks ORDER by id") != null) && $ok;
+                               `date`, `visible`, `public` FROM videolinks ORDER by id",
+                    $videolink_offset, $course_id, $video_category_offset) && $ok;
         
-        Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
-                            SET res_id = res_id + $linkid_offset
-                            WHERE units.id = res.unit_id AND course_id = $course_id AND type = 'videolink'");
+
+        $ok = Database::get()->query("UPDATE `$mysqlMainDb`.course_units AS units, `$mysqlMainDb`.unit_resources AS res
+                            SET res_id = res_id + ?d 
+                            WHERE units.id = res.unit_id AND course_id = ?d AND type IN ('videolink', 'videolinks')",
+                    $videolink_offset, $course_id) && $ok;
         
-        if (false !== $ok) { // drop old tables
+        if ($ok) { // drop old tables
             Database::get()->query("DROP TABLE videolinks");
             Database::get()->query("DROP TABLE video_category");
             Database::get()->query("DROP TABLE video");
@@ -547,14 +530,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         $lpid_offset = Database::get()->querySingle("SELECT MAX(learnPath_id) as max FROM `$mysqlMainDb`.lp_learnPath")->max;
         if (is_null($lpid_offset)) {
             $lpid_offset = 0;
-        }
-
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT learnPath_id FROM lp_learnPath ORDER by learnPath_id", function ($row) use($lpid_offset, &$lp_map) {
-                $oldid = intval($row->learnPath_id);
-                $newid = $oldid + $lpid_offset;
-                $lp_map[$oldid] = $newid;
-            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE lp_map AS
@@ -714,14 +689,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         $wikiid_offset = Database::get()->querySingle("SELECT MAX(id) as max FROM `$mysqlMainDb`.wiki_properties")->max;
         if (is_null($wikiid_offset)) {
             $wikiid_offset = 0;
-        }
-
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM wiki_properties ORDER BY id", function ($row) use($wikiid_offset, &$wiki_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $wikiid_offset;
-                $wiki_map[$oldid] = $newid;
-            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE wiki_map AS
@@ -895,14 +862,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
             $assignmentid_offset = 0;
         }
 
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM assignments ORDER by id", function ($row) use($assignmentid_offset, &$assignments_map) {
-                $oldid = intval($row['id']);
-                $newid = $oldid + $assignmentid_offset;
-                $assignments_map[$oldid] = $newid;
-            });
-        }
-
         Database::get()->query("CREATE TEMPORARY TABLE assignments_map AS
                    SELECT old.id AS old_id, old.id + $assignmentid_offset AS new_id
                      FROM assignments AS old ORDER by id");
@@ -911,7 +870,7 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
                          (`id`, `course_id`, `title`, `description`, `comments`, `deadline`, `submission_date`,
                           `active`, `secret_directory`, `group_submissions`, `assign_to_specific`)
                          SELECT `id` + $assignmentid_offset, $course_id, `title`, `description`, `comments`,
-                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '1' 
+                                `deadline`, `submission_date`, `active`, `secret_directory`, `group_submissions`, '0' 
                                 FROM assignments ORDER BY id") != null);
 
         // ----- assigments DB Table ----- //
@@ -985,14 +944,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
         $exerciseid_offset = Database::get()->querySingle("SELECT MAX(id) AS max FROM `$mysqlMainDb`.exercise")->max;
         if (is_null($exerciseid_offset)) {
             $exerciseid_offset = 0;
-        }
-
-        if ($return_mapping) {
-            Database::get()->queryFunc("SELECT id FROM exercices ORDER by id", function ($row) use($exerciseid_offset, &$exercise_map) {
-                $oldid = intval($row->id);
-                $newid = $oldid + $exerciseid_offset;
-                $exercise_map[$oldid] = $newid;
-            });
         }
 
         Database::get()->query("CREATE TEMPORARY TABLE exercise_map AS
@@ -1146,11 +1097,6 @@ function upgrade_course_3_0($code, $course_id, $return_mapping = false) {
     require_once "modules/course_metadata/CourseXML.php";
     if (file_exists(CourseXMLConfig::getCourseXMLPath($code))) {
         CourseXMLElement::refreshCourse($course_id, $code, true);
-    }
-
-    // NOTE: no code must occur after this statement or else course upgrade will be broken
-    if ($return_mapping) {
-        return array($video_map, $videolink_map, $lp_map, $wiki_map, $assignments_map, $exercise_map);
     }
 }
 
@@ -1766,38 +1712,61 @@ function fix_multiple_usernames()  {
     }
 }
 
-/**
- * @brief default theme options
- */
-$theme_options = array(
-  array('name' => 'Open Courses Atoms','styles' => 'a:11:{s:11:"imageUpload";s:25:"eclass-new-logo_atoms.png";s:7:"bgImage";s:36:"bcgr_lines_petrol_les saturation.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:18:"rgba(76,173,178,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:37:"OpenCourses_banner_Color_theme1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.64)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.71)";s:22:"leftMenuHoverFontColor";s:18:"rgba(64,121,146,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(67,142,158,1)";}'),
-  array('name' => 'Open Courses Sketchy','styles' => 'a:12:{s:11:"imageUpload";s:27:"eclass-new-logo_sketchy.png";s:7:"bgImage";s:24:"Light_sketch_bcgr2-1.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:19:"rgba(155,128,106,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:27:"banner_Sketch_empty-1-2.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(37,37,37,0.91)";s:15:"leftMenuBgColor";s:16:"rgba(0,0,0,0.83)";s:22:"leftMenuHoverFontColor";s:18:"rgba(146,100,64,1)";s:25:"leftMenuSelectedFontColor";s:18:"rgba(228,164,77,1)";s:23:"leftSubMenuHoverBgColor";s:18:"rgba(158,135,67,1)";}'),
-  array('name' => 'Open eClass Classic','styles' => 'a:13:{s:11:"imageUpload";s:27:"eclass-new-logo_classic.png";s:7:"bgColor";s:19:"rgba(223,223,223,1)";s:9:"linkColor";s:19:"rgba(152,143,138,1)";s:14:"linkHoverColor";s:17:"rgba(152,57,47,1)";s:27:"loginJumbotronRadialBgColor";s:0:"";s:8:"loginImg";s:23:"eclass_classic2-1-1.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:19:"rgba(130,124,120,1)";s:17:"leftMenuFontColor";s:19:"rgba(221,218,218,1)";s:22:"leftMenuHoverFontColor";s:19:"rgba(251,198,145,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(223,223,223,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(213,209,209,1)";s:23:"leftSubMenuHoverBgColor";s:17:"rgba(155,69,69,1)";}'),
-  array('name' => 'Open eClass City Lights','styles' => 'a:4:{s:7:"bgImage";s:21:"Open-eClass-4-1-1.jpg";s:6:"bgType";s:3:"fix";s:27:"loginJumbotronRadialBgColor";s:0:"";s:14:"leftNavBgColor";s:19:"rgba(35,44,58,0.58)";}'),
-  array('name' => 'Open eClass Classic Ice','styles' => 'a:13:{s:11:"imageUpload";s:23:"eclass-new-logo_ice.png";s:7:"bgColor";s:19:"rgba(208,219,229,1)";s:7:"bgImage";s:7:"ice.png";s:6:"bgType";s:3:"fix";s:9:"linkColor";s:17:"rgba(35,82,124,1)";s:14:"linkHoverColor";s:19:"rgba(140,195,239,1)";s:8:"loginImg";s:14:"eclass_ice.png";s:17:"loginImgPlacement";s:10:"full-width";s:14:"leftNavBgColor";s:20:"rgba(57,78,113,0.71)";s:17:"leftMenuFontColor";s:22:"rgba(220,215,215,0.89)";s:22:"leftMenuHoverFontColor";s:19:"rgba(149,173,192,1)";s:25:"leftMenuSelectedFontColor";s:19:"rgba(153,199,236,1)";s:20:"leftSubMenuFontColor";s:19:"rgba(217,208,208,1)";}')
-);
-
-/**
- * @brief Copy theme images to theme_data directory
- * @global string $webDir
- * @global string $_SESSION[theme]
- */
-function copyThemeImages() {
+function importThemes($themes = null) {
     global $webDir;
-
-    $imgDir = "$webDir/template/$_SESSION[theme]/img";
-    $images = array('bgImage', 'imageUpload', 'imageUploadSmall', 'loginImg');
-    $themes = Database::get()->queryArray("SELECT * FROM theme_options");
-    foreach ($themes as $t) {
-        $themeDir = "$webDir/courses/theme_data/" . $t->id;
-        if (!file_exists($themeDir)) {
-            mkdir($themeDir, 0755, true);
-        }
-        $styles = unserialize($t->styles);
-        foreach ($images as $img) {
-            if (isset($styles[$img]) and file_exists("$imgDir/{$styles[$img]}") and !file_exists("$themeDir/{$styles[$img]}")) {
-                copy("$imgDir/{$styles[$img]}", "$themeDir/{$styles[$img]}");
+    if (!isset($themes) || isset($themes) && !empty($themes)) {
+        require_once "$webDir/include/pclzip/pclzip.lib.php";
+        $themesDir = "$webDir/template/$_SESSION[theme]/themes";
+        if(!is_dir("$webDir/courses/theme_data")) mkdir("$webDir/courses/theme_data", 0755, true);
+        if (is_dir($themesDir) && $handle = opendir($themesDir)) {
+            if (!isset($themes)) {
+                while (false !== ($file_name = readdir($handle))) {
+                    if ($file_name != "." && $file_name != "..") {
+                        installTheme($themesDir, $file_name);
+                    }                 
+                }                
+            } else {
+                while (false !== ($file_name = readdir($handle))) {
+                    if ($file_name != "." && $file_name != ".." && in_array($file_name, $themes)) {
+                        installTheme($themesDir, $file_name);
+                    }                 
+                }
             }
+            closedir($handle);
         }
+    }
+}
+function installTheme($themesDir, $file_name) {
+    global $webDir;
+    if (copy("$themesDir/$file_name", "$webDir/courses/theme_data/$file_name")) {                   
+        $archive = new PclZip("$webDir/courses/theme_data/$file_name");
+        if (!$archive->extract(PCLZIP_OPT_PATH, "$webDir/courses/theme_data/temp")) {
+            die("Error : ".$archive->errorInfo(true));
+        } else {
+            unlink("$webDir/courses/theme_data/$file_name");
+            $base64_str = file_get_contents("$webDir/courses/theme_data/temp/theme_options.txt");
+            unlink("$webDir/courses/theme_data/temp/theme_options.txt");
+            $theme_options = unserialize(base64_decode($base64_str));                
+            $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
+            @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
+            recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
+            removeDir("$webDir/courses/theme_data/temp");
+        }
+    }    
+}
+function setGlobalContactInfo() {
+    global $Institution, $postaddress, $telephone, $fax;
+
+    if (!isset($Institution)) {
+        $Institution = get_config('institution');
+    }
+    if (!isset($postaddress)) {
+        $postaddress = get_config('postaddress');
+    }
+    if (!isset($telephone)) {
+        $telephone = get_config('phone');
+    }
+    if (!isset($fax)) {
+        $fax = get_config('fax');
     }
 }

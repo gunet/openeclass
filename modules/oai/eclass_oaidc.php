@@ -24,10 +24,6 @@ require_once('xml_creater.php');
 
 class ECLASS_OAIDC {
 
-    //! Type: PDO. The database connection of the data source. 
-    //! \see __construct. 
-    private $db;
-
     /**
      * \var $oai_pmh 
      * Type: ANDS_Response_XML. Assigned by constructor. \see __construct
@@ -40,17 +36,15 @@ class ECLASS_OAIDC {
      */
     protected $working_node;
 
-    public function __construct($eclass_response_doc, $metadata_node, $db) {
+    public function __construct($eclass_response_doc, $metadata_node) {
         $this->oai_pmh = $eclass_response_doc;
         $this->working_node = $metadata_node;
-        $this->db = $db;
         $this->createOAIDCHeader();
     }
 
     /**
-     * This is the general entrence of creating actual content.
+     * This is the general entrance of creating actual content.
      * When anything goes wrong, e.g. found no record, or $set_name is not recognised, an exception will be thrown.
-     * And for this implementation, data are stored in a database therefore a PDO is needed. But the source can be any.
      *
      * \param $set_name Type: string. The name of set is going to be created.
      * \param $key Type: string. The main identifier used in the system. There can be other identifiers.
@@ -59,17 +53,12 @@ class ECLASS_OAIDC {
         $set_name = strtolower($set_name);
         if (in_array($set_name, prepare_set_names())) {
             try {
-                $query = "select * from oai_record where oai_identifier = '" . $key . "'";
-                $res = exec_pdo_query($this->db, $query);
-                $record = $res->fetch(PDO::FETCH_ASSOC);
-                
-                $q2 = "select * from oai_metadata where oai_record = " . intval($record['id']);
-                $res2 = exec_pdo_query($this->db, $q2);
-                $metadata = $res2->fetchAll(PDO::FETCH_ASSOC);
+                $record = Database::get()->querySingle("select * from oai_record where oai_identifier = ?s", $key);
+                $metadata = Database::get()->queryArray("select * from oai_metadata where oai_record = ?d", $record->id);
                 
                 $meta_record = array();
                 foreach ($metadata as $meta_row) {
-                    $meta_record[$meta_row['field']] = $meta_row['value'];
+                    $meta_record[$meta_row->field] = $meta_row->value;
                 }
                 
                 foreach ($meta_record as $rkey => $rvalue) {

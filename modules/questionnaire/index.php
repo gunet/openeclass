@@ -152,20 +152,20 @@ draw($tool_content, 2, null, $head_content);
  * ************************************************************************************************** */
 
 function printPolls() {
-    global $tool_content, $course_id, $course_code, $langCreatePoll,
-    $langPollsActive, $langTitle, $langPollCreator, $langPollCreation, $langCancel,
+    global $tool_content, $course_id, $course_code,
+    $langTitle, $langCancel,
     $langPollStart, $langPollEnd, $langPollNone, $is_editor, $langAnswers,
-    $themeimg, $langEdit, $langDelete, $langActions, $langSurveyNotStarted,
-    $langDeactivate, $langPollsInactive, $langPollHasEnded, $langActivate,
-    $langParticipate, $langVisible, $user_id, $langHasParticipated, $langSee,
+    $langEditChange, $langDelete, $langSurveyNotStarted,
+    $langDeactivate, $langPollHasEnded, $langActivate,
+    $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
     foreach ($my_courses as $row) {
-        $courses_options .= "'<option value=\"$row->Course_id\">$row->Title</option>'+";
+        $courses_options .= "'<option value=\"$row->Course_id\">".q($row->Title)."</option>'+";
     }    
     $head_content .= "
     <script>
@@ -218,11 +218,11 @@ function printPolls() {
 			<th class='text-center'>$langPollEnd</th>";
 
         if ($is_editor) {
-            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>"
-                           . "<th class='text-center'>".icon('fa-cogs')."</th>";
+            $tool_content .= "<th class='text-center' width='16'>$langAnswers</th>";
         } else {
             $tool_content .= "<th class='text-center'>$langParticipate</th>";
         }
+        $tool_content .= "<th class='text-center'>".icon('fa-cogs')."</th>";
         $tool_content .= "</tr>";
         $index_aa = 1;
         $k = 0;
@@ -288,14 +288,32 @@ function printPolls() {
                         <td class='text-center'>$countAnswers</td>
                         <td class='text-center option-btn-cell'>" .action_button(array(
                             array(
+                                'title' => $langEditChange,
+                                'icon' => 'fa-edit',
+                                'url' => "admin.php?course=$course_code&amp;pid=$pid"                              
+                            ),
+                            array(
+                                'title' => $visibility?  $langDeactivate : $langActivate,
+                                'icon' => $visibility ?  'fa-toggle-off' : 'fa-toggle-on',
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
+                            ),
+                            array(
+                                'title' => $langUsage,
+                                'icon' => 'fa-line-chart',
+                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+                                'show' => $total_participants > 0
+                            ),
+                            array(
                                 'title' => $langSee,
                                 'icon' => 'fa-search',
                                 'url' => "pollparticipate.php?course=$course_code&amp;UseCase=1&pid=$pid"
                             ),
                             array(
-                                'title' => $langEdit,
-                                'icon' => 'fa-edit',
-                                'url' => "admin.php?course=$course_code&amp;pid=$pid"                              
+                                'title' => $langCreateDuplicate,
+                                'icon' => 'fa-copy',
+                                'icon-class' => 'warnLink',
+                                'icon-extra' => "data-pid='$pid'",
+                                'url' => "#"
                             ),
                             array(
                                 'title' => $langPurgeExercises,
@@ -303,32 +321,14 @@ function printPolls() {
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_results=yes&amp;pid=$pid",
                                 'confirm' => $langConfirmPurgeExercises,
                                 'show' => $total_participants > 0
-                            ),
+                            ),                                        
                             array(
                                 'title' => $langDelete,
                                 'icon' => 'fa-times',
                                 'class' => 'delete',
                                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=yes&amp;pid=$pid",
                                 'confirm' => $langConfirmDelete                               
-                            ),
-                            array(
-                                'title' => $langVisible,
-                                'icon' => $visibility_gif,
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;visibility=$visibility_func&amp;pid={$pid}"
-                            ),
-                            array(
-                                'title' => $langParticipate,
-                                'icon' => 'fa-pie-chart',
-                                'url' => "pollresults.php?course=$course_code&pid=$pid",
-                                'show' => $total_participants > 0
-                            ),                                        
-                            array(
-                                'title' => $langCreateDuplicate,
-                                'icon' => 'fa-copy',
-                                'icon-class' => 'warnLink',
-                                'icon-extra' => "data-pid='$pid'",
-                                'url' => "#"
-                            )                                        
+                            )                                   
                         ))."</td></tr>";
                 } else {
                     $tool_content .= "
@@ -344,7 +344,16 @@ function printPolls() {
                             $tool_content .= $langHasParticipated;
                         }
                     }
-                    $tool_content .= "</td></tr>";
+                    $tool_content .= "</td>";
+                     $tool_content .= "
+                        <td class='text-center option-btn-cell'>" .action_button(array(
+                            array(
+                                'title' => $langUsage,
+                                'icon' => 'fa-line-chart',
+                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+                                'show' => $has_participated
+                            )         
+                        ))."</td></tr>";
                 }
             }
             $index_aa ++;

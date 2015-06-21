@@ -84,7 +84,7 @@ function populateTools() {
 
     $tool = new stdClass();
     $tool->name = $langMyAgenda;
-    $tool->redirect = $urlServer . 'modules/agenda/myagenda.php';
+    $tool->redirect = $urlServer . 'main/personal_calendar/index.php';
     $tool->link = $baseurl . urlencode($tool->redirect);
     $tool->type = 'myagenda';
     $tool->active = "true";

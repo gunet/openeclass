@@ -43,6 +43,7 @@ if (isset($_REQUEST['fc'])) {
 }
 $_SESSION['fc_memo'] = $fc;
 
+$courses_list = array();
 $restrictedCourses = array();
 if (isset($_POST['changeCourse']) and is_array($_POST['changeCourse'])) {
     $changeCourse = $_POST['changeCourse'];
@@ -72,8 +73,8 @@ if (isset($_POST['submit'])) {
         $cid = intval($value);
         $course_info = Database::get()->querySingle("SELECT public_code, password, visible FROM course WHERE id = ?d", $cid);
         if ($course_info) {
-            if (($course_info->visible == COURSE_REGISTRATION or 
-                    $course_info->visible == COURSE_OPEN) and !empty($course_info->password) and 
+            if (($course_info->visible == COURSE_REGISTRATION or
+                    $course_info->visible == COURSE_OPEN) and !empty($course_info->password) and
                     $course_info->password !== $_POST['pass' . $cid]) {
                 $errorExists = true;
                 $restrictedCourses[] = $course_info->public_code;
@@ -84,7 +85,7 @@ if (isset($_POST['submit'])) {
                 $restrictedCourses[] = $course_info->public_code;
             } else {
                 Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                        VALUES (?d, ?d, ?d, CURDATE())", $cid, intval($uid), USER_STUDENT);
+                                        VALUES (?d, ?d, ?d, NOW())", $cid, intval($uid), USER_STUDENT);
             }
         }
     }
@@ -99,7 +100,7 @@ if (isset($_POST['submit'])) {
 } else {
     $fac = getfacfromfc($fc);
     if (!$fac) { // if user does not belong to department
-        $tool_content .= "<p align='justify'>$langAddHereSomeCourses";
+        $tool_content .= $langAddHereSomeCourses;
 
         $roots = $tree->buildRootsArray();
 
@@ -109,7 +110,9 @@ if (isset($_POST['submit'])) {
             header("Location:" . $urlServer . "modules/auth/courses.php?fc=" . intval($roots[0]));
             exit();
         } else {
-            $tool_content .= $tree->buildNodesNavigationHtml($tree->buildRootsArray(), 'opencourses');
+            $tool_content .= '<ul>' .
+                $tree->buildNodesNavigationHtml($tree->buildRootsArray(), 'opencourses') .
+                '</ul>';
         }
     } else {
         // department exists
@@ -136,12 +139,15 @@ if (isset($_POST['submit'])) {
         if ($numofcourses > 0) {
             $tool_content .= expanded_faculte($fc, $uid);
             $tool_content .= "<br /><div align='right'><input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>&nbsp;&nbsp;</div>";
-        } 
-        
+        } else {
+            $tool_content .= "<div class='alert alert-warning text-center'>- $langNoCourses -</div>\n";
+
+        }
     } // end of else (department exists)
 }
 $tool_content .= "<script type='text/javascript'>$(course_list_init);
 var themeimg = '" . js_escape($themeimg) . "';
+var urlAppend = '".js_escape($urlAppend)."';
 var lang = {
         unCourse: '" . js_escape($langUnCourse) . "',
         cancel: '" . js_escape($langCancel) . "',
@@ -149,7 +155,9 @@ var lang = {
         unregCourse: '" . js_escape($langUnregCourse) . "',
         reregisterImpossible: '" . js_escape("$langConfirmUnregCours $m[unsub]") . "',
         invalidCode: '" . js_escape($langInvalidCode) . "',
-};</script>";
+};
+var courses = ".(json_encode($courses_list)).";
+</script>";
 
 load_js('tools.js');
 
@@ -204,7 +212,7 @@ function expanded_faculte($facid, $uid) {
     $langRegistration, $langCourseCode, $langTeacher, $langType, $langFaculty,
     $langpres, $langposts, $langothers, $themeimg, $tree;
 
-    $retString = "";
+    $retString = '';
 
     // build a list of course followed by user.
     $myCourses = array();
@@ -216,7 +224,7 @@ function expanded_faculte($facid, $uid) {
         $myCourses[$course->course_id] = $course;
     }, intval($uid));
 
-    
+
 
     $retString .= "\n    <div class='table-responsive'><table class='table-default'>";
     $retString .= "\n    <tr class='list-header'>";
@@ -226,7 +234,7 @@ function expanded_faculte($facid, $uid) {
     $retString .= "\n      <th width='30' align='center'>$langType</th>";
     $retString .= "\n    </tr>";
     $k = 0;
-    
+
     Database::get()->queryFunc("SELECT
                             course.id cid,
                             course.code k,
@@ -240,14 +248,18 @@ function expanded_faculte($facid, $uid) {
                         AND course_department.department = ?d
                         AND course.visible != ?d
                    ORDER BY course.title, course.prof_names", function ($mycours) use (&$retString, $k, $uid, $myCourses, $themeimg, $langTutor, $m, $icons) {
+        global $urlAppend, $courses_list;
         $cid = $mycours->cid;
         $course_title = q($mycours->i);
         $password = q($mycours->password);
+        $courses_list[$cid] = array($mycours->k, $mycours->visible);
         // link creation
-        if ($mycours->visible == COURSE_OPEN or $GLOBALS['is_power_user']) { // open course, or power_user who can see all
-            $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
-        } elseif ($mycours->visible == COURSE_CLOSED) { // closed course
-            $codelink = "<a href='../contact/index.php?course_id=$cid'>$course_title</a>";
+        if ($mycours->visible == COURSE_OPEN or $GLOBALS['is_power_user'] or isset($myCourses[$cid])) {
+            // open course, registered to course, or power user who can see all
+            $codelink = "<a href='{$urlAppend}courses/" . $mycours->k . "/'>$course_title</a>";
+        } elseif ($mycours->visible == COURSE_CLOSED) {
+            // closed course
+            $codelink = "<a href='{$urlAppend}modules/contact/index.php?course_id=$cid'>$course_title</a>";
         } else {
             $codelink = $course_title;
         }
@@ -270,9 +282,7 @@ function expanded_faculte($facid, $uid) {
                     $requirepassword = '';
                 }
                 $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' checked='checked' $vis_class />";
-                $codelink = "<a href='../../courses/" . $mycours->k . "/'>$course_title</a>";
             } else {
-                //$retString .= "<img src='$themeimg/teacher.png' alt='$langTutor' title='$langTutor' />";
                 $retString .= "<i class='fa fa-user'></i>";
             }
         } else { // display unregistered courses
@@ -286,7 +296,7 @@ function expanded_faculte($facid, $uid) {
             $retString .= "<input type='checkbox' name='selectCourse[]' value='$cid' $disabled $vis_class />";
         }
         $retString .= "<input type='hidden' name='changeCourse[]' value='$cid' />
-                   <td>$codelink (" . q($mycours->public_code) . ")$requirepassword</td>
+                   <td><span id='cid$cid'>$codelink</span> (" . q($mycours->public_code) . ")$requirepassword</td>
                    <td>" . q($mycours->t) . "</td>
                    <td align='center'>";
 

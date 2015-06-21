@@ -162,13 +162,13 @@ function checkbox_input($name) {
 
 function text_input($name, $size) {
     $GLOBALS['input_fields'][$name] = true;
-    return "<input class='form-control' type='text' class='FormData_InputText' size='$size' name='$name' value='" .
+    return "<input class='form-control' type='text' size='$size' name='$name' value='" .
             q($GLOBALS[$name]) . "' />";
 }
 
 function textarea_input($name, $rows, $cols) {
     $GLOBALS['input_fields'][$name] = true;
-    return "<textarea class='form-control' rows='$rows' cols='$cols' class='FormData_InputText' name='$name'>" .
+    return "<textarea class='form-control' rows='$rows' cols='$cols' name='$name'>" .
             q($GLOBALS[$name]) . "</textarea>";
 }
 
@@ -416,6 +416,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 	<br /><br />
 	<form action='../'><input class='btn btn-primary' type='submit' value='$langEnterFirstTime' /></form>";
     }
+    $_SESSION['langswitch'] = $lang;
     draw($tool_content);
 }
 
@@ -450,9 +451,17 @@ elseif (isset($_POST['install1'])) {
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>
 	<h3>$langCheckReq</h3>
 	<ul class='list-unstyled'>
-        <li>" . icon('fa-check') . " <b>Webserver</b> ($langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em>)
-        $langWithPHP ($langFoundIt <em>PHP " . phpversion() . "</em>).";
-    $tool_content .= "</li></ul>";
+        <li>" . icon('fa-check') . " <b>Webserver</b> $langFoundIt <em>" . q($_SERVER['SERVER_SOFTWARE']) . "</em></li>";
+    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+        $info_icon = icon('fa-check');
+        $info_text = '';
+    } else {
+        $info_icon = icon('fa-ban');
+        $info_text = "<div class='alert alert-danger'>$langWarnAboutPHP</div>";
+    }
+    $tool_content .= "<li>$info_icon <b>$langPHPVersion</b> $langFoundIt <em>" . PHP_VERSION . "</em></li>";
+    $tool_content .= "</ul>";
+    $tool_content .= $info_text;
     $tool_content .= "<h3>$langRequiredPHP</h3>";
     $tool_content .= "<ul class='list-unstyled'>";
     warnIfExtNotLoaded('standard');

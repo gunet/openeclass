@@ -169,7 +169,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $pageName = $langModify;
+        $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -216,7 +216,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } else {
-        $pageName = $gradebook->title ? $gradebook->title : $langGradebookNoTitle2;
+        $pageName = ($gradebook && $gradebook->title) ? $gradebook->title : $langGradebookNoTitle2;
         $tool_content .= action_bar(
             array(
                 array('title' => $langConfig,
@@ -473,13 +473,18 @@ if ($is_editor) {
         $weight = $_POST['weight'];
         $type = $_POST['activity_type'];
         $actDate = $_POST['date'];
+        if (empty($_POST['date'])) {
+            $actDate = '0000-00-00 00:00:00';
+        } else {
+            $actDate = $_POST['date'];    
+        }
         $visible = isset($_POST['visible']) ? 1 : 0;
         
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))){
             $message = "<p class='alert1'>$langGradebookWeightAlert</p>";
             $tool_content .= $message . "<br/>";
-        } else {            
-            if ($_POST['id']) {               
+        } else {
+            if ($_POST['id']) {                
                 //update
                 $id = $_POST['id'];
                 Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);
@@ -646,7 +651,7 @@ if ($is_editor) {
         } else {  // display all students
             $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, 
                                                                 gradebook_users.uid as userID,                                                             
-                                                                user.am as am, course_user.reg_date as reg_date 
+                                                                user.am as am, DATE(course_user.reg_date) as reg_date 
                                                      FROM gradebook_users, user, course_user 
                                                         WHERE gradebook_id = ?d 
                                                         AND gradebook_users.uid = user.id 
@@ -683,14 +688,14 @@ if ($is_editor) {
                         }
                     $tool_content .="</td><td class='option-btn-cell'>".
                             action_button(array(
+                                array('title' => $langGradebookBook,
+                                        'icon' => 'fa-plus',
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID"),
                                 array('title' => $langGradebookDelete,
                                         'icon' => 'fa-times',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=$gradebook_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
                                         'class' => 'delete',
-                                        'confirm' => $langConfirmDelete),
-                                array('title' => $langGradebookBook,
-                                        'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=$resultUser->userID")))
+                                        'confirm' => $langConfirmDelete)))
                                 ."</td></tr>";
                 }
                 $tool_content .= "</tbody></table>";
@@ -1005,7 +1010,7 @@ if ($is_editor) {
         if ($checkForLpNumber > 0) {
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
             $tool_content .= "<h4>$langLearningPath</h4>";
-            $tool_content .= "<table class='table-default' id='t1'>";            
+            $tool_content .= "<table class='table-default'>";            
             $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
             $tool_content .= "<th class='text-center'>$langActions</th>";
             $tool_content .= "</tr>";
@@ -1062,7 +1067,7 @@ if ($is_editor) {
         $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
 
         //show all the students
-        $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, course_user.reg_date as reg_date   FROM gradebook_users, user, course_user  WHERE gradebook_id = ?d AND gradebook_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
+        $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname, user.givenname as name, user.am as am, DATE(course_user.reg_date) as reg_date   FROM gradebook_users, user, course_user  WHERE gradebook_id = ?d AND gradebook_users.uid = user.id AND `user`.id = `course_user`.`user_id` AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
 
         if ($resultUsers) {
             //table to display the users
@@ -1215,7 +1220,7 @@ if ($is_editor) {
                 $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($announce->id, $gradebook_id) . "</td>";
                 $tool_content .= "<td class='option-btn-cell text-center'>".
                         action_button(array(
-                                    array('title' => $langModify,
+                                    array('title' => $langEditChange,
                                         'icon' => 'fa-edit',
                                         'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$announce->id"),
                                     array('title' => $langGradebookBook,

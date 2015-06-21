@@ -182,6 +182,8 @@ switch ($module->contentType) {
         break;
 } // end switch
 
+$unitParam = isset($_GET['unit'])? "&amp;unit=$_GET[unit]": '';
+
 echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.org/TR/html4/frameset.dtd'>
 <html><head>";
 
@@ -189,14 +191,14 @@ echo "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Frameset//EN''http://www.w3.o
 if ($module->contentType == CTSCORM_ || $module->contentType == CTSCORMASSET_) {
     require_once("scormAPI.inc.php");
     echo "<frameset border='0' rows='0,56,*' frameborder='0'>
-		<frame src='updateProgress.php?course=$course_code' name='upFrame'>";
+		<frame src='updateProgress.php?course=$course_code$unitParam' name='upFrame'>";
 } else {
     echo "<frameset border='0' rows='50,*' frameborder='0'>";
 }
 
-echo "<frame src='../viewer_toc.php?course=$course_code' name='tocFrame' scrolling='no' />";
+echo "<frame src='../viewer_toc.php?course=$course_code$unitParam' name='tocFrame' scrolling='no' />";
 echo "<frameset border='0' cols='200,*' frameborder='0' id='colFrameset'>";
-echo "<frame src='../toc.php?course=$course_code' name='tocleftFrame'>";
+echo "<frame src='../toc.php?course=$course_code$unitParam' name='tocleftFrame'>";
 echo "<frame src='$moduleStartAssetPage' name='scoFrame'>";
 echo "</frameset>";
 echo "</frameset>";

@@ -91,17 +91,17 @@ if (!DBHelper::tableExists('config')) {
 if (!DBHelper::fieldExists('user', 'id')) {
     // check for multiple usernames
     fix_multiple_usernames();
-    
+
     if (DBHelper::indexExists('user', 'user_username')) {
         Database::get()->query("ALTER TABLE user DROP INDEX user_username");
-    }        
+    }
     if (!DBHelper::fieldExists('user', 'whitelist')) {
         Database::get()->query("ALTER TABLE `user` ADD `whitelist` TEXT");
         Database::get()->query("UPDATE `user` SET `whitelist` = '*,,' WHERE user_id = 1");
     }
     if (!DBHelper::fieldExists('user', 'description')) {
         Database::get()->query("ALTER TABLE `user` ADD description TEXT");
-    }        
+    }
     Database::get()->query("ALTER TABLE user
                         CHANGE registered_at ts_registered_at int(10) NOT NULL DEFAULT 0,
                         CHANGE expires_at ts_expires_at INT(10) NOT NULL DEFAULT 0,
@@ -165,51 +165,57 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     if (ini_get('short_open_tag')) { // check if short_open_tag is Off
         $tool_content .= "<div class='alert alert-danger'>$langWarningInstall2</div>";
     }
-    $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>";
-    // get old contact values
-    $tool_content .= "<div class='form-wrapper'>
-            <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
-            <fieldset>
-            <div class='form-group'><label class='col-sm-offset-4 col-sm-8'>$langUpgContact</label></div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langInstituteShortName:</label>
-                <div class='col-sm-10'>
-                    <input class=auth_input_admin type='text' size='40' name='Institution' value='" . @$Institution . "'>
-                </div>
+
+    setGlobalContactInfo();
+    $tool_content .= "<div class='alert alert-info'>$langConfigFound<br>$langConfigMod</div>
+      <div class='form-wrapper'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_Institution'>$langInstituteShortName:</label>
+            <div class='col-md-9'>
+              <input class='form-control' type='text' name='Institution' id='id_Institution' value='" . q($Institution) . "'>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langUpgAddress</label>
-                <div class='col-sm-10'>
-                    <textarea rows='3' cols='40' class=auth_input_admin name='postaddress'>" . @$postaddress . "</textarea>
-                </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_postaddress'>$langUpgAddress</label>
+            <div class='col-md-9'>
+              <textarea class='form-control' rows='3' name='postaddress' id='id_postaddress'>" . q($postaddress) . "</textarea>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langUpgTel</label>
-                <div class='col-sm-10'>
-                    <input class=auth_input_admin type='text' name='telephone' value='" . @$telephone . "'>
-                </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_telephone'>$langUpgTel</label>
+            <div class='col-md-9'>
+              <input class='form-control' type='text' name='telephone' id='id_telephone' value='" . q($telephone) . "'>
             </div>
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>Fax:</label>
-                <div class='col-sm-10'>
-                    <input class=auth_input_admin type='text' name='fax' value='" . @$fax . "'>
-                </div>
+          </div>
+          <div class='form-group'>
+            <label class='col-md-3 control-label' for='id_fax'>Fax:</label>
+            <div class='col-md-9'>
+              <input class='form-control' type='text' name='fax' id='id_fax' value='" . q($fax) . "'>
             </div>
-            </fieldset>
-            <p class='pull-right'><input class='btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'></p>
-            </form>
-            </div>";
+          </div>
+          <div class='form-group'>
+            <div class='col-md-12'>
+              <input class='pull-right btn btn-primary' name='submit2' value='$langCont &raquo;' type='submit'>
+            </div>
+          </div>
+        </form>
+      </div>";
     draw($tool_content, 0);
 } else {
     // Main part of upgrade starts here
     if ($command_line) {
-        $_POST['Institution'] = @$Institution;
-        $_POST['postaddress'] = @$postaddress;
-        $_POST['telephone'] = @$telephone;
-        $_POST['fax'] = @$fax;
+        setGlobalContactInfo();
+        $_POST['Institution'] = $Institution;
+        $_POST['postaddress'] = $postaddress;
+        $_POST['telephone'] = $telephone;
+        $_POST['fax'] = $fax;
     }
 
+    set_config('upgrade_begin', time());
+
     $tool_content .= getInfoAreas();
+    define('TEMPLATE_REMOVE_CLOSING_TAGS', true);
     draw($tool_content, 0);
     updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
     Debug::setOutput(function ($message, $level) use (&$debug_output, &$debug_error) {
@@ -219,7 +225,12 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
     });
     Debug::setLevel(Debug::WARNING);
 
-    if (isset($telephone)) {
+    set_config('institution', $_POST['Institution']);
+    set_config('postaddress', $_POST['postaddress']);
+    set_config('phone', $_POST['telephone']);
+    set_config('fax', $_POST['fax']);
+
+    if (isset($emailhelpdesk)) {
         // Upgrade to 3.x-style config
         if (!copy('config/config.php', 'config/config_backup.php')) {
             die($langConfigError1);
@@ -231,11 +242,7 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
 
         set_config('site_name', $siteName);
         set_config('account_duration', $durationAccount);
-        set_config('institution', $_POST['Institution']);
         set_config('institution_url', $InstitutionUrl);
-        set_config('phone', $_POST['telephone']);
-        set_config('postaddress', $_POST['postaddress']);
-        set_config('fax', $_POST['fax']);
         set_config('email_sender', $emailAdministrator);
         set_config('admin_name', $administratorName . ' ' . $administratorSurname);
         set_config('email_helpdesk', $emailhelpdesk);
@@ -244,7 +251,11 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         }
         set_config('base_url', $urlServer);
         set_config('default_language', $language);
-        set_config('active_ui_languages', implode(' ', $active_ui_languages));        
+        if (isset($active_ui_languages)) {
+            set_config('active_ui_languages', implode(' ', $active_ui_languages));
+        } else {
+            set_config('active_ui_languages', 'el en');
+        }
         set_config('phpMyAdminURL', $phpMyAdminURL);
         set_config('phpSysInfoURL', $phpSysInfoURL);
 
@@ -352,9 +363,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('cours_user', 'course_id')) {
             Database::get()->query('ALTER TABLE cours_user ADD course_id int(11) DEFAULT 0 NOT NULL FIRST');
             $t = Database::get()->queryArray("SELECT cours_id, code FROM cours");
-            foreach ($t as $entry) {                
+            foreach ($t as $entry) {
               Database::get()->query("UPDATE cours_user SET course_id = $entry->cours_id WHERE code_cours = '$entry->code'");
-            }            
+            }
             Database::get()->query("ALTER TABLE cours_user DROP PRIMARY KEY, ADD PRIMARY KEY (course_id, user_id)");
             Database::get()->query("CREATE INDEX course_user_id ON cours_user (user_id, course_id)");
             Database::get()->query("ALTER TABLE cours_user DROP code_cours");
@@ -368,7 +379,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             }
             Database::get()->query('ALTER TABLE annonces DROP code_cours');
         }
-    }    
+    }
     if (version_compare($oldversion, '2.3.1', '<')) {
         if (!DBHelper::fieldExists('prof_request', 'am')) {
             Database::get()->query('ALTER TABLE `prof_request` ADD `am` VARCHAR(20) NULL AFTER profcomm');
@@ -638,7 +649,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                         ('opencourses_enable', 0)");
 
         DBHelper::fieldExists('document', 'public') or
-                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");        
+                Database::get()->query("ALTER TABLE `document` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `visibility`");
         DBHelper::fieldExists('cours', 'course_license') or
                 Database::get()->query("ALTER TABLE `cours` ADD COLUMN `course_license` TINYINT(4) NOT NULL DEFAULT '0' AFTER `course_addon`");
         DBHelper::fieldExists("cours_user", "reviewer") or
@@ -842,7 +853,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         foreach ($crevres as $crev) {
             $crevres2 = Database::get()->queryArray("SELECT * FROM course_review WHERE course_id = ?d ORDER BY last_review DESC", intval($crev->course_id));
             $crevcnt = 0;
-            foreach ($revres2 as $crev2) {
+            foreach ($crevres2 as $crev2) {
                 if ($crevcnt > 0) {
                     Database::get()->query("DELETE FROM course_review WHERE id = ?d", intval($crev2['id']));
                 }
@@ -874,7 +885,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'custom_profile_fields_data', 'custom_profile_fields_category');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
-                if (Database::get()->querySingle("SELECT COUNT(*) FROM `$table_name`") > 0) {
+                if (Database::get()->querySingle("SELECT COUNT(*) AS c FROM `$table_name`")->c > 0) {
                     echo "Warning: Database inconsistent - table '$table_name' already",
                     " exists in $mysqlMainDb - renaming it to 'old_$table_name'<br>\n";
                     Database::get()->query("RENAME TABLE `$table_name` TO `old_$table_name`");
@@ -1230,6 +1241,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `content` TEXT NOT NULL,
                             `time` DATETIME NOT NULL,
                             `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+                            `commenting` TINYINT NOT NULL DEFAULT '1',
                             `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                             `course_id` INT(11) NOT NULL) $charset_spec");
 
@@ -2506,7 +2518,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
-        
+
         if (!DBHelper::fieldExists('auth', 'auth_title')) {
             Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
         }
@@ -2554,15 +2566,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
 
-        // add or upgrade default theme options
-        foreach ($theme_options as $theme) {
-            if ($q = Database::get()->querySingle("SELECT id FROM theme_options WHERE name = ?s", $theme['name'])) {
-                Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $theme['styles'], $q->id);
-            } else {
-                Database::get()->query("INSERT INTO theme_options (name, styles) VALUES (?s, ?s)", $theme['name'], $theme['styles']);
-            }
-        }
-        copyThemeImages();
 
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
@@ -2625,10 +2628,149 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         Database::get()->query("UPDATE course SET course_license = 0 WHERE course_license = 20");
         // delete stale course units entries from course modules (27 -> MODULE_ID_UNITS)
         Database::get()->query("DELETE FROM course_module WHERE module_id = 27");
-        // delete secure_url (aka $urlSecure) from table `config`
+        // move secure_url (aka $urlSecure) to base_url if not empty
+        $old_secure_url = get_config('secure_url');
+        if (!empty($old_secure_url)) {
+            set_config('base_url', $old_secure_url);
+        }
         Database::get()->query("DELETE FROM config WHERE `key` = 'secure_url'");
-        
+        // fix calendar entries (if any)
+        Database::get()->query("UPDATE agenda SET source_event_id = id WHERE source_event_id IS NULL");
+        Database::get()->query("UPDATE admin_calendar SET source_event_id = id WHERE source_event_id IS NULL");
+        Database::get()->query("UPDATE personal_calendar SET source_event_id = id WHERE source_event_id IS NULL");
+
     }
+
+    // -----------------------------------
+    // upgrade queries for 3.1
+    // -----------------------------------
+    if (version_compare($oldversion, '3.1', '<')) {
+        if (!DBHelper::fieldExists('course_user', 'document_timestamp')) {
+            Database::get()->query("ALTER TABLE `course_user` ADD document_timestamp DATETIME NOT NULL,
+                CHANGE `reg_date` `reg_date` DATETIME NOT NULL");
+            Database::get()->query("UPDATE `course_user` SET document_timestamp = NOW()");
+        }
+
+        if (get_config('course_guest') == '') {
+            set_config('course_guest', 'link');
+        }
+
+        // fix agenda entries without duration
+        Database::get()->query("UPDATE agenda SET duration = '0:00' WHERE duration = ''");
+        // Fix wiki last_version id's
+        Database::get()->query("UPDATE wiki_pages SET last_version = (SELECT MAX(id) FROM wiki_pages_content WHERE pid = wiki_pages.id)");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS module_disable (module_id int(11) NOT NULL PRIMARY KEY)");
+        DBHelper::fieldExists('assignment', 'submission_type') or
+            Database::get()->query("ALTER TABLE `assignment` ADD `submission_type` TINYINT NOT NULL DEFAULT '0' AFTER `comments`");
+        DBHelper::fieldExists('assignment_submit', 'submission_text') or
+            Database::get()->query("ALTER TABLE `assignment_submit` ADD `submission_text` MEDIUMTEXT NULL DEFAULT NULL AFTER `file_name`");
+        Database::get()->query("UPDATE `assignment` SET `max_grade` = 10 WHERE `max_grade` IS NULL");
+        Database::get()->query("ALTER TABLE `assignment` CHANGE `max_grade` `max_grade` FLOAT NOT NULL DEFAULT '10'");
+        // default assignment end date value should be null instead of 0000-00-00 00:00:00
+        Database::get()->query("ALTER TABLE `assignment` CHANGE `deadline` `deadline` DATETIME NULL DEFAULT NULL");
+        Database::get()->query("UPDATE `assignment` SET `deadline` = NULL WHERE `deadline` = '0000-00-00 00:00:00'");
+        // improve primary key for table exercise_answer
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
+                    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `course_id` int(11) NOT NULL,
+                    `module_id` int(11) NOT NULL,
+                    `element_id` int(11) NOT NULL,
+                    `user_id` int(11) NOT NULL,
+                    `date` DATETIME DEFAULT NULL,
+                    `tag_id` int(11) NOT NULL)");
+        DBHelper::indexExists('tag_element_module', 'tag_element_index') or
+            Database::get()->query("CREATE INDEX `tag_element_index` ON `tag_element_module` (course_id, module_id, element_id)");
+        // Tag tables upgrade
+        if (DBHelper::fieldExists('tags', 'tag')) {
+            $tags = Database::get()->queryArray("SELECT * FROM tags");
+            $module_ids = array(
+                'work'          =>  MODULE_ID_ASSIGN,
+                'announcement'  =>  MODULE_ID_ANNOUNCE,
+                'exe'           =>  MODULE_ID_EXERCISE
+            );
+            foreach ($tags as $tag) {
+                $first_tag_id = Database::get()->querySingle("SELECT `id` FROM `tags` WHERE `tag` = ?s ORDER BY `id` ASC", $tag->tag)->id;
+                Database::get()->query("INSERT INTO `tag_element_module` (`module_id`,`element_id`, `tag_id`)
+                                        VALUES (?d, ?d, ?d)", $module_ids[$tag->element_type], $tag->element_id, $first_tag_id);
+            }
+            // keep one instance of each tag (the one with the lowest id)
+            Database::get()->query("DELETE t1 FROM tags t1, tags t2 WHERE t1.id > t2.id AND t1.tag = t2.tag");
+            Database::get()->query("ALTER TABLE tags DROP COLUMN `element_type`, "
+                    . "DROP COLUMN `element_id`, DROP COLUMN `user_id`, DROP COLUMN `date`, DROP COLUMN `course_id`");
+            Database::get()->query("ALTER TABLE tags CHANGE `tag` `name` varchar (255)");
+            Database::get()->query("ALTER TABLE tags ADD UNIQUE KEY (name)");
+            Database::get()->query("RENAME TABLE `tags` TO `tag`");
+        }
+        Database::get()->query("CREATE TABLE IF NOT EXISTS tag (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `name` VARCHAR(255) NOT NULL,
+            UNIQUE KEY (name)) $charset_spec");
+
+        if (!DBHelper::fieldExists('blog_post', 'commenting')) {
+            Database::get()->query("ALTER TABLE `blog_post` ADD `commenting` TINYINT NOT NULL DEFAULT '1' AFTER `views`");
+        }
+        Database::get()->query("UPDATE unit_resources SET type = 'videolink' WHERE type = 'videolinks'");
+
+        //importing new themes
+        importThemes();
+        //unlinking files that were used with the old theme import mechanism
+        @unlink("$webDir/template/default/img/bcgr_lines_petrol_les saturation.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_atoms.png");
+        @unlink("$webDir/template/default/img/OpenCourses_banner_Color_theme1-1.png");
+        @unlink("$webDir/template/default/img/banner_Sketch_empty-1-2.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_sketchy.png");
+        @unlink("$webDir/template/default/img/Light_sketch_bcgr2-1.png");
+        @unlink("$webDir/template/default/img/Open-eClass-4-1-1.jpg");
+        @unlink("$webDir/template/default/img/eclass_ice.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_ice.png");
+        @unlink("$webDir/template/default/img/ice.png");
+        @unlink("$webDir/template/default/img/eclass_classic2-1-1.png");
+        @unlink("$webDir/template/default/img/eclass-new-logo_classic.png");
+    }
+    // -----------------------------------
+    // upgrade queries for 3.2
+    // -----------------------------------
+    if (version_compare($oldversion, '3.2', '<')) {
+        // delete old key 'language' (replaced by 'default_language')
+        Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
+
+        if (!DBHelper::fieldExists('link', 'user_id')) {
+            Database::get()->query("ALTER TABLE `link` ADD `user_id` INT(11) DEFAULT 0 NOT NULL");
+        }
+        if (!DBHelper::fieldExists('exercise', 'ip_lock')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `ip_lock` TEXT NULL DEFAULT NULL");
+        }
+        if (!DBHelper::fieldExists('exercise', 'password_lock')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `password_lock` VARCHAR(255) NULL DEFAULT NULL");
+        }
+        // Recycle object table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `tablename` varchar(100) NOT NULL,
+            `entryid` int(11) NOT NULL,
+            `entrydata` varchar(4000) NOT NULL,
+            KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
+        
+        // delete old key 'language' (it has been replaced by 'default_language')
+        Database::get()->query("DELETE FROM config WHERE `key` = 'language'");
+        
+        //add show results to participants field
+        if (!DBHelper::fieldExists('poll', 'show_results')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `show_results` TINYINT NOT NULL DEFAULT '0'");
+        }
+        // Add grading scales table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `title` varchar(255) NOT NULL,
+            `scales` text NOT NULL,
+            `course_id` int(11) NOT NULL,
+            KEY `course_id` (`course_id`)) $charset_spec");   
+    }    
+    //add grading_scale_id field to assignments
+    if (!DBHelper::fieldExists('assignment', 'grading_scale_id')) {
+        Database::get()->query("ALTER TABLE `assignment` ADD `grading_scale_id` INT(11) NOT NULL DEFAULT '0' AFTER `max_grade`");
+    }       
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
 
@@ -2645,8 +2787,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             $placeholders, $values);
     });
 
+    set_config('upgrade_begin', '');
     updateInfo(1, $langUpgradeSuccess);
-    $logdate = date("Y-m-d_G:i:s");
+    $logdate = date("Y-m-d_G.i:s");
 
     $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
     if ($debug_error) {
@@ -2655,4 +2798,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     updateInfo(1, $output_result, false);
     $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
     file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
+
+    // Close HTML body
+    echo "</body></html>\n";
 } // end of if not submit

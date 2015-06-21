@@ -29,7 +29,14 @@ function table_row($title, $content, $html = false) {
         $content = htmlspecialchars($content);
     }
     if (strlen(trim($content))) {
-        $tool_content .= "<tr><th class='left'>$title:</th><td>$content</td></tr>";
+        $tool_content .= "
+                        <div class='row margin-bottom-fat'>
+                            <div class='col-sm-3'>
+                                <strong>$title:</strong>
+                            </div>
+                            <div class='col-sm-9'>$content
+                            </div>
+                        </div>";
     }
 }
 
@@ -199,33 +206,51 @@ function show_submission_details($id) {
     }
 
     $tool_content .= "
-        <fieldset>
-        <legend>$m[SubmissionWorkInfo]</legend>
-        <table class='tbl'>
-	<tr>
-	  <th width='150'>$m[SubmissionStatusWorkInfo]:</th>
-	  <td valign='top'>$notice</td>
-	</tr>
-        <tr>
-          <th>" . $m['grade'] . ":</th>
-          <td>" . $sub->grade . "</td>
-        </tr>
-        <tr>
-          <th valign='top'>" . $m['gradecomments'] . ":</th>
-          <td>" . $sub->grade_comments . "</td>
-        </tr>
-        <tr>
-          <th>" . $m['sub_date'] . ":</th>
-          <td>" . $sub->submission_date . "</td>
-        </tr>
-        <tr>
-          <th>" . $m['filename'] . ":</th>
-          <td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a></td>
-        </tr>";
-    table_row($m['comments'], $sub->comments, true);
-    $tool_content .= "
-        </table>
-        </fieldset>";
+        <div class='panel panel-default'>
+            <div class='panel-heading list-header'>
+                <h3 class='panel-title'>$m[SubmissionWorkInfo]</h3>
+            </div>
+            <div class='panel-body'>
+                <div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>".$m['SubmissionStatusWorkInfo'].":</strong>
+                    </div>
+                    <div class='col-sm-9'>$notice
+                    </div>
+                </div>
+                <div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>" . $m['grade'] . ":</strong>
+                    </div>
+                    <div class='col-sm-9'>" . $sub->grade . "
+                    </div>
+                </div>
+                <div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>" . $m['gradecomments'] . ":</strong>
+                    </div>
+                    <div class='col-sm-9'>" . $sub->grade_comments . "
+                    </div>
+                </div>
+                <div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>" . $m['sub_date'] . ":</strong>
+                    </div>
+                    <div class='col-sm-9'>" . $sub->submission_date . "
+                    </div>
+                </div>
+                <div class='row margin-bottom-fat'>
+                    <div class='col-sm-3'>
+                        <strong>" . $m['filename'] . ":</strong>
+                    </div>
+                    <div class='col-sm-9'><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;get=$sub->id'>" . q($sub->file_name) . "</a>
+                    </div>
+                </div>";
+            table_row($m['comments'], $sub->comments, true);
+$tool_content .= "
+            </div>
+        </div>
+            ";
 }
 
 // Check if a file has been submitted by user uid or group gid

@@ -39,6 +39,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'ldaphost' => true, 'ldap_base' => true,
     'ldapbind_dn' => true, 'ldapbind_pw' => true,
     'ldap_login_attr' => true, 'ldap_login_attr2' => true,
+    'ldap_id_attr' => true,
     'dbhost' => true, 'dbtype' => true, 'dbname' => true,
     'dbuser' => true, 'dbpass' => true, 'dbtable' => true,
     'dbfielduser' => true, 'dbfieldpass' => true, 'dbpassencr' => true,
@@ -47,8 +48,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
     'test_username' => true), 'all', 'autounquote');
 
-// unescapeSimple() preserves whitespace in password
-$test_password = isset($_POST['test_password']) ? unescapeSimple($_POST['test_password']) : '';
+$test_password = isset($_POST['test_password']) ? $_POST['test_password'] : '';
 
 if ($auth == 7) {
     if ($submit) {
@@ -56,7 +56,8 @@ if ($auth == 7) {
         // $_POST is lost after we come back from CAS
         foreach (array('cas_host', 'cas_port', 'cas_context', 'cas_cachain',
                         'casusermailattr', 'casuserfirstattr', 'casuserlastattr',
-                        'cas_altauth', 'cas_logout', 'cas_ssout', 'auth_instructions') as $var) {
+                        'cas_altauth', 'cas_logout', 'cas_ssout', 'casuserstudentid', 
+                        'auth_instructions', 'auth_title') as $var) {
             if (isset($_POST[$var])) {
                 $_SESSION[$var] = $_POST[$var];
             }
@@ -140,7 +141,8 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'ldapbind_dn' => $ldapbind_dn,
                         'ldapbind_pw' => $ldapbind_pw,
                         'ldap_login_attr' => $ldap_login_attr,
-                        'ldap_login_attr2' => $ldap_login_attr2);
+                        'ldap_login_attr2' => $ldap_login_attr2,
+                        'ldap_studentid' => $ldap_id_attr);
                     break;
                 case '5':
                     $settings = array('dbhost' => $dbhost,
@@ -154,7 +156,7 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     break;
                 case '6':
                     if ($checkseparator) {
-                        $auth_settings = unescapeSimple($_POST['shibseparator']);
+                        $auth_settings = $_POST['shibseparator'];
                     } else {
                         $auth_settings = 'shibboleth';
                     }
@@ -172,8 +174,10 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'casuserlastattr' => $_SESSION['casuserlastattr'],
                         'cas_altauth' => $_SESSION['cas_altauth'],
                         'cas_logout' => $_SESSION['cas_logout'],
-                        'cas_ssout' => $_SESSION['cas_ssout']);
+                        'cas_ssout' => $_SESSION['cas_ssout'],
+                        'casuserstudentid' => $_SESSION['casuserstudentid']);
                     $auth_instructions = $_SESSION['auth_instructions'];
+                    $auth_title = $_SESSION['auth_title'];
                     break;
                 default:
                     break;

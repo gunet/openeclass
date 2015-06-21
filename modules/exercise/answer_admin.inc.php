@@ -145,7 +145,11 @@ if (isset($submitAnswers) || isset($buttonBack)) {
                         break;
                     }
                     // stores the found blank into the array
-                    $blanks[$i++] = substr($temp, 0, $pos);
+                    $blank = substr($temp, 0, $pos);
+                    // skip blanks containing math tags [m]...[/m]
+                    if ($blank != 'm' and $blank != '/m') {
+                        $blanks[$i++] = substr($temp, 0, $pos);
+                    }
                     // removes the character ']'
                     $temp = substr($temp, $pos + 1);
                 }
@@ -396,7 +400,7 @@ if (isset($_GET['modifyAnswers'])) {
                         <h3 class='panel-title'>$langQuestion</h3>
                       </div>
                       <div class='panel-body'>
-                            <h4>" . nl2br(q($questionName)) . "<br><small>$questionTypeWord</small></h4>                         
+                            <h4><small>$questionTypeWord</small><br>" . nl2br(q_math($questionName)) . "</h4>                         
                       </div>
                     </div>";
    $tool_content .= "<div class='panel panel-info'>
@@ -493,7 +497,7 @@ if (isset($_GET['modifyAnswers'])) {
                             <table class='table'>
                             <tr>
                               <td>$langTypeTextBelow, $langAnd $langUseTagForBlank :<br/><br/>
-                              <textarea name='reponse' cols='70' rows='6'>";
+                              <textarea class='form-control' name='reponse' cols='70' rows='6'>";
             if (!isset($submitAnswers) && empty($reponse)) {
                 $tool_content .= $langDefaultTextInBlanks;
             } else {

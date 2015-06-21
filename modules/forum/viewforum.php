@@ -24,6 +24,7 @@ $require_login = true;
 $require_help = true;
 $helpTopic = 'For';
 require_once '../../include/baseTheme.php';
+require_once 'include/log.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/search/indexer.class.php';
 
@@ -95,7 +96,7 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > $topics_per_page) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    $tool_content .= "<div class='table-responsive'><table class-'table-default' width='100%'><tr>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr>";
     $tool_content .= "<td width='50%' class='text-left'><span class='row'><strong class='pagination'>
 		<span class='pagination'>$langPages:&nbsp;";
     $current_page = $first_topic / $topics_per_page + 1; // current page
@@ -133,10 +134,25 @@ if (($is_editor) and isset($_GET['topicdel'])) {
         $topic_id = intval($_GET['topic_id']);
     }
     $number_of_posts = get_total_posts($topic_id);
-    $sql = Database::get()->queryArray("SELECT id,poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+    $sql = Database::get()->queryArray("SELECT id,poster_id,post_text FROM forum_post WHERE topic_id = ?d", $topic_id);
     $post_authors = array();
     foreach ($sql as $r) {
         $post_authors[] = $r->poster_id;
+        //delete abuse_reports for forum_posts and log actions
+        $result = Database::get()->queryArray("SELECT * FROM abuse_report WHERE `rid` = ?d AND `rtype` = ?s", $r->id, 'forum_post');
+        foreach ($result as $res) {
+            Log::record($res->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                array('id' => $res->id,
+                     'user_id' => $res->user_id,
+                     'reason' => $res->reason,
+                     'message' => $res->message,
+                     'rtype' => 'forum_post',
+                     'rid' => $r->id,
+                     'rcontent' => $r->post_text,
+                     'status' => $res->status
+            ));
+        }
+        Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $r->id, 'forum_post');
         //delete forum posts rating first
         Database::get()->query("DELETE FROM rating WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
         Database::get()->query("DELETE FROM rating_cache WHERE rtype = ?s AND rid = ?d", 'forum_post', $r->id);
@@ -211,7 +227,7 @@ $result = Database::get()->queryArray("SELECT t.*, p.post_time, p.poster_id AS p
 if (count($result) > 0) { // topics found    
     $tool_content .= "<div class='table-responsive'>
 	<table class='table-default'>
-	<tr>
+	<tr class='list-header'>
 	  <th class='forum_td'>&nbsp;$langSubject</th>
 	  <th class='text-center forum_td'>$langAnswers</th>
 	  <th class='text-center forum_td'>$langSender</th>

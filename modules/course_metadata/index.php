@@ -63,7 +63,7 @@ $instrPhoto = $langCMeta['course_instructor_photo'];
 
 load_js('select2');
 $head_content .= <<<EOF
-<link rel="stylesheet" type="text/css" href="course_metadata.css">
+<link rel="stylesheet" type="text/css" href="{$urlAppend}modules/course_metadata/course_metadata.css">
 <script type='text/javascript'>
 /* <![CDATA[ */
         

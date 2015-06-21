@@ -21,33 +21,13 @@
  */
 
 /**
- * Do the main task of archiving a course.
+ * Archive serialized course tables
  * 
  * @param int $course_id
  * @param string $course_code
- * @return boolean $success
+ * @param string $archivedir  Target directory
  */
-function doArchive($course_id, $course_code) {
-    global $webDir, $urlServer, $urlAppend, $siteName;
-    
-    if (extension_loaded('zlib')) {
-        include 'include/pclzip/pclzip.lib.php';
-    }
-
-    $basedir = "$webDir/courses/archive/$course_code";
-    mkpath($basedir);
-
-    // Remove previous back-ups older than 10 minutes
-    cleanup("$webDir/courses/archive", 600);
-
-    $backup_date = date('Ymd-His');
-    $backup_date_short = date('Ymd');
-
-    $archivedir = $basedir . '/' . $backup_date;
-    mkpath($archivedir);
-
-    $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
-
+function archiveTables($course_id, $course_code, $archivedir) {
     // backup subsystems from main db
     $sql_course = "course_id = $course_id";
     $archive_conditions = array(
@@ -150,36 +130,68 @@ function doArchive($course_id, $course_code) {
         'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
         'rating' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR 
                      (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
-                     WHERE forum.course_id = $course_id))",
+                     WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id))",
         'rating_cache' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR 
                      (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
-                     WHERE forum.course_id = $course_id))",
+                     WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id))",
+        'abuse_report' => "id IN (SELECT id FROM abuse_report WHERE course_id = $course_id)",                     
         'note' => "(reference_obj_course IS NOT NULL AND reference_obj_course = $course_id)");
 
     foreach ($archive_conditions as $table => $condition) {
         backup_table($archivedir, $table, $condition);
     }
-    file_put_contents("$archivedir/config_vars", serialize(array('urlServer' => $urlServer,
-        'urlAppend' => $urlAppend,
-        'siteName' => $siteName,
-        'version' => get_config('version'))));
 
-    // $htmldir is not needed anywhere
-    //$htmldir = $archivedir . '/html';
+    file_put_contents("$archivedir/config_vars",
+        serialize(array(
+            'urlServer' => $GLOBALS['urlServer'],
+            'urlAppend' => $GLOBALS['urlAppend'],
+            'siteName' => $GLOBALS['siteName'],
+            'version' => get_config('version'))));
+}
+
+
+/**
+ * Do the main task of archiving a course.
+ * 
+ * @param int $course_id
+ * @param string $course_code
+ */
+function doArchive($course_id, $course_code) {
+    global $webDir, $urlServer, $urlAppend, $siteName, $tool_content;
+    
+    if (extension_loaded('zlib')) {
+        include 'include/pclzip/pclzip.lib.php';
+    }
+
+    $basedir = "$webDir/courses/archive/$course_code";
+    file_exists($basedir) or mkdir($basedir, 0755, true);
+
+    // Remove previous back-ups older than 10 minutes
+    cleanup("$webDir/courses/archive", 600);
+
+    $backup_date = date('Ymd-His');
+    $backup_date_short = date('Ymd');
+
+    $archivedir = $basedir . '/' . $backup_date;
+    file_exists($archivedir) or mkdir($archivedir, 0755, true);
+
+    archiveTables($course_id, $course_code, $archivedir);
+
+    $zipfile = $basedir . "/$course_code-$backup_date_short.zip";
 
     // create zip file
     $zipCourse = new PclZip($zipfile);
-    $result1 = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive");
-    $result2 = $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html");
-    $result3 = $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
+    $result = $zipCourse->create($archivedir, PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/archive") &&
+        $zipCourse->add("$webDir/courses/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/courses/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/html") &&
+        $zipCourse->add("$webDir/video/$course_code", PCLZIP_OPT_REMOVE_PATH, "$webDir/video/$course_code", PCLZIP_OPT_ADD_PATH, "$course_code/$backup_date/video_files");
     
-    $success = true;
-    if ($result1 === 0 || $result2 === 0 || $result3 === 0) {
-        $success = false;
-    }
-
     removeDir($archivedir);
-    return $success;
+
+    if (!$result) {
+        $tool_content .= "Error: " . $zipCourse->errorInfo(true);
+        draw($tool_content, 2);
+        exit;
+    }
 }
 
 /**

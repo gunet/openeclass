@@ -93,16 +93,16 @@ while ($iterator <= $_POST['maxMediaForm']) {
             if ($num == 0) { // used in another LP but not in this one, so reuse the module id reference instead of creating a new one
                 reuse_module($thisLinkModule->module_id);
 
-                $dialogBox .= q($video->title) . " : " . $langMediaInsertedAsModule . "<br />";
+                $dialogBox .= q($video->title) . ': ' . $langMediaInsertedAsModule . '<br>';
                 $style = "success";
             } else {
-                $dialogBox .= q($video->title) . " : " . $langMediaAlreadyUsed . "<br />";
+                $dialogBox .= q($video->title) . ': ' . $langMediaAlreadyUsed . '<br>';
                 $style = "warning";
             }
         } else {
             create_new_module($video->title, $video->description, $video->path, CTMEDIA_);
 
-            $dialogBox .= q($video->title) . " : " . $langMediaInsertedAsModule . "<br />";
+            $dialogBox .= q($video->title) . ': ' . $langMediaInsertedAsModule . "<br>";
             $style = "success";
         }
     }

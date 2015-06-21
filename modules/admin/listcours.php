@@ -154,6 +154,11 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         // Add links to course users, delete course and course edit
         $icon_content = action_button(array(
             array(
+                'title' => $langEditChange,
+                'icon' => 'fa-edit',
+                'url' => "editcours.php?c=$logs->code"
+            ),
+            array(
                 'title' => $langUsers,
                 'icon' => 'fa-user',
                 'url' => "listusers.php?c=$logs->id"
@@ -163,11 +168,6 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                 'icon' => 'fa-list',
                 'url' => "../usage/displaylog.php?c=$logs->id&amp;from_admin=TRUE",
                 'show' => !isDepartmentAdmin()
-            ),
-            array(
-                'title' => $langEdit,
-                'icon' => 'fa-edit',
-                'url' => "editcours.php?c=$logs->code"
             ),  
             array(
                 'title' => $langDelete,

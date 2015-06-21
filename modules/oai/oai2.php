@@ -22,7 +22,6 @@
  *		- Your own implementation for providing metadata records.
  *
  * It also initiates:
- *	- PDO datbase connection object $db.
  *	- ANDS_XML XML document handler $outputObj.  
  *
  * \todo <b>Remember:</b> to define your own classess for generating metadata records.
@@ -71,13 +70,6 @@ foreach($attribs as $val) {
 }
 
 require_once('oaidp-config.php');
-
-// Create a PDO object
-try {
-    $db = new PDO($DSN, $DB_USER, $DB_PASSWD, $DB_OPTION);
-} catch (PDOException $e) {
-    exit('Connection failed: ' . $e->getMessage());
-}
 
 // For generic usage or just trying:
 // require_once('xml_creater.php');

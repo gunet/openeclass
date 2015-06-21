@@ -69,8 +69,19 @@ $head_content = '<script type="text/javascript">
 
 $toolName = $langDropBox;
 
+if ($course_id != 0) {
+    if ($status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+    }
+} else {
+    if (!get_mail_ver_status($uid)) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+            (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+    }
+}
 // action bar 
-if (!isset($_GET['showQuota'])) {    
+if (!isset($_GET['showQuota'])) {   
     if (isset($_GET['upload'])) {
         $navigation[] = array('url' => "index.php", 'name' => $langDropBox);
         if (isset($_GET['type'])) {
@@ -190,13 +201,16 @@ if (isset($_REQUEST['upload']) && $_REQUEST['upload'] == 1) {//new message form
                 </div>
             </div>";
     if ($type == 'cm' && $course_id == 0) {//course message from central interface
-        //find user's courses        
+        //find user's courses with dropbox module activated       
         $sql = "SELECT course.code code, course.title title
-                FROM course, course_user
+                FROM course, course_user, course_module
                 WHERE course.id = course_user.course_id
+                AND course.id = course_module.course_id
+                AND course_module.module_id = ?d
+                AND course_module.visible = ?d
                 AND course_user.user_id = ?d
                 ORDER BY title";
-        $res = Database::get()->queryArray($sql, $uid);
+        $res = Database::get()->queryArray($sql, MODULE_ID_DROPBOX, 1, $uid);
         
         $head_content .= "<script type='text/javascript'>
                             $(document).on('change','#courseselect',function(){

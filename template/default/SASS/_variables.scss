@@ -50,8 +50,8 @@ $text-color:            $gray;
 // $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace
 // $font-family-base:        $font-family-sans-serif
 
-// $font-size-base:          14px
-// $font-size-large:         ceil(($font-size-base * 1.25)) // ~18px
+$font-size-base:          14px;
+$font-size-large:         ceil(($font-size-base * 1.25));
 // $font-size-small:         ceil(($font-size-base * 0.85)) // ~12px
 
 // $font-size-h1:            floor(($font-size-base * 2.6)) // ~36px
@@ -294,7 +294,7 @@ $screen-md-max:              ($screen-lg-min - 1);
 //* Number of columns in the grid.
 // $grid-columns:              12
 //* Padding between columns. Gets divided in half for the left and right.
-// $grid-gutter-width:         30px
+$grid-gutter-width:         30px;
 // Navbar collapse
 //* Point at which the navbar becomes uncollapsed.
 // $grid-float-breakpoint:     $screen-sm-min
@@ -316,9 +316,9 @@ $screen-md-max:              ($screen-lg-min - 1);
 // $container-md:                 $container-desktop
 
 // Large screen / wide desktop
-// $container-large-desktop:      ((1140px + $grid-gutter-width))
+$container-large-desktop:      ((1310px + $grid-gutter-width));
 //* For `$screen-lg-min` and up.
-// $container-lg:                 $container-large-desktop
+$container-lg:                 $container-large-desktop;
 
 //== Navbar
 //

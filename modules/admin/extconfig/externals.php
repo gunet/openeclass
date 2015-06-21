@@ -23,10 +23,11 @@
 foreach (ExtAppManager::$AppNames as $appName)
     require_once strtolower($appName) . '.php';
 require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
+require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp");
+    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");
     private static $APPS = null;
 
     /**
@@ -51,14 +52,20 @@ class ExtAppManager {
      */
     public static function getApp($appname) {
         $apps = ExtAppManager::getApps();
-        return $apps[$appname];
+        return array_key_exists($appname, $apps) ? $apps[$appname] : null;
     }
 
 }
 
 abstract class ExtApp {
 
+    const ENABLED = "enabled";
+
     private $params = array();
+
+    public function __construct() {
+        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::ENABLED, "0", ExtParam::TYPE_BOOLEAN));
+    }
 
     /**
      * @param ExtParam $param
@@ -74,8 +81,13 @@ abstract class ExtApp {
         return $this->params;
     }
 
+    /**
+     * 
+     * @param string $paramName
+     * @return ExtParam
+     */
     public function getParam($paramName) {
-        return $this->params[$paramName];
+        return array_key_exists($paramName, $this->params) ? $this->params[$paramName] : null;
     }
 
     /**
@@ -110,18 +122,14 @@ abstract class ExtApp {
     }
 
     protected function getBaseURL() {
-        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
+        return get_config('base_url');
     }
 
     public abstract function getDisplayName();
 
-    public function getShortDescription() {
-        return "Short description about " . $this->getDisplayName();
-    }
+    public abstract function getShortDescription();
 
-    public function getLongDescription() {
-        return "Long description about " . $this->getDisplayName();
-    }
+    public abstract function getLongDescription();
 
     public function getAppIcon() {
         return $this->getBaseURL() . "template/icons/" . $this->getName() . ".png";
@@ -136,15 +144,17 @@ abstract class ExtParam {
     private $name;
     private $value;
     private $defaultValue;
+    private $type;
 
     const TYPE_STRING = 0;
     const TYPE_BOOLEAN = 1;
 
-    function __construct($display, $name, $defaultValue = "") {
+    function __construct($display, $name, $defaultValue = "", $type = ExtParam::TYPE_STRING) {
         $this->display = $display;
         $this->name = $name;
         $this->value = ExtParam::$UNSET;
         $this->defaultValue = $defaultValue;
+        $this->type = $type;
     }
 
     function display() {
@@ -169,6 +179,10 @@ abstract class ExtParam {
 
     public function validateParam() {
         return null;
+    }
+
+    function getType() {
+        return $this->type;
     }
 
     abstract protected function retrieveValue();

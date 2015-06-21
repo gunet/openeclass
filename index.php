@@ -28,6 +28,26 @@ session_start();
  *
  */
 
+// Handle alias of .../courses/<CODE>/... to index.php for course homes
+if (preg_match('|/courses/([a-zA-Z_-]+\d+)/[^/]*$|', $_SERVER['REQUEST_URI'], $matches)) {
+	$dbname = $matches[1];
+	if (!@chdir('courses/' . $dbname)) {
+		header('HTTP/1.0 404 Not Found');
+		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL ',$_SERVER['REQUEST_URI'],' was not found on this server.</p>
+</body></html>
+';
+		exit;
+	}
+	$_SESSION['dbname'] = $dbname;
+	require_once '../../modules/course_home/course_home.php';
+    exit;
+}
+
 define('HIDE_TOOL_TITLE', 1);
 $guest_allowed = true;
 
@@ -104,7 +124,7 @@ if (isset($language)) {
 
 
 // check if we are guest user
-if ($uid AND !isset($_GET['logout'])) {
+if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     if (check_guest()) {
         // if the user is a guest send him straight to the corresponding lesson
         $guest = Database::get()->querySingle("SELECT code FROM course_user, course
@@ -122,43 +142,45 @@ if ($uid AND !isset($_GET['logout'])) {
 } else {
     // check authentication methods
     $authLink = array();
-    $extAuthMethods = array('cas', 'shibboleth');
-    $loginFormEnabled = false;
-    $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
-            FROM auth WHERE auth_default <> 0
-            ORDER BY auth_default DESC, auth_id");
-    foreach ($q as $l) {
-        $extAuth = in_array($l->auth_name, $extAuthMethods);
-        if ($extAuth) {
-            $authLink[] = array(
-                'showTitle' => true,
-                'class' => 'login-option login-option-sso',
-                'title' => empty($l->auth_title)? "<b>$langLogInWith</b><br>{$l->auth_name}": q($l->auth_title),
-                'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
-                          ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
-        } elseif (!$loginFormEnabled) {
-            $loginFormEnabled = true;
-            $authLink[] = array(
-                'showTitle' => false,
-                'class' => 'login-option',
-                'title' => "<b>$langLogInWith</b><br>Credentials",
-                'html' => "<form action='$urlServer' method='post'>
+    if (!$upgrade_begin) {
+        $extAuthMethods = array('cas', 'shibboleth');
+        $loginFormEnabled = false;
+        $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
+                FROM auth WHERE auth_default <> 0
+                ORDER BY auth_default DESC, auth_id");
+        foreach ($q as $l) {
+            $extAuth = in_array($l->auth_name, $extAuthMethods);
+            if ($extAuth) {
+                $authLink[] = array(
+                    'showTitle' => true,
+                    'class' => 'login-option login-option-sso',
+                    'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
+                    'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
+                              ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
+            } elseif (!$loginFormEnabled) {
+                $loginFormEnabled = true;
+                $authLink[] = array(
+                    'showTitle' => false,
+                    'class' => 'login-option',
+                    'title' => empty($l->auth_title)? "$langLogInWith<br>Credentials": q(getSerializedMessage($l->auth_title)),
+                    'html' => "<form action='$urlServer' method='post'>
                              <div class='form-group'>
-                               <input type='text' name='uname' placeholder='$langUsername'><label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-user'></i></label>
+                                <label for='uname' class='sr-only'>$langUsername</label>
+                                <input type='text' id='uname' name='uname' placeholder='$langUsername'><span class='col-xs-2 col-sm-2 col-md-2 fa fa-user'></span>
                              </div>
                              <div class='form-group'>
-                               <input type='password' id='pass' name='pass' placeholder='$langPass'><i id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></i>&nbsp;&nbsp;<label class='col-xs-2 col-sm-2 col-md-2'><i class='fa fa-lock'></i></label>
+                                <label for='pass' class='sr-only'>$langPass</label>
+                                <input type='password' id='pass' name='pass' placeholder='$langPass'><span id='revealPass' class='fa fa-eye' style='margin-left: -20px; color: black;'></span>&nbsp;&nbsp;<span class='col-xs-2 col-sm-2 col-md-2 fa fa-lock'></span>
                              </div>
                              <button type='submit' name='submit' class='btn btn-login'>$langEnter</button>
                            </form>
                            <div class='text-right'>
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
+            }
         }
-    }
 
-
-    $head_content .= "
+        $head_content .= "
       <script>
         $(function() {
             $('#revealPass').mousedown(function () {
@@ -168,23 +190,25 @@ if ($uid AND !isset($_GET['logout'])) {
             })
         });
       </script>
-      <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>
-    ";
+      <link rel='alternate' type='application/rss+xml' title='RSS-Feed' href='{$urlServer}rss.php'>";
+    }
+
     $tool_content .= "$warning
         <div class='row margin-top-fat'>
             <div class='col-md-12 remove-gutter'>
                 <div class='jumbotron jumbotron-login'>
-                    <div class='row'>";
-    if (!get_config('dont_display_login_form')) {
+                    <div class='row'>";   
+    
+    if (!($upgrade_begin or get_config('dont_display_login_form'))) {        
         $tool_content .= "
-                        <div class='login-form col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right'>
+                        <div class='col-xs-12 col-sm-6 col-md-5 col-lg-4 pull-right login-form'>
                           <div class='wrapper-login-option'>";
         
         $show_seperator = count($authLink) > 1;
         foreach ($authLink as $i => $l) {
             $tool_content .= "<div class='$l[class]'>
                                 <h2>$langUserLogin</h2>
-                                <div>" . ($l['showTitle']? "<span class='head-text'>$l[title]</span>": '') .
+                                <div>" . ($l['showTitle']? "<span class='head-text' style='font-size:14px;'>$l[title]</span>": '') .
                                    $l['html'] . "
                                 </div>";
             if ($show_seperator) {
@@ -271,7 +295,7 @@ if ($uid AND !isset($_GET['logout'])) {
     if ($online_users > 0) {
         $tool_content .= "<div class='panel'>
                <div class='panel-body'>
-                   <i class='fa fa-group space-after-icon'></i> &nbsp;$langOnlineUsers: $online_users
+                   <span class='fa fa-group space-after-icon'></span> &nbsp;$langOnlineUsers: $online_users
                </div>
            </div>";
     }
@@ -299,7 +323,7 @@ if ($uid AND !isset($_GET['logout'])) {
             <div class='panel' id='openeclass-banner'>
                 <div class='panel-body'>
                     <a href='http://www.openeclass.org/' target='_blank'>
-                        <img class='img-responsive center-block' src='$themeimg/open_eclass_banner.png' alt=''>
+                        <img class='img-responsive center-block' src='$themeimg/open_eclass_banner.png' alt='Open eClass Banner'>
                     </a>
                 </div>
             </div>";

@@ -20,19 +20,20 @@
  * ======================================================================== 
  */
 
-require_once 'genericrequiredparam.php';
+require_once 'credentialdriveapp.php';
 
-class OwnCloudApp extends ExtApp {
-
-    const URL = "url";
-
-    public function __construct() {
-        $drivename = $this->getName();
-        $this->registerParam(new GenericRequiredParam($drivename, "OwnCLoud URL", WebDAVApp::URL));
-    }
+class OwnCloudApp extends CredentialDriveApp {
 
     public function getDisplayName() {
         return "OwnCloud";
+    }
+
+    public function getShortDescription() {
+        return $GLOBALS['langOwnCloudShortDescription'];
+    }
+
+    public function getLongDescription() {
+        return $GLOBALS['langOwnCloudLongDescription'];
     }
 
 }

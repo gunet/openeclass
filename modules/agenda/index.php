@@ -250,7 +250,8 @@ if ($is_editor) {
                 }
             }
         } else {
-            $id = $content = $duration = '';
+            $id = $content = '';
+            $duration = "0:00";
             $startdate = date('d-m-Y H:i', strtotime('now'));
             $enddate = '';
         } 

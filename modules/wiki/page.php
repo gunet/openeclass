@@ -65,7 +65,7 @@ if ($result->c > 0) {
 } else {
     $is_courseMember = false;
 }
-$pageName = $langWiki;
+$toolName = $langWiki;
 
 // check and set user access level for the tool
 if (!isset($_REQUEST['wikiId'])) {
@@ -1023,12 +1023,14 @@ switch ($action) {
                 <form class='form-inline' role='form' method='post' action='". htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>
                     <input type='hidden' name='action' value='exSearch'>
                     <div class='form-group'>
-                        <label for='searchPattern'>$langSearch:</label>
-                        <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langSearch'>
-                    </div>
-                    <div class='form-group'>
-                        <input class='btn btn-primary' type='submit' value='". $langSubmit ."'>
-                        <a class='btn btn-default' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
+                        <label for='searchPattern' class='label-control'>$langSearch:</label>
+                            <div class='input-group'>
+                                <input class='form-control' type='text' id='searchPattern' name='searchPattern' placeholder='$langSearch'>
+                                <div class='input-group-btn'>
+                                    <input class='btn btn-primary' type='submit' value='". $langSubmit ."'>
+                                        <a class='btn btn-default' href='".htmlspecialchars($_SERVER['SCRIPT_NAME'].'?wikiId='.$wikiId.'&course='.$course_code)."'>$langCancel</a>
+                                </div>
+                            </div>
                     </div>
                 </form>
             </div>";
@@ -1051,14 +1053,6 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                           'show' => ($is_allowedToEdit || $is_allowedToCreate)
                                       ),
                                       array(
-                                          'title' => $langWikiDeletePage,
-                                          'class' => 'delete',
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
-                                          'icon' => 'fa-times',
-                                          'confirm' => $langWikiDeletePageWarning,
-                                          'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
-                                      ),
-                                      array(
                                           'title' => $langWikiPageHistory,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=history&amp;title=". rawurlencode($wiki_title),
                                           'icon' => 'fa-history'
@@ -1067,7 +1061,15 @@ if ($action == 'show' && (!isset($_GET['printable']) || $_GET['printable']!="yes
                                           'title' => $langWikiPagePrintable,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=". $wiki->getWikiId(). "&amp;action=show&amp;printable=yes&amp;versionId=$versionId&amp;title=". rawurlencode($wiki_title),
                                           'icon' => 'fa-print'
-                                      )                                        
+                                      )    ,
+                                      array(
+                                          'title' => $langWikiDeletePage,
+                                          'class' => 'delete',
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;wikiId=".$wiki->getWikiId()."&amp;action=delete&amp;title=".rawurlencode($wiki_title),
+                                          'icon' => 'fa-times',
+                                          'confirm' => $langWikiDeletePageWarning,
+                                          'show' => ($is_allowedToEdit || $is_allowedToCreate) && $wiki_title != "__MainPage__" && $is_editor
+                                      )                                    
                                     ))."</div>
                                     <h3 class='panel-title'>
                                         ". ( $wiki_title != "__MainPage__" ? $wiki_title : $langWikiMainPage) ." 

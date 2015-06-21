@@ -34,6 +34,8 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 
 $toolName = $langEBook;
 
+
+
 if (!$is_editor) {
     redirect_to_home_page();
 }
@@ -49,19 +51,141 @@ require_once 'modules/document/doc_init.php';
 
 if (isset($_GET['delete'])) {
     Database::get()->query("DELETE FROM ebook_section WHERE ebook_id = ?d AND id = ?d", $ebook_id, $_GET['delete']);
+    $return_url = "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1";
+    redirect_to_home_page($return_url);
+} elseif (isset($_GET['editEbook'])) {
+        $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
+        if (!$info) {
+            redirect_to_home_page("modules/ebook/index.php?course=$course_code");
+        }
+        $pageName = $langEBookInfoEdit;
+        $tool_content .= action_bar(array(
+                        array('title' => $langBack,
+                              'url' => "edit.php?course=$course_code&amp;id=$info->id",
+                              'icon' => 'fa-reply',
+                             'level' => 'primary-label')
+                        ));         
+        // Form #1 - edit title
+        $tool_content .= "
+        <div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                <input type='hidden' name='id' value='$ebook_id' />
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langTitle:</label>         
+                    <div class='col-sm-9 input-group'>
+                        <input class='form-control' type='text' name='ebook_title' value='" . q($info->title) . "' />
+                        <span class='input-group-btn'>
+                            <button class='btn btn-primary' name='title_submit' type='submit' value='$langModify'>$langModify</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>";
+        // Form #2 - edit sections
+        $tool_content .= "
+        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+        <fieldset>
+        <h4>$langSections</h4>
+        <input type='hidden' name='id' value='$ebook_id' />
+          <table class='table-default'>
+          <tr>
+            <th class='text-left'>$langID</th>
+            <th>$langTitle</th>
+            <th width='75' class='text-center'>$langActions</th>
+          </tr>";
+        $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
+                           WHERE ebook_id = ?d
+                           ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
+        $sections = array('' => '---');
+        if (isset($_GET['s'])) {
+            $edit_section = $_GET['s'];
+        } else {
+            $edit_section = null;
+        }
+        $section_editing = false;
+        foreach ($q as $section) {
+            $sid = $section->id;
+            $qsid = Session::has('new_section_id') ? Session::get('new_section_id') : q($section->public_id);                     
+            $qstitle = Session::has('new_section_title') ? Session::get('new_section_title') : q($section->title);
+            $sections[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
+            if ($sid === $edit_section) {
+                $section_id = "
+                                <input type='hidden' name='csid' value='$sid'>
+                                <div class='form-group'>                                    
+                                    <input type='text' class='form-control' name='new_section_id' value='$qsid'>
+                                </div>";
+                $section_title = "<div class='form-group".(Session::getError('new_section_title') ? " has-error" : "")."'>
+                                    <input type='text size='3' class='form-control' name='new_section_title' value='$qstitle'>
+                                    <span class='help-block'>".Session::getError('new_section_title')."</span>    
+                                </div>
+                                ";
+                $section_editing = true;
+                $section_tools = "<input class='btn btn-primary' type='submit' name='new_section_submit' value='$langModify' />";
+            } else {
+                $section_id = q($section->public_id);
+                $section_title = q($section->title);
+                $section_tools = action_button(array(
+                                    array('title' => $langEditChange,
+                                          'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;s=$sid&amp;editEbook=1",
+                                          'icon' => 'fa-edit'),
+                                    array('title' => $langDelete,
+                                          'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;delete=$sid&amp;editEbook=1",
+                                          'icon' => 'fa-times',
+                                          'class' => 'delete',
+                                          'confirm' => $langEBookSectionDelConfirm)
+                ));            
+            }       
+            $tool_content .= "
+            <tr>
+              <td style='width:70px;'>$section_id</td>
+              <td>$section_title</td>
+              <td class='text-center'>$section_tools</td>
+            </tr>";          
+        }
+        $new_section_id = Session::has('new_section_id') ? Session::get('new_section_id') : '';
+        if (!$section_editing) {
+            $tool_content .= "
+            <tr>
+                <td style='width:70px'>
+                    <input class='form-control' type='text' name='new_section_id' value='".q($new_section_id)."'>
+                </td>
+                <td>
+                    <div class='form-group".(Session::getError('new_section_title') ? " has-error" : "")."'>
+                        <input class='form-control' type='text' size='35' name='new_section_title'>
+                        <span class='help-block'>".Session::getError('new_section_title')."</span>    
+                    </div>
+                </td>
+                <td class='center'>
+                    <input class='btn btn-primary' type='submit' name='new_section_submit' value='$langAdd'>
+                </td>
+            </tr>";
+        }
+        $tool_content .= "
+          </table>
+          </fieldset></form>";        
 } elseif (isset($_POST['new_section_submit'])) {
-    if (isset($_POST['csid'])) {
-        Database::get()->query("UPDATE ebook_section
-                                 SET public_id = ?s, title = ?s
-                                 WHERE ebook_id = ?d AND id = ?d"
-                , $_POST['new_section_id'], $_POST['new_section_title'], $ebook_id, $_POST['csid']);
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('new_section_title'));
+    $v->labels(array(
+        'new_section_title' => "$langTheField $langTitle"
+    ));
+    if($v->validate()) {
+        if (isset($_POST['csid'])) {
+            Database::get()->query("UPDATE ebook_section
+                                     SET public_id = ?s, title = ?s
+                                     WHERE ebook_id = ?d AND id = ?d"
+                    , $_POST['new_section_id'], $_POST['new_section_title'], $ebook_id, $_POST['csid']);
+        } else {
+            Database::get()->query("INSERT INTO ebook_section SET ebook_id = ?d,
+                                                            public_id = ?s,
+                                                            title = ?s"
+                    , $ebook_id, $_POST['new_section_id'], $_POST['new_section_title']);
+        }
     } else {
-        Database::get()->query("INSERT INTO ebook_section SET ebook_id = ?d,
-                                                        public_id = ?s,
-                                                        title = ?s"
-                , $ebook_id, $_POST['new_section_id'], $_POST['new_section_title']);
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());      
     }
-    redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
+    $redirect_link = isset($_POST['csid']) ? "modules/ebook/edit.php?course=$course_code&id=$ebook_id&s=$_POST[csid]&editEbook=1" : "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1";
+    redirect_to_home_page($redirect_link);
 } elseif (isset($_POST['title_submit'])) {
     $info = Database::get()->querySingle("SELECT id, title FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
     $ebook_title = trim($_POST['ebook_title']);
@@ -110,165 +234,163 @@ if (isset($_GET['delete'])) {
     }
     Session::Messages($langEBookSectionsModified, 'alert-success');
     redirect_to_home_page('modules/ebook/edit.php?course=' . $course_code . '&id=' . $ebook_id);
-}
-
-$info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
-
-if (!$info) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
 } else {
-    $pageName = $langEBookEdit;
-    $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
-    $k = 0;
-    list($paths, $files, $file_ids, $id_map) = find_html_files();
-    // Form #1 - edit ebook title
-    $tool_content .= action_bar(array(
-                    array('title' => $langFileAdmin,
-                          'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
-                          'icon' => 'fa-hdd-o',                          
-                          'level' => 'primary-label'),
-                    array('title' => $langBack,
-                          'url' => "index.php?course=$course_code",
-                          'icon' => 'fa-reply',
-                          'button-class' => 'btn-success',
-                         'level' => 'primary-label')
-                    ));    
+    $info = Database::get()->querySingle("SELECT * FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);
 
-    $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-            <input type='hidden' name='id' value='$ebook_id' />
-            <div class='form-group'>
-                <label class='col-sm-2 control-label'>$langTitle</label>         
-                <div class='col-sm-10'>
-                    <input type='text' name='ebook_title' size='53' value='" . q($info->title) . "' />
-                    <input class='btn btn-primary' name='title_submit' type='submit' value='$langModify' />
-                </div>
-            </div>
-        </form>
-    </div>";
-
-    // Form #2 - edit sections
-    $tool_content .= "
-    <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
-    <fieldset>
-    <h4>$langSections</h4>
-    <input type='hidden' name='id' value='$ebook_id' />
-      <table width='100%' class='table-default'>
-      <tr>
-        <th width='1' class='text-right'>$langID</th>
-        <th>$langTitle</th>
-        <th width='75' class='text-center'>$langActions</th>
-      </tr>";
-    $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
-                       WHERE ebook_id = ?d
-                       ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
-    $sections = array('' => '---');
-    if (isset($_GET['s'])) {
-        $edit_section = $_GET['s'];
+    if (!$info) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoEBook</div>";
     } else {
-        $edit_section = null;
-    }
-    $section_editing = false;
-    foreach ($q as $section) {
-        $sid = $section->id;
-        $qsid = q($section->public_id);
-        $qstitle = q($section->title);
-        $sections[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
-        if ($sid === $edit_section) {
-            $section_id = "<input type='hidden' name='csid' value='$sid' />" .
-                    "<input type='text size='3' name='new_section_id' value='$qsid' />";
-            $section_title = "<input type='text size='3' name='new_section_title' value='$qstitle' />";
-            $section_editing = true;
-            $section_tools = "<input class='btn btn-primary' type='submit' name='new_section_submit' value='$langModify' />";
-        } else {
-            $section_id = $qsid;
-            $section_title = $qstitle;
-            $section_tools = action_button(array(
-                                array('title' => $langModify,
-                                      'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;s=$sid",
-                                      'icon' => 'fa-edit'),
-                                array('title' => $langDelete,
-                                      'url' => "edit.php?course=$course_code&amp;id=$ebook_id&amp;delete=$sid",
-                                      'icon' => 'fa-times',
-                                      'class' => 'delete',
-                                      'confirm' => $langEBookSectionDelConfirm)
-            ));            
-        }       
-        $tool_content .= "
-        <tr>
-          <td class='text-right'>$section_id</td>
-          <td>$section_title</td>
-          <td class='text-center'>$section_tools</td>
-        </tr>";          
-    }
-    if (!$section_editing) {
-        $tool_content .= "
-        <tr>
-          <td><input type='text' size='2' name='new_section_id' /></td>
-          <td><input type='text' size='35' name='new_section_title' /></td>
-          <td class='center'><input class='btn btn-primary' type='submit' name='new_section_submit' value='$langAdd' /></td>
-        </tr>";
-    }
-    $tool_content .= "
-      </table>
-      </fieldset>";
+        $pageName = $langEBookEdit;
+        $basedir = $webDir . '/courses/' . $course_code . '/ebook/' . $ebook_id;
+        $k = 0;
+        list($paths, $files, $file_ids, $id_map) = find_html_files();
 
-    // Form #3 - edit subsection file assignment
-    $tool_content .= "
-     <fieldset>
-     <h4>$langEBookMenuTitle</h4>
-     <table width='100%' class='table-default'>
-     <tr>       
-       <th>$langFileName</th>
-       <th>$langTitle</th>
-       <th>$langSection</th>
-       <th>$langSubsection</th>
-     </tr>";
-    $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
-                              ebook_section.id AS psid,
-                              ebook_section.title AS section_title,
-                              ebook_subsection.id AS ssid,
-                              ebook_subsection.public_id AS pssid,
-                              ebook_subsection.title AS subsection_title,
-                              ebook_subsection.file_id as file_id
-                       FROM ebook_section, ebook_subsection
-                       WHERE ebook_section.ebook_id = $info->id AND
-                             ebook_section.id = ebook_subsection.section_id
-                             ORDER BY CONVERT(psid, UNSIGNED), psid,
-                                      CONVERT(pssid, UNSIGNED), pssid");
-    foreach ($q as $r) {        
-        $file_id = $r->file_id;
-        $display_id = $r->sid . ',' . $r->ssid;
+        $sections = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
+                           WHERE ebook_id = ?d
+                           ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
+        if ($sections){
+            
+            $sections_table = "<ul class='list-group'>";
+            foreach ($sections as $section){
+                $sections_table .=
+                        "
+                        <li class='list-group-item'>
+                            ".q($section->public_id).".&nbsp;
+                            ".q($section->title)."    
+                        </li>
+                        ";
+            }
+            $sections_table .= "</ul>";
+            
+            
+        } else {
+            $sections_table = "<span class='not_visible'> - $langNoEBookSections - </span>";
+        }
+        // Form #1 - edit ebook title
+        $tool_content .= action_bar(array(
+                        array('title' => $langBack,
+                              'url' => "index.php?course=$course_code",
+                              'icon' => 'fa-reply',
+                             'level' => 'primary-label')
+                        ));    
         $tool_content .= "
-            <tr>              
-              <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
-              <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
-              <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
-              <td class='center'><input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
-                  <input type='text' name='ssid[$file_id]' size='3' value='" . q($r->pssid) . "'></td>
-            </tr>";
-        unset($files[$id_map[$file_id]]);        
-    }
-    foreach ($files as $key => $file) {        
-        $path = $paths[$key];
-        $file_id = $file_ids[$key];
-        $title = get_html_title($basedir . $path);
-        $tool_content .= "
-        <tr>          
-          <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
-          <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
-          <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
-          <td class='center'><input type='text' name='ssid[$file_id]' size='3' /></td>
-        </tr>";        
-    }
-    $tool_content .= "
-     <tr>
-       <td colspan='3'>&nbsp;</td>
-       <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
-     </table>
-     </fieldset>
-     </form>";
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <h3 class='panel-title'>$langEBookInfo &nbsp;
+                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&id=$info->id&editEbook=1'>
+                            <i class='fa fa-edit' title='$langEdit' data-toggle='tooltip'></i>
+                        </a>
+                    </h3>
+                </div>
+                <div class='panel-body'>
+                    <div class='row  margin-bottom-fat'>
+                        <div class='col-sm-2'>
+                            <strong>$langTitle:</strong>
+                        </div>
+                        <div class='col-sm-10'>
+                            " . q($info->title) . "
+                        </div>                
+                    </div>
+                    <div class='row  margin-bottom-fat'>
+                        <div class='col-sm-2'>
+                            <strong>$langSections:</strong>
+                        </div>
+                        <div class='col-sm-10'>
+                            $sections_table
+                        </div>                
+                    </div>                
+                </div>
+            </div>";
+
+        $q = Database::get()->queryArray("SELECT id, public_id, title FROM ebook_section
+                           WHERE ebook_id = ?d
+                           ORDER BY CONVERT(public_id, UNSIGNED), public_id", $info->id);
+        $sections = array('' => '---');
+        foreach ($q as $section) {
+            $sid = $section->id;
+            $qsid = q($section->public_id);
+            $qstitle = q($section->title);
+            $sections[$sid] = $qsid . '. ' . ellipsize($section->title, 25);
+        }
+        $pageName = $langEBookPages;
+        $tool_content .= action_bar(array(
+                            array('title' => $langNewEBookPage,
+                              'url' => "new.php?course=$course_code&ebook_id=$ebook_id&amp;from=ebookEdit",
+                              'icon' => 'fa-plus-circle',
+                              'button-class' => 'btn-success',
+                              'level' => 'primary-label'),            
+                            array('title' => $langFileAdmin,
+                                  'url' => "document.php?course=$course_code&amp;ebook_id=$ebook_id",
+                                  'icon' => 'fa-hdd-o',                          
+                                  'level' => 'primary-label')            
+                        ));      
+        // Form #3 - edit subsection file assignment
+        $q = Database::get()->queryArray("SELECT ebook_section.id AS sid,
+                                  ebook_section.id AS psid,
+                                  ebook_section.title AS section_title,
+                                  ebook_subsection.id AS ssid,
+                                  ebook_subsection.public_id AS pssid,
+                                  ebook_subsection.title AS subsection_title,
+                                  ebook_subsection.file_id as file_id
+                           FROM ebook_section, ebook_subsection
+                           WHERE ebook_section.ebook_id = $info->id AND
+                                 ebook_section.id = ebook_subsection.section_id
+                                 ORDER BY CONVERT(psid, UNSIGNED), psid,
+                                          CONVERT(pssid, UNSIGNED), pssid");  
+        if (count($files) > 0 || count($q) > 0) {
+            $tool_content .= "
+            <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code'>
+                <input type='hidden' name='id' value='$ebook_id' />
+                <fieldset>
+                    <table class='table-default'>
+                    <tr class='list-header'>       
+                      <th>$langFileName</th>
+                      <th>$langTitle</th>
+                      <th>$langSection</th>
+                      <th>$langSubsection</th>
+                    </tr>";
+                   foreach ($q as $r) {        
+                       $file_id = $r->file_id;
+                       $display_id = $r->sid . ',' . $r->ssid;
+                       $tool_content .= "
+                            <tr>              
+                                <td class='smaller'><a href='show.php/$course_code/$ebook_id/$display_id/' target='_blank'>" . q($files[$id_map[$file_id]]) . "</a></td>
+                                <td><input type='text' name='title[$file_id]' size='30' value='" . q($r->subsection_title) . "'></td>
+                                <td>" . selection($sections, "sid[$file_id]", $r->sid, 'class="form-control"') . "</td>
+                                <td class='center' style='width: 50px;'>
+                                    <input type='hidden' name='oldssid[$file_id]' value='$r->ssid'>
+                                    <input type='text' class='form-control' name='ssid[$file_id]' value='" . q($r->pssid) . "'>
+                                </td>
+                            </tr>";
+                       unset($files[$id_map[$file_id]]);        
+                   }
+                   foreach ($files as $key => $file) {        
+                       $path = $paths[$key];
+                       $file_id = $file_ids[$key];
+                       $title = get_html_title($basedir . $path);
+                       $tool_content .= "
+                        <tr class='not_visible'>          
+                            <td class='smaller'><a href='show.php/$course_code/$ebook_id/_" . q($file) . "' target='_blank'>" . q($file) . "</a></td>
+                            <td><input type='text' name='title[$file_id]' size='30' value='" . q($title) . "' /></td>
+                            <td>" . selection($sections, "sid[$file_id]", ' ', 'class="form-control"') . "</td>
+                            <td class='center' style='width: 50px;'>
+                               <input class='form-control' type='text' name='ssid[$file_id]'>
+                           </td>
+                        </tr>";        
+                   }
+                   $tool_content .= "
+                    <tr>
+                      <td colspan='3'>&nbsp;</td>
+                      <td><input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'></td>
+                    </table>
+                </fieldset>
+             </form>";
+        } else {
+            $tool_content .= "<div class='alert alert-warning'>$langEBookNoPages</div>";
+        }
+    }    
 }
+$pageName = $langEBookEdit;
 
 draw($tool_content, 2, null, $head_content);
 

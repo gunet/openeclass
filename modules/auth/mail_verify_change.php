@@ -33,7 +33,7 @@ $require_valid_uid = true;
 $mail_ver_excluded = true;
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
-$pageName = $langMailVerify;
+$toolName = $langMailVerify;
 
 $uid = (isset($_SESSION['uid']) && !empty($_SESSION['uid'])) ? $_SESSION['uid'] : NULL;
 
@@ -42,15 +42,14 @@ if (empty($uid)) {
     draw($tool_content, 0);
     exit;
 }
-
 // user might already verified mail account or verification is no more needed
 if (!get_config('email_verification_required') or
-        get_mail_ver_status($uid) == EMAIL_VERIFIED) {
+    get_mail_ver_status($uid) == EMAIL_VERIFIED or
+    isset($_POST['enter'])) {
     if (isset($_SESSION['mail_verification_required'])) {
         unset($_SESSION['mail_verification_required']);
     }
-    header("Location:" . $urlServer);
-    exit;
+    redirect_to_home_page('main/portfolio.php');
 }
 
 if (!empty($_POST['submit'])) {
@@ -72,40 +71,49 @@ if (!empty($_POST['submit'])) {
             $mail_ver_error = sprintf("<div class='alert alert-warning'>" . $langMailVerificationError, $email, $urlServer . "auth/registration.php", "<a href='mailto:" . q($emailhelpdesk) . "' class='mainpage'>" . q($emailhelpdesk) . "</a>.</div>");
             $tool_content .= $mail_ver_error;
         } else {
-            $tool_content .= "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
+            $tool_content .= 
+                action_bar(array(
+                    array(
+                        'title' => $langBack,
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label',
+                        'url' => $urlAppend))) .
+                "<div class='alert alert-success'>$langMailVerificationSuccess4</div> ";
         }
     }
     // email wrong or empty
     else {
         $tool_content .= "<div class='alert alert-danger'>$langMailVerificationWrong</div> ";
     }
-} elseif (!empty($_SESSION['mail_verification_required']) && ($_SESSION['mail_verification_required'] === 1)) {
-    $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div> ";
+} else {
+    if (get_config('alt_auth_stud_reg') == 2) {
+        $tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
+    } else if (isset($_SESSION['mail_verification_required'])) {
+        $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+    }
 }
 
 if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
-    $tool_content .= "<br /><br /><form method='post' action='$_SERVER[SCRIPT_NAME]'>
+    $tool_content .= "<div class='form-wrapper'>
+    	<form class='form-horizontal' method='post' role='form' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
-                <legend>$langUserData</legend>
-                <table class='tbl' with='100%'>                
-                <tr>
-                        <th class='left'>$lang_email:</th>
-                        <td><input type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' /></td>
-                        <td><small>($langMailVerificationAddrChange)</small></td>
-                </tr>
-                <tr>
-                        <th class='left'>&nbsp;</th>
-                        <td colspan='2'><input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode' /></td>
-                </tr>
-                </table>               
+			<div class='form-group'>
+                <label class='col-sm-2'>$lang_email:</label>
+                <div class='col-sm-10'>
+					<input class='form-control' type='text' name='email' size='30' maxlength='40' value='" . q($_SESSION['email']) . "' placeholder='$langMailVerificationAddrChange'>
+				</div>
+			</div>
+			<div class='form-group'>
+				<div class='col-sm-offset-2 col-sm-10'>
+					<input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>
+					<input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>
+				</div>
+			</div>
         </fieldset>
-    </form>";
+    </form>
+    </div>";
 }
 
-if (isset($_GET['from_profile'])) {
-    draw($tool_content, 1);
-} else {
-    draw($tool_content, 0);
-}
+draw($tool_content, $uid? 1: 0);
 
 exit;

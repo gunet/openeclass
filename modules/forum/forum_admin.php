@@ -290,6 +290,23 @@ elseif (isset($_GET['forumcatdel'])) {
                                     WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN forum_post on rating_cache.rid = forum_post.id
                                     WHERE rating_cache.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            //delete abuse reports for forum posts belonging to this topic
+            $res = Database::get()->queryArray("SELECT abuse_report.*, forum_post.post_text FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            foreach ($res as $r) {
+                Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                    array('id' => $r->id,
+                          'user_id' => $r->user_id,
+                          'reason' => $r->reason,
+                          'message' => $r->message,
+                          'rtype' => 'forum_post',
+                          'rid' => $r->rid,
+                          'rcontent' => $r->post_text,
+                          'status' => $r->status
+                ));
+            }
+            Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             Database::get()->query("DELETE FROM forum_post WHERE topic_id = ?d", $topic_id);
             Indexer::queueAsync(Indexer::REQUEST_REMOVEBYTOPIC, Indexer::RESOURCE_FORUMPOST, $topic_id);
             
@@ -325,6 +342,23 @@ elseif (isset($_GET['forumgodel'])) {
         foreach ($result2 as $result_row2) {
             $topic_id = $result_row2->id;
             $post_authors = Database::get()->queryArray("SELECT DISTINCT poster_id FROM forum_post WHERE topic_id = ?d", $topic_id);
+            //delete abuse reports of posts belonging to the topic
+            $res = Database::get()->queryArray("SELECT abuse_report.*, forum_post.post_text FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
+            foreach ($res as $r) {
+                Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+                    array('id' => $r->id,
+                        'user_id' => $r->user_id,
+                        'reason' => $r->reason,
+                        'message' => $r->message,
+                        'rtype' => 'forum_post',
+                        'rid' => $r->rid,
+                        'rcontent' => $r->post_text,
+                        'status' => $r->status
+                ));
+            }
+            Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN forum_post ON abuse_report.rid = forum_post.id
+                                    WHERE abuse_report.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);
             //delete forum posts ratings first
             Database::get()->query("DELETE rating FROM rating INNER JOIN forum_post on rating.rid = forum_post.id
                                     WHERE rating.rtype = ?s AND forum_post.topic_id = ?d", 'forum_post', $topic_id);

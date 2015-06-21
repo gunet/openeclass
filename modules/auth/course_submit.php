@@ -45,7 +45,7 @@ if ($q) {
         if (($visible == COURSE_OPEN or $visible == COURSE_REGISTRATION) and
                 ($password === $course_password or $course_password === null)) {
             Database::get()->query("INSERT IGNORE INTO `course_user` (`course_id`, `user_id`, `status`, `reg_date`)
-                                         VALUES (?d, ?d, " . USER_STUDENT . ", CURDATE())", $cid, $uid);
+                                         VALUES (?d, ?d, " . USER_STUDENT . ", NOW())", $cid, $uid);
             Log::record($cid, MODULE_ID_USERS, LOG_INSERT, array('uid' => $uid, 'right' => 5));
             die('registered');
         } else {

@@ -40,18 +40,8 @@ $pageName = '';
 $toolName = '';
 require_once 'init.php';
 
-if ($is_editor and isset($course_code) and isset($_GET['hide'])) {
-    $eclass_module_id = intval($_GET['eclass_module_id']);
-    $cid = course_code_to_id($course_code);
-    $visible = ($_GET['hide'] == 0) ? 0 : 1;
-    Database::get()->query("UPDATE course_module SET visible = ?d
-        WHERE module_id = ?d AND
-        course_id = ?d", $visible, $eclass_module_id, $cid);
-}
-
 if (isset($toolContent_ErrorExists)) {
     Session::Messages($toolContent_ErrorExists);
-    session_write_close();
     if (!$uid) {
         $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
         header("Location:" . $urlServer . "main/login_form.php?next=" . urlencode($next));
@@ -77,21 +67,21 @@ require_once 'tools.php';
  * @param string $body_action (optional) code to be added to the BODY tag
  */
 function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null, $body_action = null, $hideLeftNav = null, $perso_tool_content = null) {
-    global $course_code, $course_id, $helpTopic,
-        $is_editor, $langActivate,
+    global $session, $course_code, $course_id, $helpTopic,
+        $is_editor, $langActivate, $langNote,
         $langAdmin, $langAdvancedSearch, $langAnonUser, $langChangeLang,
-        $langChooseLang, $langDeactivate,
+        $langChooseLang, $langDeactivate, $langProfileMenu,
         $langEclass, $langHelp, $langUsageTerms,
         $langHomePage, $langLogin, $langLogout, $langMyPersoAgenda, $langMyAgenda,
         $langMyPersoAnnouncements, $langMyPersoDeadlines,
-        $langMyPersoDocs, $langMyPersoForum, $langMyPersoLessons,
+        $langMyPersoDocs, $langMyPersoForum, $langMyCourses,
         $langPortfolio, $langSearch, $langUser,
         $langUserPortfolio, $langUserHeader, $language,
         $navigation, $pageName, $toolName, $sectionName, $currentCourseName,
         $require_current_course, $require_course_admin, $require_help, $siteName, $siteName,
-        $status, $switchLangURL, $theme, $themeimg,
+        $switchLangURL, $theme, $themeimg,
         $toolContent_ErrorExists, $urlAppend, $urlServer,
-        $theme_settings, $language, $saved_is_editor,
+        $theme_settings, $language, $saved_is_editor, $langProfileImage,
         $langStudentViewEnable, $langStudentViewDisable, $langNoteTitle, $langEnterNote, $langFieldsRequ;
 
     // negative course_id might be set in common documents
@@ -102,11 +92,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     // get blocks content from $toolContent array
     if ($perso_tool_content) {
-        $lesson_content = $perso_tool_content ['lessons_content'];
-        $assigns_content = $perso_tool_content ['assigns_content'];
-        $docs_content = $perso_tool_content ['docs_content'];
-        $agenda_content = $perso_tool_content ['agenda_content'];
-        $forum_content = $perso_tool_content ['forum_content'];
+        $lesson_content = $perso_tool_content ['lessons_content'];        
         $personal_calendar_content = $perso_tool_content ['personal_calendar_content'];
     }
 
@@ -153,9 +139,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     $t->set_var('LANG', $language);
+    $t->set_var('ECLASS_VERSION', ECLASS_VERSION);
 
     if (!$is_embedonce) {
-        //Remove search if not enabled
+        // Remove search if not enabled
         if (!get_config('enable_search')) {
             $t->set_block('mainBlock', 'searchBlock', 'delete');
         }
@@ -252,42 +239,61 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_var('ECLASS_LEFTNAV_EXTRAS', $GLOBALS['leftNavExtras']);
     }
 
-    //if user is logged in display the logout option
+    // if user is logged in display the logout option
     if (isset($_SESSION['uid'])) {
-        $t->set_var('LANG_USER', $langUserHeader);
+        $t->set_var('LANG_USER', q($langUserHeader));
         $t->set_var('USER_NAME', q($_SESSION['givenname']));
         $t->set_var('USER_SURNAME', q($_SESSION['surname']));
+        $t->set_var('LANG_USER_ICON', $langProfileMenu);
         $t->set_var('USER_ICON', user_icon($_SESSION['uid']));
         $t->set_var('USERNAME', q($_SESSION['uname']));
-        $t->set_var('LANG_PROFILE', $GLOBALS['langMyProfile']);
-        $t->set_var('PROFILE_LINK', $urlServer . "main/profile/display_profile.php");
-        $t->set_var('LANG_MESSAGES', $GLOBALS['langMyDropBox']);
-        $t->set_var('MESSAGES_LINK', $urlServer . "modules/dropbox/index.php");
-        $t->set_var('LANG_COURSES', $GLOBALS['langMyPersoLessons']);
-        $t->set_var('COURSES_LINK', $urlServer . "main/my_courses.php");        
-        $t->set_var('LANG_AGENDA', $langMyAgenda);
-        $t->set_var('AGENDA_LINK', $urlServer . "main/personal_calendar/index.php");
-        $t->set_var('LANG_NOTES', $GLOBALS['langNotes']);
-        $t->set_var('NOTES_LINK', $urlServer . 'main/notes/index.php');
-        $t->set_var('LANG_STATS', $GLOBALS['langMyStats']);
-        $t->set_var('STATS_LINK', $urlServer . "main/profile/personal_stats.php");
-        $t->set_var('LANG_LOGOUT', $langLogout);
-        $t->set_var('LOGOUT_LINK', $urlServer . 'index.php?logout=yes');
-        $t->set_var('MY_COURSES', $GLOBALS['langMyCoursesSide']);
-        $t->set_var('MY_MESSAGES', $GLOBALS['langNewMyMessagesSide']);
-        $t->set_var('LANG_ANNOUNCEMENTS', $GLOBALS['langMyAnnouncements']);
-        $t->set_var('ANNOUNCEMENTS_LINK', $urlServer . "modules/announcements/myannouncements.php");
-        $t->set_var('QUICK_NOTES', $GLOBALS['langQuickNotesSide']);
-        $t->set_var('langSave', $GLOBALS['langSave']);
-        $t->set_var('langAllNotes', $GLOBALS['langAllNotes']);
-        $t->set_var('langAllMessages', $GLOBALS['langAllMessages']);
-        $t->set_var('langNoteTitle', $langNoteTitle);
-        $t->set_var('langEnterNote', $langEnterNote);
-        $t->set_var('langFieldsRequ', $langFieldsRequ);
+        $t->set_var('LANG_PROFILE', q($GLOBALS['langMyProfile']));
+        $t->set_var('PROFILE_LINK', $urlAppend . 'main/profile/display_profile.php');
+        $t->set_var('LANG_MESSAGES', q($GLOBALS['langMyDropBox']));
+        $t->set_var('MESSAGES_LINK', $urlAppend . 'modules/dropbox/index.php');
+        $t->set_var('LANG_COURSES', q($GLOBALS['langMyCourses']));
+        $t->set_var('COURSES_LINK', $urlAppend . 'main/my_courses.php');        
+        $t->set_var('LANG_AGENDA', q($langMyAgenda));
+        $t->set_var('AGENDA_LINK', $urlAppend . 'main/personal_calendar/index.php');
+        $t->set_var('LANG_NOTES', q($GLOBALS['langNotes']));
+        $t->set_var('NOTES_LINK', $urlAppend . 'main/notes/index.php');
+        $t->set_var('LANG_STATS', q($GLOBALS['langMyStats']));
+        $t->set_var('STATS_LINK', $urlAppend . 'main/profile/personal_stats.php');
+        $t->set_var('LANG_LOGOUT', q($langLogout));
+        $t->set_var('LOGOUT_LINK', $urlAppend . 'index.php?logout=yes');
+        $t->set_var('MY_COURSES', q($GLOBALS['langMyCoursesSide']));
+        $t->set_var('MY_MESSAGES', q($GLOBALS['langNewMyMessagesSide']));
+        $t->set_var('LANG_ANNOUNCEMENTS', q($GLOBALS['langMyAnnouncements']));
+        $t->set_var('ANNOUNCEMENTS_LINK', $urlAppend . 'modules/announcements/myannouncements.php');
+        if (!$is_embedonce) {
+            if (get_config('personal_blog')) {
+                $t->set_var('LANG_MYBLOG', q($GLOBALS['langMyBlog']));
+                $t->set_var('MYBLOG_LINK', $urlAppend . 'modules/blog/index.php');
+            } elseif ($menuTypeID > 0) {
+                $t->set_block('mainBlock', 'PersoBlogBlock', 'delete');
+            }
+            if (($session->status == USER_TEACHER and get_config('mydocs_teacher_enable')) or
+                ($session->status == USER_STUDENT and get_config('mydocs_student_enable'))) {
+                $t->set_var('LANG_MYDOCS', q($GLOBALS['langMyDocs']));
+                $t->set_var('MYDOCS_LINK', $urlAppend . 'main/mydocs/index.php');
+            } elseif ($menuTypeID > 0) {
+                $t->set_block('mainBlock', 'MyDocsBlock', 'delete');
+            }
+        }
+        $t->set_var('QUICK_NOTES', q($GLOBALS['langQuickNotesSide']));
+        $t->set_var('langSave', q($GLOBALS['langSave']));
+        $t->set_var('langAllNotes', q($GLOBALS['langAllNotes']));
+        $t->set_var('langAllMessages', q($GLOBALS['langAllMessages']));
+        $t->set_var('langNoteTitle', q($langNoteTitle));
+        $t->set_var('langEnterNoteLabel', $langNote);
+        $t->set_var('langEnterNote', q($langEnterNote));
+        $t->set_var('langFieldsRequ', q($langFieldsRequ));
 
         $t->set_var('LOGGED_IN', 'true');
     } else {
-        if (!get_config('dont_display_login_form')) {
+        if (get_config('hide_login_link')) {
+            $t->set_block('mainBlock', 'LoginIconBlock', 'delete');
+        } else {
             $next = str_replace($urlAppend, '/', $_SERVER['REQUEST_URI']);
             if (preg_match('@(?:^/(?:modules|courses)|listfaculte|opencourses|openfaculties)@', $next)) {
                 $nextParam = '?next=' . urlencode($next);
@@ -296,8 +302,6 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
             }
             $t->set_var('LANG_LOGOUT', $langLogin);
             $t->set_var('LOGOUT_LINK', $urlServer . 'main/login_form.php' . $nextParam);
-        } else {
-            $t->set_var('LOGOUT_LINK', '#');
         }
         $t->set_var('LOGGED_IN', 'false');
     }
@@ -339,20 +343,15 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $module_id = current_module_id();
         if (display_activation_link($module_id)) {
             if (visible_module($module_id)) {
-                $message = $langDeactivate;
-                $mod_activation = "
-
-                <a class='deactivate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=0'>
-                    <i class='fa fa-minus-square tiny-icon tiny-icon-red' data-toggle='tooltip' data-placement='top' title='$langDeactivate'></i>
-                    </a>";
+                $modIconClass = 'fa-minus-square tiny-icon-red';
+                $modIconTitle = q($langDeactivate);
+                $modState = 0;
             } else {
-                $message = $langActivate;
-                $mod_activation = "
-
-                <a class='activate_module' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;eclass_module_id=$module_id&amp;hide=1'>
-                    <i class='fa fa-check-square tiny-icon tiny-icon-green' data-toggle='tooltip' data-placement='top' title='$langActivate'></i>
-                    </a>";
+                $modIconClass = 'fa-check-square tiny-icon-green';
+                $modIconTitle = q($langActivate);
+                $modState = 1;
             }
+            $mod_activation = "<a href='{$urlAppend}main/module_toggle.php?course=$course_code&amp;module_id=$module_id' id='module_toggle' data-state='$modState' data-toggle='tooltip' data-placement='top' title='$modIconTitle'><span class='fa tiny-icon $modIconClass'></span></a>";
         }
     }
 
@@ -360,6 +359,7 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     $t->set_var('SEARCH_ADVANCED_URL', $searchAdvancedURL);
     $t->set_var('SEARCH_TITLE', $langSearch);
     $t->set_var('SEARCH_ADVANCED', $langAdvancedSearch);
+    $t->set_var('LANG_PORTFOLIO', $langPortfolio);
 
     $t->set_var('TOOL_NAME', $toolName);
 
@@ -383,9 +383,9 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
         $t->set_block('mainBlock', 'breadCrumbEntryBlock', 'breadCrumbEntry');
 
         // Breadcrumb first entry (home / portfolio)
-        if ($status != USER_GUEST) {
+        if ($session->status != USER_GUEST) {
             if (isset($_SESSION['uid'])) {
-                $t->set_var('BREAD_TEXT', '<i class="fa fa-home"></i> ' . $langPortfolio);
+                $t->set_var('BREAD_TEXT', '<span class="fa fa-home"></span> ' . $langPortfolio);
                 $t->set_var('BREAD_HREF', $urlAppend . 'main/portfolio.php');
             } else {
                 $t->set_var('BREAD_TEXT', $langHomePage);
@@ -588,19 +588,10 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
     }
 
     if ($perso_tool_content) {
-        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyPersoLessons);
-        $t->set_var('LANG_MY_PERSO_DEADLINES', $langMyPersoDeadlines);
+        $t->set_var('LANG_MY_PERSO_LESSONS', $langMyCourses);        
         $t->set_var('LANG_MY_PERSO_ANNOUNCEMENTS', $langMyPersoAnnouncements);
-        $t->set_var('LANG_MY_PERSO_DOCS', $langMyPersoDocs);
-        $t->set_var('LANG_MY_PERSO_AGENDA', $langMyPersoAgenda);
-        $t->set_var('LANG_PERSO_FORUM', $langMyPersoForum);
         $t->set_var('LANG_MY_PERSONAL_CALENDAR', $langMyAgenda);
-
-        $t->set_var('LESSON_CONTENT', $lesson_content);
-        $t->set_var('ASSIGN_CONTENT', $assigns_content);
-        $t->set_var('DOCS_CONTENT', $docs_content);
-        $t->set_var('AGENDA_CONTENT', $agenda_content);
-        $t->set_var('FORUM_CONTENT', $forum_content);
+        $t->set_var('LESSON_CONTENT', $lesson_content);        
         $t->set_var('URL_PATH', $urlAppend);
         $t->set_var('TOOL_PATH', $urlAppend);
         $t->set_var('PERSONAL_CALENDAR_CONTENT', $personal_calendar_content);
@@ -618,9 +609,30 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     $t->set_var('EXTRA_FOOTER_CONTENT', get_config('extra_footer_content'));
 
+    // Hack to leave HTML body unclosed
+    if (defined('TEMPLATE_REMOVE_CLOSING_TAGS')) {
+        $t->set_block('mainBlock', 'closingTagsBlock', 'delete');
+    }
+
     //	At this point all variables are set and we are ready to send the final output
     //	back to the browser
     $t->parse('main', 'mainBlock', false);
+
+    $t->pparse('Output', 'fh');
+}
+
+// Simplified draw for pop-ups
+function draw_popup() {
+    global $theme, $language, $urlAppend, $theme, $pageName, $head_content, $tool_content;
+
+    $t = new Template('template/' . $theme);
+    $t->set_file('fh', 'popup.html');
+    $t->set_var('LANG', $language);
+    $t->set_var('ECLASS_VERSION', ECLASS_VERSION);
+    $t->set_var('template_base', $urlAppend . 'template/' . $theme);
+    $t->set_var('PAGE_TITLE', $pageName);
+    $t->set_var('HEAD_EXTRAS', $head_content);
+    $t->set_var('TOOL_CONTENT', $tool_content);
     $t->pparse('Output', 'fh');
 }
 
@@ -751,6 +763,15 @@ function module_path($path) {
     if (strpos($path, 'modules/units/insert.php') !== false) {
         if (strpos($path, '&dir=') !== false) {
             return 'document';
+        }
+    }
+    if (strpos($path, 'listreq.php') !== false or
+        strpos($path, 'newuseradmin.php') !== false or
+        strpos($path, 'ldapnewprofadmin.php') !== false) {
+        if (strpos($path, '?type=user') !== false) {
+            return 'listreq-user';
+        } else {
+            return 'listreq';
         }
     }
 

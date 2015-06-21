@@ -149,7 +149,7 @@ foreach($questionList as $id){
     $objQuestionTmp->read($id);    
     $tool_content .= "
                 <tr>
-                    <td>".$objQuestionTmp->selectTitle()."</th>
+                    <td>".q_math($objQuestionTmp->selectTitle())."</th>
                     <td>
                         <div class='progress'>
                             <div class='progress-bar progress-bar-success progress-bar-striped' role='progressbar' aria-valuenow='".$objQuestionTmp->successRate($exerciseId)."' aria-valuemin='0' aria-valuemax='100' style='width: ".$objQuestionTmp->successRate($exerciseId)."%;'>

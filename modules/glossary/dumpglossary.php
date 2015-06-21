@@ -31,6 +31,11 @@ if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
 }
 $crlf = "\r\n";
 
+if (!$is_editor) {
+    Session::Messages($langForbidden);
+    redirect_to_home_page('modules/glossary/index.php?course=' . $course_code);
+}
+
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=glossary.csv");
 

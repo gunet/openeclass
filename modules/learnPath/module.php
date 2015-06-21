@@ -191,11 +191,12 @@ $tool_content .=
                 'level' => 'primary-label')),false) ;
 
 $tool_content .="
-    <div class='panel panel-default lp-module-show'>
-        <div class='panel-heading'>$langLearningObjectData
+    <div class='panel panel-default'>
+        <div class='panel-heading'>
+            <h3 class='panel-title'>$langLearningObjectData</h3>
         </div>
         <div class='panel-body'>
-            <div class='row'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langTitle:</strong>
                 </div>
@@ -209,7 +210,7 @@ $tool_content .="
             }
 $tool_content .= "</div>
             </div>
-            <div class='row'>
+            <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
                     <strong>$langComments:</strong>
                 </div>
@@ -230,7 +231,7 @@ if ($module->contentType != CTLABEL_) {
       </div>
     </div>";
     $tool_content .="
-    <div class='row'>
+    <div class='row margin-bottom-fat'>
         <div class='col-sm-3'>
             <strong>$langComments - $langInstructions:<br /><small class='text-muted'>($langModuleComment_inCurrentLP)</small></strong>
         </div>
@@ -288,7 +289,7 @@ if ($module->contentType != CTLABEL_) { //
 
         //display type of the module
         
-        $tool_content .= "<div class='row'>
+        $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langTypeOfModule:</strong>
                             </div>
@@ -300,7 +301,7 @@ if ($module->contentType != CTLABEL_) { //
         
         //display total time already spent in the module
         
-        $tool_content .= "<div class='row'>
+        $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langTotalTimeSpent:</strong>
                             </div>
@@ -312,7 +313,7 @@ if ($module->contentType != CTLABEL_) { //
 
         //display time passed in last session
         
-        $tool_content .= "<div class='row'>
+        $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langLastSessionTimeSpent:</strong>
                             </div>
@@ -336,22 +337,22 @@ if ($module->contentType != CTLABEL_) { //
         }
 
         // no sens to display a score in case of a document module
-        if (($resultBrowsed->contentType != CTDOCUMENT_) &&
-                ($resultBrowsed->contentType != CTLINK_) &&
-                ($resultBrowsed->contentType != CTCOURSE_DESCRIPTION_) &&
-                ($resultBrowsed->contentType != CTMEDIA_) &&
-                ($resultBrowsed->contentType != CTMEDIALINK_)
-        ) {
-            $tool_content .= "<div class='row'>
-                            <div class='col-sm-3'>
-                                <strong>$langYourBestScore:</strong>
-                            </div>
-                            <div class='col-sm-9'>
-                                " . disp_progress_bar($raw, 1) . "
-                            </div>
-                        </div>
-                ";
-        }
+//        if (($resultBrowsed->contentType != CTDOCUMENT_) &&
+//                ($resultBrowsed->contentType != CTLINK_) &&
+//                ($resultBrowsed->contentType != CTCOURSE_DESCRIPTION_) &&
+//                ($resultBrowsed->contentType != CTMEDIA_) &&
+//                ($resultBrowsed->contentType != CTMEDIALINK_)
+//        ) {
+//            $tool_content .= "<div class='row'>
+//                            <div class='col-sm-3'>
+//                                <strong>$langYourBestScore:</strong>
+//                            </div>
+//                            <div class='col-sm-9'>
+//                                " . disp_progress_bar($raw, 1) . "
+//                            </div>
+//                        </div>
+//                ";
+//        }
 
         //display lesson status
         // display a human readable string ...
@@ -372,7 +373,7 @@ if ($module->contentType != CTLABEL_) { //
             $statusToDisplay = $resultBrowsed->lesson_status;
         }
         
-        $tool_content .= "<div class='row'>
+        $tool_content .= "<div class='row margin-bottom-fat'>
                             <div class='col-sm-3'>
                                 <strong>$langLessonStatus:</strong>
                             </div>

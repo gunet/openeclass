@@ -44,24 +44,6 @@ $action->record(MODULE_ID_EXERCISE);
 
 $pageName = $langExercices;
 
-/* * **************************** */
-/* Clears the exercise session */
-/* * **************************** */
-if (isset($_SESSION['objExercise'])) {
-    unset($_SESSION['objExercise']);
-}
-if (isset($_SESSION['objQuestion'])) {
-    unset($_SESSION['objQuestion']);
-}
-if (isset($_SESSION['objAnswer'])) {
-    unset($_SESSION['objAnswer']);
-}
-if (isset($_SESSION['questionList'])) {
-    unset($_SESSION['questionList']);
-}
-if (isset($_SESSION['exerciseResult'])) {
-    unset($_SESSION['exerciseResult']);
-}
 //Unsetting the redirect cookie which is set in case of exercise page unload event
 //More info in exercise_submit.php comments
 if (isset($_COOKIE['inExercise'])) {
@@ -113,39 +95,50 @@ if ($is_editor) {
                     $objExerciseTmp->makepublic();
                     $objExerciseTmp->save();
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    break;
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'limited':  // make exercise limited
                     $objExerciseTmp->makelimited();
                     $objExerciseTmp->save();
                     Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
-                    break;
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
                 case 'clone':  // make exercise limited
                     $objExerciseTmp->duplicate();
                     Session::Messages($langCopySuccess, 'alert-success');
-                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);
-                    break;                
+                    redirect_to_home_page('modules/exercise/index.php?course='.$course_code);              
             }
         }
         // destruction of Exercise
         unset($objExerciseTmp);
     }
-    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
+    $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, ip_lock, password_lock FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
-	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, score " .
+	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
             "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
-$paused_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
+$paused_exercises = Database::get()->queryArray("SELECT eurid, eid, title, attempt, password_lock FROM exercise_user_record a "
         . "JOIN exercise b ON a.eid = b.id WHERE b.course_id = ?d AND a.uid = ?d "
-        . "AND a.attempt_status = ?d", $course_id, $uid, ATTEMPT_PAUSED);
+        . "AND a.attempt_status = ?d ORDER BY eid, attempt", $course_id, $uid, ATTEMPT_PAUSED);
 $num_of_ex = $qnum; //Getting number of all active exercises of the course
 $nbrExercises = count($result); //Getting number of limited (offset and limit) exercises of the course (active and inactive)
 if (count($paused_exercises) > 0) {
-    foreach ($paused_exercises as $row) {       
-        $paused_exercises_ids[] = $row->eid;        
-        $tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice " . q($row->title) . ". <a href='exercise_submit.php?course=$course_code&exerciseId=$row->eid'>($langCont)</a></div>";
+    $paused_exercise_id = 0;
+    foreach ($paused_exercises as $row) {
+        if ($paused_exercise_id != $row->eid) {
+            if ($paused_exercise_id) {
+                $tool_content .= "</ul></div>";
+            }
+            $tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice ". q($row->title) .": <ul>";
+        }
+        $password_protected = isset($row->password_lock) && !$is_editor ? " password_lock": "";
+
+        $tool_content .= "<li><a class='paused_exercise$password_protected' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>$langAttempt $row->attempt</a></li>";
+        
+        $paused_exercise_id = $row->eid; 
+        //$tool_content .="<div class='alert alert-info'>$langTemporarySaveNotice " . q($row->title) . ". <a class='paused_exercise' href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->eid&amp;eurId=$row->eurid'>($langCont)</a></div>";
     }
+    $tool_content .= "</ul></div>";
 }
 if ($is_editor) {
     $pending_exercises = Database::get()->queryArray("SELECT eid, title FROM exercise_user_record a "
@@ -193,7 +186,7 @@ if (!$nbrExercises) {
         }
     }
 
-    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr>";
+    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr class='list-header'>";
 
     // shows the title bar only for the administrator
     if ($is_editor) {
@@ -217,7 +210,24 @@ if (!$nbrExercises) {
         
         $tool_content .= "<tr ".($is_editor && !$row->active ? "class='not_visible'" : "").">";
         $row->description = standard_text_escape($row->description);
-
+        $exclamation_icon = '';
+        $lock_icon = '';
+        $link_class = '';
+        if (isset($row->password_lock) || isset($row->ip_lock)) {
+            $lock_description = "<ul>";
+            if ($row->password_lock) {
+                $lock_description .= "<li>$langPasswordUnlock</li>";
+                $link_class = " class='password_protected'";
+            }
+            if ($row->ip_lock) {
+                $lock_description .= "<li>$langIPUnlock</li>";
+            }
+            $lock_description .= "</ul>";
+            $exclamation_icon = "&nbsp;&nbsp;<span class='fa fa-exclamation-triangle space-after-icon' data-toggle='tooltip' data-placement='right' data-html='true' data-title='$lock_description'><span>";
+        }
+        if (!$row->public) {
+            $lock_icon = "&nbsp;&nbsp;&nbsp;<span class='fa fa-lock'><span>";
+        }
         // prof only
         if ($is_editor) {
             if (!empty($row->description)) {
@@ -225,7 +235,7 @@ if (!$nbrExercises) {
             } else {
                 $descr = '';
             }
-            $tool_content .= "<td><a ".(isset($paused_exercises_ids) && in_array($row->id,$paused_exercises_ids)?'class="paused_exercise"':'')." href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$descr</td>";
+            $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId={$row->id}'>" . q($row->title) . "</a>$lock_icon$exclamation_icon$descr</td>";
             $eid = $row->id;
 			$NumOfResults = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise_user_record WHERE eid = ?d", $eid)->count;
 
@@ -240,33 +250,33 @@ if (!$nbrExercises) {
             $langDelete_temp = htmlspecialchars($langDelete);
             
             $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                    array('title' => $langModify,
+                    array('title' => $langEditChange,
                           'url' => "admin.php?course=$course_code&amp;exerciseId=$row->id",
                           'icon' => 'fa-edit'),
-                    array('title' => $langPurgeExercise,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
-                          'icon' => 'fa-times',
-                          'class' => 'delete',
-                          'confirm' => $langConfirmPurgeExercise),
-                    array('title' => $langPurgeExerciseResults,
-                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
-                          'icon' => 'fa-trash',
-                          'confirm' => $langConfirmPurgeExerciseResults),
-                    array('title' => $langVisible,
+                    array('title' => $row->active ?  $langViewHide : $langViewShow,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->active ? "choice=disable" : "choice=enable").(isset($page) ? "&amp;page=$page" : "")."&amp;exerciseId=" . $row->id,
-                          'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
-                    array('title' => $langResourceAccess,
+                          'icon' => $row->active ? 'fa-eye-slash' : 'fa-eye' ),
+                    array('title' => $row->public ? $langResourceAccessLock : $langResourceAccessUnlock,
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;".($row->public ? "choice=limited" : "choice=public")."&amp;exerciseId=$row->id",
-                          'icon' => $row->public ? 'fa-unlock' : 'fa-lock',
+                          'icon' => $row->public ? 'fa-lock' : 'fa-unlock',
                           'show' => course_status($course_id) == COURSE_OPEN),
-                    array('title' => $langExerciseStats,
+                    array('title' => $langUsage,
                           'url' => "exercise_stats.php?course=$course_code&amp;exerciseId=$row->id",
-                          'icon' => 'fa-pie-chart'),
+                          'icon' => 'fa-line-chart'),
                     array('title' => $langCreateDuplicate,
                           'icon-class' => 'warnLink',
                           'icon-extra' => "data-exerciseid='$row->id'",
                           'url' => "#",
-                          'icon' => 'fa-copy')                
+                          'icon' => 'fa-copy'),
+                    array('title' => $langPurgeExerciseResults,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=purge&amp;exerciseId=$row->id",
+                          'icon' => 'fa-eraser',
+                          'confirm' => $langConfirmPurgeExerciseResults),
+                    array('title' => $langDelete,
+                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=delete&amp;exerciseId=$row->id",
+                          'icon' => 'fa-times',
+                          'class' => 'delete',
+                          'confirm' => $langConfirmPurgeExercise)
                     ))."</td></tr>";
             
         // student only
@@ -274,22 +284,21 @@ if (!$nbrExercises) {
             if (!resource_access($row->active, $row->public)) {
                 continue;
             }
-            $currentDate = date("Y-m-d H:i");
-			//These convertions do not seem to be necessary
-            $temp_StartDate = mktime(substr($row->start_date, 11, 2), substr($row->start_date, 14, 2), 0, substr($row->start_date, 5, 2), substr($row->start_date, 8, 2), substr($row->start_date, 0, 4));
-            $temp_EndDate = mktime(substr($row->end_date, 11, 2), substr($row->end_date, 14, 2), 0, substr($row->end_date, 5, 2), substr($row->end_date, 8, 2), substr($row->end_date, 0, 4));
-            $currentDate = mktime(substr($currentDate, 11, 2), substr($currentDate, 14, 2), 0, substr($currentDate, 5, 2), substr($currentDate, 8, 2), substr($currentDate, 0, 4));
-        
-            if (($currentDate >= $temp_StartDate) && ($currentDate <= $temp_EndDate)) {
-                $tool_content .= "<td><a href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>";
+
+            $currentDate = new DateTime('NOW');
+            $temp_StartDate = new DateTime($row->start_date);
+            $temp_EndDate = isset($row->end_date) ? new DateTime($row->end_date) : null;
+
+            if (($currentDate >= $temp_StartDate) && (!isset($temp_EndDate) || isset($temp_EndDate) && $currentDate <= $temp_EndDate)) {
+                $tool_content .= "<td><a$link_class href='exercise_submit.php?course=$course_code&amp;exerciseId=$row->id'>" . q($row->title) . "</a>$lock_icon";
              } elseif ($currentDate <= $temp_StartDate) { // exercise has not yet started
-                $tool_content .= "<td class='not_visible'>" . q($row->title) . "&nbsp;&nbsp;";
+                $tool_content .= "<td class='not_visible'>" . q($row->title) . "$lock_icon&nbsp;&nbsp;";
             } else { // exercise has expired
-                $tool_content .= "<td>" . q($row->title) . "&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
+                $tool_content .= "<td>" . q($row->title) . "$lock_icon&nbsp;&nbsp;(<font color='red'>$m[expired]</font>)";
             }
             $tool_content .= "<br />" . $row->description . "</td><td class='smaller' align='center'>
                                 " . nice_format(date("Y-m-d H:i", strtotime($row->start_date)), true) . " /
-                                " . nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) . "</td>";          														  
+                                " . (isset($row->end_date) ? nice_format(date("Y-m-d H:i", strtotime($row->end_date)), true) : ' - ') . "</td>";          														  
             if ($row->time_constraint > 0) {
                 $tool_content .= "<td class='text-center'>{$row->time_constraint} $langExerciseConstrainUnit</td>";
             } else {
@@ -327,16 +336,58 @@ if (!$nbrExercises) {
 }
 add_units_navigation(TRUE);
 $head_content .= "<script type='text/javascript'>
+    function password_bootbox(link) {
+        bootbox.dialog({
+            title: '$langPasswordModalTitle',
+            message: '<form class=\"form-horizontal\" role=\"form\" action=\"'+link+'\" method=\"POST\" id=\"password_form\">'+
+                        '<div class=\"form-group\">'+
+                            '<div class=\"col-sm-12\">'+                
+                                '<input type=\"text\" class=\"form-control\" id=\"password\" name=\"password\">'+
+                            '</div>'+
+                        '</div>'+                                
+                      '</form>',
+            buttons: {
+                cancel: {
+                    label: '$langCancel',
+                    className: 'btn-default'
+                },
+                success: {
+                    label: '$langSubmit',
+                    className: 'btn-success',
+                    callback: function (d) {
+                        var password = $('#password').val();
+                        if(password != '') {
+                            $('#password_form').submit();
+                        } else {
+                            $('#password').closest('.form-group').addClass('has-error');
+                            $('#password').after('<span class=\"help-block\">$langTheFieldIsRequired</span>');
+                            return false;                            
+                        }
+                    }
+                }                    
+            }                          
+        });                 
+    }
     $(document).ready(function(){
         $('.paused_exercise').click(function(e){
             e.preventDefault();
+            var exercise = $(this);
             var link = $(this).attr('href');
             bootbox.confirm('$langTemporarySaveNotice2', function(result) {
                 if(result) {
-                    document.location.href = link;
+                    if(exercise.hasClass('password_lock')) {
+                        password_bootbox(link);
+                    } else {
+                        window.location = link;
+                    }
                 }
             });             
         });
+        $('.password_protected').click(function(e){
+            e.preventDefault();
+            var link = $(this).attr('href');
+            password_bootbox(link);
+        });        
     });";
 if ($is_editor) {
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
@@ -356,6 +407,10 @@ if ($is_editor) {
                             '</select>'+
                           '</form>',
                     buttons: {
+                        cancel: {
+                            label: '$langCancel',
+                            className: 'btn-default'
+                        },                    
                         success: {
                             label: '$langCreateDuplicate',
                             className: 'btn-success',
@@ -363,11 +418,7 @@ if ($is_editor) {
                                 $('#clone_form').attr('action', 'index.php?course=$course_code&choice=clone&exerciseId=' + exerciseid);
                                 $('#clone_form').submit();  
                             }
-                        },
-                        cancel: {
-                            label: '$langCancel',
-                            className: 'btn-default'
-                        }                        
+                        }
                     }
             });
         });";

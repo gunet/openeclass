@@ -45,14 +45,14 @@ function list_ebooks() {
         $tool_content .= "<form action='insert.php?course=$course_code' method='post'>
 				<input type='hidden' name='id' value='$id' />" .
                 "<table class='table-default'>" .
-                "<tr>" .
+                "<tr class='list-header'>" .
                 "<th class='text-left'>&nbsp;$langEBook</th>" .
-                "<th width='80' class='text-center'>$langChoice</th>" .
+                "<th style='width:20px;' class='text-center'>$langChoice</th>" .
                 "</tr>";
         $unit_parameter = 'unit=' . $id;
         foreach ($result as $catrow) {        
             $tool_content .= "<tr>";
-            $tool_content .= "<td class='bold'>".icon('fa-folder-o')."&nbsp;&nbsp;" .
+            $tool_content .= "<td class='bold'>".icon('fa-book')."&nbsp;&nbsp;" .
                     q($catrow->title) . "</td>";
             $tool_content .= "<td class='text-center'>
                             <input type='checkbox' name='ebook[]' value='$catrow->id' />
@@ -103,9 +103,9 @@ function list_ebooks() {
                 $old_sid = $sid;
             }
         }
-        $tool_content .= "<tr>" .
-                "<th colspan='2'><div align='right'>" .
-                "<input class='btn btn-primary' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></th>" .
-                "</tr></table></form>";
+        $tool_content .= 
+                "</table>
+                <div class='text-right'>
+                <input class='btn btn-primary' type='submit' name='submit_ebook' value='$langAddModulesButton' /></div></form>";
     }
 }

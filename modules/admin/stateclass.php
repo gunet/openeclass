@@ -104,7 +104,8 @@ if (isset($_GET['stats'])) {
             }
             $uptime = date("d-m-Y", $first_date_time);
 
-            $tool_content .= "<div class='col-sm-12'>
+            $tool_content .= "<div class='row'>
+                        <div class='col-sm-12'>
                         <h3 class='content-title'>$langNbLogin</h3>
                         <ul class='list-group'>
 			<li class='list-group-item'><label>$langFrom
@@ -134,10 +135,11 @@ if (isset($_GET['stats'])) {
                             <span class='badge'>$uptime</span>
 			</li>
                         </ul>
-                        </div>";
+                        </div></div>";
             break;
         case 'users':
-            $tool_content .= "<div class='col-sm-12'>
+            $tool_content .= "<div class='row'>
+                        <div class='col-sm-12'>
                         <h3 class='content-title'>$langUsers</h3>
                         <ul class='list-group'>
                         <li class='list-group-item'><label>$langNbProf</label>
@@ -157,12 +159,12 @@ if (isset($_GET['stats'])) {
                             <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `user` LEFT JOIN `loginout` ON `user`.`id` = `loginout`.`id_user` WHERE `loginout`.`id_user` IS NULL;")->cnt . "</span>
                         </li>
                         </ul>
-                        </div>";
+                        </div></div>";
             break;
         case 'cours':
             $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>
-                            <tr>
+                            <tr class='list-header'>
                             <th class='left' colspan='2'><b>$langCoursesHeader</b></th>
                             </tr>
                             <tr>
@@ -191,7 +193,7 @@ if (isset($_GET['stats'])) {
                             <table class='table-default'>";
             $loginDouble = list_ManyResult("SELECT DISTINCT username, COUNT(*) AS nb
 				FROM user GROUP BY BINARY username HAVING nb > 1 ORDER BY nb DESC", 'username');
-            $tool_content .= "<tr><th><b>$langMultipleUsers</b></th>
+            $tool_content .= "<tr class='list-header'><th><b>$langMultipleUsers</b></th>
 			<th class='right'><strong>$langResult</strong></th>
 			</tr>";
             if (count($loginDouble) > 0) {
@@ -205,7 +207,7 @@ if (isset($_GET['stats'])) {
         case 'percourse':
             $tool_content .= "<div class='table-responsive'>
                     <table class='table-default'>
-                    <tr><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
+                    <tr class='list-header'><th class='left' colspan='2'><b>$langUsersPerCourse</b></th>";
             $teachers = $students = $visitors = 0;
             foreach (Database::get()->queryArray("SELECT id, code, title, prof_names FROM course ORDER BY title") as $row) {
                 $cu_key = q($row->title)." (".q($row->code).") &mdash; ".q($row->prof_names);
@@ -233,7 +235,7 @@ if (isset($_GET['stats'])) {
             $loginDouble = list_ManyResult($sqlLoginDouble, 'email');
             $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>
-                            <tr>
+                            <tr class='list-header'>
                             <th><b>$langMultipleAddr e-mail</b></th>
                             <th class='right'><strong>$langResult</strong></th>
                             </tr>";
@@ -255,7 +257,7 @@ if (isset($_GET['stats'])) {
             $loginDouble = list_ManyResult($sqlLoginDouble, 'paire');
             $tool_content .= "<div class='table-responsive'>
                             <table class='table-default'>
-                            <tr>
+                            <tr class='list-header'>
                             <th><b>$langMultiplePairs LOGIN - PASS</b></th>
                             <th class='right'><b>$langResult</b></th>
                             </tr>";
@@ -272,7 +274,8 @@ if (isset($_GET['stats'])) {
             $tool_content .= "</table></div>";
             break;
         case 'vmusers':
-            $tool_content .= "<div class='col-sm-12'>
+            $tool_content .= "<div class='row'>
+                        <div class='col-sm-12'>
                         <h3 class='content-title'>$langUsers</h3>
                         <ul class='list-group'>
                         <li class='list-group-item'><label><a href='listusers.php?search=yes&verified_mail=1'>$langMailVerificationYes</a></label>          
@@ -288,7 +291,7 @@ if (isset($_GET['stats'])) {
                             <span class='badge'>" . Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM user;")->cnt . "</span>
                         </li>
                         </ul>
-                        </div>";
+                        </div></div>";
             break;
         default:
             break;
@@ -360,7 +363,7 @@ function tablize($table) {
 function ok_message() {
     global $langNotExist;
 
-    return "<b><span style='color: #00FF00'>$langNotExist</span></b>";
+    return "<div class='text-center not_visible'> - $langNotExist - </div>";
 }
 
 /**

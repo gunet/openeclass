@@ -25,9 +25,9 @@
  *        It is included in every file via baseTheme.php
  */
 
-if (function_exists("date_default_timezone_set")) { // only valid if PHP > 5.1
-    date_default_timezone_set("Europe/Athens");
-}
+
+// set default time zone
+date_default_timezone_set("Europe/Athens");
 
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
@@ -39,6 +39,9 @@ if (!session_id()) {
 }
 
 header('Content-Type: text/html; charset=UTF-8');
+
+// Will add headers to prevent against clickjacking.
+add_framebusting_headers();
 
 if (is_readable('config/config.php')) {
     require_once 'config/config.php';
@@ -60,15 +63,15 @@ try {
 } catch (Exception $ex) {
     require_once 'include/not_installed.php';
 }
-
 if (isset($language)) {
     // Old-style config.php, redirect to upgrade
-    $language = langname_to_code($language);        
+    $language = langname_to_code($language);
     if (isset($_SESSION['langswitch'])) {
         $_SESSION['langswitch'] = langname_to_code($_SESSION['langswitch']);
+        $_SESSION['givenname'] = $_SESSION['surname'] = '';
     }
     $session = new Session();
-    $uid = $session->user_id;    
+    $uid = $session->user_id;
     $session->active_ui_languages = array($language);
     if (!defined('UPGRADE')) {
         redirect_to_home_page('upgrade/');
@@ -78,7 +81,7 @@ if (isset($language)) {
     $siteName = get_config('site_name');
     $Institution = get_config('institution');
     $InstitutionUrl = get_config('institution_url');
-    $urlServer = get_config('base_url');    
+    $urlServer = get_config('base_url');
     $session = new Session();
     $uid = $session->user_id;
     $language = $session->language;    
@@ -89,7 +92,7 @@ use Valitron\Validator as V;
 V::langDir(__DIR__.'/Valitron/lang'); // always set langDir before lang.
 V::lang($language);
 
-//Managing Session Flash Data
+// Managing Session Flash Data
 if (isset($_SESSION['flash_old'])){
     foreach($_SESSION['flash_old'] as $row){
         unset($_SESSION[$row]);
@@ -118,6 +121,23 @@ $purifier->config->set('HTML.SafeObject', true);
 $purifier->config->set('Output.FlashCompat', true);
 $purifier->config->set('HTML.FlashAllowFullScreen', true);
 $purifier->config->set('Filter.Custom', array(new HTMLPurifier_Filter_MyIframe()));
+$purifier->config->set('HTML.DefinitionID', 'html5-definitions');
+if (($def = $purifier->config->maybeGetRawHTMLDefinition())) {
+    // http://htmlpurifier.org/phorum/read.php?2,7417,7417
+    $def->addElement('video', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', array(
+      'src' => 'URI',
+      'type' => 'Text',
+      'width' => 'Length',
+      'height' => 'Length',
+      'poster' => 'URI',
+      'preload' => 'Enum#auto,metadata,none',
+      'controls' => 'Text',
+    ));
+    $def->addElement('source', 'Block', 'Flow', 'Common', array(
+      'src' => 'URI',
+      'type' => 'Text',
+    ));
+}
 // PHP Math Publisher
 require_once 'include/phpmathpublisher/mathpublisher.php';
 // temp directory for pclzip
@@ -134,6 +154,21 @@ if (file_exists($extra_messages)) {
 require "$webDir/lang/$language/messages.inc.php";
 if ($extra_messages) {
     include $extra_messages;
+}
+
+
+
+if (!isset($_SESSION['csrf_token']) || empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = generate_csrf_token();
+}
+
+if (($upgrade_begin = get_config('upgrade_begin'))) {
+    if (!defined('UPGRADE')) {
+        Session::Messages(sprintf($langUpgradeInProgress, format_time_duration(time() - $upgrade_begin)), 'alert-warning');
+        if (!isset($guest_allowed) or !$guest_allowed) {
+            redirect_to_home_page();
+        }
+    }
 }
 
 // check if we are admin or power user or manageuser_user
@@ -213,7 +248,7 @@ if (!isset($guest_allowed) || $guest_allowed != true) {
 if (isset($_SESSION['mail_verification_required']) && !isset($mail_ver_excluded)) {
     // don't redirect to mail verification on logout
     if (!isset($_GET['logout'])) {
-        header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+        redirect_to_home_page('modules/auth/mail_verify_change.php');
     }
 }
 
@@ -242,7 +277,7 @@ if (isset($require_current_course) and $require_current_course) {
         $toolContent_ErrorExists = $langSessionIsLost;
         $errorMessagePath = "../../";
     } else {
-        $currentCourse = $dbname = $_SESSION['dbname'];
+        $dbname = $_SESSION['dbname'];
         Database::get()->queryFunc("SELECT course.id as cid, course.code as code, course.public_code as public_code,
                 course.title as title, course.prof_names as prof_names, course.lang as lang,
                 course.visible as visible, hierarchy.name AS faculte
@@ -273,7 +308,7 @@ if (isset($require_current_course) and $require_current_course) {
             }
         }
                 , $dbname);
-                
+
         if (!isset($course_code) or empty($course_code)) {
             $toolContent_ErrorExists = $langLessonDoesNotExist;
             $errorMessagePath = "../../";
@@ -292,7 +327,35 @@ if (isset($require_current_course) and $require_current_course) {
                                                            course_id = ?d", $uid, $course_id);
             if ($stat) {
                 $status = $stat->status;
+            } else {
+                // the department manager has rights to the courses of his department(s)
+                if ($is_departmentmanage_user && $is_usermanage_user && !$is_power_user && !$is_admin && isset($course_code)) {
+                    require_once 'include/lib/hierarchy.class.php';
+                    require_once 'include/lib/course.class.php';
+                    require_once 'include/lib/user.class.php';
+
+                    $treeObj = new Hierarchy();
+                    $courseObj = new Course();
+                    $userObj = new User();
+
+                    $atleastone = false;
+                    $subtrees = $treeObj->buildSubtrees($userObj->getDepartmentIds($uid));
+                    $depIds = $courseObj->getDepartmentIds($course_id);
+                    foreach ($depIds as $depId) {
+                        if (in_array($depId, $subtrees)) {
+                            $atleastone = true;
+                            break;
+                        }
+                    }
+
+                    if ($atleastone) {
+                        $status = 1;
+                        $is_course_admin = true;
+                        $_SESSION['courses'][$course_code] = USER_DEPARTMENTMANAGER;
+                    }
+                }
             }
+
         }
 
         if ($visible != COURSE_OPEN) {
@@ -358,9 +421,9 @@ $modules = array(
     MODULE_ID_LP => array('title' => $langLearnPath, 'link' => 'learnPath', 'image' => 'lp'),
     MODULE_ID_WIKI => array('title' => $langWiki, 'link' => 'wiki', 'image' => 'wiki'),
     MODULE_ID_BLOG => array('title' => $langBlog, 'link' => 'blog', 'image' => 'blog'),
-    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),    
+    MODULE_ID_GRADEBOOK => array('title' => $langGradebook, 'link' => 'gradebook', 'image' => 'gradebook'),
     MODULE_ID_ATTENDANCE => array('title' => $langAttendance, 'link' => 'attendance', 'image' => 'attendance'),
-    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')        
+    MODULE_ID_BBB => array('title' => $langBBB, 'link' => 'bbb', 'image' => 'conference')
 );
 // ----------------------------------------
 // course admin modules
@@ -370,6 +433,7 @@ $admin_modules = array(
     MODULE_ID_USERS => array('title' => $langUsers, 'link' => 'user', 'image' => 'users'),
     MODULE_ID_USAGE => array('title' => $langUsage, 'link' => 'usage', 'image' => 'usage'),
     MODULE_ID_TOOLADMIN => array('title' => $langToolManagement, 'link' => 'course_tools', 'image' => 'tooladmin'),
+    MODULE_ID_ABUSE_REPORT => array('title' => $langAbuseReports, 'link' => 'abuse_report', 'image' => 'abuse'),
 );
 
 // modules which can't be enabled or disabled
@@ -384,13 +448,14 @@ $static_module_paths = array('user' => MODULE_ID_USERS,
     'comments' => MODULE_ID_COMMENTS,
     'rating' => MODULE_ID_RATING,
     'sharing' => MODULE_ID_SHARING,
+    'abuse_report' => MODULE_ID_ABUSE_REPORT,            
     'notes' => MODULE_ID_NOTES);
 
 // the system admin and power users have rights to all courses
 if ($is_admin or $is_power_user) {
     $is_course_admin = true;
-    if (isset($currentCourse)) {
-        $_SESSION['courses'][$currentCourse] = USER_TEACHER;
+    if (isset($course_code)) {
+        $_SESSION['courses'][$course_code] = USER_TEACHER;
     }
 } else {
     $is_course_admin = false;
@@ -398,11 +463,11 @@ if ($is_admin or $is_power_user) {
 
 $is_editor = false;
 if (isset($_SESSION['courses'])) {
-    if (isset($currentCourse)) {
+    if (isset($course_code)) {
         if (check_editor()) { // check if user is editor of course
             $is_editor = true;
         }
-        if (@$_SESSION['courses'][$currentCourse] == USER_TEACHER) {
+        if (@$_SESSION['courses'][$course_code] == USER_TEACHER or @$_SESSION['courses'][$course_code] == USER_DEPARTMENTMANAGER) {
             $is_course_admin = true;
             $is_editor = true;
         }
@@ -423,7 +488,7 @@ if (isset($_SESSION['student_view'])) {
 }
 
 $is_opencourses_reviewer = FALSE;
-if (get_config('opencourses_enable') && isset($currentCourse) && check_opencourses_reviewer()) {
+if (get_config('opencourses_enable') && isset($course_code) && check_opencourses_reviewer()) {
     $is_opencourses_reviewer = TRUE;
 }
 
@@ -442,28 +507,34 @@ if (isset($require_editor) and $require_editor) {
 }
 
 $module_id = current_module_id();
-// Security check:: Users that do not have Professor access for a course must not
-// be able to access inactive tools.
-if (isset($course_id) and !$is_editor and $module_id and !defined('STATIC_MODULE')) {
-    if (isset($_SESSION['uid']) and $_SESSION['uid'] and !check_guest()) {
-        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
-                                             WHERE visible = 1 AND
-                                             course_id = ?d", $course_id);
-    } else {
+
+// Security check:: Users must not be able to access inactive (if students) or disabled tools.
+if (isset($course_id) and $module_id and !defined('STATIC_MODULE')) {
+    if (!$uid or check_guest()) {
         $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
                         WHERE visible = 1 AND
                               course_id = ?d AND
-                                module_id NOT IN (" . MODULE_ID_CHAT . ",
-                                                  " . MODULE_ID_ASSIGN . ",
-                                                  " . MODULE_ID_BBB . ",
-                                                  " . MODULE_ID_DROPBOX . ",
-                                                  " . MODULE_ID_QUESTIONNAIRE . ",
-                                                  " . MODULE_ID_FORUM . ",
-                                                  " . MODULE_ID_GROUPS . ",
-                                                  " . MODULE_ID_WIKI . ",
-                                                  " . MODULE_ID_GRADEBOOK . ",                                                  
-                                                  " . MODULE_ID_ATTENDANCE . ",
-                                                  " . MODULE_ID_LP . ")", $course_id);
+                              module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              module_id NOT IN (" . MODULE_ID_CHAT . ",
+                                                " . MODULE_ID_ASSIGN . ",
+                                                " . MODULE_ID_BBB . ",
+                                                " . MODULE_ID_DROPBOX . ",
+                                                " . MODULE_ID_QUESTIONNAIRE . ",
+                                                " . MODULE_ID_FORUM . ",
+                                                " . MODULE_ID_GROUPS . ",
+                                                " . MODULE_ID_WIKI . ",
+                                                " . MODULE_ID_GRADEBOOK . ",
+                                                " . MODULE_ID_ATTENDANCE . ",
+                                                " . MODULE_ID_LP . ")", $course_id);
+    } elseif ($is_editor) {
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              course_id = ?d", $course_id);
+    } else {
+        $moduleIDs = Database::get()->queryArray("SELECT module_id FROM course_module
+                        WHERE visible = 1 AND
+                              module_id NOT IN (SELECT module_id FROM module_disable) AND
+                              course_id = ?d", $course_id);
     }
     $publicModules = array();
     foreach ($moduleIDs as $module) {

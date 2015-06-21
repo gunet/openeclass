@@ -32,13 +32,14 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/log.php';
 require_once 'modules/search/indexer.class.php';
+require_once 'modules/tags/moduleElement.class.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 
 $action = new action();
 $action->record(MODULE_ID_ANNOUNCE);
 
-define('RSS', 'modules/announcements/rss.php?c=' . $course_code);
+define_rss_link();
 
 //Identifying ajax request
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
@@ -102,11 +103,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
                 '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
                 '1' => date('d-m-Y', strtotime($myrow->date)),
                 '2' => action_button(array(
-                    array('title' => $langModify,
+                    array('title' => $langEditChange,
                           'icon' => 'fa-edit',
                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$myrow->id"),
-                    array('title' => $langVisible,
-                          'icon' => $vis_icon,
+                    array('title' => !$myrow->visible == '0' ? $langViewHide : $langViewShow,
+                          'icon' => !$myrow->visible == '0' ? 'fa-eye-slash' : 'fa-eye',
                           'icon-class' => 'vis_btn',
                           'icon-extra' => "data-vis='$visible' data-id='$myrow->id'"),
                     array('title' => $langDelete,
@@ -129,11 +130,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     } else {
         foreach ($result as $myrow) {
             $data['aaData'][] = array(
-                '0' => date('d-m-Y', strtotime($myrow->date)),
-                '1' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>');
+                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">' . q($myrow->title) . '</a>',
+                '1' => date('d-m-Y', strtotime($myrow->date))
+                );
         }
     }
-    echo json_encode($data);
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
     exit();
 }
 load_js('tools.js');
@@ -267,7 +269,6 @@ if (isset($_GET['an_id'])) {
 }
 if ($is_editor) {
   $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' . $langEmptyAnTitle . '";</script>';
-  $displayForm = true;
   /* up and down commands */
   if (isset($_GET['down'])) {
     $thisAnnouncementId = $_GET['down'];
@@ -347,16 +348,9 @@ if ($is_editor) {
             $message = "<div class='alert alert-success'>$langAnnModify</div>";
             
             if (isset($_POST['tags'])) {
-                //delete all the previous for this item, course
-                Database::get()->query("DELETE FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $id, $course_id);
                 $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //echo $tagItem;
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
-                    }
-                }
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->syncTags($tagsArray);                
             }
         } else { // add new announcement
             $orderMax = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM announcement
@@ -374,12 +368,8 @@ if ($is_editor) {
             
             if (isset($_POST['tags'])) {
                 $tagsArray = explode(',', $_POST['tags']);
-                foreach ($tagsArray as $tagItem) {
-                    //insert all the new ones
-                    if($tagItem){
-                        Database::get()->query("INSERT INTO tags SET element_type = ?s, element_id = ?d, tag = ?s, course_id = ?d", "announcement", $id, $tagItem, $course_id);
-                    }
-                }
+                $moduleTag = new ModuleElement($id);
+                $moduleTag->attachTags($tagsArray);  
             }
         }
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_ANNOUNCEMENT, $id);
@@ -435,21 +425,16 @@ if ($is_editor) {
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
             }
             $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
-            $message = "<div class='alert alert-success'>$langAnnAdd $langEmailSent<br />$messageInvalid</div>";
+            Session::Messages("$langAnnAdd $langEmailSent<br>$messageInvalid", 'alert-success');
         } // if $emailOption==1
         else {
-            $message = "<div class='alert alert-success'>$langAnnAdd</div>";
+            Session::Messages($langAnnAdd, 'alert-success');
         }
+        redirect_to_home_page("modules/announcements/index.php?course=$course_code");
     } // end of if $submit
 
-
-    // teacher display
-    if (isset($message) && $message) {
-        $tool_content .= $message . "<br/>";
-        $displayForm = false; //do not show form
-    }
     /* display form */
-    if ($displayForm && (isset($_GET['addAnnounce']) or isset($_GET['modify']))) {
+    if (isset($_GET['addAnnounce']) or isset($_GET['modify'])) {
         
         if (isset($_GET['modify'])) {
             $langAdd = $pageName = $langModifAnn;
@@ -510,14 +495,7 @@ if ($is_editor) {
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
         </div>
-        
-        <div class='form-group'><label for='tags' class='col-sm-offset-2 col-sm-12 control-panel'>$langTags:</label></div>
-        <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <input type='hidden' class='form-control' name='tags' class='form-control' id='tags' value=''>
-            </div>
-        </div>
-
+        " . Tag::tagInput($AnnouncementToModify) . "
         <div class='form-group'><label for='Email' class='col-sm-offset-2 col-sm-12 control-panel'>$langAnnouncementActivePeriod:</label></div>
         
         <div class='form-group'>
@@ -541,6 +519,10 @@ if ($is_editor) {
     }
 } // end: teacher only
 
+if ($uid and $status != USER_GUEST and !get_user_email_notification($uid, $course_id)) {
+    $tool_content .= "<div class='alert alert-warning'>$langNoUserEmailNotification
+        (<a href='{$urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langModify</a>)</div>";
+}
 if (isset($_GET['an_id'])) {
     $pageName = $row->title;
     $tool_content .= action_bar(array(
@@ -556,9 +538,8 @@ if (isset($_GET['an_id'])) {
         array('title' => $langDelete,
               'url' => $_SERVER['SCRIPT_NAME'] . "?course=" .$course_code . "&amp;delete=$row->id",
               'icon' => 'fa-times',
-              'level' => 'primary',
               'confirm' => $langSureToDelAnnounce,
-              'show' => $is_editor),));
+              'show' => $is_editor)));
     } elseif (!isset($_GET['modify']) && !isset($_GET['addAnnounce'])) {
         $tool_content .= action_bar(array(
             array('title' => $langAddAnn,
@@ -573,37 +554,27 @@ if (isset($_GET['an_id'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAnnouncements);
         $tool_content .= "<div class='panel'>";
         $tool_content .= "<div class='panel-body'>";
-        $tool_content .= "<p class='not_visible'>$langDate: $row->date</p>";
+        $tool_content .= "<div class='not_visible margin-bottom-thin'>$langDate: $row->date</div>";
         $tool_content .= $row->content;
         
-        $tags_list = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $row->id, $course_id);
-        $tool_content .= $langTags.": ";
-        foreach($tags_list as $tag){
-            $tool_content .= "<a href='../../modules/tags/?course=".$course_code."&tag=".$tag->tag."'>$tag->tag</a> ";
-        }
-        $tool_content .= "</div></div>";
+        $moduleTag = new ModuleElement($row->id);
+        $tags_list = $moduleTag->showTags();
+        if ($tags_list) $tool_content .= "<div>$langTags: $tags_list</div>";
+        $tool_content .= "
+                    </div>
+                </div>";
     }
     if (!isset($_GET['addAnnounce']) && !isset($_GET['modify']) && !isset($_GET['an_id'])) {        
         $tool_content .= "<table id='ann_table{$course_id}' cellspacing='0' class='table-default'>";
         $tool_content .= "<thead>";
         $tool_content .= "<tr><th>$langAnnouncement</th><th>$langDate</th>";
+
         if ($is_editor) {
             $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         }
         $tool_content .= "</tr></thead><tbody></tbody></table>";
     }
     
-    
-
-//initialize the tags
-$answer = "";
-if(isset($modify)){
-    $tags_init = Database::get()->queryArray("SELECT tag FROM tags WHERE element_type = ?s AND element_id = ?d AND course_id = ?d", "announcement", $modify, $course_id);
-    foreach($tags_init as $tag){
-        $arrayTemp = "{id:\"".$tag->tag."\" , text:\"".$tag->tag."\"},";
-        $answer = $answer.$arrayTemp;
-    } 
-}
 
 add_units_navigation(TRUE);
 load_js('select2');
@@ -623,34 +594,8 @@ $head_content .= "<script type='text/javascript'>
             var stringVal = [];
             $('#select-recipients').val(stringVal).trigger('change');
         });   
-        $('#tags').select2({
-                minimumInputLength: 2,
-                tags: true,
-                tokenSeparators: [', ', ' '],
-                createSearchChoice: function(term, data) {
-                  if ($(data).filter(function() {
-                    return this.text.localeCompare(term) === 0;
-                  }).length === 0) {
-                    return {
-                      id: term,
-                      text: term
-                    };
-                  }
-                },
-                ajax: {
-                    url: '../tags/feed.php',
-                    dataType: 'json',
-                    data: function(term, page) {
-                        return {
-                            q: term
-                        };
-                    },
-                    results: function(data, page) {
-                        return {results: data};
-                    }
-                }
-        });
-        $('#tags').select2('data', [".$answer."]);
     });
     </script>";
+
 draw($tool_content, 2, null, $head_content);
+

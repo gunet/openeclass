@@ -171,9 +171,9 @@ function course_list_init() {
             .prop('checked', false).change();
         dialog.modal('hide');
     });
-    
+
     $('input[type=submit]').remove();
-    
+
     $('input[type=checkbox]').each(function () {
         var cid = $(this).val();
         $.course_closed[cid] = $(this).hasClass('reg_closed');
@@ -186,7 +186,7 @@ function course_list_init() {
         dialog.modal("show");
         return false;
     });
-    
+
     $('input[type=password]').each(function () {
         var id = $(this).attr('name').replace('pass', '');
         if ($(this).val() === '') {
@@ -223,11 +223,19 @@ function course_list_handler() {
     $.post('course_submit.php',
         submit_info,
         function (result) {
+            var title_span = $('#cid'+cid);
             $('#ind' + cid).remove();
             if (result === 'registered') {
-                td.append(' <img id="res' + cid + '" src="' + themeimg + '/tick.png" alt="">');                               
+                td.append(' <img id="res' + cid + '" src="' + themeimg + '/tick.png" alt="">');
+                title_span.html($('<a>', {
+                    href: urlAppend + '/courses/' + courses[cid][0] + '/',
+                    text: title_span.text() }));
+
             } else {
                 $('input[type=checkbox][value=' + cid + ']').prop('checked', false);
+                if (courses[cid][1] != 2) {
+                    title_span.text(title_span.text());
+                }
                 if ($.course_closed[cid]) {
                     course_checkbox_disabled(cid, true);
                 }
@@ -259,7 +267,7 @@ function profile_init()
 
 function toggleMenu(mid){
 	menuObj = document.getElementById(mid);
-	
+
 	if(menuObj.style.display=='none')
 		menuObj.style.display='block';
 	else
@@ -267,7 +275,7 @@ function toggleMenu(mid){
 }
 
 function exercise_enter_handler() {
-    /* 
+    /*
      * Make an array of possible inputs and everytime
      * ENTER is pressed, iterate to next availiable input
      * until you reach submit, when the form will be submited.
@@ -280,7 +288,7 @@ function exercise_enter_handler() {
             if($(this)[0].type != 'submit') {
                 ++inputs.pivot;
                 /*
-                 * In order to avoid just going to next input, 
+                 * In order to avoid just going to next input,
                  * iterate until you reach the next set of inputs.
                  */
                 while(inputs[inputs.pivot].name == inputs[inputs.pivot-1].name)
@@ -293,7 +301,7 @@ function exercise_enter_handler() {
         }
     });
     /*
-     * When clicking on an input, pivot must point 
+     * When clicking on an input, pivot must point
      * to the input clicked so when ENTER is pressed
      * will move to correct next input.
      */
@@ -341,7 +349,7 @@ function poll_init() {
         e.preventDefault();
         var last_form_group = $(this).closest('div.form-group').siblings('.form-group:last');
         last_form_group.before("<div class='form-group answer-group'><div class='col-xs-11'><input class='form-control' type='text' name='answers[]' value=''></div><div class='col-xs-1'><a href='#' style='cursor: pointer;' id='del_btn'><i class='fa fa-times'></i></a></div></div>").next().find('input').removeAttr('value');
-        delete_init();        
+        delete_init();
     });
 }
 function delete_init(){
@@ -357,7 +365,7 @@ function icon_src_to_name(src) {
 
 function checkFileSize(input, maxSize) {
     var file = input[0].files[0];
-    if (file.size > maxSize || file.fileSize > maxSize) {
+    if (file && (file.size > maxSize || file.fileSize > maxSize)) {
         alert(langMaxFileSizeExceeded);
         return false;
     }

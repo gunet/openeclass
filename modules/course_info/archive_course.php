@@ -29,28 +29,25 @@ $toolName = $langCourseInfo;
 $pageName = $langArchiveCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 
-$success = doArchive($course_id, $course_code);
+doArchive($course_id, $course_code);
 
-$tool_content .= "<table class='table-default' align='center'><tbody><tr><th align='left'><ol>"
-        . "<li>$langBUCourseDataOfMainBase $course_code</li>\n"
-        . "<li>$langBackupOfDataBase $course_code</li></ol></th><td>&nbsp;</td></tr></tbody></table>";
-
-if (!$success) {
-    $tool_content .= "Error: " . $zipCourse->errorInfo(true);
-    draw($tool_content, 2);
-    exit;
-} else {
-    $tool_content.="<br /><div class='alert alert-success'>$langBackupSuccesfull</div>";
-    $tool_content .= action_bar(array(
+$tool_content .= "
+    <div class='alert alert-info'>
+      <ol>
+        <li>$langBUCourseDataOfMainBase $course_code</li>
+        <li>$langBackupOfDataBase $course_code</li>
+      </ol>
+    </div>
+    <div class='alert alert-success'>$langBackupSuccesfull</div>" .
+    action_bar(array(
         array('title' => $langDownloadIt,
-            'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
-            'icon' => 'fa-download',
-            'button-class' => 'btn-success',
-            'level' => 'primary-label'),
+              'url' => $urlAppend . "courses/archive/$course_code/$course_code-" . date('Ymd') . ".zip",
+              'icon' => 'fa-download',
+              'button-class' => 'btn-success',
+              'level' => 'primary-label'),
         array('title' => $langBack,
-            'url' => "index.php?course=$course_code",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
-}
+              'url' => "index.php?course=$course_code",
+              'icon' => 'fa-reply',
+              'level' => 'primary-label')), false);
 
 draw($tool_content, 2);

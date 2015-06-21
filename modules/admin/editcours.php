@@ -153,7 +153,7 @@ if (isset($c)) {
     }
     $tool_content .= "</td></tr></table>";
     // Display other available choices
-    $tool_content .= "<table width='100%' class='tbl'><th colspan='2'>$langOtherActions</th>";
+    $tool_content .= "<table class='table-default'><th colspan='2'>$langOtherActions</th>";
     // Users list
     $tool_content .= "
 	<tr>
@@ -164,10 +164,16 @@ if (isset($c)) {
 	  <td><a href='../course_info/archive_course.php?c=" . q($c) . "'>" . $langTakeBackup . "</a></td>
 	</tr>";
     // Course metadata 
-    if (get_config('course_metadata'))
+    if (get_config('course_metadata')) {
         $tool_content .= "<tr>
           <td><a href='../course_metadata/index.php?course=" . q($c) . "'>" . $langCourseMetadata . "</a></td>
         </tr>";
+    }
+    if (get_config('opencourses_enable')) {
+        $tool_content .= "<tr>
+          <td><a href='../course_metadata/control.php?course=" . q($c) . "'>" . $langCourseMetadataControlPanel . "</a></td>
+        </tr>";
+    }
     // Delete course
     $tool_content .= "
 	<tr>

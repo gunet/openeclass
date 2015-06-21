@@ -89,7 +89,7 @@ class Log {
 
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo;
+            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo, $langAbuseReport;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -134,14 +134,16 @@ class Log {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAdminUsers . "</div>";
                 } elseif ($module_id == MODULE_ID_TOOLADMIN) {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $langExternalLinks . "</div>";
+                } elseif ($module_id == MODULE_ID_ABUSE_REPORT) {
+                    $tool_content .= "<div class='alert alert-info'>$langModule: " . $langAbuseReport . "</div>";
                 } else {
                     $tool_content .= "<div class='alert alert-info'>$langModule: " . $modules[$module_id]['title'] . "</div>";
                 }
             }            
-            $tool_content .= "<table id = 'log_results_table' class='tbl'>";
+            $tool_content .= "<table id = 'log_results_table' class='table-default'>";
             $tool_content .= "<thead>";
             // log header
-            $tool_content .= "<tr><th>$langDate</th><th>$langUser</th>";
+            $tool_content .= "<tr class='list-header'><th>$langDate</th><th>$langUser</th>";
             if ($course_id == -1) {
                 $tool_content .= "<th>$langCourse</th>";
             }
@@ -172,6 +174,8 @@ class Log {
                         $tool_content .= "<td>" . $langExternalLinks . "</td>";
                     } elseif ($mid == MODULE_ID_SETTINGS) {
                         $tool_content .= "<td>" . $langCourseInfo . "</td>";
+                    } elseif ($mid == MODULE_ID_ABUSE_REPORT) {
+                        $tool_content .= "<td>" . $langAbuseReport . "</td>";
                     } else {                        
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
@@ -265,6 +269,8 @@ class Log {
             case MODULE_ID_USERS: $content = $this->course_user_action_details($details);            
                 break;
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
+                break;
+            case MODULE_ID_ABUSE_REPORT: $content = $this->abuse_report_action_details($details);
                 break;
             default: $content = $langUnknownModule;
                 break;
@@ -391,11 +397,11 @@ class Log {
      */
     private function login_failure_action_details($details) {
 
-        global $lang_username, $langPassword;
+        global $lang_username;
 
         $details = unserialize($details);
 
-        $content = "$lang_username&nbsp;&laquo;" . q($details['uname']) . "&raquo;&nbsp;$langPassword&nbsp;&laquo;" . q($details['pass']) . "&raquo;";
+        $content = "$lang_username&nbsp;&laquo;" . q($details['uname']) . "&raquo;";
 
         return $content;
     }
@@ -774,6 +780,58 @@ class Log {
         $content = "URL: " . q($details['link']);
         $content .= " &mdash; $langLinkName &laquo" . q($details['name_link']) . "&raquo";
 
+        return $content;
+    }
+    
+    /**
+     * display action details in abuse reports
+     * @global type $langcreator
+     * @global type $langAbuseReportCat
+     * @global type $langSpam
+     * @global type $langRudeness
+     * @global type $langOther
+     * @global type $langMessage
+     * @global type $langComment
+     * @global type $langForumPost
+     * @global type $langAbuseResourceType
+     * @global type $langContent
+     * @global type $langAbuseReportStatus
+     * @global type $langAbuseReportOpen
+     * @global type $langAbuseReportClosed
+     * @param type $details
+     * @return string
+     */
+    private function abuse_report_action_details($details) {
+    
+        global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
+               $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
+               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks; 
+        
+        $reports_cats = array('rudeness' => $langRudeness,
+                              'spam' => $langSpam,
+                              'other' => $langOther);
+        
+        $resource_types = array('comment' => $langComment,
+                                'forum_post' => $langForumPost,
+                                'link' => $langLinks);
+                    
+        $details = unserialize($details);
+    
+        $content = "$langcreator: ". display_user($details['user_id'], false, false)."<br/>";
+        $content .= "$langAbuseReportCat: &laquo".$reports_cats[$details['reason']]."&raquo<br/>";
+        $content .= "$langMessage: &laquo".q($details['message'])."&raquo<br/>";
+        $content .= "$langAbuseResourceType: &laquo".$resource_types[$details['rtype']]."&raquo<br/>";
+        if ($details['rtype'] == 'comment') {
+            $content .= "$langContent: &laquo".q($details['rcontent'])."&raquo<br/>";
+        } elseif ($details['rtype'] == 'forum_post') {
+            $content .= "$langContent: &laquo".mathfilter($details['rcontent'], 12, "../courses/mathimg/")."&raquo<br/>";
+        }
+        if ($details['status'] == 1) {
+            $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportOpen."&raquo";
+        } elseif ($details['status'] == 0) {
+            $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportClosed."&raquo";
+        }
+        
         return $content;
     }
 

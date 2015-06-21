@@ -390,24 +390,21 @@ function showquota($quota, $used) {
     $retstring = '';
     
     // pososto xrhsimopoioumenou xorou se %
-    $diskUsedPercentage = round(($used / $quota) * 100) . "%";
+    if ($quota == 0) {
+        $diskUsedPercentage = ($used > 0)? '100%': '0%';
+    } else {
+        $diskUsedPercentage = round(($used / $quota) * 100) . '%';
+    }
     // morfopoihsh tou synolikou diathesimou megethous tou quota
     $quota = format_bytesize($quota / 1024);
     // morfopoihsh tou synolikou megethous pou xrhsimopoieitai
     $used = format_bytesize($used / 1024);
     // telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
     // ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-    if ($subsystem == GROUP) {
-        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id";
-    } elseif ($subsystem == EBOOK) {
-        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ebook_id=$ebook_id";
-    } else {
-        $link = "$_SERVER[SCRIPT_NAME]?course=$course_code";
-    }
     $pageName = $langQuotaBar;      
     $retstring .= action_bar(array(
                     array('title' => $langBack,
-                          'url' => $link,
+                          'url' => documentBackLink(''),
                           'icon' => 'fa-reply',
                           'level' => 'primary-label')));
     $retstring .= "

@@ -72,7 +72,7 @@ class WINNT extends OS
                 $this->_wmi = $objLocator->ConnectServer();
 
             } else {
-                $this->_wmi = $objLocator->ConnectServer($strHostname, 'rootcimv2', $strHostname.'\\'.$strUser, $strPassword);
+                $this->_wmi = $objLocator->ConnectServer($strHostname, 'root\CIMv2', $strHostname.'\\'.$strUser, $strPassword);
             }
         } catch (Exception $e) {
             $this->error->addError("WMI connect error", "PhpSysInfo can not connect to the WMI interface for security reasons.\nCheck an authentication mechanism for the directory where phpSysInfo is installed.");
@@ -225,26 +225,32 @@ class WINNT extends OS
      */
     private function _distro()
     {
-        $buffer = CommonFunctions::getWMI($this->_wmi, 'Win32_OperatingSystem', array('Version', 'ServicePackMajorVersion', 'Caption'));
+        $buffer = CommonFunctions::getWMI($this->_wmi, 'Win32_OperatingSystem', array('Version', 'ServicePackMajorVersion', 'Caption', 'OSArchitecture'));
         if ($buffer) {
             $kernel = $buffer[0]['Version'];
             if ($buffer[0]['ServicePackMajorVersion'] > 0) {
                 $kernel .= ' SP'.$buffer[0]['ServicePackMajorVersion'];
             }
-            $this->sys->setKernel($kernel);
+            if (isset($buffer[0]['OSArchitecture']) && preg_match("/^(\d+)/", $buffer[0]['OSArchitecture'], $bits)) {
+                $this->sys->setKernel($kernel.' ('.$bits[1].'-bit)');
+            } elseif (($allCpus = CommonFunctions::getWMI($this->_wmi, 'Win32_Processor', array('AddressWidth'))) && isset($allCpus[0]['AddressWidth'])) {
+                $this->sys->setKernel($kernel.' ('.$allCpus[0]['AddressWidth'].'-bit)');
+            } else {
+                $this->sys->setKernel($kernel);
+            }
             $this->sys->setDistribution($buffer[0]['Caption']);
 
             if ((($kernel[1] == ".") && ($kernel[0] <5)) || (substr($kernel,0,4) == "5.0."))
                 $icon = 'Win2000.png';
             elseif ((substr($kernel,0,4) == "6.0.") || (substr($kernel,0,4) == "6.1."))
                 $icon = 'WinVista.png';
-            elseif ((substr($kernel,0,4) == "6.2.") || (substr($kernel,0,4) == "6.3."))
+            elseif ((substr($kernel,0,4) == "6.2.") || (substr($kernel,0,4) == "6.3.") || (substr($kernel,0,4) == "6.4.") || (substr($kernel,0,5) == "10.0."))
                 $icon = 'Win8.png';
             else
                 $icon = 'WinXP.png';
             $this->sys->setDistributionIcon($icon);
         } elseif (CommonFunctions::executeProgram("cmd", "/c ver 2>nul", $ver_value, false)) {
-                if (preg_match("/ReactOS\nVersion\s+(.+)/", $ver_value, $ar_temp)) {
+                if (preg_match("/ReactOS\r?\nVersion\s+(.+)/", $ver_value, $ar_temp)) {
                     $this->sys->setDistribution("ReactOS");
                     $this->sys->setKernel($ar_temp[1]);
                     $this->sys->setDistributionIcon('ReactOS.png');
@@ -273,14 +279,16 @@ class WINNT extends OS
         $loadavg = "";
         $sum = 0;
         $buffer = CommonFunctions::getWMI($this->_wmi, 'Win32_Processor', array('LoadPercentage'));
-        foreach ($buffer as $load) {
-            $value = $load['LoadPercentage'];
-            $loadavg .= $value.' ';
-            $sum += $value;
-        }
-        $this->sys->setLoad(trim($loadavg));
-        if (PSI_LOAD_BAR) {
-            $this->sys->setLoadPercent($sum / count($buffer));
+        if ($buffer) {
+            foreach ($buffer as $load) {
+                $value = $load['LoadPercentage'];
+                $loadavg .= $value.' ';
+                $sum += $value;
+            }
+            $this->sys->setLoad(trim($loadavg));
+            if (PSI_LOAD_BAR) {
+                $this->sys->setLoadPercent($sum / count($buffer));
+            }
         }
     }
 
@@ -305,6 +313,28 @@ class WINNT extends OS
                 $cpu->setBusSpeed($oneCpu['ExtClock']);
                 if ($oneCpu['CurrentClockSpeed'] < $oneCpu['MaxClockSpeed']) $cpu->setCpuSpeedMax($oneCpu['MaxClockSpeed']);
                 $this->sys->setCpus($cpu);
+            }
+        }
+    }
+
+    /**
+     * Machine information
+     *
+     * @return void
+     */
+    private function _machine()
+    {
+        $buffer = CommonFunctions::getWMI($this->_wmi, 'Win32_ComputerSystem', array('Manufacturer','Model'));
+        if ($buffer) {
+            $buf = "";
+            if (isset($buffer[0]['Manufacturer'])) {
+                $buf .= ' '.$buffer[0]['Manufacturer'];
+            }
+            if (isset($buffer[0]['Model'])) {
+                $buf .= ' '.$buffer[0]['Model'];
+            }
+            if (trim($buf) != "") {
+                $this->sys->setMachine(trim($buf));
             }
         }
     }
@@ -348,29 +378,47 @@ class WINNT extends OS
      */
     private function _network()
     {
-        $allDevices = CommonFunctions::getWMI($this->_wmi, 'Win32_PerfRawData_Tcpip_NetworkInterface', array('Name', 'BytesSentPersec', 'BytesTotalPersec', 'BytesReceivedPersec', 'PacketsReceivedErrors', 'PacketsReceivedDiscarded'));
-        if (defined('PSI_SHOW_NETWORK_INFOS') && PSI_SHOW_NETWORK_INFOS)
-           $allNetworkAdapterConfigurations = CommonFunctions::getWMI($this->_wmi, 'Win32_NetworkAdapterConfiguration', array('Description', 'MACAddress', 'IPAddress'));
+        $allDevices = CommonFunctions::getWMI($this->_wmi, 'Win32_PerfRawData_Tcpip_NetworkInterface');//, array('Name', 'BytesSentPersec', 'BytesTotalPersec', 'BytesReceivedPersec', 'PacketsReceivedErrors', 'PacketsReceivedDiscarded'));
+        $allNetworkAdapterConfigurations = CommonFunctions::getWMI($this->_wmi, 'Win32_NetworkAdapterConfiguration');//, array('Description', 'MACAddress', 'IPAddress', 'SettingID'));
 
         foreach ($allDevices as $device) {
            $dev = new NetDevice();
            $name=$device['Name'];
 
-           $cname=preg_replace('/[^A-Za-z0-9]/', '_', $name); //convert to canonical
-           if (preg_match('/\s-\s([^-]*)$/', $name, $ar_name))
-                $name=substr($name,0,strlen($name)-strlen($ar_name[0]));
-           $dev->setName($name);
-
-           if (defined('PSI_SHOW_NETWORK_INFOS') && PSI_SHOW_NETWORK_INFOS) foreach ($allNetworkAdapterConfigurations as $NetworkAdapterConfiguration) {
-                   if ( preg_replace('/[^A-Za-z0-9]/', '_', $NetworkAdapterConfiguration['Description']) == $cname ) {
-                       $dev->setInfo(preg_replace('/:/', '-', $NetworkAdapterConfiguration['MACAddress']));
-                       if (isset($NetworkAdapterConfiguration['IPAddress']))
-                           foreach( $NetworkAdapterConfiguration['IPAddress'] as $ipaddres)
-                               if (($ipaddres!="0.0.0.0") && !preg_match('/^fe80::/i',$ipaddres))
-                                     $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ipaddres);
+           if (preg_match('/^isatap\.({[A-Fa-f0-9\-]*})/', $name, $ar_name)) { //isatap device
+               foreach ($allNetworkAdapterConfigurations as $NetworkAdapterConfiguration) {
+                   if ($ar_name[1]==$NetworkAdapterConfiguration['SettingID']) {
+                       $dev->setName($NetworkAdapterConfiguration['Description']);
+                       if (defined('PSI_SHOW_NETWORK_INFOS') && PSI_SHOW_NETWORK_INFOS) {
+                           $dev->setInfo(preg_replace('/:/', '-', $NetworkAdapterConfiguration['MACAddress']));
+                           if (isset($NetworkAdapterConfiguration['IPAddress']))
+                               foreach( $NetworkAdapterConfiguration['IPAddress'] as $ipaddres)
+                                   if (($ipaddres!="0.0.0.0") && !preg_match('/^fe80::/i',$ipaddres))
+                                        $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ipaddres);
+                       }
 
                        break;
                    }
+               }
+           } else {
+               $cname=preg_replace('/[^A-Za-z0-9]/', '_', $name); //convert to canonical
+               if (preg_match('/\s-\s([^-]*)$/', $name, $ar_name))
+                    $name=substr($name,0,strlen($name)-strlen($ar_name[0]));
+               $dev->setName($name);
+
+               if (defined('PSI_SHOW_NETWORK_INFOS') && PSI_SHOW_NETWORK_INFOS) foreach ($allNetworkAdapterConfigurations as $NetworkAdapterConfiguration) {
+                   if ( preg_replace('/[^A-Za-z0-9]/', '_', $NetworkAdapterConfiguration['Description']) == $cname ) {
+                       if (!is_null($dev->getInfo())) {
+                           $dev->setInfo(''); //multiple with the same name
+                       } else {
+                           $dev->setInfo(preg_replace('/:/', '-', $NetworkAdapterConfiguration['MACAddress']));
+                           if (isset($NetworkAdapterConfiguration['IPAddress']))
+                               foreach( $NetworkAdapterConfiguration['IPAddress'] as $ipaddres)
+                                   if (($ipaddres!="0.0.0.0") && !preg_match('/^fe80::/i',$ipaddres))
+                                       $dev->setInfo(($dev->getInfo()?$dev->getInfo().';':'').$ipaddres);
+                       }
+                   }
+                }
             }
 
             // http://msdn.microsoft.com/library/default.asp?url=/library/en-us/wmisdk/wmi/win32_perfrawdata_tcpip_networkinterface.asp
@@ -502,6 +550,19 @@ class WINNT extends OS
         return $this->_syslang;
     }
 
+    public function _processes()
+    {
+        $processes['*'] = 0;
+        $buffer = CommonFunctions::getWMI($this->_wmi, 'Win32_Process', array('Caption'));
+
+        foreach ($buffer as $process) {
+            $processes['*']++;
+        }
+        $processes[' '] = $processes['*'];
+        $this->sys->setProcesses($processes);
+    }
+
+
     /**
      * get the information
      *
@@ -518,6 +579,7 @@ class WINNT extends OS
             $this->error->addError("WARN", "The ReactOS version of phpSysInfo is a work in progress, some things currently don't work");
         }
         $this->_users();
+        $this->_machine();
         $this->_uptime();
         $this->_cpuinfo();
         $this->_network();
@@ -525,5 +587,6 @@ class WINNT extends OS
         $this->_filesystems();
         $this->_memory();
         $this->_loadavg();
+        $this->_processes();
     }
 }

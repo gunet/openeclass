@@ -88,13 +88,13 @@ if ($is_editor or $is_tutor) {
                   <label>$langMailSubject</label>
                 </div>
                 <div class='form-group'>
-                    <input type='text' name='subject' size='58' class='FormData_InputText'></input>
+                    <input type='text' name='subject' size='58' class='form-control'></input>
                 </div>
                 <div class='form-group'>
                   <label>$langMailBody</label>
                 </div>
                 <div class='form-group'>
-                  <label><textarea name='body_mail' rows='10' cols='73' class='FormData_InputText'></textarea></label>
+                  <label><textarea name='body_mail' rows='10' cols='73' class='form-control'></textarea></label>
                 </div>
                  <input class='btn btn-primary' type='submit' name='submit' value='$langSend'></input>                                
                 </fieldset>

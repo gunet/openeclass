@@ -23,21 +23,31 @@
  * @file upload.php
  * @brief upload form for subsystem documents
  */
-if (!defined('COMMON_DOCUMENTS')) {
-    $require_current_course = TRUE;
-    $require_login = true;
-}
-require_once '../../include/baseTheme.php';
-require_once 'modules/document/doc_init.php';
+
+$require_admin = defined('COMMON_DOCUMENTS');
+$require_current_course = !(defined('COMMON_DOCUMENTS') or defined('MY_DOCUMENTS'));
+$require_login = true;
+
+require_once "../../include/baseTheme.php";
+require_once "modules/document/doc_init.php";
 require_once 'modules/drives/clouddrive.php';
+
+if (defined('COMMON_DOCUMENTS')) {
+    $menuTypeID = 3;
+    $toolName = $langCommonDocs;
+} elseif (defined('MY_DOCUMENTS')) {
+    $menuTypeID = 1;
+    $toolName = $langMyDocs;
+} else {
+    $menuTypeID = 2;
+    $toolName = $langDoc;
+}
 
 enableCheckFileSize();
 
-$toolName = $langDoc;
-
 if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
-} 
+}
 
 if (isset($_GET['uploadPath'])) {
     $uploadPath = q($_GET['uploadPath']);
@@ -67,7 +77,7 @@ if ($can_upload) {
         $pageName = $langExternalFile;
         $fileinput = "
         <div class='form-group'>
-          <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo</label>
+          <label for='fileURL' class='col-sm-2 control-label'>$langExternalFileInfo:</label>
           <div class='col-sm-10'>
             <input type='text' class='form-control' id='fileURL' name='fileURL'>
           </div>
@@ -76,7 +86,7 @@ if ($can_upload) {
         $pageName = $langDownloadFile;
         $fileinput = "
         <div class='form-group'>
-          <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile</label>
+          <label for='userFile' class='col-sm-2 control-label'>$langPathUploadFile:</label>
           <div class='col-sm-10'>" .
                 fileSizeHidenInput() .
                 CloudDriveManager::renderAsButtons() . "<input type='file' id='userFile' name='userFile'></span>
@@ -98,21 +108,21 @@ if ($can_upload) {
           $group_hidden_input
           $fileinput
       <div class='form-group'>
-        <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle</label>
+        <label for='inputFileTitle' class='col-sm-2 control-label'>$langTitle:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='inputFileTitle' name='file_title'>
         </div>
       </div>
 
       <div class='form-group'>
-        <label for='inputFileComment' class='col-sm-2 control-label'>$langComment</label>
+        <label for='inputFileComment' class='col-sm-2 control-label'>$langComment:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='inputFileComment' name='file_comment'>
         </div>
       </div>
 
       <div class='form-group'>
-        <label for='inputFileCategory' class='col-sm-2 control-label'>$langCategory</label>
+        <label for='inputFileCategory' class='col-sm-2 control-label'>$langCategory:</label>
         <div class='col-sm-10'>
           <select class='form-control' name='file_category'>
             <option selected='selected' value='0'>$langCategoryOther</option>
@@ -130,21 +140,21 @@ if ($can_upload) {
       </div>
 
       <div class='form-group'>
-        <label for='inputFileSubject' class='col-sm-2 control-label'>$langSubject</label>
+        <label for='inputFileSubject' class='col-sm-2 control-label'>$langSubject:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='inputFileSubject' name='file_subject'>
         </div>
       </div>
 
       <div class='form-group'>
-        <label for='inputFileDescription' class='col-sm-2 control-label'>$langDescription</label>
+        <label for='inputFileDescription' class='col-sm-2 control-label'>$langDescription:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='inputFileDescription' name='file_description'>
         </div>
       </div>
 
       <div class='form-group'>
-        <label for='inputFileAuthor' class='col-sm-2 control-label'>$langAuthor</label>
+        <label for='inputFileAuthor' class='col-sm-2 control-label'>$langAuthor:</label>
         <div class='col-sm-10'>
           <input type='text' class='form-control' id='inputFileAuthor' name='file_author'>
         </div>
@@ -154,7 +164,7 @@ if ($can_upload) {
         <input type='hidden' name='file_date' value='' size='40' />
         <input type='hidden' name='file_format' value='' size='40' />
 
-        <label for='inputFileLanguage' class='col-sm-2 control-label'>$langLanguage</label>
+        <label for='inputFileLanguage' class='col-sm-2 control-label'>$langLanguage:</label>
         <div class='col-sm-10'>
           <select class='form-control' name='file_language'>
                 <option value='en'>$langEnglish</option>
@@ -168,7 +178,7 @@ if ($can_upload) {
       </div>
 
       <div class='form-group'>
-        <label for='inputFileCopyright' class='col-sm-2 control-label'>$langCopyrighted</label>
+        <label for='inputFileCopyright' class='col-sm-2 control-label'>$langCopyrighted:</label>
         <div class='col-sm-10'>
           " .
             selection(array('0' => $langCopyrightedUnknown,
@@ -186,11 +196,13 @@ if ($can_upload) {
     if (!isset($_GET['ext'])) {
         $tool_content .= "
         <div class='form-group'>
-          <div class='col-sm-offset-2 col-sm-10'>
-            <span class='checkbox-padding'>
-                <input type='checkbox' name='uncompress' value='1'>
-            </span>
-          <label for='inputFileCompression' class='control-label'>$langUncompress</label>
+            <div class='col-sm-offset-2 col-sm-10'>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='uncompress' value='1'>
+                        <strong>$langUncompress</strong>
+                    </label>
+                </div>          
               </div>
         </div>";
     }
@@ -198,22 +210,23 @@ if ($can_upload) {
     $tool_content .= "
       <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>
-          <span class='checkbox-padding'>
-              <input type='checkbox' name='replace' value='1'>
-          </span>
-          <label for='inputFileReplaceSameName' class='control-label'>$langReplaceSameName</label>
+            <div class='checkbox'>
+                <label>
+                    <input type='checkbox' name='replace' value='1'>
+                    <strong>$langReplaceSameName</strong>
+                </label>
+            </div>         
         </div>
       </div>      
 
     <div class='row'>
-        <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
+        <div class='infotext col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langNotRequired $langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
     </div>";
-    
+
     $tool_content .= "
       <div class='form-group'>
         <div class='col-xs-offset-2 col-xs-10'>
           <button type='submit' class='btn btn-primary'>
-            <i class='fa fa-arrow-up space-after-icon'></i>
             $langUpload
           </button>
           <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
@@ -226,6 +239,4 @@ if ($can_upload) {
     $tool_content .= "<div class='alert alert-warning'>$langNotAllowed</div>";
 }
 
-draw($tool_content,
-    defined('COMMON_DOCUMENTS')? 3: 2,
-    null, $head_content);
+draw($tool_content, $menuTypeID, null, $head_content);

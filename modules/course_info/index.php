@@ -15,7 +15,7 @@
  *
  * Contact address: GUnet Asynchronous eLearning Group,
  *                  Network Operations Center, University of Athens,
- *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
+ *                  Panepistimiopolis Ilissia, 15784, Athens, Greeceαψτι
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
@@ -353,6 +353,9 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['c_radio'])) {
                 setting_set(SETTING_COURSE_COMMENT_ENABLE, $_POST['c_radio'], $course_id);
             }
+            if (isset($_POST['ar_radio'])) {
+                setting_set(SETTING_COURSE_ABUSE_REPORT_ENABLE, $_POST['ar_radio'], $course_id);
+            }
             
             if ($noWeeklyMessage) {
                 Session::Messages($langCourseWeeklyFormatNotice);
@@ -379,8 +382,8 @@ if (isset($_POST['submit'])) {
     if (get_config('allow_teacher_clone_course') || $is_admin) {
         $action_bar_array0 = array_merge($action_bar_array0, array(
             array('title' => $langCloneCourse,
-                'url' => "clone_course.php?course=$course_code",
-                'icon' => 'fa-archive')
+                  'url' => "clone_course.php?course=$course_code",
+                  'icon' => 'fa-archive')
         ));
     }
     
@@ -391,15 +394,15 @@ if (isset($_POST['submit'])) {
         array('title' => $langCourseMetadata,
             'url' => "../course_metadata/index.php?course=$course_code",
             'icon' => 'fa-file-text',
-            'show' => get_config('course_metadata')),
-        array('title' => $langDelCourse,
-            'url' => "delete_course.php?course=$course_code",
-            'icon' => 'fa-times',
-            'button-class' => 'btn-danger'),                
+            'show' => get_config('course_metadata')),                
         array('title' => $langCourseMetadataControlPanel,
             'url' => "../course_metadata/control.php?course=$course_code",
             'icon' => 'fa-list',
             'show' => get_config('opencourses_enable') && $is_opencourses_reviewer),
+        array('title' => $langDelCourse,
+            'url' => "delete_course.php?course=$course_code",
+            'icon' => 'fa-times',
+            'button-class' => 'btn-danger')
     ));
     
     $tool_content .= "
@@ -482,6 +485,14 @@ if (isset($_POST['submit'])) {
     } else {
         $checkCommentDis = "checked ";
         $checkCommentEn = "";
+    }
+    // ABUSE REPORT
+    if (setting_get(SETTING_COURSE_ABUSE_REPORT_ENABLE, $course_id) == 1) {
+        $checkAbuseReportDis = "";
+        $checkAbuseReportEn = "checked ";
+    } else {
+        $checkAbuseReportDis = "checked ";
+        $checkAbuseReportEn = "";
     }    
     $tool_content .= "<div class='form-wrapper'>
 	<form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit='return validateNodePickerForm();'>
@@ -619,7 +630,7 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='coursepassword' class='col-sm-2 control-label'>$langOptPassword:</label>
                 <div class='col-sm-10'>
-                      <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' class='FormData_InputText' autocomplete='off'>
+                      <input class='form-control' id='coursepassword' type='text' name='password' value='".@q($password)."' autocomplete='off'>
                 </div>
             </div>            
 	    <div class='form-group'>
@@ -684,6 +695,21 @@ if (isset($_POST['submit'])) {
                     <div class='radio'>
                       <label>
                             <input type='radio' value='0' name='c_radio' $checkCommentDis> $langCommentsDis                    
+                      </label>
+                    </div>                   
+                </div>                    
+            </div>
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$langAbuseReport:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='1' name='ar_radio' $checkAbuseReportEn> $langAbuseReportEn
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                            <input type='radio' value='0' name='ar_radio' $checkAbuseReportDis> $langAbuseReportDis                    
                       </label>
                     </div>                   
                 </div>                    

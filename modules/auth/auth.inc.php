@@ -35,7 +35,7 @@
 
 require_once 'include/log.php';
 // pop3 class
-include 'modules/auth/methods/pop3.php';
+require_once 'modules/auth/methods/pop3.php';
 require_once 'include/phpass/PasswordHash.php';
 
 $auth_ids = array(1 => 'eclass',
@@ -52,7 +52,7 @@ $auth_ids = array(1 => 'eclass',
  * @return type
  */
 function get_auth_active_methods() {
-    
+
     $auth_methods = array();
     $q = Database::get()->queryArray("SELECT auth_id FROM auth
                             WHERE auth_default <> 0 AND (auth_settings <> '' OR auth_id = 1)");
@@ -67,7 +67,7 @@ function get_auth_active_methods() {
  * @return int
  */
 function get_auth_primary_method() {
-    
+
     $q = Database::get()->querySingle("SELECT auth_id FROM auth WHERE auth_default = 2");
     if ($q) {
         $auth_primary_method = $q->auth_id;
@@ -75,7 +75,7 @@ function get_auth_primary_method() {
     } else {
         return 0;
     }
-           
+
 }
 
 /**
@@ -84,9 +84,9 @@ function get_auth_primary_method() {
  * @return boolean
  */
 function check_auth_active($auth_id) {
-    
+
     $auth = Database::get()->querySingle("SELECT auth_id, auth_default, auth_settings FROM auth WHERE auth_id = ?d", $auth_id);
-    if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($authrow->auth_settings))) {
+    if ($auth and $auth->auth_default and ($auth->auth_id == 1 or !empty($auth->auth_settings))) {
             return true;
     }
     return false;
@@ -161,77 +161,41 @@ function get_auth_settings($auth) {
 
     $auth = intval($auth);
     $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_id = ?d", $auth);
-    if ($result) {
-            $settings['auth_id'] = $result->auth_id;
-            $settings['auth_settings'] = $result->auth_settings;
-            $auth_settings = $settings['auth_settings'];
-            $settings['auth_title'] = $result->auth_title;
-            $settings['auth_instructions'] = $result->auth_instructions;
-            $settings['auth_default'] = $result->auth_default;
-            switch ($auth) {
-                case 2:
-                    $settings['pop3host'] = str_replace('pop3host=', '', $auth_settings);
-                    break;
-                case 3:
-                    $settings['imaphost'] = str_replace('imaphost=', '', $auth_settings);
-                    break;
-                case 4:
-                    $ldap = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'ldaphost' => str_replace('ldaphost=', '', @$ldap[0]),
-                        'ldap_base' => str_replace('ldap_base=', '', @$ldap[1]),
-                        'ldapbind_dn' => str_replace('ldapbind_dn=', '', @$ldap[2]),
-                        'ldapbind_pw' => str_replace('ldapbind_pw=', '', @$ldap[3]),
-                        'ldap_login_attr' => str_replace('ldap_login_attr=', '', @$ldap[4]),
-                        'ldap_login_attr2' => str_replace('ldap_login_attr2=', '', @$ldap[5])));
-                    break;
-                case 5:
-                    $edb = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'dbhost' => str_replace('dbhost=', '', @$edb[0]),
-                        'dbname' => str_replace('dbname=', '', @$edb[1]),
-                        'dbuser' => str_replace('dbuser=', '', @$edb[2]),
-                        'dbpass' => str_replace('dbpass=', '', @$edb[3]),
-                        'dbtable' => str_replace('dbtable=', '', @$edb[4]),
-                        'dbfielduser' => str_replace('dbfielduser=', '', @$edb[5]),
-                        'dbfieldpass' => str_replace('dbfieldpass=', '', @$edb[6]),
-                        'dbpassencr' => str_replace('dbpassencr=', '', @$edb[7])));
-                    break;
-                case 7:
-                    $cas = explode('|', $auth_settings);
-                    $settings = array_merge($settings, array(
-                        'cas_host' => str_replace('cas_host=', '', @$cas[0]),
-                        'cas_port' => str_replace('cas_port=', '', @$cas[1]),
-                        'cas_context' => str_replace('cas_context=', '', @$cas[2]),
-                        'cas_cachain' => str_replace('cas_cachain=', '', @$cas[3]),
-                        'casusermailattr' => str_replace('casusermailattr=', '', @$cas[4]),
-                        'casuserfirstattr' => str_replace('casuserfirstattr=', '', @$cas[5]),
-                        'casuserlastattr' => str_replace('casuserlastattr=', '', @$cas[6]),
-                        'cas_altauth' => str_replace('cas_altauth=', '', @$cas[7]),
-                        'cas_logout' => str_replace('cas_logout=', '', @$cas[8]),
-                        'cas_ssout' => str_replace('cas_ssout=', '', @$cas[9])));
-                    break;
-            }
-            $settings['auth_name'] = $auth_ids[$auth];
-            return $settings;
+    if (!$result) {
+        return 0;
     }
-    return 0;
+
+    $settings['auth_id'] = $result->auth_id;
+    $settings['auth_settings'] = $result->auth_settings;
+    $settings['auth_title'] = $result->auth_title;
+    $settings['auth_instructions'] = $result->auth_instructions;
+    $settings['auth_default'] = $result->auth_default;
+    $settings['auth_name'] = $auth_ids[$auth];
+
+    foreach (explode('|', $result->auth_settings) as $item) {
+        if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
+            $settings[$matches[1]] = $matches[2];
+        }
+    }
+
+    return $settings;
 }
 
 /* * **************************************************************
   Try to authenticate the user with the admin-defined auth method
   true (the user is authenticated) / false (not authenticated)
 
-  $auth an integer-value for auth method(1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db, 6:shibboleth, 7:cas)
+  $auth an integer-value for auth method (1:eclass, 2:pop3, 3:imap, 4:ldap, 5:db, 6:shibboleth, 7:cas)
   $test_username
   $test_password
   return $testauth (boolean: true-is authenticated, false-is not)
 
-  Sets the global variable $auth_user_info to an array with the following
+  Sets the session variable $auth_user_info to an array with the following
   keys, if available from the current auth method:
-  firstname (LDAP attribute: givenname)
-  lastname (LDAP attribute: sn)
+  givenname (LDAP attribute: givenname)
+  surname (LDAP attribute: sn)
   email (LDAP attribute: mail)
+  studentid
  * ************************************************************** */
 
 function auth_user_login($auth, $test_username, $test_password, $settings) {
@@ -240,7 +204,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
     $testauth = false;
     switch ($auth) {
         case '1':
-            $unamewhere = (get_config('case_insensitive_usernames')) ? "= " : "COLLATE utf8_bin = ";
+            $unamewhere = (get_config('case_insensitive_usernames')) ? "COLLATE utf8_general_ci = " : "COLLATE utf8_bin = ";
             $result = Database::get()->querySingle("SELECT password FROM user WHERE username $unamewhere ?s", $test_username);
             if ($result) {
                 $hasher = new PasswordHash(8, false);
@@ -250,14 +214,14 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                     $testauth = true;
                     // password is in old md5 format, update transparently
                     $password_encrypted = $hasher->HashPassword($test_password);
-                    Database::get()->query("UPDATE user SET password = ?s WHERE username COLLATE utf8_bin = ?s" ,$password_encrypted, $test_username);
+                    Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $result->id);
                 }
             }
             break;
 
         case '2':
             $pop3 = new pop3_class;
-            $pop3->hostname = $settings['pop3host'];                // POP 3 server host name
+            $pop3->hostname = $settings['pop3host'];    // POP 3 server host name
             $pop3->port = 110;                          // POP 3 server host port
             $user = $test_username;                     // Authentication user name
             $password = $test_password;                 // Authentication password
@@ -302,7 +266,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                         $search_filter = "($settings[ldap_login_attr]=${test_username})";
                     } else {
                         $search_filter = "(|($settings[ldap_login_attr]=${test_username})
-                                                                ($settings[ldap_login_attr2]=${test_username}))";
+                                            ($settings[ldap_login_attr2]=${test_username}))";
                     }
 
                     $userinforequest = ldap_search($ldap, $settings['ldap_base'], $search_filter);
@@ -312,16 +276,20 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                             $testauth = true;
                             $userinfo = ldap_get_entries($ldap, $userinforequest);
                             if ($userinfo['count'] == 1) {
-                                $lastname = get_ldap_attribute($userinfo, 'sn');
-                                $firstname = get_ldap_attribute($userinfo, 'givenname');
-                                if (empty($firstname)) {
+                                $surname = get_ldap_attribute($userinfo, 'sn');
+                                $givenname = get_ldap_attribute($userinfo, 'givenname');
+                                if (empty($givennname)) {
                                     $cn = get_ldap_attribute($userinfo, 'cn');
-                                    $firstname = trim(str_replace($lastname, '', $cn));
+                                    $givenname = trim(str_replace($surname, '', $cn));
                                 }
-                                $GLOBALS['auth_user_info'] = array(
-                                    'firstname' => $firstname,
-                                    'lastname' => $lastname,
+                                $_SESSION['auth_user_info'] = array(
+                                    'givenname' => $givenname,
+                                    'surname' => $surname,
                                     'email' => get_ldap_attribute($userinfo, 'mail'));
+                                if (isset($settings['ldap_studentid']) and !empty($settings['ldap_studentid'])) {
+                                    $_SESSION['auth_user_info']['studentid'] =
+                                        get_ldap_attribute($userinfo, $settings['ldap_studentid']);
+                                }
                             }
                         }
                     }
@@ -402,7 +370,7 @@ header("Location: ../modules/auth/altsearch.php" . (isset($_GET["p"]) && $_GET["
 
 /* * **************************************************************
   Check if an account is active or not. Apart from admin, everybody has
-  a registration unix timestamp and an expiration unix timestamp.
+  a registration timestamp and an expiration timestamp.
   By default is set to last a year
 
   $userid : the id of the account
@@ -455,6 +423,9 @@ function cas_authenticate($auth, $new = false, $cas_host = null, $cas_port = nul
             $casusermailattr = $cas['casusermailattr'];
             $casuserfirstattr = $cas['casuserfirstattr'];
             $casuserlastattr = $cas['casuserlastattr'];
+            if (isset($cas['casuserstudentid']) and $cas['casuserstudentid']) {
+                $casuserstudentid = $cas['casuserstudentid'];
+            }
             $cas_altauth = $cas['cas_altauth'];
         }
     }
@@ -508,6 +479,7 @@ function get_cas_attrs($phpCASattrs, $settings) {
 
     $attrs = array();
     foreach ($phpCASattrs as $key => $value) {
+        $key = strtolower($key);
         // multivalue: get only the first attribute
         if (is_array($value))
             $attrs[$key] = $value[0];
@@ -516,23 +488,18 @@ function get_cas_attrs($phpCASattrs, $settings) {
     }
 
     $ret = array();
-    if (!empty($settings['casusermailattr']))
-        if (!empty($attrs[$settings['casusermailattr']])) {
-            $ret['casusermailattr'] = $attrs[$settings['casusermailattr']];
-            $GLOBALS['auth_user_info']['email'] = $attrs[$settings['casusermailattr']];
+    foreach (array('email' => 'casusermailattr',
+                   'givenname' => 'casuserfirstattr',
+                   'surname' => 'casuserlastattr',
+                   'studentid' => 'casuserstudentid') as $name => $attrname) {
+        $_SESSION['auth_user_info'][$name] = $ret[$attrname] = '';
+        if (isset($settings[$attrname]) and $settings[$attrname]) {
+            $setting = strtolower($settings[$attrname]);
+            if (isset($attrs[$setting])) {
+                $_SESSION['auth_user_info'][$name] = $ret[$attrname] = $attrs[$setting];
+            }
         }
-
-    if (!empty($settings['casuserfirstattr']))
-        if (!empty($attrs[$settings['casuserfirstattr']])) {
-            $ret['casuserfirstattr'] = $attrs[$settings['casuserfirstattr']];
-            $GLOBALS['auth_user_info']['firstname'] = $attrs[$settings['casuserfirstattr']];
-        }
-
-    if (!empty($settings['casuserlastattr']))
-        if (!empty($attrs[$settings['casuserlastattr']])) {
-            $ret['casuserlastattr'] = $attrs[$settings['casuserlastattr']];
-            $GLOBALS['auth_user_info']['lastname'] = $attrs[$settings['casuserlastattr']];
-        }
+    }
 
     return $ret;
 }
@@ -542,10 +509,10 @@ function get_cas_attrs($phpCASattrs, $settings) {
  * ************************************************************** */
 
 function process_login() {
-    global $warning, $surname, $givenname, $email, $status, $is_admin, $language,
-    $langInvalidId, $langAccountInactive1, $langAccountInactive2,
-    $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
-    $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
+    global $warning, $surname, $givenname, $email, $status, $is_admin,
+        $language, $session, $langInvalidId, $langAccountInactive1,
+        $langAccountInactive2, $langNoCookies, $langEnterPlatform, $urlServer,
+        $langHere, $auth_ids, $inactive_uid, $langTooManyFails, $urlAppend;
 
     if (isset($_POST['uname'])) {
         $posted_uname = canonicalize_whitespace($_POST['uname']);
@@ -553,7 +520,7 @@ function process_login() {
         $posted_uname = '';
     }
 
-    $pass = isset($_POST['pass']) ? $_POST['pass'] : '';
+    $pass = isset($_POST['pass']) ? trim($_POST['pass']): '';
     $auth = get_auth_active_methods();
 
     if (isset($_POST['submit'])) {
@@ -571,20 +538,21 @@ function process_login() {
             $sqlLogin = "SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username ";
             if (get_config('case_insensitive_usernames')) {
-                $sqlLogin = "= ?s";
+                $sqlLogin = "COLLATE utf8_general_ci = ?s";
             } else {
                 $sqlLogin = "COLLATE utf8_bin = ?s";
             }
             $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail
                                 FROM user WHERE username $sqlLogin", $posted_uname);
-            //print_r($result);
+            $guest_user = get_config('course_guest') != 'off' && $myrow && $myrow->status == USER_GUEST;
+
             // cas might have alternative authentication defined
             $exists = 0;
             if (!isset($_COOKIE) or count($_COOKIE) == 0) {
                 // Disallow login when cookies are disabled
                 $auth_allow = 5;
-            } elseif ($pass === '') {
-                // Disallow login with empty password
+            } elseif ($pass === '' and !$guest_user) {
+                // Disallow login with empty password except for course guest users
                 $auth_allow = 4;
             } else {
                 if ($myrow) {
@@ -603,8 +571,7 @@ function process_login() {
                 }
             }
             if (!$exists and !$auth_allow) {
-                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname,
-                                                            'pass' => $pass));
+                Log::record(0, 0, LOG_LOGIN_FAILURE, array('uname' => $posted_uname));
                 $auth_allow = 4;
             }
         }
@@ -612,12 +579,13 @@ function process_login() {
         $invalidIdMessage = sprintf($langInvalidId, $urlAppend . 'modules/auth/registration.php');
         if (!isset($_SESSION['uid'])) {
             switch ($auth_allow) {
-                case 1: $warning .= "";
+                case 1:
                     session_regenerate_id();
                     break;
                 case 2:
-                    if(isset($_GET['login_page'])) {
-                        die('ehllo');
+                    if (isset($_GET['login_page'])) {
+                        Session::flash('login_error', $invalidIdMessage);
+                        redirect_to_home_page('main/login_form.php');
                     } else {
                         $warning .= "<div class='alert alert-warning'>$invalidIdMessage</div>";
                     }
@@ -627,7 +595,7 @@ function process_login() {
                             token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></div>";
                     break;
                 case 4:
-                    if(isset($_GET['login_page'])) {
+                    if (isset($_GET['login_page'])) {
                         Session::flash('login_error', $invalidIdMessage);
                         redirect_to_home_page('main/login_form.php');
                     } else {
@@ -649,10 +617,11 @@ function process_login() {
         } else {
             Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
                     . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+            $session->setLoginTimestamp();
             if (get_config('email_verification_required') and
                     get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
                 $_SESSION['mail_verification_required'] = 1;
-                $next = "modules/auth/mail_verify_change.php";
+                $next = 'modules/auth/mail_verify_change.php';
             } elseif (isset($_POST['next'])) {
                 $next = $_POST['next'];
             } else {
@@ -669,36 +638,46 @@ function process_login() {
  * ************************************************************** */
 
 function login($user_info_object, $posted_uname, $pass) {
+    global $session;
+
     $pass_match = false;
     $hasher = new PasswordHash(8, false);
 
     if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
         if ($hasher->CheckPassword($pass, $user_info_object->password)) {
             $pass_match = true;
-        } else if (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
+        } elseif (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
             $pass_match = true;
             // password is in old md5 format, update transparently
             $password_encrypted = $hasher->HashPassword($pass);
             $user_info_object->password = $password_encrypted;
             Database::core()->query("SET sql_mode = TRADITIONAL");
             Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
+        } elseif ($user_info_object->status == USER_GUEST and $user_info_object->password === $pass and $pass === '') {
+            // allow guest user login with empty password
+            $pass_match = true;
         }
     }
 
     if ($pass_match) {
         // check if account is active
-        $is_active = check_activity($user_info_object->id);
-        // check for admin privileges
-        $admin_rights = get_admin_rights($user_info_object->id);
-        if ($admin_rights == ADMIN_USER) {
-            $is_active = 1;   // admin user is always active
-            $_SESSION['is_admin'] = 1;
-        } elseif ($admin_rights == POWER_USER) {
-            $_SESSION['is_power_user'] = 1;
-        } elseif ($admin_rights == USERMANAGE_USER) {
-            $_SESSION['is_usermanage_user'] = 1;
-        } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
-            $_SESSION['is_departmentmanage_user'] = 1;
+        if ($user_info_object->status == USER_GUEST) {
+            $is_active = get_config('course_guest') != 'off';
+        } else {
+            $is_active = check_activity($user_info_object->id);
+
+            // check for admin privileges
+            $admin_rights = get_admin_rights($user_info_object->id);
+            if ($admin_rights == ADMIN_USER) {
+                $is_active = 1;   // admin user is always active
+                $_SESSION['is_admin'] = 1;
+            } elseif ($admin_rights == POWER_USER) {
+                $_SESSION['is_power_user'] = 1;
+            } elseif ($admin_rights == USERMANAGE_USER) {
+                $_SESSION['is_usermanage_user'] = 1;
+            } elseif ($admin_rights == DEPARTMENTMANAGE_USER) {
+                $_SESSION['is_departmentmanage_user'] = 1;
+            }
         }
         if ($is_active) {
             $_SESSION['uid'] = $user_info_object->id;
@@ -709,6 +688,7 @@ function login($user_info_object, $posted_uname, $pass) {
             $_SESSION['email'] = $user_info_object->email;
             $GLOBALS['language'] = $_SESSION['langswitch'] = $user_info_object->lang;
             $auth_allow = 1;
+            $session->setLoginTimestamp();
         } else {
             $auth_allow = 3;
             $GLOBALS['inactive_uid'] = $user_info_object->id;
@@ -784,13 +764,17 @@ function alt_login($user_info_object, $uname, $pass) {
             $_SESSION['uid'] = $user_info_object->id;
             $_SESSION['uname'] = $user_info_object->username;
             // if ldap entries have changed update database
-            if (!empty($auth_user_info['firstname']) and (!empty($auth_user_info['lastname'])) and (($user_info_object->givenname != $auth_user_info['firstname']) or
-                    ($user_info_object->surname != $auth_user_info['lastname']))) {
-                Database::get()->query("UPDATE user SET givenname = '" . $auth_user_info['firstname'] . "',
-                                                          surname = '" . $auth_user_info['lastname'] . "'
-                                                      WHERE id = " . $user_info_object->id . "");
-                $_SESSION['surname'] = $auth_user_info['firstname'];
-                $_SESSION['givenname'] = $auth_user_info['lastname'];
+            if (!empty($_SESSION['auth_user_info']['givenname']) and
+                !empty($_SESSION['auth_user_info']['surname']) and
+                ($user_info_object->givenname != $_SESSION['auth_user_info']['givenname'] or
+                 $user_info_object->surname != $_SESSION['auth_user_info']['surname'])) {
+                Database::get()->query("UPDATE user SET givenname = ?s, surname = ?s
+                                                    WHERE id = ?d",
+                    $_SESSION['auth_user_info']['givenname'],
+                    $_SESSION['auth_user_info']['surname'],
+                    $user_info_object->id);
+                $_SESSION['surname'] = $_SESSION['auth_user_info']['surname'];
+                $_SESSION['givenname'] = $_SESSION['auth_user_info']['givenname'];
             } else {
                 $_SESSION['surname'] = $user_info_object->surname;
                 $_SESSION['givenname'] = $user_info_object->givenname;
@@ -811,8 +795,9 @@ function alt_login($user_info_object, $uname, $pass) {
  * ************************************************************** */
 
 function shib_cas_login($type) {
-    global $surname, $givenname, $email, $status, $language, $urlServer,
-    $is_admin, $is_power_user, $is_usermanage_user, $is_departmentmanage_user, $langUserAltAuth;
+    global $surname, $givenname, $email, $status, $language, $session,
+        $urlServer, $is_admin, $is_power_user, $is_usermanage_user,
+        $is_departmentmanage_user, $langUserAltAuth;
 
     $alt_auth_stud_reg = get_config('alt_auth_stud_reg');
 
@@ -842,10 +827,11 @@ function shib_cas_login($type) {
         $surname = $_SESSION['cas_surname'];
         $givenname = $_SESSION['cas_givenname'];
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
+        $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
     }
     // user is authenticated, now let's see if he is registered also in db
     if (get_config('case_insensitive_usernames')) {
-        $sqlLogin = "= ?s";
+        $sqlLogin = "COLLATE utf8_general_ci = ?s";
     } else {
         $sqlLogin = "COLLATE utf8_bin = ?s";
     }
@@ -863,6 +849,7 @@ function shib_cas_login($type) {
             unset($_SESSION['cas_email']);
             unset($_SESSION['cas_surname']);
             unset($_SESSION['cas_givenname']);
+            unset($_SESSION['cas_userstudentid']);
             Session::Messages($langUserAltAuth, 'alert-danger');
             redirect_to_home_page();
         } else {
@@ -902,20 +889,21 @@ function shib_cas_login($type) {
         }
     } elseif ($autoregister and !get_config('am_required')) {
         // if user not found and autoregister enabled, create user
-        if (get_config('email_verification_required')) {
-            $verified_mail = 0;
-            $_SESSION['mail_verification_required'] = 1;
-        } else {
-            $verified_mail = 2;
-        }
+	    $verified_mail = EMAIL_UNVERIFIED;
+    	if (isset($_SESSION['cas_email'])) {
+    	    $verified_mail = EMAIL_VERIFIED;
+    	} else { // redirect user to mail_verify_change.php
+	    	$_SESSION['mail_verification_required'] = 1;
+    	}
 
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
+                        am = ?s, verified_mail = ?d,
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language)->lastInsertID;
+                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am, $verified_mail)->lastInsertID;
     } else {
         // user not registered, automatic registration disabled
         // redirect to registration screen
@@ -923,7 +911,7 @@ function shib_cas_login($type) {
             unset($_SESSION[$key]);
         }
         session_destroy();
-        header("Location: {$urlServer}modules/auth/registration.php");
+        redirect_to_home_page('modules/auth/registration.php');
         exit;
     }
 
@@ -937,12 +925,12 @@ function shib_cas_login($type) {
 
     Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action)
 					VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', " . DBHelper::timeAfter() . ", 'LOGIN')");
-
+    $session->setLoginTimestamp();
     if (get_config('email_verification_required') and
             get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
         $_SESSION['mail_verification_required'] = 1;
         // init.php is already loaded so redirect from here
-        header("Location:" . $urlServer . "modules/auth/mail_verify_change.php");
+        redirect_to_home_page('modules/auth/mail_verify_change.php');
     }
 }
 

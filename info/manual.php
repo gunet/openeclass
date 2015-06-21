@@ -119,6 +119,6 @@ if (isset($uid) and $uid) {
  * @return type
  */
 function manlink($desc, $link, $language) {
-    $url = 'http://docs.openeclass.org/3.0';
+    $url = 'http://docs.openeclass.org/3.1';
     return "<a href='$url/$language:$link' target='_blank' class='mainpage'>$desc</a>";
 }

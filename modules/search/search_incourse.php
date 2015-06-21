@@ -78,7 +78,7 @@ if (empty($search_terms)) {
         <form method='post' action='$_SERVER[SCRIPT_NAME]'>
         <fieldset>
         <legend>$langSearchCriteria</legend>
-        <table width='100%' class='tbl'>
+        <table class='table-default'>
         <tr>
           <th class='left' width='120'>$langOR</th>
           <td colspan='2'><input name='search_terms' type='text' size='80'/></td>
@@ -128,7 +128,7 @@ if (empty($search_terms)) {
 
         if (count($announceHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-              <table width='99%' class='sortable' id='t1' align='left'>
+              <table class='table-default sortable' align='left'>
               <tr>
                 <th colspan='2'>$langAnnouncements:</th>
               </tr>";
@@ -197,7 +197,7 @@ if (empty($search_terms)) {
 
         if (count($documentHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                  <table width='99%' class='sortable' id='t3' align='left'>
+                  <table class='table-default sortable'>
                   <tr>
                     <th colspan='2' class='left'>$langDoc:</th>
                   </tr>";
@@ -323,7 +323,7 @@ if (empty($search_terms)) {
                     <td width='1' valign='top'><img style='padding-top:3px;' src='$themeimg/arrow.png' title='bullet' /></td>
                     <td>";
                 $desc_text = (empty($link->description)) ? "" : "<span class='smaller'>" . $link->description . "</span>";
-                $tool_content .= "<a href='" . $urlServer . "modules/link/go.php?course=" . course_id_to_code($linkHit->courseid) . "&amp;id=$linkHit->pkid&amp;url=" .
+                $tool_content .= "<a href='" . $urlServer . "modules/link/go.php?course=" . course_id_to_code($linkHit->courseid) . "&amp;id=" . getIndirectReference($linkHit->pkid) . "&amp;url=" .
                 urlencode($linkHit->url) . "' target=_blank> " . q($link->title) . "</a> $desc_text </td></tr>";
                 $numLine++;
             }
@@ -389,7 +389,7 @@ if (empty($search_terms)) {
 
         if (count($unitHits) > 0) {
             $tool_content .= "<script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable' id='t11' align='left'>
+                <table class='table-default sortable' align='left'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
@@ -412,7 +412,7 @@ if (empty($search_terms)) {
         if (count($uresHits) > 0) {
             $tool_content .= "
                 <script type='text/javascript' src='../auth/sorttable.js'></script>
-                <table width='99%' class='sortable' id='t11' align='left'>
+                <table class='table-default sortable' align='left'>
                 <tr>
                   <th colspan='2' class='left'>$langCourseUnits:</th>
                 </tr>";
