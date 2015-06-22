@@ -36,9 +36,9 @@ $shouldEdit = isset($_GET['edit']);
 $shouldUpdate = isset($_GET['update']);
 $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null);
 
+// Code to be executed with Ajax call when clicking the activate/deactivate button from External App list page
 if (isset($_POST['state'])) {
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
-
     $appNameAjax = $_POST['appName'];
     ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
 
@@ -113,6 +113,13 @@ if ($appName) {
     $tool_content.="<thead class='list-header'><td>$langExtAppName</td><td>$langExtAppDescription</td></thead>\n";
     $tool_content.="\n";
     foreach (ExtAppManager::getApps() as $app) {
+        $notSet = "";
+        foreach($app->getParams() as $para){
+            if($para->name() !== "enabled"){
+                $notSet = $para->value() === ""? 1 : 0 ;
+                break;
+            }
+        }
         $tool_content .="<tr>\n";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
         //$tool_content .= "<td style=\"width:90px;\"><a href=\"extapp.php?edit=" . $app->getName() . "\"'><img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/></a></td>\n";
@@ -122,7 +129,11 @@ if ($appName) {
         if ($app->getAppIcon() !== null) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
-        $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i> </button>";
+        if($notSet){
+            $app_active = "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\" disabled=\"disabled\"> <i class=\"fa fa-toggle-off\"></i> </button>";
+        } else {
+            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i> </button>";
+        }
         $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 
         $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "<div class=\"extapp-controls\"><div class=\"btn-group btn-group-xs\">" . $app_active . "<a href=\"extapp.php?edit=" . $app->getName() . "\" class=\"btn btn-default\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></div></td>\n";
