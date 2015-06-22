@@ -37,9 +37,10 @@ $shouldUpdate = isset($_GET['update']);
 $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null);
 
 if (isset($_POST['state'])) {
-    $newState = $_POST['state'] == 'fa-toggle-on' ? 'fa-toggle-off' : 'fa-toggle-on';
+    $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
 
     $appNameAjax = $_POST['appName'];
+    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
 
     echo $newState;
     exit;
