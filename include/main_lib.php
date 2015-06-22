@@ -1481,6 +1481,16 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);    
     Database::get()->query("DELETE FROM tag_element_module WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id IN 
+                                    (SELECT id FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM gradebook_users WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM gradebook WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id IN 
+                                    (SELECT id FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
 
 
     $garbage = "$webDir/courses/garbage";
