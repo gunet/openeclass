@@ -59,12 +59,29 @@ class ExtAppManager {
 
 abstract class ExtApp {
 
-    const ENABLED = "enabled";
-
+    private static $ENABLED = "enabled";
     private $params = array();
 
     public function __construct() {
-        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::ENABLED, "0", ExtParam::TYPE_BOOLEAN));
+        echo "ok";
+        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::$ENABLED, "0", ExtParam::TYPE_BOOLEAN));
+    }
+
+    public function isEnabled() {
+        $enabled = $this->getParam(ExtApp::$ENABLED);
+        return $enabled && strcmp($enabled->value(), "1") == 0;
+    }
+
+    /**
+     * 
+     * @param boolean $status
+     */
+    function setEnabled($status) {
+        $param = $this->getParam(ExtApp::$ENABLED);
+        if ($param) {
+            $param->setValue($status ? 1 : 0);
+            $param->persistValue();
+        }
     }
 
     /**
