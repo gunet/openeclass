@@ -145,11 +145,21 @@ if ($can_upload) {
       </div>
 	
 	<div class='form-group'>
-        <div class='col-xs-offset-2 col-xs-10'>
-          <button type='submit' value='" . $langSubmit . "' class='btn btn-primary'>
-            $langSave
-          </button>
-        </div>
+        <div class='col-xs-offset-2 col-xs-10'>";
+        $tool_content .=    form_buttons(array(
+                                array(
+                                    "class"         => "btn-primary",
+                                    "type"          => "submit",
+                                    "name"          => "la",
+                                    "value"         => $langSubmit,
+                                    "text"          => $langSave,
+                                ),
+                                array(
+                                    "href"         => $backUrl,
+                                    "text"          => $langCancel
+                                )
+                            ));
+        $tool_content .= "</div>
       </div>
 </form></div>";
 } else {

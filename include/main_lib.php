@@ -3014,6 +3014,43 @@ function forbidden($path = '') {
     exit;
 }
 
+/**
+ * @brief returns HTML for an buttons
+ * @param array $options options for each entry
+ *
+ * Each item in array is another array of the attributes for button:
+ * 
+ */
+function form_buttons($btnArray) {
+    
+    $buttons = "";
+    
+    foreach ($btnArray as $btn){
+        
+        $id = isset($btn['id'])?"id='$btn[id]'": '';
+        $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
+        $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
+        $text = isset($btn['text'])? $btn['text']: '';
+        if (isset($btn['icon'])) {
+            $text = "<span class='fa $btn[icon] space-after-icon'></span>" . $text;
+        }
+        
+        if (isset($btn['href'])) {
+            $title = isset($btn['title'])?"title='$btn[title]'": '';
+            $target = isset($btn['target'])?"target='$btn[target]'": '';
+            $javascript = isset($btn['javascript'])?"onclick='$btn[javascript]'": '';
+            $buttons .= "<a class='btn $class' $id href='$btn[href]' $target $title $javascript $custom_field>$text</a>&nbsp;&nbsp;";
+        } else {
+            $type = isset($btn['type'])?"type='$btn[type]'":'';
+            $name = isset($btn['name'])?"name='$btn[name]'": null;
+            $value = isset($btn["value"])?"value='$btn[value]'": null;
+            $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';
+            $buttons .= "<button class='btn $class' $type $id $name $value $custom_field $disabled>$text</button>&nbsp;&nbsp;";
+        }
+    }
+    
+    return $buttons;
+}
 
 /**
  * @brief returns HTML for an action bar
