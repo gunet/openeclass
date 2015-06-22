@@ -846,6 +846,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `secret_directory` VARCHAR(30) NOT NULL,
                 `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
                 `max_grade` FLOAT DEFAULT '10' NOT NULL,
+                `grading_scale_id` INT(11) NOT NULL DEFAULT '0',
                 `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                 `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
                 `file_name` VARCHAR(200) DEFAULT '' NOT NULL) $charset_spec");
@@ -866,6 +867,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
                 `group_id` INT( 11 ) DEFAULT NULL ) $charset_spec");
 
+        // Add grading scales table
+$db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
+                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `title` varchar(255) NOT NULL,
+                `scales` text NOT NULL,
+                `course_id` int(11) NOT NULL,
+                KEY `course_id` (`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
                 `user_id` int(11) NOT NULL,
