@@ -54,6 +54,8 @@ if (isset($_POST['submit'])) {
     $v->rule('in', 'language_form', $session->active_ui_languages);
     $v->rule('in', 'auth_form', get_auth_active_methods());
     $v->rule('email', 'email_form');
+    
+    cpf_validate_format_valitron($v);
 
     if (!$v->validate()) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());

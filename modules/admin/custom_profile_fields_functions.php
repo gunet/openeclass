@@ -420,3 +420,20 @@ function cpf_validate_format() {
     }
     return $ret;
 }
+
+function cpf_validate_format_valitron(&$valitron_object) {
+    global $langCPFLinkValidFail, $langCPFDateValidFail;
+    foreach ($_POST as $key => $value) {
+        if (substr($key, 0, 4) == 'cpf_' && $value != '') { //custom profile fields input names start with cpf_
+            $field_name = substr($key, 4);
+            $result = Database::get()->querySingle("SELECT name, datatype FROM custom_profile_fields WHERE shortname = ?s", $field_name);
+            $datatype = $result->datatype;
+            $field_name = $result->name;
+            if ($datatype == CPF_LINK) {
+                $valitron_object->rule('url', $key)->message(sprintf($langCPFLinkValidFail, q($field_name)))->label($field_name);
+            } elseif ($datatype == CPF_DATE) {
+                $valitron_object->rule('date', $key)->message(sprintf($langCPFDateValidFail, q($field_name)))->label($field_name);
+            }
+        }
+    }
+}
