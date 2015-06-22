@@ -60,19 +60,6 @@ if (isset($_POST['submit'])) {
         // register user
         $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
         $verified_mail = intval($_POST['verified_mail_form']);
-        $all_set = register_posted_variables(array(
-            'auth_form' => true,
-            'uname_form' => true,
-            'surname_form' => true,
-            'givenname_form' => true,
-            'email_form' => true,
-            'language_form' => true,
-            'am_form' => false,
-            'phone_form' => false,
-            'password' => true,
-            'pstatus' => true,
-            'rid' => false,
-            'submit' => true));
 
         if ($auth_form == 1) { // eclass authentication
             validateNode(intval($depid), isDepartmentAdmin());
@@ -87,6 +74,8 @@ if (isset($_POST['submit'])) {
                         DBHelper::timeAfter(get_config('account_duration')) . ", ?s, '', ?s, '')",
              $surname_form, $givenname_form, $uname_form, $password_encrypted, $email_form, $pstatus, $phone_form, $am_form, $language_form, $verified_mail)->lastInsertID;
         $user->refresh($uid, array(intval($depid)));
+        //process custom profile fields values
+        process_profile_fields_data(array('uid' => $uid));
 
         // close request if needed
         if (!empty($rid)) {
@@ -200,8 +189,6 @@ if (isset($_GET['id'])) {
             'show' => (isset($submit) and $success))));
 }
 
-        //process custom profile fields values
-        process_profile_fields_data(array('uid' => $uid));
 $lang = false;
 $ps = $pn = $pu = $pe = $pam = $pphone = $pcom = $pdate = '';
 $depid = Session::has('department')? intval(Session::get('department')): null;
@@ -228,16 +215,16 @@ if (isset($_GET['id'])) { // if we come from prof request
         if ($res->faculty_id) {
             validateNode($depid, isDepartmentAdmin());
         }
-            $cpf_context = array('origin' => 'teacher_register', 'pending' => true, 'user_request_id' => $id);
-        } else {
-            $cpf_context = array('origin' => 'teacher_register');
+        $cpf_context = array('origin' => 'teacher_register', 'pending' => true, 'user_request_id' => $id);
+    } else {
+        $cpf_context = array('origin' => 'teacher_register');
     }
 } elseif (@$_GET['type'] == 'user') {
-        $cpf_context = array('origin' => 'student_register');
     $pstatus = 5;
+    $cpf_context = array('origin' => 'student_register');
 } else {
-        $cpf_context = array('origin' => 'teacher_register');
     $pstatus = 1;
+    $cpf_context = array('origin' => 'teacher_register');
 }
 
 if ($pstatus == 5) {
@@ -314,8 +301,12 @@ if (isset($_GET['id'])) {
     formGroup('date', $langDate, q($pdate));
     $tool_content .= "<input type='hidden' name='rid' value='$id'>";
 }
-        //add custom profile fields input
-        $tool_content .= render_profile_fields_form($cpf_context);
+
+//add custom profile fields input
+$tool_content .= render_profile_fields_form($cpf_context);
+
+$tool_content .= "
+        <div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
         </div>
         <input type='hidden' name='pstatus' value='$pstatus'>
