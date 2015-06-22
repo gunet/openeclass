@@ -41,6 +41,7 @@ if (isset($_POST['submit'])) {
     if (isset($_POST['auth_form']) && $_POST['auth_form'] == 1) {
         $requiredFields[] = 'password';
     }
+    augment_registered_posted_variables_arr($requiredFields, true);
     $fieldLabels = array_combine($requiredFields, array_fill(0, count($requiredFields), $langTheField));
     $v = new Valitron\Validator($_POST);
     $v->labels($fieldLabels);
@@ -303,7 +304,7 @@ if (isset($_GET['id'])) {
 }
 
 //add custom profile fields input
-$tool_content .= render_profile_fields_form($cpf_context);
+$tool_content .= render_profile_fields_form($cpf_context, true);
 
 $tool_content .= "
         <div class='col-sm-offset-2 col-sm-10'>

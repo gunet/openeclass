@@ -36,9 +36,10 @@ define('CPF_USER_TYPE_ALL', 10);
 /**
  * Render custom profile fields in profile forms
  * @param array $context
+ * @param boolean $valitron
  * @return string
  */
-function render_profile_fields_form($context) {
+function render_profile_fields_form($context, $valitron = false) {
     global $langOptional, $langCompulsory;
     
     if ($context['origin'] == 'admin_edit_profile') { //admin editing users' profile
@@ -92,8 +93,20 @@ function render_profile_fields_form($context) {
                     unset($fdata);
                 }
                 
-                $return_string .= '<div class="form-group">';
-                $return_string .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.$f->name.'</label>';
+                if ($valitron) {
+                    if (Session::hasError('cpf_'.$f->shortname)) {
+                        $form_class = 'form-group has-error';
+                        $help_block = '<span class="help-block">' . Session::getError('cpf_'.$f->shortname) . '</span>';
+                    } else {
+                        $form_class = 'form-group';
+                        $help_block = '';
+                    }
+                } else {
+                    $form_class = 'form-group';
+                    $help_block = '';
+                }
+                $return_string .= '<div class="'.$form_class.'">';
+                $return_string .= '<label class="col-sm-2 control-label" for="'.$f->shortname.'">'.q($f->name).'</label>';
                 $return_string .= '<div class="col-sm-10">';
                 
                 //get data to prefill fields
@@ -108,6 +121,12 @@ function render_profile_fields_form($context) {
                                                           WHERE field_id = ?d AND user_request_id = ?d", $f->id, $context['user_request_id']);
                     if ($data_res) {
                         $fdata = $data_res->data;
+                    }
+                }
+                
+                if ($valitron) {
+                    if (Session::has('cpf_'.$f->shortname)) {
+                        $fdata = Session::get('cpf_'.$f->shortname);
                     }
                 }
                 
@@ -178,7 +197,7 @@ function render_profile_fields_form($context) {
                 if (!empty($f->description)) {
                     $return_string .= '<small><em>'.standard_text_escape($f->description).'</em></small>';
                 }
-                $return_string .= '</div></div>';
+                $return_string .= $help_block.'</div></div>';
             }
         }
     }
@@ -230,14 +249,19 @@ function process_profile_fields_data($context) {
 /**
  * Add to the array passed to register_posted_variables required custom profile fields for validation
  * @param array $arr
+ * @param boolean $valitron
  */
-function augment_registered_posted_variables_arr(&$arr) {
+function augment_registered_posted_variables_arr(&$arr, $valitron = false) {
     foreach ($_POST as $key => $value) {
         if (substr($key, 0, 4) == 'cpf_') { //custom profile fields input names start with cpf_
             $field_name = substr($key, 4);
             $required = Database::get()->querySingle("SELECT required FROM custom_profile_fields WHERE shortname = ?s", $field_name)->required;
             if ($required == 1) {
-                $arr[$key] = true;
+                if ($valitron) {
+                    $arr[] = $key;
+                } else {
+                    $arr[$key] = true;
+                }
             }
         }
     }
