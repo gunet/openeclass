@@ -881,8 +881,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             'exercise', 'exercise_user_record', 'exercise_question',
             'exercise_answer', 'exercise_with_questions', 'course_module',
             'actions', 'actions_summary', 'logins', 'wiki_locks', 'bbb_servers', 'bbb_session',
-            'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats', 'custom_profile_fields',
-            'custom_profile_fields_data', 'custom_profile_fields_category');
+            'blog_post', 'comments', 'rating', 'rating_cache', 'forum_user_stats');
         foreach ($new_tables as $table_name) {
             if (DBHelper::tableExists($table_name)) {
                 if (Database::get()->querySingle("SELECT COUNT(*) AS c FROM `$table_name`")->c > 0) {
@@ -1273,37 +1272,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `count` INT(11) NOT NULL DEFAULT 0,
                             `tag` VARCHAR(50),
                             INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
-        
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `shortname` VARCHAR(255) NOT NULL,
-                            `name` MEDIUMTEXT NOT NULL,
-                            `description` MEDIUMTEXT NULL DEFAULT NULL,
-                            `datatype` VARCHAR(255) NOT NULL,
-                            `categoryid` INT(11) NOT NULL DEFAULT 0,
-                            `sortorder`  INT(11) NOT NULL DEFAULT 0,
-                            `required` TINYINT NOT NULL DEFAULT 0,
-                            `visibility` TINYINT NOT NULL DEFAULT 0,
-                            `user_type` TINYINT NOT NULL,
-                            `registration` TINYINT NOT NULL DEFAULT 0,
-                            `data` TEXT NULL DEFAULT NULL) $charset_spec");
-        
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
-                            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                            `field_id` INT(11) NOT NULL,
-                            `data` TEXT NOT NULL,
-                            PRIMARY KEY (`user_id`, `field_id`)) $charset_spec");
-        
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data_pending` (
-                            `user_request_id` INT(11) NOT NULL DEFAULT 0,
-                            `field_id` INT(11) NOT NULL,
-                            `data` TEXT NOT NULL,
-                            PRIMARY KEY (`user_request_id`, `field_id`)) $charset_spec");
-        
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
-                            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            `name` MEDIUMTEXT NOT NULL,
-                            `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
         Database::get()->query("CREATE TABLE IF NOT EXISTS `gradebook` (
                             `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2732,6 +2700,38 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.2
     // -----------------------------------
     if (version_compare($oldversion, '3.2', '<')) {
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `shortname` VARCHAR(255) NOT NULL,
+                                `name` MEDIUMTEXT NOT NULL,
+                                `description` MEDIUMTEXT NULL DEFAULT NULL,
+                                `datatype` VARCHAR(255) NOT NULL,
+                                `categoryid` INT(11) NOT NULL DEFAULT 0,
+                                `sortorder`  INT(11) NOT NULL DEFAULT 0,
+                                `required` TINYINT NOT NULL DEFAULT 0,
+                                `visibility` TINYINT NOT NULL DEFAULT 0,
+                                `user_type` TINYINT NOT NULL,
+                                `registration` TINYINT NOT NULL DEFAULT 0,
+                                `data` TEXT NULL DEFAULT NULL) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
+                                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                                `field_id` INT(11) NOT NULL,
+                                `data` TEXT NOT NULL,
+                                PRIMARY KEY (`user_id`, `field_id`)) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data_pending` (
+                                `user_request_id` INT(11) NOT NULL DEFAULT 0,
+                                `field_id` INT(11) NOT NULL,
+                                `data` TEXT NOT NULL,
+                                PRIMARY KEY (`user_request_id`, `field_id`)) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `name` MEDIUMTEXT NOT NULL,
+                                `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
+        
         // delete old key 'language' (replaced by 'default_language')
         Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
 
