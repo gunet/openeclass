@@ -226,8 +226,14 @@ $userdata = Database::get()->querySingle("SELECT surname, givenname, username, e
 $numUsersRegistered = Database::get()->querySingle("SELECT COUNT(*) AS numUsers
         FROM course_user cu1, course_user cu2
         WHERE cu1.course_id = cu2.course_id AND cu1.user_id = ?d AND cu1.status = ?d AND cu2.status <> ?d;", $uid, USER_TEACHER, USER_TEACHER)->numUsers;
-$lastVisit = Database::get()->queryArray("SELECT * FROM loginout
-                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 2", $uid);
+$lastVisit = Database::get()->querySingle("SELECT * FROM loginout
+                        WHERE id_user = ?d ORDER by idLog DESC LIMIT 1", $uid);
+if ($lastVisit) {
+    $lastVisitLabel = "<br><span class='tag'>$langProfileLastVisit : </span><span class='tag-value text-muted'>" .
+        claro_format_locale_date($dateFormatLong, strtotime($lastVisit->when)) . "</span>";
+} else {
+    $lastVisitLabel = '';
+}
 $tool_content .= "
 </div>
 <div id='profile_box' class='row'>
@@ -242,8 +248,7 @@ $tool_content .= "
                     </div>
                     <div class='col-xs-8 col-sm-5'>
                         <h3 style='font-size: 18px; margin: 10px 0 10px 0;'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h3>
-                        <span class='tag'>$langProfileMemberSince : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($userdata->registered_at))."</span><br>
-                        <span class='tag'>$langProfileLastVisit : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($lastVisit[0]->when))."</span>
+                        <span class='tag'>$langProfileMemberSince : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($userdata->registered_at))."</span>$lastVisitLabel
                     </div>
                     <div class='col-xs-12 col-sm-5'>
                         <ul class='list-group'>
