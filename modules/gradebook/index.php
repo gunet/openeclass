@@ -894,9 +894,13 @@ if ($is_editor) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-xs-12'>
-                                <input class='btn btn-primary' type='submit' name='selectGradebook' value='".$langSelect."' />
-                            </div>
+                            <div class='col-xs-12'>".form_buttons(array(
+                                    array(
+                                        'text' => $langSelect,
+                                        'name' => 'selectGradebook',
+                                        'value'=> $langSelect
+                                    )
+                                ))."</div>
                         </div>
                     </form>
                 </div>
@@ -910,9 +914,13 @@ if ($is_editor) {
                                 </div>
                             </div>
                             <div class='form-group'>
-                                <div class='col-xs-12'>
-                                    <input class='btn btn-primary' type='submit' name='newGradebook' value='".$langInsert."' />
-                                </div>
+                                <div class='col-xs-12'>".form_buttons(array(
+                                    array(
+                                            'text' => $langInsert,
+                                            'name' => 'newGradebook',
+                                            'value'=> $langInsert
+                                        )
+                                    ))."</div>
                             </div>
                     </form>
                 </div>                

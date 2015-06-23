@@ -177,10 +177,17 @@ if ($is_editor) {
                          </div>
                     </div>
                    <div class='form-group'>    
-                        <div class='col-sm-10 col-sm-offset-2'>
-                             <input class='btn btn-primary' type='submit' name='submit_category' value='$submit_value'>
-                             <a href='$cat_url' class='btn btn-default'>$langCancel</a>
-                        </div>
+                        <div class='col-sm-10 col-sm-offset-2'>".
+                                    form_buttons(array(
+                                    array(
+                                        'text' => $submit_value,
+                                        'value'=> $submit_value,
+                                        'name' => 'submit_category'
+                                    ),
+                                    array(
+                                        'href' => $cat_url
+                                    )
+                                ))."</div>
                     </div>                            
                 </form>
             </div>";                       
