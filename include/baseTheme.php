@@ -227,6 +227,8 @@ function draw($toolContent, $menuTypeID, $tool_css = null, $head_content = null,
 
     $t->set_var('URL_PATH', $urlAppend);
     $t->set_var('SITE_NAME', $siteName);
+    $t->set_var('FAVICON_PATH', $urlAppend . 'template/favicon/favicon.ico');
+    $t->set_var('ICON_PATH', $urlAppend . 'template/favicon/openeclass_128x128.png');
 
     //If there is a message to display, show it (ex. Session timeout)
     if ($messages = Session::getMessages()) {
