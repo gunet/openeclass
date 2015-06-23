@@ -555,10 +555,15 @@ if ($can_upload) {
                                         </div>
                                     </div>
                                     <div class='form-group'>
-                                        <div class='col-xs-offset-2 col-xs-10'>
-                                            <button class='btn btn-primary' type='submit' value='$langRename' >$langRename</button>
-                                            <a class='btn btn-default' href='$backUrl'>$langCancel</a>
-                                        </div>
+                                        <div class='col-xs-offset-2 col-xs-10'>".form_buttons(array(
+                                                array(
+                                                    'text' => $langRename,
+                                                    'value'=> $langRename
+                                                ),
+                                                array(
+                                                    'href' => $backUrl,
+                                                )
+                                            ))."</div>
                                     </div>
                             </fieldset>
                         </form>
@@ -606,14 +611,14 @@ if ($can_upload) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-xs-offset-2 col-xs-10'>
-                                <button type='submit' class='btn btn-primary'>
-                                    $langCreate
-                                </button>
-                                <a class='btn btn-default' href='$backLink'>
-                                    $langCancel
-                                </a>
-                            </div>
+                            <div class='col-xs-offset-2 col-xs-10'>".form_buttons(array(
+                                    array(
+                                        'text' => $langCreate
+                                    ),
+                                    array(
+                                        'href' => $backLink,
+                                    )
+                                ))."</div>
                         </div>
                     </form>
                     
@@ -773,9 +778,15 @@ if ($can_upload) {
                             <div class='col-sm-7'><input type='file' name='newFile' size='35' /></div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-sm-offset-4 col-sm-8'>
-                                <input class='btn btn-primary' type='submit' value='$langReplace' />
-                            </div>
+                            <div class='col-sm-offset-4 col-sm-8'>".form_buttons(array(
+                                    array(
+                                        'text' => $langReplace,
+                                        'value'=> $langReplace
+                                    ),
+                                    array(
+                                        'href' => "index.php?course=$course_code",
+                                    )
+                                ))."</div>
                         </div>
                         </fieldset>
                         </form></div>";
@@ -880,10 +891,15 @@ if ($can_upload) {
                                <input type='hidden' size='80' name='file_language' value='$oldLanguage'>";
             }
             $dialogBox .= "<div class='form-group'>
-                    <div class='col-sm-offset-2 col-sm-10'>
-                        <button class='btn btn-primary' type='submit' value='$langOkComment'>$langSave</button>
-                        <a class='btn btn-default' href='$backUrl'>$langCancel</a>
-                    </div>
+                    <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+                            array(
+                                'text' => $langSave,
+                                'value'=> $langOkComment
+                            ),
+                            array(
+                                'href' => $backUrl,
+                            )
+                        ))."</div>
                 </div>";
             if ($is_file) { // if we are editing files file info
                 $dialogBox .= "<div class='form-group'>

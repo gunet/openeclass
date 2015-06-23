@@ -3023,13 +3023,14 @@ function forbidden($path = '') {
  */
 function form_buttons($btnArray) {
     
+    global $langCancel;
+    
     $buttons = "";
     
     foreach ($btnArray as $btn){
         
         $id = isset($btn['id'])?"id='$btn[id]'": '';
         $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
-        $text = isset($btn['text'])? $btn['text']: '';
         if (isset($btn['icon'])) {
             $text = "<span class='fa $btn[icon] space-after-icon'></span>" . $text;
         }
@@ -3037,12 +3038,14 @@ function form_buttons($btnArray) {
         if (isset($btn['href'])) {
             $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
             $title = isset($btn['title'])?"title='$btn[title]'": '';
+            $text = isset($btn['text'])? $btn['text']: $langCancel;
             $target = isset($btn['target'])?"target='$btn[target]'": '';
             $javascript = isset($btn['javascript'])?"onclick='$btn[javascript]'": '';
             $buttons .= "<a class='btn $class' $id href='$btn[href]' $target $title $javascript $custom_field>$text</a>&nbsp;&nbsp;";
         } else {
             $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
             $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';
+            $text = isset($btn['text'])? $btn['text']: '';
             $name = isset($btn['name'])?"name='$btn[name]'": null;
             $value = isset($btn["value"])?"value='$btn[value]'": null;
             $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';

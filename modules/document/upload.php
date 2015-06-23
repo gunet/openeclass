@@ -232,7 +232,6 @@ if ($can_upload) {
                 ),
                 array(
                     'href' => "index.php?course=$course_code",
-                    'text' => $langCancel
                 )
             ))
             ."
