@@ -366,9 +366,13 @@ if ($is_editor) {
                                     $tool_content .= "
                                         /></div>";
                                 }
-                                $tool_content .= "<div class='form-group'><div class='col-sm-10 col-sm-offset-2'>
-                                                <input class='btn btn-primary' type='submit' name='submitGradebookActivity' value='$langAdd' />
-                                            </div></div>";
+                                $tool_content .= "<div class='form-group'><div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
+                                    array(
+                                        'text' => $langAdd,
+                                        'name' => 'submitGradebookActivity',
+                                        'value'=> $langAdd
+                                    )
+                                ))."</div></div>";
                                 if (isset($_GET['modify'])) {
                                     $tool_content .= "<input type='hidden' name='id' value='" . $gradebookActivityToModify . "' />";
                                 }else{
@@ -761,9 +765,12 @@ if ($is_editor) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-xs-12'>
-                                <input class='btn btn-primary' type='submit' name='titleSubmit' value='".$langInsert."' />
-                            </div>                        
+                            <div class='col-xs-12'>".form_buttons(array(
+                                    array(
+                                        'text' => $langInsert,
+                                        'value'=> $langInsert
+                                    )
+                                ))."</div>                        
                         </div>
                     </form>
                 </div>
@@ -791,9 +798,13 @@ if ($is_editor) {
                                     </div>
                                 </div>
                                 <div class='form-group'>
-                                    <div class='col-xs-12'>
-                                        <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
-                                    </div>
+                                    <div class='col-xs-12'>".form_buttons(array(
+                                    array(
+                                        'text' => $langAttendanceUpdate,
+                                        'name' => 'resetAttendance',
+                                        'value'=> $langAttendanceUpdate
+                                    )
+                                ))."</div>
                                 </div>
                     </form>
                 </div>
@@ -833,9 +844,13 @@ if ($is_editor) {
                             $tool_content .= "</div>
                             </div>
                             <div class='form-group'>
-                                <div class='col-xs-12'>
-                                    <input class='btn btn-primary' type='submit' name='submitGradebookRange' value='$langGradebookUpdate'>
-                                </div>
+                                <div class='col-xs-12'>".form_buttons(array(
+                                    array(
+                                        'text' => $langGradebookUpdate,
+                                        'name' => 'submitGradebookRange',
+                                        'value'=> $langGradebookUpdate
+                                    )
+                                ))."</div>
                             </div>
                         </fieldset>
                     </form>
