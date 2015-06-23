@@ -225,11 +225,17 @@ if ($can_upload) {
 
     $tool_content .= "
       <div class='form-group'>
-        <div class='col-xs-offset-2 col-xs-10'>
-          <button type='submit' class='btn btn-primary'>
-            $langUpload
-          </button>
-          <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+        <div class='col-xs-offset-2 col-xs-10'>".
+            form_buttons(array(
+                array(
+                    'text' => $langUpload
+                ),
+                array(
+                    'href' => "index.php?course=$course_code",
+                    'text' => $langCancel
+                )
+            ))
+            ."
         </div>
       </div>
     </form>

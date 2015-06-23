@@ -3028,7 +3028,6 @@ function form_buttons($btnArray) {
     foreach ($btnArray as $btn){
         
         $id = isset($btn['id'])?"id='$btn[id]'": '';
-        $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
         $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
         $text = isset($btn['text'])? $btn['text']: '';
         if (isset($btn['icon'])) {
@@ -3036,12 +3035,14 @@ function form_buttons($btnArray) {
         }
         
         if (isset($btn['href'])) {
+            $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
             $title = isset($btn['title'])?"title='$btn[title]'": '';
             $target = isset($btn['target'])?"target='$btn[target]'": '';
             $javascript = isset($btn['javascript'])?"onclick='$btn[javascript]'": '';
             $buttons .= "<a class='btn $class' $id href='$btn[href]' $target $title $javascript $custom_field>$text</a>&nbsp;&nbsp;";
         } else {
-            $type = isset($btn['type'])?"type='$btn[type]'":'';
+            $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
+            $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';
             $name = isset($btn['name'])?"name='$btn[name]'": null;
             $value = isset($btn["value"])?"value='$btn[value]'": null;
             $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';
