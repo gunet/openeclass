@@ -2585,14 +2585,13 @@ function update_gradebook_book($uid, $id, $grade, $activity)
                             AND module_auto_id = ?d
                             AND auto = 1", $type, $id);
     if ($q) {
-
         $u = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d
                                 AND gradebook_id = ?d", $uid, $q->gradebook_id);
         if($u){
-            if ($type == 2) { // exercises
+            if ($type == 2) { // exercises                
                 $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record
                                                         WHERE uid = ?d AND eid = ?d", $uid, $id);
-                if ($sql) {
+                if ($sql) {                    
                    $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
                    $score = $sql->total_score;
                    $scoreMax = $sql->total_weighting;
@@ -2602,12 +2601,11 @@ function update_gradebook_book($uid, $id, $grade, $activity)
                         $grade = $score;
                     }
                 }
-            }
-
+            }            
             $q2 = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $q->id AND uid = ?d", $uid);
-            if ($q2) { // update grade if exists
-                Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE gradebook_activity_id = $q->id AND uid = ?d", $grade, $uid);
-            } else {
+            if ($q2) { // update grade if exists                
+                Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE gradebook_activity_id = $q->id AND uid = ?d", $grade, $uid);                
+            } else {                
                 if ($grade == '') {
                     $grade = 0;
                 }
