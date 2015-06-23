@@ -1258,8 +1258,6 @@ function publish_video_recordings($course_id, $id)
                 $recordingParams = array(
                     'meetingId' => $session->meeting_id,
                 );
-                //$recs = file_get_contents($bbb->getRecordingsUrl($recordingParams));
-                //echo $recs;die();                
                 $ch = curl_init();
                 $timeout = 0;
                 curl_setopt ($ch, CURLOPT_URL, $bbb->getRecordingsUrl($recordingParams));
