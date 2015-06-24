@@ -448,7 +448,7 @@ $lp_action_button = action_button(array(
     array(
         'title' => "$langDocumentAsModuleLabel",
         'url' => "insertMyDoc.php?course=$course_code",
-        'icon' => 'fa-folder-open-o'
+        'icon' => 'fa-file-o'
     ),
     array(
         'title' => "$langExerciseAsModuleLabel",

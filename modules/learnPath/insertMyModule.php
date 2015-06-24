@@ -211,7 +211,7 @@ if (!$atleastOne) {
 if ($atleastOne) {
     $tool_content .= '<tr>'
             . '<th colspan="2"><div align="right">' . "\n"
-            . '<input class="btn btn-primary" type="submit" value="' . $langReuse . '" />' . "\n"
+            . '<button class="btn btn-primary" value="' . $langAddOneModuleButton . '" />'.$langAddOneModuleButton.'</button>' . "\n"
             . '<input type="hidden" name="cmdglobal" value="add"></div>' . ""
             . '</th>'
             . '</tr>';
