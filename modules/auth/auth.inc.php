@@ -904,6 +904,7 @@ function shib_cas_login($type) {
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
                     $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am, $verified_mail)->lastInsertID;
+        user_hook($_SESSION['uid']);
     } else {
         // user not registered, automatic registration disabled
         // redirect to registration screen

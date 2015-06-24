@@ -1003,6 +1003,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
                 isset($data['phone'])? $data['phone']: '',
                 $now,
                 date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
+            user_hook($user_id);
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
             $user = new User();
             $user->refresh($user_id, $departments);

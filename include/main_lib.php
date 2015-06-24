@@ -3536,16 +3536,12 @@ function closest($search, $arr) {
    $position = null;
    
    foreach($arr as $key => $item) {
-      if($closest == null || abs($search - $closest) > abs($item - $search)) {
-         $closest = $item;
-         $position = $key;
-      }
+       if ($closest == null || abs($search - $closest) > abs($item - $search)) {
+           $closest = $item;
+           $position = $key;
+       }
    }
-    return   
-       array(
-           'key' => $position,
-           'value' => $closest
-        );
+   return array('key' => $position, 'value' => $closest);
 }
 /**
 * Get all values from specific key in a multidimensional array
@@ -3560,4 +3556,32 @@ function array_value_recursive($key, array $arr){
         if($k == $key) array_push($val, $v);
     });
     return count($val) > 1 ? $val : array_pop($val);
+}
+
+/**
+* Function called whenever a user is created or changed
+*
+* @param $user_id integer
+*/
+function user_hook($user_id) {
+    // Apply autoenroll rules
+    $status = Database::get()->querySingle('SELECT status FROM user WHERE id = ?d', $user_id)->status;
+    Database::get()->queryFunc('SELECT id FROM autoenroll_rule, autoenroll_rule_department
+        WHERE status = ?d AND
+              autoenroll_rule.id = autoenroll_rule_department.rule AND
+              autoenroll_rule_department.department IN
+                (SELECT department FROM user_department WHERE user = ?d)
+        UNION
+        SELECT id FROM autoenroll_rule
+            LEFT JOIN autoenroll_rule_department
+                ON autoenroll_rule.id = autoenroll_rule_department.rule
+            WHERE rule IS NULL',
+        function ($rule) use ($user_id) {
+            $id = $rule->id;
+            Database::get()->query('INSERT IGNORE INTO course_user
+                (course_id, user_id, status, reg_date, document_timestamp)
+                (SELECT course_id, ?d, ?d, NOW(), NOW()
+                    FROM autoenroll_course
+                    WHERE rule = ?d)', $user_id, USER_STUDENT, $id);
+        }, $status, $user_id);
 }

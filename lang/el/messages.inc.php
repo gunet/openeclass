@@ -170,6 +170,8 @@ $langApplyTo = 'Όταν χρήστες';
 $langApplyDepartments = 'εγγράφονται στα τμήματα';
 $langApplyAnyDepartment = 'εγγράφονται σε οποιοδήποτε τμήμα';
 $langNoRules = 'Δεν υπάρχουν κανόνες';
+$langApplyRule = 'Εφαρμογή του κανόνα στους υπάρχοντες χρήστες κατά την αποθήκευση';
+$langRuleApplied = 'Ο κανόνας εφαρμόστηκε σε όλους τους υπάρχοντες χρήστες';
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;

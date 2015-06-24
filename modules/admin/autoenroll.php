@@ -63,6 +63,10 @@ if (isset($_POST['submit'])) {
         }
     }
     Session::Messages($langAutoEnrollAdded, 'alert-success');
+    if (isset($_POST['apply'])) {
+        apply_autoenroll($rule);
+        Session::Messages($langRuleApplied, 'alert-info');
+    }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
     load_js('jstree');
@@ -123,9 +127,7 @@ if (isset($_POST['submit'])) {
         });
       </script>";
 
-    if ($type == USER_STUDENT) {
-        $statusLabel = q(($type == USER_STUDENT)? $langStudents: $langTeachers);
-    }
+    $statusLabel = q(($type == USER_STUDENT)? $langStudents: $langTeachers);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
               'url' => 'autoenroll.php',
@@ -152,6 +154,14 @@ if (isset($_POST['submit'])) {
             <div class='form-group'>
               <label for='title' class='col-sm-3 control-label'>$langAutoEnrollDepartment:</label>   
               <div class='col-sm-9 form-control-static'>$htmlTreeCourse</div>
+            </div>
+            <div class='form-group'>
+              <div class='col-sm-12 checkbox'>
+                <label>
+                  <input type='checkbox' name='apply' id='apply' value='1' checked='1'>
+                  $langApplyRule
+                </label>
+              </div>
             </div>
             <div class='form-group'>
               <div class='col-sm-10 col-sm-offset-2'>
@@ -224,7 +234,7 @@ if (isset($_POST['submit'])) {
                 }
                 $rules[$rule] .= '</ul>';
             } else {
-                $rules[$rule] .= $langApplyAnyDepartment;
+                $rules[$rule] .= $langApplyAnyDepartment . ':<br>';
             }
 
             $courses = Database::get()->queryArray('SELECT code, title, public_code
@@ -275,4 +285,31 @@ function multiInsert($table, $signature, $key, $values) {
     Database::get()->query("INSERT INTO `$table` ($signature) VALUES " .
             implode(', ', array_fill(0, $count, '(?d, ?d)')),
         $terms);
+}
+
+function apply_autoenroll($rule) {
+    $status = Database::get()->querySingle('SELECT status
+        FROM autoenroll_rule WHERE id = ?d', $rule)->status;
+    $deps = Database::get()->queryArray('SELECT department
+        FROM autoenroll_rule_department WHERE rule = ?d',
+        $rule);
+    if (!$deps) {
+        Database::get()->query('INSERT IGNORE INTO course_user
+            (course_id, user_id, status, reg_date, document_timestamp)
+            (SELECT course_id, user.id, ?d, NOW(), NOW()
+                FROM autoenroll_course, user
+                WHERE rule = ?d AND status = ?d)',
+            USER_STUDENT, $rule, $status);
+    } else {
+        $depsSQL = implode(', ', array_fill(0, '?d', count($deps)));
+        $depsParam = array_map(function ($d) { return $d->department; }, $deps);
+        Database::get()->query("INSERT IGNORE INTO course_user
+            (course_id, user_id, status, reg_date, document_timestamp)
+            (SELECT course_id, user.id, ?d, NOW(), NOW()
+                FROM autoenroll_course, user, user_department
+                WHERE user.id = user_department.user AND
+                      user_department.department IN ($depsSQL) AND
+                      rule = ?d AND status = ?d)",
+            USER_STUDENT, $depsParam, $rule, $status);
+    } 
 }

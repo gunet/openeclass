@@ -244,6 +244,7 @@ if (!isset($_POST['submit'])) {
                             $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
         $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, $departments);
+        user_hook($last_id);
 
         if ($vmail) {
             $hmac = token_generate($uname . $email . $last_id);

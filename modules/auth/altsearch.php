@@ -269,6 +269,7 @@ if ($is_valid) {
                           description = ''", $surname_form, $givenname_form, $uname, $password, $email, $am, $language, $verified_mail);
         $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, array(intval($depid)));
+        user_hook($last_id);
 
         if ($vmail and !empty($email)) {
             $hmac = token_generate($uname . $email . $last_id);

@@ -300,6 +300,7 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
                 VALUES (?s,?s,?s,?s,?s,?d," . DBHelper::timeAfter() . "," . DBHelper::timeAfter(get_config('account_duration')) . ",?s,?s,?s,?d,?d,?d,'',".EMAIL_VERIFIED.",'')"
                     , $surname, $givenname, $uname, $password_encrypted, mb_strtolower(trim($email)), $status, $lang, $am, $phone, $email_public, $phone_public, $am_public)->lastInsertID;
     $user->refresh($id, $departments);
+    user_hook($id);
     $telephone = get_config('phone');
     $administratorName = get_config('admin_name');
     $emailhelpdesk = get_config('email_helpdesk');

@@ -86,6 +86,7 @@ if (isset($_POST['submit'])) {
                         DBHelper::timeAfter(get_config('account_duration')) . ", ?s, '', ?s, '')",
              $surname_form, $givenname_form, $uname_form, $password_encrypted, $email_form, $pstatus, $phone_form, $am_form, $language_form, $verified_mail)->lastInsertID;
         $user->refresh($uid, array(intval($depid)));
+        user_hook($uid);
 
         // close request if needed
         if (!empty($rid)) {

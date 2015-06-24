@@ -103,6 +103,7 @@ if ($submit) {
 
     $last_id = $sql->lastInsertID;
     $userObj->refresh($last_id, array(intval($department)));
+    user_hook($last_id);
     
     $telephone = get_config('phone');
     $administratorName = get_config('admin_name');
