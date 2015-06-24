@@ -636,7 +636,7 @@ if ($is_editor) {
     }
     
     //EDIT DB: display all the gradebook users (reset the list, remove users)
-    elseif (isset($_GET['editUsers'])) {        
+    elseif (isset($_GET['editUsers'])) {
         //delete users from gradebook list
         if (isset($_POST['deleteSelectedUsers'])) {
             foreach ($_POST['recID'] as $value) {
@@ -710,12 +710,11 @@ if ($is_editor) {
                         <div class='form-group'>
                             <label class='col-xs-12'>$langRefreshList<small class='help-block'>($langGradebookInfoForUsers)</small></label></div>                            
                                 <div class='form-group'>
-                                    <div class='col-xs-12'>
-                                        <select name='usersLimit' class='form-control'>                
-                                            <option value='1'>$langAttendanceActiveUsers6</option>
-                                            <option value='2'>$langAttendanceActiveUsers3</option>
-                                            <option value='3'>$langAttendanceActiveUsersAll</option>
-                                        </select>
+                                    <div class='col-xs-12'>".
+                            selection(array('1' => $langAttendanceActiveUsers6, 
+                                            '2' => $langAttendanceActiveUsers3, 
+                                            '3' => $langAttendanceActiveUsersAll), 
+                                        'usersLimit', $langAttendanceActiveUsers6, "class='form-control'")."                                        
                                     </div>
                                 </div>
                                 <div class='form-group'>
