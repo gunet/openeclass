@@ -104,6 +104,8 @@ function display_student_gradebook($gradebook_id) {
  * @global type $langExercise
  * @global type $langGradebookInsAut
  * @global type $langGradebookInsMan
+ * @global type $langGradebookAss
+ * @global type $langGradebookActivityAct
  * @global type $langAttendanceActivity
  * @global type $langDelete
  * @global type $langConfirmDelete
@@ -119,7 +121,7 @@ function display_gradebook($gradebook_id) {
            $langTitle, $langView, $langScore, $langGradebookActList,
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langGradebookType, $langExercise, 
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete, 
-           $langEditChange, $langYes, $langNo, $langPreview,
+           $langEditChange, $langYes, $langNo, $langPreview, $langGradebookAss, $langGradebookActivityAct,
            $gradebook_exams, $gradebook_labs, $gradebook_oral, $gradebook_progress, $gradebook_other_type;
     
     //check if there is spare weight
@@ -176,13 +178,13 @@ function display_gradebook($gradebook_id) {
                 $tool_content .= "</td><td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>";
 
                 if ($details->module_auto_id) {
-                    if ($details->module_auto_type == 1) {
+                    if ($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
                         $tool_content .= "<td class='smaller'>$langGradebookAss";
                     }
-                    if ($details->module_auto_type == 2) {
+                    if ($details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
                         $tool_content .= "<td class='smaller'>$langExercise ";
                     }
-                    if ($details->module_auto_type == 3) {
+                    if ($details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
                         $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
                     }
 
@@ -205,11 +207,11 @@ function display_gradebook($gradebook_id) {
                 }
                 $tool_content .= "</td>";
                 $tool_content .= "<td width='120' class='text-center'>" . userGradebookTotalActivityStats($details->id, $gradebook_id) . "</td>";
-                if ($details->module_auto_id and $details->module_auto_type == 2) {
+                if ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
                     $preview_link = "${urlServer}modules/exercise/results.php?course=$course_code&amp;exerciseId=$details->module_auto_id";
-                } elseif ($details->module_auto_id and $details->module_auto_type == 1) {
+                } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
                     $preview_link = "${urlServer}modules/work/index.php?course=$course_code&amp;id=$details->module_auto_id";
-                } elseif ($details->module_auto_id and $details->module_auto_type == 3) {
+                } elseif ($details->module_auto_id and $details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
                     $preview_link = "${urlServer}modules/learnPath/detailsAll.php?course=$course_code";
                 } else {
                     $preview_link = '';
@@ -416,7 +418,7 @@ function display_gradebook_users($gradebook_id, $actID) {
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort, $langGradebookGrade, $langGradebookUpdate,
             $langGradebookGradeAlert, $langAttendanceBooking, $langGradebookBooking, $langGradebookOutRange;
     
-    //display form and list
+    //display form and list    
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
     //display users
@@ -448,24 +450,25 @@ function display_gradebook_users($gradebook_id, $actID) {
         if (!empty($resultUser->am)) {
             $am_message = "($langAm: $resultUser->am)";
         }
+        $q = Database::get()->querySingle("SELECT grade FROM gradebook_book 
+                                                        WHERE gradebook_activity_id = ?d 
+                                                    AND uid = ?d", $actID, $resultUser->userID);
         $tool_content .= "<tr><td>$cnt</td>
             <td>" . display_user($resultUser->userID). " $am_message</td>
-            <td>" . nice_format($resultUser->reg_date) . "</td>";                        
-            $tool_content .= "<td>";
-            if(weightleft($gradebook_id, 0) == 0) {                            
+            <td>" . nice_format($resultUser->reg_date) . "</td>";
+            $tool_content .= "<td>$q->grade";
+            /*if(weightleft($gradebook_id, 0) == 0) {
                 $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID);
             } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
                 $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID) . " (<small>" . $langGradebookGradeAlert . "</small>)";
-            }
-            if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {                
+            }*/
+            //if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
+            if ($q->grade > $gradebook_range) {
                 $tool_content .= "<span class='help-block'><small>$langGradebookOutRange</small></span>";
             }
+            $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>
                 <input type='text' name='" . $resultUser->userID . "'";
-                //check if the user has attendace for this activity already OR if it should be automatically inserted here
-                $q = Database::get()->querySingle("SELECT grade FROM gradebook_book 
-                                                        WHERE gradebook_activity_id = ?d 
-                                                    AND uid = ?d", $actID, $resultUser->userID);
                 if(isset($q->grade)) {
                     $tool_content .= " value = '$q->grade'";
                 } else{
@@ -638,7 +641,7 @@ function update_grades($gradebook_id, $actID) {
     if ($sql) {
         $activity_type = $sql->module_auto_type;
         $id = $sql->module_auto_id;
-    }
+    }    
     //get all the active users 
     $q = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
     if ($q) {
@@ -670,17 +673,25 @@ function update_gradebook_book($uid, $id, $grade, $activity)
             if ($activity == GRADEBOOK_ACTIVITY_EXERCISE) { // exercises                
                 $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record
                                                         WHERE uid = ?d AND eid = ?d", $uid, $id);
+                $score = $sql->total_score;
+                $scoreMax = $sql->total_weighting;                
+            } elseif ($activity == GRADEBOOK_ACTIVITY_ASSIGNMENT) { // assignments
+                $sql = Database::get()->querySingle("SELECT grade AS total_score FROM assignment_submit WHERE uid = ?d AND assignment_id = ?d", $uid, $id);
                 if ($sql) {
-                   $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
-                   $score = $sql->total_score;
-                   $scoreMax = $sql->total_weighting;
-                    if($scoreMax) {
-                       $grade = round(($range * $score) / $scoreMax, 2);
-                    } else {
-                       $grade = $score;
-                    }
+                    $score = $sql->total_score;
+                    $sql2 = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $id);
+                    $scoreMax = $sql2->max_grade;
                 }
             }
+            if ($sql) {
+                $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;                   
+                 if($scoreMax) {
+                    $grade = round(($range * $score) / $scoreMax, 2);
+                 } else {
+                    $grade = $score;
+                 }
+            }
+            
             if ($grade == '') {
                 $grade = 0;
             }

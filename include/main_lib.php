@@ -120,6 +120,7 @@ define('LISTBOX_FILL', 2); //
 // gradebook activity type
 define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
 define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
+define('GRADEBOOK_ACTIVITY_LP', 3);
 
 // Subsystem types (used in documents)
 define('MAIN', 0);
@@ -2562,7 +2563,7 @@ function update_attendance_book($uid, $id, $activity) {
         $u = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d
                                 AND attendance_id = ?d", $uid, $q->attendance_id);
         if($u){
-            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1", $uid);
+            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1, comments = ''", $uid);
         }
     }
     return;
