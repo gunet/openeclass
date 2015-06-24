@@ -1468,31 +1468,54 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     PRIMARY KEY (`id`)) $charset_spec");
 
 
-#
-# table `tags`
-#
+// Tags tables
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (
-            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `course_id` int(11) NOT NULL,
-            `module_id` int(11) NOT NULL,
-            `element_id` int(11) NOT NULL,
-            `user_id` int(11) NOT NULL,
-            `date` DATETIME DEFAULT NULL,
-            `tag_id` int(11) NOT NULL) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` int(11) NOT NULL,
+    `module_id` int(11) NOT NULL,
+    `element_id` int(11) NOT NULL,
+    `user_id` int(11) NOT NULL,
+    `date` DATETIME DEFAULT NULL,
+    `tag_id` int(11) NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS tag (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     UNIQUE KEY (name)) $charset_spec");
 
-# Recycle object table
+// Recycle object table
 $db->query("CREATE TABLE IF NOT EXISTS `recyclebin` (
-            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `tablename` varchar(100) NOT NULL,
-            `entryid` int(11) NOT NULL,
-            `entrydata` varchar(4000) NOT NULL,
-            KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `tablename` varchar(100) NOT NULL,
+    `entryid` int(11) NOT NULL,
+    `entrydata` varchar(4000) NOT NULL,
+    KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
 
+// Auto-enroll rules tables
+$db->query("CREATE TABLE IF NOT EXISTS `autoenroll_rule` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `status` TINYINT(4) NOT NULL DEFAULT 0)");
+
+$db->query("CREATE TABLE IF NOT EXISTS `autoenroll_rule_department` (
+    `rule` INT(11) NOT NULL,
+    `department` INT(11) NOT NULL,
+    PRIMARY KEY (rule, department),
+    FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
+    FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE)");
+
+$db->query("CREATE TABLE IF NOT EXISTS `autoenroll_course` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `rule` INT(11) NOT NULL DEFAULT 0,
+    `course_id` INT(11) NOT NULL,
+    FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE)");
+
+$db->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `rule` INT(11) NOT NULL DEFAULT 0,
+    `department_id` INT(11) NOT NULL,
+    FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE)");
 
 $_SESSION['theme'] = 'default';
 $webDir = '..';

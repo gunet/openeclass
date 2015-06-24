@@ -2700,9 +2700,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     // upgrade queries for 3.2
     // -----------------------------------
     if (version_compare($oldversion, '3.2', '<')) {
-        // delete old key 'language' (replaced by 'default_language')
-        Database::get()->query("DELETE FROM config WHERE `key` = 'language'");    
-
         if (!DBHelper::fieldExists('link', 'user_id')) {
             Database::get()->query("ALTER TABLE `link` ADD `user_id` INT(11) DEFAULT 0 NOT NULL");
         }
@@ -2720,6 +2717,46 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `entrydata` varchar(4000) NOT NULL,
             KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
         
+        // Auto-enroll rules tables
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `autoenroll_rule` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `status` TINYINT(4) NOT NULL DEFAULT 0)");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `autoenroll_rule_department` (
+            `rule` INT(11) NOT NULL,
+            `department` INT(11) NOT NULL,
+            PRIMARY KEY (rule, department),
+            FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
+            FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE)");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `autoenroll_course` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `rule` INT(11) NOT NULL DEFAULT 0,
+            `course_id` INT(11) NOT NULL,
+            FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
+            FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE)");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `autoenroll_department` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `rule` INT(11) NOT NULL DEFAULT 0,
+            `department_id` INT(11) NOT NULL,
+            FOREIGN KEY (rule) REFERENCES autoenroll_rule(id) ON DELETE CASCADE,
+            FOREIGN KEY (department_id) REFERENCES hierarchy(id) ON DELETE CASCADE)");
+
+        // Abuse report table
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `rid` INT(11) NOT NULL,
+            `rtype` VARCHAR(50) NOT NULL,
+            `course_id` INT(11) NOT NULL,
+            `reason` VARCHAR(50) NOT NULL DEFAULT '',
+            `message` TEXT NOT NULL,
+            `timestamp` INT(11) NOT NULL DEFAULT 0,
+            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+            `status` TINYINT(1) NOT NULL DEFAULT 1,
+            INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
+            INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
+
         // delete old key 'language' (it has been replaced by 'default_language')
         Database::get()->query("DELETE FROM config WHERE `key` = 'language'");
         
@@ -2734,13 +2771,14 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `scales` text NOT NULL,
             `course_id` int(11) NOT NULL,
             KEY `course_id` (`course_id`)) $charset_spec");   
-    }    
+    }
+
     //add grading_scale_id field to assignments
     if (!DBHelper::fieldExists('assignment', 'grading_scale_id')) {
         Database::get()->query("ALTER TABLE `assignment` ADD `grading_scale_id` INT(11) NOT NULL DEFAULT '0' AFTER `max_grade`");
     }       
     // update eclass version
-    Database::get()->query("UPDATE config SET `value` = '" . ECLASS_VERSION . "' WHERE `key`='version'");
+    Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 
     // add new modules to courses by reinserting all modules
     Database::get()->queryFunc("SELECT id, code FROM course", function ($course) {
