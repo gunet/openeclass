@@ -617,9 +617,9 @@ foreach ($flatElementList as $module) {
                     'url' => "module.php?course=$course_code&amp;module_id=" . $module['module_id'],
                     'icon' => 'fa-edit'),
                 // VISIBILITY
-                array('title' => $module['visible'] == 0? $langViewHide : $langViewShow,
+                array('title' => $module['visible'] == 0? $langViewShow : $langViewHide,
                     'url' => $module['visible'] == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=" . $module['module_id'] : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
-                    'icon' => $module['visible'] == 0 ? 'fa-eye-slash' : 'fa-eye'),
+                    'icon' => $module['visible'] == 0 ? 'fa-eye' : 'fa-eye-slash'),
 //                array('title' => $langVisible,
 //                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
 //                    'icon' => 'fa-eye',
