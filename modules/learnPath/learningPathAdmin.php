@@ -310,7 +310,7 @@ switch ($cmd) {
                     <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
                     <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
                     <input type='hidden' name='cmd' value='createLabel' />
-                    <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
+                    <button class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "'>$langCreate</button>
                   </form>
                 </td>
               </tr>";
@@ -420,7 +420,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
     $dialogBox .= "
          <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
          <input type=\"hidden\" name=\"cmdid\" value=\"" . $_REQUEST['cmdid'] . "\" />
-         <input type=\"submit\" value=\"" . $langOk . "\" />
+         <button type=\"submit\" class=\"btn btn-primary\" value=\"" . $langSave . "\" >$langSave</button>
         </form>
       </td>
     </tr>
@@ -629,7 +629,7 @@ foreach ($flatElementList as $module) {
                     'icon' => $module['lock'] == 'OPEN'? 'fa-lock' : 'fa-unlock'),
                 array('title' => $langMove, // DISPLAY CATEGORY MOVE COMMAND
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'],
-                    'icon' => 'fa-mail-forward'),
+                    'icon' => 'fa-arrows'),
                 array('title' => $langUp, // DISPLAY MOVE UP COMMAND only if it is not the top learning path
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'],
                     'level' => 'primary',

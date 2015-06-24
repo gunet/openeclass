@@ -1130,7 +1130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
                                     array(
-                                        'text' => $langImport,
+                                        'text' => $langSave,
                                         'value'=> $langImport
                                     ),
                                     array(
@@ -1251,7 +1251,7 @@ EOF;
         $tool_content .= "\n    <td colspan='2'></td>";
         $tool_content .= "\n    <td colspan='3' class='right'>".form_buttons(array(
                             array(
-                                'text' => $langImport,
+                                'text' => $langSave,
                                 'value'=> $langImport
                             ),
                             array(

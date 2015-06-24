@@ -269,11 +269,18 @@ if ($is_editor) {
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                              <input type='hidden' name='cmd' value='create'>
-                              <input class='btn btn-primary' type='submit' value='$langCreate'>
-                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
-                            </div>
-                        </div>                        
+                              <input type='hidden' name='cmd' value='create'>".
+                                    form_buttons(array(
+                                        array(
+                                            'text' => $langSave,
+                                            'value' => $langCreate
+                                        ),
+                                        array(
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."</div>
+                            </div>                        
                         </form></div>";
                     }
                 } else { // create form requested
@@ -301,10 +308,17 @@ if ($is_editor) {
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                              <input type='hidden' name='cmd' value='create'>
-                              <input class='btn btn-primary' type='submit' value='$langCreate'>
-                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
-                            </div>
+                              <input type='hidden' name='cmd' value='create'>".
+                                    form_buttons(array(
+                                        array(
+                                            'text' => $langSave,
+                                            'value' => $langCreate
+                                        ),
+                                        array(
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."</div>
                         </div>                        
                         </form></div>";
                 }
