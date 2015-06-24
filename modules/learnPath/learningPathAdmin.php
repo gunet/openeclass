@@ -410,21 +410,25 @@ if ($cmd == "updatecomment") {
 $tool_content .= "</td></tr></table></div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
-    $dialogBox = "<table class=\"table-default\">
-    <tr>
-      <th>" . $langMove . ":</th>
-      <td>
-        <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
-    // build select input - $elementList has been declared in the previous big cmd case
-    $dialogBox .= build_nested_select_menu("newPos", $elementList);
-    $dialogBox .= "
-         <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
-         <input type=\"hidden\" name=\"cmdid\" value=\"" . $_REQUEST['cmdid'] . "\" />
-         <button type=\"submit\" class=\"btn btn-primary\" value=\"" . $langSave . "\" >$langSave</button>
-        </form>
-      </td>
-    </tr>
-    </table>";
+    $dialogBox = "
+    <div class='row'>
+        <div class='col-xs-12'>
+            <div class='panel panel-body'>
+                <div class='col-md-2' style='line-height: 32px;'><strong>$langMove:</strong></div>
+                <div class='col-md-10'>
+                    <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
+                        // build select input - $elementList has been declared in the previous big cmd case
+                        $dialogBox .= build_nested_select_menu("newPos", $elementList);
+                        $dialogBox .= "
+                        <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
+                        <input type=\"hidden\" name=\"cmdid\" value=\"" . $_REQUEST['cmdid'] . "\" />
+                        <button type=\"submit\" class=\"btn btn-primary\" value=\"" . $langSave . "\" >$langSave</button>
+                        <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn btn-default\" value=\"" . $langCancel . "\" >$langCancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>";
 }
 
 
