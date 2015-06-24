@@ -2991,8 +2991,15 @@ function form_buttons($btnArray) {
             $title = isset($btn['title'])?"title='$btn[title]'": '';
             $text = isset($btn['text'])? $btn['text']: $langCancel;
             $target = isset($btn['target'])?"target='$btn[target]'": '';
-            $javascript = isset($btn['javascript'])?"onclick='$btn[javascript]'": '';
+            $javascript = isset($btn['javascript'])?"onclick=$btn[javascript]": '';
             $buttons .= "<a class='btn $class' $id href='$btn[href]' $target $title $javascript $custom_field>$text</a>&nbsp;&nbsp;";
+        } elseif(!isset($btn['href']) && isset($btn['javascript'])) {
+            $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
+            $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';
+            $name = isset($btn['name'])?"name='$btn[name]'": null;
+            $value = isset($btn["value"])?"value='$btn[value]'": null;
+            $javascript = isset($btn['javascript'])?"onclick=$btn[javascript]": '';
+            $buttons .= "<input class='btn $class' $type $id $name $value $custom_field $javascript />&nbsp;&nbsp;";
         } else {
             $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
             $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';

@@ -978,8 +978,8 @@ function new_assignment() {
 //form for editing
 function show_edit_assignment($id) {
     
-    global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
-        $urlAppend, $works_url, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
+    global $tool_content, $m, $langBack, $course_code, $langCancel,
+        $urlAppend, $langSave, $works_url, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType,
         $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales ;
@@ -1306,10 +1306,19 @@ function show_edit_assignment($id) {
                 ".Tag::tagInput($id)."                 
             </div>          
             <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <input type='submit' class='btn btn-primary' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" />
-                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-            </div> 
+            <div class='col-sm-offset-2 col-sm-10'>".
+                    form_buttons(array(
+                        array(
+                            'class'         => 'btn-primary',
+                            'name'          => 'do_edit',
+                            'value'          => $langSave,
+                            'javascript'    => "selectAll('assignee_box',true)"
+                        ),
+                        array(
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        )
+                    ))
+                    ."</div> 
             </div>
     </fieldset>
     </form></div>";
