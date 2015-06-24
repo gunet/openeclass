@@ -65,6 +65,12 @@ body
     margin-top: 15px;
     margin-bottom: 15px;
 }
+.container.body_container{
+    margin-top: 0px;
+}
+.container.header_container{
+    margin-bottom: 0px;
+}
 .container-fluid {
     padding: 0px;
     max-width: 1920px;
@@ -680,7 +686,7 @@ footer.footer
 #header .navbar-brand{
     padding: 0px;
 }
-#header_section .nav-container{
+.nav-container{
     border-bottom: 1px solid #DBDBDB;
 }
 
