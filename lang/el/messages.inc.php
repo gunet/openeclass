@@ -166,12 +166,14 @@ $langAutoEnrollAdded = 'Ο κανόνας προστέθηκε';
 $langAutoEnrollCourse = 'Αυτόματη εγγραφή στα μαθήματα';
 $langAutoEnrollDepartment = 'Αυτόματη εγγραφή σε όλα τα μαθήματα των τμημάτων';
 $langAutoEnrollRule = 'Κανόνας';
+$langAutoEnrollDeleted = 'Ο κανόνας διαγράφτηκε';
 $langApplyTo = 'Όταν χρήστες';
 $langApplyDepartments = 'εγγράφονται στα τμήματα';
 $langApplyAnyDepartment = 'εγγράφονται σε οποιοδήποτε τμήμα';
 $langNoRules = 'Δεν υπάρχουν κανόνες';
 $langApplyRule = 'Εφαρμογή του κανόνα στους υπάρχοντες χρήστες κατά την αποθήκευση';
 $langRuleApplied = 'Ο κανόνας εφαρμόστηκε σε όλους τους υπάρχοντες χρήστες';
+$langSureToDelRule = "Θέλετε σίγουρα να διαγραφεί ο κανόνας;";
 
 // Stat
 $langNbProf = "Αριθμός " . $langsOfTeachers;

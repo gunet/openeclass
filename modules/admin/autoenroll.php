@@ -33,7 +33,15 @@ if (isset($_REQUEST['add'])) {
     }
 }
 
-if (isset($_POST['submit'])) {
+if (isset($_GET['delete'])) {
+    if (!($rule = getDirectReference($_GET['delete']))) {
+        forbidden();
+    }
+    if (Database::get()->query('DELETE FROM autoenroll_rule WHERE id = ?d', $rule)->affectedRows) {
+        Session::Messages($langAutoEnrollDeleted);
+    }
+    redirect_to_home_page('modules/admin/autoenroll.php');
+} elseif (isset($_POST['submit'])) {
     if (isset($_POST['id'])) {
         if (!($rule = getDirectReference($_POST['id']))) {
             forbidden();
@@ -196,9 +204,10 @@ if (isset($_POST['submit'])) {
     Database::get()->queryFunc('SELECT * FROM autoenroll_rule',
         function ($item) {
             global $rules, $i, $urlAppend, $langStudents, $langTeachers,
-                $langAutoEnrollRule, $langApplyTo, $langApplyDepartments,
-                $langApplyAnyDepartment, $langAutoEnrollCourse,
-                $langAutoEnrollDepartment, $langDelete, $langEditChange;
+                $langAutoEnrollRule, $langApplyTo, $langSureToDelRule,
+                $langApplyDepartments, $langApplyAnyDepartment,
+                $langAutoEnrollCourse, $langAutoEnrollDepartment,
+                $langDelete, $langEditChange;
             $i++;
             $rule = $item->id;
             $statusLabel = q(($item->status == USER_STUDENT)? $langStudents: $langTeachers);
@@ -214,8 +223,9 @@ if (isset($_POST['submit'])) {
                       'url' => "autoenroll.php?edit=" . getIndirectReference($rule)),
                   array(
                       'title' => $langDelete,
-                      'url' => '#',
                       'icon' => 'fa-times',
+                      'url' => "autoenroll.php?delete=" . getIndirectReference($rule),
+                      'confirm' => $langSureToDelRule,
                       'btn_class' => 'delete_btn btn-default'),
               )) . "
               </div>
