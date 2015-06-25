@@ -24,6 +24,7 @@ $require_editor = true;
 
 include '../../include/baseTheme.php';
 
+$toolName = $langGradeScales;
 $pageName = $langGradeScales;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
 
@@ -113,6 +114,17 @@ if (isset($_GET['scale_id'])) {
                 ";
         }
     }
+    $toolName = $langGradeScales;
+    $pageName = $langNewGradeScale;
+    $navigation[] = array("url" => "grading_scales.php?course=$course_code", "name" => $langGradeScales);
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'level' => 'primary-label',
+            'icon' => 'fa-reply',
+            'url' => "grading_scales?course=$course_code"
+        ),          
+    ));
     $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
@@ -183,7 +195,7 @@ if (isset($_GET['scale_id'])) {
             'icon' => 'fa-reply',
             'url' => "index.php?course=$course_code"
         ),          
-    ));
+    ),false);
 
     $grading_scales = Database::get()->queryArray("SELECT * FROM grading_scale WHERE course_id = ?d", $course_id);
     if ($grading_scales) { 
