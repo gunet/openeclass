@@ -28,6 +28,7 @@ require_once 'modules/bbb/functions.php';
 
 $toolName = $langBBBConf;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
+$navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
 
 load_js('tools.js');
 load_js('validation.js');
@@ -38,6 +39,8 @@ $bbb_server = isset($_GET['edit_server']) ? intval($_GET['edit_server']) : '';
 
 if (isset($_GET['add_server'])) {
     $pageName = $langAddBBBServer;
+    $toolName = $langBBBConf;
+    $navigation[] = array('url' => 'bbbmoduleconf.php', 'name' => $langBBBConf);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "bbbmoduleconf.php",
