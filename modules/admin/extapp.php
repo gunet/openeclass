@@ -130,22 +130,40 @@ if ($appName) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
         if($notSet){
-            $app_active = "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\" disabled=\"disabled\"> <i class=\"fa fa-toggle-off\"></i> </button>";
+            $app_active = "<button type=\"button\" class=\"btn btn-warning\" data-app=\"" . $app->getName() . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
         } else {
-            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i> </button>";
+            $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
         }
         $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 
-        $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "<div class=\"extapp-controls\"><div class=\"btn-group btn-group-xs\">" . $app_active . "<a href=\"extapp.php?edit=" . $app->getName() . "\" class=\"btn btn-default\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></div></td>\n";
+        $tool_content .= "<td class=\"text-muted clearfix\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">" . $app_active . "<a href=\"extapp.php?edit=" . $app->getName() . "\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>\n";
         $tool_content .="</tr>\n";
     }
     $tool_content .="<tr>\n";
     $tool_content .= "<td style=\"width:90px; padding:0px;\"><div class=\"text-center\" style=\"padding:10px;\"><a href=\"bbbmoduleconf.php\"><img height=\"50\" width=\"89\"  class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></div></td>\n";
-    $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">$langBBBDescription<div class=\"extapp-controls\"><div class=\"btn-group btn-group-xs\"><span class=\"btn btn-success\"><i class=\"fa fa-toggle-on fw\"></i></span> <a href=\"bbbmoduleconf.php\" class=\"btn btn-default\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></div></td>\n";
+    $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">$langBBBDescription<div class=\"extapp-controls\"><div class=\"btn-group btn-group-xs\"><span class=\"btn btn-success\"><i class=\"fa fa-toggle-on fw\"></i></span> <a href=\"bbbmoduleconf.php\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></div></td>\n";
     $tool_content .="</tr>\n";
 
     $tool_content.="</table>\n";
     $tool_content .= "</div>\n</div>\n";
+    
+    
+    // Modal message when trying to enable tool without applying settings
+    $tool_content .= "
+                        <div class='modal fade' id='noSettings' tabindex='-1' role='dialog' aria-labelledby='myModalLabel'>
+                          <div class='modal-dialog' role='document'>
+                            <div class='modal-content'>
+                              <div class='modal-header'>
+                                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                <h4 class='modal-title' id='myModalLabel'>Δεν έχει ρυθμιστεί</h4>
+                              </div>
+                              <div class='modal-body'>
+                                Για να ενεργοποιήσετε αυτό το εργαλείο θα πρέπει πρώτα να εισάγετε τις απαιτούμενες ρυθμίσεις.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+            ";
 }
 
 draw($tool_content, 3, null, $head_content);

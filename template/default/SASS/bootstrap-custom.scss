@@ -2681,6 +2681,14 @@ span[data-cal-date]
     table.extapp-table tr{
         td{
             padding: 20px;
+            .extapp-dscr-wrapper{
+                width: 85%;
+                float: left;
+            }
+            .extapp-controls{
+                width: 100px;
+                float: right;
+            }
         }
     }
 }
