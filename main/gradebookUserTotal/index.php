@@ -27,15 +27,14 @@ require_once '../../include/baseTheme.php';
 require_once 'modules/gradebook/functions.php';
 
 //Module name
-$pageName = $langGradebook;
-$userID = $uid;
+$toolName = $langGradebook;
 $content = false;
 $grade_content = '';
 $courses = Database::get()->queryArray("SELECT course.id course_id, code, title FROM course, course_user, user 
                                             WHERE course.id = course_user.course_id
                                             AND course_user.user_id = ?d 
                                             AND user.id = ?d
-                                            AND course.visible != " . COURSE_INACTIVE . "", $userID, $userID);
+                                            AND course.visible != " . COURSE_INACTIVE . "", $uid, $uid);
 if (count($courses) > 0) {
     $grade_content .= "<div class ='table-responsive'>
             <table class='table-default'><tr><th>$langCourse</th><th>$langGradebookGrade</th></tr>";
@@ -45,12 +44,12 @@ if (count($courses) > 0) {
         $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);        
         if ($gradebook) {            
             $gradebook_id = $gradebook->id;
-            $grade = userGradeTotal($gradebook_id, $userID, $code, true);
+            $grade = userGradeTotal($gradebook_id, $uid, $code, true);
             if ($grade) {
                 $content = true;
                 $grade_content .= "<tr><td>".$course1->title."</td>
-                    <td><a href='../../modules/gradebook/index.php?course=$code'>".$grade."</a> <small>($langMax: ".$gradebook->range.")</small></td></tr>";
-            }            
+                    <td><a href='../../modules/gradebook/index.php?course=$code'>" . $grade ." / " . $gradebook->range . "</a></td></tr>";
+            }
         }
     }
     $grade_content .= "</table></div>";
@@ -63,10 +62,4 @@ if (count($courses) > 0) {
     $tool_content .= "<div class='alert alert-warning'>$langNoGradebook</div>";
 }
 
-
 draw($tool_content, 1, null, $head_content);
-
-
-
-
-  

@@ -185,7 +185,10 @@ function student_view_gradebook($gradebook_id) {
     $results = count($result);
 
     if ($results > 0) {
-        $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: <b>" . userGradeTotal($gradebook_id, $uid) . "</b> </div>";
+        if ($checkForRecords) {
+            $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
+            $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: <b>" . userGradeTotal($gradebook_id, $uid) . " / ". $range . "</b></div>";
+        }
         if(weightleft($gradebook_id, 0) != 0) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</p>";
         }
@@ -1130,12 +1133,15 @@ function userGradebookTotalActivityStats ($activityID, $gradebook_id) {
     
     global $langUsers, $langMeanValue, $langMinValue, $langMaxValue;
     
-    $users = Database::get()->querySingle("SELECT SUM(grade) as count, COUNT(gradebook_users.uid) as users FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ", $activityID, $gradebook_id);
+    $users = Database::get()->querySingle("SELECT SUM(grade) as count, COUNT(gradebook_users.uid) AS users 
+                                        FROM gradebook_book, gradebook_users 
+                                        WHERE gradebook_users.uid=gradebook_book.uid 
+                                    AND gradebook_activity_id = ?d 
+                                    AND gradebook_users.gradebook_id = ?d ", $activityID, $gradebook_id);
     
     $sumGrade = $users->count;
     //this is different than global participants number (it is limited to those that have taken degree)
-    $participantsNumber = $users->users;
-    
+    $participantsNumber = $users->users;   
 
     $q = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade ASC limit 1 ", $activityID, $gradebook_id);
     if ($q) {
