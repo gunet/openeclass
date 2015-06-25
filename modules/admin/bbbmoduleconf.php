@@ -85,8 +85,17 @@ if (isset($_GET['add_server'])) {
     $tool_content .= "<label class='col-sm-3 control-label'>$langBBBServerOrder:</label>
             <div class='col-sm-9'><input class='form-control' type='text' name='weight'></div>";
     $tool_content .= "</div>";
-    $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'><input class='btn btn-primary' type='submit' name='submit' value='$langAddModify'></div></div>";
-    $tool_content .= "</fieldset></form></div>";
+    $tool_content .= "<div class='form-group'><div class='col-sm-offset-3 col-sm-9'>";
+    $tool_content .=    form_buttons(array(
+                            array(
+                                'text' => $langSave,
+                                'name' => 'submit'
+                            ),
+                            array(
+                                'href' => 'bbbmoduleconf.php'
+                            )
+                        ));
+    $tool_content .= "</div></div></fieldset></form></div>";
 
     $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
