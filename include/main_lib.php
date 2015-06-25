@@ -3575,7 +3575,8 @@ function user_hook($user_id) {
         SELECT id FROM autoenroll_rule
             LEFT JOIN autoenroll_rule_department
                 ON autoenroll_rule.id = autoenroll_rule_department.rule
-            WHERE rule IS NULL',
+            WHERE rule IS NULL AND
+                  status = ?d',
         function ($rule) use ($user_id) {
             $id = $rule->id;
             Database::get()->query('INSERT IGNORE INTO course_user
@@ -3583,5 +3584,11 @@ function user_hook($user_id) {
                 (SELECT course_id, ?d, ?d, NOW(), NOW()
                     FROM autoenroll_course
                     WHERE rule = ?d)', $user_id, USER_STUDENT, $id);
-        }, $status, $user_id);
+            Database::get()->query('INSERT IGNORE INTO course_user
+                (course_id, user_id, status, reg_date, document_timestamp)
+                (SELECT course, ?d, ?d, NOW(), NOW()
+                    FROM autoenroll_department, course_department
+                    WHERE department_id = department AND
+                          rule = ?d)', $user_id, USER_STUDENT, $id);
+        }, $status, $user_id, $status);
 }

@@ -300,14 +300,30 @@ function apply_autoenroll($rule) {
                 FROM autoenroll_course, user
                 WHERE rule = ?d AND status = ?d)',
             USER_STUDENT, $rule, $status);
+        Database::get()->query("INSERT IGNORE INTO course_user
+            (course_id, user_id, status, reg_date, document_timestamp)
+            (SELECT course_id, user.id, ?d, NOW(), NOW()
+                FROM autoenroll_department, course_department, user
+                WHERE department_id = course_department.department AND
+                      rule = ?d AND status = ?d)",
+            USER_STUDENT, $depsParam, $rule, $status);
     } else {
-        $depsSQL = implode(', ', array_fill(0, '?d', count($deps)));
+        $depsSQL = implode(', ', array_fill(0, count($deps), '?d'));
         $depsParam = array_map(function ($d) { return $d->department; }, $deps);
         Database::get()->query("INSERT IGNORE INTO course_user
             (course_id, user_id, status, reg_date, document_timestamp)
             (SELECT course_id, user.id, ?d, NOW(), NOW()
                 FROM autoenroll_course, user, user_department
                 WHERE user.id = user_department.user AND
+                      user_department.department IN ($depsSQL) AND
+                      rule = ?d AND status = ?d)",
+            USER_STUDENT, $depsParam, $rule, $status);
+        Database::get()->query("INSERT IGNORE INTO course_user
+            (course_id, user_id, status, reg_date, document_timestamp)
+            (SELECT course, user.id, ?d, NOW(), NOW()
+                FROM autoenroll_department, course_department, user, user_department
+                WHERE user.id = user_department.user AND
+                      department_id = course_department.department AND
                       user_department.department IN ($depsSQL) AND
                       rule = ?d AND status = ?d)",
             USER_STUDENT, $depsParam, $rule, $status);
