@@ -146,9 +146,9 @@ if (isset($_GET['scale_id'])) {
                                     <table class='table-default' id='scale_table'>
                                         <thead>
                                             <tr>
-                                                <th>Λεκτικό</th>
-                                                <th>Τιμή</th>
-                                                <th class='text-center option-btn-cell'>".icon('fa-gears')."</th>
+                                                <th style='width:47%'>Λεκτικό</th>
+                                                <th style='width:47%'>Τιμή</th>
+                                                <th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>
                                             </tr>
                                         </thead>
                                         <tbody>
