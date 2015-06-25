@@ -136,7 +136,7 @@ if (isset($_GET['scale_id'])) {
                                             <tr>
                                                 <th>Λεκτικό</th>
                                                 <th>Τιμή</th>
-                                                <th class='text-center'>".icon('fa-gears')."</th>
+                                                <th class='text-center option-btn-cell'>".icon('fa-gears')."</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -150,10 +150,17 @@ if (isset($_GET['scale_id'])) {
                             </div>                                                       
                         </div>                         
                         <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input type='submit' class='btn btn-primary' name='submitScale' value='$langSubmit'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-                            </div>
+                            <div class='col-sm-offset-2 col-sm-10'>".
+                                form_buttons(array(
+                                    array(
+                                        'text' => $langSave,
+                                        'name' => 'submitScale'
+                                    ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                                    )
+                                ))
+                                ."</div>
                         </div>                        
                     </fieldset>
                     </form>
