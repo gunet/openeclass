@@ -44,6 +44,10 @@ require_once 'modules/drives/clouddrive.php';
 
 $require_help = true;
 $helpTopic = 'Doc';
+
+// Used to check for quotas
+$diskUsed = dir_total_space($basedir);
+
 if (defined('COMMON_DOCUMENTS')) {
     $menuTypeID = 3;
     $toolName = $langCommonDocs;
@@ -79,9 +83,6 @@ copyright_info_init();
 if (defined('EBOOK_DOCUMENTS')) {
     $navigation[] = array('url' => 'edit.php?course=' . $course_code . '&amp;id=' . $ebook_id, 'name' => $langEBookEdit);
 }
-
-// Used to check for quotas
-$diskUsed = dir_total_space($basedir);
 
 if (isset($_GET['showQuota'])) {
     $navigation[] = array('url' => documentBackLink(''), 'name' => $pageName);
