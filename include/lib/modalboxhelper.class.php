@@ -81,7 +81,16 @@ class ModalBoxHelper {
                                       scrolling   : false,
                                       opacity     : 0.8,
                                       ' . $colorbox_gallery . '
-                                      current     : "' . $langColorboxCurrent . '"
+                                      current     : "' . $langColorboxCurrent . '",
+                                      onComplete  : function() {
+                                        $(".cboxIframe").attr({
+                                            webkitAllowFullScreen : true,
+                                            mozallowfullscreen    : true,
+                                            oallowfullscreen      : true,
+                                            msallowfullscreen     : true,
+                                            allowFullScreen       : true,
+                                        });
+                                      }
                              });
                              $(".colorbox").colorbox({
                                       minWidth    : 300,
