@@ -315,7 +315,7 @@ if ($is_editor) {
                            || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))) {
             Session::Messages("$langGradebookWeightAlert", "alert-warning");
             redirect_to_home_page("modules/gradebook/index.php");            
-        } elseif ((empty($weight) or ($weight == 0))) {            
+        } elseif ((empty($weight) or ($weight == 0))) {
             Session::Messages("$langGradebookGradeAlert2", "alert-warning");
             redirect_to_home_page("modules/gradebook/index.php");
         } else {
@@ -368,18 +368,16 @@ if ($is_editor) {
             $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d", $gradebook_id);
 
             if ($result){
-                foreach ($result as $announce) {
-
-                    $attend = floatval($_POST[$announce->id]); //get the record from the teacher (input name is the activity id)
+                foreach ($result as $activity) {
+                    $attend = floatval($_POST[$activity->id]); //get the record from the teacher (input name is the activity id)
                     //check if there is record for the user for this activity
-                    $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $announce->id, $userID);
-
+                    $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $activity->id, $userID);
                     if($checkForBook){
                         //update
                         Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d ", $attend, $checkForBook->id);
-                    }else{
+                    } else {
                         //insert
-                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $announce->id, $attend, '');
+                        Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", $userID, $activity->id, $attend, '');
                     }
                 }
                 $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
