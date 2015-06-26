@@ -28,7 +28,7 @@
  * @global type $gradebook_range
  * @global type $langTitle
  * @global type $langGradebookActivityDate2
- * @global type $langGradebookType
+ * @global type $langType
  * @global type $langGradebookNewUser
  * @global type $langGradebookWeight
  * @global type $langGradebookBooking
@@ -48,7 +48,7 @@
 function display_user_grades($gradebook_id) {
     
     global $course_code, $tool_content, $gradebook_range,
-           $langTitle, $langGradebookActivityDate2, $langGradebookType, $langGradebookNewUser,
+           $langTitle, $langGradebookActivityDate2, $langType, $langGradebookNewUser,
            $langGradebookWeight, $langGradebookBooking, $langGradebookNoActMessage1,
            $langGradebookNoActMessage2, $langGradebookNoActMessage3, $langGradebookActCour,
            $langGradebookAutoGrade, $langGradebookΝοAutoGrade, $langGradebookActAttend,
@@ -72,7 +72,7 @@ function display_user_grades($gradebook_id) {
             $tool_content .= "<h5>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</h5>";
             $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <table class='table-default'>";
-            $tool_content .= "<tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>";
+            $tool_content .= "<tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>";
             $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
             $tool_content .= "</tr>";
         } else {
@@ -242,11 +242,11 @@ function student_view_gradebook($gradebook_id) {
  * @global type $langGradebookActivityDate2
  * @global type $langGradebookWeight
  * @global type $langGradebookNoTitle
- * @global type $langGradebookType
+ * @global type $langType
  * @global type $langExercise
  * @global type $langGradebookInsAut
  * @global type $langGradebookInsMan
- * @global type $langGradebookAss
+ * @global type $langAssignment
  * @global type $langGradebookActivityAct
  * @global type $langAttendanceActivity
  * @global type $langDelete
@@ -261,29 +261,34 @@ function display_gradebook($gradebook_id) {
     global $course_code, $urlServer, $tool_content;
     global $langGradebookGradeAlert, $langGradebookNoActMessage1, 
            $langTitle, $langView, $langScore, $langGradebookActList,
-           $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langGradebookType, $langExercise, 
+           $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType, $langExercise, 
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete, 
-           $langEditChange, $langYes, $langNo, $langPreview, $langGradebookAss, $langGradebookActivityAct,
+           $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType;
     
-    //check if there is spare weight
-        if(weightleft($gradebook_id, 0)) {
-            $weightLeftMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
-        } else {
-            $weightLeftMessage = "";
-        }
+        
+        $weightMessage = "";
         //get all the available activities
         $result = Database::get()->queryArray("SELECT * FROM gradebook_activities WHERE gradebook_id = ?d ORDER BY `DATE` DESC", $gradebook_id);
         $activityNumber = count($result);
-
+        
         if (!$result or $activityNumber == 0) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookNoActMessage1</a></div>";
-        } else {            
-            $tool_content .= $weightLeftMessage;
+        } else {
+            foreach ($result as $details) {
+                if ($details->weight == 0 or (empty($details->weight))) { // check if there are activities with 0% weight
+                    $weightMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert3</div>";
+                }
+            }
+            //check if there is spare weight
+            if(weightleft($gradebook_id, 0)) {
+                $weightMessage = "<div class='alert alert-warning'>$langGradebookGradeAlert (" . weightleft($gradebook_id, 0) . "%)</div>";
+            }
+            $tool_content .= $weightMessage;
             $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                               <table class='table-default'>
                               <tr class='list-header'><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
-                              <tr class='list-header'><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langGradebookType</th><th>$langGradebookWeight</th>
+                              <tr class='list-header'><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>
                               <th class='text-center'>$langView</th>
                               <th class='text-center'>$langScore</th>
                               <th class='text-center'><i class='fa fa-cogs'></i></th>
@@ -311,7 +316,7 @@ function display_gradebook($gradebook_id) {
 
                 if ($details->module_auto_id) {
                     if ($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
-                        $tool_content .= "<td class='smaller'>$langGradebookAss";
+                        $tool_content .= "<td class='smaller'>$langAssignment";
                     }
                     if ($details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
                         $tool_content .= "<td class='smaller'>$langExercise ";
@@ -451,7 +456,7 @@ function display_available_assignments($gradebook_id) {
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
             if($newAssToGradebook->assign_to_specific){
-                $content .= "($langGradebookAssignSpecific)<br>";
+                $content .= "($langAssignmentignSpecific)<br>";
                 $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname , user.givenname FROM `assignment_to_specific`, user WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);
                 foreach ($checkForAssSpec as $checkForAssSpecR) {
                     $content .= q($checkForAssSpecR->surname). " " . q($checkForAssSpecR->givenname) . "<br>";
@@ -737,7 +742,7 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
  * @global type $langGradebookInsAut
  * @global type $langAdd
  * @global type $langAdd
- * @global type $langGradebookType
+ * @global type $langType
  * @global type $langGradebookExams
  * @global type $langGradebookLabs
  * @global type $langGradebookOral
@@ -750,7 +755,7 @@ function add_gradebook_other_activity($gradebook_id) {
     global $tool_content, $course_code, $visible,
            $langTitle, $langGradebookActivityDate2, $langGradebookActivityWeight,
            $langGradeVisible, $langComments, $langGradebookInsAut, $langAdd,
-           $langAdd, $langGradebookType, $langGradebookExams, $langGradebookLabs, 
+           $langAdd, $langType, $langGradebookExams, $langGradebookLabs, 
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, 
            $langGradebookRemainingGrade;
     
@@ -787,7 +792,7 @@ function add_gradebook_other_activity($gradebook_id) {
                         if (!isset($contentToModify)) $contentToModify = "";
                         @$tool_content .= "
                         <div class='form-group'>
-                            <label for='activity_type' class='col-sm-2 control-label'>$langGradebookType:</label>
+                            <label for='activity_type' class='col-sm-2 control-label'>$langType:</label>
                             <div class='col-sm-10'>
                                 <select name='activity_type' class='form-control'>
                                     <option value=''  " . typeSelected($activity_type, '') . " >-</option>
