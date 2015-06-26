@@ -238,6 +238,7 @@
             <xs:element name="confirmCurriculum"               type="t_boolean"/>
             <xs:element name="confirmVideolectures"            type="t_boolean"/>
             <xs:element name="videolectures"                   type="t_integer"/>
+            <xs:element name="hits"                            type="t_integer"/>
             <xs:element name="confirmAMinusLevel"              type="t_boolean"/>
             <xs:element name="confirmALevel"                   type="t_boolean"/>
             <xs:element name="confirmAPlusLevel"               type="t_boolean"/>
