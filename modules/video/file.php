@@ -33,6 +33,11 @@ if (strpos($_GET['course'], '..') !== false) {
     exit();
 }
 
+$disposition = 'inline';
+if (isset($_GET['attachment'])) {
+    $disposition = 'attachment';
+}
+
 // locate course id
 $course_id = null;
 $res1 = Database::get()->querySingle("SELECT course.id FROM course WHERE course.code = ?s", q($_GET['course']));
@@ -70,4 +75,4 @@ if (!$valid) {
 
 $vObj = MediaResourceFactory::initFromVideo($res2);
 $real_file = $webDir . "/video/" . q($_GET['course']) . q($vObj->getPath());
-send_file_to_client($real_file, my_basename(q($vObj->getUrl())), 'inline', true);
+send_file_to_client($real_file, my_basename(q($vObj->getUrl())), $disposition, true);
