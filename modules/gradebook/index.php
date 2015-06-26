@@ -272,7 +272,7 @@ if ($is_editor) {
             redirect_to_home_page("modules/gradebook/index.php");
     }
     
-    //FORM: new activity (or edit) form to gradebook module
+    //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
         add_gradebook_other_activity($gradebook_id);        
         //do not show the activities list
@@ -309,12 +309,15 @@ if ($is_editor) {
             $actDate = '0000-00-00 00:00:00';
         } else {
             $actDate = $_POST['date'];    
-        }
-        $visible = isset($_POST['visible']) ? 1 : 0;
-        
-        if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))) {
+        }        
+        $visible = isset($_POST['visible']) ? 1 : 0;        
+        if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) 
+                           || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))) {
             Session::Messages("$langGradebookWeightAlert", "alert-warning");
             redirect_to_home_page("modules/gradebook/index.php");            
+        } elseif ((empty($weight) or ($weight == 0))) {            
+            Session::Messages("$langGradebookGradeAlert2", "alert-warning");
+            redirect_to_home_page("modules/gradebook/index.php");
         } else {
             if ($_POST['id']) {               
                 //update

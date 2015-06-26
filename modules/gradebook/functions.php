@@ -264,7 +264,7 @@ function display_gradebook($gradebook_id) {
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langGradebookType, $langExercise, 
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete, 
            $langEditChange, $langYes, $langNo, $langPreview, $langGradebookAss, $langGradebookActivityAct,
-           $gradebook_exams, $gradebook_labs, $gradebook_oral, $gradebook_progress, $gradebook_other_type;
+           $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType;
     
     //check if there is spare weight
         if(weightleft($gradebook_id, 0)) {
@@ -292,31 +292,21 @@ function display_gradebook($gradebook_id) {
                 $content = ellipsize_html($details->description, 50);                
                 $tool_content .= "<tr><td><b>";
                 if (empty($details->title)) {
-                    $tool_content .= "$langGradebookNoTitle<br>";
-                    $tool_content .= "<small class='help-block'>";
-                    switch ($details->activity_type) {
-                        case 1: $tool_content .= "($gradebook_oral)"; break;
-                        case 2: $tool_content .= "($gradebook_labs)"; break;
-                        case 3: $tool_content .= "($gradebook_progress)"; break;
-                        case 4: $tool_content .= "($gradebook_exams)"; break;
-                        case 5: $tool_content .= "($gradebook_other_type)"; break;
-                        default : $tool_content .= "";
-                    }
-                    $tool_content .= "</small";
-                } else {                    
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$details->id'>" . q($details->title) . "</a>";                    
-                    $tool_content .= "<small class='help-block'>";
-                    switch ($details->activity_type) {
-                        case 1: $tool_content .= "($gradebook_oral)"; break;
-                        case 2: $tool_content .= "($gradebook_labs)"; break;
-                        case 3: $tool_content .= "($gradebook_progress)"; break;
-                        case 4: $tool_content .= "($gradebook_exams)"; break;
-                        case 5: $tool_content .= "($gradebook_other_type)"; break;
-                        default : $tool_content .= "";
-                    }
-                    $tool_content .= "</small>";
+                    $tool_content .= "$langGradebookNoTitle<br>";                 
+                } else {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$details->id'>" . q($details->title) . "</a>";
                 }
-                $tool_content .= "</b>";                
+                $tool_content .= "<small class='help-block'>";
+                switch ($details->activity_type) {
+                     case 1: $tool_content .= "($langGradebookOral)"; break;
+                     case 2: $tool_content .= "($langGradebookLabs)"; break;
+                     case 3: $tool_content .= "($langGradebookProgress)"; break;
+                     case 4: $tool_content .= "($langGradebookExams)"; break;
+                     case 5: $tool_content .= "($langGradebookOtherType)"; break;
+                     default : $tool_content .= "";
+                 }
+                $tool_content .= "</small";
+                $tool_content .= "</b>";
                 $tool_content .= "</td><td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>";
 
                 if ($details->module_auto_id) {
@@ -605,12 +595,6 @@ function display_gradebook_users($gradebook_id, $actID) {
             <td>" . display_user($resultUser->userID). " $am_message</td>
             <td>" . nice_format($resultUser->reg_date) . "</td>";
             $tool_content .= "<td>$user_grade";
-            /*if(weightleft($gradebook_id, 0) == 0) {
-                $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID);
-            } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
-                $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID) . " (<small>" . $langGradebookGradeAlert . "</small>)";
-            }*/
-            //if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
             if ($user_grade > $gradebook_range) {
                 $tool_content .= "<span class='help-block'><small>$langGradebookOutRange</small></span>";
             }
@@ -657,9 +641,9 @@ function display_gradebook_users($gradebook_id, $actID) {
  */
 function add_gradebook_activity($gradebook_id, $id, $type) {
     
-    global $course_id;
+    global $course_id, $langLearningPath;
     
-    if ($type == 1) { //  add  assignments
+    if ($type == GRADEBOOK_ACTIVITY_ASSIGNMENT) { //  add  assignments
         //checking if it's new or not
         $checkForAss = Database::get()->querySingle("SELECT * FROM assignment WHERE assignment.course_id = ?d 
                                                         AND assignment.active = 1 AND assignment.id 
@@ -671,13 +655,14 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
             $module_auto_id = $checkForAss->id;
             $module_auto_type = 1;
             $module_auto = 1; //auto grade enabled by default
+            $module_weight = weightleft($gradebook_id, '');
             $actTitle = $checkForAss->title;
             $actDate = $checkForAss->deadline;
             $actDesc = $checkForAss->description;
             Database::get()->query("INSERT INTO gradebook_activities 
                                         SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, 
-                                        module_auto_id = ?d, auto = ?d, module_auto_type = ?d", 
-                                    $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
+                                        weight = ?d, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", 
+                                    $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
             $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
                 foreach ($sql as $u) {
                     $grd = Database::get()->querySingle("SELECT grade FROM assignment_submit WHERE assignment_id = ?d AND uid = $u->uid", $id);
@@ -688,7 +673,7 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
         }
     }
 
-    if ($type == 2) { // add exercises
+    if ($type == GRADEBOOK_ACTIVITY_EXERCISE) { // add exercises
         //checking if it is new or not
         $checkForExe = Database::get()->querySingle("SELECT * FROM exercise WHERE exercise.course_id = ?d
                                                             AND exercise.active = 1 AND exercise.id 
@@ -699,14 +684,15 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
             $module_auto_id = $checkForExe->id;
             $module_auto_type = 2; //2 for exercises
             $module_auto = 1;
+            $module_weight = weightleft($gradebook_id, '');
             $actTitle = $checkForExe->title;
             $actDate = $checkForExe->end_date;
             $actDesc = $checkForExe->description;
 
             Database::get()->query("INSERT INTO gradebook_activities 
                                         SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, 
-                                        module_auto_id = ?d, auto = ?d, module_auto_type = ?d", 
-                                    $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);            
+                                        weight = ?d, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", 
+                                    $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);            
             $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
             foreach ($sql as $u) {
                 update_gradebook_book($u->uid, $id, 0, GRADEBOOK_ACTIVITY_EXERCISE);                                	
@@ -714,7 +700,7 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
         }
     }
     
-    if ($type == 3) {    // add learning path        
+    if ($type == GRADEBOOK_ACTIVITY_LP) {    // add learning path        
         //checking if it is new or not
         $checkForLp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d 
                                                     AND learnPath_id NOT IN 
@@ -726,13 +712,14 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
             $module_auto_id = $checkForLp->learnPath_id;
             $module_auto_type = 3; //3 for lp
             $module_auto = 1;
+            $module_weight = weightleft($gradebook_id, '');
             $actTitle = $checkForLp->name;
             $actDate = date("Y-m-d");
             $actDesc = $langLearningPath . ": " . $checkForLp->name;
             Database::get()->query("INSERT INTO gradebook_activities 
                             SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s, 
-                                module_auto_id = ?d, auto = ?d, module_auto_type = ?d", 
-                            $gradebook_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
+                                weight = ?d, module_auto_id = ?d, auto = ?d, module_auto_type = ?d", 
+                            $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
         }
     }
 }
@@ -751,11 +738,11 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
  * @global type $langAdd
  * @global type $langAdd
  * @global type $langGradebookType
- * @global type $gradebook_exams
- * @global type $gradebook_labs
- * @global type $gradebook_oral
- * @global type $gradebook_progress
- * @global type $gradebook_other_type
+ * @global type $langGradebookExams
+ * @global type $langGradebookLabs
+ * @global type $langGradebookOral
+ * @global type $langGradebookProgress
+ * @global type $langGradebookOtherType
  * @param type $gradebook_id
  */
 function add_gradebook_other_activity($gradebook_id) {
@@ -763,7 +750,9 @@ function add_gradebook_other_activity($gradebook_id) {
     global $tool_content, $course_code, $visible,
            $langTitle, $langGradebookActivityDate2, $langGradebookActivityWeight,
            $langGradeVisible, $langComments, $langGradebookInsAut, $langAdd,
-           $langAdd, $langGradebookType, $gradebook_exams, $gradebook_labs, $gradebook_oral, $gradebook_progress, $gradebook_other_type;
+           $langAdd, $langGradebookType, $langGradebookExams, $langGradebookLabs, 
+           $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, 
+           $langGradebookRemainingGrade;
     
         
     $tool_content .= "            
@@ -802,11 +791,11 @@ function add_gradebook_other_activity($gradebook_id) {
                             <div class='col-sm-10'>
                                 <select name='activity_type' class='form-control'>
                                     <option value=''  " . typeSelected($activity_type, '') . " >-</option>
-                                    <option value='4' " . typeSelected($activity_type, 4) . " >" . $gradebook_exams . "</option>
-                                    <option value='2' " . typeSelected($activity_type, 2) . " >" . $gradebook_labs . "</option>
-                                    <option value='1' " . typeSelected($activity_type, 1) . " >" . $gradebook_oral . "</option>
-                                    <option value='3' " . typeSelected($activity_type, 3) . " >" . $gradebook_progress . "</option>
-                                    <option value='5' " . typeSelected($activity_type, 5) . " >" . $gradebook_other_type . "</option>
+                                    <option value='4' " . typeSelected($activity_type, 4) . " >" . $langGradebookExams . "</option>
+                                    <option value='2' " . typeSelected($activity_type, 2) . " >" . $langGradebookLabs . "</option>
+                                    <option value='1' " . typeSelected($activity_type, 1) . " >" . $langGradebookOral . "</option>
+                                    <option value='3' " . typeSelected($activity_type, 3) . " >" . $langGradebookProgress . "</option>
+                                    <option value='5' " . typeSelected($activity_type, 5) . " >" . $langGradebookOtherType . "</option>
                                 </select>
                             </div>
                         </div>
@@ -825,7 +814,7 @@ function add_gradebook_other_activity($gradebook_id) {
                         <div class='form-group'>
                             <label for='weight' class='col-sm-2 control-label'>$langGradebookActivityWeight:</label>
                             <div class='col-sm-10'>
-                                <input type='text' class='form-control' name='weight' value='$weight' size='5' /> (" . weightleft($gradebook_id, '') . " % $langGradebookActivityWeightLeft)
+                                <input type='text' class='form-control' name='weight' value='$weight' size='5'><span class='help-block'>($langGradebookRemainingGrade: " . weightleft($gradebook_id, '') . "%)</span>
                             </div>
                         </div>
                         <div class='form-group'>
