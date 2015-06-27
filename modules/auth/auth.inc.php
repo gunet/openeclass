@@ -34,6 +34,7 @@
  */
 
 require_once 'include/log.php';
+require_once 'include/lib/user.class.php';
 // pop3 class
 require_once 'modules/auth/methods/pop3.php';
 require_once 'include/phpass/PasswordHash.php';
@@ -895,7 +896,17 @@ function shib_cas_login($type) {
     	} else { // redirect user to mail_verify_change.php
 	    	$_SESSION['mail_verification_required'] = 1;
     	}
+        $options = register_hook(array(
+            'attributes' => isset($_SESSION['cas_attributes'])? $_SESSION['cas_attributes']: array(),
+            'am' => $am));
 
+        if (!$options['accept']) {
+            foreach (array_keys($_SESSION) as $key) {
+                unset($_SESSION[$key]);
+            }
+            Session::Messages($langRegistrationDenied, 'alert-warning');
+            redirect_to_home_page();
+        }
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
@@ -903,7 +914,10 @@ function shib_cas_login($type) {
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am, $verified_mail)->lastInsertID;
+                $surname, $givenname, $type, $uname, $email, $options['status'],
+                $language, $options['am'], $verified_mail)->lastInsertID;
+        $userObj = new User();
+        $userObj->refresh($_SESSION['uid'], $options['departments']);
         user_hook($_SESSION['uid']);
     } else {
         // user not registered, automatic registration disabled

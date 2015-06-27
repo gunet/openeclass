@@ -2830,6 +2830,7 @@ $langUsersRegistered = "Οι παρακάτω χρήστες προστέθηκ�
 $langNotifyRegUser1 = "Πραγματοποιήθηκε η εγγραφή σας στο μάθημα ";
 $langNotifyRegUser2 = " από τον διαχειριστή του μαθήματος.";
 $langToUser = "στον χρήστη";
+$langRegistrationDenied = 'Η εγγραφή σας στην πλατφόρμα δεν επιτρέπεται.';
 
 // search_user.php
 $langUserNoneMasc = "-";

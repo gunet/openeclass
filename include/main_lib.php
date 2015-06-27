@@ -3461,17 +3461,20 @@ function my_dirname($path) {
 function isIPv4($ip) {
     return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 }
+
 function isIPv4cidr($ip) {
     return preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$/", $ip);
 }
+
 function isIPv6($ip) {
     return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
 }
+
 function isIPv6cidr($ip) {
     return preg_match("/^((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?(\/(\d|\d\d|1[0-1]\d|12[0-8]))$/", $ip);
 }
-function ip_v4_cidr_match($ip, $range)
-{
+
+function ip_v4_cidr_match($ip, $range) {
     list ($subnet, $bits) = explode('/', $range);
     $ip = ip2long($ip);
     $subnet = ip2long($subnet);
@@ -3479,9 +3482,9 @@ function ip_v4_cidr_match($ip, $range)
     $subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
     return ($ip & $mask) == $subnet;
 }
+
 // converts inet_pton output to string with bits
-function inet_to_bits($inet) 
-{
+function inet_to_bits($inet) {
    $unpacked = unpack('A16', $inet);
    $unpacked = str_split($unpacked[1]);
    $binaryip = '';
@@ -3490,8 +3493,8 @@ function inet_to_bits($inet)
    }
    return $binaryip;
 }
-function ip_v6_cidr_match($ip, $range)
-{
+
+function ip_v6_cidr_match($ip, $range) {
     $ip = inet_pton($ip);
     $binaryip=inet_to_bits($ip);
 
@@ -3504,7 +3507,8 @@ function ip_v6_cidr_match($ip, $range)
 
     return $ip_net_bits == $net_bits;
 }
-function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array){
+
+function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array) {
     if(isIPv4($ip)){
         foreach ($ips_or_cidr_array as $ip_or_cidr) {
             if (isIPv4cidr($ip_or_cidr)) {
@@ -3524,13 +3528,14 @@ function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array){
     }
     return false;
 }
+
 /**
-* Get nearest value from specific key of a multidimensional array
-*
-* @param $key integer
-* @param $arr array
-* @return array
-*/
+ * Get nearest value from specific key of a multidimensional array
+ *
+ * @param $key integer
+ * @param $arr array
+ * @return array
+ */
 function closest($search, $arr) {
    $closest = null;
    $position = null;
@@ -3543,13 +3548,14 @@ function closest($search, $arr) {
    }
    return array('key' => $position, 'value' => $closest);
 }
+
 /**
-* Get all values from specific key in a multidimensional array
-*
-* @param $key string
-* @param $arr array
-* @return null|string|array
-*/
+ * Get all values from specific key in a multidimensional array
+ *
+ * @param $key string
+ * @param $arr array
+ * @return null|string|array
+ */
 function array_value_recursive($key, array $arr){
     $val = array();
     array_walk_recursive($arr, function($v, $k) use($key, &$val){
@@ -3559,10 +3565,10 @@ function array_value_recursive($key, array $arr){
 }
 
 /**
-* Function called whenever a user is created or changed
-*
-* @param $user_id integer
-*/
+ * Function called whenever a user is created or changed
+ *
+ * @param $user_id integer
+ */
 function user_hook($user_id) {
     // Apply autoenroll rules
     $status = Database::get()->querySingle('SELECT status FROM user WHERE id = ?d', $user_id)->status;
@@ -3591,4 +3597,38 @@ function user_hook($user_id) {
                     WHERE department_id = department AND
                           rule = ?d)', $user_id, USER_STUDENT, $id);
         }, $status, $user_id, $status);
+}
+
+
+/**
+ * @brief Function called before a user is created.
+ *
+ * For now, only called for CAS automatic registration to determine actual user
+ * details. If function local_register_hook() is defined, calls that instead.
+ *
+ * @param array $options - User creation options. Possible key-value pairs are:
+ * 'departments' - List of department id's requested by user
+ * 'attributes'  - List of attributes retrieved via LDAP / CAS / Shibboleth
+ * 'am'          - Student id number retrieved via LDAP / CAS / Shibboleth
+ * @return array - Actual user creation options. Key-value pairs are:
+ * 'accept'      - Boolean - if false, user should be rejected
+ * 'departments' - List of department id's user should be added to
+ * 'status'      - User status (USER_STUDENT, USER_TEACHER)
+ * 'am'          - Student id number
+ */
+function register_hook($options) {
+    if (!isset($options['am'])) {
+        $options['am'] = '';
+    }
+    if (!isset($options['departments'])) {
+        $options['departments'] = array();
+    }
+    $options['accept'] = true;
+    $options['status'] = USER_STUDENT;
+
+    if (function_exists('local_register_hook')) {
+        return local_register_hook($options);
+    } else {
+        return $options;
+    }
 }

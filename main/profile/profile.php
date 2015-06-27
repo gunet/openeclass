@@ -327,22 +327,24 @@ $tool_content .= "<div class='form-group'>
 
 if (get_config('email_verification_required')) {
     $user_email_status = get_mail_ver_status($uid);
+    $messageClass = '';
     switch ($user_email_status) {
         case EMAIL_VERIFICATION_REQUIRED:
-            $link = "<a href = '../../modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-            $message = "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
+        case EMAIL_UNVERIFIED:
+            $messageClass = ' alert alert-warning';
+            $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+            $message = "$langMailNotVerified $link";
             break;
         case EMAIL_VERIFIED:
             $message = icon('fa-check', $langMailVerificationYesU);
             break;
-        case EMAIL_UNVERIFIED:
-            $link = "<a href = '../../modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
-            $message = "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
         default:
             break;
     }
-    $tool_content .= "<div class='form-group'><label for='mailstatus' class='col-sm-2 control-label'>$langVerifiedMail</label>
-                        $message</div>";
+    $tool_content .= "<div class='form-group$messageClass'>
+        <label class='col-sm-2 control-label'>$langVerifiedMail</label>
+        <div class='col-sm-10 form-control-static'>$message</div>
+      </div>";
 }
 
 if (!get_config('restrict_owndep')) {
