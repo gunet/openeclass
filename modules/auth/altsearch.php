@@ -79,7 +79,8 @@ if (!$prof and $alt_auth_stud_reg == 2) {
 }
 $comment_required = !$autoregister;
 $email_required = !$autoregister || get_config('email_required');
-$am_required = !$prof && get_config('am_required');
+$am_required = !$prof && get_config('am_required') &&
+    !isset($_SESSION['auth_user_info']['studentid']) && !$_SESSION['auth_user_info']['studentid'];
 
 $pageName = ($prof ? $langReqRegProf : $langUserData) . ' (' . (get_auth_info($auth)) . ')';
 $email_message = $langEmailNotice;
@@ -165,6 +166,7 @@ if (!isset($_SESSION['was_validated']) or
 if ($is_valid) {
     $ext_info = !isset($_SESSION['auth_user_info']);
     $ext_mail = !(isset($_SESSION['auth_user_info']['email']) && !empty($_SESSION['auth_user_info']['email']));
+    $missing_posted_variables = array();
     if (isset($_POST['p']) and $_POST['p'] == 1) {
         $ok = register_posted_variables(
             array('submit' => false,
@@ -251,8 +253,8 @@ if ($is_valid) {
             $verified_mail = 2;
             $vmail = FALSE;
         }
-        
-        $authmethods = array('2', '3', '4', '5');        
+
+        $authmethods = array('2', '3', '4', '5');
         $q1 = Database::get()->query("INSERT INTO user
                       SET surname = ?s,
                           givenname = ?s,
@@ -295,9 +297,9 @@ if ($is_valid) {
         if (!empty($email)) {
             send_mail($siteName, $emailAdministrator, '', $email, $emailsubject, $emailbody, $charset, "Reply-To: $emailhelpdesk");
         }
-        
+
         $myrow = Database::get()->querySingle("SELECT id, surname, givenname FROM user WHERE id = ?d", $last_id);
-        if ($myrow) {        
+        if ($myrow) {
             $uid = $myrow->id;
             $surname = $myrow->surname;
             $givenname = $myrow->givenname;
@@ -309,7 +311,7 @@ if ($is_valid) {
             $_SESSION['status'] = USER_STUDENT;
             $_SESSION['givenname'] = $givenname;
             $_SESSION['surname'] = $surname;
-            $_SESSION['uname'] = canonicalize_whitespace($uname);            
+            $_SESSION['uname'] = canonicalize_whitespace($uname);
             $session->setLoginTimestamp();
 
             $tool_content .= "<div class='alert alert-success'><p>$greeting,</p><p>";
@@ -341,14 +343,14 @@ if ($is_valid) {
             $email = mb_strtolower(trim($email));
         }
 
-        // Record user request        
+        // Record user request
         $q1 = Database::get()->query("INSERT INTO user_request SET
                                         givenname = ?s, surname = ?s, username = ?s, password = ?s,
                                         email = ?s, faculty_id = ?d, phone = ?s,
                                         am = ?s, state = 1, status = ?d, verified_mail = ?d,
                                         date_open = " . DBHelper::timeAfter() . ", comment = ?s, lang = ?s,
-                                        request_ip = ?s", 
-                            $givenname_form, $surname_form, $uname, $password, $email, $depid, $userphone, 
+                                        request_ip = ?s",
+                            $givenname_form, $surname_form, $uname, $password, $email, $depid, $userphone,
                             $am, $status, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
         $request_id = $q1->lastInsertID;
         // email does not need verification -> mail helpdesk
@@ -411,8 +413,8 @@ function set($name) {
 
 /**
  * @brief display form
- * 
- * @global type $tool_content  
+ *
+ * @global type $tool_content
  * @global type $langName
  * @global type $langSurname
  * @global type $langEmail
@@ -422,7 +424,7 @@ function set($name) {
  * @global type $langComments
  * @global type $langFaculty
  * @global type $langRegistration
- * @global type $langLanguage  
+ * @global type $langLanguage
  * @global type $langAm
  * @global type $profreason
  * @global type $auth
@@ -430,7 +432,7 @@ function set($name) {
  * @global string $usercomment
  * @global int $depid
  * @global type $email_required
- * @global type $phone_required 
+ * @global type $phone_required
  * @global type $comment_required
  * @global type $langEmailNotice
  * @global Hierarchy $tree
@@ -451,49 +453,55 @@ function user_info_form() {
     if (!get_config("email_required")) {
         $mail_message = $langEmailNotice;
     } else {
-        $mail_message = "";
+        $mail_message = '';
     }
-    
+    if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['givenname'])) {
+        $givennameClass = ' form-control-static';
+        $givennameInput = q($_SESSION['auth_user_info']['givenname']);
+    } else {
+        $givennameClass = '';
+        $givennameInput = '<input type="text" class="form-control" id="givenname_id" name="givenname_form" maxlength="100"' . set('givenname_form') . '> ';
+    }
+    if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['surname'])) {
+        $surnameClass = ' form-control-static';
+        $surnameInput = q($_SESSION['auth_user_info']['surname']);
+    } else {
+        $surnameClass = '';
+        $surnameInput = '<input type="text" class="form-control" id="surname_id" name="surname_form" maxlength="100"' . set('surname_form') . '> ';
+    }
+    if (isset($_SESSION['auth_user_info']) and !empty($_SESSION['auth_user_info']['studentid'])) {
+        $amClass = ' form-control-static';
+        $amInput = q($_SESSION['auth_user_info']['studentid']);
+    } else {
+        $amMessage = get_config('am_required')? $langCompulsory: $langOptional;
+        $amClass = '';
+        $amInput = '<input type="text" class="form-control" id="am_id" name="am" maxlength="20"' .
+            set('am') . ' placeholder="' . q($am_message) . '>';
+    }
     $tool_content .= "<div class='form-wrapper'>
         <form role='form' class='form-horizontal' action='$_SERVER[SCRIPT_NAME]' method='post'>
-        <fieldset>                
+        <fieldset>
         <div class='form-group'>
-            <label for='Name' class='col-sm-2 control-label'>$langName:</label>
-            <div class='col-sm-10'>" .
-                (isset($_SESSION['auth_user_info']) ?
-                    q($_SESSION['auth_user_info']['givenname']) :
-                    '<input type="text" name="givenname_form" size="30" maxlength="30"' . set('givenname_form') . '> ') . "
-            </div>
+            <label for='givenname_id' class='col-sm-2 control-label'>$langName:</label>
+            <div class='col-sm-10$givennameClass'>$givennameInput</div>
         </div>
         <div class='form-group'>
-            <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
-            <div class='col-sm-10'>" .
-                (isset($_SESSION['auth_user_info']) && !empty($_SESSION['auth_user_info']['surname']) ?
-                    q($_SESSION['auth_user_info']['surname']) :
-                    '<input type="text" name="surname_form" size="30" maxlength="30"' . set('surname_form') . '> ') . "
-            </div>
-        </div>          
+            <label for='surname_id' class='col-sm-2 control-label'>$langSurname:</label>
+            <div class='col-sm-10$surnameClass'>$surnameInput</div>
+        </div>
         <div class='form-group'>
-            <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
+            <label for='email_id' class='col-sm-2 control-label'>$langEmail:</label>
             <div class='col-sm-10'>
-                <input type='text' name='email' size='30' maxlength='30'" . set('email') . "'>" .
-                    ($email_required ? "&nbsp;" : "<span class='help-block'><small>$mail_message</small></span>") . "
+                <input type='text' name='email' id='email_id' class='form-control' maxlength='100'" . set('email') . "'>" .
+                    ($email_required ? '' : "<span class='help-block'><small>$mail_message</small></span>") . "
             </div>
         </div>";
     if (!$prof) {
-        if (get_config('am_required')) {
-            $am_message = $langCompulsory;
-        } else {
-            $am_message = $langOptional;
-        }
         $tool_content .= "<div class='form-group'>
-                <label for='UserAm' class='col-sm-2 control-label'>$langAm:</label>
-                <div class='col-sm-10'>" .
-                    (isset($_SESSION['auth_user_info']) && !empty($_SESSION['auth_user_info']['studentid']) ?
-                        q($_SESSION['auth_user_info']['studentid']) :
-                        '<input type="text" name="am" size="20" maxlength="20"' . set('am') . ' placeholder="' . q($am_message) . '"> ') . "
+                <label for='am_id' class='col-sm-2 control-label'>$langAm:</label>
+                <div class='col-sm-10$amClass'>$amInput
                 </div>
-            </div>";        
+            </div>";
     }
     if ($prof) {
         $phone_message = $langCompulsory;
@@ -505,40 +513,37 @@ function user_info_form() {
                 <div class='col-sm-10'>
                     <input type='text' name='userphone' size='20' maxlength='20'" . set('userphone') . "' placeholder = '$phone_message'>
                 </div>
-            </div>";                
+            </div>";
     if ($comment_required) {
         $tool_content .= "<div class='form-group'>
           <label for='UserComment' class='col-sm-2 control-label'>$langComments:</label>
             <div class='col-sm-10'>
              <textarea name='usercomment' cols='32' rows='4'>" . q($usercomment) . "</textarea>&nbsp;&nbsp;(*) $profreason</div>
           </div>";
-    }    
+    }
     $tool_content .= "<div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => 'id', 'where' => 'AND node.allow_user = true', 'multiple' => false));
     $head_content .= $js;
-    $tool_content .= $html;
-    $tool_content .= "</div>
-    </div>";                
-    $tool_content .= "<div class='form-group'>
-              <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
-              <div class='col-sm-10'>";
-            $tool_content .= lang_select_options('localize', "class='form-control'");
-            $tool_content .= "</div>
-            </div>";
-    $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
-                        <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
-                    </div>
+    $tool_content .= $html . "</div>
+        </div>
+        <div class='form-group'>
+          <label for='UserLang' class='col-sm-2 control-label'>$langLanguage:</label>
+          <div class='col-sm-10'>" . lang_select_options('localize', "class='form-control'") . "</div>
+        </div>
+        <div class='col-sm-offset-2 col-sm-10'>
+          <input class='btn btn-primary' type='submit' name='submit' value='" . q($langRegistration) . "'>
+        </div>
         <input type='hidden' name='p' value='$prof'>";
-                        
+
     if (isset($_SESSION['shib_uname'])) {
         $tool_content .= "<input type='hidden' name='uname' value='" . q($_SESSION['shib_uname']) . "'>";
     } else {
         $tool_content .= "<input type='hidden' name='uname' value='" . q($_SESSION['was_validated']['uname']) . "'>";
     }
-    $tool_content .= "<input type='hidden' name='auth' value='$auth'>";
-    $tool_content .= "</fieldset>
+    $tool_content .= "<input type='hidden' name='auth' value='$auth'>
+      </fieldset>
     </form>
-    </div>";            
+  </div>";
 }

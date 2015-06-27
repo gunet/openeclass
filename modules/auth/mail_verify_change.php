@@ -45,7 +45,7 @@ if (empty($uid)) {
 // user might already verified mail account or verification is no more needed
 if (!get_config('email_verification_required') or
     get_mail_ver_status($uid) == EMAIL_VERIFIED or
-    isset($_POST['enter'])) {
+    (isset($_POST['enter']) and !get_config('email_required'))) {
     if (isset($_SESSION['mail_verification_required'])) {
         unset($_SESSION['mail_verification_required']);
     }
@@ -87,7 +87,11 @@ if (!empty($_POST['submit'])) {
     }
 } else {
     if (get_config('alt_auth_stud_reg') == 2) {
-        $tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
+        if (get_config('email_required')) {
+            $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
+        } else {
+            $tool_content .= "<div class='alert alert-info'>$langEmailInfo <br><br> $langEmailNotice</div>";
+        }
     } else if (isset($_SESSION['mail_verification_required'])) {
         $tool_content .= "<div class='alert alert-info'>$langMailVerificationReq</div>";
     }
@@ -105,8 +109,9 @@ if (empty($_POST['email']) or !email_seems_valid($_POST['email'])) {
 			</div>
 			<div class='form-group'>
 				<div class='col-sm-offset-2 col-sm-10'>
-					<input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>
-					<input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>
+					<input class='btn btn-primary' type='submit' name='submit' value='$langMailVerificationNewCode'>" .
+                    (get_config('email_required')? '':
+                        " <input class='btn btn-primary' type='submit' name='enter' value='$langCancelAndEnter'>") . "
 				</div>
 			</div>
         </fieldset>

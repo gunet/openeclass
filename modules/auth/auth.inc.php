@@ -887,7 +887,7 @@ function shib_cas_login($type) {
                 $language = $info->lang;
             }
         }
-    } elseif ($autoregister and !get_config('am_required')) {
+    } elseif ($autoregister and !(get_config('am_required') and empty($am))) {
         // if user not found and autoregister enabled, create user
 	    $verified_mail = EMAIL_UNVERIFIED;
     	if (isset($_SESSION['cas_email'])) {
