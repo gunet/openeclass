@@ -214,11 +214,18 @@ class MultimediaHelper {
                 $mime = 'video/ogg';
                 $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
                 break;
-            case "mp4":
             case "ogv":
             case "webm":
                 $mime = get_mime_type("." . $extension);
                 $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
+                break;
+            case "mp4":
+                if (self::isUsingFirefox()) {
+                    $ret .= self::serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension);
+                } else {
+                    $mime = get_mime_type("." . $extension);
+                    $ret .= self::serveFlowplayerHTML5($mime, $mediaPlay, $startdiv, $enddiv);
+                }
                 break;
             case "f4v":
             case "m4v":
@@ -226,32 +233,13 @@ class MultimediaHelper {
             // case "mp3": // can be server with Flowplayer Flash
             // case "mp4": // can be served with Flowplayer Flash
                 $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.13.min.js'></script>";
-                $ret .= $startdiv;
                 if (self::isUsingIOS()) {
+                    $ret .= $startdiv;
                     $ret .= '<br/><br/><a href="' . $mediaDL . '">Download or Stream media</a>';
+                    $ret .= $enddiv;
                 } else {
-                    $ret .= '<div id="flowplayer" style="display: block; width: ' . self::getObjectWidth() . 'px; height: ' . self::getObjectHeight() . 'px;"></div>
-                             <script type="text/javascript">
-                                 flowplayer("flowplayer", {
-                                     src: "' . $urlAppend . 'js/flowplayer/flowplayer-3.2.18.swf",
-                                     wmode: "transparent"
-                                     }, {
-                                     clip: {
-                                         url: "' . $mediaPlay . '",';
-                    // flowplayer needs to see a pattern of name.mp3 in order to stream it
-                    if ($extension == 'mp3') {
-                        $ret .= '        type: "audio",';
-                    }
-                    $ret .= '            scaling: "fit"
-                                     },
-                                     canvas: {
-                                         backgroundColor: "#000000",
-                                         backgroundGradient: "none"
-                                     }
-                                 });
-                             </script>';
+                    $ret .= self::serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension);
                 }
-                $ret .= $enddiv;
                 break;
             case "swf":
                 $ret .= $startdiv;
@@ -330,6 +318,45 @@ class MultimediaHelper {
         $ret .= $enddiv;
         return $ret;
     }
+    
+    /**
+     * Server Flowplayer Flash.
+     * 
+     * @global string $urlAppend
+     * @param  string $mediaPlay
+     * @param  string $startdiv
+     * @param  string $enddiv
+     * @param  string $extension
+     * @return string
+     */
+    public static function serveFlowplayerFlash($mediaPlay, $startdiv, $enddiv, $extension) {
+        global $urlAppend;
+        $ret = '';
+        $ret .= "<script type='text/javascript' src='{$urlAppend}js/flowplayer/flowplayer-3.2.13.min.js'></script>";
+        $ret .= $startdiv;
+        $ret .= '<div id="flowplayer" style="display: block; width: ' . self::getObjectWidth() . 'px; height: ' . self::getObjectHeight() . 'px;"></div>
+                 <script type="text/javascript">
+                     flowplayer("flowplayer", {
+                         src: "' . $urlAppend . 'js/flowplayer/flowplayer-3.2.18.swf",
+                         wmode: "transparent"
+                         }, {
+                         clip: {
+                             url: "' . $mediaPlay . '",';
+        // flowplayer needs to see a pattern of name.mp3 in order to stream it
+        if ($extension == 'mp3') {
+            $ret .= '        type: "audio",';
+        }
+        $ret .= '            scaling: "fit"
+                         },
+                         canvas: {
+                             backgroundColor: "#000000",
+                             backgroundGradient: "none"
+                         }
+                     });
+                 </script>';
+        $ret .= $enddiv;
+        return $ret;
+    }
 
     /**
      * Construct a proper <iframe> html tag for each type of medialink.
@@ -392,8 +419,19 @@ class MultimediaHelper {
         $u_agent = $_SERVER['HTTP_USER_AGENT'];
         return (preg_match('/MSIE/i', $u_agent)) ? true : false;
     }
+    
+    /**
+     * Whether the client uses Firefox or not
+     * 
+     * @return boolean
+     */
+    public static function isUsingFirefox() {
+        $u_agent = $_SERVER['HTTP_USER_AGENT'];
+        return (preg_match('/Firefox/i', $u_agent)) ? true : false;
+    }
 
-    /** Whether the client uses an iOS device or not
+    /**
+     * Whether the client uses an iOS device or not
      * 
      * @return boolean
      */
