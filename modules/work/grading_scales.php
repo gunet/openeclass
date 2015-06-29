@@ -122,7 +122,7 @@ if (isset($_GET['scale_id'])) {
             'title' => $langBack,
             'level' => 'primary-label',
             'icon' => 'fa-reply',
-            'url' => "grading_scales?course=$course_code"
+            'url' => "grading_scales.php?course=$course_code"
         ),          
     ));
     $tool_content .= "
