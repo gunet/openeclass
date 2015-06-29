@@ -1798,6 +1798,7 @@ tinymce.init({
     image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
+        {title: 'Responsive Center', value: 'img-responsive center-block'},
         {title: 'Float left', value: 'pull-left'},
         {title: 'Float left and responsive', value: 'pull-left img-responsive'},
         {title: 'Float right', value: 'pull-right'},
