@@ -312,12 +312,13 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'delete') {
 
         if ($c > 0) {
             // The node cannot be deleted
-            $tool_content .= "<div class='alert alert-danger'>$langNodeProErase<br >$langNodeNoErase</div>";            
+            Session::Messages("$langNodeProErase<br>$langNodeNoErase", 'alert-danger');
         } else {
             // The node can be deleted
             $tree->deleteNode($id);
-            $tool_content .= "<div class='alert alert-success'>$langNodeErase</div>";
+            Session::Messages($langNodeErase, 'alert alert-success');
         }
+        redirect_to_home_page('modules/admin/hierarchy.php');
     }    
 }
 // Edit a node
