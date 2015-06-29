@@ -1985,6 +1985,7 @@ $langProportion = "Proportional";
 $langStatsType = "Statistics type";
 $langTotalVisits = "Total Visits";
 $langVisits = "Number of visits";
+$langHits = "Number of hits";
 $langFirstLetterUser = "First letter of last name";
 $langFirstLetterCourse = "First letter of course name";
 $langUsageVisits = "Course Visits";

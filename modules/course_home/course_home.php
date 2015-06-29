@@ -101,6 +101,7 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip = '$_SERVER[REMOTE_ADDR]', date_time = " . DBHelper::timeAfter() . "", $uid, $course_id);
 
 // opencourses hits sumation
+$visitsopencourses = 0;
 $hitsopencourses = 0;
 if (get_config('opencourses_enable')) {
     $cxml = CourseXMLElement::initFromFile($course_code);
@@ -114,6 +115,7 @@ if (get_config('opencourses_enable')) {
         CourseXMLElement::refreshCourse($course_id, $course_code);
         $cxml = CourseXMLElement::initFromFile($course_code);
     }
+    $visitsopencourses = ($cxml && $cxml->visits) ? intval((string) $cxml->visits) : 0;
     $hitsopencourses = ($cxml && $cxml->hits) ? intval((string) $cxml->hits) : 0;
 }
 
@@ -396,7 +398,9 @@ if (isset($level) && !empty($level)) {
             <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata " .
             icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
             <br />
-            <small>$langVisits: $hitsopencourses</small>
+            <small>$langVisits: $visitsopencourses</small>
+            <br />
+            <small>$langHits: $hitsopencourses</small>
         </div>
     </div>
 ";
