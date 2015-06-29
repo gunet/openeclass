@@ -66,11 +66,11 @@ $tool_content .= action_bar(array(
           'icon' => 'fa-reply',
           'level' => 'primary-label')));
     $tool_content .= "<form action='$_SERVER[SCRIPT_NAME]' method='post'>";
-    if (get_config('email_verification_required') && get_config('dont_mail_unverified_mails')) {
+    if (get_config('email_verification_required') or get_config('dont_mail_unverified_mails')) {
         $user_email_status = get_mail_ver_status($uid);
         if ($user_email_status == EMAIL_VERIFICATION_REQUIRED or
                 $user_email_status == EMAIL_UNVERIFIED) {
-            $link = "<a href = '../../modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+            $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=true'>$langHere</a>.";
             $tool_content .= "<div class='alert alert-warning'>$langMailNotVerified $link</div>";
         }
     }

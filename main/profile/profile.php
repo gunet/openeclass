@@ -332,7 +332,7 @@ if (get_config('email_verification_required')) {
         case EMAIL_VERIFICATION_REQUIRED:
         case EMAIL_UNVERIFIED:
             $messageClass = ' alert alert-warning';
-            $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=TRUE'>$langHere</a>.";
+            $link = "<a href = '{$urlAppend}modules/auth/mail_verify_change.php?from_profile=true'>$langHere</a>.";
             $message = "$langMailNotVerified $link";
             break;
         case EMAIL_VERIFIED:
