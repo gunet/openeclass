@@ -85,7 +85,13 @@ if (!isset($_POST['doit'])) {
         Log::record(0, 0, LOG_DELETE_USER, array('uid' => $uid,
             'username' => $un,
             'name' => $n));
-        unset($_SESSION['uid']);
+
+        foreach (array_keys($_SESSION) as $key) {
+            unset($_SESSION[$key]);
+        }
+        session_destroy();
+        $uid = 0;
+
         $tool_content .= action_bar(array(
             array('title' => $langLogout,
                 'url' => "../index.php?logout=yes",
