@@ -63,11 +63,10 @@ function unpack_zip_inner($zipfile, $clone) {
             'course' => preg_replace('|^.*/|', '', $folder['path'])
         );
     }
-
+    
     chdir($webDir);
     return $retArr;
 }
-
 
 function unpack_zip_show_files($zipfile) {
     global $langEndFileUnzip, $langLesFound, $langRestore, $langLesFiles;
@@ -981,7 +980,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
             $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
                 . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
-                . "registered_at = ?t, expires_at = ?t, description = '', whitelist= ''",
+                . "registered_at = ?t, expires_at = ?t, document_timestamp = ?t",
                 (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '',
                 (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '',
                 $data['username'],
@@ -990,7 +989,8 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
                 intval($data[$restoreHelper->getField('course_user', 'status')]),
                 isset($data['phone'])? $data['phone']: '',
                 $now,
-                date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
+                date('Y-m-d H:i:s', time() + get_config('account_duration')),
+                isset($data['document_timestamp'])? $data['document_timestamp']: $now)->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
             $user = new User();
             $user->refresh($user_id, $departments);
