@@ -232,13 +232,13 @@ if ($is_editor) {
                 array('title' => $langGradebookAddActivity,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1",
                       'icon' => 'fa-plus'),
-                array('title' => "$langInsertWork",
+                array('title' => "$langInsertWorkCap",
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityAs=1",
                       'icon' => 'fa-flask'),
-                array('title' => "$langInsertExercise",
+                array('title' => "$langInsertExerciseCap",
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityEx=1",
                       'icon' => 'fa-edit'),
-                array('title' => "$langLearningPath1",
+                array('title' => "$langLearningPath",
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivityLp=1",
                       'icon' => 'fa-ellipsis-h')
             ),
@@ -502,8 +502,11 @@ if ($is_editor) {
                         <div class='form-group'>
                             <div class='col-xs-12'>".form_buttons(array(
                                     array(
-                                        'text' => $langInsert,
+                                        'text' => $langSave,
                                         'value'=> $langInsert
+                                    ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 ))."</div>                        
                         </div>
@@ -534,9 +537,12 @@ if ($is_editor) {
                                 <div class='form-group'>
                                     <div class='col-xs-12'>".form_buttons(array(
                                     array(
-                                        'text' => $langAttendanceUpdate,
+                                        'text' => $langSave,
                                         'name' => 'resetAttendance',
                                         'value'=> $langAttendanceUpdate
+                                    ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 ))."</div>
                                 </div>
@@ -580,9 +586,12 @@ if ($is_editor) {
                             <div class='form-group'>
                                 <div class='col-xs-12'>".form_buttons(array(
                                     array(
-                                        'text' => $langGradebookUpdate,
+                                        'text' => $langSave,
                                         'name' => 'submitGradebookRange',
                                         'value'=> $langGradebookUpdate
+                                    ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 ))."</div>
                             </div>
@@ -634,6 +643,9 @@ if ($is_editor) {
                                         'text' => $langSelect,
                                         'name' => 'selectGradebook',
                                         'value'=> $langSelect
+                                    ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 ))."</div>
                         </div>
@@ -651,9 +663,12 @@ if ($is_editor) {
                             <div class='form-group'>
                                 <div class='col-xs-12'>".form_buttons(array(
                                     array(
-                                            'text' => $langInsert,
+                                            'text' => $langSave,
                                             'name' => 'newGradebook',
                                             'value'=> $langInsert
+                                        ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                         )
                                     ))."</div>
                             </div>

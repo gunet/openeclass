@@ -757,7 +757,7 @@ function add_gradebook_other_activity($gradebook_id) {
            $langGradeVisible, $langComments, $langGradebookInsAut, $langAdd,
            $langAdd, $langType, $langGradebookExams, $langGradebookLabs, 
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType, 
-           $langGradebookRemainingGrade;
+           $langGradebookRemainingGrade, $langSave;
     
         
     $tool_content .= "            
@@ -849,9 +849,12 @@ function add_gradebook_other_activity($gradebook_id) {
                         $tool_content .= "<div class='form-group'>
                                 <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
                                     array(
-                                        'text' => $langAdd,
+                                        'text' => $langSave,
                                         'name' => 'submitGradebookActivity',
                                         'value'=> $langAdd
+                                    ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
                                     )
                                 ))."</div></div>";
                         if (isset($_GET['modify'])) {

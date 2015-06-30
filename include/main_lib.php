@@ -1767,7 +1767,6 @@ function editorAddButtonToggle (editor) {
         title: '".js_escape($langMore)."',
         classes: 'toggle',
         image: '{$urlAppend}js/tinymce/skins/light/img/toggle.png',
-        style: 'padding: 5px 8px 0 10px;',
         onclick: editorToggleSecondToolbar(editor),
     });
 }
