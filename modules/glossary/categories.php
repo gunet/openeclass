@@ -180,7 +180,7 @@ if ($is_editor) {
                         <div class='col-sm-10 col-sm-offset-2'>".
                                     form_buttons(array(
                                     array(
-                                        'text' => $submit_value,
+                                        'text' => $langSave,
                                         'value'=> $submit_value,
                                         'name' => 'submit_category'
                                     ),
