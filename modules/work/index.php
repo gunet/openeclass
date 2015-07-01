@@ -1186,7 +1186,7 @@ function show_edit_assignment($id) {
                 <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
                     <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
                     <div class='col-sm-10'>
-                      <select name='scale' class='form-control' id='scales'>
+                      <select name='scale' class='form-control' id='scales'".(!$grading_type ? " disabled" : "").">
                             $scale_options
                       </select>
                       <span class='help-block'>$scale_error</span>
