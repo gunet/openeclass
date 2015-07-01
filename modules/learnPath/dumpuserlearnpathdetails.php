@@ -28,13 +28,19 @@ require_once 'modules/group/group_functions.php';
 
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
     $charset = 'Windows-1253';
+    $sendSep = true;
 } else {
     $charset = 'UTF-8';
+    $sendSep = false;
 }
 $crlf = "\r\n";
 
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=userslearningpathstats.csv");
+
+if ($sendSep) {
+    echo 'sep=;', $crlf;
+}
 
 echo join(';', array_map("csv_escape", array($langStudent, $langAm, $langGroup, $langProgress))),
  $crlf;

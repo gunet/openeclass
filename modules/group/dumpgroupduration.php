@@ -36,8 +36,10 @@ if (!$is_editor and !$is_tutor) {
 if ($is_editor) {
     if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
         $charset = 'Windows-1253';
+        $sendSep = true;
     } else {
         $charset = 'UTF-8';
+        $sendSep = false;
     }
     $crlf = "\r\n";
 
@@ -50,6 +52,10 @@ if ($is_editor) {
         $min_date = Database::get()->querySingle("SELECT MIN(day) AS minday FROM actions_daily WHERE course_id = ?d", $course_id)->minday;        
         $u_date_start = strftime('%Y-%m-%d', strtotime($min_date));
         $u_date_end = strftime('%Y-%m-%d', strtotime('now'));
+    }
+
+    if ($sendSep) {
+        echo 'sep=;', $crlf;
     }
 
     if (isset($u_date_start) and isset($u_date_end)) {

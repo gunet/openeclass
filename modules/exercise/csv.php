@@ -25,7 +25,7 @@ require_once '../../include/init.php';
 
 if ($is_editor) {
     $exerciseId = filter_input(INPUT_GET, 'exerciseId', FILTER_SANITIZE_NUMBER_INT);
-    header("Content-disposition: filename=" . $currentCourse . "_" . $exerciseId . "_" . date("Y-m-d") . ".xls");
+    header("Content-disposition: filename=" . $currentCourse . "_" . $exerciseId . "_" . date("Y-m-d") . ".csv");
     header("Content-type: text/csv; charset=UTF-16");
     header("Pragma: no-cache");
     header("Expires: 0");
@@ -40,8 +40,8 @@ if ($is_editor) {
 
     foreach ($result as $row) {
         $sid = $row->uid;
-        $surname = uid_to_name($sid,'surname');
-        $name = uid_to_name($sid,'givenname');
+        $surname = uid_to_name($sid, 'surname');
+        $name = uid_to_name($sid, 'givenname');
         $am = uid_to_am($sid);
 
         $result2 = Database::get()->queryArray("SELECT DATE_FORMAT(record_start_date, '%Y-%m-%d / %H:%i') AS record_start_date,
