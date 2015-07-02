@@ -159,7 +159,8 @@ else if (isset($_POST['submit'])) {
         (?s,?s,?s,?s,?s,?s,?s,?s,?d)", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight);
     }    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
+    Session::Messages($langFileUpdatedSuccess,"alert-success");
+    redirect_to_home_page("modules/admin/bbbmoduleconf.php");
     // Display link to go back to index.php
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -302,7 +303,7 @@ else {
             }            	
             $tool_content .= "</table></div>";
         } else {
-             $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>";
+             $tool_content .= "<div class='alert alert-warning'>$langNoAvailableBBBServers</div>";
         }
     }
 }

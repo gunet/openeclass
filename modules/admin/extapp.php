@@ -40,7 +40,11 @@ $appName = $shouldEdit ? $_GET['edit'] : ($shouldUpdate ? $_GET['update'] : null
 if (isset($_POST['state'])) {
     $newState = $_POST['state'] == 'fa-toggle-on' ? 0 : 1;
     $appNameAjax = $_POST['appName'];
-    ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
+    if( $appNameAjax === "bbb" ) {
+        
+    } else {
+        ExtAppManager::getApp($appNameAjax)->setEnabled($newState);
+    }
 
     echo $newState;
     exit;
@@ -139,9 +143,21 @@ if ($appName) {
         $tool_content .= "<td class=\"text-muted clearfix\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">" . $app_active . "<a href=\"extapp.php?edit=" . $app->getName() . "\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>\n";
         $tool_content .="</tr>\n";
     }
+    
+    // Check if there are active bbb servers
+    $q = Database::get()->queryArray("SELECT * FROM bbb_servers");
+    if(!count($q)) {
+        $bbbactive = "<button type=\"button\" class=\"btn btn-default\" data-app=\"bbb\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
+    } else {
+        $activate = 0;
+        foreach ($q as $srv) {
+            $activate += ($srv->enabled == 'true') ? 1 : 0 ;
+        }
+        $bbbactive = !($activate === 0) ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"bbb\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"bbb\"> <i class=\"fa fa-toggle-off\"></i> </button>" ;
+    }
     $tool_content .="<tr>\n";
     $tool_content .= "<td style=\"width:90px; padding:0px;\"><div class=\"text-center\" style=\"padding:10px;\"><a href=\"bbbmoduleconf.php\"><img height=\"50\" width=\"89\"  class=\"img-responsive\" src=\"../../template/icons/bigbluebutton.png\"/>BigBlueButton</a></div></td>\n";
-    $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">$langBBBDescription</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\"><span class=\"btn btn-success\"><i class=\"fa fa-toggle-on fw\"></i></span> <a href=\"bbbmoduleconf.php\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>\n";
+    $tool_content .= "<td class=\"text-muted\"><div class=\"extapp-dscr-wrapper\">$langBBBDescription</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">$bbbactive <a href=\"bbbmoduleconf.php\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>\n";
     $tool_content .="</tr>\n";
 
     $tool_content.="</table>\n";
