@@ -27,7 +27,7 @@ require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");
+    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp");
     private static $APPS = null;
 
     /**
@@ -112,6 +112,29 @@ abstract class ExtApp {
      */
     public function getName() {
         return strtolower(str_replace(' ', '', $this->getDisplayName()));
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getEditUrl() {
+        return 'modules/admin/extapp.php?edit=' . $this->getName();
+    }
+
+    /**
+     * Return true if all params are set, else false
+     * 
+     * @return boolean
+     */
+    public function getParamsSet() {
+        foreach ($this->getParams() as $para) {
+            if ($para->name() !== 'enabled' and
+                $para->value() === '') {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function storeParams() {

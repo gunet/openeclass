@@ -1224,7 +1224,9 @@ function get_total_bbb_servers()
 {
     $total = 0;
 
-    $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
+    if (get_config('ext_bigbluebutton_enabled')) {
+        $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
+    }
 
     return $total;
 }

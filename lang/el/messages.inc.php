@@ -4614,6 +4614,8 @@ $langNationalOpenCourses = "ΕΘΝΙΚΗ ΠΥΛΗ ΑΝΟΙΚΤΩΝ ΜΑΘΗΜΑ�
 $langExtAppName = "Εφαρμογή";
 $langExtAppDescription = "Περιγραφή";
 $langClearSettings = "Καθαρισμός Ρυθμίσεων";
+$langNotConfigured = 'Δεν έχει ρυθμιστεί';
+$langEnableAfterConfig = 'Για να ενεργοποιήσετε αυτό το εργαλείο θα πρέπει πρώτα να εισάγετε τις απαιτούμενες ρυθμίσεις.';
 
 /* * ***********************************************************
  * Tags
