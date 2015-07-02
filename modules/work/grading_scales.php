@@ -24,6 +24,7 @@ $require_editor = true;
 
 include '../../include/baseTheme.php';
 
+$toolName = $langGradeScales;
 $pageName = $langGradeScales;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
 
@@ -113,6 +114,17 @@ if (isset($_GET['scale_id'])) {
                 ";
         }
     }
+    $toolName = $langGradeScales;
+    $pageName = $langNewGradeScale;
+    $navigation[] = array("url" => "grading_scales.php?course=$course_code", "name" => $langGradeScales);
+    $tool_content .= action_bar(array(
+        array(
+            'title' => $langBack,
+            'level' => 'primary-label',
+            'icon' => 'fa-reply',
+            'url' => "grading_scales.php?course=$course_code"
+        ),          
+    ));
     $tool_content .= "
         <div class='row'>
             <div class='col-sm-12'>
@@ -134,9 +146,9 @@ if (isset($_GET['scale_id'])) {
                                     <table class='table-default' id='scale_table'>
                                         <thead>
                                             <tr>
-                                                <th>Λεκτικό</th>
-                                                <th>Τιμή</th>
-                                                <th class='text-center'>".icon('fa-gears')."</th>
+                                                <th style='width:47%'>Λεκτικό</th>
+                                                <th style='width:47%'>Τιμή</th>
+                                                <th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -150,10 +162,17 @@ if (isset($_GET['scale_id'])) {
                             </div>                                                       
                         </div>                         
                         <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input type='submit' class='btn btn-primary' name='submitScale' value='$langSubmit'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-                            </div>
+                            <div class='col-sm-offset-2 col-sm-10'>".
+                                form_buttons(array(
+                                    array(
+                                        'text' => $langSave,
+                                        'name' => 'submitScale'
+                                    ),
+                                    array(
+                                        'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                                    )
+                                ))
+                                ."</div>
                         </div>                        
                     </fieldset>
                     </form>
@@ -176,7 +195,7 @@ if (isset($_GET['scale_id'])) {
             'icon' => 'fa-reply',
             'url' => "index.php?course=$course_code"
         ),          
-    ));
+    ),false);
 
     $grading_scales = Database::get()->queryArray("SELECT * FROM grading_scale WHERE course_id = ?d", $course_id);
     if ($grading_scales) { 

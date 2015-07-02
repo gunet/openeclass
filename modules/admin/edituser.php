@@ -323,16 +323,6 @@ if ($u) {
         }
     } else { // if the form was submitted then update user
 
-        $tool_content .= action_bar(array(
-                        array('title' => $langBack,
-                              'url' => "listusers.php",
-                              'icon' => 'fa-reply',
-                              'level' => 'primary-label'),
-                        array('title' => $langBackAdmin,
-                              'url' => "index.php",
-                              'icon' => 'fa-reply',
-                              'level' => 'primary-label')));
-
         // get the variables from the form and initialize them
         $fname = isset($_POST['fname']) ? $_POST['fname'] : '';
         $lname = isset($_POST['lname']) ? $_POST['lname'] : '';
@@ -364,15 +354,11 @@ if ($u) {
         
         // check if there are empty fields
         if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
-            $tool_content .= "<div class='alert alert-danger'>$langFieldsMissing <br>
-                                  <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div>";
-            draw($tool_content, 3, null, $head_content);
-            exit();
+            Session::Messages($langFieldsMissing, 'alert-danger');
+            redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif (isset($user_exist) and $user_exist == true) {
-            $tool_content .= "<div class='alert alert-danger'>$langUserFree <br>
-                                  <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
-            draw($tool_content, 3, null, $head_content);
-            exit();
+            Session::Messages($langUserFree, 'alert-danger');
+            redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif ($cpf_check[0] === false) {
             $cpf_error_str = '';
             unset($cpf_check[0]);
@@ -386,54 +372,51 @@ if ($u) {
         }
 
         if ($registered_at > $user_expires_at) {
-            $tool_content .= "<div class='alert alert-warning'>$langExpireBeforeRegister<br>
-                    <a href='edituser.php?u=$u'>$langAgain</a></div>";
-        } else {
-            if ($u == 1) {
-                $departments = array();
-            }
+            Session::Messages($langExpireBeforeRegister, 'alert-warning');
+        }
 
-            // email cannot be verified if there is no mail saved
-            if (empty($email) and $verified_mail) {
-                $verified_mail = 2;
-            }
+        // email cannot be verified if there is no mail saved
+        if (empty($email) and $verified_mail) {
+            $verified_mail = 2;
+        }
 
-            // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
-            if (isDepartmentAdmin()) {
-                $olddeps = $user->getDepartmentIds(intval($u));
+        // if depadmin then diff new/old deps and if new or deleted deps are out of juristinction, then error
+        if (isDepartmentAdmin()) {
+            $olddeps = $user->getDepartmentIds(intval($u));
 
-                foreach ($departments as $depId) {
-                    if (!in_array($depId, $olddeps)) {
-                        validateNode(intval($depId), true);
-                    }
-                }
-
-                foreach ($olddeps as $depId) {
-                    if (!in_array($depId, $departments)) {
-                        validateNode($depId, true);
-                    }
+            foreach ($departments as $depId) {
+                if (!in_array($depId, $olddeps)) {
+                    validateNode(intval($depId), true);
                 }
             }
-            $user->refresh(intval($u), $departments);
-            $qry = Database::get()->query("UPDATE user SET surname = ?s,
-                                    givenname = ?s,
-                                    username = ?s,
-                                    email = ?s,
-                                    status = ?d,
-                                    phone = ?s,
-                                    expires_at = ?t,
-                                    am = ?s,
-                                    verified_mail = ?d,
-                                    whitelist = ?s
-                          WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
+
+            foreach ($olddeps as $depId) {
+                if (!in_array($depId, $departments)) {
+                    validateNode($depId, true);
+                }
+            }
+        }
+        $user->refresh(intval($u), $departments);
+        user_hook($u);
+        $qry = Database::get()->query("UPDATE user SET surname = ?s,
+                                givenname = ?s,
+                                username = ?s,
+                                email = ?s,
+                                status = ?d,
+                                phone = ?s,
+                                expires_at = ?t,
+                                am = ?s,
+                                verified_mail = ?d,
+                                whitelist = ?s
+                      WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
             //update custom profile fields
             $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
             if ($qry->affectedRows > 0 || $cpf_updated === true) {
-                    $tool_content .= "<div class='alert alert-info'>$langSuccessfulUpdate</div>";
-            } else {
-                    $tool_content .= "<div class='alert alert-warning'>$langUpdateNoChange</div>";
-            }
+                Session::Messages($langSuccessfulUpdate, 'alert-info');
+        } else {
+            Session::Messages($langUpdateNoChange, 'alert-warning');
         }
+        redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
     }
 } else {
     $tool_content .= "<div class='alert alert-danger'>$langError <a href='listcours.php'>$back</a></div>";

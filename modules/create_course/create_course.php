@@ -441,12 +441,7 @@ if (!isset($_POST['create_course'])) {
     }
 
     if (ctype_alnum($_POST['view_type'])) {
-        $view_type = $_POST['view_type'];
-        if ($view_type == "weekly" && ($_POST['start_date'] != '' && $_POST['start_date'] != '0000-00-00')) {
-            $view_type == "weekly";
-        } else {
-            $view_type = "units";
-        }
+        $view_type = $_POST['view_type'];        
     }
     if (empty($_POST['start_date'])) {
         $_POST['start_date'] = '0000-00-00';

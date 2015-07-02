@@ -19,8 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
-if ($f = @fopen("${webDir}secure/index.php", "r")) {
+$secureIndexPath = $webDir . '/secure/index.php';
+if ($f = @fopen($secureIndexPath, 'r')) {
     while (!feof($f)) {
         $buffer = fgets($f, 4096);
         if (strpos($buffer, 'shib_email')) {
@@ -48,7 +48,7 @@ if ($shibsettings != 'shibboleth' and $shibsettings != '') {
 } else {
     $checkedshib = $shibseparator = '';
 }
-$tool_content .= sprintf("<div class='alert alert-info'>$langExplainShib</div>", $webDir);
+$tool_content .= sprintf("<div class='alert alert-info'>$langExplainShib</div>", '<em>' . $secureIndexPath . '</em>');
 $tool_content .= "
     <div class='form-group'>
         <label for='dbfieldpass' class='col-sm-2 control-label'>$langShibEmail:</label>

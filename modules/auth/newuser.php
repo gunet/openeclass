@@ -261,6 +261,7 @@ if (!isset($_POST['submit'])) {
                             $surname_form, $givenname_form, $uname, $email, $am, $phone, $language);
         $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, $departments);
+        user_hook($last_id);
         
         //fill custom profile fields
         process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));

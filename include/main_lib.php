@@ -117,6 +117,11 @@ define('ATTEMPT_CANCELED', 4);
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL', 2); //
 
+// gradebook activity type
+define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
+define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
+define('GRADEBOOK_ACTIVITY_LP', 3);
+
 // Subsystem types (used in documents)
 define('MAIN', 0);
 define('GROUP', 1);
@@ -1483,6 +1488,16 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM course_settings WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);    
     Database::get()->query("DELETE FROM tag_element_module WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id IN 
+                                    (SELECT id FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM gradebook_activities WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM gradebook_users WHERE gradebook_id IN (SELECT id FROM gradebook WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM gradebook WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id IN 
+                                    (SELECT id FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d))", $cid);
+    Database::get()->query("DELETE FROM attendance_activities WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
 
 
     $garbage = "$webDir/courses/garbage";
@@ -1755,7 +1770,6 @@ function editorAddButtonToggle (editor) {
         title: '".js_escape($langMore)."',
         classes: 'toggle',
         image: '{$urlAppend}js/tinymce/skins/light/img/toggle.png',
-        style: 'padding: 5px 8px 0 10px;',
         onclick: editorToggleSecondToolbar(editor),
     });
 }
@@ -1786,6 +1800,7 @@ tinymce.init({
     image_advtab: true,
     image_class_list: [
         {title: 'Responsive', value: 'img-responsive'},
+        {title: 'Responsive Center', value: 'img-responsive center-block'},
         {title: 'Float left', value: 'pull-left'},
         {title: 'Float left and responsive', value: 'pull-left img-responsive'},
         {title: 'Float right', value: 'pull-right'},
@@ -2551,61 +2566,7 @@ function update_attendance_book($uid, $id, $activity) {
         $u = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d
                                 AND attendance_id = ?d", $uid, $q->attendance_id);
         if($u){
-            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1", $uid);
-        }
-    }
-    return;
-}
-
-/**
- * @brief update gradebook about user grade
- * @param type $uid
- * @param type $id
- * @param type $grade
- * @param type $activity
- */
-function update_gradebook_book($uid, $id, $grade, $activity)
-{
-    global $course_id;
-
-    if ($activity == 'assignment') {
-        $type = 1;
-    } elseif ($activity == 'exercise') {
-        $type = 2;
-    }
-
-    $q = Database::get()->querySingle("SELECT id, gradebook_id FROM gradebook_activities WHERE module_auto_type = ?d
-                            AND module_auto_id = ?d
-                            AND auto = 1", $type, $id);
-    if ($q) {
-
-        $u = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d
-                                AND gradebook_id = ?d", $uid, $q->gradebook_id);
-        if($u){
-            if ($type == 2) { // exercises
-                $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record
-                                                        WHERE uid = ?d AND eid = ?d", $uid, $id);
-                if ($sql) {
-                   $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
-                   $score = $sql->total_score;
-                   $scoreMax = $sql->total_weighting;
-                    if($scoreMax) {
-                       $grade = round(($range * $score) / $scoreMax, 2);
-                    } else {
-                        $grade = $score;
-                    }
-                }
-            }
-
-            $q2 = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $q->id AND uid = ?d", $uid);
-            if ($q2) { // update grade if exists
-                Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE gradebook_activity_id = $q->id AND uid = ?d", $grade, $uid);
-            } else {
-                if ($grade == '') {
-                    $grade = 0;
-                }
-                Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?d, comments = ''", $uid, $grade);
-            }
+            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1, comments = ''", $uid);
         }
     }
     return;
@@ -3007,6 +2968,54 @@ function forbidden($path = '') {
     exit;
 }
 
+/**
+ * @brief returns HTML for an buttons
+ * @param array $options options for each entry
+ *
+ * Each item in array is another array of the attributes for button:
+ * 
+ */
+function form_buttons($btnArray) {
+    
+    global $langCancel;
+    
+    $buttons = "";
+    
+    foreach ($btnArray as $btn){
+        
+        $id = isset($btn['id'])?"id='$btn[id]'": '';
+        $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
+        if (isset($btn['icon'])) {
+            $text = "<span class='fa $btn[icon] space-after-icon'></span>" . $text;
+        }
+        
+        if (isset($btn['href'])) {
+            $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
+            $title = isset($btn['title'])?"title='$btn[title]'": '';
+            $text = isset($btn['text'])? $btn['text']: $langCancel;
+            $target = isset($btn['target'])?"target='$btn[target]'": '';
+            $javascript = isset($btn['javascript'])?"onclick=$btn[javascript]": '';
+            $buttons .= "<a class='btn $class' $id href='$btn[href]' $target $title $javascript $custom_field>$text</a>&nbsp;&nbsp;";
+        } elseif(!isset($btn['href']) && isset($btn['javascript'])) {
+            $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
+            $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';
+            $name = isset($btn['name'])?"name='$btn[name]'": null;
+            $value = isset($btn["value"])?"value='$btn[value]'": null;
+            $javascript = isset($btn['javascript'])?"onclick=$btn[javascript]": '';
+            $buttons .= "<input class='btn $class' $type $id $name $value $custom_field $javascript />&nbsp;&nbsp;";
+        } else {
+            $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
+            $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';
+            $text = isset($btn['text'])? $btn['text']: '';
+            $name = isset($btn['name'])?"name='$btn[name]'": null;
+            $value = isset($btn["value"])?"value='$btn[value]'": null;
+            $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';
+            $buttons .= "<button class='btn $class' $type $id $name $value $custom_field $disabled>$text</button>&nbsp;&nbsp;";
+        }
+    }
+    
+    return $buttons;
+}
 
 /**
  * @brief returns HTML for an action bar
@@ -3455,17 +3464,20 @@ function my_dirname($path) {
 function isIPv4($ip) {
     return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4);
 }
+
 function isIPv4cidr($ip) {
     return preg_match("/^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/([0-9]|[1-2][0-9]|3[0-2]))$/", $ip);
 }
+
 function isIPv6($ip) {
     return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6);
 }
+
 function isIPv6cidr($ip) {
     return preg_match("/^((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}))|:)))(%.+)?(\/(\d|\d\d|1[0-1]\d|12[0-8]))$/", $ip);
 }
-function ip_v4_cidr_match($ip, $range)
-{
+
+function ip_v4_cidr_match($ip, $range) {
     list ($subnet, $bits) = explode('/', $range);
     $ip = ip2long($ip);
     $subnet = ip2long($subnet);
@@ -3473,9 +3485,9 @@ function ip_v4_cidr_match($ip, $range)
     $subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
     return ($ip & $mask) == $subnet;
 }
+
 // converts inet_pton output to string with bits
-function inet_to_bits($inet) 
-{
+function inet_to_bits($inet) {
    $unpacked = unpack('A16', $inet);
    $unpacked = str_split($unpacked[1]);
    $binaryip = '';
@@ -3484,8 +3496,8 @@ function inet_to_bits($inet)
    }
    return $binaryip;
 }
-function ip_v6_cidr_match($ip, $range)
-{
+
+function ip_v6_cidr_match($ip, $range) {
     $ip = inet_pton($ip);
     $binaryip=inet_to_bits($ip);
 
@@ -3498,7 +3510,8 @@ function ip_v6_cidr_match($ip, $range)
 
     return $ip_net_bits == $net_bits;
 }
-function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array){
+
+function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array) {
     if(isIPv4($ip)){
         foreach ($ips_or_cidr_array as $ip_or_cidr) {
             if (isIPv4cidr($ip_or_cidr)) {
@@ -3518,40 +3531,107 @@ function match_ip_to_ip_or_cidr ($ip, $ips_or_cidr_array){
     }
     return false;
 }
+
 /**
-* Get nearest value from specific key of a multidimensional array
-*
-* @param $key integer
-* @param $arr array
-* @return array
-*/
+ * Get nearest value from specific key of a multidimensional array
+ *
+ * @param $key integer
+ * @param $arr array
+ * @return array
+ */
 function closest($search, $arr) {
    $closest = null;
    $position = null;
    
    foreach($arr as $key => $item) {
-      if($closest == null || abs($search - $closest) > abs($item - $search)) {
-         $closest = $item;
-         $position = $key;
-      }
+       if ($closest == null || abs($search - $closest) > abs($item - $search)) {
+           $closest = $item;
+           $position = $key;
+       }
    }
-    return   
-       array(
-           'key' => $position,
-           'value' => $closest
-        );
+   return array('key' => $position, 'value' => $closest);
 }
+
 /**
-* Get all values from specific key in a multidimensional array
-*
-* @param $key string
-* @param $arr array
-* @return null|string|array
-*/
+ * Get all values from specific key in a multidimensional array
+ *
+ * @param $key string
+ * @param $arr array
+ * @return null|string|array
+ */
 function array_value_recursive($key, array $arr){
     $val = array();
     array_walk_recursive($arr, function($v, $k) use($key, &$val){
         if($k == $key) array_push($val, $v);
     });
     return count($val) > 1 ? $val : array_pop($val);
+}
+
+/**
+ * Function called whenever a user is created or changed
+ *
+ * @param $user_id integer
+ */
+function user_hook($user_id) {
+    // Apply autoenroll rules
+    $status = Database::get()->querySingle('SELECT status FROM user WHERE id = ?d', $user_id)->status;
+    Database::get()->queryFunc('SELECT id FROM autoenroll_rule, autoenroll_rule_department
+        WHERE status = ?d AND
+              autoenroll_rule.id = autoenroll_rule_department.rule AND
+              autoenroll_rule_department.department IN
+                (SELECT department FROM user_department WHERE user = ?d)
+        UNION
+        SELECT id FROM autoenroll_rule
+            LEFT JOIN autoenroll_rule_department
+                ON autoenroll_rule.id = autoenroll_rule_department.rule
+            WHERE rule IS NULL AND
+                  status = ?d',
+        function ($rule) use ($user_id) {
+            $id = $rule->id;
+            Database::get()->query('INSERT IGNORE INTO course_user
+                (course_id, user_id, status, reg_date, document_timestamp)
+                (SELECT course_id, ?d, ?d, NOW(), NOW()
+                    FROM autoenroll_course
+                    WHERE rule = ?d)', $user_id, USER_STUDENT, $id);
+            Database::get()->query('INSERT IGNORE INTO course_user
+                (course_id, user_id, status, reg_date, document_timestamp)
+                (SELECT course, ?d, ?d, NOW(), NOW()
+                    FROM autoenroll_department, course_department
+                    WHERE department_id = department AND
+                          rule = ?d)', $user_id, USER_STUDENT, $id);
+        }, $status, $user_id, $status);
+}
+
+
+/**
+ * @brief Function called before a user is created.
+ *
+ * For now, only called for CAS automatic registration to determine actual user
+ * details. If function local_register_hook() is defined, calls that instead.
+ *
+ * @param array $options - User creation options. Possible key-value pairs are:
+ * 'departments' - List of department id's requested by user
+ * 'attributes'  - List of attributes retrieved via LDAP / CAS / Shibboleth
+ * 'am'          - Student id number retrieved via LDAP / CAS / Shibboleth
+ * @return array - Actual user creation options. Key-value pairs are:
+ * 'accept'      - Boolean - if false, user should be rejected
+ * 'departments' - List of department id's user should be added to
+ * 'status'      - User status (USER_STUDENT, USER_TEACHER)
+ * 'am'          - Student id number
+ */
+function register_hook($options) {
+    if (!isset($options['am'])) {
+        $options['am'] = '';
+    }
+    if (!isset($options['departments'])) {
+        $options['departments'] = array();
+    }
+    $options['accept'] = true;
+    $options['status'] = USER_STUDENT;
+
+    if (function_exists('local_register_hook')) {
+        return local_register_hook($options);
+    } else {
+        return $options;
+    }
 }

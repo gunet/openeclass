@@ -414,7 +414,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         </script>";
         $tool_content .= "
             <div class='form-group'>
-                <label for='answerType' class='col-sm-2 control-label'>$langExerciseType:</label>
+                <label for='answerType' class='col-sm-2 control-label'>$langSurveyType:</label>
                 <div class='col-sm-10'>            
                     <div class='radio'>
                       <label>
@@ -443,7 +443,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 </div>              
             </div>
             <div class='form-group$questionScaleErrorClass$questionScaleShowHide'>
-                <label for='questionName' class='col-sm-2 control-label'>$langMax $langScale (1-..):</label>
+                <label for='questionScale' class='col-sm-2 control-label'>$langMax $langScale (1-..):</label>
                 <div class='col-sm-10 col-md-3'>
                     <input type='text' class='form-control' name='questionScale' id='questionScale' value='".q($questionScale)."'>
                     <span class='help-block'>$questionScaleError</span>                    
@@ -498,39 +498,39 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;modifyAnswers=$question_id' method='post'>                   
                     <fieldset>
                     <div class='form-group'>
-                        <label for='questionName' class='col-xs-3 control-label'>$langPollAddAnswer:</label>
+                        <label class='col-xs-3 control-label'>$langPollAddAnswer:</label>
                         <div class='col-xs-9'>
                           <input class='btn btn-primary' type='submit' name='MoreAnswers' value='+'>
                         </div>
                     </div><hr><br>";
         if (count($answers) > 0) {
-              foreach ($answers as $answer) {    
+            foreach ($answers as $answer) {    
               $tool_content .="      
                   <div class='form-group'>
                         <div class='col-xs-11'>
                             <input type='text' class='form-control' name='answers[]' value='$answer->answer_text'>                        
                         </div>
-                        <div class='col-xs-1'>
-                            " . icon('fa-times', $langDelete, '#', 'id="del_btn"') . "
+                        <div class='col-xs-1 form-control-static'>
+                            " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
               }
         } else {
-              $tool_content .="      
+            $tool_content .="      
                   <div class='form-group'>
                         <div class='col-xs-11'>
                             <input class='form-control' type='text' name='answers[]' value=''>                        
                         </div>
-                        <div class='col-xs-1'>
-                            " . icon('fa-times', $langDelete, '#', 'id="del_btn"') . "
+                        <div class='col-xs-1 form-control-static'>
+                            " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>
                   <div class='form-group'>
                         <div class='col-xs-11'>
                             <input class='form-control' type='text' name='answers[]' value=''>                        
                         </div>
-                        <div class='col-xs-1'>
-                            " . icon('fa-times', $langDelete, '#', 'id="del_btn"') . "
+                        <div class='col-xs-1 form-control-static'>
+                            " . icon('fa-times', $langDelete, '#', ' class="del_btn"') . "
                         </div>
                     </div>";
         }                                        
@@ -538,7 +538,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                     <div class='form-group'>
                         <div class='col-sm-10 col-sm-offset-2'>                          
                             <input class='btn btn-primary' type='submit' name='submitAnswers' value='$langCreate'>
-                            <a class='btn btn-default' href='admin.php?course=$course_code&pid=$pid&editQuestion=$question_id'>$langCancel</a>
+                            <a class='btn btn-default' href='admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question_id'>$langCancel</a>
                         </div>
                     </div>
                     </fieldset>
@@ -641,12 +641,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                                 array(
                                     'title' => $langEditChange,
                                     'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&pid=$pid&editQuestion=$question->pqid"
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid"
                                 ),
                                 array(
                                     'title' => $langDelete,
                                     'icon' => 'fa-times',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&pid=$pid&deleteQuestion=$question->pqid",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;pid=$pid&amp;deleteQuestion=$question->pqid",
                                     'class' => 'delete',
                                     'confirm' => $langConfirmYourChoice                                  
                                 ),

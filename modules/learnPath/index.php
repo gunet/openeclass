@@ -269,11 +269,18 @@ if ($is_editor) {
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                              <input type='hidden' name='cmd' value='create'>
-                              <input class='btn btn-primary' type='submit' value='$langCreate'>
-                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
-                            </div>
-                        </div>                        
+                              <input type='hidden' name='cmd' value='create'>".
+                                    form_buttons(array(
+                                        array(
+                                            'text' => $langSave,
+                                            'value' => $langCreate
+                                        ),
+                                        array(
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."</div>
+                            </div>                        
                         </form></div>";
                     }
                 } else { // create form requested
@@ -301,10 +308,17 @@ if ($is_editor) {
                         </div>
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
-                              <input type='hidden' name='cmd' value='create'>
-                              <input class='btn btn-primary' type='submit' value='$langCreate'>
-                                  <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
-                            </div>
+                              <input type='hidden' name='cmd' value='create'>".
+                                    form_buttons(array(
+                                        array(
+                                            'text' => $langSave,
+                                            'value' => $langCreate
+                                        ),
+                                        array(
+                                            'href' => "index.php?course=$course_code",
+                                        )
+                                    ))
+                                    ."</div>
                         </div>                        
                         </form></div>";
                 }
@@ -455,27 +469,21 @@ $iterator = 1;
 
 $is_blocked = false;
 $allow = false;
-$ind = 1;
-foreach ($result as $list) { // while ... learning path list
-    
+$ind = 0;
+foreach ($result as $list) { // while ... learning path list    
     if ($list->visible == 0) {
         if ($is_editor) {
             $style = " class='not_visible'";
         } else {
             continue; // skip the display of this file
         }
-    } else {
-        if ($ind % 2 == 0) {
-            $style = 'class="even"';
-        } else {
-            $style = 'class="odd"';
-        }
+    } else {     
+        $style = '';
     }
 
     //$is_blocked = $list->lock == 'CLOSE'? true : false;
     
-    $tool_content .= "    <tr " . $style . ">";
-
+    $tool_content .= "<tr " . $style . ">";
     //Display current learning path name
     if (!$is_blocked) {
         // locate 1st module of current learning path
@@ -525,8 +533,7 @@ foreach ($result as $list) { // while ... learning path list
             //}
         }
 
-        $tool_content .= "
-      <td>$play_url<span class='pull-right'>$play_button</span></td>\n";
+        $tool_content .= "<td>$play_url<span class='pull-right'>$play_button</span></td>\n";
 
         // --------------TEST IF FOLLOWING PATH MUST BE BLOCKED------------------
         // ---------------------(MUST BE OPTIMIZED)------------------------------
@@ -592,10 +599,9 @@ foreach ($result as $list) { // while ... learning path list
         // 5 administration columns
         // LOCK link
 
-
         $is_real_dir = is_dir(realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $list->learnPath_id));
 
-        $tool_content .= "      <td class='option-btn-cell'>" .
+        $tool_content .= "<td class='option-btn-cell'>" .
                 action_button(array(
                     array('title' => $langEditChange,
                         'url' => "learningPathAdmin.php?course=$course_code&amp;path_id=" . $list->learnPath_id,
@@ -645,8 +651,8 @@ foreach ($result as $list) { // while ... learning path list
         }
         if ($prog >= 0) {
             $globalprog += $prog;
-        }
-        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>\n";
+        }        
+        $tool_content .= "<td class='text-right' width='120'>" . disp_progress_bar($prog, 1) . "</td>";
     }
     $tool_content .= "</tr>\n";
     $iterator++;

@@ -1128,9 +1128,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input class='btn btn-primary' type='submit' value='$langImport' >
-                            </div>
+                            <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+                                    array(
+                                        'text' => $langSave,
+                                        'value'=> $langImport
+                                    ),
+                                    array(
+                                        'href' => "index.php?course=$course_code",
+                                    )
+                                ))."</div>
                         </div>
                     </form>
                 </div>
@@ -1243,7 +1249,15 @@ EOF;
         
         $tool_content .= "\n  <tr class='nobrd'>";
         $tool_content .= "\n    <td colspan='2'></td>";
-        $tool_content .= "\n    <td colspan='3' class='right'><input class='btn btn-primary' type='submit' value='" . $langImport . "'></td>";
+        $tool_content .= "\n    <td colspan='3' class='right'>".form_buttons(array(
+                            array(
+                                'text' => $langSave,
+                                'value'=> $langImport
+                            ),
+                            array(
+                                'href' => "index.php?course=$course_code",
+                            )
+                        ))."</td>";
         $tool_content .= "\n  </tr>";
     }
 

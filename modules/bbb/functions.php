@@ -1224,7 +1224,9 @@ function get_total_bbb_servers()
 {
     $total = 0;
 
-    $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
+    if (get_config('ext_bigbluebutton_enabled')) {
+        $total = Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count;
+    }
 
     return $total;
 }
@@ -1258,18 +1260,28 @@ function publish_video_recordings($course_id, $id)
                 $recordingParams = array(
                     'meetingId' => $session->meeting_id,
                 );
-                $recs = file_get_contents($bbb->getRecordingsUrl($recordingParams));
+                $ch = curl_init();
+                $timeout = 0;
+                curl_setopt ($ch, CURLOPT_URL, $bbb->getRecordingsUrl($recordingParams));
+                curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+                $recs = curl_exec($ch);
+                curl_close($ch);
+
                 $xml = simplexml_load_string($recs);
                 // If not set it means that there is no video recording.
                 // Skip and search for next one
                 if (isset($xml->recordings->recording->playback->format->url)) {
                     $url = (string) $xml->recordings->recording->playback->format->url;
-
                     // Check if recording already in videolinks and if not insert
                     $c = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE url = ?s",$url);
                     if ($c->cnt == 0) {
                         Database::get()->querySingle("INSERT INTO videolink (course_id,url,title,description,creator,publisher,date,visible,public)"
                         . " VALUES (?s,?s,?s,IFNULL(?s,'-'),?s,?s,?t,?d,?d)",$session->course_id,$url,$session->title,strip_tags($session->description),$session->prof_names,$session->prof_names,$session->start_date,1,1);
+                        $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
+                    }
+                    else
+                    {
                         $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
                     }
                 } else {

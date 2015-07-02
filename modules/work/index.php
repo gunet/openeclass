@@ -33,6 +33,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'work_functions.php';
 require_once 'modules/group/group_functions.php';
+require_once 'modules/gradebook/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
@@ -682,7 +683,7 @@ function submit_work($id, $on_behalf_of = null) {
             // update attendance book as well
             update_attendance_book($quserid, $row->id, 'assignment');
             //update gradebook if needed
-            update_gradebook_book($quserid, $id, $grade, 'assignment');
+            update_gradebook_book($quserid, $id, $grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             if ($on_behalf_of and isset($_POST['email'])) {
                 $email_grade = $_POST['grade'];
                 $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
@@ -702,7 +703,7 @@ function submit_work($id, $on_behalf_of = null) {
 function new_assignment() {
     global $tool_content, $m, $langAdd, $course_code, $course_id, $answer;
     global $desc, $language, $head_content, $langCancel, $langMoreOptions, $langLessOptions;
-    global $langBack, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
+    global $langBack, $langSave, $langStudents, $langMove, $langWorkFile, $langAssignmentStartHelpBlock,
            $langAssignmentEndHelpBlock, $langWorkSubType, $langWorkOnlineText, $langStartDate,
            $langGradeNumbers, $langGradeScalesSelect, $langGradeType, $langGradeScales;
     
@@ -840,7 +841,7 @@ function new_assignment() {
                 <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
                     <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
                     <div class='col-sm-10'>
-                      <select name='scale' class='form-control' id='scales'>
+                      <select name='scale' class='form-control' id='scales' disabled>
                             $scale_options
                       </select>
                       <span class='help-block'>$scale_error</span>
@@ -965,10 +966,19 @@ function new_assignment() {
                 ".Tag::tagInput()."               
             </div>
             <div class='form-group'>
-                <div class='col-sm-offset-2 col-sm-10'>
-                    <input type='submit' class='btn btn-primary' name='new_assign' value='$langAdd' onclick=\"selectAll('assignee_box',true)\" />
-                    <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-                </div>
+                <div class='col-sm-offset-2 col-sm-10'>".
+                    form_buttons(array(
+                        array(
+                            'class'         => 'btn-primary',
+                            'name'          => 'new_assign',
+                            'value'         => $langSave,
+                            'javascript'    => "selectAll('assignee_box',true)"
+                        ),
+                        array(
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        )
+                    ))
+                    ."</div>
             </div>
         </fieldset>
         </form></div></div></div>";    
@@ -977,8 +987,8 @@ function new_assignment() {
 //form for editing
 function show_edit_assignment($id) {
     
-    global $tool_content, $m, $langEdit, $langBack, $course_code, $langCancel,
-        $urlAppend, $works_url, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
+    global $tool_content, $m, $langBack, $course_code, $langCancel,
+        $urlAppend, $langSave, $works_url, $course_id, $head_content, $language, $langAssignmentStartHelpBlock,
         $langAssignmentEndHelpBlock, $langStudents, $langMove, $langWorkFile, $themeimg, $langStartDate,
         $langLessOptions, $langMoreOptions, $langWorkOnlineText, $langWorkSubType,
         $langGradeScalesSelect, $langGradeType, $langGradeNumbers, $langGradeScales ;
@@ -1176,7 +1186,7 @@ function show_edit_assignment($id) {
                 <div class='form-group".($scale_error ? " has-error" : "").(!$grading_type ? " hidden" : "")."'>
                     <label for='title' class='col-sm-2 control-label'>$langGradeScales:</label>
                     <div class='col-sm-10'>
-                      <select name='scale' class='form-control' id='scales'>
+                      <select name='scale' class='form-control' id='scales'".(!$grading_type ? " disabled" : "").">
                             $scale_options
                       </select>
                       <span class='help-block'>$scale_error</span>
@@ -1305,10 +1315,19 @@ function show_edit_assignment($id) {
                 ".Tag::tagInput($id)."                 
             </div>          
             <div class='form-group'>
-            <div class='col-sm-offset-2 col-sm-10'>
-                <input type='submit' class='btn btn-primary' name='do_edit' value='$langEdit' onclick=\"selectAll('assignee_box',true)\" />
-                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>    
-            </div> 
+            <div class='col-sm-offset-2 col-sm-10'>".
+                    form_buttons(array(
+                        array(
+                            'class'         => 'btn-primary',
+                            'name'          => 'do_edit',
+                            'value'         => $langSave,
+                            'javascript'    => "selectAll('assignee_box',true)"
+                        ),
+                        array(
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        )
+                    ))
+                    ."</div> 
             </div>
     </fieldset>
     </form></div>";
@@ -1483,7 +1502,7 @@ function show_student_assignment($id) {
 }
 
 function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submissions_exist=false) {
-    global $tool_content, $m, $langWorkFile, $langSendFile, $langSubmit, $uid, 
+    global $tool_content, $m, $langWorkFile, $langSendFile, $langSave, $langSubmit, $uid, 
     $langNotice3, $gid, $urlAppend, $langGroupSpaceLink, $langOnBehalfOf, 
     $course_code, $course_id, $langBack, $is_editor, $langCancel, $langWorkOnlineText,
     $langGradeScalesSelect;
@@ -1621,10 +1640,18 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         </div>
                         $extra
                         <div class='form-group'>
-                            <div class='col-sm-10 col-sm-offset-2'>
-                                <input class='btn btn-primary' type='submit' value='$langSubmit' name='work_submit'>
-                                <a class='btn btn-default' href='$back_link'>$langCancel</a>
-                            </div>
+                            <div class='col-sm-10 col-sm-offset-2'>".
+                    form_buttons(array(
+                        array(
+                            'text'          => $langSave,
+                            'name'          => 'work_submit',
+                            'value'         => $langSubmit
+                        ),
+                        array(
+                            'href' => $back_link
+                        )
+                    ))
+                    ."</div>
                         </div>
                         </fieldset>
                      </form>
@@ -2344,7 +2371,7 @@ function submit_grade_comments() {
                     'comments' => $comment));
             //update gradebook if needed
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-            update_gradebook_book($quserid, $id, $grade, 'assignment');
+            update_gradebook_book($quserid, $id, $grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
         }
         if (isset($_POST['email'])) {
             grade_email_notify($id, $sid, $grade, $comment);
@@ -2400,7 +2427,7 @@ function submit_grades($grades_id, $grades, $email = false) {
 
                     //update gradebook if needed
                     $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                    update_gradebook_book($quserid, $assign_id, $grade, 'assignment');
+                    update_gradebook_book($quserid, $assign_id, $grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
 
                     if ($email) {
                         grade_email_notify($grades_id, $sid, $grade, '');

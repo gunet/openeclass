@@ -7,6 +7,10 @@ syntax: regexp
 ^config/.*\.php
 ^html/
 
+^composer\.phar
+^storage/
+^vendor/
+
 ^nbproject/private/
 ^.sass-cache/
 

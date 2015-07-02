@@ -507,10 +507,16 @@ if ($is_editor) {
             <div class='col-sm-10'><input class='form-control' type='text' name='enddate' id='enddate' value='$showUntil'></div>
         </div>
         <div class='form-group'>
-        <div class='col-sm-offset-2 col-sm-10'>
-            <input class='btn btn-primary' type='submit' name='submitAnnouncement' value='".q($langAdd)."' />
-            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-        </div>
+        <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
+                array(
+                    'text' => $langUpload,
+                    'name' => 'submitAnnouncement',
+                    'value'=> $langAdd
+                ),
+                array(
+                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                )
+            ))."</div>
         <input type='hidden' name='id' value='$AnnouncementToModify'>
         </div>
         </fieldset>

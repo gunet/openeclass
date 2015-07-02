@@ -383,7 +383,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
         $status = $lp->visible;
         if ($is_editor) {
             $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";            
+            $link = "<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";            
             if (!$module_visible) {
                 $link .= " <i>($langInactiveModule)</i> ";
             }
@@ -392,7 +392,7 @@ function show_lp($title, $comments, $resource_id, $lp_id) {
                 return '';
             }
             $module_id = Database::get()->querySingle("SELECT module_id FROM lp_rel_learnPath_module WHERE learnPath_id = ?d ORDER BY rank LIMIT 1", $lp_id)->module_id;
-            $link = "<a href='${urlAppend}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
+            $link = "<a href='${urlServer}modules/learnPath/viewer.php?course=$course_code&amp;path_id=$lp_id&amp;module_id=$module_id&amp;unit=$id'>";
         }
         $imagelink = icon('fa-ellipsis-h');
     }
@@ -1085,7 +1085,7 @@ function show_ebook_section($title, $comments, $resource_id, $section_id, $visib
 function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, $visibility) {
     global $course_id;
     
-    $data = Database::get()->queryArray("SELECT ebook.id AS ebook_id, ebook_section.id AS sid
+    $data = Database::get()->querySingle("SELECT ebook.id AS ebook_id, ebook_section.id AS sid
                 FROM ebook, ebook_section, ebook_subsection
                 WHERE ebook.course_id = ?d AND
                     ebook_section.ebook_id = ebook.id AND
@@ -1096,7 +1096,7 @@ function show_ebook_subsection($title, $comments, $resource_id, $subsection_id, 
         $deleted = true;
         $display_id = $ebook_id = false;
     } else {
-        $deleted = false;        
+        $deleted = false;
         $ebook_id = $data->ebook_id;
         $display_id = $data->sid . ',' . $subsection_id;
     }

@@ -27,7 +27,7 @@ require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp");
+    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp");
     private static $APPS = null;
 
     /**
@@ -59,12 +59,28 @@ class ExtAppManager {
 
 abstract class ExtApp {
 
-    const ENABLED = "enabled";
-
+    const ENABLED = 'enabled';
     private $params = array();
 
     public function __construct() {
         $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::ENABLED, "0", ExtParam::TYPE_BOOLEAN));
+    }
+
+    public function isEnabled() {
+        $enabled = $this->getParam(ExtApp::ENABLED);
+        return $enabled && strcmp($enabled->value(), "1") == 0;
+    }
+
+    /**
+     * 
+     * @param boolean $status
+     */
+    function setEnabled($status) {
+        $param = $this->getParam(ExtApp::ENABLED);
+        if ($param) {
+            $param->setValue($status ? 1 : 0);
+            $param->persistValue();
+        }
     }
 
     /**
@@ -96,6 +112,29 @@ abstract class ExtApp {
      */
     public function getName() {
         return strtolower(str_replace(' ', '', $this->getDisplayName()));
+    }
+
+    /**
+     * 
+     * @return string
+     */
+    public function getEditUrl() {
+        return 'modules/admin/extapp.php?edit=' . $this->getName();
+    }
+
+    /**
+     * Return true if all params are set, else false
+     * 
+     * @return boolean
+     */
+    public function getParamsSet() {
+        foreach ($this->getParams() as $para) {
+            if ($para->name() !== 'enabled' and
+                $para->value() === '') {
+                return false;
+            }
+        }
+        return true;
     }
 
     public function storeParams() {

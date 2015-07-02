@@ -811,7 +811,7 @@ function showlinksofcategory($cat_id = 0) {
                             $vObj->setPlayURL($vObj->getAccessURL());
                         }
                         $link_href = MultimediaHelper::chooseMediaAhref($vObj);
-                        $link_to_save = $vObj->getAccessURL();
+                        $link_to_save = $vObj->getAccessURL() . '&amp;attachment';
                         break;
                     case "videolink":
                         $vObj = MediaResourceFactory::initFromVideoLink($myrow);

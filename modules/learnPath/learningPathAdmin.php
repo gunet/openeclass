@@ -310,7 +310,7 @@ switch ($cmd) {
                     <label for='newLabel'>" . $langNewLabel . ": </label>&nbsp;
                     <input type='text' name='newLabel' id='newLabel' maxlength='255' / size='30'>
                     <input type='hidden' name='cmd' value='createLabel' />
-                    <input class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "' />
+                    <button class='btn btn-primary btn-sm' type='submit' value='" . $langCreate . "'>$langCreate</button>
                   </form>
                 </td>
               </tr>";
@@ -410,21 +410,25 @@ if ($cmd == "updatecomment") {
 $tool_content .= "</td></tr></table></div>";
 
 if (isset($displayChangePosForm) && $displayChangePosForm) {
-    $dialogBox = "<table class=\"table-default\">
-    <tr>
-      <th>" . $langMove . ":</th>
-      <td>
-        <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
-    // build select input - $elementList has been declared in the previous big cmd case
-    $dialogBox .= build_nested_select_menu("newPos", $elementList);
-    $dialogBox .= "
-         <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
-         <input type=\"hidden\" name=\"cmdid\" value=\"" . $_REQUEST['cmdid'] . "\" />
-         <input type=\"submit\" value=\"" . $langOk . "\" />
-        </form>
-      </td>
-    </tr>
-    </table>";
+    $dialogBox = "
+    <div class='row'>
+        <div class='col-xs-12'>
+            <div class='panel panel-body'>
+                <div class='col-md-2' style='line-height: 32px;'><strong>$langMove:</strong></div>
+                <div class='col-md-10'>
+                    <form action=\"" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code\" method=\"post\">\"<b>" . $moduleInfos->name . "</b>\" &nbsp;" . $langTo . ":&nbsp;&nbsp;";
+                        // build select input - $elementList has been declared in the previous big cmd case
+                        $dialogBox .= build_nested_select_menu("newPos", $elementList);
+                        $dialogBox .= "
+                        <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
+                        <input type=\"hidden\" name=\"cmdid\" value=\"" . $_REQUEST['cmdid'] . "\" />
+                        <button type=\"submit\" class=\"btn btn-primary\" value=\"" . $langSave . "\" >$langSave</button>
+                        <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn btn-default\" value=\"" . $langCancel . "\" >$langCancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>";
 }
 
 
@@ -444,7 +448,7 @@ $lp_action_button = action_button(array(
     array(
         'title' => "$langDocumentAsModuleLabel",
         'url' => "insertMyDoc.php?course=$course_code",
-        'icon' => 'fa-folder-open-o'
+        'icon' => 'fa-file-o'
     ),
     array(
         'title' => "$langExerciseAsModuleLabel",
@@ -613,9 +617,9 @@ foreach ($flatElementList as $module) {
                     'url' => "module.php?course=$course_code&amp;module_id=" . $module['module_id'],
                     'icon' => 'fa-edit'),
                 // VISIBILITY
-                array('title' => $module['visible'] == 0? $langViewHide : $langViewShow,
+                array('title' => $module['visible'] == 0? $langViewShow : $langViewHide,
                     'url' => $module['visible'] == 0? $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkVisibl&amp;cmdid=" . $module['module_id'] : $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
-                    'icon' => $module['visible'] == 0 ? 'fa-eye-slash' : 'fa-eye'),
+                    'icon' => $module['visible'] == 0 ? 'fa-eye' : 'fa-eye-slash'),
 //                array('title' => $langVisible,
 //                    'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=mkInvisibl&amp;cmdid=" . $module['module_id'],
 //                    'icon' => 'fa-eye',
@@ -629,7 +633,7 @@ foreach ($flatElementList as $module) {
                     'icon' => $module['lock'] == 'OPEN'? 'fa-lock' : 'fa-unlock'),
                 array('title' => $langMove, // DISPLAY CATEGORY MOVE COMMAND
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=changePos&amp;cmdid=" . $module['learnPath_module_id'],
-                    'icon' => 'fa-mail-forward'),
+                    'icon' => 'fa-arrows'),
                 array('title' => $langUp, // DISPLAY MOVE UP COMMAND only if it is not the top learning path
                     'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;cmd=moveUp&amp;cmdid=" . $module['learnPath_module_id'],
                     'level' => 'primary',

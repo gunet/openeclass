@@ -255,10 +255,17 @@ if ($is_editor) {
                         </div>
                     </div>
                     <div class='form-group'>
-                        <div class='col-sm-12'>
-                            <input class='btn btn-primary' type='submit' name='submit_config' value='$langSubmit'>
-                            <a class='btn btn-default' href='$base_url'>$langCancel</a>
-                        </div>
+                        <div class='col-sm-12'>".form_buttons(array(
+                                array(
+                                    'text' => $langSave,
+                                    'name' => 'submit_config',
+                                    'value'=> $langSubmit
+                                ),
+                                array(
+                                    'href' => $base_url
+                                )
+                            ))
+                            ."</div>
                     </div>                   
                 </form>
               </div>";
@@ -335,10 +342,16 @@ if ($is_editor) {
                    </div>
                    $category_selection
                    <div class='form-group'>    
-                        <div class='col-sm-10 col-sm-offset-2'>
-                             <input class='btn btn-primary' type='submit' name='submit' value='$submit_value'>
-                             <a href='$base_url' class='btn btn-default'>$langCancel</a>
-                        </div>
+                        <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(
+                                    array(
+                                        'text' => $langSave,
+                                        'value'=> $submit_value,
+                                        'name' => 'submit'
+                                    ),
+                                    array(
+                                        'href' => $base_url,
+                                    )
+                                ))."</div>
                     </div>
                 </form>
             </div>";

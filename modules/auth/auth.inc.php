@@ -34,6 +34,7 @@
  */
 
 require_once 'include/log.php';
+require_once 'include/lib/user.class.php';
 // pop3 class
 require_once 'modules/auth/methods/pop3.php';
 require_once 'include/phpass/PasswordHash.php';
@@ -316,7 +317,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '6':
-            $path = "${webDir}secure/";
+            $path = $webDir . '/secure/';
             if (!file_exists($path)) {
                 if (!mkdir($path, 0700)) {
                     $testauth = false;
@@ -326,7 +327,6 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 $index_regfile = $path . 'index_reg.php';
 
                 // creation of secure/index.php file
-                $f = fopen($indexfile, 'w');
                 $filecontents = '<?php
 session_start();
 $_SESSION[\'shib_email\'] = ' . $settings['shibemail'] . ';
@@ -334,10 +334,12 @@ $_SESSION[\'shib_uname\'] = ' . $settings['shibuname'] . ';
 $_SESSION[\'shib_surname\'] = ' . $settings['shibcn'] . ';
 header("Location: ../index.php");
 ';
-                if (fwrite($f, $filecontents)) {
-                    $testauth = true;
+                if ($f = fopen($indexfile, 'w')) {
+                    if (fwrite($f, $filecontents)) {
+                        $testauth = true;
+                    }
+                    fclose($f);
                 }
-                fclose($f);
 
                 // creation of secure/index_reg.php
                 // used in professor request registration process via shibboleth
@@ -887,7 +889,7 @@ function shib_cas_login($type) {
                 $language = $info->lang;
             }
         }
-    } elseif ($autoregister and !get_config('am_required')) {
+    } elseif ($autoregister and !(get_config('am_required') and empty($am))) {
         // if user not found and autoregister enabled, create user
 	    $verified_mail = EMAIL_UNVERIFIED;
     	if (isset($_SESSION['cas_email'])) {
@@ -895,7 +897,17 @@ function shib_cas_login($type) {
     	} else { // redirect user to mail_verify_change.php
 	    	$_SESSION['mail_verification_required'] = 1;
     	}
+        $options = register_hook(array(
+            'attributes' => isset($_SESSION['cas_attributes'])? $_SESSION['cas_attributes']: array(),
+            'am' => $am));
 
+        if (!$options['accept']) {
+            foreach (array_keys($_SESSION) as $key) {
+                unset($_SESSION[$key]);
+            }
+            Session::Messages($langRegistrationDenied, 'alert-warning');
+            redirect_to_home_page();
+        }
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
@@ -903,7 +915,11 @@ function shib_cas_login($type) {
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                    $surname, $givenname, $type, $uname, $email, USER_STUDENT, $language, $am, $verified_mail)->lastInsertID;
+                $surname, $givenname, $type, $uname, $email, $options['status'],
+                $language, $options['am'], $verified_mail)->lastInsertID;
+        $userObj = new User();
+        $userObj->refresh($_SESSION['uid'], $options['departments']);
+        user_hook($_SESSION['uid']);
     } else {
         // user not registered, automatic registration disabled
         // redirect to registration screen

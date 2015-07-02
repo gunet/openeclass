@@ -70,7 +70,8 @@ if (!isset($_POST['doit'])) {
             unset($_SESSION['dbname']);
             unset($_SESSION['cid_tmp']);
             unset($_SESSION['courses'][$code]);
-            $tool_content .= "<div class='alert alert-success'>$langCoursDelSuccess</div>";
+            Session::Messages($langCoursDelSuccess, 'alert-success');
+            redirect_to_home_page('main/portfolio.php');
         } else {
             $tool_content .= "<div class='alert alert-danger'>$langCoursError</div>";
         }

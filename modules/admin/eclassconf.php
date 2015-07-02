@@ -1167,11 +1167,6 @@ $tool_content .= "
     $tool_content .= modalConfirmation('confirmIndexDialog', 'confirmIndexLabel', $langConfirmEnableIndexTitle, $langConfirmEnableIndex, 'confirmIndexCancel', 'confirmIndexOk');
     $tool_content .= modalConfirmation('confirmMobileAPIDialog', 'confirmMobileAPILabel', $langConfirmEnableMobileAPITitle, $langConfirmEnableMobileAPI, 'confirmMobileAPICancel', 'confirmMobileAPIOk');
 
-    // After restored values have been inserted into form then bring back
-    // values from original config.php, so the rest of the page can be displayed correctly
-    if (isset($_GET['restore']) && $_GET['restore'] == "yes") {
-        @include('config/config.php');
-    }
 }
 
 draw($tool_content, 3, null, $head_content);

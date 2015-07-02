@@ -43,6 +43,7 @@ require_once 'include/lib/fileDisplayLib.inc.php';
 require_once 'modules/weeks/functions.php';
 require_once 'modules/document/doc_init.php';
 require_once 'main/personal_calendar/calendar_events.class.php';
+require_once 'modules/course_metadata/CourseXML.php';
 
 $tree = new Hierarchy();
 $course = new Course();
@@ -98,6 +99,25 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
 
 // For statistics: record login
 Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip = '$_SERVER[REMOTE_ADDR]', date_time = " . DBHelper::timeAfter() . "", $uid, $course_id);
+
+// opencourses hits sumation
+$visitsopencourses = 0;
+$hitsopencourses = 0;
+if (get_config('opencourses_enable')) {
+    $cxml = CourseXMLElement::initFromFile($course_code);
+    $reslastupdate = Database::get()->querySingle("select datestamp from oai_record where course_id = ?d and deleted = ?d", $course_id, 0);
+    $lastupdate = null;
+    if ($reslastupdate) {
+        $lastupdate = strtotime($reslastupdate->datestamp);
+    }
+    if ($cxml && $lastupdate && (time() - $lastupdate > 24 * 60 * 60)) {
+        // need to refresh hits when no update occurred during the last 24 hours
+        CourseXMLElement::refreshCourse($course_id, $course_code);
+        $cxml = CourseXMLElement::initFromFile($course_code);
+    }
+    $visitsopencourses = ($cxml && $cxml->visits) ? intval((string) $cxml->visits) : 0;
+    $hitsopencourses = ($cxml && $cxml->hits) ? intval((string) $cxml->hits) : 0;
+}
 
 $action = new action();
 $action->record(MODULE_ID_UNITS);
@@ -217,7 +237,6 @@ units_set_maxorder();
 if ($is_editor) {
     // update index and refresh course metadata
     require_once 'modules/search/indexer.class.php';
-    require_once 'modules/course_metadata/CourseXML.php';
 
     if (isset($_REQUEST['del'])) { // delete course unit
         $id = intval($_REQUEST['del']);
@@ -342,7 +361,6 @@ if ($course_license) {
 }
 
 // display opencourses level in bar
-require_once 'modules/course_metadata/CourseXML.php';
 $level = ($levres = Database::get()->querySingle("SELECT level FROM course_review WHERE course_id =  ?d", $course_id)) ? CourseXMLElement::getLevel($levres->level) : false;
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
@@ -368,7 +386,7 @@ if (isset($level) && !empty($level)) {
     });
 
 /* ]]> */
-</script>";   
+</script>";
     $opencourses_level = "
     <div class='row'>
         <div class='col-md-4'>
@@ -379,6 +397,10 @@ if (isset($level) && !empty($level)) {
             <br />
             <small><a href='javascript:showMetadata(\"$course_code\");'>$langCourseMetadata " .
             icon('fa-tags', $langCourseMetadata, "javascript:showMetadata(\"$course_code\");") . "</small>
+            <br />
+            <small>$langVisits: $visitsopencourses</small>
+            <br />
+            <small>$langHits: $hitsopencourses</small>
         </div>
     </div>
 ";

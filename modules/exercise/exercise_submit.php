@@ -32,6 +32,7 @@ $guest_allowed = true;
 
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
+require_once 'modules/gradebook/functions.php';
 
 $pageName = $langExercicesView;
 $picturePath = "courses/$course_code/image";
@@ -323,8 +324,8 @@ if (isset($_POST['formSent'])) {
         if ($attempt_status == ATTEMPT_COMPLETED) {
             // update attendance book
             update_attendance_book($uid, $exerciseId, 'exercise');
-            // update gradebook
-            update_gradebook_book($uid, $exerciseId, $totalScore, 'exercise');
+            // update gradebook            
+            update_gradebook_book($uid, $exerciseId, $totalScore, GRADEBOOK_ACTIVITY_EXERCISE);
         }
         unset($objExercise);
         unset_exercise_var($exerciseId);

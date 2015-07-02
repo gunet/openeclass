@@ -409,15 +409,15 @@ function adminMenu() {
     $sideMenuImg = array();
 
     //user administration
-    $arrMenuType = array();
-    $arrMenuType['type'] = 'text';
-    $arrMenuType['text'] = $GLOBALS['langAdminUsers'];
-    $arrMenuType['class'] = 'user_admin';
+    array_push($sideMenuSubGroup, array(
+        'type' => 'text',
+        'text' => $GLOBALS['langAdminUsers'],
+        'class' => 'user_admin'));
 
-    array_push($sideMenuSubGroup, $arrMenuType);
     array_push($sideMenuText, $GLOBALS['langSearchUser']);
     array_push($sideMenuLink, "../admin/search_user.php");
     array_push($sideMenuImg, "arrow.png");
+
     array_push($sideMenuText, $GLOBALS['langProfOpen']);
     array_push($sideMenuLink, "../admin/listreq.php");
     array_push($sideMenuImg, "arrow.png");
@@ -437,9 +437,11 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langUserAuthentication']);
         array_push($sideMenuLink, "../admin/auth.php");
         array_push($sideMenuImg, "arrow.png");
+
         array_push($sideMenuText, $GLOBALS['langMailVerification']);
         array_push($sideMenuLink, "../admin/mail_ver_settings.php");
         array_push($sideMenuImg, "arrow.png");
+
         array_push($sideMenuText, $GLOBALS['langChangeUser']);
         array_push($sideMenuLink, "../admin/change_user.php");
         array_push($sideMenuImg, "arrow.png");
@@ -451,12 +453,15 @@ function adminMenu() {
     array_push($sideMenuText, $GLOBALS['langMultiRegUser']);
     array_push($sideMenuLink, "../admin/multireguser.php");
     array_push($sideMenuImg, "arrow.png");
+
     array_push($sideMenuText, $GLOBALS['langMultiRegCourseUser']);
     array_push($sideMenuLink, "../admin/multicourseuser.php");
     array_push($sideMenuImg, "arrow.png");
+
     array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
     array_push($sideMenuLink, "../admin/multideluser.php");
     array_push($sideMenuImg, "arrow.png");
+
     array_push($sideMenuText, $GLOBALS['langInfoMail']);
     array_push($sideMenuLink, "../admin/mailtoprof.php");
     array_push($sideMenuImg, "arrow.png");
@@ -474,58 +479,67 @@ function adminMenu() {
 
     if ((isset($is_power_user) and $is_power_user) or
             (isset($is_departmentmanage_user) and $is_departmentmanage_user)) {
-        //lesson administration
-        //reset sub-arrays so that we do not have duplicate entries
+        // lesson administration
+        // reset sub-arrays so that we do not have duplicate entries
         $sideMenuSubGroup = array();
         $sideMenuText = array();
         $sideMenuLink = array();
         $sideMenuImg = array();
 
-        $arrMenuType = array();
-        $arrMenuType['type'] = 'text';
-        $arrMenuType['text'] = $GLOBALS['langAdminCours'];
-        $arrMenuType['class'] = 'course_admin';
-        array_push($sideMenuSubGroup, $arrMenuType);
+        array_push($sideMenuSubGroup, array(
+            'type' => 'text',
+            'text' => $GLOBALS['langAdminCours'],
+            'class' => 'course_admin'));
 
         array_push($sideMenuText, $GLOBALS['langSearchCourse']);
-        array_push($sideMenuLink, "../admin/searchcours.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuLink, '../admin/searchcours.php');
+        array_push($sideMenuImg, 'arrow.png');
+
         array_push($sideMenuText, $GLOBALS['langRestoreCourse']);
-        array_push($sideMenuLink, "../course_info/restore_course.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuLink, '../course_info/restore_course.php');
+        array_push($sideMenuImg, 'arrow.png');
+
         array_push($sideMenuText, $GLOBALS['langHierarchy']);
-        array_push($sideMenuLink, "../admin/hierarchy.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuLink, '../admin/hierarchy.php');
+        array_push($sideMenuImg, 'arrow.png');
+
         array_push($sideMenuText, $GLOBALS['langMultiCourse']);
-        array_push($sideMenuLink, "../admin/multicourse.php");
-        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuLink, '../admin/multicourse.php');
+        array_push($sideMenuImg, 'arrow.png');
+
+        array_push($sideMenuText, $GLOBALS['langAutoEnroll']);
+        array_push($sideMenuLink, '../admin/autoenroll.php');
+        array_push($sideMenuImg, 'arrow.png');
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
         array_push($sideMenuGroup, $sideMenuSubGroup);
     }
 
-    //server administration
-    //reset sub-arrays so that we do not have duplicate entries
+    // server administration
+    // reset sub-arrays so that we do not have duplicate entries
     $sideMenuSubGroup = array();
     $sideMenuText = array();
     $sideMenuLink = array();
     $sideMenuImg = array();
 
     if (isset($is_admin) and $is_admin) {
-        $arrMenuType = array();
-        $arrMenuType['type'] = 'text';
-        $arrMenuType['text'] = $GLOBALS['langState'];
-        $arrMenuType['class'] = 'server_admin';
-        array_push($sideMenuSubGroup, $arrMenuType);
+        array_push($sideMenuSubGroup, array(
+            'type' => 'text',
+            'text' => $GLOBALS['langState'],
+            'class' => 'server_admin'));
+
         array_push($sideMenuText, $GLOBALS['langCleanUp']);
         array_push($sideMenuLink, "../admin/cleanup.php");
         array_push($sideMenuImg, "arrow.png");
+
         if (get_config('phpSysInfoURL')) {
             array_push($sideMenuText, $GLOBALS['langSysInfo']);
             array_push($sideMenuLink, get_config('phpSysInfoURL'));
             array_push($sideMenuImg, "arrow.png");
         }
+
         array_push($sideMenuText, $GLOBALS['langPHPInfo']);
         array_push($sideMenuLink, "../admin/phpInfo.php");
         array_push($sideMenuImg, "arrow.png");
@@ -546,8 +560,8 @@ function adminMenu() {
         array_push($sideMenuGroup, $sideMenuSubGroup);
     }
 
-    //other tools
-    //reset sub-arrays so that we do not have duplicate entries
+    // other tools
+    // reset sub-arrays so that we do not have duplicate entries
     $sideMenuSubGroup = array();
     $sideMenuText = array();
     $sideMenuLink = array();
@@ -726,11 +740,13 @@ function lessonToolsMenu() {
                              'text' => $langExternalLinks,
                              'class' => 'external');
         array_push($sideMenuSubGroup, $arrMenuType);
+
         foreach ($result2 as $ex_link) {
             array_push($sideMenuText, q($ex_link->title));
             array_push($sideMenuLink, q($ex_link->url));
             array_push($sideMenuImg, 'fa-external-link');
         }
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);
@@ -746,12 +762,14 @@ function lessonToolsMenu() {
                              'text' => $langAdministrationTools,
                              'class' => 'course_admin');
         array_push($sideMenuSubGroup, $arrMenuType);
+
         foreach ($admin_modules as $adm_mod) {
             array_push($sideMenuText, $adm_mod['title']);
             array_push($sideMenuLink, q($urlAppend . 'modules/' . $adm_mod['link'] .
                             '/?course=' . $course_code));
             array_push($sideMenuImg, $adm_mod['image'] . $section['iconext']);
         }
+
         array_push($sideMenuSubGroup, $sideMenuText);
         array_push($sideMenuSubGroup, $sideMenuLink);
         array_push($sideMenuSubGroup, $sideMenuImg);

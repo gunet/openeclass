@@ -839,6 +839,12 @@ class CourseXMLElement extends SimpleXMLElement {
             $data['course_confirmVideolectures'] = 'false';
         }
         $data['course_videolectures'] = $vnum + $vlnum;
+        
+        // hits and visits
+        $visits = Database::get()->querySingle("select COUNT(id) AS cnt FROM logins WHERE course_id = ?d", $courseId)->cnt;
+        $hits = Database::get()->querySingle("select SUM(hits) AS cnt FROM actions_daily WHERE course_id = ?d", $courseId)->cnt;
+        $data['course_visits'] = $visits;
+        $data['course_hits'] = $hits;
 
         $skeletonXML = simplexml_load_file($skeleton, 'CourseXMLElement');
         $skeletonXML->adapt($data);
@@ -1003,6 +1009,8 @@ class CourseXMLElement extends SimpleXMLElement {
             self::storeMetadata($oaiRecordId, 'dc_format', $level);
             self::storeMetadata($oaiRecordId, 'dc_rights', self::serialize($xml->license));
             self::storeMetadata($oaiRecordId, 'dc_videolectures', (string) $xml->videolectures);
+            self::storeMetadata($oaiRecordId, 'dc_visits', (string) $xml->visits);
+            self::storeMetadata($oaiRecordId, 'dc_hits', (string) $xml->hits);
             self::storeMetadata($oaiRecordId, 'dc_code', (string) $xml->code);
             self::storeMetadata($oaiRecordId, 'dc_keywords', self::serialize($xml->keywords));
             self::storeMetadata($oaiRecordId, 'dc_contentdevelopment', self::serialize($xml->contentDevelopment));
