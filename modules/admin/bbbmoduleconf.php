@@ -120,7 +120,8 @@ if (isset($_GET['add_server'])) {
     $id = $_GET['delete_server'];
     Database::get()->querySingle("DELETE FROM bbb_servers WHERE id=?d", $id);
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
+    Session::Messages($langFileUpdatedSuccess,"alert-success");
+    redirect_to_home_page("modules/admin/bbbmoduleconf.php");   
     $tool_content .= action_bar(array(
         array('title' => $langBack,
             'url' => "bbbmoduleconf.php",
