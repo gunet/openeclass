@@ -120,14 +120,11 @@ if (isset($_GET['add_server'])) {
     $id = $_GET['delete_server'];
     Database::get()->querySingle("DELETE FROM bbb_servers WHERE id=?d", $id);
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";    
-    $tool_content .= action_bar(array(
-        array('title' => $langBack,
-            'url' => "bbbmoduleconf.php",
-            'icon' => 'fa-reply',
-            'level' => 'primary-label')));
+    Session::Messages($langFileUpdatedSuccess, 'alert-success');
+    redirect_to_home_page('modules/admin/bbbmoduleconf.php');   
 }
-// Save new config.php
+
+// Save new config
 else if (isset($_POST['submit'])) {
     $hostname = $_POST['hostname_form'];
     $ip = $_POST['ip_form'];
@@ -159,7 +156,8 @@ else if (isset($_POST['submit'])) {
         (?s,?s,?s,?s,?s,?s,?s,?s,?d)", $hostname, $ip, $key, $api_url, $max_rooms, $max_users, $enable_recordings, $enabled, $weight);
     }    
     // Display result message
-    $tool_content .= "<div class='alert alert-success'>$langFileUpdatedSuccess</div>";
+    Session::Messages($langFileUpdatedSuccess,"alert-success");
+    redirect_to_home_page("modules/admin/bbbmoduleconf.php");
     // Display link to go back to index.php
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -167,7 +165,7 @@ else if (isset($_POST['submit'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
 } // end of if($submit)
-// Display config.php edit form
+// Display config edit form
 else {    
     if (isset($_GET['edit_server'])) {
         $pageName = $langEdit;
@@ -282,27 +280,27 @@ else {
             foreach ($q as $srv) {
                 $enabled_bbb_server = ($srv->enabled == 'true')? $langYes : $langNo;
                 $connected_users = get_connected_users($srv->server_key, $srv->api_url, $srv->ip) . '/' . $srv->max_rooms;
-                $tool_content .= "<tr>";
-                $tool_content .= "<td>$srv->hostname</td>";
-                $tool_content .= "<td>$srv->ip</td>";
-                $tool_content .= "<td>$enabled_bbb_server</td>";
-                $tool_content .= "<td>$connected_users</td>";
-                $tool_content .= "<td>$srv->weight</td>";
-                $tool_content .= "<td class='option-btn-cell'>".action_button(array(
-                                                    array('title' => $langEditChange,
-                                                          'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
-                                                          'icon' => 'fa-edit'),
-                                                    array('title' => $langDelete,
-                                                          'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
-                                                          'icon' => 'fa-times',
-                                                          'class' => 'delete',
-                                                          'confirm' => $langConfirmDelete)
-                                                    ))."</td>";
-                $tool_content .= "</tr>";
+                $tool_content .= "<tr>" .
+                    "<td>$srv->hostname</td>" .
+                    "<td>$srv->ip</td>" .
+                    "<td>$enabled_bbb_server</td>" .
+                    "<td>$connected_users</td>" .
+                    "<td>$srv->weight</td>" .
+                    "<td class='option-btn-cell'>" .
+                    action_button(array(
+                        array('title' => $langEditChange,
+                              'url' => "$_SERVER[SCRIPT_NAME]?edit_server=$srv->id",
+                              'icon' => 'fa-edit'),
+                        array('title' => $langDelete,
+                              'url' => "$_SERVER[SCRIPT_NAME]?delete_server=$srv->id",
+                              'icon' => 'fa-times',
+                              'class' => 'delete',
+                              'confirm' => $langConfirmDelete))) . "</td>" .
+                    "</tr>";
             }            	
             $tool_content .= "</table></div>";
         } else {
-             $tool_content .= "<div class='alert alert-warning'>Δεν υπάρχουν διαθέσιμοι εξυπηρετητές.</div>";
+             $tool_content .= "<div class='alert alert-warning'>$langNoAvailableBBBServers</div>";
         }
     }
 }
