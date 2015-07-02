@@ -317,7 +317,7 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
             break;
 
         case '6':
-            $path = "${webDir}secure/";
+            $path = $webDir . '/secure/';
             if (!file_exists($path)) {
                 if (!mkdir($path, 0700)) {
                     $testauth = false;
@@ -327,7 +327,6 @@ function auth_user_login($auth, $test_username, $test_password, $settings) {
                 $index_regfile = $path . 'index_reg.php';
 
                 // creation of secure/index.php file
-                $f = fopen($indexfile, 'w');
                 $filecontents = '<?php
 session_start();
 $_SESSION[\'shib_email\'] = ' . $settings['shibemail'] . ';
@@ -335,10 +334,12 @@ $_SESSION[\'shib_uname\'] = ' . $settings['shibuname'] . ';
 $_SESSION[\'shib_surname\'] = ' . $settings['shibcn'] . ';
 header("Location: ../index.php");
 ';
-                if (fwrite($f, $filecontents)) {
-                    $testauth = true;
+                if ($f = fopen($indexfile, 'w')) {
+                    if (fwrite($f, $filecontents)) {
+                        $testauth = true;
+                    }
+                    fclose($f);
                 }
-                fclose($f);
 
                 // creation of secure/index_reg.php
                 // used in professor request registration process via shibboleth
