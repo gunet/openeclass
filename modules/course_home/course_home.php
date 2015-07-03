@@ -142,10 +142,14 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
 
 if(count($res)>0){
     $course_info_extra = "";
-    foreach ($res as $row) {
+    foreach ($res as $key => $row) {
         $desctype = intval($row->type) - 1;    
-        $hidden_id = "hidden_" . $row->id;
-   
+        $hidden_id = "hidden_" . $key;
+        $next_id = '';
+        $previous_id = '';
+        if ($key + 1 < count($res)) $next_id = "hidden_" . ($key + 1);
+        if ($key > 0) $previous_id = "hidden_" . ($key - 1);
+                
         $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
@@ -156,6 +160,15 @@ if(count($res)>0){
                                     <div class='modal-body'>".
                                       standard_text_escape($row->comments)
                                     ."</div>
+                                    <div class='modal-footer'>";
+                                        if ($previous_id) {
+                                            $tool_content .= "<a class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><i class='fa fa-arrow-left'></i></a>";
+                                        } 
+                                        if ($next_id) {
+                                            $tool_content .= "<a class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><i class='fa fa-arrow-right'></i></a>";
+                                        }                                                                              
+        $tool_content .=    "                                            
+                                    </div>                                        
                                   </div>
                                 </div>
                               </div>";
