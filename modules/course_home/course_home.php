@@ -140,6 +140,34 @@ $res = Database::get()->queryArray("SELECT cd.id, cd.title, cd.comments, cd.type
                                     LEFT JOIN course_description_type cdt ON (cd.type = cdt.id)
                                     WHERE cd.course_id = ?d AND cd.visible = 1 ORDER BY cd.order", $course_id);
 
+$head_content .= "
+        <script>
+            $(function() {
+                $('body').keydown(function(e) {
+                    if(e.keyCode == 37 || e.keyCode == 39) {
+                        if ($('.modal.in').length) {
+                            var visible_modal_id = $('.modal.in').attr('id').match(/\d+/);
+                            if (e.keyCode == 37) {
+                                var new_modal_id = parseInt(visible_modal_id) - 1;
+                            } else {
+                                var new_modal_id = parseInt(visible_modal_id) + 1;
+                            }
+                            var new_modal = $('#hidden_'+new_modal_id);  
+                            if (new_modal.length) {
+                                hideVisibleModal();
+                                new_modal.modal('show');
+                            }
+                        }
+                    }                
+                });
+            });
+            function hideVisibleModal(){
+                var visible_modal = $('.modal.in');
+                if (visible_modal) { // modal is active
+                    visible_modal.modal('hide'); // close modal
+                }              
+            };
+        </script>";
 if(count($res)>0){
     $course_info_extra = "";
     foreach ($res as $key => $row) {
@@ -162,10 +190,10 @@ if(count($res)>0){
                                     ."</div>
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
-                                            $tool_content .= "<a class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><i class='fa fa-arrow-left'></i></a>";
+                                            $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><i class='fa fa-arrow-left'></i></a>";
                                         } 
                                         if ($next_id) {
-                                            $tool_content .= "<a class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><i class='fa fa-arrow-right'></i></a>";
+                                            $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><i class='fa fa-arrow-right'></i></a>";
                                         }                                                                              
         $tool_content .=    "                                            
                                     </div>                                        
