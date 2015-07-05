@@ -29,7 +29,7 @@ class AutojudgeHackerearthApp extends AutojudgeApp {
         $url           = 'http://api.hackerearth.com/code/run/';
         $fields_string = null;
         $fields        = array(
-            'client_secret' => ExtAppManager::getApp(get_class($this))->getParam('hackerEarthKey')->value(),
+            'client_secret' => ExtAppManager::getApp(get_class($this))->getParam('key')->value(),
             'input'         => $input->input,
             'source'        => urlencode($input->code),
             'lang'          => $input->lang,
@@ -63,7 +63,7 @@ class AutojudgeHackerearthApp extends AutojudgeApp {
 
     public function getConfigFields() {
         return array(
-            'hackerEarthKey' => 'API Key',
+            'key' => 'API Key',
         );
     }
 
