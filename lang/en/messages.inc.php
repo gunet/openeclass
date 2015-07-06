@@ -3788,6 +3788,7 @@ $langCloseReportSuccess = 'The report was marked as resolved.';
 $langAbuseReportStatus = 'Abuse report status';
 $langAbuseReportOpen = 'Open report';
 $langAbuseReportClosed = 'Closed report';
+$langWall = 'Wall';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';

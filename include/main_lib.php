@@ -91,6 +91,7 @@ define('MODULE_ID_BBB', 34);
 define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
 define('MODULE_ID_ABUSE_REPORT', 42);
+define('MODULE_ID_WALL', 43);
 
 // user modules
 define('MODULE_ID_SETTINGS', 31);
@@ -1445,6 +1446,7 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM `rating` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
     Database::get()->query("DELETE FROM `rating_cache` WHERE `rtype` = ?s AND `rid` = ?d", 'course', $cid);
     Database::get()->query("DELETE FROM `blog_post` WHERE `course_id` = ?d", $cid);
+    Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $cid);
     // check if we have guest account. If yes delete it.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
     if ($guest_user) {
@@ -1560,6 +1562,7 @@ function deleteUser($id, $log) {
                                     WHERE abuse_report.rtype = ?s AND comments.user_id = ?d", 'comment', $u);
             Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE FROM wall_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM abuse_report WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
             Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
