@@ -683,7 +683,7 @@ function edit_assignment($id) {
              grading_scale_id = ?d, assign_to_specific = ?d, file_path = ?s, file_name = ?s,
              auto_judge = ?d, auto_judge_scenarios = ?s, lang = ?s
              WHERE course_id = ?d AND id = ?d", $title, $desc, $group_submissions, 
-             $comments, $submission_type, $deadline, $late_submission, $submission_date, $max_grade, $grading_scale_id, $assign_to_specific, $filename, $file_name, $course_id, $id);
+             $comments, $submission_type, $deadline, $late_submission, $submission_date, $max_grade, $grading_scale_id, $assign_to_specific, $filename, $file_name, $auto_judge, $auto_judge_scenarios, $lang, $course_id, $id);
 
          Database::get()->query("DELETE FROM assignment_to_specific WHERE assignment_id = ?d", $id);
          
@@ -730,13 +730,14 @@ function submit_work($id, $on_behalf_of = null) {
 
     $row = Database::get()->querySingle("SELECT id, title, group_submissions, submission_type, 
                             deadline, late_submission, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time,
-                            auto_judge, auto_judge_scenarios, lang
+                            auto_judge, auto_judge_scenarios, lang, max_grade
                             FROM assignment 
                             WHERE course_id = ?d AND id = ?d", 
                             $course_id, $id);
     $auto_judge = $row->auto_judge;
     $auto_judge_scenarios = ($auto_judge == true) ? unserialize($row->auto_judge_scenarios) : null;
     $lang = $row->lang;
+    $max_grade = $row->max_grade;
 
     $nav[] = $works_url;
     $nav[] = array('url' => "$_SERVER[SCRIPT_NAME]?id=$id", 'name' => q($row->title));
@@ -3163,4 +3164,72 @@ function max_grade_from_scale($scale_id) {
         }
     }
     return $max_scale_item_value;
+}
+
+function doScenarioAssertion($scenarionAssertion, $scenarioInputResult, $scenarioOutputExpectation) {
+    switch($scenarionAssertion) {
+        case 'eq':
+            $assertionResult = ($scenarioInputResult == $scenarioOutputExpectation);
+            break;
+        case 'same':
+            $assertionResult = ($scenarioInputResult === $scenarioOutputExpectation);
+            break;
+        case 'notEq':
+            $assertionResult = ($scenarioInputResult != $scenarioOutputExpectation);
+            break;
+        case 'notSame':
+            $assertionResult = ($scenarioInputResult !== $scenarioOutputExpectation);
+            break;
+        case 'integer':
+            $assertionResult = (is_int($scenarioInputResult));
+            break;
+        case 'float':
+            $assertionResult = (is_float($scenarioInputResult));
+            break;
+        case 'digit':
+            $assertionResult = (ctype_digit($scenarioInputResult));
+            break;
+        case 'boolean':
+            $assertionResult = (is_bool($scenarioInputResult));
+            break;
+        case 'notEmpty':
+            $assertionResult = (empty($scenarioInputResult) === false);
+            break;
+        case 'notNull':
+            $assertionResult = ($scenarioInputResult !== null);
+            break;
+        case 'string':
+            $assertionResult = (is_string($scenarioInputResult));
+            break;
+        case 'startsWith':
+            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === 0);
+            break;
+        case 'endsWith':
+            $stringPosition  = mb_strlen($scenarioInputResult, 'utf8') - mb_strlen($scenarioOutputExpectation, 'utf8');
+            $assertionResult = (mb_strripos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8') === $stringPosition);
+            break;
+        case 'contains':
+            $assertionResult = (mb_strpos($scenarioInputResult, $scenarioOutputExpectation, null, 'utf8'));
+            break;
+        case 'numeric':
+            $assertionResult = (is_numeric($scenarioInputResult));
+            break;
+        case 'isArray':
+            $assertionResult = (is_array($scenarioInputResult));
+            break;
+        case 'true':
+            $assertionResult = ($scenarioInputResult === true);
+            break;
+        case 'false':
+            $assertionResult = ($scenarioInputResult === false);
+            break;
+        case 'isJsonString':
+            $assertionResult = (json_decode($value) !== null && JSON_ERROR_NONE === json_last_error());
+            break;
+        case 'isObject':
+            $assertionResult = (is_object($scenarioInputResult));
+            break;
+    }
+
+    return $assertionResult;
 }

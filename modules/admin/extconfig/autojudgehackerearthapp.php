@@ -29,7 +29,7 @@ class AutojudgeHackerearthApp extends AutojudgeApp {
         $url           = 'http://api.hackerearth.com/code/run/';
         $fields_string = null;
         $fields        = array(
-            'client_secret' => ExtAppManager::getApp(get_class($this))->getParam('key')->value(),
+            'client_secret' => AutojudgeApp::getAutoJudgeApp(get_class($this))->getParam('key')->value(),
             'input'         => $input->input,
             'source'        => urlencode($input->code),
             'lang'          => $input->lang,
@@ -51,6 +51,15 @@ class AutojudgeHackerearthApp extends AutojudgeApp {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
         // Execute post
         $result = json_decode(curl_exec($ch), true);
+        $origResult = curl_exec($ch);
+        $result = json_decode($origResult, true);
+        if(!$result) {
+            $output = new AutoJudgeConnectorResult();
+            $output->compileStatus = 'ERROR';
+            $output->output = curl_error($ch).' '.$origResult;
+            curl_close($ch);
+            return $output;
+        }
         // Close curl connection
         curl_close($ch);
 
@@ -63,7 +72,7 @@ class AutojudgeHackerearthApp extends AutojudgeApp {
 
     public function getConfigFields() {
         return array(
-            'key' => 'API Key',
+            'key' => 'Hackerearth API Key',
         );
     }
 
