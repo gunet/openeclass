@@ -1086,6 +1086,7 @@ $langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 
 $langGradebook = "Βαθμολόγιο";
 $langGradebooks = "Βαθμολόγια";
+$langAvailableGradebooks = "Διαθέσιμα βαθμολόγια";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
 $langGradebookAddActivity = "Nέας δραστηριότητας";
 $langGradebookActivityDescription = "Περιγραφή";
