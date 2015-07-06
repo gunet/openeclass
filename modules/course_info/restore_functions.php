@@ -673,6 +673,12 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $blog_map = restore_table($restoreThis, 'blog_post', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         }
+        
+        // Blog
+        if (file_exists("$restoreThis/wall_post")) {
+            $wall_map = restore_table($restoreThis, 'wall_post', array('set' => array('course_id' => $new_course_id),
+            'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+        }
 
         // Comments
         if (file_exists("$restoreThis/comments")) {
