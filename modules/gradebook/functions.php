@@ -147,6 +147,91 @@ function display_user_grades($gradebook_id) {
 }
 
 
+
+/**
+ * @brief display form for creating a new gradebook
+ * @global string $tool_content
+ * @global type $course_code
+ * @global type $langNewGradebook
+ * @global type $langNewGradebook2
+ * @global type $langTitle
+ * @global type $langSave
+ * @global type $langInsert
+ */
+function new_gradebook() {
+    
+    global $tool_content, $course_code,
+           $langNewGradebook, $langNewGradebook2, 
+           $langTitle, $langSave, $langInsert;
+    
+    $tool_content .= "<div class='form-wrapper'>
+            <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&newGradebook=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                <div class='form-group'>
+                    <label class='col-xs-12'>$langNewGradebook<small class='help-block'>$langNewGradebook2</small></label></div>                            
+                    <div class='form-group'> 
+                        <div class='col-xs-12'>
+                            <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-xs-12'>".form_buttons(array(
+                            array(
+                                    'text' => $langSave,
+                                    'name' => 'newGradebook',
+                                    'value'=> $langInsert
+                                ),
+                            array(
+                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                )
+                            ))."</div>
+                    </div>
+            </form>
+        </div>";   
+}
+
+
+/**
+ * @brief delete gradebook
+ * @global type $langGradebookdeleted
+ * @global type $course_id
+ * @param type $gradebook_id
+ */
+function delete_gradebook($gradebook_id) {
+    
+    global $course_id, $langGradebookDeleted;
+    
+    $r = Database::get()->queryArray("SELECT id FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id);
+    foreach ($r as $act) {
+        delete_gradebook_activity($gradebook_id, $act->id);
+    }
+    Database::get()->query("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+    $action = Database::get()->query("DELETE FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id);
+    if ($action) {
+        Session::Messages("$langGradebookDeleted", "alert-success");
+    }
+}
+
+
+/**
+ * @brief delete gradebook activity
+ * @global type $langGradebookDel
+ * @global type $langGradebookDelFailure
+ * @param type $gradebook_id
+ * @param type $activity_id
+ */
+function delete_gradebook_activity($gradebook_id, $activity_id) {
+    
+    global $langGradebookDel, $langGradebookDelFailure;
+    
+    $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->affectedRows;
+    $delActBooks = Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id)->affectedRows;
+    if($delAct) {
+        Session::Messages("$langGradebookDel", "alert-success");
+    } else {
+        Session::Messages("$langGradebookDelFailure", "alert-danger");
+    }
+}
+
 /**
  * @brief insert/modify gradebook settings
  * @global type $tool_content
@@ -339,6 +424,7 @@ function gradebook_settings($gradebook_id) {
  * @global type $langNoRegStudent
  * @global type $langHere
  * @global type $langGradebookOutRange
+ * @global type $langGradebookGradeAlert
  * @param type $gradebook_id
  */
 function display_all_users_grades($gradebook_id) {
@@ -347,8 +433,8 @@ function display_all_users_grades($gradebook_id) {
            $langID, $langAm, $langRegistrationDateShort, $langGradebookGrade,
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
            $langNoRegStudent, $langHere, $langGradebookOutRange, $langGradebookGradeAlert;
-    
-    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;   
+        
+    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;    
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, 
                                                             gradebook_users.uid as userID,                                                             
                                                             user.am as am, DATE(course_user.reg_date) as reg_date 
@@ -676,24 +762,23 @@ function display_gradebook($gradebook_id) {
  * @brief admin available gradebook
  * @global type $course_id
  * @global type $tool_content
- * @global type $course_code
- * @global type $langNewGradebook
- * @global type $langNewGradebook2
- * @global type $langSave
- * @global type $langInsert
- * @global type $langTitle
+ * @global type $course_code 
  * @global type $langDelete
  * @global type $langConfirmDelete
  * @global type $langDeactivate
  * @global type $langActivate
+ * @global type $langNoGradeBooks
  */
 function display_gradebooks() {
     
     global $course_id, $tool_content, $course_code,
-           $langNewGradebook, $langNewGradebook2, $langSave, $langInsert, $langTitle,
-           $langDelete, $langConfirmDelete, $langDeactivate, $langActivate, $langAvailableGradebooks;
-            
-        $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
+           $langDelete, $langConfirmDelete, $langDeactivate,
+           $langActivate, $langAvailableGradebooks, $langNoGradeBooks;
+    
+    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
+    if (count($result) == 0) { // no gradebooks
+        $tool_content .= "<div class='alert alert-info'>$langNoGradeBooks</div>";
+    } else {
         $tool_content .= "<div class='row'>";
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<div class='table-responsive'>";
@@ -701,15 +786,15 @@ function display_gradebooks() {
         $tool_content .= "<tr class='list-header'><th>$langAvailableGradebooks</th><th class='text-center'>" . icon('fa-gears') . "</th></tr>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td>$g->title</td>";
+            $tool_content .= "<tr $row_class><td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;gradebook_id=$g->id'>$g->title</a></td>";
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                                 array('title' => $g->active ? $langDeactivate : $langActivate,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook=$g->id&amp;vis=" . 
+                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" . 
                                               ($g->active ? '0' : '1'),
                                       'icon' => $g->active ? 'fa-eye-slash' : 'fa-eye'),
                                 array('title' => $langDelete,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradeBooks=1&amp;delete=$g->id",
+                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=$g->id",
                                       'icon' => 'fa-times',
                                       'class' => 'delete',
                                       'confirm' => $langConfirmDelete))
@@ -717,29 +802,7 @@ function display_gradebooks() {
             $tool_content .= "</td></tr>";
         }
         $tool_content .= "</table></div></div></div>";
-        $tool_content .= "<div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                    <div class='form-group'>
-                        <label class='col-xs-12'>$langNewGradebook<small class='help-block'>$langNewGradebook2</small></label></div>                            
-                        <div class='form-group'> 
-                            <div class='col-xs-12'>
-                                <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
-                            </div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-xs-12'>".form_buttons(array(
-                                array(
-                                        'text' => $langSave,
-                                        'name' => 'newGradebook',
-                                        'value'=> $langInsert
-                                    ),
-                                array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                    )
-                                ))."</div>
-                        </div>
-                </form>
-            </div>";   
+    }
 }
 
 
@@ -917,7 +980,7 @@ function display_available_lps($gradebook_id) {
  * @param type $gradebook_id
  * @param type $actID
  */
-function display_gradebook_users($gradebook_id, $actID) {
+function register_user_grades($gradebook_id, $actID) {
             
     global $tool_content, $course_id, $course_code,
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
@@ -936,7 +999,8 @@ function display_gradebook_users($gradebook_id, $actID) {
                                                 WHERE gradebook_id = ?d AND gradebook_users.uid = user.id 
                                                     AND `user`.id = `course_user`.`user_id` 
                                                     AND `course_user`.`course_id` = ?d ", $gradebook_id, $course_id);
-    if ($resultUsers) {        
+    
+    if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
         <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=" . $actID . "'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>

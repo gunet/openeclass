@@ -1087,6 +1087,7 @@ $langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 $langGradebook = "Βαθμολόγιο";
 $langGradebooks = "Βαθμολόγια";
 $langAvailableGradebooks = "Διαθέσιμα βαθμολόγια";
+$langNoGradeBooks = "Δεν υπάρχουν διαθέσιμα βαθμολόγια";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
 $langGradebookAddActivity = "Nέας δραστηριότητας";
 $langGradebookActivityDescription = "Περιγραφή";
@@ -1174,6 +1175,7 @@ $langChangeGradebookSuccess = "Το βαθμολόγιο ενεργοποιήθ�
 $langCreateGradebookSuccess = "Το βαθμολόγιο δημιουργήθηκε με επιτυχία";
 $langChangeGradebook2 = "(επιλογή ενεργού βαθμολογίου για το μάθημα)";
 $langGradebookNoTitle2 = "Βαθμολόγιο χωρίς τίτλο";
+$langGradebookDeleted = "To βαθμολόγιο διαγράφηκε με επιτυχία";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";

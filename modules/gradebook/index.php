@@ -75,22 +75,19 @@ $(function() {
     });
 });
 </script>";
-     
+ 
+
+$display = TRUE;
 if (isset($_REQUEST['gradebook_id'])) {
     $gradebook_id = $_REQUEST['gradebook_id'];
 }
 
-//FLAG for displaying gradebook list
-$showGradebookActivities = 1;   
-//==============================================
-//tutor view
-//==============================================
 if ($is_editor) {
     // change gradebook visibility
     if (isset($_GET['vis'])) {   
-        Database::get()->query("UPDATE gradebook SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['gradebook'], $course_id);
+        Database::get()->query("UPDATE gradebook SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['gradebook_id'], $course_id);
         Session::Messages($langGlossaryUpdated, 'alert-success');
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradeBooks=1");
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
     //add a new gradebook
     if (isset($_POST['newGradebook']) && strlen($_POST['title'])) {
@@ -187,9 +184,9 @@ if ($is_editor) {
     } else {
         $tool_content .= action_bar(
             array(
-                array('title' => $langGradebooks,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradeBooks=1",
-                      'icon' => 'fa-list',
+                array('title' => $langNewGradebook,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
+                      'icon' => 'fa-plus',
                       'level' => 'primary-label',
                       'button-class' => 'btn-success')));                
     }
@@ -201,7 +198,7 @@ if ($is_editor) {
         if ($gradebook_range == 10 or $gradebook_range == 100 or $gradebook_range == 5 or $gradebook_range == 20) {
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
             Session::Messages($langGradebookEdit,"alert-success");
-            redirect_to_home_page("modules/gradebook/index.php");
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
         }
     }
     
@@ -210,28 +207,27 @@ if ($is_editor) {
         $gradebook_title = $_POST['title'];
         Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
             Session::Messages($langGradebookEdit,"alert-success");
-            redirect_to_home_page("modules/gradebook/index.php");
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
     }
     
     //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
-        add_gradebook_other_activity($gradebook_id);        
-        //do not show the activities list
-        $showGradebookActivities = 0;
+        add_gradebook_other_activity($gradebook_id);
+        $display = FALSE;
     }
 
     //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths
     elseif(isset($_GET['addCourseActivity'])) {
         $id = $_GET['addCourseActivity'];
         $type = intval($_GET['type']);
-        add_gradebook_activity($gradebook_id, $id, $type);                
-        //show gradebook activities
-        $showGradebookActivities = 1;
+        add_gradebook_activity($gradebook_id, $id, $type);
+        Session::Messages("$langGradebookSucInsert","alert-success");
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");        
+        $display = FALSE;
     }
 
     //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
-    elseif(isset($_POST['submitGradebookActivity'])){
-        
+    elseif(isset($_POST['submitGradebookActivity'])) {        
         if (isset($_POST['actTitle'])) {
             $actTitle = $_POST['actTitle'];
         } else {
@@ -255,10 +251,10 @@ if ($is_editor) {
         if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) 
                            || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))) {
             Session::Messages("$langGradebookWeightAlert", "alert-warning");
-            redirect_to_home_page("modules/gradebook/index.php");            
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
         } elseif ((empty($weight) or ($weight == 0))) {
             Session::Messages("$langGradebookGradeAlert2", "alert-warning");
-            redirect_to_home_page("modules/gradebook/index.php");
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
         } else {
             if ($_POST['id']) {               
                 //update
@@ -267,37 +263,32 @@ if ($is_editor) {
                                             `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d 
                                             WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);                
                 Session::Messages("$langGradebookEdit", "alert-success");
-                redirect_to_home_page("modules/gradebook/index.php");
+                redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
             } else {
                 //insert
                 $insertAct = Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, 
                                                             `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d", 
                                                     $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type);                
                 Session::Messages("$langGradebookSucInsert","alert-success");
-                redirect_to_home_page("modules/gradebook/index.php");
+                redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
             }
         }
-        //show activities list
-        $showGradebookActivities = 1;        
+        $display = FALSE;
     }
 
-    //DELETE DB: delete activity form to gradebook module (plus delete all activity student marks)
-    elseif (isset($_GET['delete'])) {
-            $delete = $_GET['delete'];
-            $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $delete, $gradebook_id)->affectedRows;
-            $delActBooks = Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $delete)->affectedRows;
-            $showGradebookActivities = 1; //show list activities
-            if($delAct) {
-                Session::Messages("$langGradebookDel", "alert-success");
-                redirect_to_home_page("modules/gradebook/index.php");
-            } else {
-                Session::Messages("$langGradebookDelFailure", "alert-danger");
-                redirect_to_home_page("modules/gradebook/index.php");
-            }            
-        }
+    //delete gradebook activity
+    elseif (isset($_GET['delete'])) {        
+        delete_gradebook_activity($gradebook_id, $_GET['delete']);
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
+    
+    // delete gradebook
+    } elseif (isset($_GET['delete_gb'])) {        
+        delete_gradebook($_GET['delete_gb']);
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
+    }
    
     //DISPLAY: list of users and form for each user
-    elseif(isset($_GET['gradebookBook']) || isset($_GET['book'])) {
+    elseif(isset($_GET['gradebookBook']) || isset($_GET['book'])) {        
         if (isset($_GET['update']) and $_GET['update']) {
             $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }
@@ -329,30 +320,28 @@ if ($is_editor) {
         } else {  // display all users
             display_all_users_grades($gradebook_id);            
         }
-        //do not show activities list
-        $showGradebookActivities = 0;
+        $display = FALSE;
     }
-    
+    elseif (isset($_GET['new'])) {
+        new_gradebook(); // create new gradebook
+        $display = FALSE;
+    }
     //EDIT DB: display all the gradebook users (reset the list, remove users)
     elseif (isset($_GET['editUsers'])) { // gradebook settings
         gradebook_settings($gradebook_id);
-        $showGradebookActivities = 0;
-    } elseif (isset($_GET['gradeBooks'])) {
-        display_gradebooks();
-        $showGradebookActivities = 0;        
+        $display = FALSE;
     } elseif (isset($_GET['addActivityAs'])) { //display available assignments       
-        display_available_assignments($gradebook_id);        
-        $showGradebookActivities = 0;
+        display_available_assignments($gradebook_id);
+        $display = FALSE;
     }
     elseif (isset($_GET['addActivityEx'])) { // display available exercises
         display_available_exercises($gradebook_id);
-        $showGradebookActivities = 0;
-    }    
+        $display = FALSE;
+    }
     elseif (isset($_GET['addActivityLp'])) { // display available lps
         display_available_lps($gradebook_id);
-        $showGradebookActivities = 0;
+        $display = FALSE;
     }
-
     //DISPLAY - EDIT DB: insert grades for each activity
     elseif (isset($_GET['ins'])) {
         $actID = intval($_GET['ins']);
@@ -363,27 +352,21 @@ if ($is_editor) {
         if (isset($_POST['updateUsersToAct'])) {            
             update_grades($gradebook_id, $actID);
         }
-        display_gradebook_users($gradebook_id, $actID);
-        $showGradebookActivities = 0;
-    }         
-} 
+        register_user_grades($gradebook_id, $actID);
+        $display = FALSE;
+    } 
+}
 
-// display gradebooks list
-if ($showGradebookActivities == 1) {
-    $sql = Database::get()->queryArray("SELECT id, students_semester,`range`, `title` 
-                                        FROM gradebook WHERE course_id = ?d AND active = 1", $course_id);
-    foreach ($sql as $gradebook) {
-        $gradebook_id = $gradebook->id;
-        $gradebook_title = $gradebook->title;
-        $gradebook_range = $gradebook->range;
-        $showSemesterParticipants = $gradebook->students_semester;
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count FROM gradebook_users WHERE gradebook_id=?d", $gradebook_id)->count;
-        // display gradebooks
+if (isset($display) and $display == TRUE) {
+    // display gradebook
+    if (isset($gradebook_id)) {
         if ($is_editor) {
             display_gradebook($gradebook_id);
         } else {
             student_view_gradebook($gradebook_id); // student view
         }
+    } else { // display all gradebooks
+        display_gradebooks();
     }
 }
 
