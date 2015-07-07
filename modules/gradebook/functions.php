@@ -346,7 +346,7 @@ function display_all_users_grades($gradebook_id) {
     global $course_id, $course_code, $tool_content, $langName, $langSurname, 
            $langID, $langAm, $langRegistrationDateShort, $langGradebookGrade,
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
-           $langNoRegStudent, $langHere, $langGradebookOutRange;
+           $langNoRegStudent, $langHere, $langGradebookOutRange, $langGradebookGradeAlert;
     
     $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;   
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, 

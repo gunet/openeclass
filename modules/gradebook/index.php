@@ -107,7 +107,7 @@ if ($is_editor) {
                                             FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
 
         Session::Messages($langCreateGradebookSuccess, 'alert-success');
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradeBooks=1");   
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code");   
     }    
     //delete user from gradebook list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
