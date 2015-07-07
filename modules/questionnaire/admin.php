@@ -291,9 +291,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               </div>
             </div>                
             <div class='form-group'>
-              <div class='col-sm-offset-2 col-sm-10'>
-                <input type='submit' class='btn btn-primary' name='submitPoll' value='".(isset($_GET['newPoll']) ? $langCreate : $langModify)."'>
-                <a href='$link_back' class='btn btn-default'>$langCancel</a>    
+              <div class='col-sm-offset-2 col-sm-10'>".
+            form_buttons(array(
+                array(
+                    'text'  => $langSave,
+                    'name'  => 'submitPoll',
+                    'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify)
+                ),
+                array(
+                    'href' => "index.php?course=$course_code",
+                )
+            ))
+            ."
               </div>
             </div>
         </fieldset>        
