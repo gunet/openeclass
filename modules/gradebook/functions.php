@@ -160,14 +160,13 @@ function display_user_grades($gradebook_id) {
  */
 function new_gradebook() {
     
-    global $tool_content, $course_code,
-           $langNewGradebook, $langNewGradebook2, 
+    global $tool_content, $course_code, $langNewGradebook2, 
            $langTitle, $langSave, $langInsert;
     
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&newGradebook=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
-                    <label class='col-xs-12'>$langNewGradebook<small class='help-block'>$langNewGradebook2</small></label></div>                            
+                    <label class='col-xs-12'>$langNewGradebook2</label></div>                            
                     <div class='form-group'> 
                         <div class='col-xs-12'>
                             <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
@@ -609,8 +608,7 @@ function student_view_gradebook($gradebook_id) {
  */
 function display_gradebook($gradebook_id) {
     
-    global $course_code, $urlServer, $tool_content, $pageName, $course_id;
-    global $langGradebookGradeAlert, $langGradebookNoActMessage1, 
+    global $course_code, $urlServer, $tool_content, $langGradebookGradeAlert, $langGradebookNoActMessage1, 
            $langTitle, $langView, $langScore, $langGradebookActList, $langAdd,
            $langGradebookActivityDate2, $langGradebookWeight, $langGradebookNoTitle, $langType, $langExercise, 
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete, 
@@ -618,8 +616,6 @@ function display_gradebook($gradebook_id) {
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath;
     
-    $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;
-    $pageName = $gradebook_title;
     $tool_content .= action_bar(
             array(        
                 array('title' => $langConfig,
@@ -792,7 +788,7 @@ function display_gradebooks() {
                                 array('title' => $g->active ? $langDeactivate : $langActivate,
                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" . 
                                               ($g->active ? '0' : '1'),
-                                      'icon' => $g->active ? 'fa-eye-slash' : 'fa-eye'),
+                                      'icon' => $g->active ? 'fa-toggle-off' : 'fa-toggle-on'),
                                 array('title' => $langDelete,
                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=$g->id",
                                       'icon' => 'fa-times',

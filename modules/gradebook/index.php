@@ -80,6 +80,8 @@ $(function() {
 $display = TRUE;
 if (isset($_REQUEST['gradebook_id'])) {
     $gradebook_id = $_REQUEST['gradebook_id'];
+    $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+    $pageName = $langEditChange;
 }
 
 if ($is_editor) {
@@ -181,6 +183,16 @@ if ($is_editor) {
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
+        
+    } elseif (isset($_GET['new'])) {
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+        $pageName = $langNewGradebook;
+        $tool_content .= action_bar(
+            array(
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label')));
     } else {
         $tool_content .= action_bar(
             array(
@@ -360,6 +372,8 @@ if ($is_editor) {
 if (isset($display) and $display == TRUE) {
     // display gradebook
     if (isset($gradebook_id)) {
+        $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;
+        $pageName = $gradebook_title;
         if ($is_editor) {
             display_gradebook($gradebook_id);
         } else {
