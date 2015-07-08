@@ -117,10 +117,15 @@ class Session {
                 // First time in this login session we check the document timestamp
                 // for this course, so get the previous value and update the
                 // database with current login timestamp
-                $_SESSION['document_timestamp'][$course_id] = Database::get()->querySingle(
-                    'SELECT document_timestamp FROM course_user
-                        WHERE user_id = ?d AND course_id = ?d',
-                    $this->user_id, $course_id)->document_timestamp;
+                $q = Database::get()->querySingle(
+                        'SELECT document_timestamp FROM course_user
+                            WHERE user_id = ?d AND course_id = ?d',
+                        $this->user_id, $course_id);
+                if ($q) {
+                    $_SESSION['document_timestamp'][$course_id] = $q->document_timestamp;
+                } else {
+                    return false;
+                }
             }
             if (!$_SESSION['document_timestamp_saved'][$course_id] and $save) {
                 Database::get()->query('UPDATE course_user
