@@ -240,9 +240,9 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
  * @global type $langTitle
  * @global type $langSave
  * @global type $langInsert
- * @global type $langAttendanceActiveUsers6
- * @global type $langAttendanceActiveUsers3
- * @global type $langAttendanceActiveUsersAll
+ * @global type $langTill
+ * @global type $langFrom2
+ * @global type $langRegistrationDate
  * @global type $langSave
  * @global type $langAttendanceUpdate
  * @global type $langGradebookRange
@@ -253,11 +253,24 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
  */
 function gradebook_settings($gradebook_id) {
     
-    global $tool_content, $course_code, $course_id,
-           $langNoStudents, $langTitle, $langSave, $langInsert, 
-           $langAttendanceActiveUsers6, $langAttendanceActiveUsers3, $langAttendanceActiveUsersAll,
+    global $tool_content, $head_content, $language, $course_code, $course_id,
+           $langNoStudents, $langTitle, $langSave, $langInsert,            
            $langSave, $langAttendanceUpdate, $langGradebookRange, $langGradebookUpdate,
-           $langGradebookInfoForUsers, $langRefreshList;
+           $langGradebookInfoForUsers, $langRefreshList,
+           $langRegistrationDate, $langFrom2, $langTill;
+    
+    
+    load_js('bootstrap-datetimepicker');   
+    $head_content .= "<script type='text/javascript'>
+        $(function() {
+            $('#startdatepicker, #enddatepicker').datetimepicker({
+                format: 'dd-mm-yyyy', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true
+            });
+        });
+    </script>";
     
     $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;
     
@@ -272,24 +285,15 @@ function gradebook_settings($gradebook_id) {
 
     //query to reset users in attedance list
     if (isset($_POST['resetAttendance'])) {
-        $usersLimit = intval($_POST['usersLimit']);
-        if ($usersLimit == 1) {
-            $limitDate = date('Y-m-d', strtotime(' -6 month'));
-        } elseif ($usersLimit == 2) {
-            $limitDate = date('Y-m-d', strtotime(' -3 month'));
-        } elseif ($usersLimit == 3) {
-            $limitDate = "0000-00-00";
-        }
-
-        //update the main gradebook table
-        Database::get()->querySingle("UPDATE gradebook SET `students_semester` = ?d WHERE id = ?d ", $usersLimit, $gradebook_id);
-        //clear gradebook users table
+        $usersstart = new DateTime($_POST['UsersStart']);        
+        $usersend = new DateTime($_POST['UsersEnd']);
+        // clear gradebook users table
         Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
         //check the rest value and rearrange the table            
         $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                     SELECT $gradebook_id, user_id FROM course_user
-                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                            $course_id, $limitDate);
+                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date BETWEEN ?s AND ?s",
+                            $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
         if ($newUsersQuery) {
             redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . $gradebook_id . '&gradebookBook=1&update=true');
         } else {
@@ -324,35 +328,50 @@ function gradebook_settings($gradebook_id) {
             </div>
         </div>
     </div>";
-
+    
+    
     // update users list
+    $UsersStart = date('d-m-Y', strtotime('now -6 month'));
+    $UsersEnd = date('d-m-Y', strtotime('now'));
+
     $tool_content .= "
     <div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
-                        <label class='col-xs-12'>$langRefreshList<small class='help-block'>($langGradebookInfoForUsers)</small></label></div>                            
-                            <div class='form-group'>
-                                <div class='col-xs-12'>".
-                        selection(array('1' => $langAttendanceActiveUsers6, 
-                                        '2' => $langAttendanceActiveUsers3, 
-                                        '3' => $langAttendanceActiveUsersAll), 
-                                    'usersLimit', $langAttendanceActiveUsers6, "class='form-control'")."                                        
-                                </div>
-                            </div>
-                            <div class='form-group'>
-                                <div class='col-xs-12'>".form_buttons(array(
-                                array(
-                                    'text' => $langSave,
-                                    'name' => 'resetAttendance',
-                                    'value'=> $langAttendanceUpdate
-                                ),
-                                array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                )
-                            ))."</div>
-                            </div>
+                        <label class='col-xs-12'>$langRefreshList<small class='help-block'>($langGradebookInfoForUsers)</small></label>
+                    </div>                            
+                    <div class='input-append date form-group' id='startdatepicker' data-date='$UsersStart' data-date-format='dd-mm-yyyy'>
+                        <label for='UsersStart' class='col-sm-2 control-label'>$langRegistrationDate $langFrom2:</label>
+                        <div class='col-xs-10 col-sm-9'>        
+                            <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$UsersStart'>                                    
+                        </div>
+                        <div class='col-xs-2 col-sm-1'>
+                            <span class='add-on'><i class='fa fa-calendar'></i></span>
+                        </div>
+                    </div>
+                    <div class='input-append date form-group' id='enddatepicker' data-date='$UsersEnd' data-date-format='dd-mm-yyyy'>
+                        <label for='UsersEnd' class='col-sm-2 control-label'>$langTill:</label>
+                        <div class='col-xs-10 col-sm-9'>        
+                            <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$UsersEnd'>
+                        </div>
+                        <div class='col-xs-2 col-sm-1'>  
+                            <span class='add-on'><i class='fa fa-calendar'></i></span>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-xs-12'>".form_buttons(array(
+                        array(
+                            'text' => $langSave,
+                            'name' => 'resetAttendance',
+                            'value'=> $langAttendanceUpdate
+                        ),
+                        array(
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                        )
+                    ))."</div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -441,8 +460,8 @@ function display_all_users_grades($gradebook_id) {
                                                     WHERE gradebook_id = ?d 
                                                     AND gradebook_users.uid = user.id 
                                                     AND `user`.id = `course_user`.`user_id` 
-                                                    AND `course_user`.`course_id` = ?d", $gradebook_id, $course_id);            
-    if (count($resultUsers)> 0) {                
+                                                    AND `course_user`.`course_id` = ?d", $gradebook_id, $course_id);    
+    if (count($resultUsers)> 0) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr>
@@ -455,7 +474,7 @@ function display_all_users_grades($gradebook_id) {
             </thead>
             <tbody>";
         $cnt = 0;                
-        foreach ($resultUsers as $resultUser) {
+        foreach ($resultUsers as $resultUser) {            
             $cnt++;
             $tool_content .= "
                 <tr>
