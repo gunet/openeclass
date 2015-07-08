@@ -193,7 +193,7 @@ if ($is_editor) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label')));
-    } else {
+    } elseif (!isset($_GET['direct_link'])) {
         $tool_content .= action_bar(
             array(
                 array('title' => $langNewGradebook,
