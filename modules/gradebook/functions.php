@@ -769,7 +769,7 @@ function display_gradebooks() {
     
     global $course_id, $tool_content, $course_code,
            $langDelete, $langConfirmDelete, $langDeactivate,
-           $langActivate, $langAvailableGradebooks, $langNoGradeBooks;
+           $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor;
     
     $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
     if (count($result) == 0) { // no gradebooks
@@ -779,10 +779,15 @@ function display_gradebooks() {
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langAvailableGradebooks</th><th class='text-center'>" . icon('fa-gears') . "</th></tr>";
+        $tool_content .= "<tr class='list-header'><th>$langAvailableGradebooks</th>";
+        if( $is_editor) {
+            $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
+        }
+        $tool_content .= "</tr>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
             $tool_content .= "<tr $row_class><td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;gradebook_id=$g->id'>$g->title</a></td>";
+            if( $is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                                 array('title' => $g->active ? $langDeactivate : $langActivate,
@@ -795,7 +800,9 @@ function display_gradebooks() {
                                       'class' => 'delete',
                                       'confirm' => $langConfirmDelete))
                                     );
-            $tool_content .= "</td></tr>";
+            $tool_content .= "</td>";
+            }
+            $tool_content .= "</tr>";
         }
         $tool_content .= "</table></div></div></div>";
     }
