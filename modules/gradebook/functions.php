@@ -508,7 +508,7 @@ function student_view_gradebook($gradebook_id) {
     global $tool_content, $uid, $course_id,
            $langGradebookTotalGradeNoInput, $langGradebookTotalGrade, 
            $langTitle, $langGradebookActivityDate2, $langGradebookActivityDescription,
-           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange;
+           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code;
                 
     $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;    
     //check if there are grade records for the user, otherwise alert message that there is no input
@@ -518,6 +518,12 @@ function student_view_gradebook($gradebook_id) {
                                             AND gradebook_activities.visible = 1 
                                             AND uid = ?d 
                                             AND gradebook_activities.gradebook_id = ?d", $uid, $gradebook_id)->count;
+    $tool_content .= action_bar(array(
+        array(  'title' => $langBack,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                'icon' => 'fa-reply',
+                'level' => 'primary-label'),
+    ));
     if (!$checkForRecords) {
         $tool_content .="<div class='alert alert-warning'>$langGradebookTotalGradeNoInput</div>";
     }
