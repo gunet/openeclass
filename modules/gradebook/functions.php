@@ -767,7 +767,7 @@ function display_gradebook($gradebook_id) {
  */
 function display_gradebooks() {
     
-    global $course_id, $tool_content, $course_code,
+    global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate,
            $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor;
     
@@ -786,10 +786,13 @@ function display_gradebooks() {
         $tool_content .= "</tr>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;gradebook_id=$g->id'>$g->title</a></td>";
+            $tool_content .= "<tr $row_class><td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;gradebook_id=$g->id&amp;direct_link=1'>$g->title</a></td>";
             if( $is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
+                                array('title' => $langEditChange,
+                                      'url' => "$_SERVER[PHP_SELF]?course=$course_code&amp;gradebook_id=$g->id",
+                                      'icon' => 'fa-edit'),
                                 array('title' => $g->active ? $langDeactivate : $langActivate,
                                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" . 
                                               ($g->active ? '0' : '1'),

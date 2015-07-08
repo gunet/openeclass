@@ -374,7 +374,7 @@ if (isset($display) and $display == TRUE) {
     if (isset($gradebook_id)) {
         $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;
         $pageName = $gradebook_title;
-        if ($is_editor) {
+        if ($is_editor && !isset($_GET['direct_link'])) {
             display_gradebook($gradebook_id);
         } else {
             student_view_gradebook($gradebook_id); // student view
