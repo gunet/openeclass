@@ -1268,7 +1268,7 @@ function add_gradebook_other_activity($gradebook_id) {
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label for='visible' class='col-sm-2 control-label'>$langGradeVisible</label>
+                            <label for='visible' class='col-sm-2 control-label'>$langGradeVisible:</label>
                             <div class='col-sm-10'>
                                 <input type='checkbox' id='visible' name='visible' value='1'";
                                 if ($visible == 1) {
