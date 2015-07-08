@@ -118,7 +118,9 @@ if ($is_editor) {
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
     if(isset($_GET['editUsers']) || isset($_GET['gradeBooks'])){
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+        $book_id = $_GET['gradebook_id'];
+        $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $book_id, $course_id)->title;
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$book_id", "name" => $gradebook_title);
         $pageName = isset($_GET['editUsers']) ? $langConfig : $langGradebookManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
