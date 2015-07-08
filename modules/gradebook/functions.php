@@ -694,9 +694,11 @@ function display_gradebook($gradebook_id) {
                           <tr class='list-header'><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
                           <tr class='list-header'><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>
                           <th class='text-center'>$langView</th>
-                          <th class='text-center'>$langScore</th>
-                          <th class='text-center'><i class='fa fa-cogs'></i></th>
-                          </tr>";
+                          <th class='text-center'>$langScore</th>";
+        if (!isset($_GET['direct_link'])) {
+                          $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
+        }
+                          $tool_content .= "</tr>";
         foreach ($result as $details) {
             $content = ellipsize_html($details->description, 50);                
             $tool_content .= "<tr><td><b>";
@@ -757,6 +759,7 @@ function display_gradebook($gradebook_id) {
             } else {
                 $preview_link = '';
             }
+            if (!isset($_GET['direct_link'])){
             $tool_content .= "<td class='option-btn-cell text-center'>".
                 action_button(array(
                             array('title' => $langEditChange,
@@ -773,6 +776,7 @@ function display_gradebook($gradebook_id) {
                                 'class' => 'delete')                            
                     )).
                 "</td>";
+            }
         } // end of while
         $tool_content .= "</table></div></div></div>";       
     }
