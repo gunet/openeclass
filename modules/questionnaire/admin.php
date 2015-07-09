@@ -460,10 +460,18 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>";
     }
     $tool_content .= "
-            <div class='col-md-10 col-md-offset-2'>
-                <input type='submit' class='btn btn-primary' name='submitQuestion' value='".(isset($_GET['newQuestion']) ? $langCreate : $langModify)."'>
-                <a href='admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : "")."' class='btn btn-default'>$langCancel</a>
-            </div>
+            <div class='col-md-10 col-md-offset-2'>".
+            form_buttons(array(
+                array(
+                    'text'  => $langSave,
+                    'name'  => 'submitQuestion',
+                    'value' => (isset($_GET['newQuestion']) ? $langCreate : $langModify)
+                ),
+                array(
+                    'href' => "admin.php?course=$course_code&pid=$pid".(isset($_GET['modifyQuestion']) ? "&editQuestion=".$_GET['modifyQuestion'] : "")
+                )
+            ))
+            ."</div>
         </fieldset>
     </form></div>";
 
@@ -483,7 +491,6 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
     if(!$question || $question->qtype == QTYPE_LABEL || $question->qtype == QTYPE_FILL || $question->qtype == QTYPE_SCALE) {
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     }
-    $pageName = $langAnswers;
     $navigation[] = array(
         'url' => "admin.php?course=$course_code&amp;pid=$pid&amp;editQuestion=$question->pqid", 
         'name' => $langPollManagement
@@ -555,7 +562,12 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             </div>
         </div>";
 // View edit poll page     
-} else {    
+} else {  
+    $pageName = $langEditChange;
+    $navigation[] = array(
+            'url' => "admin.php?course=$course_code&amp;pid=$pid", 
+            'name' => $poll->name
+        );
     $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
     $tool_content .= action_bar(array(
         array('title' => $langBack,
