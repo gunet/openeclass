@@ -339,7 +339,7 @@ if ($is_editor) {
     }
     elseif (isset($_GET['new'])) {
         new_gradebook(); // create new gradebook
-        $display = FALSE;
+        $display = TRUE;
     }
     //EDIT DB: display all the gradebook users (reset the list, remove users)
     elseif (isset($_GET['editUsers'])) { // gradebook settings
