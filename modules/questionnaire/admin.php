@@ -631,11 +631,11 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               'url' => $_SERVER['SCRIPT_NAME'] . "?course=$course_code&pid=$pid&newQuestion=yes&questionType=label",
               'icon' => 'fa-tag',
               'button-class' => 'btn-success')        
-        )); 
+        ),false); 
     if ($questions) {    
-        $tool_content .= "<table class='table table-striped table-bordered table-hover'>
+        $tool_content .= "<table class='table-default'>
                     <tbody>
-                        <tr>
+                        <tr class='list-header'>
                           <th colspan='2'>$langQuesList</th>
                           <th class='text-center'>".icon('fa-gears', $langCommands)."</th>
                         </tr>";
