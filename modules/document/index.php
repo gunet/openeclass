@@ -37,6 +37,8 @@ require_once '../../include/baseTheme.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
+$action->record(MODULE_ID_DOCS);
+
 require_once 'doc_init.php';
 require_once 'doc_metadata.php';
 require_once 'include/lib/forcedownload.php';
