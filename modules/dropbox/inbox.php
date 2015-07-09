@@ -207,9 +207,19 @@ $out .=         "
                         </div>
                     </div>
                     <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSend) . "'>
-                            <a id='cancelReply' class='btn btn-default' href='javascript:void(0)'>$langCancel</a>
+                        <div class='col-sm-10 col-sm-offset-2'>".
+                            form_buttons(array(
+                                array(
+                                    'text'  => $langSend,
+                                    'name'  => 'submit',
+                                    'value' => $langAddModify
+                                ),
+                                array(
+                                    'href' => "javascript:void(0)",
+                                    'id'   => "cancelReply"
+                                )
+                            ))
+                            ."
                         </div>
                     </div>
                 </fieldset>";
