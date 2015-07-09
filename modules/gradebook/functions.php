@@ -257,7 +257,7 @@ function gradebook_settings($gradebook_id) {
            $langNoStudents, $langTitle, $langSave, $langInsert,            
            $langSave, $langAttendanceUpdate, $langGradebookRange, $langGradebookUpdate,
            $langGradebookInfoForUsers, $langRefreshList,
-           $langRegistrationDate, $langFrom2, $langTill;
+           $langRegistrationDate, $langFrom2, $langTill, $gradebook_title;
     
     
     load_js('bootstrap-datetimepicker');   
@@ -271,8 +271,6 @@ function gradebook_settings($gradebook_id) {
             });
         });
     </script>";
-    
-    $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;
     
     //delete users from gradebook list
     if (isset($_POST['deleteSelectedUsers'])) {
@@ -527,9 +525,8 @@ function student_view_gradebook($gradebook_id) {
     global $tool_content, $uid, $course_id,
            $langGradebookTotalGradeNoInput, $langGradebookTotalGrade, 
            $langTitle, $langGradebookActivityDate2, $langGradebookActivityDescription,
-           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code;
+           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code, $gradebook_title;
                 
-    $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;    
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) AS count 
                                             FROM gradebook_book, gradebook_activities 
