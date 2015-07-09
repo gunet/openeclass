@@ -579,7 +579,7 @@ $(document).ready(function() {
         $( "#treeModal" ).modal( "show" );
     });
 
-    $( "a[href='#nodCnt']" ).click(function (e) {
+    $( "#nodCnt" ).on('click', "a[href='#nodCnt']", function (e) {
         e.preventDefault();
         $(this).find('span').tooltip('destroy')
             .closest('p').remove();
