@@ -2621,6 +2621,7 @@ $langEditPoll = 'Τροποποίηση Ερωτηματολογίου';
 $langPollManagement = "Διαχείριση Ερωτηματολογίου";
 $langBackPollManagement = "Επιστροφή στη διαχείριση ερωτηματολογίου";
 $langQuestionnaire = "Ερωτηματολόγια";
+$langNoAccessPrivilages = "Δεν έχετε δικαίωμα πρόσβασης";
 $langSurvey = "Ερωτηματολόγιο";
 $langSurveys = "Ερωτηματολόγια";
 $langParticipate = "Συμμετοχή";

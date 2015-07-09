@@ -1473,6 +1473,7 @@ $langCreatePoll = 'Create Questionnaire';
 $langEditPoll = 'Edit Questionnaire';
 $langQuestionnaire = "Questionnaires";
 $langSurvey = "Questionnaire";
+$langNoAccessPrivilages = "No access privileges";
 $langSurveys = "Questionnaires";
 $langParticipate = "Participation";
 $langSurveysActive = "Active Student Profile Surveys";
