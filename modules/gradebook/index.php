@@ -191,18 +191,17 @@ if ($is_editor) {
     } elseif (isset($_GET['new'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
         $pageName = $langNewGradebook;
-        $tool_content .= action_bar(
-            array(
-                array('title' => $langBack,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                      'icon' => 'fa-reply',
-                      'level' => 'primary-label')));
-    } elseif (isset($_GET['gradebook_id']) && $is_editor && !isset($_GET['direct_link'])) {
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label')));
+    } elseif (isset($_GET['gradebook_id']) && $is_editor) {
         $book_id = $_GET['gradebook_id'];
         $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $book_id, $course_id)->title;
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$book_id&amp;direct_link=1", "name" => $gradebook_title);
         $pageName = $langEditChange;
-    }  elseif (!isset($_GET['direct_link'])) {
+    }  elseif (!isset($_GET['direct_link']) && !isset($_GET['gradebook_id'])) {
         $tool_content .= action_bar(
             array(
                 array('title' => $langNewGradebook,
