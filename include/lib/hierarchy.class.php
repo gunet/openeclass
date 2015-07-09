@@ -579,6 +579,14 @@ $(document).ready(function() {
         $( "#treeModal" ).modal( "show" );
     });
 
+    $( "a[href='#nodCnt']" ).click(function (e) {
+        e.preventDefault();
+        $(this).find('span').tooltip('destroy')
+            .closest('p').remove();
+        $('#dialog-set-key').val(null);
+        $('#dialog-set-value').val(null);
+    });
+
     $( ".treeModalClose" ).click(function() {
         $( "#treeModal" ).modal( "hide" );
     });
@@ -736,7 +744,7 @@ jContent;
                     $html .= '<p id="nd_' . $i . '">';
                     $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
                     $html .= $this->getFullPath($def);
-                    $html .= '&nbsp;<a href="#nodCnt" onclick="$(\'#nd_' . $i . '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><i class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></i></a></p>';
+                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $html .= '</p>';
                     $i++;
                 }
