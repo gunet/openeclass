@@ -51,7 +51,7 @@ if (isset($_GET['delete'])) {
         Database::get()->query('DELETE FROM autoenroll_course WHERE rule = ?d', $rule);
     }
 
-    if (isset($_POST['courses']) or isset($_POST['departments'])) {
+    if (isset($_POST['courses']) or isset($_POST['rule_deps'])) {
         if (!isset($rule)) {
             $rule = Database::get()->query('INSERT INTO autoenroll_rule
                 SET status = ?d', $type)->lastInsertID;
@@ -65,9 +65,9 @@ if (isset($_GET['delete'])) {
             multiInsert('autoenroll_course',
                 'rule, course_id', $rule, $courses);
         }
-        if (isset($_POST['departments'])) {
+        if (isset($_POST['rule_deps'])) {
             multiInsert('autoenroll_department',
-                'rule, department_id', $rule, $_POST['departments']);
+                'rule, department_id', $rule, $_POST['rule_deps']);
         }
     }
     Session::Messages($langAutoEnrollAdded, 'alert-success');
@@ -206,7 +206,7 @@ if (isset($_GET['delete'])) {
                 } else {
                     countnd += 1;
                     $('#nodCnt2').append('<p id=\"nd_' + countnd + '\">'
-                                     + '<input type=\"hidden\" name=\"departments[]\" value=\"' + newnodeid + '\">'
+                                     + '<input type=\"hidden\" name=\"rule_deps[]\" value=\"' + newnodeid + '\">'
                                      + newnodename
                                      + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"$langNodeDel\" data-placement=\"top\" title=\"$langNodeDel\"><\/span><\/a>'
                                      + '<\/p>');
