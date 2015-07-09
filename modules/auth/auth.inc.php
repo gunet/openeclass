@@ -900,7 +900,7 @@ function shib_cas_login($type) {
         $attributes = array();
         if (isset($_SESSION['cas_attributes'])) {
             foreach ($_SESSION['cas_attributes'] as $name => $value) {
-                $attributess[strtolower($name)] = $value;
+                $attributes[strtolower($name)] = $value;
             }
         }
 
