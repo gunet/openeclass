@@ -52,8 +52,8 @@ function display_user_grades($gradebook_id) {
            $langGradebookNoActMessage2, $langGradebookNoActMessage3, $langGradebookActCour,
            $langGradebookAutoGrade, $langGradebookΝοAutoGrade, $langGradebookActAttend,
            $langGradebookOutRange, $langGradebookUpToDegree, $langGradeNoBookAlert, $langGradebookGrade;
-    
-    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;   
+        
+    $gradebook_range = get_gradebook_range($gradebook_id);
     
     if(weightleft($gradebook_id, 0) == 0) {
         $userID = intval($_GET['book']); //user
@@ -235,99 +235,94 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
  * @brief insert/modify gradebook settings
  * @global type $tool_content
  * @global type $course_code
- * @global type $course_id
- * @global type $langNoStudents
  * @global type $langTitle
- * @global type $langSave
- * @global type $langInsert
- * @global type $langTill
- * @global type $langFrom2
- * @global type $langRegistrationDate
- * @global type $langSave
- * @global type $langAttendanceUpdate
+ * @global type $langSave  
  * @global type $langGradebookRange
  * @global type $langGradebookUpdate
- * @global type $langGradebookInfoForUsers
- * @global type $langRefreshList
+ * @global type $langGradebookInfoForUsers 
  * @param type $gradebook_id
  */
 function gradebook_settings($gradebook_id) {
     
-    global $tool_content, $head_content, $language, $course_code, $course_id,
-           $langNoStudents, $langTitle, $langSave, $langInsert,            
-           $langSave, $langAttendanceUpdate, $langGradebookRange, $langGradebookUpdate,
-           $langGradebookInfoForUsers, $langRefreshList,
-           $langRegistrationDate, $langFrom2, $langTill, $gradebook_title;
+    global $tool_content, $course_code,
+           $langTitle, $langSave,            
+           $langSave, $langGradebookRange, $langGradebookUpdate,           
+           $gradebook_title;
     
+    $gradebook_range = get_gradebook_range($gradebook_id);
     
-    load_js('bootstrap-datetimepicker');   
-    $head_content .= "<script type='text/javascript'>
-        $(function() {
-            $('#startdatepicker, #enddatepicker').datetimepicker({
-                format: 'dd-mm-yyyy', 
-                pickerPosition: 'bottom-left', 
-                language: '".$language."',
-                autoclose: true
-            });
-        });
-    </script>";
-    
-    //delete users from gradebook list
-    if (isset($_POST['deleteSelectedUsers'])) {
-        foreach ($_POST['recID'] as $value) {
-            $value = intval($value);
-            //delete users from gradebook users table
-            Database::get()->query("DELETE FROM gradebook_users WHERE id=?d ", $value);
-        }
-    }
-
-    //query to reset users in attedance list
-    if (isset($_POST['resetAttendance'])) {
-        $usersstart = new DateTime($_POST['UsersStart']);        
-        $usersend = new DateTime($_POST['UsersEnd']);
-        // clear gradebook users table
-        Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
-        //check the rest value and rearrange the table            
-        $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                    SELECT $gradebook_id, user_id FROM course_user
-                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date BETWEEN ?s AND ?s",
-                            $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
-        if ($newUsersQuery) {
-            redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . $gradebook_id . '&gradebookBook=1&update=true');
-        } else {
-            $tool_content .= "<div class='alert alert-warning'>$langNoStudents</div>";
-        }
-    }
-
     // update gradebook title
-    $tool_content .= "
-    <div class='row'>
+    $tool_content .= "<div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editSettings=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
                         <label class='col-xs-12'>$langTitle</label>                           
                         <div class='col-xs-12'>
                             <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$gradebook_title'>
                         </div>
-                    </div>
-                    <div class='form-group'>
-                        <div class='col-xs-12'>".form_buttons(array(
+                    </div>                            
+                    <div class='form-group'><label class='col-xs-12'>$langGradebookRange</label></div>                            
+                        <div class='form-group'>
+                            <div class='col-xs-12'>
+                            <select name='degreerange' class='form-control'><option value=10";
+                            if (isset($gradebook_range) and $gradebook_range == 10) {
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .= ">0-10</option><option value=20";
+                            if (isset($gradebook_range) and $gradebook_range == 20) {
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .= ">0-20</option><option value=5";
+                            if (isset($gradebook_range) and $gradebook_range == 5) {
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .= ">0-5</option><option value=100";
+                            if (isset($gradebook_range) and $gradebook_range == 100) {
+                                $tool_content .= " selected ";
+                            }
+                            $tool_content .= ">0-100</option></select>";
+                            $tool_content .= "</div>
+                        </div>
+                        <div class='form-group'>
+                            <div class='col-xs-12'>".form_buttons(array(
                                 array(
                                     'text' => $langSave,
-                                    'value'=> $langInsert
+                                    'name' => 'submitGradebookRange',
+                                    'value'=> $langGradebookUpdate
                                 ),
                                 array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id"
                                 )
-                            ))."</div>                        
-                    </div>
+                            ))."</div>
+                        </div>
+                    </fieldset>
                 </form>
             </div>
         </div>
-    </div>";
+    </div>";                            
+}
+
+/**
+ * @brief modify user gradebook settings
+ * @global type $tool_content
+ * @global type $langRefreshList
+ * @global type $course_code
+ * @global type $language 
+ * @global type $langAttendanceUpdate
+ * @global type $langGradebookInfoForUsers
+ * @global type $langRegistrationDate
+ * @global type $langFrom2
+ * @global type $langTill
+ * @global type $langRefreshList
+ * @param type $gradebook_id
+ */
+function user_gradebook_settings($gradebook_id) {
     
-    
+    global $tool_content, $language, $course_code, $langSave,
+           $langAttendanceUpdate, $langGradebookInfoForUsers, 
+           $langRegistrationDate, $langFrom2, $langTill, $langRefreshList;
+                       
     // update users list
     $UsersStart = date('d-m-Y', strtotime('now -6 month'));
     $UsersEnd = date('d-m-Y', strtotime('now'));
@@ -361,8 +356,8 @@ function gradebook_settings($gradebook_id) {
                     <div class='form-group'>
                         <div class='col-xs-12'>".form_buttons(array(
                         array(
-                            'text' => $langSave,
-                            'name' => 'resetAttendance',
+                            'text' => $langRefreshList,
+                            'name' => 'resetGradebookUsers',
                             'value'=> $langAttendanceUpdate
                         ),
                         array(
@@ -373,56 +368,8 @@ function gradebook_settings($gradebook_id) {
                 </form>
             </div>
         </div>
-    </div>";
-    
-    // display degree range
-    $tool_content .= "
-    <div class='row'>
-        <div class='col-sm-12'>
-            <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id' onsubmit=\"return checkrequired(this, 'antitle');\">
-                    <fieldset>
-                    <div class='form-group'><label class='col-xs-12'>$langGradebookRange</label></div>                            
-                        <div class='form-group'>
-                            <div class='col-xs-12'>
-                                <select name='degreerange' class='form-control'><option value=10";
-                                if (isset($gradebook_range) and $gradebook_range == 10) {
-                                    $tool_content .= " selected ";
-                                }
-                                $tool_content .= ">0-10</option><option value=20";
-                                if (isset($gradebook_range) and $gradebook_range == 20) {
-                                    $tool_content .= " selected ";
-                                }
-                                $tool_content .= ">0-20</option><option value=5";
-                                if (isset($gradebook_range) and $gradebook_range == 5) {
-                                    $tool_content .= " selected ";
-                                }
-                                $tool_content .= ">0-5</option><option value=100";
-                                if (isset($gradebook_range) and $gradebook_range == 100) {
-                                    $tool_content .= " selected ";
-                                }
-                                $tool_content .= ">0-100</option></select>";
-                            $tool_content .= "</div>
-                        </div>
-                        <div class='form-group'>
-                            <div class='col-xs-12'>".form_buttons(array(
-                                array(
-                                    'text' => $langSave,
-                                    'name' => 'submitGradebookRange',
-                                    'value'=> $langGradebookUpdate
-                                ),
-                                array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                )
-                            ))."</div>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
-        </div>
-    </div>";                            
+    </div>";        
 }
-
 
 /**
  * @brief display all users grade
@@ -449,8 +396,8 @@ function display_all_users_grades($gradebook_id) {
            $langID, $langAm, $langRegistrationDateShort, $langGradebookGrade,
            $langGradebookBook, $langGradebookDelete, $langConfirmDelete,
            $langNoRegStudent, $langHere, $langGradebookOutRange, $langGradebookGradeAlert;
-        
-    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;    
+            
+    $gradebook_range = get_gradebook_range($gradebook_id);
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, 
                                                             gradebook_users.uid as userID,                                                             
                                                             user.am as am, DATE(course_user.reg_date) as reg_date 
@@ -641,7 +588,7 @@ function display_gradebook($gradebook_id) {
     $tool_content .= action_bar(
             array(        
                 array('title' => $langConfig,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editUsers=1",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editSettings=1",
                       'icon' => 'fa-cog ',
                       'level' => 'primary-label'),
                 array('title' => $langUsers,
@@ -1020,7 +967,7 @@ function register_user_grades($gradebook_id, $actID) {
             $langAttendanceBooking, $langGradebookBooking, $langGradebookOutRange;
     
     //display form and list
-    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
+    $gradebook_range = get_gradebook_range($gradebook_id);
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $act_type = $result->activity_type; // type of activity
     $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
@@ -1348,7 +1295,7 @@ function insert_grades($gradebook_id, $actID) {
       
     global $tool_content, $error, $langGradebookEdit, $langGradebookOutRange;
     
-    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
+    $gradebook_range = get_gradebook_range($gradebook_id);
     //get all the active users 
     $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
     if ($activeUsers) {
@@ -1622,4 +1569,18 @@ function userGradebookTotalActivityStats ($activityID, $gradebook_id) {
     } else {
         return "-";
     }        
+}
+
+
+/**
+ * @brief get gradebook range
+ * @param type $gradebook_id
+ * @return type
+ */
+function get_gradebook_range($gradebook_id) {
+    
+    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
+    
+    return $gradebook_range;
+    
 }

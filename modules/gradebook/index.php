@@ -40,12 +40,12 @@ load_js('datatables_filtering_delay');
 $head_content .= "
 <script type='text/javascript'>
 $(function() {
-    $('input[name=date]').datetimepicker({
-            format: 'yyyy-mm-dd hh:ii',
+        $('#startdatepicker, #enddatepicker').datetimepicker({    
+            format: 'dd-mm-yyyy', 
             pickerPosition: 'bottom-left', 
             language: '".$language."',
             autoclose: true 
-        });
+        });    
     var oTable = $('#users_table{$course_id}').DataTable ({
         'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -115,26 +115,51 @@ if ($is_editor) {
         Session::Messages($langGradebookEdit,"alert-success");
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$_GET[gb]&gradebookBook=1");        
     }
+    
+    //reset gradebook users
+    if (isset($_POST['resetGradebookUsers'])) {
+        $usersstart = new DateTime($_POST['UsersStart']);
+        $usersend = new DateTime($_POST['UsersEnd']);
+        // clear gradebook users table
+        Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+        //check the rest value and rearrange the table            
+        $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                    SELECT $gradebook_id, user_id FROM course_user
+                    WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
+                            $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+        if ($newUsersQuery) {
+            Session::Messages($langGradebookEdit,"alert-success");            
+        } else {
+            Session::Messages($langNoStudents, "alert-warning");            
+        }
+        redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . $gradebook_id . '&gradebookBook=1');
+    }
+    
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
-    if(isset($_GET['editUsers']) || isset($_GET['gradeBooks'])){
+    if(isset($_GET['editUsers']) || isset($_GET['gradeBooks'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
         $pageName = isset($_GET['editUsers']) ? $langConfig : $langGradebookManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif (isset($_GET['gradebookBook'])) {
+    } elseif (isset($_GET['gradebookBook'])) {        
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
-        $pageName = $langUsers;
+        $pageName = $langGradebookActiveUsers;
         $tool_content .= action_bar(array(
+            array('title' => $langRefreshList,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editUsers=1",
+                  'icon' => 'fa-users',
+                  'level' => 'primary-label'),
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'icon' => 'fa fa-reply',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success')            
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
@@ -203,18 +228,16 @@ if ($is_editor) {
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;new=1",
                       'icon' => 'fa-plus',
                       'level' => 'primary-label',
-                      'button-class' => 'btn-success')));                
+                      'button-class' => 'btn-success')));
     }
     $tool_content .= "</div></div>";
     
     //EDIT: edit range
     if (isset($_POST['submitGradebookRange'])) {
         $gradebook_range = intval($_POST['degreerange']);
-        if ($gradebook_range == 10 or $gradebook_range == 100 or $gradebook_range == 5 or $gradebook_range == 20) {
-            Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
-            Session::Messages($langGradebookEdit,"alert-success");
-            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
-        }
+        Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
+        Session::Messages($langGradebookEdit,"alert-success");
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");        
     }
     
     //EDIT: edit title
@@ -303,7 +326,7 @@ if ($is_editor) {
     }
    
     //DISPLAY: list of users and form for each user
-    elseif(isset($_GET['gradebookBook']) || isset($_GET['book'])) {        
+    elseif(isset($_GET['gradebookBook']) or isset($_GET['book'])) {        
         if (isset($_GET['update']) and $_GET['update']) {
             $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }
@@ -328,7 +351,6 @@ if ($is_editor) {
                 $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
             }
         }
-
         // display user grades 
         if(isset($_GET['book'])) {
             display_user_grades($gradebook_id);             
@@ -340,20 +362,19 @@ if ($is_editor) {
     elseif (isset($_GET['new'])) {
         new_gradebook(); // create new gradebook
         $display = TRUE;
-    }
-    //EDIT DB: display all the gradebook users (reset the list, remove users)
-    elseif (isset($_GET['editUsers'])) { // gradebook settings
-        gradebook_settings($gradebook_id);
+    } elseif (isset($_GET['editUsers'])) { // edit gradebook users
+        user_gradebook_settings($gradebook_id);
         $display = FALSE;
+    } elseif (isset($_GET['editSettings'])) { // gradebook settings
+        gradebook_settings($gradebook_id);
+        $display = FALSE;    
     } elseif (isset($_GET['addActivityAs'])) { //display available assignments       
         display_available_assignments($gradebook_id);
         $display = FALSE;
-    }
-    elseif (isset($_GET['addActivityEx'])) { // display available exercises
+    } elseif (isset($_GET['addActivityEx'])) { // display available exercises
         display_available_exercises($gradebook_id);
         $display = FALSE;
-    }
-    elseif (isset($_GET['addActivityLp'])) { // display available lps
+    } elseif (isset($_GET['addActivityLp'])) { // display available lps
         display_available_lps($gradebook_id);
         $display = FALSE;
     }
