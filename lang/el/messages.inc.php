@@ -39,6 +39,7 @@ $langContactInfo = "Στοιχεία επικοινωνίας";
 $langInCourses = "Στο μάθημα";
 $langOfSite = "της πλατφόρμας";
 $langResourceBrowser = 'Αναζήτηση πόρων';
+$langGeneralSettings = 'Ρυθμίσεις';
 
 #For the logged-out user:
 $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
@@ -4428,7 +4429,6 @@ $langBlogAddPost = "Προσθήκη ανάρτησης";
 $langBlogEmpty = "Δεν υπάρχουν αναρτήσεις ιστολογίου";
 $langBlogNewerPosts = "Νεότερες αναρτήσεις";
 $langBlogOlderPosts = "Παλαιότερες αναρτήσεις";
-$langBlogPopular = "Δημοφιλείς Αναρτήσεις";
 $langBlogPostUser = " - από τον χρήστη ";
 $langSureToDelBlogPost = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανάρτηση";
 $langBlogPostBody = "Σώμα Ανάρτησης";
