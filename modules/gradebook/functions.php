@@ -469,10 +469,10 @@ function display_all_users_grades($gradebook_id) {
  */
 function student_view_gradebook($gradebook_id) {
 
-    global $tool_content, $uid, $course_id,
+    global $tool_content, $uid,
            $langGradebookTotalGradeNoInput, $langGradebookTotalGrade, 
            $langTitle, $langGradebookActivityDate2, $langGradebookActivityDescription,
-           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code, $gradebook_title;
+           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code;
                 
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) AS count 
@@ -498,7 +498,7 @@ function student_view_gradebook($gradebook_id) {
     if ($results > 0) {
         if ($checkForRecords) {
             $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
-            $tool_content .= "<div class='alert alert-info'><strong>$gradebook_title:</strong> $langGradebookTotalGrade: <strong>" . userGradeTotal($gradebook_id, $uid) . " / ". $range . "</strong></div>";
+            $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: <strong>" . userGradeTotal($gradebook_id, $uid) . " / ". $range . "</strong></div>";
         }
         if(weightleft($gradebook_id, 0) != 0) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</p>";
@@ -744,7 +744,11 @@ function display_gradebooks() {
            $langDelete, $langConfirmDelete, $langDeactivate,
            $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor;
     
-    $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
+    if ($is_editor) {
+        $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
+    } else {
+        $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE active = 1 AND course_id = ?d", $course_id);
+    }
     if (count($result) == 0) { // no gradebooks
         $tool_content .= "<div class='alert alert-info'>$langNoGradeBooks</div>";
     } else {
@@ -759,24 +763,24 @@ function display_gradebooks() {
         $tool_content .= "</tr>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[PHP_SELF]?course=$course_code&amp;gradebook_id=$g->id&amp;direct_link=1'>$g->title</a></td>";
+            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;direct_link=1'>$g->title</a></td>";
             if( $is_editor) {
-            $tool_content .= "<td class='option-btn-cell'>";
-            $tool_content .= action_button(array(
-                                array('title' => $langEditChange,
-                                      'url' => "$_SERVER[PHP_SELF]?course=$course_code&amp;gradebook_id=$g->id",
-                                      'icon' => 'fa-edit'),
-                                array('title' => $g->active ? $langDeactivate : $langActivate,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" . 
-                                              ($g->active ? '0' : '1'),
-                                      'icon' => $g->active ? 'fa-toggle-off' : 'fa-toggle-on'),
-                                array('title' => $langDelete,
-                                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=$g->id",
-                                      'icon' => 'fa-times',
-                                      'class' => 'delete',
-                                      'confirm' => $langConfirmDelete))
-                                    );
-            $tool_content .= "</td>";
+                $tool_content .= "<td class='option-btn-cell'>";
+                $tool_content .= action_button(array(
+                                    array('title' => $langEditChange,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id",
+                                          'icon' => 'fa-edit'),
+                                    array('title' => $g->active ? $langDeactivate : $langActivate,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" . 
+                                                  ($g->active ? '0' : '1'),
+                                          'icon' => $g->active ? 'fa-toggle-off' : 'fa-toggle-on'),
+                                    array('title' => $langDelete,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=$g->id",
+                                          'icon' => 'fa-times',
+                                          'class' => 'delete',
+                                          'confirm' => $langConfirmDelete))
+                                        );
+                $tool_content .= "</td>";
             }
             $tool_content .= "</tr>";
         }
@@ -1178,7 +1182,7 @@ function add_gradebook_other_activity($gradebook_id) {
             <div class='form-wrapper'>                    
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id'>
                     <fieldset>";
-                        if (isset($_GET['modify'])) { //edit an existed activity            
+                        if (isset($_GET['modify'])) { // modify an existing gradebook activity
                             $id  = filter_var($_GET['modify'], FILTER_VALIDATE_INT);
                             //All activity data (check if it's in this gradebook)
                             $modifyActivity = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $id, $gradebook_id);
@@ -1199,6 +1203,7 @@ function add_gradebook_other_activity($gradebook_id) {
                             $gradebookActivityToModify = "";
                             $activity_type = "";
                             $date = date("Y-n-j", time());
+                            $visible = 1;
                         }
 
                         if (!isset($contentToModify)) $contentToModify = "";
@@ -1579,8 +1584,20 @@ function userGradebookTotalActivityStats ($activityID, $gradebook_id) {
  */
 function get_gradebook_range($gradebook_id) {
     
-    $gradebook_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
+    $gd_range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
     
-    return $gradebook_range;
+    return $gd_range;
     
+}
+
+/**
+ * @brief get gradebook title
+ * @param type $gradebook_id
+ * @return type
+ */
+function get_gradebook_title($gradebook_id) {
+    
+    $gd_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d", $gradebook_id)->title;
+    
+    return $gd_title;
 }

@@ -80,7 +80,7 @@ $(function() {
 $display = TRUE;
 if (isset($_REQUEST['gradebook_id'])) {
     $gradebook_id = $_REQUEST['gradebook_id'];
-    $gradebook_title = Database::get()->querySingle("SELECT title FROM gradebook WHERE id = ?d AND course_id = ?d", $gradebook_id, $course_id)->title;
+    $gradebook_title = get_gradebook_title($gradebook_id);
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
     $pageName = $langEditChange;
 }
@@ -305,8 +305,8 @@ if ($is_editor) {
             } else {
                 //insert
                 $insertAct = Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, 
-                                                            `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d", 
-                                                    $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type);                
+                                                            `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d, visible = ?d", 
+                                                    $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type, $visible);
                 Session::Messages("$langGradebookSucInsert","alert-success");
                 redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
             }
