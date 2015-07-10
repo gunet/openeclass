@@ -1661,6 +1661,7 @@ function load_global_messages() {
         $global_messages['langGlossary'][$code] = $langGlossary;
         $global_messages['langEBook'][$code] = $langEBook;
         $global_messages['langVideo'][$code] = $langVideo;
+        $global_messages['langDropBox'][$code] = $langDropBox;
     }
 }
 
