@@ -99,9 +99,18 @@ $tool_content .= "
                             </div>
                         </div>
                         <div class='form-group'>
-                        <div class='col-sm-10 col-sm-offset-2'>
-                            <input class='btn btn-primary' type='submit' name='saveCourseDescription' value='" . q($langAdd) . "'>
-                            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                        <div class='col-sm-10 col-sm-offset-2'>".
+                                form_buttons(array(
+                                    array(
+                                        'text'  =>  $langSave,
+                                        'name'  =>  'saveCourseDescription',
+                                        'value' =>  $langAdd
+                                    ),
+                                    array(
+                                        'href'  =>  "index.php?course=$course_code"
+                                    )
+                                ))
+                            ."
                         </div>
                         </div>
                   </fieldset>

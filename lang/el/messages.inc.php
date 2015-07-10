@@ -829,7 +829,7 @@ $langUsageTerms = 'Όροι Χρήσης';
  * ***************************************************** */
 $langCourseProgram = "Περιγραφή Μαθήματος";
 $langThisCourseDescriptionIsEmpty = "Το μάθημα δεν διαθέτει περιγραφή";
-$langEditCourseProgram = "Δημιουργία και διόρθωση";
+$langEditCourseProgram = "Δημιουργία / Διόρθωση";
 $langQuestionPlan = "Ερώτηση στον διδάσκοντα";
 $langInfo2Say = "Πληροφορία για τους " . $langsOfStudentss;
 $langAddCat = "Κατηγορία";
@@ -1069,7 +1069,6 @@ $langAttendanceActiveUsers = "$langStudents παρουσιολογίου";
 $langAttendanceActiveUsers6 = "$langStudents τελευταίου εξαμήνου";
 $langAttendanceActiveUsers3 = "$langStudents τελευταίου τριμήνου";
 $langAttendanceActiveUsersAll = "Όλοι οι εγγεγραμμένοι $langsStudents";
-$langAttendanceActivity = "Δραστηριότητα";
 $langAttendanceAutoBook = "Αυτόματη καταχώρηση παρουσίας";
 $langAttendanceInfoForUsers = 'επιλέξτε από τη λίστα των χρηστών ποιοι θα συμμετέχουν στο παρουσιολόγιο';
 $langAttendance6Months = "Συμμετέχουν οι $langsStudents τελευταίου εξαμήνου";
