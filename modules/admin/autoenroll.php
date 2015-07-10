@@ -117,7 +117,7 @@ if (isset($_GET['delete'])) {
     }
 
     $tree = new Hierarchy();
-    list($jsTree, $htmlTree) = $tree->buildUserNodePicker(array('defaults' => $department));
+    list($jsTree, $htmlTree) = $tree->buildUserNodePicker(array('defaults' => $department, 'multiple' => true));
 
     // The following code is modified from Hierarchy::buildJSNodePicker()
     $xmldata = str_replace("'", "\'", $tree->buildTreeDataSource(
