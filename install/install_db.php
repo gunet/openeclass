@@ -848,11 +848,11 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `max_grade` FLOAT DEFAULT '10' NOT NULL,
                 `grading_scale_id` INT(11) NOT NULL DEFAULT '0',
                 `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
-                `auto_judge` TINYINT(1),
-                `auto_judge_scenarios` VARCHAR(2048),
-                `lang` VARCHAR(10),
                 `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                `file_name` VARCHAR(200) DEFAULT '' NOT NULL) $charset_spec");
+                `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
+                `auto_judge` TINYINT(1) NOT NULL DEFAULT 0,
+                `auto_judge_scenarios` TEXT,
+                `lang` VARCHAR(10) NOT NULL DEFAULT '') $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -860,7 +860,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `assignment_id` INT(11) NOT NULL DEFAULT 0,
                 `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
                 `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                `auto_judge_scenarios_output` VARCHAR(1024),
                 `file_path` VARCHAR(200) NOT NULL DEFAULT '',
                 `file_name` VARCHAR(200) NOT NULL DEFAULT '',
                 `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
@@ -869,7 +868,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `grade_comments` TEXT NOT NULL,
                 `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
                 `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                `group_id` INT( 11 ) DEFAULT NULL ) $charset_spec");
+                `group_id` INT( 11 ) DEFAULT NULL,
+                `auto_judge_scenarios_output` TEXT) $charset_spec");
 
         // Add grading scales table
 $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (

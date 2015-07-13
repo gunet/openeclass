@@ -2707,6 +2707,16 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         set_config('ext_bigbluebutton_enabled',
             Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count > 0? '1': '0');
 
+        // Autojudge fields
+        if (!DBHelper::fieldExists('assignment', 'auto_judge')) {
+            Database::get()->query("ALTER TABLE `assignment`
+                ADD `auto_judge` TINYINT(1) NOT NULL DEFAULT 0,
+                ADD `auto_judge_scenarios` TEXT,
+                ADD `lang` VARCHAR(10) NOT NULL DEFAULT ''");
+            Database::get()->query("ALTER TABLE `assignment_submit`
+                ADD `auto_judge_scenarios_output` TEXT");
+        }
+
         if (!DBHelper::fieldExists('link', 'user_id')) {
             Database::get()->query("ALTER TABLE `link` ADD `user_id` INT(11) DEFAULT 0 NOT NULL");
         }
