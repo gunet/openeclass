@@ -138,17 +138,26 @@ if ($is_editor) {
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
-    if(isset($_GET['editUsers']) || isset($_GET['gradeBooks'])) {
+    if (isset($_GET['editUsers']) or isset($_GET['gradeBooks'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
-        $pageName = isset($_GET['editUsers']) ? $langConfig : $langGradebookManagement;
+        $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langGradebookManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
-    } elseif (isset($_GET['gradebookBook'])) {        
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+    } elseif(isset($_GET['editSettings'])) {
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $pageName = $langConfig;
+        $tool_content .= action_bar(array(
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'icon' => 'fa fa-reply ',
+                  'level' => 'primary-label')
+            ));
+    } elseif (isset($_GET['gradebookBook'])) {                
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
         $pageName = $langGradebookActiveUsers;
         $tool_content .= action_bar(array(
             array('title' => $langRefreshList,
@@ -162,20 +171,21 @@ if ($is_editor) {
                   'button-class' => 'btn-success')            
             ));
     } elseif (isset($_GET['modify'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
         $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label')
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success')
             ));
     } elseif (isset($_GET['ins'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
@@ -192,22 +202,23 @@ if ($is_editor) {
         }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
         $pageName = $langGradebookBook;
-        $tool_content .= action_bar(array(
-            array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
-                  'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label'),
+        $tool_content .= action_bar(array(            
             array('title' => $langGradebookBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label')
+                  'level' => 'primary-label'),
+            array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'icon' => 'fa fa-reply ',
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success')
             ));
         
     } elseif (isset($_GET['new'])) {
@@ -218,9 +229,8 @@ if ($is_editor) {
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
                   'level' => 'primary-label')));
-    } elseif (isset($_GET['gradebook_id']) && $is_editor) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;direct_link=1", "name" => $gradebook_title);
-        $pageName = $langEditChange;
+    } elseif (isset($_GET['gradebook_id']) && $is_editor) {        
+        $pageName = get_gradebook_title($gradebook_id);
     }  elseif (!isset($_GET['direct_link']) && !isset($_GET['gradebook_id'])) {
         $tool_content .= action_bar(
             array(

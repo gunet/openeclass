@@ -308,7 +308,6 @@ function gradebook_settings($gradebook_id) {
  * @global type $tool_content
  * @global type $langRefreshList
  * @global type $course_code
- * @global type $language 
  * @global type $langAttendanceUpdate
  * @global type $langGradebookInfoForUsers
  * @global type $langRegistrationDate
@@ -319,7 +318,7 @@ function gradebook_settings($gradebook_id) {
  */
 function user_gradebook_settings($gradebook_id) {
     
-    global $tool_content, $language, $course_code, $langSave,
+    global $tool_content, $course_code,
            $langAttendanceUpdate, $langGradebookInfoForUsers, 
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList;
                        
@@ -333,7 +332,7 @@ function user_gradebook_settings($gradebook_id) {
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
-                        <label class='col-xs-12'>$langRefreshList<small class='help-block'>($langGradebookInfoForUsers)</small></label>
+                        <label class='col-xs-12'><span class='help-block'>$langGradebookInfoForUsers</span></label>
                     </div>                            
                     <div class='input-append date form-group' id='startdatepicker' data-date='$UsersStart' data-date-format='dd-mm-yyyy'>
                         <label for='UsersStart' class='col-sm-2 control-label'>$langRegistrationDate $langFrom2:</label>
@@ -613,7 +612,7 @@ function display_gradebook($gradebook_id) {
                 'secondary_title' => $langAdd,
                 'secondary_icon' => 'fa-plus'
             )
-        );        
+        );
     
     $weightMessage = "";
     //get all the available activities
