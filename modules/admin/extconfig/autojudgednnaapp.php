@@ -69,9 +69,7 @@ class AutojudgeDnnaApp extends AutojudgeApp {
     }
 
     public function getConfigFields() {
-        return array(
-            'key' => 'Hackerearth API Key',
-        );
+        return array();
     }
 
     public function getServiceURL() {
