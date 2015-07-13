@@ -32,15 +32,38 @@ abstract class AutojudgeApp extends ExtApp {
     }
 
     public function getLongDescription() {
-        return '<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα αυτό συνδέεται με την υπηρεσία '.$this->getServiceURL().' και υποστηρίζει τις εξής γλώσσες: <b>'.implode(',', $this->getSupportedLanguages()).'</b></p>';
+        return '<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα αυτό συνδέεται με την υπηρεσία '.$this->getServiceURL().', <b>'.(!$this->supportsInput() ? 'δεν' : '').'υποστηρίζει μεταβλητά δεδομένα εισόδου</b> και περιλαμβάνει τις εξής γλώσσες: <b>'.implode(',', array_keys($this->getSupportedLanguages())).'</b></p><p>Προσοχή: Σε περίπτωση που υπάρχουν περισσότερες από μια υπηρεσίες αυτόματου κριτή ενεργοποιημένες χρησιμοποιείται μόνο η πρώτη.</p>';
     }
 
     public function getShortDescription() {
-        return '<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα αυτό συνδέεται με την υπηρεσία '.$this->getServiceURL().' και υποστηρίζει τις εξής γλώσσες: <b>'.implode(',', $this->getSupportedLanguages()).'</b></p>';
+        return '<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα αυτό συνδέεται με την υπηρεσία '.$this->getServiceURL().', <b>'.(!$this->supportsInput() ? 'δεν ' : '').'υποστηρίζει μεταβλητά δεδομένα εισόδου</b> και περιλαμβάνει τις εξής γλώσσες: <b>'.implode(',', array_keys($this->getSupportedLanguages())).'</b></p><p>Προσοχή: Σε περίπτωση που υπάρχουν περισσότερες από μια υπηρεσίες αυτόματου κριτή ενεργοποιημένες χρησιμοποιείται μόνο η πρώτη.</p>';
     }
 
     public function getDisplayName() {
-        return 'Auto Judge '.$this->getServiceURL();
+        return $this->getServiceURL();
+    }
+
+    public static function getAutojudge() {
+        $firstAutojudge = null;
+        foreach(ExtAppManager::getApps() as $curApp) {
+            if(strpos(get_class($curApp), 'Autojudge') !== false) {
+                $firstAutojudge = $curApp;
+                if($curApp->isEnabled()) {
+                    return $curApp;
+                }
+            }
+        }
+        if(!$firstAutojudge) { throw new \Exception('Error! No autojudge connectors defined!'); }
+        return $firstAutojudge;
+    }
+
+    protected static function getAutoJudgeApp($classname) {
+        foreach(ExtAppManager::getApps() as $curApp) {
+            if(strpos(get_class($curApp), $classname) !== false) {
+                return $curApp;
+            }
+        }
+        return null;
     }
 
     abstract public function compile(AutoJudgeConnectorInput $input);
