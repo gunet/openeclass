@@ -96,8 +96,18 @@ if ($is_editor) {
                       <div class='infotext-sm col-sm-offset-2 col-sm-10 margin-bottom-fat'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>
                 </div>
                 <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2 '>
-                        <input type='submit' class='btn btn-primary' name='submit' value='$langSend' />     
+                    <div class='col-sm-10 col-sm-offset-2 '>".
+            form_buttons(array(
+                array(
+                    'text'  => $langUpload,
+                    'name'  => 'submit',
+                    'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify)
+                ),
+                array(
+                    'href' => "index.php?course=$course_code",
+                )
+            ))
+            ."    
                     </div>
                 </div>                         
             </form>

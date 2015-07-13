@@ -160,7 +160,7 @@ function printPolls() {
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langNoAccessPrivilages;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -212,7 +212,7 @@ function printPolls() {
         $tool_content .= "
                     <div class='table-repsonsive'>
 		      <table class='table-default'>
-		      <tr>
+		      <tr class='list-header'>
 			<th><div align='left'>&nbsp;$langTitle</div></th>
 			<th class='text-center'>$langPollStart</th>
 			<th class='text-center'>$langPollEnd</th>";
@@ -345,15 +345,17 @@ function printPolls() {
                         }
                     }
                     $tool_content .= "</td>";
-                     $tool_content .= "
-                        <td class='text-center option-btn-cell'>" .action_button(array(
-                            array(
-                                'title' => $langUsage,
-                                'icon' => 'fa-line-chart',
-                                'url' => "pollresults.php?course=$course_code&pid=$pid",
-                                'show' => $has_participated
-                            )         
-                        ))."</td></tr>";
+                    $line_chart_link = ($has_participated && $thepoll->show_results)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "<span class='fa fa-line-chart' data-toggle='tooltip' title='$langNoAccessPrivilages'></span>" ;
+                    $tool_content .= "<td class='text-center option-btn-cell'><div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div></td></tr>";
+//                    $tool_content .= "
+//                        <td class='text-center option-btn-cell'>" .action_button(array(
+//                            array(
+//                                'title' => $langUsage,
+//                                'icon' => 'fa-line-chart',
+//                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+//                                'show' => $has_participated
+//                            )         
+//                        ))."</td></tr>";
                 }
             }
             $index_aa ++;

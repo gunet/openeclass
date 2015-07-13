@@ -421,7 +421,7 @@ function showquota($quota, $used) {
         <label class='col-sm-3 control-label'>$langQuotaPercentage:</label>
         <div class='col-sm-9'>
             <div class='progress'>
-              <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='width: $diskUsedPercentage;'>
+              <p class='progress-bar active from-control-static' role='progressbar' aria-valuenow='".str_replace('%','',$diskUsedPercentage)."' aria-valuemin='0' aria-valuemax='100' style='min-width: 2em; width: $diskUsedPercentage;'>
                 $diskUsedPercentage
               </p>
             </div>

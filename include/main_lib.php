@@ -3090,7 +3090,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $out .= implode('', $out_primary);
     }
 
-    $action_button = "";
+    $action_button = '';
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";
     if (count($out_secondary)) {
@@ -3128,6 +3128,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 function action_button($options, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
+    $primary_form_begin = $primary_form_end = '';
     foreach (array_reverse($options) as $option) {
         $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
@@ -3140,14 +3141,14 @@ function action_button($options, $secondary_menu_options = array()) {
             $class = '';
         }
         if (isset($option['btn_class'])) {
-            $btn_class = ' '.$option['btn_class'];
+            $btn_class = ' ' . $option['btn_class'];
         } else {
             $btn_class = ' btn-default';
         }
         if (isset($option['link-attrs'])) {
-            $link_attrs = " ".$option['link-attrs'];
+            $link_attrs = ' ' . $option['link-attrs'];
         } else {
-            $link_attrs = "";
+            $link_attrs = '';
         }
         $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
         $icon_class = "class='list-group-item $class$disabled";
@@ -3157,10 +3158,19 @@ function action_button($options, $secondary_menu_options = array()) {
         if (isset($option['confirm'])) {
             $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
+            if ($level == 'primary-label' or $level == 'primary') {
+                $primary_form_begin = $form_begin;
+                $primary_form_end = $form_end;
+                $form_begin = $form_end = '';
+                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
+            } else {
+                $icon_class .= " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
+                $primary_icon_class = '';
+            }
             $url = '#';
         } else {
             $icon_class .= "'";
@@ -3172,9 +3182,9 @@ function action_button($options, $secondary_menu_options = array()) {
         }
 
         if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon'></i>" . q($option['title']) . "</a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon$primary_icon_class'></i>" . q($option['title']) . "</a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]$primary_icon_class'></i></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }
@@ -3195,10 +3205,11 @@ function action_button($options, $secondary_menu_options = array()) {
                 </a>";
     }
 
-    return "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+    return $primary_form_begin .
+         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
-          </div>";
+          </div>" . $primary_form_end;
 }
 /**
  * Removes spcific get variable from Query String

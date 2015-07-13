@@ -896,9 +896,16 @@ function shib_cas_login($type) {
     	    $verified_mail = EMAIL_VERIFIED;
     	} else { // redirect user to mail_verify_change.php
 	    	$_SESSION['mail_verification_required'] = 1;
-    	}
+        }
+        $attributes = array();
+        if (isset($_SESSION['cas_attributes'])) {
+            foreach ($_SESSION['cas_attributes'] as $name => $value) {
+                $attributes[strtolower($name)] = $value;
+            }
+        }
+
         $options = register_hook(array(
-            'attributes' => isset($_SESSION['cas_attributes'])? $_SESSION['cas_attributes']: array(),
+            'attributes' => $attributes,
             'am' => $am));
 
         if (!$options['accept']) {

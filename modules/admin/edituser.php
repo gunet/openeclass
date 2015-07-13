@@ -119,6 +119,7 @@ if ($u) {
     }
     if (!$u_submitted) { // if the form was not submitted
         // Display Actions Toolbar
+        $ind_u = getIndirectReference($u);
         $tool_content .= action_bar(array(
             array('title' => $langUserMerge,
                 'url' => "mergeuser.php?u=$u",
@@ -135,7 +136,7 @@ if ($u) {
                 'icon' => 'fa-key',
                 'level' => 'primary'),
             array('title' => $langDelUser,
-                'url' => "deluser.php?u=$u",
+                'url' => "deluser.php?u=$ind_u",
                 'icon' => 'fa-times',
                 'level' => 'primary',
                 'show' => $u > 1),

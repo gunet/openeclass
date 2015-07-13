@@ -579,6 +579,14 @@ $(document).ready(function() {
         $( "#treeModal" ).modal( "show" );
     });
 
+    $( "#nodCnt" ).on('click', "a[href='#nodCnt']", function (e) {
+        e.preventDefault();
+        $(this).find('span').tooltip('destroy')
+            .closest('p').remove();
+        $('#dialog-set-key').val(null);
+        $('#dialog-set-value').val(null);
+    });
+
     $( ".treeModalClose" ).click(function() {
         $( "#treeModal" ).modal( "hide" );
     });
@@ -605,7 +613,7 @@ $(document).ready(function() {
                 $( "#nodCnt" ).append( '<p id="nd_' + countnd + '">'
                                      + '<input type="hidden" $params value="' + newnodeid + '" />'
                                      + newnodename
-                                     + '&nbsp;<a href="#nodCnt" onclick="$( \'#nd_' + countnd + '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><i class="fa fa-times" data-toggle="tooltip" data-original-title="$langNodeDel" data-placement="top" title="$langNodeDel"><\/i><\/a>'
+                                     + '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="$langNodeDel" data-placement="top" title="$langNodeDel"><\/span><\/a>'
                                      + '<\/p>');
 
                 $( "#dialog-set-value" ).val(newnodename);
@@ -736,8 +744,7 @@ jContent;
                     $html .= '<p id="nd_' . $i . '">';
                     $html .= '<input type="hidden" ' . $params . ' value="' . $def . '" />';
                     $html .= $this->getFullPath($def);
-                    $html .= '&nbsp;<a href="#nodCnt" onclick="$(\'#nd_' . $i . '\').remove(); $(\'#dialog-set-key\').val(null); $(\'#dialog-set-value\').val(null);"><i class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></i></a></p>';
-                    $html .= '</p>';
+                    $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
             }

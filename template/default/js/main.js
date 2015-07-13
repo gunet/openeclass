@@ -10,16 +10,16 @@ function act_confirm() {
             message: message,
             title: title,
             buttons: {
-                cancel_btn: {
-                    label: cancel_text,
-                    className: "btn-default"
-                },
                 action_btn: {
                     label: action_text,
                     className: action_btn_class,
                     callback: function () {
                         window.location = form;
                     }
+                },
+                cancel_btn: {
+                    label: cancel_text,
+                    className: "btn-default"
                 }
             }
         });
@@ -50,7 +50,7 @@ function popover_init() {
 
 }
 function tooltip_init() {
-    $('[data-toggle=tooltip]').tooltip({container: 'body'});
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 }
 function sidebar_reset() {
 
