@@ -4546,6 +4546,10 @@ $langAbuseReportClosed = 'Κλειστή αναφορά';
  * Social Wall
  * ************************************************************ */
 $langWall = 'Τοίχος';
+$langWallText = 'Κείμενο';
+$langWallVideo = 'Βίντεο Youtube';
+$langWallPostSaved = 'Η ανάρτηση αποθηκεύθηκε';
+$langWallMessageEmpty = 'Το μήνυμα της ανάρτησης ήταν κενό';
  
 /* * ******************************************
   Theme Options
