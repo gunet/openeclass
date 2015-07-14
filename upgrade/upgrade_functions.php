@@ -331,17 +331,17 @@ function encode_dropbox_documents($code, $id, $filename, $title) {
 // run all upgrade functions (used mainly to restore course)
 function upgrade_course($code, $lang)
 {
-	upgrade_course_old($code, $lang);
-	upgrade_course_2_1_3($code);
-	upgrade_course_2_2($code, $lang);
-	upgrade_course_2_3($code);
-	upgrade_course_2_4($code, $lang);
-        upgrade_course_2_5($code, $lang);
-        upgrade_course_2_8($code, $lang);
-        upgrade_course_2_9($code, $lang);
-        upgrade_course_2_10($code, $lang);
-        upgrade_course_2_11($code, $lang);
-        upgrade_course_2_12($code, $lang);
+    upgrade_course_old($code, $lang);
+    upgrade_course_2_1_3($code);
+    upgrade_course_2_2($code, $lang);
+    upgrade_course_2_3($code);
+    upgrade_course_2_4($code, $lang);
+    upgrade_course_2_5($code, $lang);
+    upgrade_course_2_8($code, $lang);
+    upgrade_course_2_9($code, $lang);
+    upgrade_course_2_10($code, $lang);
+    upgrade_course_2_11($code, $lang);
+    upgrade_course_2_12($code, $lang);
 }
 
 function fix_math($str) {
@@ -382,7 +382,7 @@ function upgrade_course_fix_exercise_math($code) {
 
 function upgrade_course_2_12($code, $lang, $extramessage = '') {
     
-    global $langUpgCourse;
+    global $langUpgCourse, $webDir;
 
     mysql_select_db($code);
     echo "<hr><p>$langUpgCourse <b>$code</b> (2.12) $extramessage<br>";
