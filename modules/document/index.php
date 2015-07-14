@@ -552,21 +552,17 @@ if ($can_upload) {
                                     <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
                                     $group_hidden_input
                                     <div class='form-group'>
-                                        <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). " :</label>
+                                        <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). ":</label>
                                         <div class='col-xs-10'>
-                                            <input class='form-control' type='text' name='renameTo' placeholder='" . q($fileName) . "' />
+                                            <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
                                         </div>
                                     </div>
                                     <div class='form-group'>
-                                        <div class='col-xs-offset-2 col-xs-10'>".form_buttons(array(
-                                                array(
-                                                    'text' => $langRename,
-                                                    'value'=> $langRename
-                                                ),
-                                                array(
-                                                    'href' => $backUrl,
-                                                )
-                                            ))."</div>
+                                        <div class='col-xs-offset-2 col-xs-10'>" .
+                                            form_buttons(array(
+                                                array('text' => $langRename, 'value'=> $langRename),
+                                                array('href' => $backUrl))) . "
+                                        </div>
                                     </div>
                             </fieldset>
                         </form>
