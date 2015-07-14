@@ -3128,7 +3128,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 function action_button($options, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
-    $primary_form_begin = $primary_form_end = '';
+    $primary_form_begin = $primary_form_end = $primary_icon_class = '';
     foreach (array_reverse($options) as $option) {
         $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
