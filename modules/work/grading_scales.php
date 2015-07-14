@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 $require_current_course = TRUE;
 $require_editor = true;
@@ -36,7 +36,7 @@ if (isset($_POST['submitScale'])) {
         'max_grade' => "$langTheField $m[max_grade]"
     ));
     $scale_id = isset($_POST['grading_scale_id']) ? $_POST['grading_scale_id'] : 0;
-    if($v->validate()) {        
+    if($v->validate()) {
         $title = $_POST['title'];
         $scales = array();
         foreach ($_POST['scale_item_name'] as $key => $item_name) {
@@ -73,7 +73,7 @@ if (isset($_GET['scale_id'])) {
                     '</td>'+
                     '<td class=\'text-center\'>'+
                     '<a href=\'#\' class=\'removeScale\'><span class=\'fa fa-times\' style=\'color:red\'></span></a>'+
-                    '</td>'+                    
+                    '</td>'+
                     '</tr>'
                 );
             });
@@ -123,7 +123,7 @@ if (isset($_GET['scale_id'])) {
             'level' => 'primary-label',
             'icon' => 'fa-reply',
             'url' => "grading_scales.php?course=$course_code"
-        ),          
+        ),
     ));
     $tool_content .= "
         <div class='row'>
@@ -136,18 +136,18 @@ if (isset($_GET['scale_id'])) {
                             <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                             <div class='col-sm-10'>
                               <input name='title' type='text' class='form-control' id='title' value='$title'>
-                              ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."                              
+                              ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>Κλίμακες:</label>                        
+                            <label class='col-sm-2 control-label'>$langScales:</label>
                             <div class='col-sm-10'>
                                 <div class='table-responsive'>
                                     <table class='table-default' id='scale_table'>
                                         <thead>
                                             <tr>
-                                                <th style='width:47%'>Λεκτικό</th>
-                                                <th style='width:47%'>Τιμή</th>
+                                                <th style='width:47%'>$langWording</th>
+                                                <th style='width:47%'>$langValue</th>
                                                 <th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>
                                             </tr>
                                         </thead>
@@ -158,9 +158,9 @@ if (isset($_GET['scale_id'])) {
                                 </div>
                             </div>
                             <div class='col-xs-offset-2 col-sm-10'>
-                                 <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a> 
-                            </div>                                                       
-                        </div>                         
+                                 <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a>
+                            </div>
+                        </div>
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>".
                                 form_buttons(array(
@@ -173,13 +173,13 @@ if (isset($_GET['scale_id'])) {
                                     )
                                 ))
                                 ."</div>
-                        </div>                        
+                        </div>
                     </fieldset>
                     </form>
                 </div>
             </div>
         </div>";
-    
+
 } else {
     $tool_content .= action_bar(array(
         array(
@@ -194,11 +194,11 @@ if (isset($_GET['scale_id'])) {
             'level' => 'primary-label',
             'icon' => 'fa-reply',
             'url' => "index.php?course=$course_code"
-        ),          
+        ),
     ),false);
 
     $grading_scales = Database::get()->queryArray("SELECT * FROM grading_scale WHERE course_id = ?d", $course_id);
-    if ($grading_scales) { 
+    if ($grading_scales) {
         $table_content = "";
         foreach ($grading_scales as $grading_scale) {
             $scales = unserialize($grading_scale->scales);
@@ -231,19 +231,19 @@ if (isset($_GET['scale_id'])) {
                 <table class='table-default'>
                     <thead>
                         <tr>
-                            <th>Τίτλος</th>
-                            <th>Τιμές</th>
+                            <th>$langTitle</th>
+                            <th>$langGradebookMEANS</th>
                             <th class='text-center'>" . icon('fa-gears') . "</th>
                         </tr>
                     </thead>
                     <tbody>
                         $table_content
-                    </tbody>                    
+                    </tbody>
                 </table>
             </div>";
-                
+
     } else {
-        $tool_content .= "<div class='alert alert-warning'>Δεν έχουν καταχωρηθεί βαθμολογικές κλίμακες.</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoGradeScales</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

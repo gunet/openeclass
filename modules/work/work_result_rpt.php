@@ -22,7 +22,7 @@
 $require_current_course = true;
 require_once '../../include/baseTheme.php';
 
-// Include the main TCPDF library 
+// Include the main TCPDF library
 require_once __DIR__.'/../../include/tcpdf/tcpdf_include.php';
 require_once __DIR__.'/../../include/tcpdf/tcpdf.php';
 
@@ -37,12 +37,12 @@ if (isset($_GET['assignment']) && isset($_GET['submission'])) {
     $sub_id = intval($_GET['submission']);
     $assign = get_assignment_details($as_id);
     $sub = get_assignment_submit_details($sub_id);
-    
+
     if($sub==null || $assign==null)
     {
         redirect_to_home_page('modules/work/index.php?course='.$course_code);
     }
-    
+
     $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWorks);
     $navigation[] = array("url" => "index.php?course=$course_code&amp;id=$as_id", "name" => q($assign->title));
 
@@ -55,7 +55,7 @@ if (isset($_GET['assignment']) && isset($_GET['submission'])) {
                 show_report($as_id, $sub_id, $assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
                 draw($tool_content, 2);
             }else{
-                download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output); 
+                download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output);
             }
          }
          else{
@@ -120,7 +120,7 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
     global $themeimg, $langAutoJudgeAssertions;
     $table_content = "";
     $i=0;
-   
+
     foreach($auto_judge_scenarios as $cur_senarios){
            if(!isset($cur_senarios['output']))// expected output disable
                $cur_senarios['output'] = "-";
@@ -140,7 +140,12 @@ function get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output, 
 
 
 
-function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output){ 
+function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_scenarios_output) {
+    global $langAutoJudgeInput, $langAutoJudgeOutput,
+        $langAutoJudgeExpectedOutput, $langAutoJudgeOperator,
+        $langAutoJudgeWeight, $langAutoJudgeResult,
+        $langCourse, $langAssignment, $langStudent, $m;
+
     // create new PDF document
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -204,30 +209,30 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
     </style>
     <table class="first">
         <tr>
-            <th>Είσοδος</th>
-            <th>Έξοδος</th>
-            <th>Τελεστής</th>
-            <th>Αναμεν. Έξοδος</th>
-            <th>Βαρύτητα</th>
-            <th >Αποτέλεσμα</th>
+            <th>' . $langAutoJudgeInput . '</th>
+            <th>' . $langAutoJudgeOutput . '</th>
+            <th>' . $langAutoJudgeOperator . '</th>
+            <th>' . $langAutoJudgeExpectedOutput . '</th>
+            <th>' . $langAutoJudgeWeight . '</th>
+            <th>' . $langAutoJudgeResult . '</th>
         </tr>
      '. get_table_content($auto_judge_scenarios, $auto_judge_scenarios_output,$assign->max_grade).'
     </table>';
 
 
  $report_details ='
-        <style>
+    <style>
     table.first{
         width: 100%;
         border-collapse: collapse;
-         vertical-align: center;
+        vertical-align: center;
     }
 
     td {
         font-size: 1em;
-          border: 1px solid #000000;
+        border: 1px solid #000000;
         padding: 3px 7px 2px 7px;
-         text-align: center;
+        text-align: center;
     }
 
      th {
@@ -238,30 +243,30 @@ function download_pdf_file($assign, $sub, $auto_judge_scenarios, $auto_judge_sce
         background-color: #3399FF;
         color: #ffffff;
         width: 120px;
-           border: 1px solid #000000;
+        border: 1px solid #000000;
     }
     </style>
 
-        <table class="first">
-            <tr>
-            <th> Μάθημα</th> <td>'.get_course_title().' </td>
-            </tr>
-             <tr>
-            <th> Εργασία</th> <td> '.$assign->title.'</td>
-            </tr>
-             <tr>
-            <th> Εκπαιδευόμενος</th><td> '.q(uid_to_name($sub->uid)).'</td>
-            </tr>
-             <tr>
-            <th> Βαθμός</th> <td>'.$sub->grade.'/'.$assign->max_grade.' </td>
-            </tr>
-             <tr>
-            <th> Κατάταξη</th> <td>'.get_submission_rank($assign->id, $sub->grade, $sub->submission_date).'</td>
-            </tr>
+    <table class="first">
+      <tr>
+        <th>' . $langCourse . '</th><td>' . q(get_course_title()) . '</td>
+      </tr>
+      <tr>
+        <th>' . $langAssignment . '</th><td>' . q($assign->title) . '</td>
+      </tr>
+      <tr>
+        <th>' . $langStudent . '</th><td> '.q(uid_to_name($sub->uid)).'</td>
+      </tr>
+      <tr>
+        <th>' . $m['grade'] . '</th><td>' . $sub->grade . '/' . $assign->max_grade . '</td>
+      </tr>
+      <tr>
+        <th>' . $langAutoJudgeRank . '</th><td>' . get_submission_rank($assign->id, $sub->grade, $sub->submission_date) . '</td>
+      </tr>
     </table>';
 
     $pdf->writeHTML($report_details, true, false, true, false, '');
-    $pdf->Ln();     
+    $pdf->Ln();
     $pdf->writeHTML($report_table, true, false, true, false, '');
     $pdf->Output('auto_judge_report_'.q(uid_to_name($sub->uid)).'.pdf', 'D');
 }

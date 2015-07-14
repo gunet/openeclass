@@ -278,7 +278,7 @@ function was_submitted($uid, $gid, $id) {
             return 'user';
         } else {
             return 'group';
-        }        
+        }
     } else {
         return false;
     }

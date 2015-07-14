@@ -3742,6 +3742,10 @@ $langGradeType = "Τυπος Βαθμολογίας";
 $langGradeNumbers = "Αριθμοί";
 $langGradeScales = "Βαθμολογικές Κλίμακες";
 $langGradeScalesSelect = "Επιλογή Κλίμακας";
+$langNoGradeScales = 'Δεν έχουν καταχωρηθεί βαθμολογικές κλίμακες.';
+$langWording = 'Λεκτικό';
+$langScales = 'Κλίμακες';
+$langValue = 'Τιμή';
 $langNewGradeScale = "Προσθήκη βαθμολογικής κλίμακας";
 $langWorkSubType = "Τύπος Υποβολής";
 $langWorkOnlineText = "Online Κείμενο";
@@ -3786,6 +3790,8 @@ $langOnBehalfOfUserComment = 'Υποβλήθηκε από: %s, εκ μέρους
 $langOnBehalfOfGroupComment = 'Υποβλήθηκε από: %s, εκ μέρους της ομάδας: %s';
 $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργασίας ' . $langOfUser;
 $langMyPersoDeadlines = "Οι διορίες μου";
+$langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
+
 /* * ***********************************************************
  * listerqusers.php
  * ************************************************************ */
