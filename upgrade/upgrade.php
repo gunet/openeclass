@@ -72,13 +72,15 @@ $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 // Coming from the admin tool or stand-alone upgrade?
 $fromadmin = !isset($_POST['submit_upgrade']);
 
-if (!isset($_POST['submit2']) and ! $command_line) {
-    if (!is_admin(@$_POST['login'], @$_POST['password'])) {
-        $tool_content .= "<div class='alert alert-warning'>$langUpgAdminError</div>
-            <center><a href='index.php'>$langBack</a></center>";
-        draw($tool_content, 0);
-        exit;
+if (isset($_POST['login']) and isset($_POST['password'])) {
+    if (!is_admin($_POST['login'], $_POST['password'])) {
+        Session::Messages($langUpgAdminError, 'alert-warning');
+        redirect_to_home_page('upgrade/');
     }
+}
+
+if (!$command_line and !(isset($_SESSION['is_admin']) and $_SESSION['is_admin'])) {
+    redirect_to_home_page('upgrade/');
 }
 
 if (!DBHelper::tableExists('config')) {

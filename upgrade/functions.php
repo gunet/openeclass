@@ -167,7 +167,7 @@ function update_assignment_submit() {
 
 // checks if admin user
 function is_admin($username, $password) {
-    global $mysqlMainDb;
+    global $mysqlMainDb, $session;
 
     if (DBHelper::fieldExists('user', 'user_id')) {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
@@ -184,7 +184,6 @@ function is_admin($username, $password) {
     if (!$user) {
         return false;
     } else {
-
         if (isset($user->privilege) and $user->privilege !== '0')
             return false;
 
@@ -210,6 +209,7 @@ function is_admin($username, $password) {
         $_SESSION['email'] = $user->email;
         $_SESSION['uname'] = $username;
         $_SESSION['is_admin'] = true;
+        $session->setLoginTimestamp();
 
         return true;
     }
