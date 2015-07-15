@@ -1121,7 +1121,7 @@ $langGradebookActToAddExe = "Ασκήσεις προς εισαγωγή στο �
 $langGradebookStudentFailure = "Δεν έχει γίνει ακόμη καταχώρηση βαθμών";
 $langGradebookStats = "Στατιστικά";
 $langGradebookMEANS = "Τιμές";
-$langGradebookInfoForUsers = 'Eπιλέξτε από τη λίστα των χρηστών ποιοι θα συμμετέχουν στο βαθμολόγιο';
+$langGradebookInfoForUsers = "Επιλογή χρηστών που θα συμμετέχουν στο βαθμολόγιο";
 $langGradebookActiveUsers = "Χρήστες βαθμολογίου";
 $langGradebookActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
 $langGradebookRange = "Κλίμακα βαθμολογίου";
@@ -1176,6 +1176,7 @@ $langCreateGradebookSuccess = "Το βαθμολόγιο δημιουργήθη�
 $langChangeGradebook2 = "(επιλογή ενεργού βαθμολογίου για το μάθημα)";
 $langGradebookNoTitle2 = "Βαθμολόγιο χωρίς τίτλο";
 $langGradebookDeleted = "To βαθμολόγιο διαγράφηκε με επιτυχία";
+$langSpecificUsers = "συγκεκριμένοι $langsStudents";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";

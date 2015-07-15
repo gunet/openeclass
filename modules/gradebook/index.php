@@ -30,6 +30,24 @@ require_once 'functions.php';
 
 //Module name
 $toolName = $langGradebook;
+
+// needed for updating users lists
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if (isset($_POST['assign_type'])) {
+        if ($_POST['assign_type'] == 2) {
+            $data = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d", $course_id);
+        } else {
+            $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                            FROM user, course_user
+                                                WHERE user.id = course_user.user_id 
+                                                AND course_user.course_id = ?d 
+                                                AND course_user.status = " . USER_STUDENT . "", $course_id);
+        }
+    }
+    echo json_encode($data);    
+    exit;
+}
+
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
@@ -73,6 +91,56 @@ $(function() {
                        }
                    }
     });
+    $('input[id=button_groups]').click(changeAssignLabel);
+    $('input[id=button_some_users]').click(changeAssignLabel);
+    $('input[id=button_some_users]').click(ajaxParticipants);   
+    $('input[id=button_all_users]').click(hideParticipants);
+    function hideParticipants()
+    {
+        $('#participants_tbl').addClass('hide');
+        $('#users_box').find('option').remove();
+        $('#all_users').show();
+    }        
+    function changeAssignLabel()
+    {
+        var assign_to_specific = $('input:radio[name=specific_gradebook_users]:checked').val();
+        if(assign_to_specific>0){
+           ajaxParticipants();
+        }         
+        if (this.id=='button_groups') {
+           $('#users').text('$langGroups');
+        } 
+        if (this.id=='button_some_users') {
+           $('#users').text('$langUsers');    
+        }        
+    }        
+    function ajaxParticipants()
+    {
+        $('#all_users').hide();
+        $('#participants_tbl').removeClass('hide');
+        var type = $('input:radio[name=specific_gradebook_users]:checked').val();        
+        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code',
+        {
+          assign_type: type
+        },
+        function(data,status){
+            var index;
+            var parsed_data = JSON.parse(data);
+            var select_content = '';            
+            if (type==2) {
+                for (index = 0; index < parsed_data.length; ++index) {
+                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                }
+            }
+            if (type==1) {
+                for (index = 0; index < parsed_data.length; ++index) {
+                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                }
+            }
+            $('#participants_box').find('option').remove();
+            $('#users_box').find('option').remove().end().append(select_content);
+        });
+    }
 });
 </script>";
  
@@ -117,16 +185,25 @@ if ($is_editor) {
     }
     
     //reset gradebook users
-    if (isset($_POST['resetGradebookUsers'])) {
-        $usersstart = new DateTime($_POST['UsersStart']);
-        $usersend = new DateTime($_POST['UsersEnd']);
-        // clear gradebook users table
-        Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
-        //check the rest value and rearrange the table            
-        $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                    SELECT $gradebook_id, user_id FROM course_user
-                    WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
-                            $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+    if (isset($_POST['resetGradebookUsers'])) {                
+        if (isset($_POST['specific_gradebook_users']) and $_POST['specific_gradebook_users'] == 1) { // if we choose specific users
+            Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            foreach ($_POST['specific'] as $u) {
+                $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                                SELECT $gradebook_id, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+            }
+        } else { // if we want all users between dates
+            $usersstart = new DateTime($_POST['UsersStart']);
+            $usersend = new DateTime($_POST['UsersEnd']);
+            // clear gradebook users table
+            Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            //check the rest value and rearrange the table            
+            $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                        SELECT $gradebook_id, user_id FROM course_user
+                        WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
+                                $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+        }
         if ($newUsersQuery) {
             Session::Messages($langGradebookEdit,"alert-success");            
         } else {

@@ -306,23 +306,31 @@ function gradebook_settings($gradebook_id) {
 /**
  * @brief modify user gradebook settings
  * @global type $tool_content
- * @global type $langRefreshList
  * @global type $course_code
+ * @global type $langGroups
  * @global type $langAttendanceUpdate
  * @global type $langGradebookInfoForUsers
  * @global type $langRegistrationDate
  * @global type $langFrom2
  * @global type $langTill
  * @global type $langRefreshList
+ * @global type $langUserDuration
+ * @global type $langAll
+ * @global type $langSpecificUsers
+ * @global type $langStudents
+ * @global type $langMove
+ * @global type $langParticipate
  * @param type $gradebook_id
  */
 function user_gradebook_settings($gradebook_id) {
     
-    global $tool_content, $course_code,
+    global $tool_content, $course_code, $langGroups,
            $langAttendanceUpdate, $langGradebookInfoForUsers, 
-           $langRegistrationDate, $langFrom2, $langTill, $langRefreshList;
+           $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
+           $langUserDuration, $langAll, $langSpecificUsers,
+           $langStudents, $langMove, $langParticipate;
                        
-    // update users list
+    // default values
     $UsersStart = date('d-m-Y', strtotime('now -6 month'));
     $UsersEnd = date('d-m-Y', strtotime('now'));
 
@@ -333,23 +341,73 @@ function user_gradebook_settings($gradebook_id) {
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                     <div class='form-group'>
                         <label class='col-xs-12'><span class='help-block'>$langGradebookInfoForUsers</span></label>
-                    </div>                            
-                    <div class='input-append date form-group' id='startdatepicker' data-date='$UsersStart' data-date-format='dd-mm-yyyy'>
-                        <label for='UsersStart' class='col-sm-2 control-label'>$langRegistrationDate $langFrom2:</label>
-                        <div class='col-xs-10 col-sm-9'>        
-                            <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$UsersStart'>                                    
-                        </div>
-                        <div class='col-xs-2 col-sm-1'>
-                            <span class='add-on'><i class='fa fa-calendar'></i></span>
+                    </div>
+                    <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$langUserDuration:</label>
+                        <div class='col-sm-10'>            
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' id='button_all_users' name='specific_gradebook_users' value='0' checked>
+                                <span id='button_all_users_text'>$langAll</span>                      
+                              </label>
+                            </div>
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' id='button_some_users' name='specific_gradebook_users' value='1'>
+                                <span id='button_some_users_text'>$langSpecificUsers</span>
+                              </label>
+                            </div>
+                            <div class='radio'>
+                              <label>
+                                <input type='radio' id='button_groups' name='specific_gradebook_users' value='2'>
+                                <span id='button_groups_text'>$langGroups</span>
+                              </label>
+                            </div>
                         </div>
                     </div>
-                    <div class='input-append date form-group' id='enddatepicker' data-date='$UsersEnd' data-date-format='dd-mm-yyyy'>
-                        <label for='UsersEnd' class='col-sm-2 control-label'>$langTill:</label>
-                        <div class='col-xs-10 col-sm-9'>        
-                            <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$UsersEnd'>
+                    <div class='form-group' id='all_users'>
+                        <div class='input-append date form-group' id='startdatepicker' data-date='$UsersStart' data-date-format='dd-mm-yyyy'>
+                            <label for='UsersStart' class='col-sm-2 control-label'>$langRegistrationDate $langFrom2:</label>
+                            <div class='col-xs-10 col-sm-9'>        
+                                <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$UsersStart'>                                    
+                            </div>
+                            <div class='col-xs-2 col-sm-1'>
+                                <span class='add-on'><i class='fa fa-calendar'></i></span>
+                            </div>
                         </div>
-                        <div class='col-xs-2 col-sm-1'>  
-                            <span class='add-on'><i class='fa fa-calendar'></i></span>
+                        <div class='input-append date form-group' id='enddatepicker' data-date='$UsersEnd' data-date-format='dd-mm-yyyy'>
+                            <label for='UsersEnd' class='col-sm-2 control-label'>$langTill:</label>
+                            <div class='col-xs-10 col-sm-9'>        
+                                <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$UsersEnd'>
+                            </div>
+                            <div class='col-xs-2 col-sm-1'>  
+                                <span class='add-on'><i class='fa fa-calendar'></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <div class='col-sm-10 col-sm-offset-2'>
+                            <div class='table-responsive'>
+                                <table id='participants_tbl' class='table-default hide'>
+                                    <tr class='title1'>
+                                      <td id='users'>$langStudents</td>
+                                      <td class='text-center'>$langMove</td>
+                                      <td>$langParticipate</td>
+                                    </tr>
+                                    <tr>
+                                      <td>
+                                        <select class='form-control' id='users_box' size='10' multiple></select>
+                                      </td>
+                                      <td class='text-center'>
+                                        <input type='button' onClick=\"move('users_box','participants_box')\" value='   &gt;&gt;   ' /><br />
+                                        <input type='button' onClick=\"move('participants_box','users_box')\" value='   &lt;&lt;   ' />
+                                      </td>
+                                      <td width='40%'>
+                                        <select class='form-control' id='participants_box' name='specific[]' size='10' multiple></select>
+                                      </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -357,10 +415,11 @@ function user_gradebook_settings($gradebook_id) {
                         array(
                             'text' => $langRefreshList,
                             'name' => 'resetGradebookUsers',
-                            'value'=> $langAttendanceUpdate
+                            'value'=> $langAttendanceUpdate,
+                            'javascript' => "selectAll('participants_box',true)"
                         ),
                         array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1"
                         )
                     ))."</div>
                     </div>
