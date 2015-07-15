@@ -37,8 +37,17 @@ if (isset($_POST['submit'])) {
             }
         } elseif ($_POST['type'] == 'video') {
             if (empty($_POST['video'])) {
+                if (!empty($_POST['message'])) {
+                    Session::flash('content', $_POST['message']);
+                }
+                Session::flash('type', 'video');
                 Session::Messages($langWallVideoLinkEmpty);
             } elseif (validate_youtube_link($_POST['video']) === FALSE) {
+                if (!empty($_POST['message'])) {
+                    Session::flash('content', $_POST['message']);
+                }
+                Session::flash('type', 'video');
+                Session::flash('video_link', $_POST['video']);
                 Session::Messages($langWallVideoLinkNotValid);
             } else {
                 if (empty($_POST['message'])) {
@@ -56,9 +65,15 @@ if (isset($_POST['submit'])) {
 }
 
 if ($is_editor || allow_to_post($course_id, $uid)) {
+    if (Session::has('type') && Session::get('type') == 'video') {
+        $jquery_string = "$('#type_input').val('video');";
+    } else {
+        $jquery_string = "$('#hidden_input').hide();";
+    }
+    
     $head_content .= "<script>
                           $(function() {
-                              $('#hidden_input').hide();
+                              $jquery_string
                               $('#type_input').change(function(){
                                   if($('#type_input').val() == 'video') {
                                       $('#hidden_input').show(); 
@@ -77,6 +92,9 @@ if ($is_editor || allow_to_post($course_id, $uid)) {
                           })
                       </script>";
     
+    $content = Session::has('content')? Session::get('content'): '';
+    $video_link = Session::has('video_link')? Session::get('video_link'): '';
+    
     $tool_content .= '<div class="row">
         <div class="col-sm-12">
             <div class="form-wrapper">
@@ -84,7 +102,7 @@ if ($is_editor || allow_to_post($course_id, $uid)) {
                     <fieldset> 
                         <div class="form-group">
                             <label for="message_input">'.$langMessage.'</label>
-                            <textarea class="form-control" rows="6" name="message" id="message_input"></textarea>
+                            <textarea class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
                         </div>
                         <div class="form-group">
                             <label for="type_input">'.$langType.'</label>
@@ -95,7 +113,7 @@ if ($is_editor || allow_to_post($course_id, $uid)) {
                         </div>
                         <div class="form-group" id="hidden_input">
                             <label for="video_link">'.$langWallVideoLink.'</label>
-                            <input class="form-control" type="url" name="video" id="video_link">
+                            <input class="form-control" type="url" name="video" id="video_link" value="'.$video_link.'">
                         </div>                
                     </fieldset>
                     <div class="form-group">'.
