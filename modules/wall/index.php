@@ -36,7 +36,20 @@ if (isset($_POST['submit'])) {
                 Session::Messages($langWallMessageEmpty);
             }
         } elseif ($_POST['type'] == 'video') {
-            
+            if (empty($_POST['video'])) {
+                Session::Messages($langWallVideoLinkEmpty);
+            } elseif (validate_youtube_link($_POST['video']) === FALSE) {
+                Session::Messages($langWallVideoLinkNotValid);
+            } else {
+                if (empty($_POST['message'])) {
+                    $content = '';
+                } else {
+                    $content = links_autodetection($_POST['message']);
+                }
+                Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, video_link, timestamp) VALUES (?d,?d,?s,?s, UNIX_TIMESTAMP())",
+                    $course_id, $uid, $content, $_POST['video']);
+                Session::Messages($langWallPostSaved, 'alert-success');
+            }
         }
         redirect_to_home_page("modules/wall/index.php?course=$course_code");
     }

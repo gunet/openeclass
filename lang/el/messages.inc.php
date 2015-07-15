@@ -4551,6 +4551,8 @@ $langWallVideo = 'Βίντεο Youtube';
 $langWallPostSaved = 'Η ανάρτηση αποθηκεύθηκε';
 $langWallMessageEmpty = 'Το μήνυμα της ανάρτησης ήταν κενό';
 $langWallVideoLink = 'Διεύθυνση βίντεο Youtube';
+$langWallVideoLinkEmpty = 'Το πεδίο για τη διεύθυνση του Youtube βίντεο είναι κενό';
+$langWallVideoLinkNotValid = 'Η τιμή του πεδίου για τη διεύθυνση του βίντεο δεν είναι έγκυρη διεύθυνση του Youtube';
  
 /* * ******************************************
   Theme Options
