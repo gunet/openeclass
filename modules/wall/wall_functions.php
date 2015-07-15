@@ -90,3 +90,17 @@ function links_autodetection($text) {
     
     return $ret_text;
 }
+
+function validate_youtube_link($video_url) {
+    
+    if (strrpos($video_url, 'v=', -1) === FALSE) {
+        return false;
+    }
+    
+    if (stristr($video_url, 'www.youtube.com/') === FALSE) {
+        return false;
+    }
+    
+    return true;
+}
+
