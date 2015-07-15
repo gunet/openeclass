@@ -3793,6 +3793,7 @@ $langWallText = 'Text';
 $langWallVideo = 'Youtube video';
 $langWallPostSaved = 'Wall post saved succesfully';
 $langWallMessageEmpty = 'Post message cannot be empty';
+$langWallVideoLink = 'Youtube video address';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';

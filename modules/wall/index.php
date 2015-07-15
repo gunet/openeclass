@@ -43,10 +43,31 @@ if (isset($_POST['submit'])) {
 }
 
 if ($is_editor || allow_to_post($course_id, $uid)) {
+    $head_content .= "<script>
+                          $(function() {
+                              $('#hidden_input').hide();
+                              $('#type_input').change(function(){
+                                  if($('#type_input').val() == 'video') {
+                                      $('#hidden_input').show(); 
+                                  } else {
+                                      $('#hidden_input').hide(); 
+                                  } 
+                              });
+                          });
+            
+                          $(function() {
+                              $('#wall_form').submit(function() {
+                                  if($('#type_input').val() != 'video') {
+                                      $('#video_link').remove();
+                                  }
+                              });
+                          })
+                      </script>";
+    
     $tool_content .= '<div class="row">
         <div class="col-sm-12">
             <div class="form-wrapper">
-                <form method="post" action="" enctype="multipart/form-data">
+                <form id="wall_form" method="post" action="" enctype="multipart/form-data">
                     <fieldset> 
                         <div class="form-group">
                             <label for="message_input">'.$langMessage.'</label>
@@ -59,6 +80,10 @@ if ($is_editor || allow_to_post($course_id, $uid)) {
                                 <option value="video">'.$langWallVideo.'</option>
                             </select>
                         </div>
+                        <div class="form-group" id="hidden_input">
+                            <label for="video_link">'.$langWallVideoLink.'</label>
+                            <input class="form-control" type="url" name="video" id="video_link">
+                        </div>                
                     </fieldset>
                     <div class="form-group">'.
                         form_buttons(array(

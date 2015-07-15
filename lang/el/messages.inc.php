@@ -4550,6 +4550,7 @@ $langWallText = 'Κείμενο';
 $langWallVideo = 'Βίντεο Youtube';
 $langWallPostSaved = 'Η ανάρτηση αποθηκεύθηκε';
 $langWallMessageEmpty = 'Το μήνυμα της ανάρτησης ήταν κενό';
+$langWallVideoLink = 'Διεύθυνση βίντεο Youtube';
  
 /* * ******************************************
   Theme Options
