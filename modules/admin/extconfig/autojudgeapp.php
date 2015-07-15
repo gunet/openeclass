@@ -22,71 +22,76 @@
 
 require_once 'genericrequiredparam.php';
 
-abstract class AutojudgeApp extends ExtApp {
+class AutojudgeApp extends ExtApp {
+    public static $ServiceNames = array("AutojudgeDnnaApp", "AutojudgeHackerearthApp", "AutojudgeCodepadApp");
 
     public function __construct() {
         parent::__construct();
-        foreach($this->getConfigFields() as $curField => $curLabel) {
-            $this->registerParam(new GenericParam($this->getName(), $curLabel, $curField));
-        }
     }
 
     public function getLongDescription() {
-        return '<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα αυτό συνδέεται με την υπηρεσία '.$this->getServiceURL().', <b>'.(!$this->supportsInput() ? 'δεν' : '').'υποστηρίζει μεταβλητά δεδομένα εισόδου</b> και περιλαμβάνει τις εξής γλώσσες: <b>'.implode(',', array_keys($this->getSupportedLanguages())).'</b></p><p>Προσοχή: Σε περίπτωση που υπάρχουν περισσότερες από μια υπηρεσίες αυτόματου κριτή ενεργοποιημένες χρησιμοποιείται μόνο η πρώτη.</p>';
+        return $GLOBALS['langAutojudgeDescription'];
     }
 
     public function getShortDescription() {
-        return '<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα αυτό συνδέεται με την υπηρεσία '.$this->getServiceURL().', <b>'.(!$this->supportsInput() ? 'δεν ' : '').'υποστηρίζει μεταβλητά δεδομένα εισόδου</b> και περιλαμβάνει τις εξής γλώσσες: <b>'.implode(',', array_keys($this->getSupportedLanguages())).'</b></p><p>Προσοχή: Σε περίπτωση που υπάρχουν περισσότερες από μια υπηρεσίες αυτόματου κριτή ενεργοποιημένες χρησιμοποιείται μόνο η πρώτη.</p>';
+        return $GLOBALS['langAutojudgeDescription'];
     }
 
     public function getDisplayName() {
-        return $this->getServiceURL();
+        return 'AutoJudge';
+    }
+
+    public function getEditUrl() {
+        return 'modules/admin/autojudgemoduleconf.php';
+    }
+
+    /**
+     * Returns true if a compilation service has been selected
+     *
+     * @return boolean
+     */
+    public function getParamsSet() {
+        return (q(get_config('autojudge_connector')) != null);
     }
 
     public static function getAutojudge() {
-        $firstAutojudge = null;
-        foreach(ExtAppManager::getApps() as $curApp) {
-            if(strpos(get_class($curApp), 'Autojudge') !== false) {
-                $firstAutojudge = $curApp;
-                if($curApp->isEnabled()) {
-                    return $curApp;
-                }
-            }
+        $autojudge = ExtAppManager::getApp('autojudge');
+        $connector = q(get_config('autojudge_connector'));
+        if(!$connector) {
+            $connector = new AutojudgeDnnaApp();
+        } else {
+            $connector = new $connector();
         }
-        if(!$firstAutojudge) { throw new \Exception('Error! No autojudge connectors defined!'); }
-        return $firstAutojudge;
+        $connector->setEnabled($autojudge->isEnabled());
+        return $connector;
     }
 
-    protected static function getAutoJudgeApp($classname) {
-        foreach(ExtAppManager::getApps() as $curApp) {
-            if(strpos(get_class($curApp), $classname) !== false) {
-                return $curApp;
+    /**
+     * @return ExtApp[]
+     */
+    public static function getAutoJudgeServices() {
+        if (self::$ServiceNames == null) {
+            $apps = array();
+            foreach (self::$ServiceNames as $serviceName) {
+                $service = new $serviceName();
+                $apps[$service->getName()] = $service;
             }
+            self::$ServiceNames = $apps;
         }
-        return null;
+        return self::$ServiceNames;
     }
-
-    abstract public function compile(AutoJudgeConnectorInput $input);
-
-    abstract public function getConfigFields();
-
-    abstract public function getSupportedLanguages();
-
-    abstract public function supportsInput();
-
-    abstract public function getServiceURL();
 }
 
 interface AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input);
 
-    public function getConfigFields();
-
-    public function getName();
-
     public function getSupportedLanguages();
 
     public function supportsInput();
+
+    public function getServiceURL();
+
+    public function getName();
 }
 
 class AutoJudgeConnectorResult {
@@ -104,3 +109,6 @@ class AutoJudgeConnectorInput {
 
     public $lang;
 }
+
+foreach (AutojudgeApp::$ServiceNames as $serviceName)
+    require_once strtolower($serviceName) . '.php';

@@ -27,7 +27,7 @@ require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp", "AutojudgeDnnaApp", "AutojudgeHackerearthApp", "AutojudgeCodepadApp");
+    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp", "AutojudgeApp");
     private static $APPS = null;
 
     /**

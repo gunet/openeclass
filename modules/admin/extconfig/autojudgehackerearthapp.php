@@ -23,13 +23,13 @@
 require_once 'autojudgeapp.php';
 require_once 'include/simplehtmldom/simple_html_dom.php';
 
-class AutojudgeHackerearthApp extends AutojudgeApp {
+class AutojudgeHackerearthApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
         //set POST variables
         $url           = 'http://api.hackerearth.com/code/run/';
         $fields_string = null;
         $fields        = array(
-            'client_secret' => AutojudgeApp::getAutoJudgeApp(get_class($this))->getParam('key')->value(),
+            'client_secret' => q(get_config('autojudge_hackerEarthKey')),
             'input'         => $input->input,
             'source'        => urlencode($input->code),
             'lang'          => $input->lang,
@@ -72,7 +72,7 @@ class AutojudgeHackerearthApp extends AutojudgeApp {
 
     public function getConfigFields() {
         return array(
-            'key' => 'Hackerearth API Key',
+            'autojudge_hackerEarthKey' => 'Hackerearth API Key',
         );
     }
 
@@ -99,5 +99,9 @@ class AutojudgeHackerearthApp extends AutojudgeApp {
 
     public function supportsInput() {
         return true;
+    }
+
+    public function getName() {
+        return 'Hackerearth';
     }
 }

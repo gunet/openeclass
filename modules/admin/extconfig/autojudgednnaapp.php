@@ -22,13 +22,13 @@
 
 require_once 'autojudgeapp.php';
 
-class AutojudgeDnnaApp extends AutojudgeApp {
+class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
         //set POST variables
         $url           = 'http://compile.dnna.gr/api/code/run';
         $fields_string = null;
         $fields        = array(
-            'client_secret' => AutojudgeApp::getAutoJudgeApp(get_class($this))->getParam('key')->value(),
+            //'client_secret' => AutojudgeApp::getAutoJudgeApp(get_class($this))->getParam('key')->value(),
             'input'         => $input->input,
             'source'        => urlencode($input->code),
             'lang'          => $input->lang,
@@ -95,5 +95,9 @@ class AutojudgeDnnaApp extends AutojudgeApp {
 
     public function supportsInput() {
         return true;
+    }
+
+    public function getName() {
+        return 'compile.dnna.gr';
     }
 }
