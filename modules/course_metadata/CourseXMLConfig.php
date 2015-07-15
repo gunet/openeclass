@@ -310,7 +310,8 @@ class CourseXMLConfig {
         'course_unit_material_digital_url', 'course_unit_material_digital_library',
         'course_confirmAMinusLevel', 'course_confirmALevel', 'course_confirmAPlusLevel',
         'course_lastLevelConfirmation', 'course_firstCreateDate', 'course_videolectures',
-        'course_instructor_fullName', 'course_instructor_moreInformation', 'course_instructor_cv'
+        'course_instructor_fullName', 'course_instructor_moreInformation', 'course_instructor_cv',
+        'course_hits', 'course_visits'
     );
 
     /**
