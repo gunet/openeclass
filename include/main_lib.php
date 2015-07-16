@@ -3064,24 +3064,56 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $link_attrs = "";
         }
+        $caret = '';
+        $primaryTag = 'a';
+        if ($level != 'primary-label' or isset($option['icon'])) {
+            $dataAttrs = "data-placement='bottom' data-toggle='tooltip'";
+        } else {
+            $dataAttrs = '';
+        }
+        $subMenu = '';
+        if (isset($option['options']) and ($level == 'primary' or $level == 'primary-label')) {
+            $href = '';
+            $primaryTag = 'button';
+            $button_class .= ' dropdown-toggle';
+            $caret = ' <span class="caret"></span>';
+            $dataAttrs = 'data-toggle="dropdown" data-placement="right" aria-haspopup="true" aria-expanded="false"';
+            $form_begin = '<div class="btn-group" role="group">';
+            $form_end = '</div>';
+            $subMenu = '<ul class="dropdown-menu dropdown-menu-right">';
+            foreach ($option['options'] as $subOption) {
+               $subMenu .= '<li><a href="' . $subOption['url'] . '">' . q($subOption['title']) . '</a></li>'; 
+            }
+            $subMenu .= '</ul>';
+        }
+        $iconTag = '';
         if ($level == 'primary-label') {
+            if (isset($option['icon'])) {
+                $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
+                $link_attrs .= " title='$title'";
+            }
+            if (isset($option['icon'])) {
+                $title = "<span class='hidden-xs'>$title</span>";
+            }
             array_unshift($out_primary,
-                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' " .
-                " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon] space-after-icon'></i>" .
-                "<span class='hidden-xs'>$title</span></a>$form_end");
+                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
+                ' ' . $dataAttrs .
+                " $link_attrs>" . $iconTag . $title . $caret .
+                "</$primaryTag>$subMenu$form_end");
         } elseif ($level == 'primary') {
+            if (isset($option['icon'])) {
+                $iconTag = "<span class='fa $option[icon]'></span>";
+            }
             array_unshift($out_primary,
-                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' " .
-                " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon]'></i></a>$form_end");
+                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                ' ' . $dataAttrs .
+                " title='$title'$link_attrs>" . $iconTag . $caret .
+                "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class'" . $href .
                 " $link_attrs>" .
-                "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
+                "<span class='fa $option[icon]'></span> $title</a>$form_end</li>");
         }
         $i++;
     }
@@ -3094,7 +3126,6 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";
     if (count($out_secondary)) {
-        //$action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
         $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
         $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
                      ".implode('', $out_secondary)."
