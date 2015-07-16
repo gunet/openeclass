@@ -1,10 +1,10 @@
 <?php
 /*
 * ========================================================================
-* Open eClass 2.9 - E-learning and Course Management System
+* Open eClass 2.11 - E-learning and Course Management System
 * ========================================================================
 
-Copyright(c) 2003-2014  Greek Universities Network - GUnet
+Copyright(c) 2003-2015  Greek Universities Network - GUnet
 A full copyright notice can be read in "/info/copyright.txt".
 
 Authors:     Costas Tsibanis <k.tsibanis@noc.uoa.gr>
@@ -31,7 +31,7 @@ Standard header included by all eClass files
 Defines standard functions and validates variables
 ---------------------------------------------------------------------
 */
-define('ECLASS_VERSION', '2.11.3');
+define('ECLASS_VERSION', '2.11.4');
 
 // course status
 define('COURSE_OPEN', 2);
