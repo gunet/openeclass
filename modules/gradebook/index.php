@@ -37,11 +37,19 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($_POST['assign_type'] == 2) {
             $data = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d", $course_id);
         } else {
-            $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+            $data = array();
+            // users who don't participate in gradebook
+            $d1 = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                             FROM user, course_user
                                                 WHERE user.id = course_user.user_id 
                                                 AND course_user.course_id = ?d 
-                                                AND course_user.status = " . USER_STUDENT . "", $course_id);
+                                                AND course_user.status = " . USER_STUDENT . "
+                                            AND user.id NOT IN (SELECT uid FROM gradebook_users WHERE gradebook_id = $_REQUEST[gradebook_id])", $course_id);
+            $data[0] = $d1;
+            // users who already participate in gradebook
+            $d2 = Database::get()->queryArray("SELECT uid AS id, givenname, surname FROM user, gradebook_users 
+                                        WHERE gradebook_users.uid = user.id AND gradebook_id = $_REQUEST[gradebook_id]");
+            $data[1] = $d2;
         }
     }
     echo json_encode($data);    
@@ -55,7 +63,7 @@ load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
-$head_content .= "
+@$head_content .= "
 <script type='text/javascript'>
 $(function() {
         $('#startdatepicker, #enddatepicker').datetimepicker({    
@@ -119,26 +127,31 @@ $(function() {
         $('#all_users').hide();
         $('#participants_tbl').removeClass('hide');
         var type = $('input:radio[name=specific_gradebook_users]:checked').val();        
-        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code',
+        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$_REQUEST[gradebook_id]&editUsers=1',
         {
           assign_type: type
         },
         function(data,status){
             var index;
-            var parsed_data = JSON.parse(data);
-            var select_content = '';            
+            var parsed_data = JSON.parse(data);            
+            var select_content = '';
+            var select_content_2 = '';
             if (type==2) {
                 for (index = 0; index < parsed_data.length; ++index) {
                     select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
                 }
             }
             if (type==1) {
-                for (index = 0; index < parsed_data.length; ++index) {
-                    select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                for (index = 0; index < parsed_data[0].length; ++index) {
+                    select_content += '<option value=\"' + parsed_data[0][index]['id'] + '\">' + parsed_data[0][index]['surname'] + ' ' + parsed_data[0][index]['givenname'] + '<\/option>';
                 }
-            }
-            $('#participants_box').find('option').remove();
+                for (index = 0; index < parsed_data[1].length; ++index) {
+                    select_content_2 += '<option value=\"' + parsed_data[1][index]['id'] + '\">' + parsed_data[1][index]['surname'] + ' ' + parsed_data[1][index]['givenname'] + '<\/option>';
+                }
+            }            
             $('#users_box').find('option').remove().end().append(select_content);
+            $('#participants_box').find('option').remove().end().append(select_content_2);
+            
         });
     }
 });
@@ -185,9 +198,9 @@ if ($is_editor) {
     }
     
     //reset gradebook users
-    if (isset($_POST['resetGradebookUsers'])) {                
-        if (isset($_POST['specific_gradebook_users']) and $_POST['specific_gradebook_users'] == 1) { // if we choose specific users
-            Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+    if (isset($_POST['resetGradebookUsers'])) {
+        if (isset($_POST['specific_gradebook_users']) and $_POST['specific_gradebook_users'] == 1) { // if we choose specific users                        
+            Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);            
             foreach ($_POST['specific'] as $u) {
                 $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                                 SELECT $gradebook_id, user_id FROM course_user

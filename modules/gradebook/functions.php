@@ -338,7 +338,7 @@ function user_gradebook_settings($gradebook_id) {
     <div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editUsers=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editUsers=1'>
                     <div class='form-group'>
                         <label class='col-xs-12'><span class='help-block'>$langGradebookInfoForUsers</span></label>
                     </div>
@@ -806,7 +806,7 @@ function display_gradebooks() {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
     } else {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE active = 1 AND course_id = ?d", $course_id);
-    }
+    }    
     if (count($result) == 0) { // no gradebooks
         $tool_content .= "<div class='alert alert-info'>$langNoGradeBooks</div>";
     } else {
