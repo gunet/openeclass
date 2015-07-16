@@ -912,6 +912,10 @@ function upgrade_course_3_0($code, $course_id) {
     // move agenda to central db and drop table
     if (DBHelper::tableExists('agenda', $code)) {
 
+        if (!DBHelper::fieldExists('agenda', 'visibility', $code)) {
+            Database::get()->query("ALTER TABLE `$code`.agenda ADD `visibility` char(1) NOT NULL DEFAULT 'v'");
+        }
+
         // ----- agenda DB Table ----- //
         Database::get()->query("UPDATE `$code`.agenda SET visibility = '1' WHERE visibility = 'v'");
         Database::get()->query("UPDATE `$code`.agenda SET visibility = '0' WHERE visibility = 'i'");
