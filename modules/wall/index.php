@@ -145,13 +145,13 @@ if (count($posts) == 0) {
         $pinned = $post->pinned;
         $token = token_generate($user_id, true);
         $datetime = nice_format($post->datetime, true);
-        if ($post->video_link != '') {
+        if ($post->video_link == '') {
             $shared = $langWallSharedPost;
         } else {
             $shared = $langWallSharedVideo;
         }
         
-        $tool_content .= '<div class="row">
+        $tool_content .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
                               <div class="col-sm-12">
                                   <div class="media">
                                       <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
