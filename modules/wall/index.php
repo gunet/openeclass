@@ -25,6 +25,7 @@ require_once 'modules/wall/wall_functions.php';
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
+//handle submit
 if (isset($_POST['submit'])) {
     if ($is_editor || allow_to_post($course_id, $uid)) {
         if ($_POST['type'] == 'text') {
@@ -64,6 +65,7 @@ if (isset($_POST['submit'])) {
     }
 }
 
+//show post form
 if ($is_editor || allow_to_post($course_id, $uid)) {
     if (Session::has('type') && Session::get('type') == 'video') {
         $jquery_string = "$('#type_input').val('video');";
@@ -129,6 +131,43 @@ if ($is_editor || allow_to_post($course_id, $uid)) {
             </div>
         </div>
     </div>';
+}
+
+//show wall posts
+$posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY timestamp DESC", $course_id);
+if (count($posts) == 0) {
+    $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
+} else {
+    foreach ($posts as $post) {
+        $user_id = $post->user_id;
+        $id = $post->id;
+        $content = $post->content;
+        $pinned = $post->pinned;
+        $token = token_generate($user_id, true);
+        $datetime = nice_format($post->datetime, true);
+        if ($post->video_link != '') {
+            $shared = $langWallSharedPost;
+        } else {
+            $shared = $langWallSharedVideo;
+        }
+        
+        $tool_content .= '<div class="row">
+                              <div class="col-sm-12">
+                                  <div class="media">
+                                      <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
+                                        '. profile_image($user_id, IMAGESIZE_SMALL) .'
+                                      </a>
+                                      <div class="media-body bubble">
+                                          <div class="label label-success media-heading">'.$datetime.'</div>
+                                          <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>    
+                                          <div class="margin-top-thin">
+                                              '.standard_text_escape($content).'
+                                          </div>
+                                      </div>    
+                                  </div>
+                              </div>
+                          </div>';
+    }
 }
 
 

@@ -4553,7 +4553,11 @@ $langWallMessageEmpty = 'Το μήνυμα της ανάρτησης ήταν κ
 $langWallVideoLink = 'Διεύθυνση βίντεο Youtube';
 $langWallVideoLinkEmpty = 'Το πεδίο για τη διεύθυνση του Youtube βίντεο είναι κενό';
 $langWallVideoLinkNotValid = 'Η τιμή του πεδίου για τη διεύθυνση του βίντεο δεν είναι έγκυρη διεύθυνση του Youtube';
- 
+$langNoWallPosts = 'Δεν υπάρχουν αναρτήσεις στον τοίχο του μαθήματος';
+$langWallUser = 'Ο χρήστης ';
+$langWallSharedVideo = ' μοιράστηκε ένα βίντεο';
+$langWallSharedPost = ' μοιράστηκε μια ανάρτηση';
+
 /* * ******************************************
   Theme Options
  * ***************************************** */
