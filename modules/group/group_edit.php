@@ -283,7 +283,8 @@ $tool_content .= "<div class='form-wrapper'>
             array(
                 'text'  =>  $langSave,
                 'name'  =>  'modify',
-                'value' =>  $langModify
+                'value' =>  $langModify,
+                'javascript' => "selectAll('members_box',true)"
             ),
             array(
                 'href'  =>  $back_url
