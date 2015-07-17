@@ -190,6 +190,25 @@ function new_gradebook() {
 
 
 /**
+ * @brief create copy of an existing gradebook. (with same activities and no users).
+ * @global type $course_id
+ * @param type $gradebook_id
+ */
+function clone_gradebook($gradebook_id) {
+        
+    global $course_id;
+    
+    $newTitle = get_gradebook_title($gradebook_id);
+    $newRange = get_gradebook_range($gradebook_id);
+    $new_gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d,
+                                                      students_semester = 1, `range` = ?d,
+                                                      active = 1, title = ?s", $course_id, $newRange, $newTitle)->lastInsertID;
+    Database::get()->query("INSERT INTO gradebook_activities (gradebook_id, title, activity_type, date, description, weight, module_auto_id, module_auto_type, auto)
+                                SELECT $new_gradebook_id, title, activity_type, " . DBHelper::timeAfter() . ", description, weight, module_auto_id, module_auto_type, auto
+                                 FROM gradebook_activities WHERE gradebook_id = ?d", $gradebook_id);
+}
+
+/**
  * @brief delete gradebook
  * @global type $langGradebookdeleted
  * @global type $course_id
@@ -232,6 +251,22 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
 }
 
 /**
+ * @brief delete user from gradebook
+ * @global type $langGradebookEdit
+ * @param type $gradebook_id
+ * @param type $userid
+ */
+function delete_gradebook_user($gradebook_id, $userid) {
+       
+    global $langGradebookEdit;
+    
+    Database::get()->query("DELETE FROM gradebook_book WHERE uid = ?d AND gradebook_activity_id IN 
+                                (SELECT id FROM gradebook_activities WHERE gradebook_id = ?d)", $userid, $gradebook_id);
+    Database::get()->query("DELETE FROM gradebook_users WHERE uid = ?d AND gradebook_id = ?d", $userid, $gradebook_id);   
+    Session::Messages($langGradebookEdit,"alert-success");
+}
+
+/**
  * @brief insert/modify gradebook settings
  * @global type $tool_content
  * @global type $course_code
@@ -255,7 +290,7 @@ function gradebook_settings($gradebook_id) {
     $tool_content .= "<div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editSettings=1' onsubmit=\"return checkrequired(this, 'antitle');\">
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id'>
                     <div class='form-group'>
                         <label class='col-xs-12'>$langTitle</label>                           
                         <div class='col-xs-12'>
@@ -288,7 +323,7 @@ function gradebook_settings($gradebook_id) {
                             <div class='col-xs-12'>".form_buttons(array(
                                 array(
                                     'text' => $langSave,
-                                    'name' => 'submitGradebookRange',
+                                    'name' => 'submitGradebookSettings',
                                     'value'=> $langGradebookUpdate
                                 ),
                                 array(
@@ -794,12 +829,13 @@ function display_gradebook($gradebook_id) {
  * @global type $langConfirmDelete
  * @global type $langDeactivate
  * @global type $langActivate
+ * @global type $langCreateDuplicate
  * @global type $langNoGradeBooks
  */
 function display_gradebooks() {
     
     global $course_id, $tool_content, $course_code, $langEditChange,
-           $langDelete, $langConfirmDelete, $langDeactivate,
+           $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
            $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor;
     
     if ($is_editor) {
@@ -832,6 +868,9 @@ function display_gradebooks() {
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" . 
                                                   ($g->active ? '0' : '1'),
                                           'icon' => $g->active ? 'fa-toggle-off' : 'fa-toggle-on'),
+                                    array('title' => $langCreateDuplicate,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;dup=1",
+                                          'icon' => 'fa-copy'),
                                     array('title' => $langDelete,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=$g->id",
                                           'icon' => 'fa-times',

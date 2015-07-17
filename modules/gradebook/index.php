@@ -168,9 +168,14 @@ if (isset($_REQUEST['gradebook_id'])) {
 
 if ($is_editor) {
     // change gradebook visibility
-    if (isset($_GET['vis'])) {   
+    if (isset($_GET['vis'])) {
         Database::get()->query("UPDATE gradebook SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['gradebook_id'], $course_id);
         Session::Messages($langGlossaryUpdated, 'alert-success');
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
+    }
+    if (isset($_GET['dup'])) {
+        clone_gradebook($gradebook_id);
+        Session::Messages($langCopySuccess, 'alert-success');
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
     //add a new gradebook
@@ -192,36 +197,54 @@ if ($is_editor) {
     }    
     //delete user from gradebook list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
-        Database::get()->query("DELETE FROM gradebook_users WHERE uid = ?d AND gradebook_id = ?d", $_GET['ruid'], $_GET['gb']);
-        Session::Messages($langGradebookEdit,"alert-success");
+        delete_gradebook_user($_GET['gb'], $_GET['ruid']);        
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$_GET[gb]&gradebookBook=1");        
     }
     
     //reset gradebook users
-    if (isset($_POST['resetGradebookUsers'])) {
-        if (isset($_POST['specific_gradebook_users']) and $_POST['specific_gradebook_users'] == 1) { // if we choose specific users                        
-            Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);            
-            foreach ($_POST['specific'] as $u) {
-                $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                                SELECT $gradebook_id, user_id FROM course_user
-                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+    if (isset($_POST['resetGradebookUsers'])) {                
+        if ($_POST['specific_gradebook_users'] == 2) { // specific users group
+            foreach ($_POST['specific'] as $g) {
+                $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
+                foreach ($ug as $u) {
+                    $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                            SELECT $gradebook_id, user_id FROM course_user
+                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);                        
+                }
             }
-        } else { // if we want all users between dates
+        } elseif ($_POST['specific_gradebook_users'] == 1) { // specific users            
+            $active_gradebook_users = '';
+            foreach ($_POST['specific'] as $u) {
+                $active_gradebook_users .= $u . ",";
+            }
+            $active_gradebook_users = substr($active_gradebook_users, 0, -1);
+            $gu = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
+                                                AND uid NOT IN ($active_gradebook_users)", $gradebook_id);            
+            foreach ($gu as $u) {
+                delete_gradebook_user($gradebook_id, $u);
+            }
+            foreach ($_POST['specific'] as $u) {
+                $sql = Database::get()->querySingle("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d AND uid = ?d", $gradebook_id, $u);                
+                if (!isset($sql->uid)) {
+                    $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                            SELECT $gradebook_id, user_id FROM course_user
+                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
+                }
+            }
+        } else { // if we want all users between dates            
             $usersstart = new DateTime($_POST['UsersStart']);
             $usersend = new DateTime($_POST['UsersEnd']);
-            // clear gradebook users table
-            Database::get()->querySingle("DELETE FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            $gu = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            foreach ($gu as $u) {
+                delete_gradebook_user($gradebook_id, $u);
+            }
             //check the rest value and rearrange the table            
             $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                         SELECT $gradebook_id, user_id FROM course_user
                         WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
                                 $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
         }
-        if ($newUsersQuery) {
-            Session::Messages($langGradebookEdit,"alert-success");            
-        } else {
-            Session::Messages($langNoStudents, "alert-warning");            
-        }
+        Session::Messages($langGradebookEdit,"alert-success");                    
         redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . $gradebook_id . '&gradebookBook=1');
     }
     
@@ -332,22 +355,20 @@ if ($is_editor) {
     }
     $tool_content .= "</div></div>";
     
-    //EDIT: edit range
-    if (isset($_POST['submitGradebookRange'])) {
-        $gradebook_range = intval($_POST['degreerange']);
-        Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
+    // update gradebook settings
+    if (isset($_POST['submitGradebookSettings'])) {               
+        if (isset($_POST['degreerange'])) { // update gradebook range
+            $gradebook_range = intval($_POST['degreerange']);
+            Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
+        }
+        if (isset($_POST['title'])) { // upgrade gradebook title
+            $gradebook_title = $_POST['title'];
+            Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
+         
+        }
         Session::Messages($langGradebookEdit,"alert-success");
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");        
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
     }
-    
-    //EDIT: edit title
-    if (isset($_POST['title']) && strlen($_POST['title'])) {
-        $gradebook_title = $_POST['title'];
-        Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
-            Session::Messages($langGradebookEdit,"alert-success");
-            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
-    }
-    
     //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
         add_gradebook_other_activity($gradebook_id);
