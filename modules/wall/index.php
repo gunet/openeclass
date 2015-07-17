@@ -142,45 +142,7 @@ $posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, F
 if (count($posts) == 0) {
     $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
 } else {
-    $tool_content .= '<div class="infinite-container">';
-    foreach ($posts as $post) {
-        $user_id = $post->user_id;
-        $id = $post->id;
-        $content = $post->content;
-        $pinned = $post->pinned;
-        $token = token_generate($user_id, true);
-        $datetime = nice_format($post->datetime, true);
-        if ($post->video_link == '') {
-            $shared = $langWallSharedPost;
-        } else {
-            $shared = $langWallSharedVideo;
-        }
-        
-        $tool_content .= '<div class="infinite-item">';
-        
-        $tool_content .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
-                              <div class="col-sm-12">
-                                  <div class="media">
-                                      <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
-                                        '. profile_image($user_id, IMAGESIZE_SMALL) .'
-                                      </a>
-                                      <div class="media-body bubble">
-                                          <div class="label label-success media-heading">'.$datetime.'</div>
-                                          <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>    
-                                          <div class="margin-top-thin">
-                                              '.standard_text_escape($content).'
-                                          </div>
-                                      </div>    
-                                  </div>
-                              </div>
-                          </div>';
-        
-        $tool_content .= '</div>';
-    }
-    $tool_content .= '</div>';
-    if (count($posts) == $posts_per_page) {
-        $tool_content .= '<a class="infinite-more-link" href="loadMore.php?course='.$course_code.'&amp;page=2">'.$langMore.'</a>';
-    }
+    $tool_content .= generate_infinite_container_html($posts, 2);
     
     $tool_content .= '<script>
                           var infinite = new Waypoint.Infinite({

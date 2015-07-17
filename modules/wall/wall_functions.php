@@ -104,3 +104,50 @@ function validate_youtube_link($video_url) {
     return true;
 }
 
+function generate_infinite_container_html($posts, $next_page) {
+    global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser,
+    $course_code, $langMore;
+    
+    $ret = '<div class="infinite-container">';
+    foreach ($posts as $post) {
+        $user_id = $post->user_id;
+        $id = $post->id;
+        $content = $post->content;
+        $pinned = $post->pinned;
+        $token = token_generate($user_id, true);
+        $datetime = nice_format($post->datetime, true);
+        if ($post->video_link == '') {
+            $shared = $langWallSharedPost;
+        } else {
+            $shared = $langWallSharedVideo;
+        }
+    
+        $ret .= '<div class="infinite-item">';
+    
+        $ret .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
+                              <div class="col-sm-12">
+                                  <div class="media">
+                                      <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
+                                        '. profile_image($user_id, IMAGESIZE_SMALL) .'
+                                      </a>
+                                      <div class="media-body bubble">
+                                          <div class="label label-success media-heading">'.$datetime.'</div>
+                                          <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                                          <div class="margin-top-thin">
+                                              '.standard_text_escape($content).'
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>';
+    
+        $ret .= '</div>';
+    }
+    $ret .= '</div>';
+    if (count($posts) == $posts_per_page) {
+        $ret .= '<a class="infinite-more-link" href="loadMore.php?course='.$course_code.'&amp;page='.$next_page.'">'.$langMore.'</a>';
+    }
+
+    return $ret;
+}
+
