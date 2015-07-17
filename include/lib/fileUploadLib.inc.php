@@ -382,7 +382,7 @@ function get_max_upload_size($maxFilledSpace, $baseWorkDir) {
  * @param type $used
  * @return string
  */
-function showquota($quota, $used) {
+function showquota($quota, $used, $backPath=null) {
 
     global $langQuotaUsed, $langQuotaPercentage, $langQuotaTotal, $langBack, $langQuotaBar,
     $course_code, $subsystem, $group_id, $ebook_id, $pageName;
@@ -401,12 +401,20 @@ function showquota($quota, $used) {
     $used = format_bytesize($used / 1024);
     // telos diamorfwshs ths grafikh mparas kai twn arithmitikwn statistikwn stoixeiwn
     // ektypwsh pinaka me arithmitika stoixeia + thn grafikh bara
-    $pageName = $langQuotaBar;      
-    $retstring .= action_bar(array(
+    $pageName = $langQuotaBar;
+    if( !is_null($backPath) ){
+        $retstring .= action_bar(array(
                     array('title' => $langBack,
-                          'url' => documentBackLink(''),
+                          'url' => $backPath,
                           'icon' => 'fa-reply',
                           'level' => 'primary-label')));
+    } else {
+    $retstring .= action_bar(array(
+                    array('title' => $langBack,
+                          'url' => documentBackLink($backPath),
+                          'icon' => 'fa-reply',
+                          'level' => 'primary-label')));
+    }
     $retstring .= "
     <div class='row'><div class='col-sm-12'>
     <div class='form-wrapper'>

@@ -3082,7 +3082,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $form_end = '</div>';
             $subMenu = '<ul class="dropdown-menu dropdown-menu-right">';
             foreach ($option['options'] as $subOption) {
-               $subMenu .= '<li><a href="' . $subOption['url'] . '">' . q($subOption['title']) . '</a></li>'; 
+               $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">' . q($subOption['title']) . '</a></li>'; 
             }
             $subMenu .= '</ul>';
         }
