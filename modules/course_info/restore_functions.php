@@ -674,7 +674,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         }
         
-        // Blog
+        // Wall
         if (file_exists("$restoreThis/wall_post")) {
             $wall_map = restore_table($restoreThis, 'wall_post', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
@@ -704,13 +704,13 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             restore_table($restoreThis, 'rating', array('delete' => array('rate_id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map, $forum_post_map, $link_map,
+            'map_function_data' => array($blog_map, $forum_post_map, $link_map, $wall_map,
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
         if (file_exists("$restoreThis/rating_cache")) {
             restore_table($restoreThis, 'rating_cache', array('delete' => array('rate_cache_id'),
             'map_function' => 'ratings_map_function',
-            'map_function_data' => array($blog_map, $forum_post_map, $link_map,
+            'map_function_data' => array($blog_map, $forum_post_map, $link_map, $wall_map, 
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
@@ -1293,7 +1293,7 @@ function unit_map_function(&$data, $maps) {
 }
 
 function ratings_map_function(&$data, $maps) {
-    list($blog_post_map, $forum_post_map, $link_map, $course_id) = $maps;
+    list($blog_post_map, $forum_post_map, $link_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
@@ -1303,6 +1303,8 @@ function ratings_map_function(&$data, $maps) {
         $data['rid'] = $forum_post_map[$data['rid']];
     } elseif ($rtype == 'link') {
         $data['rid'] = $link_map[$data['rid']];
+    } elseif ($rtype == 'wallpost') {
+        $data['rid'] = $wall_map[$data['rid']];
     }
     return true;
 }

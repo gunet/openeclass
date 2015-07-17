@@ -20,6 +20,7 @@
  * ======================================================================== 
  */
 
+require_once 'modules/rating/class.rating.php';
 
 function allow_to_post($course_id, $user_id) {
     $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
@@ -106,7 +107,7 @@ function validate_youtube_link($video_url) {
 
 function generate_infinite_container_html($posts, $next_page) {
     global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser,
-    $course_code, $langMore;
+    $course_code, $langMore, $is_editor, $uid, $course_id;
     
     $ret = '<div class="infinite-container">';
     foreach ($posts as $post) {
@@ -121,7 +122,10 @@ function generate_infinite_container_html($posts, $next_page) {
         } else {
             $shared = $langWallSharedVideo;
         }
-    
+        
+        $rating = new Rating('thumbs_up', 'wallpost', $id);
+        $rating_content = $rating->put($is_editor, $uid, $course_id);
+        
         $ret .= '<div class="infinite-item">';
     
         $ret .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
@@ -136,11 +140,12 @@ function generate_infinite_container_html($posts, $next_page) {
                                           <div class="margin-top-thin">
                                               '.standard_text_escape($content).'
                                           </div>
+                                          '.$rating_content.'
                                       </div>
                                   </div>
                               </div>
                           </div>';
-    
+
         $ret .= '</div>';
     }
     $ret .= '</div>';

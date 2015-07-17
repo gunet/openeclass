@@ -25,6 +25,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
 
 $is_link = false;
+$is_wallpost = false;
 
 if ($_GET['rtype'] == 'blogpost') {
 	$setting_id = SETTING_BLOG_RATING_ENABLE;
@@ -34,9 +35,11 @@ if ($_GET['rtype'] == 'blogpost') {
     $setting_id = SETTING_FORUM_RATING_ENABLE;
 } elseif ($_GET['rtype'] == 'link') {
     $is_link = true; //there is no rating setting for social bookmarks, rating is always enabled
+} elseif ($_GET['rtype'] == 'wallpost') {
+    $is_wallpost = true; //there is no rating setting for wall posts, rating is always enabled
 }
 
-if ($is_link || setting_get($setting_id, $course_id) == 1) {
+if ($is_link || $is_wallpost || setting_get($setting_id, $course_id) == 1) {
     if (Rating::permRate($is_editor, $uid, $course_id, $_GET['rtype'])) {
         $widget = $_GET['widget'];
         $rtype = $_GET['rtype'];
