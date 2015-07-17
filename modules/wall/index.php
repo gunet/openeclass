@@ -25,6 +25,10 @@ require_once 'modules/wall/wall_functions.php';
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
+load_js('waypoints-infinite');
+
+$posts_per_page = 5;
+
 //handle submit
 if (isset($_POST['submit'])) {
     if ($is_editor || allow_to_post($course_id, $uid)) {
@@ -134,10 +138,11 @@ if ($is_editor || allow_to_post($course_id, $uid)) {
 }
 
 //show wall posts
-$posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY timestamp DESC", $course_id);
+$posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
 if (count($posts) == 0) {
     $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
 } else {
+    $tool_content .= '<div class="infinite-container">';
     foreach ($posts as $post) {
         $user_id = $post->user_id;
         $id = $post->id;
@@ -150,6 +155,8 @@ if (count($posts) == 0) {
         } else {
             $shared = $langWallSharedVideo;
         }
+        
+        $tool_content .= '<div class="infinite-item">';
         
         $tool_content .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
                               <div class="col-sm-12">
@@ -167,7 +174,19 @@ if (count($posts) == 0) {
                                   </div>
                               </div>
                           </div>';
+        
+        $tool_content .= '</div>';
     }
+    $tool_content .= '</div>';
+    if (count($posts) == $posts_per_page) {
+        $tool_content .= '<a class="infinite-more-link" href="loadMore.php?course='.$course_code.'&amp;page=2">'.$langMore.'</a>';
+    }
+    
+    $tool_content .= '<script>
+                          var infinite = new Waypoint.Infinite({
+                              element: $(".infinite-container")[0]
+                          })
+                      </script>';
 }
 
 
