@@ -117,10 +117,17 @@ function generate_infinite_container_html($posts, $next_page) {
         $pinned = $post->pinned;
         $token = token_generate($user_id, true);
         $datetime = nice_format($post->datetime, true);
-        if ($post->video_link == '') {
+        $video_link = $post->video_link;
+        if ($video_link == '') {
             $shared = $langWallSharedPost;
+            $video_block = '';
         } else {
             $shared = $langWallSharedVideo;
+            $pos_v = strrpos ($video_link, 'v=', - 1);
+            $video_link = 'http://www.youtube.com/embed/'.mb_substr($video_link, $pos_v+2);
+            $video_block = '<div class="video_status">
+                               <iframe  scrolling="no" width="445" height="250" src="'.$video_link.'" frameborder="0" allowfullscreen></iframe>
+                            </div>';
         }
         
         $rating = new Rating('thumbs_up', 'wallpost', $id);
@@ -138,7 +145,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                           <div class="label label-success media-heading">'.$datetime.'</div>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           <div class="margin-top-thin">
-                                              '.standard_text_escape($content).'
+                                              '.$video_block.q($content).'
                                           </div>
                                           '.$rating_content.'
                                       </div>
