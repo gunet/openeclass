@@ -104,7 +104,7 @@ if (isset($_POST['import'])) {
                 unlink("$webDir/courses/theme_data/temp/theme_options.txt");
                 $theme_options = unserialize(base64_decode($base64_str));                
                 $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
-                @rename("$webDir/courses/theme_data/temp/$theme_options->id", "$webDir/courses/theme_data/$new_theme_id");
+                @rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/$new_theme_id");
                 recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
                 Session::Messages($langThemeInstalled);
@@ -122,7 +122,7 @@ if (isset($_POST['optionsSave'])) {
     Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $serialized_data, $theme_id);
     redirect_to_home_page('modules/admin/theme_options.php');
 } elseif (isset($_GET['delThemeId'])) {
-    $theme_id = $_GET['delThemeId'];
+    $theme_id = intval($_GET['delThemeId']);
     $theme_options = Database::get()->querySingle("SELECT * FROM theme_options WHERE id = ?d", $theme_id);
     $theme_options_styles = unserialize($theme_options->styles);
     @removeDir("$webDir/courses/theme_data/$theme_id");
@@ -665,7 +665,7 @@ function clone_images($new_theme_id = null) {
     foreach($images as $image) {
         if (isset($_POST[$image])) {
             $image_name = $_POST[$image];
-            if(copy("$webDir/courses/theme_data/$theme_id/$image_name", "$webDir/courses/theme_data/$new_theme_id/$image_name")){
+            if(copy("$webDir/courses/theme_data/".intval($theme_id)."/$image_name", "$webDir/courses/theme_data/$new_theme_id/$image_name")){
                 $_POST[$image] = $image_name;
             }                
         }
