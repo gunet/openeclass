@@ -100,7 +100,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $data['aaData'][] = array(
                 'DT_RowId' => $myrow->id,
                 'DT_RowClass' => $vis_class,
-                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.$myrow->title.'</a>',
+                '0' => '<a href="'.$_SERVER['SCRIPT_NAME'].'?course='.$course_code.'&an_id='.$myrow->id.'">'.q($myrow->title).'</a>',
                 '1' => date('d-m-Y', strtotime($myrow->date)),
                 '2' => action_button(array(
                     array('title' => $langEditChange,
