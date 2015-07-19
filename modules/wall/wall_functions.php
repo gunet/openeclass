@@ -145,7 +145,8 @@ function generate_infinite_container_html($posts, $next_page) {
                                           <div class="label label-success media-heading">'.$datetime.'</div>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
                                           <div class="margin-top-thin">
-                                              '.$video_block.q($content).'
+                                              '.$video_block.'
+                                              <div class="userContent">'.nl2br(q($content)).'</div>
                                           </div>
                                           '.$rating_content.'
                                       </div>
@@ -157,7 +158,7 @@ function generate_infinite_container_html($posts, $next_page) {
     }
     $ret .= '</div>';
     if (count($posts) == $posts_per_page) {
-        $ret .= '<a class="infinite-more-link" href="loadMore.php?course='.$course_code.'&amp;page='.$next_page.'">'.$langMore.'</a>';
+        $ret .= '<a class="infinite-more-link" href="loadMore.php?course='.$course_code.'&amp;page='.$next_page.'"></a>';
     }
 
     return $ret;
