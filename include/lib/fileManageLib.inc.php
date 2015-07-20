@@ -312,7 +312,7 @@ function directory_selection($source_value, $command, $entryToExclude, $director
                 <div class='form-wrapper'>
                     <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]$groupset' method='post'>
                         <fieldset>
-                                <input type='hidden' name='source' value='$source_value'>
+                                <input type='hidden' name='source' value='".q($source_value)."'>
                                 <div class='form-group'>
                                     <label for='$command' class='col-sm-2 control-label' >$langMove $langTo:</label>
                                     <div class='col-sm-10'>
@@ -332,7 +332,7 @@ function directory_selection($source_value, $command, $entryToExclude, $director
                                             if ($disabled === '' and $entryToExclude !== '/' and $entryToExclude !== '') {
                                                 $disabled = ($path === $entryToExclude)? ' disabled': '';
                                             }
-                                            $dialogBox .= "<option$disabled value='$path'>$tab$filename</option>";
+                                            $dialogBox .= "<option$disabled value='".q($path)."'>$tab".q($filename)."</option>";
                                         }
                                     $dialogBox .= "</select>
                                         </div>
