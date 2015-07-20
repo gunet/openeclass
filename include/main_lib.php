@@ -3126,10 +3126,10 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";
     if (count($out_secondary)) {
-        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
+        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
         $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
                      ".implode('', $out_secondary)."
-                  </ul>";
+                  </ul></div>";
     }
     if ($out && $i!=0) {
         return "<div class='row action_bar'>
