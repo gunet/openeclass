@@ -127,7 +127,8 @@ function archiveTables($course_id, $course_code, $archivedir) {
                                                                 WHERE course_id = $course_id)",
         'bbb_session' => "course_id IN (SELECT id FROM bbb_session WHERE course_id = $course_id)",
         'blog_post' => "id IN (SELECT id FROM blog_post WHERE course_id = $course_id)",
-        'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id)",
+        'comments' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR
+                       (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",
         'rating' => "(rtype = 'blogpost' AND rid IN (SELECT id FROM blog_post WHERE course_id = $course_id)) OR (rtype = 'course' AND rid = $course_id) OR 
                      (rtype = 'forum_post' AND rid IN (SELECT forum_post.id FROM forum_post INNER JOIN forum_topic on forum_post.topic_id = forum_topic.id INNER JOIN forum on forum_topic.forum_id = forum.id
                      WHERE forum.course_id = $course_id)) OR (rtype = 'link' AND rid IN (SELECT id FROM link WHERE course_id = $course_id)) OR (rtype = 'wallpost' AND rid IN (SELECT id FROM wall_post WHERE course_id = $course_id))",

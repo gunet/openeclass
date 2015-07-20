@@ -149,6 +149,8 @@ $posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, F
 if (count($posts) == 0) {
     $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
 } else {
+    commenting_add_js();
+    
     $tool_content .= generate_infinite_container_html($posts, 2);
     
     $tool_content .= '<script>

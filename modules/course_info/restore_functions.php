@@ -685,7 +685,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $comment_map = restore_table($restoreThis, 'comments', array('delete' => array('id'),
             'map' => array('user_id' => $userid_map),
             'map_function' => 'comments_map_function',
-            'map_function_data' => array($blog_map, $new_course_id),
+            'map_function_data' => array($blog_map, $wall_map, $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
         }
         
@@ -1310,12 +1310,14 @@ function ratings_map_function(&$data, $maps) {
 }
 
 function comments_map_function(&$data, $maps) {
-    list($blog_post_map, $course_id) = $maps;
+    list($blog_post_map, $wall_map, $course_id) = $maps;
     $rtype = $data['rtype'];
     if ($rtype == 'blogpost') {
         $data['rid'] = $blog_post_map[$data['rid']];
     } elseif ($rtype == 'course') {
         $data['rid'] = $course_id;
+    } elseif ($rtype == 'wallpost') {
+        $data['rid'] = $wall_map[$data['rid']];
     }
     return true;
 }

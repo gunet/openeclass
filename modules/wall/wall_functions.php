@@ -21,6 +21,8 @@
  */
 
 require_once 'modules/rating/class.rating.php';
+require_once 'modules/comments/class.commenting.php';
+require_once 'modules/comments/class.comment.php';
 
 function allow_to_post($course_id, $user_id, $is_editor) {
     if ($is_editor) {
@@ -158,6 +160,9 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating = new Rating('thumbs_up', 'wallpost', $id);
         $rating_content = $rating->put($is_editor, $uid, $course_id);
         
+        $comm = new Commenting('wallpost', $id);
+        $comm_content = $comm->put($course_code, $is_editor, $uid, true);
+        
         if (allow_to_edit($id, $uid, $is_editor)) {
             $post_actions = '<div class="edit_delete"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
                     '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
@@ -183,6 +188,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                               <div class="userContent">'.nl2br(q($content)).'</div>
                                           </div>
                                           '.$rating_content.'
+                                          '.$comm_content.'
                                       </div>
                                   </div>
                               </div>
