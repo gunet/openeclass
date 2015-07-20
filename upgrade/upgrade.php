@@ -25,6 +25,7 @@ require '../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
+require_once 'modules/db/recycle.php';
 require_once 'upgradeHelper.php';
 
 stop_output_buffering();
@@ -1406,7 +1407,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `user_id` int(11) NOT NULL,
                             `group_id` int(11) NOT NULL,
                             `assignment_id` int(11) NOT NULL,
-                             PRIMARY KEY (user_id, group_id, assignment_id)
+                            PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
@@ -2170,8 +2171,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
     DBHelper::indexExists('course', 'course_index') or
             Database::get()->query("CREATE INDEX `course_index` ON course(code)");
-    DBHelper::indexExists('course_department', 'cdep_index') or
-            Database::get()->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
     DBHelper::indexExists('course_description', 'cd_type_index') or
             Database::get()->query('CREATE INDEX `cd_type_index` ON course_description(`type`)');
     DBHelper::indexExists('course_description', 'cd_cid_type_index') or
@@ -2272,8 +2271,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query('CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visibility,res_id)');
     DBHelper::indexExists('user', 'u_id') or
             Database::get()->query("CREATE INDEX `u_id` ON user(username)");
-    DBHelper::indexExists('user_department', 'udep_id') or
-            Database::get()->query("CREATE INDEX `udep_id` ON user_department(user, department)");
     DBHelper::indexExists('video', 'cid') or
             Database::get()->query('CREATE INDEX `cid` ON video (course_id)');
     DBHelper::indexExists('videolink', 'cid') or
@@ -2780,32 +2777,83 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
             INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
 
-        // delete old key 'language' (it has been replaced by 'default_language')
+        // Delete old key 'language' (it has been replaced by 'default_language')
         Database::get()->query("DELETE FROM config WHERE `key` = 'language'");
         
-        //add show results to participants field
-        if (!DBHelper::fieldExists('poll', 'show_results')) {
-            Database::get()->query("ALTER TABLE `poll` ADD `show_results` TINYINT NOT NULL DEFAULT '0'");
-        }
         // Add grading scales table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `title` varchar(255) NOT NULL,
             `scales` text NOT NULL,
             `course_id` int(11) NOT NULL,
-            KEY `course_id` (`course_id`)) $charset_spec");
+            KEY `course_id` (`course_id`)) $charset_spec");   
+
         // Add grading_scale_id field to assignments
         if (!DBHelper::fieldExists('assignment', 'grading_scale_id')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `grading_scale_id` INT(11) NOT NULL DEFAULT '0' AFTER `max_grade`");
+        }       
+
+        // Add show results to participants field
+        if (!DBHelper::fieldExists('poll', 'show_results')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `show_results` TINYINT NOT NULL DEFAULT '0'");
         }
+
         Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `user_id` int(11) NULL,
             `group_id` int(11) NULL,
             `poll_id` int(11) NOT NULL ) $charset_spec");        
+
         if (!DBHelper::fieldExists('poll', 'assign_to_specific')) {
             Database::get()->query("ALTER TABLE `poll` ADD `assign_to_specific` TINYINT NOT NULL DEFAULT '0'");
         }                      
+
+        // This is needed for ALTER IGNORE TABLE
+        Database::get()->query('SET SESSION old_alter_table = 1');
+
+        // Unique and foreign keys for user_department table
+        if (DBHelper::indexExists('user_department', 'udep_id')) {
+            Database::get()->query('DROP INDEX `udep_id` ON user_department');
+        }
+        if (!DBHelper::indexExists('user_department', 'udep_unique')) {
+            Database::get()->queryFunc('SELECT user_department.id FROM user
+                        RIGHT JOIN user_department ON user.id = user_department.user
+                    WHERE user.id IS NULL', function ($item) {
+                Recycle::deleteObject('user_department', $item->id, 'id');
+            });
+            Database::get()->queryFunc('SELECT user_department.id FROM hierarchy
+                        RIGHT JOIN user_department ON hierarchy.id = user_department.department
+                    WHERE hierarchy.id IS NULL', function ($item) {
+                Recycle::deleteObject('user_department', $item->id, 'id');
+            });
+            Database::get()->query('ALTER TABLE user_department CHANGE `user` `user` INT(11) NOT NULL');
+            Database::get()->query('ALTER IGNORE TABLE `user_department`
+                ADD UNIQUE KEY `udep_unique` (`user`,`department`),
+                ADD FOREIGN KEY (user) REFERENCES user(id) ON DELETE CASCADE,
+                ADD FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE');
+        }
+
+        // Unique and foreign keys for user_department table
+        if (DBHelper::indexExists('course_department', 'cdep_index')) {
+            Database::get()->query('DROP INDEX `cdep_index` ON course_department');
+        }
+        if (!DBHelper::indexExists('course_department', 'udep_unique')) {
+            Database::get()->queryFunc('SELECT course_department.id FROM course
+                        RIGHT JOIN course_department ON course.id = course_department.course
+                    WHERE course.id IS NULL', function ($item) {
+                Recycle::deleteObject('course_department', $item->id, 'id');
+            });
+            Database::get()->queryFunc('SELECT course_department.id FROM hierarchy
+                        RIGHT JOIN course_department ON hierarchy.id = course_department.department
+                    WHERE hierarchy.id IS NULL', function ($item) {
+                Recycle::deleteObject('course_department', $item->id, 'id');
+            });
+            Database::get()->query('ALTER IGNORE TABLE `course_department`
+                ADD UNIQUE KEY `cdep_unique` (`course`,`department`),
+                ADD FOREIGN KEY (course) REFERENCES course(id) ON DELETE CASCADE,
+                ADD FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE');
+        }
+
     }
 
  
