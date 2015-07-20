@@ -4557,6 +4557,7 @@ $langNoWallPosts = 'Δεν υπάρχουν αναρτήσεις στον τοί
 $langWallUser = 'Ο χρήστης ';
 $langWallSharedVideo = ' μοιράστηκε ένα βίντεο';
 $langWallSharedPost = ' μοιράστηκε μια ανάρτηση';
+$langWallPostDeleted = 'Η διαγραφή της ανάρτησης πραγματοποιήθηκε επιτυχώς';
 
 /* * ******************************************
   Theme Options

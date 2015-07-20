@@ -3800,6 +3800,7 @@ $langNoWallPosts = 'There are no wall posts';
 $langWallUser = 'User ';
 $langWallSharedVideo = ' shared a video';
 $langWallSharedPost = ' shared a post';
+$langWallPostDeleted = 'Wall post deleted succesfully';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';

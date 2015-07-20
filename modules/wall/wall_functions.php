@@ -22,7 +22,11 @@
 
 require_once 'modules/rating/class.rating.php';
 
-function allow_to_post($course_id, $user_id) {
+function allow_to_post($course_id, $user_id, $is_editor) {
+    if ($is_editor) {
+        return true;
+    }
+    
     $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
     $result = Database::get()->querySingle($sql, $course_id, $user_id);
     if ($result->c > 0) {//user is course member
@@ -32,7 +36,16 @@ function allow_to_post($course_id, $user_id) {
     }
 }
 
-function allow_to_edit($post_id, $user_id) {
+function allow_to_edit($post_id, $user_id, $is_editor) {
+    if ($is_editor) {
+        global $course_id;
+        $sql = "SELECT COUNT(`id`) as c FROM `wall_post` WHERE `id` = ?d AND `course_id` = ?d";
+        $result = Database::get()->querySingle($sql, $post_id, $course_id);
+        if ($result->c > 0) {
+            return true;
+        }
+    }
+    
     $sql = "SELECT COUNT(`user_id`) as c FROM `wall_post` WHERE `id` = ?d AND `user_id` = ?d";
     $result = Database::get()->querySingle($sql, $post_id, $user_id);
     if ($result->c > 0) {

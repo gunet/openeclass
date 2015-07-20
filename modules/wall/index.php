@@ -31,7 +31,7 @@ $posts_per_page = 5;
 
 //handle submit
 if (isset($_POST['submit'])) {
-    if ($is_editor || allow_to_post($course_id, $uid)) {
+    if (allow_to_post($course_id, $uid, $is_editor)) {
         if ($_POST['type'] == 'text') {
             if (!empty($_POST['message'])) {
                 Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, timestamp) VALUES (?d,?d,?s,UNIX_TIMESTAMP())",
@@ -67,10 +67,17 @@ if (isset($_POST['submit'])) {
         }
         redirect_to_home_page("modules/wall/index.php?course=$course_code");
     }
+} elseif (isset($_GET['delete'])) { //handle delete
+    $id = intval($_GET['delete']);
+    if (allow_to_edit($id, $uid, $is_editor)) {
+        Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
+        Session::Messages($langWallPostDeleted, 'alert-success');
+        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+    }
 }
 
 //show post form
-if ($is_editor || allow_to_post($course_id, $uid)) {
+if (allow_to_post($course_id, $uid, $is_editor)) {
     if (Session::has('type') && Session::get('type') == 'video') {
         $jquery_string = "$('#type_input').val('video');";
     } else {
