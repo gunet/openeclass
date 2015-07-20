@@ -677,12 +677,24 @@ function display_gradebook($gradebook_id) {
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath;
+    global $langExport, $langcsvenc1, $langcsvenc2, $langToA;
     
     $tool_content .= action_bar(
-            array(        
+            array(
+                array('title' => $langExport,                 
+                      'level' => 'primary-label', 
+                      'options' => array(
+                                        array('title' => "$langToA $langcsvenc1",
+                                               'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id&amp;enc=1253",                                               
+                                               'class' => ''),
+                                        array('title' => "$langToA $langcsvenc2",
+                                              'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id",                                              
+                                              'class' => '')
+                                    ),
+                     'icon' => 'fa-file-excel-o'),
                 array('title' => $langConfig,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editSettings=1",
-                      'icon' => 'fa-cog ',
+                      'icon' => 'fa-cog',
                       'level' => 'primary-label'),
                 array('title' => $langUsers,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
@@ -707,6 +719,11 @@ function display_gradebook($gradebook_id) {
                 'secondary_icon' => 'fa-plus'
             )
         );
+    
+    /*$tool_content .= action_bar(
+            array('title' => $langExport,
+                      'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id",
+                      'icon' => 'fa-excel'), true, array('secondary_title' => $langExport, 'secondary_icon' => 'fa-plus')); */
     
     $weightMessage = "";
     //get all the available activities
@@ -867,7 +884,7 @@ function display_gradebooks() {
                                     array('title' => $g->active ? $langDeactivate : $langActivate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" . 
                                                   ($g->active ? '0' : '1'),
-                                          'icon' => $g->active ? 'fa-toggle-off' : 'fa-toggle-on'),
+                                          'icon' => $g->active ? 'fa-toggle-off' : 'fa-toggle-on'),                                    
                                     array('title' => $langCreateDuplicate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;dup=1",
                                           'icon' => 'fa-copy'),
