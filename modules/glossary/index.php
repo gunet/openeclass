@@ -135,6 +135,11 @@ if ($is_editor) {
     
     if (isset($_POST['url'])) {
         $url = trim($_POST['url']);
+        if (!is_url_accepted($url,"(https?|ftp)")){
+            $tool_content .= "<div class='error'>$langLinkNotPermitted</div>";
+            draw($tool_content, 2, null, $head_content);
+            exit;
+        }
         if (!empty($url)) {
             $url = canonicalize_url($url);
         }
