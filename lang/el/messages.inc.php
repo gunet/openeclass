@@ -4558,6 +4558,7 @@ $langWallUser = 'Ο χρήστης ';
 $langWallSharedVideo = ' μοιράστηκε ένα βίντεο';
 $langWallSharedPost = ' μοιράστηκε μια ανάρτηση';
 $langWallPostDeleted = 'Η διαγραφή της ανάρτησης πραγματοποιήθηκε επιτυχώς';
+$langWallPostDelConfirm = 'Είστε σίγουροι ότι επιθυμείτε να διαγράψετε αυτή την ανάρτηση;';
 
 /* * ******************************************
   Theme Options

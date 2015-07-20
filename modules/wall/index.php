@@ -72,8 +72,8 @@ if (isset($_POST['submit'])) {
     if (allow_to_edit($id, $uid, $is_editor)) {
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
         Session::Messages($langWallPostDeleted, 'alert-success');
-        redirect_to_home_page("modules/wall/index.php?course=$course_code");
     }
+    redirect_to_home_page("modules/wall/index.php?course=$course_code");
 }
 
 //show post form

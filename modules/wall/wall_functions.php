@@ -120,7 +120,19 @@ function validate_youtube_link($video_url) {
 
 function generate_infinite_container_html($posts, $next_page) {
     global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser,
-    $course_code, $langMore, $is_editor, $uid, $course_id;
+    $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm;
+    
+    $head_content .= '<script>
+                          $(document).on("click", ".link", function(e) {
+                              var link = $(this).attr("href");
+                              e.preventDefault();    
+                              bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {    
+                                  if (result) {
+                                      document.location.href = link;       
+                                  }    
+                              });
+                          });
+                      </script>';
     
     $ret = '<div class="infinite-container">';
     foreach ($posts as $post) {
@@ -146,6 +158,14 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating = new Rating('thumbs_up', 'wallpost', $id);
         $rating_content = $rating->put($is_editor, $uid, $course_id);
         
+        if (allow_to_edit($id, $uid, $is_editor)) {
+            $post_actions = '<div class="edit_delete"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
+                    '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
+                    '.icon('fa-times', $langDelete).'</a></div>';
+        } else {
+            $post_actions = '';
+        }
+        
         $ret .= '<div class="infinite-item">';
     
         $ret .= '<div class="row margin-right-thin margin-left-thin margin-top-thin">
@@ -157,6 +177,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                       <div class="media-body bubble">
                                           <div class="label label-success media-heading">'.$datetime.'</div>
                                           <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                                          '.$post_actions.'
                                           <div class="margin-top-thin">
                                               '.$video_block.'
                                               <div class="userContent">'.nl2br(q($content)).'</div>
