@@ -1406,7 +1406,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `user_id` int(11) NOT NULL,
                             `group_id` int(11) NOT NULL,
                             `assignment_id` int(11) NOT NULL,
-                            PRIMARY KEY (user_id, group_id, assignment_id)
+                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
@@ -2793,13 +2793,22 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `title` varchar(255) NOT NULL,
             `scales` text NOT NULL,
             `course_id` int(11) NOT NULL,
-            KEY `course_id` (`course_id`)) $charset_spec");   
+            KEY `course_id` (`course_id`)) $charset_spec");
+        // Add grading_scale_id field to assignments
+        if (!DBHelper::fieldExists('assignment', 'grading_scale_id')) {
+            Database::get()->query("ALTER TABLE `assignment` ADD `grading_scale_id` INT(11) NOT NULL DEFAULT '0' AFTER `max_grade`");
+        }
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` int(11) NULL,
+            `group_id` int(11) NULL,
+            `poll_id` int(11) NOT NULL ) $charset_spec");        
+        if (!DBHelper::fieldExists('poll', 'assign_to_specific')) {
+            Database::get()->query("ALTER TABLE `poll` ADD `assign_to_specific` TINYINT NOT NULL DEFAULT '0'");
+        }                      
     }
 
-    //add grading_scale_id field to assignments
-    if (!DBHelper::fieldExists('assignment', 'grading_scale_id')) {
-        Database::get()->query("ALTER TABLE `assignment` ADD `grading_scale_id` INT(11) NOT NULL DEFAULT '0' AFTER `max_grade`");
-    }       
+ 
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 

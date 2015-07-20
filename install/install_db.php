@@ -811,7 +811,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `description` MEDIUMTEXT NULL DEFAULT NULL,
                 `end_message` MEDIUMTEXT NULL DEFAULT NULL,
                 `anonymized` INT(1) NOT NULL DEFAULT 0,
-                `show_results` INT(1) NOT NULL DEFAULT 0) $charset_spec");
+                `show_results` INT(1) NOT NULL DEFAULT 0,
+                `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` int(11) NULL,
+            `group_id` int(11) NULL,
+            `poll_id` int(11) NOT NULL ) $charset_spec"); 
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,

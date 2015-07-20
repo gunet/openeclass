@@ -29,7 +29,7 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 require_once '../../include/baseTheme.php';
-
+require_once 'modules/group/group_functions.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -201,7 +201,25 @@ function printPolls() {
     ";
     
     $poll_check = 0;
-    $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d", $course_id);
+    $query = "SELECT * FROM poll WHERE course_id = ?d";
+    $query_params[] = $course_id;
+    //Bring only those assigned to the student
+    if (!$is_editor) {
+        $gids = user_group_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode(',',array_keys($gids));
+        } else {
+            $gids_sql_ready = "''";
+        }        
+        $query .= " AND
+                    (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                    )";
+        $query_params[] = $uid;
+    }
+    
+    $result = Database::get()->queryArray($query, $query_params);
+        
     $num_rows = count($result);
     if ($num_rows > 0)
         ++$poll_check;

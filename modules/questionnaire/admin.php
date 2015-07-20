@@ -36,6 +36,19 @@ $navigation[] = array(
             'name' => $langQuestionnaire
         );
 
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if ($_POST['assign_type'] == 2) {
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+    } elseif ($_POST['assign_type'] == 1) {
+        $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                FROM user, course_user
+                                WHERE user.id = course_user.user_id
+                                AND course_user.course_id = ?d AND course_user.status = 5
+                                AND user.id", $course_id);
+    }
+    echo json_encode($data);
+    exit;
+}
 if (isset($_GET['pid'])) {
     $pid = intval($_GET['pid']);
 }
@@ -72,17 +85,35 @@ if (isset($_POST['submitPoll'])) {
         $PollEndMessage = purify($_POST['PollEndMessage']);    
         $PollAnonymized = (isset($_POST['PollAnonymized'])) ? $_POST['PollAnonymized'] : 0;
         $PollShowResults = (isset($_POST['PollShowResults'])) ? $_POST['PollShowResults'] : 0;
-        if(isset($_GET['pid'])) {
+        $PollAssignToSpecific = $_POST['assign_to_specific'];
+        $PollAssignees = filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY);
+        if(isset($pid)) {
             Database::get()->query("UPDATE poll SET name = ?s,
-                    start_date = ?t, end_date = ?t, description = ?s, end_message = ?s, anonymized = ?d, show_results = ?d WHERE course_id = ?d AND pid = ?d", $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $course_id, $pid);
+                    start_date = ?t, end_date = ?t, description = ?s, 
+                    end_message = ?s, anonymized = ?d, show_results = ?d,
+                    assign_to_specific = ?d
+                    WHERE course_id = ?d AND pid = ?d", 
+                    $PollName, $PollStart, $PollEnd, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollAssignToSpecific, $course_id, $pid);
+            Database::get()->query("DELETE FROM poll_to_specific WHERE poll_id = ?d", $pid);
             Session::Messages($langPollEdited, 'alert-success');
         } else {
             $PollActive = 1;
             $pid = Database::get()->query("INSERT INTO poll
-                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results)
-                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults)->lastInsertID;
+                        (course_id, creator_id, name, creation_date, start_date, end_date, active, description, end_message, anonymized, show_results, assign_to_specific)
+                        VALUES (?d, ?d, ?s, NOW(), ?t, ?t, ?d, ?s, ?s, ?d, ?d, ?d)", $course_id, $uid, $PollName, $PollStart, $PollEnd, $PollActive, $PollDescription, $PollEndMessage, $PollAnonymized, $PollShowResults, $PollAssignToSpecific)->lastInsertID;         
             Session::Messages($langPollCreated, 'alert-success');
         }
+        if ($PollAssignToSpecific && !empty($PollAssignees)) {
+            if ($PollAssignToSpecific == 1) {
+                foreach ($PollAssignees as $assignee_id) {
+                    Database::get()->query("INSERT INTO poll_to_specific (user_id, poll_id) VALUES (?d, ?d)", $assignee_id, $pid);
+                }                
+            } else {
+                foreach ($PollAssignees as $group_id) {
+                    Database::get()->query("INSERT INTO poll_to_specific (group_id, poll_id) VALUES (?d, ?d)", $group_id, $pid);
+                }
+            }
+        }           
         redirect_to_home_page("modules/questionnaire/admin.php?course=$course_code&pid=$pid");
     } else {
         // Errors
@@ -214,14 +245,90 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 language: '".$language."',
                 autoclose: true
             });
+            $('#assign_button_all').click(hideAssignees);
+            $('#assign_button_user, #assign_button_group').click(ajaxAssignees);
         });
-    </script>";    
+        function ajaxAssignees()
+        {
+            $('#assignees_tbl').removeClass('hide');
+            var type = $(this).val();
+            $.post('',
+            {
+              assign_type: type
+            },
+            function(data,status){
+                var index;
+                var parsed_data = JSON.parse(data);
+                var select_content = '';
+                if(type==1){
+                    for (index = 0; index < parsed_data.length; ++index) {
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                    }
+                } else {
+                    for (index = 0; index < parsed_data.length; ++index) {
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                    }
+                }
+                $('#assignee_box').find('option').remove();
+                $('#assign_box').find('option').remove().end().append(select_content);
+            });
+        }
+        function hideAssignees()
+        {
+            $('#assignees_tbl').addClass('hide');
+            $('#assignee_box').find('option').remove();
+        }        
+    </script>";
+
+        if ($poll->assign_to_specific) {
+            //preparing options in select boxes for assigning to speficic users/groups
+            $assignee_options='';
+            $unassigned_options='';
+            if ($poll->assign_to_specific == 2) {
+                $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
+                                       FROM poll_to_specific, `group`
+                                       WHERE `group`.id = poll_to_specific.group_id AND poll_to_specific.poll_id = ?d", $poll->pid);
+                $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+                foreach ($assignees as $assignee_row) {
+                    $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
+                }
+                $unassigned = array_udiff($all_groups, $assignees,
+                  function ($obj_a, $obj_b) {
+                    return $obj_a->id - $obj_b->id;
+                  }
+                );
+                foreach ($unassigned as $unassigned_row) {
+                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
+                }
+            } else {
+                $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                       FROM poll_to_specific, user
+                                       WHERE user.id = poll_to_specific.user_id AND poll_to_specific.poll_id = ?d", $poll->pid);
+                $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
+                                        FROM user, course_user
+                                        WHERE user.id = course_user.user_id
+                                        AND course_user.course_id = ?d AND course_user.status = 5
+                                        AND user.id", $course_id);
+                foreach ($assignees as $assignee_row) {
+                    $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
+                }
+                $unassigned = array_udiff($all_users, $assignees,
+                  function ($obj_a, $obj_b) {
+                    return $obj_a->id - $obj_b->id;
+                  }
+                );
+                foreach ($unassigned as $unassigned_row) {
+                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->surname $unassigned_row->givenname</option>";
+                }
+            }
+        }
 
     $PollName = Session::has('PollName') ? Session::get('PollName') : (isset($poll) ? $poll->name : '');
     $PollDescription = Session::has('PollDescription') ? Session::get('PollDescription') : (isset($poll) ? $poll->description : '');
     $PollEndMessage = Session::has('PollEndMessage') ? Session::get('PollEndMessage') : (isset($poll) ? $poll->end_message : '');
     $PollStart = Session::has('PollStart') ? Session::get('PollStart') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->start_date) : strtotime('now')));
     $PollEnd = Session::has('PollEnd') ? Session::get('PollEnd') : date('d-m-Y H:i', (isset($poll) ? strtotime($poll->end_date) : strtotime('now +1 year')));
+    $PollAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : (isset($poll) ? $poll->assign_to_specific : 0);
 
     $link_back = isset($_GET['modifyPoll']) ? "admin.php?course=$course_code&amp;pid=$pid" : "index.php?course=$course_code";
     $pageName = isset($_GET['modifyPoll']) ? "$langEditPoll" : "$langCreatePoll";
@@ -289,14 +396,66 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
               <div class='col-sm-10'>
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
-            </div>                
+            </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                    <div class='col-sm-10'>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "").">
+                            <span>$m[WorkToAllUsers]</span>
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "").">
+                            <span>$m[WorkToUser]</span>
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($PollAssignToSpecific == 2 ? " checked" : "").">
+                            <span>$m[WorkToGroup]</span>
+                          </label>
+                        </div>                        
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <div class='table-responsive'>
+                            <table id='assignees_tbl' class='table-default".(in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
+                                <tr class='title1'>
+                                  <td id='assignees'>$langStudents</td>
+                                  <td class='text-center'>$langMove</td>
+                                  <td>$m[WorkAssignTo]</td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <select class='form-control' id='assign_box' size='10' multiple>
+                                    ".((isset($unassigned_options)) ? $unassigned_options : '')."
+                                    </select>
+                                  </td>
+                                  <td class='text-center'>
+                                    <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                  </td>
+                                  <td width='40%'>
+                                    <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                    ".((isset($assignee_options)) ? $assignee_options : '')."
+                                    </select>
+                                  </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>            
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>".
             form_buttons(array(
                 array(
                     'text'  => $langSave,
                     'name'  => 'submitPoll',
-                    'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify)
+                    'value' => (isset($_GET['newPoll']) ? $langCreate : $langModify),
+                    'javascript' => "selectAll('assignee_box',true)"
                 ),
                 array(
                     'href' => "index.php?course=$course_code",
