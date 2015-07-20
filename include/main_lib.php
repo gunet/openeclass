@@ -2539,58 +2539,6 @@ function update_attendance_book($id, $activity) {
 }
 
 /**
- * @brief update gradebook about user grade
- * @param type $uid
- * @param type $id
- * @param type $grade
- * @param type $activity
- */
-function update_gradebook_book($uid, $id, $grade, $activity)
-{
-    global $course_id;
-
-    if ($activity == 'assignment') {
-        $type = 1;
-    } elseif ($activity == 'exercise') {
-        $type = 2;
-    }
-
-    $q = Database::get()->querySingle("SELECT id, gradebook_id FROM gradebook_activities WHERE module_auto_type = ?d
-                            AND module_auto_id = ?d
-                            AND auto = 1", $type, $id);
-    if ($q) {
-        $u = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d
-                                AND gradebook_id = ?d", $uid, $q->gradebook_id);
-        if($u){
-            if ($type == 2) { // exercises                
-                $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record
-                                                        WHERE uid = ?d AND eid = ?d", $uid, $id);
-                if ($sql) {                    
-                   $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
-                   $score = $sql->total_score;
-                   $scoreMax = $sql->total_weighting;
-                    if($scoreMax) {
-                       $grade = round(($range * $score) / $scoreMax, 2);
-                    } else {
-                        $grade = $score;
-                    }
-                }
-            }            
-            $q2 = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $q->id AND uid = ?d", $uid);
-            if ($q2) { // update grade if exists                
-                Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE gradebook_activity_id = $q->id AND uid = ?d", $grade, $uid);                
-            } else {                
-                if ($grade == '') {
-                    $grade = 0;
-                }
-                Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?d", $uid, $grade);
-            }
-        }
-    }
-    return;
-}
-
-/**
  * Generate a token verifying some info
  *
  * @param  string  $info           - The info that will be verified by the token
