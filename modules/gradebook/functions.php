@@ -1112,37 +1112,36 @@ function register_user_grades($gradebook_id, $actID) {
             </thead>
             <tbody>";
 
-        $cnt = 0;   
+        $cnt = 0;
+        //$usersgrade = array();
         foreach ($resultUsers as $resultUser) {
-        $cnt++;
-        $am_message = '';
-        if (!empty($resultUser->am)) {
-            $am_message = "($langAm: $resultUser->am)";
-        }
-        $q = Database::get()->querySingle("SELECT grade FROM gradebook_book 
-                                                        WHERE gradebook_activity_id = ?d 
-                                                    AND uid = ?d", $actID, $resultUser->userID);
-        if ($q) {
-            $user_grade = $q->grade;
-        } else {
-            $user_grade = 0;
-        }
-        $tool_content .= "<tr><td>$cnt</td>
-            <td>" . display_user($resultUser->userID). " $am_message</td>
-            <td>" . nice_format($resultUser->reg_date) . "</td>";
+            $cnt++;
+            $am_message = '';
+            if (!empty($resultUser->am)) {
+                $am_message = "($langAm: $resultUser->am)";
+            }
+            $q = Database::get()->querySingle("SELECT grade FROM gradebook_book 
+                                                            WHERE gradebook_activity_id = ?d 
+                                                        AND uid = ?d", $actID, $resultUser->userID);
+            if ($q) {
+                $user_grade = $q->grade;
+            } else {
+                $user_grade = 0;
+            }
+            $tool_content .= "<tr><td>$cnt</td>
+                <td>" . display_user($resultUser->userID). " $am_message</td>
+                <td>" . nice_format($resultUser->reg_date) . "</td>";
             $tool_content .= "<td class='text-center'>$user_grade";
             if ($user_grade > $gradebook_range) {
                 $tool_content .= "<span class='help-block'><small>$langGradebookOutRange</small></span>";
             }
-            $tool_content .= "</td>";
-            $tool_content .= "<td class='text-center'>
-                <input type='text' name='" . $resultUser->userID . "'";
-                if(isset($q->grade)) {
-                    $tool_content .= " value = '$q->grade'";
-                } else{
-                    $tool_content .= " value = ''";
-                }
-
+            $tool_content .= "</td>";            
+            $tool_content .= "<td class='text-center'><input type='text' name='usersgrade[$resultUser->userID]'";
+            if(isset($q->grade)) {
+                $tool_content .= " value = '$q->grade'";
+            } else{
+                $tool_content .= " value = ''";
+            }
             $tool_content .= "><input type='hidden' value='" . $actID . "' name='actID'></td>";
             $tool_content .= "</tr>";                        
         }
@@ -1415,37 +1414,22 @@ function insert_grades($gradebook_id, $actID) {
     global $tool_content, $error, $langGradebookEdit, $langGradebookOutRange;
     
     $gradebook_range = get_gradebook_range($gradebook_id);
-    //get all the active users    
-    $activeUsers = Database::get()->queryArray("SELECT uid AS userID FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);    
-    if ($activeUsers) {
-        foreach ($activeUsers as $result) {
-            $userInp = @$_POST[$result->userID]; // input name is the user id
-            $v = new Valitron\Validator($_POST);
-            $v->rule('numeric', $result->userID);
-            $v->rule('min', $result->userID, 0);
-            $v->rule('max', $result->userID, $gradebook_range);
-            if ($userInp == '') {
-                $userInp = 0;
-            }
-            if ($v->validate()) {                                
-                // //check if there is record for the user for this activity
-                $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM gradebook_book 
-                                            WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $result->userID);
-                if ($checkForBook->count) { // update
-                    Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d", $userInp, $checkForBook->id);
-                } else { // insert
-                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", $result->userID, $actID, $userInp, '');
-                }
-            } else {
-                @Session::Messages($langGradebookOutRange)->Errors($v->errors());
-                $error = true;
-            }            
-        }       
-        if (!$error) {
-            $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
-            $tool_content .= $message . "<br/>";
+            
+    foreach ($_POST['usersgrade'] as $userID => $userInp) {
+        if ($userInp == '') {
+            $userInp = 0;
         }
+        // //check if there is record for the user for this activity
+        $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM gradebook_book 
+                                    WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $userID);
+        if ($checkForBook->count) { // update
+            Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d", $userInp, $checkForBook->id);
+        } else { // insert
+            Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", $userID, $actID, $userInp, '');
+        }        
     }
+    $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
+    $tool_content .= $message . "<br/>";
 }
 
 /**
