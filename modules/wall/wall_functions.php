@@ -120,8 +120,71 @@ function validate_youtube_link($video_url) {
     return true;
 }
 
+function generate_single_post_html($post) {
+    global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
+    $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $langWallPostDelConfirm;
+    
+    commenting_add_js();
+    
+    $user_id = $post->user_id;
+    $id = $post->id;
+    $content = $post->content;
+    $pinned = $post->pinned;
+    $token = token_generate($user_id, true);
+    $datetime = nice_format($post->datetime, true);
+    $video_link = $post->video_link;
+    if ($video_link == '') {
+        $shared = $langWallSharedPost;
+        $video_block = '';
+    } else {
+        $shared = $langWallSharedVideo;
+        $pos_v = strrpos ($video_link, 'v=', - 1);
+        $video_link = 'http://www.youtube.com/embed/'.mb_substr($video_link, $pos_v+2);
+        $video_block = '<div class="video_status">
+                               <iframe  scrolling="no" width="445" height="250" src="'.$video_link.'" frameborder="0" allowfullscreen></iframe>
+                            </div>';
+    }
+    
+    $rating = new Rating('thumbs_up', 'wallpost', $id);
+    $rating_content = $rating->put($is_editor, $uid, $course_id);
+    
+    $comm = new Commenting('wallpost', $id);
+    $comm_content = $comm->put($course_code, $is_editor, $uid, true);
+    
+    if (allow_to_edit($id, $uid, $is_editor)) {
+        $post_actions = '<div class="edit_delete"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
+                    '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
+                    '.icon('fa-times', $langDelete).'</a></div>';
+    } else {
+        $post_actions = '';
+    }
+    
+    $ret = '<div class="row margin-right-thin margin-left-thin margin-top-thin">
+                              <div class="col-sm-12">
+                                  <div class="media">
+                                      <a class="media-left" href="'.$urlServer.'main/profile/display_profile.php?id='.$user_id.'&amp;token='.$token.'">
+                                        '. profile_image($user_id, IMAGESIZE_SMALL) .'
+                                      </a>
+                                      <div class="media-body bubble">
+                                          <div class="label label-success media-heading">'.$datetime.'</div>
+                                          <small>'.$langWallUser.display_user($user_id, false, false).$shared.'</small>
+                                          '.$post_actions.'
+                                          <div class="margin-top-thin">
+                                              '.$video_block.'
+                                              <div class="userContent">'.nl2br(q($content)).'</div>
+                                          </div>
+                                          '.$rating_content.'
+                                          '.$comm_content.'
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>';
+    
+    return $ret;
+}
+
 function generate_infinite_container_html($posts, $next_page) {
-    global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser,
+    global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments, 
     $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm;
     
     $head_content .= '<script>
@@ -161,7 +224,7 @@ function generate_infinite_container_html($posts, $next_page) {
         $rating_content = $rating->put($is_editor, $uid, $course_id);
         
         $comm = new Commenting('wallpost', $id);
-        $comm_content = $comm->put($course_code, $is_editor, $uid, true);
+        $comm_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
         
         if (allow_to_edit($id, $uid, $is_editor)) {
             $post_actions = '<div class="edit_delete"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">

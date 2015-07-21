@@ -29,6 +29,9 @@ load_js('waypoints-infinite');
 
 $posts_per_page = 5;
 
+$navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWall);
+$toolName = $langWall;
+
 //handle submit
 if (isset($_POST['submit'])) {
     if (allow_to_post($course_id, $uid, $is_editor)) {
@@ -76,89 +79,102 @@ if (isset($_POST['submit'])) {
     redirect_to_home_page("modules/wall/index.php?course=$course_code");
 }
 
-//show post form
-if (allow_to_post($course_id, $uid, $is_editor)) {
-    if (Session::has('type') && Session::get('type') == 'video') {
-        $jquery_string = "$('#type_input').val('video');";
+if (isset($_GET['showPost'])) { //show comments case
+    $id = intval($_GET['showPost']);
+    $post = Database::get()->querySingle("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    if ($post) {
+        $tool_content .= action_bar(array(
+                  array('title' => $langBack,
+                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                        'icon' => 'fa-reply',
+                        'level' => 'primary-label')
+        ),false);
+        $tool_content .= generate_single_post_html($post);
     } else {
-        $jquery_string = "$('#hidden_input').hide();";
+        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+    }
+} else {
+    //show post form
+    if (allow_to_post($course_id, $uid, $is_editor)) {
+        if (Session::has('type') && Session::get('type') == 'video') {
+            $jquery_string = "$('#type_input').val('video');";
+        } else {
+            $jquery_string = "$('#hidden_input').hide();";
+        }
+        
+        $head_content .= "<script>
+                              $(function() {
+                                  $jquery_string
+                                  $('#type_input').change(function(){
+                                      if($('#type_input').val() == 'video') {
+                                          $('#hidden_input').show(); 
+                                      } else {
+                                          $('#hidden_input').hide(); 
+                                      } 
+                                  });
+                              });
+                
+                              $(function() {
+                                  $('#wall_form').submit(function() {
+                                      if($('#type_input').val() != 'video') {
+                                          $('#video_link').remove();
+                                      }
+                                  });
+                              })
+                          </script>";
+        
+        $content = Session::has('content')? Session::get('content'): '';
+        $video_link = Session::has('video_link')? Session::get('video_link'): '';
+        
+        $tool_content .= '<div class="row">
+            <div class="col-sm-12">
+                <div class="form-wrapper">
+                    <form id="wall_form" method="post" action="" enctype="multipart/form-data">
+                        <fieldset> 
+                            <div class="form-group">
+                                <label for="message_input">'.$langMessage.'</label>
+                                <textarea class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="type_input">'.$langType.'</label>
+                                <select class="form-control" name="type" id="type_input">
+                                    <option value="text">'.$langWallText.'</option>
+                                    <option value="video">'.$langWallVideo.'</option>
+                                </select>
+                            </div>
+                            <div class="form-group" id="hidden_input">
+                                <label for="video_link">'.$langWallVideoLink.'</label>
+                                <input class="form-control" type="url" name="video" id="video_link" value="'.$video_link.'">
+                            </div>                
+                        </fieldset>
+                        <div class="form-group">'.
+                            form_buttons(array(
+                                array(
+                                    'text'  =>  $langSubmit,
+                                    'name'  =>  'submit',
+                                    'value' =>  $langSubmit
+                                )
+                            ))
+                      .'</div>        
+                    </form>
+                </div>
+            </div>
+        </div>';
     }
     
-    $head_content .= "<script>
-                          $(function() {
-                              $jquery_string
-                              $('#type_input').change(function(){
-                                  if($('#type_input').val() == 'video') {
-                                      $('#hidden_input').show(); 
-                                  } else {
-                                      $('#hidden_input').hide(); 
-                                  } 
-                              });
-                          });
-            
-                          $(function() {
-                              $('#wall_form').submit(function() {
-                                  if($('#type_input').val() != 'video') {
-                                      $('#video_link').remove();
-                                  }
-                              });
-                          })
-                      </script>";
-    
-    $content = Session::has('content')? Session::get('content'): '';
-    $video_link = Session::has('video_link')? Session::get('video_link'): '';
-    
-    $tool_content .= '<div class="row">
-        <div class="col-sm-12">
-            <div class="form-wrapper">
-                <form id="wall_form" method="post" action="" enctype="multipart/form-data">
-                    <fieldset> 
-                        <div class="form-group">
-                            <label for="message_input">'.$langMessage.'</label>
-                            <textarea class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="type_input">'.$langType.'</label>
-                            <select class="form-control" name="type" id="type_input">
-                                <option value="text">'.$langWallText.'</option>
-                                <option value="video">'.$langWallVideo.'</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="hidden_input">
-                            <label for="video_link">'.$langWallVideoLink.'</label>
-                            <input class="form-control" type="url" name="video" id="video_link" value="'.$video_link.'">
-                        </div>                
-                    </fieldset>
-                    <div class="form-group">'.
-                        form_buttons(array(
-                            array(
-                                'text'  =>  $langSubmit,
-                                'name'  =>  'submit',
-                                'value' =>  $langSubmit
-                            )
-                        ))
-                  .'</div>        
-                </form>
-            </div>
-        </div>
-    </div>';
+    //show wall posts
+    $posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
+    if (count($posts) == 0) {
+        $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
+    } else {
+        $tool_content .= generate_infinite_container_html($posts, 2);
+        
+        $tool_content .= '<script>
+                              var infinite = new Waypoint.Infinite({
+                                  element: $(".infinite-container")[0]
+                              })
+                          </script>';
+    }
 }
-
-//show wall posts
-$posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
-if (count($posts) == 0) {
-    $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
-} else {
-    commenting_add_js();
-    
-    $tool_content .= generate_infinite_container_html($posts, 2);
-    
-    $tool_content .= '<script>
-                          var infinite = new Waypoint.Infinite({
-                              element: $(".infinite-container")[0]
-                          })
-                      </script>';
-}
-
 
 draw($tool_content, 2, null, $head_content);
