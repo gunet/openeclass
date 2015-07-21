@@ -3085,7 +3085,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             $form_end = '</div>';
             $subMenu = '<ul class="dropdown-menu dropdown-menu-right">';
             foreach ($option['options'] as $subOption) {
-               $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">' . q($subOption['title']) . '</a></li>'; 
+               $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '"><span class="'.$subOption['icon'].'"></span>' . q($subOption['title']) . '</a></li>'; 
             }
             $subMenu .= '</ul>';
         }
@@ -3094,8 +3094,6 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
             if (isset($option['icon'])) {
                 $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
                 $link_attrs .= " title='$title'";
-            }
-            if (isset($option['icon'])) {
                 $title = "<span class='hidden-xs'>$title</span>";
             }
             array_unshift($out_primary,
@@ -3199,10 +3197,10 @@ function action_button($options, $secondary_menu_options = array()) {
                 $primary_form_end = $form_end;
                 $form_begin = $form_end = '';
                 $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
             } else {
                 $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger";
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
                 $primary_icon_class = '';
             }
             $url = '#';
