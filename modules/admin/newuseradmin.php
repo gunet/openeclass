@@ -263,7 +263,6 @@ $nodePickerParams = array(
     'params' => 'name="department"',
     'defaults' => $depid,
     'tree' => null,
-    'useKey' => 'id',
     'where' => "AND node.allow_user = true",
     'multiple' => false);
 if (isDepartmentAdmin()) {

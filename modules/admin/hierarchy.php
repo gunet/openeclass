@@ -216,8 +216,9 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                     'level' => 'primary-label')));
         } else {
             // OK Create the new node
-            validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
-            $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user, $order_priority);
+            $pid = intval($_POST['parentid']);
+            validateParentId($pid, isDepartmentAdmin());
+            $tree->addNode($name, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<div class='alert alert-success'>" . $langAddSuccess . "</div>";
         }
     } else {
@@ -244,7 +245,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         $tool_content .= "<div class='form-group'>
                         <label class='col-sm-3 control-label'>$langNodeParent:</label>
                         <div class='col-sm-9'>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
@@ -339,15 +340,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                     'level' => 'primary-label')));
         } else {
             // OK Update the node
-            validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
-            $tree->updateNode($id, $name, intval($_POST['nodelft']), intval($_POST['lft']), intval($_POST['rgt']), intval($_POST['parentLft']), $code, $allow_course, $allow_user, $order_priority);
+            $oldpid = intval($_POST['oldparentid']);
+            $newpid = intval($_POST['newparentid']);
+            validateParentId($newpid, isDepartmentAdmin());
+            $tree->updateNode($id, $name, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<div class='alert alert-success'>$langEditNodeSuccess</div><br />";
         }
     } else {
         // Get node information
         $id = intval($_GET['id']);
         $mynode = Database::get()->querySingle("SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM hierarchy WHERE id = ?d", $id);
-        $parentLft = $tree->getParent($mynode->lft, $mynode->rgt);
+        $parent = $tree->getParent($mynode->lft, $mynode->rgt);
         $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
         // Display form for edit node information
@@ -383,18 +386,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $tool_content .= "<div class='form-group'>
                         <label class='col-sm-3 control-label'>$langNodeParent:</label>
                         <div class='col-sm-9'>";
-        
+
         $treeopts = array(
-            'params' => 'name="nodelft"',
+            'params' => 'name="newparentid"',
             'exclude' => $id,
             'tree' => array('0' => 'Top'),
-            'useKey' => 'lft',
             'multiple' => false);
-        if (isset($parentLft) && isset($parentLft->lft)) {
-            $treeopts['defaults'] = $parentLft->lft;
-            $formPLft = $parentLft->lft;
+        if (isset($parent) && isset($parent->id)) {
+            $treeopts['defaults'] = $parent->id;
+            $formOPid = $parent->id;
         } else {
-            $formPLft = 0;
+            $formOPid = 0;
         }
         
         if ($is_admin) {
@@ -427,7 +429,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
           </div>
         </div>
         <input type='hidden' name='id' value='$id' />
-               <input type='hidden' name='parentLft' value='" . $formPLft . "'/>
+               <input type='hidden' name='oldparentid' value='" . $formOPid . "'/>
                <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
                <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
         <div class='form-group'>
@@ -438,7 +440,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         </fieldset>
         </form>
         </div>";           
-    }    
+    }
 }
 
 draw($tool_content, 3, null, $head_content);

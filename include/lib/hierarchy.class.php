@@ -248,16 +248,15 @@ class Hierarchy {
     /**
      * Get a node's (unserialized) name value.
      *
-     * @param  int    $key    - The db query search pattern
-     * @param  string $useKey - Match against either the id or the lft during the db query
-     * @return string         - The (unserialized) node's name
+     * @param  int    $id    - The node's id
+     * @return string        - The (unserialized) node's name
      */
-    public function getNodeName($key, $useKey = 'id') {
-        if ($key === null || intval($key) <= 0) {
+    public function getNodeName($id) {
+        if ($id === null || intval($id) <= 0) {
             return null;
         }
 
-        $node = Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
+        $node = Database::get()->querySingle("SELECT name FROM hierarchy WHERE `id` = ?d", $id);
         if ($node) {
             return self::unserializeLangField($node->name);
         }
@@ -437,7 +436,6 @@ class Hierarchy {
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
@@ -575,7 +573,6 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
@@ -591,7 +588,6 @@ jContent;
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
         $exclude = (array_key_exists('exclude', $options)) ? $options['exclude'] : null;
         $tree_array = (array_key_exists('tree', $options)) ? $options['tree'] : array('0' => 'Top');
-        $useKey = (array_key_exists('useKey', $options)) ? $options['useKey'] : 'lft';
         $where = (array_key_exists('where', $options)) ? $options['where'] : '';
         $multiple = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
 
@@ -624,7 +620,7 @@ jContent;
                 if (isset($tree_array[$defs[0]])) {
                     $def = $tree_array[$defs[0]];
                 } else {
-                    $def = $this->getFullPath($defs[0], true, '', $useKey);
+                    $def = $this->getFullPath($defs[0], true, '');
                 }
             }
             else {
@@ -674,7 +670,6 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
@@ -702,7 +697,6 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
@@ -714,7 +708,6 @@ jContent;
     public function buildCourseNodePicker($options = array()) {
         $defaults = array('params' => 'name="department[]"',
             'tree' => null,
-            'useKey' => 'id',
             'where' => 'AND node.allow_course = true',
             'multiple' => get_config('course_multidep'));
         $this->populateOptions($options, $defaults);
@@ -734,7 +727,6 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
@@ -746,7 +738,6 @@ jContent;
     public function buildUserNodePicker($options = array()) {
         $defaults = array('params' => 'name="department[]"',
             'tree' => null,
-            'useKey' => 'id',
             'where' => 'AND node.allow_user = true',
             'multiple' => get_config('user_multidep'));
         $this->populateOptions($options, $defaults);
@@ -775,20 +766,19 @@ jContent;
     /**
      * Get a node's full breadcrump-style path
      *
-     * @param  int     $key       - The db query search pattern
+     * @param  int     $id        - The node's id
      * @param  boolean $skipfirst - whether the first parent is ommited from the resulted full path or not
      * @param  string  $href      - If provided (and not left empty or null), then the breadcrump is clickable towards the provided href with the node's id appended to it
-     * @param  string  $useKey    - Match against either the id or the lft during the db query
      * @return string  $ret       - The return HTML output
      */
-    public function getFullPath($key, $skipfirst = true, $href = '', $useKey = 'id') {
+    public function getFullPath($id, $skipfirst = true, $href = '') {
         $ret = "";
 
-        if ($key === null || intval($key) <= 0) {
+        if ($id === null || intval($id) <= 0) {
             return $ret;
         }
 
-        $node = Database::get()->querySingle("SELECT name, lft, rgt FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
+        $node = Database::get()->querySingle("SELECT name, lft, rgt FROM hierarchy WHERE `id` = ?d", $id);
         if (!$node) {
             return $ret;
         }

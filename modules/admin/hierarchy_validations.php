@@ -58,34 +58,30 @@ function validateNode($id, $checkOwn) {
 }
 
 /**
- * Validate a tree node's existence (and proper integer) based on its lft value.
+ * Validate a tree node's existence (and proper integer) based on its id value.
  * Optionally, validate that the current user has proper access for this node 
  * (the node must be within the nodes subtree that this user belongs to).
  * 
- * @param int     $nodelft  - The node's lft value
+ * @param int     $id       - The node's id value
  * @param boolean $checkOwn - Optional validation (if true) of current user's node access
  */
-function validateParentLft($nodelft, $checkOwn) {
-    global $tool_content, $head_content, $tree, $user, $uid,
-    $langBack, $langNotAllowed;
-
+function validateParentId($id, $checkOwn) {
+    global $tool_content, $head_content, $tree, $user, $uid, $langBack, $langNotAllowed;
     $notallowed = "<div class='alert alert-danger'>$langNotAllowed</div><p class='pull-right'><a href='$_SERVER[PHP_SELF]'>" . $langBack . "</a></p>";
 
-    if ((!$checkOwn && $nodelft < 0) || ($checkOwn && $nodelft <= 0)) {
+    // special parent check
+    if ((!$checkOwn && $id < 0) || ($checkOwn && $id <= 0)) {
         exitWithError($notallowed);
     }
 
-    $result = Database::get()->querySingle("SELECT * FROM " . $tree->getDbtable() . " WHERE lft = ?d", $nodelft);
-
-    if (!$result && $nodelft > 0) {
+    if (!Database::get()->querySingle("SELECT * FROM hierarchy WHERE id = ?d", $id)) {
         exitWithError($notallowed);
     }
 
     if ($checkOwn) {
-        $parentid = $result->id;
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
-        if (!in_array($parentid, $subtrees)) {
+        if (!in_array($id, $subtrees)) {
             exitWithError($notallowed);
         }
     }
