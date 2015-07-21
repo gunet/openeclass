@@ -912,6 +912,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
                 `score` TINYINT(1) NOT NULL DEFAULT 1,
                 `ip_lock` TEXT NULL DEFAULT NULL,
                 `password_lock` VARCHAR(255) NULL DEFAULT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` int(11) NULL,
+            `group_id` int(11) NULL,
+            `exercise_id` int(11) NOT NULL ) $charset_spec"); 
+
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `eid` INT(11) NOT NULL DEFAULT 0,

@@ -65,6 +65,7 @@ if ($is_editor) {
         if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
             Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
                         (SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+            Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
             Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
             Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
             Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
@@ -100,7 +101,8 @@ if ($is_editor) {
                     $poll->end_date, 
                     $poll->description, 
                     $poll->end_message, 
-                    $poll->anonymized
+                    $poll->anonymized,
+                    $poll->assign_to_specific
                 );
                 $new_pid = Database::get()->query("INSERT INTO poll
                                     SET creator_id = ?d,
@@ -111,9 +113,14 @@ if ($is_editor) {
                                         end_date = ?t,
                                         description = ?s,
                                         end_message = ?s,
-                                        anonymized = ?d,    
+                                        anonymized = ?d,
+                                        assign_to_specific = ?d,
                                         active = 1", $poll_data)->lastInsertID;
-
+                if ($poll->assign_to_specific) {
+                    Database::get()->query("INSERT INTO `poll_to_specific` (user_id, group_id, poll_id) 
+                                            SELECT user_id, group_id, ?d FROM `poll_to_specific`
+                                            WHERE poll_id = ?d", $new_pid, $pid)->lastInsertID;                       
+                }
                 foreach ($questions as $question) {
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,

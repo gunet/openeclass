@@ -397,57 +397,57 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
                 ".rich_text_editor('PollEndMessage', 4, 52, $PollEndMessage)."
               </div>
             </div>
-                <div class='form-group'>
-                    <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
-                    <div class='col-sm-10'>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "").">
-                            <span>$m[WorkToAllUsers]</span>
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "").">
-                            <span>$m[WorkToUser]</span>
-                          </label>
-                        </div>
-                        <div class='radio'>
-                          <label>
-                            <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($PollAssignToSpecific == 2 ? " checked" : "").">
-                            <span>$m[WorkToGroup]</span>
-                          </label>
-                        </div>                        
+            <div class='form-group'>
+                <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                <div class='col-sm-10'>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($PollAssignToSpecific == 0 ? " checked" : "").">
+                        <span>$m[WorkToAllUsers]</span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($PollAssignToSpecific == 1 ? " checked" : "").">
+                        <span>$m[WorkToUser]</span>
+                      </label>
+                    </div>
+                    <div class='radio'>
+                      <label>
+                        <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($PollAssignToSpecific == 2 ? " checked" : "").">
+                        <span>$m[WorkToGroup]</span>
+                      </label>
+                    </div>                        
+                </div>
+            </div>
+            <div class='form-group'>
+                <div class='col-sm-10 col-sm-offset-2'>
+                    <div class='table-responsive'>
+                        <table id='assignees_tbl' class='table-default".(in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
+                            <tr class='title1'>
+                              <td id='assignees'>$langStudents</td>
+                              <td class='text-center'>$langMove</td>
+                              <td>$m[WorkAssignTo]</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <select class='form-control' id='assign_box' size='10' multiple>
+                                ".((isset($unassigned_options)) ? $unassigned_options : '')."
+                                </select>
+                              </td>
+                              <td class='text-center'>
+                                <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                              </td>
+                              <td width='40%'>
+                                <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                ".((isset($assignee_options)) ? $assignee_options : '')."
+                                </select>
+                              </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
-                <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>
-                        <div class='table-responsive'>
-                            <table id='assignees_tbl' class='table-default".(in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
-                                <tr class='title1'>
-                                  <td id='assignees'>$langStudents</td>
-                                  <td class='text-center'>$langMove</td>
-                                  <td>$m[WorkAssignTo]</td>
-                                </tr>
-                                <tr>
-                                  <td>
-                                    <select class='form-control' id='assign_box' size='10' multiple>
-                                    ".((isset($unassigned_options)) ? $unassigned_options : '')."
-                                    </select>
-                                  </td>
-                                  <td class='text-center'>
-                                    <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
-                                  </td>
-                                  <td width='40%'>
-                                    <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple>
-                                    ".((isset($assignee_options)) ? $assignee_options : '')."
-                                    </select>
-                                  </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>            
+            </div>            
             <div class='form-group'>
               <div class='col-sm-offset-2 col-sm-10'>".
             form_buttons(array(

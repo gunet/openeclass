@@ -2805,7 +2805,15 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `poll_id` int(11) NOT NULL ) $charset_spec");        
         if (!DBHelper::fieldExists('poll', 'assign_to_specific')) {
             Database::get()->query("ALTER TABLE `poll` ADD `assign_to_specific` TINYINT NOT NULL DEFAULT '0'");
-        }                      
+        }
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
+                    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `user_id` int(11) NULL,
+                    `group_id` int(11) NULL,
+                    `exercise_id` int(11) NOT NULL ) $charset_spec");
+        if (!DBHelper::fieldExists('exercise', 'assign_to_specific')) {
+            Database::get()->query("ALTER TABLE `exercise` ADD `assign_to_specific` TINYINT NOT NULL DEFAULT '0'");
+        }        
     }
 
  

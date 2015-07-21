@@ -26,6 +26,20 @@
 require_once 'modules/search/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 
+if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+    if ($_POST['assign_type'] == 2) {
+        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+    } elseif ($_POST['assign_type'] == 1) {
+        $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                FROM user, course_user
+                                WHERE user.id = course_user.user_id
+                                AND course_user.course_id = ?d AND course_user.status = 5
+                                AND user.id", $course_id);
+    }
+    echo json_encode($data);
+    exit;
+}
+load_js('tools.js');
 // the exercise form has been submitted
 if (isset($_POST['submitExercise'])) {
     $v = new Valitron\Validator($_POST);
@@ -75,9 +89,11 @@ if (isset($_POST['submitExercise'])) {
         $objExercise->setRandom($randomQuestions);
         $objExercise->updateResults($dispresults);
         $objExercise->updateScore($dispscore);
+        $objExercise->updateAssignToSpecific($assign_to_specific);
         $objExercise->save();
         // reads the exercise ID (only useful for a new exercise)
-        $exerciseId = $objExercise->selectId();
+        $exerciseId = $objExercise->selectId(); 
+        $objExercise->assignTo(filter_input(INPUT_POST, 'ingroup', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY));
         Indexer::queueAsync(Indexer::REQUEST_STORE, Indexer::RESOURCE_EXERCISE, $exerciseId);
         
         //tags
@@ -116,6 +132,49 @@ if (isset($_POST['submitExercise'])) {
     $displayScore = Session::has('dispscore') ? Session::get('dispscore') : $objExercise->selectScore();
     $exerciseIPLock = Session::has('exerciseIPLock') ? Session::get('exerciseIPLock') : $objExercise->selectIPLock();
     $exercisePasswordLock = Session::has('exercisePasswordLock') ? Session::get('exercisePasswordLock') : $objExercise->selectPasswordLock();
+    $exerciseAssignToSpecific = Session::has('assign_to_specific') ? Session::get('assign_to_specific') : $objExercise->selectAssignToSpecific();
+        if ($objExercise->selectAssignToSpecific()) {
+            //preparing options in select boxes for assigning to speficic users/groups
+            $assignee_options='';
+            $unassigned_options='';
+            if ($objExercise->selectAssignToSpecific() == 2) {
+                $assignees = Database::get()->queryArray("SELECT `group`.id AS id, `group`.name
+                                       FROM exercise_to_specific, `group`
+                                       WHERE `group`.id = exercise_to_specific.group_id AND exercise_to_specific.exercise_id = ?d", $exerciseId);
+                $all_groups = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+                foreach ($assignees as $assignee_row) {
+                    $assignee_options .= "<option value='".$assignee_row->id."'>".$assignee_row->name."</option>";
+                }
+                $unassigned = array_udiff($all_groups, $assignees,
+                  function ($obj_a, $obj_b) {
+                    return $obj_a->id - $obj_b->id;
+                  }
+                );
+                foreach ($unassigned as $unassigned_row) {
+                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->name</option>";
+                }
+            } else {
+                $assignees = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                       FROM exercise_to_specific, user
+                                       WHERE user.id = exercise_to_specific.user_id AND exercise_to_specific.exercise_id = ?d", $exerciseId);
+                $all_users = Database::get()->queryArray("SELECT user.id AS id, user.givenname, user.surname
+                                        FROM user, course_user
+                                        WHERE user.id = course_user.user_id
+                                        AND course_user.course_id = ?d AND course_user.status = 5
+                                        AND user.id", $course_id);
+                foreach ($assignees as $assignee_row) {
+                    $assignee_options .= "<option value='$assignee_row->id'>$assignee_row->surname $assignee_row->givenname</option>";
+                }
+                $unassigned = array_udiff($all_users, $assignees,
+                  function ($obj_a, $obj_b) {
+                    return $obj_a->id - $obj_b->id;
+                  }
+                );
+                foreach ($unassigned as $unassigned_row) {
+                    $unassigned_options .= "<option value='$unassigned_row->id'>$unassigned_row->surname $unassigned_row->givenname</option>";
+                }
+            }
+        }        
 }
 
 // shows the form to modify the exercise
@@ -198,7 +257,39 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                 tags: false,
                 tokenSeparators: [' ']
             });
+            $('#assign_button_all').click(hideAssignees);
+            $('#assign_button_user, #assign_button_group').click(ajaxAssignees);            
         });
+        function ajaxAssignees()
+        {
+            $('#assignees_tbl').removeClass('hide');
+            var type = $(this).val();
+            $.post('',
+            {
+              assign_type: type
+            },
+            function(data,status){
+                var index;
+                var parsed_data = JSON.parse(data);
+                var select_content = '';
+                if(type==1){
+                    for (index = 0; index < parsed_data.length; ++index) {
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['surname'] + ' ' + parsed_data[index]['givenname'] + '<\/option>';
+                    }
+                } else {
+                    for (index = 0; index < parsed_data.length; ++index) {
+                        select_content += '<option value=\"' + parsed_data[index]['id'] + '\">' + parsed_data[index]['name'] + '<\/option>';
+                    }
+                }
+                $('#assignee_box').find('option').remove();
+                $('#assign_box').find('option').remove().end().append(select_content);
+            });
+        }
+        function hideAssignees()
+        {
+            $('#assignees_tbl').addClass('hide');
+            $('#assignee_box').find('option').remove();
+        }            
     </script>";
     $tool_content .= action_bar(array(
         array('title' => $langBack,
@@ -385,13 +476,74 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      <input name='exerciseIPLock' type='hidden' class='form-control' id='exerciseIPLock' value='$exerciseIPLock' placeholder=''>
                      <span class='help-block'>".Session::getError('exerciseIPLock')."</span>
                    </div>
-                 </div>                 
+                 </div>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label'>$m[WorkAssignTo]:</label>
+                    <div class='col-sm-10'>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_all' name='assign_to_specific' value='0'".($exerciseAssignToSpecific == 0 ? " checked" : "").">
+                            <span>$m[WorkToAllUsers]</span>
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_user' name='assign_to_specific' value='1'".($exerciseAssignToSpecific == 1 ? " checked" : "").">
+                            <span>$m[WorkToUser]</span>
+                          </label>
+                        </div>
+                        <div class='radio'>
+                          <label>
+                            <input type='radio' id='assign_button_group' name='assign_to_specific' value='2'".($exerciseAssignToSpecific == 2 ? " checked" : "").">
+                            <span>$m[WorkToGroup]</span>
+                          </label>
+                        </div>                        
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <div class='table-responsive'>
+                            <table id='assignees_tbl' class='table-default".(in_array($exerciseAssignToSpecific, [1, 2]) ? '' : ' hide')."'>
+                                <tr class='title1'>
+                                  <td id='assignees'>$langStudents</td>
+                                  <td class='text-center'>$langMove</td>
+                                  <td>$m[WorkAssignTo]</td>
+                                </tr>
+                                <tr>
+                                  <td>
+                                    <select class='form-control' id='assign_box' size='10' multiple>
+                                    ".((isset($unassigned_options)) ? $unassigned_options : '')."
+                                    </select>
+                                  </td>
+                                  <td class='text-center'>
+                                    <input type='button' onClick=\"move('assign_box','assignee_box')\" value='   &gt;&gt;   ' /><br /><input type='button' onClick=\"move('assignee_box','assign_box')\" value='   &lt;&lt;   ' />
+                                  </td>
+                                  <td width='40%'>
+                                    <select class='form-control' id='assignee_box' name='ingroup[]' size='10' multiple>
+                                    ".((isset($assignee_options)) ? $assignee_options : '')."
+                                    </select>
+                                  </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>                   
                  " . Tag::tagInput($exerciseId) . "
 
                  <div class='form-group'>
                    <div class='col-sm-offset-2 col-sm-10'>
-                     <input type='submit' class='btn btn-primary' name='submitExercise' value='".(isset($_GET['NewExercise']) ? $langCreate : $langModify)."'>
-                     <a href='".(($exerciseId) ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code")."' class='btn btn-default'>$langCancel</a>    
+                    " . form_buttons(array(
+                        array(
+                            'text'  => $langSave,
+                            'name'  => 'submitExercise',
+                            'value' => (isset($_GET['NewExercise']) ? $langCreate : $langModify),
+                            'javascript' => "selectAll('assignee_box',true)"
+                        ),
+                        array(
+                            'href' => $exerciseId ? "admin.php?course=$course_code&exerciseId=$exerciseId" : "index.php?course=$course_code",
+                        )
+                    ))
+                    ."                   
                    </div>
                  </div>
                  
