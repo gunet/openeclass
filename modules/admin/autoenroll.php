@@ -77,7 +77,7 @@ if (isset($_GET['delete'])) {
     }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
-    load_js('jstree');
+    load_js('jstree3d');
     load_js('select2');
 
     $pageName = isset($_GET['add'])? $langAutoEnrollNew: $langEditChange;
@@ -120,10 +120,8 @@ if (isset($_GET['delete'])) {
     list($jsTree, $htmlTree) = $tree->buildUserNodePicker(array('defaults' => $department, 'multiple' => true));
 
     // The following code is modified from Hierarchy::buildJSNodePicker()
-    $xmldata = str_replace("'", "\'", $tree->buildTreeDataSource(
-        array('defaults' => $deps,
-              'where' => 'AND node.allow_course = true')));
-    $initopen = $tree->buildJSTreeInitOpen();
+    $options = array('defaults' => $deps, 'where' => 'AND node.allow_course = true');
+    $joptions = json_encode($options);
 
     $htmlTreeCourse = "<div id='nodCnt2'>";
     $i = 0;
@@ -190,9 +188,11 @@ if (isset($_GET['delete'])) {
           });
 
           $('#treeCourseModalSelect').click(function() {
-            var newnode = $('#js-tree-course').jstree('get_selected');
-            var newnodeid = newnode.attr('id').substring(2);
-            var newnodename = newnode.children('a').text();
+            var newnode = $( '#js-tree-course' ).jstree('get_selected', true)[0];
+            if (newnode !== undefined) {
+                var newnodeid = newnode.id;
+                var newnodename = newnode.text;
+            }
 
             jQuery.getJSON('{$urlAppend}modules/hierarchy/nodefullpath.php', {nodeid : newnodeid})
               .done(function(data) {
@@ -201,7 +201,7 @@ if (isset($_GET['delete'])) {
                 }
             })
             .always(function(dataORjqXHR, textStatus, jqXHRORerrorThrown) {
-                if (!newnode.length) {
+                if (newnode === undefined) {
                     alert('$langEmptyNodeSelect');
                 } else {
                     countnd += 1;
@@ -219,36 +219,33 @@ if (isset($_GET['delete'])) {
             });
           });
 
-          $('#js-tree-course').jstree({
-            'plugins' : ['xml_data', 'themes', 'ui', 'cookies', 'types', 'sort'],
-            'xml_data' : {
-              'data' : '$xmldata',
-              'xsl' : 'nest' },
-            'core' : {
-              'animation': 300,
-              'initially_open' : [$initopen] },
-            'themes' : {
-              'theme' : 'eclass',
-              'dots' : true,
-              'icons' : false },
-            'ui' : {
-              'select_limit' : 1 },
-            'types' : {
-              'types' : {
-                'nosel' : {
-                  'hover_node' : false,
-                  'select_node' : false } } },
-            'sort' : function (a, b) {
-              priorityA = this._get_node(a).attr('tabindex');
-              priorityB = this._get_node(b).attr('tabindex');
+          $( '#js-tree-course' ).jstree({
+              'plugins' : ['sort'],
+              'core' : {
+                  'data' : {
+                      'url' : '{$urlAppend}modules/hierarchy/nodes.php',
+                      'type' : 'POST',
+                      'data' : function(node) {
+                          return { 'id' : node.id, 'options' : $joptions };
+                      }
+                  },
+                  'multiple' : false,
+                  'themes' : {
+                      'dots' : true,
+                      'icons' : false
+                  }
+              },
+              'sort' : function (a, b) {
+                  priorityA = this.get_node(a).li_attr.tabindex;
+                  priorityB = this.get_node(b).li_attr.tabindex;
 
-              if (priorityA == priorityB) {
-                return (this.get_text(a) > this.get_text(b)) ? 1 : -1;
-              } else {
-                return (priorityA < priorityB) ? 1 : -1;
+                  if (priorityA == priorityB) {
+                      return (this.get_text(a) > this.get_text(b)) ? 1 : -1;
+                  } else {
+                      return (priorityA < priorityB) ? 1 : -1;
+                  }
               }
-            }
-          });
+          }); 
 
         });
       </script>";

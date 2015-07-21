@@ -25,7 +25,7 @@ include 'include/lib/hierarchy.class.php';
 
 $tree = new Hierarchy();
 
-load_js('jstree');
+load_js('jstree3d');
 
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 

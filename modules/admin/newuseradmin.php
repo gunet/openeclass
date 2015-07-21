@@ -131,7 +131,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // javascript
-load_js('jstree');
+load_js('jstree3d');
 load_js('pwstrength.js');
 $head_content .= <<<hContent
 <script type="text/javascript">

@@ -994,32 +994,26 @@ $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, al
 $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
     VALUES ('TMAPOST', ?s, '10', '100', '21', '22', true, true)", $langHierarchyTestCategory . ' 2');
 
+$db->query("CREATE TABLE `course_department` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course` INT(11) NOT NULL,
+    `department` INT(11) NOT NULL,
+    UNIQUE KEY `cdep_unique` (`course`,`department`),
+    FOREIGN KEY (`course`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE)");
 
-$db->query("CREATE TABLE IF NOT EXISTS `course_department` (
-                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `course` int(11) NOT NULL references course(id),
-                `department` int(11) NOT NULL references hierarchy(id) )");
-
-$db->query("CREATE TABLE IF NOT EXISTS `user_department` (
-                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `user` mediumint(8) unsigned NOT NULL references user(user_id),
-                `department` int(11) NOT NULL references hierarchy(id) )");
+$db->query("CREATE TABLE `user_department` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user` INT(11) NOT NULL,
+    `department` INT(11) NOT NULL,
+    UNIQUE KEY `udep_unique` (`user`,`department`),
+    FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE)"); 
 
 // hierarchy stored procedures
-$db->query("DROP VIEW IF EXISTS `hierarchy_depth`");
-$db->query("CREATE VIEW `hierarchy_depth` AS
-                    SELECT node.id, node.code, node.name, node.number, node.generator,
-                           node.lft, node.rgt, node.allow_course, node.allow_user, node.order_priority,
-                           COUNT(parent.id) - 1 AS depth
-                    FROM hierarchy AS node,
-                         hierarchy AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    GROUP BY node.id
-                    ORDER BY node.lft");
-
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
-$db->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
-                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+$db->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
+                        IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
                         DECLARE lft, rgt INT(11);
@@ -1033,8 +1027,8 @@ $db->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(
                     END");
 
 $db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-$db->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
-                        IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11),
+$db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
+                        IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
                         IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
@@ -1049,9 +1043,9 @@ $db->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft 
                     END");
 
 $db->query("DROP PROCEDURE IF EXISTS `update_node`");
-$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
+$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
                         IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+                        IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
                         UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
@@ -1554,7 +1548,6 @@ $db->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)
 $db->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
 $db->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
 $db->query("CREATE INDEX `course_index` ON course(code)");
-$db->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
 $db->query('CREATE INDEX `cd_type_index` ON course_description (`type`)');
 $db->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, `type`)');
 $db->query('CREATE INDEX `cid` ON course_description (course_id)');
@@ -1605,7 +1598,6 @@ $db->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
 $db->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
 $db->query("CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)");
 $db->query("CREATE INDEX `u_id` ON user(username)");
-$db->query("CREATE INDEX `udep_id` ON user_department(user, department)");
 $db->query("CREATE INDEX `cid` ON video (course_id)");
 $db->query("CREATE INDEX `cid` ON videolink (course_id)");
 $db->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");

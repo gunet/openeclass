@@ -40,7 +40,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jstree');
+load_js('jstree3d');
 
 $toolName = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -106,59 +106,49 @@ if (!isset($_GET['action'])) {
     </td>
     </tr>";
 
-    $xmldata = str_replace('"', '\"', $tree->buildTreeDataSource(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin))));
-    $initopen = $tree->buildJSTreeInitOpen();
+    $options = array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin));
+    $joptions = json_encode($options);
 
     $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
 
 $(function() {
-
+            
     $( "#js-tree" ).jstree({
-        "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort", "contextmenu"],
-        "xml_data" : {
-            "data" : "$xmldata",
-            "xsl" : "nest"
-        },
+        "plugins" : ["sort", "contextmenu"],
         "core" : {
-            "animation": 300,
-            "initially_open" : [$initopen]
-        },
-        "themes" : {
-            "theme" : "eclass",
-            "dots" : true,
-            "icons" : false
-        },
-        "ui" : {
-            "select_limit" : 1
-        },
-        "cookies" : {
-            "save_selected": false
-        },
-        "types" : {
-            "types" : {
-                "nosel" : {
-                    "hover_node" : false,
-                    "select_node" : false
+            "data" : {
+                "url" : "{$urlAppend}modules/hierarchy/nodes.php",
+                "type" : "POST",
+                "data" : function(node) {
+                    return { "id" : node.id, "options" : $joptions };
                 }
+            },
+            "multiple" : false,
+            "themes" : {
+                "dots" : true,
+                "icons" : false
             }
         },
         "sort" : function (a, b) {
-            priorityA = this._get_node(a).attr("tabindex");
-            priorityB = this._get_node(b).attr("tabindex");
+            priorityA = this.get_node(a).li_attr.tabindex;
+            priorityB = this.get_node(b).li_attr.tabindex;
 
-            if (priorityA == priorityB)
-                return this.get_text(a) > this.get_text(b) ? 1 : -1;
-            else
-                return priorityA < priorityB ? 1 : -1;
+            if (priorityA == priorityB) {
+                return (this.get_text(a) > this.get_text(b)) ? 1 : -1;
+            } else {
+                return (priorityA < priorityB) ? 1 : -1;
+            }
         },
         "contextmenu": {
             "select_node" : true,
             "items" : customMenu
         }
     })
-    .delegate("a", "click.jstree", function (e) { $("#js-tree").jstree("show_contextmenu", e.currentTarget); });
+    .delegate("a", "click.jstree", function (e) { 
+        $("#js-tree").jstree("show_contextmenu", e.currentTarget); 
+    });
 
 });
 
@@ -167,19 +157,18 @@ function customMenu(node) {
     var items = {
         editItem: {
             label: "$langEdit",
-            action: function (obj) { document.location.href='?action=edit&id=' + obj.attr('id').substring(2); }
+            action: function (obj) { document.location.href='?action=edit&id=' + node.id; }
         },
         deleteItem: {
             label: "$langDelete",
-            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id').substring(2); }
+            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + node.id; }
         }
     };
 
-    if (node.attr('rel') == 'nosel') {
+    if (node.a_attr.class == 'nosel') {
         delete items.editItem;
         delete items.deleteItem;
     }
-
 
     return items;
 }
@@ -188,9 +177,7 @@ function customMenu(node) {
 </script>
 hContent;
 
-    $tool_content .= "<tr><td colspan='" . ($maxdepth + 4) . "'><div id='js-tree'></div></td></tr>";
-    // Close table correctly
-    $tool_content .= "</table>";    
+    $tool_content .= "<tr><td colspan='" . ($maxdepth + 4) . "'><div id='js-tree'></div></td></tr></table>";
 }
 // Add a new node
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {

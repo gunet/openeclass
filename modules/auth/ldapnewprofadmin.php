@@ -41,7 +41,7 @@ require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jstree');
+load_js('jstree3d');
 
 $auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : '';
 

@@ -32,7 +32,7 @@ require_once 'restore_functions.php';
 $treeObj = new Hierarchy();
 $courseObj = new Course();
 
-load_js('jstree');
+load_js('jstree3d');
 
 list($js, $html) = $treeObj->buildCourseNodePicker();
 $head_content .= $js;
