@@ -10,16 +10,16 @@ function act_confirm() {
             message: message,
             title: title,
             buttons: {
+                cancel_btn: {
+                    label: cancel_text,
+                    className: "btn-default"
+                },
                 action_btn: {
                     label: action_text,
                     className: action_btn_class,
                     callback: function () {
                         window.location = form;
                     }
-                },
-                cancel_btn: {
-                    label: cancel_text,
-                    className: "btn-default"
                 }
             }
         });
