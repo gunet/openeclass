@@ -3644,7 +3644,7 @@ function user_hook($user_id) {
 
 
 /**
- * @brief Function called before a user is created.
+ * @brief Function called for every user login
  *
  * For now, only called for CAS automatic registration to determine actual user
  * details. If function local_register_hook() is defined, calls that instead.
@@ -3653,24 +3653,27 @@ function user_hook($user_id) {
  * 'departments' - List of department id's requested by user
  * 'attributes'  - List of attributes retrieved via LDAP / CAS / Shibboleth
  * 'am'          - Student id number retrieved via LDAP / CAS / Shibboleth
+ * 'user_id'     - Null for registration, current user id for subsequent logins
  * @return array - Actual user creation options. Key-value pairs are:
  * 'accept'      - Boolean - if false, user should be rejected
  * 'departments' - List of department id's user should be added to
  * 'status'      - User status (USER_STUDENT, USER_TEACHER)
  * 'am'          - Student id number
  */
-function register_hook($options) {
+function login_hook($options) {
     if (!isset($options['am'])) {
         $options['am'] = '';
     }
     if (!isset($options['departments'])) {
         $options['departments'] = array();
     }
+    if (!isset($options['status'])) {
+        $options['status'] = USER_STUDENT;
+    }
     $options['accept'] = true;
-    $options['status'] = USER_STUDENT;
 
-    if (function_exists('local_register_hook')) {
-        return local_register_hook($options);
+    if (function_exists('local_login_hook')) {
+        return local_login_hook($options);
     } else {
         return $options;
     }

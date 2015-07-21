@@ -831,6 +831,15 @@ function shib_cas_login($type) {
         $email = isset($_SESSION['cas_email']) ? $_SESSION['cas_email'] : '';
         $am = isset($_SESSION['cas_userstudentid']) ? $_SESSION['cas_userstudentid'] : '';
     }
+
+    // Attributes passed to login_hook()
+    $attributes = array();
+    if (isset($_SESSION['cas_attributes'])) {
+        foreach ($_SESSION['cas_attributes'] as $name => $value) {
+            $attributes[strtolower($name)] = $value;
+        }
+    }
+
     // user is authenticated, now let's see if he is registered also in db
     if (get_config('case_insensitive_usernames')) {
         $sqlLogin = "COLLATE utf8_general_ci = ?s";
@@ -860,12 +869,34 @@ function shib_cas_login($type) {
             if (!empty($info->email)) {
                 $email = $info->email;
             }
-            if (!empty($info->status)) {
-                $status = $info->status;
+
+            $userObj = new User();
+
+            $options = login_hook(array(
+                'user_id' => $info->id,
+                'attributes' => $attributes,
+                'status' => $info->status,
+                'departments' => $userObj->getDepartmentIds($info->id),
+                'am' => $am));
+
+            if (!$options['accept']) {
+                foreach (array_keys($_SESSION) as $key) {
+                    unset($_SESSION[$key]);
+                }
+                Session::Messages($langRegistrationDenied, 'alert-warning');
+                redirect_to_home_page();
             }
+
+            $status = $options['status'];
+
             // update user information
-            Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s
-                                        WHERE id = ?d", $surname, $givenname, $email, $info->id);
+            Database::get()->query("UPDATE user SET surname = ?s, givenname = ?s, email = ?s,
+                                           status = ?d WHERE id = ?d",
+                                        $surname, $givenname, $email, $info->id, $status);
+
+            $userObj->refresh($_SESSION['uid'], $options['departments']);
+            user_hook($_SESSION['uid']);
+
             // check for admin privileges
             $admin_rights = get_admin_rights($info->id);
             if ($admin_rights == ADMIN_USER) {
@@ -897,14 +928,9 @@ function shib_cas_login($type) {
     	} else { // redirect user to mail_verify_change.php
 	    	$_SESSION['mail_verification_required'] = 1;
         }
-        $attributes = array();
-        if (isset($_SESSION['cas_attributes'])) {
-            foreach ($_SESSION['cas_attributes'] as $name => $value) {
-                $attributes[strtolower($name)] = $value;
-            }
-        }
 
-        $options = register_hook(array(
+        $options = login_hook(array(
+            'user_id' => null,
             'attributes' => $attributes,
             'am' => $am));
 
@@ -915,6 +941,7 @@ function shib_cas_login($type) {
             Session::Messages($langRegistrationDenied, 'alert-warning');
             redirect_to_home_page();
         }
+        $status = $options['status'];
         $_SESSION['uid'] = Database::get()->query("INSERT INTO user
                     SET surname = ?s, givenname = ?s, password = ?s,
                         username = ?s, email = ?s, status = ?d, lang = ?s,
@@ -922,7 +949,7 @@ function shib_cas_login($type) {
                         registered_at = " . DBHelper::timeAfter() . ",
                         expires_at = " . DBHelper::timeAfter(get_config('account_duration')) . ",
                         whitelist = ''",
-                $surname, $givenname, $type, $uname, $email, $options['status'],
+                $surname, $givenname, $type, $uname, $email, $status,
                 $language, $options['am'], $verified_mail)->lastInsertID;
         $userObj = new User();
         $userObj->refresh($_SESSION['uid'], $options['departments']);
