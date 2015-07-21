@@ -41,7 +41,7 @@ $user = new User();
 
 $toolName = $langCourseCreate;
 
-load_js('jstree');
+load_js('jstree3d');
 load_js('pwstrength.js');
 
 //Datepicker

@@ -32,7 +32,7 @@ require_once 'hierarchy_validations.php';
 
 $user = new User();
 
-load_js('jstree');
+load_js('jstree3d');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>

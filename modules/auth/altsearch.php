@@ -36,7 +36,7 @@ require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jstree');
+load_js('jstree3d');
 
 $user_registration = get_config('user_registration');
 $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
