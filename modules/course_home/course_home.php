@@ -179,12 +179,7 @@ if(count($res)>0){
 $main_content .= "<div class='course_info'>";
 if ($course_info->description) {
     $description = standard_text_escape($course_info->description);
-    $main_content .= "
-
-    <div id='descr_content'>
-        $description
-    </div>
-    ";
+    $main_content .= "<div id='descr_content'>$description</div>";
 } else {
     $main_content .= "<p class='not_visible'> - $langThisCourseDescriptionIsEmpty - </p>";
 }
@@ -352,6 +347,21 @@ if ($is_course_admin) {
     $link = "<a href='{$urlAppend}modules/user/userslist.php?course=$course_code'>$numUsers $langRegistered</a>";
 }
 $bar_content_2 .= "<br><b>$langUsers:</b> $link";
+$citation_text = "$professor.&nbsp;<i>$currentCourseName.</i>&nbsp;$langAccessed" . claro_format_locale_date($dateFormatLong, strtotime('now')) . "&nbsp;$langFrom2 {$urlServer}courses/$course_code/";
+$tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
+                    <div class='modal-dialog'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true'>&times;</span></button>
+                                <h4 class='modal-title' id='myModalLabel'>$langCitation</h4>
+                            </div>
+                            <div class='modal-body'>".
+                              standard_text_escape($citation_text)
+                            ."</div>                                
+                        </div>
+                    </div>
+                </div>";
+$bar_content_2 .= "<br><a data-modal='citation' data-toggle='modal' data-target='#citation' href='javascript:void(0);'>$langCitation</a>";
 
 // display course license
 if ($course_license) {
