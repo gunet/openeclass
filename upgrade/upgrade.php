@@ -2837,7 +2837,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (DBHelper::indexExists('course_department', 'cdep_index')) {
             Database::get()->query('DROP INDEX `cdep_index` ON course_department');
         }
-        if (!DBHelper::indexExists('course_department', 'udep_unique')) {
+        if (!DBHelper::indexExists('course_department', 'cdep_unique')) {
             Database::get()->queryFunc('SELECT course_department.id FROM course
                         RIGHT JOIN course_department ON course.id = course_department.course
                     WHERE course.id IS NULL', function ($item) {
