@@ -894,7 +894,7 @@ function shib_cas_login($type) {
                                            status = ?d WHERE id = ?d",
                                         $surname, $givenname, $email, $status, $info->id);
 
-            $userObj->refresh($_SESSION['uid'], $options['departments']);
+            $userObj->refresh($info->id, $options['departments']);
             user_hook($_SESSION['uid']);
 
             // check for admin privileges
