@@ -2007,7 +2007,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                         sprintf(count($user_group_info) ?
                                         $m['group_assignment_publish'] :
                                         $m['group_assignment_no_groups'], $group_link) .
-                        "</p>\n";
+                        "</div>\n";
             }
         } else {
             $groups_with_no_submissions = groups_with_no_submissions($id);
