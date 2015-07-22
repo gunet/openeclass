@@ -123,7 +123,7 @@ if ($appName) {
         if ($app->getAppIcon() !== null) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
-        if ($app->getParamsSet()){
+        if ($app->isConfigured()){
             $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
         } else {
             $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"" . $app->getName() . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";

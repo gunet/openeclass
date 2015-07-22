@@ -50,7 +50,7 @@ class AutojudgeApp extends ExtApp {
      *
      * @return boolean
      */
-    public function getParamsSet() {
+    public function isConfigured() {
         return (q(get_config('autojudge_connector')) != null);
     }
 

@@ -51,7 +51,7 @@ class BBBApp extends ExtApp {
      * 
      * @return boolean
      */
-    public function getParamsSet() {
+    public function isConfigured() {
         return Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count > 0;
     }
 

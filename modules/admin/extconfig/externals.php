@@ -122,12 +122,12 @@ abstract class ExtApp {
         return 'modules/admin/extapp.php?edit=' . $this->getName();
     }
 
-    /**
-     * Return true if all params are set, else false
+       /**
+     * Return true if the external app is configured (all params are set)
      * 
-     * @return boolean
+     * @return boolean true if the app is configured, else false
      */
-    public function getParamsSet() {
+    public function isConfigured() {
         foreach ($this->getParams() as $para) {
             if ($para->name() !== 'enabled' and
                 $para->value() === '') {
