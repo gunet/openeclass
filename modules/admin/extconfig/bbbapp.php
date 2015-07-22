@@ -42,7 +42,7 @@ class BBBApp extends ExtApp {
         return $GLOBALS['langBBBDescription'];
     }
 
-    public function getEditUrl() {
+    public function getConfigUrl() {
         return 'modules/admin/bbbmoduleconf.php';
     }
 

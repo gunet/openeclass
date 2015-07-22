@@ -41,7 +41,7 @@ class AutojudgeApp extends ExtApp {
         return 'AutoJudge';
     }
 
-    public function getEditUrl() {
+    public function getConfigUrl() {
         return 'modules/admin/autojudgemoduleconf.php';
     }
 
