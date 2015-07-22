@@ -60,6 +60,7 @@ class ExtAppManager {
 abstract class ExtApp {
 
     const ENABLED = 'enabled';
+
     private $params = array();
 
     public function __construct() {
@@ -122,15 +123,14 @@ abstract class ExtApp {
         return 'modules/admin/extapp.php?edit=' . $this->getName();
     }
 
-       /**
+    /**
      * Return true if the external app is configured (all params are set)
      * 
      * @return boolean true if the app is configured, else false
      */
     public function isConfigured() {
         foreach ($this->getParams() as $para) {
-            if ($para->name() !== 'enabled' and
-                $para->value() === '') {
+            if ($para->isRequired() && $para->value() === '') {
                 return false;
             }
         }
@@ -222,6 +222,10 @@ abstract class ExtParam {
 
     function getType() {
         return $this->type;
+    }
+
+    function isRequired() {
+        return false;
     }
 
     abstract protected function retrieveValue();
