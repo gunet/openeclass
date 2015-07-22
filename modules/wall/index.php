@@ -77,11 +77,51 @@ if (isset($_POST['submit'])) {
         Session::Messages($langWallPostDeleted, 'alert-success');
     }
     redirect_to_home_page("modules/wall/index.php?course=$course_code");
+} elseif (isset($_POST['edit_submit'])) { //handle edit form submit
+    $id = intval($_GET['edit']);
+    if (allow_to_edit($id, $uid, $is_editor)) {
+        if (isset($_POST['video'])) { //video post
+            if (empty($_POST['video'])) {
+                if (!empty($_POST['message'])) {
+                    Session::flash('content', $_POST['message']);
+                }
+                Session::Messages($langWallVideoLinkEmpty);
+                redirect_to_home_page("modules/wall/index.php?course=$course_code&edit=$id");
+            } elseif (validate_youtube_link($_POST['video']) === FALSE) {
+                if (!empty($_POST['message'])) {
+                    Session::flash('content', $_POST['message']);
+                }
+                Session::flash('video_link', $_POST['video']);
+                Session::Messages($langWallVideoLinkNotValid);
+                redirect_to_home_page("modules/wall/index.php?course=$course_code&edit=$id");
+            } else {
+                if (empty($_POST['message'])) {
+                    $content = '';
+                } else {
+                    $content = links_autodetection($_POST['message']);
+                }
+                Database::get()->query("UPDATE wall_post SET content = ?s, video_link = ?s WHERE id = ?d AND course_id = ?d",
+                    $content, $_POST['video'], $id, $course_id);
+                Session::Messages($langWallPostSaved, 'alert-success');
+                redirect_to_home_page("modules/wall/index.php?course=$course_code");
+            }
+        } else { //text post
+            if (!empty($_POST['message'])) {
+                Database::get()->query("UPDATE wall_post SET content = ?s WHERE id = ?d AND course_id = ?d",
+                    links_autodetection($_POST['message']), $id, $course_id);
+                Session::Messages($langWallPostSaved, 'alert-success');
+                redirect_to_home_page("modules/wall/index.php?course=$course_code");
+            } else {
+                Session::Messages($langWallMessageEmpty);
+                redirect_to_home_page("modules/wall/index.php?course=$course_code&edit=$id");
+            }
+        }
+    }
 }
 
 if (isset($_GET['showPost'])) { //show comments case
     $id = intval($_GET['showPost']);
-    $post = Database::get()->querySingle("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $post = Database::get()->querySingle("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
     if ($post) {
         $tool_content .= action_bar(array(
                   array('title' => $langBack,
@@ -90,6 +130,56 @@ if (isset($_GET['showPost'])) { //show comments case
                         'level' => 'primary-label')
         ),false);
         $tool_content .= generate_single_post_html($post);
+    } else {
+        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+    }
+} elseif (isset($_GET['edit'])) {
+    $id = intval($_GET['edit']);
+    if (allow_to_edit($id, $uid, $is_editor)) {
+        $tool_content .= action_bar(array(
+                             array('title' => $langBack,
+                                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                                   'icon' => 'fa-reply',
+                                   'level' => 'primary-label')
+                          ),false);
+        
+        $post = Database::get()->querySingle("SELECT content, video_link FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
+        $content = Session::has('content')? Session::get('content') : $post->content;
+        $video_link = Session::has('video_link')? Session::get('video_link') : $post->video_link;
+        
+        if ($video_link != '') {
+            $video_input = '<div class="form-group" id="hidden_input">
+                                <label for="video_link">'.$langWallVideoLink.'</label>
+                                <input class="form-control" type="url" name="video" id="video_link" value="'.$video_link.'">
+                            </div>';
+        } else {
+            $video_input = '';
+        }
+        
+        $tool_content .= '<div class="row">
+            <div class="col-sm-12">
+                <div class="form-wrapper">
+                    <form id="wall_form" method="post" action="" enctype="multipart/form-data">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="message_input">'.$langMessage.'</label>
+                                <textarea class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
+                            </div>
+                            '.$video_input.'
+                        </fieldset>
+                        <div class="form-group">'.
+                            form_buttons(array(
+                                array(
+                                    'text'  =>  $langSubmit,
+                                    'name'  =>  'edit_submit',
+                                    'value' =>  $langSubmit
+                                )
+                            ))
+                        .'</div>
+                    </form>
+                </div>
+            </div>
+        </div>';
     } else {
         redirect_to_home_page("modules/wall/index.php?course=$course_code");
     }
