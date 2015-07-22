@@ -280,7 +280,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
         }        
     </script>";
 
-        if ($poll->assign_to_specific) {
+        if (isset($poll) && $poll->assign_to_specific) {
             //preparing options in select boxes for assigning to speficic users/groups
             $assignee_options='';
             $unassigned_options='';
@@ -423,7 +423,7 @@ if (isset($_GET['modifyPoll']) || isset($_GET['newPoll'])) {
             <div class='form-group'>
                 <div class='col-sm-10 col-sm-offset-2'>
                     <div class='table-responsive'>
-                        <table id='assignees_tbl' class='table-default".(in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
+                        <table id='assignees_tbl' class='table-default".(isset($poll) && in_array($poll->assign_to_specific, [1, 2]) ? '' : ' hide')."'>
                             <tr class='title1'>
                               <td id='assignees'>$langStudents</td>
                               <td class='text-center'>$langMove</td>
