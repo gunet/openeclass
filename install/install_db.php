@@ -910,6 +910,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
                 `public` TINYINT(4) NOT NULL DEFAULT 1,
                 `results` TINYINT(1) NOT NULL DEFAULT 1,
                 `score` TINYINT(1) NOT NULL DEFAULT 1,
+                `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
                 `ip_lock` TEXT NULL DEFAULT NULL,
                 `password_lock` VARCHAR(255) NULL DEFAULT NULL) $charset_spec");
 
