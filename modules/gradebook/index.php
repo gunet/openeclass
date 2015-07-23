@@ -179,8 +179,8 @@ if ($is_editor) {
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
     //add a new gradebook
-    if (isset($_POST['newGradebook']) && strlen($_POST['title'])) {
-        $newTitle = $_POST['title'];
+    if (isset($_POST['newGradebook']) && strlen(trim($_POST['title']))) {
+        $newTitle = trim($_POST['title']);
         $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;   
         //create gradebook users (default the last six months)
         $limitDate = date('Y-m-d', strtotime(' -6 month'));
@@ -361,8 +361,8 @@ if ($is_editor) {
             $gradebook_range = intval($_POST['degreerange']);
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
         }
-        if (isset($_POST['title'])) { // upgrade gradebook title
-            $gradebook_title = $_POST['title'];
+        if (isset($_POST['title']) && strlen(trim($_POST['title']))) { // upgrade gradebook title
+            $gradebook_title = trim($_POST['title']);
             Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
          
         }
