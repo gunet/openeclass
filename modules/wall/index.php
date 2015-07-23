@@ -22,6 +22,9 @@ $require_current_course = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
+require_once 'modules/rating/class.rating.php';
+require_once 'modules/comments/class.commenting.php';
+require_once 'modules/comments/class.comment.php';
 require_once 'modules/abuse_report/abuse_report.php';
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
@@ -89,6 +92,10 @@ if (isset($_POST['submit'])) {
             ));
         }
         Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $id, 'wallpost');
+        
+        //delete comments and ratings
+        Commenting::deleteComments('wallpost', $id);
+        Rating::deleteRatings('wallpost', $id);
         
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
         Session::Messages($langWallPostDeleted, 'alert-success');

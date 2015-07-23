@@ -20,10 +20,6 @@
  * ======================================================================== 
  */
 
-require_once 'modules/rating/class.rating.php';
-require_once 'modules/comments/class.commenting.php';
-require_once 'modules/comments/class.comment.php';
-
 function allow_to_post($course_id, $user_id, $is_editor) {
     if ($is_editor) {
         return true;
