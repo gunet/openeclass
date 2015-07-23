@@ -125,7 +125,6 @@ function generate_single_post_html($post) {
     $user_id = $post->user_id;
     $id = $post->id;
     $content = $post->content;
-    $pinned = $post->pinned;
     $token = token_generate($user_id, true);
     $datetime = nice_format($post->datetime, true);
     $video_link = $post->video_link;
