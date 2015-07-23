@@ -213,13 +213,18 @@ if (!isset($_POST['submit2']) and isset($_SESSION['is_admin']) and ( $_SESSION['
         $_POST['postaddress'] = $postaddress;
         $_POST['telephone'] = $telephone;
         $_POST['fax'] = $fax;
+        if (!isset($_SERVER['SERVER_NAME'])) {
+            $_SERVER['SERVER_NAME'] = parse_url($urlServer, PHP_URL_HOST);
+        }
     }
 
     set_config('upgrade_begin', time());
 
-    $tool_content .= getInfoAreas();
-    define('TEMPLATE_REMOVE_CLOSING_TAGS', true);
-    draw($tool_content, 0);
+    if (!$command_line) {
+        $tool_content .= getInfoAreas();
+        define('TEMPLATE_REMOVE_CLOSING_TAGS', true);
+        draw($tool_content, 0);
+    }
     updateInfo(0.01, $langUpgradeStart . " : " . $langUpgradeConfig);
     Debug::setOutput(function ($message, $level) use (&$debug_output, &$debug_error) {
         $debug_output .= $message;
@@ -2726,13 +2731,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     $logdate = date("Y-m-d_G.i:s");
 
     $output_result = "<br/><div class='alert alert-success'>$langUpgradeSuccess<br/><b>$langUpgReady</b><br/><a href=\"../courses/log-$logdate.html\" target=\"_blank\">$langLogOutput</a></div><p/>";
-    if ($debug_error) {
-        $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
+    if ($command_line) {
+        if ($debug_error) {
+            echo " * $langUpgSucNotice\n";
+        }
+        echo $langUpgradeSuccess, "\n", $langLogOutput, ": courses/log-$logdate.html\n";
+    } else {
+        if ($debug_error) {
+            $output_result .= "<div class='alert alert-danger'>" . $langUpgSucNotice . "</div>";
+        }
+        updateInfo(1, $output_result, false);
+        // Close HTML body
+        echo "</body></html>\n";
     }
-    updateInfo(1, $output_result, false);
+
     $debug_output = "<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/><title>Open eClass upgrade log of $logdate</title></head><body>$debug_output</body></html>";
     file_put_contents($webDir . "/courses/log-$logdate.html", $debug_output);
 
-    // Close HTML body
-    echo "</body></html>\n";
 } // end of if not submit
