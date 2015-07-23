@@ -356,7 +356,7 @@ if ($is_editor) {
     $tool_content .= "</div></div>";
     
     // update gradebook settings
-    if (isset($_POST['submitGradebookSettings'])) {               
+    if (isset($_POST['submitGradebookSettings'])) {
         if (isset($_POST['degreerange'])) { // update gradebook range
             $gradebook_range = intval($_POST['degreerange']);
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);

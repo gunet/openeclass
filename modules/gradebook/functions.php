@@ -243,7 +243,7 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
     
     $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->affectedRows;
     $delActBooks = Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id)->affectedRows;
-    if($delAct) {
+    if (($delAct) and $delActBooks) {
         Session::Messages("$langGradebookDel", "alert-success");
     } else {
         Session::Messages("$langGradebookDelFailure", "alert-danger");
@@ -676,8 +676,8 @@ function display_gradebook($gradebook_id) {
            $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity, $langDelete, $langConfirmDelete, 
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
-           $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath;
-    global $langExport, $langcsvenc1, $langcsvenc2, $langToA;
+           $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath,
+           $langExport, $langcsvenc1, $langcsvenc2, $langToA;
     
     $tool_content .= action_bar(
             array(
@@ -719,11 +719,6 @@ function display_gradebook($gradebook_id) {
                 'secondary_icon' => 'fa-plus'
             )
         );
-    
-    /*$tool_content .= action_bar(
-            array('title' => $langExport,
-                      'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id",
-                      'icon' => 'fa-excel'), true, array('secondary_title' => $langExport, 'secondary_icon' => 'fa-plus')); */
     
     $weightMessage = "";
     //get all the available activities
@@ -1402,19 +1397,15 @@ function add_gradebook_other_activity($gradebook_id) {
 
 /**
  * @brief insert grades for activity
- * @global string $tool_content 
- * @global boolean $error
- * @global type $langGradebookOutRange
+ * @global string $tool_content  
  * @global type $langGradebookEdit
  * @param type $gradebook_id 
  * @param type $actID
  */
 function insert_grades($gradebook_id, $actID) {
       
-    global $tool_content, $error, $langGradebookEdit, $langGradebookOutRange;
-    
-    $gradebook_range = get_gradebook_range($gradebook_id);
-            
+    global $tool_content, $langGradebookEdit;
+                    
     foreach ($_POST['usersgrade'] as $userID => $userInp) {
         if ($userInp == '') {
             $userInp = 0;
