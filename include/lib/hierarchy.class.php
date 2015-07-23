@@ -892,6 +892,55 @@ jContent;
 
         return $subs;
     }
+    
+    /**
+     * Builds an array containing all the subtree nodes of the (parent) nodes given
+     *
+     * @param  array $nodes    - Array containing the (parent) nodes whose subtree nodes we want
+     * @param  array $allnodes - Array of all tree nodes to feed into loopTree() if it's already available
+     * @return array $subs     - Array containing the returned subtree nodes
+     */
+    public function buildSubtreesFull($nodes, $allnodes = array()) {
+        $subs = array();
+        $nodelfts = array();
+        $ids = '';
+        
+        if (count($nodes) <= 0) {
+            return $subs;
+        }
+
+        foreach ($nodes as $key => $id) {
+            $ids .= $id . ',';
+        }
+        // remove last ',' from $ids
+        $q = substr($ids, 0, -1);
+        
+        Database::get()->queryFunc("SELECT node.id, node.lft FROM " . $this->dbtable . " AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
+            $nodelfts[] = $row->lft;
+        });
+        
+        if (count($nodelfts) > 0) {
+            $currentIdx = 0;
+            $searchLft = intval($nodelfts[$currentIdx]);
+            $searchSubLft = 0;
+            $searchSubRgt = 0;
+            
+            $this->loopTree(function($node) use(&$subs, &$nodelfts, &$searchLft, &$currentIdx, &$searchSubLft, &$searchSubRgt) {
+                $nlft = intval($node->lft);
+                if ($nlft === $searchLft) {
+                    $currentIdx++;
+                    $searchLft = (isset($nodelfts[$currentIdx])) ? intval($nodelfts[$currentIdx]) : 0;
+                    $searchSubLft = intval($node->lft);
+                    $searchSubRgt = intval($node->rgt);
+                }
+                if ($nlft >= $searchSubLft && $nlft <= $searchSubRgt) {
+                    $subs[] = $node;
+                }
+            }, $allnodes);
+        }
+
+        return $subs;
+    }
 
     /**
      * Check if we can use Stored Procedures. Nothing more than a regular mysql version check for 5.0 or above/below.

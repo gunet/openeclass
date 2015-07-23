@@ -218,8 +218,23 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIdsAllowedForCourseCreation($uid), 'allow_only_defaults' => $allow_only_defaults));
+        $defaults = array();
+        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin );
+        if ($allow_only_defaults) {
+            // Method: getDepartmentIdsAllowedForCourseCreation
+            // fetches only specific tree nodes, not their sub-children
+            //$user->getDepartmentIdsAllowedForCourseCreation($uid);
+            // the code below searches for the allow_course flag in the user's department subtrees
+            $userdeps = $user->getDepartmentIds($uid);
+            $subs = $tree->buildSubtreesFull($userdeps);
+            foreach ($subs as $node) {
+                if (intval($node->allow_course) === 1) {
+                    $defaults[] = $node->id;
+                }
+            }
+        }
+        
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $defaults, 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
