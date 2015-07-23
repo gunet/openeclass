@@ -118,7 +118,7 @@ function validate_youtube_link($video_url) {
 
 function generate_single_post_html($post) {
     global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
-    $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $langWallPostDelConfirm;
+    $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm;
     
     commenting_add_js();
     
@@ -147,6 +147,18 @@ function generate_single_post_html($post) {
     $comm_content = $comm->put($course_code, $is_editor, $uid, true);
     
     if (allow_to_edit($id, $uid, $is_editor)) {
+        $head_content .= '<script>
+                          $(document).on("click", ".link", function(e) {
+                              var link = $(this).attr("href");
+                              e.preventDefault();
+                              bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
+                                  if (result) {
+                                      document.location.href = link;
+                                  }
+                              });
+                          });
+                      </script>';
+        
         $post_actions = '<div class="pull-right"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
                     '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
                     '.icon('fa-times', $langDelete).'</a>';
@@ -194,11 +206,11 @@ function generate_infinite_container_html($posts, $next_page) {
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
                               var link = $(this).attr("href");
-                              e.preventDefault();    
-                              bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {    
+                              e.preventDefault();
+                              bootbox.confirm("'.$langWallPostDelConfirm.'", function(result) {
                                   if (result) {
-                                      document.location.href = link;       
-                                  }    
+                                      document.location.href = link;
+                                  }
                               });
                           });
                       </script>';
