@@ -805,7 +805,7 @@ class Log {
     
         global $langcreator, $langAbuseReportCat, $langSpam, $langRudeness, $langOther, $langMessage,
                $langComment, $langForumPost, $langAbuseResourceType, $langContent, $langAbuseReportStatus,
-               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks; 
+               $langAbuseReportOpen, $langAbuseReportClosed, $langLinks, $langWallPost; 
         
         $reports_cats = array('rudeness' => $langRudeness,
                               'spam' => $langSpam,
@@ -813,7 +813,8 @@ class Log {
         
         $resource_types = array('comment' => $langComment,
                                 'forum_post' => $langForumPost,
-                                'link' => $langLinks);
+                                'link' => $langLinks,
+                                'wallpost' => $langWallPost);
                     
         $details = unserialize($details);
     

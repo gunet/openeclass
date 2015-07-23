@@ -3802,6 +3802,7 @@ $langWallSharedVideo = ' shared a video';
 $langWallSharedPost = ' shared a post';
 $langWallPostDeleted = 'Wall post deleted succesfully';
 $langWallPostDelConfirm = 'Are you sure you want to delete this wall post?';
+$langWallPost = 'Wall post';
 $langTheField = 'The field';
 $langFormErrors = 'The form contains errors. Please correct and resubmit it';
 $langMoreOptions = 'More options';

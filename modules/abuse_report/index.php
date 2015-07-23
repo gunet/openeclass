@@ -70,6 +70,12 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                 $url = $urlServer."modules/link/?course=".$course_code;
                 $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$rid&amp;url=" .
                 urlencode($rcontent) . "'>" . q($result->title) . "</a>";
+            } elseif ($rtype == 'wallpost') {
+                $res = Database::get()->querySingle("SELECT content FROM `wall_post` WHERE id = ?d", $rid);
+                $rcontent = $res->url;
+                $content_type = $langWallPost;
+                $content = nl2br(q($content));
+                $url = $urlServer."modules/wall/?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
             }
             
             Log::record($course_id, MODULE_ID_ABUSE_REPORT, LOG_MODIFY,
@@ -135,7 +141,8 @@ if (!$nbrReports) {
     
     $resource_types = array('comment' => $langComment,
                             'forum_post' => $langForumPost,
-                            'link' => $langLink);
+                            'link' => $langLink,
+                            'wallpost' => $langWallPost);
     
     $maxpage = 1 + intval($total_reports / $limitReportsPage);
     if ($maxpage > 0) {
@@ -240,6 +247,31 @@ if (!$nbrReports) {
                           'icon' => 'fa-times',
                           'class' => 'delete',
                           'confirm' => $langConfirmDeleteReportedResource),
+            ));
+        } elseif ($report->rtype == 'wallpost') {
+            $res = Database::get()->querySingle("SELECT content FROM `wall_post` WHERE id = ?d", $report->rid);
+            $content = nl2br(q($res->content));
+            $visiturl = $urlServer."modules/wall/?course=$course_code&amp;showPost=$report->rid";
+            $editurl = $urlServer."modules/wall/?course=$course_code&amp;edit=$report->rid";
+            $deleteurl = $urlServer."modules/wall/?course=$course_code&amp;delete=$report->rid";
+            $options = action_button(array(
+                    array('title' => $langAbuseReportClose,
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",
+                            'icon' => 'fa-archive',
+                            'confirm' => $langConfirmAbuseReportClose,
+                            'confirm_title' => $langAbuseReportClose,
+                            'confirm_button' => $langClose),
+                    array('title' => $langVisitReportedResource,
+                            'url' => $visiturl,
+                            'icon' => 'fa-external-link'),
+                    array('title' => $langEditReportedResource,
+                            'url' => $editurl,
+                            'icon' => 'fa-edit'),
+                    array('title' => $langDeleteReportedResource,
+                            'url' => $deleteurl,
+                            'icon' => 'fa-times',
+                            'class' => 'delete',
+                            'confirm' => $langConfirmDeleteReportedResource),
             ));
         }
         

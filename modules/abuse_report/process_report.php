@@ -92,6 +92,9 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $res = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $rid);
             $rcontent = $res->url;
             $link_title = $res->title;
+        } elseif ($rtype == 'wallpost') {
+            $res = Database::get()->querySingle("SELECT content FROM `wall_post` WHERE id = ?d", $rid);
+            $rcontent = $res->content;
         }
         
         Log::record($cid, MODULE_ID_ABUSE_REPORT, LOG_INSERT,
@@ -139,6 +142,11 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $content = "<a href='" . $urlServer . "modules/link/go.php?course=".course_id_to_code($cid)."&amp;id=$rid&amp;url=" .
                 urlencode($rcontent) . "'>" . q($link_title) . "</a>";
             $url = $urlServer."modules/link/?course=".course_id_to_code($cid);
+        } elseif ($rtype == 'wallpost') {
+            $res = Database::get()->querySingle("SELECT content FROM wall_post WHERE id = ?d", $rid);
+            $content_type = $langWallPost;
+            $content = nl2br(q($res->content));
+            $url = $urlServer."modules/wall/?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
         }
         
         $v = Database::get()->querySingle("SELECT visible FROM course_module

@@ -22,6 +22,7 @@ $require_current_course = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
+require_once 'modules/abuse_report/abuse_report.php';
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
@@ -73,6 +74,22 @@ if (isset($_POST['submit'])) {
 } elseif (isset($_GET['delete'])) { //handle delete
     $id = intval($_GET['delete']);
     if (allow_to_edit($id, $uid, $is_editor)) {
+        //delete abuse reports for this wall post first and log action
+        $res = Database::get()->queryArray("SELECT * FROM abuse_report WHERE `rid` = ?d AND `rtype` = ?s", $id, 'wallpost');
+        foreach ($res as $r) {
+            Log::record($r->course_id, MODULE_ID_ABUSE_REPORT, LOG_DELETE,
+            array('id' => $r->id,
+            'user_id' => $r->user_id,
+            'reason' => $r->reason,
+            'message' => $r->message,
+            'rtype' => 'wallpost',
+            'rid' => $id,
+            'rcontent' => Database::get()->querySingle("SELECT content FROM wall_post WHERE id = ?d", $id)->content,
+            'status' => $r->status
+            ));
+        }
+        Database::get()->query("DELETE FROM abuse_report WHERE rid = ?d AND rtype = ?s", $id, 'wallpost');
+        
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
         Session::Messages($langWallPostDeleted, 'alert-success');
     }

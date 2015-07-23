@@ -152,12 +152,21 @@ function generate_single_post_html($post) {
     $comm_content = $comm->put($course_code, $is_editor, $uid, true);
     
     if (allow_to_edit($id, $uid, $is_editor)) {
-        $post_actions = '<div class="edit_delete"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
+        $post_actions = '<div class="pull-right"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
                     '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
-                    '.icon('fa-times', $langDelete).'</a></div>';
+                    '.icon('fa-times', $langDelete).'</a>';
+        if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
+            $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
+        }
+        $post_actions .= '</div>';
     } else {
         $post_actions = '';
+        if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
+            $post_actions .= '<div class="pull-right">'.abuse_report_icon_flag ('wallpost', $id, $course_id).'</div>';
+        }
     }
+    
+    
     
     $ret = '<div class="row margin-right-thin margin-left-thin margin-top-thin">
                               <div class="col-sm-12">
@@ -227,12 +236,21 @@ function generate_infinite_container_html($posts, $next_page) {
         $comm_content = "<a class='btn btn-primary btn-xs pull-right' href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;showPost=".$id."#comments_title'>$langComments (".$comm->getCommentsNum().")</a>";
         
         if (allow_to_edit($id, $uid, $is_editor)) {
-            $post_actions = '<div class="edit_delete"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
+            $post_actions = '<div class="pull-right"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
                     '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
-                    '.icon('fa-times', $langDelete).'</a></div>';
+                    '.icon('fa-times', $langDelete).'</a>';
+            if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
+                $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
+            }
+            $post_actions .= '</div>';
         } else {
             $post_actions = '';
+            if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
+                $post_actions .= '<div class="pull-right">'.abuse_report_icon_flag ('wallpost', $id, $course_id).'</div>';
+            }
         }
+        
+        
         
         $ret .= '<div class="infinite-item">';
     
