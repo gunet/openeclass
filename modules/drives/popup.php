@@ -43,6 +43,10 @@ if (!$callback_auth) {
             if ($redirect) {
                 if (strpbrk($redirect, "\r\n"))
                     die();
+                if (!is_url_accepted($redirect))
+                    die();
+                if (!preg_match('#^(https?://)?(www\.)?' . $_SERVER['SERVER_NAME'] .'(/.*)?#i', $redirect))
+                    die();
                 $encoded_url = preg_replace_callback('#://([^/]+)/([^?]+)#', function ($match) { return '://' . $match[1] . '/' . join('/', array_map('rawurlencode', explode('/', $match[2])));}, $redirect);
                 header('Location: ' . $encoded_url);
             } else {
