@@ -51,7 +51,7 @@ if (isset($_GET['delete'])) {
         Database::get()->query('DELETE FROM autoenroll_course WHERE rule = ?d', $rule);
     }
 
-    if (isset($_POST['courses']) or isset($_POST['departments'])) {
+    if (isset($_POST['courses']) or isset($_POST['rule_deps'])) {
         if (!isset($rule)) {
             $rule = Database::get()->query('INSERT INTO autoenroll_rule
                 SET status = ?d', $type)->lastInsertID;
@@ -65,9 +65,9 @@ if (isset($_GET['delete'])) {
             multiInsert('autoenroll_course',
                 'rule, course_id', $rule, $courses);
         }
-        if (isset($_POST['departments'])) {
+        if (isset($_POST['rule_deps'])) {
             multiInsert('autoenroll_department',
-                'rule, department_id', $rule, $_POST['departments']);
+                'rule, department_id', $rule, $_POST['rule_deps']);
         }
     }
     Session::Messages($langAutoEnrollAdded, 'alert-success');
@@ -77,7 +77,7 @@ if (isset($_GET['delete'])) {
     }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
-    load_js('jstree');
+    load_js('jstree3d');
     load_js('select2');
 
     $pageName = isset($_GET['add'])? $langAutoEnrollNew: $langEditChange;
@@ -106,15 +106,53 @@ if (isset($_GET['delete'])) {
                          WHERE autoenroll_course.course_id = course.id AND
                                rule = ?d', $rule)));
         $ruleInput = "<input type='hidden' name='id' value='$_GET[edit]'>";
+
+        $deps = array_map(function ($dep) { return $dep->department_id; },
+            Database::get()->queryArray('SELECT department_id
+                FROM autoenroll_department
+                WHERE rule = ?d', $rule));
     } else {
-        $department = array();
+        $deps = $department = array();
         $courses = $ruleInput = '';
     }
 
     $tree = new Hierarchy();
-    list($js, $htmlTree) = $tree->buildUserNodePicker(array('defaults' => $department));
-    list($js, $htmlTreeCourse) = $tree->buildCourseNodePicker();
-    $head_content .= $js . "
+    list($jsTree, $htmlTree) = $tree->buildUserNodePicker(array('defaults' => $department, 'multiple' => true));
+
+    // The following code is modified from Hierarchy::buildJSNodePicker()
+    $options = array('defaults' => $deps, 'where' => 'AND node.allow_course = true');
+    $joptions = json_encode($options);
+
+    $htmlTreeCourse = "<div id='nodCnt2'>";
+    $i = 0;
+    foreach ($deps as $dep) {
+        $htmlTreeCourse .= "<p id='nc_$i'>
+            <input type='hidden' name='rule_deps[]' value='$dep'>" .
+            $tree->getFullPath($dep) .
+            "&nbsp;<a href='#nodCnt2'><span class='fa fa-times' data-toggle='tooltip' data-original-title='".q($langNodeDel)."' data-placement='top' title='".q($langNodeDel)."'></span></a></p>";
+        $i++;
+    }
+    $htmlTreeCourse .= "</div>
+        <div><p><a id='ndAdd2' href='#add'><span class='fa fa-plus' data-toggle='tooltip' data-placement='top' title='".q($langNodeAdd)."'></i></a></p></div>
+        <div class='modal fade' id='treeCourseModal' tabindex='-1' role='dialog' aria-labelledby='treeModalLabel' aria-hidden='true'>
+          <div class='modal-dialog'>
+            <div class='modal-content'>
+              <div class='modal-header'>
+                <button type='button' class='close treeCourseModalClose'><span aria-hidden='true'>&times;</span><span class='sr-only'>$langCancel</span></button>
+                <h4 class='modal-title' id='treeCourseModalLabel'>" . q($langNodeAdd) . "</h4>
+              </div>
+              <div class='modal-body'>
+                <div id='js-tree-course'></div>
+              </div>
+              <div class='modal-footer'>
+                <button type='button' class='btn btn-default treeCourseModalClose'>$langCancel</button>
+                <button type='button' class='btn btn-primary' id='treeCourseModalSelect'>$langSelect</button>
+              </div>
+            </div>
+          </div>
+        </div>";
+
+    $head_content .= $jsTree . "
       <script>
         $(function () {
           $('#courses').select2({
@@ -132,6 +170,83 @@ if (isset($_GET['delete'])) {
               }
             }
           }).select2('data', [$courses]);
+
+          $('#ndAdd2').click(function() {
+            $('#treeCourseModal').modal('show');
+          });
+
+          $('#nodCnt2').on('click', \"a[href='#nodCnt2']\", function (e) {
+            e.preventDefault();
+            $(this).find('span').tooltip('destroy')
+              .closest('p').remove();
+            $('#dialog-set-key').val(null);
+            $('#dialog-set-value').val(null);
+          });
+
+          $('.treeCourseModalClose').click(function() {
+            $('#treeCourseModal').modal('hide');
+          });
+
+          $('#treeCourseModalSelect').click(function() {
+            var newnode = $( '#js-tree-course' ).jstree('get_selected', true)[0];
+            if (newnode !== undefined) {
+                var newnodeid = newnode.id;
+                var newnodename = newnode.text;
+            }
+
+            jQuery.getJSON('{$urlAppend}modules/hierarchy/nodefullpath.php', {nodeid : newnodeid})
+              .done(function(data) {
+                if (data.nodefullpath !== undefined && data.nodefullpath.length > 0) {
+                  newnodename = data.nodefullpath;
+                }
+            })
+            .always(function(dataORjqXHR, textStatus, jqXHRORerrorThrown) {
+                if (newnode === undefined) {
+                    alert('$langEmptyNodeSelect');
+                } else {
+                    countnd += 1;
+                    $('#nodCnt2').append('<p id=\"nd_' + countnd + '\">'
+                                     + '<input type=\"hidden\" name=\"rule_deps[]\" value=\"' + newnodeid + '\">'
+                                     + newnodename
+                                     + '&nbsp;<a href=\"#nodCnt2\"><span class=\"fa fa-times\" data-toggle=\"tooltip\" data-original-title=\"$langNodeDel\" data-placement=\"top\" title=\"$langNodeDel\"><\/span><\/a>'
+                                     + '<\/p>');
+
+                    $('#dialog-set-value').val(newnodename);
+                    $('#dialog-set-key').val(newnodeid);
+                    document.getElementById('dialog-set-key').onchange();
+                    $('#treeCourseModal').modal('hide');
+                }
+            });
+          });
+
+          $( '#js-tree-course' ).jstree({
+              'plugins' : ['sort'],
+              'core' : {
+                  'data' : {
+                      'url' : '{$urlAppend}modules/hierarchy/nodes.php',
+                      'type' : 'POST',
+                      'data' : function(node) {
+                          return { 'id' : node.id, 'options' : $joptions };
+                      }
+                  },
+                  'multiple' : false,
+                  'themes' : {
+                      'dots' : true,
+                      'icons' : false
+                  }
+              },
+              'sort' : function (a, b) {
+                  priorityA = this.get_node(a).li_attr.tabindex;
+                  priorityB = this.get_node(b).li_attr.tabindex;
+
+                  if (priorityA == priorityB) {
+                      return (this.get_text(a) > this.get_text(b)) ? 1 : -1;
+                  } else {
+                      return (priorityA < priorityB) ? 1 : -1;
+                  }
+              }
+          }); 
+
         });
       </script>";
 

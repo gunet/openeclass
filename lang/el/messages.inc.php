@@ -39,6 +39,7 @@ $langContactInfo = "Στοιχεία επικοινωνίας";
 $langInCourses = "Στο μάθημα";
 $langOfSite = "της πλατφόρμας";
 $langResourceBrowser = 'Αναζήτηση πόρων';
+$langGeneralSettings = 'Ρυθμίσεις';
 
 #For the logged-out user:
 $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
@@ -828,7 +829,7 @@ $langUsageTerms = 'Όροι Χρήσης';
  * ***************************************************** */
 $langCourseProgram = "Περιγραφή Μαθήματος";
 $langThisCourseDescriptionIsEmpty = "Το μάθημα δεν διαθέτει περιγραφή";
-$langEditCourseProgram = "Δημιουργία και διόρθωση";
+$langEditCourseProgram = "Δημιουργία / Διόρθωση";
 $langQuestionPlan = "Ερώτηση στον διδάσκοντα";
 $langInfo2Say = "Πληροφορία για τους " . $langsOfStudentss;
 $langAddCat = "Κατηγορία";
@@ -864,6 +865,8 @@ $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
+$langCitation = "Βιβλιογραφική αναφορά μαθήματος";
+$langAccessed = "Ανακτήθηκε την ";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
 
 
@@ -1006,6 +1009,8 @@ $langExercices = "Ασκήσεις";
 $langAddPageHome = "Ανέβασμα Ιστοσελίδας";
 $langModifyInfo = "Διαχείριση Μαθήματος";
 $langDropBox = "Μηνύματα";
+$langDropBoxInbox = "Εισερχόμενα";
+$langDropBoxOutbox = "Εξερχόμενα";
 $langMyDropBox = "Τα μηνύματά μου";
 $langLearnPath = "Γραμμή Μάθησης";
 $langWikiDescriptionShort = "Περιγραφή";
@@ -1068,7 +1073,6 @@ $langAttendanceActiveUsers = "$langStudents παρουσιολογίου";
 $langAttendanceActiveUsers6 = "$langStudents τελευταίου εξαμήνου";
 $langAttendanceActiveUsers3 = "$langStudents τελευταίου τριμήνου";
 $langAttendanceActiveUsersAll = "Όλοι οι εγγεγραμμένοι $langsStudents";
-$langAttendanceActivity = "Δραστηριότητα";
 $langAttendanceAutoBook = "Αυτόματη καταχώρηση παρουσίας";
 $langAttendanceInfoForUsers = 'επιλέξτε από τη λίστα των χρηστών ποιοι θα συμμετέχουν στο παρουσιολόγιο';
 $langAttendance6Months = "Συμμετέχουν οι $langsStudents τελευταίου εξαμήνου";
@@ -1086,8 +1090,10 @@ $langAttendanceNoTitle2 = "Παρουσιολόγιο χωρίς τίτλο";
 
 $langGradebook = "Βαθμολόγιο";
 $langGradebooks = "Βαθμολόγια";
+$langAvailableGradebooks = "Διαθέσιμα βαθμολόγια";
+$langNoGradeBooks = "Δεν υπάρχουν διαθέσιμα βαθμολόγια";
 $langGradebookManagement = "Διαχείριση Βαθμολογίου";
-$langGradebookAddActivity = "Nέας δραστηριότητας";
+$langGradebookAddActivity = "Δραστηριότητας";
 $langGradebookActivityDescription = "Περιγραφή";
 $langGradebookActivityDate = "Ημερομηνία διεξαγωγής";
 $langGradebookActivityDate2 = "Ημερομηνία";
@@ -1119,7 +1125,7 @@ $langGradebookActToAddExe = "Ασκήσεις προς εισαγωγή στο �
 $langGradebookStudentFailure = "Δεν έχει γίνει ακόμη καταχώρηση βαθμών";
 $langGradebookStats = "Στατιστικά";
 $langGradebookMEANS = "Τιμές";
-$langGradebookInfoForUsers = 'επιλέξτε από τη λίστα των χρηστών ποιοι θα συμμετέχουν στο βαθμολόγιο';
+$langGradebookInfoForUsers = "Επιλογή χρηστών που θα συμμετέχουν στο βαθμολόγιο";
 $langGradebookActiveUsers = "Χρήστες βαθμολογίου";
 $langGradebookActiveUsersSemester = "Φοιτητές μόνο τελευταίου εξαμήνου";
 $langGradebookRange = "Κλίμακα βαθμολογίου";
@@ -1167,12 +1173,14 @@ $langUsersGradebook = "$langStudents βαθμολογίου";
 $langNoGradebook = "Δεν συμμετέχετε σε μαθήματα με βαθμολόγηση.";
 $langGradeVisible = "Εμφάνιση βαθμολογίας στους χρήστες";
 $langNewGradebook = "Νέο βαθμολόγιο";
-$langNewGradebook2 = "(δημιουργία νέου βαθμολογίου για το μάθημα)";
+$langNewGradebook2 = "Δημιουργία νέου βαθμολογίου για το μάθημα";
 $langChangeGradebook = "Επιλογή βαθμολογίου";
 $langChangeGradebookSuccess = "Το βαθμολόγιο ενεργοποιήθηκε με επιτυχία";
 $langCreateGradebookSuccess = "Το βαθμολόγιο δημιουργήθηκε με επιτυχία";
 $langChangeGradebook2 = "(επιλογή ενεργού βαθμολογίου για το μάθημα)";
 $langGradebookNoTitle2 = "Βαθμολόγιο χωρίς τίτλο";
+$langGradebookDeleted = "To βαθμολόγιο διαγράφηκε με επιτυχία";
+$langSpecificUsers = "συγκεκριμένοι $langsStudents";
 
 $langCopyrighted="Πνευματικά Δικαιώματα";
 $langWithoutCopyright="Ελεύθερο δικαιωμάτων";
@@ -1410,7 +1418,7 @@ $langMetaHighereducation = "Ανώτερη/Ανώτατη Εκπαίδευση";
 $langNewPersoMessage = "Νέο προσωπικό μήνυμα";
 $langNewCourseMessage = "Νέο μήνυμα μαθήματος";
 $langBadFormData = "Η αποστολή του αρχείου απέτυχε";
-$langSendTo = "Αποστολή στον/στην";
+$langSendTo = "Προς";
 $langReceivedFiles = "Εισερχόμενα";
 $langSentFiles = "Απεσταλμένα";
 $langSentTo = "Στάλθηκε στον/στην";
@@ -1429,7 +1437,6 @@ $langPurgeFile = "Προσοχή! Το μήνυμα θα διαγραφεί απ
 $langOtherDropBoxFiles = "Λοιπές αποστολές";
 $langRecipient = "Παραλήπτης";
 $langRecipients = "Παραλήπτες";
-$langMaxMessageSize = "Το μήνυμά σας δεν πρέπει να υπερβαίνει τους 1000 χαρακτήρες.";
 $langAttachedFile = "Συννημένο αρχείο";
 $langDoNotReply = "Αν απαντήσετε απευθείας στο παραπάνω μήνυμα, η απάντηση θα φθάσει σε λάθος παραλήπτη. Για να απαντήσετε κάντε κλικ";
 $langParticipants = "Συμμετέχοντες";
@@ -2492,7 +2499,7 @@ $langNoDocsExist = "Δεν υπάρχουν έγγραφα";
 $langNoPosts = "Δεν υπάρχουν αποστολές στις περιοχές συζητήσεων";
 $langNotEnrolledToLessons = "Δεν έχετε εγγραφεί σε μαθήματα";
 $langMore = "περισσότερα";
-$langSender = "Αποστολέας";
+$langSender = "Από";
 $langUnknown = "μη ορισμένη";
 $langDuration = "Διάρκεια";
 $langClassic = "Συνοπτικό";
@@ -2618,6 +2625,7 @@ $langEditPoll = 'Τροποποίηση Ερωτηματολογίου';
 $langPollManagement = "Διαχείριση Ερωτηματολογίου";
 $langBackPollManagement = "Επιστροφή στη διαχείριση ερωτηματολογίου";
 $langQuestionnaire = "Ερωτηματολόγια";
+$langNoAccessPrivilages = "Δεν έχετε δικαίωμα πρόσβασης";
 $langSurvey = "Ερωτηματολόγιο";
 $langSurveys = "Ερωτηματολόγια";
 $langParticipate = "Συμμετοχή";
@@ -3194,7 +3202,7 @@ $langUpgTooOld = 'Η έκδοση του Open eClass από την οποία γ
    στην έκδοση 2.2 και στη συνέχεια στην τελευταία έκδοση.';
 $langSuccessOk = "Επιτυχία";
 $langSuccessBad = "Σφάλμα ή δεν χρειάζεται τροποποίηση";
-$langUpgAdminError = "Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του συστήματος! Παρακαλούμε επιστρέψτε στην προηγούμενη σελίδα και ξαναδοκιμάστε.";
+$langUpgAdminError = "Τα στοιχεία που δώσατε δεν αντιστοιχούν στο διαχειριστή του συστήματος! Παρακαλούμε ξαναδοκιμάστε.";
 $langUpgNoVideoDir = "Ο υποκατάλογος 'video' δεν υπάρχει και δεν μπόρεσε να δημιουργηθεί. Ελέγξτε τα δικαιώματα πρόσβασης.";
 $langUpgNoVideoDir2 = "Υπάρχει ένα αρχείο με όνομα 'video' που εμποδίζει! Θα πρέπει να το διαγράψετε.";
 $langUpgNoVideoDir3 = "Δεν υπάρχει δικαίωμα εγγραφής στον υποκατάλογο 'video'!";
@@ -3738,6 +3746,10 @@ $langGradeType = "Τυπος Βαθμολογίας";
 $langGradeNumbers = "Αριθμοί";
 $langGradeScales = "Βαθμολογικές Κλίμακες";
 $langGradeScalesSelect = "Επιλογή Κλίμακας";
+$langNoGradeScales = 'Δεν έχουν καταχωρηθεί βαθμολογικές κλίμακες.';
+$langWording = 'Λεκτικό';
+$langScales = 'Κλίμακες';
+$langValue = 'Τιμή';
 $langNewGradeScale = "Προσθήκη βαθμολογικής κλίμακας";
 $langWorkSubType = "Τύπος Υποβολής";
 $langWorkOnlineText = "Online Κείμενο";
@@ -3781,6 +3793,8 @@ $langOnBehalfOf = 'Εκ μέρους του';
 $langOnBehalfOfUserComment = 'Υποβλήθηκε από: %s, εκ μέρους του χρήστη: %s';
 $langOnBehalfOfGroupComment = 'Υποβλήθηκε από: %s, εκ μέρους της ομάδας: %s';
 $langDelWarnUserAssignment = 'Επιβεβαίωση διαγραφής εργασίας ' . $langOfUser;
+$langMyPersoDeadlines = "Οι διορίες μου";
+$langAssignmentWillBeActive = 'Η εργασία θα είναι ενεργή στις';
 
 /* * ***********************************************************
  * listerqusers.php
@@ -3846,11 +3860,11 @@ $langResourceUnitModified = "Τα στοιχεία του πόρου της εν
 $langInsertText = "κειμένου";
 $langInsertDoc = "εγγράφου";
 $langInsertExercise = "άσκησης";
-$langInsertExerciseCap = "Άσκησης";
+$langInsertExerciseCap = "Άσκηση";
 $langInsertVideo = "πολυμεσικού αρχείου";
 $langInsertForum = "περιοχής συζητήσεων";
 $langInsertWork = 'εργασίας';
-$langInsertWorkCap = 'Εργασίας';
+$langInsertWorkCap = 'Εργασία';
 $langInsertWiki = 'wiki';
 $langInsertLink = "συνδέσμου";
 $langInsertEBook = "ηλεκτρονικού βιβλίου";
@@ -4424,7 +4438,6 @@ $langBlogAddPost = "Προσθήκη ανάρτησης";
 $langBlogEmpty = "Δεν υπάρχουν αναρτήσεις ιστολογίου";
 $langBlogNewerPosts = "Νεότερες αναρτήσεις";
 $langBlogOlderPosts = "Παλαιότερες αναρτήσεις";
-$langBlogPopular = "Δημοφιλείς Αναρτήσεις";
 $langBlogPostUser = " - από τον χρήστη ";
 $langSureToDelBlogPost = "Είστε σίγουρος ότι θέλετε να διαγράψετε την ανάρτηση";
 $langBlogPostBody = "Σώμα Ανάρτησης";
@@ -4637,6 +4650,68 @@ $langNotConfigured = 'Δεν έχει ρυθμιστεί';
 $langEnableAfterConfig = 'Για να ενεργοποιήσετε αυτό το εργαλείο θα πρέπει πρώτα να εισάγετε τις απαιτούμενες ρυθμίσεις.';
 
 /* * ***********************************************************
+ * Auto Judge
+ * ************************************************************ */
+//auto_judge.php
+$langauto_judge = 'Ρυθμίσεις Αυτόματου Κριτή';
+$langHackerEarth = "Κλειδί HackerEarth";
+$langAutoJudge = "Ρυθμίσεις αυτόματου κριτή του $siteName";
+$langAutoJudgeSupportedLanguages = 'Υποστηριζόμενες Γλώσσες';
+$langAutoJudgeSupportsInput = 'Υποστηρίζει μεταβλητά δεδομένα εισόδου';
+$langAutoJudgeInputNotSupported = 'Δεν υποστηρίζεται από υπηρεσία μεταγλώττισης';
+$langAutoJudgeConnector = "Επιθυμητή υπηρεσία μεταγλώττισης";
+$langAutoJudgeUpdated = "Οι ρυθμίσεις αυτόματου κριτή ενημερώθηκαν με επιτυχία";
+
+// scenarios edit
+$langAutoJudgeEnable = 'Αυτόματος Κριτής';
+$langAutoJudgeInput = 'Είσοδος';
+$langAutoJudgeOutput = 'Έξοδος';
+$langAutoJudgeExpectedOutput = 'Αναμενόμενη έξοδος';
+$langAutoJudgeOperator = 'Τελεστής';
+$langAutoJudgeWeight = 'Βαθμοί';
+$langAutoJudgeProgrammingLanguage = 'Γλώσσα Προγραμματισμού';
+$langAutoJudgeResult = 'Αποτέλεσμα';
+
+// messages & misc
+$langAutoJudgeEmptyFile = "Το αρχείο που επιχειρείτε να ανεβάσετε είναι κενό. Η εργασία δεν υποβλήθηκε.";
+$langAutoJudgeInvalidFileType = "Εσφαλμένος τύπος αρχείου. Αναμενόμενος: %s, Δόθηκε: %s";
+$langAutoJudgeSum = 'Άθροισμα';
+$langAutoJudgeNewScenario = 'Νέο σενάριο';
+$langAutoJudgeShowWorkResultRpt = 'Προβολή αναφοράς αποτελεσμάτων';
+$langAutoJudgeRank = 'Κατάταξη';
+$langAutoJudgeScenariosPassed = 'Περασμένα Σενάρια';
+
+// asserts
+$langAutoJudgeAssertions = array(
+    "eq" => "είναι ίσο με",
+    "same" => "είναι ίδιο με",
+    "notEq" => "δεν είναι ίσο με",
+    "notSame" => "δεν είναι ίδιο με",
+    "integer" => "είναι ακέραιος",
+    "float" => "είναι δεκαδικός",
+    "digit" => "είναι ψηφίο",
+    "boolean" => "είναιboolean",
+    "notEmpty" => "δεν είναι κενό",
+    "notNull" => "δεν είναι Null",
+    "string" => "είναι string",
+    "startsWith" => "αρχίζει με",
+    "endsWith" => "τελειώνει με",
+    "contains" => "περιέχει",
+    "numeric" => "είναι αριθμητικό",
+    "isArray" => "είναι array",
+    "true" => "είναι true",
+    "false" => "είναι false",
+    "isJsonString" => "είναι JSON string ",
+    "isObject" => "είναι αντικείμενο",
+);
+
+// result report
+$langAutoJudgeDetailedReport = 'Αυτόματος κριτής: Αναλυτική αναφορά ';
+$langAutoJudgeResultsFor = 'Αποτελέσματα για';
+$langAutoJudgeNotEnabledForReport = ' Ο αυτόματος κριτής δεν είναι ενεργοποιημένος για την συγκεκριμένη εργασία. ';
+$langAutoJudgeDownloadPdf = 'Λήψη σε μορφή PDF';
+
+/* * ***********************************************************
  * Tags
  * ************************************************************ */
 $langTag = 'Ετικέτα';
@@ -4650,6 +4725,7 @@ $langOpenDelosDescription = "<p>Το OpenDelos είναι η πλατφόρμα 
 <p>Η πλατφόρμα υποστηρίζει τη δράση <a href='http://ocw-project.gunet.gr/'>Ανοικτών Ακαδημαϊκών Μαθημάτων</a> σε συνδυασμό με την <a href='http://openeclass.org/'>πλατφόρμα Open eClass</a> και την εθνική πύλη αναζήτησης μαθημάτων που επίσης αναπτύσσει το GUNET.</p>";
 $langBBBDescription = "<p>Το υποσύστημα <b>Τηλεσυνεργασίας</b> της πλατφόρμας Open eClass υποστηρίζεται λειτουργικά από το ανοικτό λογισμικό <a href=\"http://www.bigbluebutton.org/\" target=\"_blank\">BigBlueButton</a> το οποίο αποτελεί  ένα πλήρες σύστημα άμεσης web-based επικοινωνίας και συνεργασίας εκπαιδευτών και εκπαιδευόμενων.</p>
 <p>Το BigBlueButton ανήκει στις εφαρμογές τηλεδιάσκεψης / σύγχρονης τηλεκπαίδευσης που δεν απαιτούν την εγκατάσταση πρόσθετου υλικού (Software ή Hardware). Η εφαρμογή εκτελείται απευθείας από τον πλοηγό διαδικτύου (Internet Explorer, Firefox, Chrome, Safari, κ.α) με χρήση του Adobe Flash Player. Για τη σύνδεση του Open eClass με μία εγκατεστημένη πλατφόρμα BigBlueButton επιλέξτε <a href=\"bbbmoduleconf.php\">Ρυθμίσεις</a>.</p>";
+$langAutojudgeDescription = "<p>Ο αυτόματος κριτής είναι ένα εργαλείο που επιτρέπει την αυτόματη διόρθωση προγραμματιστικών εργασιών. Πιο συγκεκριμένα, μέσω του εργαλείου ο καθηγητής μπορεί να ορίσει σενάρια που περιλαμβάνουν input και output βάσει των οποίων οι αναρτώμενες εργασίες βαθμολογούνται αυτόματα.</p><p>Το συγκεκριμένο υποσύστημα συνδέεται με τρίτες υπηρεσίες μεταγλώττισης οι οποίες μπορούν να επιλεχθούν στις <a href=\"autojudgemoduleconf.php\">Ρυθμίσεις</a>.</p>";
 $langFtpShortDescription = "Σύνδεση με υπηρεσία FTP";
 $langFtpLongDescription = "Πληκτρολογήστε το σύνδεσμο FTP";
 $langGoogleDriveShortDescription = "Short Description about google drive";

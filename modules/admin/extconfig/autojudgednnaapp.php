@@ -22,12 +22,13 @@
 
 require_once 'autojudgeapp.php';
 
-class AutojudgeDnnaApp extends AutojudgeApp {
+class AutojudgeDnnaApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
         //set POST variables
         $url           = 'http://compile.dnna.gr/api/code/run';
         $fields_string = null;
         $fields        = array(
+            //'client_secret' => AutojudgeApp::getAutoJudgeApp(get_class($this))->getParam('key')->value(),
             'input'         => $input->input,
             'source'        => urlencode($input->code),
             'lang'          => $input->lang,
@@ -48,7 +49,15 @@ class AutojudgeDnnaApp extends AutojudgeApp {
         curl_setopt($ch, CURLOPT_POSTFIELDS, $fields_string);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
         // Execute post
-        $result = json_decode(curl_exec($ch), true);
+        $origResult = curl_exec($ch);
+        $result = json_decode($origResult, true);
+        if(!$result) {
+            $output = new AutoJudgeConnectorResult();
+            $output->compileStatus = 'ERROR';
+            $output->output = curl_error($ch).' '.$origResult;
+            curl_close($ch);
+            return $output;
+        }
         // Close curl connection
         curl_close($ch);
 
@@ -86,5 +95,9 @@ class AutojudgeDnnaApp extends AutojudgeApp {
 
     public function supportsInput() {
         return true;
+    }
+
+    public function getName() {
+        return 'compile.dnna.gr';
     }
 }

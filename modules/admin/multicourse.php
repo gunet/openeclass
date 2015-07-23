@@ -110,7 +110,7 @@ if (isset($_POST['submit'])) {
     $course = new course();
     $user = new user();
 
-    load_js('jstree');
+    load_js('jstree3d');
 
     $tool_content .= "<div class='alert alert-info'>$langMultiCourseInfo</div>
         <div class='form-wrapper'>

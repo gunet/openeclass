@@ -29,7 +29,7 @@ $require_current_course = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Questionnaire';
 require_once '../../include/baseTheme.php';
-
+require_once 'modules/group/group_functions.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
@@ -65,6 +65,7 @@ if ($is_editor) {
         if (isset($_GET['delete']) and $_GET['delete'] == 'yes') {
             Database::get()->query("DELETE FROM poll_question_answer WHERE pqid IN
                         (SELECT pqid FROM poll_question WHERE pid = ?d)", $pid);
+            Database::get()->query("DELETE FROM `poll_to_specific` WHERE poll_id = ?d", $pid);
             Database::get()->query("DELETE FROM poll WHERE course_id = ?d AND pid = ?d", $course_id, $pid);
             Database::get()->query("DELETE FROM poll_question WHERE pid = ?d", $pid);
             Database::get()->query("DELETE FROM poll_answer_record WHERE pid = ?d", $pid);
@@ -100,7 +101,8 @@ if ($is_editor) {
                     $poll->end_date, 
                     $poll->description, 
                     $poll->end_message, 
-                    $poll->anonymized
+                    $poll->anonymized,
+                    $poll->assign_to_specific
                 );
                 $new_pid = Database::get()->query("INSERT INTO poll
                                     SET creator_id = ?d,
@@ -111,9 +113,14 @@ if ($is_editor) {
                                         end_date = ?t,
                                         description = ?s,
                                         end_message = ?s,
-                                        anonymized = ?d,    
+                                        anonymized = ?d,
+                                        assign_to_specific = ?d,
                                         active = 1", $poll_data)->lastInsertID;
-
+                if ($poll->assign_to_specific) {
+                    Database::get()->query("INSERT INTO `poll_to_specific` (user_id, group_id, poll_id) 
+                                            SELECT user_id, group_id, ?d FROM `poll_to_specific`
+                                            WHERE poll_id = ?d", $new_pid, $pid)->lastInsertID;                       
+                }
                 foreach ($questions as $question) {
                     $new_pqid = Database::get()->query("INSERT INTO poll_question
                                                SET pid = ?d,
@@ -160,7 +167,7 @@ function printPolls() {
     $langParticipate,  $langHasParticipated, $langSee,
     $langHasNotParticipated, $uid, $langConfirmDelete, $langPurgeExercises,
     $langPurgeExercises, $langConfirmPurgeExercises, $langCreateDuplicate, 
-    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage;
+    $head_content, $langCreateDuplicateIn, $langCurrentCourse, $langUsage, $langNoAccessPrivilages;
     
     $my_courses = Database::get()->queryArray("SELECT a.course_id Course_id, b.title Title FROM course_user a, course b WHERE a.course_id = b.id AND a.course_id != ?d AND a.user_id = ?d AND a.status = 1", $course_id, $uid);
     $courses_options = "";
@@ -201,7 +208,25 @@ function printPolls() {
     ";
     
     $poll_check = 0;
-    $result = Database::get()->queryArray("SELECT * FROM poll WHERE course_id = ?d", $course_id);
+    $query = "SELECT * FROM poll WHERE course_id = ?d";
+    $query_params[] = $course_id;
+    //Bring only those assigned to the student
+    if (!$is_editor) {
+        $gids = user_group_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode(',',array_keys($gids));
+        } else {
+            $gids_sql_ready = "''";
+        }        
+        $query .= " AND
+                    (assign_to_specific = '0' OR assign_to_specific != '0' AND pid IN
+                       (SELECT poll_id FROM poll_to_specific WHERE user_id = ?d UNION SELECT poll_id FROM poll_to_specific WHERE group_id IN ($gids_sql_ready))
+                    )";
+        $query_params[] = $uid;
+    }
+    
+    $result = Database::get()->queryArray($query, $query_params);
+        
     $num_rows = count($result);
     if ($num_rows > 0)
         ++$poll_check;
@@ -212,7 +237,7 @@ function printPolls() {
         $tool_content .= "
                     <div class='table-repsonsive'>
 		      <table class='table-default'>
-		      <tr>
+		      <tr class='list-header'>
 			<th><div align='left'>&nbsp;$langTitle</div></th>
 			<th class='text-center'>$langPollStart</th>
 			<th class='text-center'>$langPollEnd</th>";
@@ -345,15 +370,17 @@ function printPolls() {
                         }
                     }
                     $tool_content .= "</td>";
-                     $tool_content .= "
-                        <td class='text-center option-btn-cell'>" .action_button(array(
-                            array(
-                                'title' => $langUsage,
-                                'icon' => 'fa-line-chart',
-                                'url' => "pollresults.php?course=$course_code&pid=$pid",
-                                'show' => $has_participated
-                            )         
-                        ))."</td></tr>";
+                    $line_chart_link = ($has_participated && $thepoll->show_results)? "<a href='pollresults.php?course=$course_code&pid=$pid'><span class='fa fa-line-chart'></span></a>" : "<span class='fa fa-line-chart' data-toggle='tooltip' title='$langNoAccessPrivilages'></span>" ;
+                    $tool_content .= "<td class='text-center option-btn-cell'><div style='padding-top:7px;padding-bottom:7px;'>$line_chart_link</div></td></tr>";
+//                    $tool_content .= "
+//                        <td class='text-center option-btn-cell'>" .action_button(array(
+//                            array(
+//                                'title' => $langUsage,
+//                                'icon' => 'fa-line-chart',
+//                                'url' => "pollresults.php?course=$course_code&pid=$pid",
+//                                'show' => $has_participated
+//                            )         
+//                        ))."</td></tr>";
                 }
             }
             $index_aa ++;

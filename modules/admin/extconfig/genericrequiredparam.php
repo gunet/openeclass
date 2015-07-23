@@ -36,4 +36,8 @@ class GenericRequiredParam extends GenericParam {
         return null;
     }
 
+    function isRequired() {
+        return true;
+    }
+
 }

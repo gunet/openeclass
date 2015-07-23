@@ -23,7 +23,7 @@
 require_once 'autojudgeapp.php';
 require_once 'include/simplehtmldom/simple_html_dom.php';
 
-class AutojudgeCodepadApp extends AutojudgeApp {
+class AutojudgeCodepadApp extends AutojudgeApp implements AutoJudgeConnector {
     public function compile(AutoJudgeConnectorInput $input) {
         //set POST variables
         $url = 'http://codepad.org/';
@@ -94,5 +94,9 @@ class AutojudgeCodepadApp extends AutojudgeApp {
 
     public function supportsInput() {
         return false;
+    }
+
+    public function getName() {
+        return 'Codepad';
     }
 }

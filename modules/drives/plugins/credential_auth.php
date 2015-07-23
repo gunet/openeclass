@@ -27,7 +27,7 @@ $drive = CloudDriveManager::getSessionDrive();
 $url = trim(addslashes(array_key_exists('url', $_POST) ? $_POST['url'] : $drive->getDefaultURL()));
 $username = trim(addslashes(array_key_exists('username', $_POST) ? $_POST['username'] : ""));
 $password = array_key_exists('password', $_POST) ? $_POST['password'] : "";
-$username_value = ($username == "")? "value='' placeholder='Username'" : "value='$username'";
+$username_value = ($username == "")? "value='' placeholder='Username'" : "value='" . q($username) . "'";
 
 if ($drive->checkCredentials($url, $username, $password)) {
     header('Location: ' . '../popup.php?' . $drive->getDriveDefaultParameter() . "&" . $drive->getCallbackName() . '=' . $drive->encodeCredentials($url, $username, $password));
@@ -54,7 +54,7 @@ if ($username || $password) {
 echo '<form action="credential_auth.php?' . $drive->getDriveDefaultParameter() . '" method="POST">';
 
 echo '<div class="form-group">';
-echo '<input type="url" class="form-control text-center" id="url" name="url" value="' . $url . '">';
+echo '<input type="url" class="form-control text-center" id="url" name="url" value="' . q($url) . '">';
 echo '</div>';
 
 echo '<div class="form-group">';

@@ -23,11 +23,10 @@
 foreach (ExtAppManager::$AppNames as $appName)
     require_once strtolower($appName) . '.php';
 require_once realpath(dirname(__FILE__)) . '/../../db/database.php';
-require_once realpath(dirname(__FILE__)) . '/../../../include/main_lib.php';
 
 class ExtAppManager {
 
-    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp", "AutojudgeDnnaApp", "AutojudgeHackerearthApp", "AutojudgeCodepadApp");
+    public static $AppNames = array("GoogleDriveApp", "OneDriveApp", "DropBoxApp", "OwnCloudApp", "WebDAVApp", "FTPApp", "OpenDelosApp", "BBBApp", "AutojudgeApp");
     private static $APPS = null;
 
     /**
@@ -59,15 +58,15 @@ class ExtAppManager {
 
 abstract class ExtApp {
 
-    const ENABLED = 'enabled';
+    private static $ENABLED = 'enabled';
     private $params = array();
 
     public function __construct() {
-        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::ENABLED, "0", ExtParam::TYPE_BOOLEAN));
+        $this->registerParam(new GenericParam($this->getName(), "Ενεργό", ExtApp::$ENABLED, "0", ExtParam::TYPE_BOOLEAN));
     }
 
     public function isEnabled() {
-        $enabled = $this->getParam(ExtApp::ENABLED);
+        $enabled = $this->getParam(ExtApp::$ENABLED);
         return $enabled && strcmp($enabled->value(), "1") == 0;
     }
 
@@ -76,7 +75,7 @@ abstract class ExtApp {
      * @param boolean $status
      */
     function setEnabled($status) {
-        $param = $this->getParam(ExtApp::ENABLED);
+        $param = $this->getParam(ExtApp::$ENABLED);
         if ($param) {
             $param->setValue($status ? 1 : 0);
             $param->persistValue();
@@ -118,19 +117,18 @@ abstract class ExtApp {
      * 
      * @return string
      */
-    public function getEditUrl() {
+    public function getConfigUrl() {
         return 'modules/admin/extapp.php?edit=' . $this->getName();
     }
 
     /**
-     * Return true if all params are set, else false
+     * Return true if the external app is configured (all params are set)
      * 
-     * @return boolean
+     * @return boolean true if the app is configured, else false
      */
-    public function getParamsSet() {
+    public function isConfigured() {
         foreach ($this->getParams() as $para) {
-            if ($para->name() !== 'enabled' and
-                $para->value() === '') {
+            if ($para->isRequired() && $para->value() === '') {
                 return false;
             }
         }
@@ -161,7 +159,7 @@ abstract class ExtApp {
     }
 
     protected function getBaseURL() {
-        return get_config('base_url');
+        return Database::get()->querySingle("SELECT `value` FROM config WHERE `key` = ?s", "base_url")->value;
     }
 
     public abstract function getDisplayName();
@@ -222,6 +220,10 @@ abstract class ExtParam {
 
     function getType() {
         return $this->type;
+    }
+
+    function isRequired() {
+        return false;
     }
 
     abstract protected function retrieveValue();

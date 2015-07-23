@@ -195,6 +195,9 @@ function load_js($file, $init='') {
         } elseif ($file == 'jstree3') {
             $head_content .= css_link('jstree3/themes/proton/style.min.css');
             $file = 'jstree3/jstree.min.js';
+        } elseif ($file == 'jstree3d') {
+            $head_content .= css_link('jstree3/themes/default/style.min.css');
+            $file = 'jstree3/jstree.min.js';
         } elseif ($file == 'shadowbox') {
             $head_content .= css_link('shadowbox/shadowbox.css');
             $file = 'shadowbox/shadowbox.js';
@@ -3076,24 +3079,57 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $link_attrs = "";
         }
+        $caret = '';
+        $primaryTag = 'a';
+        if ($level != 'primary-label' or isset($option['icon'])) {
+            $dataAttrs = "data-placement='bottom' data-toggle='tooltip'";
+        } else {
+            $dataAttrs = '';
+        }
+        $subMenu = '';
+        if (isset($option['options']) and ($level == 'primary' or $level == 'primary-label')) {
+            $href = '';
+            $primaryTag = 'button';
+            $button_class .= ' dropdown-toggle';
+            $caret = ' <span class="caret"></span>';
+            $dataAttrs = 'data-toggle="dropdown" data-placement="right" aria-haspopup="true" aria-expanded="false"';
+            $form_begin = '<div class="btn-group" role="group">';
+            $form_end = '</div>';
+            $subMenu = '<ul class="dropdown-menu dropdown-menu-right">';
+            foreach ($option['options'] as $subOption) {
+               $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">';
+               $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].'"></span>' : '';
+               $subMenu .= q($subOption['title']) . '</a></li>';
+               
+            }
+            $subMenu .= '</ul>';
+        }
+        $iconTag = '';
         if ($level == 'primary-label') {
+            if (isset($option['icon'])) {
+                $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
+                $link_attrs .= " title='$title'";
+                $title = "<span class='hidden-xs'>$title</span>";
+            }
             array_unshift($out_primary,
-                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' " .
-                " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon] space-after-icon'></i>" .
-                "<span class='hidden-xs'>$title</span></a>$form_end");
+                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
+                ' ' . $dataAttrs .
+                " $link_attrs>" . $iconTag . $title . $caret .
+                "</$primaryTag>$subMenu$form_end");
         } elseif ($level == 'primary') {
+            if (isset($option['icon'])) {
+                $iconTag = "<span class='fa $option[icon]'></span>";
+            }
             array_unshift($out_primary,
-                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' " .
-                " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon]'></i></a>$form_end");
+                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                ' ' . $dataAttrs .
+                " title='$title'$link_attrs>" . $iconTag . $caret .
+                "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class'" . $href .
                 " $link_attrs>" .
-                "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
+                "<span class='fa $option[icon]'></span> $title</a>$form_end</li>");
         }
         $i++;
     }
@@ -3102,15 +3138,14 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $out .= implode('', $out_primary);
     }
 
-    $action_button = "";
+    $action_button = '';
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";
     if (count($out_secondary)) {
-        //$action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
-        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
+        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
         $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
                      ".implode('', $out_secondary)."
-                  </ul>";
+                  </ul></div>";
     }
     if ($out && $i!=0) {
         return "<div class='row action_bar'>
@@ -3140,6 +3175,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 function action_button($options, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
+    $primary_form_begin = $primary_form_end = $primary_icon_class = '';
     foreach (array_reverse($options) as $option) {
         $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
@@ -3152,14 +3188,14 @@ function action_button($options, $secondary_menu_options = array()) {
             $class = '';
         }
         if (isset($option['btn_class'])) {
-            $btn_class = ' '.$option['btn_class'];
+            $btn_class = ' ' . $option['btn_class'];
         } else {
             $btn_class = ' btn-default';
         }
         if (isset($option['link-attrs'])) {
-            $link_attrs = " ".$option['link-attrs'];
+            $link_attrs = ' ' . $option['link-attrs'];
         } else {
-            $link_attrs = "";
+            $link_attrs = '';
         }
         $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
         $icon_class = "class='list-group-item $class$disabled";
@@ -3169,10 +3205,19 @@ function action_button($options, $secondary_menu_options = array()) {
         if (isset($option['confirm'])) {
             $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
+            if ($level == 'primary-label' or $level == 'primary') {
+                $primary_form_begin = $form_begin;
+                $primary_form_end = $form_end;
+                $form_begin = $form_end = '';
+                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+            } else {
+                $icon_class .= " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                $primary_icon_class = '';
+            }
             $url = '#';
         } else {
             $icon_class .= "'";
@@ -3184,9 +3229,9 @@ function action_button($options, $secondary_menu_options = array()) {
         }
 
         if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon'></i>" . q($option['title']) . "</a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon$primary_icon_class'></i>" . q($option['title']) . "</a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]$primary_icon_class'></i></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }
@@ -3207,10 +3252,11 @@ function action_button($options, $secondary_menu_options = array()) {
                 </a>";
     }
 
-    return "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+    return $primary_form_begin .
+         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
-          </div>";
+          </div>" . $primary_form_end;
 }
 /**
  * Removes spcific get variable from Query String
@@ -3613,7 +3659,7 @@ function user_hook($user_id) {
 
 
 /**
- * @brief Function called before a user is created.
+ * @brief Function called for every user login
  *
  * For now, only called for CAS automatic registration to determine actual user
  * details. If function local_register_hook() is defined, calls that instead.
@@ -3622,24 +3668,27 @@ function user_hook($user_id) {
  * 'departments' - List of department id's requested by user
  * 'attributes'  - List of attributes retrieved via LDAP / CAS / Shibboleth
  * 'am'          - Student id number retrieved via LDAP / CAS / Shibboleth
+ * 'user_id'     - Null for registration, current user id for subsequent logins
  * @return array - Actual user creation options. Key-value pairs are:
  * 'accept'      - Boolean - if false, user should be rejected
  * 'departments' - List of department id's user should be added to
  * 'status'      - User status (USER_STUDENT, USER_TEACHER)
  * 'am'          - Student id number
  */
-function register_hook($options) {
+function login_hook($options) {
     if (!isset($options['am'])) {
         $options['am'] = '';
     }
     if (!isset($options['departments'])) {
         $options['departments'] = array();
     }
+    if (!isset($options['status'])) {
+        $options['status'] = USER_STUDENT;
+    }
     $options['accept'] = true;
-    $options['status'] = USER_STUDENT;
 
-    if (function_exists('local_register_hook')) {
-        return local_register_hook($options);
+    if (function_exists('local_login_hook')) {
+        return local_login_hook($options);
     } else {
         return $options;
     }

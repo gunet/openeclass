@@ -349,11 +349,11 @@ function delete_link($id) {
     $title = $tuple->title;
     $category = $tuple->category;
     if ($category == -2) { //delete abuse reports and ratings for social bookmark
-        Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON `link`.id = abuse_report.id
+        Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON `link`.id = abuse_report.rid
                                WHERE abuse_report.rtype = ?s AND abuse_report.rid = ?d", 'link', $id);
-        Database::get()->query("DELETE rating FROM rating INNER JOIN `link` ON `link`.id = rating.id
+        Database::get()->query("DELETE rating FROM rating INNER JOIN `link` ON `link`.id = rating.rid
                                 WHERE rating.rtype = ?s AND rating.rid = ?d", 'link', $id);
-        Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN `link` ON `link`.id = rating_cache.id
+        Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN `link` ON `link`.id = rating_cache.rid
                                 WHERE rating_cache.rtype = ?s AND rating_cache.rid = ?d", 'link', $id);
         
     }

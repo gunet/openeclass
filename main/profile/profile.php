@@ -44,7 +44,7 @@ $tree = new Hierarchy();
 $userObj = new User();
 $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
 
-load_js('jstree');
+load_js('jstree3d');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>
 var lang = {
@@ -349,7 +349,7 @@ if (get_config('email_verification_required')) {
 
 if (!get_config('restrict_owndep')) {
     $tool_content .= "<div class='form-group'><label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>";
-    $tool_content .= "<div class='col-sm-10'>";
+    $tool_content .= "<div class='col-sm-10 form-control-static'>";
     list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
     $head_content .= $js;
     $tool_content .= $html;

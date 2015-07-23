@@ -104,7 +104,7 @@ function show_assignments() {
     $tool_content .= "
             <div class='form-wrapper'>
                 <form class='form-horizontal' action='$_SERVER[SCRIPT_NAME]?course=$course_code' method='post'>
-                <fieldset> 
+                <fieldset>
                     <input type='hidden' name='file' value='" . q($_GET['submit']) . "'>
                     <input type='hidden' name='group_id' value='$group_id'>
                     <div class='form-group'>
@@ -132,7 +132,7 @@ function show_assignments() {
                             <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
                             <a class='btn btn-default' href='$urlServer/modules/group/document.php?course=$course_code&group_id=$group_id'>$langCancel</a>
                         </div>
-                    </div>                      
+                    </div>
                 </fieldset>
             </form>
         </div>";
@@ -161,7 +161,7 @@ function submit_work($uid, $group_id, $id, $file) {
     }
     if (copy($source, "$workPath/$destination")) {
         Database::get()->query("INSERT INTO assignment_submit (uid, assignment_id, submission_date,
-                                submission_ip, file_path, file_name, comments, group_id, grade_comments) 
+                                submission_ip, file_path, file_name, comments, group_id, grade_comments)
                                 VALUES (?d, ?d, NOW(), '$_SERVER[REMOTE_ADDR]', ?s, ?s, ?s, ?d, ''", $uid, $id, $destination, $original_filename, $_POST['comments'], $group_id);
 
         $tool_content .="<div class='alert alert-success'>$langUploadSuccess

@@ -40,7 +40,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jstree');
+load_js('jstree3d');
 
 $toolName = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -106,59 +106,49 @@ if (!isset($_GET['action'])) {
     </td>
     </tr>";
 
-    $xmldata = str_replace('"', '\"', $tree->buildTreeDataSource(array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin))));
-    $initopen = $tree->buildJSTreeInitOpen();
+    $options = array('codesuffix' => true, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin));
+    $joptions = json_encode($options);
 
     $head_content .= <<<hContent
 <script type="text/javascript">
 /* <![CDATA[ */
 
 $(function() {
-
+            
     $( "#js-tree" ).jstree({
-        "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort", "contextmenu"],
-        "xml_data" : {
-            "data" : "$xmldata",
-            "xsl" : "nest"
-        },
+        "plugins" : ["sort", "contextmenu"],
         "core" : {
-            "animation": 300,
-            "initially_open" : [$initopen]
-        },
-        "themes" : {
-            "theme" : "eclass",
-            "dots" : true,
-            "icons" : false
-        },
-        "ui" : {
-            "select_limit" : 1
-        },
-        "cookies" : {
-            "save_selected": false
-        },
-        "types" : {
-            "types" : {
-                "nosel" : {
-                    "hover_node" : false,
-                    "select_node" : false
+            "data" : {
+                "url" : "{$urlAppend}modules/hierarchy/nodes.php",
+                "type" : "POST",
+                "data" : function(node) {
+                    return { "id" : node.id, "options" : $joptions };
                 }
+            },
+            "multiple" : false,
+            "themes" : {
+                "dots" : true,
+                "icons" : false
             }
         },
         "sort" : function (a, b) {
-            priorityA = this._get_node(a).attr("tabindex");
-            priorityB = this._get_node(b).attr("tabindex");
+            priorityA = this.get_node(a).li_attr.tabindex;
+            priorityB = this.get_node(b).li_attr.tabindex;
 
-            if (priorityA == priorityB)
-                return this.get_text(a) > this.get_text(b) ? 1 : -1;
-            else
-                return priorityA < priorityB ? 1 : -1;
+            if (priorityA == priorityB) {
+                return (this.get_text(a) > this.get_text(b)) ? 1 : -1;
+            } else {
+                return (priorityA < priorityB) ? 1 : -1;
+            }
         },
         "contextmenu": {
             "select_node" : true,
             "items" : customMenu
         }
     })
-    .delegate("a", "click.jstree", function (e) { $("#js-tree").jstree("show_contextmenu", e.currentTarget); });
+    .delegate("a", "click.jstree", function (e) { 
+        $("#js-tree").jstree("show_contextmenu", e.currentTarget); 
+    });
 
 });
 
@@ -167,19 +157,18 @@ function customMenu(node) {
     var items = {
         editItem: {
             label: "$langEdit",
-            action: function (obj) { document.location.href='?action=edit&id=' + obj.attr('id').substring(2); }
+            action: function (obj) { document.location.href='?action=edit&id=' + node.id; }
         },
         deleteItem: {
             label: "$langDelete",
-            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + obj.attr('id').substring(2); }
+            action: function (obj) { if (confirm('$langConfirmDelete')) document.location.href='?action=delete&id=' + node.id; }
         }
     };
 
-    if (node.attr('rel') == 'nosel') {
+    if (node.a_attr.class == 'nosel') {
         delete items.editItem;
         delete items.deleteItem;
     }
-
 
     return items;
 }
@@ -188,9 +177,7 @@ function customMenu(node) {
 </script>
 hContent;
 
-    $tool_content .= "<tr><td colspan='" . ($maxdepth + 4) . "'><div id='js-tree'></div></td></tr>";
-    // Close table correctly
-    $tool_content .= "</table>";    
+    $tool_content .= "<tr><td colspan='" . ($maxdepth + 4) . "'><div id='js-tree'></div></td></tr></table>";
 }
 // Add a new node
 elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -229,8 +216,9 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
                     'level' => 'primary-label')));
         } else {
             // OK Create the new node
-            validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
-            $tree->addNode($name, intval($_POST['nodelft']), $code, $allow_course, $allow_user, $order_priority);
+            $pid = intval($_POST['parentid']);
+            validateParentId($pid, isDepartmentAdmin());
+            $tree->addNode($name, $tree->getNodeLft($pid), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<div class='alert alert-success'>" . $langAddSuccess . "</div>";
         }
     } else {
@@ -257,7 +245,7 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
         $tool_content .= "<div class='form-group'>
                         <label class='col-sm-3 control-label'>$langNodeParent:</label>
                         <div class='col-sm-9'>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="nodelft"', 'tree' => array('0' => 'Top'), 'useKey' => 'lft', 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="parentid"', 'tree' => array('0' => 'Top'), 'multiple' => false, 'defaults' => $user->getDepartmentIds($uid), 'allow_only_defaults' => (!$is_admin)));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "<span class='help-block'><small>$langNodeParent2</small></span>
@@ -352,15 +340,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                     'level' => 'primary-label')));
         } else {
             // OK Update the node
-            validateParentLft(intval($_POST['nodelft']), isDepartmentAdmin());
-            $tree->updateNode($id, $name, intval($_POST['nodelft']), intval($_POST['lft']), intval($_POST['rgt']), intval($_POST['parentLft']), $code, $allow_course, $allow_user, $order_priority);
+            $oldpid = intval($_POST['oldparentid']);
+            $newpid = intval($_POST['newparentid']);
+            validateParentId($newpid, isDepartmentAdmin());
+            $tree->updateNode($id, $name, $tree->getNodeLft($newpid), intval($_POST['lft']), intval($_POST['rgt']), $tree->getNodeLft($oldpid), $code, $allow_course, $allow_user, $order_priority);
             $tool_content .= "<div class='alert alert-success'>$langEditNodeSuccess</div><br />";
         }
     } else {
         // Get node information
         $id = intval($_GET['id']);
         $mynode = Database::get()->querySingle("SELECT name, lft, rgt, code, allow_course, allow_user, order_priority FROM hierarchy WHERE id = ?d", $id);
-        $parentLft = $tree->getParent($mynode->lft, $mynode->rgt);
+        $parent = $tree->getParent($mynode->lft, $mynode->rgt);
         $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
         // Display form for edit node information
@@ -396,18 +386,17 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $tool_content .= "<div class='form-group'>
                         <label class='col-sm-3 control-label'>$langNodeParent:</label>
                         <div class='col-sm-9'>";
-        
+
         $treeopts = array(
-            'params' => 'name="nodelft"',
+            'params' => 'name="newparentid"',
             'exclude' => $id,
             'tree' => array('0' => 'Top'),
-            'useKey' => 'lft',
             'multiple' => false);
-        if (isset($parentLft) && isset($parentLft->lft)) {
-            $treeopts['defaults'] = $parentLft->lft;
-            $formPLft = $parentLft->lft;
+        if (isset($parent) && isset($parent->id)) {
+            $treeopts['defaults'] = $parent->id;
+            $formOPid = $parent->id;
         } else {
-            $formPLft = 0;
+            $formOPid = 0;
         }
         
         if ($is_admin) {
@@ -440,7 +429,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
           </div>
         </div>
         <input type='hidden' name='id' value='$id' />
-               <input type='hidden' name='parentLft' value='" . $formPLft . "'/>
+               <input type='hidden' name='oldparentid' value='" . $formOPid . "'/>
                <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
                <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
         <div class='form-group'>
@@ -451,7 +440,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         </fieldset>
         </form>
         </div>";           
-    }    
+    }
 }
 
 draw($tool_content, 3, null, $head_content);

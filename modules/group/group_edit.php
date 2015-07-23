@@ -278,9 +278,19 @@ $tool_content .= "<div class='form-wrapper'>
       </div>
     </div>
     <div class='form-group'>
-    <div class='col-sm-10 col-sm-offset-2'>      
-      <input class='btn btn-primary' type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\">
-    </div>  
+    <div class='col-sm-10 col-sm-offset-2'>".
+        form_buttons(array(
+            array(
+                'text'  =>  $langSave,
+                'name'  =>  'modify',
+                'value' =>  $langModify,
+                'javascript' => "selectAll('members_box',true)"
+            ),
+            array(
+                'href'  =>  $back_url
+            )
+        ))
+        ."</div>  
     </div>
     </fieldset>
     </form>

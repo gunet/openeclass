@@ -131,7 +131,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 // javascript
-load_js('jstree');
+load_js('jstree3d');
 load_js('pwstrength.js');
 $head_content .= <<<hContent
 <script type="text/javascript">
@@ -263,7 +263,6 @@ $nodePickerParams = array(
     'params' => 'name="department"',
     'defaults' => $depid,
     'tree' => null,
-    'useKey' => 'id',
     'where' => "AND node.allow_user = true",
     'multiple' => false);
 if (isDepartmentAdmin()) {

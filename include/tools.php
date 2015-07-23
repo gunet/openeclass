@@ -852,7 +852,7 @@ function pickerMenu() {
 function openCoursesExtra() {
     global $urlAppend, $themeimg, $openCoursesExtraHTML;
 
-    if (!isset($openCoursesExtraHTML)) {
+    if (!isset($openCoursesExtraHTML) and !defined('UPGRADE')) {
         setOpenCoursesExtraHTML();
     }
     $menuGroup = false;

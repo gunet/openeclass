@@ -223,12 +223,12 @@ if (!$nbrReports) {
                                  'confirm' => $langConfirmDeleteReportedResource),
                        ));
         } elseif ($report->rtype == 'link') {
-            $res = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $report->id);
-            $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$report->id&amp;url=" .
+            $res = Database::get()->querySingle("SELECT url, title FROM `link` WHERE id = ?d", $report->rid);
+            $content = "<a href='" . $urlServer . "modules/link/go.php?course=".$course_code."&amp;id=$report->rid&amp;url=" .
                 urlencode($res->url) . "'>" . q($res->title) . "</a>";
             $visiturl = $urlServer."modules/link/?course=$course_code&amp;socialview";
-            $editurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->id&amp;action=editlink";
-            $deleteurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->id&amp;action=deletelink";
+            $editurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->rid&amp;action=editlink";
+            $deleteurl = $urlServer."modules/link/?course=$course_code&amp;id=$report->rid&amp;action=deletelink";
             $options = action_button(array(
                     array('title' => $langAbuseReportClose,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=close&amp;report=$report->id",

@@ -821,7 +821,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `poll` (
                 `description` MEDIUMTEXT NULL DEFAULT NULL,
                 `end_message` MEDIUMTEXT NULL DEFAULT NULL,
                 `anonymized` INT(1) NOT NULL DEFAULT 0,
-                `show_results` INT(1) NOT NULL DEFAULT 0) $charset_spec");
+                `show_results` INT(1) NOT NULL DEFAULT 0,
+                `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` int(11) NULL,
+            `group_id` int(11) NULL,
+            `poll_id` int(11) NOT NULL ) $charset_spec"); 
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
                 `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `pid` INT(11) NOT NULL DEFAULT 0,
@@ -859,7 +867,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
                 `grading_scale_id` INT(11) NOT NULL DEFAULT '0',
                 `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
                 `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                `file_name` VARCHAR(200) DEFAULT '' NOT NULL) $charset_spec");
+                `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
+                `auto_judge` TINYINT(1) NOT NULL DEFAULT 0,
+                `auto_judge_scenarios` TEXT,
+                `lang` VARCHAR(10) NOT NULL DEFAULT '') $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -875,7 +886,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                 `grade_comments` TEXT NOT NULL,
                 `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
                 `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                `group_id` INT( 11 ) DEFAULT NULL ) $charset_spec");
+                `group_id` INT( 11 ) DEFAULT NULL,
+                `auto_judge_scenarios_output` TEXT) $charset_spec");
 
         // Add grading scales table
 $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
@@ -908,8 +920,16 @@ $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
                 `public` TINYINT(4) NOT NULL DEFAULT 1,
                 `results` TINYINT(1) NOT NULL DEFAULT 1,
                 `score` TINYINT(1) NOT NULL DEFAULT 1,
+                `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
                 `ip_lock` TEXT NULL DEFAULT NULL,
                 `password_lock` VARCHAR(255) NULL DEFAULT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
+            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `user_id` int(11) NULL,
+            `group_id` int(11) NULL,
+            `exercise_id` int(11) NOT NULL ) $charset_spec"); 
+
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
                 `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                 `eid` INT(11) NOT NULL DEFAULT 0,
@@ -985,32 +1005,26 @@ $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, al
 $db->query("INSERT INTO `hierarchy` (code, name, number, generator, lft, rgt, allow_course, allow_user)
     VALUES ('TMAPOST', ?s, '10', '100', '21', '22', true, true)", $langHierarchyTestCategory . ' 2');
 
+$db->query("CREATE TABLE `course_department` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course` INT(11) NOT NULL,
+    `department` INT(11) NOT NULL,
+    UNIQUE KEY `cdep_unique` (`course`,`department`),
+    FOREIGN KEY (`course`) REFERENCES `course` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE)");
 
-$db->query("CREATE TABLE IF NOT EXISTS `course_department` (
-                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `course` int(11) NOT NULL references course(id),
-                `department` int(11) NOT NULL references hierarchy(id) )");
-
-$db->query("CREATE TABLE IF NOT EXISTS `user_department` (
-                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `user` mediumint(8) unsigned NOT NULL references user(user_id),
-                `department` int(11) NOT NULL references hierarchy(id) )");
+$db->query("CREATE TABLE `user_department` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user` INT(11) NOT NULL,
+    `department` INT(11) NOT NULL,
+    UNIQUE KEY `udep_unique` (`user`,`department`),
+    FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`department`) REFERENCES `hierarchy` (`id`) ON DELETE CASCADE)"); 
 
 // hierarchy stored procedures
-$db->query("DROP VIEW IF EXISTS `hierarchy_depth`");
-$db->query("CREATE VIEW `hierarchy_depth` AS
-                    SELECT node.id, node.code, node.name, node.number, node.generator,
-                           node.lft, node.rgt, node.allow_course, node.allow_user, node.order_priority,
-                           COUNT(parent.id) - 1 AS depth
-                    FROM hierarchy AS node,
-                         hierarchy AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    GROUP BY node.id
-                    ORDER BY node.lft");
-
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
-$db->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(11),
-                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+$db->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
+                        IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
                         DECLARE lft, rgt INT(11);
@@ -1024,8 +1038,8 @@ $db->query("CREATE PROCEDURE `add_node` (IN name VARCHAR(255), IN parentlft INT(
                     END");
 
 $db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
-$db->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft INT(11),
-                        IN p_code VARCHAR(10), IN p_number INT(11), IN p_generator INT(11),
+$db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
+                        IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
                         IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
@@ -1040,9 +1054,9 @@ $db->query("CREATE PROCEDURE `add_node_ext` (IN name VARCHAR(255), IN parentlft 
                     END");
 
 $db->query("DROP PROCEDURE IF EXISTS `update_node`");
-$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name VARCHAR(255),
+$db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
                         IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                        IN p_code VARCHAR(10), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+                        IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
                     LANGUAGE SQL
                     BEGIN
                         UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
@@ -1545,7 +1559,6 @@ $db->query("CREATE INDEX `att_act_index` ON attendance_activities(attendance_id)
 $db->query("CREATE INDEX `att_book_index` ON attendance_book(attendance_activity_id)");
 $db->query("CREATE INDEX `bbb_index` ON bbb_session(course_id)");
 $db->query("CREATE INDEX `course_index` ON course(code)");
-$db->query("CREATE INDEX `cdep_index` ON course_department(course, department)");
 $db->query('CREATE INDEX `cd_type_index` ON course_description (`type`)');
 $db->query('CREATE INDEX `cd_cid_type_index` ON course_description (course_id, `type`)');
 $db->query('CREATE INDEX `cid` ON course_description (course_id)');
@@ -1596,7 +1609,6 @@ $db->query("CREATE INDEX `poll_q_id` ON poll_question(pid)");
 $db->query("CREATE INDEX `poll_qa_id` ON poll_question_answer(pqid)");
 $db->query("CREATE INDEX `unit_res_index` ON unit_resources (unit_id, visible, res_id)");
 $db->query("CREATE INDEX `u_id` ON user(username)");
-$db->query("CREATE INDEX `udep_id` ON user_department(user, department)");
 $db->query("CREATE INDEX `cid` ON video (course_id)");
 $db->query("CREATE INDEX `cid` ON videolink (course_id)");
 $db->query("CREATE INDEX `wiki_id` ON wiki_locks(wiki_id)");
