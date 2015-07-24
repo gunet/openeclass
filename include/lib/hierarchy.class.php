@@ -28,11 +28,6 @@
 class Hierarchy {
 
     private $dbtable;
-    private $dbdepth;
-    private $view;
-
-    /* private $ordering_copy;
-      private $ordermap; */
 
     /**
      * Constructor - do not use any arguments for default eclass behaviour (standard db tables).
@@ -41,13 +36,6 @@ class Hierarchy {
      */
     public function __construct($dbtable = 'hierarchy') {
         $this->dbtable = $dbtable;
-        $this->dbdepth = $dbtable . '_depth';
-        $this->view = " (SELECT node.*, COUNT(parent.id) - 1 AS depth
-                     FROM " . $this->dbtable . " AS node,
-                          " . $this->dbtable . " AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    GROUP BY node.id
-                    ORDER BY node.lft) AS tmp ";
     }
 
     /**
@@ -260,16 +248,15 @@ class Hierarchy {
     /**
      * Get a node's (unserialized) name value.
      *
-     * @param  int    $key    - The db query search pattern
-     * @param  string $useKey - Match against either the id or the lft during the db query
-     * @return string         - The (unserialized) node's name
+     * @param  int    $id    - The node's id
+     * @return string        - The (unserialized) node's name
      */
-    public function getNodeName($key, $useKey = 'id') {
-        if ($key === null || intval($key) <= 0) {
+    public function getNodeName($id) {
+        if ($id === null || intval($id) <= 0) {
             return null;
         }
 
-        $node = Database::get()->querySingle("SELECT name FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
+        $node = Database::get()->querySingle("SELECT name FROM hierarchy WHERE `id` = ?d", $id);
         if ($node) {
             return self::unserializeLangField($node->name);
         }
@@ -318,218 +305,126 @@ class Hierarchy {
             Database::get()->query("UPDATE " . $this->dbtable . " SET lft = (lft - ?d) + ?d WHERE lft > ?d", $maxrgt, $nodelft, $maxrgt);
         }
     }
-
+    
     /**
-     * Build an ArrayMap containing the tree nodes (ordered by the lft value).
-     *
-     * @param  array  $tree_array  - Include extra ArrayMap contents, useful for dropdowns and html-related UI selection dialogs.
-     * @param  string $useKey      - Key for return array, can be 'lft' or 'id'
-     * @param  int    $exclude     - The id of the subtree parent node we want to exclude from the result
-     * @param  string $where       - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * @param  boolean $dashprefix - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * @return array               - The returned result is an array of ArrayMaps, in the form of <treeArrayMap, idMap, depthMap, codeMap, allowCourseMap, allowUserMap, orderingMap>.
-     *                               The Tree map is in the form of <node key, node name>, all other byproducts (unordered) are in the following forms: <node key, node id>,
-     *                               <node key, node depth>, <node key, node code>, <node key, allow_course>, <node key, allow_user> and <node key, order_priority>.
+     * Recursive function for getting all neighbour nodes (on the same depth level) according to a starting LEFT value.
+     * i.e. useful for finding all roots (depth level 0)
+     * 
+     * @param type $lft      - the starting point lft value, this has to be well known, i.e. lft = 1 certainly belongs to a root node
+     * @param type $callback - optional callback function to call for each found node
      */
-    public function build($tree_array = array('0' => 'Top'), $useKey = 'lft', $exclude = null, $where = '', $dashprefix = false) {
-        if ($exclude != null) {
-            $row = Database::get()->querySingle("SELECT * FROM " . $this->dbtable . " WHERE id = ?d", $exclude);
-
-            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user,
-                             node.order_priority, COUNT(parent.id) - 1 AS depth
-                     FROM " . $this->dbtable . " AS node, " . $this->dbtable . " AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    AND (node.lft < " . $row->lft . " OR node.lft > " . $row->rgt . ")
-                    $where
-                    GROUP BY node.id
-                    ORDER BY node.lft";
+    private function getNeighbourNodesByLft($lft, $callback) {
+        $hasMore = 0;
+        $nextRootLft = 0;
+        Database::get()->queryFunc("SELECT * FROM " . $this->dbtable . " WHERE lft = ?d", function($row) use ($callback, &$hasMore, &$nextRootLft) {
+            if (is_callable($callback)) {
+                $callback($row);
+            }
+            $nextRootLft = intval($row->rgt) + 1;
+            $hasMore = Database::get()->querySingle("SELECT COUNT(id) AS count FROM " . $this->dbtable . " WHERE lft = ?d", $nextRootLft)->count;
+        }, $lft);
+        
+        if ($hasMore > 0) {
+            return $this->getNeighbourNodesByLft($nextRootLft, $callback);
         } else {
-            $query = "SELECT node.id, node.lft, node.name, node.code, node.allow_course, node.allow_user,
-                             node.order_priority, COUNT(parent.id) - 1 AS depth
-                     FROM " . $this->dbtable . " AS node, " . $this->dbtable . " AS parent
-                    WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                    $where
-                    GROUP BY node.id
-                    ORDER BY node.lft";
+            return;
         }
-
-        $result = Database::get()->queryArray($query);
-
-        $idmap = array();
-        $depthmap = array();
-        $codemap = array();
-        $allowcoursemap = array();
-        $allowusermap = array();
-        $orderingmap = array();
-
-        // necessary to avoid php notices for undefined offset
-        $idmap[0] = 0;
-        $depthmap[0] = 0;
-        $codemap[0] = '';
-        $allowcoursemap[0] = 1;
-        $allowusermap[0] = 1;
-        $orderingmap[0] = 999999;
-
-        foreach ($result as $row) {
-            $prefix = '';
-            if ($dashprefix) {
-                for ($i = 0; $i < $row->depth; $i++) {
-                    $prefix .= '&nbsp;-&nbsp;';
-                }
-            }
-
-            $tree_array[$row->$useKey] = $prefix . self::unserializeLangField($row->name);
-            $idmap[$row->$useKey] = $row->id;
-            $depthmap[$row->$useKey] = $row->depth;
-            $codemap[$row->$useKey] = $row->code;
-            $allowcoursemap[$row->$useKey] = $row->allow_course;
-            $allowusermap[$row->$useKey] = $row->allow_user;
-            $orderingmap[$row->$useKey] = intval($row->order_priority);
-        }
-
-        return array($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap);
     }
 
     /**
-     * Represent the tree using XML or HTML unordered list tags (<ul> and <li>) data source. Used for JSTree representation (GUI).
+     * Compile an array with the root nodes (nodes of 0 depth).
      *
-     * @param array $options           - Options array for construction of the HTML unordered tree representation. Possible key value pairs are:
-     * 'params'              => string  - Extra html tag parameters for the form's input elements (such as name)
-     * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
-     * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
-     * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
-     * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
-     * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
-     * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
-     * 'dashprefix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be prefixed by dashes indicating each node's depth in the tree
-     * 'codesuffix'          => boolean - Flag controlling whether the resulted ArrayMap's name values will be suffixed by each node's code in parentheses
-     * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
-     * 'xmlout'              => boolean - Flag controlling JSTree datasource
-     * You can omit all of the above since this method uses default values.
-     *
-     * @return string $out - XML or HTML output
+     * @return array
      */
-    public function buildTreeDataSource($options = array()) {
-        $tree_array = (array_key_exists('tree', $options)) ? $options['tree'] : array();
-        $useKey = (array_key_exists('useKey', $options)) ? $options['useKey'] : 'id';
-        $exclude = (array_key_exists('exclude', $options)) ? $options['exclude'] : null;
-        $where = (array_key_exists('where', $options)) ? $options['where'] : '';
-        $dashprefix = (array_key_exists('dashprefix', $options)) ? $options['dashprefix'] : false;
-        $codesuffix = (array_key_exists('codesuffix', $options)) ? $options['codesuffix'] : false;
-        $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
-        $allowables = (array_key_exists('allowables', $options)) ? $options['allowables'] : null;
-        $allow_only_defaults = (array_key_exists('allow_only_defaults', $options)) ? $options['allow_only_defaults'] : false;
-        $mark_allow_user = (strstr($where, 'allow_user') !== false) ? true : false;
-        $mark_allow_course = (strstr($where, 'allow_course') !== false) ? true : false;
-        $xmlout = (array_key_exists('xmlout', $options)) ? $options['xmlout'] : true;
-
-        $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
-        $subdefs = ($allow_only_defaults) ? $this->buildSubtrees($defs) : array();
-        $suballowed = ($allowables != null) ? $this->buildSubtrees($allowables) : null;
-        $out = ($xmlout) ? '<root>' : '<ul>' . "\n";
-
-        list($tree_array, $idmap, $depthmap, $codemap, $allowcoursemap, $allowusermap, $orderingmap) = $this->build($tree_array, $useKey, $exclude, null, $dashprefix);
-        $i = 0;
-        $current_depth = null;
-        $start_depth = null;
-
-        foreach ($tree_array as $key => $value) {
-            if ($i == 0) {
-                $start_depth = $current_depth = ($key != 0) ? $depthmap[$key] : 0;
-            } else {
-                if ($depthmap[$key] > $current_depth) {
-                    $out = ($xmlout) ? substr($out, 0, -8) : substr($out, 0, -6);
-                    $out .= ($xmlout) ? '' : '<ul>' . "\n";
-
-                    $current_depth = $depthmap[$key];
-                }
-
-                if ($depthmap[$key] < $current_depth) {
-                    for ($i = $current_depth; $i > $depthmap[$key]; $i--) {
-                        $out .= ($xmlout) ? '<\/item>' : '</ul></li>' . "\n";
-                    }
-
-                    $current_depth = $depthmap[$key];
-                }
-            }
-
-            $rel = '';
-            $class = '';
-            if (($mark_allow_course && !$allowcoursemap[$key]) ||
-                    ($mark_allow_user && !$allowusermap[$key]) ||
-                    ($allow_only_defaults && !in_array($idmap[$key], $subdefs) ) ||
-                    ($suballowed != null && !in_array($idmap[$key], $suballowed) )
-            ) {
-                $rel = 'nosel';
-            }
-            if (!empty($rel)) {
-                $rel = "rel='" . $rel . "'";
-                $class = "class='nosel'";
-            }
-
-            $valcode = '';
-            if ($codesuffix && strlen($codemap[$key]) > 0) {
-                $valcode = ' (' . $codemap[$key] . ')';
-            }
-
-            // valid HTML requires ids starting with letters.
-            // We can just use any 2 characters, all JS funcs use obj.attr("id").substring(2)
-            if ($xmlout) {
-                $out .= "<item id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><content><name " . $class . ">" . q($value . $valcode) . '<\/name><\/content><\/item>';
-            } else {
-                $out .= "<li id='nd" . $key . "' " . $rel . " tabindex='" . $orderingmap[$key] . "'><a href='#' " . $class . ">" . q($value . $valcode) . "</a></li>" . "\n";
-            }
-
-            $i++;
-        }
-
-        if (!$xmlout) {
-            $out .= '</ul>';
-        }
-
-        // close remaining open tags
-        $remain_depth = $current_depth - $start_depth;
-        if ($remain_depth > 0) {
-            for ($j = 0; $j < $remain_depth; $j++) {
-                $out .= ($xmlout) ? '<\/item>' : '</li></ul>';
-            }
-        }
-
-        if ($xmlout) {
-            $out .= '<\/root>';
-        }
-
-        return $out;
+    public function buildRootsArray() {
+        $roots = array();
+        $cb = function($row) use (&$roots) {
+            $roots[] = $row;
+        };
+        $this->getNeighbourNodesByLft(1, $cb);
+        return $roots;
     }
-
+    
+    /**
+     * Locate immediate subordinates of parent node with given lft and their subtrees.
+     * 
+     * @param  integer $searchLft - the lft of the parent node upon which the searching will apply
+     * @return array
+     */
+    private function locateSubordinatesAndSubTrees($searchLft) {
+        $subords = array();
+        $subtrees = array();
+        
+        $currentSubIdx = 0;
+        $searchSubLft = 0;
+        $searchSubRgt = 0;
+        
+        $this->loopTree(function($node) use (&$searchLft, &$currentSubIdx, &$searchSubLft, &$searchSubRgt, &$subords, &$subtrees) {
+            $nlft = intval($node->lft);
+            // locate immediate subordinates of parent node by searching for specific lft values
+            if ($nlft === $searchLft) {
+                $subords[] = $node;
+                $searchLft = intval($node->rgt) + 1;
+                $currentSubIdx = intval($node->id);
+                $searchSubLft = intval($node->lft);
+                $searchSubRgt = intval($node->rgt);
+            }
+            if ($nlft >= $searchSubLft && $nlft <= $searchSubRgt) {
+                $subtrees[$currentSubIdx][] = $node->id;
+            }
+        });
+        
+        return array($subords, $subtrees);
+    }
+    
+    /**
+     * Loop the whole tree ordered by lft and call callback for each node.
+     * 
+     * @param  function $callback
+     * @param  array    $nodesoverride - in case we can avoid the query
+     * @return array    $nodes
+     */
+    public function loopTree($callback, $nodesoverride = array()) {
+        if (count($nodesoverride) > 0) {
+            $nodes = $nodesoverride;
+        } else {
+            $nodes = array();
+            // get all nodes
+            Database::get()->queryFunc("select * from " . $this->dbtable . " order by lft", function($row) use (&$nodes) {
+                $nodes[] = $row;
+            });
+        }
+        
+        foreach($nodes as $node) {
+            if (is_callable($callback)) {
+                $callback($node);
+            }
+        }
+        
+        return $nodes;
+    }
+    
+    /**
+     * Compile an array with the root nodes (nodes of 0 depth) and their subtrees.
+     *
+     * @return array
+     */
+    public function buildRootsWithSubTreesArray() {
+        return $this->locateSubordinatesAndSubTrees(1);
+    }
+    
     /**
      * Compile an array with the root node ids (nodes of 0 depth).
      *
      * @return array
      */
-    public function buildRootsArray() {
-        $ret = array();
-        $res = ($this->useProcedures()) ? Database::get()->queryArray("SELECT id FROM " . $this->dbdepth . " WHERE depth = 0") : Database::get()->queryArray("SELECT id FROM " . $this->view . " WHERE depth = 0");
-        foreach ($res as $row) {
-            $ret[] = $row->id;
-        }
-        return $ret;
-    }
-
-    /**
-     * Compile a comma seperated list with node ids. Used for setting JSTree initially_open core
-     * configuration option
-     *
-     * @return string $initopen - The returned comma seperated list
-     */
-    public function buildJSTreeInitOpen() {
-        // compile a comma seperated list with node ids that will be initially open (nodes of 0 depth, roots)
-        $initopen = '';
-        foreach ($this->buildRootsArray() as $id) {
-            $initopen .= '"nd' . $id . '",';
-        }
-        return $initopen;
+    public function buildRootIdsArray() {
+        $roots = array();
+        $cb = function($row) use (&$roots) {
+            $roots[] = $row->id;
+        };
+        $this->getNeighbourNodesByLft(1, $cb);
+        return $roots;
     }
 
     /**
@@ -541,12 +436,10 @@ class Hierarchy {
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
-     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      *
      * @return string $js              - The returned JS code
      */
@@ -555,13 +448,7 @@ class Hierarchy {
 
         $params = $options['params'];
         $offset = (isset($options['defaults']) && is_array($options['defaults'])) ? count($options['defaults']) : 0; // The number of the parents that the editing child already belongs to (mainly for edit forms)
-        $xmlout = (isset($options['xmlout']) && is_bool($options['xmlout'])) ? $options['xmlout'] : true;
-
-        $xmldata = '';
-        if ($xmlout) {
-            $xmldata = $this->buildTreeDataSource($options);
-        }
-        $initopen = $this->buildJSTreeInitOpen();
+        $joptions = json_encode($options);
 
         if ($offset > 0) {
             $offset -= 1;
@@ -584,9 +471,11 @@ $(document).ready(function() {
     });
 
     $( "#treeModalSelect" ).click(function() {
-        var newnode = $( "#js-tree" ).jstree("get_selected");
-        var newnodeid = newnode.attr("id").substring(2);
-        var newnodename = newnode.children("a").text();
+        var newnode = $( "#js-tree" ).jstree("get_selected", true)[0];
+        if (newnode !== undefined) {
+            var newnodeid = newnode.id;
+            var newnodename = newnode.text;
+        }
 
         jQuery.getJSON('{$urlAppend}modules/hierarchy/nodefullpath.php', {nodeid : newnodeid})
         .done(function(data) {
@@ -598,7 +487,7 @@ $(document).ready(function() {
 //            // console.debug("jqxhr Request Failed: " + textStatus + ', ' + error);
 //        })
         .always(function(dataORjqXHR, textStatus, jqXHRORerrorThrown) {
-            if (!newnode.length) {
+            if (newnode === undefined) {
                 alert("$langEmptyNodeSelect");
             } else {
                 countnd += 1;
@@ -618,48 +507,24 @@ $(document).ready(function() {
     });
 
     $( "#js-tree" ).jstree({
-
-jContent;
-
-        if ($xmlout) {
-            $xmldata = str_replace('"', '\"', $xmldata);
-            $js .= <<<jContent
-        "plugins" : ["xml_data", "themes", "ui", "cookies", "types", "sort"],
-        "xml_data" : {
-            "data" : "$xmldata",
-            "xsl" : "nest"
-        },
-jContent;
-        } else {
-            $js .= <<<jContent
-        "plugins" : ["html_data", "themes", "ui", "cookies", "types", "sort"],
-jContent;
-        }
-
-        $js .= <<<jContent
+        "plugins" : ["sort"],
         "core" : {
-            "animation": 300,
-            "initially_open" : [$initopen]
-        },
-        "themes" : {
-            "theme" : "eclass",
-            "dots" : true,
-            "icons" : false
-        },
-        "ui" : {
-            "select_limit" : 1
-        },
-        "types" : {
-            "types" : {
-                "nosel" : {
-                    "hover_node" : false,
-                    "select_node" : false
+            "data" : {
+                "url" : "{$urlAppend}modules/hierarchy/nodes.php",
+                "type" : "POST",
+                "data" : function(node) {
+                    return { "id" : node.id, "options" : $joptions };
                 }
+            },
+            "multiple" : false,
+            "themes" : {
+                "dots" : true,
+                "icons" : false
             }
         },
         "sort" : function (a, b) {
-            priorityA = this._get_node(a).attr("tabindex");
-            priorityB = this._get_node(b).attr("tabindex");
+            priorityA = this.get_node(a).li_attr.tabindex;
+            priorityB = this.get_node(b).li_attr.tabindex;
 
             if (priorityA == priorityB) {
                 return (this.get_text(a) > this.get_text(b)) ? 1 : -1;
@@ -701,12 +566,10 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
-     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * This method uses default values, but you should at least provide 'params'.
      *
      * @return string  $html - The returned HTML code
@@ -718,10 +581,8 @@ jContent;
         $defaults = (array_key_exists('defaults', $options)) ? $options['defaults'] : '';
         $exclude = (array_key_exists('exclude', $options)) ? $options['exclude'] : null;
         $tree_array = (array_key_exists('tree', $options)) ? $options['tree'] : array('0' => 'Top');
-        $useKey = (array_key_exists('useKey', $options)) ? $options['useKey'] : 'lft';
         $where = (array_key_exists('where', $options)) ? $options['where'] : '';
         $multiple = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
-        $xmlout = (array_key_exists('xmlout', $options)) ? $options['xmlout'] : true;
 
 
         $html = '';
@@ -753,7 +614,7 @@ jContent;
                 if (isset($tree_array[$defs[0]])) {
                     $def = $tree_array[$defs[0]];
                 } else {
-                    $def = $this->getFullPath($defs[0], true, '', $useKey);
+                    $def = $this->getFullPath($defs[0], true, '');
                 }
             }
             else {
@@ -779,18 +640,14 @@ jContent;
                     <h4 class="modal-title" id="treeModalLabel">' . q($langNodeAdd) . '</h4>
                 </div>
                 <div class="modal-body">
-                    <div id="js-tree">';
-        if (!$xmlout) {
-            $html .= $this->buildTreeDataSource($options);
-        }
-        $html .= '</div></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default treeModalClose">' . $langCancel . '</button>
-                        <button type="button" class="btn btn-primary" id="treeModalSelect">' . $langSelect . '</button>
-                    </div>
+                    <div id="js-tree"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default treeModalClose">' . $langCancel . '</button>
+                    <button type="button" class="btn btn-primary" id="treeModalSelect">' . $langSelect . '</button>
                 </div>
             </div>
-        </div>';
+        </div></div>';
 
         return $html;
     }
@@ -807,12 +664,10 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
-     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * You must provide at least 'params' because this method does not use any default values.
      *
      * @return array - Return array containing (<js, html>) all necessary JS and HTML code
@@ -823,7 +678,7 @@ jContent;
 
         return array($js, $html);
     }
-
+    
     /**
      * Build a Tree Node Picker (UI) for attaching courses under tree nodes. The method's output provides all necessary JS and HTML code.
      * The php script calling this should provide:
@@ -836,12 +691,10 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
-     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * You can omit all of the above since this method uses default values.
      *
      * @return array            - Return array containing (<js, html>) all necessary JS and HTML code
@@ -849,7 +702,6 @@ jContent;
     public function buildCourseNodePicker($options = array()) {
         $defaults = array('params' => 'name="department[]"',
             'tree' => null,
-            'useKey' => 'id',
             'where' => 'AND node.allow_course = true',
             'multiple' => get_config('course_multidep'));
         $this->populateOptions($options, $defaults);
@@ -869,12 +721,10 @@ jContent;
      * 'defaults'            => array   - The ids of the already selected/added nodes. It can also be a single integer value, the code handles it automatically.
      * 'exclude'             => int     - The id of the subtree parent node we want to exclude from the result
      * 'tree'                => array   - Include (prepend) extra ArrayMap contents
-     * 'useKey'              => string  - Key for return array, can be 'lft' or 'id'
      * 'where'               => string  - Extra filtering db query where arguments, mainly for selecting course/user allowing nodes
      * 'multiple'            => boolean - Flag controlling whether the picker will allow multiple tree nodes selection or just one (single)
      * 'allow_only_defaults' => boolean - Flag controlling whether the picker will mark non-default tree nodes as non-selectable ones
      * 'allowables'          => array   - The ids of the (parent) nodes whose subtrees are to be allowed, all others will be marked as non-selectables
-     * 'xmlout'              => boolean - Flag controlling JSTree datasource
      * You can omit all of the above since this method uses default values.
      *
      * @return array            - Return array containing (<js, html>) all necessary JS and HTML code
@@ -882,7 +732,6 @@ jContent;
     public function buildUserNodePicker($options = array()) {
         $defaults = array('params' => 'name="department[]"',
             'tree' => null,
-            'useKey' => 'id',
             'where' => 'AND node.allow_user = true',
             'multiple' => get_config('user_multidep'));
         $this->populateOptions($options, $defaults);
@@ -911,20 +760,19 @@ jContent;
     /**
      * Get a node's full breadcrump-style path
      *
-     * @param  int     $key       - The db query search pattern
+     * @param  int     $id        - The node's id
      * @param  boolean $skipfirst - whether the first parent is ommited from the resulted full path or not
      * @param  string  $href      - If provided (and not left empty or null), then the breadcrump is clickable towards the provided href with the node's id appended to it
-     * @param  string  $useKey    - Match against either the id or the lft during the db query
      * @return string  $ret       - The return HTML output
      */
-    public function getFullPath($key, $skipfirst = true, $href = '', $useKey = 'id') {
+    public function getFullPath($id, $skipfirst = true, $href = '') {
         $ret = "";
 
-        if ($key === null || intval($key) <= 0) {
+        if ($id === null || intval($id) <= 0) {
             return $ret;
         }
 
-        $node = Database::get()->querySingle("SELECT name, lft, rgt FROM " . $this->dbtable . " WHERE `" . $useKey . "` = ?d", $key);
+        $node = Database::get()->querySingle("SELECT name, lft, rgt FROM hierarchy WHERE `id` = ?d", $id);
         if (!$node) {
             return $ret;
         }
@@ -989,33 +837,100 @@ jContent;
             }
         }
     }
-
+    
     /**
      * Builds an array containing all the subtree nodes of the (parent) nodes given
      *
-     * @param  array $nodes - Array containing the (parent) nodes whose subtree nodes we want
-     * @return array $subs  - Array containing the returned subtree nodes
+     * @param  array $nodes    - Array containing the (parent) nodes whose subtree nodes we want
+     * @param  array $allnodes - Array of all tree nodes to feed into loopTree() if it's already available
+     * @return array $subs     - Array containing the returned subtree nodes
      */
-    public function buildSubtrees($nodes) {
+    public function buildSubtrees($nodes, $allnodes = array()) {
         $subs = array();
+        $nodelfts = array();
         $ids = '';
+        
+        if (count($nodes) <= 0) {
+            return $subs;
+        }
 
         foreach ($nodes as $key => $id) {
             $ids .= $id . ',';
         }
         // remove last ',' from $ids
         $q = substr($ids, 0, -1);
+        
+        Database::get()->queryFunc("SELECT node.id, node.lft FROM " . $this->dbtable . " AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
+            $nodelfts[] = $row->lft;
+        });
+        
+        if (count($nodelfts) > 0) {
+            $currentIdx = 0;
+            $searchLft = intval($nodelfts[$currentIdx]);
+            $searchSubLft = 0;
+            $searchSubRgt = 0;
+            
+            $this->loopTree(function($node) use(&$subs, &$nodelfts, &$searchLft, &$currentIdx, &$searchSubLft, &$searchSubRgt) {
+                $nlft = intval($node->lft);
+                if ($nlft === $searchLft) {
+                    $currentIdx++;
+                    $searchLft = (isset($nodelfts[$currentIdx])) ? intval($nodelfts[$currentIdx]) : 0;
+                    $searchSubLft = intval($node->lft);
+                    $searchSubRgt = intval($node->rgt);
+                }
+                if ($nlft >= $searchSubLft && $nlft <= $searchSubRgt) {
+                    $subs[] = $node->id;
+                }
+            }, $allnodes);
+        }
 
-        $sql = "SELECT node.id
-                  FROM " . $this->dbtable . " AS node, " . $this->dbtable . " AS parent
-                 WHERE node.lft BETWEEN parent.lft AND parent.rgt
-                   AND parent.id IN ($q)
-                 GROUP BY node.id
-                 ORDER BY node.lft";
+        return $subs;
+    }
+    
+    /**
+     * Builds an array containing all the subtree nodes of the (parent) nodes given
+     *
+     * @param  array $nodes    - Array containing the (parent) nodes whose subtree nodes we want
+     * @param  array $allnodes - Array of all tree nodes to feed into loopTree() if it's already available
+     * @return array $subs     - Array containing the returned subtree nodes
+     */
+    public function buildSubtreesFull($nodes, $allnodes = array()) {
+        $subs = array();
+        $nodelfts = array();
+        $ids = '';
+        
+        if (count($nodes) <= 0) {
+            return $subs;
+        }
 
-        $result = Database::get()->queryArray($sql);
-        foreach ($result as $row) {
-            $subs[] = $row->id;
+        foreach ($nodes as $key => $id) {
+            $ids .= $id . ',';
+        }
+        // remove last ',' from $ids
+        $q = substr($ids, 0, -1);
+        
+        Database::get()->queryFunc("SELECT node.id, node.lft FROM " . $this->dbtable . " AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
+            $nodelfts[] = $row->lft;
+        });
+        
+        if (count($nodelfts) > 0) {
+            $currentIdx = 0;
+            $searchLft = intval($nodelfts[$currentIdx]);
+            $searchSubLft = 0;
+            $searchSubRgt = 0;
+            
+            $this->loopTree(function($node) use(&$subs, &$nodelfts, &$searchLft, &$currentIdx, &$searchSubLft, &$searchSubRgt) {
+                $nlft = intval($node->lft);
+                if ($nlft === $searchLft) {
+                    $currentIdx++;
+                    $searchLft = (isset($nodelfts[$currentIdx])) ? intval($nodelfts[$currentIdx]) : 0;
+                    $searchSubLft = intval($node->lft);
+                    $searchSubRgt = intval($node->rgt);
+                }
+                if ($nlft >= $searchSubLft && $nlft <= $searchSubRgt) {
+                    $subs[] = $node;
+                }
+            }, $allnodes);
         }
 
         return $subs;
@@ -1044,52 +959,68 @@ jContent;
     /**
      * Build an HTML table containing navigation code for the given nodes
      *
-     * @param  array    $nodes         - The node ids whose children we want to navigate to
+     * @param  array    $nodes         - The nodes (full sql row) whose children we want to navigate to
      * @param  string   $url           - The php script to call in the navigational URLs
      * @param  function $countCallback - An optional closure that will be used for the counting
      * @param  bool     $showEmpty     - Whether to display nodes with count == 0
      * @return string   $ret           - The returned HTML output
      */
-    public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $showEmpty = true) {
+    public function buildNodesNavigationHtml($nodes, $url, $countCallback = null, $showEmpty = true, $subtrees = array()) {
         global $langAvCours, $langAvCourses;
-
         $ret = '';
-        $res = Database::get()->queryArray("SELECT node.id, node.code, node.name
-                          FROM " . $this->dbtable . " AS node
-                         WHERE node.id IN (" . implode(', ', $nodes) . ")");
 
-        if (count($res) > 0) {
-            $nodenames = array();
-            $nodecodes = array();
+        if (count($nodes) > 0) {
+            $nodesWK = array();
+            $coursedeps = array();
 
-            foreach ($res as $node) {
-                $nodenames[$node->id] = self::unserializeLangField($node->name);
-                $nodecodes[$node->id] = $node->code;
+            foreach ($nodes as $node) {
+                $nodesWK[$node->id] = $node;
             }
-            asort($nodenames);
-
-            foreach ($nodenames as $key => $value) {
-                $count = 0;
-                foreach ($this->buildSubtrees(array(intval($key))) as $subnode) {
-                    if ($countCallback !== null && is_callable($countCallback)) {
-                        $count += $countCallback($subnode);
+            uasort($nodesWK, function ($a, $b) {
+                $priorityA = intval($a->order_priority);
+                $priorityB = intval($b->order_priority);
+                $nameA = self::unserializeLangField($a->name);
+                $nameB = self::unserializeLangField($b->name);
+                
+                if ($priorityA == $priorityB) {
+                    if ($nameA == $nameB) {
+                        return 0;
                     } else {
-                        $n = Database::get()->querySingle("SELECT COUNT(*) AS count
-                                         FROM course, course_department
-                                        WHERE course.id = course_department.course
-                                          AND course_department.department = ?d", intval($subnode))->count;
-                        $count += $n;
+                        return ($nameA > $nameB) ? 1 : -1;
+                    }
+                } else {
+                    return ($priorityA < $priorityB) ? 1 : -1;
+                }
+            });
+            
+            // course department counting
+            Database::get()->queryFunc("select department, count(id) as count from course_department group by department", function($row) use (&$coursedeps) {
+                $coursedeps[intval($row->department)] = $row->count;
+            });
+            
+            
+            foreach ($nodesWK as $key => $node) {
+                $id = intval($key);
+                $code = $node->code;
+                $name = self::unserializeLangField($node->name);
+                $count = 0;
+                
+                if (isset($subtrees[$id])) {
+                    foreach ($subtrees[$id] as $subkey => $subnode) {
+                        // TODO: callback mechanism might need further optimization to avoid repeating extra sql query foreach subnode
+                        if ($countCallback !== null && is_callable($countCallback)) {
+                            $count += $countCallback($subnode);
+                        } else {
+                            // fast count using pre-loaded array in memory
+                            $count += (isset($coursedeps[$subnode])) ? $coursedeps[$subnode] : 0;
+                        }
                     }
                 }
-
-                if ($showEmpty or $count > 0) {
-                    $ret .= "<li class='list-group-item' ><a href='$url.php?fc=" . intval($key) . "'>" .
-                            q($value) . '</a>';
-                    if (strlen(q($nodecodes[$key])) > 0) {
-                        $ret .= "&nbsp;(" . q($nodecodes[$key]) . ")";
-                    }
-                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . intval($count) . "&nbsp;" .
-                        ($count == 1 ? $langAvCours : $langAvCourses) . "</small></li>";
+                
+                if ($showEmpty || $count > 0) {
+                    $ret .= "<li class='list-group-item' ><a href='$url.php?fc=" . $id . "'>" . q($name) . '</a>';
+                    $ret .= (strlen(q($code)) > 0) ? "&nbsp;(" . q($code) . ")" : '';
+                    $ret .= "<small>&nbsp;&nbsp;-&nbsp;&nbsp;" . $count . "&nbsp;" . ($count == 1 ? $langAvCours : $langAvCourses) . "</small></li>";
                 }
             }
         }
@@ -1107,25 +1038,16 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
-
-        global $langNoCoursesAvailable;
-
-
-        // select subnodes of the next depth level
-        $res = Database::get()->queryArray("SELECT node.id FROM " . $this->dbtable . " AS node
-                LEFT OUTER JOIN " . $this->dbtable . " AS parent ON parent.lft =
-                                (SELECT MAX(S.lft)
-                                FROM " . $this->dbtable . " AS S WHERE node.lft > S.lft
-                                    AND node.lft < S.rgt)
-                          WHERE parent.id = ?d", intval($depid));
-
-        if (count($res) > 0) {
-            $nodes = array();
-            foreach ($res as $node) {
-                $nodes[] = $node->id;
-            }
-
-            return $this->buildNodesNavigationHtml($nodes, $url, $countCallback, $showEmpty);
+        $parent = Database::get()->querySingle("select lft, rgt from " . $this->dbtable . " where id = ?d", $depid);
+        if (!$parent) {
+            return " ";
+        }
+        $searchLft = intval($parent->lft) + 1;
+        
+        list($children, $subtrees) = $this->locateSubordinatesAndSubTrees($searchLft);
+        
+        if (count($children) > 0) {
+            return $this->buildNodesNavigationHtml($children, $url, $countCallback, $showEmpty, $subtrees);
         } else {
             return " ";
         }
@@ -1141,7 +1063,7 @@ jContent;
         // select root nodes
         $res = Database::get()->queryArray("SELECT node.id, node.name
                           FROM " . $this->dbtable . " AS node
-                         WHERE node.id IN (" . implode(', ', $this->buildRootsArray()) . ")");
+                         WHERE node.id IN (" . implode(', ', $this->buildRootIdsArray()) . ")");
 
         $ret = '';
         if (count($res) > 0) {

@@ -36,7 +36,7 @@ require_once 'include/lib/hierarchy.class.php';
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jstree');
+load_js('jstree3d');
 
 $user_registration = get_config('user_registration');
 $alt_auth_stud_reg = get_config('alt_auth_stud_reg'); //user registration via alternative auth methods
@@ -515,7 +515,7 @@ function user_info_form() {
     $tool_content .= "<div class='form-group'>
               <label for='UserFac' class='col-sm-2 control-label'>$langFaculty:</label>
                 <div class='col-sm-10'>";
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'useKey' => "id", 'where' => "AND node.allow_user = true", 'multiple' => false));
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $depid, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
     $head_content .= $js;
     $tool_content .= $html;
     $tool_content .= "</div>

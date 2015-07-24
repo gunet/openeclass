@@ -36,7 +36,7 @@ $display_captcha = get_config("display_captcha") && function_exists('imagettfbbo
 $tree = new Hierarchy();
 $userObj = new User();
 
-load_js('jstree');
+load_js('jstree3d');
 load_js('pwstrength.js');
 $head_content .= <<<hContent
 <script type="text/javascript">

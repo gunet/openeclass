@@ -25,7 +25,7 @@ include 'include/lib/hierarchy.class.php';
 
 $tree = new Hierarchy();
 
-load_js('jstree');
+load_js('jstree3d');
 
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
@@ -250,7 +250,7 @@ if ($all_set) {
             <div class='form-group'>
                 <label for='ProfComments' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
-        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'useKey' => 'id', 'where' => "AND node.allow_user = true", 'multiple' => false));
+        list($js, $html) = $tree->buildNodePicker(array('params' => 'name="department"', 'defaults' => $department, 'tree' => null, 'where' => "AND node.allow_user = true", 'multiple' => false));
         $head_content .= $js;
         $tool_content .= $html;
         $tool_content .= "</div></div>";
