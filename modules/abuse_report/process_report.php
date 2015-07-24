@@ -133,6 +133,9 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
                 
             } elseif ($comm_rtype == 'course') {
                 $url = $urlServer."courses/".course_id_to_code($comm_rid);
+            } elseif ($comm_rtype == 'wallpost') {
+                $url = $urlServer."modules/wall/index.php?course=".course_id_to_code($cid).
+                    "&showPost=".$comm_rid."#comments_title";
             }
             $content_type = $langAComment;
             $content = q($rcontent);
@@ -142,9 +145,8 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
                 urlencode($rcontent) . "'>" . q($link_title) . "</a>";
             $url = $urlServer."modules/link/?course=".course_id_to_code($cid);
         } elseif ($rtype == 'wallpost') {
-            $res = Database::get()->querySingle("SELECT content FROM wall_post WHERE id = ?d", $rid);
             $content_type = $langWallPost;
-            $content = nl2br(standard_text_escape($res->content));
+            $content = nl2br(standard_text_escape($rcontent));
             $url = $urlServer."modules/wall/?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
         }
         
