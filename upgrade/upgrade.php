@@ -1879,7 +1879,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
     }
     
-    if (version_compare($oldversion, '3.1.5', '<')) {
+    if (version_compare($oldversion, '3.1.6', '<')) {
         refreshHierarchyProcedures();
     }
 
