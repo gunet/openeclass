@@ -524,6 +524,7 @@ if ($course_info->home_layout == 3) {
 }
 $edit_link = "";
 if ($is_editor) {
+    warnCourseInvalidDepartment(true);
     $edit_link = "
     <a href='{$urlAppend}modules/course_home/editdesc.php?course=$course_code' data-toggle='tooltip' data-placement='top' title='$langCourseInformationText'><i class='pull-left fa fa-edit fa'></i></a>";
 } else {

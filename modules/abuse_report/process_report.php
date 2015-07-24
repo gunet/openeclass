@@ -83,8 +83,10 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             VALUES (?d, ?s, ?d, ?s, ?s, UNIX_TIMESTAMP(NOW()), ?d, ?d)", $rid, $rtype, $cid, $reason, $msg, $uid, 1)->lastInsertID;
         
         if ($rtype == 'comment') {
-            $res = Database::get()->querySingle("SELECT content FROM comments WHERE id = ?d", $rid);
+            $res = Database::get()->querySingle("SELECT rid, rtype, content FROM comments WHERE id = ?d", $rid);
             $rcontent = $res->content;
+            $comm_rid = $res->rid;
+            $comm_rtype = $res->rtype;
         } elseif ($rtype == 'forum_post') {
             $res = Database::get()->querySingle("SELECT post_text FROM forum_post WHERE id = ?d", $rid);
             $rcontent = $res->post_text;
@@ -125,9 +127,6 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
             $content_type = $langAForumPost;
             $content = mathfilter($res->post_text, 12, "../../courses/mathimg/");
         } elseif ($rtype == 'comment') {
-            $res = Database::get()->querySingle("SELECT rid, rtype, content FROM comments WHERE id = ?d", $rid);
-            $comm_rid = $res->rid;
-            $comm_rtype = $res->rtype;
             if ($comm_rtype == 'blogpost') {
                 $url = $urlServer."modules/blog/index.php?course=".course_id_to_code($cid).
                     "&action=showPost&pId=".$comm_rid."#comments_title";
@@ -136,7 +135,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
                 $url = $urlServer."courses/".course_id_to_code($comm_rid);
             }
             $content_type = $langAComment;
-            $content = q($res->content);
+            $content = q($rcontent);
         } elseif ($rtype == 'link') {
             $content_type = $langLink;
             $content = "<a href='" . $urlServer . "modules/link/go.php?course=".course_id_to_code($cid)."&amp;id=$rid&amp;url=" .
