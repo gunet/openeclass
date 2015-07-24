@@ -187,7 +187,7 @@ function generate_single_post_html($post) {
                                           '.$post_actions.'
                                           <div class="margin-top-thin">
                                               '.$video_block.'
-                                              <div class="userContent">'.nl2br(q($content)).'</div>
+                                              <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
                                           '.$rating_content.'
                                           '.$comm_content.'
@@ -273,7 +273,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                           '.$post_actions.'
                                           <div class="margin-top-thin">
                                               '.$video_block.'
-                                              <div class="userContent">'.nl2br(q($content)).'</div>
+                                              <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
                                           '.$rating_content.'
                                           '.$comm_content.'

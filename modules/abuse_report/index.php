@@ -74,7 +74,7 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                 $res = Database::get()->querySingle("SELECT content FROM `wall_post` WHERE id = ?d", $rid);
                 $rcontent = $res->url;
                 $content_type = $langWallPost;
-                $content = nl2br(q($content));
+                $content = nl2br(standard_text_escape($content));
                 $url = $urlServer."modules/wall/?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
             }
             
@@ -250,7 +250,7 @@ if (!$nbrReports) {
             ));
         } elseif ($report->rtype == 'wallpost') {
             $res = Database::get()->querySingle("SELECT content FROM `wall_post` WHERE id = ?d", $report->rid);
-            $content = nl2br(q($res->content));
+            $content = nl2br(standard_text_escape($res->content));
             $visiturl = $urlServer."modules/wall/?course=$course_code&amp;showPost=$report->rid";
             $editurl = $urlServer."modules/wall/?course=$course_code&amp;edit=$report->rid";
             $deleteurl = $urlServer."modules/wall/?course=$course_code&amp;delete=$report->rid";

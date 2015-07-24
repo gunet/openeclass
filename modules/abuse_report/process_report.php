@@ -145,7 +145,7 @@ if (abuse_report_show_flag ($rtype, $rid, $cid, false)) {
         } elseif ($rtype == 'wallpost') {
             $res = Database::get()->querySingle("SELECT content FROM wall_post WHERE id = ?d", $rid);
             $content_type = $langWallPost;
-            $content = nl2br(q($res->content));
+            $content = nl2br(standard_text_escape($res->content));
             $url = $urlServer."modules/wall/?course=".course_id_to_code($cid)."&amp;showPost=".$rid;
         }
         
