@@ -367,6 +367,8 @@ if (isset($_POST['submit'])) {
         }
     }
 } else {
+    warnCourseInvalidDepartment();
+
     $action_bar_array0 = array(
         array('title' => $langBackupCourse,
             'url' => "archive_course.php?course=$course_code",

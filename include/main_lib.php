@@ -3645,6 +3645,29 @@ function user_hook($user_id) {
         }, $status, $user_id, $status);
 }
 
+/**
+ * @brief Display a message if course is under not-allowed department
+ *
+ * @param boolean $prompt - Provide a link to course settings if true
+ */
+function warnCourseInvalidDepartment($prompt=false) {
+    global $course_id, $course_code, $urlAppend, $langCourseInvalidDepartment,
+        $langCourseInvalidDepartmentPrompt;
+    if (Database::get()->querySingle("SELECT department
+            FROM course_department, hierarchy
+            WHERE course_department.department = hierarchy.id AND
+                  hierarchy.allow_course = 0 AND
+                  course = ?d
+            LIMIT 1", $course_id)) {
+        if ($prompt) {
+            $message = sprintf($langCourseInvalidDepartment . ' ' . $langCourseInvalidDepartmentPrompt,
+                "<a href='{$urlAppend}modules/course_info/?course=$course_code'>", '</a>');
+        } else {
+            $message = $langCourseInvalidDepartment;
+        }
+        Session::Messages($message);
+    }
+}
 
 /**
  * @brief Function called for every user login

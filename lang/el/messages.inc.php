@@ -868,7 +868,10 @@ $langRSSFeed = 'Ροή RSS';
 $langCitation = "Βιβλιογραφική αναφορά μαθήματος";
 $langAccessed = "Ανακτήθηκε την ";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
-
+$langCourseInvalidDepartment = 'Το μάθημα βρίσκεται σε τμήμα όπου δεν
+    επιτρέπεται πλέον η δημιουργία μαθημάτων.';
+$langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρετέ το
+    μέσω των ρυθμίσεων μαθήματος%s.';
 
 /* * *******************************************
  * course_info.php
