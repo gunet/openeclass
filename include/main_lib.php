@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.1.5');
+define('ECLASS_VERSION', '3.1.6');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -185,9 +185,6 @@ function load_js($file, $init='') {
             $file = 'jstree/jquery.jstree.min.js';
         } elseif ($file == 'jstree3') {
             $head_content .= css_link('jstree3/themes/proton/style.min.css');
-            $file = 'jstree3/jstree.min.js';
-        } elseif ($file == 'jstree3d') {
-            $head_content .= css_link('jstree3/themes/default/style.min.css');
             $file = 'jstree3/jstree.min.js';
         } elseif ($file == 'shadowbox') {
             $head_content .= css_link('shadowbox/shadowbox.css');
