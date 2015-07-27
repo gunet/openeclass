@@ -61,7 +61,7 @@ function replace_dangerous_char($string) {
  */
 
 function php2phps($fileName) {
-    $fileName = preg_replace('/\.(php[0-9]?|phtml)$/', '.phps', $fileName);
+    $fileName = preg_replace('/\.(php.*|phtml|pht)$/', '.phps', $fileName);
     return $fileName;
 }
 
