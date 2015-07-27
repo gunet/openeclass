@@ -22,10 +22,6 @@ $require_current_course = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
-require_once 'modules/rating/class.rating.php';
-require_once 'modules/comments/class.commenting.php';
-require_once 'modules/comments/class.comment.php';
-require_once 'modules/abuse_report/abuse_report.php';
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
@@ -141,11 +137,18 @@ if (isset($_POST['submit'])) {
             }
         }
     }
+} elseif (isset($_GET['pin'])) {
+    $id = intval($_GET['pin']);
+    if ($is_editor && allow_to_edit($id, $uid, $is_editor)) {
+        Database::get()->query("UPDATE wall_post SET pinned = !pinned WHERE id = ?", $id);
+        Session::Messages($langWallGeneralSuccess, 'alert-success');
+        redirect_to_home_page("modules/wall/index.php?course=$course_code");
+    }
 }
 
 if (isset($_GET['showPost'])) { //show comments case
     $id = intval($_GET['showPost']);
-    $post = Database::get()->querySingle("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $post = Database::get()->querySingle("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned FROM wall_post WHERE course_id = ?d AND id = ?d", $course_id, $id);
     if ($post) {
         $tool_content .= action_bar(array(
                   array('title' => $langBack,
@@ -277,7 +280,7 @@ if (isset($_GET['showPost'])) { //show comments case
     }
     
     //show wall posts
-    $posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
+    $posts = Database::get()->queryArray("SELECT id, user_id, content, video_link, FROM_UNIXTIME(timestamp) as datetime, pinned  FROM wall_post WHERE course_id = ?d ORDER BY pinned DESC, timestamp DESC LIMIT ?d", $course_id, $posts_per_page);
     if (count($posts) == 0) {
         $tool_content .= '<div class="alert alert-warning">'.$langNoWallPosts.'</div>';
     } else {

@@ -19,18 +19,22 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== 
  */
+require_once 'modules/rating/class.rating.php';
+require_once 'modules/comments/class.commenting.php';
+require_once 'modules/comments/class.comment.php';
+require_once 'modules/abuse_report/abuse_report.php';
 
 function allow_to_post($course_id, $user_id, $is_editor) {
     if ($is_editor) {
         return true;
-    }
-    
-    $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
-    $result = Database::get()->querySingle($sql, $course_id, $user_id);
-    if ($result->c > 0) {//user is course member
-        return true;
-    } else {//user is not course member
-        return false;
+    } else {
+        $sql = "SELECT COUNT(`user_id`) as c FROM `course_user` WHERE `course_id` = ?d AND `user_id` = ?d";
+        $result = Database::get()->querySingle($sql, $course_id, $user_id);
+        if ($result->c > 0) {//user is course member
+            return true;
+        } else {//user is not course member
+            return false;
+        }
     }
 }
 
@@ -41,15 +45,17 @@ function allow_to_edit($post_id, $user_id, $is_editor) {
         $result = Database::get()->querySingle($sql, $post_id, $course_id);
         if ($result->c > 0) {
             return true;
+        } else {
+            return false;
         }
-    }
-    
-    $sql = "SELECT COUNT(`user_id`) as c FROM `wall_post` WHERE `id` = ?d AND `user_id` = ?d";
-    $result = Database::get()->querySingle($sql, $post_id, $user_id);
-    if ($result->c > 0) {
-        return true;
     } else {
-        return false;
+        $sql = "SELECT COUNT(`user_id`) as c FROM `wall_post` WHERE `id` = ?d AND `user_id` = ?d";
+        $result = Database::get()->querySingle($sql, $post_id, $user_id);
+        if ($result->c > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -118,7 +124,8 @@ function validate_youtube_link($video_url) {
 
 function generate_single_post_html($post) {
     global $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments,
-    $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm;
+    $course_code, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
+    $langWallPinPost, $langWallUnPinPost;
     
     commenting_add_js();
     
@@ -128,6 +135,7 @@ function generate_single_post_html($post) {
     $token = token_generate($user_id, true);
     $datetime = nice_format($post->datetime, true);
     $video_link = $post->video_link;
+    $pinned = $post->pinned;
     if ($video_link == '') {
         $shared = $langWallSharedPost;
         $video_block = '';
@@ -162,6 +170,14 @@ function generate_single_post_html($post) {
         $post_actions = '<div class="pull-right"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
                     '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
                     '.icon('fa-times', $langDelete).'</a>';
+        if ($is_editor) { //add link for pin post
+            $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
+            if ($pinned == 0) {
+                $post_actions .= icon('fa-lock', $langWallPinPost).'</a>';
+            } elseif ($pinned == 1) {
+                $post_actions .= icon('fa-unlock', $langWallUnPinPost).'</a>';
+            }
+        }
         if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
             $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
         }
@@ -201,7 +217,8 @@ function generate_single_post_html($post) {
 
 function generate_infinite_container_html($posts, $next_page) {
     global $posts_per_page, $urlServer, $langWallSharedPost, $langWallSharedVideo, $langWallUser, $langComments, 
-    $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm;
+    $course_code, $langMore, $is_editor, $uid, $course_id, $langModify, $langDelete, $head_content, $langWallPostDelConfirm,
+    $langWallPinPost, $langWallUnPinPost;
     
     $head_content .= '<script>
                           $(document).on("click", ".link", function(e) {
@@ -246,6 +263,14 @@ function generate_infinite_container_html($posts, $next_page) {
             $post_actions = '<div class="pull-right"><a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;edit='.$id.'">
                     '.icon('fa-edit', $langModify).'</a><a class="link" href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;delete='.$id.'">
                     '.icon('fa-times', $langDelete).'</a>';
+            if ($is_editor) { //add link for pin post
+                $post_actions .= '<a href="'.$urlServer.'modules/wall/index.php?course='.$course_code.'&amp;pin='.$id.'">';
+                if ($pinned == 0) {
+                    $post_actions .= icon('fa-lock', $langWallPinPost).'</a>';
+                } elseif ($pinned == 1) {
+                    $post_actions .= icon('fa-unlock', $langWallUnPinPost).'</a>';
+                }
+            }
             if (abuse_report_show_flag('wallpost', $id, $course_id, $is_editor)) {
                 $post_actions .= abuse_report_icon_flag ('wallpost', $id, $course_id);
             }
