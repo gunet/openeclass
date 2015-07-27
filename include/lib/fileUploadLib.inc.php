@@ -61,8 +61,31 @@ function replace_dangerous_char($string) {
  */
 
 function php2phps($fileName) {
-    $fileName = preg_replace('/\.(php.*|phtml|pht)$/', '.phps', $fileName);
+    $fileName = preg_replace('/\.(php[0-9]*|phtml|pht)$/', '.phps', $fileName);
     return $fileName;
+}
+
+/*
+ * Copy folder and change the file name extension from .php to .phps
+ *
+ * @param  - dirPath (string) of the source folder
+ * @param  - dirPath (string) of the destination folder
+ */
+
+function recurse_php2phps_copy($src,$dst) {
+    $dir = opendir($src);
+    @mkdir($dst);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            if ( is_dir($src . '/' . $file) ) {
+                recurse_php2phps_copy($src . '/' . $file,$dst . '/' . $file);
+            }
+            else {
+                copy($src . '/' . $file,$dst . '/' . php2phps($file));
+            }
+        }
+    }
+    closedir($dir);
 }
 
 /*
