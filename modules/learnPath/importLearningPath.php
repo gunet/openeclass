@@ -572,7 +572,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !is_null($_POST)) {
             $realFileSize = 0;
 
             foreach ($zipContentArray as $thisContent) {
-                if (preg_match('/.(php[[:digit:]]?|phtml)$/i', $thisContent['filename'])) {
+                if (preg_match('/.(php[[:digit:]]?|phtml|pht)$/i', $thisContent['filename'])) {
                     $errorFound = true;
                     array_push($errorMsgs, $langZipNoPhp);
                     $is_allowedToUnzip = false;

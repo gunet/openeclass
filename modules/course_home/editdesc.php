@@ -54,6 +54,7 @@ if (isset($_GET['delete_image'])) {
             $ext =  get_file_extension($file_name);
             $file_name = "$name-$i.$ext";
         }
+        $file_name = php2phps($file_name);
         move_uploaded_file($_FILES['course_image']['tmp_name'], "$webDir/courses/$course_code/image/$file_name");
         $extra_sql = ", course_image = ?s";
         array_push($db_vars, $file_name);

@@ -729,6 +729,7 @@ if ($can_upload) {
                 $newformat = get_file_extension($_FILES['newFile']['name']);
                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
                         (empty($newformat) ? '' : '.' . $newformat);
+                $newpath = php2phps($newpath);
                 my_delete($basedir . $oldpath);
                 $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path = ?s"

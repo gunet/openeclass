@@ -144,6 +144,7 @@ if (isset($_POST['submit'])) {
             $format = get_file_extension($filename);
             $real_filename = $filename;
             $filename = safe_filename($format);
+            $filename = php2phps($filename);
             $recipients = $_POST["recipients"];
             //After uploading the file, create the db entries
             if (!$error) {
