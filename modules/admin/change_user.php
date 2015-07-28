@@ -43,6 +43,9 @@ if (isset($_REQUEST['username'])) {
     }
     $myrow = Database::get()->querySingle($sql, $_REQUEST['username']);
     if ($myrow) {
+        foreach (array_keys($_SESSION) as $key) {
+            unset($_SESSION[$key]);
+        }
         $_SESSION['uid'] = $myrow->id;
         $_SESSION['surname'] = $myrow->surname;
         $_SESSION['givenname'] = $myrow->givenname;
