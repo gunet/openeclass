@@ -322,6 +322,12 @@ $db->query("CREATE TABLE user (
       phone_public TINYINT(1) NOT NULL DEFAULT 0,
       am_public TINYINT(1) NOT NULL DEFAULT 0,
       whitelist TEXT,
+      facebook_uid VARCHAR(32) DEFAULT '',
+      twitter_uid VARCHAR(32) DEFAULT '',
+      google_uid VARCHAR(32) DEFAULT '',
+      live_uid VARCHAR(32) DEFAULT '',
+      yahoo_uid VARCHAR(32) DEFAULT '',
+      linkedin_uid VARCHAR(32) DEFAULT '',
       last_passreminder DATETIME DEFAULT NULL) $charset_spec");
 
 $db->query("CREATE TABLE admin (
@@ -1201,6 +1207,12 @@ $db->query("CREATE TABLE user_request (
                 lang VARCHAR(16) NOT NULL DEFAULT 'el',
                 status TINYINT(4) NOT NULL DEFAULT 1,
                 request_ip VARCHAR(45) NOT NULL DEFAULT '',
+                facebook_uid VARCHAR(32) DEFAULT '',
+                twitter_uid VARCHAR(32) DEFAULT '',
+                google_uid VARCHAR(32) DEFAULT '',
+                live_uid VARCHAR(32) DEFAULT '',
+                yahoo_uid VARCHAR(32) DEFAULT '',
+                linkedin_uid VARCHAR(32) DEFAULT '',
                 PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE `auth` (
@@ -1210,17 +1222,24 @@ $db->query("CREATE TABLE `auth` (
                   `auth_instructions` text ,
                   `auth_title` text,
                   `auth_default` tinyint(1) NOT NULL default 0,
+                  `auth_enabled` tinyint(1) NOT NULL default 0,
                   PRIMARY KEY (`auth_id`))
                   $charset_spec");
 
 $db->query("INSERT INTO `auth` VALUES
-                (1, 'eclass', '', '', '', 1),
-                (2, 'pop3', '', '', '', 0),
-                (3, 'imap', '', '', '', 0),
-                (4, 'ldap', '', '', '', 0),
-                (5, 'db', '', '', '', 0),
-                (6, 'shibboleth', '', '', '', 0),
-                (7, 'cas', '', '', '', 0)");
+                (1, 'eclass', '', '', '', 1, 0),
+                (2, 'pop3', '', '', '', 0, 0),
+                (3, 'imap', '', '', '', 0, 0),
+                (4, 'ldap', '', '', '', 0, 0),
+                (5, 'db', '', '', '', 0, 0),
+                (6, 'shibboleth', '', '', '', 0, 0),
+                (7, 'cas', '', '', '', 0, 0),
+                (8, 'facebook', '', '', '', 0, 0),
+                (9, 'twitter', '', '', '', 0, 0),
+                (10, 'google', '', '', '', 0, 0),
+                (11, 'live', 'Microsoft Live Account', '', 'does not work locally', 0, 0),
+                (12, 'yahoo', '', '', 'does not work locally', 0, 0),
+                (13, 'linkedin', '', '', '', 0, 0)");
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);

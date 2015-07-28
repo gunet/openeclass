@@ -121,14 +121,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     // auth type search
     if (!empty($auth_type)) {
-        if ($auth_type >= 2) {
-            $criteria[] = 'password = ?s';
-            $terms[] = $auth_ids[$auth_type];
+        if ($auth_type >= 2 && $auth_type < 8) {
+            $criteria[] = 'password = ' . quote($auth_ids[$auth_type]);
         } elseif ($auth_type == 1) {
-            $terms[] = $auth_ids;
-            $criteria[] = 'password NOT IN (' .
-                    implode(', ', array_fill(0, count($auth_ids), '?s')) .
-                    ')';
+            $q1 = "'". implode("','", $auth_ids) . "'";
+            $criteria[] = 'password NOT IN ('.$q1.')';
+        }
+        switch($auth_type) {
+            case '8': $criteria[] = "facebook_uid <> ''"; break;
+            case '9': $criteria[] = "twitter_uid <> ''"; break;
+            case '10': $criteria[] = "google_uid <> ''"; break;
+            case '11': $criteria[] = "live_uid <> ''"; break;
+            case '12': $criteria[] = "yahoo_uid <> ''"; break;
+            case '13': $criteria[] = "linkedin_uid <> ''"; break;
         }
         add_param('auth_type');
     }

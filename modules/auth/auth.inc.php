@@ -45,7 +45,14 @@ $auth_ids = array(1 => 'eclass',
     4 => 'ldap',
     5 => 'db',
     6 => 'shibboleth',
-    7 => 'cas');
+    7 => 'cas',
+    8 => 'facebook',
+    9 => 'twitter',
+    10 => 'google',
+    11 => 'live',
+    12 => 'yahoo',
+    13 => 'linked'
+);
 
 
 /**
@@ -122,27 +129,41 @@ function count_auth_users($auth) {
   return $m (string)
  * ************************************************************** */
 
-function get_auth_info($auth) {
-    global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS, $langNbUsers, $langAuthChangeUser;
+function get_auth_info($auth)
+{
+    global $langViaeClass, $langViaPop, $langViaImap, $langViaLdap, $langViaDB, $langViaShibboleth, $langViaCAS, $langViaFacebook, $langViaTwitter, $langViaGoogle, $langViaLive, $langViaYahoo, $langViaLinkedIn, $langNbUsers, $langAuthChangeUser;
 
-    if (!empty($auth)) {
-        switch ($auth) {
+    if(!empty($auth)) {
+        switch($auth)
+        {
             case '1': $m = $langViaeClass;
-                break;
+            break;
             case '2': $m = $langViaPop;
-                break;
+            break;
             case '3': $m = $langViaImap;
-                break;
+            break;
             case '4': $m = $langViaLdap;
-                break;
+            break;
             case '5': $m = $langViaDB;
-                break;
+            break;
             case '6': $m = $langViaShibboleth;
-                break;
+            break;
             case '7': $m = $langViaCAS;
-                break;
+            break;
+            case '8': $m = $langViaFacebook;
+            break;
+            case '9': $m = $langViaTwitter;
+            break;
+            case '10': $m = $langViaGoogle;
+            break;
+            case '11': $m = $langViaLive;
+            break;
+            case '12': $m = $langViaYahoo;
+            break;
+            case '13': $m = $langViaLinkedIn;
+            break;
             default: $m = 0;
-                break;
+            break;
         }
         return $m;
     } else {
@@ -171,7 +192,7 @@ function get_auth_settings($auth) {
     $settings['auth_title'] = $result->auth_title;
     $settings['auth_instructions'] = $result->auth_instructions;
     $settings['auth_default'] = $result->auth_default;
-    $settings['auth_name'] = $auth_ids[$auth];
+    $settings['auth_name'] = $result->auth_id;
 
     foreach (explode('|', $result->auth_settings) as $item) {
         if (preg_match('/(\w+)=(.*)/', $item, $matches)) {
@@ -180,6 +201,23 @@ function get_auth_settings($auth) {
     }
 
     return $settings;
+}
+
+/* * **************************************************************
+ find/return the settings of a HybridAuth provider
+
+ $provider : a string value in lowercase which corresponds to a
+             HybridAuth provider (e.g. facebook, twitter, google, 
+             live, yahoo, linkedin) 
+ return $provider_row
+* ************************************************************** */
+
+function get_hybridauth_settings($provider) {
+    $result = Database::get()->querySingle("SELECT * FROM auth WHERE auth_name = ?s", $provider);
+    if ($result && $result->auth_settings) {
+        list($provider_id_key, $provider_secret) = explode('|', $result->auth_settings);
+        return array ("provider_id_key" => $provider_id_key, "provider_secret" => $provider_secret, "provider_enabled" => $result->auth_enabled);
+    } else return array();
 }
 
 /* * **************************************************************
@@ -636,28 +674,222 @@ function process_login() {
 }
 
 /* * **************************************************************
+ Authenticate user via HybridAuth (Twitter, Google, Facebook, 
+ Yahoo, Live accounts)
+* ************************************************************** */
+
+function hybridauth_login() {
+    //this is needed so as to include the HybridAuth error codes
+    global $language, $language_codes, $siteName, $Institution, $InstitutionUrl;
+    if (isset($language)) {
+        // include_messages
+        include "lang/$language/common.inc.php";
+        $extra_messages = "config/{$language_codes[$language]}.inc.php";
+        if (file_exists($extra_messages)) {
+            include $extra_messages;
+        } else {
+            $extra_messages = false;
+        }
+        include "lang/$language/messages.inc.php";
+        if ($extra_messages) {
+            include $extra_messages;
+        }
+    }
+    //end HybridAuth messages inclusion
+    
+    
+    global $warning;
+    
+    // include HubridAuth libraries
+    require_once 'modules/auth/methods/hybridauth/config.php';
+    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+    $config = get_hybridauth_config();
+    
+    //print_r($config);
+    
+    // check for erros and whatnot
+    $warning = "";
+    
+    if( isset( $_GET["error"] ) ){
+        $warning = "<p class='alert1'>" . trim( strip_tags(  $_GET["error"] ) ) . "</p>";
+    }
+    
+    // if user select a provider to login with
+    // then inlcude hybridauth config and main class
+    // then try to authenticate te current user
+    // finally redirect him to his profile page
+    if( isset($_GET["provider"]) && $_GET["provider"]) {
+        try {
+            // create an instance for Hybridauth with the configuration file path as parameter
+            $hybridauth = new Hybrid_Auth($config);
+            
+            // set selected provider name
+            $provider = @ trim( strip_tags($_GET["provider"]));
+        
+            // try to authenticate the selected $provider
+            $adapter = $hybridauth->authenticate( $provider );
+            
+            // grab the user profile
+            $user_data = $adapter->getUserProfile();
+            
+            //user profile debug print
+            //echo $user_data->displayName;
+            //echo $user_data->email;
+            //echo $user_data->photoURL;
+            //echo $user_data->identifier;
+            
+        } catch(Exception $e) {
+            // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
+            // let hybridauth forget all about the user so we can try to authenticate again.
+        
+            // Display the recived error,
+            // to know more please refer to Exceptions handling section on the userguide
+            switch($e->getCode()) {
+                case 0 : $warning = "<p class='alert1'>$langProviderError1</p>"; break;
+                case 1 : $warning = "<p class='alert1'>$langProviderError2</p>"; break;
+                case 2 : $warning = "<p class='alert1'>$langProviderError3</p>"; break;
+                case 3 : $warning = "<p class='alert1'>$langProviderError4</p>"; break;
+                case 4 : $warning = "<p class='alert1'>$langProviderError5</p>"; break;
+                case 5 : $warning = "<p class='alert1'>$langProviderError6</p>"; break;
+                case 6 : $warning = "<p class='alert1'>$langProviderError7</p>"; $adapter->logout(); break;
+                case 7 : $warning = "<p class='alert1'>$langProviderError8</p>"; $adapter->logout(); break;
+            }
+        
+            // debug messages for hybridauth errors
+            //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
+            //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
+        
+            return false;
+        }
+    } //endif( isset( $_GET["provider"] ) && $_GET["provider"] )
+    
+    
+    // *****************************
+    //from here on runs an alternative version of proccess_login() where instead of a password, the provider 
+    //user id is used and matched against the corresponding field in the db table.
+    global $surname, $givenname, $email, $status, $is_admin, $language,
+    $langInvalidId, $langAccountInactive1, $langAccountInactive2,
+    $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
+    $auth_ids, $inactive_uid, $langTooManyFails;
+    
+    $pass = $user_data->identifier; //password = provider user id
+    $auth = get_auth_active_methods();
+    $is_eclass_unique = is_eclass_unique();
+    
+    unset($_SESSION['uid']);
+    $auth_allow = 0;
+    
+    if (get_config('login_fail_check')) {
+        $r = Database::get()->querySingle("SELECT 1 FROM login_failure WHERE ip = '" . $_SERVER['REMOTE_ADDR'] . "'
+                                       AND COUNT > " . intval(get_config('login_fail_threshold')) . "
+                                       AND DATE_SUB(CURRENT_TIMESTAMP, interval " . intval(get_config('login_fail_deny_interval')) . " minute) < last_fail");
+    }
+    if (get_config('login_fail_check') && $r) {
+        $auth_allow = 8;
+    } else {
+        $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail, facebook_uid, twitter_uid, google_uid, live_uid, yahoo_uid, linkedin_uid
+                FROM user WHERE " . $provider . "_uid = ?s", $user_data->identifier);
+                // cas might have alternative authentication defined
+        $exists = 0;
+        if (!isset($_COOKIE) or count($_COOKIE) == 0) {
+            // Disallow login when cookies are disabled
+            $auth_allow = 5;
+        } elseif ($myrow) {
+            $exists = 1;
+            if (!empty($auth)) {
+                if (in_array($myrow->password, $auth_ids)) {
+                    // alternate methods login
+                    //$auth_allow = alt_login($myrow, $provider, $pass); //this should NOT be called during HybridAuth!
+                } else {
+                    // eclass login
+                    $auth_allow = login($myrow, $provider, $pass, $provider);
+                }
+            } else {
+                $tool_content .= "<br>$langInvalidAuth<br>";
+            }
+        }
+        if (!$exists and !$auth_allow) {
+            //Since HybridAuth was used and there is not user id matched in the db, send the user to the registration form.
+            header('Location: ' . $urlServer . 'modules/auth/registration.php?provider=' . $provider);
+            
+            //from this point and on, the code does not need to run since the user is redirected to the registration page
+            $auth_allow = 4;
+        }
+    }
+    
+    if (!isset($_SESSION['uid'])) {
+        switch ($auth_allow) {
+            case 1: $warning .= "";
+            session_regenerate_id();
+            break;
+            case 2: $warning .= "<p class='alert1'>$langInvalidId</p>";
+            break;
+            case 3: $warning .= "<p class='alert1'>$langAccountInactive1 " .
+            "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
+            token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></p>";
+            break;
+            case 4: $warning .= "<p class='alert1'>$langInvalidId</p>";
+            increaseLoginFailure();
+            break;
+            case 5: $warning .= "<p class='alert1'>$langNoCookies</p>";
+            break;
+            case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
+            break;
+            case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
+            break;
+            case 8: $warning .= "<p class='alert1'>$langTooManyFails</p>";
+            break;
+            default:
+            break;
+        }
+    } else {
+        Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
+                . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
+                if (get_config('email_verification_required') and
+                        get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
+                                $_SESSION['mail_verification_required'] = 1;
+            $next = "modules/auth/mail_verify_change.php";
+    } elseif (isset($_POST['next'])) {
+        $next = autounquote($_POST['next']);
+    } else {
+        $next = '';
+    }
+        resetLoginFailure();
+        redirect_to_home_page($next);
+    }
+}
+
+/* * **************************************************************
   Authenticate user via eclass
  * ************************************************************** */
 
-function login($user_info_object, $posted_uname, $pass) {
+function login($user_info_object, $posted_uname, $pass, $provider = NULL) {
     global $session;
 
     $pass_match = false;
     $hasher = new PasswordHash(8, false);
 
-    if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
-        if ($hasher->CheckPassword($pass, $user_info_object->password)) {
-            $pass_match = true;
-        } elseif (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
-            $pass_match = true;
-            // password is in old md5 format, update transparently
-            $password_encrypted = $hasher->HashPassword($pass);
-            $user_info_object->password = $password_encrypted;
-            Database::core()->query("SET sql_mode = TRADITIONAL");
-            Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
-        } elseif ($user_info_object->status == USER_GUEST and $user_info_object->password === $pass and $pass === '') {
-            // allow guest user login with empty password
-            $pass_match = true;
+    if(is_null($provider)) {
+        if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
+            if ($hasher->CheckPassword($pass, $user_info_object->password)) {
+                $pass_match = true;
+            } else if (strlen($user_info_object->password) < 60 && md5($pass) == $user_info_object->password) {
+                $pass_match = true;
+                // password is in old md5 format, update transparently
+                $password_encrypted = $hasher->HashPassword($pass);
+                $user_info_object->password = $password_encrypted;
+                Database::core()->query("SET sql_mode = TRADITIONAL");
+                Database::get()->query("UPDATE user SET password = ?s WHERE id = ?d", $password_encrypted, $user_info_object->id);
+            }
+        }
+    } else {
+        switch ($provider) {
+            case 'Facebook': if($pass == $user_info_object->facebook_uid) $pass_match = true; break;
+            case 'Twitter': if($pass == $user_info_object->twitter_uid) $pass_match = true; break;
+            case 'Google': if($pass == $user_info_object->google_uid) $pass_match = true; break;
+            case 'Live': if($pass == $user_info_object->live_uid) $pass_match = true; break;
+            case 'Yahoo': if($pass == $user_info_object->yahoo_uid) $pass_match = true; break;
+            case 'LinkedIn': if($pass == $user_info_object->linkedin_uid) $pass_match = true; break;
         }
     }
 

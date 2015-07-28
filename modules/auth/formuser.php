@@ -22,6 +22,7 @@
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 include 'include/lib/hierarchy.class.php';
+require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
 
@@ -69,7 +70,10 @@ $all_set = register_posted_variables(array(
     'usermail' => true,
     'am' => $am_required,
     'department' => true,
-    'captcha_code' => false));
+    'captcha_code' => false,
+    'provider' => false,
+    'provider_name' => false,
+    'provider_id' => false));
 
 if (!$all_set) {
     $errors[] = $langFieldsMissing;
@@ -105,6 +109,84 @@ if ($display_captcha) {
     }
 }
 
+if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $provider_id = '';
+
+//check if it's valid and the provider enabled in the db
+if(is_numeric(@$_GET['auth']) && @$_GET['auth'] > 7 && @$_GET['auth'] < 14) {
+    $provider_name = $auth_ids[$_GET['auth']];
+    $result = Database::get()->querySingle("SELECT auth_enabled FROM auth WHERE auth_name = ?s", $provider_name);
+    if($result->auth_enabled != 1) {
+        $provider_name = "";
+        $provider_id = "";
+    }
+} else $provider_name = "";
+
+//authenticate user via hybridauth if requested by URL
+$user_data = '';
+if(!empty($provider_name) || (!empty($_POST['provider']) && !empty($_POST['provider_id']))) {
+    require_once 'modules/auth/methods/hybridauth/config.php';
+    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+    $config = get_hybridauth_config();
+    
+    $hybridauth = new Hybrid_Auth( $config );
+    $allProviders = $hybridauth->getProviders();
+    $warning = '';
+    
+    //additional layer of checks to verify that the provider is valid via hybridauth middleware
+    if(count($allProviders) && array_key_exists(ucfirst($provider_name), $allProviders)) { 
+        try {
+            // create an instance for Hybridauth with the configuration file path as parameter
+            $hybridauth = new Hybrid_Auth($config);
+    
+            // try to authenticate the selected $provider
+            $adapter = $hybridauth->authenticate(strtolower($provider_name));
+    
+            // grab the user profile and check if the provider_uid
+            $user_data = $adapter->getUserProfile();
+            if($user_data->identifier) {
+                $result = Database::get()->querySingle("SELECT " . strtolower($provider_name) . "_uid FROM user_request WHERE " . strtolower($provider_name) . "_uid = ?s", $user_data->identifier);
+                if($result) $registration_errors[] = $langProviderError9; //the provider user id already exists the the db. show an error.
+                    else {
+                        $provider_id = $user_data->identifier; 
+                        if(empty($givenname)) $givenname = $user_data->firstName;
+                        if(empty($surname)) $surname = $user_data->lastName;
+                        if(empty($username)) $username = q(str_replace(' ', '', $user_data->displayName));
+                        if(empty($usermail)) $usermail = $user_data->email;
+                        if(empty($userphone)) $userphone = $user_data->phone;
+                    }
+            }
+        } catch(Exception $e) {
+            // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
+            // let hybridauth forget all about the user so we can try to authenticate again.
+
+            // Display the recived error,
+            // to know more please refer to Exceptions handling section on the userguide
+            switch($e->getCode()) {
+                case 0 : $warning = "<p class='alert alert-info'>$langProviderError1</p>"; break;
+                case 1 : $warning = "<p class='alert alert-info'>$langProviderError2</p>"; break;
+                case 2 : $warning = "<p class='alert alert-info'>$langProviderError3</p>"; break;
+                case 3 : $warning = "<p class='alert alert-info'>$langProviderError4</p>"; break;
+                case 4 : $warning = "<p class='alert alert-info'>$langProviderError5</p>"; break;
+                case 5 : $warning = "<p class='alert alert-info'>$langProviderError6</p>"; break;
+                case 6 : $warning = "<p class='alert alert-info'>$langProviderError7</p>"; $adapter->logout(); break;
+                case 7 : $warning = "<p class='alert alert-info'>$langProviderError8</p>"; $adapter->logout(); break;
+            }
+        }
+    }
+}
+
+if (@count($registration_errors) != 0) {
+        // errors exist (from hybridauth) - show message
+        $tool_content .= "<div class='alert alert-danger'>";
+        foreach ($registration_errors as $error) {
+            $tool_content .= " $error";
+        }
+        $tool_content .= "</div>";
+        $provider_name = '';
+        $provider_id ='';
+        $_GET['auth'] = '';
+}
+
 if (isset($_POST['submit'])) {
     foreach ($errors as $message) {
         $tool_content .= "<div class='alert alert-warning'>$message</div>";
@@ -122,13 +204,23 @@ if ($all_set) {
 
     // register user request
     $status = $prof ? USER_TEACHER : USER_STUDENT;
-    $res = Database::get()->query("INSERT INTO user_request SET
-			givenname = ?s, surname = ?s, username = ?s, email = ?s,
-			am = ?s, faculty_id = ?d, phone = ?s,
-			state = 1, status = $status,
-			verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
-			comment = ?s, lang = ?s, request_ip = ?s",
-            $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
+    if(!empty($provider) && !empty($user_data->identifier)) {
+        $res = Database::get()->query("INSERT INTO user_request SET
+            givenname = ?s, surname = ?s, username = ?s, email = ?s,
+            am = ?s, faculty_id = ?d, phone = ?s,
+            state = 1, status = $status,
+            verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
+			comment = ?s, lang = ?s, request_ip = ?s, " . $provider . "_uid = ?s",
+            $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR'], $user_data->identifier);
+    } else {
+        $res = Database::get()->query("INSERT INTO user_request SET
+    			givenname = ?s, surname = ?s, username = ?s, email = ?s,
+    			am = ?s, faculty_id = ?d, phone = ?s,
+    			state = 1, status = $status,
+    			verified_mail = ?d, date_open = " . DBHelper::timeAfter() . ",
+    			comment = ?s, lang = ?s, request_ip = ?s",
+                $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
+    }
     $request_id = $res->lastInsertID;
 
     // email does not need verification -> mail helpdesk
@@ -200,7 +292,7 @@ if ($all_set) {
                         'level' => 'primary-label')), false);
     $tool_content .= "<div class='alert alert-info'>$langUserData</div>";
     $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]?auth=". @$_GET['auth'] ."' method='post'>
         <input type='hidden' name='p' value='$prof'>
         <fieldset>
         <div class='form-group'>
@@ -265,6 +357,20 @@ if ($all_set) {
                       <label for='Captcha' class='col-sm-2 control-label'>$langCaptcha:</label>
                       <div class='col-sm-10'><input class='form-control' type='text' name='captcha_code' maxlength='6'/></div>
                     </div>";
+    }
+
+//check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form
+    if(!empty($provider_name) && !empty($provider_id)) {
+        $tool_content .= "<div class='form-group'>
+          <label for='UserLang' class='col-sm-2 control-label'>$langProviderConnectWith:</label>
+          <div class='col-sm-10'>
+            <img src='$themeimg/" . q($provider_name) . ".png' alt='" . q($provider_name) . "' />&nbsp;" . q(ucfirst($provider_name)) . "<br /><small>$langProviderConnectWithTooltip</small>
+          </div>
+          <div class='col-sm-offset-2 col-sm-10'>
+            <input type='hidden' name='provider' value='" . $provider_name . "' />
+            <input type='hidden' name='provider_id' value='" . $provider_id . "' />
+          </div>
+          </div>";
     }
 
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>

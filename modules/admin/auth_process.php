@@ -34,7 +34,10 @@ $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'auth.php', 'name' => $langUserAuthentication);
 $debugCAS = true;
 
-$auth = isset($_REQUEST['auth']) ? intval($_REQUEST['auth']) : false;
+$auth = false;
+if(isset($_REQUEST['auth']) && is_numeric($_REQUEST['auth'])) $auth = intval($_REQUEST['auth']); //$auth gets the integer value of the auth method if it is set
+
+
 register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'ldaphost' => true, 'ldap_base' => true,
     'ldapbind_dn' => true, 'ldapbind_pw' => true,
@@ -46,6 +49,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'shibemail' => true, 'shibuname' => true,
     'shibcn' => true, 'checkseparator' => true,
     'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
+	'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
     'test_username' => true), 'all', 'autounquote');
 
 $test_password = isset($_POST['test_password']) ? $_POST['test_password'] : '';
@@ -177,7 +181,16 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                         'cas_ssout' => $_SESSION['cas_ssout'],
                         'casuserstudentid' => $_SESSION['casuserstudentid']);
                     $auth_instructions = $_SESSION['auth_instructions'];
-                    $auth_title = $_SESSION['auth_title'];
+	                break;
+                case '8':
+                case '9':
+                case '10':
+                case '11':
+                case '12':
+                case '13':
+                    $settings = array('hybridauth_id_key' => $hybridauth_id_key,
+                                      'hybridauth_secret' => $hybridauth_secret);
+            	    $auth_instructions = $hybridauth_instructions;
                     break;
                 default:
                     break;
@@ -209,16 +222,18 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
                     $tool_content .= "</div>";
                     $auth_allow = 0;
                 }
-            } else {
+            } elseif (is_numeric($auth) && $auth < 8) { //display the wrong username/password message only if the auth method is NOT a hybridauth method
                 $tool_content .= "<div class='alert alert-danger'>$langWrongAuth</div>";
                 $auth_allow = 0;
-            }
-        }
+            } elseif(is_numeric($auth) && $auth >= 8) $auth_allow = 1; //hybridauth provider, so no username-password testing
+        } 
 
         // update table `auth`
         if (!empty($auth_allow) and $auth_allow == 1) {
-            if ($auth != 6) {
+            if ($auth != 6 && $auth < 8) {
                 $auth_settings = pack_settings($settings);
+            } elseif ($auth != 6 && $auth >= 8) {
+                $auth_settings = pack_settings_alt($settings);
             }
             $result = Database::get()->query("UPDATE auth
             			SET auth_settings = ?s,
@@ -279,8 +294,18 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             break;
         case 7: require_once 'modules/auth/methods/casform.php';
             break;
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+            require_once 'modules/auth/methods/hybridauthform.php'; //generic HybridAuth form for provider settings
+            break;
+        default:
+            break;
     }
-    if ($auth != 6 && $auth != 7 && $auth != 1) {
+    if ($auth != 1 && $auth <! 6) {
         $tool_content .= "
                 <div class='alert alert-info'>$langTestAccount</div>
                 <div class='form-group'>
@@ -348,6 +373,19 @@ function pack_settings($settings) {
     $items = array();
     foreach ($settings as $key => $value) {
         $items[] = "$key=$value";
+    }
+    return implode('|', $items);
+}
+
+/**
+ * @implode settings but only values
+ * @param type $settings
+ * @return string
+ */
+function pack_settings_alt($settings) {
+    $items = array();
+    foreach ($settings as $key => $value) {
+        $items[] = "$value";
     }
     return implode('|', $items);
 }

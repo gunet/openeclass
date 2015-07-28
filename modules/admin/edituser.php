@@ -95,9 +95,11 @@ if ($u) {
         $current_auth = 1;
         $auth_names[1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            $auth_names[$auth] = get_auth_info($auth);
-            if ($info->password == $auth_ids[$auth]) {
-                $current_auth = $auth;
+            if($auth < 8) {
+                $auth_names[$auth] = get_auth_info($auth);
+                if ($info->password == $auth_ids[$auth]) {
+                    $current_auth = $auth;
+                }
             }
         }
         $tool_content .= "<div class='form-wrapper'>

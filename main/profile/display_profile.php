@@ -93,6 +93,23 @@ if ($userdata) {
                     ));
         }
     }
+
+    //hybridauth providers information. available only for the current user.
+    $providers ="";
+    if($id == $uid) {
+        $providers_text = "";
+        $myrow = Database::get()->querySingle("SELECT facebook_uid, twitter_uid, google_uid, live_uid, yahoo_uid, linkedin_uid
+                                             FROM user WHERE id = ?d", $id);
+        if($myrow->facebook_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/facebook.png' alt='Facebook' title='Facebook' />&nbsp;Facebook&nbsp;</span>";
+        if($myrow->twitter_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/twitter.png' alt='Twitter' title='Twitter' />&nbsp;Twitter&nbsp;</span>";
+        if($myrow->google_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/google.png' alt='Google' title='Google' />&nbsp;Google&nbsp;</span>";
+        if($myrow->live_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/live.png' alt='Live' title='Live' />&nbsp;Microsoft Live&nbsp;</span>";
+        if($myrow->yahoo_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/yahoo.png' alt='Yahoo!' title='Yahoo!' />&nbsp;Yahoo!&nbsp;</span>";
+        if($myrow->linkedin_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/linkedin.png' alt='LinkedIn' title='LinkedIn' />&nbsp;LinkedIn&nbsp;</span>";
+        
+        if(!empty($providers_text)) $providers .= "</div><span class='tag'>$langProviderConnectWith&nbsp;:&nbsp;</span>" . $providers_text . "</div>";
+    }
+    
     if (get_config('personal_blog')) {
         $perso_blog_html = "<div class='row'>
                                 <div class='col-xs-12'>
@@ -181,6 +198,7 @@ if ($userdata) {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
 
                 }
+                $tool_content .= $providers;
                 $tool_content .= "</div>
                         </div> <!-- end of col-xs-6 -->
                     </div> <!-- end of row -->
