@@ -74,11 +74,11 @@ function validateParentId($id, $checkOwn) {
         exitWithError($notallowed);
     }
 
-    if (!Database::get()->querySingle("SELECT * FROM hierarchy WHERE id = ?d", $id)) {
+    if ($id > 0 && !Database::get()->querySingle("SELECT * FROM hierarchy WHERE id = ?d", $id)) {
         exitWithError($notallowed);
     }
 
-    if ($checkOwn) {
+    if ($id > 0 && $checkOwn) {
         $subtrees = $tree->buildSubtrees($user->getDepartmentIds($uid));
 
         if (!in_array($id, $subtrees)) {
