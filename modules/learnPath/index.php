@@ -135,7 +135,7 @@ if ($is_editor) {
         switch ($_REQUEST['cmd']) {
             // DELETE COMMAND
             case "delete" :
-                if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id'])) {
+                if (is_dir($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($_GET['del_path_id']))) {
                     $findsql = "SELECT M.`module_id`
 						FROM  `lp_rel_learnPath_module` AS LPM, `lp_module` AS M
 						WHERE LPM.`learnPath_id` = ?d
@@ -160,7 +160,7 @@ if ($is_editor) {
                     Database::get()->query($delModuleSql, CTSCORM_, CTSCORMASSET_, CTLABEL_);
 
                     // DELETE the directory containing the package and all its content
-                    $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . $_GET['del_path_id']);
+                    $real = realpath($webDir . "/courses/" . $course_code . "/scormPackages/path_" . intval($_GET['del_path_id']));
                     claro_delete_file($real);
                 } else { // end of dealing with the case of a scorm learning path.
                     $findsql = "SELECT M.`module_id`
