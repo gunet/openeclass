@@ -25,7 +25,10 @@ require_once 'include/lib/hierarchy.class.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $tree = new Hierarchy();
-$requestId = intval($_REQUEST['id']);
+$requestId = 0;
+if (isset($_POST['id'])) {
+    $requestId = intval($_POST['id']);
+}
 $nodes = array();
 $data = array();
 
