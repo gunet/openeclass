@@ -73,6 +73,9 @@ if (isset($_SESSION['shib_uname'])) {
 } elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
     // authenticate via cas
     shib_cas_login('cas');
+} elseif (isset($_GET['provider'])) {
+        //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
+        hybridauth_login();
 } else {
     // normal authentication
     process_login();
@@ -94,6 +97,14 @@ if (isset($_GET['logout']) and $uid) {
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
+    
+    // include HubridAuth libraries
+    require_once 'modules/auth/methods/hybridauth/config.php';
+	require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+	$config = get_hybridauth_config();
+    $hybridauth = new Hybrid_Auth( $config );
+    $hybridauth->logoutAllProviders();
+    
     session_destroy();
     $uid = 0;
     if (defined('CAS')) {
@@ -143,20 +154,28 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     // check authentication methods
     $authLink = array();
     if (!$upgrade_begin) {
-        $extAuthMethods = array('cas', 'shibboleth');
+        $extAuthMethods = array('cas', 'shibboleth', 'facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin');
         $loginFormEnabled = false;
-        $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
+        $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title, auth_enabled
                 FROM auth WHERE auth_default <> 0
                 ORDER BY auth_default DESC, auth_id");
+        $hybrid_auth_providers_html = '';
         foreach ($q as $l) {
             $extAuth = in_array($l->auth_name, $extAuthMethods);
             if ($extAuth) {
-                $authLink[] = array(
+                $hybrid_auth_provider_found = false;
+                if($l->auth_id < 8) { 
+                    $authLink[] = array(
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
                     'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
                               ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
+                } elseif($l->auth_id > 7 && $l->auth_id < 14) { 
+                    $hybrid_auth_providers_html .= "<a class='' href='{$urlServer}index.php?provider=" .
+                    $l->auth_name . "'><img src='$themeimg/$l->auth_name.png' alt='Sign-in with $l->auth_name' title='Sign-in with $l->auth_name' />" . ucfirst($l->auth_name) . "</a><br />";
+                    $hybrid_auth_provider_found = true;
+                }
             } elseif (!$loginFormEnabled) {
                 $loginFormEnabled = true;
                 $authLink[] = array(
@@ -178,6 +197,13 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
             }
+        }
+        if($hybrid_auth_provider_found == true) {
+            $authLink[] = array(
+                'showTitle' => true,
+                'class' => 'login-option login-option-sso',
+                'title' => $langViaSocialNetwork,
+                'html' => $hybrid_auth_providers_html);
         }
 
         $head_content .= "

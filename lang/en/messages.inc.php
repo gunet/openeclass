@@ -2351,6 +2351,7 @@ $langCASNotWork = "Warning: PHP doesn't support CAS. Please make sure that phpCA
 $langConnectWith = "connecting with";
 $langNotSSL = "Connection wasn't made using SSL because no certificate was provided or the certificate couldn't be read";
 $langViaCAS = "authentication via CAS Single Sign On";
+$langViaSocialNetwork = "Authentication via social network";
 $langViaFacebook = "authentication via Facebook";
 $langViaTwitter ="authentication via Twitter";
 $langViaGoogle = "authentication via Google";

@@ -729,6 +729,7 @@ $langViaLdap = "Πιστοποίηση μέσω LDAP";
 $langViaDB = "Πιστοποίηση μέσω άλλης Βάσης Δεδομένων";
 $langViaShibboleth = "Πιστοποίηση μέσω Shibboleth";
 $langViaCAS = "Πιστοποίηση μέσω CAS";
+$langViaSocialNetwork = "Πιστοποίηση μέσω κοινωνικού δικτύου";
 $langViaFacebook = "Πιστοποίηση μέσω Facebook";
 $langViaTwitter ="Πιστοποίηση μέσω Twitter";
 $langViaGoogle = "Πιστοποίηση μέσω Google";

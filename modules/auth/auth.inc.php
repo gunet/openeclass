@@ -21,9 +21,9 @@
 
 /* ===========================================================================
   auth.inc.php
-  @last update: 31-05-2006 by Stratos Karatzidis
+  @last update: 29-07-2015 by Sakis Agorastos
   @authors list: Karatzidis Stratos <kstratos@uom.gr>
-  Vagelis Pitsioygas <vagpits@uom.gr>
+  				 Vagelis Pitsioygas <vagpits@uom.gr>
   ==============================================================================
   @Description: Functions Library for authentication purposes
 
@@ -705,9 +705,7 @@ function hybridauth_login() {
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
     $config = get_hybridauth_config();
     
-    //print_r($config);
-    
-    // check for erros and whatnot
+    // check for errors and whatnot
     $warning = "";
     
     if( isset( $_GET["error"] ) ){
@@ -774,7 +772,7 @@ function hybridauth_login() {
     
     $pass = $user_data->identifier; //password = provider user id
     $auth = get_auth_active_methods();
-    $is_eclass_unique = is_eclass_unique();
+    //$is_eclass_unique = is_eclass_unique();
     
     unset($_SESSION['uid']);
     $auth_allow = 0;
@@ -883,7 +881,7 @@ function login($user_info_object, $posted_uname, $pass, $provider = NULL) {
             }
         }
     } else {
-        switch ($provider) {
+        switch (ucfirst($provider)) {
             case 'Facebook': if($pass == $user_info_object->facebook_uid) $pass_match = true; break;
             case 'Twitter': if($pass == $user_info_object->twitter_uid) $pass_match = true; break;
             case 'Google': if($pass == $user_info_object->google_uid) $pass_match = true; break;
