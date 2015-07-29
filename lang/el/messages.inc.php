@@ -2800,7 +2800,7 @@ $langProfileQuickPassword = "Αλλαγή Συνθηματικού";
 
 $langProviderIdAlreadyExists = 'Η ρύθμιση δεν είναι αποθηκεύτηκε γιατί υπάρχει ήδη λογαριασμός στο σύστημα που συνδεμένος με αυτόν τον πάροχο';
 $langAuthSettingsSaved = "Οι ρυθμίσεις σας έχουν αποθηκευτεί";
-$langProviderConnectWithAlternativeProbiders = 'Σύνδεση ή εγγραφή με εναλλακτικούς παρόχους';
+$langProviderConnectWithAlternativeProviders = 'Σύνδεση ή εγγραφή με εναλλακτικούς παρόχους';
 $langProviderConnect = 'Σύνδεση';
 $langProviderConnectWith = 'Σύνδεση με προφίλ';
 $langProviderConnectWithTooltip = 'Ο λογαριασμός σας θα συνδεθεί με το αντίστοιχο προφίλ σας ώστε να μπορείτε να εισέρχεστε στην πλατφόρμα με αυτό';
