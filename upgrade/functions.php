@@ -1697,18 +1697,17 @@ function fix_multiple_usernames()  {
         $tool_content .= "<p>&nbsp;</p>";
 
         foreach ($q1 as $u) {
-            $q2 = Database::get()->queryArray("SELECT user_id, username FROM user WHERE BINARY username = '$u->username'");
+            $q2 = Database::get()->queryArray("SELECT user_id, username FROM user
+                WHERE BINARY username = ?s ORDER BY user_id DESC", $u->username);
             $i = 0;
             foreach ($q2 as $uid) {
                 while (++$i) {
+                    $new_username = $uid->username . $i;
                     // check if new username exists 
-                    $q3 = Database::get()->querySingle("SELECT user_id FROM user WHERE BINARY username = CONCAT('$uid->username', '$i')");
-                    if (!$q3) {
-                            Database::get()->query("UPDATE user SET username = CONCAT('$uid->username', '$i') WHERE user_id = $uid->user_id");
-                            $newusername = $uid->username . "$i";
-                            $tool_content .= sprintf($langUpgradeChangeUsername, $uid->username, $newusername);
-                            $tool_content .= "<br />";
-                            break;
+                    if (!Database::get()->querySingle("SELECT user_id FROM user WHERE BINARY username = ?s", $new_username)) {
+                        Database::get()->query("UPDATE user SET username = ?s WHERE user_id = ?d", $new_username, $uid->user_id);
+                        $tool_content .= sprintf($langUpgradeChangeUsername, $uid->username, $new_username) . "<br>";
+                        break;
                     }
                 }
             }
