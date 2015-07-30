@@ -154,28 +154,24 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     // check authentication methods
     $authLink = array();
     if (!$upgrade_begin) {
-        $extAuthMethods = array('cas', 'shibboleth', 'facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin');
+        $extAuthMethods = array('cas', 'shibboleth', 'facebook');
+        $hybridAuthMethods = array('twitter', 'google', 'live', 'yahoo', 'linkedin');
         $loginFormEnabled = false;
-        $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title, auth_enabled
+        $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
                 FROM auth WHERE auth_default <> 0
                 ORDER BY auth_default DESC, auth_id");
         $hybrid_auth_providers_html = '';
         foreach ($q as $l) {
-            $extAuth = in_array($l->auth_name, $extAuthMethods);
-            if ($extAuth) {
-                $hybrid_auth_provider_found = false;
-                if($l->auth_id < 8) { 
-                    $authLink[] = array(
+            if (in_array($l->auth_name, $extAuthMethods)) {
+                $authLink[] = array(
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
                     'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
                               ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
-                } elseif($l->auth_id > 7 && $l->auth_id < 14) { 
-                    $hybrid_auth_providers_html .= "<a class='' href='{$urlServer}index.php?provider=" .
+            } elseif (in_array($l->auth_name, $hybridAuthMethods)) { 
+                $hybrid_auth_providers_html .= "<a class='' href='{$urlServer}index.php?provider=" .
                     $l->auth_name . "'><img src='$themeimg/$l->auth_name.png' alt='Sign-in with $l->auth_name' title='Sign-in with $l->auth_name' />" . ucfirst($l->auth_name) . "</a><br />";
-                    $hybrid_auth_provider_found = true;
-                }
             } elseif (!$loginFormEnabled) {
                 $loginFormEnabled = true;
                 $authLink[] = array(
@@ -198,7 +194,7 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                            </div>");
             }
         }
-        if($hybrid_auth_provider_found == true) {
+        if ($hybrid_auth_providers_html) {
             $authLink[] = array(
                 'showTitle' => true,
                 'class' => 'login-option login-option-sso',
