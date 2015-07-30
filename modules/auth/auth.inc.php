@@ -54,6 +54,8 @@ $auth_ids = array(1 => 'eclass',
     13 => 'linked'
 );
 
+$extAuthMethods = array('cas', 'shibboleth', 'facebook');
+$hybridAuthMethods = array('twitter', 'google', 'live', 'yahoo', 'linkedin');
 
 /**
  * get active authentication methods auth_ids

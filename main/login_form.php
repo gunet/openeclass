@@ -16,71 +16,72 @@ $next = isset($_GET['next'])?
 $userValue = isset($_GET['user'])? (" value='" . q($_GET['user']) . "' readonly"): '';
 
 $authLink = array();
-$extAuthMethods = array('cas', 'shibboleth');
 $loginFormEnabled = false;
+$hybrid_auth_providers_html = '';
 $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
-    FROM auth WHERE auth_default <> 0
+    FROM auth WHERE auth_default > 0
     ORDER BY auth_default DESC, auth_id");
 foreach ($q as $l) {
-    $extAuth = in_array($l->auth_name, $extAuthMethods);
     $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": getSerializedMessage($l->auth_title);
-    if ($extAuth) {
+    if (in_array($l->auth_name, $extAuthMethods)) {
         $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');        
         $authLink[] = array(false, "
             <div class='col-sm-8 col-sm-offset-2' style='padding-top:40px;'>
                 <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
             </div>", $authTitle);
+    } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
+        $authLinkTitle = q("Sign-in with {$l->auth_name}");
+        $hybrid_auth_providers_html .= "<a href='{$urlServer}index.php?provider={$l->auth_name}}'>" .
+            "<img src='$themeimg/{$l->auth_name}.png' alt='$authLinkTitle' title='$authLinkTitle'>" .
+            q(ucfirst($l2->auth_name)) . "</a><br>";
     } elseif (!$loginFormEnabled) {
         $loginFormEnabled = true;
-        $content = "
-            <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
-                $next
-                <div class='form-group'>
-                    <div class='col-xs-12'>
-                        <input class='form-control' name='uname' placeholder='$langUsername'$userValue>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <div class='col-xs-12'>
-                        <input class='form-control' name='pass' type='password' placeholder='$langPass'>
-                    </div>
-                </div>";
-        
-        //check if there are any available alternative providers for authentication and show the corresponding links on the homepage
-        require_once 'modules/auth/methods/hybridauth/config.php';
-        require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
-        $config = get_hybridauth_config();
-
-        $hybridauth = new Hybrid_Auth( $config );
-        $allProviders = $hybridauth->getProviders();
-        $tool_content_providers = "";
-
-        $extAuthMethods2 = array('facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin');
-        $q2 = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title, auth_enabled
-                FROM auth WHERE auth_default <> 0
-                ORDER BY auth_default DESC, auth_id");
-        $hybrid_auth_providers_html = '';
-        foreach ($q2 as $l2) {
-            if($l2->auth_id > 7 && $l2->auth_id < 14) { 
-                    $tool_content_providers .= "<a class='' href='{$urlServer}index.php?provider=" .
-                    $l2->auth_name . "'><img src='$themeimg/$l2->auth_name.png' alt='Sign-in with $l2->auth_name' title='Sign-in with $l2->auth_name' />" . ucfirst($l2->auth_name) . "</a><br />";
-            }
-        }
-
-        if($tool_content_providers) $content .= "<div class='form-group'><div class='col-sm-8'>$langProviderConnectWithAlternativeProviders<br />" . $tool_content_providers . "</div></div>";
-        
-        $content .= "<div class='form-group'>
-                    <div class='col-xs-3'>
-                        <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
-                    </div>
-                    <div class='col-xs-9 text-right'>
-                        <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                    </div>
-                </div>
-            </form>";   
-        $authLink[] = array(true, $content, $authTitle);
+        $loginFormTitle = $authTitle;
     }
 }
+
+if ($loginFormEnabled) {
+    $content = "
+          <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
+            $next
+            <div class='form-group'>
+              <div class='col-xs-12'>
+                <input class='form-control' name='uname' placeholder='$langUsername'$userValue>
+              </div>
+            </div>
+            <div class='form-group'>
+              <div class='col-xs-12'>
+                <input class='form-control' name='pass' type='password' placeholder='$langPass'>
+              </div>
+            </div>";
+    if ($hybrid_auth_providers_html) {
+        $content .= "
+            <div class='form-group'>
+              <div class='col-sm-8'>$langProviderConnectWithAlternativeProviders<br>
+                $hybrid_auth_providers_html
+              </div>
+            </div>";
+    }
+    $content .= "
+            <div class='form-group'>
+              <div class='col-xs-3'>
+                <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+              </div>
+              <div class='col-xs-9 text-right'>
+                <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+             </div>
+           </div>
+         </form>";   
+    $authLink[] = array(true, $content, $loginFormTitle);
+}
+
+//check if there are any available alternative providers for authentication and show the corresponding links on the homepage
+// require_once 'modules/auth/methods/hybridauth/config.php';
+// require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+// $config = get_hybridauth_config();
+// $hybridauth = new Hybrid_Auth($config);
+// $allProviders = $hybridauth->getProviders();
+
 
 $columns = 12 / count($authLink);
 

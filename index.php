@@ -154,8 +154,6 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     // check authentication methods
     $authLink = array();
     if (!$upgrade_begin) {
-        $extAuthMethods = array('cas', 'shibboleth', 'facebook');
-        $hybridAuthMethods = array('twitter', 'google', 'live', 'yahoo', 'linkedin');
         $loginFormEnabled = false;
         $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
                 FROM auth WHERE auth_default <> 0
