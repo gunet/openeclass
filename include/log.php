@@ -89,7 +89,7 @@ class Log {
 
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo, $langAbuseReport;
+            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo, $langAbuseReport, $langWall;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -271,6 +271,8 @@ class Log {
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
             case MODULE_ID_ABUSE_REPORT: $content = $this->abuse_report_action_details($details);
+                break;
+            case MODULE_ID_WALL: $content = $this->wall_action_details($details);
                 break;
             default: $content = $langUnknownModule;
                 break;
@@ -831,6 +833,30 @@ class Log {
             $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportOpen."&raquo";
         } elseif ($details['status'] == 0) {
             $content.= "$langAbuseReportStatus: &laquo".$langAbuseReportClosed."&raquo";
+        }
+        
+        return $content;
+    }
+    
+    /**
+     * display action details for social wall
+     * @global type $langContent
+     * @global type $langWallVideoLink
+     * @param type $details
+     * @return string
+     */
+    private function wall_action_details($details) {
+        global $langContent, $langWallVideoLink;
+        
+        $details = unserialize($details);
+        
+        $content = '';
+        
+        if (!empty($details['content'])) {
+            $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
+        }
+        if (!empty($details['videolink'])) {
+            $content .= "$langWallVideoLink: &laquo".q($details['videolink'])."&raquo<br/>";
         }
         
         return $content;

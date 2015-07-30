@@ -22,6 +22,7 @@ $require_current_course = TRUE;
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
+require_once 'include/log.php';
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
@@ -37,8 +38,12 @@ if (isset($_POST['submit'])) {
     if (allow_to_post($course_id, $uid, $is_editor)) {
         if ($_POST['type'] == 'text') {
             if (!empty($_POST['message'])) {
-                Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, timestamp) VALUES (?d,?d,?s,UNIX_TIMESTAMP())",
-                    $course_id, $uid, links_autodetection($_POST['message']));
+                $content = links_autodetection($_POST['message']);
+                $id = Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, timestamp) VALUES (?d,?d,?s,UNIX_TIMESTAMP())",
+                    $course_id, $uid, $content)->lastInsertID;
+                Log::record($course_id, MODULE_ID_WALL, LOG_INSERT, 
+                    array('id' => $id,
+                           'content' => $content));
                 Session::Messages($langWallPostSaved, 'alert-success');
             } else {
                 Session::Messages($langWallMessageEmpty);
@@ -63,8 +68,12 @@ if (isset($_POST['submit'])) {
                 } else {
                     $content = links_autodetection($_POST['message']);
                 }
-                Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, video_link, timestamp) VALUES (?d,?d,?s,?s, UNIX_TIMESTAMP())",
-                    $course_id, $uid, $content, $_POST['video']);
+                $id = Database::get()->query("INSERT INTO wall_post (course_id, user_id, content, video_link, timestamp) VALUES (?d,?d,?s,?s, UNIX_TIMESTAMP())",
+                    $course_id, $uid, $content, $_POST['video'])->lastInsertID;
+                Log::record($course_id, MODULE_ID_WALL, LOG_INSERT,
+                    array('id' => $id,
+                          'content' => $content,
+                          'videolink' => $_POST['video']));
                 Session::Messages($langWallPostSaved, 'alert-success');
             }
         }
@@ -92,6 +101,15 @@ if (isset($_POST['submit'])) {
         //delete comments and ratings
         Commenting::deleteComments('wallpost', $id);
         Rating::deleteRatings('wallpost', $id);
+        
+        $post = Database::get()->querySingle("SELECT content, videolink FROM wall_post WHERE id = ?d", $id);
+        $content = $post->content;
+        $videolink = $post->videolink;
+        
+        Log::record($course_id, MODULE_ID_WALL, LOG_DELETE, 
+            array('id' => $id,
+                  'content' => $content,
+                  'videolink' => $videolink));
         
         Database::get()->query("DELETE FROM wall_post WHERE id = ?d", $id);
         Session::Messages($langWallPostDeleted, 'alert-success');
@@ -122,13 +140,26 @@ if (isset($_POST['submit'])) {
                 }
                 Database::get()->query("UPDATE wall_post SET content = ?s, video_link = ?s WHERE id = ?d AND course_id = ?d",
                     $content, $_POST['video'], $id, $course_id);
+                
+                Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
+                array('id' => $id,
+                      'content' => $content,
+                      'videolink' => $_POST['video']));
+                
                 Session::Messages($langWallPostSaved, 'alert-success');
                 redirect_to_home_page("modules/wall/index.php?course=$course_code");
             }
         } else { //text post
             if (!empty($_POST['message'])) {
+                $content = links_autodetection($_POST['message']);
+                
                 Database::get()->query("UPDATE wall_post SET content = ?s WHERE id = ?d AND course_id = ?d",
-                    links_autodetection($_POST['message']), $id, $course_id);
+                    $content, $id, $course_id);
+                
+                Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
+                    array('id' => $id,
+                          'content' => $content));
+                
                 Session::Messages($langWallPostSaved, 'alert-success');
                 redirect_to_home_page("modules/wall/index.php?course=$course_code");
             } else {
