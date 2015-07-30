@@ -1571,8 +1571,8 @@ ul.tablelist
 
 /* Search styles */
 #quick-search-wrapper{
-    padding: 15px;
-    margin: 15px 0;
+    padding: 0px 15px 15px 15px;
+    margin: 0px 0px 15px 0px;
 }
 #quick-search-wrapper input.form-control
 {
@@ -1685,7 +1685,7 @@ a.list-group-item.delete:hover{
     top: -53px;
     padding: 0;
     .logo{
-        margin: 0.8em 0.8em 0px;
+        margin: 0.8em 0.8em 30px;
         img{margin:0 auto;}
     }
     .panel{
