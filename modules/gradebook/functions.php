@@ -446,7 +446,7 @@ function user_gradebook_settings($gradebook_id) {
                         </div>
                     </div>
                     <div class='form-group'>
-                        <div class='col-xs-12'>".form_buttons(array(
+                        <div class='col-xs-10 col-sm-offset-2'>".form_buttons(array(
                         array(
                             'text' => $langRefreshList,
                             'name' => 'resetGradebookUsers',
@@ -677,17 +677,17 @@ function display_gradebook($gradebook_id) {
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath,
-           $langExport, $langcsvenc1, $langcsvenc2, $langToA;
+           $langExport, $langcsvenc1, $langcsvenc2, $langBack;
     
     $tool_content .= action_bar(
             array(
-                array('title' => $langExport,                 
-                      'level' => 'primary-label', 
-                      'options' => array(
-                                        array('title' => "$langToA $langcsvenc1",
+                array(  'title' => $langExport,                 
+                        'level' => 'primary-label', 
+                        'options' => array(
+                                        array('title' => "$langcsvenc1",
                                                'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id&amp;enc=1253",                                               
                                                'class' => ''),
-                                        array('title' => "$langToA $langcsvenc2",
+                                        array('title' => "$langcsvenc2",
                                               'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id",                                              
                                               'class' => '')
                                     ),
@@ -711,7 +711,11 @@ function display_gradebook($gradebook_id) {
                       'icon' => 'fa-edit'),
                 array('title' => "$langLearningPath",
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityLp=1",
-                      'icon' => 'fa-ellipsis-h')
+                      'icon' => 'fa-ellipsis-h'),
+                array('title' => $langBack,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                      'icon' => 'fa-reply',
+                      'level' => 'primary-label'),
             ),
             true,
             array(
@@ -1094,10 +1098,12 @@ function register_user_grades($gradebook_id, $actID) {
     
     if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=" . $actID . "'>
+        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=" . $actID . "'>
+        <div class='form-group'>
+        <div class='col-xs-12'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
-                <tr>
+                <tr class='list-header'>
                   <th width='1'>$langID</th>
                   <th width='350'>$langName $langSurname</th>
                   <th class='text-center' width='80'>$langRegistrationDateShort</th>
@@ -1140,7 +1146,7 @@ function register_user_grades($gradebook_id, $actID) {
             $tool_content .= "><input type='hidden' value='" . $actID . "' name='actID'></td>";
             $tool_content .= "</tr>";                        
         }
-        $tool_content .= "</tbody></table>";
+        $tool_content .= "</tbody></table></div></div>";
         $tool_content .= "<div class='form-group'>";
         $tool_content .= "<div class='col-xs-12'>" . 
                         form_buttons(array(
@@ -1148,15 +1154,13 @@ function register_user_grades($gradebook_id, $actID) {
                                 'text' => $langGradebookBooking,
                                 'name' => 'bookUsersToAct',
                                 'value'=> $langGradebookBooking
-                                )));
-        if ($act_type == 0) {
-            $tool_content .= form_buttons(array(
-                                array(
+                                ),
+                            array(
                                     'text' => $langGradebookUpdate,
                                     'name' => 'updateUsersToAct',
-                                    'value'=> $langGradebookUpdate                        
+                                    'value'=> $langGradebookUpdate,
+                                    'show' => $act_type == 0
                                 )));
-            }
         $tool_content .= "</div></div>";        
         $tool_content .= "</form></div>";    
     }
@@ -1369,7 +1373,7 @@ function add_gradebook_other_activity($gradebook_id) {
                             if ($auto) {
                                 $tool_content .= " checked";
                             }
-                            $tool_content .= "/></div>";
+                            $tool_content .= "/></div></div>";
                         }
                         $tool_content .= "<div class='form-group'>
                                 <div class='col-sm-10 col-sm-offset-2'>".form_buttons(array(

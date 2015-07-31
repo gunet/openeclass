@@ -2983,6 +2983,8 @@ function form_buttons($btnArray) {
     
     foreach ($btnArray as $btn){
         
+        if(!isset($btn['show']) || (isset($btn['show']) && $btn['show'] == true)){
+        
         $id = isset($btn['id'])?"id='$btn[id]'": '';
         $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
         if (isset($btn['icon'])) {
@@ -3012,6 +3014,7 @@ function form_buttons($btnArray) {
             $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';
             $buttons .= "<button class='btn $class' $type $id $name $value $custom_field $disabled>$text</button>&nbsp;&nbsp;";
         }
+    }
     }
     
     return $buttons;
