@@ -916,22 +916,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                     CHANGE `statut` `status` TINYINT(4) NOT NULL DEFAULT 1");
         }
 
-        Database::get()->query("ALTER TABLE `user_request`
-                    ADD facebook_uid VARCHAR(32) DEFAULT '',
-                    ADD twitter_uid VARCHAR(32) DEFAULT '',
-                    ADD google_uid VARCHAR(32) DEFAULT '',
-                    ADD live_uid VARCHAR(32) DEFAULT '',
-                    ADD yahoo_uid VARCHAR(32) DEFAULT '',
-                    ADD linkedin_uid VARCHAR(32) DEFAULT ''");
-
-        Database::get()->query("ALTER TABLE `user`
-                    ADD facebook_uid VARCHAR(32) DEFAULT '',
-                    ADD twitter_uid VARCHAR(32) DEFAULT '',
-                    ADD google_uid VARCHAR(32) DEFAULT '',
-                    ADD live_uid VARCHAR(32) DEFAULT '',
-                    ADD yahoo_uid VARCHAR(32) DEFAULT '',
-                    ADD linkedin_uid VARCHAR(32) DEFAULT ''");
-
         Database::get()->query("CREATE TABLE `cron_params` (
                         `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
                         `name` VARCHAR(255) NOT NULL UNIQUE,
@@ -2370,14 +2354,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('attendance', 'title')) {
             Database::get()->query("ALTER table `attendance` ADD `title` VARCHAR(250) DEFAULT NULL");
         }
-        Database::get()->query("INSERT INTO `auth` VALUES
-                (7, 'cas', '', '', '', 0, 0),
-                (8, 'facebook', '', '', '', 0, 0),
-                (9, 'twitter', '', '', '', 0, 0),
-                (10, 'google', '', '', '', 0, 0),
-                (11, 'live', 'Microsoft Live Account', '', 'does not work locally', 0, 0),
-                (12, 'yahoo', '', '', 'does not work locally', 0, 0),
-                (13, 'linkedin', '', '', '', 0, 0)");
+        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', '', 0, 0)");
         Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
                 `id` MEDIUMINT(11) NOT NULL auto_increment,
                 `element_type` VARCHAR(255) NOT NULL DEFAULT '',
@@ -2730,6 +2707,34 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 ADD FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE');
         }
 
+        // External authentication via Hybridauth
+        Database::get()->query("INSERT IGNORE INTO `auth`
+            (auth_id, auth_name, auth_title, auth_settings, auth_instructions, auth_default)
+            VALUES
+            (8, 'facebook', '', '', '', 0),
+            (9, 'twitter', '', '', '', 0),
+            (10, 'google', '', '', '', 0),
+            (11, 'live', 'Microsoft Live Account', '', 'does not work locally', 0),
+            (12, 'yahoo', '', '', 'does not work locally', 0),
+            (13, 'linkedin', '', '', '', 0)");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_ext_uid` (
+            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(11) NOT NULL,
+            auth_id INT(2) NOT NULL,
+            uid VARCHAR(64) NOT NULL,
+            UNIQUE KEY (user_id, auth_id),
+            KEY (uid),
+            FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE)
+            $charset_spec");
+        Database::get()->query("CREATE TABLE `user_request_ext_uid` (
+            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_request_id INT(11) NOT NULL,
+            auth_id INT(2) NOT NULL,
+            uid VARCHAR(64) NOT NULL,
+            UNIQUE KEY (user_request_id, auth_id),
+            FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
+            $charset_spec"); 
     }
 
  
