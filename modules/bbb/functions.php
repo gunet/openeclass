@@ -213,6 +213,7 @@ function new_bbb_session() {
             </div>
         </div>
         </fieldset>
+         ". generate_csrf_token_form_field() ."
         </form></div>";
         $tool_content .='<script language="javaScript" type="text/javascript">
         //<![CDATA[
@@ -632,6 +633,7 @@ function edit_bbb_session($session_id) {
                         </div>
                     </div>
                     </fieldset>
+                     ". generate_csrf_token_form_field() ."
                     </form></div>";
                 $tool_content .='<script language="javaScript" type="text/javascript">
                     //<![CDATA[

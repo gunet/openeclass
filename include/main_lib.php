@@ -2832,7 +2832,7 @@ function validate_csrf_token($token) {
 */
 function generate_csrf_token_form_field()
 {
-    return "<input type='hidden' name='token' value='{$_SESSION['csrf_token']}'";
+    return "<input type='hidden' name='token' value='{$_SESSION['csrf_token']}' />";
 }
 
 function generate_csrf_token_link_parameter()
