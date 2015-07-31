@@ -102,7 +102,7 @@ function new_bbb_session() {
             //select all users from this course except yourself
             $sql = "SELECT DISTINCT u.id user_id, CONCAT(u.surname,' ', u.givenname) AS name, u.username
                         FROM user u, course_user cu
-        			    WHERE cu.course_id = ?d
+                        WHERE cu.course_id = ?d
                         AND cu.user_id = u.id
                         AND cu.status != ?d
                         AND u.id != ?d
@@ -308,7 +308,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
             foreach ($recipients as $row) {
                 //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
-                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=".$q->meeting_id."&username=".$row;
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=" . urlencode($q->meeting_id) . "&username=" . urlencode($row);
                 $emailsubject = $langBBBScheduledSession;
                 $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
                 $emailcontent = $emailbody;
@@ -322,7 +322,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
 
     $order = $orderMax + 1;
 
-    Database::get()->querySingle("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible) VALUES ('".$langBBBScheduleSessionInfo . " \"" . $title . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
+    Database::get()->querySingle("INSERT INTO announcement (content,title,`date`,course_id,`order`,visible) VALUES ('".$langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . $start_session."',
                                              '$langBBBScheduledSession',NOW(),
                                              '$course_id','$order','1')");
 }
@@ -407,7 +407,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $_GET['id']);
             foreach ($recipients as $row) {
                 //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
-                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=".$q->meeting_id."&username=".$row;
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=" . urlencode($q->meeting_id) . "&username=" . urlencode($row);
                 $emailsubject = $langBBBScheduledSession;
                 $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
                 $emailcontent = $emailbody;
@@ -477,7 +477,7 @@ function edit_bbb_session($session_id) {
     } // If more than 80 course users, we suggest 50% of them
     $tool_content .= "
                 <div class='form-wrapper'>
-                    <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=$session_id' method='post'>
+                    <form class='form-horizontal' role='form' name='sessionForm' action='$_SERVER[SCRIPT_NAME]?id=" . getIndirectReference($session_id) . "' method='post'>
                     <fieldset>
                     <div class='form-group'>
                         <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
@@ -747,11 +747,11 @@ function bbb_session_details() {
             if ($canJoin) {
                 if($is_editor)
                 {
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;mod_pw=".urlencode($mod_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
                 }else
                 {
-                    //$joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
-                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=$meeting_id&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
+                    //$joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."' target='_blank'>" . q($title) . "</a>";
+                    $joinLink = "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;meeting_id=" . urlencode($meeting_id) . "&amp;title=".urlencode($title)."&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank'>" . q($title) . "</a>";
                 }
             } else {
                 $joinLink = q($title);
@@ -770,17 +770,17 @@ function bbb_session_details() {
                     <td class='option-btn-cell'>".
                         action_button(array(
                             array(  'title' => $langEditChange,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id&amp;choice=edit",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($id) . "&amp;choice=edit",
                                     'icon' => 'fa-edit'),
                             array(  'title' => $langBBBImportRecordings,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=import_video",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=import_video",
                                     'icon' => "fa-edit"),
                             array(  'title' => $row->active? $langDeactivate : $langActivate,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_".
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_".
                                              ($row->active? 'disable' : 'enable'),
                                     'icon' => $row->active ? 'fa-eye': 'fa-eye-slash'),
                             array(  'title' => $langDelete,
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$row->id&amp;choice=do_delete",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($row->id) . "&amp;choice=do_delete",
                                     'icon' => 'fa-times',
                                     'class' => 'delete',
                                     'confirm' => $langConfirmDelete)
@@ -816,7 +816,7 @@ function bbb_session_details() {
                         <td class='text-center'>";
                     // Join url will be active only X minutes before scheduled time and if session is visible for users
                     if ($canJoin) {
-                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=$meeting_id&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
+                        $tool_content .= icon('fa-sign-in', $langBBBSessionJoin,"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;choice=do_join&amp;title=".urlencode($title)."&amp;meeting_id=" . urlencode($meeting_id) . "&amp;att_pw=".urlencode($att_pw)."&amp;record=$record' target='_blank");
                     } else {
                         $tool_content .= "-</td>";
                     }
@@ -1040,11 +1040,11 @@ function bbb_join_moderator($meeting_id, $mod_pw, $att_pw, $surname, $name) {
 
         $joinParams = array(
             'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting to join.
-            'username' => $surname . " " . $name,	// REQUIRED - The user display name that will show in the BBB meeting.
-            'password' => $mod_pw,	// REQUIRED - Must match either attendee or moderator pass for meeting.
-            'createTime' => '',	// OPTIONAL - string
-            'userId' => '',	// OPTIONAL - string
-            'webVoiceConf' => ''	// OPTIONAL - string
+            'username' => $surname . " " . $name,   // REQUIRED - The user display name that will show in the BBB meeting.
+            'password' => $mod_pw,  // REQUIRED - Must match either attendee or moderator pass for meeting.
+            'createTime' => '', // OPTIONAL - string
+            'userId' => '', // OPTIONAL - string
+            'webVoiceConf' => ''    // OPTIONAL - string
         );
 
         // Get the URL to join meeting:
@@ -1088,11 +1088,11 @@ function bbb_join_user($meeting_id, $att_pw, $surname, $name) {
 
     $joinParams = array(
         'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting to join.
-        'username' => $surname . " " . $name,	// REQUIRED - The user display name that will show in the BBB meeting.
-        'password' => $att_pw,	// REQUIRED - Must match either attendee or moderator pass for meeting.
-        'createTime' => '',	// OPTIONAL - string
-        'userId' => '',	// OPTIONAL - string
-        'webVoiceConf' => ''	// OPTIONAL - string
+        'username' => $surname . " " . $name,   // REQUIRED - The user display name that will show in the BBB meeting.
+        'password' => $att_pw,  // REQUIRED - Must match either attendee or moderator pass for meeting.
+        'createTime' => '', // OPTIONAL - string
+        'userId' => '', // OPTIONAL - string
+        'webVoiceConf' => ''    // OPTIONAL - string
     );
     // Get the URL to join meeting:
     $result = $bbb->getJoinMeetingURL($joinParams);
@@ -1312,7 +1312,7 @@ function get_meeting_users($salt,$bbb_url,$meeting_id,$pw)
 
     $infoParams = array(
         'meetingId' => $meeting_id, // REQUIRED - We have to know which meeting.
-        'password' => $pw,	// REQUIRED - Must match moderator pass for meeting.
+        'password' => $pw,  // REQUIRED - Must match moderator pass for meeting.
     );
 
     // Now get meeting info and display it:    
