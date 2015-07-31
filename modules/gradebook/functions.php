@@ -242,8 +242,8 @@ function delete_gradebook_activity($gradebook_id, $activity_id) {
     global $langGradebookDel, $langGradebookDelFailure;
     
     $delAct = Database::get()->query("DELETE FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $activity_id, $gradebook_id)->affectedRows;
-    $delActBooks = Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id)->affectedRows;
-    if (($delAct) and $delActBooks) {
+    Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d", $activity_id);
+    if ($delAct) {
         Session::Messages("$langGradebookDel", "alert-success");
     } else {
         Session::Messages("$langGradebookDelFailure", "alert-danger");
@@ -677,51 +677,50 @@ function display_gradebook($gradebook_id) {
            $langEditChange, $langYes, $langNo, $langPreview, $langAssignment, $langGradebookActivityAct, $langGradebookGradeAlert3,
            $langGradebookExams, $langGradebookLabs, $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap, $langLearningPath,
-           $langExport, $langcsvenc1, $langcsvenc2, $langBack;
+           $langExport, $langcsvenc1, $langcsvenc2, $langBack, $langToA;
     
     $tool_content .= action_bar(
             array(
-                array(  'title' => $langExport,                 
+                array(  'title' => $langAdd,                 
                         'level' => 'primary-label', 
                         'options' => array(
-                                        array('title' => "$langcsvenc1",
-                                               'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id&amp;enc=1253",                                               
-                                               'class' => ''),
-                                        array('title' => "$langcsvenc2",
-                                              'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id",                                              
-                                              'class' => '')
+                                        array(  'title' => $langGradebookAddActivity,
+                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivity=1",
+                                                'icon' => 'fa fa-plus fa space-after-icon',
+                                                'class' => ''),
+                                        array(  'title' => "$langInsertWorkCap",
+                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityAs=1",
+                                                'icon' => 'fa fa-flask space-after-icon',
+                                                'class' => ''),
+                                        array(  'title' => "$langInsertExerciseCap",
+                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityEx=1",
+                                                'icon' => 'fa fa-edit space-after-icon',
+                                                'class' => ''),
+                                        array(  'title' => "$langLearningPath",
+                                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityLp=1",
+                                                'icon' => 'fa fa-ellipsis-h space-after-icon',
+                                                'class' => ''),
                                     ),
-                     'icon' => 'fa-file-excel-o'),
+                     'icon' => 'fa-plus',
+                     'class'=>  'btn-success'),
                 array('title' => $langConfig,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editSettings=1",
-                      'icon' => 'fa-cog',
-                      'level' => 'primary-label'),
+                      'icon' => 'fa-cog'),
                 array('title' => $langUsers,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
-                      'icon' => 'fa-users',
-                      'level' => 'primary-label'),                
-                array('title' => $langGradebookAddActivity,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivity=1",
-                      'icon' => 'fa-plus'),
-                array('title' => "$langInsertWorkCap",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityAs=1",
-                      'icon' => 'fa-flask'),
-                array('title' => "$langInsertExerciseCap",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityEx=1",
-                      'icon' => 'fa-edit'),
-                array('title' => "$langLearningPath",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityLp=1",
-                      'icon' => 'fa-ellipsis-h'),
+                      'icon' => 'fa-users'),                
+                array('title' => "$langExport $langToA $langcsvenc1",
+                        'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id&amp;enc=1253",                                               
+                        'icon' => 'fa-file-excel-o'),
+                array('title' => "$langExport $langToA $langcsvenc2",
+                        'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id",                                              
+                        'icon' => 'fa-file-excel-o'),
                 array('title' => $langBack,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                       'icon' => 'fa-reply',
                       'level' => 'primary-label'),
             ),
-            true,
-            array(
-                'secondary_title' => $langAdd,
-                'secondary_icon' => 'fa-plus'
-            )
+            true
         );
     
     $weightMessage = "";
