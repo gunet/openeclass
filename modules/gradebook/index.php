@@ -127,7 +127,7 @@ $(function() {
         $('#all_users').hide();
         $('#participants_tbl').removeClass('hide');
         var type = $('input:radio[name=specific_gradebook_users]:checked').val();        
-        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$_REQUEST[gradebook_id]&editUsers=1',
+        $.post('$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . urlencode($_REQUEST[gradebook_id]) . "&editUsers=1',
         {
           assign_type: type
         },
@@ -160,7 +160,7 @@ $(function() {
 
 $display = TRUE;
 if (isset($_REQUEST['gradebook_id'])) {
-    $gradebook_id = $_REQUEST['gradebook_id'];
+    $gradebook_id = getDirectReference($_REQUEST['gradebook_id']);
     $gradebook_title = get_gradebook_title($gradebook_id);
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
     $pageName = $langEditChange;
@@ -169,7 +169,7 @@ if (isset($_REQUEST['gradebook_id'])) {
 if ($is_editor) {
     // change gradebook visibility
     if (isset($_GET['vis'])) {
-        Database::get()->query("UPDATE gradebook SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], $_GET['gradebook_id'], $course_id);
+        Database::get()->query("UPDATE gradebook SET active = ?d WHERE id = ?d AND course_id = ?d", $_GET['vis'], getDirectReference($_GET['gradebook_id']), $course_id);
         Session::Messages($langGlossaryUpdated, 'alert-success');
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
@@ -180,6 +180,7 @@ if ($is_editor) {
     }
     //add a new gradebook
     if (isset($_POST['newGradebook']) && strlen(trim($_POST['title']))) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $newTitle = trim($_POST['title']);
         $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;   
         //create gradebook users (default the last six months)
@@ -197,15 +198,16 @@ if ($is_editor) {
     }    
     //delete user from gradebook list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
-        delete_gradebook_user($_GET['gb'], $_GET['ruid']);        
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$_GET[gb]&gradebookBook=1");        
+        delete_gradebook_user(getDirectReference($_GET['gb']), getDirectReference($_GET['ruid']));        
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=".urlencode($_GET['gb'])."&gradebookBook=1");        
     }
     
     //reset gradebook users
-    if (isset($_POST['resetGradebookUsers'])) {                
+    if (isset($_POST['resetGradebookUsers'])) {  
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();              
         if ($_POST['specific_gradebook_users'] == 2) { // specific users group
             foreach ($_POST['specific'] as $g) {
-                $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
+                $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", getDirectReference($g));
                 foreach ($ug as $u) {
                     $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                             SELECT $gradebook_id, user_id FROM course_user
@@ -215,7 +217,7 @@ if ($is_editor) {
         } elseif ($_POST['specific_gradebook_users'] == 1) { // specific users            
             $active_gradebook_users = '';
             foreach ($_POST['specific'] as $u) {
-                $active_gradebook_users .= $u . ",";
+                $active_gradebook_users .= getDirectReference($u) . ",";
             }
             $active_gradebook_users = substr($active_gradebook_users, 0, -1);
             $gu = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
@@ -224,11 +226,11 @@ if ($is_editor) {
                 delete_gradebook_user($gradebook_id, $u);
             }
             foreach ($_POST['specific'] as $u) {
-                $sql = Database::get()->querySingle("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d AND uid = ?d", $gradebook_id, $u);                
+                $sql = Database::get()->querySingle("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d AND uid = ?d", $gradebook_id, getDirectReference($u));                
                 if (!isset($sql->uid)) {
                     $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                             SELECT $gradebook_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
+                            WHERE course_id = ?d AND user_id = ?d", $course_id, getDirectReference($u)); 
                 }
             }
         } else { // if we want all users between dates            
@@ -245,64 +247,64 @@ if ($is_editor) {
                                 $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
         }
         Session::Messages($langGradebookEdit,"alert-success");                    
-        redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . $gradebook_id . '&gradebookBook=1');
+        redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . getIndirectReference($gradebook_id) . '&gradebookBook=1');
     }
     
     // Top menu
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
     if (isset($_GET['editUsers']) or isset($_GET['gradeBooks'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
         $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langGradebookManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['editSettings'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
         $pageName = $langConfig;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['gradebookBook'])) {                
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
         $pageName = $langGradebookActiveUsers;
         $tool_content .= action_bar(array(
             array('title' => $langRefreshList,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editUsers=1",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editUsers=1",
                   'icon' => 'fa-users',
                   'level' => 'primary-label'),
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success')            
             ));
     } elseif (isset($_GET['modify'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
         $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['ins'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
@@ -314,20 +316,20 @@ if ($is_editor) {
         }
         $tool_content .= action_bar(array(
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id", "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(            
             array('title' => $langGradebookBook,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply',
                   'level' => 'primary-label'),
             array('title' => $langBack,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply ',
                   'level' => 'primary-label',
                   'button-class' => 'btn-success')
@@ -356,6 +358,7 @@ if ($is_editor) {
     
     // update gradebook settings
     if (isset($_POST['submitGradebookSettings'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['degreerange'])) { // update gradebook range
             $gradebook_range = intval($_POST['degreerange']);
             Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
@@ -366,7 +369,7 @@ if ($is_editor) {
          
         }
         Session::Messages($langGradebookEdit,"alert-success");
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
     }
     //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
@@ -376,16 +379,17 @@ if ($is_editor) {
 
     //UPDATE/INSERT DB: new activity from exersices, assignments, learning paths
     elseif(isset($_GET['addCourseActivity'])) {
-        $id = $_GET['addCourseActivity'];
+        $id = getDirectReference($_GET['addCourseActivity']);
         $type = intval($_GET['type']);
         add_gradebook_activity($gradebook_id, $id, $type);
         Session::Messages("$langGradebookSucInsert","alert-success");
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");        
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));        
         $display = FALSE;
     }
 
     //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
-    elseif(isset($_POST['submitGradebookActivity'])) {        
+    elseif(isset($_POST['submitGradebookActivity'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();        
         if (isset($_POST['actTitle'])) {
             $actTitle = $_POST['actTitle'];
         } else {
@@ -406,29 +410,29 @@ if ($is_editor) {
             $actDate = $_POST['date'];    
         }        
         $visible = isset($_POST['visible']) ? 1 : 0;        
-        if (($_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])) && $weight != 100) 
-                           || (!$_POST['id'] && $weight>(weightleft($gradebook_id, $_POST['id'])))) {
+        if (($_POST['id'] && $weight>(weightleft($gradebook_id, getDirectReference($_POST['id']))) && $weight != 100) 
+                           || (!$_POST['id'] && $weight>(weightleft($gradebook_id, getDirectReference($_POST['id']))))) {
             Session::Messages("$langGradebookWeightAlert", "alert-warning");
-            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
         } elseif ((empty($weight) or ($weight == 0))) {
             Session::Messages("$langGradebookGradeAlert2", "alert-warning");
-            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
         } else {
             if ($_POST['id']) {               
                 //update
-                $id = $_POST['id'];
+                $id = getDirectReference($_POST['id']);
                 Database::get()->query("UPDATE gradebook_activities SET `title` = ?s, date = ?t, description = ?s,
                                             `auto` = ?d, `weight` = ?d, `activity_type` = ?d, `visible` = ?d 
                                             WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $weight, $type, $visible, $id);                
                 Session::Messages("$langGradebookEdit", "alert-success");
-                redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
+                redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
             } else {
                 //insert
                 $insertAct = Database::get()->query("INSERT INTO gradebook_activities SET gradebook_id = ?d, title = ?s, 
                                                             `date` = ?t, description = ?s, weight = ?d, `activity_type` = ?d, visible = ?d", 
                                                     $gradebook_id, $actTitle, $actDate, $actDesc, $weight, $type, $visible);
                 Session::Messages("$langGradebookSucInsert","alert-success");
-                redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
+                redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
             }
         }
         $display = FALSE;
@@ -436,12 +440,12 @@ if ($is_editor) {
 
     //delete gradebook activity
     elseif (isset($_GET['delete'])) {        
-        delete_gradebook_activity($gradebook_id, $_GET['delete']);
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=$gradebook_id");
+        delete_gradebook_activity($gradebook_id, getDirectReference($_GET['delete']));
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
     
     // delete gradebook
     } elseif (isset($_GET['delete_gb'])) {        
-        delete_gradebook($_GET['delete_gb']);
+        delete_gradebook(getDirectReference($_GET['delete_gb']));
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
    
@@ -452,12 +456,13 @@ if ($is_editor) {
         }
         //record booking
         if(isset($_POST['bookUser'])) {
-            $userID = intval($_POST['userID']); //user
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+            $userID = intval(getDirectReference($_POST['userID'])); //user
             //get all the gradebook activies --> for each gradebook activity update or insert grade
             $result = Database::get()->queryArray("SELECT * FROM gradebook_activities  WHERE gradebook_id = ?d", $gradebook_id);
             if ($result) {
                 foreach ($result as $activity) {
-                    $attend = floatval($_POST[$activity->id]); //get the record from the teacher (input name is the activity id)
+                    $attend = floatval($_POST[getIndirectReference($activity->id)]); //get the record from the teacher (input name is the activity id)
                     //check if there is record for the user for this activity
                     $checkForBook = Database::get()->querySingle("SELECT id FROM gradebook_book  WHERE gradebook_activity_id = ?d AND uid = ?d", $activity->id, $userID);
                     if($checkForBook){
@@ -500,12 +505,14 @@ if ($is_editor) {
     }
     //DISPLAY - EDIT DB: insert grades for each activity
     elseif (isset($_GET['ins'])) {
-        $actID = intval($_GET['ins']);
+        $actID = intval(getDirectReference($_GET['ins']));
         $error = false;
         if (isset($_POST['bookUsersToAct'])) {
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             insert_grades($gradebook_id, $actID);
         }
-        if (isset($_POST['updateUsersToAct'])) {            
+        if (isset($_POST['updateUsersToAct'])) {  
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();          
             update_grades($gradebook_id, $actID);
         }
         register_user_grades($gradebook_id, $actID);

@@ -42,7 +42,7 @@ header("Content-Disposition: attachment; filename=list_gradebook_users.csv");
 echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade)));
 echo $crlf;
 echo $crlf;
-$sql = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $_GET['gradebook_id']);
+$sql = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", getDirectReference($_GET['gradebook_id']));
 foreach ($sql as $act) {
     echo csv_escape($act->title). "$crlf";
     $sql2 = Database::get()->queryArray("SELECT uid, grade FROM gradebook_book WHERE gradebook_activity_id = ?d", $act->id);

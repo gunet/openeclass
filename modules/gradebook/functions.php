@@ -70,7 +70,7 @@ function display_user_grades($gradebook_id) {
         $actNumber = count($result);
         if ($actNumber > 0) {
             $tool_content .= "<h5>" . display_user($userID) . " ($langGradebookGrade: " . userGradeTotal($gradebook_id, $userID) . ")</h5>";
-            $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
+            $tool_content .= "<form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=" . $userID . "' onsubmit=\"return checkrequired(this, 'antitle');\">
                               <table class='table-default'>";
             $tool_content .= "<tr><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>";
             $tool_content .= "<th width='10' class='text-center'>$langGradebookBooking</th>";
@@ -128,14 +128,14 @@ function display_user_grades($gradebook_id) {
                 }
                 $tool_content .= "<td width='' class='text-center'>" . $activity->weight . "%</td>";
                 @$tool_content .= "<td class='text-center'>
-                <input style='width:30px' type='text' value='".$userGrade."' name='" . $activity->id . "'"; //SOS 4 the UI!!
+                <input style='width:30px' type='text' value='".$userGrade."' name='" . getIndirectReference($activity->id) . "'"; //SOS 4 the UI!!
                 $tool_content .= ">
-                <input type='hidden' value='" . $userID . "' name='userID'>
+                <input type='hidden' value='" . getIndirectReference($userID) . "' name='userID'>
                 </td>";
             } // end of while
         }
         $tool_content .= "</tr></table>";
-        $tool_content .= "<div class='pull-right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langGradebookBooking'></div>";
+        $tool_content .= "<div class='pull-right'><input class='btn btn-primary' type='submit' name='bookUser' value='$langGradebookBooking'>".generate_csrf_token_form_field()."</div>";
 
         if(userGradeTotal($gradebook_id, $userID) > $gradebook_range){
             $tool_content .= "<br>" . $langGradebookOutRange;
@@ -184,6 +184,7 @@ function new_gradebook() {
                                 )
                             ))."</div>
                     </div>
+            ". generate_csrf_token_form_field() ."
             </form>
         </div>";
 }
@@ -290,7 +291,7 @@ function gradebook_settings($gradebook_id) {
     $tool_content .= "<div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "'>
                     <div class='form-group'>
                         <label class='col-xs-12'>$langTitle</label>
                         <div class='col-xs-12'>
@@ -327,11 +328,12 @@ function gradebook_settings($gradebook_id) {
                                     'value'=> $langGradebookUpdate
                                 ),
                                 array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id"
+                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . ""
                                 )
                             ))."</div>
                         </div>
                     </fieldset>
+                ". generate_csrf_token_form_field() ."
                 </form>
             </div>
         </div>
@@ -373,7 +375,7 @@ function user_gradebook_settings($gradebook_id) {
     <div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=$gradebook_id&editUsers=1'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "&editUsers=1'>
                     <div class='form-group'>
                         <label class='col-xs-12'><span class='help-block'>$langGradebookInfoForUsers</span></label>
                     </div>
@@ -454,10 +456,11 @@ function user_gradebook_settings($gradebook_id) {
                             'javascript' => "selectAll('participants_box',true)"
                         ),
                         array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1"
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1"
                         )
                     ))."</div>
                     </div>
+                ". generate_csrf_token_form_field() ."
                 </form>
             </div>
         </div>
@@ -532,17 +535,17 @@ function display_all_users_grades($gradebook_id) {
                     action_button(array(
                         array('title' => $langGradebookBook,
                                 'icon' => 'fa-plus',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;book=$resultUser->userID"),
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;book=$resultUser->userID"),
                         array('title' => $langGradebookDelete,
                                 'icon' => 'fa-times',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=$gradebook_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gb=" . getIndirectReference($gradebook_id) . "&amp;ruid=" . getIndirectReference($resultUser->userID) . "&amp;deleteuser=yes",
                                 'class' => 'delete',
                                 'confirm' => $langConfirmDelete)))
                         ."</td></tr>";
         }
         $tool_content .= "</tbody></table>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editUsers=1'>$langHere</a>.</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editUsers=1'>$langHere</a>.</div>";
     }
 }
 
@@ -685,35 +688,35 @@ function display_gradebook($gradebook_id) {
                   'level' => 'primary-label',
                   'options' => array(
                       array('title' => $langGradebookAddActivity,
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivity=1",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addActivity=1",
                             'icon' => 'fa fa-plus fa space-after-icon',
                             'class' => ''),
                       array('title' => "$langInsertWorkCap",
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityAs=1",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addActivityAs=1",
                             'icon' => 'fa fa-flask space-after-icon',
                             'class' => ''),
                       array('title' => "$langInsertExerciseCap",
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityEx=1",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addActivityEx=1",
                             'icon' => 'fa fa-edit space-after-icon',
                             'class' => ''),
                       array('title' => "$langLearningPath",
-                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addActivityLp=1",
+                            'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addActivityLp=1",
                             'icon' => 'fa fa-ellipsis-h space-after-icon',
                             'class' => ''),
                       ),
                   'icon' => 'fa-plus',
                   'class'=>  'btn-success'),
             array('title' => $langConfig,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;editSettings=1",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editSettings=1",
                   'icon' => 'fa-cog'),
             array('title' => $langUsers,
-                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;gradebookBook=1",
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
                   'icon' => 'fa-users'),
             array('title' => "$langExport $langToA $langcsvenc1",
-                  'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id&amp;enc=1253",
+                  'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;enc=1253",
                   'icon' => 'fa-file-excel-o'),
             array('title' => "$langExport $langToA $langcsvenc2",
-                  'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=$gradebook_id",
+                  'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "",
                   'icon' => 'fa-file-excel-o'),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
@@ -757,7 +760,7 @@ function display_gradebook($gradebook_id) {
             if (empty($details->title)) {
                 $tool_content .= "$langGradebookNoTitle<br>";
             } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=$details->id'>" . q($details->title) . "</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($details->id) . "'>" . q($details->title) . "</a>";
             }
             $tool_content .= "<small class='help-block'>";
             switch ($details->activity_type) {
@@ -816,14 +819,14 @@ function display_gradebook($gradebook_id) {
                 action_button(array(
                             array('title' => $langEditChange,
                                 'icon' => 'fa-edit',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;modify=$details->id"),
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;modify=" . getIndirectReference($details->id)),
                             array('title' => $langPreview,
                                 'icon' => 'fa-plus',
                                 'url' => $preview_link,
                                 'show' => (!empty($preview_link))),
                             array('title' => $langDelete,
                                 'icon' => 'fa-times',
-                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;delete=$details->id",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;delete=" . getIndirectReference($details->id),
                                 'confirm' => $langConfirmDelete,
                                 'class' => 'delete')
                     )).
@@ -872,22 +875,22 @@ function display_gradebooks() {
         $tool_content .= "</tr>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;direct_link=1'>$g->title</a></td>";
+            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;direct_link=1'>" . q($g->title) . "</a></td>";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
                                     array('title' => $langEditChange,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id",
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id),
                                           'icon' => 'fa-edit'),
                                     array('title' => $g->active ? $langDeactivate : $langActivate,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;vis=" .
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;vis=" .
                                                   ($g->active ? '0' : '1'),
                                           'icon' => $g->active ? 'fa-toggle-off' : 'fa-toggle-on'),
                                     array('title' => $langCreateDuplicate,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$g->id&amp;dup=1",
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;dup=1",
                                           'icon' => 'fa-copy'),
                                     array('title' => $langDelete,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=$g->id",
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_gb=" . getIndirectReference($g->id),
                                           'icon' => 'fa-times',
                                           'class' => 'delete',
                                           'confirm' => $langConfirmDelete))
@@ -939,7 +942,7 @@ function display_available_exercises($gradebook_id) {
             $tool_content .= "</td>"
                     . "<td><div class='smaller'><span class='day'>" . nice_format($newExerToGradebook->start_date, true, true) . " </div></td>"
                     . "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addCourseActivity=" . $newExerToGradebook->id . "&amp;type=2");
+            $tool_content .= "<td width='70' class='text-center'>" . icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->id) . "&amp;type=2");
         }
         $tool_content .= "</td></tr></table></div></div></div>";
     } else {
@@ -977,7 +980,7 @@ function display_available_assignments($gradebook_id) {
             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
             <h4>$langWorks</h4>
                           <table class='table-default'";
-        $tool_content .= "<tr><th>$langTitle</th><th>$m[deadline]</th><th>$langDescription</th>";
+        $tool_content .= "<tr><th>$langTitle</th><th>".q($m[deadline])."</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
@@ -1004,9 +1007,9 @@ function display_available_assignments($gradebook_id) {
             }
             $tool_content .= "</b>";
             $tool_content .= "</td>"
-                    . "<td><div class='smaller'><span class='day'>$date_str</span> $hour_str </div></td>"
+                    . "<td><div class='smaller'><span class='day'>".q($date_str)."</span> ".q($hour_str)." </div></td>"
                     . "<td>" . $content . "</td>";
-            $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addCourseActivity=" . $newAssToGradebook->id . "&amp;type=1");
+            $tool_content .= "<td width='70' class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newAssToGradebook->id) . "&amp;type=1");
         } // end of while
         $tool_content .= "</tr></table></div></div></div>";
     } else {
@@ -1046,8 +1049,8 @@ function display_available_lps($gradebook_id) {
         foreach ($checkForLp as $newExerToGradebook) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>". q($newExerToGradebook->name) ."</td>";
-            $tool_content .= "<td>" .$newExerToGradebook->comment. "</td>";
-            $tool_content .= "<td class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;addCourseActivity=$newExerToGradebook->learnPath_id&amp;type=3")."</td>";
+            $tool_content .= "<td>" .q($newExerToGradebook->comment). "</td>";
+            $tool_content .= "<td class='text-center'>".icon('fa-plus', $langAdd, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;addCourseActivity=" . getIndirectReference($newExerToGradebook->learnPath_id) . "&amp;type=3")."</td>";
             $tool_content .= "</tr>";
         } // end of while
         $tool_content .= "</table></div></div></div>";
@@ -1086,7 +1089,7 @@ function register_user_grades($gradebook_id, $actID) {
     $gradebook_range = get_gradebook_range($gradebook_id);
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $act_type = $result->activity_type; // type of activity
-    $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
+    $tool_content .= "<div class='alert alert-info'>" . q($result->title) . "</div>";
     //display users
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname,
                                                     user.givenname as name, user.am as am, DATE(course_user.reg_date) AS reg_date
@@ -1097,7 +1100,7 @@ function register_user_grades($gradebook_id, $actID) {
 
     if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id&amp;ins=" . $actID . "'>
+        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "'>
         <div class='form-group'>
         <div class='col-xs-12'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
@@ -1136,13 +1139,13 @@ function register_user_grades($gradebook_id, $actID) {
                 $tool_content .= "<span class='help-block'><small>$langGradebookOutRange</small></span>";
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td class='text-center'><input type='text' name='usersgrade[$resultUser->userID]'";
+            $tool_content .= "<td class='text-center'><input type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]'";
             if(isset($q->grade)) {
-                $tool_content .= " value = '$q->grade'";
+                $tool_content .= " value = '".q($q->grade)."'";
             } else{
                 $tool_content .= " value = ''";
             }
-            $tool_content .= "><input type='hidden' value='" . $actID . "' name='actID'></td>";
+            $tool_content .= "><input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'></td>";
             $tool_content .= "</tr>";
         }
         $tool_content .= "</tbody></table></div></div>";
@@ -1161,7 +1164,7 @@ function register_user_grades($gradebook_id, $actID) {
                                     'show' => $act_type == 0
                                 )));
         $tool_content .= "</div></div>";
-        $tool_content .= "</form></div>";
+        $tool_content .= generate_csrf_token_form_field()."</form></div>";
     }
 }
 
@@ -1291,10 +1294,10 @@ function add_gradebook_other_activity($gradebook_id) {
     <div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=$gradebook_id'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "'>
                     <fieldset>";
                         if (isset($_GET['modify'])) { // modify an existing gradebook activity
-                            $id  = filter_var($_GET['modify'], FILTER_VALIDATE_INT);
+                            $id  = filter_var(getDirectReference($_GET['modify']), FILTER_VALIDATE_INT);
                             //All activity data (check if it's in this gradebook)
                             $modifyActivity = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d AND gradebook_id = ?d", $id, $gradebook_id);
                             if ($modifyActivity) {
@@ -1335,7 +1338,7 @@ function add_gradebook_other_activity($gradebook_id) {
                         <div class='form-group'>
                             <label for='actTitle' class='col-sm-2 control-label'>$langTitle:</label>
                             <div class='col-sm-10'>
-                                <input type='text' class='form-control' name='actTitle' value='$titleToModify'/>
+                                <input type='text' class='form-control' name='actTitle' value='".q($titleToModify)."'/>
                             </div>
                         </div>
                         <div class='form-group'>
@@ -1386,11 +1389,12 @@ function add_gradebook_other_activity($gradebook_id) {
                                     )
                                 ))."</div></div>";
                         if (isset($_GET['modify'])) {
-                            $tool_content .= "<input type='hidden' name='id' value='" . $gradebookActivityToModify . "'>";
+                            $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($gradebookActivityToModify) . "'>";
                         } else {
-                            $tool_content .= " <input type='hidden' name='id' value=''>";
+                            $tool_content .= " <input type='hidden' name='id' value='' >";
                         }
                     $tool_content .= "</fieldset>
+                ". generate_csrf_token_form_field() ."
                 </form>
             </div>
         </div>
@@ -1415,11 +1419,11 @@ function insert_grades($gradebook_id, $actID) {
         }
         // //check if there is record for the user for this activity
         $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM gradebook_book
-                                    WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, $userID);
+                                    WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
         if ($checkForBook->count) { // update
             Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d", $userInp, $checkForBook->id);
         } else { // insert
-            Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", $userID, $actID, $userInp, '');
+            Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", getDirectReference($userID), $actID, $userInp, '');
         }
     }
     $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
