@@ -44,6 +44,7 @@ function display_attendance_users($attendance_id) {
     
     //record booking
     if(isset($_POST['bookUsersToAct'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
 
         //get all the active users 
         $activeUsers = Database::get()->queryArray("SELECT uid as userID FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
@@ -79,7 +80,7 @@ function display_attendance_users($attendance_id) {
     if ($resultUsers) {
         //table to display the users
         $tool_content .= "
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . $actID . "'>
+        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&ins=" . getIndirectReference($actID) . "'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr>
@@ -111,10 +112,10 @@ function display_attendance_users($attendance_id) {
                 if(isset($q->attend) && $q->attend == 1) {
                     $tool_content .= " checked";
                 }    
-                $tool_content .= "><input type='hidden' value='" . $actID . "' name='actID'></td>";
+                $tool_content .= "><input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'></td>";
                 $tool_content .= "</tr>";
         }
-        $tool_content .= "</tbody></table> <input type='submit' class='btn btn-primary' name='bookUsersToAct' value='$langAttendanceBooking' /></form>";
+        $tool_content .= "</tbody></table> <input type='submit' class='btn btn-primary' name='bookUsersToAct' value='$langAttendanceBooking' />". generate_csrf_token_form_field() ."</form>";
     }
 }
 
@@ -144,9 +145,9 @@ function display_attendance_activities($attendance_id) {
             $content = ellipsize_html($details->description, 50);            
             $tool_content .= "<tr><td>";
              if (empty($details->title)) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$details->id'>$langAttendanceNoTitle</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=" . getIndirectReference($details->id) . "'>$langAttendanceNoTitle</a>";
             } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=$details->id'>".q($details->title)."</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ins=" . getIndirectReference($details->id) . "'>".q($details->title)."</a>";
             }
             $tool_content .= "</td>
                     <td>" . nice_format($details->date, true, true) . "</td>";
@@ -171,11 +172,11 @@ function display_attendance_activities($attendance_id) {
                     action_button(array(
                                 array('title' => $langEditChange,
                                     'icon' => 'fa-edit',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=$details->id"
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;modify=" . getIndirectReference($details->id)
                                     ),                            
                                 array('title' => $langDelete,
                                     'icon' => 'fa-times',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$details->id",
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=" . getIndirectReference($details->id),
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete'))).
                     "</td></tr>";

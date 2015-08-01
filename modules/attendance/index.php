@@ -84,6 +84,7 @@ $toolName = $langAttendance;
 
 //change the attendance
 if (isset($_POST['selectAttendance'])){
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $attendance_id = intval($_POST['attendanceYear']);
     $attendance = Database::get()->querySingle("SELECT id FROM attendance WHERE course_id = ?d AND id = ?d  ", $course_id, $attendance_id);
     if ($attendance) {
@@ -98,6 +99,7 @@ if (isset($_POST['selectAttendance'])){
     
 //add a new attendance
 if (isset($_POST['newAttendance']) && strlen($_POST['title'])){
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     //make the others inactive
     Database::get()->querySingle("UPDATE attendance SET active = 0 WHERE course_id = ?d AND active = 1 ", $course_id);
     
@@ -144,7 +146,7 @@ if ($is_editor) {
     
     //delete users from attendance users table        
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {
-        Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d AND attendance_id = ?d", $_GET['ruid'], $_GET['ab']);
+        Database::get()->query("DELETE FROM attendance_users WHERE uid = ?d AND attendance_id = ?d", getDirectReference($_GET['ruid']), $_GET['ab']);
     }
         
     // action and navigation bar
@@ -186,7 +188,7 @@ if ($is_editor) {
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
-        $actID = intval($_GET['ins']);
+        $actID = intval(getDirectReference($_GET['ins']));
         $result = Database::get()->querySingle("SELECT * FROM attendance_activities  WHERE id = ?d", $actID);
         $pageName = $langAttendanceBook.' '.$result->title;
         $tool_content .= action_bar(array(
@@ -263,6 +265,7 @@ if ($is_editor) {
     
     //EDIT: edit title
     if (isset($_POST['titleSubmit']) && strlen($_POST['title'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $attendance_title = $_POST['title'];
         Database::get()->querySingle("UPDATE attendance SET `title` = ?s WHERE id = ?d ", $attendance_title, $attendance_id);
             Session::Messages($langAttendanceEdit,"alert-success");
@@ -280,7 +283,7 @@ if ($is_editor) {
                     <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' >
                         <fieldset>";                            
                         if (isset($_GET['modify'])) { //edit an existed activity
-                            $id = intval($_GET['modify']);
+                            $id = intval(getDirectReference($_GET['modify']));
 
                             //all activity data (check if it is in this attendance)
                             $mofifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
@@ -332,9 +335,10 @@ if ($is_editor) {
                             </div>";
                             if (isset($_GET['modify'])) { 
                                 $tool_content .= "
-                                                <input type='hidden' name='id' value='" . $attendanceActivityToModify . "' />";
+                                                <input type='hidden' name='id' value='" . getIndirectReference($attendanceActivityToModify) . "' />";
                             }
                         $tool_content .= "</fieldset>
+                   ". generate_csrf_token_form_field() ."
                     </form>
                 </div>
             </div>
@@ -346,7 +350,7 @@ if ($is_editor) {
 
     //EDIT DB: add to the attendance module new activity from exersices or assignments
     elseif(isset($_GET['addCourseActivity'])){
-        $id = intval($_GET['addCourseActivity']);
+        $id = intval(getDirectReference($_GET['addCourseActivity']));
         $type = intval($_GET['type']);
         
         //check the type of the module (assignments)
@@ -414,7 +418,7 @@ if ($is_editor) {
 
     //EDIT DB: add or edit activity to attendance module (edit concerns and course automatic activities)
     elseif(isset($_POST['submitAttendanceActivity'])){
-
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (strlen($_POST['actTitle'])) {
             $actTitle = $_POST['actTitle'];
         } else {
@@ -431,7 +435,7 @@ if ($is_editor) {
         
         if (isset($_POST['id'])) {
             //update
-            $id = intval($_POST['id']);
+            $id = intval(getDirectReference($_POST['id']));
             Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, description = ?s, `auto` = ?d WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);            
             
             Session::Messages($langAttendanceEdit,"alert-success");
@@ -450,6 +454,7 @@ if ($is_editor) {
 
     //EDIT DB: add or edit attendance limit
     elseif(isset($_POST['submitAttendanceLimit'])){
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $attendance_limit = intval($_POST['limit']);
         
         Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
@@ -460,7 +465,7 @@ if ($is_editor) {
 
     //DELETE DB: delete activity form to attendance module
     elseif (isset($_GET['delete'])) {
-            $delete = intval($_GET['delete']);
+            $delete = intval(getDirectReference($_GET['delete']));
             $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $delete, $attendance_id)->affectedRows;
             $delActBooks = Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $delete)->affectedRows;
             $showAttendanceActivities = 1; //show list activities
@@ -480,8 +485,9 @@ if ($is_editor) {
             $tool_content .= "<div class='alert alert-success'>$langAttendanceUsers</div>";
         }        
         //record booking
-        if(isset($_POST['bookUser'])){                        
-            $userID = intval($_POST['userID']); //user
+        if(isset($_POST['bookUser'])){     
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();                   
+            $userID = intval(getDirectReference($_POST['userID'])); //user
             //get all the activies
             $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d", $attendance_id);
             if ($result){                
@@ -507,7 +513,7 @@ if ($is_editor) {
         //View activities for one user - (check for auto mechanism) 
         if(isset($_GET['book'])) {
             $limit = isset($_REQUEST['limit']) ? intval($_REQUEST['limit']) : 0;            
-            $userID = intval($_GET['book']); //user
+            $userID = intval(getDirectReference($_GET['book'])); //user
             //check if there are booking records for the user, otherwise alert message for first input
             $checkForRecords = Database::get()->querySingle("SELECT COUNT(attendance_book.id) as count FROM attendance_book, attendance_activities WHERE attendance_book.attendance_activity_id = attendance_activities.id AND uid = ?d AND attendance_activities.attendance_id = ?d", $userID, $attendance_id)->count;
             if(!$checkForRecords){
@@ -584,16 +590,16 @@ if ($is_editor) {
                     }
 
                     $tool_content .= "<td class='center'>
-                    <input type='checkbox' value='1' name='" . $activ->id . "'";
+                    <input type='checkbox' value='1' name='" . getIndirectReference($activ->id) . "'";
                     if(isset($userAttend) && $userAttend) {
                         $tool_content .= " checked";
                     }    
                     $tool_content .= ">
-                    <input type='hidden' value='" . $userID . "' name='userID'>    
+                    <input type='hidden' value='" . getIndirectReference($userID) . "' name='userID'>    
                     </td></tr>";
                 } // end of while
             }
-            $tool_content .= "</table><input type='submit' class='btn btn-default' name='bookUser' value='$langAttendanceBooking' /></form></fieldset>";
+            $tool_content .= "</table><input type='submit' class='btn btn-default' name='bookUser' value='$langAttendanceBooking' />". generate_csrf_token_form_field() ."</form></fieldset>";
         } elseif (isset($_GET['attendanceBook'])) {        
             //======================
             //show all the students
@@ -623,15 +629,15 @@ if ($is_editor) {
                             <td>$cnt</td>
                             <td>" . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
                             <td>" . nice_format($resultUser->reg_date) . "</td>
-                            <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . $attendance_limit . "</td>    
+                            <td>". userAttendTotal($attendance_id, $resultUser->userID). "/" . q($attendance_limit) . "</td>    
                             <td class='option-btn-cell'>"
                                . action_button(array(
                                     array('title' => $langAttendanceBook,
                                         'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . $resultUser->userID),
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;book=" . getIndirectReference($resultUser->userID)),
                                    array('title' => $langAttendanceDelete,
                                         'icon' => 'fa-times',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=$resultUser->userID&amp;deleteuser=yes",
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;ab=$attendance_id&amp;ruid=" . getIndirectReference($resultUser->userID) . "&amp;deleteuser=yes",
                                         'confirm' => $langConfirmDelete,
                                         'class' => 'delete')))."</td>
                         </tr>";
@@ -648,6 +654,7 @@ if ($is_editor) {
     elseif(isset($_GET['editUsers'])){        
         //query to reset users in attendance list
         if (isset($_POST['resetAttendance'])) {
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $usersLimit = intval($_POST['usersLimit']);            
             if($usersLimit == 1){
                 $limitDate = date('Y-m-d', strtotime(' -6 month'));
@@ -705,6 +712,7 @@ if ($is_editor) {
                                         <input class='btn btn-primary' type='submit' name='titleSubmit' value='".($attendance_title ? $langEdit : $langInsert)."' />
                                     </div>
                                 </div>
+                   ". generate_csrf_token_form_field() ."
                     </form>
                 </div>
             </div>
@@ -734,6 +742,7 @@ if ($is_editor) {
                                 <input class='btn btn-primary' type='submit' name='resetAttendance' value='$langAttendanceUpdate' />
                             </div>
                         </div>
+                   ". generate_csrf_token_form_field() ."
                     </form>
                 </div>
             </div>
@@ -761,6 +770,7 @@ if ($is_editor) {
                                 </div>
                             </div>
                         </fieldset>
+                   ". generate_csrf_token_form_field() ."
                     </form>
                 </div>
             </div>
@@ -812,6 +822,7 @@ if ($is_editor) {
                                 <input class='btn btn-primary' type='submit' name='selectAttendance' value='".$langSelect."' />
                             </div>
                         </div>
+                   ". generate_csrf_token_form_field() ."
                     </form>
                 </div>
                 <div class='form-wrapper'>
@@ -827,6 +838,7 @@ if ($is_editor) {
                                 <input class='btn btn-primary' type='submit' name='newAttendance' value='".$langInsert."' />
                             </div>
                         </div>
+                   ". generate_csrf_token_form_field() ."
                     </form>
                 </div>                
             </div>
@@ -869,7 +881,7 @@ if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                                     array('title' => $langAdd,
                                         'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newAssToAttendance->id . "&amp;type=1")));
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . getIndirectReference($newAssToAttendance->id) . "&amp;type=1")));
             }
             $tool_content .= "</table></div></div></div>";
         } else {
@@ -911,7 +923,7 @@ if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>".action_button(array(
                                     array('title' => $langAdd,
                                         'icon' => 'fa-plus',
-                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . $newExerToAttendance->id . "&amp;type=2")));                
+                                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addCourseActivity=" . getIndirectReference($newExerToAttendance->id) . "&amp;type=2")));                
             } // end of while
             $tool_content .= "</tr></table></div></div></div>";
         } else {
