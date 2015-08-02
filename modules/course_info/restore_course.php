@@ -42,7 +42,7 @@ $navigation[] = array('url' => '../admin/index.php', 'name' => $langAdmin);
 
 // Default backup version
 if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
-
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     validateUploadedFile($_FILES['archiveZipped']['name'], 3);
 
     $tool_content .= "<fieldset>
@@ -59,6 +59,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <tr><td>" . unpack_zip_show_files($_FILES['archiveZipped']['tmp_name']) . "</td></tr>
                 </table></fieldset>";
 } elseif (isset($_POST['send_path']) and isset($_POST['pathToArchive'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $pathToArchive = $_POST['pathToArchive'];
     validateUploadedFile(basename($pathToArchive), 3);
     if (get_file_extension($pathToArchive) !== 'zip') {
@@ -73,6 +74,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         $tool_content .= "<div class='alert alert-danger'>$langFileNotFound</div>";
     }
 } elseif (isset($_POST['create_restored_course'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     register_posted_variables(array('restoreThis' => true,
         'course_code' => true,
         'course_lang' => true,
@@ -80,9 +82,10 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'course_desc' => true,
         'course_vis' => true,
         'course_prof' => true), 'all', 'autounquote');
-    create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
+    create_restored_course($tool_content,  getDirectReference($restoreThis) , $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
 } elseif (isset($_POST['do_restore'])) {
-    $base = $_POST['restoreThis'];
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+    $base = getDirectReference($_POST['restoreThis']);
     if (!file_exists($base . '/config_vars')) {
         $tool_content .= "<div class='alert alert-warning'>$langInvalidArchive</div>";
         draw($tool_content, 3);
@@ -147,6 +150,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
                     <span class='help-block'><small>$langMaxFileSize " .ini_get('upload_max_filesize') . "</small></span>
                 </div>
             </div>
+            ". generate_csrf_token_form_field() ."  
             </form>
         </div> 
     <div class='alert alert-info'>
@@ -159,6 +163,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
             <div class='form-group'>
                 <input class='btn btn-primary' type='submit' name='send_path' value='" . $langSend . "'>
             </div>
+          ". generate_csrf_token_form_field() ."  
           </form>
         </div>";
 }

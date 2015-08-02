@@ -66,6 +66,7 @@ if (isset($_POST['reg_flag'])) {
     $reg_flag = 'before';
 }
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (!$from_user) {
         $url = "$_SERVER[SCRIPT_NAME]?course=$course_code";
     } else {
@@ -184,6 +185,7 @@ if (isset($_POST['submit'])) {
             <input class='btn btn-primary' type='submit' value='$langSubmitActions' name='submit'>
             </div>
             </fieldset>
+            ". generate_csrf_token_form_field() ."                              
             </form>
             </div>";    
 }

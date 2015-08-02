@@ -179,6 +179,7 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (empty($_POST['title'])) {
         $tool_content .= "<div class='alert alert-danger'>$langNoCourseTitle</div>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
@@ -191,7 +192,7 @@ if (isset($_POST['submit'])) {
         }
         // if it is opencourses certified keeep the current course_license
         if (isset($_POST['course_license'])) {
-            $course_license = $_POST['course_license'];
+            $course_license = getDirectReference($_POST['course_license']);
         }
         // update course_license
         if (isset($_POST['l_radio'])) {
@@ -371,7 +372,7 @@ if (isset($_POST['submit'])) {
 
     $action_bar_array0 = array(
         array('title' => $langBackupCourse,
-            'url' => "archive_course.php?course=$course_code",
+            'url' => "archive_course.php?course=$course_code&".generate_csrf_token_link_parameter(),
             'icon' => 'fa-archive',
             'level' => 'primary-label'),
         array('title' => $langBack,
@@ -564,7 +565,7 @@ if (isset($_POST['submit'])) {
             </div>";
 
     if ($isOpenCourseCertified) {
-        $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
+        $tool_content .= "<input type='hidden' name='course_license' value='" . getIndirectReference($course_license) . "'>";
     }
     $language = $c->lang;
     $tool_content .= "        
@@ -722,6 +723,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."  
     </form>
 </div>";
 }

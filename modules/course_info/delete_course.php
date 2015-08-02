@@ -29,6 +29,7 @@ $pageName = $langDelCourse;
 
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 if (isset($_POST['delete'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $tool_content .= action_bar(array(
         array('title' => "$langBackHome $siteName",
             'url' => '../../index.php',
@@ -59,6 +60,8 @@ if (isset($_POST['delete'])) {
             <input class='btn btn-primary' type='submit' name='delete' value='$langDelete'>
         </div>
     </div>
-    <span class='help-block'><small>$langByDel</small></span></form></div>";
+    <span class='help-block'><small>$langByDel</small></span>
+    ". generate_csrf_token_form_field() ."                              
+   </form></div>";
 }
 draw($tool_content, 2);
