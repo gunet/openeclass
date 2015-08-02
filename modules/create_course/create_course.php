@@ -389,11 +389,13 @@ if (!isset($_POST['create_course'])) {
             </div>
             <div class='text-right'><small>$langFieldsOptionalNote</small></div>
         </fieldset>
+    ". generate_csrf_token_form_field() ."  
     </form>
 </div>";
 
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
         Session::Messages($langEmptyAddNode);
