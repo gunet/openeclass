@@ -40,6 +40,7 @@ if (isset($_GET['action'])) {
 }
 
 if (isset($_REQUEST['toolStatus'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['toolStatActive'])) {
         $tool_stat_active = $_POST['toolStatActive'];
     }
@@ -53,9 +54,9 @@ if (isset($_REQUEST['toolStatus'])) {
     $tool_id = null;
     while ($i < $loopCount) {
         if (!isset($tool_id)) {
-            $tool_id = " (`module_id` = " . intval($tool_stat_active[$i]) . ")";
+            $tool_id = " (`module_id` = " . intval(getDirectReference($tool_stat_active[$i])) . ")";
         } else {
-            $tool_id .= " OR (`module_id` = " . intval($tool_stat_active[$i]) . ")";
+            $tool_id .= " OR (`module_id` = " . intval(getDirectReference($tool_stat_active[$i])) . ")";
         }
         $i++;
     }
@@ -71,7 +72,7 @@ if (isset($_REQUEST['toolStatus'])) {
 }
 
 if (isset($_GET['delete'])) {
-    $delete = $_GET['delete'];
+    $delete = getDirectReference($_GET['delete']);
     $r = Database::get()->querySingle("SELECT url, title, category FROM link WHERE id = ?d", $delete);    
     Database::get()->query("DELETE FROM link WHERE id = ?d", $delete);
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
@@ -84,6 +85,7 @@ if (isset($_GET['delete'])) {
  * Add external link
  */
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $link = isset($_POST['link']) ? $_POST['link'] : '';
     $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
     if ((trim($link) == 'http://') or ( trim($link) == 'ftp://') or empty($link) or empty($name_link) or ! is_url_accepted($link)) {
@@ -136,6 +138,7 @@ if (isset($_POST['submit'])) {
             </div>  
             </div>
             </fieldset>
+            ". generate_csrf_token_form_field() ." 
             </form>
           </div>";
     draw($tool_content, 2, null, $head_content);
@@ -149,7 +152,7 @@ if (is_array($toolArr)) {
         $toolSelection[$i] = '';
         $numOfTools = count($toolArr[$i][1]);
         for ($j = 0; $j < $numOfTools; $j++) {
-            $toolSelection[$i] .= "<option value='" . $toolArr[$i][4][$j] . "'>" .
+            $toolSelection[$i] .= "<option value='" . getIndirectReference($toolArr[$i][4][$j]) . "'>" .
                     $toolArr[$i][1][$j] . "</option>\n";
         }
     }
@@ -194,6 +197,8 @@ $tool_content .= <<<tForm
                 </tr>
             </table>
         </div>
+tForm
+.generate_csrf_token_form_field() .<<<tForm
     </form>
 </div>
 tForm;
@@ -215,7 +220,7 @@ foreach ($q as $externalLinks) {
     $tool_content .= "<td class='text-center'>";
     $tool_content .= action_button(array(
                 array('title' => $langDelete,
-                      'url' => "?course=$course_code&amp;delete=$externalLinks->id",
+                      'url' => "?course=$course_code&amp;delete=".getIndirectReference($externalLinks->id),
                       'icon' => 'fa-times',
                       'class' => 'delete',
                       'confirm' => $langConfirmDelete)
