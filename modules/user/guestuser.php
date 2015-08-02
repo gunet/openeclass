@@ -71,6 +71,7 @@ $tool_content .= action_bar(array(
                  )));
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
     Session::Messages($langGuestSuccess, 'alert-success');
@@ -127,6 +128,7 @@ if (isset($_POST['submit'])) {
           <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."  
         </form>
         </div>";
 }

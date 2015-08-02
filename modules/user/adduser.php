@@ -37,7 +37,7 @@ $pageName = $langAddUser;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langUsers);
 
 if (isset($_GET['add'])) {
-    $uid_to_add = intval($_GET['add']);
+    $uid_to_add = intval(getDirectReference($_GET['add']));
     $result = Database::get()->query("INSERT IGNORE INTO course_user (user_id, course_id, status, reg_date, document_timestamp)
                                     VALUES (?d, ?d, " . USER_STUDENT . ", " . DBHelper::timeAfter() . ", " . DBHelper::timeAfter(). ")", $uid_to_add, $course_id);
 
@@ -137,7 +137,7 @@ if (isset($_GET['add'])) {
                 $tool_content .= "<td class='text-right'>$i.</td><td>" . q($myrow->givenname) . "</td><td>" .
                         q($myrow->surname) . "</td><td>" . q($myrow->username) . "</td><td>" .
                         q($myrow->am) . "</td><td class='text-center'>" .
-                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=$myrow->id"). "</td></tr>";
+                        icon('fa-sign-in', $langRegister, "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;add=" . getIndirectReference($myrow->id)). "</td></tr>";
                 $i++;
             }
             $tool_content .= "</table>";
