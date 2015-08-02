@@ -97,6 +97,7 @@ if (isset($_POST['delimage'])) {
 }
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     // First process language changes
     if (!file_exists($webDir . '/courses/userimg/')) {
         mkdir($webDir . '/courses/userimg/', 0775);
@@ -631,6 +632,7 @@ $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
         </div>
       </fieldset>
+      ". generate_csrf_token_form_field() ."  
       </form>
       </div>";
 
