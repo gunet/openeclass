@@ -44,6 +44,7 @@ if (empty($userdata->email)) {
         $tool_content .= sprintf('<p>' . $langNonUserContact . '</p>', $urlServer);
     }
 } elseif (isset($_POST['content'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $content = trim($_POST['content']);
     if (empty($content)) {
         $tool_content .= "<p>$langEmptyMessage</p>";
@@ -92,6 +93,7 @@ function form() {
 	</tbody>
 	</table>
 	</fieldset>
+    ". generate_csrf_token_form_field() ."  
 	</form>";
 
     return $ret;
@@ -129,7 +131,7 @@ function email_profs($course_id, $content, $from_name, $from_address) {
             continue;
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
-            $ret .= "<p><img src='$themeimg/teacher.png'> $to_name</p><br>\n";
+            $ret .= "<p><img src='$themeimg/teacher.png'> ".q($to_name)."</p><br>\n";
             if (!send_mail($from_name, $from_address, $to_name, $prof->email, $subject, $message, $GLOBALS['charset'])) {
                 $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>\n";               
             }
