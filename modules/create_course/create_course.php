@@ -199,7 +199,7 @@ if (empty($prof_names)) {
 }
 
 // departments and validation
-$allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin );
+$allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
 $allowables = array();
 if ($allow_only_defaults) {
     // Method: getDepartmentIdsAllowedForCourseCreation
