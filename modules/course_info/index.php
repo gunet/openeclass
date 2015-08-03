@@ -217,12 +217,30 @@ if (isset($_POST['submit'])) {
             $_POST['formvisible'] = '2';
         }
 
+        // departments and validation
+        $allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
+        $allowables = array();
+        if ($allow_only_defaults) {
+            // Method: getDepartmentIdsAllowedForCourseCreation
+            // fetches only specific tree nodes, not their sub-children
+            //$user->getDepartmentIdsAllowedForCourseCreation($uid);
+            // the code below searches for the allow_course flag in the user's department subtrees
+            $userdeps = $user->getDepartmentIds($uid);
+            $subs = $tree->buildSubtreesFull($userdeps);
+            foreach ($subs as $node) {
+                if (intval($node->allow_course) === 1) {
+                    $allowables[] = $node->id;
+                }
+            }
+        }
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
 
         foreach ($departments as $dep) {
-            if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)))
+            if ($allow_only_defaults && !in_array($dep, $allowables)) {
                 $deps_valid = false;
+                break;
+            }
         }
 
         //===================course format and start and finish date===============
@@ -317,8 +335,8 @@ if (isset($_POST['submit'])) {
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
         if (!$deps_valid) {
-            $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
-                                      <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
+            Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
+            redirect_to_home_page("modules/course_info/?course=$course_code");
         } else {
             Database::get()->query("UPDATE course
                             SET title = ?s,
@@ -521,7 +539,7 @@ if (isset($_POST['submit'])) {
         <div class='form-group'>
 	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
-        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
+        $allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         $tool_content .= $html;
