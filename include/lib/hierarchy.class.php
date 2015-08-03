@@ -591,7 +591,7 @@ jContent;
         if ($multiple) {
             $html .= '<div id="nodCnt">';
 
-            if (is_array($defaults) && count($defaults) == 1) {
+            if (is_array($defaults)) {
                 $i = 0;
                 foreach ($defaults as $def) {
                     $html .= '<p id="nd_' . $i . '">';
