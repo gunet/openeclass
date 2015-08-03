@@ -34,6 +34,7 @@ require_once 'include/lib/forcedownload.php';
 require_once 'work_functions.php';
 require_once 'modules/group/group_functions.php';
 require_once 'modules/gradebook/functions.php';
+require_once 'modules/attendance/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
@@ -873,7 +874,7 @@ function submit_work($id, $on_behalf_of = null) {
 
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
             // update attendance book as well
-            update_attendance_book($quserid, $row->id, 'assignment');
+            update_attendance_book($quserid, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             //update gradebook if needed
             update_gradebook_book($quserid, $id, $grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             if ($on_behalf_of and isset($_POST['email'])) {

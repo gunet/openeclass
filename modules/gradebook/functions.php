@@ -1116,7 +1116,6 @@ function register_user_grades($gradebook_id, $actID) {
             <tbody>";
 
         $cnt = 0;
-        //$usersgrade = array();
         foreach ($resultUsers as $resultUser) {
             $cnt++;
             $am_message = '';

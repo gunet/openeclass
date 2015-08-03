@@ -2547,32 +2547,6 @@ function removeDir($dirPath) {
 }
 
 /**
- * @brief update attendance about user activities
- * @param type $id
- * @param type $activity
- * @return type
- */
-function update_attendance_book($uid, $id, $activity) {
-
-    if ($activity == 'assignment') {
-        $type = 1;
-    } elseif ($activity == 'exercise') {
-        $type = 2;
-    }
-    $q = Database::get()->querySingle("SELECT id, attendance_id FROM attendance_activities WHERE module_auto_type = ?d
-                            AND module_auto_id = ?d
-                            AND auto = 1", $type, $id);
-    if ($q) {
-        $u = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d
-                                AND attendance_id = ?d", $uid, $q->attendance_id);
-        if($u){
-            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1, comments = ''", $uid);
-        }
-    }
-    return;
-}
-
-/**
  * Generate a token verifying some info
  *
  * @param  string  $info           - The info that will be verified by the token
