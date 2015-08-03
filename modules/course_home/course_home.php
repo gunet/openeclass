@@ -98,7 +98,9 @@ $head_content .= "<link rel='stylesheet' type='text/css' href='{$urlAppend}js/bo
     </script>";
 
 // For statistics: record login
-Database::get()->query("INSERT INTO logins SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter() . "", $uid, $course_id,$_SERVER[REMOTE_ADDR]);
+Database::get()->query("INSERT INTO logins
+    SET user_id = ?d, course_id = ?d, ip = ?s, date_time = " . DBHelper::timeAfter(),
+    $uid, $course_id, $_SERVER['REMOTE_ADDR']);
 
 // opencourses hits sumation
 $visitsopencourses = 0;
