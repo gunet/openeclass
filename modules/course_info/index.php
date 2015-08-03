@@ -42,9 +42,9 @@ $course = new Course();
 $tree = new Hierarchy();
 
 // departments and validation
-$allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
+$depadmin_mode = get_config('restrict_teacher_owndep') && !$is_admin;
 $allowables = array();
-if ($allow_only_defaults) {
+if ($depadmin_mode) {
     // Method: getDepartmentIdsAllowedForCourseCreation
     // fetches only specific tree nodes, not their sub-children
     //$user->getDepartmentIdsAllowedForCourseCreation($uid);
@@ -238,7 +238,7 @@ if (isset($_POST['submit'])) {
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
         foreach ($departments as $dep) {
-            if ($allow_only_defaults && !in_array($dep, $allowables)) {
+            if ($depadmin_mode && !in_array($dep, $allowables)) {
                 $deps_valid = false;
                 break;
             }
@@ -540,7 +540,7 @@ if (isset($_POST['submit'])) {
         <div class='form-group'>
 	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
-        if ($allow_only_defaults) {
+        if ($depadmin_mode) {
             list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
         } else {
             list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id)));
