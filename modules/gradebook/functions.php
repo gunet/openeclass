@@ -761,10 +761,8 @@ function display_gradebook($gradebook_id) {
                           <tr class='list-header'><th colspan='7' class='text-center'>$langGradebookActList</th></tr>
                           <tr class='list-header'><th>$langTitle</th><th >$langGradebookActivityDate2</th><th>$langType</th><th>$langGradebookWeight</th>
                           <th class='text-center'>$langView</th>
-                          <th class='text-center'>$langScore</th>";
-        if (!isset($_GET['direct_link'])) {
-                          $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
-        }
+                          <th class='text-center'>$langScore</th>
+                          <th class='text-center'><i class='fa fa-cogs'></i></th>";
                           $tool_content .= "</tr>";
         foreach ($result as $details) {
             $content = ellipsize_html($details->description, 50);
@@ -826,7 +824,6 @@ function display_gradebook($gradebook_id) {
             } else {
                 $preview_link = '';
             }
-            if (!isset($_GET['direct_link'])){
             $tool_content .= "<td class='option-btn-cell text-center'>".
                 action_button(array(
                             array('title' => $langEditChange,
@@ -843,7 +840,7 @@ function display_gradebook($gradebook_id) {
                                 'class' => 'delete')
                     )).
                 "</td>";
-            }
+            
         } // end of while
         $tool_content .= "</table></div></div></div>";
     }
@@ -887,13 +884,10 @@ function display_gradebooks() {
         $tool_content .= "</tr>";
         foreach ($result as $g) {
             $row_class = !$g->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;direct_link=1'>" . q($g->title) . "</a></td>";
+            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a></td>";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
-                                    array('title' => $langEditChange,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id),
-                                          'icon' => 'fa-edit'),
                                     array('title' => $g->active ? $langDeactivate : $langActivate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;vis=" .
                                                   ($g->active ? '0' : '1'),

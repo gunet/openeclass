@@ -355,7 +355,7 @@ if ($is_editor) {
                   'level' => 'primary-label')));
     } elseif (isset($_GET['gradebook_id']) && $is_editor) {        
         $pageName = get_gradebook_title($gradebook_id);
-    }  elseif (!isset($_GET['direct_link']) && !isset($_GET['gradebook_id'])) {
+    }  elseif ( !isset($_GET['gradebook_id'])) {
         $tool_content .= action_bar(
             array(
                 array('title' => $langNewGradebook,
