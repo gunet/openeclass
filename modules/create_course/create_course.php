@@ -235,10 +235,6 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        // do not over-bloat pre-populating nodepicker with defaults in case of multiple allowance 
-        if (get_config('course_multidep') && count($allowables) > 1) {
-            array_splice($allowables, 1);
-        }
         list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
