@@ -598,7 +598,8 @@ jContent;
         if ($multiple) {
             $html .= '<div id="nodCnt">';
 
-            if (is_array($defaults)) {
+            // do not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
+            /*if (is_array($defaults)) {
                 $i = 0;
                 foreach ($defaults as $def) {
                     $html .= '<p id="nd_' . $i . '">';
@@ -607,7 +608,7 @@ jContent;
                     $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
-            }
+            }*/
 
             $html .= '</div>';
             $html .= '<div><p><a id="ndAdd" href="#add"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="'.q($langNodeAdd).'"></i></a></p></div>';
