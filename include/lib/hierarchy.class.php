@@ -60,7 +60,7 @@ class Hierarchy {
 
             $this->shiftRight($parentlft);
 
-            $query = "INSERT INTO " . $this->dbtable . " (name, lft, rgt, code, allow_course, allow_user, order_priority) "
+            $query = "INSERT INTO hierarchy (name, lft, rgt, code, allow_course, allow_user, order_priority) "
                     . "VALUES (?s, ?d, ?d, ?s, ?d, ?d, ?d)";
             $ret = Database::get()->query($query, $name, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority)->lastInsertID;
         }
@@ -92,7 +92,7 @@ class Hierarchy {
 
             $this->shiftRight($parentlft);
 
-            $query = "INSERT INTO " . $this->dbtable . " (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) "
+            $query = "INSERT INTO hierarchy (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) "
                     . "VALUES (?s, ?d, ?d, ?s, ?d, ?d, ?d, ?d, ?d)";
             $ret = Database::get()->query($query, $name, $lft, $rgt, $code, $number, $generator, $allow_course, $allow_user, $order_priority)->lastInsertID;
         }
@@ -118,7 +118,7 @@ class Hierarchy {
         if ($this->useProcedures()) {
             Database::get()->query("CALL update_node(?d, ?s, ?d, ?d, ?d, ?d, ?s, ?d, ?d, ?d)", $id, $name, $nodelft, $lft, $rgt, $parentlft, $code, $allow_course, $allow_user, $order_priority);
         } else {
-            $query = "UPDATE " . $this->dbtable . " SET name = ?s, lft = ?d, rgt = ?d,
+            $query = "UPDATE hierarchy SET name = ?s, lft = ?d, rgt = ?d,
                     code = ?s, allow_course = ?d, allow_user = ?d,
                     order_priority = ?d WHERE id = ?d";
             Database::get()->query($query, $name, $lft, $rgt, $code, $allow_course, $allow_user, $order_priority, $id);
@@ -138,8 +138,8 @@ class Hierarchy {
         if ($this->useProcedures()) {
             Database::get()->query("CALL delete_node(?d)", $id);
         } else {
-            $row = Database::get()->querySingle("SELECT lft, rgt FROM " . $this->dbtable . " WHERE id = ?d", $id);
-            Database::get()->query("DELETE FROM " . $this->dbtable . " WHERE id = ?d", $id);
+            $row = Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $id);
+            Database::get()->query("DELETE FROM hierarchy WHERE id = ?d", $id);
             $this->delete($row->lft, $row->rgt);
         }
     }
@@ -174,7 +174,7 @@ class Hierarchy {
      * @param int $maxrgt - Maximum rgt value in the tree
      */
     public function shiftEnd($lft, $rgt, $maxrgt) {
-        $query = "UPDATE " . $this->dbtable . " SET  lft = (lft - ?d) + ?d, rgt = (rgt - ?d) + ?d WHERE lft BETWEEN ?d AND ?d";
+        $query = "UPDATE hierarchy SET  lft = (lft - ?d) + ?d, rgt = (rgt - ?d) + ?d WHERE lft BETWEEN ?d AND ?d";
         Database::get()->query($query, ($lft - 1), $maxrgt, ($lft - 1), $maxrgt, $lft, $rgt);
     }
 
@@ -187,10 +187,10 @@ class Hierarchy {
      * @param int    $maxrgt - Maximum rgt value in the tree
      */
     public function shift($action, $node, $shift = 2, $maxrgt = 0) {
-        $query = "UPDATE " . $this->dbtable . " SET rgt = rgt " . $action . " ?d WHERE rgt > ?d" . ($maxrgt > 0 ? " AND rgt <= " . $maxrgt : '');
+        $query = "UPDATE hierarchy SET rgt = rgt " . $action . " ?d WHERE rgt > ?d" . ($maxrgt > 0 ? " AND rgt <= " . $maxrgt : '');
         Database::get()->query($query, $shift, $node);
 
-        $query = "UPDATE " . $this->dbtable . " SET lft = lft " . $action . " ?d WHERE lft > ?d" . ($maxrgt > 0 ? " AND lft <= " . $maxrgt : '');
+        $query = "UPDATE hierarchy SET lft = lft " . $action . " ?d WHERE lft > ?d" . ($maxrgt > 0 ? " AND lft <= " . $maxrgt : '');
         Database::get()->query($query, $shift, $node);
     }
 
@@ -200,7 +200,7 @@ class Hierarchy {
      * @return int
      */
     public function getMaxRgt() {
-        return Database::get()->querySingle("SELECT rgt FROM " . $this->dbtable . " ORDER BY rgt desc limit 1")->rgt;
+        return Database::get()->querySingle("SELECT rgt FROM hierarchy ORDER BY rgt desc limit 1")->rgt;
     }
 
     /**
@@ -211,7 +211,7 @@ class Hierarchy {
      * @return object     - the object of the PDO query result
      */
     public function getParent($lft, $rgt) {
-        return Database::get()->querySingle("SELECT * FROM " . $this->dbtable . " WHERE lft < ?d AND rgt > ?d ORDER BY lft DESC LIMIT 1", $lft, $rgt);
+        return Database::get()->querySingle("SELECT * FROM hierarchy WHERE lft < ?d AND rgt > ?d ORDER BY lft DESC LIMIT 1", $lft, $rgt);
     }
 
     /**
@@ -222,7 +222,7 @@ class Hierarchy {
      * @return object     - the object of the PDO query result
      */
     public function getRootParent($lft, $rgt) {
-        return Database::get()->querySingle("SELECT * FROM " . $this->dbtable . " WHERE lft < ?d AND rgt > ?d ORDER BY lft ASC LIMIT 1", $lft, $rgt);
+        return Database::get()->querySingle("SELECT * FROM hierarchy WHERE lft < ?d AND rgt > ?d ORDER BY lft ASC LIMIT 1", $lft, $rgt);
     }
 
     /**
@@ -232,7 +232,7 @@ class Hierarchy {
      * @return int
      */
     public function getNodeLft($id) {
-        return intval(Database::get()->querySingle("SELECT lft FROM " . $this->dbtable . " WHERE id = ?d", $id)->lft);
+        return intval(Database::get()->querySingle("SELECT lft FROM hierarchy WHERE id = ?d", $id)->lft);
     }
 
     /**
@@ -242,7 +242,7 @@ class Hierarchy {
      * @return object
      */
     public function getNodeLftRgt($id) {
-        return Database::get()->querySingle("SELECT lft, rgt FROM " . $this->dbtable . " WHERE id = ?d", $id);
+        return Database::get()->querySingle("SELECT lft, rgt FROM hierarchy WHERE id = ?d", $id);
     }
 
     /**
@@ -272,9 +272,9 @@ class Hierarchy {
      */
     public function delete($lft, $rgt) {
         $nodeWidth = $rgt - $lft + 1;
-        Database::get()->query("DELETE FROM " . $this->dbtable . " WHERE lft BETWEEN ?d AND ?d", $lft, $rgt);
-        Database::get()->query("UPDATE " . $this->dbtable . "  SET rgt = rgt - ?d WHERE rgt > ?d", $nodeWidth, $rgt);
-        Database::get()->query("UPDATE " . $this->dbtable . "  SET lft = lft - ?d WHERE lft > ?d", $nodeWidth, $lft);
+        Database::get()->query("DELETE FROM hierarchy WHERE lft BETWEEN ?d AND ?d", $lft, $rgt);
+        Database::get()->query("UPDATE hierarchy  SET rgt = rgt - ?d WHERE rgt > ?d", $nodeWidth, $rgt);
+        Database::get()->query("UPDATE hierarchy  SET lft = lft - ?d WHERE lft > ?d", $nodeWidth, $lft);
     }
 
     /**
@@ -301,8 +301,8 @@ class Hierarchy {
 
             $this->shiftRight($nodelft, $nodeWidth, $maxrgt);
 
-            Database::get()->query("UPDATE " . $this->dbtable . " SET rgt = (rgt - ?d) + ?d WHERE rgt > ?d", $maxrgt, $nodelft, $maxrgt);
-            Database::get()->query("UPDATE " . $this->dbtable . " SET lft = (lft - ?d) + ?d WHERE lft > ?d", $maxrgt, $nodelft, $maxrgt);
+            Database::get()->query("UPDATE hierarchy SET rgt = (rgt - ?d) + ?d WHERE rgt > ?d", $maxrgt, $nodelft, $maxrgt);
+            Database::get()->query("UPDATE hierarchy SET lft = (lft - ?d) + ?d WHERE lft > ?d", $maxrgt, $nodelft, $maxrgt);
         }
     }
     
@@ -316,12 +316,12 @@ class Hierarchy {
     private function getNeighbourNodesByLft($lft, $callback) {
         $hasMore = 0;
         $nextRootLft = 0;
-        Database::get()->queryFunc("SELECT * FROM " . $this->dbtable . " WHERE lft = ?d", function($row) use ($callback, &$hasMore, &$nextRootLft) {
+        Database::get()->queryFunc("SELECT * FROM hierarchy WHERE lft = ?d", function($row) use ($callback, &$hasMore, &$nextRootLft) {
             if (is_callable($callback)) {
                 $callback($row);
             }
             $nextRootLft = intval($row->rgt) + 1;
-            $hasMore = Database::get()->querySingle("SELECT COUNT(id) AS count FROM " . $this->dbtable . " WHERE lft = ?d", $nextRootLft)->count;
+            $hasMore = Database::get()->querySingle("SELECT COUNT(id) AS count FROM hierarchy WHERE lft = ?d", $nextRootLft)->count;
         }, $lft);
         
         if ($hasMore > 0) {
@@ -390,7 +390,7 @@ class Hierarchy {
         } else {
             $nodes = array();
             // get all nodes
-            Database::get()->queryFunc("select * from " . $this->dbtable . " order by lft", function($row) use (&$nodes) {
+            Database::get()->queryFunc("select * from hierarchy order by lft", function($row) use (&$nodes) {
                 $nodes[] = $row;
             });
         }
@@ -747,7 +747,7 @@ jContent;
      * @return array  $nodes - The return tree ArrayMap in the form of <node id, node name>
      */
     public function buildSimple($where = null) {
-        $result = Database::get()->queryArray("SELECT id, name FROM $this->dbtable " . $where . " order by id");
+        $result = Database::get()->queryArray("SELECT id, name FROM hierarchy " . $where . " order by id");
 
         $nodes = array();
 
@@ -778,7 +778,7 @@ jContent;
             return $ret;
         }
 
-        $result = Database::get()->queryArray("SELECT * FROM $this->dbtable WHERE lft < ?d AND rgt > ?d ORDER BY lft ASC", $node->lft, $node->rgt);
+        $result = Database::get()->queryArray("SELECT * FROM hierarchy WHERE lft < ?d AND rgt > ?d ORDER BY lft ASC", $node->lft, $node->rgt);
 
         $c = 0;
         $skip = 0;
@@ -861,7 +861,7 @@ jContent;
         // remove last ',' from $ids
         $q = substr($ids, 0, -1);
         
-        Database::get()->queryFunc("SELECT node.id, node.lft FROM " . $this->dbtable . " AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
+        Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
         });
         
@@ -910,7 +910,7 @@ jContent;
         // remove last ',' from $ids
         $q = substr($ids, 0, -1);
         
-        Database::get()->queryFunc("SELECT node.id, node.lft FROM " . $this->dbtable . " AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
+        Database::get()->queryFunc("SELECT node.id, node.lft FROM hierarchy AS node WHERE node.id IN ($q) ORDER BY node.lft", function($row) use (&$nodelfts) {
             $nodelfts[] = $row->lft;
         });
         
@@ -949,15 +949,6 @@ jContent;
     }
 
     /**
-     * Returns Hierarchy DB table
-     *
-     * @return string
-     */
-    public function getDbtable() {
-        return $this->dbtable;
-    }
-
-    /**
      * Build an HTML table containing navigation code for the given nodes
      *
      * @param  array    $nodes         - The nodes (full sql row) whose children we want to navigate to
@@ -980,8 +971,8 @@ jContent;
             uasort($nodesWK, function ($a, $b) {
                 $priorityA = intval($a->order_priority);
                 $priorityB = intval($b->order_priority);
-                $nameA = self::unserializeLangField($a->name);
-                $nameB = self::unserializeLangField($b->name);
+                $nameA = Hierarchy::unserializeLangField($a->name);
+                $nameB = Hierarchy::unserializeLangField($b->name);
                 
                 if ($priorityA == $priorityB) {
                     if ($nameA == $nameB) {
@@ -1039,7 +1030,7 @@ jContent;
      * @return string   $ret           - The returned HTML output
      */
     public function buildDepartmentChildrenNavigationHtml($depid, $url, $countCallback = null, $showEmpty = true) {
-        $parent = Database::get()->querySingle("select lft, rgt from " . $this->dbtable . " where id = ?d", $depid);
+        $parent = Database::get()->querySingle("select lft, rgt from hierarchy where id = ?d", $depid);
         if (!$parent) {
             return " ";
         }
@@ -1063,7 +1054,7 @@ jContent;
     public function buildRootsSelection($currentNode, $params = '') {
         // select root nodes
         $res = Database::get()->queryArray("SELECT node.id, node.name
-                          FROM " . $this->dbtable . " AS node
+                          FROM hierarchy AS node
                          WHERE node.id IN (" . implode(', ', $this->buildRootIdsArray()) . ")");
 
         $ret = '';

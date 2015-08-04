@@ -44,7 +44,7 @@ function validateNode($id, $checkOwn) {
         exitWithError($notallowed);
     }
 
-    if (!Database::get()->querySingle("SELECT * FROM " . $tree->getDbtable() . " WHERE id = ?d", $id)) {
+    if (!Database::get()->querySingle("SELECT * FROM hierarchy WHERE id = ?d", $id)) {
         exitWithError($notallowed);
     }
 
