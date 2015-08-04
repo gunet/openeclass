@@ -80,6 +80,13 @@ $(function() {
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
+               'fnDrawCallback': function( oSettings ) {
+                    popover_init();
+                    $('#users_table{$course_id}_filter label input').attr({
+                          class : 'form-control input-sm',
+                          placeholder : '$langSearch...'
+                        });
+},
                'sPaginationType': 'full_numbers',              
                 'bSort': true,
                 'oLanguage': {                       
@@ -90,6 +97,7 @@ $(function() {
                        'sInfoFiltered': '',
                        'sInfoPostFix':  '',
                        'sSearch':       '".$langSearch."',
+                       'sSearch':       '',
                        'sUrl':          '',
                        'oPaginate': {
                            'sFirst':    '&laquo;',
@@ -182,7 +190,9 @@ if ($is_editor) {
     if (isset($_POST['newGradebook']) && strlen(trim($_POST['title']))) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $newTitle = trim($_POST['title']);
-        $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;   
+        $gradebook_range = intval($_POST['degreerange']);
+        $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;
+        Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
         //create gradebook users (default the last six months)
         $limitDate = date('Y-m-d', strtotime(' -6 month'));
         Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
@@ -278,12 +288,12 @@ if ($is_editor) {
             array('title' => $langRefreshList,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editUsers=1",
                   'icon' => 'fa-users',
-                  'level' => 'primary-label'),
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success'),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')            
+                  'level' => 'primary-label')            
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
@@ -327,12 +337,12 @@ if ($is_editor) {
             array('title' => $langGradebookBook,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label'),
+                  'level' => 'primary-label',
+                  'button-class' => 'btn-success'),
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id),
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')
+                  'level' => 'primary-label')
             ));
         
     } elseif (isset($_GET['new'])) {
@@ -486,7 +496,7 @@ if ($is_editor) {
     }
     elseif (isset($_GET['new'])) {
         new_gradebook(); // create new gradebook
-        $display = TRUE;
+        $display = FALSE;
     } elseif (isset($_GET['editUsers'])) { // edit gradebook users
         user_gradebook_settings($gradebook_id);
         $display = FALSE;

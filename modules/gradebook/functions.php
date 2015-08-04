@@ -160,30 +160,44 @@ function display_user_grades($gradebook_id) {
  */
 function new_gradebook() {
 
-    global $tool_content, $course_code, $langNewGradebook2,
-           $langTitle, $langSave, $langInsert;
+    global $tool_content, $course_code,
+           $langTitle, $langSave, $langInsert, $langGradebookRange;
 
-    $tool_content .= "<div class='form-wrapper'>
+    $tool_content .= 
+        "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&newGradebook=1' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
-                    <label class='col-xs-12'>$langNewGradebook2</label></div>
-                    <div class='form-group'>
-                        <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
-                        </div>
+                    <div class='col-xs-12'>
+                        <label>$langTitle</label>
                     </div>
-                    <div class='form-group'>
-                        <div class='col-xs-12'>".form_buttons(array(
-                            array(
-                                    'text' => $langSave,
-                                    'name' => 'newGradebook',
-                                    'value'=> $langInsert
-                                ),
-                            array(
-                                'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
-                                )
-                            ))."</div>
+                    <div class='col-xs-12'>
+                        <input class='form-control' type='text' name='title'/>
                     </div>
+                </div>
+                <div class='form-group'>
+                    <label class='col-xs-12'>$langGradebookRange</label>
+                    <div class='col-xs-12'>
+                        <select name='degreerange' class='form-control'>
+                            <option value='5'>0-5</option>
+                            <option value='10'>0-10</option>
+                            <option value='20'>0-20</option>
+                            <option value='100'>0-100</option>
+                        </select>
+                    </div>
+                </div>
+                <div class='form-group'>
+                    <div class='col-xs-12'>".form_buttons(array(
+                        array(
+                                'text' => $langSave,
+                                'name' => 'newGradebook',
+                                'value'=> $langInsert
+                            ),
+                        array(
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            )
+                        ))."
+                    </div>
+                </div>
             ". generate_csrf_token_form_field() ."
             </form>
         </div>";
@@ -298,8 +312,7 @@ function gradebook_settings($gradebook_id) {
                             <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$gradebook_title'>
                         </div>
                     </div>
-                    <div class='form-group'><label class='col-xs-12'>$langGradebookRange</label></div>
-                        <div class='form-group'>
+                    <div class='form-group'><label class='col-xs-12'>$langGradebookRange</label>
                             <div class='col-xs-12'>
                             <select name='degreerange' class='form-control'><option value=10";
                             if (isset($gradebook_range) and $gradebook_range == 10) {
@@ -704,8 +717,7 @@ function display_gradebook($gradebook_id) {
                             'icon' => 'fa fa-ellipsis-h space-after-icon',
                             'class' => ''),
                       ),
-                  'icon' => 'fa-plus',
-                  'class'=>  'btn-success'),
+                  'icon' => 'fa-plus'),
             array('title' => $langConfig,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editSettings=1",
                   'icon' => 'fa-cog'),
