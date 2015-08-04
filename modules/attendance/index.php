@@ -80,7 +80,7 @@ $(function() {
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
                'fnDrawCallback': function( oSettings ) {
-                            $('#users_table{$course_id} label input').attr({
+                            $('#users_table{$course_id}_wrapper label input').attr({
                               class : 'form-control input-sm',
                               placeholder : '$langSearch...'
                             });
@@ -188,7 +188,8 @@ if ($is_editor) {
     //add a new attendance
     if (isset($_POST['newAttendance'])) {
         $newTitle = $_POST['title'];
-        $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;   
+        $attendance_limit = intval($_POST['limit']);
+        $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s", $course_id, $attendance_limit, $newTitle)->lastInsertID;   
         //create attendance users (default the last six months)
         $limitDate = date('Y-m-d', strtotime(' -6 month'));
         Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
@@ -339,7 +340,7 @@ if ($is_editor) {
             ));
         
     } elseif (isset($_GET['new'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langNewAttendance);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
         $pageName = $langNewAttendance;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -348,7 +349,7 @@ if ($is_editor) {
                   'level' => 'primary-label')));
     } elseif (isset($_GET['attendance_id']) && $is_editor) {        
         $pageName = get_attendance_title($attendance_id);
-    }  elseif (!isset($_GET['direct_link']) && !isset($_GET['attendance_id'])) {
+    }  elseif (!isset($_GET['attendance_id'])) {
         $tool_content .= action_bar(
             array(
                 array('title' => $langNewAttendance,
@@ -473,7 +474,7 @@ if ($is_editor) {
     
  elseif (isset($_GET['new'])) {
         new_attendance(); // create new attendance
-        $display = TRUE;
+        $display = FALSE;
     } elseif (isset($_GET['editUsers'])) { // edit attendance users
         user_attendance_settings($attendance_id);
         $display = FALSE;
@@ -489,7 +490,7 @@ if ($is_editor) {
     }
     //DISPLAY - EDIT DB: insert grades for each activity
     elseif (isset($_GET['ins'])) {
-        $actID = intval($_GET['ins']);
+        $actID = intval(getDirectReference($_GET['ins']));
         $error = false;
         if (isset($_POST['bookUsersToAct'])) {
             insert_presence($attendance_id, $actID);

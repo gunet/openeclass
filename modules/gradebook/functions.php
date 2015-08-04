@@ -211,9 +211,9 @@ function new_gradebook() {
  */
 function clone_gradebook($gradebook_id) {
 
-    global $course_id;
+    global $course_id, $langCopyDuplicate;
 
-    $newTitle = get_gradebook_title($gradebook_id);
+    $newTitle = get_gradebook_title($gradebook_id).$langCopyDuplicate;
     $newRange = get_gradebook_range($gradebook_id);
     $new_gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d,
                                                       students_semester = 1, `range` = ?d,
@@ -934,7 +934,7 @@ function display_available_exercises($gradebook_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
@@ -984,9 +984,8 @@ function display_available_assignments($gradebook_id) {
     if ($checkForAssNumber > 0) {
         $tool_content .= "
             <div class='row'><div class='col-sm-12'><div class='table-responsive'>
-            <h4>$langWorks</h4>
                           <table class='table-default'";
-        $tool_content .= "<tr><th>$langTitle</th><th>".q($m[deadline])."</th><th>$langDescription</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>".q($m['deadline'])."</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
         foreach ($checkForAss as $newAssToGradebook) {
@@ -1047,7 +1046,6 @@ function display_available_lps($gradebook_id) {
     $checkForLpNumber = count($checkForLp);
     if ($checkForLpNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
-        $tool_content .= "<h4>$langLearningPath</h4>";
         $tool_content .= "<table class='table-default'>";
         $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'>$langActions</th>";

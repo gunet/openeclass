@@ -60,13 +60,10 @@ function display_attendances() {
         $tool_content .= "</tr>";
         foreach ($result as $a) {
             $row_class = !$a->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;direct_link=1'>$a->title</a></td>";
+            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>$a->title</a></td>";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
-                                    array('title' => $langEditChange,
-                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id",
-                                          'icon' => 'fa-edit'),
                                     array('title' => $a->active ? $langDeactivate : $langActivate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;vis=" . 
                                                   ($a->active ? '0' : '1'),
@@ -109,7 +106,6 @@ function register_user_presences($attendance_id, $actID) {
     global $tool_content, $course_id, $course_code, $langAttendanceAutoBook,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
            $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit;
-    
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
     $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
@@ -201,8 +197,8 @@ function register_user_presences($attendance_id, $actID) {
                                 )));
             }
         $tool_content .= "</div></div>";        
-        $tool_content .= "</form></div>";    
-        $tool_content .= "</tbody></table> <input type='submit' class='btn btn-primary' name='bookUsersToAct' value='$langAttendanceBooking' />". generate_csrf_token_form_field() ."</form>";
+        $tool_content .= generate_csrf_token_form_field() ."</form></div>";    
+        $tool_content .= "</tbody></table>";
     }
 }
 
@@ -247,46 +243,47 @@ function display_attendance_activities($attendance_id) {
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, $langAttendanceActivity,
            $langHere, $langAttendanceNoActMessage3, $langToA, $langcsvenc1, $langcsvenc2,
            $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
-           $langAdd, $langExport;
+           $langAdd, $langExport, $langBack;
     
    
     $tool_content .= action_bar(
             array(
-                array('title' => $langExport,                 
+                array('title' => $langAdd,                 
                       'level' => 'primary-label', 
                       'options' => array(
-                                        array('title' => "$langToA $langcsvenc1",
-                                               'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id&amp;enc=1253",                                               
-                                               'class' => ''),
-                                        array('title' => "$langToA $langcsvenc2",
-                                              'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id",                                              
-                                              'class' => '')
-                                    ),
-                     'icon' => 'fa-file-excel-o'),
+                          array('title' => $langGradebookAddActivity,
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivity=1",
+                                'icon' => 'fa fa-plus space-after-icon',
+                                'class' => ''),
+                          array('title' => "$langInsertWorkCap",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityAs=1",
+                                'icon' => 'fa fa-flask space-after-icon',
+                                'class' => ''),
+                          array('title' => "$langInsertExerciseCap",
+                                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityEx=1",
+                                'icon' => 'fa fa-edit space-after-icon',
+                                'class' => '')),
+                     'icon' => 'fa-plus'),
+                array('title' => $langBack,
+                  'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
+                  'icon' => 'fa-reply',
+                  'level' => 'primary-label'),
                 array('title' => $langConfig,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
-                      'icon' => 'fa-cog',
-                      'level' => 'primary-label'),
+                      'icon' => 'fa-cog'),
                 array('title' => $langUsers,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                      'icon' => 'fa-users',
-                      'level' => 'primary-label'),                
-                array('title' => $langGradebookAddActivity,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivity=1",
-                      'icon' => 'fa-plus'),
-                array('title' => "$langInsertWorkCap",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityAs=1",
-                      'icon' => 'fa-flask'),
-                array('title' => "$langInsertExerciseCap",
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;addActivityEx=1",
-                      'icon' => 'fa-edit')                
+                      'icon' => 'fa-users'),
+                array('title' => "$langExport $langToA $langcsvenc1",
+                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id&amp;enc=1253",
+                    'icon' => 'fa-file-excel-o'),
+                array('title' => "$langExport $langToA $langcsvenc2",
+                        'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id",                                              
+                        'icon' => 'fa-file-excel-o'),                
             ),
-            true,
-            array(
-                'secondary_title' => $langAdd,
-                'secondary_icon' => 'fa-plus'
-            )
+            true
         );
+    
         
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
                                             FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
@@ -295,8 +292,8 @@ function display_attendance_activities($attendance_id) {
     if (count($result) > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
                         <table class='table-default'>
-                        <tr><th class='text-center' colspan='5'>$langAttendanceActList</th></tr>
-                        <tr>                            
+                        <tr class='list-header'><th class='text-center' colspan='5'>$langAttendanceActList</th></tr>
+                        <tr class='list-header'>                            
                             <th>$langTitle</th>
                             <th>$langAttendanceActivityDate</th>
                             <th>$langType</th>
@@ -373,7 +370,7 @@ function attendance_display_available_exercises($attendance_id) {
     if ($checkForExerNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$langGradebookActivityDate2</th><th>$langDescr</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>";
         $tool_content .= "</tr>";
 
@@ -426,9 +423,8 @@ function attendance_display_available_assignments($attendance_id) {
 
     if ($checkForAssNumber > 0) {
         $tool_content .= "<div class='row'><div class='col-sm-12'><div class='table-responsive'>
-                            <h4>$langWorks</h4>
                             <table class='table-default'";
-        $tool_content .= "<tr><th>$langTitle</th><th>$m[deadline]</th><th>$langDescription</th>";
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th><th>$m[deadline]</th><th>$langDescription</th>";
         $tool_content .= "<th class='text-center'><i class='fa fa-cogs'></i></th>"; 
         $tool_content .= "</tr>";           
         foreach ($checkForAss as $newAssToGradebook) {
@@ -491,7 +487,8 @@ function add_attendance_other_activity($attendance_id) {
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id'>
                     <fieldset>";
                     if (isset($_GET['modify'])) { // modify an existing attendance activity
-                        $id  = filter_var($_GET['modify'], FILTER_VALIDATE_INT);
+                        
+                        $id  = filter_var(getDirectReference($_GET['modify']), FILTER_VALIDATE_INT);
                         //All activity data (check if it's in this attendance)
                         $modifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
                         //if ($modifyActivity) {
@@ -637,7 +634,7 @@ function add_attendance_activity($attendance_id, $id, $type) {
 function new_attendance() {
     
     global $tool_content, $course_code, $langNewAttendance2, 
-           $langTitle, $langSave, $langInsert;
+           $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber, $attendance_limit;
                     
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
@@ -646,6 +643,12 @@ function new_attendance() {
                     <div class='form-group'> 
                         <div class='col-xs-12'>
                             <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
+                        </div>
+                    </div>
+                    <div class='form-group'>
+                        <label class='col-xs-12'>$langAttendanceLimitNumber:</label>
+                        <div class='col-sm-12'>
+                            <input class='form-control' type='text' name='limit' value='$attendance_limit'/>
                         </div>
                     </div>
                     <div class='form-group'>
@@ -885,8 +888,8 @@ function attendance_settings($attendance_id) {
                             <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$attendance_title'>
                         </div>
                     </div>
-                    <div class='form-group'><label class='col-xs-12'>$langAttendanceLimitNumber:</label></div>
                     <div class='form-group'>
+                        <label class='col-xs-12'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>
                             <input class='form-control' type='text' name='limit' value='$attendance_limit'/>
                         </div>
@@ -1018,7 +1021,7 @@ function user_attendance_settings($attendance_id) {
                         </div>
                     </div>
                     <div class='form-group'>
-                        <div class='col-xs-12'>".form_buttons(array(
+                        <div class='col-xs-10 col-xs-offset-2'>".form_buttons(array(
                         array(
                             'text' => $langRefreshList,
                             'name' => 'resetAttendanceUsers',
@@ -1310,8 +1313,8 @@ function delete_attendance_activity($attendance_id, $activity_id) {
     global $langAttendanceDel, $langAttendanceDelFailure;
     
     $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->affectedRows;
-    $delActBooks = Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
-    if(($delAct) and $delActBooks) {
+    Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
+    if($delAct) {
         Session::Messages("$langAttendanceDel", "alert-success");
     } else {
         Session::Messages("$langAttendanceDelFailure", "alert-danger");
@@ -1343,9 +1346,9 @@ function delete_attendance_user($attendance_id, $userid) {
  */
 function clone_attendance($attendance_id) {
         
-    global $course_id;
+    global $course_id, $langCopyDuplicate;
     
-    $newTitle = get_attendance_title($attendance_id);
+    $newTitle = get_attendance_title($attendance_id).$langCopyDuplicate;
     $newLimit = get_attendance_limit($attendance_id);
     $new_attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d,
                                                       students_semester = 1, `limit` = ?d,
