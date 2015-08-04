@@ -235,13 +235,14 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults));
+        // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
-        }       
+        }
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,

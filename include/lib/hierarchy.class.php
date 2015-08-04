@@ -590,6 +590,7 @@ jContent;
         $tree_array = (array_key_exists('tree', $options)) ? $options['tree'] : array('0' => 'Top');
         $where = (array_key_exists('where', $options)) ? $options['where'] : '';
         $multiple = (array_key_exists('multiple', $options)) ? $options['multiple'] : false;
+        $skip_preloaded_defaults = (array_key_exists('skip_preloaded_defaults', $options)) ? $options['skip_preloaded_defaults'] : false;
 
 
         $html = '';
@@ -598,8 +599,7 @@ jContent;
         if ($multiple) {
             $html .= '<div id="nodCnt">';
 
-            // do not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
-            /*if (is_array($defaults)) {
+            if (!$skip_preloaded_defaults && is_array($defaults)) {
                 $i = 0;
                 foreach ($defaults as $def) {
                     $html .= '<p id="nd_' . $i . '">';
@@ -608,7 +608,7 @@ jContent;
                     $html .= '&nbsp;<a href="#nodCnt"><span class="fa fa-times" data-toggle="tooltip" data-original-title="'.$langNodeDel.'" data-placement="top" title="'.$langNodeDel.'"></span></a></p>';
                     $i++;
                 }
-            }*/
+            }
 
             $html .= '</div>';
             $html .= '<div><p><a id="ndAdd" href="#add"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="'.q($langNodeAdd).'"></i></a></p></div>';
