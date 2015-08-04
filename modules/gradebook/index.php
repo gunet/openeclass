@@ -379,18 +379,30 @@ if ($is_editor) {
     
     // update gradebook settings
     if (isset($_POST['submitGradebookSettings'])) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        if (isset($_POST['degreerange'])) { // update gradebook range
-            $gradebook_range = intval($_POST['degreerange']);
-            Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'degreerange'));
+        $v->rule('numeric', array('degreerange'));
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'degreerange' => "$langTheField $langGradebookRange"
+        ));
+        if($v->validate()) {          
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+            if (isset($_POST['degreerange'])) { // update gradebook range
+                $gradebook_range = intval($_POST['degreerange']);
+                Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
+            }
+            if (isset($_POST['title']) && strlen(trim($_POST['title']))) { // upgrade gradebook title
+                $gradebook_title = trim($_POST['title']);
+                Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
+
+            }
+            Session::Messages($langGradebookEdit,"alert-success");
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "&editSettings=1");            
         }
-        if (isset($_POST['title']) && strlen(trim($_POST['title']))) { // upgrade gradebook title
-            $gradebook_title = trim($_POST['title']);
-            Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
-         
-        }
-        Session::Messages($langGradebookEdit,"alert-success");
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
     }
     //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){

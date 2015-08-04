@@ -182,7 +182,7 @@ function new_gradebook() {
                     <label class='col-xs-12'>$langGradebookRange</label>
                     <div class='col-xs-12'>
                         <select name='degreerange' class='form-control'>
-                            <option value".($degreerange == 0 ? ' selected' : '').">$langGradeScalesSelect</option>
+                            <option value".($degreerange == 0 ? ' selected' : '').">-- $langGradeScalesSelect --</option>
                             <option value='5'".($degreerange == 5 ? ' selected' : '').">0-5</option>
                             <option value='10'".($degreerange == 10 ? ' selected' : '').">0-10</option>
                             <option value='20'".($degreerange == 20 ? ' selected' : '').">0-20</option>
@@ -303,41 +303,35 @@ function gradebook_settings($gradebook_id) {
     global $tool_content, $course_code,
            $langTitle, $langSave,
            $langSave, $langGradebookRange, $langGradebookUpdate,
-           $gradebook_title;
-
-    $gradebook_range = get_gradebook_range($gradebook_id);
-
+           $gradebook_title, $langGradeScalesSelect;
+  
+    $title_error = Session::getError('title');
+    $title = Session::has('title') ? Session::get('title') : $gradebook_title;
+    $degreerange_error  = Session::getError('degreerange');
+    $degreerange = Session::has('degreerange') ? Session::get('degreerange') : get_gradebook_range($gradebook_id);
     // update gradebook title
     $tool_content .= "<div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "'>
-                    <div class='form-group'>
+                    <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langTitle</label>
                         <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$gradebook_title'>
+                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                            <span class='help-block'>$title_error</span>
                         </div>
                     </div>
-                    <div class='form-group'><label class='col-xs-12'>$langGradebookRange</label>
+                    <div class='form-group".($degreerange_error ? " has-error" : "")."'><label class='col-xs-12'>$langGradebookRange</label>
                             <div class='col-xs-12'>
-                            <select name='degreerange' class='form-control'><option value=10";
-                            if (isset($gradebook_range) and $gradebook_range == 10) {
-                                $tool_content .= " selected ";
-                            }
-                            $tool_content .= ">0-10</option><option value=20";
-                            if (isset($gradebook_range) and $gradebook_range == 20) {
-                                $tool_content .= " selected ";
-                            }
-                            $tool_content .= ">0-20</option><option value=5";
-                            if (isset($gradebook_range) and $gradebook_range == 5) {
-                                $tool_content .= " selected ";
-                            }
-                            $tool_content .= ">0-5</option><option value=100";
-                            if (isset($gradebook_range) and $gradebook_range == 100) {
-                                $tool_content .= " selected ";
-                            }
-                            $tool_content .= ">0-100</option></select>";
-                            $tool_content .= "</div>
+                                <select name='degreerange' class='form-control'>
+                                    <option value".($degreerange == 0 ? ' selected' : '').">-- $langGradeScalesSelect --</option>
+                                    <option value='10'" . ($degreerange == 10 ? " selected" : "") .">0-10</option>
+                                    <option value='20'" . ($degreerange == 20 ? " selected" : "") .">0-20</option>
+                                    <option value='5'" . ($degreerange == 5 ? " selected " : "") .">0-5</option>
+                                    <option value='100'" . ($degreerange == 100 ? " selected" : "") .">0-100</option>
+                                </select>
+                                <span class='help-block'>$degreerange_error</span>
+                            </div>
                         </div>
                         <div class='form-group'>
                             <div class='col-xs-12'>".form_buttons(array(
