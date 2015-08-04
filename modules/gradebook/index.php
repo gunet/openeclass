@@ -191,8 +191,7 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $newTitle = trim($_POST['title']);
         $gradebook_range = intval($_POST['degreerange']);
-        $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, active = 1, title = ?s", $course_id, $newTitle)->lastInsertID;
-        Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
+        $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s", $course_id, $gradebook_range, $newTitle)->lastInsertID;
         //create gradebook users (default the last six months)
         $limitDate = date('Y-m-d', strtotime(' -6 month'));
         Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
