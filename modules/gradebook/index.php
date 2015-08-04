@@ -187,23 +187,35 @@ if ($is_editor) {
         redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
     }
     //add a new gradebook
-    if (isset($_POST['newGradebook']) && strlen(trim($_POST['title']))) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        $newTitle = trim($_POST['title']);
-        $gradebook_range = intval($_POST['degreerange']);
-        $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s", $course_id, $gradebook_range, $newTitle)->lastInsertID;
-        //create gradebook users (default the last six months)
-        $limitDate = date('Y-m-d', strtotime(' -6 month'));
-        Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                                SELECT $gradebook_id, user_id FROM course_user
-                                WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                                        $course_id, $limitDate);
+    if (isset($_POST['newGradebook'])) {
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'degreerange'));
+        $v->rule('numeric', array('degreerange'));
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'degreerange' => "$langTheField $langGradebookRange"
+        ));
+        if($v->validate()) {        
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+            $newTitle = trim($_POST['title']);
+            $gradebook_range = intval($_POST['degreerange']);
+            $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s", $course_id, $gradebook_range, $newTitle)->lastInsertID;
+            //create gradebook users (default the last six months)
+            $limitDate = date('Y-m-d', strtotime(' -6 month'));
+            Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                                    SELECT $gradebook_id, user_id FROM course_user
+                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
+                                            $course_id, $limitDate);
 
-        $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
-                                            FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
+            $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
+                                                FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
 
-        Session::Messages($langCreateGradebookSuccess, 'alert-success');
-        redirect_to_home_page("modules/gradebook/index.php?course=$course_code");   
+            Session::Messages($langCreateGradebookSuccess, 'alert-success');
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&new=1");
+        }
     }    
     //delete user from gradebook list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {

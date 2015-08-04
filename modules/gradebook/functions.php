@@ -161,28 +161,34 @@ function display_user_grades($gradebook_id) {
 function new_gradebook() {
 
     global $tool_content, $course_code,
-           $langTitle, $langSave, $langInsert, $langGradebookRange;
-
+           $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect;
+    $title_error = Session::getError('title');
+    $title = Session::has('title') ? Session::get('title') : '';
+    $degreerange_error  = Session::getError('degreerange');
+    $degreerange = Session::has('degreerange') ? Session::get('degreerange') : 0;
     $tool_content .= 
         "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&newGradebook=1' onsubmit=\"return checkrequired(this, 'antitle');\">
-                <div class='form-group'>
+                <div class='form-group".($title_error ? " has-error" : "")."'>
                     <div class='col-xs-12'>
-                        <label>$langTitle</label>
+                        <label>$langTitle</label>                      
                     </div>
                     <div class='col-xs-12'>
-                        <input class='form-control' type='text' name='title'/>
+                        <input class='form-control' type='text' name='title' value='$title'>
+                        <span class='help-block'>$title_error</span>
                     </div>
                 </div>
-                <div class='form-group'>
+                <div class='form-group".($degreerange_error ? " has-error" : "")."'>
                     <label class='col-xs-12'>$langGradebookRange</label>
                     <div class='col-xs-12'>
                         <select name='degreerange' class='form-control'>
-                            <option value='5'>0-5</option>
-                            <option value='10'>0-10</option>
-                            <option value='20'>0-20</option>
-                            <option value='100'>0-100</option>
+                            <option value".($degreerange == 0 ? ' selected' : '').">$langGradeScalesSelect</option>
+                            <option value='5'".($degreerange == 5 ? ' selected' : '').">0-5</option>
+                            <option value='10'".($degreerange == 10 ? ' selected' : '').">0-10</option>
+                            <option value='20'".($degreerange == 20 ? ' selected' : '').">0-20</option>
+                            <option value='100'".($degreerange == 100 ? ' selected' : '').">0-100</option>
                         </select>
+                        <span class='help-block'>$degreerange_error</span>
                     </div>
                 </div>
                 <div class='form-group'>
