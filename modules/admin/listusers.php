@@ -474,14 +474,17 @@ $tool_content .= "<table id='search_results_table' class='display'>
 $tool_content .= "<tbody></tbody></table>";
 
 $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
-// delete all function
-$tool_content .= " <form action='multideluser.php' method='post' name='delall_user_search'>";
+
+// Edit all function
+$tool_content .= " <form action='multiedituser.php' method='post'>";
 // redirect all request vars towards delete all action
 foreach ($_REQUEST as $key => $value) {
     $tool_content .= "<input type='hidden' name='$key' value='$value' />";
 }
 
-$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'></form></div>";
+$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'>
+    <input class='btn btn-primary' type='submit' name='activate_submit' value='$langAddSixMonths'>
+  </form></div>";
 
 draw($tool_content, 3, null, $head_content);
 
