@@ -187,18 +187,30 @@ if ($is_editor) {
     
     //add a new attendance
     if (isset($_POST['newAttendance'])) {
-        $newTitle = $_POST['title'];
-        $attendance_limit = intval($_POST['limit']);
-        $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s", $course_id, $attendance_limit, $newTitle)->lastInsertID;   
-        //create attendance users (default the last six months)
-        $limitDate = date('Y-m-d', strtotime(' -6 month'));
-        Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                                SELECT $attendance_id, user_id FROM course_user
-                                WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                                        $course_id, $limitDate);
-        
-        Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code");   
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'limit'));
+        $v->rule('numeric', array('limit'));
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'limit' => "$langTheField $langAttendanceLimitNumber"
+        ));
+        if($v->validate()) {           
+            $newTitle = $_POST['title'];
+            $attendance_limit = intval($_POST['limit']);
+            $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s", $course_id, $attendance_limit, $newTitle)->lastInsertID;   
+            //create attendance users (default the last six months)
+            $limitDate = date('Y-m-d', strtotime(' -6 month'));
+            Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
+                                    SELECT $attendance_id, user_id FROM course_user
+                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
+                                            $course_id, $limitDate);
+
+            Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&new=1");
+        }
     }    
     //delete user from attendance list
     if (isset($_GET['deleteuser']) and isset($_GET['ruid'])) {

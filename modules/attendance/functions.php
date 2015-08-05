@@ -635,20 +635,27 @@ function new_attendance() {
     
     global $tool_content, $course_code, $langNewAttendance2, 
            $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber, $attendance_limit;
-                    
+    
+    $title_error = Session::getError('title');
+    $title = Session::has('title') ? Session::get('title') : '';
+    $limit_error  = Session::getError('limit');
+    $limit = Session::has('limit') ? Session::get('limit') : '';
+    
     $tool_content .= "<div class='form-wrapper'>
             <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code' onsubmit=\"return checkrequired(this, 'antitle');\">
                 <div class='form-group'>
                     <label class='col-xs-12'>$langNewAttendance2</label></div>                            
-                    <div class='form-group'> 
+                    <div class='form-group".($title_error ? " has-error" : "")."'> 
                         <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title'/>
+                            <input class='form-control' type='text' placeholder='$langTitle' name='title'>
+                            <span class='help-block'>$title_error</span>
                         </div>
                     </div>
-                    <div class='form-group'>
+                    <div class='form-group".($limit_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' type='text' name='limit' value='$attendance_limit'/>
+                            <input class='form-control' type='text' name='limit' value='$attendance_limit'>
+                            <span class='help-block'>$limit_error</span>
                         </div>
                     </div>
                     <div class='form-group'>
