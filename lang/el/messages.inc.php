@@ -3773,6 +3773,7 @@ $langGradeType = "Τυπος Βαθμολογίας";
 $langGradeNumbers = "Αριθμοί";
 $langGradeScales = "Βαθμολογικές Κλίμακες";
 $langGradeScalesSelect = "Επιλογή Κλίμακας";
+$langGradeScaleNotEditable = "Η κλίμακα δεν είναι πλέον επεξεργάσιμη γιατί έχει χρησιμοποιηθεί για την βαθμολόγηση μίας ή περισσότερων εργασιών.";
 $langNoGradeScales = 'Δεν έχουν καταχωρηθεί βαθμολογικές κλίμακες.';
 $langWording = 'Λεκτικό';
 $langScales = 'Κλίμακες';

@@ -4013,6 +4013,7 @@ $langOpenDelosReplaceInfo = "<p>Already existing links will be refreshed with cu
 $langGradeType = "Grade Type";
 $langGradeNumbers = "Numbers";
 $langGradeScalesSelect = "Scales Select";
+$langGradeScaleNotEditable = "Grading scale is not editable anymore as it has been used for the grading of 1 or more assignments.";
 $langWorkSubType = "Submission Type";
 $langWorkOnlineText = "Online Text";
 $lang_personal_blog = "Activate personal blog";

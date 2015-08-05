@@ -91,6 +91,8 @@ if (isset($_GET['scale_id'])) {
     ";
     if ($_GET['scale_id']) {
         $scale_data = Database::get()->querySingle("SELECT * FROM grading_scale WHERE id = ?d AND course_id = ?d", $_GET['scale_id'], $course_id);
+        $scale_used = Database::get()->querySingle("SELECT COUNT(*) as count FROM `assignment`, `assignment_submit` "
+                . "WHERE `assignment`.`grading_scale_id` = ?d AND `assignment`.`course_id` = ?d AND `assignment`.`id` = `assignment_submit`.`assignment_id` AND `assignment_submit`.`grade` IS NOT NULL", $_GET['scale_id'], $course_id)->count;
     }
     $title = Session::has('title') ? Session::get('title') : (isset($scale_data) ? $scale_data->title : "");
     $scale_rows = "";
@@ -102,14 +104,18 @@ if (isset($_GET['scale_id'])) {
             $scale_rows .= "
                     <tr>
                         <td class='form-group'>
-                            <input type='text' name='scale_item_name[$key]' class='form-control' value='".q($scale['scale_item_name'])."' required>
+                            <input type='text' name='scale_item_name[$key]' class='form-control' value='".q($scale['scale_item_name'])."' required".($scale_used ? " disabled" : "").">
                         </td>
                         <td class='form-group'>
-                            <input type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required>
-                        </td>
-                        <td class='text-center'>
-                            <a href='#' class='removeScale'><span class='fa fa-times' style='color:red'></span></a>
-                        </td>
+                            <input type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required".($scale_used ? " disabled" : "").">
+                        </td>";
+            if (!$scale_used) {
+                $scale_rows .= "            
+                            <td class='text-center'>
+                                <a href='#' class='removeScale'><span class='fa fa-times' style='color:red'></span></a>
+                            </td>";
+            }
+            $scale_rows .= "
                     </tr>
                 ";
         }
@@ -117,6 +123,9 @@ if (isset($_GET['scale_id'])) {
     $toolName = $langGradeScales;
     $pageName = $langNewGradeScale;
     $navigation[] = array("url" => "grading_scales.php?course=$course_code", "name" => $langGradeScales);
+    if ($scale_used) {
+        $tool_content .= "<div class='alert alert-info'>$langGradeScaleNotEditable</div>";
+    }
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
@@ -135,7 +144,7 @@ if (isset($_GET['scale_id'])) {
                         <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
                             <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                             <div class='col-sm-10'>
-                              <input name='title' type='text' class='form-control' id='title' value='$title'>
+                              <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
                               ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
                             </div>
                         </div>
@@ -148,7 +157,7 @@ if (isset($_GET['scale_id'])) {
                                             <tr>
                                                 <th style='width:47%'>$langWording</th>
                                                 <th style='width:47%'>$langValue</th>
-                                                <th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>
+                                                ".(!$scale_used ? "<th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>" : "")."
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -156,11 +165,16 @@ if (isset($_GET['scale_id'])) {
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div>";
+    if (!$scale_used) {
+        $tool_content .= "
                             <div class='col-xs-offset-2 col-sm-10'>
                                  <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a>
-                            </div>
-                        </div>
+                            </div>";
+    }
+    $tool_content .= "  </div>";
+    if (!$scale_used) {
+        $tool_content .= " 
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>".
                                 form_buttons(array(
@@ -173,7 +187,9 @@ if (isset($_GET['scale_id'])) {
                                     )
                                 ))
                                 ."</div>
-                        </div>
+                        </div>";
+    }
+    $tool_content .= "
                     </fieldset>
                     </form>
                 </div>
