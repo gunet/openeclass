@@ -24,7 +24,7 @@ $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκ�
 $langVersion = "Έκδοση";
 $langAboutText = "Η έκδοση της πλατφόρμας είναι";
 $langHostName = "Ο υπολογιστής στον οποίο βρίσκεται η πλατφόρμα είναι ο ";
-$langMySqlVersion = "Έκδοση της MySql ";
+$langMySqlVersion = "Έκδοση της MySQL";
 $langWebServerVersion = "Έκδοση του Web Server";
 $langNoMysql = "Η MySql δεν λειτουργεί !";
 $langUptime = "Λειτουργεί από τις";
@@ -39,7 +39,6 @@ $langContactInfo = "Στοιχεία επικοινωνίας";
 $langInCourses = "Στο μάθημα";
 $langOfSite = "της πλατφόρμας";
 $langResourceBrowser = 'Αναζήτηση πόρων';
-$langGeneralSettings = 'Ρυθμίσεις';
 
 #For the logged-out user:
 $langAboutCourses1 = "Αυτή τη στιγμή, η πλατφόρμα διαθέτει συνολικά";
@@ -443,7 +442,7 @@ $langSearchCourses = "Αναζήτηση μαθημάτων";
 $langActSuccess = "Μόλις ενεργοποιήσατε την ";
 $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
 $langThe = "Η ";
-$langLdapNotWork = "Η php δεν έχει ενεργοποιμένη την υποστήριξη για ldap. Βεβαιωθείτε ότι η ldap υποστήριξη είναι εγκατεστημένη και ενεργοποιημένη.";
+$langLdapNotWork = "Η PHP δεν υποστηρίζει LPAP. Βεβαιωθείτε ότι η υποστήριξη LDAP είναι εγκατεστημένη και ενεργοποιημένη.";
 $langCASLoggedIN = "Προειδοποίηση: Θα πρέπει να βγείτε από το CAS πριν αλλάξετε τις ρυθμίσεις του";
 $langCASNotWork = "Προειδοποίηση: Η PHP δεν έχει υποστήριξη για CAS. Βεβαιωθείτε ότι η phpCAS είναι εγκατεστημένη.";
 $langShibEmail = "Shibboleth Email";
