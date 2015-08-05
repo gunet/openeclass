@@ -881,24 +881,28 @@ function attendance_settings($attendance_id) {
            $langTitle, $langSave, $langAttendanceLimitNumber,
            $langAttendanceUpdate, $langSave,
            $attendance_title;
-    
-    $attendance_limit = get_attendance_limit($attendance_id);
-    
+
+    $title_error = Session::getError('title');
+    $title = Session::has('title') ? Session::get('title') : $attendance_title;
+    $limit_error  = Session::getError('limit');
+    $limit = Session::has('limit') ? Session::get('limit') : get_attendance_limit($attendance_id);    
     // update attendance title
     $tool_content .= "<div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&attendance_id=$attendance_id'>
-                    <div class='form-group'>
+                    <div class='form-group".($title_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langTitle</label>                           
                         <div class='col-xs-12'>
-                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$attendance_title'>
+                            <input class='form-control' type='text' placeholder='$langTitle' name='title' value='$title'>
+                            <span class='help-block'>$title_error</span>
                         </div>
                     </div>
-                    <div class='form-group'>
+                    <div class='form-group".($limit_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>
-                            <input class='form-control' type='text' name='limit' value='$attendance_limit'/>
+                            <input class='form-control' type='text' name='limit' value='$limit'/>
+                            <span class='help-block'>$limit_error</span>
                         </div>
                     </div>                                        
                     <div class='form-group'>

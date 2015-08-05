@@ -374,16 +374,23 @@ if ($is_editor) {
     
     // update attendance settings
     if (isset($_POST['submitAttendanceBookSettings'])) {
-        if (isset($_POST['limit'])) { // update attendance range
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('title', 'limit'));
+        $v->rule('numeric', array('limit'));
+        $v->labels(array(
+            'title' => "$langTheField $langTitle",
+            'limit' => "$langTheField $langAttendanceLimitNumber"
+        ));
+        if($v->validate()) {           
             $attendance_limit = intval($_POST['limit']);
-            Database::get()->querySingle("UPDATE attendance SET `limit` = ?d WHERE id = ?d ", $attendance_limit, $attendance_id);
-        }
-        if (isset($_POST['title'])) { // upgrade attendance title
             $attendance_title = $_POST['title'];
-            Database::get()->querySingle("UPDATE attendance SET `title` = ?s WHERE id = ?d ", $attendance_title, $attendance_id);         
+            Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d WHERE id = ?d ", $attendance_title, $attendance_limit, $attendance_id);
+            Session::Messages($langGradebookEdit,"alert-success");
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&editSettings=1");           
         }
-        Session::Messages($langGradebookEdit,"alert-success");
-        redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
     }
     //FORM: create / edit new activity
     if(isset($_GET['addActivity']) OR isset($_GET['modify'])){
