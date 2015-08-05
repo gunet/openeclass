@@ -89,6 +89,7 @@ if (isset($_GET['scale_id'])) {
         });
     </script>
     ";
+    $scale_used = 0;
     if ($_GET['scale_id']) {
         $scale_data = Database::get()->querySingle("SELECT * FROM grading_scale WHERE id = ?d AND course_id = ?d", $_GET['scale_id'], $course_id);
         $scale_used = Database::get()->querySingle("SELECT COUNT(*) as count FROM `assignment`, `assignment_submit` "
