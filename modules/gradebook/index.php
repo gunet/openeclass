@@ -197,7 +197,7 @@ if ($is_editor) {
         ));
         if($v->validate()) {        
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-            $newTitle = trim($_POST['title']);
+            $newTitle = $_POST['title'];
             $gradebook_range = intval($_POST['degreerange']);
             $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s", $course_id, $gradebook_range, $newTitle)->lastInsertID;
             //create gradebook users (default the last six months)
@@ -389,7 +389,7 @@ if ($is_editor) {
         if($v->validate()) {          
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $gradebook_range = $_POST['degreerange'];
-            $gradebook_title = trim($_POST['title']);
+            $gradebook_title = $_POST['title'];
             Database::get()->querySingle("UPDATE gradebook SET `title` = ?s, `range` = ?d WHERE id = ?d ", $gradebook_title, $gradebook_range, $gradebook_id);
             Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
