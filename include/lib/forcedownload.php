@@ -400,13 +400,3 @@ function not_found($path) {
     exit;
 }
 
-function error($message) {
-    global $urlServer;
-    
-    Session::Messages($message, 'alert-danger');
-    session_write_close();
-
-    header("Location: $urlServer");
-
-    exit;
-}
