@@ -794,6 +794,8 @@ function module_path($path) {
         $new_path = preg_replace('|^.*(/admin/.*)|', '\1', $path);
         if ($new_path == '/admin/auth_process.php') {
             return '/admin/auth.php';
+        } elseif ($new_path == '/admin/listusers.php' or $new_path == '/admin/edituser.php') {
+            return '/admin/search_user.php';
         }
         return $new_path;
     } elseif (strpos($path, '/main/unreguser.php') !== false or
