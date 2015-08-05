@@ -133,7 +133,6 @@ if (isset($language)) {
     }
 }
 
-
 // check if we are guest user
 if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     if (check_guest()) {
@@ -152,13 +151,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     header("Location: {$urlServer}main/portfolio.php");
 } else {
     // check authentication methods
+    $hybridLinkId = null;
+    $hybridProviders = array();
     $authLink = array();
     if (!$upgrade_begin) {
         $loginFormEnabled = false;
         $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
                 FROM auth WHERE auth_default <> 0
                 ORDER BY auth_default DESC, auth_id");
-        $hybrid_auth_providers_html = '';
         foreach ($q as $l) {
             if (in_array($l->auth_name, $extAuthMethods)) {
                 $authLink[] = array(
@@ -168,8 +168,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
                               ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) { 
-                $hybrid_auth_providers_html .= "<a class='' href='{$urlServer}index.php?provider=" .
-                    $l->auth_name . "'><img src='$themeimg/$l->auth_name.png' alt='Sign-in with $l->auth_name' title='Sign-in with $l->auth_name' />" . ucfirst($l->auth_name) . "</a><br />";
+                $hybridProviders[] = $l->auth_name;
+                if (is_null($hybridLinkId)) {
+                    $authLink[] = array(
+                        'showTitle' => true,
+                        'class' => 'login-option',
+                        'title' => $langViaSocialNetwork);
+                    $hybridLinkId = count($authLink) - 1;
+                }
             } elseif (!$loginFormEnabled) {
                 $loginFormEnabled = true;
                 $authLink[] = array(
@@ -192,12 +198,14 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                            </div>");
             }
         }
-        if ($hybrid_auth_providers_html) {
-            $authLink[] = array(
-                'showTitle' => true,
-                'class' => 'login-option login-option-sso',
-                'title' => $langViaSocialNetwork,
-                'html' => $hybrid_auth_providers_html);
+
+        if (count($hybridProviders)) {
+            $authLink[$hybridLinkId]['html'] = '<div>';
+            foreach ($hybridProviders as $provider) {
+                $authLink[$hybridLinkId]['html'] .=
+                    "<a href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
+            }
+            $authLink[$hybridLinkId]['html'] .= '</div>';
         }
 
         $head_content .= "

@@ -51,11 +51,21 @@ $auth_ids = array(1 => 'eclass',
     10 => 'google',
     11 => 'live',
     12 => 'yahoo',
-    13 => 'linked'
+    13 => 'linkedin',
 );
 
-$extAuthMethods = array('cas', 'shibboleth', 'facebook');
-$hybridAuthMethods = array('twitter', 'google', 'live', 'yahoo', 'linkedin');
+$authFullName = array(
+    8 => 'Facebook',
+    9 => 'Twitter',
+    10 => 'Google',
+    11 => 'Microsoft Live',
+    12 => 'Yahoo!',
+    13 => 'LinkedIn',
+);
+
+$extAuthMethods = array('cas', 'shibboleth');
+$hybridAuthMethods = array('facebook', 'twitter', 'google', 'live', 'yahoo', 'linkedin');
+
 
 /**
  * get active authentication methods auth_ids
@@ -708,23 +718,23 @@ function hybridauth_login() {
     $config = get_hybridauth_config();
     
     // check for errors and whatnot
-    $warning = "";
+    $warning = '';
     
-    if( isset( $_GET["error"] ) ){
-        $warning = "<p class='alert1'>" . trim( strip_tags(  $_GET["error"] ) ) . "</p>";
+    if (isset($_GET['error'])) {
+        Session::Messages(q(trim(strip_tags($_GET['error']))));
     }
-    
+
     // if user select a provider to login with
     // then inlcude hybridauth config and main class
     // then try to authenticate te current user
     // finally redirect him to his profile page
-    if( isset($_GET["provider"]) && $_GET["provider"]) {
+    if (isset($_GET['provider'])) {
         try {
             // create an instance for Hybridauth with the configuration file path as parameter
             $hybridauth = new Hybrid_Auth($config);
             
             // set selected provider name
-            $provider = @ trim( strip_tags($_GET["provider"]));
+            $provider = @trim(strip_tags($_GET["provider"]));
         
             // try to authenticate the selected $provider
             $adapter = $hybridauth->authenticate( $provider );
@@ -738,21 +748,21 @@ function hybridauth_login() {
             //echo $user_data->photoURL;
             //echo $user_data->identifier;
             
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
             // let hybridauth forget all about the user so we can try to authenticate again.
         
             // Display the recived error,
             // to know more please refer to Exceptions handling section on the userguide
             switch($e->getCode()) {
-                case 0 : $warning = "<p class='alert1'>$langProviderError1</p>"; break;
-                case 1 : $warning = "<p class='alert1'>$langProviderError2</p>"; break;
-                case 2 : $warning = "<p class='alert1'>$langProviderError3</p>"; break;
-                case 3 : $warning = "<p class='alert1'>$langProviderError4</p>"; break;
-                case 4 : $warning = "<p class='alert1'>$langProviderError5</p>"; break;
-                case 5 : $warning = "<p class='alert1'>$langProviderError6</p>"; break;
-                case 6 : $warning = "<p class='alert1'>$langProviderError7</p>"; $adapter->logout(); break;
-                case 7 : $warning = "<p class='alert1'>$langProviderError8</p>"; $adapter->logout(); break;
+                case 0: Session::Messages($GLOBALS['langProviderError1']); break;
+                case 1: Session::Messages($GLOBALS['langProviderError2']); break;
+                case 2: Session::Messages($GLOBALS['langProviderError3']); break;
+                case 3: Session::Messages($GLOBALS['langProviderError4']); break;
+                case 4: Session::Messages($GLOBALS['langProviderError5']); break;
+                case 5: Session::Messages($GLOBALS['langProviderError6']); break;
+                case 6: Session::Messages($GLOBALS['langProviderError7']); $adapter->logout(); break;
+                case 7: Session::Messages($GLOBALS['langProviderError8']); $adapter->logout(); break;
             }
         
             // debug messages for hybridauth errors
@@ -787,9 +797,13 @@ function hybridauth_login() {
     if (get_config('login_fail_check') && $r) {
         $auth_allow = 8;
     } else {
-        $myrow = Database::get()->querySingle("SELECT id, surname, givenname, password, username, status, email, lang, verified_mail, facebook_uid, twitter_uid, google_uid, live_uid, yahoo_uid, linkedin_uid
-                FROM user WHERE " . $provider . "_uid = ?s", $user_data->identifier);
-                // cas might have alternative authentication defined
+        $auth_id = $auth_ids[strtolower($provider)];
+        $myrow = Database::get()->querySingle("SELECT user.id, surname, givenname, password, username, status, email, lang, verified_mail
+                FROM user, user_ext_uid
+                WHERE user.id = user_ext_uid.user_id AND
+                      user_ext_uid.auth_id = ?d AND
+                      user_ext_uid.uid = ?s",
+            $auth_id, $user_data->identifier);
         $exists = 0;
         if (!isset($_COOKIE) or count($_COOKIE) == 0) {
             // Disallow login when cookies are disabled
@@ -809,10 +823,10 @@ function hybridauth_login() {
             }
         }
         if (!$exists and !$auth_allow) {
-            //Since HybridAuth was used and there is not user id matched in the db, send the user to the registration form.
+            // Since HybridAuth was used and there is not user id matched in the db, send the user to the registration form.
             header('Location: ' . $urlServer . 'modules/auth/registration.php?provider=' . $provider);
             
-            //from this point and on, the code does not need to run since the user is redirected to the registration page
+            // from this point and on, the code does not need to run since the user is redirected to the registration page
             $auth_allow = 4;
         }
     }

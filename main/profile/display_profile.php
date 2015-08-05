@@ -94,20 +94,19 @@ if ($userdata) {
         }
     }
 
-    //hybridauth providers information. available only for the current user.
-    $providers ="";
-    if($id == $uid) {
-        $providers_text = "";
-        $myrow = Database::get()->querySingle("SELECT facebook_uid, twitter_uid, google_uid, live_uid, yahoo_uid, linkedin_uid
-                                             FROM user WHERE id = ?d", $id);
-        if($myrow->facebook_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/facebook.png' alt='Facebook' title='Facebook' />&nbsp;Facebook&nbsp;</span>";
-        if($myrow->twitter_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/twitter.png' alt='Twitter' title='Twitter' />&nbsp;Twitter&nbsp;</span>";
-        if($myrow->google_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/google.png' alt='Google' title='Google' />&nbsp;Google&nbsp;</span>";
-        if($myrow->live_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/live.png' alt='Live' title='Live' />&nbsp;Microsoft Live&nbsp;</span>";
-        if($myrow->yahoo_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/yahoo.png' alt='Yahoo!' title='Yahoo!' />&nbsp;Yahoo!&nbsp;</span>";
-        if($myrow->linkedin_uid) $providers_text .= "<span class='tag-value'><img src='$themeimg/linkedin.png' alt='LinkedIn' title='LinkedIn' />&nbsp;LinkedIn&nbsp;</span>";
-        
-        if(!empty($providers_text)) $providers .= "</div><span class='tag'>$langProviderConnectWith&nbsp;:&nbsp;</span>" . $providers_text . "</div>";
+    // hybridauth providers information. available only for the current user.
+    $providers = '';
+    if ($id == $uid) {
+        $providers_text = '';
+        $extAuthList = Database::get()->queryArray("SELECT auth.auth_id, auth_name FROM auth, user_ext_uid
+            WHERE auth.auth_id = user_ext_uid.auth_id AND user_ext_uid.user_id = ?d", $id);
+        foreach ($extAuthList as $item) {
+            $fullName = q($authFullName[$item->auth_id]);
+            $providers_text .= " <span class='tag-value'><img src='$themeimg/{$item->auth_name}.png' alt=''>&nbsp;$fullName</span>";
+        }
+        if (!empty($providers_text)) {
+            $providers .= "</div><span class='tag'>$langProviderConnectWith&nbsp;:&nbsp;</span>" . $providers_text . "</div>";
+        }
     }
     
     if (get_config('personal_blog')) {
@@ -119,7 +118,7 @@ if ($userdata) {
                                 </div>
                             </div>";
     } else {
-        $perso_blog_html = "";
+        $perso_blog_html = '';
     }
     /*if (!empty($userdata->email) and allow_access($userdata->email_public)) { // E-mail
         $tool_content .= "<div class='profile-pers-info'><span class='tag'>$langEmail :</span> <span class='tag-value'>" . mailto($userdata->email) . "</span></div>";}

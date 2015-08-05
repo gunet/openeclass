@@ -19,19 +19,22 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 $require_help = true;
 $require_login = true;
+$require_valid_uid = true;
 $helpTopic = 'Profile';
-include '../../include/baseTheme.php';
+
+require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/pwgen.inc.php';
-$require_valid_uid = TRUE;
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/log.php';
+
+require_once 'modules/auth/methods/hybridauth/config.php';
+require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
 
 check_uid();
 check_guest();
@@ -54,15 +57,8 @@ $(profile_init);</script>";
 
 $myrow = Database::get()->querySingle("SELECT surname, givenname, username, email, am, phone,
                                             lang, status, has_icon, description,
-                                            email_public, phone_public, am_public, password,
-                        facebook_uid, twitter_uid, google_uid, live_uid, yahoo_uid, linkedin_uid
+                                            email_public, phone_public, am_public, password
                                         FROM user WHERE id = ?d", $uid);
-$facebook_uid = $myrow->facebook_uid;
-$twitter_uid = $myrow->twitter_uid;
-$google_uid = $myrow->google_uid;
-$live_uid = $myrow->live_uid;
-$yahoo_uid = $myrow->yahoo_uid;
-$linkedin_uid = $myrow->linkedin_uid;
 
 $password = $myrow->password;
 $auth = array_search($password, $auth_ids);
@@ -224,129 +220,85 @@ if (isset($_POST['submit'])) {
     }
 }
 
-//HybridAuth actions
-if(isset($_GET['provider'])) {
-    //user requests hybridauth provider_uid deletion
-    if(@$_GET['action'] == 'delete') {
-        if($_GET['provider'] == 'Facebook') { $q = Database::get()->query("UPDATE user SET facebook_uid = '' WHERE id = ?d", $uid); $facebook_uid = '';}
-        if($_GET['provider'] == 'Twitter') { $q = Database::get()->query("UPDATE user SET twitter_uid = '' WHERE id = ?d", $uid); $twitter_uid = '';}
-        if($_GET['provider'] == 'Google') { $q = Database::get()->query("UPDATE user SET google_uid = '' WHERE id = ?d", $uid); $google_uid = '';}
-        if($_GET['provider'] == 'Live') { $q = Database::get()->query("UPDATE user SET live_uid = '' WHERE id = ?d", $uid); $live_uid = '';}
-        if($_GET['provider'] == 'Yahoo') { $q = Database::get()->query("UPDATE user SET yahoo_uid = '' WHERE id = ?d", $uid); $yahoo_uid = '';}
-        if($_GET['provider'] == 'LinkedIn') { $q = Database::get()->query("UPDATE user SET linkedin_uid = '' WHERE id = ?d", $uid); $linkedin_uid = '';}
-        $_GET['msg'] = 1; //show success message
-    } elseif(@$_GET['action'] == 'connect') {
-    //HybridAuth checks, authentication and user profile info and finally store provider user id in the db
-    require_once 'modules/auth/methods/hybridauth/config.php';
-    require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
-    $config = get_hybridauth_config();
-    $user_data = '';
-    $provider = q(strtolower($_GET["provider"]));
-    
-    $hybridauth = new Hybrid_Auth($config);
-    $allProviders = $hybridauth->getProviders();
-
-    if(count($allProviders) && array_key_exists($_GET["provider"], $allProviders)) { //check if the provider is existent and valid - it's checked above
-        try {
-            $hybridauth = new Hybrid_Auth($config);
-            $adapter = $hybridauth->authenticate( @ trim( strip_tags($provider)) );
-                
-            // grab the user profile
-            $user_data = $adapter->getUserProfile();
-                
-            //fetch user profile id and check if there is another instance in the db (this would happen if a user tried to authenticate
-            //two different eclass accounts with the same facebook, etc. account)
-            if($user_data->identifier)
-                switch($provider) {
-                    case 'facebook':
-                        $facebook_uid = $user_data->identifier;
-                        if(!$r = Database::get()->querySingle("SELECT id FROM user WHERE facebook_uid = ?s AND id <> ?d", q($facebook_uid), $uid)) {
-                            $q = Database::get()->querySingle("UPDATE user SET facebook_uid = ?s WHERE id = ?d", q($facebook_uid), $uid);
-                            $_GET['msg'] = 1;
-                        } else {
-                            $facebook_uid = '';
-                            $_GET['msg'] = 12;
-                        }
-                        break;
-                    case 'twitter':
-                        $twitter_uid = $user_data->identifier;
-                        if(!$r = Database::get()->querySingle("SELECT id FROM user WHERE twitter_uid = ?s AND id <> ?d", q($twitter_uid), $uid)) {
-                            $q = Database::get()->querySingle("UPDATE user SET twitter_uid = ?s WHERE id = ?d", q($twitter_uid), $uid);
-                            $_GET['msg'] = 1;
-                        } else {
-                            $twitter_uid = '';
-                            $_GET['msg'] = 12;
-                        }
-                        break;
-                    case 'google':
-                        $google_uid = $user_data->identifier;
-                        if(!$r = Database::get()->querySingle("SELECT id FROM user WHERE google_uid = ?s AND id <> ?d", q($google_uid), $uid)) {
-                            $q = Database::get()->querySingle("UPDATE user SET google_uid = ?s WHERE id = ?d", q($google_uid), $uid);
-                            $_GET['msg'] = 1;
-                        } else {
-                            $google_uid = '';
-                            $_GET['msg'] = 12;
-                        }
-                        break;
-                    case 'live':
-                        $live_uid = $user_data->identifier;
-                        if(!$r = Database::get()->querySingle("SELECT id FROM user WHERE live_uid = ?s AND id <> ?d", q($live_uid), $uid)) {
-                            $q = Database::get()->querySingle("UPDATE user SET live_uid = ?s WHERE id = ?d", q($live_uid), $uid);
-                            $_GET['msg'] = 1;
-                        } else {
-                            $live_uid = '';
-                            $_GET['msg'] = 12;
-                        }
-                        break;
-                    case 'yahoo':
-                        $yahoo_uid = $user_data->identifier;
-                        if(!$r = Database::get()->querySingle("SELECT id FROM user WHERE yahoo_uid = ?s AND id <> ?d", q($yahoo_uid), $uid)) {
-                            $q = Database::get()->querySingle("UPDATE user SET yahoo_uid = ?s WHERE id = ?d", q($yahoo_uid), $uid);
-                            $_GET['msg'] = 1;
-                        } else {
-                            $yahoo_uid = '';
-                            $_GET['msg'] = 12;
-                        }
-                        break;
-                    case 'linkedin':
-                        $linkedin_uid = $user_data->identifier;
-                        if(!$r = Database::get()->querySingle("SELECT id FROM user WHERE linkedin_uid = ?s AND id <> ?d", q($linkedin_uid), $uid)) {
-                            $q = Database::get()->querySingle("UPDATE user SET linkedin_uid = ?s WHERE id = ?d", q($linkedin_uid), $uid);
-                            $_GET['msg'] = 1;
-                        } else {
-                            $linkedin_uid = '';
-                            $_GET['msg'] = 12;
-                        }
-                        break;
-                    default:
-                        $_GET['msg'] = 11;
-                        break;
-                } 
-                
-        } catch(Exception $e) {
-            // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
-            // let hybridauth forget all about the user so we can try to authenticate again.
-
-            // Display the recived error,
-            // to know more please refer to Exceptions handling section on the userguide
-            switch($e->getCode()) {
-                case 0 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError1</td></tr></tbody></table><br /><br />"; break;
-                case 1 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError2</td></tr></tbody></table><br /><br />"; break;
-                case 2 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError3</td></tr></tbody></table><br /><br />"; break;
-                case 3 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError4</td></tr></tbody></table><br /><br />"; break;
-                case 4 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError5</td></tr></tbody></table><br /><br />"; break;
-                case 5 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError6</td></tr></tbody></table><br /><br />"; break;
-                case 6 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError7</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
-                case 7 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError8</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
+// HybridAuth actions
+if (isset($_GET['provider'])) {
+    // user requests hybridauth provider uid deletion
+    if (isset($_GET['action'])) {
+        if ($_GET['action'] == 'delete') {
+            $auth_id = array_search(strtolower($_GET['provider']), $auth_ids);
+            if ($auth_id and
+                Database::get()->query('DELETE FROM user_ext_uid
+                    WHERE user_id = ?d AND auth_id = ?d', $uid, $auth_id)) {
+                Session::Messages($langProfileReg, 'alert-success');
+                redirect_to_home_page('main/profile/display_profile.php');
             }
-            $_GET['msg'] = 11; //display generic error for now
-            
-            // debug messages for hybridauth errors
-            //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
-            //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
-        }
-    } //endif(count($allProviders) && array_key_exists($_GET['provider'], $allProviders))
-    } //endif(isset($_GET['provider'])) {
+        } elseif ($_GET['action'] == 'connect') {
+            // HybridAuth checks, authentication and user profile info and finally store provider user id in the db
+            require_once 'modules/auth/methods/hybridauth/config.php';
+            require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+
+            $config = get_hybridauth_config();
+            $user_data = '';
+            $provider = q(trim(strtolower($_GET['provider'])));
+
+            $hybridauth = new Hybrid_Auth($config);
+            $allProviders = $hybridauth->getProviders();
+
+            if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
+                try {
+                    if (in_array($provider, $hybridAuthMethods)) {
+                        $hybridauth = new Hybrid_Auth($config);
+                        $adapter = $hybridauth->authenticate($provider);
+
+                        // grab the user profile
+                        $user_data = $adapter->getUserProfile();
+
+                        // Fetch user profile id and check if there is another
+                        // instance in the db (this would happen if a user tried to
+                        // authenticate two different eclass accounts with the same
+                        // Facebook, etc. account)
+                        if ($user_data->identifier)
+                            $r = Database::get()->querySingle('SELECT id FROM user_ext_uid, auth
+                                WHERE user_ext_uid.auth_id = auth.auth_id AND
+                                      auth.auth_name = ?s AND
+                                      uid = ?s AND
+                                      user_ext_uid.user_id <> ?d',
+                                $provider, $user_data->identifier, $uid);
+                            if ($r) {
+                                $ext_uid = '';
+                                $_GET['msg'] = 12;
+                            } else {
+                                $ext_uid = $user_data->identifier;
+                                $_GET['msg'] = 1;
+                            }
+                    } else {
+                        $_GET['msg'] = 11;
+                    } 
+                } catch(Exception $e) {
+                    // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
+                    // let hybridauth forget all about the user so we can try to authenticate again.
+
+                    // Display the recived error,
+                    // to know more please refer to Exceptions handling section on the userguide
+                    switch($e->getCode()) {
+                        case 0 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError1</td></tr></tbody></table><br /><br />"; break;
+                        case 1 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError2</td></tr></tbody></table><br /><br />"; break;
+                        case 2 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError3</td></tr></tbody></table><br /><br />"; break;
+                        case 3 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError4</td></tr></tbody></table><br /><br />"; break;
+                        case 4 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError5</td></tr></tbody></table><br /><br />"; break;
+                        case 5 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError6</td></tr></tbody></table><br /><br />"; break;
+                        case 6 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError7</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
+                        case 7 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError8</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
+                    }
+                    $_GET['msg'] = 11; // display generic error for now
+
+                    // debug messages for hybridauth errors
+                    //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
+                    //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
+                }
+            } // endif(count($allProviders) && array_key_exists($_GET['provider'], $allProviders))
+        } // endif(isset($_GET['provider'])) {
+    }
 }
 
 //Show message if exists
@@ -552,79 +504,44 @@ $tool_content .= "<div class='form-group'>
           <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
         </div>";
 
-//HybridAuth settings and links
-//check if there are any available alternative providers for authentication and show the corresponding links on 
-//the homepage, or no mesage if no providers are enabled
-require_once 'modules/auth/methods/hybridauth/config.php';
-require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+foreach ($hybridAuthMethods as $provider) {
+    $userProviders[$provider] = false;
+}
+Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d',
+    function ($item) {
+        global $userProviders;
+        $userProviders[$auth_ids[$item->auth_id]] = true;
+    }, $uid);
+
+// HybridAuth settings and links
+// check if there are any available alternative providers for authentication and show the corresponding links on 
+// the homepage, or no mesage if no providers are enabled
 $config = get_hybridauth_config();
 
-$hybridauth = new Hybrid_Auth( $config );
+$hybridauth = new Hybrid_Auth($config);
 $allProviders = $hybridauth->getProviders();
-if(count($allProviders)) {
-    $facebook_status = $twitter_status = $google_status = $live_status = $yahoo_status = $linkedin_status = '';
-    //checks if a provider is enabled by the admin
-    if(array_key_exists('Facebook', $allProviders)) {
-        if($facebook_uid) {
-            $facebook_status = "<div class='col-sm-10'><img src='$themeimg/tick.png' alt='$langProviderConnectWith Facebook' title='$langProviderConnectWith Facebook' />
-                                <input type='hidden' name='facebook_provider_id' value='" . q($facebook_uid) . "' /><br />
-                                <a href='$sec?action=delete&provider=Facebook'>$langProviderDeleteConnection</a>";
-        } else  $facebook_status = "<div class='col-sm-10'><a href='$sec?action=connect&provider=Facebook' />$langProviderConnect</a></div>";
+if (count($allProviders)) {
+    $tool_content .= "<div class='form-group'>
+        <label class='col-sm-2 control-label'>$langProviderConnectWith:</label>
+        <div class='col-sm-10'>
+          <div class='row'>";
+    foreach ($allProviders as $provider => $settings) {
+        $lcProvider = strtolower($provider);
+        $tool_content .= "
+            <div class='col-xs-1 text-center'>
+              <img src='$themeimg/$lcProvider.png' alt='Sign-in with $provider'><br>$provider<br>";
+        if ($userProviders[$lcProvider]) {
+            $tool_content .= "
+              <img src='$themeimg/tick.png' alt='$langProviderConnectWith Facebook'>
+              <a href='$sec?action=delete&provider=$provider'>$langProviderDeleteConnection</a>";
+        } else {
+            $tool_content .= "<a href='$sec?action=connect&provider=$provider'>$langProviderConnect</a>";
+        }
+        $tool_content .= "</div>";
     }
-    if(array_key_exists('Twitter', $allProviders)) {
-        if($twitter_uid) {
-            $twitter_status = "<div class='col-sm-10'><img src='$themeimg/tick.png' alt='$langProviderConnectWith Twitter' title='$langProviderConnectWith Twitter' />
-            <input type='hidden' name='twitter_provider_id' value='" . q($twitter_uid) . "' /><br />
-            <a href='$sec?action=delete&provider=Twitter'>$langProviderDeleteConnection</a></div>";
-        } else $twitter_status = "<div class='col-sm-10'><a href='$sec?action=connect&provider=Twitter' />$langProviderConnect</a></div>";
-    }
-    if(array_key_exists('Google', $allProviders)) {
-        if($google_uid) {
-            $google_status = "<div class='col-sm-10'><img src='$themeimg/tick.png' alt='$langProviderConnectWith Google' title='$langProviderConnectWith Google' />
-            <input type='hidden' name='google_provider_id' value='" . q($google_uid) . "' /><br />
-            <a href='$sec?action=delete&provider=Google'>$langProviderDeleteConnection</a></div>";
-        } else $google_status = "<div class='col-sm-10'><a href='$sec?action=connect&provider=Google' />$langProviderConnect</a></div>";
-    }
-    if(array_key_exists('Live', $allProviders)) {
-        if($live_uid) {
-            $live_status = "<div class='col-sm-10'><img src='$themeimg/tick.png' alt='$langProviderConnectWith Live' title='$langProviderConnectWith Live' />
-            <input type='hidden' name='live_provider_id' value='" . q($live_uid) . "' /><br />
-            <a href='$sec?action=delete&provider=Live'>$langProviderDeleteConnection</a>";
-        } else $live_status = "<div class='col-sm-10'><a href='$sec?action=connect&provider=Live' />$langProviderConnect</a>";
-    }
-    if(array_key_exists('Yahoo', $allProviders)) {
-        if($yahoo_uid) {
-            $yahoo_status = "<div class='col-sm-10'><img src='$themeimg/tick.png' alt='$langProviderConnectWith Yahoo' title='$langProviderConnectWith Yahoo' />
-            <input type='hidden' name='yahoo_provider_id' value='" . q($yahoo_uid) . "' /><br />
-            <a href='$sec?action=delete&provider=Yahoo'>$langProviderDeleteConnection</a></div>";
-        } else $yahoo_status = "<div class='col-sm-10'><a href='$sec?action=connect&provider=Yahoo' />$langProviderConnect</a></div>";
-    }
-    if(array_key_exists('LinkedIn', $allProviders)) {
-        if($linkedin_uid) {
-            $linkedin_status = "<div class='col-sm-10'><img src='$themeimg/tick.png' alt='$langProviderConnectWith LinkedIn' title='$langProviderConnectWith LinkedIn' />
-            <input type='hidden' name='linkedin_provider_id' value='" . q($linkedin_uid) . "' /><br />
-            <a href='$sec?action=delete&provider=LinkedIn'>$langProviderDeleteConnection</a></div>";
-        } else $linkedin_status = "<div class='col-sm-10'><a href='$sec?action=connect&provider=LinkedIn' />$langProviderConnect</a></div>";
-    }
-
-$tool_content .= "
-    <div class='form-group'>
-        <th>$langProviderConnectWith:</th>
-    <td>
-    <table>
-        <tr style='text-align: center;'>";
-if($facebook_status) $tool_content .= "<td><img src='$themeimg/facebook.png' alt='Sign-in with Facebook' title='Sign-in with Facebook' /><br />Facebook<br />$facebook_status</td>";
-if($twitter_status) $tool_content .= "<td><img src='$themeimg/twitter.png' alt='Sign-in with Twitter' title='Sign-in with Twitter' /><br />Twitter<br />$twitter_status</td>";
-if($google_status) $tool_content .= "<td><img src='$themeimg/google.png' alt='Sign-in with Google' title='Sign-in with Google' /><br />Google<br />$google_status</td>";
-if($live_status) $tool_content .= "<td><img src='$themeimg/live.png' alt='Sign-in with Microsoft Live' title='Sign-in with Microsoft Live' /><br />Live<br />$live_status</td>";
-if($yahoo_status) $tool_content .= "<td><img src='$themeimg/yahoo.png' alt='Sign-in with Yahoo!' title='Sign-in with Yahoo!' /><br />Yahoo<br />$yahoo_status</td>";
-if($linkedin_status) $tool_content .= "<td><img src='$themeimg/linkedin.png' alt='Sign-in with LinkedIn' title='Sign-in with LinkedIn' /><br />LinkedIn<br />$linkedin_status</td>";
-$tool_content .= "</tr>
-    </table>
-        </td>
-    </tr>
-    </div>";
-
+    $tool_content .= "</div>
+        </div>
+      </div>";
 } //endif(count($allProviders)) - in case no providers are enabled, do not show anything
 
 $tool_content .= "<div class='col-sm-offset-2 col-sm-10'>

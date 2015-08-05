@@ -42,95 +42,31 @@ from a simple text file.
 // ----------------------------------------------------------------------------------------
 if (!function_exists('get_hybridauth_config')) {
 	function get_hybridauth_config() {
+        $providers = array (
+            // openid providers
+            'OpenID' => array ('enabled' => false));
 
-		$yahoo_key = $yahoo_secret = $google_id = $google_secret = $facebook_id = $facebook_secret = $twitter_key = $twitter_secret = $live_id = $live_secret = $linkedin_key = $linkedin_secret = '';
-		$yahoo_enabled = $google_enabled = $google_enabled = $facebook_enabled = $twitter_enabled = $live_enabled = $linkedin_enabled = false;
-		$tmp = array();
-		
-		$q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_title, auth_settings, auth_instructions, auth_default, auth_enabled FROM auth WHERE 1");
+        $q = Database::get()->queryArray("SELECT * FROM auth
+            WHERE auth_name IN ('yahoo', 'google', 'facebook', 'twitter', 'live', 'linkedin')");
 		if ($q) {
 			foreach ($q as $row) {
-				if(!$row->auth_settings) continue;
-				// get only those with valid, not empty settings
-				switch($row->auth_name){
-					case "yahoo":
-						$tmp = explode('|', $row->auth_settings);
-						$yahoo_key = $tmp[0];
-						$yahoo_secret = $tmp[1];
-						$yahoo_enabled = boolval($row->auth_enabled);
-						break;
-					case "google":
-						list($google_id, $google_secret) = explode('|', $row->auth_settings);
-						$google_enabled = boolval($row->auth_enabled);
-						break;
-					case "facebook":
-						list($facebook_id, $facebook_secret) = explode('|', $row->auth_settings);
-						$facebook_enabled = boolval($row->auth_enabled);
-						break;
-					case "twitter":
-						list($twitter_key, $twitter_secret) = explode('|', $row->auth_settings);
-						$twitter_enabled = boolval($row->auth_enabled);
-						break;
-					case "live":
-						list($live_id, $live_secret) = explode('|', $row->auth_settings);
-						$live_enabled = boolval($row->auth_enabled);
-						break;
-					case "linkedin":
-						list($linkedin_key, $linkedin_secret) = explode('|', $row->auth_settings);
-						$linkedin_enabled = boolval($row->auth_enabled);
-						break;
-				}
+                $name = $row->auth_name == 'linkedin' ? 'LinkedIn' : ucfirst($row->auth_name);
+                if ($row->auth_default and !empty($row->auth_settings)) {
+                    $providers[$name]['keys'] = unserialize($row->auth_settings);
+                    $providers[$name]['enabled'] = true;
+                } else {
+                    $providers[$name]['keys'] = array();
+                    $providers[$name]['enabled'] = true;
+                }
 			}
-		}
+        }
 	
-	//return configuration data as an array
-	return 
-		array(
-			"base_url" => $GLOBALS['urlServer'] . "/modules/auth/methods/hybridauth/", 
-	
-			"providers" => array ( 
-				// openid providers
-				"OpenID" => array (
-					"enabled" => false
-				),
-	
-				"Yahoo" => array ( 
-					"enabled" => $yahoo_enabled,
-					"keys"    => array ( "key" => $yahoo_key, "secret" => $yahoo_secret )
-				),
-	
-				"Google" => array ( 
-					"enabled" => $google_enabled,
-					"keys"    => array ( "id" => $google_id, "secret" => $google_secret )
-				),
-	
-				"Facebook" => array ( 
-					"enabled" => $facebook_enabled,
-					"keys"    => array ( "id" => "$facebook_id", "secret" => "$facebook_secret" )
-				),
-	
-				"Twitter" => array ( 
-					"enabled" => $twitter_enabled,
-					"keys"    => array ( "key" => $twitter_key, "secret" => $twitter_secret ) 
-				),
-	
-				"Live" => array ( 
-					"enabled" => $live_enabled,
-					"keys"    => array ( "id" => $live_id, "secret" => $live_secret ) //does not work locally!
-				),
-	
-				"LinkedIn" => array ( 
-					"enabled" => $linkedin_enabled,
-					"keys"    => array ( "key" => $linkedin_key, "secret" => $linkedin_secret ) 
-				),
-	
-			),
-	
-			// if you want to enable logging, set 'debug_mode' to true  then provide a writable file by the web server on "debug_file"
-			"debug_mode" => false,
-	
-			"debug_file" => "/log.txt"
-		);
-	
-	}
+        // return configuration data as an array
+        return array(
+            'base_url' => $GLOBALS['urlServer'] . 'modules/auth/methods/hybridauth/', 
+            'providers' => $providers,
+            // if you want to enable logging, set 'debug_mode' to true then provide a writable file by the web server on 'debug_file'
+            'debug_mode' => false,
+            'debug_file' => '/log.txt');
+    }
 }
