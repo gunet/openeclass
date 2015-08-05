@@ -388,15 +388,9 @@ if ($is_editor) {
         ));
         if($v->validate()) {          
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-            if (isset($_POST['degreerange'])) { // update gradebook range
-                $gradebook_range = intval($_POST['degreerange']);
-                Database::get()->querySingle("UPDATE gradebook SET `range` = ?d WHERE id = ?d ", $gradebook_range, $gradebook_id);
-            }
-            if (isset($_POST['title']) && strlen(trim($_POST['title']))) { // upgrade gradebook title
-                $gradebook_title = trim($_POST['title']);
-                Database::get()->querySingle("UPDATE gradebook SET `title` = ?s WHERE id = ?d ", $gradebook_title, $gradebook_id);
-
-            }
+            $gradebook_range = $_POST['degreerange'];
+            $gradebook_title = trim($_POST['title']);
+            Database::get()->querySingle("UPDATE gradebook SET `title` = ?s, `range` = ?d WHERE id = ?d ", $gradebook_title, $gradebook_range, $gradebook_id);
             Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
         } else {
