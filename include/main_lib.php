@@ -1458,6 +1458,8 @@ function delete_course($cid) {
                             WHERE `rating_cache`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $cid);
     Database::get()->query("DELETE `comments` FROM `comments` INNER JOIN `wall_post` ON `comments`.`rid` = `wall_post`.`id`
                             WHERE `comments`.`rtype` = ?s AND `wall_post`.`course_id` = ?d", 'wallpost', $cid);
+    Database::get()->query("DELETE `wall_post_resources` FROM `wall_post_resources` INNER JOIN `wall_post` ON `wall_post_resources`.`post_id` = `wall_post`.`id`
+                            WHERE `wall_post`.`course_id` = ?d", $cid);
     Database::get()->query("DELETE FROM `wall_post` WHERE `course_id` = ?d", $cid);
     // check if we have guest account. If yes delete it.
     $guest_user = Database::get()->querySingle("SELECT user_id FROM course_user WHERE course_id = ?d AND status = ?d", $cid, USER_GUEST);
@@ -1574,6 +1576,8 @@ function deleteUser($id, $log) {
                                     WHERE abuse_report.rtype = ?s AND comments.user_id = ?d", 'comment', $u);
             Database::get()->query("DELETE FROM comments WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM blog_post WHERE user_id = ?d", $u);
+            Database::get()->query("DELETE wall_post_resources FROM wall_post_resources INNER JOIN wall_post ON wall_post_resources.post_id = wall_post.id
+                            WHERE wall_post.user_id = ?d", $u);
             Database::get()->query("DELETE FROM wall_post WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM abuse_report WHERE user_id = ?d", $u);
             Database::get()->query("DELETE FROM user WHERE id = ?d", $u);
