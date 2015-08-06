@@ -219,7 +219,7 @@ function clone_gradebook($gradebook_id) {
 
     global $course_id, $langCopyDuplicate;
 
-    $newTitle = get_gradebook_title($gradebook_id).$langCopyDuplicate;
+    $newTitle = get_gradebook_title($gradebook_id)." $langCopyDuplicate";
     $newRange = get_gradebook_range($gradebook_id);
     $new_gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d,
                                                       students_semester = 1, `range` = ?d,
@@ -580,8 +580,9 @@ function student_view_gradebook($gradebook_id) {
 
     global $tool_content, $uid,
            $langGradebookTotalGradeNoInput, $langGradebookTotalGrade,
-           $langTitle, $langGradebookActivityDate2, $langGradebookActivityDescription,
-           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code;
+           $langTitle, $langGradebookActivityDate2,
+           $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code, $langType,
+            $langAssignment, $langExercise, $langGradebookActivityAct, $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity;
 
     //check if there are grade records for the user, otherwise alert message that there is no input
     $checkForRecords = Database::get()->querySingle("SELECT COUNT(gradebook_book.id) AS count
@@ -613,25 +614,41 @@ function student_view_gradebook($gradebook_id) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</p>";
         }
         $tool_content .= "<table class='table-default' >";
-        $tool_content .= "<tr><th>$langTitle</th>
+        $tool_content .= "<tr class='list-header'><th>$langTitle</th>
                               <th>$langGradebookActivityDate2</th>
-                              <th>$langGradebookActivityDescription</th>
+                              <th>$langType</th>
                               <th>$langGradebookActivityWeight</th>
                               <th>$langGradebookGrade</th>
                           </tr>";
     }
     if ($result) {
         foreach ($result as $details) {
-            $content = standard_text_escape($details->description);
+            //$content = standard_text_escape($details->description);
             $tool_content .= "<tr><td><b>";
             if (!empty($details->title)) {
                 $tool_content .= q($details->title);
             }
             $tool_content .= "</b>";
             $tool_content .= "</td>"
-                    . "<td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>"
-                    . "<td>" . $content . "</td>"
-                    . "<td>" . q($details->weight) . "%</td>";
+                    . "<td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>";
+                    
+            if ($details->module_auto_id) {
+                if ($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
+                    $tool_content .= "<td class='smaller'>$langAssignment";
+                }
+                if ($details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
+                    $tool_content .= "<td class='smaller'>$langExercise ";
+                }
+                if ($details->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
+                    $tool_content .= "<td class='smaller'>$langGradebookActivityAct";
+                }
+
+                
+                $tool_content .= "</td>";
+            } else {
+                $tool_content .= "<td class='smaller'>$langAttendanceActivity</td>";
+            }
+                    $tool_content .= "<td>" . q($details->weight) . "%</td>";
             $tool_content .= "<td width='70' class='text-center'>";
             //check user grade for this activity
             $sql = Database::get()->querySingle("SELECT grade FROM gradebook_book
@@ -718,12 +735,13 @@ function display_gradebook($gradebook_id) {
                             'class' => ''),
                       ),
                   'icon' => 'fa-plus'),
-            array('title' => $langConfig,
+            array('title' => $langEditChange,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;editSettings=1",
                   'icon' => 'fa-cog'),
             array('title' => $langUsers,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1",
-                  'icon' => 'fa-users'),
+                  'icon' => 'fa-users',
+                  'level' => 'primary-label'),
             array('title' => "$langExport $langToA $langcsvenc1",
                   'url' => "dumpgradebook.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;enc=1253",
                   'icon' => 'fa-file-excel-o'),
@@ -861,7 +879,7 @@ function display_gradebook($gradebook_id) {
  */
 function display_gradebooks() {
 
-    global $course_id, $tool_content, $course_code, $langEditChange,
+    global $course_id, $tool_content, $gradebook_id, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
            $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor;
 
@@ -888,6 +906,9 @@ function display_gradebooks() {
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
+                                    array('title' => $langEditChange,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;editSettings=1",
+                                          'icon' => 'fa-cog'),
                                     array('title' => $g->active ? $langDeactivate : $langActivate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "&amp;vis=" .
                                                   ($g->active ? '0' : '1'),

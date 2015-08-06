@@ -2670,7 +2670,7 @@ $langQQuestionNotGiven = "Δεν έχετε εισαγάγει την τελευ
 $langQFillInAllQs = "Παρακαλώ απαντήστε σε όλες τις ερωτήσεις.";
 $langCreateDuplicate = "Δημιουργία Αντιγράφου";
 $langCopy2 = "Αντίγραφο";
-$langCopyDuplicate = "<span class='text-muted'>&nbsp;&nbsp;(Αντίγραφο)</span>";
+$langCopyDuplicate = "(Αντίγραφο)";
 $langCreateDuplicateIn = "Δημιουργία Αντιγράφου στο ...";
 $langCurrentCourse = "Τρέχον Μάθημα";
 $langCopySuccess = "Το αντίγραφο δημιουργήθηκε με επιτυχία!";

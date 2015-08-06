@@ -4160,7 +4160,7 @@ $langAttendanceDeleted = "Attendance book deleted";
 $langNoAttendances = "No attendance books available";
 $langAvailableAttendances = 'Available attendance books';
 $langGradebookAutoUpdate = 'Automatic grade update';
-$langCopyDuplicate = "<span class='text-muted'>&nbsp;&nbsp;(Copy)</span>";
+$langCopyDuplicate = "(Copy)";
 $langProviderIdAlreadyExists = 'An existent account in the platform is already linked with your profile';
 $langAuthSettingsSaved = 'Your connection settings have been stored';
 $langProviderConnectWithAlternativeProviders = 'Sign-in or register with alternative providers';
