@@ -678,6 +678,12 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
         if (file_exists("$restoreThis/wall_post")) {
             $wall_map = restore_table($restoreThis, 'wall_post', array('set' => array('course_id' => $new_course_id),
             'return_mapping' => 'id'), $url_prefix_map, $backupData, $restoreHelper);
+            
+            restore_table($restoreThis, 'wall_post_resources', array('delete' => array('id'),
+            'map' => array('post_id' => $wall_map),
+            'map_function' => 'wall_map_function',
+            'map_function_data' => array($document_map, $video_map)
+            ), $url_prefix_map, $backupData, $restoreHelper);
         }
 
         // Comments
@@ -1333,6 +1339,17 @@ function abuse_report_map_function(&$data, $maps) {
         $data['rid'] = $link_map[$data['rid']];
     } elseif ($rtype == 'wallpost') {
         $data['rid'] = $wall_map[$data['rid']];
+    }
+    return true;
+}
+
+function wall_map_function(&$data, $maps) {
+    list($document_map, $video_map) = $maps;
+    $type = $data['type'];
+    if ($type == 'doc') {
+        $data['res_id'] = @$document_map[$data['res_id']];
+    } elseif ($type == 'video') {
+        $data['res_id'] = @$video_map[$data['res_id']];
     }
     return true;
 }
