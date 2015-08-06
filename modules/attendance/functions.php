@@ -342,7 +342,7 @@ function display_attendance_activities($attendance_id) {
         } // end of while
         $tool_content .= "</table></div></div></div>";
     } else {
-        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;addActivity=1'>$langHere</a> $langAttendanceNoActMessage3</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langAttendanceNoActMessage1 $langAttendanceNoActMessage3</div>";
     }
 }
 
