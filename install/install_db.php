@@ -804,10 +804,10 @@ $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
                 `course_id` INT(11) NOT NULL,
                 `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
                 `content` TEXT DEFAULT '',
-                `video_link` VARCHAR(250) DEFAULT '',
+                `youtube` VARCHAR(250) DEFAULT '',
                 `timestamp` INT(11) NOT NULL DEFAULT 0,
                 `pinned` TINYINT(1) NOT NULL DEFAULT 0,
-                INDEX `wall_post_index_1` (`course_id`)) $charset_spec");
+                INDEX `wall_post_index` (`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE `wall_post_resources` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

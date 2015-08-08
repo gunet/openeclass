@@ -846,7 +846,7 @@ class Log {
      * @return string
      */
     private function wall_action_details($details) {
-        global $langContent, $langWallVideoLink;
+        global $langContent, $langWallYoutubeVideoLink;
         
         $details = unserialize($details);
         
@@ -855,8 +855,8 @@ class Log {
         if (!empty($details['content'])) {
             $content .= "$langContent: &laquo".q($details['content'])."&raquo<br/>";
         }
-        if (!empty($details['videolink'])) {
-            $content .= "$langWallVideoLink: &laquo".q($details['videolink'])."&raquo<br/>";
+        if (!empty($details['youtube'])) {
+            $content .= "$langWallYoutubeVideoLink: &laquo".q($details['youtube'])."&raquo<br/>";
         }
         
         return $content;
