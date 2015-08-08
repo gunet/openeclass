@@ -65,9 +65,8 @@ if (isset($_POST['submit'])) {
                 }
             }
             if (isset($id)) { //check if wall resources need to get saved
-                if (!empty($_POST['video'])) { //save multimedia content
-                    
-                }
+                //save multimedia content
+                insert_video($id);
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -147,9 +146,10 @@ if (isset($_POST['submit'])) {
                     
                 }
             }
-            if (!empty($_POST['video'])) {
-                    
-            }
+            
+            //save multimedia content
+            insert_video($id, true);
+            
             Session::Messages($langWallPostSaved, 'alert-success');
             redirect_to_home_page("modules/wall/index.php?course=$course_code");
         } else {
@@ -216,7 +216,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                     <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
                                 </div>
                                 <div class="form-group tab-pane fade" id="videos_div">
-                                    '.list_videos().'
+                                    '.list_videos($id).'
                                 </div>
                             </div>
                         </fieldset>

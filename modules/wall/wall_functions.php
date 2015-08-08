@@ -317,3 +317,20 @@ function generate_infinite_container_html($posts, $next_page) {
     return $ret;
 }
 
+function insert_video($post_id, $edit = false) {
+    global $course_code, $course_id;
+
+    if ($edit) {
+        Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $post_id);
+    }
+    if (isset($_POST['video']) and count($_POST['video'] > 0)) {
+        foreach ($_POST['video'] as $video_id) {
+            list($table, $res_id) = explode(':', $video_id);
+            $table = ($table == 'video') ? 'video' : 'videolink';
+            $row = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $res_id);
+            $q = Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, visible = ?d, res_id = ?d",
+                $post_id, $table, $row->title, 1, $res_id);
+        }
+    }
+}
+

@@ -682,7 +682,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             restore_table($restoreThis, 'wall_post_resources', array('delete' => array('id'),
             'map' => array('post_id' => $wall_map),
             'map_function' => 'wall_map_function',
-            'map_function_data' => array($document_map, $video_map)
+            'map_function_data' => array($document_map, $video_map, $videolink_map)
             ), $url_prefix_map, $backupData, $restoreHelper);
         }
 
@@ -1344,12 +1344,14 @@ function abuse_report_map_function(&$data, $maps) {
 }
 
 function wall_map_function(&$data, $maps) {
-    list($document_map, $video_map) = $maps;
+    list($document_map, $video_map, $videolink_map) = $maps;
     $type = $data['type'];
     if ($type == 'doc') {
         $data['res_id'] = @$document_map[$data['res_id']];
     } elseif ($type == 'video') {
         $data['res_id'] = @$video_map[$data['res_id']];
+    } elseif ($type == 'videolink') {
+        $data['res_id'] = @$videolink_map[$data['res_id']];
     }
     return true;
 }
