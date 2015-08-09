@@ -4577,6 +4577,8 @@ $langWallPost = 'Ανάρτηση τοίχου';
 $langWallPinPost = 'Μόνιμη τοποθέτηση στην κορυφή του τοίχου';
 $langWallUnPinPost = 'Απομάκρυνση από την κορυφή του τοίχου';
 $langWallGeneralSuccess = 'Η ενέργεια εκτελέστηκε επιτυχώς';
+$langWallAttachedResources = 'Συνημμένοι πόροι';
+$langWallHiddenResource = 'Μη ορατός πόρος';
 
 /* * ******************************************
   Theme Options

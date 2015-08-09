@@ -815,7 +815,6 @@ $db->query("CREATE TABLE `wall_post_resources` (
                 `title` VARCHAR(255) NOT NULL DEFAULT '',
                 `res_id` INT(11) NOT NULL,
                 `type` VARCHAR(255) NOT NULL DEFAULT '',
-                `visible` TINYINT(4),
                 INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (

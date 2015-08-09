@@ -66,7 +66,9 @@ if (isset($_POST['submit'])) {
             }
             if (isset($id)) { //check if wall resources need to get saved
                 //save multimedia content
-                insert_video($id);
+                if (visible_module(MODULE_ID_VIDEO)) {
+                    insert_video($id);
+                }
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -148,7 +150,9 @@ if (isset($_POST['submit'])) {
             }
             
             //save multimedia content
-            insert_video($id, true);
+            if (visible_module(MODULE_ID_VIDEO)) {
+                insert_video($id, true);
+            }
             
             Session::Messages($langWallPostSaved, 'alert-success');
             redirect_to_home_page("modules/wall/index.php?course=$course_code");
@@ -197,6 +201,16 @@ if (isset($_GET['showPost'])) { //show comments case
         $content = Session::has('content')? Session::get('content') : $post->content;
         $youtube = Session::has('youtube')? Session::get('youtube') : $post->youtube;
         
+        if (visible_module(MODULE_ID_VIDEO)) {
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
+                              '.list_videos($id).'
+                          </div>';
+        } else {
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
+                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
+                          </div>';
+        }
+        
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
                 <div class="form-wrapper">
@@ -215,9 +229,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                     <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
                                     <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
                                 </div>
-                                <div class="form-group tab-pane fade" id="videos_div">
-                                    '.list_videos($id).'
-                                </div>
+                                '.$video_div.'
                             </div>
                         </fieldset>
                         <div class="form-group">'.
@@ -243,6 +255,17 @@ if (isset($_GET['showPost'])) { //show comments case
         $content = Session::has('content')? Session::get('content'): '';
         $youtube = Session::has('youtube')? Session::get('youtube'): '';
         
+        $video_div = '';
+        if (visible_module(MODULE_ID_VIDEO)) {
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
+                              '.list_videos().'
+                          </div>';
+        } else {
+            $video_div = '<div class="form-group tab-pane fade" id="videos_div">
+                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
+                          </div>';
+        }
+        
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
                 <div class="form-wrapper">
@@ -261,9 +284,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                     <label for="youtube_video">'.$langWallYoutubeVideoLink.'</label>
                                     <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
                                 </div>
-                                <div class="form-group tab-pane fade" id="videos_div">
-                                    '.list_videos().'
-                                </div>
+                                '.$video_div.'
                             </div>
                         </fieldset>
                         <div class="form-group">'.

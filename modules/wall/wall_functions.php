@@ -205,6 +205,7 @@ function generate_single_post_html($post) {
                                               '.$youtube_block.'
                                               <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
+                                          '.show_resources($id).'
                                           '.$rating_content.'
                                           '.$comm_content.'
                                       </div>
@@ -300,6 +301,7 @@ function generate_infinite_container_html($posts, $next_page) {
                                               '.$youtube_block.'
                                               <div class="userContent">'.nl2br(standard_text_escape($content)).'</div>
                                           </div>
+                                          '.show_resources($id).'
                                           '.$rating_content.'
                                           '.$comm_content.'
                                       </div>
@@ -328,9 +330,91 @@ function insert_video($post_id, $edit = false) {
             list($table, $res_id) = explode(':', $video_id);
             $table = ($table == 'video') ? 'video' : 'videolink';
             $row = Database::get()->querySingle("SELECT * FROM $table WHERE course_id = ?d AND id = ?d", $course_id, $res_id);
-            $q = Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, visible = ?d, res_id = ?d",
-                $post_id, $table, $row->title, 1, $res_id);
+            $q = Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
+                $post_id, $table, $row->title, $res_id);
         }
     }
 }
 
+function show_resources($post_id) {
+    global $is_editor, $langWallAttachedResources;
+    
+    $ret_str = '';
+    
+    $req = Database::get()->queryArray("SELECT * FROM wall_post_resources WHERE post_id = ?d", $post_id);
+    if (count($req) > 0) {
+        $ret_str .= '<div class="table-responsive">';
+        $ret_str .= '<table class="table">';
+        $ret_str .= '<thead><tr><th colspan="2">'.$langWallAttachedResources.'</th></tr></thead>';
+        foreach ($req as $info) {
+            $ret_str .= show_resource($info);
+        }
+        $ret_str .= '</table></div>';
+    }
+    return $ret_str;
+}
+
+function show_resource($info) {
+    global $is_editor;
+    
+    switch ($info->type) {
+        case 'video':
+        case 'videolink':
+            $ret_str = show_video($info->type, $info->title, $info->id, $info->res_id);
+            break;
+    }
+    return $ret_str;
+}
+
+function show_video($table, $title, $resource_id, $video_id) {
+    global $is_editor, $course_id, $langInactiveModule, $langWallHiddenResource;
+    
+    $class_vis = $imagelink = $link = '';
+    
+    $module_visible = visible_module(MODULE_ID_VIDEO); // checks module visibility
+
+    $row = Database::get()->querySingle("SELECT * FROM `$table` WHERE course_id = ?d AND id = ?d", $course_id, $video_id);
+    if ($row) {
+        if (!$is_editor and (!resource_access(1, $row->public))) {
+            return '';
+        }
+        $row->title = $title;
+        $status = $row->public;
+        $visibility = $row->visible;
+        if ($visibility == 0) {
+            $class_vis = ' class="not_visible"';
+        }
+        if ($table == 'video') {
+            $vObj = MediaResourceFactory::initFromVideo($row);
+            $videolink = MultimediaHelper::chooseMediaAhref($vObj);
+        } else {
+            $vObj = MediaResourceFactory::initFromVideoLink($row);
+            $videolink = MultimediaHelper::chooseMedialinkAhref($vObj);
+        }
+        if (!$module_visible) {
+            $class_vis = ' class="not_visible"';
+            if ($is_editor) {
+                $videolink .= " <i>($langInactiveModule)</i>";
+            } else {
+                $videolink = "<i>$title ($langInactiveModule)</i>";
+            }
+        } elseif ($visibility == 0) {
+            $class_vis = ' class="not_visible"';
+            if ($is_editor) {
+                $videolink .= " <i>($langWallHiddenResource)</i>";
+            } else {
+                $videolink = "<i>$title ($langWallHiddenResource)</i>";
+            }
+        }
+        $imagelink = "fa-film";
+    } else {
+        $videolink = $title;
+        $imagelink = "fa-times";
+        $visibility = 'del';
+    }
+
+    $class_vis = ($visibility == 0 or !$module_visible or $status == 'del') ? ' class="not_visible"' : ' ';
+    $ret_str = "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>$videolink</td></tr>";
+    
+    return $ret_str;
+}
