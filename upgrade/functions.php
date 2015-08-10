@@ -1189,7 +1189,7 @@ function upgrade_course_2_9($code, $lang) {
 
     Database::get()->query("USE `$code`");
     
-    if (!DBHelper::fieldExists('dropbox_file', 'real_filename')) {
+    if (!DBHelper::fieldExists('dropbox_file', 'real_filename', $code)) {
         Database::get()->query("ALTER TABLE `dropbox_file` ADD `real_filename` VARCHAR(255) NOT NULL DEFAULT '' AFTER `filename`");
         Database::get()->query("UPDATE dropbox_file SET real_filename = filename");
     }
@@ -1210,17 +1210,17 @@ function upgrade_course_2_8($code, $lang) {
 
     Database::get()->query("USE `$code`");
     
-    DBHelper::fieldExists('exercices', 'public') or
+    DBHelper::fieldExists('exercices', 'public', $code) or
             Database::get()->query("ALTER TABLE `exercices` ADD `public` TINYINT(4) NOT NULL DEFAULT 1 AFTER `active`");
-    DBHelper::fieldExists('video', 'visible') or
+    DBHelper::fieldExists('video', 'visible', $code) or
             Database::get()->query("ALTER TABLE `video` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-    DBHelper::fieldExists('video', 'public') or
+    DBHelper::fieldExists('video', 'public', $code) or
             Database::get()->query("ALTER TABLE `video` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-    DBHelper::fieldExists('videolinks', 'visible') or
+    DBHelper::fieldExists('videolinks', 'visible', $code) or
             Database::get()->query("ALTER TABLE `videolinks` ADD `visible` TINYINT(4) NOT NULL DEFAULT 1 AFTER `date`");
-    DBHelper::fieldExists('videolinks', 'public') or
+    DBHelper::fieldExists('videolinks', 'public', $code) or
             Database::get()->query("ALTER TABLE `videolinks` ADD `public` TINYINT(4) NOT NULL DEFAULT 1");
-    if (DBHelper::indexExists('dropbox_file', 'UN_filename')) {
+    if (DBHelper::indexExists('dropbox_file', 'UN_filename', $code)) {
         Database::get()->query("ALTER TABLE dropbox_file DROP index UN_filename");
     }
     Database::get()->query("ALTER TABLE dropbox_file CHANGE description description VARCHAR(500)");
