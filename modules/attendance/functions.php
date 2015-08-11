@@ -39,7 +39,8 @@ function display_attendances() {
         
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
-           $langActivate, $langAvailableAttendances, $langNoAttendances, $is_editor;
+           $langActivate, $langAvailableAttendances, $langNoAttendances, $is_editor,
+           $langViewHide, $langViewShow;
     
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
@@ -64,10 +65,10 @@ function display_attendances() {
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
-                                    array('title' => $a->active ? $langDeactivate : $langActivate,
+                                    array('title' => $a->active ? $langViewHide : $langViewShow,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;vis=" . 
                                                   ($a->active ? '0' : '1'),
-                                          'icon' => $a->active ? 'fa-toggle-off' : 'fa-toggle-on'),                                    
+                                          'icon' => $a->active ? 'fa-eye-slash' : 'fa-eye'),                                    
                                     array('title' => $langCreateDuplicate,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;dup=1",
                                           'icon' => 'fa-copy'),
@@ -311,12 +312,15 @@ function display_attendance_activities($attendance_id) {
             $tool_content .= "</td>
                     <td>" . nice_format($details->date, true, true) . "</td>";
             $tool_content .= "<td class='smaller'>";
+//            if($details->module_auto_id != 4 && $details->module_auto_id != 1){
+//            print_r($details);die;
+//            }
             if($details->module_auto_id) {
-                if($details->module_auto_id == 1) {
-                        $tool_content .= $langExercise;
-                } elseif($details->module_auto_id == 2) {
-                        $tool_content .= $langAssignment;
-                }
+//                if($details->module_auto_id == 4) {
+//                        $tool_content .= $langExercise;
+//                } elseif($details->module_auto_id == 1) {
+//                        $tool_content .= $langAssignment;
+//                }
                 if($details->auto) {
                     $tool_content .= "<small class='help-block'>($langAttendanceInsAut)</small>";
                 } else {
@@ -430,7 +434,7 @@ function attendance_display_available_assignments($attendance_id) {
         foreach ($checkForAss as $newAssToGradebook) {
             $content = ellipsize_html($newAssToGradebook->description, 50);
             if($newAssToGradebook->assign_to_specific){
-                $content .= "($langAssignmentignSpecific)<br>";
+                $content .= "$m[WorkAssignTo]:<br>";
                 $checkForAssSpec = Database::get()->queryArray("SELECT user_id, user.surname, user.givenname 
                                                     FROM `assignment_to_specific`, user 
                                                     WHERE user_id = user.id AND assignment_id = ?d", $newAssToGradebook->id);

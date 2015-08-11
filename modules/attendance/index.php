@@ -199,11 +199,11 @@ if ($is_editor) {
             $attendance_limit = intval($_POST['limit']);
             $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s", $course_id, $attendance_limit, $newTitle)->lastInsertID;   
             //create attendance users (default the last six months)
-            $limitDate = date('Y-m-d', strtotime(' -6 month'));
-            Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                                    SELECT $attendance_id, user_id FROM course_user
-                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                                            $course_id, $limitDate);
+//            $limitDate = date('Y-m-d', strtotime(' -6 month'));
+//            Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
+//                                    SELECT $attendance_id, user_id FROM course_user
+//                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
+//                                            $course_id, $limitDate);
 
             Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code");

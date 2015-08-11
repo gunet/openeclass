@@ -38,17 +38,18 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             $data = Database::get()->queryArray("SELECT name, id FROM `group` WHERE course_id = ?d", $course_id);
         } else {
             $data = array();
+            $gradebook_id = intval(getDirectReference($_REQUEST['gradebook_id']));
             // users who don't participate in gradebook
             $d1 = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
                                             FROM user, course_user
                                                 WHERE user.id = course_user.user_id 
                                                 AND course_user.course_id = ?d 
                                                 AND course_user.status = " . USER_STUDENT . "
-                                            AND user.id NOT IN (SELECT uid FROM gradebook_users WHERE gradebook_id = $_REQUEST[gradebook_id])", $course_id);
+                                            AND user.id NOT IN (SELECT uid FROM gradebook_users WHERE gradebook_id = ?d)", $course_id, $gradebook_id);
             $data[0] = $d1;
             // users who already participate in gradebook
             $d2 = Database::get()->queryArray("SELECT uid AS id, givenname, surname FROM user, gradebook_users 
-                                        WHERE gradebook_users.uid = user.id AND gradebook_id = $_REQUEST[gradebook_id]");
+                                        WHERE gradebook_users.uid = user.id AND gradebook_id = ?d", $gradebook_id);
             $data[1] = $d2;
         }
     }
@@ -201,14 +202,14 @@ if ($is_editor) {
             $gradebook_range = intval($_POST['degreerange']);
             $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s", $course_id, $gradebook_range, $newTitle)->lastInsertID;
             //create gradebook users (default the last six months)
-            $limitDate = date('Y-m-d', strtotime(' -6 month'));
-            Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                                    SELECT $gradebook_id, user_id FROM course_user
-                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-                                            $course_id, $limitDate);
+//            $limitDate = date('Y-m-d', strtotime(' -6 month'));
+//            Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+//                                    SELECT $gradebook_id, user_id FROM course_user
+//                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
+//                                            $course_id, $limitDate);
 
-            $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
-                                                FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
+//            $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
+//                                                FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
 
             Session::Messages($langCreateGradebookSuccess, 'alert-success');
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
@@ -237,35 +238,77 @@ if ($is_editor) {
             }
         } elseif ($_POST['specific_gradebook_users'] == 1) { // specific users            
             $active_gradebook_users = '';
-            foreach ($_POST['specific'] as $u) {
-                $active_gradebook_users .= getDirectReference($u) . ",";
+            $extra_sql_not_in = "";
+            $extra_sql_in = "";
+            if (isset($_POST['specific'])) {
+                foreach ($_POST['specific'] as $u) {
+                    $active_gradebook_users .= $u . ",";
+                }
             }
             $active_gradebook_users = substr($active_gradebook_users, 0, -1);
+            if ($active_gradebook_users) {
+                $extra_sql_not_in .= " NOT IN ($active_gradebook_users)";
+                $extra_sql_in .= " IN ($active_gradebook_users)";
+            }
             $gu = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
-                                                AND uid NOT IN ($active_gradebook_users)", $gradebook_id);            
+                                                AND uid$extra_sql_in", $gradebook_id);            
             foreach ($gu as $u) {
                 delete_gradebook_user($gradebook_id, $u);
             }
-            foreach ($_POST['specific'] as $u) {
-                $sql = Database::get()->querySingle("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d AND uid = ?d", $gradebook_id, getDirectReference($u));                
-                if (!isset($sql->uid)) {
-                    $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                            SELECT $gradebook_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, getDirectReference($u)); 
+            $already_inserted_users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
+                                                AND uid$extra_sql_in", $gradebook_id);
+            $already_inserted_ids = [];
+            foreach ($already_inserted_users as $already_inserted_user) {
+                array_push($already_inserted_ids, $already_inserted_user->uid);
+            }
+            if (isset($_POST['specific'])) {
+                foreach ($_POST['specific'] as $u) {
+                    if (!in_array($u, $already_inserted_ids)) {
+                        $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                                SELECT $gradebook_id, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
+                    }
                 }
             }
         } else { // if we want all users between dates            
             $usersstart = new DateTime($_POST['UsersStart']);
             $usersend = new DateTime($_POST['UsersEnd']);
-            $gu = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            
+            // Delete all students not in the Date Range
+            $gu = Database::get()->queryArray("SELECT gradebook_users.uid FROM gradebook_users, course_user "
+                    . "WHERE gradebook_users.uid = course_user.user_id "
+                    . "AND gradebook_users.gradebook_id = ?d "
+                    . "AND course_user.status = " . USER_STUDENT . " "
+                    . "AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $gradebook_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
             foreach ($gu as $u) {
                 delete_gradebook_user($gradebook_id, $u);
             }
-            //check the rest value and rearrange the table            
-            $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-                        SELECT $gradebook_id, user_id FROM course_user
-                        WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
-                                $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+            //Add students that are not already registered to the gradebook
+            $already_inserted_users = Database::get()->queryArray("SELECT gradebook_users.uid FROM gradebook_users, course_user "
+                    . "WHERE gradebook_users.uid = course_user.user_id "
+                    . "AND gradebook_users.gradebook_id = ?d "
+                    . "AND course_user.status = " . USER_STUDENT . " "
+                    . "AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $gradebook_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));                         
+            $already_inserted_ids = [];
+            foreach ($already_inserted_users as $already_inserted_user) {
+                array_push($already_inserted_ids, $already_inserted_user->uid);
+            }
+            $valid_users_for_insertion = Database::get()->queryArray("SELECT user_id 
+                        FROM course_user
+                        WHERE course_id = ?d 
+                        AND status = " . USER_STUDENT . " "
+                    . "AND DATE(reg_date) BETWEEN ?s AND ?s",$course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+
+            foreach ($valid_users_for_insertion as $u) {
+                if (!in_array($u->user_id, $already_inserted_ids)) {
+                    Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) VALUES (?d, ?d)", $gradebook_id, $u->user_id);
+                }
+            }
+
+//            $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+//                        SELECT $gradebook_id, user_id FROM course_user
+//                        WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
+//                                $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
         }
         Session::Messages($langGradebookEdit,"alert-success");                    
         redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . getIndirectReference($gradebook_id) . '&gradebookBook=1');
