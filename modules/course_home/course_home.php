@@ -154,32 +154,33 @@ $head_content .= "
                             } else {
                                 var new_modal_id = parseInt(visible_modal_id) + 1;
                             }
-                            var new_modal = $('#hidden_'+new_modal_id);  
+                            var new_modal = $('#hidden_'+new_modal_id);
                             if (new_modal.length) {
                                 hideVisibleModal();
                                 new_modal.modal('show');
                             }
                         }
-                    }                
+                    }
                 });
             });
             function hideVisibleModal(){
                 var visible_modal = $('.modal.in');
                 if (visible_modal) { // modal is active
                     visible_modal.modal('hide'); // close modal
-                }              
+                }
             };
         </script>";
+
 if(count($res)>0){
     $course_info_extra = "";
     foreach ($res as $key => $row) {
-        $desctype = intval($row->type) - 1;    
+        $desctype = intval($row->type) - 1;
         $hidden_id = "hidden_" . $key;
         $next_id = '';
         $previous_id = '';
         if ($key + 1 < count($res)) $next_id = "hidden_" . ($key + 1);
         if ($key > 0) $previous_id = "hidden_" . ($key - 1);
-                
+
         $tool_content .=    "<div class='modal fade' id='$hidden_id' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
@@ -193,12 +194,12 @@ if(count($res)>0){
                                     <div class='modal-footer'>";
                                         if ($previous_id) {
                                             $tool_content .= "<a id='prev_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$previous_id'><i class='fa fa-arrow-left'></i></a>";
-                                        } 
+                                        }
                                         if ($next_id) {
                                             $tool_content .= "<a id='next_btn' class='btn btn-default' data-dismiss='modal' data-toggle='modal' href='#$next_id'><i class='fa fa-arrow-right'></i></a>";
-                                        }                                                                              
-        $tool_content .=    "                                            
-                                    </div>                                        
+                                        }
+        $tool_content .=    "
+                                    </div>
                                   </div>
                                 </div>
                               </div>";
@@ -214,9 +215,9 @@ if(count($res)>0){
               <ul class='dropdown-menu pull-right' role='menu'>
                 $course_info_extra
               </ul>
-            </div>";    
+            </div>";
 } else {
-   $course_info_btn = ''; 
+   $course_info_btn = '';
 }
 
 $main_content .= "<div class='course_info'>";
@@ -250,24 +251,24 @@ if (is_sharing_allowed($course_id)) {
 }
 $panel_footer = "";
 if(isset($rating_content) || isset($social_content)) {
-    $panel_footer .= "                
+    $panel_footer .= "
                 <div class='panel-footer'>
                     <div class='row'>";
     if(isset($rating_content)){
      $panel_footer .=
             "<div class='col-sm-6'>
                 $rating_content
-            </div>";       
+            </div>";
     }
     if(isset($social_content)){
      $panel_footer .=
             "<div class='col-sm-6 ".(isset($rating_content) ? "text-right" : "")."'>
                 $social_content
-            </div>";         
+            </div>";
     }
-    $panel_footer .= "                
+    $panel_footer .= "
                 </div>
-            </div>";          
+            </div>";
 }
 units_set_maxorder();
 
@@ -277,7 +278,7 @@ if ($is_editor) {
     require_once 'modules/search/indexer.class.php';
 
     if (isset($_REQUEST['del'])) { // delete course unit
-        $id = intval(getDirectReference($_REQUEST['del']));
+        $id = intval($_REQUEST['del']);
         if ($course_info->view_type == 'units') {
             Database::get()->query('DELETE FROM course_units WHERE id = ?d', $id);
             Database::get()->query('DELETE FROM unit_resources WHERE unit_id = ?d', $id);
@@ -288,7 +289,7 @@ if ($is_editor) {
             Session::Messages($langCourseUnitDeleted, 'alert-success');
             redirect_to_home_page("courses/$course_code/");
         } else {
-            $res_id = intval(getDirectReference($_GET['del']));
+            $res_id = intval($_GET['del']);
             if (($id = check_admin_unit_resource($res_id))) {
                 Database::get()->query("DELETE FROM course_weekly_view_activities WHERE id = ?d", $res_id);
                 Indexer::queueAsync(Indexer::REQUEST_REMOVE, Indexer::RESOURCE_UNITRESOURCE, $res_id);
@@ -298,7 +299,7 @@ if ($is_editor) {
             }
         }
     } elseif (isset($_REQUEST['vis'])) { // modify visibility
-        $id = intval(getDirectReference($_REQUEST['vis']));
+        $id = intval($_REQUEST['vis']);
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_units WHERE id = ?d", $id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_units SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
@@ -307,32 +308,32 @@ if ($is_editor) {
         CourseXMLElement::refreshCourse($course_id, $course_code);
     } elseif (isset($_REQUEST['access'])) {
         if ($course_viewType == 'weekly') {
-            $id = intval(getDirectReference($_REQUEST['access']));
+            $id = intval($_REQUEST['access']);
             $access = Database::get()->querySingle("SELECT `public` FROM course_weekly_view WHERE id = ?d", $id);
             $newaccess = ($access->public == '1') ? '0' : '1';
             Database::get()->query("UPDATE course_weekly_view SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         } else {
-            $id = intval(getDirectReference($_REQUEST['access']));
+            $id = intval($_REQUEST['access']);
             $access = Database::get()->querySingle("SELECT `public` FROM course_units WHERE id = ?d", $id);
             $newaccess = ($access->public == '1') ? '0' : '1';
             Database::get()->query("UPDATE course_units SET public = ?d WHERE id = ?d AND course_id = ?d", $newaccess, $id, $course_id);
         }
     } elseif (isset($_REQUEST['down'])) {
-        $id = intval(getDirectReference($_REQUEST['down'])); // change order down
+        $id = intval($_REQUEST['down']); // change order down
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'down', "course_id=$course_id");
         } else {
-            $res_id = intval(getDirectReference($_REQUEST['down']));
+            $res_id = intval($_REQUEST['down']);
             if (($id = check_admin_unit_resource($res_id))) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'down', "course_weekly_view_id=$id");
             }
         }
     } elseif (isset($_REQUEST['up'])) { // change order up
-        $id = intval(getDirectReference($_REQUEST['up']));
+        $id = intval($_REQUEST['up']);
         if ($course_info->view_type == 'units' or $course_info->view_type == 'simple') {
             move_order('course_units', 'id', $id, 'order', 'up', "course_id=$course_id");
         } else {
-            $res_id = intval(getDirectReference($_REQUEST['up']));
+            $res_id = intval($_REQUEST['up']);
             if (($id = check_admin_unit_resource($res_id))) {
                 move_order('course_weekly_view_activities', 'id', $res_id, 'order', 'up', "course_weekly_view_id=$id");
             }
@@ -340,7 +341,7 @@ if ($is_editor) {
     }
 
     if (isset($_REQUEST['visW'])) { // modify visibility of the Week
-        $id = intval(getDirectReference($_REQUEST['visW']));
+        $id = intval($_REQUEST['visW']);
         $vis = Database::get()->querySingle("SELECT `visible` FROM course_weekly_view WHERE id = ?d", $id)->visible;
         $newvis = ($vis == 1) ? 0 : 1;
         Database::get()->query("UPDATE course_weekly_view SET visible = ?d WHERE id = ?d AND course_id = ?d", $newvis, $id, $course_id);
@@ -400,7 +401,7 @@ $tool_content .= "<div class='modal fade' id='citation' tabindex='-1' role='dial
                             </div>
                             <div class='modal-body'>".
                               standard_text_escape($citation_text)
-                            ."</div>                                
+                            ."</div>
                         </div>
                     </div>
                 </div>";
@@ -418,13 +419,13 @@ $level = ($levres = Database::get()->querySingle("SELECT level FROM course_revie
 if (isset($level) && !empty($level)) {
     $metadataUrl = $urlServer . 'modules/course_metadata/info.php?course=' . $course_code;
     $head_content .= "
-<link rel='stylesheet' type='text/css' href='{$urlAppend}modules/course_metadata/course_metadata.css'>
+<link rel='stylesheet' type='text/css' href='course_metadata.css'>
 <style type='text/css'></style>
 <script type='text/javascript'>
 /* <![CDATA[ */
 
     var dialog;
-    
+
     var showMetadata = function(course) {
         $('.modal-body', dialog).load('../../modules/course_metadata/anoninfo.php', {course: course}, function(response, status, xhr) {
             if (status === 'error') {
@@ -433,7 +434,7 @@ if (isset($level) && !empty($level)) {
         });
         dialog.modal('show');
     };
-        
+
     $(document).ready(function() {
         dialog = $(\"<div class='modal fade' tabindex='-1' role='dialog' aria-labelledby='modal-label' aria-hidden='true'><div class='modal-dialog modal-lg'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal'><span aria-hidden='true'>&times;</span><span class='sr-only'>{$langCancel}</span></button><h4 class='modal-title' id='modal-label'>{$langCourseMetadata}</h4></div><div class='modal-body'>body</div></div></div></div>\");
     });
@@ -475,7 +476,7 @@ if (!empty($rec_mail)) {
 }
 */
 // Contentbox: Course main contentbox
-//Temp commit (waiting for Alex to fix course description issue) 
+//Temp commit (waiting for Alex to fix course description issue)
 if ($course_info->home_layout == 3) {
     $left_column = '';
     $main_content_cols = '';
@@ -485,13 +486,13 @@ if ($course_info->home_layout == 3) {
                 </div>
                 <div class='col-xs-12 form-wrapper'>
                 <div class='row'>
-                <div class='col-xs-8'>              
+                <div class='col-xs-8'>
                      $bar_content
                      $bar_content_2
                 </div>
-                <div class='col-xs-4 text-center'> 
+                <div class='col-xs-4 text-center'>
                     $license_info_box
-                </div></div></div>";    
+                </div></div></div>";
 
 } else {
     if(!empty($license_info_box)){
@@ -503,11 +504,11 @@ if ($course_info->home_layout == 3) {
                         <hr class='col-xs-12 margin-top-fat margin-bottom-fat visible-xs-block'>";
     } else {
         $license_holder = "";
-    }           
+    }
    $left_column = "
             <div class='banner-image-wrapper col-md-5 col-sm-5 col-xs-12'>";
    if ($course_info->home_layout == 1) {
-       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/" . urlencode($course_info->course_image) : "$themeimg/ph1.jpg";
+       $course_image_url = isset($course_info->course_image) ? "{$urlAppend}courses/$course_code/image/$course_info->course_image" : "$themeimg/ph1.jpg";
        $left_column .= "
                 <div>
                     <img class='banner-image img-responsive' src='$course_image_url'/>
@@ -515,10 +516,10 @@ if ($course_info->home_layout == 3) {
                 <hr class='col-xs-12 margin-top-fat margin-bottom-fat'>";
    }
     $left_column .= "
-                <div class='col-xs-12 form-wrapper'>              
+                <div class='col-xs-12 form-wrapper'>
                      $bar_content
                      $bar_content_2
-                </div>               
+                </div>
                 $license_holder
             </div>";
    $horizontal_info_row = '';
@@ -535,7 +536,7 @@ $tool_content .= "
 <div class='row margin-top-thin margin-bottom-fat'>
     <div class='col-md-12'>
             <div class='panel panel-default'>
-                
+
                 <div class='panel-body'>
                             $left_column
                             <div class='col-xs-12 $main_content_cols'>
@@ -548,7 +549,7 @@ $tool_content .= "
                             </div>
                             $horizontal_info_row
                 </div>
-                
+
                 $panel_footer
             </div>
         </div>
@@ -577,8 +578,8 @@ if ($is_editor) {
 }
 
     $sql = Database::get()->queryArray($query, $course_id);
-    $total_cunits = count($sql);    
-    if ($total_cunits > 0) {        
+    $total_cunits = count($sql);
+    if ($total_cunits > 0) {
         $cunits_content .= "";
         $count_index = 0;
         foreach ($sql as $cu) {
@@ -593,10 +594,10 @@ if ($is_editor) {
             $class_vis = ($vis == 0) ? 'not_visible' : '';
             if ($course_info->view_type == 'weekly') {
                 if (!empty($cu->title)) {
-                    $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";                    
+                    $cwtitle = "" . q($cu->title) . " ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
                 } else {
-                    $cwtitle = "$count_index$langOr $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")"; 
-                }                
+                    $cwtitle = "$count_index$langOr $langsWeek ($langFrom2 ".nice_format($cu->start_week)." $langTill ".nice_format($cu->finish_week).")";
+                }
                 $href = "<a class = '$class_vis' href='${urlServer}modules/weeks/?course=$course_code&amp;id=$cu->id&amp;cnt=$count_index'>$cwtitle</a>";
             } else {
                 $href = "<a class='$class_vis' href='${urlServer}modules/units/?course=$course_code&amp;id=$cu->id'>" . q($cu->title) . "</a>";
@@ -613,13 +614,13 @@ if ($is_editor) {
                               'url' => $urlAppend . "modules/weeks/info.php?course=$course_code&amp;edit=$cu->id&amp;cnt=$count_index",
                               'icon' => 'fa-edit'),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[SCRIPT_NAME]?visW=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[SCRIPT_NAME]?visW=$cu->id",
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                              'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),)) .
-                    '</div>';                    
+                    '</div>';
                 } else {
                     $cunits_content .= "<div class='item-side'>" .
                     action_button(array(
@@ -628,23 +629,23 @@ if ($is_editor) {
                               'icon' => 'fa-edit'),
                         array('title' => $langDown,
                               'level' => 'primary',
-                              'url' => "$_SERVER[SCRIPT_NAME]?down=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[SCRIPT_NAME]?down=$cu->id",
                               'icon' => 'fa-arrow-down',
                               'disabled' => $cu->id == $last_id),
                         array('title' => $langUp,
                               'level' => 'primary',
-                              'url' => "$_SERVER[SCRIPT_NAME]?up=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[SCRIPT_NAME]?up=$cu->id",
                               'icon' => 'fa-arrow-up',
                               'disabled' => $count_index == 1),
                         array('title' => $vis == 1? $langViewHide : $langViewShow,
-                              'url' => "$_SERVER[SCRIPT_NAME]?vis=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[SCRIPT_NAME]?vis=$cu->id",
                               'icon' => $vis == 1? 'fa-eye-slash' : 'fa-eye'),
                         array('title' => $access == 1? $langResourceAccessLock : $langResourceAccessUnlock,
-                              'url' => "$_SERVER[SCRIPT_NAME]?access=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[SCRIPT_NAME]?access=$cu->id",
                               'icon' => $access == 1? 'fa-lock' : 'fa-unlock',
                               'show' => $visible == COURSE_OPEN),
                         array('title' => $langDelete,
-                              'url' => "$_SERVER[SCRIPT_NAME]?del=". getIndirectReference($cu->id),
+                              'url' => "$_SERVER[SCRIPT_NAME]?del=$cu->id",
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langCourseUnitDeleteConfirm))) .
@@ -655,7 +656,7 @@ if ($is_editor) {
                                         <div class='item-body'>";
                         $cunits_content .= ($cu->comments == ' ')?'':$cu->comments;
                         $cunits_content .= "</div></div>";
-            $cunits_content .= "</div></div></div>";            
+            $cunits_content .= "</div></div></div>";
         }
     } else {
         $cunits_content .= "<div class='col-sm-12'><div class='panel'><div class='panel-body not_visible'> - $langNoUnits - </div></div></div>";
@@ -683,14 +684,14 @@ if (!$alter_layout) {
             <div class='col-md-12'>
                 <h3 class='content-title  pull-left'>$unititle</h3>
             ";
-            
-        if ($is_editor and $course_info->view_type == 'units') {            
+
+        if ($is_editor and $course_info->view_type == 'units') {
             $link = "{$urlServer}modules/units/info.php?course=$course_code";
             $tool_content .= "<a href='$link' class='pull-left add-unit-btn' data-toggle='tooltip' data-placement='top' title='$langAddUnit'>
                                 <i class='fa fa-plus-circle'></i>
-                            </a>";           
+                            </a>";
         }
-            
+
         $tool_content .= "</div></div>";
         $tool_content .= "<div class='row boxlist no-list'>
             $cunits_content
