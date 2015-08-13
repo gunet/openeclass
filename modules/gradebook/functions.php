@@ -427,25 +427,26 @@ function gradebook_settings($gradebook_id) {
  * @global type $langStudents
  * @global type $langMove
  * @global type $langParticipate
- * @param type $gradebook_id
+ * @global type $gradebook
  */
-function user_gradebook_settings($gradebook_id) {
+function user_gradebook_settings() {
 
     global $tool_content, $course_code, $langGroups,
            $langAttendanceUpdate, $langGradebookInfoForUsers,
            $langRegistrationDate, $langFrom2, $langTill, $langRefreshList,
            $langUserDuration, $langAll, $langSpecificUsers,
-           $langStudents, $langMove, $langParticipate;
+           $langStudents, $langMove, $langParticipate, $gradebook;
 
     // default values
     $UsersStart = date('d-m-Y', strtotime('now -6 month'));
     $UsersEnd = date('d-m-Y', strtotime('now'));
-
+    $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $gradebook->start_date)->format('d-m-Y H:i');
+    $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $gradebook->end_date)->format('d-m-Y H:i');
     $tool_content .= "
     <div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>
-                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id) . "&editUsers=1'>
+                <form class='form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&gradebook_id=" . getIndirectReference($gradebook->id) . "&editUsers=1'>
                     <div class='form-group'>
                         <label class='col-xs-12'><span class='help-block'>$langGradebookInfoForUsers</span></label>
                     </div>
@@ -473,19 +474,19 @@ function user_gradebook_settings($gradebook_id) {
                         </div>
                     </div>
                     <div class='form-group' id='all_users'>
-                        <div class='input-append date form-group' id='startdatepicker' data-date='$UsersStart' data-date-format='dd-mm-yyyy'>
+                        <div class='input-append date form-group' id='startdatepicker'>
                             <label for='UsersStart' class='col-sm-2 control-label'>$langRegistrationDate $langFrom2:</label>
                             <div class='col-xs-10 col-sm-9'>
-                                <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$UsersStart'>
+                                <input class='form-control' name='UsersStart' id='UsersStart' type='text' value='$start_date'>
                             </div>
                             <div class='col-xs-2 col-sm-1'>
                                 <span class='add-on'><i class='fa fa-calendar'></i></span>
                             </div>
                         </div>
-                        <div class='input-append date form-group' id='enddatepicker' data-date='$UsersEnd' data-date-format='dd-mm-yyyy'>
+                        <div class='input-append date form-group' id='enddatepicker'>
                             <label for='UsersEnd' class='col-sm-2 control-label'>$langTill:</label>
                             <div class='col-xs-10 col-sm-9'>
-                                <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$UsersEnd'>
+                                <input class='form-control' name='UsersEnd' id='UsersEnd' type='text' value='$end_date'>
                             </div>
                             <div class='col-xs-2 col-sm-1'>
                                 <span class='add-on'><i class='fa fa-calendar'></i></span>
@@ -526,7 +527,7 @@ function user_gradebook_settings($gradebook_id) {
                             'javascript' => "selectAll('participants_box',true)"
                         ),
                         array(
-                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;gradebookBook=1"
+                            'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . "&amp;gradebookBook=1"
                         )
                     ))."</div>
                     </div>
@@ -847,11 +848,7 @@ function display_gradebook($gradebook_id) {
         foreach ($result as $details) {
             $content = ellipsize_html($details->description, 50);
             $tool_content .= "<tr><td><b>";
-            if (empty($details->title)) {
-                $tool_content .= "$langGradebookNoTitle<br>";
-            } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($details->id) . "'>" . q($details->title) . "</a>";
-            }
+            $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($details->id) . "'>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</a>";
             $tool_content .= "<small class='help-block'>";
             switch ($details->activity_type) {
                  case 1: $tool_content .= "($langGradebookOral)"; break;
@@ -1182,14 +1179,14 @@ function register_user_grades($gradebook_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
-            $langGradebookGrade, $langGradebookUpdate,
+            $langGradebookGrade, $langGradebookUpdate, $langGradebookNoTitle,
             $langAttendanceBooking, $langGradebookBooking, $langGradebookOutRange;
 
     //display form and list
     $gradebook_range = get_gradebook_range($gradebook_id);
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $act_type = $result->activity_type; // type of activity
-    $tool_content .= "<div class='alert alert-info'>" . q($result->title) . "</div>";
+    $tool_content .= "<div class='alert alert-info'>" .(!empty($details->title) ? q($result->title) : $langGradebookNoTitle) . "</div>";
     //display users
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname,
                                                     user.givenname as name, user.am as am, DATE(course_user.reg_date) AS reg_date

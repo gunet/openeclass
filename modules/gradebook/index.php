@@ -68,7 +68,7 @@ load_js('datatables_filtering_delay');
 <script type='text/javascript'>
 $(function() {
         $('#startdatepicker, #enddatepicker').datetimepicker({    
-            format: 'dd-mm-yyyy', 
+            format: 'dd-mm-yyyy hh:ii', 
             pickerPosition: 'bottom-left', 
             language: '".$language."',
             autoclose: true 
