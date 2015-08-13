@@ -1404,7 +1404,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook` (
     `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
     `range` TINYINT(4) NOT NULL DEFAULT 10,
     `active` TINYINT(1) NOT NULL DEFAULT 0,
-    `title` VARCHAR(250) DEFAULT NULL) $charset_spec");
+    `title` VARCHAR(250) DEFAULT NULL,
+    `start_date` DATETIME NOT NULL,
+    `end_date` DATETIME NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

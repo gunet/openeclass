@@ -160,10 +160,27 @@ function display_user_grades($gradebook_id) {
  */
 function new_gradebook() {
 
-    global $tool_content, $course_code,
+    global $tool_content, $course_code, $langStart, $langEnd, $head_content, $language,
            $langTitle, $langSave, $langInsert, $langGradebookRange, $langGradeScalesSelect;
+    
+        load_js('bootstrap-datetimepicker');
+        $head_content .= "
+        <script type='text/javascript'>
+            $(function() {
+                $('#start_date, #end_date').datetimepicker({
+                    format: 'dd-mm-yyyy hh:ii', 
+                    pickerPosition: 'bottom-left', 
+                    language: '".$language."',
+                    autoclose: true    
+                });
+            });
+        </script>";
     $title_error = Session::getError('title');
     $title = Session::has('title') ? Session::get('title') : '';
+    $start_date_error = Session::getError('start_date');
+    $start_date = Session::has('start_date') ? Session::get('start_date') : '';
+    $end_date_error = Session::getError('end_date');
+    $end_date = Session::has('end_date') ? Session::get('end_date') : '';    
     $degreerange_error  = Session::getError('degreerange');
     $degreerange = Session::has('degreerange') ? Session::get('degreerange') : 0;
     $tool_content .= 
@@ -178,6 +195,24 @@ function new_gradebook() {
                         <span class='help-block'>$title_error</span>
                     </div>
                 </div>
+                <div class='form-group".($start_date_error ? " has-error" : "")."'>
+                    <div class='col-xs-12'>
+                        <label>$langStart</label>                      
+                    </div>
+                    <div class='col-xs-12'>
+                        <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
+                        <span class='help-block'>$start_date_error</span>
+                    </div>
+                </div>
+                <div class='form-group".($end_date_error ? " has-error" : "")."'>
+                    <div class='col-xs-12'>
+                        <label>$langEnd</label>                      
+                    </div>
+                    <div class='col-xs-12'>
+                        <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
+                        <span class='help-block'>$end_date_error</span>
+                    </div>
+                </div>                   
                 <div class='form-group".($degreerange_error ? " has-error" : "")."'>
                     <label class='col-xs-12'>$langGradebookRange</label>
                     <div class='col-xs-12'>
@@ -301,14 +336,18 @@ function delete_gradebook_user($gradebook_id, $userid) {
 function gradebook_settings($gradebook_id) {
 
     global $tool_content, $course_code,
-           $langTitle, $langSave,
+           $langTitle, $langSave, $langStart, $langEnd,
            $langSave, $langGradebookRange, $langGradebookUpdate,
-           $gradebook_title, $langGradeScalesSelect;
-  
+           $gradebook, $langGradeScalesSelect;
+    
     $title_error = Session::getError('title');
-    $title = Session::has('title') ? Session::get('title') : $gradebook_title;
+    $title = Session::has('title') ? Session::get('title') : $gradebook->title;
+    $start_date_error = Session::getError('start_date');
+    $start_date = Session::has('start_date') ? Session::get('start_date') : DateTime::createFromFormat('Y-m-d H:i:s', $gradebook->start_date)->format('d-m-Y H:i');
+    $end_date_error = Session::getError('end_date');
+    $end_date = Session::has('end_date') ? Session::get('end_date') : DateTime::createFromFormat('Y-m-d H:i:s', $gradebook->end_date)->format('d-m-Y H:i');       
     $degreerange_error  = Session::getError('degreerange');
-    $degreerange = Session::has('degreerange') ? Session::get('degreerange') : get_gradebook_range($gradebook_id);
+    $degreerange = Session::has('degreerange') ? Session::get('degreerange') : $gradebook->range;
     // update gradebook title
     $tool_content .= "<div class='row'>
         <div class='col-sm-12'>
@@ -321,6 +360,24 @@ function gradebook_settings($gradebook_id) {
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
+                    <div class='form-group".($start_date_error ? " has-error" : "")."'>
+                        <div class='col-xs-12'>
+                            <label>$langStart</label>                      
+                        </div>
+                        <div class='col-xs-12'>
+                            <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
+                            <span class='help-block'>$start_date_error</span>
+                        </div>
+                    </div>
+                    <div class='form-group".($end_date_error ? " has-error" : "")."'>
+                        <div class='col-xs-12'>
+                            <label>$langEnd</label>                      
+                        </div>
+                        <div class='col-xs-12'>
+                            <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
+                            <span class='help-block'>$end_date_error</span>
+                        </div>
+                    </div>                       
                     <div class='form-group".($degreerange_error ? " has-error" : "")."'><label class='col-xs-12'>$langGradebookRange</label>
                             <div class='col-xs-12'>
                                 <select name='degreerange' class='form-control'>
@@ -341,7 +398,7 @@ function gradebook_settings($gradebook_id) {
                                     'value'=> $langGradebookUpdate
                                 ),
                                 array(
-                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . ""
+                                    'href' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook->id) . ""
                                 )
                             ))."</div>
                         </div>
@@ -887,7 +944,7 @@ function display_gradebooks() {
     global $course_id, $tool_content, $gradebook_id, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
            $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor,
-           $langViewShow, $langViewHide;
+           $langViewShow, $langViewHide, $langStart, $langEnd;
 
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
@@ -901,14 +958,26 @@ function display_gradebooks() {
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langAvailableGradebooks</th>";
+        $tool_content .= "<tr class='list-header'>
+                            <th>$langAvailableGradebooks</th>
+                            <th>$langStart</th>
+                            <th>$langEnd</th>";
         if( $is_editor) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
         foreach ($result as $g) {
+            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->start_date)->format('d-m-Y H:i');
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $g->end_date)->format('d-m-Y H:i');
             $row_class = !$g->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a></td>";
+            $tool_content .= "
+                    <tr $row_class>
+                        <td>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($g->id) . "'>" . q($g->title) . "</a>
+                        </td>
+                        <td>$start_date</td>
+                        <td>$end_date</td>
+                        ";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(

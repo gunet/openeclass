@@ -170,7 +170,7 @@ $(function() {
 $display = TRUE;
 if (isset($_REQUEST['gradebook_id'])) {
     $gradebook_id = getDirectReference($_REQUEST['gradebook_id']);
-    $gradebook_title = get_gradebook_title($gradebook_id);
+    $gradebook = Database::get()->querySingle("SELECT * FROM gradebook WHERE id = ?d", $gradebook_id);
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langGradebook);
     $pageName = $langEditChange;
 }
@@ -190,26 +190,25 @@ if ($is_editor) {
     //add a new gradebook
     if (isset($_POST['newGradebook'])) {
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'degreerange'));
+        $v->rule('required', array('title', 'degreerange', 'start_date', 'end_date'));
         $v->rule('numeric', array('degreerange'));
+        $v->rule('date', array('start_date', 'end_date'));
+        if (!empty($_POST['end_date'])) {
+            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
+        }
         $v->labels(array(
             'title' => "$langTheField $langTitle",
+            'start_date' => "$langTheField $langStart",
+            'end_date' => "$langTheField $langEnd",
             'degreerange' => "$langTheField $langGradebookRange"
         ));
         if($v->validate()) {        
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $newTitle = $_POST['title'];
-            $gradebook_range = intval($_POST['degreerange']);
-            $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s", $course_id, $gradebook_range, $newTitle)->lastInsertID;
-            //create gradebook users (default the last six months)
-//            $limitDate = date('Y-m-d', strtotime(' -6 month'));
-//            Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-//                                    SELECT $gradebook_id, user_id FROM course_user
-//                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-//                                            $course_id, $limitDate);
-
-//            $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
-//                                                FROM gradebook_users WHERE gradebook_id=?d ", $gradebook_id)->count;
+            $gradebook_range = $_POST['degreerange'];        
+            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
+            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');
+            $gradebook_id = Database::get()->query("INSERT INTO gradebook SET course_id = ?d, `range` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $gradebook_range, $newTitle, $start_date, $end_date)->lastInsertID;
 
             Session::Messages($langCreateGradebookSuccess, 'alert-success');
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code");
@@ -318,7 +317,7 @@ if ($is_editor) {
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
     if (isset($_GET['editUsers']) or isset($_GET['gradeBooks'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langGradebookManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -327,7 +326,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['editSettings'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langConfig;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -336,7 +335,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['gradebookBook'])) {                
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langGradebookActiveUsers;
         $tool_content .= action_bar(array(
             array('title' => $langRefreshList,
@@ -350,7 +349,7 @@ if ($is_editor) {
                   'level' => 'primary-label')            
             ));
     } elseif (isset($_GET['modify'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -359,7 +358,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['ins'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -368,7 +367,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
@@ -385,7 +384,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id), "name" => $gradebook->title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(            
             array('title' => $langGradebookBook,
@@ -421,19 +420,27 @@ if ($is_editor) {
     $tool_content .= "</div></div>";
     
     // update gradebook settings
-    if (isset($_POST['submitGradebookSettings'])) {
+    if (isset($_POST['submitGradebookSettings'])) {        
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'degreerange'));
+        $v->rule('required', array('title', 'degreerange', 'start_date', 'end_date'));
         $v->rule('numeric', array('degreerange'));
+        $v->rule('date', array('start_date', 'end_date'));
+        if (!empty($_POST['end_date'])) {
+            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
+        }
         $v->labels(array(
             'title' => "$langTheField $langTitle",
+            'start_date' => "$langTheField $langStart",
+            'end_date' => "$langTheField $langEnd",
             'degreerange' => "$langTheField $langGradebookRange"
         ));
-        if($v->validate()) {          
+        if($v->validate()) {                  
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             $gradebook_range = $_POST['degreerange'];
             $gradebook_title = $_POST['title'];
-            Database::get()->querySingle("UPDATE gradebook SET `title` = ?s, `range` = ?d WHERE id = ?d ", $gradebook_title, $gradebook_range, $gradebook_id);
+            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
+            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');            
+            Database::get()->querySingle("UPDATE gradebook SET `title` = ?s, `range` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $gradebook_title, $gradebook_range, $start_date, $end_date, $gradebook_id);
             Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
         } else {
@@ -596,7 +603,7 @@ if (isset($display) and $display == TRUE) {
         if ($is_editor) {
             display_gradebook($gradebook_id);
         } else {
-            $pageName = $gradebook_title;
+            $pageName = $gradebook->title;
             student_view_gradebook($gradebook_id); // student view
         }
     } else { // display all gradebooks

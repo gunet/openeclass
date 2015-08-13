@@ -63,8 +63,8 @@ if (isset($_POST['submitExercise'])) {
         'exerciseTitle' => "$langTheField $langExerciseName",
         'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",
         'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed",
-        'exerciseEndDate' => "$langTheField $langExerciseEnd",
-        'exerciseStartDate' => "$langTheField $langExerciseStart",
+        'exerciseEndDate' => "$langTheField $langEnd",
+        'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
     if($v->validate()) {
@@ -335,7 +335,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>              
                  <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
+                     <label for='exerciseStartDate' class='col-sm-2 control-label'>$langStart:</label>
                      <div class='col-sm-10'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
@@ -347,7 +347,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>            
                  <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd:</label>
+                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langEnd:</label>
                      <div class='col-sm-10'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
@@ -613,7 +613,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langExerciseStart:</strong>
+                    <strong>$langStart:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $exerciseStartDate
@@ -621,7 +621,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langExerciseEnd:</strong>
+                    <strong>$langEnd:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $exerciseEndDate

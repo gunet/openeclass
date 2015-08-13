@@ -2735,6 +2735,13 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             UNIQUE KEY (user_request_id, auth_id),
             FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
             $charset_spec"); 
+        
+        if (!DBHelper::fieldExists('gradebook', 'start_date')) {
+            Database::get()->query("ALTER table `gradebook` ADD `start_date` DATETIME NOT NULL");
+        }
+        if (!DBHelper::fieldExists('gradebook', 'end_date')) {
+            Database::get()->query("ALTER table `gradebook` ADD `end_date` DATETIME NOT NULL");
+        }        
     }
 
  
