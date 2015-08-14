@@ -581,7 +581,7 @@ function display_all_users_grades($gradebook_id) {
                   <th><div align='left' width='100'>$langName $langSurname</div></th>
                   <th>$langRegistrationDateShort</th>
                   <th>$langGradebookGrade</th>
-                  <th class='text-center'><i class='cogs'></i></th>
+                  <th class='text-center'>".icon('fa-cogs')."</th>
                 </tr>
             </thead>
             <tbody>";
@@ -600,7 +600,7 @@ function display_all_users_grades($gradebook_id) {
                     $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID) . " (<small>" . $langGradebookGradeAlert . "</small>)";
                 }
                 if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
-                    $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
+//                    $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
                 }
             $tool_content .="</td><td class='option-btn-cell'>".
                     action_button(array(
@@ -638,7 +638,7 @@ function student_view_gradebook($gradebook_id) {
 
     global $tool_content, $uid,
            $langGradebookTotalGradeNoInput, $langGradebookTotalGrade,
-           $langTitle, $langGradebookActivityDate2,
+           $langTitle, $langGradebookActivityDate2, $langGradebookNoTitle,
            $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code, $langType,
             $langAssignment, $langExercise, $langGradebookActivityAct, $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity;
 
@@ -682,13 +682,14 @@ function student_view_gradebook($gradebook_id) {
     if ($result) {
         foreach ($result as $details) {
             //$content = standard_text_escape($details->description);
-            $tool_content .= "<tr><td><b>";
-            if (!empty($details->title)) {
-                $tool_content .= q($details->title);
-            }
-            $tool_content .= "</b>";
-            $tool_content .= "</td>"
-                    . "<td><div class='smaller'>" . nice_format($details->date, true, true) . "</div></td>";
+            $tool_content .= "
+                <tr>
+                    <td>
+                        <b>" .(!empty($details->title) ? q($details->title) : $langGradebookNoTitle) . "</b>
+                    </td>
+                    <td>
+                        <div class='smaller'>" . nice_format($details->date, true, true) . "</div>
+                    </td>";
                     
             if ($details->module_auto_id) {
                 if ($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
@@ -1180,13 +1181,14 @@ function register_user_grades($gradebook_id, $actID) {
     global $tool_content, $course_id, $course_code,
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
             $langGradebookGrade, $langGradebookUpdate, $langGradebookNoTitle,
-            $langAttendanceBooking, $langGradebookBooking, $langGradebookOutRange;
+            $langAttendanceBooking, $langGradebookBooking, $langGradebookTotalGrade,
+            $langGradebookActivityWeight;
 
     //display form and list
     $gradebook_range = get_gradebook_range($gradebook_id);
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $act_type = $result->activity_type; // type of activity
-    $tool_content .= "<div class='alert alert-info'>" .(!empty($details->title) ? q($result->title) : $langGradebookNoTitle) . "</div>";
+    $tool_content .= "<div class='alert alert-info'>" .(!empty($details->title) ? q($result->title) : $langGradebookNoTitle) . " <br><small>$langGradebookActivityWeight: $result->weight%</small></div>";
     //display users
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname,
                                                     user.givenname as name, user.am as am, DATE(course_user.reg_date) AS reg_date
@@ -1198,16 +1200,16 @@ function register_user_grades($gradebook_id, $actID) {
     if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "'>
-        <div class='form-group'>
+        <div class='row'>
         <div class='col-xs-12'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr class='list-header'>
-                  <th width='1'>$langID</th>
-                  <th width='350'>$langName $langSurname</th>
-                  <th class='text-center' width='80'>$langRegistrationDateShort</th>
-                  <th class='text-center'>$langGradebookGrade</th>
-                  <th class='text-center'>$langAttendanceBooking</th>
+                    <th width='2'>$langID</th>
+                    <th>$langName $langSurname</th>
+                    <th class='text-center' width='80'>$langRegistrationDateShort</th>
+                    <th width='50' class='text-center'>$langGradebookGrade</th>
+                    <th width='50'>$langGradebookTotalGrade</th>
                 </tr>
             </thead>
             <tbody>";
@@ -1222,27 +1224,22 @@ function register_user_grades($gradebook_id, $actID) {
             $q = Database::get()->querySingle("SELECT grade FROM gradebook_book
                                                             WHERE gradebook_activity_id = ?d
                                                         AND uid = ?d", $actID, $resultUser->userID);
-            if ($q) {
-                $user_grade = $q->grade;
-            } else {
-                $user_grade = 0;
-            }
-            $tool_content .= "<tr><td>$cnt</td>
+            $user_grade = $q ? $q->grade : '-';
+            $user_ind_id = getIndirectReference($resultUser->userID);
+            $grade = Session::has($user_ind_id) ? Session::get($user_ind_id) : ($q ? $q->grade : '');
+            $total_grade = is_numeric($grade) ? $grade * $result->weight / 100 : ' - ';
+            $tool_content .= "
+            <tr>
+                <td>$cnt</td>
                 <td>" . display_user($resultUser->userID). " $am_message</td>
-                <td>" . nice_format($resultUser->reg_date) . "</td>";
-            $tool_content .= "<td class='text-center'>$user_grade";
-            if ($user_grade > $gradebook_range) {
-                $tool_content .= "<span class='help-block'><small>$langGradebookOutRange</small></span>";
-            }
-            $tool_content .= "</td>";
-            $tool_content .= "<td class='text-center'><input type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]'";
-            if(isset($q->grade)) {
-                $tool_content .= " value = '".q($q->grade)."'";
-            } else{
-                $tool_content .= " value = ''";
-            }
-            $tool_content .= "><input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'></td>";
-            $tool_content .= "</tr>";
+                <td>" . nice_format($resultUser->reg_date) . "</td>
+                <td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
+                    <input class='form-control' type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]' value = '".$grade."'>
+                    <input type='hidden' value='" . getIndirectReference($actID) . "' name='actID'>
+                    <span class='help-block'>".Session::getError(getIndirectReference($resultUser->userID))."</span>
+                </td>
+                <td><input class='form-control' type='text' value='$total_grade' disabled></td>
+            </tr>";
         }
         $tool_content .= "</tbody></table></div></div>";
         $tool_content .= "<div class='form-group'>";
@@ -1507,21 +1504,43 @@ function add_gradebook_other_activity($gradebook_id) {
  */
 function insert_grades($gradebook_id, $actID) {
 
-    global $tool_content, $langGradebookEdit;
+    global $tool_content, $langGradebookEdit, $gradebook, $langTheField, 
+           $course_code, $langFormErrors, $m;
 
+    $errors = [];  
+    $v = new Valitron\Validator($_POST['usersgrade']);
+    $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
+        if(is_numeric($value) || empty($value)) return true;
+    });    
     foreach ($_POST['usersgrade'] as $userID => $userInp) {
-        if ($userInp == '') {
-            $userInp = 0;
-        }
-        // //check if there is record for the user for this activity
-        $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM gradebook_book
-                                    WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
-        if ($checkForBook->count) { // update
-            Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d", $userInp, $checkForBook->id);
-        } else { // insert
-            Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", getDirectReference($userID), $actID, $userInp, '');
-        }
+        $v->rule('emptyOrNumeric', array("$userID"));
+        $v->rule('min', array("$userID"), 0);
+        $v->rule('max', array("$userID"), $gradebook->range);
+        $v->labels(array(
+            "$userID" => "$langTheField $m[grade]"
+        ));
     }
+    if($v->validate()) {       
+        foreach ($_POST['usersgrade'] as $userID => $userInp) {
+            if ($userInp == '') {
+                Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
+            } else {
+                // //check if there is record for the user for this activity
+                $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM gradebook_book
+                                            WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
+                if ($checkForBook->count) { // update
+                    Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d", $userInp, $checkForBook->id);
+                } else { // insert
+                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", getDirectReference($userID), $actID, $userInp, '');
+                }
+            }
+        }
+    } else {     
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=".getIndirectReference($gradebook->id)."&ins=".getIndirectReference($actID));        
+    }    
+
+
     $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
     $tool_content .= $message . "<br/>";
 }
