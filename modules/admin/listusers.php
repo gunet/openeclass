@@ -58,9 +58,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // 'LIKE' argument prefix/postfix - default is substring search
     $l1 = $l2 = '%';
+    $cs = 'COLLATE utf8_general_ci';
     if (isset($_GET['search_type'])) {
         if ($_GET['search_type'] == 'exact') {
-            $l1 = $l2 = '';
+            $l1 = $l2 = $cs = '';
         } elseif ($_GET['search_type'] == 'begin') {
             $l1 = '';
         }
@@ -83,19 +84,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     // surname search
     if (!empty($lname)) {
-        $criteria[] = 'surname LIKE ?s';
+        $criteria[] = 'surname LIKE ?s ' . $cs;
         $terms[] = $l1 . $lname . $l2;
         add_param('lname');
     }
     // first name search
     if (!empty($fname)) {
-        $criteria[] = 'givenname LIKE ?s';
+        $criteria[] = 'givenname LIKE ?s '. $cs;
         $terms[] = $l1 . $fname . $l2;
         add_param('fname');
     }
     // username search
     if (!empty($uname)) {
-        $criteria[] = 'username LIKE ?s';
+        $criteria[] = 'username LIKE ?s ' . $cs;
         $terms[] = $l1 . $uname . $l2;
         add_param('uname');
     }
@@ -250,8 +251,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = $offset;
         $terms[] = $limit;
     }
-    $sql = Database::get()->queryArray($qry, $terms);
-
+    $sql = Database::get()->queryArray($qry, $terms);    
     $all_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base", $terms_base)->total;
     if ($qry_criteria or $c) {
         $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base
