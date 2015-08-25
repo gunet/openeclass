@@ -180,8 +180,8 @@ if ($userdata) {
                 $tool_content .= "</div>
                                   <div class='profile-pers-info'><span class='tag'>$langStatus :</span>";
                 if (!empty($userdata->status)) { // Status
-                    $status = (q($userdata->status)==1)?$langTeacher:$langStudent;
-                    $tool_content .= " <span class='tag-value'>$status</span>";
+                    $message_status = (q($userdata->status)==1)?$langTeacher:$langStudent;
+                    $tool_content .= " <span class='tag-value'>$message_status</span>";
 
                 } else {
                     $tool_content .= " <span class='tag-value not_visible'> - $langProfileNotAvailable - </span>";
@@ -234,12 +234,18 @@ $tool_content .= "</div>
 }
 draw($tool_content, 1);
 
-function allow_access($level) {
-    global $uid, $status;
+/**
+ * check access to user profiles
+ * @global type $status
+ * @param type $level
+ * @return boolean
+ */
 
-    if ($level == ACCESS_USERS and $uid > 0) {
+function allow_access($level) {
+        
+    if ($level == ACCESS_USERS) {        
         return true;
-    } elseif ($level == ACCESS_PROFS and $status = 1) {
+    } elseif ($level == ACCESS_PROFS and $_SESSION['status'] == USER_TEACHER) {        
         return true;
     } else {
         return false;
