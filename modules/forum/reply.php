@@ -141,7 +141,7 @@ if (isset($_POST['submit'])) {
     $plain_forum_message = q(html2text($forum_message));
     $body_topic_notify = "<br>$langBodyTopicNotify $langInForum '" . q($topic_title) . "' $langOfForum '" . q($forum_name) . "' 
                                 $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c'  <br />
-                                <br />" . q($forum_message) . "<br /><br />$gunet<br />
+                                <br />" . $forum_message . "<br /><br />$gunet<br />
                                 <a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
     $plain_body_topic_notify = "$langBodyTopicNotify $langInForum '" . q($topic_title) . "' $langOfForum " . q($forum_name) . "' $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
     $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
