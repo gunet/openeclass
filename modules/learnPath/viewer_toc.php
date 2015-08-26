@@ -42,6 +42,7 @@ $require_current_course = TRUE;
 require_once '../../include/init.php';
 require_once 'include/lib/learnPathLib.inc.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/gradebook/functions.php';
 // The following is added for statistics purposes
 require_once 'include/action.php';
 $action = new action();
@@ -320,7 +321,9 @@ echo "<!DOCTYPE HTML>
                     <div class='pull-right progressbar-plr'>";
 
                          if ($uid) {
-                            $lpProgress = get_learnPath_progress((int) $_SESSION['path_id'], $uid);
+                            $path_id = (int) $_SESSION['path_id'];
+                            $lpProgress = get_learnPath_progress($path_id, $uid);
+                            update_gradebook_book($uid, $path_id, $lpProgress, GRADEBOOK_ACTIVITY_LP);
                             echo disp_progress_bar($lpProgress, 1);
                         }
 echo "</div>

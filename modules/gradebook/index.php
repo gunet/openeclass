@@ -60,19 +60,12 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
 //Datepicker
 load_js('tools.js');
 load_js('jquery');
-load_js('bootstrap-datetimepicker');
 load_js('datatables');
 load_js('datatables_filtering_delay');
 
 @$head_content .= "
 <script type='text/javascript'>
-$(function() {
-        $('#startdatepicker, #enddatepicker').datetimepicker({    
-            format: 'dd-mm-yyyy hh:ii', 
-            pickerPosition: 'bottom-left', 
-            language: '".$language."',
-            autoclose: true 
-        });    
+$(function() {   
     var oTable = $('#users_table{$course_id}').DataTable ({
         'aLengthMenu': [
                    [10, 15, 20 , -1],
@@ -599,9 +592,9 @@ if ($is_editor) {
 
 if (isset($display) and $display == TRUE) {
     // display gradebook
-    if (isset($gradebook_id)) {
+    if (isset($gradebook)) {
         if ($is_editor) {
-            display_gradebook($gradebook_id);
+            display_gradebook($gradebook);
         } else {
             $pageName = $gradebook->title;
             student_view_gradebook($gradebook_id); // student view

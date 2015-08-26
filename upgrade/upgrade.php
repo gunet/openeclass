@@ -2741,7 +2741,11 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::fieldExists('gradebook', 'end_date')) {
             Database::get()->query("ALTER table `gradebook` ADD `end_date` DATETIME NOT NULL");
-        }        
+        }
+        // Add grading_scale_id field to assignments
+        if (!DBHelper::fieldExists('gradebook_book', 'max_grade')) {
+            Database::get()->query("ALTER TABLE `gradebook_book` ADD `max_grade` FLOAT NOT NULL DEFAULT '0' AFTER `grade`");
+        }           
     }
 
  
