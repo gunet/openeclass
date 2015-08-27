@@ -1412,7 +1412,9 @@ function add_gradebook_other_activity($gradebook_id) {
            $langAdd, $langType, $langGradebookExams, $langGradebookLabs,
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
            $langGradebookRemainingGrade, $langSave;
-
+    
+    $weight_error = Session::getError('weight'); 
+    $date_error = Session::getError('date');  
     $tool_content .= "
     <div class='row'>
         <div class='col-sm-12'>
@@ -1426,10 +1428,10 @@ function add_gradebook_other_activity($gradebook_id) {
                             if ($modifyActivity) {
                                 $titleToModify = $modifyActivity->title;
                                 $contentToModify = $modifyActivity->description;
-                                $date = $modifyActivity->date;
+                                $date = Session::has('date') ? Session::get('date') : $modifyActivity->date;
                                 $module_auto_id = $modifyActivity->module_auto_id;
                                 $auto = $modifyActivity->auto;
-                                $weight = $modifyActivity->weight;
+                                $weight = Session::has('weight') ? Session::get('title') : $modifyActivity->weight;
                                 $activity_type = $modifyActivity->activity_type;
                                 $visible = $modifyActivity->visible;
                             } else {
@@ -1464,16 +1466,18 @@ function add_gradebook_other_activity($gradebook_id) {
                                 <input type='text' class='form-control' name='actTitle' value='".q($titleToModify)."'/>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group".($date_error ? " has-error" : "")."'>
                             <label for='date' class='col-sm-2 control-label'>$langGradebookActivityDate2:</label>
                             <div class='col-sm-10'>
                                 <input type='text' class='form-control' name='date' value='" . datetime_remove_seconds($date) . "'/>
+                                <span class='help-block'>$date_error</span>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group".($weight_error ? " has-error" : "")."'>
                             <label for='weight' class='col-sm-2 control-label'>$langGradebookActivityWeight:</label>
                             <div class='col-sm-10'>
-                                <input type='text' class='form-control' name='weight' value='$weight' size='5'><span class='help-block'>($langGradebookRemainingGrade: " . weightleft($gradebook_id, '') . "%)</span>
+                                <input type='text' class='form-control' name='weight' value='$weight' size='5'>
+                                <span class='help-block'>". ($weight_error ? $weight_error :  "($langGradebookRemainingGrade: " . weightleft($gradebook_id, '') . "%)")."</span>
                             </div>
                         </div>
                         <div class='form-group'>

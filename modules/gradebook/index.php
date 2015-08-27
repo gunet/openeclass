@@ -459,35 +459,25 @@ if ($is_editor) {
 
     //UPDATE/INSERT DB: add or edit activity to gradebook module (edit concerns and course activities like lps)
     elseif(isset($_POST['submitGradebookActivity'])) {
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();        
-        if (isset($_POST['actTitle'])) {
-            $actTitle = $_POST['actTitle'];
-        } else {
-            $actTitle = "";
-        }        
-        $actDesc = purify($_POST['actDesc']);
-        if (isset($_POST['auto'])) {
-            $auto = $_POST['auto'];
-        } else {
-            $auto = "";
-        }
-        $weight = $_POST['weight'];
-        $type = $_POST['activity_type'];
-        $actDate = $_POST['date'];
-        if (empty($_POST['date'])) {
-            $actDate = '0000-00-00 00:00:00';
-        } else {
-            $actDate = $_POST['date'];    
-        }        
-        $visible = isset($_POST['visible']) ? 1 : 0;        
-        if (($_POST['id'] && $weight>(weightleft($gradebook_id, getDirectReference($_POST['id']))) && $weight != 100) 
-                           || (!$_POST['id'] && $weight>(weightleft($gradebook_id, getDirectReference($_POST['id']))))) {
-            Session::Messages("$langGradebookWeightAlert", "alert-warning");
-            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
-        } elseif ((empty($weight) or ($weight == 0))) {
-            Session::Messages("$langGradebookGradeAlert2", "alert-warning");
-            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
-        } else {
+        $v = new Valitron\Validator($_POST);
+        $v->rule('numeric', array('weight'));
+        $v->rule('min', array('weight'), 0);
+        $v->rule('max', array('weight'), weightleft($gradebook_id, getDirectReference($_POST['id'])));        
+        $v->rule('date', array('date'));
+        $v->labels(array(
+            'weight' => "$langTheField $langGradebookActivityWeight",
+            'date' => "$langTheField $langGradebookActivityDate2"
+        ));
+        if($v->validate()) {
+            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+            $actTitle = isset($_POST['actTitle']) ? $_POST['actTitle'] : '';
+            $actDesc = purify($_POST['actDesc']);
+            $auto = isset($_POST['auto']) ? 1 : 0;
+            $weight = $_POST['weight'];
+            $type = $_POST['activity_type'];
+            $actDate = !empty($_POST['date']) ? $_POST['date'] : NULL;
+            $visible = isset($_POST['visible']) ? 1 : 0;
+
             if ($_POST['id']) {               
                 //update
                 $id = getDirectReference($_POST['id']);
@@ -504,8 +494,11 @@ if ($is_editor) {
                 Session::Messages("$langGradebookSucInsert","alert-success");
                 redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=" . getIndirectReference($gradebook_id));
             }
+        } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $new_or_edit = $_POST['id'] ?  "&modify=".$_POST['id'] : "&addActivity=1";
+            redirect_to_home_page("modules/gradebook/index.php?course=$course_code&gradebook_id=".getIndirectReference($gradebook_id).$new_or_edit);
         }
-        $display = FALSE;
     }
 
     //delete gradebook activity
