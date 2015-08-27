@@ -1411,7 +1411,20 @@ function add_gradebook_other_activity($gradebook_id) {
            $langGradeVisible, $langComments, $langGradebookInsAut, $langAdd,
            $langAdd, $langType, $langGradebookExams, $langGradebookLabs,
            $langGradebookOral, $langGradebookProgress, $langGradebookOtherType,
-           $langGradebookRemainingGrade, $langSave;
+           $langGradebookRemainingGrade, $langSave, $head_content, $language;
+    
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "
+    <script type='text/javascript'>
+    $(function() {
+            $('#date').datetimepicker({    
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true 
+            });
+    });
+    </script>";  
     
     $weight_error = Session::getError('weight'); 
     $date_error = Session::getError('date');  
@@ -1469,7 +1482,7 @@ function add_gradebook_other_activity($gradebook_id) {
                         <div class='form-group".($date_error ? " has-error" : "")."'>
                             <label for='date' class='col-sm-2 control-label'>$langGradebookActivityDate2:</label>
                             <div class='col-sm-10'>
-                                <input type='text' class='form-control' name='date' value='" . datetime_remove_seconds($date) . "'/>
+                                <input type='text' class='form-control' name='date' id='date' value='" . datetime_remove_seconds($date) . "'/>
                                 <span class='help-block'>$date_error</span>
                             </div>
                         </div>
