@@ -1805,7 +1805,7 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
 
     global $langUsers, $langMeanValue, $langMinValue, $langMaxValue;
 
-    $users = Database::get()->querySingle("SELECT SUM(grade) as count, COUNT(gradebook_users.uid) AS users
+    $users = Database::get()->querySingle("SELECT SUM(grade/max_grade) as count, COUNT(gradebook_users.uid) AS users
                                         FROM gradebook_book, gradebook_users
                                         WHERE gradebook_users.uid=gradebook_book.uid
                                     AND gradebook_activity_id = ?d
@@ -1815,26 +1815,19 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
     //this is different than global participants number (it is limited to those that have taken degree)
     $participantsNumber = $users->users;
     //die($users->users.'');
-    $q = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade ASC limit 1 ", $activity->id, $gradebook->id);
+    $q = Database::get()->querySingle("SELECT grade, max_grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade ASC limit 1 ", $activity->id, $gradebook->id);
     if ($q) {
-        $userGradebookTotalActivityMin = $q->grade;
+        $userGradebookTotalActivityMin = $q->grade / $q->max_grade * $gradebook->range;
     }
-    $q = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade DESC limit 1 ", $activity->id, $gradebook->id);
+    $q = Database::get()->querySingle("SELECT grade, max_grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade DESC limit 1 ", $activity->id, $gradebook->id);
     if ($q) {
-        $userGradebookTotalActivityMax = $q->grade;
+        $userGradebookTotalActivityMax = $q->grade / $q->max_grade * $gradebook->range;
     }
-    if ($activity->activity_type) {
-        $total_score = $gradebook->range;
-    } else {
-        if ($activity->module_auto_type == GRADEBOOK_ACTIVITY_LP) {
-            $total_score = 100;       
-        } elseif ($activity->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
-            $total_score = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $activity->module_auto_id)->max_grade;
-        }      
-    }
-//check if participantsNumber is zero
+    $total_score = $gradebook->range;
+
+    //check if participantsNumber is zero
     if ($participantsNumber) {
-        $mean = round($sumGrade/$participantsNumber, 2);
+        $mean = round($sumGrade * $gradebook->range / $participantsNumber, 2);
         return "<i>$langUsers:</i> $participantsNumber<br>"
              . "$langMinValue: $userGradebookTotalActivityMin/$total_score<br> "
              . "$langMaxValue: $userGradebookTotalActivityMax/$total_score<br> "
