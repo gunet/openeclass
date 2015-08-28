@@ -1352,9 +1352,12 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                                         SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s,
                                         weight = ?d, module_auto_id = ?d, auto = ?d, module_auto_type = ?d, visible = 1",
                                     $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
-            $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
-            foreach ($sql as $u) {
-                update_gradebook_book($u->uid, $id, 0, GRADEBOOK_ACTIVITY_EXERCISE);
+            $users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            foreach ($users as $user) {
+                $exerciseUserRecord = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record WHERE eid = ?d AND uid = $user->uid ORDER BY total_score/total_weighting limit 1", $id);
+                if ($exerciseUserRecord) {
+                    update_gradebook_book($user->uid, $id, $exerciseUserRecord->total_score, $exerciseUserRecord->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE, $gradebook_id);
+                }
             }
         }
     }
@@ -1622,47 +1625,90 @@ function update_grades($gradebook_id, $actID) {
  * @param type $grade
  * @param type $activity
  */
-function update_gradebook_book($uid, $id, $grade, $activity)
+function update_gradebook_book($uid, $id, $grade, $max_grade, $activity, $gradebook_id = 0)
 {
     global $course_id;
     
-    // Selects all instances of the specific gradebook activity that that belongs to one or more legitimate gradebooks 
-    // (within the specified date range) and auto flag is enabled
-    $act_id = Database::get()->queryArray("SELECT id, gradebook_id FROM gradebook_activities WHERE module_auto_type = ?d
-                            AND module_auto_id = ?d
-                            AND auto = 1", $activity, $id);
-    
-    if ($act_id) {
-        foreach ($act_id as $q) {
-            //For each activity check if specified user exists in activity's gradebook
-            $u = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d
-                                    AND gradebook_id = ?d", $uid, $q->gradebook_id);
-            if($u) {
-                if ($activity == GRADEBOOK_ACTIVITY_EXERCISE) { // exercises
-                    $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record
-                                                            WHERE uid = ?d AND eid = ?d", $uid, $id);
-                    $score = $sql->total_score;
-                    $max_grade = $sql->total_weighting;
-                } elseif ($activity == GRADEBOOK_ACTIVITY_ASSIGNMENT) { // assignments
-                    $score = $grade;
-                    $sql2 = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $id);
-                    $max_grade = $sql2->max_grade;
-                } elseif ($activity == GRADEBOOK_ACTIVITY_LP) {
-                    $score = $grade;
-                    $max_grade = 100;
+    $params = [$activity, $id];
+    $sql = "SELECT gradebook_activities.id, gradebook_activities.gradebook_id 
+                            FROM gradebook_activities, gradebook                          
+                            WHERE gradebook.start_date < NOW()
+                            AND gradebook.end_date > NOW()
+                            AND gradebook_activities.module_auto_type = ?d
+                            AND gradebook_activities.module_auto_id = ?d
+                            AND gradebook_activities.auto = 1 
+                            AND gradebook_activities.gradebook_id = gradebook.id                            
+                            AND gradebook_activities.gradebook_id ";
+    if ($gradebook_id) {
+        $sql .= "= ?d";
+        array_push($params, $gradebook_id);
+    } else {
+        $sql .= "IN (
+                    SELECT gradebook_id 
+                    FROM gradebook_users
+                    WHERE uid = ?d)";
+        array_push($params, $uid);
+    }
+    // This query if there is NO $gradebook_id gets the gradebook activities that:
+    // 1) belong to gradebooks withing the date constraints  
+    // 2) include a specifc module and has grade auto-submission enabled 
+    // 3) include a specifc user
+    $gradebookActivities = Database::get()->queryArray($sql, $params); 
+    if ($gradebookActivities) {
+        foreach($gradebookActivities as $gradebookActivity){
+            $gradebook_book = Database::get()->querySingle("SELECT grade, max_grade FROM gradebook_book WHERE gradebook_activity_id = $gradebookActivity->id AND uid = ?d", $uid);
+            if ($gradebook_book) {
+                if ($grade / $max_grade > $gradebook_book->grade / $gradebook_book->max_grade) {
+                    Database::get()->query("UPDATE gradebook_book "
+                            . "SET grade = ?f, max_grade = ?f "
+                            . "WHERE gradebook_activity_id = $gradebookActivity->id "
+                            . "AND uid = ?d", 
+                            $grade, $max_grade, $uid);
                 }
-
-                $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
-                
-                $q2 = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $q->id AND uid = ?d", $uid);
-                if ($q2) { // update grade if exists
-                    Database::get()->query("UPDATE gradebook_book SET grade = ?f, max_grade = ?f WHERE gradebook_activity_id = $q->id AND uid = ?d", $score, $max_grade, $uid);
-                } else { // insert grade
-                    Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?f, max_grade = ?f, comments = ''", $uid, $score, $max_grade);
-                }
+            } else {
+                Database::get()->query("INSERT INTO gradebook_book "
+                        . "SET gradebook_activity_id = $gradebookActivity->id, uid = ?d, grade = ?f, max_grade = ?f, comments = ''", 
+                        $uid, $grade, $max_grade);
             }
         }
     }
+    
+    
+    
+//    if ($act_id) {
+//        foreach ($act_id as $q) {
+//            //For each activity check if specified user exists in activity's gradebook
+//            $u = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d
+//                                    AND gradebook_id = ?d", $uid, $q->gradebook_id);
+//            
+//            if($u) {
+//                
+//                if ($activity == GRADEBOOK_ACTIVITY_EXERCISE) { // exercises
+//                    $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record
+//                                                            WHERE uid = ?d AND eid = ?d", $uid, $id);
+//                    var_dump($sql);die();
+//                    $score = $sql->total_score;
+//                    $max_grade = $sql->total_weighting;
+//                } elseif ($activity == GRADEBOOK_ACTIVITY_ASSIGNMENT) { // assignments
+//                    $score = $grade;
+//                    $sql2 = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $id);
+//                    $max_grade = $sql2->max_grade;
+//                } elseif ($activity == GRADEBOOK_ACTIVITY_LP) {
+//                    $score = $grade;
+//                    $max_grade = 100;
+//                }
+//
+//                $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
+//                
+//                $q2 = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $q->id AND uid = ?d", $uid);
+//                if ($q2) { // update grade if exists
+//                    Database::get()->query("UPDATE gradebook_book SET grade = ?f, max_grade = ?f WHERE gradebook_activity_id = $q->id AND uid = ?d", $score, $max_grade, $uid);
+//                } else { // insert grade
+//                    Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?f, max_grade = ?f, comments = ''", $uid, $score, $max_grade);
+//                }
+//            }
+//        }
+//    }
     return;
 }
 

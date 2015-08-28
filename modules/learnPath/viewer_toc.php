@@ -323,7 +323,7 @@ echo "<!DOCTYPE HTML>
                          if ($uid) {
                             $path_id = (int) $_SESSION['path_id'];
                             $lpProgress = get_learnPath_progress($path_id, $uid);
-                            update_gradebook_book($uid, $path_id, $lpProgress, GRADEBOOK_ACTIVITY_LP);
+                            update_gradebook_book($uid, $path_id, $lpProgress, 100, GRADEBOOK_ACTIVITY_LP);
                             echo disp_progress_bar($lpProgress, 1);
                         }
 echo "</div>

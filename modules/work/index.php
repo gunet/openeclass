@@ -876,7 +876,7 @@ function submit_work($id, $on_behalf_of = null) {
             // update attendance book as well
             update_attendance_book($quserid, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             //update gradebook if needed
-            update_gradebook_book($quserid, $id, $grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+            update_gradebook_book($quserid, $id, $grade, $row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
             if ($on_behalf_of and isset($_POST['email'])) {
                 $email_grade = $_POST['grade'];
                 $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
@@ -2865,7 +2865,7 @@ function submit_grade_comments($args) {
                     'comments' => $comment));
             //update gradebook if needed
             $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-            update_gradebook_book($quserid, $id, $grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+            update_gradebook_book($quserid, $id, $grade, $max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
         }
         if (isset($args['email'])) {
             grade_email_notify($id, $sid, $grade, $comment);
@@ -2921,7 +2921,7 @@ function submit_grades($grades_id, $grades, $email = false) {
 
                     //update gradebook if needed
                     $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                    update_gradebook_book($quserid, $assign_id, $grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    update_gradebook_book($quserid, $assign_id, $grade, $max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
 
                     if ($email) {
                         grade_email_notify($grades_id, $sid, $grade, '');
