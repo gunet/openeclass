@@ -56,6 +56,7 @@ function getUserLessonInfo($uid) {
                              course.title title,
                              course.prof_names professor,
                              course.lang,
+                             course.visible,
                              course_user.status status	                        
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
@@ -69,6 +70,7 @@ function getUserLessonInfo($uid) {
                              course.title title,
                              course.prof_names professor,
                              course.lang,
+                             course.visible,
                              course_user.status status                                
                        FROM course, course_user, user
                        WHERE course.id = course_user.course_id AND
@@ -86,7 +88,11 @@ function getUserLessonInfo($uid) {
         $lesson_content .= "<thead class='sr-only'><tr><th>$langCourse</th><th>$langActions</th></tr></thead>";
         foreach ($myCourses as $data) {
             array_push($lesson_ids, $data->course_id);
-            $lesson_content .= "<tr>
+            $visclass = '';
+            if ($data->visible == COURSE_INACTIVE) {
+                $visclass = "not_visible";
+            }
+            $lesson_content .= "<tr class='$visclass'>
 			  <td class='text-left'>
 			  <b><a href='${urlServer}courses/$data->code/'>" . q(ellipsize($data->title, 64)) . "</a></b><span class='smaller'>&nbsp;(" . q($data->public_code) . ")</span>
 			  <div class='smaller'>" . q($data->professor) . "</div></td>";
