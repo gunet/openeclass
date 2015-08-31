@@ -25,7 +25,7 @@
  */
 require_once '../include/phpass/PasswordHash.php';
 require_once '../modules/db/database.php';
-require_once '../modules/admin/debug.php';
+require_once '../modules/db/foreignkeys.php';
 
 if (!defined('ECLASS_VERSION')) {
     exit;

@@ -90,12 +90,27 @@ abstract class DBHelper {
     }
 
     /**
-     * Find the primary key of a table.
+     * Find all the primary keys of a table.
      * @param string $table The table name
      * @return string The name of the primary key field
      */
-    public static function primaryKeyOf($table) {
-        return DBHelper::impl()->primaryKeyOfImpl($table);
+    public static function primaryKeysOf($tableName) {
+        return DBHelper::impl()->primaryKeysOfImpl($tableName);
+    }
+
+    /**
+     * Find the primary key of a table. If more than one key exist, throw an exception.
+     * @param string $table The table name
+     * @return string The name of the primary key field
+     */
+    public static function primaryKeyOf($tableName) {
+        $keys = DBHelper::primaryKeysOf($tableName);
+        if (!$keys || count($keys) != 1) {
+            $msg = "Exactly one primary key for table '$tableName' was expected; " . count($keys) . " found.";
+            Debug::message($msg, Debug::CRITICAL);
+            throw new Exception($msg);
+        }
+        return $keys[0];
     }
 
     public static function isColumnNullable($table, $column) {
@@ -152,7 +167,7 @@ abstract class DBHelper {
 
     abstract protected function writeLockTablesImpl($function, $tables);
 
-    abstract protected function primaryKeyOfImpl($table);
+    abstract protected function primaryKeysOfImpl($table);
 
     abstract protected function isColumnNullableImpl($table, $column);
 
@@ -226,9 +241,13 @@ class _DBHelper_MYSQL extends DBHelper {
         return $result ? strcmp($result->IS_NULLABLE, 'YES') == 0 : false;
     }
 
-    public function primaryKeyOfImpl($tableName) {
-        $result = Database::get()->querySingle("show keys from `" . $tableName . "` where `Key_name` = 'PRIMARY'");
-        return $result ? $result->Column_name : null;
+    public function primaryKeysOfImpl($tableName) {
+        $tableKeys = Database::get()->queryArray("show keys from `" . $tableName . "` where `Key_name` = 'PRIMARY'");
+        $keys = array();
+        foreach ($tableKeys as $key) {
+            $keys[] = $key->Column_name;
+        }
+        return $keys;
     }
 
     private function getForeignKeyName($detailTableName, $detailFieldName, $masterTableName) {

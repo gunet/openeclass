@@ -26,6 +26,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
 require_once 'modules/db/recycle.php';
+require_once 'modules/db/foreignkeys.php';
 require_once 'upgradeHelper.php';
 
 stop_output_buffering();

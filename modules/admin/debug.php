@@ -48,11 +48,12 @@ class Debug {
         if (is_null($level))
             $level = Debug::$default_level;
         if ($level >= Debug::$level) {
-            $full_message = "<p>";
-            if (!is_null($backtrace_file)) {
-                $full_message .= "In file <b>" . $backtrace_file . "</b> on line <b>" . $backtrace_line . "</b> : ";
+            if (is_null($backtrace_file)) {
+                $backtrace_entry = debug_backtrace();
+                $backtrace_file = $backtrace_entry[1]['file'];
+                $backtrace_line = $backtrace_entry[1]['line'];
             }
-            $full_message .="<i>$message</i></p>";
+            $full_message = "<p>In file <b>" . $backtrace_file . "</b> on line <b>" . $backtrace_line . "</b> : " . "<i>$message</i></p>";
             if (is_null(Debug::$output))
                 echo $full_message;
             else {
