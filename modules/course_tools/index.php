@@ -38,19 +38,15 @@ $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
 if (isset($_GET['action'])) {
     $action = intval($_GET['action']);
 }
-
 if (isset($_REQUEST['toolStatus'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (isset($_POST['toolStatActive'])) {
         $tool_stat_active = $_POST['toolStatActive'];
-    }
-    if (isset($tool_stat_active)) {
         $loopCount = count($tool_stat_active);
     } else {
         $loopCount = 0;
     }
-    $i = 0;
-    $publicTools = array();
+    $i = 0;    
     $tool_id = null;
     while ($i < $loopCount) {
         if (!isset($tool_id)) {
@@ -59,7 +55,7 @@ if (isset($_REQUEST['toolStatus'])) {
             $tool_id .= " OR (`module_id` = " . intval(getDirectReference($tool_stat_active[$i])) . ")";
         }
         $i++;
-    }
+    }    
     //reset all tools
     Database::get()->query("UPDATE course_module SET visible = 0
                          WHERE course_id = ?d", $course_id);
