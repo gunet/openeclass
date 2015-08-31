@@ -2686,7 +2686,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 ADD FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE');
         }
 
-        // Unique and foreign keys for user_department table
+        // Unique and foreign keys for course_department table
         if (DBHelper::indexExists('course_department', 'cdep_index')) {
             Database::get()->query('DROP INDEX `cdep_index` ON course_department');
         }
