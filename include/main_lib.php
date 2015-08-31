@@ -82,21 +82,21 @@ define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
-define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_ATTENDANCE', 30);
+define('MODULE_ID_GRADEBOOK', 32);
+define('MODULE_ID_BBB', 34);
 define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
-define('MODULE_ID_BBB', 34);
-define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
+define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 
 // user modules
 define('MODULE_ID_SETTINGS', 31);
 define('MODULE_ID_NOTES', 35);
 define('MODULE_ID_PERSONALCALENDAR',36);
-define('MODULE_ID_ADMINCALENDAR',37);
+define('MODULE_ID_ADMINCALENDAR', 43);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
