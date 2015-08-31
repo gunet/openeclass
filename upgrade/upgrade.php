@@ -2744,7 +2744,21 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::fieldExists('gradebook_book', 'max_grade')) {
             Database::get()->query("ALTER TABLE `gradebook_book` ADD `max_grade` FLOAT NOT NULL DEFAULT '0' AFTER `grade`");
-        }           
+        }
+        // Cancelled exercises total weighting fix
+        $exercises = Database::get()->queryArray("SELECT exercise.id AS id, exercise.course_id AS course_id, exercise_user_record.eurid AS eurid "
+                . "FROM exercise_user_record, exercise "
+                . "WHERE exercise_user_record.eid = exercise.id "
+                . "AND exercise_user_record.total_weighting = 0 "
+                . "AND exercise_user_record.attempt_status = 4");
+        foreach ($exercises as $exercise) {
+            $totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
+                                            FROM exercise_question, exercise_with_questions
+                                            WHERE exercise_question.course_id = ?d 
+                                            AND exercise_question.id = exercise_with_questions.question_id
+                                            AND exercise_with_questions.exercise_id = ?d", $exercise->course_id, $exercise->id)->totalweight;    
+            Database::get()->query("UPDATE exercise_user_record SET total_weighting = ?f WHERE eurid = ?d", $totalweight, $exercise->eurid);
+        }
     }
 
  

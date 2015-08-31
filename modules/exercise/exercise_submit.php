@@ -145,9 +145,10 @@ if ($ips && !$is_editor){
 // if the user has clicked on the "Cancel" button
 // ends the exercise and returns to the exercise list
 if (isset($_POST['buttonCancel'])) {
-        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];        
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0
-                WHERE eurid = ?d", ATTEMPT_CANCELED, $eurid);
+        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]; 
+        $exercisetotalweight = $objExercise->selectTotalWeighting();
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
+                WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
         unset_exercise_var($exerciseId);
         Session::Messages($langAttemptWasCanceled);
