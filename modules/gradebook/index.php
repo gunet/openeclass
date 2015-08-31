@@ -218,14 +218,15 @@ if ($is_editor) {
     
     //reset gradebook users
     if (isset($_POST['resetGradebookUsers'])) {  
-        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();              
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();          
         if ($_POST['specific_gradebook_users'] == 2) { // specific users group
             foreach ($_POST['specific'] as $g) {
                 $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", getDirectReference($g));
                 foreach ($ug as $u) {
                     $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                             SELECT $gradebook_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);                        
+                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+                    update_user_gradebook_activities($gradebook_id, $u);    
                 }
             }
         } elseif ($_POST['specific_gradebook_users'] == 1) { // specific users            
@@ -259,6 +260,7 @@ if ($is_editor) {
                         $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                                 SELECT $gradebook_id, user_id FROM course_user
                                 WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
+                        update_user_gradebook_activities($gradebook_id, $u);
                     }
                 }
             }
@@ -294,14 +296,11 @@ if ($is_editor) {
             foreach ($valid_users_for_insertion as $u) {
                 if (!in_array($u->user_id, $already_inserted_ids)) {
                     Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) VALUES (?d, ?d)", $gradebook_id, $u->user_id);
+                    update_user_gradebook_activities($gradebook_id, $u->user_id);
                 }
             }
-
-//            $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
-//                        SELECT $gradebook_id, user_id FROM course_user
-//                        WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
-//                                $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
         }
+        
         Session::Messages($langGradebookEdit,"alert-success");                    
         redirect_to_home_page('modules/gradebook/index.php?course=' . $course_code . '&gradebook_id=' . getIndirectReference($gradebook_id) . '&gradebookBook=1');
     }
@@ -574,10 +573,10 @@ if ($is_editor) {
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             insert_grades($gradebook_id, $actID);
         }
-        if (isset($_POST['updateUsersToAct'])) {  
-            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();          
-            update_grades($gradebook_id, $actID);
-        }
+//        if (isset($_POST['updateUsersToAct'])) {  
+//            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();          
+//            update_grades($gradebook_id, $actID);
+//        }
         register_user_grades($gradebook_id, $actID);
         $display = FALSE;
     } 

@@ -2743,9 +2743,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('gradebook', 'end_date')) {
             Database::get()->query("ALTER table `gradebook` ADD `end_date` DATETIME NOT NULL");
         }
-        if (!DBHelper::fieldExists('gradebook_book', 'max_grade')) {
-            Database::get()->query("ALTER TABLE `gradebook_book` ADD `max_grade` FLOAT NOT NULL DEFAULT '0' AFTER `grade`");
-        }
         // Cancelled exercises total weighting fix
         $exercises = Database::get()->queryArray("SELECT exercise.id AS id, exercise.course_id AS course_id, exercise_user_record.eurid AS eurid "
                 . "FROM exercise_user_record, exercise "

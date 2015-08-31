@@ -1163,6 +1163,7 @@ $langGradebookProgress = "Βαθμός προόδου";
 $langGradebookOtherType = "Άλλη δραστηριότητα";
 $langGradebookAssignSpecific = "Η εργασία αφορά συγκεκριμένους $langsStudents";
 $langGradebookTotalGrade = "Τελικός βαθμός";
+$langGradebookSum = "Σύνολο";
 $langGradebookTotalGradeNoInput = "Δεν έχει γίνει ακόμη καταχώρηση βαθμών ή δεν υπάρχουν δραστηριότητες στο βαθμολόγιο.";
 $langGradebookGrades = "Βαθμοί";
 $langGradebookAlertToChange = "Προσοχή το βαθμολόγιο είναι σε επεξεργασία και μπορεί οι βαθμοί να αλλάξουν.";

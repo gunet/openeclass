@@ -1426,7 +1426,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
     `gradebook_activity_id` MEDIUMINT(11) NOT NULL,
     `uid` int(11) NOT NULL DEFAULT 0,
     `grade` FLOAT NOT NULL DEFAULT -1,
-    `max_grade` FLOAT NOT NULL DEFAULT 0,
     `comments` TEXT NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (

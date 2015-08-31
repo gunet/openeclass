@@ -622,9 +622,6 @@ function display_all_users_grades($gradebook_id) {
                 } elseif (userGradeTotal($gradebook_id, $resultUser->userID) != "-") { //alert message only when grades have been submitted
                     $tool_content .= userGradeTotal($gradebook_id, $resultUser->userID) . " (<small>" . $langGradebookGradeAlert . "</small>)";
                 }
-                if (userGradeTotal($gradebook_id, $resultUser->userID) > $gradebook_range) {
-//                    $tool_content .= "<br><div class='smaller'>" . $langGradebookOutRange . "</div>";
-                }
             $tool_content .="</td><td class='option-btn-cell'>".
                     action_button(array(
                         array('title' => $langGradebookBook,
@@ -660,7 +657,7 @@ function display_all_users_grades($gradebook_id) {
 function student_view_gradebook($gradebook_id) {
 
     global $tool_content, $uid,
-           $langGradebookTotalGradeNoInput, $langGradebookTotalGrade,
+           $langGradebookTotalGradeNoInput, $langGradebookTotalGrade, $langGradebookSum,
            $langTitle, $langGradebookActivityDate2, $langGradebookNoTitle,
            $langGradebookActivityWeight, $langGradebookGrade, $langGradebookAlertToChange, $langBack, $course_code, $langType,
             $langAssignment, $langExercise, $langGradebookActivityAct, $langGradebookInsAut, $langGradebookInsMan, $langAttendanceActivity;
@@ -688,8 +685,7 @@ function student_view_gradebook($gradebook_id) {
 
     if ($results > 0) {
         if ($checkForRecords) {
-            $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;
-            $tool_content .= "<div class='alert alert-info'>$langGradebookTotalGrade: <strong>" . userGradeTotal($gradebook_id, $uid) . " / ". $range . "</strong></div>";
+            $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = ?d", $gradebook_id)->range;           
         }
         if(weightleft($gradebook_id, 0) != 0) {
             $tool_content .= "<div class='alert alert-warning'>$langGradebookAlertToChange</div>";
@@ -700,6 +696,7 @@ function student_view_gradebook($gradebook_id) {
                               <th>$langType</th>
                               <th>$langGradebookActivityWeight</th>
                               <th>$langGradebookGrade</th>
+                              <th>$langGradebookTotalGrade</th>
                           </tr>";
     }
     if ($result) {
@@ -733,16 +730,23 @@ function student_view_gradebook($gradebook_id) {
                     $tool_content .= "<td>" . q($details->weight) . "%</td>";
             $tool_content .= "<td width='70' class='text-center'>";
             //check user grade for this activity
-            $sql = Database::get()->querySingle("SELECT grade, max_grade FROM gradebook_book
+            $sql = Database::get()->querySingle("SELECT grade FROM gradebook_book
                                                             WHERE gradebook_activity_id = ?d
                                                                 AND uid = ?d", $details->id, $uid);
             if ($sql) {
-                $tool_content .= "$sql->grade / $sql->max_grade";
+                $tool_content .= $sql->grade * $range. ' / '.$range;
             } else {
                 $tool_content .= "&mdash;";
             }
             $tool_content .= "</td>";
+            $tool_content .= "<td width='70' class='text-center'>".($sql->grade * $range * $details->weight / 100)." / $range</td>
+            </tr>";
         } // end of while
+        $tool_content .= "            
+            <tr>
+                <th colspan='5' class='text-right'>$langGradebookSum:</th>
+                <th>".userGradeTotal($gradebook_id, $uid) . " / $range</th>
+            </tr>";
     }
     $tool_content .= "</table>";
 }
@@ -1212,7 +1216,7 @@ function register_user_grades($gradebook_id, $actID) {
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
             $langGradebookGrade, $langGradebookUpdate, $langGradebookNoTitle,
             $langAttendanceBooking, $langGradebookBooking, $langGradebookTotalGrade,
-            $langGradebookActivityWeight;
+            $langGradebookActivityWeight, $langCancel;
 
     //display form and list
     $gradebook_range = get_gradebook_range($gradebook_id);
@@ -1256,7 +1260,7 @@ function register_user_grades($gradebook_id, $actID) {
                                                         AND uid = ?d", $actID, $resultUser->userID);
             $user_grade = $q ? $q->grade : '-';
             $user_ind_id = getIndirectReference($resultUser->userID);
-            $grade = Session::has($user_ind_id) ? Session::get($user_ind_id) : ($q ? $q->grade : '');
+            $grade = Session::has($user_ind_id) ? Session::get($user_ind_id) : ($q ? $q->grade * $gradebook_range : '');
             $total_grade = is_numeric($grade) ? $grade * $result->weight / 100 : ' - ';
             $tool_content .= "
             <tr>
@@ -1279,13 +1283,8 @@ function register_user_grades($gradebook_id, $actID) {
                                 'text' => $langGradebookBooking,
                                 'name' => 'bookUsersToAct',
                                 'value'=> $langGradebookBooking
-                                ),
-                            array(
-                                    'text' => $langGradebookUpdate,
-                                    'name' => 'updateUsersToAct',
-                                    'value'=> $langGradebookUpdate,
-                                    'show' => $act_type == 0
-                                )));
+                                ))).
+                        "<a href='index.php?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "' class='btn btn-default'>$langCancel</a>";
         $tool_content .= "</div></div>";
         $tool_content .= generate_csrf_token_form_field()."</form></div>";
     }
@@ -1324,9 +1323,13 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                                     $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
             $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);            
                 foreach ($sql as $u) {
-                    $grd = Database::get()->querySingle("SELECT grade FROM assignment_submit WHERE assignment_id = ?d AND uid = $u->uid", $id);
+                    $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
+                            . "FROM assignment_submit, assignment "
+                            . "WHERE assignment_submit.assignment_id = assignment.id "
+                            . "AND assignment.id =?d "
+                            . "AND uid = $u->uid", $id);
                     if ($grd) {
-                        update_gradebook_book($u->uid, $id, $grd->grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                        update_gradebook_book($u->uid, $id, $grd->grade/$grd->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     }
             }
         }
@@ -1354,14 +1357,13 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                                     $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
             $users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
             foreach ($users as $user) {
-                $exerciseUserRecord = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record WHERE eid = ?d AND uid = $user->uid ORDER BY total_score/total_weighting limit 1", $id);
+                $exerciseUserRecord = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record WHERE eid = ?d AND uid = $user->uid ORDER BY total_score/total_weighting DESC limit 1", $id);
                 if ($exerciseUserRecord) {
-                    update_gradebook_book($user->uid, $id, $exerciseUserRecord->total_score, $exerciseUserRecord->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE, $gradebook_id);
+                    update_gradebook_book($user->uid, $id, $exerciseUserRecord->total_score/$exerciseUserRecord->total_weighting, GRADEBOOK_ACTIVITY_EXERCISE, $gradebook_id);
                 }
             }
         }
     }
-
     if ($type == GRADEBOOK_ACTIVITY_LP) {    // add learning path
         //checking if it is new or not
         $checkForLp = Database::get()->querySingle("SELECT * FROM lp_learnPath WHERE course_id = ?d
@@ -1382,10 +1384,46 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                             SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s,
                                 weight = ?d, module_auto_id = ?d, auto = ?d, module_auto_type = ?d, visible = 1",
                             $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
+            require_once 'include/lib/learnPathLib.inc.php';
+            $users = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            foreach ($users as $user) {
+                $lpProgress = get_learnPath_progress($module_auto_id, $user->uid);
+                if ($lpProgress) {
+                    update_gradebook_book($user->uid, $id, $lpProgress/100, GRADEBOOK_ACTIVITY_LP, $gradebook_id);
+                }
+            }
         }
     }
 }
-
+function update_user_gradebook_activities($gradebook_id, $uid) { 
+    require_once 'include/lib/learnPathLib.inc.php';
+    $gradebookActivities = Database::get()->queryArray("SELECT * FROM gradebook_activities WHERE gradebook_id = ?d AND auto = 1", $gradebook_id);
+    foreach ($gradebookActivities as $gradebookActivity) {
+        if ($gradebookActivity->module_auto_type == GRADEBOOK_ACTIVITY_LP){
+            $grade = get_learnPath_progress($gradebookActivity->module_auto_id, $uid)/100;
+            $allow_insert = $grade ? TRUE : FALSE;
+        } elseif ($gradebookActivity->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
+            $exerciseUserRecord = Database::get()->querySingle("SELECT total_score, total_weighting FROM exercise_user_record WHERE eid = ?d AND uid = $uid ORDER BY total_score/total_weighting DESC limit 1", $gradebookActivity->module_auto_id);
+            if ($exerciseUserRecord) {
+                $grade = $exerciseUserRecord->total_score/$exerciseUserRecord->total_weighting;
+                $allow_insert = TRUE;
+            }
+        } elseif ($gradebookActivity->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
+            $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
+                    . "FROM assignment_submit, assignment "
+                    . "WHERE assignment_submit.assignment_id = assignment.id "
+                    . "AND assignment.id =?d "
+                    . "AND uid = $uid", $gradebookActivity->module_auto_id);
+            if ($grd) {
+                $grade = $grd->grade/$grd->max_grade;            
+                $allow_insert = TRUE;
+            }         
+        }
+        if (isset($allow_insert) && $allow_insert) {
+            update_gradebook_book($uid, $gradebookActivity->module_auto_id, $grade, $gradebookActivity->module_auto_type, $gradebook_id);
+        }
+    }
+}
 /**
  * @brief dislay form for adding other activity in gradebook
  * @global type $tool_content
@@ -1574,14 +1612,14 @@ function insert_grades($gradebook_id, $actID) {
         foreach ($_POST['usersgrade'] as $userID => $userInp) {
             if ($userInp == '') {
                 Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
-            } else {
+            } else {               
                 // //check if there is record for the user for this activity
                 $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM gradebook_book
                                             WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));
                 if ($checkForBook->count) { // update
-                    Database::get()->query("UPDATE gradebook_book SET grade = ?d WHERE id = ?d", $userInp, $checkForBook->id);
+                    Database::get()->query("UPDATE gradebook_book SET grade = ?f WHERE id = ?d", $userInp/$gradebook->range, $checkForBook->id);
                 } else { // insert
-                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?d, comments = ?s", getDirectReference($userID), $actID, $userInp, '');
+                    Database::get()->query("INSERT INTO gradebook_book SET uid = ?d, gradebook_activity_id = ?d, grade = ?f, comments = ?s", getDirectReference($userID), $actID, $userInp/$gradebook->range, '');
                 }
             }
         }
@@ -1625,7 +1663,7 @@ function update_grades($gradebook_id, $actID) {
  * @param type $grade
  * @param type $activity
  */
-function update_gradebook_book($uid, $id, $grade, $max_grade, $activity, $gradebook_id = 0)
+function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
 {
     global $course_id;
     
@@ -1656,59 +1694,22 @@ function update_gradebook_book($uid, $id, $grade, $max_grade, $activity, $gradeb
     $gradebookActivities = Database::get()->queryArray($sql, $params); 
     if ($gradebookActivities) {
         foreach($gradebookActivities as $gradebookActivity){
-            $gradebook_book = Database::get()->querySingle("SELECT grade, max_grade FROM gradebook_book WHERE gradebook_activity_id = $gradebookActivity->id AND uid = ?d", $uid);
+            $gradebook_book = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $gradebookActivity->id AND uid = ?d", $uid);
             if ($gradebook_book) {
-                if ($grade / $max_grade > $gradebook_book->grade / $gradebook_book->max_grade) {
+                if ($grade > $gradebook_book->grade) {
                     Database::get()->query("UPDATE gradebook_book "
-                            . "SET grade = ?f, max_grade = ?f "
+                            . "SET grade = ?f "
                             . "WHERE gradebook_activity_id = $gradebookActivity->id "
                             . "AND uid = ?d", 
-                            $grade, $max_grade, $uid);
+                            $grade, $uid);
                 }
             } else {
                 Database::get()->query("INSERT INTO gradebook_book "
-                        . "SET gradebook_activity_id = $gradebookActivity->id, uid = ?d, grade = ?f, max_grade = ?f, comments = ''", 
-                        $uid, $grade, $max_grade);
+                        . "SET gradebook_activity_id = $gradebookActivity->id, uid = ?d, grade = ?f, comments = ''", 
+                        $uid, $grade);
             }
         }
     }
-    
-    
-    
-//    if ($act_id) {
-//        foreach ($act_id as $q) {
-//            //For each activity check if specified user exists in activity's gradebook
-//            $u = Database::get()->querySingle("SELECT id FROM gradebook_users WHERE uid = ?d
-//                                    AND gradebook_id = ?d", $uid, $q->gradebook_id);
-//            
-//            if($u) {
-//                
-//                if ($activity == GRADEBOOK_ACTIVITY_EXERCISE) { // exercises
-//                    $sql = Database::get()->querySingle("SELECT MAX(total_score) AS total_score, total_weighting FROM exercise_user_record
-//                                                            WHERE uid = ?d AND eid = ?d", $uid, $id);
-//                    var_dump($sql);die();
-//                    $score = $sql->total_score;
-//                    $max_grade = $sql->total_weighting;
-//                } elseif ($activity == GRADEBOOK_ACTIVITY_ASSIGNMENT) { // assignments
-//                    $score = $grade;
-//                    $sql2 = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $id);
-//                    $max_grade = $sql2->max_grade;
-//                } elseif ($activity == GRADEBOOK_ACTIVITY_LP) {
-//                    $score = $grade;
-//                    $max_grade = 100;
-//                }
-//
-//                $range = Database::get()->querySingle("SELECT `range` FROM gradebook WHERE id = $q->gradebook_id AND course_id = ?d", $course_id)->range;
-//                
-//                $q2 = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $q->id AND uid = ?d", $uid);
-//                if ($q2) { // update grade if exists
-//                    Database::get()->query("UPDATE gradebook_book SET grade = ?f, max_grade = ?f WHERE gradebook_activity_id = $q->id AND uid = ?d", $score, $max_grade, $uid);
-//                } else { // insert grade
-//                    Database::get()->query("INSERT INTO gradebook_book SET gradebook_activity_id = $q->id, uid = ?d, grade = ?f, max_grade = ?f, comments = ''", $uid, $score, $max_grade);
-//                }
-//            }
-//        }
-//    }
     return;
 }
 
@@ -1824,11 +1825,12 @@ function userGradeTotal ($gradebook_id, $userID, $student_view = 'false') {
         $visible = 1;
     }
     $range = Database::get()->querySingle("SELECT * FROM gradebook WHERE id = ?d", $gradebook_id)->range;
-    $userGradeTotal = Database::get()->querySingle("SELECT SUM(weight / 100 * grade / max_grade * ?d) AS count FROM gradebook_book, gradebook_activities, gradebook
+    $userGradeTotal = Database::get()->querySingle("SELECT SUM(gradebook_activities.weight / 100 * gradebook_book.grade * $range) AS count FROM gradebook_book, gradebook_activities, gradebook
                                                     WHERE gradebook_book.uid = ?d
                                                         AND gradebook_book.gradebook_activity_id = gradebook_activities.id
+                                                        AND gradebook.id = gradebook_activities.gradebook_id
                                                         AND gradebook_activities.gradebook_id = ?d
-                                                        AND gradebook_activities.visible = ?d", $range, $userID, $gradebook_id, $visible)->count;
+                                                        AND gradebook_activities.visible = ?d", $userID, $gradebook_id, $visible)->count;
 
     if ($userGradeTotal) {
         return round($userGradeTotal, 2);
@@ -1851,7 +1853,7 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
 
     global $langUsers, $langMeanValue, $langMinValue, $langMaxValue;
 
-    $users = Database::get()->querySingle("SELECT SUM(grade/max_grade) as count, COUNT(gradebook_users.uid) AS users
+    $users = Database::get()->querySingle("SELECT SUM(grade) as count, COUNT(gradebook_users.uid) AS users
                                         FROM gradebook_book, gradebook_users
                                         WHERE gradebook_users.uid=gradebook_book.uid
                                     AND gradebook_activity_id = ?d
@@ -1861,13 +1863,13 @@ function userGradebookTotalActivityStats ($activity, $gradebook) {
     //this is different than global participants number (it is limited to those that have taken degree)
     $participantsNumber = $users->users;
     //die($users->users.'');
-    $q = Database::get()->querySingle("SELECT grade, max_grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade ASC limit 1 ", $activity->id, $gradebook->id);
+    $q = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade ASC limit 1 ", $activity->id, $gradebook->id);
     if ($q) {
-        $userGradebookTotalActivityMin = $q->grade / $q->max_grade * $gradebook->range;
+        $userGradebookTotalActivityMin = $q->grade * $gradebook->range;
     }
-    $q = Database::get()->querySingle("SELECT grade, max_grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade DESC limit 1 ", $activity->id, $gradebook->id);
+    $q = Database::get()->querySingle("SELECT grade FROM gradebook_book, gradebook_users WHERE  gradebook_users.uid=gradebook_book.uid AND gradebook_activity_id = ?d AND gradebook_users.gradebook_id = ?d ORDER BY grade DESC limit 1 ", $activity->id, $gradebook->id);
     if ($q) {
-        $userGradebookTotalActivityMax = $q->grade / $q->max_grade * $gradebook->range;
+        $userGradebookTotalActivityMax = $q->grade * $gradebook->range;
     }
     $total_score = $gradebook->range;
 

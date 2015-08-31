@@ -3193,6 +3193,7 @@ $langGradebookDeleteAlert = "Are you sure you want to delete the activity? Grade
 $langGradebookOutRange = "Warning: You have entered grades out of range";
 $langGradebookAssignSpecific = "Assigment accessible to specific $langsStudents";
 $langGradebookTotalGrade = "Total grade";
+$langGradebookSum = "Sum";
 $langGradebookTotalGradeNoInput = "No grades entered yet or no activities in the gradebook.";
 $langGradebookGrades = "Grades";
 $langGradebookAlertToChange = "Warning: The gradebook is being edited and grades may change.";

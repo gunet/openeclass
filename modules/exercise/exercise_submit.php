@@ -327,7 +327,7 @@ if (isset($_POST['formSent'])) {
             // update attendance book
             update_attendance_book($uid, $exerciseId, GRADEBOOK_ACTIVITY_EXERCISE);
             // update gradebook            
-            update_gradebook_book($uid, $exerciseId, $totalScore, $totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
+            update_gradebook_book($uid, $exerciseId, $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
         }
         unset($objExercise);
         unset_exercise_var($exerciseId);
