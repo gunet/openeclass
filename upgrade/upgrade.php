@@ -2728,7 +2728,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             KEY (uid),
             FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE)
             $charset_spec");
-        Database::get()->query("CREATE TABLE `user_request_ext_uid` (
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_request_ext_uid` (
             id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             user_request_id INT(11) NOT NULL,
             auth_id INT(2) NOT NULL,
