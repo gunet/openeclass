@@ -35,39 +35,25 @@ load_js('tools.js');
 $head_content .= '<script type="text/javascript">var langEmptyGroupName = "' .
         $langNoPgTitle . '";</script>';
 
-if (isset($_GET['action'])) {
-    $action = intval($_GET['action']);
-}
+$page_url = 'modules/course_tools/?course=' . $course_code;
 
 if (isset($_REQUEST['toolStatus'])) {
-    if (isset($_POST['toolStatActive'])) {
-        $tool_stat_active = $_POST['toolStatActive'];
-    }
-    if (isset($tool_stat_active)) {
-        $loopCount = count($tool_stat_active);
-    } else {
-        $loopCount = 0;
-    }
-    $i = 0;
-    $publicTools = array();
-    $tool_id = null;
-    while ($i < $loopCount) {
-        if (!isset($tool_id)) {
-            $tool_id = " (`module_id` = " . intval($tool_stat_active[$i]) . ")";
-        } else {
-            $tool_id .= " OR (`module_id` = " . intval($tool_stat_active[$i]) . ")";
-        }
-        $i++;
-    }
-    //reset all tools
+    // deactivate all modules
     Database::get()->query("UPDATE course_module SET visible = 0
                          WHERE course_id = ?d", $course_id);
-    //and activate the ones the professor wants active, if any
-    if ($loopCount > 0) {
+
+    // activate modules set in request
+    if (isset($_POST['toolStatActive'])) {
+        $mids = $_POST['toolStatActive'];
+
+        $placeholders = join(', ', array_fill(0, count($mids), '?d'));
         Database::get()->query("UPDATE course_module SET visible = 1
-                                 WHERE $tool_id AND
-                                 course_id = ?d", $course_id);
+                                    WHERE course_id = ?d AND module_id IN ($placeholders)",
+                               $course_id, $mids);
     }
+    Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_MODIFY, array());
+    Session::Messages($langRegDone, 'alert-success');
+    redirect_to_home_page($page_url);
 }
 
 if (isset($_GET['delete'])) {
@@ -77,7 +63,8 @@ if (isset($_GET['delete'])) {
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_DELETE, array('id' => $delete,
                                                                    'link' => $r->url,
                                                                    'name_link' => $r->title));
-    $tool_content .= "<div class='alert alert-success'>$langLinkDeleted</div>";
+    Session::Messages($langLinkDeleted, 'alert-success');
+    redirect_to_home_page($page_url);
 }
 
 /**
@@ -87,23 +74,18 @@ if (isset($_POST['submit'])) {
     $link = isset($_POST['link']) ? $_POST['link'] : '';
     $name_link = isset($_POST['name_link']) ? $_POST['name_link'] : '';
     if ((trim($link) == 'http://') or ( trim($link) == 'ftp://') or empty($link) or empty($name_link) or ! is_url_accepted($link)) {
-        $tool_content .= "<div class='alert alert-danger'>$langInvalidLink</div>" .
-                action_bar(array(
-                    array('title' => $langBack,
-                        'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=2",
-                        'icon' => 'fa-reply',
-                        'level' => 'primary-label')));
-        draw($tool_content, 2, null, $head_content);
-        exit();
+        Session::Messages($langInvalidLink, 'alert-danger');
+        redirect_to_home_page($page_url);
     }
 
     $sql = Database::get()->query("INSERT INTO link (course_id, url, title, category, description)
                             VALUES (?d, ?s, ?s, -1, ' ')", $course_id, $link, $name_link);
     $id = $sql->lastInsertID;
-    $tool_content .= "<div class='alert alert-success'>$langLinkAdded</div>";
     Log::record($course_id, MODULE_ID_TOOLADMIN, LOG_INSERT, array('id' => $id,
                                                                    'link' => $link,
                                                                    'name_link' => $name_link));
+    Session::Messages($langLinkAdded, 'alert-success');
+    redirect_to_home_page($page_url);
 } elseif (isset($_GET['action'])) { // add external link
     $pageName = $langAddExtLink;
     $tool_content .= action_bar(array(
@@ -142,17 +124,13 @@ if (isset($_POST['submit'])) {
     exit();
 }
 
-$toolArr = getSideMenu(2);
-
-if (is_array($toolArr)) {
-    for ($i = 0; $i <= 1; $i++) {
-        $toolSelection[$i] = '';
-        $numOfTools = count($toolArr[$i][1]);
-        for ($j = 0; $j < $numOfTools; $j++) {
-            $toolSelection[$i] .= "<option value='" . $toolArr[$i][4][$j] . "'>" .
-                    $toolArr[$i][1][$j] . "</option>\n";
-        }
-    }
+$toolSelection[0] = $toolSelection[1] = '';
+$module_list = Database::get()->queryArray('SELECT module_id, visible
+    FROM course_module WHERE course_id = ?d', $course_id);
+foreach ($module_list as $item) {
+    $mid = $item->module_id;
+    $mtitle = q($modules[$item->module_id]['title']);
+    $toolSelection[$item->visible] .= "<option value='$mid'>$mtitle</option>\n";
 }
 
 $tool_content .= "
@@ -177,14 +155,14 @@ $tool_content .= <<<tForm
                 </tr>
                 <tr>
                     <td class="text-center">
-                        <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[1]</select>
+                        <select class="form-control" name="toolStatInactive[]" id='inactive_box' size='17' multiple>$toolSelection[0]</select>
                     </td>
                     <td class="text-center">
                         <input class="btn btn-primary" type="button" onClick="move('inactive_box','active_box')" value="   >>   " /><br><br>
                         <input class="btn btn-primary" type="button" onClick="move('active_box','inactive_box')" value="   <<   " />
                     </td>
                     <td class="text-center">
-                        <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[0]</select>
+                        <select class="form-control" name="toolStatActive[]" id='active_box' size='17' multiple>$toolSelection[1]</select>
                     </td>
                 </tr>
                 <tr>
@@ -197,10 +175,8 @@ $tool_content .= <<<tForm
     </form>
 </div>
 tForm;
-// ------------------------------------------------
-// display table to edit/delete external links
-// ------------------------------------------------
 
+// display table to edit/delete external links
 $tool_content .= "<table class='table-default'>
 <tr><th colspan='2'>$langOperations</th></tr>
 <tr>  
