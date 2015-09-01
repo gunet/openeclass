@@ -4,7 +4,7 @@ require_once 'modules/auth/auth.inc.php';
 
 // if we are logged in there is no need to access this page
 if (isset($_SESSION['uid'])) {
-    redirect_to_home_page();
+    redirect_to_home_page('main/portfolio.php');
 }
 
 $warning = '';
