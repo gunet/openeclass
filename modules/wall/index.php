@@ -23,6 +23,7 @@ $require_current_course = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'modules/wall/wall_functions.php';
 require_once 'insert_video.php';
+require_once 'insert_doc.php';
 require_once 'include/log.php';
 
 ModalBoxHelper::loadModalBox(true);
@@ -68,6 +69,10 @@ if (isset($_POST['submit'])) {
                 //save multimedia content
                 if (visible_module(MODULE_ID_VIDEO)) {
                     insert_video($id);
+                }
+                //save documents
+                if (visible_module(MODULE_ID_DOCS)) {
+                    
                 }
             }
         } else {
@@ -153,6 +158,10 @@ if (isset($_POST['submit'])) {
             if (visible_module(MODULE_ID_VIDEO)) {
                 insert_video($id, true);
             }
+            //save documents
+            if (visible_module(MODULE_ID_DOCS)) {
+                
+            }
             
             Session::Messages($langWallPostSaved, 'alert-success');
             redirect_to_home_page("modules/wall/index.php?course=$course_code");
@@ -211,6 +220,16 @@ if (isset($_GET['showPost'])) { //show comments case
                           </div>';
         }
         
+        if (visible_module(MODULE_ID_DOCS)) {
+            $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
+                              '.list_docs($id).'
+                          </div>';
+        } else {
+            $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
+                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
+                          </div>';
+        }
+        
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
                 <div class="form-wrapper">
@@ -223,6 +242,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <ul class="nav nav-pills">
                                 <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
                                 <li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>
+                                <li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="form-group tab-pane fade in active" id="youtube_video_div">
@@ -230,6 +250,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                     <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
                                 </div>
                                 '.$video_div.'
+                                '.$docs_div.'
                             </div>
                         </fieldset>
                         <div class="form-group">'.
@@ -255,13 +276,22 @@ if (isset($_GET['showPost'])) { //show comments case
         $content = Session::has('content')? Session::get('content'): '';
         $youtube = Session::has('youtube')? Session::get('youtube'): '';
         
-        $video_div = '';
         if (visible_module(MODULE_ID_VIDEO)) {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div">
                               '.list_videos().'
                           </div>';
         } else {
             $video_div = '<div class="form-group tab-pane fade" id="videos_div">
+                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
+                          </div>';
+        }
+        
+        if (visible_module(MODULE_ID_DOCS)) {
+            $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
+                              '.list_docs().'
+                          </div>';
+        } else {
+             $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
                               <div class = "alert alert-warning">'.$langInactiveModule.'</div>
                           </div>';
         }
@@ -278,6 +308,7 @@ if (isset($_GET['showPost'])) { //show comments case
                             <ul class="nav nav-pills">
                                 <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
                                 <li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>
+                                <li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="form-group tab-pane fade in active" id="youtube_video_div">
@@ -285,6 +316,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                     <input class="form-control" type="url" name="youtube" id="youtube_video" value="'.$youtube.'">
                                 </div>
                                 '.$video_div.'
+                                '.$docs_div.'
                             </div>
                         </fieldset>
                         <div class="form-group">'.
