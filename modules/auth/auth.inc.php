@@ -1045,7 +1045,7 @@ function alt_login($user_info_object, $uname, $pass) {
 function shib_cas_login($type) {
     global $surname, $givenname, $email, $status, $language, $session,
         $urlServer, $is_admin, $is_power_user, $is_usermanage_user,
-        $is_departmentmanage_user, $langUserAltAuth;
+        $is_departmentmanage_user, $langUserAltAuth, $langRegistrationDenied;
 
     $alt_auth_stud_reg = get_config('alt_auth_stud_reg');
 
