@@ -169,6 +169,7 @@
             <xs:element name="moreInformation" minOccurs="0" maxOccurs="unbounded" type="t_langString"/>
             <xs:element name="cv" minOccurs="0" type="t_string"/>
             <xs:element name="photo" minOccurs="0" type="t_image"/>
+            <xs:element name="registrationCode" minOccurs="0" type="t_string"/>
         </xs:sequence>
     </xs:complexType>
 
