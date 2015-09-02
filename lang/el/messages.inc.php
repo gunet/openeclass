@@ -4059,6 +4059,7 @@ $langCMeta['course_instructor_fullName'] = "Πλήρες όνομα διδάσκ
 $langCMeta['course_instructor_moreInformation'] = "Περισσότερα για τον διδάσκοντα";
 $langCMeta['course_instructor_cv'] = "Σύνδεσμος σε βιογραφικό ή σύντομο βιογραφικό (έως 10 γραμμές)";
 $langCMeta['course_instructor_photo'] = "Φωτογραφία διδάσκοντος";
+$langCMeta['course_instructor_registrationCode'] = "Αριθμός Πανεπιστημιακού Μητρώου";
 $langCMeta['course_title'] = "Τίτλος Μαθήματος";
 $langCMeta['help_course_title'] = "όπως αναφέρεται στο Πρόγραμμα Σπουδών";
 $langCMeta['course_url'] = "Δικτυακός τόπος μαθήματος";

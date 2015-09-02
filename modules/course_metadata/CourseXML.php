@@ -1002,6 +1002,7 @@ class CourseXMLElement extends SimpleXMLElement {
             self::storeMetadata($oaiRecordId, 'dc_coursephotomime', (string) $xml->coursePhoto['mime']);
             self::storeMetadata($oaiRecordId, 'dc_instructorphoto', self::serializeMulti($xml->instructor, "photo"));
             self::storeMetadata($oaiRecordId, 'dc_instructorphotomime', self::serializeAttr($xml->instructor, "photo", "mime"));
+            self::storeMetadata($oaiRecordId, 'dc_instructorregistrationcode', self::serializeMulti($xml->instructor, "registrationCode"));
             self::storeMetadata($oaiRecordId, 'dc_url', (string) $xml->url);
             // unused ATM self::storeMetadata($oaiRecordId, 'dc_identifier', );
             self::storeMetadata($oaiRecordId, 'dc_language', self::serialize($xml->language));

@@ -2967,6 +2967,7 @@ $langCMeta['course_instructor_fullName'] = "Instructor Full name";
 $langCMeta['course_instructor_moreInformation'] = "More about instructor";
 $langCMeta['course_instructor_cv'] = "Link to CV or brief biography (10 lines maximum)";
 $langCMeta['course_instructor_photo'] = "Course instructor photo";
+$langCMeta['course_instructor_registrationCode'] = "Registration code";
 $langCMeta['course_title'] = "Course Title";
 $langCMeta['help_course_title'] = "as stated in the curriculum";
 $langCMeta['course_url'] = "Course URL";
