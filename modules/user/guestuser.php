@@ -27,9 +27,8 @@ $helpTopic = 'Guest';
 require_once '../../include/baseTheme.php';
 require_once 'include/phpass/PasswordHash.php';
 
-if (get_config('eclass_stud_reg') == 0 or
-    get_config('course_guest') == 'off') {
-        redirect_to_home_page('modules/user/');
+if (get_config('course_guest') == 'off') {
+    redirect_to_home_page('modules/user/?course=' . $course_code);
 }
 
 $toolName = $langUsers;
