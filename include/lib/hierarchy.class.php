@@ -525,6 +525,7 @@ $(document).ready(function() {
             },
             "multiple" : false,
             "themes" : {
+                "name" : "proton",
                 "dots" : true,
                 "icons" : false
             }

@@ -77,7 +77,7 @@ if (isset($_GET['delete'])) {
     }
     redirect_to_home_page('modules/admin/autoenroll.php');
 } elseif (isset($_GET['add']) or isset($_GET['edit'])) {
-    load_js('jstree3d');
+    load_js('jstree3');
     load_js('select2');
 
     $pageName = isset($_GET['add'])? $langAutoEnrollNew: $langEditChange;
@@ -231,6 +231,7 @@ if (isset($_GET['delete'])) {
                   },
                   'multiple' : false,
                   'themes' : {
+                      'name' : 'proton',
                       'dots' : true,
                       'icons' : false
                   }

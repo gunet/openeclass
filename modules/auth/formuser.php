@@ -26,7 +26,7 @@ require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
 
-load_js('jstree3d');
+load_js('jstree3');
 
 $navigation[] = array('url' => 'registration.php', 'name' => $langNewUser);
 
