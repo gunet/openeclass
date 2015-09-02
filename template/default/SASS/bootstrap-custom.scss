@@ -2691,4 +2691,12 @@ div#profile-about-me{
     padding-bottom: 20px;
 }
 
-.jstree li a.nosel { font-style:italic; color:grey; }
+.jstree li a.nosel {
+    font-style: italic;
+    color: #cccccc;
+}
+
+div #treeModal div .modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}

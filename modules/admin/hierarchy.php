@@ -40,7 +40,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jstree3d');
+load_js('jstree3');
 
 $toolName = $langHierarchyActions;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -127,6 +127,7 @@ $(function() {
             },
             "multiple" : false,
             "themes" : {
+                "name" : "proton",
                 "dots" : true,
                 "icons" : false
             }

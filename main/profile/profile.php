@@ -44,7 +44,7 @@ $tree = new Hierarchy();
 $userObj = new User();
 $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
 
-load_js('jstree3d');
+load_js('jstree3');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>
 var lang = {

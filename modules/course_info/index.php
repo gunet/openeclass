@@ -58,7 +58,7 @@ if ($depadmin_mode) {
     }
 }
 
-load_js('jstree3d');
+load_js('jstree3');
 load_js('pwstrength.js');
 
 //Datepicker
