@@ -527,7 +527,7 @@ if ($is_editor) {
         <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
                 array(
-                    'text' => $langUpload,
+                    'text' => $langSubmit,
                     'name' => 'submitAnnouncement',
                     'value'=> $langAdd
                 ),

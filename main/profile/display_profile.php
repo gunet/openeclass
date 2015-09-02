@@ -211,9 +211,8 @@ if ($userdata) {
     }
         $tool_content .= "
     <div id='profile-departments' class='row'>
-        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>
-            <h4>$langProfileStats</h4>
-            <div>";
+        <div class='col-xs-12 col-md-10 col-md-offset-2 profile-pers-info'>            
+            <div><span class='tag'>$langHierarchyNode : </span>";
             $departments = $user->getDepartmentIds($id);
                 $i = 1;
                 foreach ($departments as $dep) {
