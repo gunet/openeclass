@@ -91,8 +91,7 @@ $tool_content .= "
             $tool_content .= $tree->buildDepartmentChildrenNavigationHtml($fc, 'opencourses', $countCallback, $showEmpty);
        $tool_content .= "</ul>
            </div>
-    </div>
-        ";
+    </div>";
 
 
 
@@ -149,11 +148,11 @@ if ($runQuery) {
                          WHERE course.id = course_department.course
                            $queryExtraJoinWhere
                            AND course_department.department = ?d
-                           AND course.visible != ?d
+                           AND course.visible != " . COURSE_INACTIVE . "
                            $queryCourseIds
                       ORDER BY course.title, course.prof_names", function ($course) use (&$courses) {
         $courses[] = $course;
-    }, $fc, COURSE_INACTIVE );
+    }, $fc);
 }
 
 if (count($courses) > 0) {

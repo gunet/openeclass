@@ -993,11 +993,18 @@ jContent;
             });
             
             // course department counting
-            Database::get()->queryFunc("select department, count(id) as count from course_department group by department", function($row) use (&$coursedeps) {
+            //SELECT COUNT(course_department.id) AS count,department FROM course_department 
+            //              JOIN course ON course_department.course=course.id 
+            //              WHERE course.visible != 3 GROUP BY department;
+            /*Database::get()->queryFunc("select department, count(id) as count from course_department group by department", function($row) use (&$coursedeps) {
+                $coursedeps[intval($row->department)] = $row->count;
+            });*/
+            
+            Database::get()->queryFunc("SELECT COUNT(course_department.id) AS count,department FROM course_department 
+                                            JOIN course ON course_department.course = course.id 
+                                        WHERE course.visible != " . COURSE_INACTIVE . " GROUP BY department", function($row) use (&$coursedeps) {
                 $coursedeps[intval($row->department)] = $row->count;
             });
-            
-            
             foreach ($nodesWK as $key => $node) {
                 $id = intval($key);
                 $code = $node->code;
