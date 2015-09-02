@@ -356,7 +356,6 @@ if (get_config('opencourses_enable')) {
     }
 }
 
-$eclass_stud_reg = get_config('eclass_stud_reg');
 // show help link and link to Add new user, search new user and management page of groups
 $tool_content .= 
         action_bar(array(
@@ -373,7 +372,7 @@ $tool_content .=
             array('title' => $langAddGUser,
                 'url' => "guestuser.php?course=$course_code",
                 'icon' => 'fa-plane',
-                'show' => ($eclass_stud_reg != 0 && get_config('course_guest') != 'off')),
+                'show' => get_config('course_guest') != 'off'),
             array('title' => $langGroupUserManagement,
                 'url' => "../group/index.php?course=$course_code",
                 'icon' => 'fa-users'),
