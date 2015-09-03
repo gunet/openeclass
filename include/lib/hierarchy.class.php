@@ -232,7 +232,11 @@ class Hierarchy {
      * @return int
      */
     public function getNodeLft($id) {
-        return intval(Database::get()->querySingle("SELECT lft FROM hierarchy WHERE id = ?d", $id)->lft);
+        $node = Database::get()->querySingle("SELECT lft FROM hierarchy WHERE id = ?d", $id);
+        if ($node) {
+            return intval($node->lft);
+        }
+        return 0;
     }
 
     /**
