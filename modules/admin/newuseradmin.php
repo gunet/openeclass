@@ -34,9 +34,15 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-if (isset($_POST['submit'])) {
-    $requiredFields = array('auth_form', 'email_form', 'surname_form',
+if (isset($_POST['submit'])) {    
+    $requiredFields = array('auth_form', 'surname_form',
         'givenname_form', 'language_form', 'department', 'pstatus');
+    if (get_config('am_required')) {
+        $requiredFields[] = 'am_form';
+    }
+    if (get_config('email_required')) {
+        $requiredFields[] = 'email_form';
+    }
     if (isset($_POST['auth_form']) && $_POST['auth_form'] == 1) {
         $requiredFields[] = 'password';
     }
@@ -285,18 +291,28 @@ if ($eclass_method_unique) {
 formGroup('passsword_form', $langPass,
     "<input class='form-control' type='text' name='password'" .
         getValue('password', genPass()) . " id='password' autocomplete='off' placeholder='" . q($langPass) . "'><span id='result'></span>");
+if (get_config('email_required')) {
+    $email_message = "$langEmail $langCompulsory";
+} else {
+    $email_message = "$langEmail $langOptional";
+}
 formGroup('email_form', $langEmail,
     "<input class='form-control' id='email_form' type='text' name='email_form'" .
-    getValue('email_form', $pe) . " placeholder='" . q($langEmail) . "'>");
+    getValue('email_form', $pe) . " placeholder='" . q($email_message) . "'>");
 formGroup('verified_mail_form', $langEmailVerified,
     selection($verified_mail_data, "verified_mail_form", $pv, "class='form-control'"));
 formGroup('phone_form', $langPhone,
     "<input class='form-control' id='phone_form' type='text' name='phone_form'" .
     getValue('phone_form', $pphone) . " placeholder='" . q($langPhone) . "'>");
 formGroup('faculty', $langFaculty, $tree_html);
+if (get_config('am_required')) {
+    $am_message = $langCompulsory;
+} else {
+    $am_message = $langOptional;
+}
 formGroup('am_form', $langAm, 
     "<input class='form-control' id='am_form' type='text' name='am_form'" .
-    q('am_form', $pam) . " placeholder='$langOptional'>");
+    getValue('am_form', $pam) . " placeholder='" . q($am_message) . "'>");
 formGroup('language_form', $langLanguage,
     lang_select_options('language_form', "class='form-control'",
         Session::has('language_form')? Session::get('language_form'): $language));
