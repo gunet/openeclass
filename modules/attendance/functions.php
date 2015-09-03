@@ -246,7 +246,7 @@ function display_attendance_activities($attendance_id) {
            $langAttendanceNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, $langAttendanceInsMan,
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, $langAttendanceActivity,
            $langHere, $langAttendanceNoActMessage3, $langToA, $langcsvenc1, $langcsvenc2,
-           $langConfig, $langUsers, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
+           $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
            $langAdd, $langExport, $langBack;
     
    
@@ -268,6 +268,10 @@ function display_attendance_activities($attendance_id) {
                                 'icon' => 'fa fa-edit space-after-icon',
                                 'class' => '')),
                      'icon' => 'fa-plus'),
+                array('title' => $langStudents,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
+                      'level' => 'primary-label',
+                      'icon' => 'fa-users'),                
                 array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code",
                   'icon' => 'fa-reply',
@@ -275,9 +279,6 @@ function display_attendance_activities($attendance_id) {
                 array('title' => $langConfig,
                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;editSettings=1",
                       'icon' => 'fa-cog'),
-                array('title' => $langUsers,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;attendanceBook=1",
-                      'icon' => 'fa-users'),
                 array('title' => "$langExport $langToA $langcsvenc1",
                         'url' => "dumpattendancebook.php?course=$course_code&amp;attendance_id=$attendance_id&amp;enc=1253",
                     'icon' => 'fa-file-excel-o'),
