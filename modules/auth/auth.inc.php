@@ -659,7 +659,7 @@ function process_login() {
                     break;
                 case 6: $warning .= "<div class='alert alert-warning'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></div>";
                     break;
-                case 7: $warning .= "<div class='alert alert-warning'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></div>";
+                case 7: $warning .= "<div class='alert alert-warning'>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></div>";
                     break;
                 case 8: $warning .= "<div class='alert alert-warning'>$langTooManyFails</div>";
                     break;
@@ -849,7 +849,7 @@ function hybridauth_login() {
             break;
             case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
             break;
-            case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/cas.php'>$langHere</a></p>";
+            case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></p>";
             break;
             case 8: $warning .= "<p class='alert1'>$langTooManyFails</p>";
             break;

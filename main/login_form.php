@@ -24,7 +24,7 @@ $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
 foreach ($q as $l) {
     $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": getSerializedMessage($l->auth_title);
     if (in_array($l->auth_name, $extAuthMethods)) {
-        $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');        
+        $authUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');        
         $authLink[] = array(false, "
             <div class='col-sm-8 col-sm-offset-2' style='padding-top:40px;'>
                 <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>

@@ -165,8 +165,8 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
-                              ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
+                    'html' => "<a class='btn btn-default btn-login' href='" . $urlServer .
+                              ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$langEnter</a><br>");
             } elseif (in_array($l->auth_name, $hybridAuthMethods)) { 
                 $hybridProviders[] = $l->auth_name;
                 if (is_null($hybridLinkId)) {
