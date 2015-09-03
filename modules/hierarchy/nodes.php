@@ -22,9 +22,11 @@
 
 require_once '../../include/baseTheme.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
 header('Content-Type: application/json; charset=utf-8');
 
 $tree = new Hierarchy();
+$user = new User();
 $requestId = 0;
 if (isset($_POST['id'])) {
     $requestId = intval($_POST['id']);
@@ -49,6 +51,12 @@ $allnodes = array();
 Database::get()->queryFunc("select * from hierarchy order by lft", function($row) use (&$allnodes) {
     $allnodes[] = $row;
 });
+
+// preload all user's nodes
+$usernodes = array();
+if ($uid) {
+    $usernodes = $user->getDepartmentNodes($uid);
+}
 
 // initialize vars
 $defs = (is_array($defaults)) ? $defaults : array(intval($defaults));
@@ -108,7 +116,9 @@ foreach ($nodes as $node) {
         $disabled = true;
     }
     
-    $class = $disabled ? 'nosel' : '';
+    $class1 = $disabled ? 'nosel' : '';
+    $class2 = classOfUserNodes($usernodes, $node);
+    $class = (strlen($class2) > 0) ? $class1 . ' ' . $class2 : $class1;
     $valcode = ($codesuffix && strlen($node->code) > 0) ? ' (' . $node->code . ')' : '';
     
     $data[] = array(
@@ -127,3 +137,12 @@ foreach ($nodes as $node) {
 
 echo json_encode($data);
 exit();
+
+function classOfUserNodes($usernodes, $node) {
+    foreach($usernodes as $usernode) {
+        if ($usernode->id === $node->id || ($node->lft < $usernode->lft && $node->rgt > $usernode->rgt)) {
+            return 'jstree-search';
+        }
+    }
+    return '';
+}
