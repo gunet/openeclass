@@ -228,40 +228,78 @@ if ($is_editor) {
                 foreach ($ug as $u) {
                     $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
                             SELECT $attendance_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);                        
+                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
+                    //update_user_attendance_activities($attendance_id, $u->user_id);
                 }
             }
         } elseif ($_POST['specific_attendance_users'] == 1) { // specific users            
             $active_attendance_users = '';
+            $extra_sql_not_in = "";
+            $extra_sql_in = "";
             foreach ($_POST['specific'] as $u) {
                 $active_attendance_users .= $u . ",";
             }
             $active_attendance_users = substr($active_attendance_users, 0, -1);
+            if ($active_attendance_users) {
+                $extra_sql_not_in .= " NOT IN ($active_attendance_users)";
+                $extra_sql_in .= " IN ($active_attendance_users)";
+            }            
             $gu = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d
-                                                AND uid NOT IN ($active_attendance_users)", $attendance_id);            
+                                                AND uid$extra_sql_not_in", $attendance_id);            
             foreach ($gu as $u) {
                 delete_attendance_user($attendance_id, $u);
             }
-            foreach ($_POST['specific'] as $u) {
-                $sql = Database::get()->querySingle("SELECT uid FROM attendance_users WHERE attendance_id = ?d AND uid = ?d", $attendance_id, $u);                
-                if (!isset($sql->uid)) {
-                    $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                            SELECT $attendance_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
+            $already_inserted_users = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d
+                                                AND uid$extra_sql_in", $attendance_id);
+            $already_inserted_ids = [];
+            foreach ($already_inserted_users as $already_inserted_user) {
+                array_push($already_inserted_ids, $already_inserted_user->uid);
+            }
+            if (isset($_POST['specific'])) {
+                foreach ($_POST['specific'] as $u) {
+                    if (!in_array($u, $already_inserted_ids)) {
+                        $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
+                                SELECT $attendance_id, user_id FROM course_user
+                                WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
+                        //update_user_attendance_activities($attendance_id, $u->user_id);
+                    }
                 }
             }
         } else { // if we want all users between dates            
             $usersstart = new DateTime($_POST['UsersStart']);
             $usersend = new DateTime($_POST['UsersEnd']);
-            $gu = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
+            // Delete all students not in the Date Range
+            $gu = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
+                    . "WHERE attendance_users.uid = course_user.user_id "
+                    . "AND attendance_users.attendance_id = ?d "
+                    . "AND course_user.status = " . USER_STUDENT . " "
+                    . "AND DATE(course_user.reg_date) NOT BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+                    
             foreach ($gu as $u) {
                 delete_attendance_user($attendance_id, $u);
             }
-            //check the rest value and rearrange the table            
-            $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-                        SELECT $attendance_id, user_id FROM course_user
-                        WHERE course_id = ?d AND status = " . USER_STUDENT . " AND reg_date BETWEEN ?s AND ?s",
-                                $course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+            //Add students that are not already registered to the gradebook
+            $already_inserted_users = Database::get()->queryArray("SELECT attendance_users.uid FROM attendance_users, course_user "
+                    . "WHERE attendance_users.uid = course_user.user_id "
+                    . "AND attendance_users.attendance_id = ?d "
+                    . "AND course_user.status = " . USER_STUDENT . " "
+                    . "AND DATE(course_user.reg_date) BETWEEN ?s AND ?s", $attendance_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));                         
+            $already_inserted_ids = [];
+            foreach ($already_inserted_users as $already_inserted_user) {
+                array_push($already_inserted_ids, $already_inserted_user->uid);
+            }
+            $valid_users_for_insertion = Database::get()->queryArray("SELECT user_id 
+                        FROM course_user
+                        WHERE course_id = ?d 
+                        AND status = " . USER_STUDENT . " "
+                    . "AND DATE(reg_date) BETWEEN ?s AND ?s",$course_id, $usersstart->format("Y-m-d"), $usersend->format("Y-m-d"));
+
+            foreach ($valid_users_for_insertion as $u) {
+                if (!in_array($u->user_id, $already_inserted_ids)) {
+                    Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $u->user_id);
+                    //update_user_attendance_activities($attendance_id, $u->user_id);
+                }
+            }            
         }
         Session::Messages($langGradebookEdit,"alert-success");                    
         redirect_to_home_page('modules/attendance/index.php?course=' . $course_code . '&attendance_id=' . $attendance_id . '&attendanceBook=1');

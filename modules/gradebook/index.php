@@ -244,7 +244,7 @@ if ($is_editor) {
                 $extra_sql_in .= " IN ($active_gradebook_users)";
             }
             $gu = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d
-                                                AND uid$extra_sql_in", $gradebook_id);            
+                                                AND uid$extra_sql_not_in", $gradebook_id);            
             foreach ($gu as $u) {
                 delete_gradebook_user($gradebook_id, $u);
             }
