@@ -40,7 +40,7 @@ function display_attendances() {
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
            $langActivate, $langAvailableAttendances, $langNoAttendances, $is_editor,
-           $langViewHide, $langViewShow;
+           $langViewHide, $langViewShow, $langEditChange;
     
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
@@ -65,6 +65,9 @@ function display_attendances() {
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
+                                    array('title' => $langEditChange,
+                                          'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;editSettings=1",
+                                          'icon' => 'fa-cogs'),                       
                                     array('title' => $a->active ? $langViewHide : $langViewShow,
                                           'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id&amp;vis=" . 
                                                   ($a->active ? '0' : '1'),
@@ -637,11 +640,28 @@ function add_attendance_activity($attendance_id, $id, $type) {
  */
 function new_attendance() {
     
-    global $tool_content, $course_code, $langNewAttendance2, 
-           $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber, $attendance_limit;
-    
+    global $tool_content, $course_code, $langNewAttendance2, $head_content,
+           $langTitle, $langSave, $langInsert, $langAttendanceLimitNumber, 
+           $attendance_limit, $langStart, $langEnd, $language;
+
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "
+    <script type='text/javascript'>
+        $(function() {
+            $('#start_date, #end_date').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });
+        });
+    </script>";
     $title_error = Session::getError('title');
     $title = Session::has('title') ? Session::get('title') : '';
+    $start_date_error = Session::getError('start_date');
+    $start_date = Session::has('start_date') ? Session::get('start_date') : '';
+    $end_date_error = Session::getError('end_date');
+    $end_date = Session::has('end_date') ? Session::get('end_date') : '';      
     $limit_error  = Session::getError('limit');
     $limit = Session::has('limit') ? Session::get('limit') : '';
     
@@ -655,6 +675,24 @@ function new_attendance() {
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
+                    <div class='form-group".($start_date_error ? " has-error" : "")."'>
+                        <div class='col-xs-12'>
+                            <label>$langStart</label>                      
+                        </div>
+                        <div class='col-xs-12'>
+                            <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
+                            <span class='help-block'>$start_date_error</span>
+                        </div>
+                    </div>
+                    <div class='form-group".($end_date_error ? " has-error" : "")."'>
+                        <div class='col-xs-12'>
+                            <label>$langEnd</label>                      
+                        </div>
+                        <div class='col-xs-12'>
+                            <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
+                            <span class='help-block'>$end_date_error</span>
+                        </div>
+                    </div>                      
                     <div class='form-group".($limit_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>
@@ -881,13 +919,28 @@ function display_all_users_presences($attendance_id) {
  */
 function attendance_settings($attendance_id) {
     
-    global $tool_content, $course_code,
+    global $tool_content, $course_code, $language,
            $langTitle, $langSave, $langAttendanceLimitNumber,
-           $langAttendanceUpdate, $langSave,
-           $attendance_title;
-
+           $langAttendanceUpdate, $langSave, $head_content,
+           $attendance, $langStart, $langEnd;
+    load_js('bootstrap-datetimepicker');
+    $head_content .= "
+    <script type='text/javascript'>
+        $(function() {
+            $('#start_date, #end_date').datetimepicker({
+                format: 'dd-mm-yyyy hh:ii', 
+                pickerPosition: 'bottom-left', 
+                language: '".$language."',
+                autoclose: true    
+            });
+        });
+    </script>";
     $title_error = Session::getError('title');
-    $title = Session::has('title') ? Session::get('title') : $attendance_title;
+    $title = Session::has('title') ? Session::get('title') : $attendance->title;
+    $start_date_error = Session::getError('start_date');
+    $start_date = Session::has('start_date') ? Session::get('start_date') : DateTime::createFromFormat('Y-m-d H:i:s', $attendance->start_date)->format('d-m-Y H:i');
+    $end_date_error = Session::getError('end_date');
+    $end_date = Session::has('end_date') ? Session::get('end_date') : DateTime::createFromFormat('Y-m-d H:i:s', $attendance->end_date)->format('d-m-Y H:i');     
     $limit_error  = Session::getError('limit');
     $limit = Session::has('limit') ? Session::get('limit') : get_attendance_limit($attendance_id);    
     // update attendance title
@@ -902,6 +955,24 @@ function attendance_settings($attendance_id) {
                             <span class='help-block'>$title_error</span>
                         </div>
                     </div>
+                    <div class='form-group".($start_date_error ? " has-error" : "")."'>
+                        <div class='col-xs-12'>
+                            <label>$langStart</label>                      
+                        </div>
+                        <div class='col-xs-12'>
+                            <input class='form-control' type='text' name='start_date' id='start_date' value='$start_date'>
+                            <span class='help-block'>$start_date_error</span>
+                        </div>
+                    </div>
+                    <div class='form-group".($end_date_error ? " has-error" : "")."'>
+                        <div class='col-xs-12'>
+                            <label>$langEnd</label>                      
+                        </div>
+                        <div class='col-xs-12'>
+                            <input class='form-control' type='text' name='end_date' id='end_date' value='$end_date'>
+                            <span class='help-block'>$end_date_error</span>
+                        </div>
+                    </div>                       
                     <div class='form-group".($limit_error ? " has-error" : "")."'>
                         <label class='col-xs-12'>$langAttendanceLimitNumber:</label>
                         <div class='col-sm-12'>

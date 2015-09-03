@@ -166,7 +166,7 @@ $('input[id=button_groups]').click(changeAssignLabel);
 $display = TRUE;
 if (isset($_REQUEST['attendance_id'])) {
     $attendance_id = $_REQUEST['attendance_id'];
-    $attendance_title = get_attendance_title($attendance_id);
+    $attendance = Database::get()->querySingle("SELECT * FROM attendance WHERE id = ?d", $attendance_id);
     $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code", "name" => $langAttendance);
     $pageName = $langEditChange;
 }
@@ -188,22 +188,24 @@ if ($is_editor) {
     //add a new attendance
     if (isset($_POST['newAttendance'])) {
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'limit'));
+        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
         $v->rule('numeric', array('limit'));
+        $v->rule('date', array('start_date', 'end_date'));
+        if (!empty($_POST['end_date'])) {
+            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
+        }        
         $v->labels(array(
             'title' => "$langTheField $langTitle",
+            'start_date' => "$langTheField $langStart",
+            'end_date' => "$langTheField $langEnd",            
             'limit' => "$langTheField $langAttendanceLimitNumber"
         ));
         if($v->validate()) {           
             $newTitle = $_POST['title'];
             $attendance_limit = intval($_POST['limit']);
-            $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s", $course_id, $attendance_limit, $newTitle)->lastInsertID;   
-            //create attendance users (default the last six months)
-//            $limitDate = date('Y-m-d', strtotime(' -6 month'));
-//            Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
-//                                    SELECT $attendance_id, user_id FROM course_user
-//                                    WHERE course_id = ?d AND status = ".USER_STUDENT." AND reg_date > ?s",
-//                                            $course_id, $limitDate);
+            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
+            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');            
+            $attendance_id = Database::get()->query("INSERT INTO attendance SET course_id = ?d, `limit` = ?d, active = 1, title = ?s, start_date = ?t, end_date = ?t", $course_id, $attendance_limit, $newTitle, $start_date, $end_date)->lastInsertID;   
 
             Session::Messages($langChangeAttendanceCreateSuccess, 'alert-success');
             redirect_to_home_page("modules/attendance/index.php?course=$course_code");
@@ -269,7 +271,7 @@ if ($is_editor) {
     $tool_content .= "<div class='row'><div class='col-sm-12'>";
     
     if (isset($_GET['editUsers']) or isset($_GET['Book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = isset($_GET['editUsers']) ? $langRefreshList : $langAttendanceManagement;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -278,7 +280,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['editSettings'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langConfig;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -287,7 +289,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['attendanceBook'])) {                
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langAttendanceActiveUsers;
         $tool_content .= action_bar(array(
             array('title' => $langRefreshList,
@@ -301,7 +303,7 @@ if ($is_editor) {
                   'button-class' => 'btn-success')            
             ));
     } elseif (isset($_GET['modify'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langEditChange;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -311,7 +313,7 @@ if ($is_editor) {
                   'button-class' => 'btn-success')
             ));
     } elseif (isset($_GET['ins'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(
             array('title' => $langBack,
@@ -320,7 +322,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif(isset($_GET['addActivity']) or isset($_GET['addActivityAs']) or isset($_GET['addActivityEx']) or isset($_GET['addActivityLp'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         if (isset($_GET['addActivityAs'])) {
             $pageName = "$langAdd $langInsertWork";
         } elseif (isset($_GET['addActivityEx'])) {
@@ -337,7 +339,7 @@ if ($is_editor) {
                   'level' => 'primary-label')
             ));
     } elseif (isset($_GET['book'])) {
-        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance_title);
+        $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
         $pageName = $langGradebookBook;
         $tool_content .= action_bar(array(            
             array('title' => $langGradebookBook,
@@ -375,16 +377,24 @@ if ($is_editor) {
     // update attendance settings
     if (isset($_POST['submitAttendanceBookSettings'])) {
         $v = new Valitron\Validator($_POST);
-        $v->rule('required', array('title', 'limit'));
+        $v->rule('required', array('title', 'limit', 'start_date', 'end_date'));
         $v->rule('numeric', array('limit'));
+        $v->rule('date', array('start_date', 'end_date'));
+        if (!empty($_POST['end_date'])) {
+            $v->rule('dateBefore', 'start_date', $_POST['end_date']);
+        }        
         $v->labels(array(
             'title' => "$langTheField $langTitle",
+            'start_date' => "$langTheField $langStart",
+            'end_date' => "$langTheField $langEnd",            
             'limit' => "$langTheField $langAttendanceLimitNumber"
         ));
         if($v->validate()) {           
-            $attendance_limit = intval($_POST['limit']);
+            $attendance_limit = $_POST['limit'];
             $attendance_title = $_POST['title'];
-            Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d WHERE id = ?d ", $attendance_title, $attendance_limit, $attendance_id);
+            $start_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['start_date'])->format('Y-m-d H:i:s');
+            $end_date = DateTime::createFromFormat('d-m-Y H:i', $_POST['end_date'])->format('Y-m-d H:i:s');             
+            Database::get()->querySingle("UPDATE attendance SET `title` = ?s, `limit` = ?d, `start_date` = ?t, `end_date` = ?t WHERE id = ?d ", $attendance_title, $attendance_limit, $start_date, $end_date, $attendance_id);
             Session::Messages($langGradebookEdit,"alert-success");
             redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
         } else {
@@ -529,7 +539,7 @@ if (isset($display) and $display == TRUE) {
         if ($is_editor) {
             display_attendance_activities($attendance_id);            
         } else {
-            $pageName = $attendance_title;
+            $pageName = $attendance->title;
             student_view_attendance($attendance_id); // student view
         }
     } else { // display all attendances
