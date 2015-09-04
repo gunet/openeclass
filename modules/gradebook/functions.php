@@ -1202,11 +1202,9 @@ function display_available_lps($gradebook_id) {
  * @global type $langAm
  * @global type $langRegistrationDateShort
  * @global type $langGradebookGrade
- * @global type $langGradebookGradeAlert
- * @global type $langAttendanceBooking
+ * @global type $langGradebookGradeAlert 
  * @global type $langGradebookBooking
  * @global type $langGradebookOutRange
- * @global type $langGradebookUpdate
  * @param type $gradebook_id
  * @param type $actID
  */
@@ -1214,15 +1212,16 @@ function register_user_grades($gradebook_id, $actID) {
 
     global $tool_content, $course_id, $course_code,
             $langID, $langName, $langSurname, $langAm, $langRegistrationDateShort,
-            $langGradebookGrade, $langGradebookUpdate, $langGradebookNoTitle,
-            $langAttendanceBooking, $langGradebookBooking, $langGradebookTotalGrade,
+            $langGradebookGrade, $langGradebookNoTitle,
+            $langGradebookBooking, $langGradebookTotalGrade,
             $langGradebookActivityWeight, $langCancel;
 
     //display form and list
     $gradebook_range = get_gradebook_range($gradebook_id);
     $result = Database::get()->querySingle("SELECT * FROM gradebook_activities WHERE id = ?d", $actID);
     $act_type = $result->activity_type; // type of activity
-    $tool_content .= "<div class='alert alert-info'>" .(!empty($details->title) ? q($result->title) : $langGradebookNoTitle) . " <br><small>$langGradebookActivityWeight: $result->weight%</small></div>";
+    $tool_content .= "<div class='alert alert-info'>" .(!empty($result->title) ? q($result->title) : $langGradebookNoTitle) . " <br>
+                        <small>$langGradebookActivityWeight: $result->weight%</small></div>";
     //display users
     $resultUsers = Database::get()->queryArray("SELECT gradebook_users.id as recID, gradebook_users.uid as userID, user.surname as surname,
                                                     user.givenname as name, user.am as am, DATE(course_user.reg_date) AS reg_date

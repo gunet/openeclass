@@ -573,10 +573,6 @@ if ($is_editor) {
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
             insert_grades($gradebook_id, $actID);
         }
-//        if (isset($_POST['updateUsersToAct'])) {  
-//            if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();          
-//            update_grades($gradebook_id, $actID);
-//        }
         register_user_grades($gradebook_id, $actID);
         $display = FALSE;
     } 
