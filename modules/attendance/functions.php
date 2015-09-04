@@ -302,7 +302,7 @@ function display_attendance_activities($attendance_id) {
                             <th>$langTitle</th>
                             <th>$langAttendanceActivityDate</th>
                             <th>$langType</th>
-                            <th>$langAttendanceAbsences</th>
+                            <th>$langStudents</th>
                             <th class='text-center'><i class='fa fa-cogs'></i></th>
                         </tr>";
         foreach ($result as $details) {            
