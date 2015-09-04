@@ -141,7 +141,7 @@ exit();
 function classOfUserNodes($usernodes, $node) {
     foreach($usernodes as $usernode) {
         if ($usernode->id === $node->id || ($node->lft < $usernode->lft && $node->rgt > $usernode->rgt)) {
-            return 'jstree-search';
+            return 'jstree-strong';
         }
     }
     return '';
