@@ -596,8 +596,14 @@ function add_attendance_activity($attendance_id, $id, $type) {
                                         module_auto_id = ?d, auto = ?d, module_auto_type = ?d", 
                                     $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);
             $sql = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
-            foreach ($sql as $u) {                    
-                update_attendance_book($u->uid, $id, GRADEBOOK_ACTIVITY_ASSIGNMENT);                    
+            foreach ($sql as $u) {
+                $grd = Database::get()->querySingle("SELECT * "
+                        . "FROM assignment_submit "
+                        . "WHERE assignment_id =?d "
+                        . "AND uid = $u->uid", $id);
+                if($grd) {
+                    update_attendance_book($u->uid, $id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                }
             }
         }
     }
@@ -623,7 +629,10 @@ function add_attendance_activity($attendance_id, $id, $type) {
                                     $attendance_id, $actTitle, $actDate, $actDesc, $module_auto_id, $module_auto, $module_auto_type);            
             $sql = Database::get()->queryArray("SELECT uid FROM attendance_users WHERE attendance_id = ?d", $attendance_id);
             foreach ($sql as $u) {
-                update_attendance_book($u->uid, $id, GRADEBOOK_ACTIVITY_EXERCISE);                                	
+                $exerciseUserRecord = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eid = ?d AND uid = $u->uid AND attempt_status != ?s AND attempt_status != ?s LIMIT 1", $id, ATTEMPT_PAUSED, ATTEMPT_CANCELED);
+                if ($exerciseUserRecord) {
+                    update_attendance_book($u->uid, $id, GRADEBOOK_ACTIVITY_EXERCISE);
+                }
             }
         }
     }        
