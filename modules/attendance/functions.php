@@ -315,16 +315,14 @@ function display_attendance_activities($attendance_id) {
             }
             $tool_content .= "</td>
                     <td>" . nice_format($details->date, true, true) . "</td>";
-            $tool_content .= "<td class='smaller'>";
-//            if($details->module_auto_id != 4 && $details->module_auto_id != 1){
-//            print_r($details);die;
-//            }
+            $tool_content .= "<td>";
+            
             if($details->module_auto_id) {
-//                if($details->module_auto_id == 4) {
-//                        $tool_content .= $langExercise;
-//                } elseif($details->module_auto_id == 1) {
-//                        $tool_content .= $langAssignment;
-//                }
+                if($details->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
+                        $tool_content .= $langExercise;
+                } elseif($details->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
+                        $tool_content .= $langAssignment;
+                }
                 if($details->auto) {
                     $tool_content .= "<small class='help-block'>($langAttendanceInsAut)</small>";
                 } else {
@@ -522,7 +520,7 @@ function add_attendance_other_activity($attendance_id) {
                         <div class='form-group'>
                             <label for='date' class='col-sm-2 control-label'>$langAttendanceActivityDate:</label>
                             <div class='col-sm-10'>
-                                <input type='text' class='form-control' name='date' value='" . datetime_remove_seconds($date) . "'/>
+                                <input type='text' class='form-control' name='date' id='startdatepicker' value='" . datetime_remove_seconds($date) . "'/>
                             </div>
                         </div>
                         <div class='form-group'>

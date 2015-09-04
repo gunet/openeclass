@@ -339,8 +339,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')            
+                  'level' => 'primary-label')            
             ));
     } elseif (isset($_GET['modify'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
@@ -349,8 +348,7 @@ if ($is_editor) {
             array('title' => $langBack,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id",
                   'icon' => 'fa fa-reply ',
-                  'level' => 'primary-label',
-                  'button-class' => 'btn-success')
+                  'level' => 'primary-label')
             ));
     } elseif (isset($_GET['ins'])) {
         $navigation[] = array("url" => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id", "name" => $attendance->title);
