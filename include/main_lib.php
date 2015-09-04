@@ -718,15 +718,10 @@ function user_app_exists($login) {
 function html2text($string) {
     $trans_tbl = get_html_translation_table(HTML_ENTITIES);
     $trans_tbl = array_flip($trans_tbl);
-
-    $text = preg_replace('/</', ' <', $string);
-    $text = preg_replace('/>/', '> ', $string);
-    $desc = html_entity_decode(strip_tags($text));
-    $desc = preg_replace('/[\n\r\t]/', ' ', $desc);
-    $desc = preg_replace('/  /', ' ', $desc);
-
-    return $desc;
-    //    return strtr (strip_tags($string), $trans_tbl);
+    $string = html_entity_decode(strip_tags($string));
+    $text = preg_replace('/<(div|p|pre|br)[^>]*>/i', "\n", $string);
+    return canonicalize_whitespace(strip_tags($text));
+    // return strtr (strip_tags($string), $trans_tbl);
 }
 
 /*
