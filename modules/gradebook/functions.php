@@ -1421,6 +1421,7 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
         if (isset($allow_insert) && $allow_insert) {
             update_gradebook_book($uid, $gradebookActivity->module_auto_id, $grade, $gradebookActivity->module_auto_type, $gradebook_id);
         }
+        unset($allow_insert);
     }
 }
 /**
@@ -1663,9 +1664,7 @@ function update_grades($gradebook_id, $actID) {
  * @param type $activity
  */
 function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
-{
-    global $course_id;
-    
+{    
     $params = [$activity, $id];
     $sql = "SELECT gradebook_activities.id, gradebook_activities.gradebook_id 
                             FROM gradebook_activities, gradebook                          
@@ -1686,9 +1685,10 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
                     WHERE uid = ?d)";
         array_push($params, $uid);
     }
-    // This query if there is NO $gradebook_id gets the gradebook activities that:
-    // 1) belong to gradebooks withing the date constraints  
-    // 2) include a specifc module and has grade auto-submission enabled 
+    // This query gets the gradebook activities that:
+    // 1) belong to gradebooks (or specific gradebook if $gradebook_id != 0) 
+    // withing the date constraints  
+    // 2) of a specifc module and have grade auto-submission enabled 
     // 3) include a specifc user
     $gradebookActivities = Database::get()->queryArray($sql, $params); 
     if ($gradebookActivities) {

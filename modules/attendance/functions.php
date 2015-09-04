@@ -637,7 +637,26 @@ function add_attendance_activity($attendance_id, $id, $type) {
         }
     }        
 }
-
+function update_user_attendance_activities($attendance_id, $uid) { 
+    $attendanceActivities = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d AND auto = 1", $attendance_id);
+    foreach ($attendanceActivities as $attendanceActivity) {
+        if ($attendanceActivity->module_auto_type == GRADEBOOK_ACTIVITY_EXERCISE) {
+            $exerciseUserRecord = Database::get()->querySingle("SELECT * FROM exercise_user_record WHERE eid = ?d AND uid = $uid AND attempt_status != ?d AND attempt_status != ?d LIMIT 1", $attendanceActivity->module_auto_id, ATTEMPT_PAUSED, ATTEMPT_CANCELED);
+            if ($exerciseUserRecord) {
+                $allow_insert = TRUE;
+            }
+        } elseif ($attendanceActivity->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
+            $grd = Database::get()->querySingle("SELECT * FROM assignment_submit WHERE assignment_id = ?d AND uid = $uid", $attendanceActivity->module_auto_id);
+            if ($grd) {
+                $allow_insert = TRUE;
+            }         
+        }
+        if (isset($allow_insert) && $allow_insert) {
+            update_attendance_book($uid, $attendanceActivity->module_auto_id, $attendanceActivity->module_auto_type, $attendance_id);
+        }
+        unset($allow_insert);
+    }
+}
 
 /**
  * @brief create new attendance
@@ -1360,19 +1379,42 @@ function update_presence($attendance_id, $actID) {
  * @param type $activity
  * @return type
  */
-function update_attendance_book($uid, $id, $activity) {
-    
-    $act_id = Database::get()->queryArray("SELECT id, attendance_id FROM attendance_activities WHERE module_auto_type = ?d
-                            AND module_auto_id = ?d
-                            AND auto = 1", $activity, $id);
-    foreach ($act_id as $q) {       
-            $u = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d
-                                    AND attendance_id = ?d", $uid, $q->attendance_id);
-            if($u) {
-                Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1, comments = ''", $uid);
-            }
-        
+function update_attendance_book($uid, $id, $activity, $attendance_id = 0) {
+    $params = [$activity, $id];
+    $sql = "SELECT attendance_activities.id, attendance_activities.attendance_id 
+                            FROM attendance_activities, attendance
+                            WHERE attendance.start_date < NOW()
+                            AND attendance.end_date > NOW() 
+                            AND attendance_activities.module_auto_type = ?d
+                            AND attendance_activities.module_auto_id = ?d
+                            AND attendance_activities.auto = 1
+                            AND attendance_activities.attendance_id = attendance.id
+                            AND attendance_activities.attendance_id ";
+    if ($attendance_id) {
+        $sql .= "= ?d";
+        array_push($params, $attendance_id);
+    } else {
+        $sql .= "IN (
+                    SELECT attendance_id 
+                    FROM attendance_users
+                    WHERE uid = ?d)";
+        array_push($params, $uid);
     }
+    // This query gets the attendance activities that:
+    // 1) belong to attendancebooks (or specific attendancebook if $attendance_id != 0) 
+    // withing the date constraints  
+    // 2) of a specifc module and have grade auto-submission enabled 
+    // 3) attended by a specifc user    
+    $attendanceActivities = Database::get()->queryArray($sql, $params);
+
+    foreach ($attendanceActivities as $attendanceActivity) {       
+            $attendance_book = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = $attendanceActivity->id AND uid = ?d", $uid);
+            if(!$attendance_book) {
+                Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $attendanceActivity->id, uid = ?d, attend = 1, comments = ''", $uid);
+            }
+
+    }        
+
     return;
 }
 

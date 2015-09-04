@@ -229,15 +229,17 @@ if ($is_editor) {
                     $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
                             SELECT $attendance_id, user_id FROM course_user
                             WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
-                    //update_user_attendance_activities($attendance_id, $u->user_id);
+                    update_user_attendance_activities($attendance_id, $u->user_id);
                 }
             }
         } elseif ($_POST['specific_attendance_users'] == 1) { // specific users            
             $active_attendance_users = '';
             $extra_sql_not_in = "";
             $extra_sql_in = "";
-            foreach ($_POST['specific'] as $u) {
-                $active_attendance_users .= $u . ",";
+            if (isset($_POST['specific'])) {
+                foreach ($_POST['specific'] as $u) {
+                    $active_attendance_users .= $u . ",";
+                }
             }
             $active_attendance_users = substr($active_attendance_users, 0, -1);
             if ($active_attendance_users) {
@@ -261,7 +263,7 @@ if ($is_editor) {
                         $newUsersQuery = Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) 
                                 SELECT $attendance_id, user_id FROM course_user
                                 WHERE course_id = ?d AND user_id = ?d", $course_id, $u); 
-                        //update_user_attendance_activities($attendance_id, $u->user_id);
+                        update_user_attendance_activities($attendance_id, $u);
                     }
                 }
             }
@@ -297,7 +299,7 @@ if ($is_editor) {
             foreach ($valid_users_for_insertion as $u) {
                 if (!in_array($u->user_id, $already_inserted_ids)) {
                     Database::get()->query("INSERT INTO attendance_users (attendance_id, uid) VALUES (?d, ?d)", $attendance_id, $u->user_id);
-                    //update_user_attendance_activities($attendance_id, $u->user_id);
+                    update_user_attendance_activities($attendance_id, $u->user_id);
                 }
             }            
         }
