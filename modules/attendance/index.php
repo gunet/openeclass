@@ -495,7 +495,7 @@ if ($is_editor) {
     }
     
     elseif (isset($_GET['delete'])) {
-        delete_attendance_activity($attendance_id, $_GET['delete']);
+        delete_attendance_activity($attendance_id, getDirectReference($_GET['delete']));
         redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
     
     // delete attendance

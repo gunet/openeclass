@@ -343,7 +343,7 @@ function display_attendance_activities($attendance_id) {
                                     ),                            
                                 array('title' => $langDelete,
                                     'icon' => 'fa-times',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;attendance_id=$attendance_id&amp;delete= " .getIndirectReference($details->id),
+                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;&amp;attendance_id=$attendance_id&amp;delete=" .getIndirectReference($details->id),
                                     'confirm' => $langConfirmDelete,
                                     'class' => 'delete'))).
                     "</td></tr>";
@@ -1398,7 +1398,7 @@ function delete_attendance($attendance_id) {
 function delete_attendance_activity($attendance_id, $activity_id) {
     
     global $langAttendanceDel, $langAttendanceDelFailure;
-    
+
     $delAct = Database::get()->query("DELETE FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $activity_id, $attendance_id)->affectedRows;
     Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $activity_id)->affectedRows;
     if($delAct) {
