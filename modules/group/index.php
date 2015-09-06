@@ -60,6 +60,9 @@ $user_groups = user_group_info($uid, $course_id);
 
 if ($is_editor) {
     if (isset($_POST['creation'])) {
+			$category_id = intval(getDirectReference($_POST['selectcategory']));
+			$id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
+                                    VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('group_quantity'));
         $v->rule('numeric', array('group_quantity'));
@@ -176,6 +179,13 @@ if ($is_editor) {
                     $self_reg, $multi_reg, $private_forum, $has_forum, $documents, $wiki, $course_id);
         $message = $langGroupPropertiesModified;
     } elseif (isset($_REQUEST['delete_all'])) {
+    elseif (isset($_POST['submitCategory'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        submit_category();
+        $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
+        Session::Messages($messsage, 'alert-success');
+        redirect_to_home_page("modules/group/index.php");
+    }
         /*         * ************Delete All Group Wikis********** */
         $sql = "SELECT id "
                 . "FROM wiki_properties "
@@ -343,6 +353,11 @@ if ($is_editor) {
                 array('title' => $langGroupProperties,
                     'url' => "group_properties.php?course=$course_code",
                     'icon' => 'fa-gear'),
+				array('title' => $langCategoryAdd,
+                      'url' => "group_category.php?course=$course_code",
+                      'icon' => 'fa-plus-circle',
+                      'button-class' => 'btn-success',
+                      'level' => 'primary-label'),
                 array('title' => $langFillGroupsAll,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
                     'icon' => 'fa-pencil',
@@ -463,6 +478,33 @@ if ($is_editor) {
         }
         $tool_content .= "</table></div>";
     }
+	
+}
+
+function submit_category() {
+    global $course_id, $langCategoryAdded, $langCategoryModded,
+    $categoryname, $description;
+
+    register_posted_variables(array('categoryname' => true,
+                                    'description' => true), 'all', 'trim');
+    $set_sql = "SET name = ?s, description = ?s";
+    $terms = array($categoryname, purify($description));
+
+    if (isset($_POST['id'])) {
+        $id = getDirectReference($_POST['id']);
+        Database::get()->query("UPDATE `group_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
+        $log_type = LOG_MODIFY;
+    } else {
+        $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link_category`
+                                      WHERE course_id = ?d", $course_id)->maxorder;
+        $order++;
+        $id = Database::get()->query("INSERT INTO `group_category` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
+        $log_type = LOG_INSERT;
+    }
+    $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
+    Log::record($course_id, MODULE_ID_LINKS, $log_type, array('id' => $id,
+        'category' => $categoryname,
+        'description' => $txt_description));
 }
 
 add_units_navigation(TRUE);

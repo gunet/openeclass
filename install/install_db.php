@@ -407,6 +407,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `group` (
     `name` varchar(100) NOT NULL DEFAULT '',
     `description` TEXT,
     `forum_id` int(11) NULL,
+	`category_id` int(11) NULL,
     `max_members` int(11) NOT NULL DEFAULT 0,
     `secret_directory` varchar(30) NOT NULL DEFAULT 0) $charset_spec");
 
@@ -416,6 +417,14 @@ $db->query("CREATE TABLE IF NOT EXISTS `group_members` (
     `is_tutor` int(11) NOT NULL DEFAULT 0,
     `description` TEXT,
     PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `group_category` (
+    `id` INT(6) NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `order` INT(6) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `glossary` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
