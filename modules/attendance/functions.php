@@ -61,7 +61,7 @@ function display_attendances() {
         $tool_content .= "</tr>";
         foreach ($result as $a) {
             $row_class = !$a->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>$a->title</a></td>";
+            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".$a->title."</a></td>";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
@@ -243,7 +243,7 @@ function display_attendance_activities($attendance_id) {
     
     global $tool_content, $course_code,
            $langAttendanceActList, $langTitle, $langType, $langAttendanceActivityDate, $langAttendanceAbsences,
-           $langAttendanceNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, $langAttendanceInsMan,
+           $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, $langAttendanceInsMan,
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, $langAttendanceActivity,
            $langHere, $langAttendanceNoActMessage3, $langToA, $langcsvenc1, $langcsvenc2,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
@@ -309,7 +309,7 @@ function display_attendance_activities($attendance_id) {
             $content = ellipsize_html($details->description, 50);            
             $tool_content .= "<tr><td>";
              if (empty($details->title)) {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id). "'>$langAttendanceNoTitle</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id). "'>$langGradebookNoTitle</a>";
             } else {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($details->id) . "'>".q($details->title)."</a>";
             }
