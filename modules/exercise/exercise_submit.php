@@ -422,7 +422,11 @@ foreach ($questionList as $questionId) {
 } // end foreach()
 
 if (!$questionList) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
+    $tool_content .= "
+            <div class='alert alert-warning'>$langNoQuestion</div>
+            <div class='pull-right'>
+                <a href='index.php?course=$course_code' class='btn btn-default'>$langBack</a>
+            </div>";
 } else {
     $tool_content .= "
         <br>
