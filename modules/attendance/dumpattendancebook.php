@@ -39,18 +39,19 @@ if (!$is_editor) {
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=listattendanceusers.csv");
 
-echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langUsername, $langEmail, $langAttendanceAbsences)));
-echo $crlf;
-echo $crlf;
 
 $sql = Database::get()->queryArray("SELECT id, title FROM attendance_activities WHERE attendance_id = ?d", $_GET['attendance_id']);
 foreach ($sql as $act) {
-    echo csv_escape($act->title). "$crlf";
+    $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
+    echo csv_escape($title). "$crlf";
+    echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langUsername, $langEmail, $langAttendanceAbsences)));
+    echo $crlf;
     $sql2 = Database::get()->queryArray("SELECT uid, attend FROM attendance_book WHERE attendance_activity_id = ?d", $act->id);
     foreach ($sql2 as $u) {
         $userdata = Database::get()->querySingle("SELECT surname, givenname, username, am, email FROM user WHERE id = ?d", $u->uid);
         echo join(';', array_map("csv_escape", array($userdata->surname, $userdata->givenname, $userdata->am, $userdata->username, $userdata->email, $u->attend)));
         echo "$crlf";
     }
+    echo "$crlf";
     echo "$crlf";
 }
