@@ -34,10 +34,10 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-if (isset($_POST['submit'])) {    
+if (isset($_POST['submit'])) {
     $requiredFields = array('auth_form', 'surname_form',
-        'givenname_form', 'language_form', 'department', 'pstatus');
-    if (get_config('am_required')) {
+        'givenname_form', 'language_form', 'department', 'pstatus');        
+    if (get_config('am_required') and @$_POST['pstatus'] == 5) {
         $requiredFields[] = 'am_form';
     }
     if (get_config('email_required')) {
@@ -130,8 +130,7 @@ $langEmail : " . get_config('email_helpdesk') . "\n";
         Session::Messages(array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
             ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
-    }
-    redirect_to_home_page('modules/admin/newuseradmin.php');
+    }    
 }
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
@@ -233,22 +232,21 @@ if (isset($_GET['id'])) { // if we come from prof request
             validateNode($depid, isDepartmentAdmin());
         }
     }
+    $params = '';
 } elseif (@$_GET['type'] == 'user') {
     $pstatus = 5;
-} else {
-    $pstatus = 1;
-}
-
-if ($pstatus == 5) {
     $pageName = $langUserDetails;
     $title = $langInsertUserInfo;
+    $params = "?type=user";
 } else {
+    $pstatus = 1;
     $pageName = $langProfReg;
     $title = $langNewProf;
+    $params = "?type=";
 }
 
 $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]' method='post' onsubmit='return validateNodePickerForm();'>
+        <form class='form-horizontal' role='form' action='$_SERVER[SCRIPT_NAME]$params' method='post' onsubmit='return validateNodePickerForm();'>
         <fieldset>";
 formGroup('givenname_form', $langName,
     "<input class='form-control' id='givenname_form' type='text' name='givenname_form'" .
@@ -305,14 +303,18 @@ formGroup('phone_form', $langPhone,
     "<input class='form-control' id='phone_form' type='text' name='phone_form'" .
     getValue('phone_form', $pphone) . " placeholder='" . q($langPhone) . "'>");
 formGroup('faculty', $langFaculty, $tree_html);
-if (get_config('am_required')) {
-    $am_message = $langCompulsory;
-} else {
-    $am_message = $langOptional;
+
+if ($pstatus == 5) { // only for students
+    if (get_config('am_required')) {
+        $am_message = $langCompulsory;
+    } else {
+        $am_message = $langOptional;
+    }
+    formGroup('am_form', $langAm, 
+        "<input class='form-control' id='am_form' type='text' name='am_form'" .
+        getValue('am_form', $pam) . " placeholder='" . q($am_message) . "'>");
 }
-formGroup('am_form', $langAm, 
-    "<input class='form-control' id='am_form' type='text' name='am_form'" .
-    getValue('am_form', $pam) . " placeholder='" . q($am_message) . "'>");
+
 formGroup('language_form', $langLanguage,
     lang_select_options('language_form', "class='form-control'",
         Session::has('language_form')? Session::get('language_form'): $language));
@@ -322,11 +324,13 @@ if (isset($_GET['id'])) {
     formGroup('date', $langDate, q($pdate));
     $tool_content .= "<input type='hidden' name='rid' value='$id'>";
 }
+if (isset($pstatus)) { 
+    $tool_content .= "<input type='hidden' name='pstatus' value='$pstatus'>";
+}        
 $tool_content .= "
         <div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langRegistration'>
-        </div>
-        <input type='hidden' name='pstatus' value='$pstatus'>
+        </div>        
       </fieldset>
     </form>
   </div>";
