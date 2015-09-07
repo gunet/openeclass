@@ -120,7 +120,7 @@ function register_user_presences($attendance_id, $actID) {
 
     global $tool_content, $course_id, $course_code, $langAttendanceAutoBook,
            $langName, $langSurname, $langRegistrationDateShort, $langAttendanceAbsences,
-           $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit;
+           $langAm, $langAttendanceBooking, $langID, $langAttendanceEdit, $langCancel;
     $result = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d", $actID);
     $act_type = $result->auto; // type of activity
     $tool_content .= "<div class='alert alert-info'>" . $result->title . "</div>";
@@ -161,7 +161,7 @@ function register_user_presences($attendance_id, $actID) {
     if ($resultUsers) {
         //table to display the users
         $tool_content .= "<div class='form-wrapper'>
-        <form method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
+        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr>
@@ -199,15 +199,16 @@ function register_user_presences($attendance_id, $actID) {
                                 'text' => $langAttendanceBooking,
                                 'name' => 'bookUsersToAct',
                                 'value'=> $langAttendanceBooking
-                                )));
-        if ($act_type == 1) {
-            $tool_content .= form_buttons(array(
-                                array(
-                                    'text' => $langAttendanceAutoBook,
-                                    'name' => 'updateUsersToAct',
-                                    'value'=> $langAttendanceAutoBook                        
-                                )));
-            }
+                                ))).
+                "<a href='index.php?course=$course_code&amp;attendance_id=" . $attendance_id . "' class='btn btn-default'>$langCancel</a>";
+//        if ($act_type == 1) {
+//            $tool_content .= form_buttons(array(
+//                                array(
+//                                    'text' => $langAttendanceAutoBook,
+//                                    'name' => 'updateUsersToAct',
+//                                    'value'=> $langAttendanceAutoBook                        
+//                                )));
+//            }
         $tool_content .= "</div></div>";        
         $tool_content .= generate_csrf_token_form_field() ."</form></div>";    
         $tool_content .= "</tbody></table>";
