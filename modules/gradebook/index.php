@@ -469,7 +469,7 @@ if ($is_editor) {
         ));
         if($v->validate()) {
             if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-            $actTitle = isset($_POST['actTitle']) ? $_POST['actTitle'] : '';
+            $actTitle = isset($_POST['actTitle']) ? trim($_POST['actTitle']) : '';
             $actDesc = purify($_POST['actDesc']);
             $auto = isset($_POST['auto']) ? 1 : 0;
             $weight = $_POST['weight'];

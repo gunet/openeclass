@@ -463,7 +463,7 @@ if ($is_editor) {
             'date' => "$langTheField $langGradebookActivityDate2"
         ));
         if($v->validate()) {
-            $actTitle = isset($_POST['actTitle']) ? $_POST['actTitle'] : "";
+            $actTitle = isset($_POST['actTitle']) ? trim($_POST['actTitle']) : "";
             $actDesc = purify($_POST['actDesc']);
             $auto = isset($_POST['auto']) ? $_POST['auto'] : "";
             $actDate = !empty($_POST['date']) ? $_POST['date'] : null;

@@ -2060,7 +2060,7 @@ function show_submission_form($id, $user_group_info, $on_behalf_of=false, $submi
                     $scale_options
                 </select>";
     } else {
-        $grade_field = "<input class='form-control' type='text' name='grade' maxlength='3' size='3'> ($m[max_grade]: $assignment->max_grade)";
+        $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3'> ($m[max_grade]: $assignment->max_grade)";
     }
     $extra = $on_behalf_of ? "
                         <div class='form-group'>
@@ -2457,7 +2457,7 @@ function show_assignment($id, $display_graph_results = false) {
                                 $scale_options
                             </select>";
                 } else {
-                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='3' size='3'>";
+                    $grade_field = "<input class='form-control' type='text' value='$grade' name='grades[$row->id][grade]' maxlength='4' size='3'>";
                 }
                 $late_sub_text = $row->deadline && $row->submission_date > $row->deadline ?  "<div style='color:red;'><small>$m[late_submission]</small></div>" : '';
                 $tool_content .= "
