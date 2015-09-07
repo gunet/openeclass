@@ -739,13 +739,15 @@ function student_view_gradebook($gradebook_id) {
                 $tool_content .= "&mdash;";
             }
             $tool_content .= "</td>";
-            $tool_content .= "<td width='70' class='text-center'>".($sql->grade * $range * $details->weight / 100)." / $range</td>
+            $tool_content .= "<td width='70' class='text-center'>";
+            $tool_content .= $sql ? ($sql->grade * $range * $details->weight / 100)." / $range</td>" : "&mdash;";
+            $tool_content .= "</td>
             </tr>";
         } // end of while
         $tool_content .= "            
             <tr>
                 <th colspan='5' class='text-right'>$langGradebookSum:</th>
-                <th>".userGradeTotal($gradebook_id, $uid) . " / $range</th>
+                <th class='text-center'>".($sql ? userGradeTotal($gradebook_id, $uid) . " / $range" : "&mdash;")."</th>
             </tr>";
     }
     $tool_content .= "</table>";
