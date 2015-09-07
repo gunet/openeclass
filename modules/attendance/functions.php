@@ -165,9 +165,10 @@ function register_user_presences($attendance_id, $actID) {
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr>
-                  <th class='text-center' width='10%'>$langID</th>
-                  <th class='text-left' width='75%'>$langName $langSurname</th>
-                  <th class='text-center' width='5%'>$langRegistrationDateShort</th>
+                  <th class='text-center' width='5%'>$langID</th>
+                  <th class='text-left'>$langName $langSurname</th>
+                  <th>$langAm</th>
+                  <th class='text-center'>$langRegistrationDateShort</th>
                   <th class='text-center'>$langAttendanceAbsences</th>
                 </tr>
             </thead>
@@ -176,15 +177,11 @@ function register_user_presences($attendance_id, $actID) {
         $cnt = 0;   
         foreach ($resultUsers as $resultUser) {
             $cnt++;            
-            if (empty($resultUser->am)) {
-                $am_text = "($langAm: $resultUser->am)";
-            } else {
-                $am_text = '';
-            }
             $tool_content .= "<tr>
                 <td class='text-center'>$cnt</td>
-                <td> " . display_user($resultUser->userID). " $am_text </td>
-                <td>" . nice_format($resultUser->reg_date, true, true) . "</td>
+                <td> " . display_user($resultUser->userID). "</td>
+                <td>$resultUser->am</td>    
+                <td class='text-center'>" . nice_format($resultUser->reg_date, true, true) . "</td>
                 <td class='text-center'><input type='checkbox' value='1' name='userspresence[$resultUser->userID]'";
                 //check if the user has attendace for this activity already OR if it should be automatically inserted here
                 $q = Database::get()->querySingle("SELECT attend FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $resultUser->userID);
@@ -916,7 +913,8 @@ function display_all_users_presences($attendance_id) {
             <thead>
                 <tr>
                   <th width='1'>$langID</th>
-                  <th><div align='left'>$langName $langSurname</div></th>
+                  <th>$langName $langSurname</th>
+                  <th>$langAm</th>
                   <th class='center'>$langRegistrationDateShort</th>
                   <th class='center'>$langAttendanceAbsences</th>
                   <th class='text-center'><i class='fa fa-cogs'></i></th>
@@ -928,7 +926,8 @@ function display_all_users_presences($attendance_id) {
             $cnt++;
             $tool_content .= "<tr>
                 <td>$cnt</td>
-                <td>" . display_user($resultUser->userID) . " ($langAm: $resultUser->am)</td>
+                <td>" . display_user($resultUser->userID) . "</td>
+                <td>$resultUser->am</td>
                 <td>" . nice_format($resultUser->reg_date) . "</td>
                 <td>" . userAttendTotal($attendance_id, $resultUser->userID) . "/" . $attendance_limit . "</td>    
                 <td class='option-btn-cell'>"

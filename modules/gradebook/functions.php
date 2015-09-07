@@ -601,7 +601,8 @@ function display_all_users_grades($gradebook_id) {
             <thead>
                 <tr>
                   <th width='1'>$langID</th>
-                  <th><div align='left' width='100'>$langName $langSurname</div></th>
+                  <th>$langName $langSurname</th>
+                  <th>$langAm</th>
                   <th>$langRegistrationDateShort</th>
                   <th>$langGradebookGrade</th>
                   <th class='text-center'>".icon('fa-cogs')."</th>
@@ -614,7 +615,8 @@ function display_all_users_grades($gradebook_id) {
             $tool_content .= "
                 <tr>
                 <td>$cnt</td>
-                <td>" . display_user($resultUser->userID). " ($langAm: $resultUser->am)</td>
+                <td>" . display_user($resultUser->userID). "</td>
+                <td>$resultUser->am</td>
                 <td>" . nice_format($resultUser->reg_date) . "</td>
                 <td>";
                 if(weightleft($gradebook_id, 0) == 0) {
@@ -1242,6 +1244,7 @@ function register_user_grades($gradebook_id, $actID) {
                 <tr class='list-header'>
                     <th width='2'>$langID</th>
                     <th>$langName $langSurname</th>
+                    <th>$langAm</th>
                     <th class='text-center' width='80'>$langRegistrationDateShort</th>
                     <th width='50' class='text-center'>$langGradebookGrade</th>
                     <th width='50'>$langGradebookTotalGrade</th>
@@ -1252,10 +1255,6 @@ function register_user_grades($gradebook_id, $actID) {
         $cnt = 0;
         foreach ($resultUsers as $resultUser) {
             $cnt++;
-            $am_message = '';
-            if (!empty($resultUser->am)) {
-                $am_message = "($langAm: $resultUser->am)";
-            }
             $q = Database::get()->querySingle("SELECT grade FROM gradebook_book
                                                             WHERE gradebook_activity_id = ?d
                                                         AND uid = ?d", $actID, $resultUser->userID);
@@ -1266,7 +1265,8 @@ function register_user_grades($gradebook_id, $actID) {
             $tool_content .= "
             <tr>
                 <td>$cnt</td>
-                <td>" . display_user($resultUser->userID). " $am_message</td>
+                <td>" . display_user($resultUser->userID). "</td>
+                <td>$resultUser->am</td>
                 <td>" . nice_format($resultUser->reg_date) . "</td>
                 <td class='text-center form-group".(Session::getError(getIndirectReference($resultUser->userID)) ? " has-error" : "")."'>
                     <input class='form-control' type='text' name='usersgrade[".getIndirectReference($resultUser->userID)."]' value = '".$grade."'>
