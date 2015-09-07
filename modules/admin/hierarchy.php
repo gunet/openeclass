@@ -270,8 +270,16 @@ elseif (isset($_GET['action']) && $_GET['action'] == 'add') {
           </div>
         </div>
         <div class='form-group'>
-          <div class='col-sm-2'>
-              <input class='btn btn-primary' type='submit' name='add' value='" . $langAdd . "' />
+          <div class='col-sm-9 col-sm-offset-3'>".form_buttons(array(
+                array(
+                    'text' => $langSave,
+                    'name' => 'add',
+                    'value'=> $langAdd
+                ),
+                array(
+                    'href' => "$_SERVER[SCRIPT_NAME]"
+                )
+            ))."
           </div>
         </div>
         </fieldset>
@@ -355,15 +363,16 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         $check_course = ($mynode->allow_course == 1) ? " checked=1 " : '';
         $check_user = ($mynode->allow_user == 1) ? " checked=1 " : '';
         // Display form for edit node information
-        $tool_content .= "<div class='form-wrapper'>
-        <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=edit' onsubmit='return validateNodePickerForm();'>
-        <fieldset>
-        <div class='form-group'>
-            <label class='col-sm-3 control-label'>$langNodeCode1:</label>
-            <div class='col-sm-9'>
-                <input class='form-control' type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i>
-            </div>
-        </div>";            
+        $tool_content .= "
+            <div class='form-wrapper'>
+                <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?action=edit' onsubmit='return validateNodePickerForm();'>
+                    <fieldset>
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langNodeCode1:</label>
+                            <div class='col-sm-9'>
+                                <input class='form-control' type='text' name='code' value='" . q($mynode->code) . "' />&nbsp;<i>" . $langCodeFaculte2 . "</i>
+                            </div>
+                        </div>";
 
         $is_serialized = false;
         $names = @unserialize($mynode->name);
@@ -376,11 +385,12 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
             if (!$is_serialized && $key == 0) {
                 $n = $mynode->name;
             }
-            $tool_content .= "<div class='form-group'>
-                     <label class='col-sm-3 control-label'>$langNodeName:</label>";
+            $tool_content .= "
+                        <div class='form-group'>
+                            <label class='col-sm-3 control-label'>$langNodeName:</label>";
              $tdpre = ($i >= 0) ? "<div class='col-sm-9'>" : '';
              $placeholder = "$langFaculte2 (" . $langNameOfLang[langcode_to_name($langcode)] . ")";
-            $tool_content .= $tdpre . "<input type='text' name='name-" . q($langcode) . "' value='" . q($n) . "' placeholder='$placeholder'></div></div>";
+            $tool_content .= $tdpre . "<input class='form-control' type='text' name='name-" . q($langcode) . "' value='" . q($n) . "' placeholder='$placeholder'></div></div>";
             $i++;
         }
 
@@ -426,7 +436,7 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
         <div class='form-group'>
         <label class='col-sm-3 control-label'>$langNodeOrderPriority</label>      
           <div class='col-sm-9'>
-              <input type='text' name='order_priority' value='" . q($mynode->order_priority) . "'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
+              <input class='form-control' type='text' name='order_priority' value='" . q($mynode->order_priority) . "'><span class='help-block'><small>$langNodeOrderPriority2</small></span>
           </div>
         </div>
         <input type='hidden' name='id' value='$id' />
@@ -434,8 +444,16 @@ elseif (isset($_GET['action']) and $_GET['action'] == 'edit') {
                <input type='hidden' name='lft' value='" . q($mynode->lft) . "'/>
                <input type='hidden' name='rgt' value='" . q($mynode->rgt) . "'/>
         <div class='form-group'>
-          <div class='col-sm-10 col-sm-offset-2'>
-              <input class='btn btn-primary' type='submit' name='edit' value='$langAcceptChanges'>
+          <div class='col-sm-9 col-sm-offset-3'>".form_buttons(array(
+                array(
+                    'text' => $langSave,
+                    'name' => 'edit',
+                    'value'=> $langAcceptChanges
+                ),
+                array(
+                    'href' => "$_SERVER[SCRIPT_NAME]"
+                )
+            ))."
           </div>
         </div>        
         </fieldset>
