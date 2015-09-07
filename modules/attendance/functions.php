@@ -40,7 +40,7 @@ function display_attendances() {
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
            $langActivate, $langAvailableAttendances, $langNoAttendances, $is_editor,
-           $langViewHide, $langViewShow, $langEditChange;
+           $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd;
     
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
@@ -54,14 +54,25 @@ function display_attendances() {
         $tool_content .= "<div class='col-sm-12'>";
         $tool_content .= "<div class='table-responsive'>";
         $tool_content .= "<table class='table-default'>";
-        $tool_content .= "<tr class='list-header'><th>$langAvailableAttendances</th>";
+        $tool_content .= "<tr class='list-header'>
+                            <th>$langAvailableAttendances</th>
+                            <th>$langStart</th>
+                            <th>$langEnd</th>";                                
         if( $is_editor) {
             $tool_content .= "<th class='text-center'>" . icon('fa-gears') . "</th>";
         }
         $tool_content .= "</tr>";
         foreach ($result as $a) {
+            $start_date = DateTime::createFromFormat('Y-m-d H:i:s', $a->start_date)->format('d-m-Y H:i');
+            $end_date = DateTime::createFromFormat('Y-m-d H:i:s', $a->end_date)->format('d-m-Y H:i');
             $row_class = !$a->active ? "class='not_visible'" : "";
-            $tool_content .= "<tr $row_class><td><a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".$a->title."</a></td>";
+            $tool_content .= "
+                    <tr $row_class>
+                        <td>
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$a->id'>".$a->title."</a>
+                        </td>
+                        <td>$start_date</td>
+                        <td>$end_date</td>";
             if( $is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
@@ -241,13 +252,13 @@ function register_user_presences($attendance_id, $actID) {
  */
 function display_attendance_activities($attendance_id) {
     
-    global $tool_content, $course_code,
+    global $tool_content, $course_code, $attendance,
            $langAttendanceActList, $langTitle, $langType, $langAttendanceActivityDate, $langAttendanceAbsences,
            $langGradebookNoTitle, $langExercise, $langAssignment,$langAttendanceInsAut, $langAttendanceInsMan,
            $langDelete, $langEditChange, $langConfirmDelete, $langAttendanceNoActMessage1, $langAttendanceActivity,
            $langHere, $langAttendanceNoActMessage3, $langToA, $langcsvenc1, $langcsvenc2,
            $langConfig, $langStudents, $langGradebookAddActivity, $langInsertWorkCap, $langInsertExerciseCap,
-           $langAdd, $langExport, $langBack;
+           $langAdd, $langExport, $langBack, $langNoRegStudent;
     
    
     $tool_content .= action_bar(
@@ -292,6 +303,9 @@ function display_attendance_activities($attendance_id) {
         
     $participantsNumber = Database::get()->querySingle("SELECT COUNT(id) AS count 
                                             FROM attendance_users WHERE attendance_id=?d ", $attendance_id)->count;
+    if ($participantsNumber == 0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoRegStudent <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=" . $attendance->id . "&amp;editUsers=1'>$langHere</a>.</div>";
+    }
     //get all the available activities
     $result = Database::get()->queryArray("SELECT * FROM attendance_activities WHERE attendance_id = ?d  ORDER BY `DATE` DESC", $attendance_id);  
     if (count($result) > 0) {
