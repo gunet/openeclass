@@ -980,12 +980,16 @@ function display_gradebooks() {
     global $course_id, $tool_content, $gradebook_id, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
            $langActivate, $langAvailableGradebooks, $langNoGradeBooks, $is_editor,
-           $langViewShow, $langViewHide, $langStart, $langEnd;
+           $langViewShow, $langViewHide, $langStart, $langEnd, $uid;
 
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE course_id = ?d", $course_id);
     } else {
-        $result = Database::get()->queryArray("SELECT * FROM gradebook WHERE active = 1 AND course_id = ?d", $course_id);
+        $result = Database::get()->queryArray("SELECT gradebook.* "
+                . "FROM gradebook, gradebook_users "
+                . "WHERE gradebook.active = 1 "
+                . "AND gradebook.course_id = ?d "
+                . "AND gradebook.id = gradebook_users.gradebook_id AND gradebook_users.uid = ?d", $course_id, $uid);        
     }
     if (count($result) == 0) { // no gradebooks
         $tool_content .= "<div class='alert alert-info'>$langNoGradeBooks</div>";

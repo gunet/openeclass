@@ -40,12 +40,16 @@ function display_attendances() {
     global $course_id, $tool_content, $course_code, $langEditChange,
            $langDelete, $langConfirmDelete, $langDeactivate, $langCreateDuplicate,
            $langActivate, $langAvailableAttendances, $langNoAttendances, $is_editor,
-           $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd;
+           $langViewHide, $langViewShow, $langEditChange, $langStart, $langEnd, $uid;
     
     if ($is_editor) {
         $result = Database::get()->queryArray("SELECT * FROM attendance WHERE course_id = ?d", $course_id);
     } else {
-        $result = Database::get()->queryArray("SELECT * FROM attendance WHERE active = 1 AND course_id = ?d", $course_id);
+        $result = Database::get()->queryArray("SELECT attendance.* "
+                . "FROM attendance, attendance_users "
+                . "WHERE attendance.active = 1 "
+                . "AND attendance.course_id = ?d "
+                . "AND attendance.id = attendance_users.attendance_id AND attendance_users.uid = ?d", $course_id, $uid);
     }    
     if (count($result) == 0) { // no attendances
         $tool_content .= "<div class='alert alert-info'>$langNoAttendances</div>";
