@@ -456,42 +456,39 @@ if ($is_editor) {
     }
     
     //UPDATE/INSERT DB: add or edit activity to attendance module (edit concerns and course activities like lps)
-    elseif(isset($_POST['submitAttendanceActivity'])) {        
-        if (isset($_POST['actTitle'])) {
-            $actTitle = $_POST['actTitle'];
+    elseif(isset($_POST['submitAttendanceActivity'])) {   
+        $v = new Valitron\Validator($_POST);      
+        $v->rule('date', array('date'));
+        $v->labels(array(
+            'date' => "$langTheField $langGradebookActivityDate2"
+        ));
+        if($v->validate()) {
+            $actTitle = isset($_POST['actTitle']) ? $_POST['actTitle'] : "";
+            $actDesc = purify($_POST['actDesc']);
+            $auto = isset($_POST['auto']) ? $_POST['auto'] : "";
+            $actDate = !empty($_POST['date']) ? $_POST['date'] : null;
+            $visible = isset($_POST['visible']) ? 1 : 0;
+            if ($_POST['id']) {              
+                //update
+                $id = $_POST['id'];
+                Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, 
+                                                description = ?s, `auto` = ?d
+                                            WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);
+                Session::Messages("$langGradebookEdit", "alert-success");
+                redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+            } else {
+                //insert
+                $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, 
+                                                            `date` = ?t, description = ?s", 
+                                                    $attendance_id, $actTitle, $actDate, $actDesc);
+                Session::Messages("$langGradebookSucInsert","alert-success");
+                redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
+            }            
         } else {
-            $actTitle = "";
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            $new_or_edit = $_POST['id'] ?  "&modify=".getIndirectReference($_POST['id']) : "&addActivity=1";
+            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=".$attendance_id.$new_or_edit);            
         }        
-        $actDesc = purify($_POST['actDesc']);
-        if (isset($_POST['auto'])) {
-            $auto = $_POST['auto'];
-        } else {
-            $auto = "";
-        }
-        $actDate = $_POST['date'];
-        if (empty($_POST['date'])) {
-            $actDate = '0000-00-00 00:00:00';
-        } else {
-            $actDate = $_POST['date'];    
-        }        
-        $visible = isset($_POST['visible']) ? 1 : 0;                
-        if ($_POST['id']) {              
-            //update
-            $id = $_POST['id'];
-            Database::get()->query("UPDATE attendance_activities SET `title` = ?s, date = ?t, 
-                                            description = ?s, `auto` = ?d
-                                        WHERE id = ?d", $actTitle, $actDate, $actDesc, $auto, $id);
-            Session::Messages("$langGradebookEdit", "alert-success");
-            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
-        } else {
-            //insert
-            $insertAct = Database::get()->query("INSERT INTO attendance_activities SET attendance_id = ?d, title = ?s, 
-                                                        `date` = ?t, description = ?s", 
-                                                $attendance_id, $actTitle, $actDate, $actDesc);
-            Session::Messages("$langGradebookSucInsert","alert-success");
-            redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id");
-        }
-        $display = FALSE;
     }
     
     elseif (isset($_GET['delete'])) {

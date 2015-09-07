@@ -486,7 +486,8 @@ function add_attendance_other_activity($attendance_id) {
     global $tool_content, $course_code, $langDescription,
            $langTitle, $langAttendanceInsAut, $langAdd,
            $langAdd, $langSave, $langAttendanceActivityDate;
-            
+    
+    $date_error = Session::getError('date');                
     $tool_content .= "<div class='row'>
         <div class='col-sm-12'>
             <div class='form-wrapper'>                    
@@ -498,16 +499,17 @@ function add_attendance_other_activity($attendance_id) {
                         //All activity data (check if it's in this attendance)
                         $modifyActivity = Database::get()->querySingle("SELECT * FROM attendance_activities WHERE id = ?d AND attendance_id = ?d", $id, $attendance_id);
                         //if ($modifyActivity) {
-                            $titleToModify = $modifyActivity->title;
-                            $contentToModify = $modifyActivity->description;
-                            $attendanceActivityToModify = $id;
-                            $date = $modifyActivity->date;
-                            $module_auto_id = $modifyActivity->module_auto_id;
-                            $auto = $modifyActivity->auto;
+                        $titleToModify = Session::has('actTitle') ? Session::get('actTitle') : $modifyActivity->title;
+                        $contentToModify = Session::has('actDesc') ? Session::get('actDesc') : $modifyActivity->description;
+                        $attendanceActivityToModify = $id;
+                        $date = Session::has('date') ? Session::get('date') : $modifyActivity->date;
+                        $module_auto_id = $modifyActivity->module_auto_id;
+                        $auto = $modifyActivity->auto;
                     }  else { //new activity 
                         $attendanceActivityToModify = "";
-                        $titleToModify = '';
-                        $contentToModify = '';
+                        $titleToModify = Session::has('actTitle') ? Session::get('actTitle') : '';
+                        $contentToModify = Session::has('actDesc') ? Session::get('actDesc') : '';
+                        $date = Session::has('date') ? Session::get('date') : '';
                     }
                     if (!isset($contentToModify)) $contentToModify = "";
                     @$tool_content .= "
@@ -517,10 +519,11 @@ function add_attendance_other_activity($attendance_id) {
                                 <input type='text' class='form-control' name='actTitle' value='$titleToModify'/>
                             </div>
                         </div>
-                        <div class='form-group'>
+                        <div class='form-group".($date_error ? " has-error" : "")."'>
                             <label for='date' class='col-sm-2 control-label'>$langAttendanceActivityDate:</label>
                             <div class='col-sm-10'>
                                 <input type='text' class='form-control' name='date' id='startdatepicker' value='" . datetime_remove_seconds($date) . "'/>
+                                <span class='help-block'>$date_error</span>
                             </div>
                         </div>
                         <div class='form-group'>
