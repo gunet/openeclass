@@ -81,7 +81,7 @@ $tool_content .= "<div class='form-wrapper'>
                     <input class='btn btn-primary' type='submit' value='$langSubmit'>
                 </div>
             </div>
-        ". generate_csrf_token_form_field() ."            
+            ". generate_csrf_token_form_field() ."            
         </form>
         </div>";
 draw($tool_content, 3);

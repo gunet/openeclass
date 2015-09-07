@@ -833,41 +833,46 @@ function hybridauth_login() {
     
     if (!isset($_SESSION['uid'])) {
         switch ($auth_allow) {
-            case 1: $warning .= "";
-            session_regenerate_id();
-            break;
-            case 2: $warning .= "<p class='alert1'>$langInvalidId</p>";
-            break;
-            case 3: $warning .= "<p class='alert1'>$langAccountInactive1 " .
-            "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
-            token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></p>";
-            break;
-            case 4: $warning .= "<p class='alert1'>$langInvalidId</p>";
-            increaseLoginFailure();
-            break;
-            case 5: $warning .= "<p class='alert1'>$langNoCookies</p>";
-            break;
-            case 6: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
-            break;
-            case 7: $warning .= "<p class='alert1'>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></p>";
-            break;
-            case 8: $warning .= "<p class='alert1'>$langTooManyFails</p>";
-            break;
-            default:
-            break;
+            case 1:
+                session_regenerate_id();
+                break;
+            case 2:
+                $warning .= "<p class='alert alert-warning'>$langInvalidId</p>";
+                break;
+            case 3:
+                $warning .= "<p class='alert alert-warning'>$langAccountInactive1 " .
+                    "<a href='modules/auth/contactadmin.php?userid=$inactive_uid&amp;h=" .
+                    token_generate("userid=$inactive_uid") . "'>$langAccountInactive2</a></p>";
+                break;
+            case 4:
+                $warning .= "<p class='alert alert-warning'>$langInvalidId</p>";
+                increaseLoginFailure();
+                break;
+            case 5:
+                $warning .= "<p class='alert alert-warning'>$langNoCookies</p>";
+                break;
+            case 6:
+                $warning .= "<p class='alert alert-info'>$langEnterPlatform <a href='{$urlServer}secure/index.php'>$langHere</a></p>";
+                break;
+            case 7:
+                $warning .= "<p class='alert alert-info'>$langEnterPlatform <a href='{$urlServer}modules/auth/cas.php'>$langHere</a></p>";
+                break;
+            case 8:
+                $warning .= "<p class='alert alert-danger''>$langTooManyFails</p>";
+                break;
         }
     } else {
         Database::get()->query("INSERT INTO loginout (loginout.id_user, loginout.ip, loginout.when, loginout.action) "
                 . "VALUES ($_SESSION[uid], '$_SERVER[REMOTE_ADDR]', NOW(), 'LOGIN')");
-                if (get_config('email_verification_required') and
-                        get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
-                                $_SESSION['mail_verification_required'] = 1;
+        if (get_config('email_verification_required') and
+            get_mail_ver_status($_SESSION['uid']) == EMAIL_VERIFICATION_REQUIRED) {
+            $_SESSION['mail_verification_required'] = 1;
             $next = "modules/auth/mail_verify_change.php";
-    } elseif (isset($_POST['next'])) {
-        $next = autounquote($_POST['next']);
-    } else {
-        $next = '';
-    }
+        } elseif (isset($_POST['next'])) {
+            $next = $_POST['next'];
+        } else {
+            $next = '';
+        }
         resetLoginFailure();
         redirect_to_home_page($next);
     }

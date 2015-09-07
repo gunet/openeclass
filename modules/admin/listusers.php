@@ -123,11 +123,12 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     // auth type search
     if (!empty($auth_type)) {
         if ($auth_type >= 2 && $auth_type < 8) {
-            $criteria[] = 'password = ' . quote($auth_ids[$auth_type]);
+            $criteria[] = "password = '{$auth_ids[$auth_type]}'";
         } elseif ($auth_type == 1) {
             $q1 = "'". implode("','", $auth_ids) . "'";
             $criteria[] = 'password NOT IN ('.$q1.')';
         }
+        // FIXME: ext auth uid's moved to new table user_ext_uid
         switch($auth_type) {
             case '8': $criteria[] = "facebook_uid <> ''"; break;
             case '9': $criteria[] = "twitter_uid <> ''"; break;

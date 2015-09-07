@@ -52,7 +52,7 @@ register_posted_variables(array('imaphost' => true, 'pop3host' => true,
     'shibcn' => true, 'checkseparator' => true,
     'submit' => true, 'auth_instructions' => true, 'auth_title' => true,
 	'hybridauth_id_key' => true, 'hybridauth_secret' => true, 'hybridauth_instructions' => true,
-    'test_username' => true), 'all', 'autounquote');
+    'test_username' => true), 'all');
 
 $test_password = isset($_POST['test_password']) ? $_POST['test_password'] : '';
 

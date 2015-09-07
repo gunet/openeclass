@@ -81,7 +81,7 @@ if (isset($_FILES['archiveZipped']) and $_FILES['archiveZipped']['size'] > 0) {
         'course_title' => true,
         'course_desc' => true,
         'course_vis' => true,
-        'course_prof' => true), 'all', 'autounquote');
+        'course_prof' => true), 'all');
     create_restored_course($tool_content,  getDirectReference($restoreThis) , $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
 } elseif (isset($_POST['do_restore'])) {
     if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
