@@ -52,15 +52,11 @@ if (!function_exists('get_hybridauth_config')) {
 			foreach ($q as $row) {
                 $name = $row->auth_name == 'linkedin' ? 'LinkedIn' : ucfirst($row->auth_name);
                 if ($row->auth_default and !empty($row->auth_settings)) {
-                    $auth_settings = unserialize($row->auth_settings);
-                    if (in_array($name, array('Yahoo', 'Twitter', 'LinkedIn'))) {
-                        $providers[$name]['keys'] = array(
-                            'key' => $auth_settings['id'],
-                            'secret' => $auth_settings['secret']);
-                    } else {
-                        $providers[$name]['keys'] = $auth_settings;
-                    }
+                    $providers[$name]['keys'] = unserialize($row->auth_settings);
                     $providers[$name]['enabled'] = true;
+                    if ($name == 'Facebook') {
+                        $providers[$name]['scope'] = 'public_profile, email';
+                    }
                 } else {
                     $providers[$name]['keys'] = array();
                     $providers[$name]['enabled'] = true;
