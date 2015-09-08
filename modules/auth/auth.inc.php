@@ -707,7 +707,7 @@ function hybridauth_login() {
             include $extra_messages;
         }
     }
-    //end HybridAuth messages inclusion
+    // end HybridAuth messages inclusion
     
     
     global $warning;
@@ -775,8 +775,9 @@ function hybridauth_login() {
     
     
     // *****************************
-    //from here on runs an alternative version of proccess_login() where instead of a password, the provider 
-    //user id is used and matched against the corresponding field in the db table.
+    // from here on runs an alternative version of proccess_login() where
+    // instead of a password, the provider user id is used and matched against
+    // the corresponding field in the db table.
     global $surname, $givenname, $email, $status, $is_admin, $language,
     $langInvalidId, $langAccountInactive1, $langAccountInactive2,
     $langNoCookies, $langEnterPlatform, $urlServer, $langHere,
@@ -797,8 +798,10 @@ function hybridauth_login() {
     if (get_config('login_fail_check') && $r) {
         $auth_allow = 8;
     } else {
-        $auth_id = $auth_ids[strtolower($provider)];
-        $myrow = Database::get()->querySingle("SELECT user.id, surname, givenname, password, username, status, email, lang, verified_mail
+        $auth_id = array_search(strtolower($provider), $auth_ids);
+        $myrow = Database::get()->querySingle("SELECT user.id, surname,
+                    givenname, password, username, status, email, lang,
+                    verified_mail, uid
                 FROM user, user_ext_uid
                 WHERE user.id = user_ext_uid.user_id AND
                       user_ext_uid.auth_id = ?d AND
@@ -882,13 +885,13 @@ function hybridauth_login() {
   Authenticate user via eclass
  * ************************************************************** */
 
-function login($user_info_object, $posted_uname, $pass, $provider = NULL) {
+function login($user_info_object, $posted_uname, $pass, $provider=null) {
     global $session;
 
     $pass_match = false;
     $hasher = new PasswordHash(8, false);
 
-    if(is_null($provider)) {
+    if (is_null($provider)) {
         if (check_username_sensitivity($posted_uname, $user_info_object->username)) {
             if ($hasher->CheckPassword($pass, $user_info_object->password)) {
                 $pass_match = true;
@@ -902,13 +905,8 @@ function login($user_info_object, $posted_uname, $pass, $provider = NULL) {
             }
         }
     } else {
-        switch (ucfirst($provider)) {
-            case 'Facebook': if($pass == $user_info_object->facebook_uid) $pass_match = true; break;
-            case 'Twitter': if($pass == $user_info_object->twitter_uid) $pass_match = true; break;
-            case 'Google': if($pass == $user_info_object->google_uid) $pass_match = true; break;
-            case 'Live': if($pass == $user_info_object->live_uid) $pass_match = true; break;
-            case 'Yahoo': if($pass == $user_info_object->yahoo_uid) $pass_match = true; break;
-            case 'LinkedIn': if($pass == $user_info_object->linkedin_uid) $pass_match = true; break;
+        if ($pass == $user_info_object->uid) {
+            $pass_match = true;
         }
     }
 
