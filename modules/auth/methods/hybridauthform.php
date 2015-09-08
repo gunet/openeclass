@@ -33,7 +33,7 @@ function hybridAuthForm($auth) {
     if (!empty($r->auth_settings)) {
         $auth_settings = unserialize($r->auth_settings);
     } else {
-        $auth_settings[0] = $auth_settings[1] = '';
+        $auth_settings['id'] = $auth_settings['secret'] = '';
     }
     $auth_instructions = $r->auth_instructions;
     $authName = q(ucfirst($r->auth_name));
@@ -42,13 +42,13 @@ function hybridAuthForm($auth) {
       <div class='form-group'>
           <label for='hybridauth_id_key' class='col-sm-2 control-label'>$authName Id/Key:</label>
           <div class='col-sm-10'>
-              <input class='form-control' name='hybridauth_id_key' id='hybridauth_id_key' type='text' value='" . q($auth_settings[0]) . "'>
+              <input class='form-control' name='hybridauth_id_key' id='hybridauth_id_key' type='text' value='" . q($auth_settings['id']) . "'>
           </div>
       </div> 
       <div class='form-group'>
           <label for='hybridauth_secret' class='col-sm-2 control-label'>" . ucfirst($r->auth_name) . " Secret:</label>
           <div class='col-sm-10'>
-              <input class='form-control' name='hybridauth_secret' id='hybridauth_secret' type='text' value='" . q($auth_settings[1]) . "'>
+              <input class='form-control' name='hybridauth_secret' id='hybridauth_secret' type='text' value='" . q($auth_settings['secret']) . "'>
           </div>
       </div> 
       <div class='form-group'>

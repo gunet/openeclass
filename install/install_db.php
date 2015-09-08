@@ -1185,7 +1185,6 @@ $db->query("CREATE TABLE `auth` (
     `auth_instructions` text ,
     `auth_title` text,
     `auth_default` tinyint(1) NOT NULL default 0,
-    `auth_enabled` tinyint(1) NOT NULL default 0,
     PRIMARY KEY (`auth_id`))
     $charset_spec");
 

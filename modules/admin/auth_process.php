@@ -247,12 +247,11 @@ if ($submit or ! empty($_SESSION['cas_do'])) {
             			SET auth_settings = ?s,
                             auth_instructions = ?s,
                             auth_default = GREATEST(auth_default, 1),
-                            auth_title = ?s,
-                            auth_name = ?s
+                            auth_title = ?s
                         WHERE auth_id = ?d",
                 function ($error) use(&$tool_content, $langErrActiv) {
                     $tool_content .= "<div class='alert alert-warning'>$langErrActiv</div>";
-                }, $auth_settings, $auth_instructions, $auth_title, $auth_ids[$auth], $auth);
+                }, $auth_settings, $auth_instructions, $auth_title, $auth);
             if ($result) {
                 if ($result->affectedRows == 1) {
                     $tool_content .= "<div class='alert alert-success'>$langHasActivate</div>";
