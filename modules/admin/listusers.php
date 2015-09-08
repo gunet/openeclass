@@ -331,6 +331,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'title' => $changetip,
                     'icon' => 'fa-key',
                     'url' => 'change_user.php?username=' . urlencode($logs->username),
+                    'class' => 'change-user-link',
                     'hide' => isDepartmentAdmin()
                 ),
                 array(
@@ -361,67 +362,79 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 load_js('tools.js');
 load_js('datatables');
 load_js('datatables_filtering_delay');
-$head_content .= "<script type='text/javascript'>
-        $(document).ready(function() {
-         var table = $('#search_results_table').DataTable ({
-                initComplete: function () {
-                    var api = this.api();
-                    var column = api.column(4);
-                    var select = $('<select id=\'select_role\'>'+
-                                        '<option value=\'0\'>-- Όλοι --</option>'+
-                                        '<option value=\'".USER_TEACHER."\'>$langTeacher</option>'+"
-        . "                             '<option value=\'".USER_STUDENT."\'>$langStudent</option>'+"
-        . "                             '<option value=\'".USER_GUEST."\'>$langVisitor</option>'+
-                                    '</select>')
-                                    .appendTo( $(column.footer()).empty() );
-                },
-                'fnDrawCallback': function( oSettings ) {
-                    popover_init();
-                },
-                'bProcessing': true,
-                'bServerSide': true,
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-                ],
-                'sPaginationType': 'full_numbers',
-                'bAutoWidth': false,
-                'aoColumns': [
-                    {'bSortable' : true, 'sWidth': '20%' },
-                    {'bSortable' : true, 'sWidth': '20%' },
-                    {'bSortable' : true, 'sWidth': '20%' },
-                    {'bSortable' : false, 'sWidth': '20%' },
-                    {'bSortable' : false, 'sClass': 'text-center' },
-                    {'bSortable' : false, 'sClass': 'text-center' },
-                ],
-                'oLanguage': {
-                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '" . $langNoResult . "',
-                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                   'sInfoFiltered': '',
-                   'sInfoPostFix':  '',
-                   'sSearch':       '" . $langSearch . "',
-                   'sUrl':          '',
-                   'oPaginate': {
-                       'sFirst':    '&laquo;',
-                       'sPrevious': '&lsaquo;',
-                       'sNext':     '&rsaquo;',
-                       'sLast':     '&raquo;'
-                   }
-               }
-            });
-            // Apply the filter
-            $(document).on('change', '#search_results_table tfoot select#select_role', function (e) {
-                table
-                    .column( $(this).parent().index()+':visible' )
-                    .search($('select#select_role').val())
-                    .draw();
-            });
-            $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
+$head_content .= "<script>
+    var csrf_token = '$_SESSION[csrf_token]';
+    $(document).ready(function() {
+        $(document).on('click', '.change-user-link', function (e) {
+            e.preventDefault();
+            $('<form>', {
+                'action': $(this).attr('href'),
+                'method': 'post'
+            }).append($('<input>', {
+                'type': 'hidden',
+                'name': 'token',
+                'value': csrf_token
+            })).appendTo(document.body).submit();
         });
-        </script>";
+        var table = $('#search_results_table').DataTable ({
+            initComplete: function () {
+                var api = this.api();
+                var column = api.column(4);
+                var select = $('<select id=\'select_role\'>'+
+                                 '<option value=\'0\'>-- " . js_escape($langAll) . " --</option>'+
+                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langTeacher) . "</option>'+
+                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langStudent) . "</option>'+
+                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langVisitor) . "</option>'+
+                               '</select>')
+                             .appendTo( $(column.footer()).empty() );
+            },
+            'fnDrawCallback': function( oSettings ) {
+                popover_init();
+            },
+            'bProcessing': true,
+            'bServerSide': true,
+            'sAjaxSource': '$_SERVER[REQUEST_URI]',
+            'aLengthMenu': [
+               [10, 15, 20 , -1],
+               [10, 15, 20, '" . js_escape($langAllOfThem) . "'] // change per page values here
+            ],
+            'sPaginationType': 'full_numbers',
+            'bAutoWidth': false,
+            'aoColumns': [
+                {'bSortable' : true, 'sWidth': '20%' },
+                {'bSortable' : true, 'sWidth': '20%' },
+                {'bSortable' : true, 'sWidth': '20%' },
+                {'bSortable' : false, 'sWidth': '20%' },
+                {'bSortable' : false, 'sClass': 'text-center' },
+                {'bSortable' : false, 'sClass': 'text-center' },
+            ],
+            'oLanguage': {
+               'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',
+               'sZeroRecords':  '" . js_escape($langNoResult) . "',
+               'sInfo':         '" . js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults") . "',
+               'sInfoEmpty':    '" . js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2") . "',
+               'sInfoFiltered': '',
+               'sInfoPostFix':  '',
+               'sSearch':       '" . js_escape($langSearch) . "',
+               'sUrl':          '',
+               'oPaginate': {
+                   'sFirst':    '&laquo;',
+                   'sPrevious': '&lsaquo;',
+                   'sNext':     '&rsaquo;',
+                   'sLast':     '&raquo;'
+               }
+            }
+        });
+        // Apply the filter
+        $(document).on('change', '#search_results_table tfoot select#select_role', function (e) {
+            table
+                .column( $(this).parent().index()+':visible' )
+                .search($('select#select_role').val())
+                .draw();
+        });
+        $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
+    });
+    </script>";
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
