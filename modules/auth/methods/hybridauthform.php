@@ -32,6 +32,9 @@ function hybridAuthForm($auth) {
     $r = Database::get()->querySingle("SELECT auth_settings, auth_instructions, auth_name FROM auth WHERE auth_id = ?d", $auth);
     if (!empty($r->auth_settings)) {
         $auth_settings = unserialize($r->auth_settings);
+        if (isset($auth_settings['id'])) {
+            $auth_settings['key'] = $auth_settings['id'];
+        }
     } else {
         $auth_settings['id'] = $auth_settings['secret'] = '';
     }
@@ -42,7 +45,7 @@ function hybridAuthForm($auth) {
       <div class='form-group'>
           <label for='hybridauth_id_key' class='col-sm-2 control-label'>$authName Id/Key:</label>
           <div class='col-sm-10'>
-              <input class='form-control' name='hybridauth_id_key' id='hybridauth_id_key' type='text' value='" . q($auth_settings['id']) . "'>
+              <input class='form-control' name='hybridauth_id_key' id='hybridauth_id_key' type='text' value='" . q($auth_settings['key']) . "'>
           </div>
       </div> 
       <div class='form-group'>
