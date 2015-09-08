@@ -201,7 +201,13 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
 
         if (count($hybridProviders)) {
             $authLink[$hybridLinkId]['html'] = '<div>';
+            $beginHybridHTML = true;
             foreach ($hybridProviders as $provider) {
+                if ($beginHybridHTML) {
+                    $beginHybridHTML = false;
+                } else {
+                    $authLink[$hybridLinkId]['html'] .= '<br>';
+                }
                 $authLink[$hybridLinkId]['html'] .=
                     "<a href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
             }
