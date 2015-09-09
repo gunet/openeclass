@@ -186,8 +186,8 @@ if (isset($_POST['submit'])) {
             }
 
             $pref = ($c) ? 'a' : 'user';
-            $criteria[] = $pref . '.user.id = user_department.user';
-            $criteria[] = 'department IN (' . array_fill(0, $count, '?s') . ')';
+            $criteria[] = $pref . '.id = user_department.user';
+            $criteria[] = 'department IN (' . implode(', ', array_fill(0, $count, '?s')) . ')';
         }
 
         $qry_criteria = (count($criteria)) ? implode(' AND ', $criteria) : '';
