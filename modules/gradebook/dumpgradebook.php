@@ -20,24 +20,26 @@
  * ======================================================================== */
 
 $require_current_course = true;
-$require_course_admin = true;
+$require_editor = true;
 
 include '../../include/init.php';
 
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
     $charset = 'Windows-1253';
+    $sendSep = true;
 } else {
     $charset = 'UTF-8';
+    $sendSep = false;
 }
 $crlf = "\r\n";
 
-if (!$is_editor) {
-    Session::Messages($langForbidden);
-    redirect_to_home_page();
-}
 
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=list_gradebook_users.csv");
+
+if ($sendSep) {
+    echo 'sep=;', $crlf;
+}
 
 $sql = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", getDirectReference($_GET['gradebook_id']));
 foreach ($sql as $act) {
