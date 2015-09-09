@@ -54,9 +54,9 @@ $tool_content .= "<ul class='list-group'>
 $tool_content .= "</div>";
 
 $e = Database::get()->querySingle("SELECT COUNT(*) as count FROM user")->count;
-$b = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_TEACHER)->count;
-$c = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_STUDENT)->count;
-$d = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d', USER_GUEST)->count;
+$b = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d AND expires_at > NOW()', USER_TEACHER)->count;
+$c = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d AND expires_at > NOW()', USER_STUDENT)->count;
+$d = Database::get()->querySingle('SELECT COUNT(*) as count FROM user WHERE status = ?d AND expires_at > NOW()', USER_GUEST)->count;
 
 $tool_content .= "<div class='col-sm-6'>";
 $tool_content .= "<ul class='list-group'>
