@@ -757,7 +757,7 @@ function imap_literal($s) {
  */
 function new_code($fac) {
     $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
-        FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d);", $fac);
+        FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d)", $fac);
     if ($gencode) {
         do {
             $gencode->generator += 1;
