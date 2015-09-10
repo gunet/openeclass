@@ -149,7 +149,7 @@ class Indexer {
      * @global type $webDir
      */
     public function __construct() {
-        global $webDir;
+        global $webDir, $errorMessage;
         
         if (!get_config('enable_indexing')) {
             return;
@@ -168,6 +168,7 @@ class Indexer {
                 $this->__index = Zend_Search_Lucene::create($index_path); // Create index
             }
         } catch (Zend_Search_Lucene_Exception $e) {
+            $errorMessage = $e->getMessage();
             require_once 'fatal_error.php';
         }
 

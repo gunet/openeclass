@@ -20,13 +20,18 @@
  * ======================================================================== */
 
 
-
-$pageName = $GLOBALS['langEclass'];
+if (isset($GLOBALS['errorMessage']) {
+    $htmlErrorMessage = "<p><i>" . q($GLOBALS['errorMessage']) . "</i></p>";
+} else {
+    $htmlErrorMessage = '';
+}
+$GLOBALS['pageName'] = $GLOBALS['langEclass'];
 $GLOBALS['tool_content'] = "
 <div class='row'>
     <div class='col-md-12'>
         <div class='alert alert-warning'>" .
-        $GLOBALS['langIdxErrorPermissions'] . "
+        $GLOBALS['langIdxErrorPermissions'] .
+        $htmlErrorMessage . "
         </div>
     <div>
 </div>";
