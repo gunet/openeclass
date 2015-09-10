@@ -1189,19 +1189,19 @@ $db->query("CREATE TABLE `auth` (
     $charset_spec");
 
 $db->query("INSERT INTO `auth` VALUES
-    (1, 'eclass', '', '', '', 1, 0),
-    (2, 'pop3', '', '', '', 0, 0),
-    (3, 'imap', '', '', '', 0, 0),
-    (4, 'ldap', '', '', '', 0, 0),
-    (5, 'db', '', '', '', 0, 0),
-    (6, 'shibboleth', '', '', '', 0, 0),
-    (7, 'cas', '', '', '', 0, 0),
-    (8, 'facebook', '', '', '', 0, 0),
-    (9, 'twitter', '', '', '', 0, 0),
-    (10, 'google', '', '', '', 0, 0),
-    (11, 'live', 'Microsoft Live Account', '', 'does not work locally', 0, 0),
-    (12, 'yahoo', '', '', 'does not work locally', 0, 0),
-    (13, 'linkedin', '', '', '', 0, 0)");
+    (1, 'eclass', '', '', '', 1),
+    (2, 'pop3', '', '', '', 0),
+    (3, 'imap', '', '', '', 0),
+    (4, 'ldap', '', '', '', 0),
+    (5, 'db', '', '', '', 0),
+    (6, 'shibboleth', '', '', '', 0),
+    (7, 'cas', '', '', '', 0),
+    (8, 'facebook', '', '', '', 0),
+    (9, 'twitter', '', '', '', 0),
+    (10, 'google', '', '', '', 0),
+    (11, 'live', '', '', '', 0),
+    (12, 'yahoo', '', '', '', 0),
+    (13, 'linkedin', '', '', '', 0)");
 
 $db->query("CREATE TABLE `user_ext_uid` (
     id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
