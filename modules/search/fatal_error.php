@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 
-if (isset($GLOBALS['errorMessage']) {
+if (isset($GLOBALS['errorMessage'])) {
     $htmlErrorMessage = "<p><i>" . q($GLOBALS['errorMessage']) . "</i></p>";
 } else {
     $htmlErrorMessage = '';
