@@ -747,6 +747,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
         }
 
+        // Drop obsolete course_description table if needed
+        if (DBHelper::tableExists('course_description') and
+            DBHelper::fieldExists('course_description', 'upDate')) {
+            Database::get()->query('DROP TABLE course_description');
+        }
+
         if (!DBHelper::tableExists('course_description')) {
             Database::get()->query("CREATE TABLE IF NOT EXISTS `course_description` (
                             `id` int(11) NOT NULL AUTO_INCREMENT,
