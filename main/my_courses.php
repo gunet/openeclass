@@ -68,7 +68,7 @@ $pageName = $langMyCourses;
             'level' => 'primary-label',
             'url' => 'portfolio.php'
         )
-    ));
+    ),false);
     if ($myCourses) {
         $tool_content .= "
             <div class='table-responsive'>

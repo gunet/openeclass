@@ -1214,7 +1214,7 @@ $langNoGroup = "Δεν έχουν οριστεί ομάδες χρηστών";
 $langGroupMembersNum = "Μέλη";
 
 //neos odhgos dhmiourgias mathimaton
-$langEnterMetadata = "(Σημ.) μπορείτε να αλλάξετε διάφορες ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";
+$langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";
 $langCreateCourse = "Οδηγός δημιουργίας μαθήματος";
 $langCreateCourseStep = "Βήμα";
 $langCreateCourseStep2 = "από";
