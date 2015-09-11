@@ -1410,6 +1410,7 @@ $langNewTopic = "New topic";
 $langTopicData = "Topic elements";
 $langTopicAnswer = "Topic Answer";
 $langGroupDocumentsLink = "Documents of the group ";
+$langForumFrom = "From member";
 $langNotify = "Notify me of replies via email";
 $langNotifyActions = "Notifications";
 $langGoToPage = "Go to page";

@@ -171,10 +171,10 @@ function add_topic_link($pagenr, $total_reply_pages) {
 /* Send an e-mail notification for new messages to subscribed users
  */
 function notify_users($forum_id, $forum_name, $topic_id, $subject, $message) {
-    global $logo, $langNewForumNotify, $course_code, $course_code, $course_id,
-        $uid, $langBodyForumNotify, $langInForums, $urlServer, $langSender,
+    global $logo, $langNewForumNotify, $course_code, $course_code, $course_id, $langForumFrom,
+        $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
-        $langLinkUnsubscribe, $langHere, $charset;
+        $langLinkUnsubscribe, $langHere, $charset, $langMailBody;
 
     $subject_notify = "$logo - $langNewForumNotify";
     $category_id = forum_category($forum_id);
@@ -182,18 +182,43 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message) {
     $c = course_code_to_title($course_code);
     $name = uid_to_name($uid);
     $title = course_id_to_title($course_id);
-    $body_topic_notify = "$langBodyForumNotify $langInForums<br>" .
-       "<b>$langSender:</b> " . q($name) . "<br>" .
-       "<b>$langCourse:</b> <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a><br>" .
-       "<b>$langCategory:</b> " . q($cat_name) . "<br>" .
-       "<b>$langForum:</b> <a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($forum_name) . "</a><br>" . 
-       "<b>$langSubject:</b> <a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic=$topic_id'>" . q($subject) . "</a><br>" . 
-       "<hr>\n" . $message . "<br><hr>" .
-       "$langNote: " . sprintf($langLinkUnsubscribe, q($title)) .
-       " <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
+
+    $header_html_topic_notify = "<!-- Header Section -->
+    <div id='mail-header'>
+        <br>
+        <div>
+            <div id='header-title'>$langBodyForumNotify <a href='{$urlServer}courses/$course_code'>".q($title)."</a>.</div>
+            <ul id='forum-category'>
+                <li><span><b>$langCategory:</b></span> <span>" . q($cat_name) . "</span></li>
+                <li><span><b>$langForum:</b></span> <span><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($forum_name) . "</a></span></li>
+                <li><span><b>$langForumFrom :</b></span> <span>$name</span></li>
+                <li><span><b>$langdate:</b></span> <span> --- </span></li>
+            </ul>
+        </div>
+    </div>";
+    
+    $body_html_topic_notify = "<!-- Body Section -->
+    <div id='mail-body'>
+        <br>
+        <div><b>$langSubject:</b> <span class='left-space'><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic=$topic_id'>" . q($subject) . "</a></span></div><br>
+        <div><b>$langMailBody</b></div>
+        <div id='mail-body-inner'>
+            $message
+        </div>
+    </div>";
+
+    $footer_html_topic_notify = "<!-- Footer Section -->
+    <div id='mail-footer'>
+        <br>
+        <div>
+            <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+        </div>
+    </div>";
+
+    $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify.$footer_html_topic_notify;
 
     $plain_message = html2text($message);
-    $plain_body_topic_notify = "$langBodyForumNotify $langInForums\n" .
+    $plain_topic_notify = "$langBodyForumNotify $langInForums\n" .
        "$langSender: $name\n" .
        "$langCourse: $title\n    {$urlServer}courses/$course_code/\n" .
        "$langCategory: $cat_name\n" .
@@ -213,5 +238,5 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message) {
             $email[] = uid_to_email($user->user_id);
         }
     }
-    send_mail_multipart('', '', '', $email, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
+    send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
 }
