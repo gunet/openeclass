@@ -95,7 +95,7 @@ function checkrequired(which, entry) {
 		}
 	}
 	if (!pass) {
-		alert("$langEmptyLinkURL");
+		alert("$langFieldsMissing");
 		return false;
 	} else {
 		return true;
@@ -270,7 +270,7 @@ if ($is_editor) {
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
+        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview' onsubmit=\"return checkrequired(this, 'categoryname');\">";
         if ($action == 'editcategory') {
             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
             category_form_defaults($id);
