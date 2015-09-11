@@ -162,7 +162,7 @@ class Indexer {
         Zend_Search_Lucene_Analysis_Analyzer::setDefault(new Zend_Search_Lucene_Analysis_Analyzer_Common_Utf8Num_CaseInsensitive());
 
         try {
-            if (file_exists($index_path)) {
+            if ($this->checkPath($index_path)) {
                 $this->__index = Zend_Search_Lucene::open($index_path); // Open index
             } else {
                 $this->__index = Zend_Search_Lucene::create($index_path); // Create index
@@ -184,6 +184,16 @@ class Indexer {
         if (!file_exists($index_path . '/index.php')) {
             touch($index_path . '/index.php');
         }
+    }
+    
+    /**
+     * Checks if a lucene index path exists.
+     * 
+     * @param  string  $path The lucene index path.
+     * @return boolean       TRUE if the lucene index path exists else FALSE.
+     */
+    private function checkPath($path) {
+        return file_exists($path) && is_readable($path) && ($resources = scandir($path)) && (count($resources) > 2);
     }
 
     /**
@@ -336,58 +346,6 @@ class Indexer {
         $ndx->removeByCourse($courseId);
     }
 
-    /**
-     * Batch index all possible contents.
-     * @deprecated
-     */
-//    public function reindexAll() {
-//        if (!get_config('enable_indexing')) {
-//            return;
-//        }
-//        
-//        $cidx = new CourseIndexer($this);
-//        $cidx->reindex();
-//
-//        $aidx = new AnnouncementIndexer($this);
-//        $aidx->reindex();
-//
-//        $agdx = new AgendaIndexer($this);
-//        $agdx->reindex();
-//
-//        $lidx = new LinkIndexer($this);
-//        $lidx->reindex();
-//
-//        $vdx = new VideoIndexer($this);
-//        $vdx->reindex();
-//
-//        $vldx = new VideolinkIndexer($this);
-//        $vldx->reindex();
-//
-//        $eidx = new ExerciseIndexer($this);
-//        $eidx->reindex();
-//
-//        $fidx = new ForumIndexer($this);
-//        $fidx->reindex();
-//
-//        $ftdx = new ForumTopicIndexer($this);
-//        $ftdx->reindex();
-//
-//        $fpdx = new ForumPostIndexer($this);
-//        $fpdx->reindex();
-//
-//        $didx = new DocumentIndexer($this);
-//        $didx->reindex();
-//
-//        $uidx = new UnitIndexer($this);
-//        $uidx->reindex();
-//
-//        $urdx = new UnitResourceIndexer($this);
-//        $urdx->reindex();
-//        
-//        $ndx = new NoteIndexer($this);
-//        $ndx->reindex();
-//    }
-    
     /**
      * Batch remove all index contents.
      */
