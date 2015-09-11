@@ -1309,6 +1309,7 @@ $langDownloadAndZipEnd = "Το αρχείο .zip ανέβηκε και αποσ�
 $langParentDir = "αρχικό κατάλογο";
 $langInvalidDir = "Ακυρο ή μη υπαρκτό όνομα καταλόγου";
 $langInvalidGroupDir = "Σφάλμα! Ο κατάλογος των ομάδων χρηστών δεν υπάρχει!";
+$langGroupAssignments =  "Ομαδικές Εργασίες";
 
 //prosthikes gia v2 - metadata
 $langCategory = "Κατηγορία";

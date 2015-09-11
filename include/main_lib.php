@@ -1417,8 +1417,10 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM group_properties WHERE group_id IN
+                         (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM `group_category` WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `link` ON `rating`.`rid` = `link`.`id`
                             WHERE `rating`.`rtype` = ?s AND `link`.`course_id` = ?d", 'link', $cid);
     Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `link` ON `rating_cache`.`rid` = `link`.`id`

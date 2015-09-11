@@ -254,6 +254,7 @@ if ($is_editor) {
 
         Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = 1 AND subsystem_id = ?d", $course_id, $id);
         Database::get()->query("DELETE FROM group_members WHERE group_id = ?d", $id);
+		Database::get()->query("DELETE FROM group_properties WHERE group_id = ?d", $id);
         Database::get()->query("DELETE FROM `group` WHERE id = ?d", $id);
 
         /*         * ********Delete Group Wiki*********** */
