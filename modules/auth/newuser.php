@@ -80,6 +80,7 @@ if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $
 if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and $_GET['auth'] < 14) {
     $auth = $_GET['auth'];
     $provider_name = $auth_ids[$auth];
+    if($provider_name == "linkedin") $provider_name = "linkedIn";
     $result = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_id = ?d", $auth);
     if (!$result->auth_default) {
         $provider_name = $provider_id = '';

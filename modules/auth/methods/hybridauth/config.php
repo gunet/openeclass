@@ -32,7 +32,7 @@ from a simple text file.
 ==============================================================================
 */
 /*!
-* HybridAuth 2.1.2
+* HybridAuth 2.5.0
 * http://hybridauth.sourceforge.net | http://github.com/hybridauth/hybridauth
 * (c) 2009-2012, HybridAuth authors | http://hybridauth.sourceforge.net/licenses.html
 */
@@ -70,6 +70,6 @@ if (!function_exists('get_hybridauth_config')) {
             'providers' => $providers,
             // if you want to enable logging, set 'debug_mode' to true then provide a writable file by the web server on 'debug_file'
             'debug_mode' => false,
-            'debug_file' => '/log.txt');
+            'debug_file' => '/tmp/log.log');
     }
 }

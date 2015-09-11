@@ -114,8 +114,8 @@ if(!empty($_GET['provider_id'])) $provider_id = @q($_GET['provider_id']); else $
 //check if it's valid and the provider enabled in the db
 if(is_numeric(@$_GET['auth']) && @$_GET['auth'] > 7 && @$_GET['auth'] < 14) {
     $provider_name = $auth_ids[$_GET['auth']];
-    $result = Database::get()->querySingle("SELECT auth_enabled FROM auth WHERE auth_name = ?s", $provider_name);
-    if($result->auth_enabled != 1) {
+    $result = Database::get()->querySingle("SELECT auth_default FROM auth WHERE auth_name = ?s", $provider_name);
+    if($result->auth_default != 1) {
         $provider_name = "";
         $provider_id = "";
     }
