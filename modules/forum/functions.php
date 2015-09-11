@@ -170,7 +170,7 @@ function add_topic_link($pagenr, $total_reply_pages) {
 
 /* Send an e-mail notification for new messages to subscribed users
  */
-function notify_users($forum_id, $forum_name, $topic_id, $subject, $message) {
+function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $topic_date) {
     global $logo, $langNewForumNotify, $course_code, $course_code, $course_id, $langForumFrom,
         $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
         $langCourse, $langCategory, $langForum, $langSubject, $langNote,
@@ -192,7 +192,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message) {
                 <li><span><b>$langCategory:</b></span> <span>" . q($cat_name) . "</span></li>
                 <li><span><b>$langForum:</b></span> <span><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($forum_name) . "</a></span></li>
                 <li><span><b>$langForumFrom :</b></span> <span>$name</span></li>
-                <li><span><b>$langdate:</b></span> <span> --- </span></li>
+                <li><span><b>$langdate:</b></span> <span> $topic_date </span></li>
             </ul>
         </div>
     </div>";

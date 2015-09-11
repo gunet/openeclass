@@ -125,7 +125,7 @@ if (isset($_POST['submit'])) {
     }
 
     $subject = Database::get()->querySingle('SELECT title FROM forum_topic WHERE id = ?d', $topic)->title;
-    notify_users($forum_id, $forum_name, $topic, $subject, $message);
+    notify_users($forum_id, $forum_name, $topic, $subject, $message, $time);
 
     $page = "modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
     $total_posts = get_total_posts($topic);

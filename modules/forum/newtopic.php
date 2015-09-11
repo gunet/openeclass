@@ -118,7 +118,7 @@ if (isset($_POST['submit'])) {
     // subtract 1 because we want the number of replies, not the number of posts.
     $total_topic = get_total_posts($topic) - 1;
 
-    notify_users($forum_id, $forum_name, $topic_id, $subject, $message);
+    notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $time);
 
     Session::Messages($langStored, 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");

@@ -839,7 +839,7 @@ $langUsageTerms = 'Όροι Χρήσης';
  * ***************************************************** */
 $langCourseProgram = "Περιγραφή Μαθήματος";
 $langThisCourseDescriptionIsEmpty = "Το μάθημα δεν διαθέτει περιγραφή";
-$langEditCourseProgram = "Δημιουργία / Διόρθωση";
+$langEditCourseProgram = "Δημιουργία";
 $langQuestionPlan = "Ερώτηση στον διδάσκοντα";
 $langInfo2Say = "Πληροφορία για τους " . $langsOfStudentss;
 $langAddCat = "Κατηγορία";
