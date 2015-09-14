@@ -396,20 +396,49 @@ if ($is_editor) {
                 foreach($_POST['recipients'] as $re) {
                     $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
                 }
-            }            
-            $emailContent = "$professorMessage: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "<br>\n<br>\n" .
-                    q($_POST['antitle']) .
-                    "<br>\n<br>\n" .
-                    $_POST['newContent'];
+            }
+
+            $emailHeaderContent = "
+                <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>Έχει δημοσιευθεί ανακοίνωση στο μάθημα <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a>.</div>
+                        <ul id='forum-category'>
+                            <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
+                            <li><span><b>$langdate:</b></span> <span class='left-space'> --- </span></li>
+                        </ul>
+                    </div>
+                </div>";
+
+            $emailBodyContent = "
+                <!-- Body Section -->
+                <div id='mail-body'>
+                    <br>
+                    <div><b>$langSubject:</b> <span class='left-space'>".q($_POST['antitle'])."</span></div><br>
+                    <div><b>$langMailBody</b></div>
+                    <div id='mail-body-inner'>".
+                        $_POST['newContent']
+                    ."</div>
+                </div>";
+
+            $emailFooterContent = "
+                <!-- Footer Section -->
+                <div id='mail-footer'>
+                    <br>
+                    <div>
+                        <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                    </div>
+                </div>";
+
+            $emailContent = $emailHeaderContent.$emailBodyContent.$emailFooterContent;
+
             $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
             // select students email list
             $countEmail = 0;
             $invalid = 0;
             $recipients = array();
             $emailBody = html2text($emailContent);
-            $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
-            $emailContent .= $unsubscribe . $linkhere;
             $general_to = 'Members of course ' . $course_code;            
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
                                                    FROM course_user, user
