@@ -33,7 +33,7 @@ if ($is_editor) {
     $bom = "\357\273\277";
 
     $crlf = "\r\n";
-    $output = "$bom$langSurname\t$langName\t$langAm\t$langExerciseStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
+    $output = "$bom$langSurname\t$langName\t$langAm\t$langStart\t$langExerciseDuration\t$langYourTotalScore2$crlf";
     $output .= "$crlf";
 
     $result = Database::get()->queryArray("SELECT DISTINCT uid FROM `exercise_user_record` WHERE eid = ?d", $exerciseId);

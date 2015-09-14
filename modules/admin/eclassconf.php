@@ -368,8 +368,12 @@ if (isset($_POST['submit'])) {
 
     register_posted_variables($config_vars, 'all', 'intval');
 
-    set_config('mydocs_student_quota', floatval($_POST['mydocs_student_quota']));
-    set_config('mydocs_teacher_quota', floatval($_POST['mydocs_teacher_quota']));
+    if (isset($_POST['mydocs_student_quota'])) {
+        set_config('mydocs_student_quota', floatval($_POST['mydocs_student_quota']));
+    }
+    if (isset($_POST['mydocs_teacher_quota'])) {
+        set_config('mydocs_teacher_quota', floatval($_POST['mydocs_teacher_quota']));
+    }
 
     if (!in_array($_POST['course_guest'], array('on', 'off', 'link'))) {
         set_config('course_guest', 'off');

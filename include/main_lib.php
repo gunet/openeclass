@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.1.6');
+define('ECLASS_VERSION', '3.1.99');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -82,14 +82,14 @@ define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
-define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_ATTENDANCE', 30);
+define('MODULE_ID_GRADEBOOK', 32);
+define('MODULE_ID_BBB', 34);
 define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
-define('MODULE_ID_BBB', 34);
-define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
+define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 43);
 
@@ -97,7 +97,7 @@ define('MODULE_ID_WALL', 43);
 define('MODULE_ID_SETTINGS', 31);
 define('MODULE_ID_NOTES', 35);
 define('MODULE_ID_PERSONALCALENDAR',36);
-define('MODULE_ID_ADMINCALENDAR',37);
+define('MODULE_ID_ADMINCALENDAR', 43);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -732,15 +732,10 @@ function user_app_exists($login) {
 function html2text($string) {
     $trans_tbl = get_html_translation_table(HTML_ENTITIES);
     $trans_tbl = array_flip($trans_tbl);
-
-    $text = preg_replace('/</', ' <', $string);
-    $text = preg_replace('/>/', '> ', $string);
-    $desc = html_entity_decode(strip_tags($text));
-    $desc = preg_replace('/[\n\r\t]/', ' ', $desc);
-    $desc = preg_replace('/  /', ' ', $desc);
-
-    return $desc;
-    //    return strtr (strip_tags($string), $trans_tbl);
+    $string = html_entity_decode(strip_tags($string));
+    $text = preg_replace('/<(div|p|pre|br)[^>]*>/i', "\n", $string);
+    return canonicalize_whitespace(strip_tags($text));
+    // return strtr (strip_tags($string), $trans_tbl);
 }
 
 /*
@@ -775,16 +770,16 @@ function imap_literal($s) {
  * @return string
  */
 function new_code($fac) {
-
-    $gencode = Database::get()->querySingle("SELECT code, generator FROM hierarchy WHERE id = ?d", $fac);
+    $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
+        FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d)", $fac);
     if ($gencode) {
         do {
-            $code = $gencode->code . $gencode->generator;
             $gencode->generator += 1;
-            Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
+            $code = $gencode->code . $gencode->generator;
         } while (file_exists("courses/" . $code));
-    // Make sure the code returned isn't empty!
+        Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
     } else {
+        // Make sure the code returned isn't empty!
         die("Course Code is empty!");
     }
     return $code;
@@ -2563,32 +2558,6 @@ function removeDir($dirPath) {
 }
 
 /**
- * @brief update attendance about user activities
- * @param type $id
- * @param type $activity
- * @return type
- */
-function update_attendance_book($uid, $id, $activity) {
-
-    if ($activity == 'assignment') {
-        $type = 1;
-    } elseif ($activity == 'exercise') {
-        $type = 2;
-    }
-    $q = Database::get()->querySingle("SELECT id, attendance_id FROM attendance_activities WHERE module_auto_type = ?d
-                            AND module_auto_id = ?d
-                            AND auto = 1", $type, $id);
-    if ($q) {
-        $u = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d
-                                AND attendance_id = ?d", $uid, $q->attendance_id);
-        if($u){
-            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1, comments = ''", $uid);
-        }
-    }
-    return;
-}
-
-/**
  * Generate a token verifying some info
  *
  * @param  string  $info           - The info that will be verified by the token
@@ -2848,7 +2817,7 @@ function validate_csrf_token($token) {
 */
 function generate_csrf_token_form_field()
 {
-    return "<input type='hidden' name='token' value='{$_SESSION['csrf_token']}'";
+    return "<input type='hidden' name='token' value='{$_SESSION['csrf_token']}' />";
 }
 
 function generate_csrf_token_link_parameter()
@@ -2999,6 +2968,8 @@ function form_buttons($btnArray) {
     
     foreach ($btnArray as $btn){
         
+        if(!isset($btn['show']) || (isset($btn['show']) && $btn['show'] == true)){
+        
         $id = isset($btn['id'])?"id='$btn[id]'": '';
         $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
         if (isset($btn['icon'])) {
@@ -3028,6 +2999,7 @@ function form_buttons($btnArray) {
             $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';
             $buttons .= "<button class='btn $class' $type $id $name $value $custom_field $disabled>$text</button>&nbsp;&nbsp;";
         }
+    }
     }
     
     return $buttons;

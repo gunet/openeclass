@@ -34,7 +34,7 @@ $pageName = $langEditCourseProgram;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langCourseProgram);
 
 if (isset($_REQUEST['id'])) {
-    $editId = intval($_REQUEST['id']);
+    $editId = intval(getDirectReference($_REQUEST['id']));
     $q = Database::get()->querySingle("SELECT title, comments, type FROM course_description WHERE course_id = ?d AND id = ?d", $course_id, $editId);
     $cdtitle = Session::has('editTitle') ? Session::get('editTitle') : $q->title;
     $comments = Session::has('editComments') ? Session::get('editComments') : $q->comments;
@@ -75,7 +75,7 @@ $tool_content .= "
             <div class='form-wrapper'>
                 <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>";
 if ($editId !== false) {
-    $tool_content .= "<input type='hidden' name='editId' value='$editId' />";
+    $tool_content .= "<input type='hidden' name='editId' value='" . getIndirectReference($editId) . "' />";
 }
 $tool_content .= "
                     <fieldset>
@@ -114,6 +114,7 @@ $tool_content .= "
                         </div>
                         </div>
                   </fieldset>
+                  ". generate_csrf_token_form_field() ."
                 </form>
             </div>
         </div>

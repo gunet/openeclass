@@ -29,6 +29,8 @@ $toolName = $langCourseInfo;
 $pageName = $langArchiveCourse;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langCourseInfo);
 
+if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();
+
 doArchive($course_id, $course_code);
 
 $tool_content .= "

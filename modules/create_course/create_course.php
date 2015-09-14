@@ -41,7 +41,7 @@ $user = new User();
 
 $toolName = $langCourseCreate;
 
-load_js('jstree3d');
+load_js('jstree3');
 load_js('pwstrength.js');
 
 //Datepicker
@@ -199,7 +199,7 @@ if (empty($prof_names)) {
 }
 
 // departments and validation
-$allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin );
+$allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
 $allowables = array();
 if ($allow_only_defaults) {
     // Method: getDepartmentIdsAllowedForCourseCreation
@@ -235,13 +235,14 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults));
+        // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
-        }       
+        }
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
@@ -389,11 +390,13 @@ if (!isset($_POST['create_course'])) {
             </div>
             <div class='text-right'><small>$langFieldsOptionalNote</small></div>
         </fieldset>
+    ". generate_csrf_token_form_field() ."  
     </form>
 </div>";
 
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
         Session::Messages($langEmptyAddNode);

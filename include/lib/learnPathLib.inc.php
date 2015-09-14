@@ -168,7 +168,7 @@ function commentBox($type, $mode) {
             }
         } else {
             // display comment
-            $output .= $currentComment;
+            $output .= q($currentComment);
             // display edit and delete links if user as the right to see it
             if ($is_editor) {
                 $output .= '&nbsp;&nbsp;&nbsp;'
@@ -1502,8 +1502,8 @@ function get_limited_page_links($sql, $limiter, $stringPreviousPage, $stringNext
     }
 
     if (isset($_REQUEST['path_id'])) {
-        $prevstring = "<a href=\"" . $url . $prevpage . "&amp;path_id=$_REQUEST[path_id]\">" . $stringPreviousPage . "</a> | ";
-        $nextstring = "<a href=\"" . $url . $nextpage . "&amp;path_id=$_REQUEST[path_id]\">" . $stringNextPage . "</a>";
+        $prevstring = "<a href=\"" . $url . $prevpage . "&amp;path_id=" . urlencode($_REQUEST[path_id]) . "\">" . $stringPreviousPage . "</a> | ";
+        $nextstring = "<a href=\"" . $url . $nextpage . "&amp;path_id=" . urlencode($_REQUEST[path_id]) . "\">" . $stringNextPage . "</a>";
     } else {
         $prevstring = "<a href=\"" . $url . $prevpage . "\">" . $stringPreviousPage . "</a> | ";
         $nextstring = "<a href=\"" . $url . $nextpage . "\">" . $stringNextPage . "</a>";

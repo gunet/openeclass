@@ -25,7 +25,7 @@
  */
 require_once '../include/phpass/PasswordHash.php';
 require_once '../modules/db/database.php';
-require_once '../modules/admin/debug.php';
+require_once '../modules/db/foreignkeys.php';
 
 if (!defined('ECLASS_VERSION')) {
     exit;
@@ -68,9 +68,7 @@ $db->query("DROP TABLE IF EXISTS bbb_session");
 $charset_spec = 'DEFAULT CHARACTER SET=utf8';
 
 // create tables
-#
-# table `course_module`
-#
+
 $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
   `id` int(11) NOT NULL auto_increment,
   `module_id` int(11) NOT NULL,
@@ -82,9 +80,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_module` (
 $db->query("CREATE TABLE IF NOT EXISTS module_disable (
     module_id int(11) NOT NULL PRIMARY KEY)");
 
-#
-# table `log`
-#
 $db->query("CREATE TABLE IF NOT EXISTS `log` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default 0,
@@ -107,10 +102,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `log_archive` (
   `ip` varchar(45) NOT NULL default 0,
   PRIMARY KEY  (`id`)) $charset_spec");
 
-#
-# table `announcement`
-#
-$db->query("CREATE TABLE announcement (
+$db->query("CREATE TABLE `announcement` (
     `id` MEDIUMINT(11) NOT NULL auto_increment,
     `title` VARCHAR(255) NOT NULL DEFAULT '',
     `content` TEXT,
@@ -122,10 +114,7 @@ $db->query("CREATE TABLE announcement (
     `stop_display` DATE NOT NULL DEFAULT '2094-12-31',
     PRIMARY KEY (id)) $charset_spec");
 
-#
-# table admin_announcements
-#
-$db->query("CREATE TABLE admin_announcement (
+$db->query("CREATE TABLE `admin_announcement` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `title` VARCHAR(255) NOT NULL,
     `body` TEXT,
@@ -135,10 +124,6 @@ $db->query("CREATE TABLE admin_announcement (
     `lang` VARCHAR(16) NOT NULL DEFAULT 'el',
     `order` MEDIUMINT(11) NOT NULL DEFAULT 0,
     `visible` TINYINT(4)) $charset_spec");
-
-#
-# table `agenda`
-#
 
 $db->query("CREATE TABLE `agenda` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -152,10 +137,6 @@ $db->query("CREATE TABLE `agenda` (
     `recursion_end` date DEFAULT NULL,
     `source_event_id` int(11) DEFAULT NULL)
     $charset_spec");
-
-#
-# table `course`
-#
 
 $db->query("CREATE TABLE `course` (
   `id` INT(11) NOT NULL auto_increment,
@@ -183,10 +164,6 @@ $db->query("CREATE TABLE `course` (
   `course_image` VARCHAR(400) NULL,
   PRIMARY KEY  (`id`)) $charset_spec");
 
-#
-# table `course_weekly_view`
-#
-
 $db->query("CREATE TABLE `course_weekly_view` (
   `id` INT(11) NOT NULL auto_increment,
   `course_id` INT(11) NOT NULL,
@@ -199,10 +176,6 @@ $db->query("CREATE TABLE `course_weekly_view` (
   `order` INT(11) NOT NULL DEFAULT 0,
   PRIMARY KEY  (`id`)) $charset_spec");
 
-#
-# table `course_weekly_view_activities`
-#
-
 $db->query("CREATE TABLE `course_weekly_view_activities` (
     `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY ,
     `course_weekly_view_id` INT(11) NOT NULL ,
@@ -214,13 +187,7 @@ $db->query("CREATE TABLE `course_weekly_view_activities` (
     `order` INT(11) NOT NULL DEFAULT 0,
     `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00') $charset_spec");
 
-
-
-#
-# Table `course_user`
-#
-
-$db->query("CREATE TABLE course_user (
+$db->query("CREATE TABLE `course_user` (
       `course_id` INT(11) NOT NULL DEFAULT 0,
       `user_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
       `status` TINYINT(4) NOT NULL DEFAULT 0,
@@ -231,10 +198,6 @@ $db->query("CREATE TABLE course_user (
       `receive_mail` BOOL NOT NULL DEFAULT 1,
       `document_timestamp` datetime NOT NULL,
       PRIMARY KEY (course_id, user_id)) $charset_spec");
-
-//
-// table `course_description_type`
-//
 
 $db->query("CREATE TABLE `course_description_type` (
     `id` smallint(6) NOT NULL AUTO_INCREMENT,
@@ -264,10 +227,6 @@ $db->query("INSERT INTO `course_description_type` (`id`, `title`, `target_group`
 $db->query("INSERT INTO `course_description_type` (`id`, `title`, `featured_books`, `order`, `icon`) VALUES (9, 'a:2:{s:2:\"el\";s:47:\"Προτεινόμενα συγγράμματα\";s:2:\"en\";s:9:\"Textbooks\";}', 1, 9, '8.png')");
 $db->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
 
-//
-// table `course_description`
-//
-
 $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `course_id` int(11) NOT NULL,
@@ -279,525 +238,534 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_description` (
     `update_dt` datetime NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
 
-
-//
-// Table `course_review`
-//
-
-$db->query("CREATE TABLE course_review (
+$db->query("CREATE TABLE `course_review` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `course_id` INT(11) NOT NULL,
     `is_certified` BOOL NOT NULL DEFAULT 0,
     `level` TINYINT(4) NOT NULL DEFAULT 0,
     `last_review` DATETIME NOT NULL,
-
     `last_reviewer` INT(11) NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY cid (course_id)) $charset_spec");
 
+$db->query("CREATE TABLE `user` (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    surname VARCHAR(100) NOT NULL DEFAULT '',
+    givenname VARCHAR(100) NOT NULL DEFAULT '',
+    username VARCHAR(100) NOT NULL UNIQUE KEY COLLATE utf8_bin,
+    password VARCHAR(60) NOT NULL DEFAULT 'empty',
+    email VARCHAR(100) NOT NULL DEFAULT '',
+    parent_email VARCHAR(100) NOT NULL DEFAULT '',
+    status TINYINT(4) NOT NULL DEFAULT " . USER_STUDENT . ",
+    phone VARCHAR(20) DEFAULT '',
+    am VARCHAR(20) DEFAULT '',
+    registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
+    expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
+    lang VARCHAR(16) NOT NULL DEFAULT 'el',
+    description TEXT,
+    has_icon TINYINT(1) NOT NULL DEFAULT 0,
+    verified_mail TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
+    receive_mail TINYINT(1) NOT NULL DEFAULT 1,
+    email_public TINYINT(1) NOT NULL DEFAULT 0,
+    phone_public TINYINT(1) NOT NULL DEFAULT 0,
+    am_public TINYINT(1) NOT NULL DEFAULT 0,
+    whitelist TEXT,
+    last_passreminder DATETIME DEFAULT NULL) $charset_spec");
 
-#
-# Table `user`
-#
+$db->query("CREATE TABLE `admin` (
+    user_id INT(11) NOT NULL PRIMARY KEY,
+    privilege INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
-$db->query("CREATE TABLE user (
-      id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-      surname VARCHAR(100) NOT NULL DEFAULT '',
-      givenname VARCHAR(100) NOT NULL DEFAULT '',
-      username VARCHAR(100) NOT NULL UNIQUE KEY COLLATE utf8_bin,
-      password VARCHAR(60) NOT NULL DEFAULT 'empty',
-      email VARCHAR(100) NOT NULL DEFAULT '',
-      parent_email VARCHAR(100) NOT NULL DEFAULT '',
-      status TINYINT(4) NOT NULL DEFAULT " . USER_STUDENT . ",
-      phone VARCHAR(20) DEFAULT '',
-      am VARCHAR(20) DEFAULT '',
-      registered_at DATETIME NOT NULL DEFAULT '0000-00-00',
-      expires_at DATETIME NOT NULL DEFAULT '0000-00-00',
-      lang VARCHAR(16) NOT NULL DEFAULT 'el',
-      description TEXT,
-      has_icon TINYINT(1) NOT NULL DEFAULT 0,
-      verified_mail TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
-      receive_mail TINYINT(1) NOT NULL DEFAULT 1,
-      email_public TINYINT(1) NOT NULL DEFAULT 0,
-      phone_public TINYINT(1) NOT NULL DEFAULT 0,
-      am_public TINYINT(1) NOT NULL DEFAULT 0,
-      whitelist TEXT,
-      last_passreminder DATETIME DEFAULT NULL) $charset_spec");
-
-$db->query("CREATE TABLE admin (
-      user_id INT(11) NOT NULL PRIMARY KEY,
-      privilege INT(11) NOT NULL DEFAULT 0) $charset_spec");
-
-$db->query("CREATE TABLE login_failure (
+$db->query("CREATE TABLE `login_failure` (
     id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     ip varchar(45) NOT NULL,
     count tinyint(4) unsigned NOT NULL default 0,
     last_fail datetime NOT NULL,
     UNIQUE KEY ip (ip)) $charset_spec");
 
-$db->query("CREATE TABLE loginout (
-      idLog mediumint(9) unsigned NOT NULL auto_increment,
-      id_user mediumint(9) unsigned NOT NULL default 0,
-      ip char(45) NOT NULL default '0.0.0.0',
-      loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
-      loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
-      PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
+$db->query("CREATE TABLE `loginout` (
+    idLog mediumint(9) unsigned NOT NULL auto_increment,
+    id_user mediumint(9) unsigned NOT NULL default 0,
+    ip char(45) NOT NULL default '0.0.0.0',
+    loginout.when datetime NOT NULL default '0000-00-00 00:00:00',
+    loginout.action enum('LOGIN','LOGOUT') NOT NULL default 'LOGIN',
+    PRIMARY KEY (idLog), KEY `id_user` (`id_user`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `user_id` int(11) NOT NULL,
-        `title` varchar(200) NOT NULL,
-        `content` text NOT NULL,
-        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-        `duration` time NOT NULL,
-        `recursion_period` varchar(30) DEFAULT NULL,
-        `recursion_end` date DEFAULT NULL,
-        `source_event_id` int(11) DEFAULT NULL,
-        `reference_obj_module` mediumint(11) DEFAULT NULL,
-        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') DEFAULT NULL,
-        `reference_obj_id` int(11) DEFAULT NULL,
-        `reference_obj_course` int(11) DEFAULT NULL,
-        PRIMARY KEY (`id`))");
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
+    `title` varchar(200) NOT NULL,
+    `content` text NOT NULL,
+    `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `duration` time NOT NULL,
+    `recursion_period` varchar(30) DEFAULT NULL,
+    `recursion_end` date DEFAULT NULL,
+    `source_event_id` int(11) DEFAULT NULL,
+    `reference_obj_module` mediumint(11) DEFAULT NULL,
+    `reference_obj_type` ENUM('course', 'personalevent', 'user',
+        'course_ebook', 'course_event', 'course_assignment', 'course_document',
+        'course_link', 'course_exercise', 'course_learningpath', 'course_video',
+        'course_videolink') DEFAULT NULL,
+    `reference_obj_id` int(11) DEFAULT NULL,
+    `reference_obj_course` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`))");
 
 $db->query("CREATE TABLE IF NOT EXISTS `personal_calendar_settings` (
-        `user_id` int(11) NOT NULL,
-        `view_type` enum('day','month','week') DEFAULT 'month',
-        `personal_color` varchar(30) DEFAULT '#5882fa',
-        `course_color` varchar(30) DEFAULT '#acfa58',
-        `deadline_color` varchar(30) DEFAULT '#fa5882',
-        `admin_color` varchar(30) DEFAULT '#eeeeee',
-        `show_personal` bit(1) DEFAULT b'1',
-        `show_course` bit(1) DEFAULT b'1',
-        `show_deadline` bit(1) DEFAULT b'1',
-        `show_admin` bit(1) DEFAULT b'1',
-        PRIMARY KEY (`user_id`))");
+    `user_id` int(11) NOT NULL,
+    `view_type` enum('day','month','week') DEFAULT 'month',
+    `personal_color` varchar(30) DEFAULT '#5882fa',
+    `course_color` varchar(30) DEFAULT '#acfa58',
+    `deadline_color` varchar(30) DEFAULT '#fa5882',
+    `admin_color` varchar(30) DEFAULT '#eeeeee',
+    `show_personal` bit(1) DEFAULT b'1',
+    `show_course` bit(1) DEFAULT b'1',
+    `show_deadline` bit(1) DEFAULT b'1',
+    `show_admin` bit(1) DEFAULT b'1',
+    PRIMARY KEY (`user_id`))");
 
 //create triggers
-$db->query("CREATE TRIGGER personal_calendar_settings_init "
-        . "AFTER INSERT ON `user` FOR EACH ROW "
-        . "INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
+$db->query("CREATE TRIGGER personal_calendar_settings_init
+    AFTER INSERT ON `user` FOR EACH ROW 
+    INSERT INTO personal_calendar_settings(user_id) VALUES (NEW.id)");
 
 $db->query("CREATE TABLE `admin_calendar` (
-        `id` int(11) NOT NULL AUTO_INCREMENT,
-        `user_id` int(11) NOT NULL,
-        `title` varchar(200) NOT NULL,
-        `content` text NOT NULL,
-        `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-        `duration` time NOT NULL,
-        `recursion_period` varchar(30) DEFAULT NULL,
-        `recursion_end` date DEFAULT NULL,
-        `source_event_id` int(11) DEFAULT NULL,
-        `visibility_level` int(11) DEFAULT '1',
-        `email_notification` time DEFAULT NULL,
-        PRIMARY KEY (`id`),
-        KEY `user_events` (`user_id`),
-        KEY `admin_events_dates` (`start`))");
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
+    `title` varchar(200) NOT NULL,
+    `content` text NOT NULL,
+    `start` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `duration` time NOT NULL,
+    `recursion_period` varchar(30) DEFAULT NULL,
+    `recursion_end` date DEFAULT NULL,
+    `source_event_id` int(11) DEFAULT NULL,
+    `visibility_level` int(11) DEFAULT '1',
+    `email_notification` time DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `user_events` (`user_id`),
+    KEY `admin_events_dates` (`start`))");
 
-// haniotak:
 // table for loginout rollups
 // only contains LOGIN events summed up by a period (typically weekly)
-$db->query("CREATE TABLE loginout_summary (
-        id mediumint unsigned NOT NULL auto_increment,
-        login_sum int(11) unsigned  NOT NULL default 0,
-        start_date datetime NOT NULL default '0000-00-00 00:00:00',
-        end_date datetime NOT NULL default '0000-00-00 00:00:00',
-        PRIMARY KEY (id)) $charset_spec");
+$db->query("CREATE TABLE `loginout_summary` (
+    id mediumint unsigned NOT NULL auto_increment,
+    login_sum int(11) unsigned  NOT NULL default 0,
+    start_date datetime NOT NULL default '0000-00-00 00:00:00',
+    end_date datetime NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY (id)) $charset_spec");
 
-//table keeping data for monthly reports
+// table keeping data for monthly reports
 $db->query("CREATE TABLE monthly_summary (
-        id mediumint unsigned NOT NULL auto_increment,
-        `month` varchar(20)  NOT NULL default 0,
-        profesNum int(11) NOT NULL default 0,
-        studNum int(11) NOT NULL default 0,
-        visitorsNum int(11) NOT NULL default 0,
-        coursNum int(11) NOT NULL default 0,
-        logins int(11) NOT NULL default 0,
-        details MEDIUMTEXT,
-        PRIMARY KEY (id)) $charset_spec");
+    id mediumint unsigned NOT NULL auto_increment,
+    `month` varchar(20)  NOT NULL default 0,
+    profesNum int(11) NOT NULL default 0,
+    studNum int(11) NOT NULL default 0,
+    visitorsNum int(11) NOT NULL default 0,
+    coursNum int(11) NOT NULL default 0,
+    logins int(11) NOT NULL default 0,
+    details MEDIUMTEXT,
+    PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `document` (
-        `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `course_id` INT(11) NOT NULL DEFAULT 0,
-        `subsystem` TINYINT(4) NOT NULL,
-        `subsystem_id` INT(11) DEFAULT NULL,
-        `path` VARCHAR(255) NOT NULL,
-        `extra_path` VARCHAR(255) NOT NULL DEFAULT '',
-        `filename` VARCHAR(255) NOT NULL,
-        `visible` TINYINT(4) NOT NULL DEFAULT 1,
-        `public` TINYINT(4) NOT NULL DEFAULT 1,
-        `comment` TEXT,
-        `category` TINYINT(4) NOT NULL DEFAULT 0,
-        `title` TEXT,
-        `creator` TEXT,
-        `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-        `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-        `subject` TEXT,
-        `description` TEXT,
-        `author` VARCHAR(255) NOT NULL DEFAULT '',
-        `format` VARCHAR(32) NOT NULL DEFAULT '',
-        `language` VARCHAR(16) NOT NULL DEFAULT 'el',
-        `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
-        `editable` TINYINT(4) NOT NULL DEFAULT 0,
-        `lock_user_id` INT(11) NOT NULL DEFAULT 0) $charset_spec");
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL DEFAULT 0,
+    `subsystem` TINYINT(4) NOT NULL,
+    `subsystem_id` INT(11) DEFAULT NULL,
+    `path` VARCHAR(255) NOT NULL,
+    `extra_path` VARCHAR(255) NOT NULL DEFAULT '',
+    `filename` VARCHAR(255) NOT NULL,
+    `visible` TINYINT(4) NOT NULL DEFAULT 1,
+    `public` TINYINT(4) NOT NULL DEFAULT 1,
+    `comment` TEXT,
+    `category` TINYINT(4) NOT NULL DEFAULT 0,
+    `title` TEXT,
+    `creator` TEXT,
+    `date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `subject` TEXT,
+    `description` TEXT,
+    `author` VARCHAR(255) NOT NULL DEFAULT '',
+    `format` VARCHAR(32) NOT NULL DEFAULT '',
+    `language` VARCHAR(16) NOT NULL DEFAULT 'el',
+    `copyrighted` TINYINT(4) NOT NULL DEFAULT 0,
+    `editable` TINYINT(4) NOT NULL DEFAULT 0,
+    `lock_user_id` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
-                `course_id` INT(11) NOT NULL PRIMARY KEY ,
-                `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
-                `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
-                `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
-                `forum` TINYINT(4) NOT NULL DEFAULT 1,
-                `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
-                `documents` TINYINT(4) NOT NULL DEFAULT 1,
-                `wiki` TINYINT(4) NOT NULL DEFAULT 0,
-                `agenda` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+    `course_id` INT(11) NOT NULL PRIMARY KEY ,
+    `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
+    `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
+    `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
+    `forum` TINYINT(4) NOT NULL DEFAULT 1,
+    `private_forum` TINYINT(4) NOT NULL DEFAULT 0,
+    `documents` TINYINT(4) NOT NULL DEFAULT 1,
+    `wiki` TINYINT(4) NOT NULL DEFAULT 0,
+    `agenda` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `group` (
-                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL DEFAULT 0,
-                `name` varchar(100) NOT NULL DEFAULT '',
-                `description` TEXT,
-                `forum_id` int(11) NULL,
-                `max_members` int(11) NOT NULL DEFAULT 0,
-                `secret_directory` varchar(30) NOT NULL DEFAULT 0) $charset_spec");
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL DEFAULT 0,
+    `name` varchar(100) NOT NULL DEFAULT '',
+    `description` TEXT,
+    `forum_id` int(11) NULL,
+    `max_members` int(11) NOT NULL DEFAULT 0,
+    `secret_directory` varchar(30) NOT NULL DEFAULT 0) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `group_members` (
-                `group_id` int(11) NOT NULL,
-                `user_id` int(11) NOT NULL,
-                `is_tutor` int(11) NOT NULL DEFAULT 0,
-                `description` TEXT,
-                PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
+    `group_id` int(11) NOT NULL,
+    `user_id` int(11) NOT NULL,
+    `is_tutor` int(11) NOT NULL DEFAULT 0,
+    `description` TEXT,
+    PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `glossary` (
-               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `term` VARCHAR(255) NOT NULL,
-               `definition` text NOT NULL,
-           `url` text,
-               `order` INT(11) NOT NULL DEFAULT 0,
-               `datestamp` DATETIME NOT NULL,
-               `course_id` INT(11) NOT NULL,
-               `category_id` INT(11) DEFAULT NULL,
-               `notes` TEXT NOT NULL) $charset_spec");
+    `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `term` VARCHAR(255) NOT NULL,
+    `definition` text NOT NULL,
+    `url` text,
+    `order` INT(11) NOT NULL DEFAULT 0,
+    `datestamp` DATETIME NOT NULL,
+    `course_id` INT(11) NOT NULL,
+    `category_id` INT(11) DEFAULT NULL,
+    `notes` TEXT NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `glossary_category` (
-               `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `course_id` INT(11) NOT NULL,
-               `name` VARCHAR(255) NOT NULL,
-               `description` TEXT NOT NULL,
-               `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT NOT NULL,
+    `order` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `attendance` (
-               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `course_id` INT(11) NOT NULL,
-               `limit` TINYINT(4) NOT NULL DEFAULT 0,
-               `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
-               `active` TINYINT(1) NOT NULL DEFAULT 0,
-                `title` VARCHAR(250) DEFAULT NULL) $charset_spec");
+    `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `limit` TINYINT(4) NOT NULL DEFAULT 0,
+    `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
+    `active` TINYINT(1) NOT NULL DEFAULT 0,
+    `title` VARCHAR(250) DEFAULT NULL,
+    `start_date` DATETIME NOT NULL,
+    `end_date` DATETIME NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `attendance_activities` (
-               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `attendance_id` MEDIUMINT(11) NOT NULL,
-               `title` VARCHAR(250) DEFAULT NULL,
-               `date` DATETIME DEFAULT NULL,
-               `description` TEXT NOT NULL,
-               `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
-               `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
-               `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+    `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `attendance_id` MEDIUMINT(11) NOT NULL,
+    `title` VARCHAR(250) DEFAULT NULL,
+    `date` DATETIME DEFAULT NULL,
+    `description` TEXT NOT NULL,
+    `module_auto_id` MEDIUMINT(11) NOT NULL DEFAULT 0,
+    `module_auto_type` TINYINT(4) NOT NULL DEFAULT 0,
+    `auto` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `attendance_book` (
-               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `attendance_activity_id` MEDIUMINT(11) NOT NULL,
-               `uid` int(11) NOT NULL DEFAULT 0,
-               `attend` TINYINT(4) NOT NULL DEFAULT 0,
-               `comments` TEXT NOT NULL) $charset_spec");
+    `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `attendance_activity_id` MEDIUMINT(11) NOT NULL,
+    `uid` int(11) NOT NULL DEFAULT 0,
+    `attend` TINYINT(4) NOT NULL DEFAULT 0,
+    `comments` TEXT NOT NULL) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `attendance_users` (
-               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `attendance_id` MEDIUMINT(11) NOT NULL,
-               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
+    `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `attendance_id` MEDIUMINT(11) NOT NULL,
+    `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `link` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT,
-                `course_id` INT(11) NOT NULL,
-                `url` VARCHAR(255),
-                `title` VARCHAR(255),
-                `description` TEXT NOT NULL,
-                `category` INT(6) DEFAULT 0 NOT NULL,
-                `order` INT(6) DEFAULT 0 NOT NULL,
-                `hits` INT(6) DEFAULT 0 NOT NULL,
-                `user_id` INT(11) DEFAULT 0 NOT NULL,
-                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
-$db->query("CREATE TABLE IF NOT EXISTS `link_category` (
-                `id` INT(6) NOT NULL AUTO_INCREMENT,
-                `course_id` INT(11) NOT NULL,
-                `name` VARCHAR(255) NOT NULL,
-                `description` TEXT,
-                `order` INT(6) NOT NULL DEFAULT 0,
-                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
-$db->query("CREATE TABLE IF NOT EXISTS ebook (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `order` INT(11) NOT NULL,
-                `title` TEXT,
-                `visible` BOOL NOT NULL DEFAULT 0) $charset_spec");
-$db->query("CREATE TABLE IF NOT EXISTS ebook_section (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `ebook_id` INT(11) NOT NULL,
-                `public_id` VARCHAR(11) NOT NULL,
-    	`file` VARCHAR(128),
-                `title` TEXT) $charset_spec");
-$db->query("CREATE TABLE IF NOT EXISTS ebook_subsection (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `section_id` VARCHAR(11) NOT NULL,
-                `public_id` VARCHAR(11) NOT NULL,
-                `file_id` INT(11) NOT NULL,
-                `title` TEXT) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `url` VARCHAR(255),
+    `title` VARCHAR(255),
+    `description` TEXT NOT NULL,
+    `category` INT(6) DEFAULT 0 NOT NULL,
+    `order` INT(6) DEFAULT 0 NOT NULL,    
+    `user_id` INT(11) DEFAULT 0 NOT NULL,
+    PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 
+$db->query("CREATE TABLE IF NOT EXISTS `link_category` (
+    `id` INT(6) NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    `order` INT(6) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`, `course_id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `ebook` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `order` INT(11) NOT NULL,
+    `title` TEXT,
+    `visible` BOOL NOT NULL DEFAULT 0) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `ebook_section` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `ebook_id` INT(11) NOT NULL,
+    `public_id` VARCHAR(11) NOT NULL,
+    `file` VARCHAR(128),
+    `title` TEXT) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `ebook_subsection` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `section_id` VARCHAR(11) NOT NULL,
+    `public_id` VARCHAR(11) NOT NULL,
+    `file_id` INT(11) NOT NULL,
+    `title` TEXT) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(150) DEFAULT '' NOT NULL,
-  `desc` MEDIUMTEXT NOT NULL,
-  `num_topics` INT(10) DEFAULT 0 NOT NULL,
-  `num_posts` INT(10) DEFAULT 0 NOT NULL,
-  `last_post_id` INT(10) DEFAULT 0 NOT NULL,
-  `cat_id` INT(10) DEFAULT 0 NOT NULL,
-  `course_id` INT(11) NOT NULL,
-  PRIMARY KEY (`id`)) $charset_spec");
+    `id` INT(10) NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(150) DEFAULT '' NOT NULL,
+    `desc` MEDIUMTEXT NOT NULL,
+    `num_topics` INT(10) DEFAULT 0 NOT NULL,
+    `num_posts` INT(10) DEFAULT 0 NOT NULL,
+    `last_post_id` INT(10) DEFAULT 0 NOT NULL,
+    `cat_id` INT(10) DEFAULT 0 NOT NULL,
+    `course_id` INT(11) NOT NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_category` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `cat_title` VARCHAR(100) DEFAULT '' NOT NULL,
-  `cat_order` INT(11) DEFAULT 0 NOT NULL,
-  `course_id` INT(11) NOT NULL,
-  KEY `forum_category_index` (`id`, `course_id`)) $charset_spec");
+    `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `cat_title` VARCHAR(100) DEFAULT '' NOT NULL,
+    `cat_order` INT(11) DEFAULT 0 NOT NULL,
+    `course_id` INT(11) NOT NULL,
+    KEY `forum_category_index` (`id`, `course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_notify` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `user_id` INT(11) DEFAULT 0 NOT NULL,
-  `cat_id` INT(11) DEFAULT 0 NOT NULL ,
-  `forum_id` INT(11) DEFAULT 0 NOT NULL,
-  `topic_id` INT(11) DEFAULT 0 NOT NULL ,
-  `notify_sent` BOOL DEFAULT 0 NOT NULL ,
-  `course_id` INT(11) DEFAULT 0 NOT NULL) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) DEFAULT 0 NOT NULL,
+    `cat_id` INT(11) DEFAULT 0 NOT NULL ,
+    `forum_id` INT(11) DEFAULT 0 NOT NULL,
+    `topic_id` INT(11) DEFAULT 0 NOT NULL ,
+    `notify_sent` BOOL DEFAULT 0 NOT NULL ,
+    `course_id` INT(11) DEFAULT 0 NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_post` (
-  `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `topic_id` INT(10) NOT NULL DEFAULT 0,
-  `post_text` MEDIUMTEXT NOT NULL,
-  `poster_id` INT(10) NOT NULL DEFAULT 0,
-  `post_time` DATETIME,
-  `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
-  `parent_post_id` INT(10) NOT NULL DEFAULT 0) $charset_spec");
+    `id` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `topic_id` INT(10) NOT NULL DEFAULT 0,
+    `post_text` MEDIUMTEXT NOT NULL,
+    `poster_id` INT(10) NOT NULL DEFAULT 0,
+    `post_time` DATETIME,
+    `poster_ip` VARCHAR(45) DEFAULT '' NOT NULL,
+    `parent_post_id` INT(10) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_topic` (
-  `id` INT(10) NOT NULL auto_increment,
-  `title` VARCHAR(100) DEFAULT NULL,
-  `poster_id` INT(10) DEFAULT NULL,
-  `topic_time` DATETIME,
-  `num_views` INT(10) NOT NULL DEFAULT 0,
-  `num_replies` INT(10) NOT NULL DEFAULT 0,
-  `last_post_id` INT(10) NOT NULL DEFAULT 0,
-  `forum_id` INT(10) NOT NULL DEFAULT 0,
-  `locked` TINYINT DEFAULT 0 NOT NULL,
-  PRIMARY KEY  (`id`)) $charset_spec");
+    `id` INT(10) NOT NULL auto_increment,
+    `title` VARCHAR(100) DEFAULT NULL,
+    `poster_id` INT(10) DEFAULT NULL,
+    `topic_time` DATETIME,
+    `num_views` INT(10) NOT NULL DEFAULT 0,
+    `num_replies` INT(10) NOT NULL DEFAULT 0,
+    `last_post_id` INT(10) NOT NULL DEFAULT 0,
+    `forum_id` INT(10) NOT NULL DEFAULT 0,
+    `locked` TINYINT DEFAULT 0 NOT NULL,
+    PRIMARY KEY  (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `forum_user_stats` (
-        `user_id` INT(11) NOT NULL,
-        `num_posts` INT(11) NOT NULL,
-        `course_id` INT(11) NOT NULL,
-        PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
+    `user_id` INT(11) NOT NULL,
+    `num_posts` INT(11) NOT NULL,
+    `course_id` INT(11) NOT NULL,
+    PRIMARY KEY (`user_id`,`course_id`)) $charset_spec");
 
-$db->query("CREATE TABLE IF NOT EXISTS video (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `path` VARCHAR(255) NOT NULL,
-                `url` VARCHAR(200) NOT NULL,
-                `title` VARCHAR(200) NOT NULL,
-                `category` INT(6) DEFAULT NULL,
-                `description` TEXT NOT NULL,
-                `creator` VARCHAR(200) NOT NULL,
-                `publisher` VARCHAR(200) NOT NULL,
-                `date` DATETIME NOT NULL,
-                `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+$db->query("CREATE TABLE IF NOT EXISTS `video` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `path` VARCHAR(255) NOT NULL,
+    `url` VARCHAR(200) NOT NULL,
+    `title` VARCHAR(200) NOT NULL,
+    `category` INT(6) DEFAULT NULL,
+    `description` TEXT NOT NULL,
+    `creator` VARCHAR(200) NOT NULL,
+    `publisher` VARCHAR(200) NOT NULL,
+    `date` DATETIME NOT NULL,
+    `visible` TINYINT(4) NOT NULL DEFAULT 1,
+    `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
-$db->query("CREATE TABLE IF NOT EXISTS videolink (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `url` VARCHAR(200) NOT NULL DEFAULT '',
-                `title` VARCHAR(200) NOT NULL DEFAULT '',
-                `description` TEXT NOT NULL,
-                `category` INT(6) DEFAULT NULL,
-                `creator` VARCHAR(200) NOT NULL DEFAULT '',
-                `publisher` VARCHAR(200) NOT NULL DEFAULT '',
-                `date` DATETIME NOT NULL,
-                `visible` TINYINT(4) NOT NULL DEFAULT 1,
-                `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
+$db->query("CREATE TABLE IF NOT EXISTS `videolink` (
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `url` VARCHAR(200) NOT NULL DEFAULT '',
+    `title` VARCHAR(200) NOT NULL DEFAULT '',
+    `description` TEXT NOT NULL,
+    `category` INT(6) DEFAULT NULL,
+    `creator` VARCHAR(200) NOT NULL DEFAULT '',
+    `publisher` VARCHAR(200) NOT NULL DEFAULT '',
+    `date` DATETIME NOT NULL,
+    `visible` TINYINT(4) NOT NULL DEFAULT 1,
+    `public` TINYINT(4) NOT NULL DEFAULT 1) $charset_spec");
 
-$db->query("CREATE TABLE video_category (
-                id INT(11) NOT NULL auto_increment,
-                `course_id` INT(11) NOT NULL,
-                name VARCHAR(255) NOT NULL, 
-                description TEXT DEFAULT NULL,
-                PRIMARY KEY (id)) $charset_spec");
+$db->query("CREATE TABLE `video_category` (
+    `id` INT(11) NOT NULL auto_increment,
+    `course_id` INT(11) NOT NULL,
+    `name` VARCHAR(255) NOT NULL, 
+    `description` TEXT DEFAULT NULL,
+    PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_msg (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `author_id` INT(11) UNSIGNED NOT NULL,
-                `subject` VARCHAR(250) NOT NULL,
-                `body` LONGTEXT NOT NULL,
-                `timestamp` INT(11) NOT NULL) $charset_spec");
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `author_id` INT(11) UNSIGNED NOT NULL,
+    `subject` VARCHAR(250) NOT NULL,
+    `body` LONGTEXT NOT NULL,
+    `timestamp` INT(11) NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_attachment (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `msg_id` INT(11) UNSIGNED NOT NULL,
-                `filename` VARCHAR(250) NOT NULL,
-                 real_filename varchar(255) NOT NULL,
-                `filesize` INT(11) UNSIGNED NOT NULL) $charset_spec");
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `msg_id` INT(11) UNSIGNED NOT NULL,
+    `filename` VARCHAR(250) NOT NULL,
+    `real_filename` varchar(255) NOT NULL,
+    `filesize` INT(11) UNSIGNED NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS dropbox_index (
-                `msg_id` INT(11) UNSIGNED NOT NULL,
-                `recipient_id` INT(11) UNSIGNED NOT NULL,
-                `is_read` BOOLEAN NOT NULL DEFAULT 0,
-                `deleted` BOOLEAN NOT NULL DEFAULT 0,
-                PRIMARY KEY (`msg_id`, `recipient_id`)) $charset_spec");
+    `msg_id` INT(11) UNSIGNED NOT NULL,
+    `recipient_id` INT(11) UNSIGNED NOT NULL,
+    `is_read` BOOLEAN NOT NULL DEFAULT 0,
+    `deleted` BOOLEAN NOT NULL DEFAULT 0,
+    PRIMARY KEY (`msg_id`, `recipient_id`)) $charset_spec");
 
+// COMMENT='List of available modules used in learning paths';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_module` (
-                `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `name` VARCHAR(255) NOT NULL DEFAULT '',
-                `comment` TEXT NOT NULL,
-                `accessibility` enum('PRIVATE','PUBLIC') NOT NULL DEFAULT 'PRIVATE',
-                `startAsset_id` INT(11) NOT NULL DEFAULT 0,
-                `contentType` enum('CLARODOC','DOCUMENT','EXERCISE','HANDMADE','SCORM','SCORM_ASSET','LABEL','COURSE_DESCRIPTION','LINK','MEDIA','MEDIALINK') NOT NULL,
-                `launch_data` TEXT NOT NULL)  $charset_spec");
-//COMMENT='List of available modules used in learning paths';
+    `module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `name` VARCHAR(255) NOT NULL DEFAULT '',
+    `comment` TEXT NOT NULL,
+    `accessibility` enum('PRIVATE','PUBLIC') NOT NULL DEFAULT 'PRIVATE',
+    `startAsset_id` INT(11) NOT NULL DEFAULT 0,
+    `contentType` enum('CLARODOC', 'DOCUMENT', 'EXERCISE', 'HANDMADE',
+        'SCORM', 'SCORM_ASSET', 'LABEL', 'COURSE_DESCRIPTION', 'LINK',
+        'MEDIA','MEDIALINK') NOT NULL,
+    `launch_data` TEXT NOT NULL) $charset_spec");
+
+// COMMENT='List of learning Paths';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_learnPath` (
-                `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `name` VARCHAR(255) NOT NULL DEFAULT '',
-                `comment` TEXT NOT NULL,
-                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                `visible` TINYINT(4) NOT NULL DEFAULT 0,
-                `rank` INT(11) NOT NULL DEFAULT 0)  $charset_spec");
-//COMMENT='List of learning Paths';
+    `learnPath_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `name` VARCHAR(255) NOT NULL DEFAULT '',
+    `comment` TEXT NOT NULL,
+    `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+    `visible` TINYINT(4) NOT NULL DEFAULT 0,
+    `rank` INT(11) NOT NULL DEFAULT 0) $charset_spec");
+
+// COMMENT='This table links module to the learning path using them';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_rel_learnPath_module` (
-                `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `learnPath_id` INT(11) NOT NULL DEFAULT 0,
-                `module_id` INT(11) NOT NULL DEFAULT 0,
-                `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
-                `visible` TINYINT(4) NOT NULL DEFAULT 0,
-                `specificComment` TEXT NOT NULL,
-                `rank` INT(11) NOT NULL DEFAULT 0,
-                `parent` INT(11) NOT NULL DEFAULT 0,
-                `raw_to_pass` TINYINT(4) NOT NULL DEFAULT 50)  $charset_spec");
-//COMMENT='This table links module to the learning path using them';
+    `learnPath_module_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `learnPath_id` INT(11) NOT NULL DEFAULT 0,
+    `module_id` INT(11) NOT NULL DEFAULT 0,
+    `lock` enum('OPEN','CLOSE') NOT NULL DEFAULT 'OPEN',
+    `visible` TINYINT(4) NOT NULL DEFAULT 0,
+    `specificComment` TEXT NOT NULL,
+    `rank` INT(11) NOT NULL DEFAULT 0,
+    `parent` INT(11) NOT NULL DEFAULT 0,
+    `raw_to_pass` TINYINT(4) NOT NULL DEFAULT 50) $charset_spec");
+
+// COMMENT='List of resources of module of learning paths';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_asset` (
-                `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `module_id` INT(11) NOT NULL DEFAULT 0,
-                `path` VARCHAR(255) NOT NULL DEFAULT '',
-                `comment` VARCHAR(255) default NULL)  $charset_spec");
-//COMMENT='List of resources of module of learning paths';
+    `asset_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `module_id` INT(11) NOT NULL DEFAULT 0,
+    `path` VARCHAR(255) NOT NULL DEFAULT '',
+    `comment` VARCHAR(255) default NULL) $charset_spec");
+
+// COMMENT='Record the last known status of the user in the course';
 $db->query("CREATE TABLE IF NOT EXISTS `lp_user_module_progress` (
-                `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `learnPath_module_id` INT(11) NOT NULL DEFAULT 0,
-                `learnPath_id` INT(11) NOT NULL DEFAULT 0,
-                `lesson_location` VARCHAR(255) NOT NULL DEFAULT '',
-                `lesson_status` enum('NOT ATTEMPTED','PASSED','FAILED','COMPLETED','BROWSED','INCOMPLETE','UNKNOWN') NOT NULL default 'NOT ATTEMPTED',
-                `entry` enum('AB-INITIO','RESUME','') NOT NULL DEFAULT 'AB-INITIO',
-                `raw` TINYINT(4) NOT NULL DEFAULT '-1',
-                `scoreMin` TINYINT(4) NOT NULL DEFAULT '-1',
-                `scoreMax` TINYINT(4) NOT NULL DEFAULT '-1',
-                `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
-                `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
-                `suspend_data` TEXT NOT NULL,
-                `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT')  $charset_spec");
-//COMMENT='Record the last known status of the user in the course';
+    `user_module_progress_id` INT(22) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `learnPath_module_id` INT(11) NOT NULL DEFAULT 0,
+    `learnPath_id` INT(11) NOT NULL DEFAULT 0,
+    `lesson_location` VARCHAR(255) NOT NULL DEFAULT '',
+    `lesson_status` enum('NOT ATTEMPTED', 'PASSED', 'FAILED', 'COMPLETED',
+        'BROWSED', 'INCOMPLETE', 'UNKNOWN') NOT NULL DEFAULT 'NOT ATTEMPTED',
+    `entry` enum('AB-INITIO', 'RESUME', '') NOT NULL DEFAULT 'AB-INITIO',
+    `raw` TINYINT(4) NOT NULL DEFAULT '-1',
+    `scoreMin` TINYINT(4) NOT NULL DEFAULT '-1',
+    `scoreMax` TINYINT(4) NOT NULL DEFAULT '-1',
+    `total_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+    `session_time` VARCHAR(13) NOT NULL DEFAULT '0000:00:00.00',
+    `suspend_data` TEXT NOT NULL,
+    `credit` enum('CREDIT','NO-CREDIT') NOT NULL DEFAULT 'NO-CREDIT') $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_properties` (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `title` VARCHAR(255) NOT NULL DEFAULT '',
-                `description` TEXT NULL,
-                `group_id` INT(11) NOT NULL DEFAULT 0 )  $charset_spec");
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `title` VARCHAR(255) NOT NULL DEFAULT '',
+    `description` TEXT NULL,
+    `group_id` INT(11) NOT NULL DEFAULT 0) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_acls` (
-                `wiki_id` INT(11) UNSIGNED NOT NULL,
-                `flag` VARCHAR(255) NOT NULL,
-                `value` ENUM('false','true') NOT NULL DEFAULT 'false',
-                PRIMARY KEY (wiki_id, flag) )
-                $charset_spec");
+    `wiki_id` INT(11) UNSIGNED NOT NULL,
+    `flag` VARCHAR(255) NOT NULL,
+    `value` ENUM('false','true') NOT NULL DEFAULT 'false',
+    PRIMARY KEY (wiki_id, flag)) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_pages` (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `title` VARCHAR(255) NOT NULL DEFAULT '',
-                `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )  $charset_spec");
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `wiki_id` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `owner_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `title` VARCHAR(255) NOT NULL DEFAULT '',
+    `ctime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `last_version` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `last_mtime` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' )  $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_pages_content` (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
-                `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
-                `content` TEXT NOT NULL,
-                `changelog` VARCHAR(200) )  $charset_spec");
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `pid` INT(11) UNSIGNED NOT NULL DEFAULT 0,
+    `editor_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `mtime` DATETIME NOT NULL default '0000-00-00 00:00:00',
+    `content` TEXT NOT NULL,
+    `changelog` VARCHAR(200) )  $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `wiki_locks` (
-                `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
-                `wiki_id` INT(11) UNSIGNED NOT NULL,
-                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
-                PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
+    `ptitle` VARCHAR(255) NOT NULL DEFAULT '',
+    `wiki_id` INT(11) UNSIGNED NOT NULL,
+    `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `ltime_created` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `ltime_alive` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+    PRIMARY KEY (ptitle, wiki_id) ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `blog_post` (
-                `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `title` VARCHAR(255) NOT NULL DEFAULT '',
-                `content` TEXT NOT NULL,
-                `time` DATETIME NOT NULL,
-                `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
-                `commenting` TINYINT NOT NULL DEFAULT '1',
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `course_id` INT(11) NOT NULL) $charset_spec");
+    `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `title` VARCHAR(255) NOT NULL DEFAULT '',
+    `content` TEXT NOT NULL,
+    `time` DATETIME NOT NULL,
+    `views` int(11) UNSIGNED NOT NULL DEFAULT '0',
+    `commenting` TINYINT NOT NULL DEFAULT '1',
+    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `course_id` INT(11) NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `comments` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `rid` INT(11) NOT NULL,
-                `rtype` VARCHAR(50) NOT NULL,
-                `content` TEXT NOT NULL,
-                `time` DATETIME NOT NULL,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `rid` INT(11) NOT NULL,
+    `rtype` VARCHAR(50) NOT NULL,
+    `content` TEXT NOT NULL,
+    `time` DATETIME NOT NULL,
+    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `rating` (
-                `rate_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `rid` INT(11) NOT NULL,
-                `rtype` VARCHAR(50) NOT NULL,
-                `value` TINYINT NOT NULL,
-                `widget` VARCHAR(30) NOT NULL,
-                `time` DATETIME NOT NULL,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `rating_source` VARCHAR(50) NOT NULL,
-                INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
-                INDEX `rating_index_2` (`rid`, `rtype`, `widget`, `user_id`)) $charset_spec");
+    `rate_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `rid` INT(11) NOT NULL,
+    `rtype` VARCHAR(50) NOT NULL,
+    `value` TINYINT NOT NULL,
+    `widget` VARCHAR(30) NOT NULL,
+    `time` DATETIME NOT NULL,
+    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `rating_source` VARCHAR(50) NOT NULL,
+    INDEX `rating_index_1` (`rid`, `rtype`, `widget`),
+    INDEX `rating_index_2` (`rid`, `rtype`, `widget`, `user_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `rating_cache` (
-                `rate_cache_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `rid` INT(11) NOT NULL,
-                `rtype` VARCHAR(50) NOT NULL,
-                `value` FLOAT NOT NULL DEFAULT 0,
-                `count` INT(11) NOT NULL DEFAULT 0,
-                `tag` VARCHAR(50),
-                INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
+    `rate_cache_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `rid` INT(11) NOT NULL,
+    `rtype` VARCHAR(50) NOT NULL,
+    `value` FLOAT NOT NULL DEFAULT 0,
+    `count` INT(11) NOT NULL DEFAULT 0,
+    `tag` VARCHAR(50),
+    INDEX `rating_cache_index_1` (`rid`, `rtype`, `tag`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `rid` INT(11) NOT NULL,
-                `rtype` VARCHAR(50) NOT NULL,
-                `course_id` INT(11) NOT NULL,
-                `reason` VARCHAR(50) NOT NULL DEFAULT '',
-                `message` TEXT NOT NULL,
-                `timestamp` INT(11) NOT NULL DEFAULT 0,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `status` TINYINT(1) NOT NULL DEFAULT 1,
-                INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
-                INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `rid` INT(11) NOT NULL,
+    `rtype` VARCHAR(50) NOT NULL,
+    `course_id` INT(11) NOT NULL,
+    `reason` VARCHAR(50) NOT NULL DEFAULT '',
+    `message` TEXT NOT NULL,
+    `timestamp` INT(11) NOT NULL DEFAULT 0,
+    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `status` TINYINT(1) NOT NULL DEFAULT 1,
+    INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
+    INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -818,186 +786,192 @@ $db->query("CREATE TABLE `wall_post_resources` (
                 INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll` (
-                `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `name` VARCHAR(255) NOT NULL DEFAULT '',
-                `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `active` INT(11) NOT NULL DEFAULT 0,
-                `description` MEDIUMTEXT NULL DEFAULT NULL,
-                `end_message` MEDIUMTEXT NULL DEFAULT NULL,
-                `anonymized` INT(1) NOT NULL DEFAULT 0,
-                `show_results` INT(1) NOT NULL DEFAULT 0,
-                `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
+    `pid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `creator_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `name` VARCHAR(255) NOT NULL DEFAULT '',
+    `creation_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `end_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `active` INT(11) NOT NULL DEFAULT 0,
+    `description` MEDIUMTEXT NULL DEFAULT NULL,
+    `end_message` MEDIUMTEXT NULL DEFAULT NULL,
+    `anonymized` INT(1) NOT NULL DEFAULT 0,
+    `show_results` INT(1) NOT NULL DEFAULT 0,
+    `assign_to_specific` TINYINT NOT NULL DEFAULT '0' ) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_to_specific` (
-            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `user_id` int(11) NULL,
-            `group_id` int(11) NULL,
-            `poll_id` int(11) NOT NULL ) $charset_spec"); 
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` int(11) NULL,
+    `group_id` int(11) NULL,
+    `poll_id` int(11) NOT NULL ) $charset_spec"); 
 
 $db->query("CREATE TABLE IF NOT EXISTS `poll_answer_record` (
-                `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `pid` INT(11) NOT NULL DEFAULT 0,
-                `qid` INT(11) NOT NULL DEFAULT 0,
-                `aid` INT(11) NOT NULL DEFAULT 0,
-                `answer_text` TEXT NOT NULL,
-                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ) $charset_spec");
+    `arid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `pid` INT(11) NOT NULL DEFAULT 0,
+    `qid` INT(11) NOT NULL DEFAULT 0,
+    `aid` INT(11) NOT NULL DEFAULT 0,
+    `answer_text` TEXT NOT NULL,
+    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `submit_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question` (
-                `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `pid` INT(11) NOT NULL DEFAULT 0,
-                `question_text` VARCHAR(250) NOT NULL DEFAULT '',
-                `qtype` tinyint(3) UNSIGNED NOT NULL,
-                `q_position` INT(11) DEFAULT 1, 
-                `q_scale` INT(11) NULL DEFAULT NULL) $charset_spec");
+    `pqid` BIGINT(12) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `pid` INT(11) NOT NULL DEFAULT 0,
+    `question_text` VARCHAR(250) NOT NULL DEFAULT '',
+    `qtype` tinyint(3) UNSIGNED NOT NULL,
+    `q_position` INT(11) DEFAULT 1, 
+    `q_scale` INT(11) NULL DEFAULT NULL) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `poll_question_answer` (
-                `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `pqid` INT(11) NOT NULL DEFAULT 0,
-                `answer_text` TEXT NOT NULL) $charset_spec");
+    `pqaid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `pqid` INT(11) NOT NULL DEFAULT 0,
+    `answer_text` TEXT NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `title` VARCHAR(200) NOT NULL DEFAULT '',
-                `description` TEXT NOT NULL,
-                `comments` TEXT NOT NULL,
-                `submission_type` TINYINT NOT NULL DEFAULT '0',
-                `deadline` DATETIME NULL DEFAULT NULL,
-                `late_submission` TINYINT NOT NULL DEFAULT '0', 
-                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `active` CHAR(1) NOT NULL DEFAULT '1',
-                `secret_directory` VARCHAR(30) NOT NULL,
-                `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
-                `max_grade` FLOAT DEFAULT '10' NOT NULL,
-                `grading_scale_id` INT(11) NOT NULL DEFAULT '0',
-                `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
-                `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
-                `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
-                `auto_judge` TINYINT(1) NOT NULL DEFAULT 0,
-                `auto_judge_scenarios` TEXT,
-                `lang` VARCHAR(10) NOT NULL DEFAULT '') $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `title` VARCHAR(200) NOT NULL DEFAULT '',
+    `description` TEXT NOT NULL,
+    `comments` TEXT NOT NULL,
+    `submission_type` TINYINT NOT NULL DEFAULT '0',
+    `deadline` DATETIME NULL DEFAULT NULL,
+    `late_submission` TINYINT NOT NULL DEFAULT '0', 
+    `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `active` CHAR(1) NOT NULL DEFAULT '1',
+    `secret_directory` VARCHAR(30) NOT NULL,
+    `group_submissions` CHAR(1) DEFAULT '0' NOT NULL,
+    `max_grade` FLOAT DEFAULT '10' NOT NULL,
+    `grading_scale_id` INT(11) NOT NULL DEFAULT '0',
+    `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
+    `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
+    `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
+    `auto_judge` TINYINT(1) NOT NULL DEFAULT 0,
+    `auto_judge_scenarios` TEXT,
+    `lang` VARCHAR(10) NOT NULL DEFAULT '') $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `assignment_id` INT(11) NOT NULL DEFAULT 0,
-                `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                `file_path` VARCHAR(200) NOT NULL DEFAULT '',
-                `file_name` VARCHAR(200) NOT NULL DEFAULT '',
-                `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
-                `comments` TEXT NOT NULL,
-                `grade` FLOAT DEFAULT NULL,
-                `grade_comments` TEXT NOT NULL,
-                `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
-                `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
-                `group_id` INT( 11 ) DEFAULT NULL,
-                `auto_judge_scenarios_output` TEXT) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `assignment_id` INT(11) NOT NULL DEFAULT 0,
+    `submission_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
+    `file_path` VARCHAR(200) NOT NULL DEFAULT '',
+    `file_name` VARCHAR(200) NOT NULL DEFAULT '',
+    `submission_text` MEDIUMTEXT NULL DEFAULT NULL,
+    `comments` TEXT NOT NULL,
+    `grade` FLOAT DEFAULT NULL,
+    `grade_comments` TEXT NOT NULL,
+    `grade_submission_date` DATE NOT NULL DEFAULT '1000-10-10',
+    `grade_submission_ip` VARCHAR(45) NOT NULL DEFAULT '',
+    `group_id` INT( 11 ) DEFAULT NULL,
+    `auto_judge_scenarios_output` TEXT) $charset_spec");
 
-        // Add grading scales table
+// grading scales table
 $db->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
-                `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `title` varchar(255) NOT NULL,
-                `scales` text NOT NULL,
-                `course_id` int(11) NOT NULL,
-                KEY `course_id` (`course_id`)) $charset_spec");
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `title` varchar(255) NOT NULL,
+    `scales` text NOT NULL,
+    `course_id` int(11) NOT NULL,
+    KEY `course_id` (`course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `assignment_to_specific` (
-                `user_id` int(11) NOT NULL,
-                `group_id` int(11) NOT NULL,
-                `assignment_id` int(11) NOT NULL,
-                PRIMARY KEY (user_id, group_id, assignment_id)
-              ) $charset_spec");
+    `user_id` int(11) NOT NULL,
+    `group_id` int(11) NOT NULL,
+    `assignment_id` int(11) NOT NULL,
+    PRIMARY KEY (user_id, group_id, assignment_id)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `title` VARCHAR(250) DEFAULT NULL,
-                `description` TEXT,
-                `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT 1,
-                `start_date` DATETIME DEFAULT NULL,
-                `end_date` DATETIME DEFAULT NULL,
-                `temp_save` TINYINT(1) NOT NULL DEFAULT 0,
-                `time_constraint` INT(11) DEFAULT 0,
-                `attempts_allowed` INT(11) DEFAULT 0,
-                `random` SMALLINT(6) NOT NULL DEFAULT 0,
-                `active` TINYINT(4) DEFAULT NULL,
-                `public` TINYINT(4) NOT NULL DEFAULT 1,
-                `results` TINYINT(1) NOT NULL DEFAULT 1,
-                `score` TINYINT(1) NOT NULL DEFAULT 1,
-                `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
-                `ip_lock` TEXT NULL DEFAULT NULL,
-                `password_lock` VARCHAR(255) NULL DEFAULT NULL) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `title` VARCHAR(250) DEFAULT NULL,
+    `description` TEXT,
+    `type` TINYINT(4) UNSIGNED NOT NULL DEFAULT 1,
+    `start_date` DATETIME DEFAULT NULL,
+    `end_date` DATETIME DEFAULT NULL,
+    `temp_save` TINYINT(1) NOT NULL DEFAULT 0,
+    `time_constraint` INT(11) DEFAULT 0,
+    `attempts_allowed` INT(11) DEFAULT 0,
+    `random` SMALLINT(6) NOT NULL DEFAULT 0,
+    `active` TINYINT(4) DEFAULT NULL,
+    `public` TINYINT(4) NOT NULL DEFAULT 1,
+    `results` TINYINT(1) NOT NULL DEFAULT 1,
+    `score` TINYINT(1) NOT NULL DEFAULT 1,
+    `assign_to_specific` TINYINT NOT NULL DEFAULT '0',
+    `ip_lock` TEXT NULL DEFAULT NULL,
+    `password_lock` VARCHAR(255) NULL DEFAULT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_to_specific` (
-            `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            `user_id` int(11) NULL,
-            `group_id` int(11) NULL,
-            `exercise_id` int(11) NOT NULL ) $charset_spec"); 
+    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` int(11) NULL,
+    `group_id` int(11) NULL,
+    `exercise_id` int(11) NOT NULL ) $charset_spec"); 
 
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_user_record` (
-                `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `eid` INT(11) NOT NULL DEFAULT 0,
-                `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-                `record_end_date` DATETIME DEFAULT NULL,
-                `total_score` FLOAT(5,2) NOT NULL DEFAULT 0,
-                `total_weighting` FLOAT(5,2) DEFAULT 0,
-                `attempt` INT(11) NOT NULL DEFAULT 0,
-                `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
-                `secs_remaining` INT(11) NOT NULL DEFAULT '0') $charset_spec");
+    `eurid` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `eid` INT(11) NOT NULL DEFAULT 0,
+    `uid` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+    `record_start_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+    `record_end_date` DATETIME DEFAULT NULL,
+    `total_score` FLOAT(5,2) NOT NULL DEFAULT 0,
+    `total_weighting` FLOAT(5,2) DEFAULT 0,
+    `attempt` INT(11) NOT NULL DEFAULT 0,
+    `attempt_status` tinyint(4) NOT NULL DEFAULT 1,
+    `secs_remaining` INT(11) NOT NULL DEFAULT '0') $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer_record` (
-     			`answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    			`eurid` int(11) NOT NULL,
-    			`question_id` int(11) NOT NULL,
-    			`answer` text,
-      			`answer_id` int(11) NOT NULL,
-      			`weight` float(5,2) DEFAULT NULL,
-                                `is_answered` TINYINT NOT NULL DEFAULT '1') $charset_spec");
+    `answer_record_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `eurid` int(11) NOT NULL,
+    `question_id` int(11) NOT NULL,
+    `answer` text,
+    `answer_id` int(11) NOT NULL,
+    `weight` float(5,2) DEFAULT NULL,
+    `is_answered` TINYINT NOT NULL DEFAULT '1') $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `course_id` INT(11) NOT NULL,
-                `question` TEXT,
-                `description` TEXT,
-                `weight` FLOAT(11,2) DEFAULT NULL,
-                `q_position` INT(11) DEFAULT 1,
-                `type` INT(11) DEFAULT 1,
-                `difficulty` INT(1) DEFAULT 0,
-                `category` INT(11) DEFAULT 0) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `course_id` INT(11) NOT NULL,
+    `question` TEXT,
+    `description` TEXT,
+    `weight` FLOAT(11,2) DEFAULT NULL,
+    `q_position` INT(11) DEFAULT 1,
+    `type` INT(11) DEFAULT 1,
+    `difficulty` INT(1) DEFAULT 0,
+    `category` INT(11) DEFAULT 0) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_question_cats` (
-                `question_cat_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `question_cat_name` VARCHAR(300) NOT NULL,
-                `course_id` INT(11) NOT NULL) $charset_spec");
+    `question_cat_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `question_cat_name` VARCHAR(300) NOT NULL,
+    `course_id` INT(11) NOT NULL) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_answer` (
-                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                `question_id` INT(11) NOT NULL DEFAULT 0,
-                `answer` TEXT,
-                `correct` INT(11) DEFAULT NULL,
-                `comment` TEXT,
-                `weight` FLOAT(5,2),
-                `r_position` INT(11) DEFAULT NULL ) $charset_spec");
+    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `question_id` INT(11) NOT NULL DEFAULT 0,
+    `answer` TEXT,
+    `correct` INT(11) DEFAULT NULL,
+    `comment` TEXT,
+    `weight` FLOAT(5,2),
+`r_position` INT(11) DEFAULT NULL ) $charset_spec");
+
 $db->query("CREATE TABLE IF NOT EXISTS `exercise_with_questions` (
-                `question_id` INT(11) NOT NULL DEFAULT 0,
-                `exercise_id` INT(11) NOT NULL DEFAULT 0,
-                PRIMARY KEY (question_id, exercise_id) ) $charset_spec");
+    `question_id` INT(11) NOT NULL DEFAULT 0,
+    `exercise_id` INT(11) NOT NULL DEFAULT 0,
+    PRIMARY KEY (question_id, exercise_id) ) $charset_spec");
 
 // hierarchy tables
 $db->query("CREATE TABLE IF NOT EXISTS `hierarchy` (
-                `id` int(11) NOT NULL auto_increment PRIMARY KEY,
-                `code` varchar(20),
-                `name` text NOT NULL,
-                `number` int(11) NOT NULL default 1000,
-                `generator` int(11) NOT NULL default 100,
-                `lft` int(11) NOT NULL,
-                `rgt` int(11) NOT NULL,
-                `allow_course` boolean not null default false,
-                `allow_user` boolean NOT NULL default false,
-                `order_priority` int(11) default null,
-                KEY `lftindex` (`lft`),
-                KEY `rgtindex` (`rgt`) )");
+    `id` int(11) NOT NULL auto_increment PRIMARY KEY,
+    `code` varchar(20),
+    `name` text NOT NULL,
+    `number` int(11) NOT NULL default 1000,
+    `generator` int(11) NOT NULL default 100,
+    `lft` int(11) NOT NULL,
+    `rgt` int(11) NOT NULL,
+    `allow_course` boolean not null default false,
+    `allow_user` boolean NOT NULL default false,
+    `order_priority` int(11) default null,
+    KEY `lftindex` (`lft`),
+    KEY `rgtindex` (`rgt`) )");
 
 $db->query("INSERT INTO `hierarchy` (code, name, lft, rgt)
     VALUES ('', ?s, 1, 68)", $institutionForm);
@@ -1032,157 +1006,158 @@ $db->query("CREATE TABLE `user_department` (
 // hierarchy stored procedures
 $db->query("DROP PROCEDURE IF EXISTS `add_node`");
 $db->query("CREATE PROCEDURE `add_node` (IN name TEXT, IN parentlft INT(11),
-                        IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        DECLARE lft, rgt INT(11);
+            IN p_code VARCHAR(20), IN p_allow_course BOOLEAN,
+            IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+        LANGUAGE SQL
+        BEGIN
+            DECLARE lft, rgt INT(11);
 
-                        SET lft = parentlft + 1;
-                        SET rgt = parentlft + 2;
+            SET lft = parentlft + 1;
+            SET rgt = parentlft + 2;
 
-                        CALL shift_right(parentlft, 2, 0);
+            CALL shift_right(parentlft, 2, 0);
 
-                        INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
-                    END");
+            INSERT INTO `hierarchy` (name, lft, rgt, code, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_allow_course, p_allow_user, p_order_priority);
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `add_node_ext`");
 $db->query("CREATE PROCEDURE `add_node_ext` (IN name TEXT, IN parentlft INT(11),
-                        IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
-                        IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        DECLARE lft, rgt INT(11);
+            IN p_code VARCHAR(20), IN p_number INT(11), IN p_generator INT(11),
+            IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+        LANGUAGE SQL
+        BEGIN
+            DECLARE lft, rgt INT(11);
 
-                        SET lft = parentlft + 1;
-                        SET rgt = parentlft + 2;
+            SET lft = parentlft + 1;
+            SET rgt = parentlft + 2;
 
-                        CALL shift_right(parentlft, 2, 0);
+            CALL shift_right(parentlft, 2, 0);
 
-                        INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
-                    END");
+            INSERT INTO `hierarchy` (name, lft, rgt, code, number, generator, allow_course, allow_user, order_priority) VALUES (name, lft, rgt, p_code, p_number, p_generator, p_allow_course, p_allow_user, p_order_priority);
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `update_node`");
 $db->query("CREATE PROCEDURE `update_node` (IN p_id INT(11), IN p_name TEXT,
-                        IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
-                        IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
-                            code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
-                            order_priority = p_order_priority WHERE id = p_id;
+            IN nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11), IN parentlft INT(11),
+            IN p_code VARCHAR(20), IN p_allow_course BOOLEAN, IN p_allow_user BOOLEAN, IN p_order_priority INT(11))
+        LANGUAGE SQL
+        BEGIN
+            UPDATE `hierarchy` SET name = p_name, lft = p_lft, rgt = p_rgt,
+                code = p_code, allow_course = p_allow_course, allow_user = p_allow_user,
+                order_priority = p_order_priority WHERE id = p_id;
 
-                        IF nodelft <> parentlft THEN
-                            CALL move_nodes(nodelft, p_lft, p_rgt);
-                        END IF;
-                    END");
+            IF nodelft <> parentlft THEN
+                CALL move_nodes(nodelft, p_lft, p_rgt);
+            END IF;
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `delete_node`");
 $db->query("CREATE PROCEDURE `delete_node` (IN p_id INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        DECLARE p_lft, p_rgt INT(11);
+        LANGUAGE SQL
+        BEGIN
+            DECLARE p_lft, p_rgt INT(11);
 
-                        SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
-                        DELETE FROM `hierarchy` WHERE id = p_id;
+            SELECT lft, rgt INTO p_lft, p_rgt FROM `hierarchy` WHERE id = p_id;
+            DELETE FROM `hierarchy` WHERE id = p_id;
 
-                        CALL delete_nodes(p_lft, p_rgt);
-                    END");
+            CALL delete_nodes(p_lft, p_rgt);
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `shift_right`");
 $db->query("CREATE PROCEDURE `shift_right` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        IF maxrgt > 0 THEN
-                            UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
-                        ELSE
-                            UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
-                        END IF;
+        LANGUAGE SQL
+        BEGIN
+            IF maxrgt > 0 THEN
+                UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node AND rgt <= maxrgt;
+            ELSE
+                UPDATE `hierarchy` SET rgt = rgt + shift WHERE rgt > node;
+            END IF;
 
-                        IF maxrgt > 0 THEN
-                            UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
-                        ELSE
-                            UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
-                        END IF;
-                    END");
+            IF maxrgt > 0 THEN
+                UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node AND lft <= maxrgt;
+            ELSE
+                UPDATE `hierarchy` SET lft = lft + shift WHERE lft > node;
+            END IF;
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `shift_left`");
 $db->query("CREATE PROCEDURE `shift_left` (IN node INT(11), IN shift INT(11), IN maxrgt INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        IF maxrgt > 0 THEN
-                            UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
-                        ELSE
-                            UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
-                        END IF;
+        LANGUAGE SQL
+        BEGIN
+            IF maxrgt > 0 THEN
+                UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node AND rgt <= maxrgt;
+            ELSE
+                UPDATE `hierarchy` SET rgt = rgt - shift WHERE rgt > node;
+            END IF;
 
-                        IF maxrgt > 0 THEN
-                            UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
-                        ELSE
-                            UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
-                        END IF;
-                    END");
+            IF maxrgt > 0 THEN
+                UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node AND lft <= maxrgt;
+            ELSE
+                UPDATE `hierarchy` SET lft = lft - shift WHERE lft > node;
+            END IF;
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `shift_end`");
 $db->query("CREATE PROCEDURE `shift_end` (IN p_lft INT(11), IN p_rgt INT(11), IN maxrgt INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        UPDATE `hierarchy`
-                        SET lft = (lft - (p_lft - 1)) + maxrgt,
-                            rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
-                    END");
+        LANGUAGE SQL
+        BEGIN
+            UPDATE `hierarchy`
+            SET lft = (lft - (p_lft - 1)) + maxrgt,
+                rgt = (rgt - (p_lft - 1)) + maxrgt WHERE lft BETWEEN p_lft AND p_rgt;
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `get_maxrgt`");
 $db->query("CREATE PROCEDURE `get_maxrgt` (OUT maxrgt INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
-                    END");
+        LANGUAGE SQL
+        BEGIN
+            SELECT rgt INTO maxrgt FROM `hierarchy` ORDER BY rgt DESC LIMIT 1;
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `get_parent`");
 $db->query("CREATE PROCEDURE `get_parent` (IN p_lft INT(11), IN p_rgt INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
-                    END");
+        LANGUAGE SQL
+        BEGIN
+            SELECT * FROM `hierarchy` WHERE lft < p_lft AND rgt > p_rgt ORDER BY lft DESC LIMIT 1;
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `delete_nodes`");
 $db->query("CREATE PROCEDURE `delete_nodes` (IN p_lft INT(11), IN p_rgt INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        DECLARE node_width INT(11);
-                        SET node_width = p_rgt - p_lft + 1;
+        LANGUAGE SQL
+        BEGIN
+            DECLARE node_width INT(11);
+            SET node_width = p_rgt - p_lft + 1;
 
-                        DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
-                        UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
-                        UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
-                    END");
+            DELETE FROM `hierarchy` WHERE lft BETWEEN p_lft AND p_rgt;
+            UPDATE `hierarchy` SET rgt = rgt - node_width WHERE rgt > p_rgt;
+            UPDATE `hierarchy` SET lft = lft - node_width WHERE lft > p_lft;
+        END");
 
 $db->query("DROP PROCEDURE IF EXISTS `move_nodes`");
 $db->query("CREATE PROCEDURE `move_nodes` (INOUT nodelft INT(11), IN p_lft INT(11), IN p_rgt INT(11))
-                    LANGUAGE SQL
-                    BEGIN
-                        DECLARE node_width, maxrgt INT(11);
+        LANGUAGE SQL
+        BEGIN
+            DECLARE node_width, maxrgt INT(11);
 
-                        SET node_width = p_rgt - p_lft + 1;
-                        CALL get_maxrgt(maxrgt);
+            SET node_width = p_rgt - p_lft + 1;
+            CALL get_maxrgt(maxrgt);
 
-                        CALL shift_end(p_lft, p_rgt, maxrgt);
+            CALL shift_end(p_lft, p_rgt, maxrgt);
 
-                        IF nodelft = 0 THEN
-                            CALL shift_left(p_rgt, node_width, 0);
-                        ELSE
-                            CALL shift_left(p_rgt, node_width, maxrgt);
+            IF nodelft = 0 THEN
+                CALL shift_left(p_rgt, node_width, 0);
+            ELSE
+                CALL shift_left(p_rgt, node_width, maxrgt);
 
-                            IF p_lft < nodelft THEN
-                                SET nodelft = nodelft - node_width;
-                            END IF;
+                IF p_lft < nodelft THEN
+                    SET nodelft = nodelft - node_width;
+                END IF;
 
-                            CALL shift_right(nodelft, node_width, maxrgt);
+                CALL shift_right(nodelft, node_width, maxrgt);
 
-                            UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
-                            UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
-                        END IF;
-                    END");
+                UPDATE `hierarchy` SET rgt = (rgt - maxrgt) + nodelft WHERE rgt > maxrgt;
+                UPDATE `hierarchy` SET lft = (lft - maxrgt) + nodelft WHERE lft > maxrgt;
+            END IF;
+        END");
 
 // encrypt the admin password into DB
 $hasher = new PasswordHash(8, false);
@@ -1191,54 +1166,78 @@ $admin_uid = $db->query("INSERT INTO `user`
     (`givenname`, `surname`, `username`, `password`, `email`, `status`, `lang`,
      `registered_at`,`expires_at`, `verified_mail`, `whitelist`, `description`)
     VALUES (?s, ?s, ?s, ?s, ?s, ?d, ?s, " . DBHelper::timeAfter() . ", " .
-                DBHelper::timeAfter(5 * 365 * 24 * 60 * 60) . ", ?d, ?s, ?s)", $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1, '*,,', 'Administrator')->lastInsertID;
+            DBHelper::timeAfter(5 * 365 * 24 * 60 * 60) . ", ?d, ?s, ?s)",
+    $nameForm, '', $loginForm, $password_encrypted, $emailForm, 1, $lang, 1,
+    '*,,', 'Administrator')->lastInsertID;
 $db->query("INSERT INTO loginout (`id_user`, `ip`, `when`, `action`)
-    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)", $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
+    VALUES (?d, ?s, " . DBHelper::timeAfter() . ", ?s)",
+    $admin_uid, $_SERVER['REMOTE_ADDR'], 'LOGIN');
 
 $db->query("INSERT INTO admin (user_id, privilege) VALUES (?d, ?d)", $admin_uid, 0);
 
-#
-# Table structure for table `user_request`
-#
-
-$db->query("CREATE TABLE user_request (
-                id INT(11) NOT NULL AUTO_INCREMENT,
-                givenname VARCHAR(60) NOT NULL DEFAULT '',
-                surname VARCHAR(60) NOT NULL DEFAULT '',
-                username VARCHAR(50) NOT NULL DEFAULT '',
-                password VARCHAR(255) NOT NULL DEFAULT '',
-                email VARCHAR(100) NOT NULL DEFAULT '',
-                verified_mail TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
-                faculty_id INT(11) NOT NULL DEFAULT 0,
-                phone VARCHAR(20) NOT NULL DEFAULT '',
-                am VARCHAR(20) NOT NULL DEFAULT '',
-                state INT(11) NOT NULL DEFAULT 0,
-                date_open DATETIME DEFAULT NULL,
-                date_closed DATETIME DEFAULT NULL,
-                comment TEXT NOT NULL,
-                lang VARCHAR(16) NOT NULL DEFAULT 'el',
-                status TINYINT(4) NOT NULL DEFAULT 1,
-                request_ip VARCHAR(45) NOT NULL DEFAULT '',
-                PRIMARY KEY (id)) $charset_spec");
+$db->query("CREATE TABLE `user_request` (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    givenname VARCHAR(60) NOT NULL DEFAULT '',
+    surname VARCHAR(60) NOT NULL DEFAULT '',
+    username VARCHAR(50) NOT NULL DEFAULT '',
+    password VARCHAR(255) NOT NULL DEFAULT '',
+    email VARCHAR(100) NOT NULL DEFAULT '',
+    verified_mail TINYINT(1) NOT NULL DEFAULT " . EMAIL_UNVERIFIED . ",
+    faculty_id INT(11) NOT NULL DEFAULT 0,
+    phone VARCHAR(20) NOT NULL DEFAULT '',
+    am VARCHAR(20) NOT NULL DEFAULT '',
+    state INT(11) NOT NULL DEFAULT 0,
+    date_open DATETIME DEFAULT NULL,
+    date_closed DATETIME DEFAULT NULL,
+    comment TEXT NOT NULL,
+    lang VARCHAR(16) NOT NULL DEFAULT 'el',
+    status TINYINT(4) NOT NULL DEFAULT 1,
+    request_ip VARCHAR(45) NOT NULL DEFAULT '',
+    PRIMARY KEY (id)) $charset_spec");
 
 $db->query("CREATE TABLE `auth` (
-                  `auth_id` int(2) NOT NULL auto_increment,
-                  `auth_name` varchar(20) NOT NULL default '',
-                  `auth_settings` text ,
-                  `auth_instructions` text ,
-                  `auth_title` text,
-                  `auth_default` tinyint(1) NOT NULL default 0,
-                  PRIMARY KEY (`auth_id`))
-                  $charset_spec");
+    `auth_id` int(2) NOT NULL auto_increment,
+    `auth_name` varchar(20) NOT NULL default '',
+    `auth_settings` text ,
+    `auth_instructions` text ,
+    `auth_title` text,
+    `auth_default` tinyint(1) NOT NULL default 0,
+    PRIMARY KEY (`auth_id`))
+    $charset_spec");
 
 $db->query("INSERT INTO `auth` VALUES
-                (1, 'eclass', '', '', '', 1),
-                (2, 'pop3', '', '', '', 0),
-                (3, 'imap', '', '', '', 0),
-                (4, 'ldap', '', '', '', 0),
-                (5, 'db', '', '', '', 0),
-                (6, 'shibboleth', '', '', '', 0),
-                (7, 'cas', '', '', '', 0)");
+    (1, 'eclass', '', '', '', 1),
+    (2, 'pop3', '', '', '', 0),
+    (3, 'imap', '', '', '', 0),
+    (4, 'ldap', '', '', '', 0),
+    (5, 'db', '', '', '', 0),
+    (6, 'shibboleth', '', '', '', 0),
+    (7, 'cas', '', '', '', 0),
+    (8, 'facebook', '', '', '', 0),
+    (9, 'twitter', '', '', '', 0),
+    (10, 'google', '', '', '', 0),
+    (11, 'live', '', '', '', 0),
+    (12, 'yahoo', '', '', '', 0),
+    (13, 'linkedin', '', '', '', 0)");
+
+$db->query("CREATE TABLE `user_ext_uid` (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INT(11) NOT NULL,
+    auth_id INT(2) NOT NULL,
+    uid VARCHAR(64) NOT NULL,
+    UNIQUE KEY (user_id, auth_id),
+    KEY (uid),
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE)
+    $charset_spec"); 
+
+$db->query("CREATE TABLE `user_request_ext_uid` (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_request_id INT(11) NOT NULL,
+    auth_id INT(2) NOT NULL,
+    uid VARCHAR(64) NOT NULL,
+    UNIQUE KEY (user_request_id, auth_id),
+    FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
+    $charset_spec"); 
 
 $eclass_stud_reg = intval($eclass_stud_reg);
 $eclass_prof_reg = intval($eclass_prof_reg);
@@ -1250,6 +1249,7 @@ $db->query("CREATE TABLE `config` (
     `key` VARCHAR(32) NOT NULL,
     `value` TEXT NOT NULL,
     PRIMARY KEY (`key`))");
+
 $default_config = array(
     'base_url', $urlForm,
     'default_language', $lang,
@@ -1310,6 +1310,7 @@ $default_config = array(
     'enable_search', 1,
     'course_guest', 'link',
     'version', ECLASS_VERSION);
+
 $db->query("INSERT INTO `config` (`key`, `value`) VALUES " .
         implode(', ', array_fill(0, count($default_config) / 2, '(?s, ?s)')), $default_config);
 
@@ -1415,14 +1416,15 @@ $db->query("CREATE TABLE IF NOT EXISTS `course_settings` (
     `value` INT(11) NOT NULL DEFAULT 0,
     PRIMARY KEY (`setting_id`, `course_id`))");
 
-
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `course_id` INT(11) NOT NULL,
     `students_semester` TINYINT(4) NOT NULL DEFAULT 1,
     `range` TINYINT(4) NOT NULL DEFAULT 10,
     `active` TINYINT(1) NOT NULL DEFAULT 0,
-    `title` VARCHAR(250) DEFAULT NULL) $charset_spec");
+    `title` VARCHAR(250) DEFAULT NULL,
+    `start_date` DATETIME NOT NULL,
+    `end_date` DATETIME NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_activities` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1445,9 +1447,9 @@ $db->query("CREATE TABLE IF NOT EXISTS `gradebook_book` (
     `comments` TEXT NOT NULL) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `gradebook_users` (
-               `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-               `gradebook_id` MEDIUMINT(11) NOT NULL,
-               `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
+    `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `gradebook_id` MEDIUMINT(11) NOT NULL,
+    `uid` int(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `oai_record` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1465,20 +1467,20 @@ $db->query("CREATE TABLE IF NOT EXISTS `oai_metadata` (
     `oai_record` int(11) NOT NULL references oai_record(id),
     `field` varchar(255) NOT NULL,
     `value` text,
-    INDEX `field_index` (`field`) )");
+    INDEX `field_index` (`field`))");
 
 $db->query("CREATE TABLE IF NOT EXISTS `note` (
-        `id` int(11) NOT NULL auto_increment,
-        `user_id` int(11) NOT NULL,
-        `title` varchar(300),
-        `content` text NOT NULL,
-        `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-        `order` mediumint(11) NOT NULL default 0,
-        `reference_obj_module` mediumint(11) default NULL,
-        `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
-        `reference_obj_id` int(11) default NULL,
-        `reference_obj_course` int(11) default NULL,
-        PRIMARY KEY  (`id`))");
+    `id` int(11) NOT NULL auto_increment,
+    `user_id` int(11) NOT NULL,
+    `title` varchar(300),
+    `content` text NOT NULL,
+    `date_time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+    `order` mediumint(11) NOT NULL default 0,
+    `reference_obj_module` mediumint(11) default NULL,
+    `reference_obj_type` enum('course','personalevent','user','course_ebook','course_event','course_assignment','course_document','course_link','course_exercise','course_learningpath','course_video','course_videolink') default NULL,
+    `reference_obj_id` int(11) default NULL,
+    `reference_obj_course` int(11) default NULL,
+    PRIMARY KEY (`id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `idx_queue` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1498,7 +1500,6 @@ $db->query("CREATE TABLE IF NOT EXISTS `theme_options` (
     `name` VARCHAR(300) NOT NULL,
     `styles` LONGTEXT NOT NULL,
     PRIMARY KEY (`id`)) $charset_spec");
-
 
 // Tags tables
 $db->query("CREATE TABLE IF NOT EXISTS `tag_element_module` (

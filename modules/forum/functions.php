@@ -166,3 +166,77 @@ function add_topic_link($pagenr, $total_reply_pages) {
     $pagination .= "<a href='$topiclink&amp;start=$start'>$pagenr</a>" .
             (($pagenr < $total_reply_pages) ? "<span class='page-sep'>,&nbsp;</span>" : '');
 }
+
+
+/* Send an e-mail notification for new messages to subscribed users
+ */
+function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $topic_date) {
+    global $logo, $langNewForumNotify, $course_code, $course_code, $course_id, $langForumFrom,
+        $uid, $langBodyForumNotify, $langInForums, $urlServer, $langdate, $langSender,
+        $langCourse, $langCategory, $langForum, $langSubject, $langNote,
+        $langLinkUnsubscribe, $langHere, $charset, $langMailBody;
+
+    $subject_notify = "$logo - $langNewForumNotify";
+    $category_id = forum_category($forum_id);
+    $cat_name = category_name($category_id);
+    $c = course_code_to_title($course_code);
+    $name = uid_to_name($uid);
+    $title = course_id_to_title($course_id);
+
+    $header_html_topic_notify = "<!-- Header Section -->
+    <div id='mail-header'>
+        <br>
+        <div>
+            <div id='header-title'>$langBodyForumNotify <a href='{$urlServer}courses/$course_code'>".q($title)."</a>.</div>
+            <ul id='forum-category'>
+                <li><span><b>$langCategory:</b></span> <span>" . q($cat_name) . "</span></li>
+                <li><span><b>$langForum:</b></span> <span><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id'>" . q($forum_name) . "</a></span></li>
+                <li><span><b>$langForumFrom :</b></span> <span>$name</span></li>
+                <li><span><b>$langdate:</b></span> <span> $topic_date </span></li>
+            </ul>
+        </div>
+    </div>";
+    
+    $body_html_topic_notify = "<!-- Body Section -->
+    <div id='mail-body'>
+        <br>
+        <div><b>$langSubject:</b> <span class='left-space'><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic=$topic_id'>" . q($subject) . "</a></span></div><br>
+        <div><b>$langMailBody</b></div>
+        <div id='mail-body-inner'>
+            $message
+        </div>
+    </div>";
+
+    $footer_html_topic_notify = "<!-- Footer Section -->
+    <div id='mail-footer'>
+        <br>
+        <div>
+            <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+        </div>
+    </div>";
+
+    $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify.$footer_html_topic_notify;
+
+    $plain_message = html2text($message);
+    $plain_topic_notify = "$langBodyForumNotify $langInForums\n" .
+       "$langSender: $name\n" .
+       "$langCourse: $title\n    {$urlServer}courses/$course_code/\n" .
+       "$langCategory: $cat_name\n" .
+       "$langForum: $forum_name\n    {$urlServer}modules/forum/viewforum.php?course=$course_code&forum=$forum_id\n" . 
+       "$langSubject: $subject\n    {$urlServer}modules/forum/viewforum.php?course=$course_code&forum=$forum_id&topic=$topic_id\n" . 
+       "--------------------------------------------\n$plain_message\n" .
+       "--------------------------------------------\n" .
+       "$langNote: " . canonicalize_whitespace(str_replace('<br />', "\n", sprintf($langLinkUnsubscribe, q($title)))) .
+       " $langHere:\n${urlServer}main/profile/emailunsubscribe.php?cid=$course_id\n";
+
+    $users = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
+			WHERE (forum_id = ?d OR cat_id = ?d)
+			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d", $forum_id, $category_id, $course_id, $uid);
+    $email = array();
+    foreach ($users as $user) {
+        if (get_user_email_notification($user->user_id, $course_id)) {
+            $email[] = uid_to_email($user->user_id);
+        }
+    }
+    send_mail_multipart('', '', '', $email, $subject_notify, $plain_topic_notify, $html_topic_notify, $charset);
+}

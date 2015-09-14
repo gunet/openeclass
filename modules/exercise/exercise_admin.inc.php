@@ -27,17 +27,19 @@ require_once 'modules/search/indexer.class.php';
 require_once 'modules/tags/moduleElement.class.php';
 
 if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-    if ($_POST['assign_type'] == 2) {
-        $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
-    } elseif ($_POST['assign_type'] == 1) {
-        $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
-                                FROM user, course_user
-                                WHERE user.id = course_user.user_id
-                                AND course_user.course_id = ?d AND course_user.status = 5
-                                AND user.id", $course_id);
+    if (isset($_POST['assign_type'])) {
+        if ($_POST['assign_type'] == 2) {
+            $data = Database::get()->queryArray("SELECT name,id FROM `group` WHERE course_id = ?d", $course_id);
+        } elseif ($_POST['assign_type'] == 1) {
+            $data = Database::get()->queryArray("SELECT user.id AS id, surname, givenname
+                                    FROM user, course_user
+                                    WHERE user.id = course_user.user_id
+                                    AND course_user.course_id = ?d AND course_user.status = 5
+                                    AND user.id", $course_id);
+        }
+        echo json_encode($data);
+        exit;
     }
-    echo json_encode($data);
-    exit;
 }
 load_js('tools.js');
 // the exercise form has been submitted
@@ -61,8 +63,8 @@ if (isset($_POST['submitExercise'])) {
         'exerciseTitle' => "$langTheField $langExerciseName",
         'exerciseTimeConstraint' => "$langTheField $langExerciseConstrain",
         'exerciseAttemptsAllowed' => "$langTheField $langExerciseAttemptsAllowed",
-        'exerciseEndDate' => "$langTheField $langExerciseEnd",
-        'exerciseStartDate' => "$langTheField $langExerciseStart",
+        'exerciseEndDate' => "$langTheField $langEnd",
+        'exerciseStartDate' => "$langTheField $langStart",
         'exerciseIPLock' => "$langTheField IPs"
     ));
     if($v->validate()) {
@@ -333,7 +335,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>              
                  <div class='input-append date form-group".(Session::getError('exerciseStartDate') ? " has-error" : "")."' id='startdatepicker' data-date='$exerciseStartDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseStartDate' class='col-sm-2 control-label'>$langExerciseStart:</label>
+                     <label for='exerciseStartDate' class='col-sm-2 control-label'>$langStart:</label>
                      <div class='col-sm-10'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
@@ -345,7 +347,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
                      </div>
                  </div>            
                  <div class='input-append date form-group".(Session::getError('exerciseEndDate') ? " has-error" : "")."' id='enddatepicker' data-date='$exerciseEndDate' data-date-format='dd-mm-yyyy'>
-                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langExerciseEnd:</label>
+                     <label for='exerciseEndDate' class='col-sm-2 control-label'>$langEnd:</label>
                      <div class='col-sm-10'>
                         <div class='input-group'>
                             <span class='input-group-addon'>
@@ -611,7 +613,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langExerciseStart:</strong>
+                    <strong>$langStart:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $exerciseStartDate
@@ -619,7 +621,7 @@ if (isset($_GET['modifyExercise']) or isset($_GET['NewExercise'])) {
             </div>
             <div class='row margin-bottom-fat'>
                 <div class='col-sm-3'>
-                    <strong>$langExerciseEnd:</strong>
+                    <strong>$langEnd:</strong>
                 </div>
                 <div class='col-sm-9'>
                     $exerciseEndDate

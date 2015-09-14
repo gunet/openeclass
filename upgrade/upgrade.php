@@ -26,6 +26,7 @@ require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'include/phpass/PasswordHash.php';
 require_once 'modules/db/recycle.php';
+require_once 'modules/db/foreignkeys.php';
 require_once 'upgradeHelper.php';
 
 stop_output_buffering();
@@ -753,6 +754,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `target_group`, `order`, `icon`) VALUES (8, 'a:2:{s:2:\"el\";s:23:\"Ομάδα στόχος\";s:2:\"en\";s:12:\"Target Group\";}', 1, 8, '7.png')");
             Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `featured_books`, `order`, `icon`) VALUES (9, 'a:2:{s:2:\"el\";s:47:\"Προτεινόμενα συγγράμματα\";s:2:\"en\";s:9:\"Textbooks\";}', 1, 9, '8.png')");
             Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
+        }
+
+        // Drop obsolete course_description table if needed
+        if (DBHelper::tableExists('course_description') and
+            DBHelper::fieldExists('course_description', 'upDate')) {
+            Database::get()->query('DROP TABLE course_description');
         }
 
         if (!DBHelper::tableExists('course_description')) {
@@ -2356,7 +2363,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
-
+        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
+        
         if (!DBHelper::fieldExists('auth', 'auth_title')) {
             Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
         }
@@ -2371,8 +2379,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::fieldExists('attendance', 'title')) {
             Database::get()->query("ALTER table `attendance` ADD `title` VARCHAR(250) DEFAULT NULL");
-        }
-        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0, '')");
+        }        
         Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
                 `id` MEDIUMINT(11) NOT NULL auto_increment,
                 `element_type` VARCHAR(255) NOT NULL DEFAULT '',
@@ -2704,7 +2711,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 ADD FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE');
         }
 
-        // Unique and foreign keys for user_department table
+        // Unique and foreign keys for course_department table
         if (DBHelper::indexExists('course_department', 'cdep_index')) {
             Database::get()->query('DROP INDEX `cdep_index` ON course_department');
         }
@@ -2725,6 +2732,77 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 ADD FOREIGN KEY (department) REFERENCES hierarchy(id) ON DELETE CASCADE');
         }
 
+        // External authentication via Hybridauth
+        Database::get()->query("INSERT IGNORE INTO `auth`
+            (auth_id, auth_name, auth_title, auth_settings, auth_instructions, auth_default)
+            VALUES
+            (8, 'facebook', '', '', '', 0),
+            (9, 'twitter', '', '', '', 0),
+            (10, 'google', '', '', '', 0),
+            (11, 'live', 'Microsoft Live Account', '', 'does not work locally', 0),
+            (12, 'yahoo', '', '', 'does not work locally', 0),
+            (13, 'linkedin', '', '', '', 0)");
+
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_ext_uid` (
+            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_id INT(11) NOT NULL,
+            auth_id INT(2) NOT NULL,
+            uid VARCHAR(64) NOT NULL,
+            UNIQUE KEY (user_id, auth_id),
+            KEY (uid),
+            FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE)
+            $charset_spec");
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `user_request_ext_uid` (
+            id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            user_request_id INT(11) NOT NULL,
+            auth_id INT(2) NOT NULL,
+            uid VARCHAR(64) NOT NULL,
+            UNIQUE KEY (user_request_id, auth_id),
+            FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
+            $charset_spec"); 
+        
+        if (!DBHelper::fieldExists('gradebook', 'start_date')) {
+            Database::get()->query("ALTER TABLE `gradebook` ADD `start_date` DATETIME NOT NULL");
+            Database::get()->query("UPDATE `gradebook` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months before
+        }
+        if (!DBHelper::fieldExists('gradebook', 'end_date')) {
+            Database::get()->query("ALTER TABLE `gradebook` ADD `end_date` DATETIME NOT NULL");
+            Database::get()->query("UPDATE `gradebook` SET `end_date` = " . DBHelper::timeAfter(6*30*24*60*60) . ""); // 6 months after
+        }
+        $q = Database::get()->queryArray("SELECT gradebook_book.id, grade,`range` FROM gradebook, gradebook_activities, gradebook_book 
+                                                    WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id 
+                                                    AND gradebook_activities.gradebook_id = gradebook.id");
+        foreach ($q as $data) {
+            Database::get()->query("UPDATE gradebook_book SET grade = $data->grade/$data->range WHERE id = $data->id");
+        }
+        
+        
+        if (!DBHelper::fieldExists('attendance', 'start_date')) {
+            Database::get()->query("ALTER TABLE `attendance` ADD `start_date` DATETIME NOT NULL");
+            Database::get()->query("UPDATE `attendance` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months after
+        }
+        if (!DBHelper::fieldExists('attendance', 'end_date')) {
+            Database::get()->query("ALTER TABLE `attendance` ADD `end_date` DATETIME NOT NULL");
+            Database::get()->query("UPDATE `attendance` SET `end_date` = " . DBHelper::timeAfter(6*30*24*60*60) . ""); // 6 months after
+        }      
+        // Cancelled exercises total weighting fix
+        $exercises = Database::get()->queryArray("SELECT exercise.id AS id, exercise.course_id AS course_id, exercise_user_record.eurid AS eurid "
+                . "FROM exercise_user_record, exercise "
+                . "WHERE exercise_user_record.eid = exercise.id "
+                . "AND exercise_user_record.total_weighting = 0 "
+                . "AND exercise_user_record.attempt_status = 4");
+        foreach ($exercises as $exercise) {
+            $totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
+                                            FROM exercise_question, exercise_with_questions
+                                            WHERE exercise_question.course_id = ?d 
+                                            AND exercise_question.id = exercise_with_questions.question_id
+                                            AND exercise_with_questions.exercise_id = ?d", $exercise->course_id, $exercise->id)->totalweight;    
+            Database::get()->query("UPDATE exercise_user_record SET total_weighting = ?f WHERE eurid = ?d", $totalweight, $exercise->eurid);
+        }
+        
+        if (DBHelper::fieldExists('link', 'hits')) { // not needed
+            delete_field('link', 'hits');
+        }
     }
 
  

@@ -20,36 +20,39 @@
  * ======================================================================== */
 
 $require_current_course = true;
-$require_course_admin = true;
+$require_editor = true;
 
 include '../../include/init.php';
 
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
     $charset = 'Windows-1253';
+    $sendSep = true;
 } else {
     $charset = 'UTF-8';
+    $sendSep = false;
 }
 $crlf = "\r\n";
 
-if (!$is_editor) {
-    Session::Messages($langForbidden);
-    redirect_to_home_page();
-}
 
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=list_gradebook_users.csv");
 
-echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade)));
-echo $crlf;
-echo $crlf;
-$sql = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", $_GET['gradebook_id']);
+if ($sendSep) {
+    echo 'sep=;', $crlf;
+}
+
+$sql = Database::get()->queryArray("SELECT id, title FROM gradebook_activities WHERE gradebook_id = ?d", getDirectReference($_GET['gradebook_id']));
 foreach ($sql as $act) {
-    echo csv_escape($act->title). "$crlf";
+    $title = !empty($act->title) ? $act->title : $langGradebookNoTitle;
+    echo csv_escape($title). "$crlf";
+    echo join(';', array_map("csv_escape", array($langSurname, $langName, $langAm, $langUsername, $langEmail, $langGradebookGrade)));
+    echo $crlf;    
     $sql2 = Database::get()->queryArray("SELECT uid, grade FROM gradebook_book WHERE gradebook_activity_id = ?d", $act->id);
     foreach ($sql2 as $u) {
         $userdata = Database::get()->querySingle("SELECT surname, givenname, username, am, email FROM user WHERE id = ?d", $u->uid);
         echo join(';', array_map("csv_escape", array($userdata->surname, $userdata->givenname, $userdata->am, $userdata->username, $userdata->email, $u->grade)));
         echo "$crlf";
     }
+    echo "$crlf";
     echo "$crlf";
 }

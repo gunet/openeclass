@@ -209,7 +209,7 @@ if (!$nbrExercises) {
     } else { // student view
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center'>$langExerciseStart / $langExerciseEnd</th>
+                <th class='text-center'>$langStart / $langEnd</th>
                 <th class='text-center'>$langExerciseConstrain</th>
                 <th class='text-center'>$langExerciseAttemptsAllowed</th>
                 <th class='text-center'>$langResults</th>

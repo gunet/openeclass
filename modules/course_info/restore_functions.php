@@ -81,16 +81,18 @@ function unpack_zip_show_files($zipfile) {
         $checked = ' checked';
 
         foreach ($retArr as $entry) {
-            $path = q($entry['path']);
+            $path = $entry['path'];
             $file = q($entry['file']);
             $course = q($entry['course']);
 
-            $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='$path'$checked>
+            $retString .= "<li>$langLesFiles <input type='radio' name='restoreThis' value='" . q(getIndirectReference($path)) . "'$checked>
                             <b>$course</b> ($file)</li>\n";
             $checked = '';
         }
 
-        $retString .= "</ol><br /><input class='btn btn-primary' type='submit' name='do_restore' value='$langRestore' /></form>";
+        $retString .= "</ol><br /><input class='btn btn-primary' type='submit' name='do_restore' value='$langRestore' />
+                      ".generate_csrf_token_form_field()."
+                      </form>";
     }
 
     return $retString;
@@ -360,6 +362,7 @@ function course_details_form($code, $title, $prof, $lang, $type, $vis, $desc, $f
                       <input type='hidden' name='restoreThis' value='" . q($_POST['restoreThis']) . "' />
                           </div>
                     </div>
+                " . generate_csrf_token_form_field() . "
                 </form>
                 </div>
                 </div>

@@ -92,6 +92,7 @@ if (isset($_POST['import'])) {
     validateUploadedFile($_FILES['themeFile']['name'], 2);
     if (get_file_extension($_FILES['themeFile']['name']) == 'zip') {
         $file_name = $_FILES['themeFile']['name'];
+        $file_name = php2phps($file_name);
         if(!is_dir("courses/theme_data")) mkdir("courses/theme_data", 0755);
         if (move_uploaded_file($_FILES['themeFile']['tmp_name'], "courses/theme_data/$file_name")) {
             require_once 'include/pclzip/pclzip.lib.php';
@@ -104,8 +105,8 @@ if (isset($_POST['import'])) {
                 unlink("$webDir/courses/theme_data/temp/theme_options.txt");
                 $theme_options = unserialize(base64_decode($base64_str));                
                 $new_theme_id = Database::get()->query("INSERT INTO theme_options (name, styles) VALUES(?s, ?s)", $theme_options->name, $theme_options->styles)->lastInsertID;
-                @rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/$new_theme_id");
-                recurse_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
+                @rename("$webDir/courses/theme_data/temp/".intval($theme_options->id), "$webDir/courses/theme_data/temp/$new_theme_id");
+                recurse_php2phps_copy("$webDir/courses/theme_data/temp","$webDir/courses/theme_data");
                 removeDir("$webDir/courses/theme_data/temp");
                 Session::Messages($langThemeInstalled);
             }
@@ -689,6 +690,7 @@ function upload_images($new_theme_id = null) {
                 $ext =  get_file_extension($file_name);
                 $file_name = "$name-$i.$ext";
             }
+            $file_name = php2phps($file_name);
             move_uploaded_file($_FILES[$image]['tmp_name'], "$webDir/courses/theme_data/$theme_id/$file_name");
             $_POST[$image] = $file_name;
         }

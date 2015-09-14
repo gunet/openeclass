@@ -421,7 +421,7 @@ if (isset($displayChangePosForm) && $displayChangePosForm) {
                         $dialogBox .= build_nested_select_menu("newPos", $elementList);
                         $dialogBox .= "
                         <input type=\"hidden\" name=\"cmd\" value=\"changePos\" />
-                        <input type=\"hidden\" name=\"cmdid\" value=\"" . $_REQUEST['cmdid'] . "\" />
+                        <input type=\"hidden\" name=\"cmdid\" value=\"" . q($_REQUEST['cmdid']) . "\" />
                         <button type=\"submit\" class=\"btn btn-primary\" value=\"" . $langSave . "\" >$langSave</button>
                         <a href=\"learningPathAdmin.php?course=$course_code&amp;path_id=" . (int) $_SESSION['path_id'] . "\" class=\"btn btn-default\" value=\"" . $langCancel . "\" >$langCancel</a>
                     </form>

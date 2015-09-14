@@ -27,9 +27,8 @@ $helpTopic = 'Guest';
 require_once '../../include/baseTheme.php';
 require_once 'include/phpass/PasswordHash.php';
 
-if (get_config('eclass_stud_reg') == 0 or
-    get_config('course_guest') == 'off') {
-        redirect_to_home_page('modules/user/');
+if (get_config('course_guest') == 'off') {
+    redirect_to_home_page('modules/user/?course=' . $course_code);
 }
 
 $toolName = $langUsers;
@@ -71,6 +70,7 @@ $tool_content .= action_bar(array(
                  )));
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $password = $_POST['guestpassword'];
     createguest($default_guest_username, $course_id, $password);
     Session::Messages($langGuestSuccess, 'alert-success');
@@ -127,6 +127,7 @@ if (isset($_POST['submit'])) {
           <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
         </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."  
         </form>
         </div>";
 }

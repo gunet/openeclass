@@ -29,7 +29,7 @@
     position: absolute;
     background: $color-background;
     height: 100%;
-    padding-bottom: 49px;
+    padding-bottom: 48px;
     left: 0px;
     top: 0px;
     padding: 0px;
@@ -1571,8 +1571,8 @@ ul.tablelist
 
 /* Search styles */
 #quick-search-wrapper{
-    padding: 15px;
-    margin: 15px 0;
+    padding: 0px 15px 15px 15px;
+    margin: 0px 0px 15px 0px;
 }
 #quick-search-wrapper input.form-control
 {
@@ -1685,7 +1685,7 @@ a.list-group-item.delete:hover{
     top: -53px;
     padding: 0;
     .logo{
-        margin: 0.8em 0.8em 0px;
+        margin: 0.8em 0.8em 30px;
         img{margin:0 auto;}
     }
     .panel{
@@ -2705,4 +2705,18 @@ div#profile-about-me{
     padding-bottom: 20px;
 }
 
-.jstree li a.nosel { font-style:italic; color:grey; }
+.jstree li a.nosel {
+    font-style: italic;
+    color: #cccccc;
+}
+
+div #treeModal div .modal-body {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+.jstree-strong {
+  font-style: italic;
+  font-weight: bold;
+  color: #000000 !important;
+}

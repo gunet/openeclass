@@ -380,25 +380,65 @@ if ($is_editor) {
                                                                      'content' => $txt_content));
 
         // send email
-        if ($send_mail) {
+        if ($send_mail) {            
             $title = course_id_to_title($course_id);
             $recipients_emaillist = "";
-            foreach($_POST['recipients'] as $re){
-                $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
-            }            
-            $emailContent = "$professorMessage: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "<br>\n<br>\n" .
-                    q($_POST['antitle']) .
-                    "<br>\n<br>\n" .
-                    $_POST['newContent'];
+            if ($_POST['recipients'][0] == -1) { // all users
+                $cu = Database::get()->queryArray("SELECT cu.user_id FROM course_user cu 
+                                                        JOIN user u ON cu.user_id=u.id 
+                                                    WHERE cu.course_id = ?d 
+                                                    AND u.email <> '' 
+                                                    AND u.email IS NOT NULL", $course_id);                
+                foreach($cu as $re) {
+                    $recipients_emaillist .= (empty($recipients_emaillist))? "'$re->user_id'":",'$re->user_id'";
+                }
+            } else { // selected users
+                foreach($_POST['recipients'] as $re) {
+                    $recipients_emaillist .= (empty($recipients_emaillist))? "'$re'":",'$re'";
+                }
+            }
+
+            $emailHeaderContent = "
+                <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>Έχει δημοσιευθεί ανακοίνωση στο μάθημα <a href='{$urlServer}courses/$course_code'>" . q($title) . "</a>.</div>
+                        <ul id='forum-category'>
+                            <li><span><b>$langSender:</b></span> <span class='left-space'>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']) . "</span></li>
+                            <li><span><b>$langdate:</b></span> <span class='left-space'> --- </span></li>
+                        </ul>
+                    </div>
+                </div>";
+
+            $emailBodyContent = "
+                <!-- Body Section -->
+                <div id='mail-body'>
+                    <br>
+                    <div><b>$langSubject:</b> <span class='left-space'>".q($_POST['antitle'])."</span></div><br>
+                    <div><b>$langMailBody</b></div>
+                    <div id='mail-body-inner'>".
+                        $_POST['newContent']
+                    ."</div>
+                </div>";
+
+            $emailFooterContent = "
+                <!-- Footer Section -->
+                <div id='mail-footer'>
+                    <br>
+                    <div>
+                        <small>" . sprintf($langLinkUnsubscribe, q($title)) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+                    </div>
+                </div>";
+
+            $emailContent = $emailHeaderContent.$emailBodyContent.$emailFooterContent;
+
             $emailSubject = "$professorMessage ($public_code - " . q($title) . " - $langAnnouncement)";
             // select students email list
             $countEmail = 0;
             $invalid = 0;
             $recipients = array();
             $emailBody = html2text($emailContent);
-            $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-            $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, $title);
-            $emailContent .= $unsubscribe . $linkhere;
             $general_to = 'Members of course ' . $course_code;            
             Database::get()->queryFunc("SELECT course_user.user_id as id, user.email as email
                                                    FROM course_user, user
@@ -416,17 +456,17 @@ if ($is_editor) {
                     array_push($recipients, $emailTo);
                 }
                 // send mail message per 50 recipients
-                if (count($recipients) >= 50) {                    
+                if (count($recipients) >= 50) {                   
                     send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
                     $recipients = array();
                 }
             }, $course_id);
-            if (count($recipients) > 0) {
+            if (count($recipients) > 0) {                
                 send_mail_multipart("$_SESSION[givenname] $_SESSION[surname]", $_SESSION['email'], $general_to, $recipients, $emailSubject, $emailBody, $emailContent, $charset);
             }
             $messageInvalid = " $langOn $countEmail $langRegUser, $invalid $langInvalidMail";
             Session::Messages("$langAnnAdd $langEmailSent<br>$messageInvalid", 'alert-success');
-        } // if $emailOption==1
+        }
         else {
             Session::Messages($langAnnAdd, 'alert-success');
         }
@@ -487,10 +527,17 @@ if ($is_editor) {
         <div class='form-group'>
             <div class='col-sm-offset-2 col-sm-10'>
                 <select class='form-control' name='recipients[]' multiple class='form-control' id='select-recipients'>";
-                $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id = ?d AND u.email<>'' AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
-                foreach($course_users as $cu){
+                $course_users = Database::get()->queryArray("SELECT cu.user_id, CONCAT(u.surname, ' ', u.givenname) name, u.email 
+                                                    FROM course_user cu 
+                                                        JOIN user u ON cu.user_id=u.id 
+                                                    WHERE cu.course_id = ?d 
+                                                    AND u.email<>'' 
+                                                    AND u.email IS NOT NULL ORDER BY u.surname, u.givenname", $course_id);
+                
+                $tool_content .= "<option value='-1' selected><h2>$langAllUsers</h2></option>";
+                foreach($course_users as $cu) {
                    $tool_content .= "<option value='" . q($cu->user_id) . "'>" . q($cu->name) . " (" . q($cu->email) . ")</option>"; 
-                } 
+                }
                 $tool_content .= "</select>
                 <a href='#' id='selectAll'>$langJQCheckAll</a> | <a href='#' id='removeAll'>$langJQUncheckAll</a>
             </div>
@@ -509,7 +556,7 @@ if ($is_editor) {
         <div class='form-group'>
         <div class='col-sm-offset-2 col-sm-10'>".form_buttons(array(
                 array(
-                    'text' => $langUpload,
+                    'text' => $langSubmit,
                     'name' => 'submitAnnouncement',
                     'value'=> $langAdd
                 ),
@@ -604,4 +651,3 @@ $head_content .= "<script type='text/javascript'>
     </script>";
 
 draw($tool_content, 2, null, $head_content);
-

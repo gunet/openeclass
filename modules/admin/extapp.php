@@ -90,7 +90,7 @@ if ($appName) {
             } else {
                 $tool_content .= "        <div class='form-group'>\n";
                 $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
-                $tool_content .= "          <div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . $param->value() . "'></div>";
+                $tool_content .= "          <div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
                 $tool_content .= "        </div>\n";
             }
         }

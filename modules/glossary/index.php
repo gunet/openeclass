@@ -54,8 +54,13 @@ Database::get()->queryFunc("SELECT id, name, description, `order`
                       ORDER BY name", function ($cat) use (&$categories) {
     $categories[intval($cat->id)] = $cat->name;
 }, $course_id);
+
+$indirectcategories = array();
+foreach ($categories as $k => $v) {
+    $indirectcategories[getIndirectReference($k)] = $v;
+}
 if (isset($_GET['cat'])) {
-    $cat_id = intval($_GET['cat']);
+    $cat_id = intval(getDirectReference($_GET['cat']));
     $edit_url .= "&amp;cat=$cat_id";
 } else {
     $cat_id = false;
@@ -148,6 +153,7 @@ if ($is_editor) {
     }
 
     if (isset($_POST['submit_config'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $expand_glossary = isset($_POST['expand']) ? 1 : 0;
         Database::get()->query("UPDATE course SET glossary_expand = ?d,
                                            glossary_index = ?d WHERE id = ?d"
@@ -157,6 +163,7 @@ if ($is_editor) {
     }
 
     if (isset($_POST['submit'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('term', 'definition'));
         $v->rule('url', array('url'));
@@ -167,14 +174,14 @@ if ($is_editor) {
             'url' => "$langTheField $langGlossaryUrl"
         ));
         if($v->validate()) {
-            if (!isset($_POST['category_id']) || $_POST['category_id'] == 0) {
+            if (!isset($_POST['category_id']) || getDirectReference($_POST['category_id']) == 0) {
                 $category_id = NULL;
             } else {
-                $category_id = intval($_POST['category_id']);
+                $category_id = intval(getDirectReference($_POST['category_id']));
             }
 
             if (isset($_POST['id'])) {
-                $id = intval($_POST['id']);
+                $id = intval(getDirectReference($_POST['id']));
                 $q = Database::get()->query("UPDATE glossary
                                                   SET term = ?s,
                                                       definition = ?s,
@@ -220,7 +227,7 @@ if ($is_editor) {
     }
 
     if (isset($_GET['delete'])) {
-        $id = $_GET['delete'];
+        $id = getDirectReference($_GET['delete']);
         $term = Database::get()->querySingle("SELECT term FROM glossary WHERE ID = ?d", $id)->term;
         $q = Database::get()->query("DELETE FROM glossary WHERE id = ?d AND course_id = ?d", $id, $course_id);
         invalidate_glossary_cache();
@@ -271,7 +278,8 @@ if ($is_editor) {
                                 )
                             ))
                             ."</div>
-                    </div>                   
+                    </div>   
+                ". generate_csrf_token_form_field() ."                
                 </form>
               </div>";
     }
@@ -287,11 +295,11 @@ if ($is_editor) {
             $submit_value = $langSubmit;
         } else {
             $pageName = $langEditGlossaryTerm;
-            $id = intval($_GET['edit']);
+            $id = intval(getDirectReference($_GET['edit']));
             $data = Database::get()->querySingle("SELECT term, definition, url, notes, category_id
                                               FROM glossary WHERE id = ?d", $id);
             if ($data) {
-                $html_id = "<input type = 'hidden' name='id' value='$id'>";
+                $html_id = "<input type = 'hidden' name='id' value='" . getIndirectReference($id) . "'>";
                 $category_id = is_null($data->category_id) ? 'none' : $data->category_id;
             }
             $submit_value = $langModify;
@@ -302,14 +310,16 @@ if ($is_editor) {
         $notes = Session::has('notes') ? Session::get('notes') : (isset($_GET['add']) ? "" : $data->notes );
         if ($categories) {
             $categories[0] = '-';
+            $indirectcategories[0] = '-';
             $category_selection = "
                         <div class='form-group'>
                              <label for='category_id' class='col-sm-2 control-label'>$langCategory: </label>
                              <div class='col-sm-10'>
-                                 " . selection($categories, 'category_id', $category_id, 'class="form-control"') . "
+                                 " . selection($indirectcategories, 'category_id', ($category_id), 'class="form-control"') . "
                              </div>
                         </div>";
             unset($categories['none']);
+            unset($indirectcategories['none']);
         } else {
             $category_selection = '';
         }
@@ -358,6 +368,7 @@ if ($is_editor) {
                                     )
                                 ))."</div>
                     </div>
+                ". generate_csrf_token_form_field() ."
                 </form>
             </div>";
     }
@@ -391,7 +402,7 @@ if (isset($_GET['edit'])) {
     $navigation[] = array('url' => $base_url,
         'name' => $langGlossary);
     $where = "AND id = ?d";
-    $terms[] = intval($_GET['id']);
+    $terms[] = intval(getDirectReference($_GET['id']));
 } elseif (isset($_GET['prefix'])) {
     $where = "AND term LIKE ?s";
     $terms[] = $_GET['prefix'] . '%';
@@ -445,7 +456,7 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             if (!empty($g->category_id)) {
-                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat=$g->category_id'>" . q($categories[$g->category_id]) . "</a></span>";
+                $cat_descr = "<span class='text-muted'>$langCategory: <a href='$base_url&amp;cat=" . getIndirectReference($g->category_id) . "'>" . q($categories[$g->category_id]) . "</a></span>";
             } else {
                 $cat_descr = '';
             }
@@ -461,17 +472,17 @@ if(!isset($_GET['add']) && !isset($_GET['edit']) && !isset($_GET['config'])) {
             }
 
             $tool_content .= "<tr>
-                     <td width='150'><strong><a href='$base_url&amp;id=$g->id'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
+                     <td width='150'><strong><a href='$base_url&amp;id=" . getIndirectReference($g->id) . "'>" . q($g->term) . "</a></strong><br><span><small>$cat_descr</small></span></td>
                      <td><em>$definition_data</em>$urllink</td>";
 
             if ($is_editor) {
                 $tool_content .= "<td class='option-btn-cell'>";
                 $tool_content .= action_button(array(
                         array('title' => $langEditChange,
-                              'url' => "$edit_url&amp;edit=$g->id",
+                              'url' => "$edit_url&amp;edit=" . getIndirectReference($g->id),
                               'icon' => 'fa-edit'),
                         array('title' => $langDelete,
-                              'url' => "$edit_url&amp;delete=$g->id",
+                              'url' => "$edit_url&amp;delete=" . getIndirectReference($g->id),
                               'icon' => 'fa-times',
                               'class' => 'delete',
                               'confirm' => $langConfirmDelete))

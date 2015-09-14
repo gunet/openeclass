@@ -99,7 +99,7 @@ function show_edit_form($id, $sid, $assign) {
                         $scale_options
                     </select>";
         } else {
-            $grade_field = "<input class='form-control' type='text' name='grade' maxlength='3' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)";
+            $grade_field = "<input class='form-control' type='text' name='grade' maxlength='4' size='3' value='$sub->grade'> ($m[max_grade]: $assign->max_grade)";
         }
         $tool_content .= action_bar(array(
                 array(

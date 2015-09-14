@@ -97,7 +97,6 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-
     $time = date("Y-m-d H:i:s");
     $surname = addslashes($_SESSION['surname']);
     $givenname = addslashes($_SESSION['givenname']);
@@ -125,46 +124,16 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // --------------------------------
-    // notify users
-    // --------------------------------
-    $subject_notify = "$logo - $langSubjectNotify";
-    $category_id = forum_category($forum_id);
-    $cat_name = category_name($category_id);
-    $sql = Database::get()->queryArray("SELECT DISTINCT user_id FROM forum_notify
-			WHERE (topic_id = ?d OR forum_id = ?d OR cat_id = ?d)
-			AND notify_sent = 1 AND course_id = ?d AND user_id != ?d"
-            , $topic, $forum_id, $category_id, $course_id, $uid);
-    $c = course_code_to_title($course_code);
-    $name = uid_to_name($uid);
-    $forum_message = "-------- $langBodyMessage ($langSender: $name )\n$message--------";
-    $plain_forum_message = q(html2text($forum_message));
-    $body_topic_notify = "<br>$langBodyTopicNotify $langInForum '" . q($topic_title) . "' $langOfForum '" . q($forum_name) . "' 
-                                $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c'  <br />
-                                <br />" . q($forum_message) . "<br /><br />$gunet<br />
-                                <a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
-    $plain_body_topic_notify = "$langBodyTopicNotify $langInForum '" . q($topic_title) . "' $langOfForum " . q($forum_name) . "' $langInCat '" . q($cat_name) . "' $langTo $langCourseS '$c' \n\n$plain_forum_message \n\n$gunet\n<a href='{$urlServer}$course_code'>{$urlServer}$course_code</a>";
-    $linkhere = "&nbsp;<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a>.";
-    $unsubscribe = "<br /><br />$langNote: " . sprintf($langLinkUnsubscribe, course_id_to_title($course_id));
-    $plain_body_topic_notify .= $unsubscribe . $linkhere;
-    $body_topic_notify .= $unsubscribe . $linkhere;
-    foreach ($sql as $r) {
-        if (get_user_email_notification($r->user_id, $course_id)) {
-            $emailaddr = uid_to_email($r->user_id);
-            send_mail_multipart('', '', '', $emailaddr, $subject_notify, $plain_body_topic_notify, $body_topic_notify, $charset);
-        }
-    }
-    // end of notification
+    $subject = Database::get()->querySingle('SELECT title FROM forum_topic WHERE id = ?d', $topic)->title;
+    notify_users($forum_id, $forum_name, $topic, $subject, $message, $time);
 
+    $page = "modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id";
     $total_posts = get_total_posts($topic);
     if ($total_posts > $posts_per_page) {
-        $page = '&start=' . ($posts_per_page * intval(($total_posts - 1) / $posts_per_page));
-    } else {
-        $page = '';
+        $page .= '&start=' . ($posts_per_page * intval(($total_posts - 1) / $posts_per_page));
     }
-    $_SESSION['message'] = "<div class='alert alert-success'>$langStored</div>";
-    header("Location: {$urlServer}modules/forum/viewtopic.php?course=$course_code&topic=$topic&forum=$forum_id" . $page);
-    exit;
+    Session::Messages($langStored, 'alert-success');
+    redirect_to_home_page($page);
 } else {
     // Topic review
     $tool_content .= action_bar(array(
@@ -174,7 +143,7 @@ if (isset($_POST['submit'])) {
                     'level' => 'primary-label')
                 ));
     if (!isset($reply)) {
-        $reply = "";
+        $reply = '';
     }
     $tool_content .= "
     <div class='form-wrapper'>

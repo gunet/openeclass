@@ -52,7 +52,8 @@ require_once 'include/lib/textLib.inc.php';
 
 // chat commands
 // reset command
-    if (isset($_GET['reset']) && $is_editor) {        
+    if (isset($_GET['reset']) && $is_editor) { 
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
         $fchat = fopen($fileChatName, 'w');
 
         if (flock($fchat, LOCK_EX)) {
@@ -69,6 +70,7 @@ require_once 'include/lib/textLib.inc.php';
 // store
     if (isset($_GET['store']) && $is_editor) {
         require_once 'modules/document/doc_init.php';
+        if (!isset($_GET['token']) || !validate_csrf_token($_GET['token'])) csrf_token_error();       
         $saveIn = "chat." . date("Y-m-j-his") . ".txt";
         $chat_filename = '/' . safe_filename('txt');
         
@@ -101,11 +103,12 @@ require_once 'include/lib/textLib.inc.php';
     }
   
 // add new line
-    if (isset($_GET['chatLine']) and trim($_GET['chatLine']) != '') {
-        $chatLine = purify($_GET['chatLine']);
+    if (isset($_POST['chatLine']) and trim($_POST['chatLine']) != '') {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        $chatLine = purify($_POST['chatLine']);
         $fchat = fopen($fileChatName, 'a');
         if ($is_editor) {
-            $nick = "<b>$nick</b>";
+            $nick = "<b>".q($nick)."</b>";
         }
         fwrite($fchat, $timeNow . ' - ' . $nick . ' : ' . stripslashes($chatLine) . " !@#$ $uid       \n");
         fclose($fchat);

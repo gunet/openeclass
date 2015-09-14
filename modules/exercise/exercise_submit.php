@@ -33,6 +33,7 @@ $guest_allowed = true;
 include '../../include/baseTheme.php';
 require_once 'include/lib/textLib.inc.php';
 require_once 'modules/gradebook/functions.php';
+require_once 'modules/attendance/functions.php';
 
 $pageName = $langExercicesView;
 $picturePath = "courses/$course_code/image";
@@ -144,9 +145,10 @@ if ($ips && !$is_editor){
 // if the user has clicked on the "Cancel" button
 // ends the exercise and returns to the exercise list
 if (isset($_POST['buttonCancel'])) {
-        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value];        
-        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0
-                WHERE eurid = ?d", ATTEMPT_CANCELED, $eurid);
+        $eurid = $_SESSION['exerciseUserRecordID'][$exerciseId][$attempt_value]; 
+        $exercisetotalweight = $objExercise->selectTotalWeighting();
+        Database::get()->query("UPDATE exercise_user_record SET record_end_date = NOW(), attempt_status = ?d, total_score = 0, total_weighting = ?d
+                WHERE eurid = ?d", ATTEMPT_CANCELED, $exercisetotalweight, $eurid);
         Database::get()->query("DELETE FROM exercise_answer_record WHERE eurid = ?d", $eurid);
         unset_exercise_var($exerciseId);
         Session::Messages($langAttemptWasCanceled);
@@ -210,10 +212,14 @@ if (isset($_SESSION['questionList'][$exerciseId][$attempt_value])) {
         }        
     } else {
         // selects the list of question ID
-        $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();        
+        $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList(); 
     }
-    // saves the question list into the session
-    $_SESSION['questionList'][$exerciseId][$attempt_value] = $questionList;
+    // saves the question list into the session if there are questions
+    if (count($questionList)) {
+        $_SESSION['questionList'][$exerciseId][$attempt_value] = $questionList;
+    } else {
+        unset_exercise_var($exerciseId);
+    }
 }
 
 $nbrQuestions = count($questionList);
@@ -323,9 +329,9 @@ if (isset($_POST['formSent'])) {
         
         if ($attempt_status == ATTEMPT_COMPLETED) {
             // update attendance book
-            update_attendance_book($uid, $exerciseId, 'exercise');
+            update_attendance_book($uid, $exerciseId, GRADEBOOK_ACTIVITY_EXERCISE);
             // update gradebook            
-            update_gradebook_book($uid, $exerciseId, $totalScore, GRADEBOOK_ACTIVITY_EXERCISE);
+            update_gradebook_book($uid, $exerciseId, $totalScore/$totalWeighting, GRADEBOOK_ACTIVITY_EXERCISE);
         }
         unset($objExercise);
         unset_exercise_var($exerciseId);
@@ -420,7 +426,11 @@ foreach ($questionList as $questionId) {
 } // end foreach()
 
 if (!$questionList) {
-    $tool_content .= "<div class='alert alert-warning'>$langNoQuestion</div>";
+    $tool_content .= "
+            <div class='alert alert-warning'>$langNoQuestion</div>
+            <div class='pull-right'>
+                <a href='index.php?course=$course_code' class='btn btn-default'>$langBack</a>
+            </div>";
 } else {
     $tool_content .= "
         <br>

@@ -31,6 +31,7 @@ $pageName = $langChangeUser;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 
 if (isset($_REQUEST['username'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $sql = "SELECT user.id, surname, username, password, givenname, status, email,
                    admin.user_id AS is_admin, lang
                 FROM user LEFT JOIN admin ON user.id = admin.user_id
@@ -43,6 +44,9 @@ if (isset($_REQUEST['username'])) {
     }
     $myrow = Database::get()->querySingle($sql, $_REQUEST['username']);
     if ($myrow) {
+        foreach (array_keys($_SESSION) as $key) {
+            unset($_SESSION[$key]);
+        }
         $_SESSION['uid'] = $myrow->id;
         $_SESSION['surname'] = $myrow->surname;
         $_SESSION['givenname'] = $myrow->givenname;
@@ -76,7 +80,8 @@ $tool_content .= "<div class='form-wrapper'>
                 <div class='col-sm-9 col-sm-offset-3'>
                     <input class='btn btn-primary' type='submit' value='$langSubmit'>
                 </div>
-            </div>            
+            </div>
+            ". generate_csrf_token_form_field() ."            
         </form>
         </div>";
 draw($tool_content, 3);

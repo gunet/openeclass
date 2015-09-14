@@ -26,9 +26,11 @@ require_once 'recycle.php';
 final class ForeignKeys {
 
     /**
-     * Create a new foreign key from $masterTableName to $detailTableName based on the $detailFieldName field
+     * Create a new foreign key from $masterTableName to $detailTableName based
+     * on the $detailFieldName field
      * @param type $detailTableName The detail table name
-     * @param type $detailFieldName The detail table's field name, which connects with the master table
+     * @param type $detailFieldName The detail table's field name, which
+     * connects with the master table
      * @param type $masterTableName The master table name
      * @param type $defaultEntryResolver A numeric value or a function which 
      * returns a numeric value, in order to get the master id field value. This

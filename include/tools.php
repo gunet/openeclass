@@ -106,7 +106,6 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_QUESTIONNAIRE . ",
                                           " . MODULE_ID_FORUM . ",
                                           " . MODULE_ID_GROUPS . ",
-                                          " . MODULE_ID_WIKI . ",
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
                                           " . MODULE_ID_LP . ") AND
@@ -456,7 +455,7 @@ function adminMenu() {
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
-    array_push($sideMenuLink, "../admin/multideluser.php");
+    array_push($sideMenuLink, "../admin/multiedituser.php");
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langInfoMail']);
