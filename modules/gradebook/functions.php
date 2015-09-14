@@ -600,7 +600,7 @@ function display_all_users_grades($gradebook_id) {
         $tool_content .= "<table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr>
-                  <th width='1'>$langID</th>
+                  <th style='width:1%'>$langID</th>
                   <th>$langName $langSurname</th>
                   <th>$langAm</th>
                   <th>$langRegistrationDateShort</th>

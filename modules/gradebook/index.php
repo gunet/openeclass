@@ -75,7 +75,6 @@ $(function() {
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
                'fnDrawCallback': function( oSettings ) {
-                    popover_init();
                     $('#users_table{$course_id}_filter label input').attr({
                           class : 'form-control input-sm',
                           placeholder : '$langSearch...'
