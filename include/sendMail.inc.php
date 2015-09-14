@@ -23,6 +23,9 @@
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header
 function send_mail($from, $from_address, $to, $to_address, $subject, $body, $charset, $extra_headers = '') {
+    if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
+        return true;
+    }
     if (count($to_address) > 1) {
         $to_header = '(undisclosed-recipients)';
         $bcc = 'Bcc: ' . join(', ', $to_address) . PHP_EOL;
@@ -52,6 +55,10 @@ function send_mail($from, $from_address, $to, $to_address, $subject, $body, $cha
 // From: address is always the platform administrator, and the
 // $from_address specified appears in the Reply-To: header
 function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $body_plain, $body_html, $charset) {
+
+    if ((is_array($to_address) and !count($to_address)) or empty($to_address)) {
+        return true;
+    }
     
     $emailAnnounce = get_config('email_announce');
     $body_html = add_host_to_urls($body_html);
