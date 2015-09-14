@@ -2781,6 +2781,10 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                             AND exercise_with_questions.exercise_id = ?d", $exercise->course_id, $exercise->id)->totalweight;    
             Database::get()->query("UPDATE exercise_user_record SET total_weighting = ?f WHERE eurid = ?d", $totalweight, $exercise->eurid);
         }
+        
+        if (DBHelper::fieldExists('link', 'hits')) { // not needed
+            delete_field('link', 'hits');
+        }
     }
 
  

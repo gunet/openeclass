@@ -70,12 +70,11 @@ function showlinksofcategory($catid) {
                                    WHERE course_id = ?d AND category = ?d
                                    ORDER BY `order`", $course_id, $catid);
     $numberoflinks = count($result);
-    $links_num = 1;
+    $links_num = 1;    
     foreach ($result as $myrow) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=" . getIndirectReference($myrow->id) . "&amp;url=" .
-                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
+        $tool_content .= "<td class='nocategory-link'><a href='" . $myrow->url . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if ($catid == -2 && $myrow->user_id != 0) {
             $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
         }
