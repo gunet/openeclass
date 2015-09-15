@@ -1326,16 +1326,40 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                                         SET gradebook_id = ?d, title = ?s, `date` = ?t, description = ?s,
                                         weight = ?d, module_auto_id = ?d, auto = ?d, module_auto_type = ?d, visible = 1",
                                     $gradebook_id, $actTitle, $actDate, $actDesc, $module_weight, $module_auto_id, $module_auto, $module_auto_type);
-            $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);            
+            $sql = Database::get()->queryArray("SELECT uid FROM gradebook_users WHERE gradebook_id = ?d", $gradebook_id);
+            if ($checkForAss->group_submissions) {
+                foreach ($sql as $u) {
+                    $user_groups = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id = ?d", $u->uid);
+                    $group_ids = [];
+                    foreach ($user_groups as $user_group) {
+                        array_push($group_ids, $user_group->group_id);
+                    }
+                    if (!empty($group_ids)) {
+                        $sql_ready_group_ids = implode(', ', $group_ids);
+                        $grd = Database::get()->querySingle("SELECT assignment_submit.group_id AS group_id, assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
+                                . "FROM assignment_submit, assignment "
+                                . "WHERE assignment_submit.assignment_id = assignment.id "
+                                . "AND assignment.id =?d "
+                                . "AND assignment_submit.group_id IN ($sql_ready_group_ids)", $id);
+                        if ($grd) {
+                            $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $grd->group_id);
+                            foreach ($user_ids as $user_id) {
+                                update_gradebook_book($user_id, $id, $grd->grade/$grd->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                            }
+                        }
+                    }
+                }
+            } else {
                 foreach ($sql as $u) {
                     $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
                             . "FROM assignment_submit, assignment "
                             . "WHERE assignment_submit.assignment_id = assignment.id "
                             . "AND assignment.id =?d "
-                            . "AND uid = $u->uid", $id);
+                            . "AND assignment_submit.uid = $u->uid", $id);
                     if ($grd) {
                         update_gradebook_book($u->uid, $id, $grd->grade/$grd->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     }
+                }                
             }
         }
     }
@@ -1414,12 +1438,30 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
                 $allow_insert = TRUE;
             }
         } elseif ($gradebookActivity->module_auto_type == GRADEBOOK_ACTIVITY_ASSIGNMENT) {
-            $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
-                    . "FROM assignment_submit, assignment "
-                    . "WHERE assignment_submit.assignment_id = assignment.id "
-                    . "AND assignment.id =?d "
-                    . "AND uid = $uid", $gradebookActivity->module_auto_id);
-            if ($grd) {
+            $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $gradebookActivity->module_auto_id);
+            if ($assignment->group_submissions) {
+                $group_members = Database::get()->queryArray("SELECT group_id FROM group_members WHERE user_id = ?d", $uid);
+                $extra_sql = '';
+                if ($group_members) {
+                    $group_ids_arr = [];
+                    foreach ($group_members as $group_member) {
+                        array_push($group_ids_arr, $group_member->group_id);
+                    }
+                    $sql_ready_group_ids = implode(', ', $group_ids_arr);
+                    $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
+                            . "FROM assignment_submit, assignment "
+                            . "WHERE assignment_submit.assignment_id = assignment.id "
+                            . "AND assignment.id =?d "
+                            . "AND assignment_submit.group_id IN ($sql_ready_group_ids)", $gradebookActivity->module_auto_id);                
+                }                
+            } else {
+                $grd = Database::get()->querySingle("SELECT assignment_submit.grade AS grade, assignment.max_grade AS max_grade "
+                        . "FROM assignment_submit, assignment "
+                        . "WHERE assignment_submit.assignment_id = assignment.id "
+                        . "AND assignment.id =?d "
+                        . "AND assignment_submit.uid = $uid", $gradebookActivity->module_auto_id);                
+            }
+            if (isset($grd) && $grd) {
                 $grade = $grd->grade/$grd->max_grade;            
                 $allow_insert = TRUE;
             }         
