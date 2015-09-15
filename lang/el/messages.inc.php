@@ -874,6 +874,7 @@ $langOneRegistered = "εγγεγραμμένος";
 $langIdentity = "Ταυτότητα Μαθήματος";
 $langCourseS = "μάθημα";
 $langRSSFeed = 'Ροή RSS';
+$langRefernce = "Αναφορά";
 $langCitation = "Βιβλιογραφική αναφορά μαθήματος";
 $langAccessed = "Ανακτήθηκε την ";
 $langNoUserEmailNotification = "Δεν λαμβάνετε ειδοποιήσεις του μαθήματος μέσω email.";
@@ -885,6 +886,7 @@ $langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρε�
 /* * *******************************************
  * course_info.php
  * ******************************************* */
+
 $langCourseIden = "Ταυτότητα Μαθήματος";
 $langBackupCourse = "Αντίγραφο ασφαλείας";
 $langCloneCourse = "Κλώνος μαθήματος";
@@ -896,7 +898,7 @@ $langDelUsers = "Διαγραφή χρηστών";
 $langDelUser = "Διαγραφή χρήστη";
 $langCourseTitle = "Τίτλος Μαθήματος";
 $langDescription = "Πληροφορίες";
-$langConfidentiality = "Πρόσβαση στο μάθημα";
+$langConfidentiality = "Πρόσβαση";
 $langPrivOpen = "Ελεύθερη Πρόσβαση (με εγγραφή) σε όσους διαθέτουν λογαριασμό στην πλατφόρμα";
 $langPrivOpenShort = "Ελεύθερη (με εγγραφή)";
 $langForbidden = "Μη επιτρεπτή ενέργεια";
@@ -1948,7 +1950,7 @@ $langAccountActivateMessage = 'Ο φοιτητής με τα παρακάτω σ
 $langMyCoursesProf = "Τα μαθήματα που υποστηρίζω";
 $langMyCoursesUser = "Τα μαθήματα που παρακολουθώ";
 $langNoCourses = "Δεν υπάρχουν μαθήματα";
-$langCourseCreate = "Δημιουργία Μαθήματος";
+$langCourseCreate = "Δημιουργία μαθήματος";
 $langCreationDate = "Ημερομηνία δημιουργίας";
 $langMyAgenda = "Το ημερολόγιό μου";
 $langMyAnnouncements = "Οι ανακοινώσεις μου";
@@ -2906,8 +2908,8 @@ $langAddedToCourse = "είναι ήδη γραμμένος στην πλατφό
 $langGroupUserManagement = "Διαχείριση ομάδας χρηστών";
 $langRegDone = "Οι αλλαγές σας κατοχυρώθηκαν.";
 $langPassTooEasy = "Το συνθηματικό σας είναι πολύ απλό. Χρησιμοποιήστε ένα συνθηματικό σαν και αυτό";
-$langChoiceLesson = "Επιλογή Μαθημάτων";
-$langRegCourses = "Εγγραφή σε Mάθημα";
+$langChoiceLesson = "Επιλογή μαθημάτων";
+$langRegCourses = "Εγγραφή σε μάθημα";
 $langChoiceDepartment = "Επιλογή $langOfFaculty";
 $langCoursesRegistered = "Η εγγραφή σας στα μαθήματα που επιλέξατε έγινε με επιτυχία!";
 $langNoCoursesRegistered = "<p>Δεν επιλέξατε μάθημα για εγγραφή.</p><p> Μπορείτε να εγγραφείτε σε μάθημα, την
