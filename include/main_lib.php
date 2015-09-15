@@ -767,13 +767,17 @@ function imap_literal($s) {
  */
 function new_code($fac) {
 
-    $gencode = Database::get()->querySingle("SELECT code, generator FROM hierarchy WHERE id = ?d", $fac);
-    if ($gencode) {
+ $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
+       FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d)", $fac);
+   if ($gencode) {
         do {
             $code = $gencode->code . $gencode->generator;
             $gencode->generator += 1;
+			$code = $gencode->code . $gencode->generator;
             Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
         } while (file_exists("courses/" . $code));
+		Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
+
     // Make sure the code returned isn't empty!
     } else {
         die("Course Code is empty!");
