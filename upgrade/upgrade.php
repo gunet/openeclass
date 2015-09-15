@@ -2840,36 +2840,46 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 	     if (DBHelper::fieldExists('link', 'hits')) { // not needed
            delete_field('link', 'hits');
 			}
-		
+	       
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `group_category` (
+                                `id` INT(6) NOT NULL AUTO_INCREMENT,
+                                `course_id` INT(11) NOT NULL,
+                                `name` VARCHAR(255) NOT NULL,
+                                `description` TEXT,
+                                `order` INT(6) NOT NULL DEFAULT 0,
+                                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
+        
+        if (!DBHelper::fieldExists('group', 'category_id')) {
+            Database::get()->query("ALTER TABLE `group` ADD `category_id` INT(11) NULL");
+        }
 		//Group Mapping due to group_id addition in group_properties table
-		
-		Database::get()->query("ALTER TABLE `group_properties` ADD `group_id` ADD INT NOT NULL DEFAULT 0");
-		Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
-	
-		$group_info = Database::get()->queryArray("SELECT * FROM group_properties");
-		foreach ($group_info as group) {
-			$course_id = $group -> course_id;
-			$self_reg = $group -> self_registration;
-			$multi_reg = $group -> multi_registration;
-			$unreg = $group -> allow_unregister;
-			$forum = $group -> forum;
-			$priv_forum = $group -> private_forum;
-			$documents = $group -> documents;
-			$wiki = $group -> wiki;
-			$agenda =$group -> agenda;
+        if (!DBHelper::fieldExists('group_properties', 'group_id')) {
+            Database::get()->query("ALTER TABLE `group_properties` ADD `group_id` INT(11) NOT NULL DEFAULT 0");
+            Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
 
-			Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $course_id);
+            $group_info = Database::get()->queryArray("SELECT * FROM group_properties");
+            foreach ($group_info as $group) {
+                $cid = $group->course_id;
+                $self_reg = $group->self_registration;
+                $multi_reg = $group->multiple_registration;
+                $unreg = $group->allow_unregister;
+                $forum = $group->forum;
+                $priv_forum = $group->private_forum;
+                $documents = $group->documents;
+                $wiki = $group->wiki;
+                $agenda = $group->agenda;           
+                Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
+
+                $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $cid);
 				
-			$num = Database::get()->queryArray("SELECT * FROM group WHERE course_id = ?", $course_id);
-		
-			foreach ($num as $group_num){
-				$group_id = $group_num -> id;
-			
-				Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, multi_registration, allow_unregister, forum, private_forum, documents, wiki, agenda) 
-											   VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $course_id, $group_id, $self_reg, $multi_reg, $unreg, $forum, $priv_forum, $wiki, $agenda);									   
-			}
-		}
-			Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
+                foreach ($num as $group_num) {
+                        $group_id = $group_num->id;			
+                        Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, multiple_registration, allow_unregister, forum, private_forum, documents, wiki, agenda) 
+                                                                                   VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $multi_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);									   
+                }
+            }
+            Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
+        }
 	}
 
  
