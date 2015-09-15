@@ -2792,7 +2792,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 		Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
 	
 		$group_info = Database::get()->queryArray("SELECT * FROM group_properties");
-		foreach ($group_info as group) {
+		foreach ($group_info as $group) {
 			$course_id = $group -> course_id;
 			$self_reg = $group -> self_registration;
 			$multi_reg = $group -> multi_registration;

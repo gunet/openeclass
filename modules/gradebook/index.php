@@ -220,12 +220,12 @@ if ($is_editor) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();          
         if ($_POST['specific_gradebook_users'] == 2) { // specific users group
             foreach ($_POST['specific'] as $g) {
-                $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", getDirectReference($g));
+                $ug = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $g);
                 foreach ($ug as $u) {
-                    $newUsersQuery = Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
+                    Database::get()->query("INSERT INTO gradebook_users (gradebook_id, uid) 
                             SELECT $gradebook_id, user_id FROM course_user
-                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u);
-                    update_user_gradebook_activities($gradebook_id, $u);    
+                            WHERE course_id = ?d AND user_id = ?d", $course_id, $u->user_id);
+                    update_user_gradebook_activities($gradebook_id, $u->user_id);
                 }
             }
         } elseif ($_POST['specific_gradebook_users'] == 1) { // specific users            
