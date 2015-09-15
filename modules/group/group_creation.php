@@ -44,6 +44,8 @@ $tool_content .= action_bar(array(
 ));
 $group_max_value = Session::has('group_max') ? Session::get('group_max') : 8;
 $group_quantity_value = Session::has('group_quantity') ? Session::get('group_quantity') : 1;
+
+if (isset($_GET['all'])) {
 $tool_content .= " 
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
@@ -182,93 +184,6 @@ $tool_content .= "<div class='form-wrapper'>
             </div>
       </div>
     </div>
-}
-else{
-	if ($is_editor) {
-		$tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>\n";
-		$q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
-                                   user.id IN(SELECT user_id FROM group_members
-                                                              WHERE is_tutor = 1) AS is_tutor
-                              FROM course_user, user 
-                              WHERE course_user.user_id = user.id AND
-                                    course_user.tutor = 1 AND
-                                    course_user.course_id = ?d
-                              ORDER BY surname, givenname, user_id", $course_id);
-		foreach ($q as $row) {
-			$selected = $row->is_tutor ? ' selected="selected"' : '';
-			$tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
-					' ' . q($row->givenname) . "</option>\n";
-    }
-		$tool_content_tutor .= '</select>';
-	} else {
-		$tool_content_tutor = display_user($tutors);
-	}	
-$tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;group=1'>
-        <fieldset>    
-        <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
-            <label class='col-sm-2 control-label'>$langGroupName:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type=text name='name' size='40'>
-                <span class='help-block'>".Session::getError('name')."</span>
-            </div>
-        </div>
-        <div class='form-group'>
-          <label class='col-sm-2 control-label'>$langDescription $langOptional:</label>
-          <div class='col-sm-10'><textarea class='form-control' name='description' rows='2' cols='60'></textarea></div>
-        </div>
-        <div class='form-group".(Session::getError('maxStudent') ? " has-error" : "")."'>
-            <label class='col-sm-2 control-label'>$langMax $langGroupPlacesThis:</label>
-            <div class='col-sm-10'>
-                <input class='form-control' type=text name='maxStudent' size=2>
-                <span class='help-block'>".Session::getError('maxStudent')."</span>
-            </div>
-              
-        </div>
-		<div class='form-group'>
-          <label class='col-sm-2 control-label'>$langGroupTutor:</label>
-          <div class='col-sm-10'>
-              $tool_content_tutor
-          </div>
-        </div>
-        <div class='form-group'>
-            <label class='col-sm-2 control-label'>$langGroupMembers:</label>
-        <div class='col-sm-10'>
-            <div class='table-responsive'>
-                <table class='table-default'>
-                    <thead>
-                        <tr class='title1'>
-                          <th>$langNoGroupStudents</th>
-                          <th width='100' class='text-center'>$langMove</th>
-                          <th class='right'>$langGroupMembers</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                          <td>
-                            <select class='form-control' id='users_box' name='nogroup[]' size='15' multiple>
-                              
-                            </select>
-                          </td>
-                          <td class='text-center'>
-                              <div class='form-group'>
-                                  <input class='btn btn-default' type='button' onClick=\"move('users_box','members_box')\" value='   &gt;&gt;   ' />
-                              </div>
-                              <div class='form-group'>
-                                  <input class='btn btn-default' type='button' onClick=\"move('members_box','users_box')\" value='   &lt;&lt;   ' />
-                              </div>    
-                          </td>
-                          <td class='text-right'>
-                            <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
-
-                            </select>
-                          </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-      </div>
-    </div>
 	<div class='form-group'>
             <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
             <div class='col-sm-3'>
@@ -294,7 +209,6 @@ $tool_content .= "<div class='form-wrapper'>
             </div>
         </div>
 		<div class='form-group'>
-
              <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
                 <div class='col-xs-9'>             
                     <div class='checkbox'>

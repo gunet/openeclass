@@ -36,15 +36,21 @@ $pageName = $langGroupProperties;
 $navigation[] = array('url' => "index.php?course=$course_code", 'name' => $langGroups);
 
 require_once 'group_functions.php';
-initialize_group_info();
+initialize_group_id();
+$group_id = $_GET['group_id'];
 
-$checked['self_reg'] = $self_reg ? ' checked="1"' : '';
-$checked['multi_reg'] = $multi_reg ? ' checked="1"' : '';
-$checked['has_forum'] = $has_forum ? ' checked="1"' : '';
-$checked['documents'] = $documents ? ' checked="1"' : '';
-$checked['private_forum_yes'] = $private_forum ? ' checked="1"' : '';
-$checked['private_forum_no'] = $private_forum ? '' : ' checked="1"';
-$checked['wiki'] = ($wiki==0) ? '' : ' checked="1"';
+initialize_group_info($group_id);
+
+$group = Database::get()->querySingle("SELECT * FROM group_properties WHERE group_id = ?d AND course_id = ?d", $group_id, $course_id);
+
+$checked['self_reg'] = ($group->self_registration?'checked':'');
+$checked['multi_reg'] = ($group->multiple_registration?'checked':'');
+$checked['private_forum_yes'] =($group->private_forum?' checked="1"' : '');
+$checked['private_forum_no'] = ($group->private_forum? '' : ' checked="1"');
+$checked['has_forum'] = ($group->forum?'checked':'');
+$checked['documents'] = ($group->documents?'checked':'');
+$checked['wiki'] = ($group->wiki?'checked':'');
+
 
 $tool_content .= action_bar(array(
     array(
@@ -63,31 +69,31 @@ $tool_content .= "
             <label class='col-sm-3 control-label'>$langGroupStudentRegistrationType:</label>
                 <div class='col-xs-9'>             
                     <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='self_reg' value='1'$checked[self_reg]>
+					   <label>
+					    <input type='checkbox' name='self_reg' $checked[self_reg]>
                         $langGroupAllowStudentRegistration
-                      </label>
-                    </div>
+					  </label>
+					</div>
                     <div class='checkbox'>
-                      <label>
-                        <input type='checkbox' name='multi_reg' value='1'$checked[multi_reg]>
+					  <label>
+                        <input type='checkbox' name='multi_reg' $checked[multi_reg]>
                         $langGroupAllowMultipleRegistration
                       </label>
-                    </div>                    
+					</div>                    
                 </div>
             </div>        
-            <div class='form-group'>
+		    <div class='form-group'>
                 <label class='col-sm-3 control-label'>$langPrivate_1:</label>
                 <div class='col-sm-9'>            
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='private_forum' value='1' checked=''$checked[private_forum_yes]>
+                        <input type='radio' name='private_forum' value='1' checked=''  $checked[private_forum_yes]>
                         $langPrivate_2
                       </label>
                     </div>
                     <div class='radio'>
                       <label>
-                        <input type='radio' name='private_forum' value='0'$checked[private_forum_no]>
+                        <input type='radio' name='private_forum' value='0' $checked[private_forum_no]>
                         $langPrivate_3
                       </label>
                     </div>
@@ -98,7 +104,7 @@ $tool_content .= "
                 <div class='col-xs-9'>             
                     <div class='checkbox'>
                       <label>
-                        <input type='checkbox' name='has_forum' value='1'$checked[has_forum]>
+                        <input type='checkbox' name='forum' $checked[has_forum]>
                       </label>
                     </div>                    
                 </div>
@@ -108,7 +114,7 @@ $tool_content .= "
                 <div class='col-xs-9'>             
                     <div class='checkbox'>
                       <label>
-                        <input type='checkbox' name='documents' value='1'$checked[documents]>
+                        <input type='checkbox' name='documents' $checked[documents]>
                       </label>
                     </div>                    
                 </div>
@@ -118,11 +124,14 @@ $tool_content .= "
                 <div class='col-xs-9'>             
                     <div class='checkbox'>
                       <label>
-                        <input type='checkbox' name='wiki' value='1'$checked[wiki]>
+                        <input type='checkbox' name='wiki' $checked[wiki]>
                       </label>
                     </div>                    
                 </div>
             </div>
+			
+			<input type='hidden' name='group_id' value=$group_id></input>
+			
             <div class='form-group'>
             <div class='col-sm-9 col-sm-offset-3'>
                 <input type='submit' class='btn btn-primary' name='properties' value='$langModify'>
