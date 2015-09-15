@@ -407,7 +407,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `group` (
     `name` varchar(100) NOT NULL DEFAULT '',
     `description` TEXT,
     `forum_id` int(11) NULL,
-	`category_id` int(11) NULL,
+    `category_id` int(11) NULL,
     `max_members` int(11) NOT NULL DEFAULT 0,
     `secret_directory` varchar(30) NOT NULL DEFAULT 0) $charset_spec");
 
