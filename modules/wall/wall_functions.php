@@ -23,6 +23,9 @@ require_once 'modules/rating/class.rating.php';
 require_once 'modules/comments/class.commenting.php';
 require_once 'modules/comments/class.comment.php';
 require_once 'modules/abuse_report/abuse_report.php';
+require_once 'include/lib/mediaresource.factory.php';
+require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'modules/document/doc_init.php';
 
 function allow_to_post($course_id, $user_id, $is_editor) {
     if ($is_editor) {
@@ -373,8 +376,46 @@ function show_resource($info) {
         case 'videolink':
             $ret_str = show_video($info->type, $info->title, $info->id, $info->res_id);
             break;
+        case 'document' :
+            $ret_str = show_document($info->title, $info->id, $info->res_id);
+            break;
     }
     return $ret_str;
+}
+
+function show_document($title, $resource_id, $doc_id) {
+    global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code;
+
+    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $doc_id);
+
+    if (!$file) {
+        $download_hidden_link = '';
+        if (!$is_editor) {
+            return '';
+        }
+        $status = 'del';
+        $image = 'fa-times';
+        $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
+    } else {
+        $status = $file->visible;
+        if (!$is_editor and (!resource_access($file->visible, $file->public))) {
+            return '';
+        }
+        $file->title = $title;
+        $image = choose_image('.' . $file->format);
+        $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
+        $download_hidden_link = "<input type='hidden' value='$download_url'>";
+        $file_obj = MediaResourceFactory::initFromDocument($file);
+        $file_obj->setAccessURL(file_url($file->path, $file->filename));
+        $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+        $link = MultimediaHelper::chooseMediaAhref($file_obj);
+    }
+    $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
+    
+    return "
+    <tr$class_vis>
+    <td width='1'>" . icon($image, '') . "</td>
+    <td class='text-left'>$download_hidden_link$link</td></tr>";
 }
 
 function show_video($table, $title, $resource_id, $video_id) {
