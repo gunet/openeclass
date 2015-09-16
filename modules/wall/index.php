@@ -224,6 +224,7 @@ if (isset($_GET['showPost'])) { //show comments case
         
         if (visible_module(MODULE_ID_DOCS)) {
             $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
+                              <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs($id).'
                           </div>';
         } else {
