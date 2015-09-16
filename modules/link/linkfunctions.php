@@ -74,7 +74,7 @@ function showlinksofcategory($catid) {
     foreach ($result as $myrow) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "<td class='nocategory-link'><a href='" . $myrow->url . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
+        $tool_content .= "<td class='nocategory-link'><a href='" . q($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if ($catid == -2 && $myrow->user_id != 0) {
             $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
         }
