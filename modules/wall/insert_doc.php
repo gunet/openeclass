@@ -65,5 +65,19 @@ function list_docs($id = NULL) {
                    });
                  </script>";
     
+    
+    if (!is_null($id)) {
+        $doc_res = Database::get()->queryArray("SELECT res_id FROM wall_post_resources WHERE post_id = ?d AND type = ?s", $id, 'document');
+        if (count($doc_res)) {
+            $ret_str .= "<script>
+                           $('#jstree_doc').on('ready.jstree', function (e, data) {";
+            foreach ($doc_res as $doc) {
+                $ret_str .= "$('#jstree_doc').jstree('select_node', '".$doc->res_id."');";
+            }
+            $ret_str .= "  });
+                         </script>";
+        }
+    }
+    
     return $ret_str;
 }
