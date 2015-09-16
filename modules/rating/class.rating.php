@@ -44,6 +44,13 @@ Class Rating {
      */
     private function rating_add_js() {
         global $head_content, $urlServer;
+        static $loaded;
+        
+        if (isset($loaded[$this->widget])) {
+            return;
+        } else {
+            $loaded[$this->widget] = true;
+        }
         
         $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/rating/style.css">';
         
