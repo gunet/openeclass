@@ -29,6 +29,14 @@ function list_docs($id = NULL) {
     $ret_str .= "<script>
                    $(function () {
                      $('#jstree_doc').jstree({
+                       'types' : {
+                         'folder' : {
+                           'icon' : 'fa fa-folder'
+                         },
+                         'file' : {
+                           'icon' : 'fa fa-file'
+                         }
+                       },
                        'core': {
                          'themes': {
                            'name': 'proton',
@@ -41,7 +49,18 @@ function list_docs($id = NULL) {
                            }
                          }
                        },
-                       'plugins' : [ 'checkbox' ]
+                       'plugins' : [ 'checkbox', 'types' ]
+                     });
+                     
+                     $('#wall_form').on('submit', function(e) {
+                        var selectedElms = $('#jstree_doc').jstree('get_selected', true);
+                        var concat_ids = '';
+                        $.each(selectedElms, function() {
+                          if (this.type == 'file') {
+                            concat_ids += this.id + ',';
+                          }
+                        });
+                        $('#docs').val(concat_ids.slice(0,-1));
                      });
                    });
                  </script>";

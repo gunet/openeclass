@@ -53,10 +53,12 @@ if (isset($_GET['id'])) {
             "$path/%", "$path/%/%");
     
     foreach ($result as $row) {
+        $text = (empty($row->title))? $row->filename : $row->title;
+        
         if ($row->format == '.dir') {
-            $data[] = array('id'=> $row->id, 'text' => $row->filename, 'children' => true, 'state' => array('opened' => true));
+            $data[] = array('id'=> $row->id, 'text' => $text, 'children' => true, 'state' => array('opened' => true), 'type' => 'folder');
         } else {
-            $data[] = array('id'=> $row->id, 'text' => $row->filename);
+            $data[] = array('id'=> $row->id, 'text' => $text, 'type' => 'file');
         }
     }
 }

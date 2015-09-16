@@ -72,7 +72,7 @@ if (isset($_POST['submit'])) {
                 }
                 //save documents
                 if (visible_module(MODULE_ID_DOCS)) {
-                    
+                    insert_docs($id);
                 }
             }
         } else {
@@ -129,6 +129,7 @@ if (isset($_POST['submit'])) {
                 $youtube = '';
                 Database::get()->query("UPDATE wall_post SET content = ?s, youtube = ?s WHERE id = ?d AND course_id = ?d",
                     $content, $youtube, $id, $course_id);
+                Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
                 
                 Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
                 array('id' => $id,
@@ -145,6 +146,7 @@ if (isset($_POST['submit'])) {
                     $youtube = $_POST['youtube'];
                     Database::get()->query("UPDATE wall_post SET content = ?s, youtube = ?s WHERE id = ?d AND course_id = ?d",
                         $content, $youtube, $id, $course_id);
+                    Database::get()->query("DELETE FROM wall_post_resources WHERE post_id = ?d", $id);
                     
                     Log::record($course_id, MODULE_ID_WALL, LOG_MODIFY,
                     array('id' => $id,
@@ -156,11 +158,11 @@ if (isset($_POST['submit'])) {
             
             //save multimedia content
             if (visible_module(MODULE_ID_VIDEO)) {
-                insert_video($id, true);
+                insert_video($id);
             }
             //save documents
             if (visible_module(MODULE_ID_DOCS)) {
-                
+                insert_docs($id);
             }
             
             Session::Messages($langWallPostSaved, 'alert-success');
@@ -288,6 +290,7 @@ if (isset($_GET['showPost'])) { //show comments case
         
         if (visible_module(MODULE_ID_DOCS)) {
             $docs_div = '<div class="form-group tab-pane fade" id="docs_div">
+                            <input type="hidden" name="doc_ids" id="docs">
                               '.list_docs().'
                           </div>';
         } else {
