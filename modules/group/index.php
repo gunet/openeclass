@@ -164,8 +164,7 @@ if ($is_editor) {
                                                                             'name' => $group_name,
                                                                             'max_members' => $group_max,
                                                                             'secret_directory' => $secretDirectory));
-            
-          
+                      
                 $message = "$langGroupAdded";
 
 	}
@@ -278,29 +277,29 @@ if ($is_editor) {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
         }
-    }elseif (isset($_POST['properties'])) {
+    } elseif (isset($_POST['properties'])) {
 	
-	if ($_POST['self_reg']==on){
+	if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
 		$self_reg = 1;
 	}
 	else $self_reg = 0;
 	
-	if ($_POST['multi_reg']==on){
+	if (isset($_POST['multi_reg']) and $_POST['multi_reg'] == 'on') {
 		$multi_reg = 1;
 	}
 	else $multi_reg = 0;
 	
-	if ($_POST['forum']==on){
+	if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
 		$has_forum = 1;
 	}
 	else $has_forum = 0;
 	
-	if ($_POST['documents']==on){
+	if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
 		$documents = 1;
 	}
 	else $documents = 0;
 	
-	if ($_POST['wiki']==on){
+	if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
 		$wiki = 1;
 	}
 	else $wiki = 0;

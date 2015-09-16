@@ -125,7 +125,6 @@ if (isset($_GET['group_as'])) {
 	}
 	     
 }
-
 $tool_content .= action_bar(array(
             array('title' => $langRegIntoGroup,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;registration=1&amp;group_id=$group_id",
@@ -152,7 +151,7 @@ $tool_content .= action_bar(array(
                 'icon' => 'fa-globe',
                 'level' => 'primary',
                 'show' => $wiki),
-			array('title' => $langEmailGroup,
+            array('title' => $langEmailGroup,
                 'url' => "group_email.php?course=$course_code&amp;group_id=$group_id",
                 'icon' => 'fa-envelope',
                 'level' => 'primary',
@@ -230,7 +229,7 @@ $tool_content .= "
     </div>";
 
 // members
-if (count($members) > 0) { 
+if (count($members) > 0) {
 $tool_content .= "   
                     <div class='row'>
                         <div class='col-xs-12'>
