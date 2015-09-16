@@ -1349,7 +1349,7 @@ function abuse_report_map_function(&$data, $maps) {
 function wall_map_function(&$data, $maps) {
     list($document_map, $video_map, $videolink_map) = $maps;
     $type = $data['type'];
-    if ($type == 'doc') {
+    if ($type == 'document') {
         $data['res_id'] = @$document_map[$data['res_id']];
     } elseif ($type == 'video') {
         $data['res_id'] = @$video_map[$data['res_id']];
