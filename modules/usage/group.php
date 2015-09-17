@@ -36,9 +36,7 @@ require_once "statistics_tools_bar.php";
 
 statistics_tools($course_code, "group");
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langUsage);
-$pageName = $langGroupUsage;
-
-initialize_group_info();
+$toolName = $langGroupUsage;
 
 $q = Database::get()->queryArray("SELECT id, name, g.description, max_members, COUNT(*) AS registered
 	              FROM `group` AS g, group_members AS gm
