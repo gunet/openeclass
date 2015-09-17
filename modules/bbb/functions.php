@@ -1244,20 +1244,24 @@ function get_total_bbb_servers()
  */
 function publish_video_recordings($course_id, $id)
 {
-    global $langBBBImportRecordingsOK, $langBBBImportRecordingsNo, $tool_content;
+    global $langBBBImportRecordingsOK, $langBBBImportRecordingsNo, $langBBBImportRecordingsNoNew, $tool_content;
 
     $sessions = Database::get()->queryArray("SELECT bbb_session.id,bbb_session.course_id AS course_id,"
             . "bbb_session.title,bbb_session.description,bbb_session.start_date,"
             . "bbb_session.meeting_id,course.prof_names FROM bbb_session LEFT JOIN course ON bbb_session.course_id=course.id WHERE course.code=?s AND bbb_session.id=?d", $course_id, $id);
 
     $servers = Database::get()->queryArray("SELECT * FROM bbb_servers WHERE enabled='true' ORDER BY id DESC");
-
+    
+    $perServerResult = array(); /*AYTO THA EINAI TO ID THS KATASTASHS GIA KATHE SERVER*/
+    
     if (($sessions) && ($servers)) {
+        $msgID = array();
         foreach ($servers as $server) {
             $salt = $server->server_key;
             $bbb_url = $server->api_url;
 
             $bbb = new BigBlueButton($salt, $bbb_url);
+            $sessionsCounter = 0;
             foreach ($sessions as $session) {
                 $recordingParams = array(
                     'meetingId' => $session->meeting_id,
@@ -1273,23 +1277,45 @@ function publish_video_recordings($course_id, $id)
                 $xml = simplexml_load_string($recs);
                 // If not set it means that there is no video recording.
                 // Skip and search for next one
-                if (isset($xml->recordings->recording->playback->format->url)) {
-                    $url = (string) $xml->recordings->recording->playback->format->url;
-                    // Check if recording already in videolinks and if not insert
-                    $c = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE url = ?s",$url);
-                    if ($c->cnt == 0) {
-                        Database::get()->querySingle("INSERT INTO videolink (course_id,url,title,description,creator,publisher,date,visible,public)"
-                        . " VALUES (?s,?s,?s,IFNULL(?s,'-'),?s,?s,?t,?d,?d)",$session->course_id,$url,$session->title,strip_tags($session->description),$session->prof_names,$session->prof_names,$session->start_date,1,1);
-                        $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
-                    }
-                    else
-                    {
-                        $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
-                    }
-                } else {
-                        $tool_content .= "<div class='alert alert-warning'>$langBBBImportRecordingsNo</div>";
+                if (isset($xml->recordings->recording/*->playback->format->url*/)) {//echo "<br>@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@<br>";
+                   foreach($xml->recordings->recording as $recording) {					
+                        $url = (string) $recording->playback->format->url;
+                        // Check if recording already in videolinks and if not insert
+                        $c = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM videolink WHERE url = ?s",$url);
+                        if ($c->cnt == 0) {
+                            Database::get()->querySingle("INSERT INTO videolink (course_id,url,title,description,creator,publisher,date,visible,public)"
+                            . " VALUES (?s,?s,?s,IFNULL(?s,'-'),?s,?s,?t,?d,?d)",$session->course_id,$url,$session->title,strip_tags($session->description),$session->prof_names,$session->prof_names,$session->start_date,1,1);
+                            //$tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
+                            $msgID[$sessionsCounter] = 2;  /*AN EGINE TO INSERT SWSTA PAIRNEI 2*/
+                        } else {
+                            //global $sessionsCounter;
+                            //$temp = $msgID[$sessionsCounter];
+                            if(isset($msgID[$sessionsCounter])) {
+                                if($msgID[$sessionsCounter] <= 1)  $msgID[$sessionsCounter] = 1;  /*AN DEN EXEI GINEI KANENA INSERT MEXRI EKEINH TH STIGMH PAIRNEI 1*/
+                            }
+                            else  $msgID[$sessionsCounter] = 1;
+                        }
+                    }                    
+                } else {                    
+                    $msgID[$sessionsCounter] = 0;  /*AN DEN YPARXOUN KAN RECORDINGS PAIRNEI 0*/                    
                 }
+                $sessionsCounter++;
             }
+            $finalMsgPerSession = max($msgID);
+            array_push($perServerResult, $finalMsgPerSession);
+        }
+        $finalMsg = max($perServerResult);
+        switch($finalMsg)
+        {
+            case 0:
+                    $tool_content .= "<div class='alert alert-warning'>$langBBBImportRecordingsNo</div>";
+                    break;
+            case 1:
+                    $tool_content .= "<div class='alert alert-warning'>$langBBBImportRecordingsNoNew</div>";
+                    break;
+            case 2:
+                    $tool_content .= "<div class='alert alert-success'>$langBBBImportRecordingsOK</div>";
+                    break;
         }
     }
     return true;
