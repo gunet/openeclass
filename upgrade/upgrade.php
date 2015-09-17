@@ -2801,19 +2801,18 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('gradebook', 'start_date')) {
             Database::get()->query("ALTER TABLE `gradebook` ADD `start_date` DATETIME NOT NULL");
             Database::get()->query("UPDATE `gradebook` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months before
+            $q = Database::get()->queryArray("SELECT gradebook_book.id, grade,`range` FROM gradebook, gradebook_activities, gradebook_book 
+                                                    WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id 
+                                                    AND gradebook_activities.gradebook_id = gradebook.id");
+            foreach ($q as $data) {
+                Database::get()->query("UPDATE gradebook_book SET grade = $data->grade/$data->range WHERE id = $data->id");
+            }
         }
         if (!DBHelper::fieldExists('gradebook', 'end_date')) {
             Database::get()->query("ALTER TABLE `gradebook` ADD `end_date` DATETIME NOT NULL");
             Database::get()->query("UPDATE `gradebook` SET `end_date` = " . DBHelper::timeAfter(6*30*24*60*60) . ""); // 6 months after
         }
-        $q = Database::get()->queryArray("SELECT gradebook_book.id, grade,`range` FROM gradebook, gradebook_activities, gradebook_book 
-                                                    WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id 
-                                                    AND gradebook_activities.gradebook_id = gradebook.id");
-        foreach ($q as $data) {
-            Database::get()->query("UPDATE gradebook_book SET grade = $data->grade/$data->range WHERE id = $data->id");
-        }
-        
-        
+                        
         if (!DBHelper::fieldExists('attendance', 'start_date')) {
             Database::get()->query("ALTER TABLE `attendance` ADD `start_date` DATETIME NOT NULL");
             Database::get()->query("UPDATE `attendance` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months after
@@ -2837,9 +2836,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("UPDATE exercise_user_record SET total_weighting = ?f WHERE eurid = ?d", $totalweight, $exercise->eurid);
         }
 		
-	     if (DBHelper::fieldExists('link', 'hits')) { // not needed
+        if (DBHelper::fieldExists('link', 'hits')) { // not needed
            delete_field('link', 'hits');
-			}
+        }
 	       
         Database::get()->query("CREATE TABLE IF NOT EXISTS `group_category` (
                                 `id` INT(6) NOT NULL AUTO_INCREMENT,
