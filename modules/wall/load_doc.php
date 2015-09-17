@@ -47,10 +47,11 @@ if (isset($_GET['id'])) {
         
     $result = Database::get()->queryArray("SELECT id, path, filename, format, title, visible, IF(title = '', filename, title) AS sort_key FROM document
             WHERE $sql AND
+            visible = ?d AND
             path LIKE ?s AND
             path NOT LIKE ?s
             ORDER BY sort_key COLLATE utf8_unicode_ci",
-            "$path/%", "$path/%/%");
+            1, "$path/%", "$path/%/%");
     
     foreach ($result as $row) {
         $text = (empty($row->title))? $row->filename : $row->title;
