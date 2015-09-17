@@ -179,8 +179,7 @@ if (isset($_GET['mid'])) {
                     <div class='form-group'>
                         <label for='body' class='col-sm-2 control-label'>$langMessage:</label>
                         <div class='col-sm-10'>
-                            ".rich_text_editor('body', 4, 20, '')."
-                            <span class='help-block'>$langMaxMessageSize</span>
+                            ".rich_text_editor('body', 4, 20, '')."                            
                         </div>
                     </div>";
 
