@@ -24,7 +24,6 @@
  * @brief installation data base queries
  */
 require_once '../include/phpass/PasswordHash.php';
-require_once '../modules/db/database.php';
 require_once '../modules/db/foreignkeys.php';
 
 if (!defined('ECLASS_VERSION')) {
@@ -32,8 +31,6 @@ if (!defined('ECLASS_VERSION')) {
 }
 
 set_time_limit(0);
-
-Database::core()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 
 // set default storage engine
 Database::core()->query("SET storage_engine = InnoDB");

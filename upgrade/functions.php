@@ -147,6 +147,16 @@ function add_index($index, $table, $column) {
     return $retString;
 }
 
+// Check MySQL for InnoDB storage engine support
+function check_engine() {
+    foreach (Database::get()->queryArray('SHOW ENGINES') as $item) {
+        if ($item->Engine == 'InnoDB') {
+            return $item->Support == 'YES' or $item->Support == 'DEFAULT';
+        }
+    }
+    return false;
+}
+
 // Removes initial part of path from assignment_submit.file_path
 function update_assignment_submit() {
     global $langTable;
