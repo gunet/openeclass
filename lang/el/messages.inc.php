@@ -59,7 +59,7 @@ $langUserHeader = "Χρήστης:";
 $langUserS = "χρήστης";
 $langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
-$langAdminUsers = "Διαχείριση Χρηστών";
+$langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
 
 /* * ******************************************
@@ -1026,7 +1026,7 @@ $langDropBox = "Μηνύματα";
 $langDropBoxInbox = "Εισερχόμενα";
 $langDropBoxOutbox = "Εξερχόμενα";
 $langMyDropBox = "Τα μηνύματά μου";
-$langLearnPath = "Γραμμή Μάθησης";
+$langLearnPath = "Γραμμή μάθησης";
 $langWikiDescriptionShort = "Περιγραφή";
 $langWiki = "Σύστημα Wiki";
 $langWikiNoModifications = "Δεν υπάρχουν αλλαγές";
@@ -1043,7 +1043,7 @@ $langCreateCourseNotAllowedNode = "Επιλέξατε μη επιτρεπτές 
 
 $langAttendance = "Παρουσιολόγιο";
 $langAttendances = "Παρουσιολόγια";
-$langAttendanceManagement = "Διαχείριση Παρουσιολογίου";
+$langAttendanceManagement = "Διαχείριση παρουσιολογίου";
 $langAttendanceAbsencesYes = "Παρουσία";
 $langAttendanceAbsencesNo = "Απουσία";
 $langAttendanceAbsences = "Παρουσίες";
@@ -1208,7 +1208,7 @@ $langAllowModification = "Επιτρέψτε διασκευή";
 
 
 // Groups
-$langCreateCourseGroups = "Ομάδες Χρηστών";
+$langCreateCourseGroups = "Ομάδες χρηστών";
 $langCatagoryMain = "Αρχή";
 $langCatagoryGroup = "Συζητήσεις Ομάδων χρηστών";
 $langNoGroup = "Δεν έχουν οριστεί ομάδες χρηστών";
@@ -1955,7 +1955,7 @@ $langCourseCreate = "Δημιουργία μαθήματος";
 $langCreationDate = "Ημερομηνία δημιουργίας";
 $langMyAgenda = "Το ημερολόγιό μου";
 $langMyAnnouncements = "Οι ανακοινώσεις μου";
-$langAdminTool = "Διαχείριση Πλατφόρμας";
+$langAdminTool = "Διαχείριση πλατφόρμας";
 $langPass = "Συνθηματικό (password)";
 $langHelp = "Βοήθεια";
 $langSelection = "Επιλογή";
@@ -2347,7 +2347,7 @@ $langLPViewerToggleLeftTOC = "Εναλλαγή εμφάνισης περιεχο
  * lessontools.php
  * ************************************************ */
 $langActiveTools = "Ενεργά εργαλεία";
-$langAdministrationTools = "Διαχείριση Μαθήματος";
+$langAdministrationTools = "Διαχείριση μαθήματος";
 $langAdministratorTools = "Εργαλεία διαχειριστή";
 $langCourseTools = "Εργαλεία μαθήματος";
 
@@ -3976,7 +3976,7 @@ $langGlossaryOverLimit = 'Το πλήθος όρων του γλωσσαρίου
  * ***************************************** */
 
 $langEBookEditStructure = 'Επεξεργασία';
-$langEBook = 'Ηλεκτρονικό Βιβλίο';
+$langEBook = 'Ηλεκτρονικό βιβλίο';
 $langEBookCreate = "Δημιουργία Ηλεκτρονικού Βιβλίου";
 $langEBookEdit = 'Διόρθωση Ηλεκτρονικού Βιβλίου';
 $langEBookInfo = 'Στοιχεία Ηλεκτρονικού Βιβλίου';
