@@ -384,23 +384,20 @@ function show_resource($info) {
 }
 
 function show_document($title, $resource_id, $doc_id) {
-    global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code;
-
+    global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code, 
+           $langWallHiddenResource, $langInactiveModule;
+    
+    $module_visible = visible_module(MODULE_ID_DOCS);
+    
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $doc_id);
 
     if (!$file) {
         $download_hidden_link = '';
-        if (!$is_editor) {
-            return '';
-        }
         $status = 'del';
         $image = 'fa-times';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
     } else {
         $status = $file->visible;
-        if (!$is_editor and (!resource_access($file->visible, $file->public))) {
-            return '';
-        }
         $file->title = $title;
         $image = choose_image('.' . $file->format);
         $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
@@ -410,7 +407,27 @@ function show_document($title, $resource_id, $doc_id) {
         $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
         $link = MultimediaHelper::chooseMediaAhref($file_obj);
     }
-    $class_vis = ($status == '0' or $status == 'del') ? ' class="not_visible"' : '';
+    
+    if (!$module_visible) {
+        $class_vis = ' class="not_visible"';
+        if (!$is_editor) {
+            $link = $title;
+        }
+        $link .= ' <i>('.$langInactiveModule.')</i>';
+    } else {
+        if ($status == '0') {
+            $class_vis = ' class="not_visible"';
+            if (!$is_editor) {
+                $link = $title;
+            }
+            $link .= ' <i>('.$langWallHiddenResource.')</i>';
+        } else if ($status == 'del') {
+            $class_vis = ' class="not_visible"';
+            $link .= '';
+        } else {
+            $class_vis = '';
+        }
+    }
     
     return "
     <tr$class_vis>
