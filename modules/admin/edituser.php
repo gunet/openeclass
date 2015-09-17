@@ -30,6 +30,7 @@ require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'hierarchy_validations.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -261,8 +262,12 @@ if ($u) {
         <div class='form-group'>
           <label class='col-sm-2 control-label'>$langUserWhitelist</label>
           <div class='col-sm-10'><textarea rows='6' cols='60' name='user_upload_whitelist'>" . q($info->whitelist) . "</textarea></div>
-        </div>
-        <input type='hidden' name='u' value='$u' />
+        </div>";
+        //show custom profile fields input
+        if ($info->status != USER_GUEST) {
+            $tool_content .= render_profile_fields_form(array('origin' => 'admin_edit_profile', 'user_id' => $u));
+        }
+        $tool_content .= "<input type='hidden' name='u' value='$u' />
         <input type='hidden' name='u_submitted' value='1' />
         <input type='hidden' name='registered_at' value='" . $info->registered_at . "' />
         <div class='col-sm-offset-2 col-sm-10'>
@@ -346,14 +351,27 @@ if ($u) {
                                                  username = ?s", $u, $username)) {
             $user_exist = TRUE;
         }
-
+        
+        //check for validation errors in custom profile fields
+        $cpf_check = cpf_validate_format();
+        
         // check if there are empty fields
-        if (empty($fname) or empty($lname) or empty($username)) {
+        if (empty($fname) or empty($lname) or empty($username) or cpf_validate_required_edituser() === false) {
             Session::Messages($langFieldsMissing, 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
         } elseif (isset($user_exist) and $user_exist == true) {
             Session::Messages($langUserFree, 'alert-danger');
             redirect_to_home_page('modules/admin/edituser.php?u=' . $u);
+        } elseif ($cpf_check[0] === false) {
+            $cpf_error_str = '';
+            unset($cpf_check[0]);
+            foreach ($cpf_check as $cpf_error) {
+                $cpf_error_str .= $cpf_error;
+            }
+            $tool_content .= "<div class='alert alert-danger'>$cpf_error_str <br>
+                                <a href='$_SERVER[SCRIPT_NAME]'>$langAgain</a></div";
+            draw($tool_content, 3, null, $head_content);
+            exit();
         }
 
         if ($registered_at > $user_expires_at) {
@@ -394,8 +412,10 @@ if ($u) {
                                 verified_mail = ?d,
                                 whitelist = ?s
                       WHERE id = ?d", $lname, $fname, $username, $email, $newstatus, $phone, $user_expires_at, $am, $verified_mail, $user_upload_whitelist, $u);
-        if ($qry->affectedRows > 0) {
-            Session::Messages($langSuccessfulUpdate, 'alert-info');
+            //update custom profile fields
+            $cpf_updated = process_profile_fields_data(array('uid' => $u, 'origin' => 'admin_edit_profile'));
+            if ($qry->affectedRows > 0 || $cpf_updated === true) {
+                Session::Messages($langSuccessfulUpdate, 'alert-info');
         } else {
             Session::Messages($langUpdateNoChange, 'alert-warning');
         }

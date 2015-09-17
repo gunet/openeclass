@@ -26,6 +26,7 @@ $helpTopic = 'Profile';
 
 require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/pwgen.inc.php';
 
@@ -103,18 +104,22 @@ if (isset($_POST['submit'])) {
     $old_language = $language;
     $langcode = $language = $_SESSION['langswitch'] = $_POST['userLanguage'];
     Database::get()->query("UPDATE user SET lang = ?s WHERE id = ?d", $langcode, $uid);
-
-    $all_ok = register_posted_variables(array(
-        'am_form' => get_config('am_required') and $myrow->status != 1,
-        'desc_form' => false,
-        'phone_form' => false,
-        'email_form' => get_config('email_required'),
-        'surname_form' => !$is_admin,
-        'givenname_form' => true,
-        'username_form' => true,
-        'email_public' => false,
-        'phone_public' => false,
-        'am_public' => false), 'all');
+    
+    $var_arr = array('am_form' => get_config('am_required') and $myrow->status != 1,
+                    'desc_form' => false,
+                    'phone_form' => false,
+                    'email_form' => get_config('email_required'),
+                    'surname_form' => !$is_admin,
+                    'givenname_form' => true,
+                    'username_form' => true,
+                    'email_public' => false,
+                    'phone_public' => false,
+                    'am_public' => false);
+    
+    //add custom profile fields required variables
+    augment_registered_posted_variables_arr($var_arr);
+    
+    $all_ok = register_posted_variables($var_arr, 'all');
 
     $departments = null;
     if (!get_config('restrict_owndep')) {
@@ -176,6 +181,18 @@ if (isset($_POST['submit'])) {
             redirect_to_home_page("main/profile/profile.php");
         }
     }
+    
+    //check for validation errors in custom profile fields
+    $cpf_check = cpf_validate_format();
+    if ($cpf_check[0] === false) {
+        $cpf_error_str = '';
+        unset($cpf_check[0]);
+        foreach ($cpf_check as $cpf_error) {
+            $cpf_error_str .= $cpf_error;
+        }
+        Session::Messages($cpf_error_str);
+        redirect_to_home_page("main/profile/profile.php");
+    }
 
     // TODO: Allow admin to configure allowed username format
     if (!empty($email_form) && ($email_form != $_SESSION['email']) && get_config('email_verification_required')) {
@@ -200,6 +217,10 @@ if (isset($_POST['submit'])) {
                              $verified_mail_sql
                          WHERE id = ?d",
                             $surname_form, $givenname_form, $username_form, $email_form, $am_form, $phone_form, $desc_form, $email_public, $phone_public, $subscribe, $am_public, $uid);
+        
+    //fill custom profile fields
+    process_profile_fields_data(array('uid' => $uid, 'origin' => 'edit_profile'));
+    
         if ($q->affectedRows > 0 or isset($departments)) {
             $userObj->refresh($uid, $departments);
             Log::record(0, 0, LOG_PROFILE, array('uid' => intval($_SESSION['uid']),
@@ -503,6 +524,8 @@ $tool_content .= "<div class='form-group'>
           <label for='desription' class='col-sm-2 control-label'>$langDescription:</label>
           <div class='col-sm-10'>" . rich_text_editor('desc_form', 5, 20, $desc_form) . "</div>
         </div>";
+//add custom profile fields
+$tool_content .= render_profile_fields_form(array('origin' => 'edit_profile'));
 
 foreach ($hybridAuthMethods as $provider) {
     $userProviders[$provider] = false;
@@ -540,7 +563,6 @@ if (count($allProviders)) {
         $tool_content .= "</div>";
     }
     $tool_content .= "</div>
-        </div>
       </div>";
 } //endif(count($allProviders)) - in case no providers are enabled, do not show anything
 

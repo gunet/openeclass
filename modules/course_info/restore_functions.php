@@ -711,6 +711,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
+        
         // Course_settings
         if (file_exists("$restoreThis/course_settings")) {
             restore_table($restoreThis, 'course_settings', array('set' => array('course_id' => $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);

@@ -444,6 +444,9 @@ function adminMenu() {
         array_push($sideMenuText, $GLOBALS['langChangeUser']);
         array_push($sideMenuLink, "../admin/change_user.php");
         array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
+        array_push($sideMenuLink, "../admin/custom_profile_fields.php");
+        array_push($sideMenuImg, "arrow.png");
     }
 
     array_push($sideMenuText, $GLOBALS['langMultiRegUser']);

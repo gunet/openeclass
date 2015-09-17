@@ -252,6 +252,8 @@ function load_js($file, $init='') {
         }   elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
+        } elseif ($file == 'sortable') {
+            $file = "sortable/Sortable.min.js";
         } elseif ($file == 'filetree') {
             $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
             $file = 'jquery_filetree/jqueryFileTree.js';            
@@ -1038,14 +1040,14 @@ function cp737_to_utf8($s) {
                                "\xcc" => '╠', "\xcd" => '═', "\xce" => '╬', "\xcf" => '╧',
                                "\xd0" => '╨', "\xd1" => '╤', "\xd2" => '╥', "\xd3" => '╙',
                                "\xd4" => '╘', "\xd5" => '╒', "\xd6" => '╓', "\xd7" => '╫',
-                               "\xd8" => '╪', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
+                               "\xd8" => '�', "\xd9" => '┘', "\xda" => '┌', "\xdb" => '█',
                                "\xdc" => '▄', "\xdd" => '▌', "\xde" => '▐', "\xdf" => '▀',
                                "\xe0" => 'ω', "\xe1" => 'ά', "\xe2" => 'έ', "\xe3" => 'ή',
                                "\xe4" => 'ϊ', "\xe5" => 'ί', "\xe6" => 'ό', "\xe7" => 'ύ',
                                "\xe8" => 'ϋ', "\xe9" => 'ώ', "\xea" => 'Ά', "\xeb" => 'Έ',
                                "\xec" => 'Ή', "\xed" => 'Ί', "\xee" => 'Ό', "\xef" => 'Ύ',
                                "\xf0" => 'Ώ', "\xf1" => '±', "\xf2" => '≥', "\xf3" => '≤',
-                               "\xf4" => 'Ϊ', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
+                               "\xf4" => '�', "\xf5" => 'Ϋ', "\xf6" => '÷', "\xf7" => '≈',
                                "\xf8" => '°', "\xf9" => '∙', "\xfa" => '·', "\xfb" => '√',
                                "\xfc" => 'ⁿ', "\xfd" => '²', "\xfe" => '■', "\xff" => ' '));
     }
@@ -1129,7 +1131,7 @@ $native_language_names_init = array(
     'de' => 'Deutsch',
     'is' => 'Íslenska',
     'it' => 'Italiano',
-    'jp' => '日本語',
+    'jp' => '日本�',
     'pl' => 'Polski',
     'ru' => 'Русский',
     'tr' => 'Türkçe',
@@ -1569,6 +1571,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar_settings WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM custom_profile_fields_data WHERE user_id = ?d", $u);
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON abuse_report.rid = `link`.id
                                     WHERE abuse_report.rtype = ?s AND `link`.user_id = ?d", 'link', $u);
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
