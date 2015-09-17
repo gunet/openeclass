@@ -73,7 +73,7 @@ $var_arr = array('usercomment' => true,
     'captcha_code' => false,
     'provider' => false,
     'provider_name' => false,
-    'provider_id' => false));
+    'provider_id' => false);
 
 //add custom profile fields required variables
 augment_registered_posted_variables_arr($var_arr);
