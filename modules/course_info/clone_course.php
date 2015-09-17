@@ -39,6 +39,7 @@ $treeObj = new Hierarchy();
 $_POST['restoreThis'] = null; // satisfy course_details_form()
 
 if (isset($_POST['create_restored_course'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $currentCourseCode = $course_code;
 
     $restoreThis = $webDir . '/courses/tmpUnzipping/' .
@@ -55,6 +56,7 @@ if (isset($_POST['create_restored_course'])) {
         'course_desc' => true,
         'course_vis' => true,
         'course_prof' => true), 'all');
+
     create_restored_course($tool_content, $restoreThis, $course_code, $course_lang, $course_title, $course_desc, $course_vis, $course_prof);
     $course_code = $currentCourseCode; // revert course code to the correct value
 } else {
@@ -68,7 +70,7 @@ if (isset($_POST['create_restored_course'])) {
     $tool_content = course_details_form($public_code, $currentCourseName, $titulaires, $currentCourseLanguage, null, $visible, $desc, $old_deps);
 }
 
-load_js('jstree');
+load_js('jstree3');
 list($js, $html) = $treeObj->buildCourseNodePicker();
 $head_content .= $js;
 draw($tool_content, 2, null, $head_content);

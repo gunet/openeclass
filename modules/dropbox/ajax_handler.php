@@ -93,9 +93,11 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         if ($msg->is_read == 1) {
             $bold_start = "";
             $bold_end = "";
+            $envelove_icon = "fa-envelope-o";
         } else {
-            $bold_start = "<b>";
-            $bold_end = "</b>";
+            $bold_start = "<strong>";
+            $bold_end = "</strong>";
+            $envelove_icon = "fa-envelope";
         }
     
         $urlstr = '';
@@ -105,7 +107,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         
         if (($msg->filename != '') and ($msg->filesize != 0)) {
             $ahref = "dropbox_download.php?course=".course_id_to_code($msg->course_id)."&amp;id=".$msg->id;
-            $filename = "&nbsp;&nbsp;<a class='outtabs' href='$ahref' target='_blank'><i class='fa fa-save'></i>
+            $filename = "&nbsp;&nbsp;&#124;&nbsp;&nbsp;<a class='outtabs' href='$ahref' target='_blank'><span class='fa fa-paperclip'></span>
             </a><span class='smaller'>&nbsp;&nbsp;(".format_file_size($msg->filesize).")</span><br />";
         } else {
             $filename = '';
@@ -114,9 +116,9 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         $i = 0;
         
         if ($mbox_type == 'inbox') {
-            $td[$i++] = "<i class='fa fa-envelope' title='".q($msg->subject)."' /></i> $bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename.$bold_end;
+            $td[$i++] = "<i class='fa $envelove_icon' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;$bold_start<a href='inbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$bold_end.$filename;
         } else {
-            $td[$i++] = "<i class='fa fa-envelope' title='".q($msg->subject)."' /></i> <a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
+            $td[$i++] = "<i class='fa fa-envelope-o' title='".q($msg->subject)."' /></i>&nbsp;&nbsp;<a href='outbox.php?mid=$msg->id".$urlstr."'>".q($msg->subject)."</a>".$filename;
         }
         
         if ($course_id == 0) {
@@ -128,7 +130,7 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
         }
         
         if ($mbox_type == 'inbox') {
-            $td[$i++] = $bold_start.display_user($msg->author_id, false, false, "outtabs").$bold_end;
+            $td[$i++] = display_user($msg->author_id, false, false, "outtabs");
         } else {
             $recipients = '';
             foreach ($msg->recipients as $r) {
@@ -138,19 +140,21 @@ if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
             }
             $td[$i++] = $recipients;
         }
-        $td[$i++] = $bold_start.nice_format(date('Y-m-d H:i:s',$msg->timestamp), true).$bold_end;
+        $td[$i++] = nice_format(date('Y-m-d H:i:s',$msg->timestamp), true);
             
-            $td[$i++] = action_button(array(
-                array(
-                    'icon' => 'fa-times',
-                    'url' => 'javascript:void(0);',
-                    'level' => 'primary',
-                    'title' => $langDelete,
-                    'btn_class' => $mbox_type == 'inbox'? 'delete_in btn-default' : 'delete_out btn-default',
-                    'link-attrs' => "data-id='$msg->id'"
-                    )
-                )
-            );
+//            $td[$i++] = action_button(array(
+//                array(
+//                    'icon' => 'fa-times',
+//                    'url' => 'javascript:void(0);',
+//                    'level' => 'primary',
+//                    'title' => $langDelete,
+//                    'btn_class' => $mbox_type == 'inbox'? 'delete_in btn-default' : 'delete_out btn-default',
+//                    'link-attrs' => "data-id='$msg->id'"
+//                    )
+//                )
+//            );
+        $btn_class = ($mbox_type == 'inbox')? 'delete_in' : 'delete_out';
+        $td[$i++] = "<a href='javascript:void(0)' class='$btn_class'><span class='fa fa-times text-danger' style='padding-top:8px; font-size:1.2em;'></span></a>";
         
         if ($course_id == 0) {
             $data['aaData'][] = array(

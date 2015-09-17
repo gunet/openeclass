@@ -30,27 +30,22 @@ if (!isset($_GET['pid'])) {
     $pid = intval($_GET['pid']);
 }
 
-if (!$is_editor) {
-    Session::Messages($langPollResultsAccess);
-    redirect_to_home_page('modules/questionnaire/index.php?course=' . $course_code);
-}
-
 if (isset($_GET['enc']) and $_GET['enc'] == '1253') {
     $charset = 'Windows-1253';
+    $sendSep = true;
 } else {
     $charset = 'UTF-8';
+    $sendSep = false;
 }
 $full = isset($_GET['full']) && $_GET['full'];
 $crlf = "\r\n";
 
-if (!isset($_GET['pid'])) {
-    redirect_to_home_page();
-} else {
-    $pid = intval($_GET['pid']);
-}
-
 header("Content-Type: text/csv; charset=$charset");
 header("Content-Disposition: attachment; filename=pollresults.csv");
+
+if ($sendSep) {
+    echo 'sep=;', $crlf;
+}
 
 $p = Database::get()->querySingle("SELECT pid, name, anonymized FROM poll
         WHERE course_id = ?d AND pid = ?d ORDER BY pid", $course_id, $pid);

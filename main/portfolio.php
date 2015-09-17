@@ -32,6 +32,11 @@ require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'modules/graphics/plotter.php';
+require_once 'include/lib/hierarchy.class.php';
+require_once 'include/lib/user.class.php';
+
+$tree = new Hierarchy();
+$user = new User();
 
 //ModalBoxHelper::loadModalBox();
 
@@ -234,6 +239,7 @@ if ($lastVisit) {
 } else {
     $lastVisitLabel = '';
 }
+
 $tool_content .= "
 </div>
 <div id='profile_box' class='row'>
@@ -247,9 +253,16 @@ $tool_content .= "
                         <div class='not_visible text-center' style='margin:0px;'>".q($_SESSION['uname'])."</div>
                     </div>
                     <div class='col-xs-8 col-sm-5'>
-                        <h3 style='font-size: 18px; margin: 10px 0 10px 0;'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h3>
-                        <span class='tag'>$langProfileMemberSince : </span><span class='tag-value text-muted'>". claro_format_locale_date($dateFormatLong, strtotime($userdata->registered_at))."</span>$lastVisitLabel
-                    </div>
+                    <h3 style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></h3>
+                    <div><h5><span class='tag'>$langHierarchyNode :</span></h5><span class='tag-value text-muted'>";
+                    $departments = $user->getDepartmentIds($uid);
+                        $i = 1;
+                        foreach ($departments as $dep) {
+                            $br = ($i < count($departments)) ? '<br>' : '';
+                            $tool_content .= $tree->getFullPath($dep) . $br;
+                            $i++;
+                        }
+                    $tool_content .= "</span></div>$lastVisitLabel</div>
                     <div class='col-xs-12 col-sm-5'>
                         <ul class='list-group'>
                             <li class='list-group-item'>

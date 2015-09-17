@@ -39,6 +39,7 @@ $tool_content .= action_bar(array(
                  )));
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $ok = array();
     $not_found = array();
     $existing = array();
@@ -99,6 +100,7 @@ $tool_content .= "<div class='alert alert-info'>$langAskManyUsers</div>
                 <input class='btn btn-primary' type='submit' name='submit' value='$langAdd'>
             </div>                       
         </fieldset>
+        ". generate_csrf_token_form_field() ."  
         </form>
         </div";
 

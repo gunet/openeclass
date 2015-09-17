@@ -41,7 +41,7 @@ $user = new User();
 
 $toolName = $langCourseCreate;
 
-load_js('jstree');
+load_js('jstree3');
 load_js('pwstrength.js');
 
 //Datepicker
@@ -198,12 +198,29 @@ if (empty($prof_names)) {
     $prof_names = "$_SESSION[givenname] $_SESSION[surname]";
 }
 
+// departments and validation
+$allow_only_defaults = get_config('restrict_teacher_owndep') && !$is_admin;
+$allowables = array();
+if ($allow_only_defaults) {
+    // Method: getDepartmentIdsAllowedForCourseCreation
+    // fetches only specific tree nodes, not their sub-children
+    //$user->getDepartmentIdsAllowedForCourseCreation($uid);
+    // the code below searches for the allow_course flag in the user's department subtrees
+    $userdeps = $user->getDepartmentIds($uid);
+    $subs = $tree->buildSubtreesFull($userdeps);
+    foreach ($subs as $node) {
+        if (intval($node->allow_course) === 1) {
+            $allowables[] = $node->id;
+        }
+    }
+}
 $departments = isset($_POST['department']) ? $_POST['department'] : array();
 $deps_valid = true;
 
 foreach ($departments as $dep) {
-    if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIdsAllowedForCourseCreation($uid))) {
+    if ($allow_only_defaults && !in_array($dep, $allowables)) {
         $deps_valid = false;
+        break;
     }
 }
 
@@ -218,14 +235,14 @@ if (!$deps_valid) {
 
 // display form
 if (!isset($_POST['create_course'])) {
-        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $user->getDepartmentIdsAllowedForCourseCreation($uid), 'allow_only_defaults' => $allow_only_defaults));
+        // set skip_preloaded_defaults in order to not over-bloat pre-populating nodepicker with defaults in case of multiple allowance
+        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $allowables, 'allow_only_defaults' => $allow_only_defaults, 'skip_preloaded_defaults' => true));
         $head_content .= $js;
         foreach ($license as $id => $l_info) {
             if ($id and $id < 10) {
                 $cc_license[$id] = $l_info['title'];
             }
-        }       
+        }
         $tool_content .= action_bar(array(
                                 array('title' => $langBack,
                                       'url' => $urlServer,
@@ -373,11 +390,13 @@ if (!isset($_POST['create_course'])) {
             </div>
             <div class='text-right'><small>$langFieldsOptionalNote</small></div>
         </fieldset>
+    ". generate_csrf_token_form_field() ."  
     </form>
 </div>";
 
 } else  { // create the course and the course database
     // validation in case it skipped JS validation
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $validationFailed = false;
     if (count($departments) < 1 || empty($departments[0])) {
         Session::Messages($langEmptyAddNode);

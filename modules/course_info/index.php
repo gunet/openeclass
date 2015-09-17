@@ -41,7 +41,24 @@ $user = new User();
 $course = new Course();
 $tree = new Hierarchy();
 
-load_js('jstree');
+// departments and validation
+$depadmin_mode = get_config('restrict_teacher_owndep') && !$is_admin;
+$allowables = array();
+if ($depadmin_mode) {
+    // Method: getDepartmentIdsAllowedForCourseCreation
+    // fetches only specific tree nodes, not their sub-children
+    //$user->getDepartmentIdsAllowedForCourseCreation($uid);
+    // the code below searches for the allow_course flag in the user's department subtrees
+    $userdeps = $user->getDepartmentIds($uid);
+    $subs = $tree->buildSubtreesFull($userdeps);
+    foreach ($subs as $node) {
+        if (intval($node->allow_course) === 1) {
+            $allowables[] = $node->id;
+        }
+    }
+}
+
+load_js('jstree3');
 load_js('pwstrength.js');
 
 //Datepicker
@@ -179,6 +196,7 @@ $disabledVisibility = ($isOpenCourseCertified) ? " disabled " : '';
 
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     if (empty($_POST['title'])) {
         $tool_content .= "<div class='alert alert-danger'>$langNoCourseTitle</div>
                                   <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
@@ -191,7 +209,7 @@ if (isset($_POST['submit'])) {
         }
         // if it is opencourses certified keeep the current course_license
         if (isset($_POST['course_license'])) {
-            $course_license = $_POST['course_license'];
+            $course_license = getDirectReference($_POST['course_license']);
         }
         // update course_license
         if (isset($_POST['l_radio'])) {
@@ -216,30 +234,32 @@ if (isset($_POST['submit'])) {
             $_POST['formvisible'] = '2';
         }
 
+        // validate departments
         $departments = isset($_POST['department']) ? $_POST['department'] : array();
         $deps_valid = true;
-
         foreach ($departments as $dep) {
-            if (get_config('restrict_teacher_owndep') && !$is_admin && !in_array($dep, $user->getDepartmentIds($uid)))
+            if ($depadmin_mode && !in_array($dep, $allowables)) {
                 $deps_valid = false;
+                break;
+            }
         }
 
         //===================course format and start and finish date===============
-        //check if there is a start and finish date if weekly selected
+        // check if there is a start and finish date if weekly selected
         if ($_POST['view_type'] || $_POST['start_date'] || $_POST['finish_date']) {
             if (!$_POST['start_date']) {
-                //if no start date do not allow weekly view and show alert message
+                // if no start date do not allow weekly view and show alert message
                 $view_type = 'units';
                 $_POST['start_date'] = '0000-00-00';
                 $_POST['finish_date'] = '0000-00-00';
                 $noWeeklyMessage = 1;
-            } else { //if there is start date create the weeks from that start date
-                //Number of the previous week records for this course
+            } else { // if there is start date create the weeks from that start date
+                // Number of the previous week records for this course
                 $previousWeeks = Database::get()->queryArray("SELECT id FROM course_weekly_view WHERE course_id = ?d", $course_id);
-                //count of previous weeks
+                // count of previous weeks
                 if ($previousWeeks) {
                     foreach ($previousWeeks as $previousWeek) {
-                        //array to hold all the previous records
+                        // array to hold all the previous records
                         $previousWeeksArray[] = $previousWeek->id;
                     }
                     $countPreviousWeeks = count($previousWeeksArray);
@@ -247,10 +267,10 @@ if (isset($_POST['submit'])) {
                     $countPreviousWeeks = 0;
                 }
 
-                //counter for the new records
+                // counter for the new records
                 $cnt = 1;
 
-                //counter for the old records
+                // counter for the old records
                 $cntOld = 0;
 
                 $noWeeklyMessage = 0;
@@ -258,7 +278,7 @@ if (isset($_POST['submit'])) {
                 $view_type = $_POST['view_type'];
                 $begin = new DateTime($_POST['start_date']);
 
-                //check if there is no end date
+                // check if there is no end date
                 if ($_POST['finish_date'] == "" || $_POST['finish_date'] == '0000-00-00') {
                     $end = new DateTime($begin->format("Y-m-d"));
                     ;
@@ -272,12 +292,12 @@ if (isset($_POST['submit'])) {
 
                 foreach ($daterange as $date) {
                     //===============================
-                    //new weeks
-                    //get the end week day
+                    // new weeks
+                    // get the end week day
                     $endWeek = new DateTime($date->format("Y-m-d"));
                     $endWeek->modify('+6 day');
 
-                    //value for db
+                    // value for db
                     $startWeekForDB = $date->format("Y-m-d");
 
                     if ($endWeek->format("Y-m-d") < $end->format("Y-m-d")) {
@@ -286,11 +306,11 @@ if (isset($_POST['submit'])) {
                         $endWeekForDB = $end->format("Y-m-d");
                     }
                     //================================
-                    //update the DB or insert new weeks
+                    // update the DB or insert new weeks
                     if ($cnt <= $countPreviousWeeks) {
-                        //update the weeks in DB
+                        // update the weeks in DB
                         Database::get()->query("UPDATE course_weekly_view SET start_week = ?t, finish_week = ?t WHERE course_id = ?d AND id = ?d", $startWeekForDB, $endWeekForDB, $course_id, $previousWeeksArray[$cntOld]);
-                        //update the cntOLD records
+                        // update the cntOLD records
                         $cntOld++;
                     } else {
                         $q = Database::get()->querySingle("SELECT MAX(`order`) AS maxorder FROM course_weekly_view");
@@ -299,11 +319,11 @@ if (isset($_POST['submit'])) {
                             Database::get()->query("INSERT INTO course_weekly_view (course_id, start_week, finish_week, `order`) VALUES (?d, ?t, ?t, ?d)", $course_id, $startWeekForDB, $endWeekForDB, $order);
                         }                        
                     }
-                    //update the counter
+                    // update the counter
                     $cnt++;
                 }
-                //check if left from the previous weeks and they are out of the new period
-                //if so delete them
+                // check if left from the previous weeks and they are out of the new period
+                // if so delete them
                 if (--$cnt < $countPreviousWeeks) {
                     $week2delete = $countPreviousWeeks - $cnt;
                     for ($i = 0; $i < $week2delete; $i++) {
@@ -313,11 +333,16 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
+
+        $old_deps = $course->getDepartmentIds($course_id);
+        $deps_changed = count(array_diff($old_deps, $departments)) +
+                        count(array_diff($departments, $old_deps));
+
         //=======================================================
         // Check if the teacher is allowed to create in the departments he chose
-        if (!$deps_valid) {
-            $tool_content .= "<div class='alert alert-danger'>$langCreateCourseNotAllowedNode</div>
-                                      <p>&laquo; <a href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langAgain</a></p>";
+        if ($deps_changed and !$deps_valid) {
+            Session::Messages($langCreateCourseNotAllowedNode, 'alert-danger');
+            redirect_to_home_page("modules/course_info/?course=$course_code");
         } else {
             Database::get()->query("UPDATE course
                             SET title = ?s,
@@ -367,9 +392,11 @@ if (isset($_POST['submit'])) {
         }
     }
 } else {
+    warnCourseInvalidDepartment();
+
     $action_bar_array0 = array(
         array('title' => $langBackupCourse,
-            'url' => "archive_course.php?course=$course_code",
+            'url' => "archive_course.php?course=$course_code&".generate_csrf_token_link_parameter(),
             'icon' => 'fa-archive',
             'level' => 'primary-label'),
         array('title' => $langBack,
@@ -518,8 +545,11 @@ if (isset($_POST['submit'])) {
         <div class='form-group'>
 	    <label for='Faculty' class='col-sm-2 control-label'>$langFaculty:</label>
             <div class='col-sm-10'>";
-        $allow_only_defaults = ( get_config('restrict_teacher_owndep') && !$is_admin ) ? true : false;
-        list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allow_only_defaults' => $allow_only_defaults));
+        if ($depadmin_mode) {
+            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id), 'allowables' => $allowables));
+        } else {
+            list($js, $html) = $tree->buildCourseNodePicker(array('defaults' => $course->getDepartmentIds($c->id)));
+        }
         $head_content .= $js;
         $tool_content .= $html;
         @$tool_content .= "</div></div>
@@ -562,7 +592,7 @@ if (isset($_POST['submit'])) {
             </div>";
 
     if ($isOpenCourseCertified) {
-        $tool_content .= "<input type='hidden' name='course_license' value='$course_license'>";
+        $tool_content .= "<input type='hidden' name='course_license' value='" . getIndirectReference($course_license) . "'>";
     }
     $language = $c->lang;
     $tool_content .= "        
@@ -720,6 +750,7 @@ if (isset($_POST['submit'])) {
                 </div>
             </div>
         </fieldset>
+        ". generate_csrf_token_form_field() ."  
     </form>
 </div>";
 }

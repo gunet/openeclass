@@ -36,7 +36,7 @@ $tool_content .= action_bar(array(
         'level' => 'primary-label')));
 
 if (isset($_POST['submit']) and ! empty($username)) {
-
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $res = Database::get()->querySingle("SELECT id FROM user WHERE username=?s", $username);
     if ($res) {
         $user_id = $res->id;
@@ -69,7 +69,7 @@ if (isset($_POST['submit']) and ! empty($username)) {
         $tool_content .= "<div class='alert alert-danger'>$langTheUser " . q($username) . " $langNotFound.</div>";
     }
 } else if (isset($_GET['delete'])) { // delete admin users
-    $aid = intval($_GET['aid']);
+    $aid = intval(getDirectReference($_GET['aid']));
     if ($aid != 1) { // admin user (with id = 1) cannot be deleted
         if (Database::get()->query("DELETE FROM admin WHERE admin.user_id = ?d", $aid)->affectedRows > 0) {
             $tool_content .= "<div class='alert alert-success'>$langNotAdmin</div>";
@@ -116,7 +116,7 @@ Database::get()->queryFunc("SELECT id, givenname, surname, username, admin.privi
         $tool_content .="<td class='center'>" .
                 action_button(array(
                     array('title' => $langDelete,
-                        'url' => "$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q($row->id),
+                        'url' => "$_SERVER[SCRIPT_NAME]?delete=1&amp;aid=" . q(getIndirectReference($row->id)),
                         'class' => 'delete',
                         'icon' => 'fa-times'),
                 )) .
@@ -184,6 +184,7 @@ function printform($message) {
                     </div>
                 </div>       
             </fieldset>
+            ". generate_csrf_token_form_field() ."
             </form>
         </div>";
     return $ret;

@@ -71,7 +71,7 @@ class User {
      * Get an array with a given user's hierarchy nodes that he belongs to.
      *
      * @param  int   $id  - The id of a given user
-     * @return array $ret - Array containing the given user's nodes
+     * @return array $ret - Array containing the given user's node ids.
      */
     public function getDepartmentIds($id) {
         $ret = array();
@@ -80,6 +80,24 @@ class User {
                              WHERE u.id = ?d
                                AND u.id = ud.user", function($row) use (&$ret) {
             $ret[] = $row->id;
+        }, $id);
+        return $ret;
+    }
+    
+    /**
+     * Get an array with a given user's hierarchy nodes that he belongs to.
+     *
+     * @param  int   $id  - The id of a given user
+     * @return array $ret - Array containing the given user's nodes.
+     */
+    public function getDepartmentNodes($id) {
+        $ret = array();
+        Database::get()->queryFunc("SELECT h.*
+                              FROM user u
+                              JOIN user_department ud ON (u.id = ud.user)
+                              JOIN hierarchy h ON (h.id = ud.department)
+                             WHERE u.id = ?d", function($row) use (&$ret) {
+            $ret[] = $row;
         }, $id);
         return $ret;
     }

@@ -88,7 +88,7 @@ class ModalBoxHelper {
                                             mozallowfullscreen    : true,
                                             oallowfullscreen      : true,
                                             msallowfullscreen     : true,
-                                            allowFullScreen       : true,
+                                            allowFullscreen       : true
                                         });
                                       }
                              });

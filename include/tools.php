@@ -106,7 +106,6 @@ function getToolsArray($cat) {
                                           " . MODULE_ID_QUESTIONNAIRE . ",
                                           " . MODULE_ID_FORUM . ",
                                           " . MODULE_ID_GROUPS . ",
-                                          " . MODULE_ID_WIKI . ",
                                           " . MODULE_ID_ATTENDANCE . ",
                                           " . MODULE_ID_GRADEBOOK . ",
                                           " . MODULE_ID_LP . ") AND
@@ -257,6 +256,10 @@ function loggedInMenu() {
 
     require_once 'modules/dropbox/class.mailbox.php';
 
+    array_push($sideMenuText, $GLOBALS['langMyCourses']);
+    array_push($sideMenuLink, $urlServer . "main/my_courses.php");
+    array_push($sideMenuImg, "fa-graduation-cap");
+
     $mbox = new Mailbox($uid, 0);
     $new_msgs = $mbox->unreadMsgsNumber();
     if ($new_msgs == 0) {
@@ -266,10 +269,6 @@ function loggedInMenu() {
     }
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
-
-    array_push($sideMenuText, $GLOBALS['langMyCourses']);
-    array_push($sideMenuLink, $urlServer . "main/my_courses.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
 
     array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
     array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
@@ -459,7 +458,7 @@ function adminMenu() {
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langMultiDelUser']);
-    array_push($sideMenuLink, "../admin/multideluser.php");
+    array_push($sideMenuLink, "../admin/multiedituser.php");
     array_push($sideMenuImg, "arrow.png");
 
     array_push($sideMenuText, $GLOBALS['langInfoMail']);
@@ -855,7 +854,7 @@ function pickerMenu() {
 function openCoursesExtra() {
     global $urlAppend, $themeimg, $openCoursesExtraHTML;
 
-    if (!isset($openCoursesExtraHTML)) {
+    if (!isset($openCoursesExtraHTML) and !defined('UPGRADE')) {
         setOpenCoursesExtraHTML();
     }
     $menuGroup = false;

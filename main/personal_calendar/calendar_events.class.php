@@ -1345,6 +1345,9 @@ class Calendar_Events {
        
        $events = array();
        foreach ($eventlist as $event) {
+           $event->title = q($event->title);
+           $event->content = q($event->content);
+           $event->course = q($event->course);
            $startdatetime = new DateTime($event->start);
            $event->start = $startdatetime->getTimestamp()*1000;
            $event->start_hour = $startdatetime->format("H:i");

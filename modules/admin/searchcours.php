@@ -34,7 +34,7 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-load_js('jstree');
+load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
@@ -122,10 +122,11 @@ $tool_content .= "<input class='form-control' id='id_date' name='date' type='tex
 $tool_content .= "</div>";
 $tool_content .= "<div class='form-group'><label class='col-sm-2 control-label'>$langFaculty:</label>";
 $tool_content .= "<div class='col-sm-10'>";
-if (isDepartmentAdmin())
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
-else
-    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'useKey' => "id", 'multiple' => false));
+if (isDepartmentAdmin()) {
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'allowables' => $user->getDepartmentIds($uid)));
+} else {
+    list($js, $html) = $tree->buildNodePicker(array('params' => 'name="formsearchfaculte"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false));
+}
 
 $head_content .= $js;
 $tool_content .= $html;

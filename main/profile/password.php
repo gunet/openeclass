@@ -70,6 +70,7 @@ $passUrl = $urlServer . 'main/profile/password.php';
 $passLocation = 'Location: ' . $passUrl;
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     $v = new Valitron\Validator($_POST);
     $v->rule('required', array('password_form', 'password_form1', 'old_pass'));
     $v->rule('equals', 'password_form', 'password_form1');
@@ -152,6 +153,7 @@ if (!isset($_POST['changePass'])) {
       </div>
     </div>
   </fieldset>
+  ". generate_csrf_token_form_field() ."  
 </form></div>";
 }
 

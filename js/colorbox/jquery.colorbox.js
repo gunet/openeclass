@@ -1,5 +1,5 @@
 /*!
-	Colorbox 1.6.0
+	Colorbox 1.6.3
 	license: MIT
 	http://www.jacklmoore.com/colorbox
 */
@@ -22,12 +22,12 @@
 		initialWidth: "600",
 		innerWidth: false,
 		maxWidth: false,
-                minWidth: false,
+		minWidth: false,
 		height: false,
 		initialHeight: "450",
 		innerHeight: false,
 		maxHeight: false,
-                minHeight: false,
+		minHeight: false,
 		scalePhotos: true,
 		scrolling: true,
 		opacity: 0.9,
@@ -117,7 +117,7 @@
 				iframe.allowTransparency = "true";
 			}
 			iframe.name = (new Date()).getTime(); // give the iframe a unique name to prevent caching
-			iframe.allowFullScreen = true;
+			iframe.allowFullscreen = true;
 
 			return iframe;
 		}
@@ -415,8 +415,8 @@
 				var maxWidth = settings.get('maxWidth');
 				var maxHeight = settings.get('maxHeight');
 
-				settings.w = (maxWidth !== false ? Math.min(initialWidth, setSize(maxWidth, 'x')) : initialWidth) - loadedWidth - interfaceWidth;
-				settings.h = (maxHeight !== false ? Math.min(initialHeight, setSize(maxHeight, 'y')) : initialHeight) - loadedHeight - interfaceHeight;
+				settings.w = Math.max((maxWidth !== false ? Math.min(initialWidth, setSize(maxWidth, 'x')) : initialWidth) - loadedWidth - interfaceWidth, 0);
+				settings.h = Math.max((maxHeight !== false ? Math.min(initialHeight, setSize(maxHeight, 'y')) : initialHeight) - loadedHeight - interfaceHeight, 0);
 
 				$loaded.css({width:'', height:settings.h});
 				publicMethod.position();
@@ -790,17 +790,17 @@
 
 		function getWidth() {
 			settings.w = settings.w || $loaded.width();
-                        if (settings.get('minWidth') && settings.w < settings.get('minWidth')) {
-                            settings.w = setSize(settings.get('minWidth'), 'x');
-                        }
+			if (settings.get('minWidth') && settings.w < settings.get('minWidth')) {
+				settings.w = setSize(settings.get('minWidth'), 'x');
+			}
 			settings.w = settings.mw && settings.mw < settings.w ? settings.mw : settings.w;
 			return settings.w;
 		}
 		function getHeight() {
 			settings.h = settings.h || $loaded.height();
-                        if (settings.get('minHeight') && settings.h < settings.get('minHeight')) {
-                            settings.h = setSize(settings.get('minHeight'), 'y');
-                        }
+			if (settings.get('minHeight') && settings.h < settings.get('minHeight')) {
+				settings.h = setSize(settings.get('minHeight'), 'y');
+			}
 			settings.h = settings.mh && settings.mh < settings.h ? settings.mh : settings.h;
 			return settings.h;
 		}
@@ -982,7 +982,7 @@
 
 			$(photo)
 			.addClass(prefix + 'Photo')
-			.bind('error',function () {
+			.bind('error.'+prefix,function () {
 				prep($tag(div, 'Error').html(settings.get('imgError')));
 			})
 			.one('load', function () {
@@ -1021,9 +1021,10 @@
 
 					if ($related[1] && (settings.get('loop') || $related[index + 1])) {
 						photo.style.cursor = 'pointer';
-						photo.onclick = function () {
+
+						$(photo).bind('click.'+prefix, function () {
 							publicMethod.next();
-						};
+						});
 					}
 
 					photo.style.width = photo.width + 'px';

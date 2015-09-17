@@ -46,7 +46,7 @@ if (!isset($_REQUEST['u'])) {
 
 $verified_mail = isset($_REQUEST['verified_mail']) ? intval($_REQUEST['verified_mail']) : 2;
 
-load_js('jstree');
+load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
@@ -96,9 +96,11 @@ if ($u) {
         $current_auth = 1;
         $auth_names[1] = get_auth_info(1);
         foreach (get_auth_active_methods() as $auth) {
-            $auth_names[$auth] = get_auth_info($auth);
-            if ($info->password == $auth_ids[$auth]) {
-                $current_auth = $auth;
+            if($auth < 8) {
+                $auth_names[$auth] = get_auth_info($auth);
+                if ($info->password == $auth_ids[$auth]) {
+                    $current_auth = $auth;
+                }
             }
         }
         $tool_content .= "<div class='form-wrapper'>
@@ -120,6 +122,7 @@ if ($u) {
     }
     if (!$u_submitted) { // if the form was not submitted
         // Display Actions Toolbar
+        $ind_u = getIndirectReference($u);
         $tool_content .= action_bar(array(
             array('title' => $langUserMerge,
                 'url' => "mergeuser.php?u=$u",
@@ -136,7 +139,7 @@ if ($u) {
                 'icon' => 'fa-key',
                 'level' => 'primary'),
             array('title' => $langDelUser,
-                'url' => "deluser.php?u=$u",
+                'url' => "deluser.php?u=$ind_u",
                 'icon' => 'fa-times',
                 'level' => 'primary',
                 'show' => $u > 1),

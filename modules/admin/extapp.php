@@ -62,7 +62,7 @@ if ($appName) {
             Session::Messages($langFileUpdatedSuccess, 'alert-success');
         }
     }
-        redirect_to_home_page($app->getEditUrl());
+        redirect_to_home_page($app->getConfigUrl());
     }
 
     $navigation[] = array('url' => 'extapp.php', 'name' => $langExtAppConfig);
@@ -90,7 +90,7 @@ if ($appName) {
             } else {
                 $tool_content .= "        <div class='form-group'>\n";
                 $tool_content .= "          <label for='" . $param->name() . "' class='col-sm-2 control-label'>" . $param->display() . "</label>\n";
-                $tool_content .= "          <div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . $param->value() . "'></div>";
+                $tool_content .= "          <div class='col-sm-10'><input class='form-control' type='text' name='" . $param->name() . "' value='" . q($param->value()) . "'></div>";
                 $tool_content .= "        </div>\n";
             }
         }
@@ -119,18 +119,18 @@ if ($appName) {
         $tool_content .="<tr>\n";
         // WARNING!!!! LEAVE THE SIZE OF THE IMAGE TO BE DOUBLE THE SIZE OF THE ACTUAL PNG FILE, TO SUPPORT HDPI DISPLAYS!!!!
         $tool_content .= "<td style=\"width:90px; padding:0px;\">";
-        $tool_content .= "<div class=\"text-center\" style=\"padding:10px;\"><a href=\"$urlAppend" . $app->getEditUrl() . "\"'>";
+        $tool_content .= "<div class=\"text-center\" style=\"padding:10px;\"><a href=\"$urlAppend" . $app->getConfigUrl() . "\"'>";
         if ($app->getAppIcon() !== null) {
             $tool_content .= "<img height=\"50\" width=\"89\" src=\"" . $app->getAppIcon() . "\"/>\n";
         }
-        if ($app->getParamsSet()){
+        if ($app->isConfigured()){
             $app_active = $app->isEnabled() ? "<button type=\"button\" class=\"btn btn-success extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-on\"></i> </button>" : "<button type=\"button\" class=\"btn btn-danger extapp-status\" data-app=\"" . $app->getName() . "\"> <i class=\"fa fa-toggle-off\"></i></button>";
         } else {
             $app_active = "<button type=\"button\" class=\"btn btn-default\" data-app=\"" . $app->getName() . "\"  data-toggle='modal' data-target='#noSettings'> <i class=\"fa fa-warning\"></i> </button>";
         }
         $tool_content .= $app->getDisplayName() . "</a></div></td>\n";
 
-        $tool_content .= "<td class=\"text-muted clearfix\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">" . $app_active . "<a href=\"$urlAppend" . $app->getEditUrl() . "\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>\n";
+        $tool_content .= "<td class=\"text-muted clearfix\"><div class=\"extapp-dscr-wrapper\">" . $app->getShortDescription() . "</div><div class=\"extapp-controls\"><div class=\"btn-group btn-group-sm\">" . $app_active . "<a href=\"$urlAppend" . $app->getConfigUrl() . "\" class=\"btn btn-primary\"> <i class=\"fa fa-sliders fw\"></i> </a></div></div></td>\n";
         $tool_content .="</tr>\n";
     }
 

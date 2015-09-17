@@ -20,6 +20,7 @@
  * ======================================================================== */
 
 $path = realpath(dirname(__FILE__));
+require_once $path . '/../../include/baseTheme.php';
 require_once $path . '/../../config/config.php';
 require_once $path . '/../../modules/admin/debug.php';
 require_once $path . '/../db/database.php';

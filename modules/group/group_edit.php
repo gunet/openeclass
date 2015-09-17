@@ -25,16 +25,19 @@
  * @brief group editing
  *
  */
-$require_login = TRUE;
+
 $require_current_course = TRUE;
+$require_editor = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
+require_once 'group_functions.php';
+
 $toolName = $langGroups;
 $pageName = $langEditGroup;
 
-require_once 'group_functions.php';
 initialize_group_id();
 initialize_group_info($group_id);
 
@@ -49,10 +52,9 @@ $head_content .= "<script type='text/javascript'>
     </script>
     <script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n    
 ";
-if (!($is_editor or $is_tutor)) {
-    header('Location: group_space.php?course=' . $course_code . '&group_id=' . $group_id);
-    exit;
-}
+
+//check if social bookmarking is enabled for this course
+$social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
 
 $message = '';
 // Once modifications have been done, the user validates and arrives here
@@ -277,10 +279,44 @@ $tool_content .= "<div class='form-wrapper'>
             </div>
       </div>
     </div>
+	<div class='form-group'>
+            <label for='selectcategory' class='col-sm-2 control-label'>$langCategory:</label>
+            <div class='col-sm-3'>
+                <select class='form-control' name='selectcategory' id='selectcategory'>
+                <option value='0'>--</option>";
+        if ($social_bookmarks_enabled) {
+            $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
+            if (isset($category) and -2 == $category) {
+                $tool_content .= " selected='selected'";
+            }
+            $tool_content .= ">$langSocialCategory</option>";
+        }
+        $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `order`", $course_id);
+        foreach ($resultcategories as $myrow) {
+            $tool_content .= "<option value='" . getIndirectReference($myrow->id) . "'";
+            if (isset($category) and $myrow->id == $category) {
+                $tool_content .= " selected='selected'";
+            }
+            $tool_content .= '>' . q($myrow->name) . "</option>";
+        }
+        $tool_content .= "
+            </select>
+            </div>
+    </div>
     <div class='form-group'>
-    <div class='col-sm-10 col-sm-offset-2'>      
-      <input class='btn btn-primary' type='submit' name='modify' value='$langModify' onClick=\"selectAll('members_box',true)\">
-    </div>  
+    <div class='col-sm-10 col-sm-offset-2'>".
+        form_buttons(array(
+            array(
+                'text'  =>  $langSave,
+                'name'  =>  'modify',
+                'value' =>  $langModify,
+                'javascript' => "selectAll('members_box',true)"
+            ),
+            array(
+                'href'  =>  $back_url
+            )
+        ))
+        ."</div>  
     </div>
     </fieldset>
     </form>

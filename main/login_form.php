@@ -4,7 +4,7 @@ require_once 'modules/auth/auth.inc.php';
 
 // if we are logged in there is no need to access this page
 if (isset($_SESSION['uid'])) {
-    redirect_to_home_page();
+    redirect_to_home_page('main/portfolio.php');
 }
 
 $warning = '';
@@ -16,43 +16,51 @@ $next = isset($_GET['next'])?
 $userValue = isset($_GET['user'])? (" value='" . q($_GET['user']) . "' readonly"): '';
 
 $authLink = array();
-$extAuthMethods = array('cas', 'shibboleth');
 $loginFormEnabled = false;
+$hybridLinkId = null;
 $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
-    FROM auth WHERE auth_default <> 0
+    FROM auth WHERE auth_default > 0
     ORDER BY auth_default DESC, auth_id");
 foreach ($q as $l) {
-    $extAuth = in_array($l->auth_name, $extAuthMethods);
     $authTitle = empty($l->auth_title)? "$langLogInWith {$l->auth_name}": getSerializedMessage($l->auth_title);
-    if ($extAuth) {
-        $authUrl = $urlServer . 'secure/' . ($l->auth_name == 'cas'? 'cas.php': '');        
+    if (in_array($l->auth_name, $extAuthMethods)) {
+        $authUrl = $urlServer . ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/');        
         $authLink[] = array(false, "
             <div class='col-sm-8 col-sm-offset-2' style='padding-top:40px;'>
                 <a class='btn btn-primary btn-block' href='$authUrl' style='line-height:40px;'>$langEnter</a>
             </div>", $authTitle);
+    } elseif (in_array($l->auth_name, $hybridAuthMethods)) {
+        $hybridProviderHtml = "<a class='' href='{$urlServer}index.php?provider=" .
+            $l->auth_name . "'><img src='$themeimg/$l->auth_name.png' alt='Sign-in with $l->auth_name' title='Sign-in with $l->auth_name' style='margin-right: 0.5em;'>" . ucfirst($l->auth_name) . "</a>";
+        if (is_null($hybridLinkId)) {
+            $authLink[] = array(false, $hybridProviderHtml, $langViaSocialNetwork);
+            $hybridLinkId = count($authLink) - 1;
+        } else {
+            $authLink[$hybridLinkId][1] .= '<br>' . $hybridProviderHtml;
+        }
     } elseif (!$loginFormEnabled) {
         $loginFormEnabled = true;
         $authLink[] = array(true, "
-            <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
-                $next
-                <div class='form-group'>
-                    <div class='col-xs-12'>
-                        <input class='form-control' name='uname' placeholder='$langUsername'$userValue>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <div class='col-xs-12'>
-                        <input class='form-control' name='pass' type='password' placeholder='$langPass'>
-                    </div>
-                </div>
-                <div class='form-group'>
-                    <div class='col-xs-3'>
-                        <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
-                    </div>
-                    <div class='col-xs-9 text-right'>
-                        <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
-                    </div>
-                </div>
+          <form class='form-horizontal' role='form' action='$urlServer?login_page=1' method='post'>
+            $next
+            <div class='form-group'>
+              <div class='col-xs-12'>
+                <input class='form-control' name='uname' placeholder='$langUsername'$userValue>
+              </div>
+            </div>
+            <div class='form-group'>
+              <div class='col-xs-12'>
+                <input class='form-control' name='pass' type='password' placeholder='$langPass'>
+              </div>
+            </div>
+            <div class='form-group'>
+              <div class='col-xs-3'>
+                <button class='btn btn-primary margin-bottom-fat' type='submit' name='submit' value='$langEnter'>$langEnter</button>
+              </div>
+              <div class='col-xs-9 text-right'>
+                <a href='{$urlAppend}modules/auth/lostpass.php'>$lang_forgot_pass</a>
+             </div>
+           </div>
             </form>", $authTitle);
     }
 }

@@ -68,8 +68,8 @@ if ($can_upload) {
         <div class='form-group'>
           <label for='fileCloudName' class='col-sm-2 control-label'>$langCloudFile</label>
           <div class='col-sm-10'>
-            <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='$pendingCloudUpload'>
-            <input type='text' class='form-control' name='fileCloudName' value='" . CloudFile::fromJSON($pendingCloudUpload)->name() . "' readonly>
+            <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='".q($pendingCloudUpload)."'>
+            <input type='text' class='form-control' name='fileCloudName' value='" . q(CloudFile::fromJSON($pendingCloudUpload)->name()) . "' readonly>
           </div>
         </div>";
     } else if (isset($_GET['ext'])) {

@@ -1,7 +1,7 @@
 <?php
 
 /* ========================================================================
- * Open eClass 
+ * Open eClass
  * E-learning and Course Management System
  * ========================================================================
  * Copyright 2003-2014  Greek Universities Network - GUnet
@@ -17,7 +17,7 @@
  *                  Network Operations Center, University of Athens,
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
- * ======================================================================== 
+ * ========================================================================
  */
 $require_current_course = TRUE;
 $require_editor = true;
@@ -36,7 +36,7 @@ if (isset($_POST['submitScale'])) {
         'max_grade' => "$langTheField $m[max_grade]"
     ));
     $scale_id = isset($_POST['grading_scale_id']) ? $_POST['grading_scale_id'] : 0;
-    if($v->validate()) {        
+    if($v->validate()) {
         $title = $_POST['title'];
         $scales = array();
         foreach ($_POST['scale_item_name'] as $key => $item_name) {
@@ -73,7 +73,7 @@ if (isset($_GET['scale_id'])) {
                     '</td>'+
                     '<td class=\'text-center\'>'+
                     '<a href=\'#\' class=\'removeScale\'><span class=\'fa fa-times\' style=\'color:red\'></span></a>'+
-                    '</td>'+                    
+                    '</td>'+
                     '</tr>'
                 );
             });
@@ -89,8 +89,11 @@ if (isset($_GET['scale_id'])) {
         });
     </script>
     ";
+    $scale_used = 0;
     if ($_GET['scale_id']) {
         $scale_data = Database::get()->querySingle("SELECT * FROM grading_scale WHERE id = ?d AND course_id = ?d", $_GET['scale_id'], $course_id);
+        $scale_used = Database::get()->querySingle("SELECT COUNT(*) as count FROM `assignment`, `assignment_submit` "
+                . "WHERE `assignment`.`grading_scale_id` = ?d AND `assignment`.`course_id` = ?d AND `assignment`.`id` = `assignment_submit`.`assignment_id` AND `assignment_submit`.`grade` IS NOT NULL", $_GET['scale_id'], $course_id)->count;
     }
     $title = Session::has('title') ? Session::get('title') : (isset($scale_data) ? $scale_data->title : "");
     $scale_rows = "";
@@ -102,14 +105,18 @@ if (isset($_GET['scale_id'])) {
             $scale_rows .= "
                     <tr>
                         <td class='form-group'>
-                            <input type='text' name='scale_item_name[$key]' class='form-control' value='".q($scale['scale_item_name'])."' required>
+                            <input type='text' name='scale_item_name[$key]' class='form-control' value='".q($scale['scale_item_name'])."' required".($scale_used ? " disabled" : "").">
                         </td>
                         <td class='form-group'>
-                            <input type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required>
-                        </td>
-                        <td class='text-center'>
-                            <a href='#' class='removeScale'><span class='fa fa-times' style='color:red'></span></a>
-                        </td>
+                            <input type='number' name='scale_item_value[$key]' class='form-control' value='$scale[scale_item_value]' min='0' required".($scale_used ? " disabled" : "").">
+                        </td>";
+            if (!$scale_used) {
+                $scale_rows .= "            
+                            <td class='text-center'>
+                                <a href='#' class='removeScale'><span class='fa fa-times' style='color:red'></span></a>
+                            </td>";
+            }
+            $scale_rows .= "
                     </tr>
                 ";
         }
@@ -117,13 +124,16 @@ if (isset($_GET['scale_id'])) {
     $toolName = $langGradeScales;
     $pageName = $langNewGradeScale;
     $navigation[] = array("url" => "grading_scales.php?course=$course_code", "name" => $langGradeScales);
+    if ($scale_used) {
+        $tool_content .= "<div class='alert alert-info'>$langGradeScaleNotEditable</div>";
+    }
     $tool_content .= action_bar(array(
         array(
             'title' => $langBack,
             'level' => 'primary-label',
             'icon' => 'fa-reply',
             'url' => "grading_scales.php?course=$course_code"
-        ),          
+        ),
     ));
     $tool_content .= "
         <div class='row'>
@@ -135,20 +145,20 @@ if (isset($_GET['scale_id'])) {
                         <div class='form-group".(Session::getError('title') ? " has-error" : "")."'>
                             <label for='title' class='col-sm-2 control-label'>$langTitle:</label>
                             <div class='col-sm-10'>
-                              <input name='title' type='text' class='form-control' id='title' value='$title'>
-                              ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."                              
+                              <input name='title' type='text' class='form-control' id='title' value='$title'".($scale_used ? " disabled" : "").">
+                              ".(Session::getError('title') ? "<span class='help-block'>" . Session::getError('title') . "</span>" : "")."
                             </div>
                         </div>
                         <div class='form-group'>
-                            <label class='col-sm-2 control-label'>Κλίμακες:</label>                        
+                            <label class='col-sm-2 control-label'>$langScales:</label>
                             <div class='col-sm-10'>
                                 <div class='table-responsive'>
                                     <table class='table-default' id='scale_table'>
                                         <thead>
                                             <tr>
-                                                <th style='width:47%'>Λεκτικό</th>
-                                                <th style='width:47%'>Τιμή</th>
-                                                <th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>
+                                                <th style='width:47%'>$langWording</th>
+                                                <th style='width:47%'>$langValue</th>
+                                                ".(!$scale_used ? "<th class='text-center option-btn-cell'  style='width:5%'>".icon('fa-gears')."</th>" : "")."
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -156,11 +166,16 @@ if (isset($_GET['scale_id'])) {
                                         </tbody>
                                     </table>
                                 </div>
-                            </div>
+                            </div>";
+    if (!$scale_used) {
+        $tool_content .= "
                             <div class='col-xs-offset-2 col-sm-10'>
-                                 <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a> 
-                            </div>                                                       
-                        </div>                         
+                                 <a class='btn btn-xs btn-success margin-top-thin' id='addScale'>$langAdd</a>
+                            </div>";
+    }
+    $tool_content .= "  </div>";
+    if (!$scale_used) {
+        $tool_content .= " 
                         <div class='form-group'>
                             <div class='col-sm-offset-2 col-sm-10'>".
                                 form_buttons(array(
@@ -173,13 +188,15 @@ if (isset($_GET['scale_id'])) {
                                     )
                                 ))
                                 ."</div>
-                        </div>                        
+                        </div>";
+    }
+    $tool_content .= "
                     </fieldset>
                     </form>
                 </div>
             </div>
         </div>";
-    
+
 } else {
     $tool_content .= action_bar(array(
         array(
@@ -194,11 +211,11 @@ if (isset($_GET['scale_id'])) {
             'level' => 'primary-label',
             'icon' => 'fa-reply',
             'url' => "index.php?course=$course_code"
-        ),          
+        ),
     ),false);
 
     $grading_scales = Database::get()->queryArray("SELECT * FROM grading_scale WHERE course_id = ?d", $course_id);
-    if ($grading_scales) { 
+    if ($grading_scales) {
         $table_content = "";
         foreach ($grading_scales as $grading_scale) {
             $scales = unserialize($grading_scale->scales);
@@ -231,19 +248,19 @@ if (isset($_GET['scale_id'])) {
                 <table class='table-default'>
                     <thead>
                         <tr>
-                            <th>Τίτλος</th>
-                            <th>Τιμές</th>
+                            <th>$langTitle</th>
+                            <th>$langGradebookMEANS</th>
                             <th class='text-center'>" . icon('fa-gears') . "</th>
                         </tr>
                     </thead>
                     <tbody>
                         $table_content
-                    </tbody>                    
+                    </tbody>
                 </table>
             </div>";
-                
+
     } else {
-        $tool_content .= "<div class='alert alert-warning'>Δεν έχουν καταχωρηθεί βαθμολογικές κλίμακες.</div>";
+        $tool_content .= "<div class='alert alert-warning'>$langNoGradeScales</div>";
     }
 }
 draw($tool_content, 2, null, $head_content);

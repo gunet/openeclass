@@ -41,14 +41,17 @@ if (count($courses) > 0) {
     foreach ($courses as $course1) {
         $course_id = $course1->course_id;
         $code = $course1->code;
-        $gradebook = Database::get()->querySingle("SELECT id, students_semester,`range` FROM gradebook WHERE course_id = ?d", $course_id);        
-        if ($gradebook) {            
-            $gradebook_id = $gradebook->id;
+        $gradebook = Database::get()->queryArray("SELECT * FROM gradebook_users WHERE uid = ?d 
+                                    AND gradebook_id IN (SELECT id FROM gradebook WHERE active = 1 AND course_id = ?d)", $uid, $course_id);        
+        foreach ($gradebook as $gd) {
+            $gradebook_id = $gd->gradebook_id; // if course has one gradebook
+            $range = get_gradebook_range($gradebook_id);
+            $gd_title = get_gradebook_title($gradebook_id);
             $grade = userGradeTotal($gradebook_id, $uid, $code, true);
             if ($grade) {
                 $content = true;
-                $grade_content .= "<tr><td>".$course1->title."</td>
-                    <td><a href='../../modules/gradebook/index.php?course=$code'>" . $grade ." / " . $gradebook->range . "</a></td></tr>";
+                $grade_content .= "<tr><td>" . $course1->title . " ($gd_title)</td>
+                    <td><a href='../../modules/gradebook/index.php?course=$code&amp;gradebook_id=$gradebook_id'>" . $grade ." / " . $range . "</a></td></tr>";            
             }
         }
     }

@@ -141,6 +141,7 @@ hContent;
                 $pageName = ($_GET['action'] == 'editcategory') ? $langCategoryMod : $langCategoryAdd;
             }
             if (isset($_GET['form_input'])) {
+                $pageName = $langAddV;
                 switch ($langCategoryMod) {
                     case 'file':
                         $pageName = $langAddV;
@@ -222,10 +223,18 @@ hContent;
                             <div class='col-sm-10'><textarea class='form-control' rows='5' name='description'>$form_description</textarea></div>
                         </div>
                         <div class='form-group'>
-                            <div class='col-sm-offset-2 col-sm-10'>
-                                <input class='btn btn-primary' type='submit' name='submitCategory' value='" . q($form_legend) . "'>
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
-                            </div>
+                            <div class='col-sm-offset-2 col-sm-10'>".
+                                form_buttons(array(
+                                    array(
+                                        'text'  =>  $langSave,
+                                        'name'  =>  'submitCategory',
+                                        'value' =>  $form_legend
+                                    ),
+                                    array(
+                                        'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                                    )
+                                ))
+                                ."</div>
                         </div>
                         </fieldset></form>
                     </div></div></div>";
@@ -310,7 +319,7 @@ hContent;
                 }
                 validateUploadedFile($file_name, $menuTypeID);
                 // convert php file in phps to protect the platform against malicious codes
-                $file_name = preg_replace("/\.php.*$/", ".phps", $file_name);                    
+                $file_name = php2phps($file_name);                    
                 $file_name = str_replace(" ", "%20", $file_name);
                 $file_name = str_replace("%20", "", $file_name);
                 $file_name = str_replace("\'", "", $file_name);
@@ -395,8 +404,8 @@ hContent;
                         <div class='form-group'>
                             <label for='fileCloudName' class='col-sm-2 control-label'>$langCloudFile</label>
                             <div class='col-sm-10'>
-                                <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='$pendingCloudUpload'>
-                                <input type='text' class='form-control' name='fileCloudName' value='" . CloudFile::fromJSON($pendingCloudUpload)->name() . "' readonly>
+                                <input type='hidden' class='form-control' id='fileCloudInfo' name='fileCloudInfo' value='".q($pendingCloudUpload)."'>
+                                <input type='text' class='form-control' name='fileCloudName' value='" . q(CloudFile::fromJSON($pendingCloudUpload)->name()) . "' readonly>
                             </div>
                         </div>";
             } else if ($_GET['form_input'] === 'file') {
@@ -454,19 +463,37 @@ hContent;
 
             // Submit button
             if ($_GET['form_input'] === 'file') {
-                $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
-                        <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langUpload) . "'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>".
+                        form_buttons(array(
+                            array(
+                                'text'  =>  $langUpload,
+                                'name'  =>  'add_submit',
+                                'value' =>  $langUpload
+                            ),
+                            array(
+                                'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            )
+                        ))
+                        ."
                     </div></div>";
             } else if ($_GET['form_input'] === 'url') {
-                $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
-                        <input class='btn btn-primary' type='submit' name='add_submit' value='" . q($langAdd) . "'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>".
+                        form_buttons(array(
+                            array(
+                                'text'  =>  $langSave,
+                                'name'  =>  'add_submit',
+                                'value' =>  $langAdd
+                            ),
+                            array(
+                                'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            )
+                        ))
+                        ."
                     </div></div>";
             }
             $tool_content .= "</fieldset>";
             if ($_GET['form_input'] === 'file') {
-                $tool_content .= "<div class='smaller right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div>";
+                $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'><div class='smaller right'>$langMaxFileSize " . ini_get('upload_max_filesize') . "</div></div></div>";
             }
             $tool_content .= "</form>
                 </div></div></div>";
@@ -544,11 +571,20 @@ hContent;
         $tool_content .= "</select></div>
                 </div>
                 <div class='form-group'>
-                    <div class='col-sm-offset-2 col-sm-10'>
-                        <input class='btn btn-primary' type='submit' name='edit_submit' value='" . q($langEditChange) . "'>
+                    <div class='col-sm-offset-2 col-sm-10'>".
+                        form_buttons(array(
+                            array(
+                                'text'  =>  $langSave,
+                                'name'  =>  'edit_submit',
+                                'value' =>  $langEditChange
+                            ),
+                            array(
+                                'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                            )
+                        ))
+                        ."
                         <input type='hidden' name='id' value='$id'>
                         <input type='hidden' name='table' value='$table_edit'>
-                        <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
                     </div>
                 </div>
                 </fieldset>

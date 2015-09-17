@@ -95,7 +95,7 @@ function checkrequired(which, entry) {
 		}
 	}
 	if (!pass) {
-		alert("$langEmptyLinkURL");
+		alert("$langFieldsMissing");
 		return false;
 	} else {
 		return true;
@@ -135,18 +135,21 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if ($is_editor) {
     if (isset($_POST['submitLink'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_link();
         $message = isset($_POST['id']) ? $langLinkMod : $langLinkAdded;
         Session::Messages($message, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
     if (isset($_POST['submitCategory'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         submit_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
         Session::Messages($messsage, 'alert-success');
         redirect_to_home_page("modules/link/index.php");
     }
     if (isset($_POST['submitSettings'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         if (isset($_POST['settings_radio'])) {
             setting_set(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, intval($_POST['settings_radio']));
             Session::Messages($langLinkSettingsSucc, 'alert-success');
@@ -261,12 +264,13 @@ if ($is_editor) {
         </div>
         </div>
         </fieldset>
+         ". generate_csrf_token_form_field() ."
         </form>
         </div>";
     } elseif (in_array($action, array('addcategory', 'editcategory'))) {
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langLinks);
         $tool_content .= "<div class = 'form-wrapper'>";
-        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview'>";
+        $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&urlview=$urlview' onsubmit=\"return checkrequired(this, 'categoryname');\">";
         if ($action == 'editcategory') {
             $tool_content .= "<input type='hidden' name='id' value='" . getIndirectReference($id) . "' />";
             category_form_defaults($id);
@@ -295,6 +299,7 @@ if ($is_editor) {
                             </div>
                         </div>
                         </fieldset>
+                     ". generate_csrf_token_form_field() ."
                     </form>
                 </div>";
     } elseif ($action == 'settings') {
@@ -331,6 +336,7 @@ if ($is_editor) {
                                   </div>
                               </div>
                           </fieldset>
+                       ". generate_csrf_token_form_field() ."
                       </form>
                   </div>";
     }
@@ -426,6 +432,7 @@ if ($is_editor) {
                                             </div>
                                         </div>
                                       </fieldset>
+                                   ". generate_csrf_token_form_field() ."
                                   </form>
                               </div>";
                 }

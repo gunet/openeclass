@@ -121,7 +121,7 @@ foreach ($result as $row) {
         $tool_content .= "</td>
                 </tr>
                 <tr>
-                  <th class='text-center'>" . $langExerciseStart . "</td>
+                  <th class='text-center'>" . $langStart . "</td>
                   <th class='text-center'>" . $langExerciseDuration . "</td>
                   <th class='text-center'>" . $langYourTotalScore2 . "</td>
                   <th class='text-center'>" . $langCurrentStatus. "</th>

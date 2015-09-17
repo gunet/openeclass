@@ -73,6 +73,9 @@ if (isset($_SESSION['shib_uname'])) {
 } elseif (isset($_SESSION['cas_uname']) && !isset($_GET['logout'])) {
     // authenticate via cas
     shib_cas_login('cas');
+} elseif (isset($_GET['provider'])) {
+        //hybridauth authentication (Facebook, Twitter, Google, Yahoo, Live, LinkedIn)
+        hybridauth_login();
 } else {
     // normal authentication
     process_login();
@@ -94,6 +97,14 @@ if (isset($_GET['logout']) and $uid) {
     foreach (array_keys($_SESSION) as $key) {
         unset($_SESSION[$key]);
     }
+    
+    // include HubridAuth libraries
+    require_once 'modules/auth/methods/hybridauth/config.php';
+	require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+	$config = get_hybridauth_config();
+    $hybridauth = new Hybrid_Auth( $config );
+    $hybridauth->logoutAllProviders();
+    
     session_destroy();
     $uid = 0;
     if (defined('CAS')) {
@@ -122,7 +133,6 @@ if (isset($language)) {
     }
 }
 
-
 // check if we are guest user
 if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     if (check_guest()) {
@@ -141,22 +151,31 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
     header("Location: {$urlServer}main/portfolio.php");
 } else {
     // check authentication methods
+    $hybridLinkId = null;
+    $hybridProviders = array();
     $authLink = array();
     if (!$upgrade_begin) {
-        $extAuthMethods = array('cas', 'shibboleth');
         $loginFormEnabled = false;
-        $q = Database::get()->queryArray("SELECT auth_name, auth_default, auth_title
+        $q = Database::get()->queryArray("SELECT auth_id, auth_name, auth_default, auth_title
                 FROM auth WHERE auth_default <> 0
                 ORDER BY auth_default DESC, auth_id");
         foreach ($q as $l) {
-            $extAuth = in_array($l->auth_name, $extAuthMethods);
-            if ($extAuth) {
+            if (in_array($l->auth_name, $extAuthMethods)) {
                 $authLink[] = array(
                     'showTitle' => true,
                     'class' => 'login-option login-option-sso',
                     'title' => empty($l->auth_title)? "$langLogInWith<br>{$l->auth_name}": q(getSerializedMessage($l->auth_title)),
-                    'html' => "<a class='btn btn-default btn-login' href='{$urlServer}secure/" .
-                              ($l->auth_name == 'cas'? 'cas.php': '') . "'>$langEnter</a><br>");
+                    'html' => "<a class='btn btn-default btn-login' href='" . $urlServer .
+                              ($l->auth_name == 'cas'? 'modules/auth/cas.php': 'secure/') . "'>$langEnter</a><br>");
+            } elseif (in_array($l->auth_name, $hybridAuthMethods)) { 
+                $hybridProviders[] = $l->auth_name;
+                if (is_null($hybridLinkId)) {
+                    $authLink[] = array(
+                        'showTitle' => true,
+                        'class' => 'login-option',
+                        'title' => $langViaSocialNetwork);
+                    $hybridLinkId = count($authLink) - 1;
+                }
             } elseif (!$loginFormEnabled) {
                 $loginFormEnabled = true;
                 $authLink[] = array(
@@ -178,6 +197,21 @@ if (!$upgrade_begin and $uid and !isset($_GET['logout'])) {
                              <a href='modules/auth/lostpass.php'>$lang_forgot_pass</a>
                            </div>");
             }
+        }
+
+        if (count($hybridProviders)) {
+            $authLink[$hybridLinkId]['html'] = '<div>';
+            $beginHybridHTML = true;
+            foreach ($hybridProviders as $provider) {
+                if ($beginHybridHTML) {
+                    $beginHybridHTML = false;
+                } else {
+                    $authLink[$hybridLinkId]['html'] .= '<br>';
+                }
+                $authLink[$hybridLinkId]['html'] .=
+                    "<a href='{$urlServer}index.php?provider=$provider'><img src='$themeimg/$provider.png' alt='Sign-in with $provider' style='margin-right: 0.5em;'>" . ucfirst($provider) . "</a>";
+            }
+            $authLink[$hybridLinkId]['html'] .= '</div>';
         }
 
         $head_content .= "

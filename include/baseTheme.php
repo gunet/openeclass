@@ -661,23 +661,29 @@ function dumpArray($arr) {
  * @param array $arr
  */
 function print_a($TheArray) {
-    echo "<table border=1>\n";
-
+    
+    echo "<table border=1>";
+    if (is_object($TheArray)) {
+        $TheArray = (array)($TheArray);
+    }
     $Keys = array_keys($TheArray);
     foreach ($Keys as $OneKey) {
-        echo "<tr>\n";
+        echo "<tr>";
         echo "<td bgcolor='yellow'>";
         echo "<b>" . $OneKey . "</b>";
-        echo "</td>\n";
+        echo "</td>";
         echo "<td bgcolor='#C4C2A6'>";
-        if (is_array($TheArray [$OneKey]))
+        if (is_array($TheArray [$OneKey])) {
             print_a($TheArray [$OneKey]);
-        else
+        } elseif (is_object($TheArray [$OneKey])) {
+            print_a((array)$TheArray [$OneKey]);
+        } else {
             echo $TheArray [$OneKey];
-        echo "</td>\n";
-        echo "</tr>\n";
+        }
+        echo "</td>";
+        echo "</tr>";
     }
-    echo "</table>\n";
+    echo "</table>";
 }
 
 /**
@@ -788,6 +794,8 @@ function module_path($path) {
         $new_path = preg_replace('|^.*(/admin/.*)|', '\1', $path);
         if ($new_path == '/admin/auth_process.php') {
             return '/admin/auth.php';
+        } elseif ($new_path == '/admin/listusers.php' or $new_path == '/admin/edituser.php') {
+            return '/admin/search_user.php';
         }
         return $new_path;
     } elseif (strpos($path, '/main/unreguser.php') !== false or

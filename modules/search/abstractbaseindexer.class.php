@@ -185,7 +185,7 @@ abstract class AbstractBaseIndexer {
      * @param  Zend_Search_Lucene_Exception $e
      */
     protected function handleWriteErrors($e) {
-        global $tool_content, $pageName;
+        global $tool_content, $pageName, $errorMessage;
         if (preg_match("/too many open files/i", $e->getMessage())) {
             $pageName = 'Open eClass Asynchronous eLearning Platform';
             $tool_content .= "
@@ -195,6 +195,7 @@ abstract class AbstractBaseIndexer {
             draw_popup();
             exit();
         } else {
+            $errorMessage = $e->getMessage();
             require_once 'fatal_error.php';
         }
     }

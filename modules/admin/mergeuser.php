@@ -145,7 +145,8 @@ function do_user_merge($source, $target) {
                               SELECT course_id, $target_id AS user_id,
                                      MIN(status) AS status, MAX(tutor) AS tutor,
                                      MAX(editor) AS editor, MAX(reviewer) AS reviewer, MIN(reg_date) AS reg_date,
-                                     MAX(receive_mail) AS receive_mail
+                                     MAX(receive_mail) AS receive_mail,
+                                     MAX(document_timestamp) AS document_timestamp
                                  FROM course_user
                                  WHERE user_id IN ($source_id, $target_id)
                                  GROUP BY course_id");

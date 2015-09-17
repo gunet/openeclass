@@ -32,7 +32,10 @@ CronUtil::flush();
 monthlycronjob();
 CronUtil::unlock();
 
-function monthlycronjob() {
+/**
+ * @brief run jobs once a month
+ */
+function monthlycronjob() {    
     $monthlyname = 'admin_monthly';
     $lastmonth = mktime(date("H"), date("i"), date("s"), date("n") - 1, date("j"), date("Y"));
 
@@ -57,6 +60,9 @@ function monthlycronjob() {
     }
 }
 
+/**
+ * 
+ */
 function summarizeLogins() {
     $stop_stmp = time() - (get_config('actions_expire_interval') - 1) * 30 * 24 * 3600;
     $stop_month = date('Y-m-01 00:00:00', $stop_stmp);
@@ -102,6 +108,17 @@ function summarizeLogins() {
     }
 }
 
+/**
+ * @brief store summarized monthly statistics
+ * @global type $langCourse
+ * @global type $langCoursVisible
+ * @global type $langFaculty
+ * @global type $langTeacher
+ * @global type $langNbUsers
+ * @global type $langTypeClosed
+ * @global type $langTypeRegistration
+ * @global type $langTypeOpen
+ */
 function summarizeMonthlyData() {
     global $langCourse, $langCoursVisible, $langFaculty, $langTeacher,
     $langNbUsers, $langTypeClosed, $langTypeRegistration, $langTypeOpen;
@@ -121,7 +138,8 @@ function summarizeMonthlyData() {
         $stud_sum = Database::get()->querySingle("SELECT COUNT(id) as stud_sum FROM user WHERE status = 5")->stud_sum;
         $vis_sum = Database::get()->querySingle("SELECT COUNT(id) as vis_sum FROM user WHERE status = 10")->vis_sum;
 
-        $mtext = "<table>
+        $mtext = "<table class='table-default'>
+                <tbody>
                 <tr><th>" . $langCourse . "</th>
                 <th>" . $langCoursVisible . "</th>
                 <th>" . $langFaculty . "</th>
@@ -137,29 +155,35 @@ function summarizeMonthlyData() {
                             JOIN hierarchy ON hierarchy.id = course_department.department
                             LEFT JOIN course_user ON course.id = course_user.course_id
                 GROUP BY course.id";
-        Database::get()->queryFunc($sql, function($row) use (&$mtext, $langTypeClosed, $langTypeRegistration, $langTypeOpen) {
-            //declare visibility
-            if ($row->visible == 0) {
+        Database::get()->queryFunc($sql, function($row) use (&$mtext, $langTypeClosed, $langTypeRegistration, $langTypeOpen, $langInactiveCourse) {
+            //declare course visibility
+            if ($row->visible == COURSE_CLOSED) {
                 $cvisible = $langTypeClosed;
-            } else if ($row->visible == 1) {
+            } else if ($row->visible == COURSE_REGISTRATION) {
                 $cvisible = $langTypeRegistration;
-            } else {
+            } else if ($row->visible == COURSE_OPEN) {
                 $cvisible = $langTypeOpen;
+            } else {
+                $cvisible = $langInactiveCourse;
             }
             $mtext .= "<tr><td>" . $row->name . "</td><td> " . $cvisible . "</td>
-                <td align=center>" . $row->dept . "</td>
-                <td>" . $row->proff . "</td><td align=center>" . $row->cnt . "</td></tr>";
+                <td class='text-center'>" . getSerializedMessage($row->dept) . "</td>
+                <td>" . $row->proff . "</td><td class='text-center'>" . $row->cnt . "</td></tr>";
         });
         
-        $mtext .= '</table>';
+        $mtext .= '</tbody></table>';
         $sql = "INSERT INTO monthly_summary SET month = ?s, profesNum = ?d, studNum = ?d,
             visitorsNum = ?d, coursNum = ?d, logins = ?d, details = ?s";
         Database::get()->query($sql, $last_month, $prof_sum, $stud_sum, $vis_sum, $cours_sum, $login_sum, $mtext);
     }
 }
 
+/**
+ * @brief summarize monthly actions
+ */
 function summarizeMonthlyActions() {
     require_once 'include/action.php';
+    
     $action = new action();
     Database::get()->queryFunc("SELECT id FROM course", function($course) use (&$action) {
         $min_time = ($res = Database::get()->querySingle("SELECT MIN(day) as min_time FROM actions_daily WHERE course_id = ?d", intval($course->id))) ? $res->min_time : time();
@@ -169,6 +193,10 @@ function summarizeMonthlyActions() {
     });
 }
 
+/**
+ * 
+ * @global type $webDir
+ */
 function optimizeIndex() {
     global $webDir; // required for indexer
     require_once 'modules/search/indexer.class.php';

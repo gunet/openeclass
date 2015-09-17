@@ -848,14 +848,9 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
 
 /**
  * @brief display resource link
- * @global type $id
- * @global string $tool_content
- * @global type $mysqlMainDb
- * @global type $urlServer
  * @global type $is_editor
  * @global type $langWasDeleted
  * @global type $course_id
- * @global type $course_code
  * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
@@ -865,8 +860,7 @@ function show_wiki($title, $comments, $resource_id, $wiki_id, $visibility) {
  * @return string
  */
 function show_link($title, $comments, $resource_id, $link_id, $visibility) {
-    global $urlServer, $is_editor,
-    $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
+    global $is_editor, $langWasDeleted, $course_id, $langInactiveModule;
 
     $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
 
@@ -886,12 +880,11 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
             $imagelink = icon('fa-times');
             $exlink = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
         }
-    } else {        
-        $eurl = urlencode($l->url);
-        $link = "<a href='${urlServer}modules/link/go.php?course=$course_code&amp;id=" . getIndirectReference($link_id) . "&amp;url=$eurl' target='_blank'>";
+    } else {
         if ($title == '') {
             $title = q($l->url);
-        }
+        }        
+        $link = "<a href='" . q($l->url) . "' target='_blank'>";        
         $exlink = $link . "$title</a>";
         if (!$module_visible) {
             $exlink .= " <i>($langInactiveModule)</i>";
@@ -914,14 +907,9 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
 
 /**
  * @brief display resource link category
- * @global type $id
- * @global string $tool_content
- * @global type $mysqlMainDb
- * @global type $urlServer
  * @global type $is_editor
  * @global type $langWasDeleted
  * @global type $course_id
- * @global type $course_code
  * @global type $langInactiveModule
  * @param type $title
  * @param type $comments
@@ -931,8 +919,8 @@ function show_link($title, $comments, $resource_id, $link_id, $visibility) {
  * @return string
  */
 function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility) {
-    global $urlServer, $is_editor,
-    $langWasDeleted, $course_id, $course_code, $themeimg, $langInactiveModule;
+    
+    global $is_editor, $langWasDeleted, $course_id, $langInactiveModule;
 
     $content = $linkcontent = '';
     $module_visible = visible_module(MODULE_ID_LINKS); // checks module visibility
@@ -969,7 +957,7 @@ function show_linkcat($title, $comments, $resource_id, $linkcat_id, $visibility)
             foreach ($sql2 as $l) {
                 $imagelink = icon('fa-link');
                 $ltitle = q(($l->title == '') ? $l->url : $l->title);
-                $linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='${urlServer}modules/link/go.php?course=$course_code&amp;id=" . getIndirectReference($l->id) . "&amp;url=$l->url' target='_blank'>$ltitle</a>";
+                $linkcontent .= "<br />$imagelink&nbsp;&nbsp;<a href='" . q($l->url) ."' target='_blank'>$ltitle</a>";                
                 if (!$module_visible) {
                     $linkcontent .= " <i>($langInactiveModule)</i>";
                 }

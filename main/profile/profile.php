@@ -19,20 +19,23 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-
 $require_help = true;
 $require_login = true;
+$require_valid_uid = true;
 $helpTopic = 'Profile';
-include '../../include/baseTheme.php';
+
+require_once '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'modules/admin/custom_profile_fields_functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/pwgen.inc.php';
-$require_valid_uid = TRUE;
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/log.php';
+
+require_once 'modules/auth/methods/hybridauth/config.php';
+require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
 
 check_uid();
 check_guest();
@@ -45,7 +48,7 @@ $tree = new Hierarchy();
 $userObj = new User();
 $image_path = $webDir . '/courses/userimg/' . $_SESSION['uid'];
 
-load_js('jstree');
+load_js('jstree3');
 load_js('tools.js');
 $head_content .= "<script type='text/javascript'>
 var lang = {
@@ -91,6 +94,7 @@ if (isset($_POST['delimage'])) {
 }
 
 if (isset($_POST['submit'])) {
+    if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
     // First process language changes
     if (!file_exists($webDir . '/courses/userimg/')) {
         mkdir($webDir . '/courses/userimg/', 0775);
@@ -237,6 +241,127 @@ if (isset($_POST['submit'])) {
     }
 }
 
+// HybridAuth actions
+if (isset($_GET['provider'])) {
+    // user requests hybridauth provider uid deletion
+    if (isset($_GET['action'])) {
+        if ($_GET['action'] == 'delete') {
+            $auth_id = array_search(strtolower($_GET['provider']), $auth_ids);
+            if ($auth_id and
+                Database::get()->query('DELETE FROM user_ext_uid
+                    WHERE user_id = ?d AND auth_id = ?d', $uid, $auth_id)) {
+                Session::Messages($langProfileReg, 'alert-success');
+                redirect_to_home_page('main/profile/display_profile.php');
+            }
+        } elseif ($_GET['action'] == 'connect') {
+            // HybridAuth checks, authentication and user profile info and finally store provider user id in the db
+            require_once 'modules/auth/methods/hybridauth/config.php';
+            require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
+
+            $config = get_hybridauth_config();
+            $user_data = '';
+            $provider = q(trim(strtolower($_GET['provider'])));
+
+            $hybridauth = new Hybrid_Auth($config);
+            $allProviders = $hybridauth->getProviders();
+
+            if (count($allProviders) && array_key_exists($_GET['provider'], $allProviders)) { //check if the provider is existent and valid - it's checked above
+                try {
+                    if (in_array($provider, $hybridAuthMethods)) {
+                        $hybridauth = new Hybrid_Auth($config);
+                        $adapter = $hybridauth->authenticate($provider);
+
+                        // grab the user profile
+                        $user_data = $adapter->getUserProfile();
+
+                        // Fetch user profile id and check if there is another
+                        // instance in the db (this would happen if a user tried to
+                        // authenticate two different eclass accounts with the same
+                        // Facebook, etc. account)
+                        if ($user_data->identifier)
+                            $r = Database::get()->querySingle('SELECT id FROM user_ext_uid, auth
+                                WHERE user_ext_uid.auth_id = auth.auth_id AND
+                                      auth.auth_name = ?s AND
+                                      uid = ?s AND
+                                      user_ext_uid.user_id <> ?d',
+                                $provider, $user_data->identifier, $uid);
+                            if ($r) {
+                                $ext_uid = '';
+                                $_GET['msg'] = 12;
+                            } else {
+                                $ext_uid = $user_data->identifier;
+                                $_GET['msg'] = 1;
+                            }
+                    } else {
+                        $_GET['msg'] = 11;
+                    } 
+                } catch(Exception $e) {
+                    // In case we have errors 6 or 7, then we have to use Hybrid_Provider_Adapter::logout() to
+                    // let hybridauth forget all about the user so we can try to authenticate again.
+
+                    // Display the recived error,
+                    // to know more please refer to Exceptions handling section on the userguide
+                    switch($e->getCode()) {
+                        case 0 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError1</td></tr></tbody></table><br /><br />"; break;
+                        case 1 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError2</td></tr></tbody></table><br /><br />"; break;
+                        case 2 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError3</td></tr></tbody></table><br /><br />"; break;
+                        case 3 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError4</td></tr></tbody></table><br /><br />"; break;
+                        case 4 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError5</td></tr></tbody></table><br /><br />"; break;
+                        case 5 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError6</td></tr></tbody></table><br /><br />"; break;
+                        case 6 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError7</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
+                        case 7 : $warning = "<table width='100%'><tbody><tr><td class='alert alert-danger'>$langProviderError8</td></tr></tbody></table><br /><br />"; $adapter->logout(); break;
+                    }
+                    $_GET['msg'] = 11; // display generic error for now
+
+                    // debug messages for hybridauth errors
+                    //$warning .= "<br /><br /><b>Original error message:</b> " . $e->getMessage();
+                    //$warning .= "<hr /><pre>Trace:<br />" . $e->getTraceAsString() . "</pre>";
+                }
+            } // endif(count($allProviders) && array_key_exists($_GET['provider'], $allProviders))
+        } // endif(isset($_GET['provider'])) {
+    }
+}
+
+//Show message if exists
+if (isset($_GET['msg'])) {
+    $urlText = '';
+    $type = 'caution';
+    switch ($_GET['msg']) {
+        case 1: //profile information changed successfully
+            $message = $langProfileReg;
+            $urlText = "<br /><a href='$urlServer'>$langHome</a>";
+            $type = "success";
+            break;
+        case 3: //pass too easy
+            $message = $langPassTooEasy . ": <strong>" . genPass() . "</strong>";
+            break;
+        case 4: // empty fields check
+            $message = $langFieldsMissing;
+            break;
+        case 5: //username already exists
+            $message = $langUserFree;
+            break;
+        case 6: //email not valid
+            $message = $langEmailWrong;
+            break;
+        case 7: //invalid image
+            $message = $langInvalidPicture;
+            break;
+        case 10: // invalid characters
+            $message = $langInvalidCharsUsername;
+            break;
+        case 11: // invalid HybridAuth settings or authentication
+            $message = $langProviderError;
+            break;
+        case 12: //hybrid auth provider is already in the db! (which means the user tried to authenticate a second eclass account with the same facebook etc. account)
+            $message = $langProviderIdAlreadyExists;
+            break;
+        default:
+            exit;
+    }
+    $tool_content .= "<table width='100%'><tbody><tr><td class='alert alert-danger'>$message$urlText</td></tr></tbody></table><br /><br />";
+}
+
 $surname_form = q($myrow->surname);
 $givenname_form = q($myrow->givenname);
 $username_form = q($myrow->username);
@@ -370,7 +495,7 @@ if (get_config('email_verification_required')) {
 
 if (!get_config('restrict_owndep')) {
     $tool_content .= "<div class='form-group'><label for='faculty' class='col-sm-2 control-label'>$langFaculty:</label>";
-    $tool_content .= "<div class='col-sm-10'>";
+    $tool_content .= "<div class='col-sm-10 form-control-static'>";
     list($js, $html) = $tree->buildUserNodePicker(array('defaults' => $userObj->getDepartmentIds($uid)));
     $head_content .= $js;
     $tool_content .= $html;
@@ -401,12 +526,52 @@ $tool_content .= "<div class='form-group'>
         </div>";
 //add custom profile fields
 $tool_content .= render_profile_fields_form(array('origin' => 'edit_profile'));
-$tool_content .= "
-        <div class='col-sm-offset-2 col-sm-10'>
+
+foreach ($hybridAuthMethods as $provider) {
+    $userProviders[$provider] = false;
+}
+Database::get()->queryFunc('SELECT auth_id FROM user_ext_uid WHERE user_id = ?d',
+    function ($item) {
+        global $userProviders;
+        $userProviders[$auth_ids[$item->auth_id]] = true;
+    }, $uid);
+
+// HybridAuth settings and links
+// check if there are any available alternative providers for authentication and show the corresponding links on 
+// the homepage, or no mesage if no providers are enabled
+$config = get_hybridauth_config();
+
+$hybridauth = new Hybrid_Auth($config);
+$allProviders = $hybridauth->getProviders();
+if (count($allProviders)) {
+    $tool_content .= "<div class='form-group'>
+        <label class='col-sm-2 control-label'>$langProviderConnectWith:</label>
+        <div class='col-sm-10'>
+          <div class='row'>";
+    foreach ($allProviders as $provider => $settings) {
+        $lcProvider = strtolower($provider);
+        $tool_content .= "
+            <div class='col-xs-1 text-center'>
+              <img src='$themeimg/$lcProvider.png' alt='Sign-in with $provider'><br>$provider<br>";
+        if ($userProviders[$lcProvider]) {
+            $tool_content .= "
+              <img src='$themeimg/tick.png' alt='$langProviderConnectWith Facebook'>
+              <a href='$sec?action=delete&provider=$provider'>$langProviderDeleteConnection</a>";
+        } else {
+            $tool_content .= "<a href='$sec?action=connect&provider=$provider'>$langProviderConnect</a>";
+        }
+        $tool_content .= "</div>";
+    }
+    $tool_content .= "</div>
+      </div>";
+} //endif(count($allProviders)) - in case no providers are enabled, do not show anything
+
+$tool_content .= "<div class='col-sm-offset-2 col-sm-10'>
           <input class='btn btn-primary' type='submit' name='submit' value='$langSubmit'>
           <a href='display_profile.php' class='btn btn-default'>$langCancel</a>
         </div>
       </fieldset>
+      ". generate_csrf_token_form_field() ."  
       </form>
       </div>";
 

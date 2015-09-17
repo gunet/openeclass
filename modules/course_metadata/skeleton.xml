@@ -67,6 +67,7 @@
         <moreInformation lang="en"></moreInformation>
         <cv></cv>
         <photo mime=""></photo>
+        <registrationCode></registrationCode>
     </instructor>
     
     <coTeaching></coTeaching>

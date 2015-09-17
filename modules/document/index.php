@@ -28,6 +28,8 @@ require_once '../../include/baseTheme.php';
 /* * ** The following is added for statistics purposes ** */
 require_once 'include/action.php';
 $action = new action();
+$action->record(MODULE_ID_DOCS);
+
 require_once 'doc_init.php';
 require_once 'doc_metadata.php';
 require_once 'include/lib/forcedownload.php';
@@ -550,21 +552,17 @@ if ($can_upload) {
                                     <input type='hidden' name='sourceFile' value='" . q($_GET['rename']) . "' />
                                     $group_hidden_input
                                     <div class='form-group'>
-                                        <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). " :</label>
+                                        <label for='renameTo' class='col-xs-2 control-label' >" . ($r->format != '.dir'? $m['filename'] : $m['dirname'] ). ":</label>
                                         <div class='col-xs-10'>
-                                            <input class='form-control' type='text' name='renameTo' placeholder='" . q($fileName) . "' />
+                                            <input class='form-control' type='text' name='renameTo' value='" . q($fileName) . "' />
                                         </div>
                                     </div>
                                     <div class='form-group'>
-                                        <div class='col-xs-offset-2 col-xs-10'>".form_buttons(array(
-                                                array(
-                                                    'text' => $langRename,
-                                                    'value'=> $langRename
-                                                ),
-                                                array(
-                                                    'href' => $backUrl,
-                                                )
-                                            ))."</div>
+                                        <div class='col-xs-offset-2 col-xs-10'>" .
+                                            form_buttons(array(
+                                                array('text' => $langRename, 'value'=> $langRename),
+                                                array('href' => $backUrl))) . "
+                                        </div>
                                     </div>
                             </fieldset>
                         </form>
@@ -731,6 +729,7 @@ if ($can_upload) {
                 $newformat = get_file_extension($_FILES['newFile']['name']);
                 $newpath = preg_replace("/\\.$oldformat$/", '', $oldpath) .
                         (empty($newformat) ? '' : '.' . $newformat);
+                $newpath = php2phps($newpath);
                 my_delete($basedir . $oldpath);
                 $affectedRows = Database::get()->query("UPDATE document SET path = ?s, format = ?s, filename = ?s, date_modified = NOW()
                           WHERE $group_sql AND path = ?s"

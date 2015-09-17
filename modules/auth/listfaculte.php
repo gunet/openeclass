@@ -40,12 +40,12 @@ if (defined('LISTING_MODE') && LISTING_MODE === 'COURSE_METADATA') {
 
 $tree = new Hierarchy();
 $toolName = $langSelectFac;
-$roots = $tree->buildRootsArray();
+list($roots, $subtrees) = $tree->buildRootsWithSubTreesArray();
 
 if (count($roots) <= 0) {
     die("ERROR: no root nodes");
 } else if (count($roots) == 1) {
-    header("Location:" . $urlServer . $redirectUrl . intval($roots[0]));
+    header("Location:" . $urlServer . $redirectUrl . intval($roots[0]->id));
     exit();
 } else {
     $tool_content = action_bar(array(
@@ -62,7 +62,7 @@ if (count($roots) <= 0) {
             <div class='list-group'>
                 <a href='#' class='list-group-item list-header'><b>$langFaculty</b></a>
             ";
-    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, $showEmpty);
+    $tool_content .= $tree->buildNodesNavigationHtml($roots, 'opencourses', $countCallback, $showEmpty, $subtrees);
     $tool_content .= "
             </div>
         </div>

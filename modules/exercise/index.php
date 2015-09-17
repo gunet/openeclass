@@ -33,6 +33,7 @@ $helpTopic = 'Exercise';
 $guest_allowed = true;
 
 include '../../include/baseTheme.php';
+require_once 'modules/group/group_functions.php';
 require_once 'include/lib/modalboxhelper.class.php';
 require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/search/indexer.class.php';
@@ -113,8 +114,18 @@ if ($is_editor) {
     $result = Database::get()->queryArray("SELECT id, title, description, type, active, public, ip_lock, password_lock FROM exercise WHERE course_id = ?d ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
     $qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d", $course_id)->count;
 } else {
+        $gids = user_group_info($uid, $course_id);
+        if (!empty($gids)) {
+            $gids_sql_ready = implode(',',array_keys($gids));
+        } else {
+            $gids_sql_ready = "''";
+        }       
 	$result = Database::get()->queryArray("SELECT id, title, description, type, active, public, start_date, end_date, time_constraint, attempts_allowed, score, ip_lock, password_lock " .
-            "FROM exercise WHERE course_id = ?d AND active = 1 ORDER BY id LIMIT ?d, ?d", $course_id, $from, $limitExPage);
+            "FROM exercise WHERE course_id = ?d AND active = 1 "
+            . "AND (assign_to_specific = '0' OR assign_to_specific != '0' AND id IN
+                       (SELECT exercise_id FROM exercise_to_specific WHERE user_id = ?d UNION SELECT exercise_id FROM exercise_to_specific WHERE group_id IN ($gids_sql_ready))
+                    ) "
+            ."ORDER BY id LIMIT ?d, ?d", $course_id, $uid, $from, $limitExPage);
 	$qnum = Database::get()->querySingle("SELECT COUNT(*) as count FROM exercise WHERE course_id = ?d AND active = 1", $course_id)->count;
 }
 $paused_exercises = Database::get()->queryArray("SELECT eurid, eid, title, attempt, password_lock FROM exercise_user_record a "
@@ -198,7 +209,7 @@ if (!$nbrExercises) {
     } else { // student view
         $tool_content .= "
                 <th>$langExerciseName</th>
-                <th class='text-center'>$langExerciseStart / $langExerciseEnd</th>
+                <th class='text-center'>$langStart / $langEnd</th>
                 <th class='text-center'>$langExerciseConstrain</th>
                 <th class='text-center'>$langExerciseAttemptsAllowed</th>
                 <th class='text-center'>$langResults</th>

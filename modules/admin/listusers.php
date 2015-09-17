@@ -58,9 +58,10 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 
     // 'LIKE' argument prefix/postfix - default is substring search
     $l1 = $l2 = '%';
+    $cs = 'COLLATE utf8_general_ci';
     if (isset($_GET['search_type'])) {
         if ($_GET['search_type'] == 'exact') {
-            $l1 = $l2 = '';
+            $l1 = $l2 = $cs = '';
         } elseif ($_GET['search_type'] == 'begin') {
             $l1 = '';
         }
@@ -83,19 +84,19 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     // surname search
     if (!empty($lname)) {
-        $criteria[] = 'surname LIKE ?s';
+        $criteria[] = 'surname LIKE ?s ' . $cs;
         $terms[] = $l1 . $lname . $l2;
         add_param('lname');
     }
     // first name search
     if (!empty($fname)) {
-        $criteria[] = 'givenname LIKE ?s';
+        $criteria[] = 'givenname LIKE ?s '. $cs;
         $terms[] = $l1 . $fname . $l2;
         add_param('fname');
     }
     // username search
     if (!empty($uname)) {
-        $criteria[] = 'username LIKE ?s';
+        $criteria[] = 'username LIKE ?s ' . $cs;
         $terms[] = $l1 . $uname . $l2;
         add_param('uname');
     }
@@ -121,14 +122,20 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
     }
     // auth type search
     if (!empty($auth_type)) {
-        if ($auth_type >= 2) {
-            $criteria[] = 'password = ?s';
-            $terms[] = $auth_ids[$auth_type];
+        if ($auth_type >= 2 && $auth_type < 8) {
+            $criteria[] = "password = '{$auth_ids[$auth_type]}'";
         } elseif ($auth_type == 1) {
-            $terms[] = $auth_ids;
-            $criteria[] = 'password NOT IN (' .
-                    implode(', ', array_fill(0, count($auth_ids), '?s')) .
-                    ')';
+            $q1 = "'". implode("','", $auth_ids) . "'";
+            $criteria[] = 'password NOT IN ('.$q1.')';
+        }
+        // FIXME: ext auth uid's moved to new table user_ext_uid
+        switch($auth_type) {
+            case '8': $criteria[] = "facebook_uid <> ''"; break;
+            case '9': $criteria[] = "twitter_uid <> ''"; break;
+            case '10': $criteria[] = "google_uid <> ''"; break;
+            case '11': $criteria[] = "live_uid <> ''"; break;
+            case '12': $criteria[] = "yahoo_uid <> ''"; break;
+            case '13': $criteria[] = "linkedin_uid <> ''"; break;
         }
         add_param('auth_type');
     }
@@ -245,8 +252,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
         $terms[] = $offset;
         $terms[] = $limit;
     }
-    $sql = Database::get()->queryArray($qry, $terms);
-
+    $sql = Database::get()->queryArray($qry, $terms);    
     $all_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base", $terms_base)->total;
     if ($qry_criteria or $c) {
         $filtered_results = Database::get()->querySingle("SELECT COUNT(*) AS total $qry_base
@@ -325,6 +331,7 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
                     'title' => $changetip,
                     'icon' => 'fa-key',
                     'url' => 'change_user.php?username=' . urlencode($logs->username),
+                    'class' => 'change-user-link',
                     'hide' => isDepartmentAdmin()
                 ),
                 array(
@@ -355,67 +362,79 @@ if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQ
 load_js('tools.js');
 load_js('datatables');
 load_js('datatables_filtering_delay');
-$head_content .= "<script type='text/javascript'>
-        $(document).ready(function() {
-         var table = $('#search_results_table').DataTable ({
-                initComplete: function () {
-                    var api = this.api();
-                    var column = api.column(4);
-                    var select = $('<select id=\'select_role\'>'+
-                                        '<option value=\'0\'>-- Όλοι --</option>'+
-                                        '<option value=\'".USER_TEACHER."\'>$langTeacher</option>'+"
-        . "                             '<option value=\'".USER_STUDENT."\'>$langStudent</option>'+"
-        . "                             '<option value=\'".USER_GUEST."\'>$langVisitor</option>'+
-                                    '</select>')
-                                    .appendTo( $(column.footer()).empty() );
-                },
-                'fnDrawCallback': function( oSettings ) {
-                    popover_init();
-                },
-                'bProcessing': true,
-                'bServerSide': true,
-                'sAjaxSource': '$_SERVER[REQUEST_URI]',
-                'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-                ],
-                'sPaginationType': 'full_numbers',
-                'bAutoWidth': false,
-                'aoColumns': [
-                    {'bSortable' : true, 'sWidth': '20%' },
-                    {'bSortable' : true, 'sWidth': '20%' },
-                    {'bSortable' : true, 'sWidth': '20%' },
-                    {'bSortable' : false, 'sWidth': '20%' },
-                    {'bSortable' : false, 'sClass': 'text-center' },
-                    {'bSortable' : false, 'sClass': 'text-center' },
-                ],
-                'oLanguage': {
-                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '" . $langNoResult . "',
-                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
-                   'sInfoFiltered': '',
-                   'sInfoPostFix':  '',
-                   'sSearch':       '" . $langSearch . "',
-                   'sUrl':          '',
-                   'oPaginate': {
-                       'sFirst':    '&laquo;',
-                       'sPrevious': '&lsaquo;',
-                       'sNext':     '&rsaquo;',
-                       'sLast':     '&raquo;'
-                   }
-               }
-            });
-            // Apply the filter
-            $(document).on('change', '#search_results_table tfoot select#select_role', function (e) {
-                table
-                    .column( $(this).parent().index()+':visible' )
-                    .search($('select#select_role').val())
-                    .draw();
-            });
-            $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
+$head_content .= "<script>
+    var csrf_token = '$_SESSION[csrf_token]';
+    $(document).ready(function() {
+        $(document).on('click', '.change-user-link', function (e) {
+            e.preventDefault();
+            $('<form>', {
+                'action': $(this).attr('href'),
+                'method': 'post'
+            }).append($('<input>', {
+                'type': 'hidden',
+                'name': 'token',
+                'value': csrf_token
+            })).appendTo(document.body).submit();
         });
-        </script>";
+        var table = $('#search_results_table').DataTable ({
+            initComplete: function () {
+                var api = this.api();
+                var column = api.column(4);
+                var select = $('<select id=\'select_role\'>'+
+                                 '<option value=\'0\'>-- " . js_escape($langAll) . " --</option>'+
+                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langTeacher) . "</option>'+
+                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langStudent) . "</option>'+
+                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langVisitor) . "</option>'+
+                               '</select>')
+                             .appendTo( $(column.footer()).empty() );
+            },
+            'fnDrawCallback': function( oSettings ) {
+                popover_init();
+            },
+            'bProcessing': true,
+            'bServerSide': true,
+            'sAjaxSource': '$_SERVER[REQUEST_URI]',
+            'aLengthMenu': [
+               [10, 15, 20 , -1],
+               [10, 15, 20, '" . js_escape($langAllOfThem) . "'] // change per page values here
+            ],
+            'sPaginationType': 'full_numbers',
+            'bAutoWidth': false,
+            'aoColumns': [
+                {'bSortable' : true, 'sWidth': '20%' },
+                {'bSortable' : true, 'sWidth': '20%' },
+                {'bSortable' : true, 'sWidth': '20%' },
+                {'bSortable' : false, 'sWidth': '20%' },
+                {'bSortable' : false, 'sClass': 'text-center' },
+                {'bSortable' : false, 'sClass': 'text-center' },
+            ],
+            'oLanguage': {
+               'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',
+               'sZeroRecords':  '" . js_escape($langNoResult) . "',
+               'sInfo':         '" . js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults") . "',
+               'sInfoEmpty':    '" . js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2") . "',
+               'sInfoFiltered': '',
+               'sInfoPostFix':  '',
+               'sSearch':       '" . js_escape($langSearch) . "',
+               'sUrl':          '',
+               'oPaginate': {
+                   'sFirst':    '&laquo;',
+                   'sPrevious': '&lsaquo;',
+                   'sNext':     '&rsaquo;',
+                   'sLast':     '&raquo;'
+               }
+            }
+        });
+        // Apply the filter
+        $(document).on('change', '#search_results_table tfoot select#select_role', function (e) {
+            table
+                .column( $(this).parent().index()+':visible' )
+                .search($('select#select_role').val())
+                .draw();
+        });
+        $('.dataTables_filter input').attr('placeholder', '$langName, $langSurname, $langUsername');
+    });
+    </script>";
 
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 $navigation[] = array('url' => 'search_user.php', 'name' => $langSearchUser);
@@ -469,14 +488,17 @@ $tool_content .= "<table id='search_results_table' class='display'>
 $tool_content .= "<tbody></tbody></table>";
 
 $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
-// delete all function
-$tool_content .= " <form action='multideluser.php' method='post' name='delall_user_search'>";
+
+// Edit all function
+$tool_content .= " <form action='multiedituser.php' method='post'>";
 // redirect all request vars towards delete all action
 foreach ($_REQUEST as $key => $value) {
     $tool_content .= "<input type='hidden' name='$key' value='$value' />";
 }
 
-$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'></form></div>";
+$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'>
+    <input class='btn btn-primary' type='submit' name='activate_submit' value='$langAddSixMonths'>
+  </form></div>";
 
 draw($tool_content, 3, null, $head_content);
 

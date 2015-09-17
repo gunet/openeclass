@@ -21,7 +21,7 @@
  * Standard header included by all eClass files
  * Defines standard functions and validates variables
  */
-define('ECLASS_VERSION', '3.1.2');
+define('ECLASS_VERSION', '3.1.99');
 
 // better performance while downloading very large files
 define('PCLZIP_TEMPORARY_FILE_RATIO', 0.2);
@@ -82,21 +82,21 @@ define('MODULE_ID_WIKI', 26);
 define('MODULE_ID_UNITS', 27);
 define('MODULE_ID_SEARCH', 28);
 define('MODULE_ID_CONTACT', 29);
-define('MODULE_ID_GRADEBOOK', 32);
 define('MODULE_ID_ATTENDANCE', 30);
+define('MODULE_ID_GRADEBOOK', 32);
+define('MODULE_ID_BBB', 34);
 define('MODULE_ID_BLOG', 37);
 define('MODULE_ID_COMMENTS', 38);
 define('MODULE_ID_RATING', 39);
-define('MODULE_ID_BBB', 34);
-define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_SHARING', 40);
+define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 
 // user modules
 define('MODULE_ID_SETTINGS', 31);
 define('MODULE_ID_NOTES', 35);
 define('MODULE_ID_PERSONALCALENDAR',36);
-define('MODULE_ID_ADMINCALENDAR',37);
+define('MODULE_ID_ADMINCALENDAR', 43);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -193,6 +193,9 @@ function load_js($file, $init='') {
             $file = 'jstree/jquery.jstree.min.js';
         } elseif ($file == 'jstree3') {
             $head_content .= css_link('jstree3/themes/proton/style.min.css');
+            $file = 'jstree3/jstree.min.js';
+        } elseif ($file == 'jstree3d') {
+            $head_content .= css_link('jstree3/themes/default/style.min.css');
             $file = 'jstree3/jstree.min.js';
         } elseif ($file == 'shadowbox') {
             $head_content .= css_link('shadowbox/shadowbox.css');
@@ -727,15 +730,10 @@ function user_app_exists($login) {
 function html2text($string) {
     $trans_tbl = get_html_translation_table(HTML_ENTITIES);
     $trans_tbl = array_flip($trans_tbl);
-
-    $text = preg_replace('/</', ' <', $string);
-    $text = preg_replace('/>/', '> ', $string);
-    $desc = html_entity_decode(strip_tags($text));
-    $desc = preg_replace('/[\n\r\t]/', ' ', $desc);
-    $desc = preg_replace('/  /', ' ', $desc);
-
-    return $desc;
-    //    return strtr (strip_tags($string), $trans_tbl);
+    $string = html_entity_decode(strip_tags($string));
+    $text = preg_replace('/<(div|p|pre|br)[^>]*>/i', "\n", $string);
+    return canonicalize_whitespace(strip_tags($text));
+    // return strtr (strip_tags($string), $trans_tbl);
 }
 
 /*
@@ -771,13 +769,17 @@ function imap_literal($s) {
  */
 function new_code($fac) {
 
-    $gencode = Database::get()->querySingle("SELECT code, generator FROM hierarchy WHERE id = ?d", $fac);
-    if ($gencode) {
+ $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
+       FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d)", $fac);
+   if ($gencode) {
         do {
             $code = $gencode->code . $gencode->generator;
             $gencode->generator += 1;
+			$code = $gencode->code . $gencode->generator;
             Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
         } while (file_exists("courses/" . $code));
+		Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
+
     // Make sure the code returned isn't empty!
     } else {
         die("Course Code is empty!");
@@ -1421,8 +1423,10 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM group_properties WHERE group_id IN
+                         (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM `group_category` WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `link` ON `rating`.`rid` = `link`.`id`
                             WHERE `rating`.`rtype` = ?s AND `link`.`course_id` = ?d", 'link', $cid);
     Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `link` ON `rating_cache`.`rid` = `link`.`id`
@@ -2547,32 +2551,6 @@ function removeDir($dirPath) {
 }
 
 /**
- * @brief update attendance about user activities
- * @param type $id
- * @param type $activity
- * @return type
- */
-function update_attendance_book($uid, $id, $activity) {
-
-    if ($activity == 'assignment') {
-        $type = 1;
-    } elseif ($activity == 'exercise') {
-        $type = 2;
-    }
-    $q = Database::get()->querySingle("SELECT id, attendance_id FROM attendance_activities WHERE module_auto_type = ?d
-                            AND module_auto_id = ?d
-                            AND auto = 1", $type, $id);
-    if ($q) {
-        $u = Database::get()->querySingle("SELECT id FROM attendance_users WHERE uid = ?d
-                                AND attendance_id = ?d", $uid, $q->attendance_id);
-        if($u){
-            Database::get()->query("INSERT INTO attendance_book SET attendance_activity_id = $q->id, uid = ?d, attend = 1, comments = ''", $uid);
-        }
-    }
-    return;
-}
-
-/**
  * Generate a token verifying some info
  *
  * @param  string  $info           - The info that will be verified by the token
@@ -2832,7 +2810,7 @@ function validate_csrf_token($token) {
 */
 function generate_csrf_token_form_field()
 {
-    return "<input type='hidden' name='token' value='{$_SESSION['csrf_token']}'";
+    return "<input type='hidden' name='token' value='{$_SESSION['csrf_token']}' />";
 }
 
 function generate_csrf_token_link_parameter()
@@ -2983,6 +2961,8 @@ function form_buttons($btnArray) {
     
     foreach ($btnArray as $btn){
         
+        if(!isset($btn['show']) || (isset($btn['show']) && $btn['show'] == true)){
+        
         $id = isset($btn['id'])?"id='$btn[id]'": '';
         $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
         if (isset($btn['icon'])) {
@@ -3012,6 +2992,7 @@ function form_buttons($btnArray) {
             $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';
             $buttons .= "<button class='btn $class' $type $id $name $value $custom_field $disabled>$text</button>&nbsp;&nbsp;";
         }
+    }
     }
     
     return $buttons;
@@ -3067,24 +3048,57 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         } else {
             $link_attrs = "";
         }
+        $caret = '';
+        $primaryTag = 'a';
+        if ($level != 'primary-label' or isset($option['icon'])) {
+            $dataAttrs = "data-placement='bottom' data-toggle='tooltip'";
+        } else {
+            $dataAttrs = '';
+        }
+        $subMenu = '';
+        if (isset($option['options']) and ($level == 'primary' or $level == 'primary-label')) {
+            $href = '';
+            $primaryTag = 'button';
+            $button_class .= ' dropdown-toggle';
+            $caret = ' <span class="caret"></span>';
+            $dataAttrs = 'data-toggle="dropdown" data-placement="right" aria-haspopup="true" aria-expanded="false"';
+            $form_begin = '<div class="btn-group" role="group">';
+            $form_end = '</div>';
+            $subMenu = '<ul class="dropdown-menu dropdown-menu-right">';
+            foreach ($option['options'] as $subOption) {
+               $subMenu .= '<li><a class="'.$subOption['class'].'" href="' . $subOption['url'] . '">';
+               $subMenu .= isset($subOption['icon']) ? '<span class="'.$subOption['icon'].'"></span>' : '';
+               $subMenu .= q($subOption['title']) . '</a></li>';
+               
+            }
+            $subMenu .= '</ul>';
+        }
+        $iconTag = '';
         if ($level == 'primary-label') {
+            if (isset($option['icon'])) {
+                $iconTag = "<span class='fa $option[icon] space-after-icon'></span>";
+                $link_attrs .= " title='$title'";
+                $title = "<span class='hidden-xs'>$title</span>";
+            }
             array_unshift($out_primary,
-                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' " .
-                " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon] space-after-icon'></i>" .
-                "<span class='hidden-xs'>$title</span></a>$form_end");
+                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class$class'" . $href .
+                ' ' . $dataAttrs .
+                " $link_attrs>" . $iconTag . $title . $caret .
+                "</$primaryTag>$subMenu$form_end");
         } elseif ($level == 'primary') {
+            if (isset($option['icon'])) {
+                $iconTag = "<span class='fa $option[icon]'></span>";
+            }
             array_unshift($out_primary,
-                "$form_begin<a$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
-                " data-placement='bottom' data-toggle='tooltip' " .
-                " title='$title'$link_attrs>" .
-                "<i class='fa $option[icon]'></i></a>$form_end");
+                "$form_begin<$primaryTag$confirm_extra class='btn $button_class$confirm_modal_class'" . $href .
+                ' ' . $dataAttrs .
+                " title='$title'$link_attrs>" . $iconTag . $caret .
+                "</$primaryTag>$subMenu$form_end");
         } else {
             array_unshift($out_secondary,
                 "<li$wrapped_class>$form_begin<a$confirm_extra  class='$confirm_modal_class'" . $href .
                 " $link_attrs>" .
-                "<i class='fa $option[icon]'></i> $title</a>$form_end</li>");
+                "<span class='fa $option[icon]'></span> $title</a>$form_end</li>");
         }
         $i++;
     }
@@ -3093,15 +3107,14 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
         $out .= implode('', $out_primary);
     }
 
-    $action_button = "";
+    $action_button = '';
     $secondary_title = isset($secondary_menu_options['secondary_title']) ? $secondary_menu_options['secondary_title'] : "";
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gears";
     if (count($out_secondary)) {
-        //$action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
-        $action_button .= "<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
+        $action_button .= "<div class='btn-group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'><i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span></button>";
         $action_button .= "  <ul class='dropdown-menu dropdown-menu-right' role='menu'>
                      ".implode('', $out_secondary)."
-                  </ul>";
+                  </ul></div>";
     }
     if ($out && $i!=0) {
         return "<div class='row action_bar'>
@@ -3131,6 +3144,7 @@ function action_bar($options, $page_title_flag = true, $secondary_menu_options =
 function action_button($options, $secondary_menu_options = array()) {
     global $langConfirmDelete, $langCancel, $langDelete;
     $out_primary = $out_secondary = array();
+    $primary_form_begin = $primary_form_end = $primary_icon_class = '';
     foreach (array_reverse($options) as $option) {
         $level = isset($option['level'])? $option['level']: 'secondary';
         // skip items with show=false
@@ -3143,14 +3157,14 @@ function action_button($options, $secondary_menu_options = array()) {
             $class = '';
         }
         if (isset($option['btn_class'])) {
-            $btn_class = ' '.$option['btn_class'];
+            $btn_class = ' ' . $option['btn_class'];
         } else {
             $btn_class = ' btn-default';
         }
         if (isset($option['link-attrs'])) {
-            $link_attrs = " ".$option['link-attrs'];
+            $link_attrs = ' ' . $option['link-attrs'];
         } else {
-            $link_attrs = "";
+            $link_attrs = '';
         }
         $disabled = isset($option['disabled']) && $option['disabled'] ? ' disabled' : '';
         $icon_class = "class='list-group-item $class$disabled";
@@ -3160,10 +3174,19 @@ function action_button($options, $secondary_menu_options = array()) {
         if (isset($option['confirm'])) {
             $title = q(isset($option['confirm_title']) ? $option['confirm_title'] : $langConfirmDelete);
             $accept = isset($option['confirm_button']) ? $option['confirm_button'] : $langDelete;
-            $icon_class .= " confirmAction' data-title='$title' data-message='" .
-                q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
             $form_begin = "<form method=post action='$option[url]'>";
             $form_end = '</form>';
+            if ($level == 'primary-label' or $level == 'primary') {
+                $primary_form_begin = $form_begin;
+                $primary_form_end = $form_end;
+                $form_begin = $form_end = '';
+                $primary_icon_class = " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+            } else {
+                $icon_class .= " confirmAction' data-title='$title' data-message='" .
+                    q($option['confirm']) . "' data-cancel-txt='$langCancel' data-action-txt='$accept' data-action-class='btn-danger'";
+                $primary_icon_class = '';
+            }
             $url = '#';
         } else {
             $icon_class .= "'";
@@ -3175,9 +3198,9 @@ function action_button($options, $secondary_menu_options = array()) {
         }
 
         if ($level == 'primary-label') {
-            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon'></i>" . q($option['title']) . "</a>");
+            array_unshift($out_primary, "<a href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon] space-after-icon$primary_icon_class'></i>" . q($option['title']) . "</a>");
         } elseif ($level == 'primary') {
-            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]'></i></a>");
+            array_unshift($out_primary, "<a data-placement='bottom' data-toggle='tooltip' title='" . q($option['title']) . "' href='$url' class='btn $btn_class$disabled' $link_attrs><i class='fa $option[icon]$primary_icon_class'></i></a>");
         } else {
             array_unshift($out_secondary, $form_begin . icon($option['icon'], $option['title'], $url, $icon_class.$link_attrs, true) . $form_end);
         }
@@ -3198,10 +3221,11 @@ function action_button($options, $secondary_menu_options = array()) {
                 </a>";
     }
 
-    return "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
+    return $primary_form_begin .
+         "<div class='btn-group btn-group-sm' role='group' aria-label='...'>
                 $primary_buttons
                 $action_button
-          </div>";
+          </div>" . $primary_form_end;
 }
 /**
  * Removes spcific get variable from Query String
@@ -3602,9 +3626,32 @@ function user_hook($user_id) {
         }, $status, $user_id, $status);
 }
 
+/**
+ * @brief Display a message if course is under not-allowed department
+ *
+ * @param boolean $prompt - Provide a link to course settings if true
+ */
+function warnCourseInvalidDepartment($prompt=false) {
+    global $course_id, $course_code, $urlAppend, $langCourseInvalidDepartment,
+        $langCourseInvalidDepartmentPrompt;
+    if (Database::get()->querySingle("SELECT department
+            FROM course_department, hierarchy
+            WHERE course_department.department = hierarchy.id AND
+                  hierarchy.allow_course = 0 AND
+                  course = ?d
+            LIMIT 1", $course_id)) {
+        if ($prompt) {
+            $message = sprintf($langCourseInvalidDepartment . ' ' . $langCourseInvalidDepartmentPrompt,
+                "<a href='{$urlAppend}modules/course_info/?course=$course_code'>", '</a>');
+        } else {
+            $message = $langCourseInvalidDepartment;
+        }
+        Session::Messages($message);
+    }
+}
 
 /**
- * @brief Function called before a user is created.
+ * @brief Function called for every user login
  *
  * For now, only called for CAS automatic registration to determine actual user
  * details. If function local_register_hook() is defined, calls that instead.
@@ -3613,24 +3660,27 @@ function user_hook($user_id) {
  * 'departments' - List of department id's requested by user
  * 'attributes'  - List of attributes retrieved via LDAP / CAS / Shibboleth
  * 'am'          - Student id number retrieved via LDAP / CAS / Shibboleth
+ * 'user_id'     - Null for registration, current user id for subsequent logins
  * @return array - Actual user creation options. Key-value pairs are:
  * 'accept'      - Boolean - if false, user should be rejected
  * 'departments' - List of department id's user should be added to
  * 'status'      - User status (USER_STUDENT, USER_TEACHER)
  * 'am'          - Student id number
  */
-function register_hook($options) {
+function login_hook($options) {
     if (!isset($options['am'])) {
         $options['am'] = '';
     }
     if (!isset($options['departments'])) {
         $options['departments'] = array();
     }
+    if (!isset($options['status'])) {
+        $options['status'] = USER_STUDENT;
+    }
     $options['accept'] = true;
-    $options['status'] = USER_STUDENT;
 
-    if (function_exists('local_register_hook')) {
-        return local_register_hook($options);
+    if (function_exists('local_login_hook')) {
+        return local_login_hook($options);
     } else {
         return $options;
     }

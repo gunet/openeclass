@@ -48,7 +48,7 @@ Developers and Contributors
  Security Team
 ************************************************************************/
  Ioannis Stais <istais@di.uoa.gr>
- George Arygoros <argyros.george@gmail.com>
+ George Argyros <argyros.george@gmail.com>
 
 ************************************************************************/
 Documentation and Testing Team

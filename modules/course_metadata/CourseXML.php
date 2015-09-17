@@ -1002,6 +1002,7 @@ class CourseXMLElement extends SimpleXMLElement {
             self::storeMetadata($oaiRecordId, 'dc_coursephotomime', (string) $xml->coursePhoto['mime']);
             self::storeMetadata($oaiRecordId, 'dc_instructorphoto', self::serializeMulti($xml->instructor, "photo"));
             self::storeMetadata($oaiRecordId, 'dc_instructorphotomime', self::serializeAttr($xml->instructor, "photo", "mime"));
+            self::storeMetadata($oaiRecordId, 'dc_instructorregistrationcode', self::serializeMulti($xml->instructor, "registrationCode"));
             self::storeMetadata($oaiRecordId, 'dc_url', (string) $xml->url);
             // unused ATM self::storeMetadata($oaiRecordId, 'dc_identifier', );
             self::storeMetadata($oaiRecordId, 'dc_language', self::serialize($xml->language));
@@ -1153,10 +1154,10 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     private static function makeMultiLang($ele) {
-        global $currentCourseLanguage, $webDir;
+        global $currentCourseLanguage, $language, $webDir;
         global $siteName, $Institution, $InstitutionUrl; // required for proper including commons and langs, ignore unused scope warning
         if (empty($currentCourseLanguage)) {
-            $clang = $currentCourseLanguage = 'el';
+            $clang = $language;
         } else {
             $clang = $currentCourseLanguage;
         }
@@ -1188,8 +1189,8 @@ class CourseXMLElement extends SimpleXMLElement {
             $revert = true;
         }
         if ($revert) { // revert messages back to current language
-            require("${webDir}/lang/" . $currentCourseLanguage . "/common.inc.php");
-            require("${webDir}/lang/" . $currentCourseLanguage . "/messages.inc.php");
+            require("${webDir}/lang/" . $clang . "/common.inc.php");
+            require("${webDir}/lang/" . $clang . "/messages.inc.php");
         }
         return base64_encode(serialize($arr));
     }
@@ -1207,9 +1208,15 @@ class CourseXMLElement extends SimpleXMLElement {
      * @return array
      */
     public static function getAutogenData($courseId) {
-        global $urlServer, $license, $webDir;
+        global $urlServer, $license, $webDir, $currentCourseLanguage, $language;
         global $siteName, $Institution, $InstitutionUrl; // NOTICE: DO NOT remove these global vars, include of common.inc, etc, below requires them
         $data = array();
+        
+        if (empty($currentCourseLanguage)) {
+            $plang = $language;
+        } else {
+            $plang = $currentCourseLanguage;
+        }
 
         $course = Database::get()->querySingle("SELECT * FROM course WHERE id = ?d", intval($courseId));
         if (!$course) {
@@ -1220,17 +1227,15 @@ class CourseXMLElement extends SimpleXMLElement {
         $clang = $course->lang;
         $data['course_language'] = $clang;
         $data['course_language_' . $clang] = $GLOBALS['langNameOfLang'][langcode_to_name($clang)];
-        if ($clang != 'en') {
-            $data['course_language_en'] = ucfirst(langcode_to_name($clang));
-        }
-        if ($clang != 'el') {
-            include("${webDir}/lang/el/common.inc.php");
-            include("${webDir}/lang/el/messages.inc.php");
-            $data['course_language_el'] = $langNameOfLang[langcode_to_name($clang)]; // do not use GLOBALS here as it will not work
-            // revert messages back to current language
-            include("${webDir}/lang/" . $clang . "/common.inc.php");
-            include("${webDir}/lang/" . $clang . "/messages.inc.php");
-        }
+        // en
+        $data['course_language_en'] = ucfirst(langcode_to_name($clang));
+        // el
+        include("${webDir}/lang/el/common.inc.php");
+        include("${webDir}/lang/el/messages.inc.php");
+        $data['course_language_el'] = $langNameOfLang[langcode_to_name($clang)]; // do not use GLOBALS here as it will not work
+        // revert messages back to current language
+        include("${webDir}/lang/" . $plang . "/common.inc.php");
+        include("${webDir}/lang/" . $plang . "/messages.inc.php");
 
         $data['course_url'] = $urlServer . 'courses/' . $course->code;
         $data['course_title_' . $clang] = $course->title;
@@ -1239,26 +1244,20 @@ class CourseXMLElement extends SimpleXMLElement {
         // course license
         if (!empty($course->course_license)) {
             $data['course_license_' . $clang] = $license[$course->course_license]['title'];
-            $revert = false;
-            if ($clang != 'en') {
-                include("${webDir}/lang/en/common.inc.php");
-                include("${webDir}/lang/en/messages.inc.php");
-                include("${webDir}/include/license_info.php");
-                $data['course_license_en'] = $license[$course->course_license]['title'];
-                $revert = true;
-            }
-            if ($clang != 'el') {
-                include("${webDir}/lang/el/common.inc.php");
-                include("${webDir}/lang/el/messages.inc.php");
-                include("${webDir}/include/license_info.php");
-                $data['course_license_el'] = $license[$course->course_license]['title'];
-                $revert = true;
-            }
-            if ($revert) { // revert messages back to current language
-                include("${webDir}/lang/" . $clang . "/common.inc.php");
-                include("${webDir}/lang/" . $clang . "/messages.inc.php");
-                include("${webDir}/include/license_info.php");
-            }
+            // en
+            include("${webDir}/lang/en/common.inc.php");
+            include("${webDir}/lang/en/messages.inc.php");
+            include("${webDir}/include/license_info.php");
+            $data['course_license_en'] = $license[$course->course_license]['title'];
+            //el
+            include("${webDir}/lang/el/common.inc.php");
+            include("${webDir}/lang/el/messages.inc.php");
+            include("${webDir}/include/license_info.php");
+            $data['course_license_el'] = $license[$course->course_license]['title'];
+            // revert messages back to current language
+            include("${webDir}/lang/" . $clang . "/common.inc.php");
+            include("${webDir}/lang/" . $clang . "/messages.inc.php");
+            include("${webDir}/include/license_info.php");
         } else {
             $data['course_license_' . $clang] = '';
             if ($clang != 'en') {

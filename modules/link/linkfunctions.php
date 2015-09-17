@@ -70,12 +70,11 @@ function showlinksofcategory($catid) {
                                    WHERE course_id = ?d AND category = ?d
                                    ORDER BY `order`", $course_id, $catid);
     $numberoflinks = count($result);
-    $links_num = 1;
+    $links_num = 1;    
     foreach ($result as $myrow) {
         $title = empty($myrow->title) ? $myrow->url : $myrow->title;        
         $aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
-        $tool_content .= "<td class='nocategory-link'><a href='" . $urlServer . "modules/link/go.php?course=$course_code&amp;id=" . getIndirectReference($myrow->id) . "&amp;url=" .
-                urlencode($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
+        $tool_content .= "<td class='nocategory-link'><a href='" . q($myrow->url) . "' $aclass target='_blank'>" . q($title) . "&nbsp;&nbsp;<i class='fa fa-external-link' style='color:#444'></i></a>";
         if ($catid == -2 && $myrow->user_id != 0) {
             $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
         }
@@ -349,11 +348,11 @@ function delete_link($id) {
     $title = $tuple->title;
     $category = $tuple->category;
     if ($category == -2) { //delete abuse reports and ratings for social bookmark
-        Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON `link`.id = abuse_report.id
+        Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON `link`.id = abuse_report.rid
                                WHERE abuse_report.rtype = ?s AND abuse_report.rid = ?d", 'link', $id);
-        Database::get()->query("DELETE rating FROM rating INNER JOIN `link` ON `link`.id = rating.id
+        Database::get()->query("DELETE rating FROM rating INNER JOIN `link` ON `link`.id = rating.rid
                                 WHERE rating.rtype = ?s AND rating.rid = ?d", 'link', $id);
-        Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN `link` ON `link`.id = rating_cache.id
+        Database::get()->query("DELETE rating_cache FROM rating_cache INNER JOIN `link` ON `link`.id = rating_cache.rid
                                 WHERE rating_cache.rtype = ?s AND rating_cache.rid = ?d", 'link', $id);
         
     }

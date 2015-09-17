@@ -54,7 +54,7 @@ if (count($result) > 0) {  // found courses ?
         $course_names[$item->code] = $item->title;
     }
 
-    $chart = new Plotter(600, 300);
+    $chart = new Plotter(800, 300);
     $chart->setTitle($langCourseVisits);
     foreach ($hits as $code => $count) {
         if ($count > 0) {
@@ -69,29 +69,41 @@ if (count($result) > 0) {  // found courses ?
                                       'level' => 'primary-label',
                                       'button-class' => 'btn-default')
                             ), false);
-    $tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel'><div class='panel-body'>" .
+    $tool_content .= "<div class='row margin-bottom-fat'><div class='col-xs-12'>" .
         $chart->plot() .
-        "</div></div></div></div>";
+        "</div></div>";
 
     $totalDuration = format_time_duration(0 + $totalDuration, 240);
     $tool_content .= "
-                <h4>$langPlatformGenStats</h4>
-                <div class='row margin-bottom-fat'>
-                  <div class='col-md-4'>$langTotalVisitsCourses:</div>
-                  <div class='col-md-8'>$totalHits</div>
+                <div class='row margin-top-fat'>
+                    <div class='col-xs-12'>
+                        <ul class='list-group'>
+                            <li class='list-group-item disabled'>
+                                <div class='row'>
+                                    <div class='col-sm-12'><b>$langPlatformGenStats</b></div>
+                                </div>
+                            </li>
+                            <li class='list-group-item'>
+                                <div class='row'>
+                                    <div class='col-sm-8'>$langTotalVisitsCourses</div>
+                                    <div class='col-sm-4'>$totalHits</div>
+                                </div>
+                            </li>
+                            <li class='list-group-item'>
+                                <div class='row'>
+                                    <div class='col-sm-8'>$langDurationVisits</div>
+                                    <div class='col-sm-4'>$totalDuration</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
                 <div class='row margin-bottom-fat margin-top-fat'>
-                  <div class='col-md-4'>$langDurationVisits:</div>
-                  <div class='col-md-8'>$totalDuration</div>
-                </div>
-                <div class='row margin-bottom-fat margin-top-fat'>
-                  <div class='col-xs-12'>$langDurationVisitsPerCourse:</div>
                   <div class='col-xs-12'>
                     <ul class='list-group'>
                       <li class='list-group-item disabled'>
                         <div class='row'>
-                          <div class='col-sm-8'><b>$langCourseTitle</b></div>
-                          <div class='col-sm-4 text-muted'><b>$langDuration</b></div>
+                          <div class='col-sm-12'><b>$langDurationVisitsPerCourse</b></div>
                         </div>
                       </li>";
     foreach ($duration as $code => $time) {
@@ -111,13 +123,11 @@ if (count($result) > 0) {  // found courses ?
 
 $tool_content .= "
                 <div class='row margin-bottom-fat margin-top-fat'>
-                  <div class='col-xs-12'>$langLastVisits:</div>
                   <div class='col-xs-12'>
                     <ul class='list-group'>
                       <li class='list-group-item disabled'>
                         <div class='row'>
-                          <div class='col-sm-8'><b>$langDate</b></div>
-                          <div class='col-sm-4'><b>$langAction</b></div>
+                          <div class='col-sm-12'><b>$langLastVisits</b></div>
                         </div>
                       </li>";
 $act["LOGIN"] = "<span class='text-success'>$langLogIn</span>";

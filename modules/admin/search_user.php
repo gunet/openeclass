@@ -32,7 +32,7 @@ require_once 'hierarchy_validations.php';
 
 $user = new User();
 
-load_js('jstree');
+load_js('jstree3');
 load_js('bootstrap-datetimepicker');
 
 $head_content .= "<script type='text/javascript'>
@@ -64,9 +64,9 @@ $reg_flag = isset($_GET['reg_flag']) ? intval($_GET['reg_flag']) : '';
 $user_registered_at = isset($_GET['user_registered_at']) ? $_GET['user_registered_at'] : '';
 
 if (isset($_GET['department'])) {
-    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false, 'defaults' => array_map('intval', $_GET['department']));
 } else {
-    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'useKey' => 'id', 'multiple' => false);
+    $depts_defaults = array('params' => 'name="department"', 'tree' => array('0' => $langAllFacultes), 'multiple' => false);
 }
 
 if (isDepartmentAdmin()) {
