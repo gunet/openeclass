@@ -26,6 +26,7 @@
  */
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
 
@@ -51,24 +52,17 @@ unset($message);
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
-if (!$uid or !$courses[$course_code]) {
-    forbidden();
-}
-
-
-initialize_group_info();
 $user_groups = user_group_info($uid, $course_id);
 
 if ($is_editor) {
-	if (isset($_GET['group'])){
-//print_r($_POST);
+    if (isset($_GET['group'])) {
 		$group_name = $_POST['name'];
 		$group_desc = $_POST['description'];
 		$v = new Valitron\Validator($_POST);
 			$v->rule('required', array('maxStudent'));
 			$v->rule('numeric', array('maxStudent'));
 			$v->rule('required', array('name'));
-		if($v->validate()) {          
+        if($v->validate()) {
             if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
                 $group_max = intval($_POST['maxStudent']);
             } else {
@@ -105,77 +99,73 @@ if ($is_editor) {
 			$id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
                                     VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
 				
-	if ($_POST['self_reg']==on){
+	if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on'){
 		$self_reg = 1;
 	}
 	else $self_reg = 0;
 	
-	if ($_POST['multi_reg']==on){
+	if (isset($_POST['multi_reg']) and $_POST['multi_reg'] == 'on'){
 		$multi_reg = 1;
 	}
 	else $multi_reg = 0;
 	
-	if ($_POST['forum']==on){
-		$has_forum = 1;
+	if (isset($_POST['forum']) and $_POST['forum'] == 'on'){
+            $has_forum = 1;
 	}
 	else $has_forum = 0;
 	
-	if ($_POST['documents']==on){
-		$documents = 1;
+	if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+            $documents = 1;
 	}
 	else $documents = 0;
 	
-	if ($_POST['wiki']==on){
-		$wiki = 1;
+	if (isset($_POST['wiki']) and $_POST['wiki'] == 'on') {
+            $wiki = 1;
 	}
 	else $wiki = 0;
-
+        
+        $private_forum = $_POST['private_forum'];
 									
-		$group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d, group_id = ?d, self_registration = ?d, multiple_registration = ?d, allow_unregister = ?d, forum = ?d, private_forum = ?d, documents = ?d, wiki = ?d, agenda = ?d",
-													$course_id, $id, $self_reg, $multi_reg, 0, $has_forum, $private_forum, $documents, $wiki, 0);
+        $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d, group_id = ?d, self_registration = ?d, multiple_registration = ?d, allow_unregister = ?d, forum = ?d, private_forum = ?d, documents = ?d, wiki = ?d, agenda = ?d",
+                                                $course_id, $id, $self_reg, $multi_reg, 0, $has_forum, $private_forum, $documents, $wiki, 0);
 
-	/*             * ********Create Group Wiki*********** */
-                //Set ACL
-                $wikiACL = array();
-                $wikiACL['course_read'] = true;
-                $wikiACL['course_edit'] = false;
-                $wikiACL['course_create'] = false;
-                $wikiACL['group_read'] = true;
-                $wikiACL['group_edit'] = true;
-                $wikiACL['group_create'] = true;
-                $wikiACL['other_read'] = false;
-                $wikiACL['other_edit'] = false;
-                $wikiACL['other_create'] = false;
+	/** ********Create Group Wiki*********** */
+        //Set ACL
+        $wikiACL = array();
+        $wikiACL['course_read'] = true;
+        $wikiACL['course_edit'] = false;
+        $wikiACL['course_create'] = false;
+        $wikiACL['group_read'] = true;
+        $wikiACL['group_edit'] = true;
+        $wikiACL['group_create'] = true;
+        $wikiACL['other_read'] = false;
+        $wikiACL['other_edit'] = false;
+        $wikiACL['other_create'] = false;
 
-                $wiki = new Wiki();
-                $wiki->setTitle($langGroup . " - Wiki");
-                $wiki->setDescription('');
-                $wiki->setACL($wikiACL);
-                $wiki->setGroupId($id);
-                $wikiId = $wiki->save();
+        $wiki = new Wiki();
+        $wiki->setTitle($langGroup . " - Wiki");
+        $wiki->setDescription('');
+        $wiki->setACL($wikiACL);
+        $wiki->setGroupId($id);
+        $wikiId = $wiki->save();
 
-                $mainPageContent = $langWikiMainPageContent;
+        $mainPageContent = $langWikiMainPageContent;
 
-                $wikiPage = new WikiPage($wikiId);
-                $wikiPage->create($uid, '__MainPage__', $mainPageContent, '', date("Y-m-d H:i:s"), true);
-                /*             * ************************************ */
+        $wikiPage = new WikiPage($wikiId);
+        $wikiPage->create($uid, '__MainPage__', $mainPageContent, '', date("Y-m-d H:i:s"), true);
+        /*             * ************************************ */
 
-                Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' => $id,
-                                                                            'name' => $group_name,
-                                                                            'max_members' => $group_max,
-                                                                            'secret_directory' => $secretDirectory));
-                      
-                $message = "$langGroupAdded";
+        Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' => $id,
+                                                                    'name' => $group_name,
+                                                                    'max_members' => $group_max,
+                                                                    'secret_directory' => $secretDirectory));
 
-	}
-	else {
+        $message = "$langGroupAdded";
+    } else {
             Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
-		}
-	
-	}
-	
-    elseif (isset($_POST['creation'])) {
+        }        
+    } elseif (isset($_POST['creation'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('group_quantity'));
         $v->rule('numeric', array('group_quantity'));
@@ -234,10 +224,15 @@ if ($is_editor) {
                                              secret_directory = ?s",
                                     $course_id, $forum_id, $group_max, $secretDirectory)->lastInsertID;
 									
-				$group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d, group_id = ?d, self_registration = ?d, multiple_registration = ?d, allow_unregister = ?d, forum = ?d, private_forum = ?d, documents = ?d, wiki = ?d, agenda = ?d",
-													$course_id, $id, 1, 0, 0, 1, 0, 1, 0, 0);
+                $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
+                                                                    group_id = ?d, self_registration = ?d, 
+                                                                    multiple_registration = ?d, allow_unregister = ?d, 
+                                                                    forum = ?d, private_forum = ?d, 
+                                                                    documents = ?d, wiki = ?d, 
+                                                                    agenda = ?d",
+                                                                $course_id, $id, 1, 0, 0, 1, 0, 1, 0, 0);
 
-                /*             * ********Create Group Wiki*********** */
+                /** ********Create Group Wiki*********** */
                 //Set ACL
                 $wikiACL = array();
                 $wikiACL['course_read'] = true;
@@ -305,25 +300,15 @@ if ($is_editor) {
 	else $wiki = 0;
 
 	$private_forum = $_POST['private_forum'];
-
 	$group_id = $_POST['group_id'];
-
-	//print_r($_POST);
-      /*register_posted_variables(array(
-            'self_reg' => true,
-            'multi_reg' => true,
-            'private_forum' => true,
-            'has_forum' => true,
-            'documents' => true,
-            'wiki' => true), 'all');*/
-    
+	    
 	Database::get()->query("UPDATE group_properties SET
-								 self_registration = ?d,
-                                 multiple_registration = ?d,
-                                 forum = ?d,
-								 private_forum = ?d,
-                                 documents = ?d,
-                                 wiki = ?d WHERE course_id = ?d AND group_id = ?d",
+                                self_registration = ?d,
+                                multiple_registration = ?d,
+                                forum = ?d,
+                                private_forum = ?d,
+                                documents = ?d,
+                                wiki = ?d WHERE course_id = ?d AND group_id = ?d",
                      $self_reg, $multi_reg,  $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
         $message = $langGroupPropertiesModified;
 

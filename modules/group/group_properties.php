@@ -69,17 +69,17 @@ $tool_content .= "
             <label class='col-sm-3 control-label'>$langGroupStudentRegistrationType:</label>
                 <div class='col-xs-9'>             
                     <div class='checkbox'>
-					   <label>
-					    <input type='checkbox' name='self_reg' $checked[self_reg]>
+                    <label>
+                     <input type='checkbox' name='self_reg' $checked[self_reg]>
                         $langGroupAllowStudentRegistration
-					  </label>
-					</div>
+                        </label>
+                        </div>
                     <div class='checkbox'>
-					  <label>
+                        <label>
                         <input type='checkbox' name='multi_reg' $checked[multi_reg]>
                         $langGroupAllowMultipleRegistration
                       </label>
-					</div>                    
+                    </div>                    
                 </div>
             </div>        
 		    <div class='form-group'>
@@ -128,10 +128,8 @@ $tool_content .= "
                       </label>
                     </div>                    
                 </div>
-            </div>
-			
-			<input type='hidden' name='group_id' value=$group_id></input>
-			
+            </div>			
+            <input type='hidden' name='group_id' value=$group_id></input>			
             <div class='form-group'>
             <div class='col-sm-9 col-sm-offset-3'>
                 <input type='submit' class='btn btn-primary' name='properties' value='$langModify'>

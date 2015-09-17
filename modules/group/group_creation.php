@@ -30,6 +30,8 @@ $helpTopic = 'Group';
 $require_editor = true;
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
+
 $toolName = $langGroups;
 $pageName = $langNewGroupCreate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
@@ -42,11 +44,15 @@ $tool_content .= action_bar(array(
         'url' => "index.php?course=$course_code"
     )
 ));
+
+//check if social bookmarking is enabled for this course
+$social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+
 $group_max_value = Session::has('group_max') ? Session::get('group_max') : 8;
 $group_quantity_value = Session::has('group_quantity') ? Session::get('group_quantity') : 1;
 
 if (isset($_GET['all'])) {
-$tool_content .= " 
+    $tool_content .= " 
     <div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code'>
         <fieldset>
@@ -97,28 +103,26 @@ $tool_content .= "
         </fieldset>
         </form>
     </div>";
-}
-else{
+} else {
 	if ($is_editor) {
-		$tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>\n";
-		$q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
-                                   user.id IN(SELECT user_id FROM group_members
-                                                              WHERE is_tutor = 1) AS is_tutor
-                              FROM course_user, user 
-                              WHERE course_user.user_id = user.id AND
-                                    course_user.tutor = 1 AND
-                                    course_user.course_id = ?d
-                              ORDER BY surname, givenname, user_id", $course_id);
-		foreach ($q as $row) {
-			$selected = $row->is_tutor ? ' selected="selected"' : '';
-			$tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
-					' ' . q($row->givenname) . "</option>\n";
-    }
-		$tool_content_tutor .= '</select>';
+            $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>";
+            $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
+                               user.id IN (SELECT user_id FROM group_members WHERE is_tutor = 1) AS is_tutor
+                          FROM course_user, user 
+                          WHERE course_user.user_id = user.id AND
+                                course_user.tutor = 1 AND
+                                course_user.course_id = ?d
+                          ORDER BY surname, givenname, user_id", $course_id);
+            foreach ($q as $row) {
+                $selected = $row->is_tutor ? ' selected="selected"' : '';
+                $tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
+                                ' ' . q($row->givenname) . "</option>";
+            }
+            $tool_content_tutor .= '</select>';
 	} else {
-		$tool_content_tutor = display_user($tutors);
+            $tool_content_tutor = display_user($tutors);
 	}	
-$tool_content .= "<div class='form-wrapper'>
+    $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;group=1'>
         <fieldset>    
         <div class='form-group".(Session::getError('name') ? " has-error" : "")."'>
@@ -137,16 +141,31 @@ $tool_content .= "<div class='form-wrapper'>
             <div class='col-sm-10'>
                 <input class='form-control' type=text name='maxStudent' size=2>
                 <span class='help-block'>".Session::getError('maxStudent')."</span>
-            </div>
-              
+            </div>              
         </div>
 		<div class='form-group'>
           <label class='col-sm-2 control-label'>$langGroupTutor:</label>
           <div class='col-sm-10'>
               $tool_content_tutor
           </div>
-        </div>
-        <div class='form-group'>
+        </div>";
+        // Students registered to the course but members of no group
+        $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
+                                                FROM (user u, course_user cu)
+                                                    WHERE cu.course_id = $course_id AND
+                                                          cu.user_id = u.id AND
+                                                          cu.status = " . USER_STUDENT . " AND
+                                                          u.id NOT IN (SELECT user_id FROM group_members, `group`
+                                                                        WHERE `group`.id = group_members.group_id AND
+                                                                        `group`.course_id = ?d)
+                                                    GROUP BY u.id
+                                                    ORDER BY u.surname, u.givenname", $course_id);
+        $tool_content_not_Member = $tool_content_group_members = '';
+        foreach ($resultNotMember as $myNotMember) {
+            $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
+                    q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
+        }
+        $tool_content .= "<div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupMembers:</label>
         <div class='col-sm-10'>
             <div class='table-responsive'>
@@ -162,7 +181,7 @@ $tool_content .= "<div class='form-wrapper'>
                         <tr>
                           <td>
                             <select class='form-control' id='users_box' name='nogroup[]' size='15' multiple>
-                              
+                              $tool_content_not_Member
                             </select>
                           </td>
                           <td class='text-center'>
@@ -175,7 +194,7 @@ $tool_content .= "<div class='form-wrapper'>
                           </td>
                           <td class='text-right'>
                             <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
-
+                                $tool_content_group_members
                             </select>
                           </td>
                         </tr>
@@ -208,24 +227,22 @@ $tool_content .= "<div class='form-wrapper'>
             </select>
             </div>
         </div>
-		<div class='form-group'>
+            <div class='form-group'>
              <label class='col-sm-2 control-label'>$langGroupStudentRegistrationType:</label>
                 <div class='col-xs-9'>             
                     <div class='checkbox'>
-					   <label>
-					    <input type='checkbox' name='self_reg'>
-                        
-					  </label>
-					</div>
-                    <div class='checkbox'>
-					  <label>
-                        <input type='checkbox' name='multi_reg'>
-                        
+                    <label>
+                     <input type='checkbox' name='self_reg' checked>$langGroupAllowStudentRegistration
+                   </label>
+                 </div>
+                <div class='checkbox'>
+                    <label>
+                        <input type='checkbox' name='multi_reg'>$langGroupAllowMultipleRegistration                        
                       </label>
-					</div>                    
+                    </div>                    
                 </div>
             </div>        
-		    <div class='form-group'>
+            <div class='form-group'>
                  <label class='col-sm-2 control-label'>$langPrivate_1:</label>
                 <div class='col-sm-9'>            
                     <div class='radio'>
@@ -273,13 +290,13 @@ $tool_content .= "<div class='form-wrapper'>
                 </div>
             </div>
         <div class='form-group'>
-        <div class='col-sm-10 col-sm-offset-2'>
-            <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
-            <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+            <div class='col-sm-10 col-sm-offset-2'>
+                <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
+                <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+            </div>
         </div>
-        </div>
-    </fieldset>
-    </form>
-</div>";
+        </fieldset>
+        </form>
+    </div>";
 }
 draw($tool_content, 2);

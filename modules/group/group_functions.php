@@ -45,7 +45,8 @@ function initialize_group_id($param = 'group_id') {
  * @global type $course_code
  * @param type $group_id
  */
-function initialize_group_info($group_id = false) {
+function initialize_group_info($group_id) {
+    
     global $course_id, $status, $self_reg, $multi_reg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
@@ -65,35 +66,33 @@ function initialize_group_info($group_id = false) {
     if ($status == USER_GUEST) {
         $self_reg = 0;
     }
-
-    if ($group_id !== false) {
-        $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory
-                                 FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $group_id);
-        if (!$res) {
-            header("Location: {$urlServer}modules/group/index.php?course=$course_code");
-            exit;
-        }
-        $group_name = Session::has('name') ? Session::get('name') : $res->name;
-        $group_description = Session::has('description') ? Session::get('description') : $res->description;
-        $forum_id = $res->forum_id;
-        $max_members = Session::has('maxStudent') ? Session::get('maxStudent') : $res->max_members;
-        $secret_directory = $res->secret_directory;
-        $member_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM group_members
-                                                                        WHERE group_id = ?d
-                                                                        AND is_tutor = 0", $group_id)->count;
-
-        $tutors = group_tutors($group_id);
-        $is_tutor = $is_member = $user_group_description = false;
-        if (isset($uid)) {
-            $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
-                                         WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
-            if ($res) {
-                $is_member = true;
-                $is_tutor = $res->is_tutor;
-                $user_group_description = $res->description;
-            }
-        }
+    
+    $res = Database::get()->querySingle("SELECT name, description, forum_id, max_members, secret_directory
+                             FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $group_id);
+    if (!$res) {
+        header("Location: {$urlServer}modules/group/index.php?course=$course_code");
+        exit;
     }
+    $group_name = Session::has('name') ? Session::get('name') : $res->name;
+    $group_description = Session::has('description') ? Session::get('description') : $res->description;
+    $forum_id = $res->forum_id;
+    $max_members = Session::has('maxStudent') ? Session::get('maxStudent') : $res->max_members;
+    $secret_directory = $res->secret_directory;
+    $member_count = Database::get()->querySingle("SELECT COUNT(*) as count FROM group_members
+                                                                    WHERE group_id = ?d
+                                                                    AND is_tutor = 0", $group_id)->count;
+
+    $tutors = group_tutors($group_id);
+    $is_tutor = $is_member = $user_group_description = false;
+    if (isset($uid)) {
+        $res = Database::get()->querySingle("SELECT is_tutor, description FROM group_members
+                                     WHERE group_id = ?d AND user_id = ?d", $group_id, $uid);
+        if ($res) {
+            $is_member = true;
+            $is_tutor = $res->is_tutor;
+            $user_group_description = $res->description;
+        }
+    }    
 }
 
 /**
