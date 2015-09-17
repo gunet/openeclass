@@ -238,6 +238,7 @@ if (isset($_GET['id'])) { // if we come from prof request
     $params = "?type=user";
 } else {
     $pstatus = 1;
+    $cpf_context = array('origin' => 'teacher_register');
     $pageName = $langProfReg;
     $title = $langNewProf;
     $params = "?type=";
