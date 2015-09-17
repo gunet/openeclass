@@ -62,13 +62,26 @@ if (isset($_POST['submit'])) {
     $v->rule('email', 'email_form');
     
     cpf_validate_format_valitron($v);
-
+    
     if (!$v->validate()) {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
     } else {
         // register user
         $depid = intval(isset($_POST['department']) ? $_POST['department'] : 0);
         $verified_mail = intval($_POST['verified_mail_form']);
+        $all_set = register_posted_variables(array(
+            'auth_form' => true,
+            'uname_form' => true,
+            'surname_form' => true,
+            'givenname_form' => true,
+            'email_form' => true,
+            'language_form' => true,
+            'am_form' => false,
+            'phone_form' => false,
+            'password' => true,
+            'pstatus' => true,
+            'rid' => false,
+            'submit' => true));
 
         if ($auth_form == 1) { // eclass authentication
             validateNode(intval($depid), isDepartmentAdmin());
@@ -86,7 +99,7 @@ if (isset($_POST['submit'])) {
         user_hook($uid);
         //process custom profile fields values
         process_profile_fields_data(array('uid' => $uid));
-
+        
         // close request if needed
         if (!empty($rid)) {
             $rid = intval($rid);
@@ -232,7 +245,6 @@ if (isset($_GET['id'])) { // if we come from prof request
 } elseif (@$_GET['type'] == 'user') {
     $pstatus = 5;
     $cpf_context = array('origin' => 'student_register');
-    $cpf_context = array('origin' => 'teacher_register');
     $pageName = $langUserDetails;
     $title = $langInsertUserInfo;
     $params = "?type=user";
@@ -325,7 +337,7 @@ if (isset($_GET['id'])) {
 }
 if (isset($pstatus)) { 
     $tool_content .= "<input type='hidden' name='pstatus' value='$pstatus'>";
-}        
+}
 
 //add custom profile fields input
 $tool_content .= render_profile_fields_form($cpf_context, true);
