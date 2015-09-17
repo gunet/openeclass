@@ -447,9 +447,9 @@ class Validator
     {
         foreach ($this->validUrlPrefixes as $prefix) {
             if (strpos($value, $prefix) !== false) {
-                $url = str_replace($prefix, '', strtolower($value));
+                $url = explode('/', str_replace($prefix, '', strtolower($value)))[0];
 
-                return checkdnsrr($url);
+                return checkdnsrr($url, 'A') || checkdnsrr($url, 'AAAA') || checkdnsrr($url, 'CNAME');
             }
         }
 
