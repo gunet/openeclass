@@ -115,6 +115,12 @@ define('ATTEMPT_CANCELED', 4);
 // for fill in blanks questions
 define('TEXTFIELD_FILL', 1);
 define('LISTBOX_FILL', 2); //
+
+// gradebook activity type
+define('GRADEBOOK_ACTIVITY_ASSIGNMENT', 1);
+define('GRADEBOOK_ACTIVITY_EXERCISE', 2);
+define('GRADEBOOK_ACTIVITY_LP', 3);
+
 // Subsystem types (used in documents)
 define('MAIN', 0);
 define('GROUP', 1);
