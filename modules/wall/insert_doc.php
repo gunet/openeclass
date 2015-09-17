@@ -19,16 +19,26 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
-function list_docs($id = NULL) {
+function list_docs($id = NULL, $subsystem = NULL) {
     global $course_code;
     
     load_js('jstree3');
     
-    $ret_str = '<div id="jstree_doc"></div>';
+    if (is_null($subsystem)) { //main documents
+        $div_id = 'jstree_doc';
+        $sys = '';
+        $input_id = 'docs';
+    } elseif ($subsystem == 'mydocs') { //my documents
+        $div_id = 'jstree_mydoc';
+        $sys = '&subsystem=mydocs';
+        $input_id = 'mydocs';
+    }
+    
+    $ret_str = '<div id="'.$div_id.'"></div>';
     
     $ret_str .= "<script>
                    $(function () {
-                     $('#jstree_doc').jstree({
+                     $('#$div_id').jstree({
                        'types' : {
                          'folder' : {
                            'icon' : 'fa fa-folder'
@@ -43,7 +53,7 @@ function list_docs($id = NULL) {
                            'responsive': true
                          },
 	                     'data' : {
-                           'url' : 'load_doc.php?course=$course_code',
+                           'url' : 'load_doc.php?course=$course_code$sys',
                            'data' : function (node) {
                              return { 'id' : node.id };
                            }
@@ -53,14 +63,14 @@ function list_docs($id = NULL) {
                      });
                      
                      $('#wall_form').on('submit', function(e) {
-                        var selectedElms = $('#jstree_doc').jstree('get_selected', true);
+                        var selectedElms = $('#$div_id').jstree('get_selected', true);
                         var concat_ids = '';
                         $.each(selectedElms, function() {
                           if (this.type == 'file') {
                             concat_ids += this.id + ',';
                           }
                         });
-                        $('#docs').val(concat_ids.slice(0,-1));
+                        $('#$input_id').val(concat_ids.slice(0,-1));
                      });
                    });
                  </script>";
@@ -70,9 +80,9 @@ function list_docs($id = NULL) {
         $doc_res = Database::get()->queryArray("SELECT res_id FROM wall_post_resources WHERE post_id = ?d AND type = ?s", $id, 'document');
         if (count($doc_res)) {
             $ret_str .= "<script>
-                           $('#jstree_doc').on('ready.jstree', function (e, data) {";
+                           $('#$div_id').on('ready.jstree', function (e, data) {";
             foreach ($doc_res as $doc) {
-                $ret_str .= "$('#jstree_doc').jstree('select_node', '".$doc->res_id."');";
+                $ret_str .= "$('#$div_id').jstree('select_node', '".$doc->res_id."');";
             }
             $ret_str .= "  });
                          </script>";

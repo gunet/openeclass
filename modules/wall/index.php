@@ -74,6 +74,10 @@ if (isset($_POST['submit'])) {
                 if (visible_module(MODULE_ID_DOCS)) {
                     insert_docs($id);
                 }
+                //save my documents
+                if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
+                    insert_docs($id,'mydocs');
+                }
             }
         } else {
             Session::Messages($langWallMessageEmpty);
@@ -300,6 +304,17 @@ if (isset($_GET['showPost'])) { //show comments case
                           </div>';
         }
         
+        if (($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'))) {
+            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div">
+                            <input type="hidden" name="mydoc_ids" id="mydocs">
+                              '.list_docs(NULL,'mydocs').'
+                          </div>';
+        } else {
+            $mydocs_div = '<div class="form-group tab-pane fade" id="mydocs_div">
+                              <div class = "alert alert-warning">'.$langInactiveModule.'</div>
+                          </div>';
+        }
+        
         $tool_content .= '<div class="row">
             <div class="col-sm-12">
                 <div class="form-wrapper">
@@ -313,6 +328,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                 <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
                                 <li><a data-toggle="pill" href="#videos_div">'.$langVideo.'</a></li>
                                 <li><a data-toggle="pill" href="#docs_div">'.$langDoc.'</a></li>
+                                <li><a data-toggle="pill" href="#mydocs_div">'.$langMyDocs.'</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div class="form-group tab-pane fade in active" id="youtube_video_div">
@@ -321,6 +337,7 @@ if (isset($_GET['showPost'])) { //show comments case
                                 </div>
                                 '.$video_div.'
                                 '.$docs_div.'
+                                '.$mydocs_div.'
                             </div>
                         </fieldset>
                         <div class="form-group">'.

@@ -25,6 +25,7 @@ require_once 'modules/comments/class.comment.php';
 require_once 'modules/abuse_report/abuse_report.php';
 require_once 'include/lib/mediaresource.factory.php';
 require_once 'include/lib/fileDisplayLib.inc.php';
+require_once 'include/lib/multimediahelper.class.php';
 require_once 'modules/document/doc_init.php';
 
 function allow_to_post($course_id, $user_id, $is_editor) {
@@ -336,13 +337,24 @@ function insert_video($post_id) {
     }
 }
 
-function insert_docs($post_id) {
-    global $course_id;
+function insert_docs($post_id, $subsystem = NULL) {
+    global $course_id, $uid;
     
-    if (isset($_POST['doc_ids']) and !empty($_POST['doc_ids'])) {
-        $docs = explode(',', $_POST['doc_ids']);
+    if (is_null($subsystem)) { //main documents
+        if (isset($_POST['doc_ids']) and !empty($_POST['doc_ids'])) {
+            $docs = explode(',', $_POST['doc_ids']);
+        }
+        $sql = "course_id = $course_id";
+    } else if ($subsystem == 'mydocs') { //mydocuments
+        if (isset($_POST['mydoc_ids']) and !empty($_POST['mydoc_ids'])) {
+            $docs = explode(',', $_POST['mydoc_ids']);
+        }
+        $sql = "subsystem = ".MYDOCS." AND subsystem_id = $uid";
+    }
+    
+    if (isset($docs)) {
         foreach ($docs as $doc) {
-            $row = Database::get()->querySingle("SELECT title, filename FROM document WHERE course_id = ?d AND id = ?d", $course_id, $doc);
+            $row = Database::get()->querySingle("SELECT title, filename FROM document WHERE $sql AND id = ?d", $doc);
             $text = (empty($row->title))? $row->filename : $row->title;
             $q = Database::get()->query("INSERT INTO wall_post_resources SET post_id = ?d, type = ?s, title = ?s, res_id = ?d",
                     $post_id, 'document', $text, $doc);
@@ -390,7 +402,7 @@ function show_document($title, $resource_id, $doc_id) {
     $module_visible = visible_module(MODULE_ID_DOCS);
     
     $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $doc_id);
-
+    
     if (!$file) {
         $download_hidden_link = '';
         $status = 'del';

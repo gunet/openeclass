@@ -28,7 +28,7 @@ header('Content-Type: application/json');
 $data = array();
 
 //variables initialization
-if (isset($_GET['subsystem']) AND $_GET['subsystem'] == 'MY_DOCS') { //MY DOCUMENTS
+if (isset($_GET['subsystem']) AND $_GET['subsystem'] == 'mydocs') { //MY DOCUMENTS
     $subsystem = MYDOCS;
     $sql = "subsystem = $subsystem AND subsystem_id = $uid";
 } else { //MAIN DOCS
