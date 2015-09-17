@@ -1240,7 +1240,7 @@ function register_user_grades($gradebook_id, $actID) {
 
     if ($resultUsers) {
         $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "'>
+        <form class='form-horizontal' id='user_grades_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;gradebook_id=" . getIndirectReference($gradebook_id) . "&amp;ins=" . getIndirectReference($actID) . "'>
         <div class='row'>
         <div class='col-xs-12'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
@@ -1667,7 +1667,7 @@ function insert_grades($gradebook_id, $actID) {
             "$userID" => "$langTheField $m[grade]"
         ));
     }
-    if($v->validate()) {       
+    if($v->validate()) {
         foreach ($_POST['usersgrade'] as $userID => $userInp) {
             if ($userInp == '') {
                 Database::get()->query("DELETE FROM gradebook_book WHERE gradebook_activity_id = ?d AND uid = ?d", $actID, getDirectReference($userID));

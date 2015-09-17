@@ -67,10 +67,7 @@ load_js('datatables_filtering_delay');
 <script type='text/javascript'>
 $(function() {   
     var oTable = $('#users_table{$course_id}').DataTable ({
-        'aLengthMenu': [
-                   [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
-               ],'aLengthMenu': [
+                'aLengthMenu': [
                    [10, 15, 20 , -1],
                    [10, 15, 20, '$langAllOfThem'] // change per page values here
                ],
@@ -99,6 +96,9 @@ $(function() {
                            'sLast':     '&raquo;'
                        }
                    }
+    });
+    $('#user_grades_form').on('submit', function (e) {
+        oTable.rows().nodes().page.len(-1).draw();             
     });
     $('input[id=button_groups]').click(changeAssignLabel);
     $('input[id=button_some_users]').click(changeAssignLabel);

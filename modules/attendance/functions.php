@@ -165,7 +165,7 @@ function register_user_presences($attendance_id, $actID) {
     if ($resultUsers) {
         //table to display the users
         $tool_content .= "<div class='form-wrapper'>
-        <form class='form-horizontal' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
+        <form class='form-horizontal' id='user_attendances_form' method='post' action='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;attendance_id=$attendance_id&amp;ins=" . getIndirectReference($actID) . "'>
         <table id='users_table{$course_id}' class='table-default custom_list_order'>
             <thead>
                 <tr>
@@ -1353,20 +1353,35 @@ function attendForAutoActivities($userID, $exeID, $exeType) {
  */
 function insert_presence($attendance_id, $actID) {
       
-    global $tool_content, $langGradebookEdit;
-    
-    foreach ($_POST['userspresence'] as $userID => $userInp) {
-        // //check if there is record for the user for this activity
-        $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM attendance_book 
-                                    WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $userID);        
-        if ($checkForBook->count) { // update
-            Database::get()->query("UPDATE attendance_book SET attend = ?d WHERE id = ?d", $userInp, $checkForBook->id);            
-        } else { // insert
-            Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $userID, $actID, $userInp, '');
-        }                
-    }  
-    $message = "<div class='alert alert-success'>$langGradebookEdit</div>";
-    $tool_content .= $message . "<br/>";
+    global $tool_content, $langGradebookEdit, $course_code;
+
+    if (isset($_POST['userspresence'])) {
+       
+        $to_be_inserted = array_keys($_POST['userspresence']);
+        $already_inserted = [];
+        Database::get()->queryFunc("SELECT uid FROM attendance_book 
+                                        WHERE attendance_activity_id = ?d", 
+        function($attendance_book) use (&$already_inserted){
+            array_push($already_inserted, $attendance_book->uid);
+        },$actID);
+        
+        $to_be_deleted = array_diff($already_inserted, $to_be_inserted);
+        foreach ($to_be_deleted as $row) {
+            Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $row);
+        }      
+        foreach ($to_be_inserted as $row) {
+            // check if there is record for the user for this activity
+            $checkForBook = Database::get()->querySingle("SELECT COUNT(id) AS count, id FROM attendance_book 
+                                        WHERE attendance_activity_id = ?d AND uid = ?d", $actID, $row);
+            if (!$checkForBook->count) {
+                Database::get()->query("INSERT INTO attendance_book SET uid = ?d, attendance_activity_id = ?d, attend = ?d, comments = ?s", $row, $actID, 1, '');
+            }
+        }
+    } else {
+        Database::get()->query("DELETE FROM attendance_book WHERE attendance_activity_id = ?d", $actID);
+    }
+    Session::Messages($langGradebookEdit, 'alert-success');
+    redirect_to_home_page("modules/attendance/index.php?course=$course_code&attendance_id=$attendance_id&ins=".  getIndirectReference($actID));
 }
 
 
