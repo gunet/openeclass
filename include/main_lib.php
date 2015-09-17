@@ -2781,6 +2781,54 @@ function forbidden($path = '') {
     exit;
 }
 
+/**
+ * @brief returns HTML for an buttons
+ * @param array $options options for each entry
+ *
+ * Each item in array is another array of the attributes for button:
+ * 
+ */
+function form_buttons($btnArray) {
+    global $langCancel;
+    
+    $buttons = '';
+    foreach ($btnArray as $btn) {
+        if (!isset($btn['show']) || (isset($btn['show']) && $btn['show'] == true)){
+
+            $id = isset($btn['id'])?"id='$btn[id]'": '';
+            $custom_field = isset($btn['custom_field'])?"onclick='$btn[custom_field]'": '';
+            if (isset($btn['icon'])) {
+                $text = "<span class='fa $btn[icon] space-after-icon'></span>" . $text;
+            }
+
+            if (isset($btn['href'])) {
+                $class = isset($btn['class']) ? $btn['class'] : 'btn-default';
+                $title = isset($btn['title'])?"title='$btn[title]'": '';
+                $text = isset($btn['text'])? $btn['text']: $langCancel;
+                $target = isset($btn['target'])?"target='$btn[target]'": '';
+                $javascript = isset($btn['javascript'])?"onclick=$btn[javascript]": '';
+                $buttons .= "<a class='btn $class' $id href='$btn[href]' $target $title $javascript $custom_field>$text</a>&nbsp;&nbsp;";
+            } elseif (!isset($btn['href']) && isset($btn['javascript'])) {
+                $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
+                $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';
+                $name = isset($btn['name'])?"name='$btn[name]'": null;
+                $value = isset($btn["value"])?"value='$btn[value]'": null;
+                $javascript = isset($btn['javascript'])?"onclick=$btn[javascript]": '';
+                $buttons .= "<input class='btn $class' $type $id $name $value $custom_field $javascript />&nbsp;&nbsp;";
+            } else {
+                $class = isset($btn['class']) ? $btn['class'] : 'btn-primary';
+                $type = isset($btn['type'])?"type='$btn[type]'":'type="submit"';
+                $text = isset($btn['text'])? $btn['text']: '';
+                $name = isset($btn['name'])?"name='$btn[name]'": null;
+                $value = isset($btn["value"])?"value='$btn[value]'": null;
+                $disabled = isset($btn['disabled'])?"disabled='$btn[disabled]'": '';
+                $buttons .= "<button class='btn $class' $type $id $name $value $custom_field $disabled>$text</button>&nbsp;&nbsp;";
+            }
+        }
+    }
+
+    return $buttons;
+}
 
 /**
  * @brief returns HTML for an action bar
