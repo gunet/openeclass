@@ -30,7 +30,7 @@ function print_sharing_links ($url, $text) {
     
     $head_content .= '<link rel="stylesheet" type="text/css" href="'.$urlServer.'modules/sharing/style.css">';
     
-    $out = "<div class='sharingcontainer'><span class='hidden-xs'>$langShare:</span> ";
+    $out = "<div class='sharingcontainer'>";
     $out .= "<ul class='sharinglist'>";
 
     //facebook

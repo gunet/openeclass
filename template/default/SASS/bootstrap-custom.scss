@@ -29,7 +29,6 @@
     position: absolute;
     background: $color-background;
     height: 100%;
-    padding-bottom: 48px;
     left: 0px;
     top: 0px;
     padding: 0px;
@@ -1441,15 +1440,17 @@ ul.tablelist
 
     .item-header
     {
-        padding:0em 4em 1em 0em;
+        padding:0em 0em 1em 0em;
         border-bottom:1px solid #ccc;
-        margin-top: 1em;
+        margin-top: 15px;
     }
     .item-header h4.item-title
     {
         margin:0px;
         font-size: 15px;
-        width: 85%;
+        width: 70%;
+        float: left;
+        line-height: 22px;
     }
     .item-header .item-date
     {
@@ -1550,21 +1551,23 @@ ul.tablelist
         border: none;
     }
     .item-side{
-        position: absolute;
-        top: 0px;
-        right: 0px;
+        //position: absolute;
+        width: 108px;
+        float: right;
+        //top: 0px;
+        //right: 0px;
         .btn-group a{
-            border-top: none !important;
+            //border-top: none !important;
         }
         .btn-group a:last-child{
-            border-right: none !important;
+            //border-right: none !important;
         }
         .btn-group a:first-child{
-            border-top-left-radius: 0px !important;
+            //border-top-left-radius: 0px !important;
         }
         .btn-group a:last-child{
-            border-top-right-radius: 0px !important;
-            border-bottom-right-radius: 0px !important;
+            //border-top-right-radius: 0px !important;
+            //border-bottom-right-radius: 0px !important;
         }
     }
 }
@@ -1908,7 +1911,9 @@ a.list-group-item.delete:hover{
 /* COURSE HOME */
 /* Course description title */
 .course-info-title{
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #aaaaaa;
     h4{
         line-height: 30px;
         font-size: 16px;
@@ -1918,17 +1923,7 @@ a.list-group-item.delete:hover{
     }
 
     .edit-course-title{
-        margin: 0px 15px;
-        i{
-            font-size: 16px;
-            line-height: 30px;
-            color : #666;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        i:hover{
-            color: #4DA1E4;
-        }
+        margin-right: 15px;
     }
 }
 /* add unit button */
@@ -1947,13 +1942,35 @@ a.list-group-item.delete:hover{
 .license_info_box
 {
     text-align: center;
-
     img
     {
         width:100px;
         margin: 8px 0 5px 0;
     }
 }
+.rating-container{
+    text-align: left;
+}
+.social-container{
+    text-align: right;
+}
+.rating{
+    .ratestar{
+        display: inline-block;
+        vertical-align: top;
+    }
+    .rateit{
+        padding-top: 2px;
+    }
+    .rateit-info{
+        display: inline-block;
+        vertical-align: top;
+        span{
+            vertical-align: top;
+        }
+    }
+}
+
 
 /* PORTFOLIO */
 /* portfolio datatable right cell fix */ 

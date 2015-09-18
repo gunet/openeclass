@@ -98,16 +98,16 @@ if ($is_link || setting_get($setting_id, $course_id) == 1) {
             
             if ($num_ratings['fivestar'] != 0) {
                 $avg = $rating->getFivestarRating();
-                $response[0] .= $langRatingAverage.$avg.', ';
+                $response[0] .= '<small class="text-muted">&nbsp;('.$avg.')</small>';
                 $response[1] = $avg;
             } else {
                 $response[1] = 0;
             }
             
             if ($num_ratings['fivestar'] == 1) {
-                $response[0] .= $num_ratings['fivestar'].$langRatingVote;
+                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVote.'</small>';
             } else {
-                $response[0] .= $num_ratings['fivestar'].$langRatingVotes;
+                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'</small>';
             }
             
         }

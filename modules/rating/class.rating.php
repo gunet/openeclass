@@ -461,11 +461,28 @@ Class Rating {
                 
                 $avg = $this->getFivestarRating();
                 $avg_datavalue = 'data-rateit-value="'.$avg.'" data-rateit-ispreset="true" data-rateit-readonly="true"';
-                
+
+                $out .= '';
+
                 $out .= '<div class="rateit" id="rateit-avg-'.$this->rtype.'-'.$this->rid.'" '.$avg_datavalue.'></div>';
-                
-                $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'">';
-                
+
+                $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'" class="rateit-info">';
+
+                if ($num_ratings['fivestar'] != 0) {
+                    $out .= '<small class="text-muted">&nbsp;('.$avg.')</small>';
+                }
+
+                if ($num_ratings['fivestar'] == 1) {
+                    $out .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVote.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
+                } else {
+                    $out .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
+                }
+
+                $out .= '</div><span id="rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'" class="ratestar"> <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="'.$langRateIt.'"><span class="fa fa-plus-square"></span></a></span>';
+
+                /* *** Original ***
+                $out .= '<div id="sdf rateit-info-'.$this->rtype.'-'.$this->rid.'">';
+
                 if ($num_ratings['fivestar'] != 0) {
                     $out .= $langRatingAverage.$avg.', ';
                 }
@@ -474,9 +491,10 @@ Class Rating {
                     $out .= $num_ratings['fivestar'].$langRatingVote.'</div>';
                 } else {
                     $out .= $num_ratings['fivestar'].$langRatingVotes.'</div>';
-                }
+                }*/
                 
-                $out .= '<div id="rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'" ><a href="javascript:void(0)">'.$langRateIt.'</a></div>';
+                //$out .= '<div id="rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'" ><a href="javascript:void(0)">'.$langRateIt.'</a></div>';
+
                 
                 $userRating = "";
                 if ($this->userHasRated($uid) !== false) {
@@ -495,7 +513,7 @@ Class Rating {
                          type: \'GET\',
                          success: function (data) {
                              response = JSON.parse(data);
-                             $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").text(response[0]);
+                             $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").html(response[0]);
                              $("#rateit-avg-'.$this->rtype.'-'.$this->rid.'").rateit("value",response[1]);
                          },
                      });
@@ -508,7 +526,7 @@ Class Rating {
                          type: \'GET\',
                          success: function (data) {
                              response = JSON.parse(data);
-                             $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").text(response[0]);
+                             $("#rateit-info-'.$this->rtype.'-'.$this->rid.'").html(response[0]);
                              $("#rateit-avg-'.$this->rtype.'-'.$this->rid.'").rateit("value",response[1]);
                          },
                      });
@@ -524,14 +542,15 @@ Class Rating {
                 
                 $out .= '<div class="rateit" '.$avg_datavalue.' data-rateit-ispreset="true" data-rateit-readonly="true"></div>';
                 $out .= '<div id="rateit-info-'.$this->rtype.'-'.$this->rid.'">';
+
                 if ($num_ratings['fivestar'] != 0) {
-                    $out .= $langRatingAverage.$avg.', ';
+                    $out .= '<small class="text-muted">&nbsp;('.$avg.') &nbsp;&nbsp;</small>';
                 }
-                
+
                 if ($num_ratings['fivestar'] == 1) {
-                    $out .= $num_ratings['fivestar'].$langRatingVote.'</div>';
+                    $out .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVote.'hg </small></div>';
                 } else {
-                    $out .= $num_ratings['fivestar'].$langRatingVotes.'</div>';
+                    $out .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'</small></div>';
                 }
             }
             
