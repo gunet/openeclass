@@ -114,14 +114,14 @@ function send_mail_multipart($from, $from_address, $to, $to_address, $subject, $
         "<title>message</title>".
         "<style type='text/css'>
             /* General Styles */
-            body{ padding: 0px; margin: 0px; color: #555; background-color: #f5f5f5; font-family: 'Helvetica', sans-serif; font-size: 1em; }
+            body{ padding: 0px; margin: 0px; color: #555; background-color: #f7f7f7; font-family: 'Helvetica', sans-serif; font-size: 1em; }
             #container{ margin: 20px; padding: 10px; background-color: #fefefe; }
             #mail-header, #mail-body, #mail-footer{ padding:  0 15px 15px; }
             hr{ margin: 0px; }
 
             /* Header Styles */
             #mail-header{ padding-top: 10px; border-bottom: 1px solid #ddd; color: #666; }
-            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; padding: 12px 15px; }
+            #header-title{ background-color: #f5f5f5; margin-left: -15px; margin-right: -15px; padding: 12px 15px; font-weight: bold; }
             #forum-category{ list-style: none; padding-left: 0px; }
             #forum-category li{ padding-bottom: 1px; }
             #forum-category li span:first-child{ width: 150px; }
