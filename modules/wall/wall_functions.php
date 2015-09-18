@@ -399,12 +399,9 @@ function show_document($title, $resource_id, $doc_id) {
     global $is_editor, $course_id, $langWasDeleted, $urlServer, $id, $course_code, 
            $langWallHiddenResource, $langInactiveModule;
     
-    $module_visible = visible_module(MODULE_ID_DOCS);
-    
-    $file = Database::get()->querySingle("SELECT * FROM document WHERE course_id = ?d AND id = ?d", $course_id, $doc_id);
+    $file = Database::get()->querySingle("SELECT * FROM document WHERE id = ?d", $doc_id);
     
     if (!$file) {
-        $download_hidden_link = '';
         $status = 'del';
         $image = 'fa-times';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
@@ -412,9 +409,15 @@ function show_document($title, $resource_id, $doc_id) {
         $status = $file->visible;
         $file->title = $title;
         $image = choose_image('.' . $file->format);
-        $download_url = "{$urlServer}modules/document/index.php?course=$course_code&amp;download=$file->path";
-        $download_hidden_link = "<input type='hidden' value='$download_url'>";
         $file_obj = MediaResourceFactory::initFromDocument($file);
+        
+        if ($file->subsystem == MYDOCS) { //my documents
+            $module_visible = ($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'));
+            define('MY_DOCUMENTS', true);
+        } else { //main documents
+            $module_visible = visible_module(MODULE_ID_DOCS);
+        }
+                
         $file_obj->setAccessURL(file_url($file->path, $file->filename));
         $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
         $link = MultimediaHelper::chooseMediaAhref($file_obj);
@@ -444,7 +447,7 @@ function show_document($title, $resource_id, $doc_id) {
     return "
     <tr$class_vis>
     <td width='1'>" . icon($image, '') . "</td>
-    <td class='text-left'>$download_hidden_link$link</td></tr>";
+    <td class='text-left'>$link</td></tr>";
 }
 
 function show_video($table, $title, $resource_id, $video_id) {
