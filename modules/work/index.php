@@ -33,6 +33,7 @@ require_once '../../include/baseTheme.php';
 require_once 'include/lib/forcedownload.php';
 require_once 'work_functions.php';
 require_once 'modules/group/group_functions.php';
+require_once 'modules/gradebook/functions.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/fileManageLib.inc.php';
 require_once 'include/sendMail.inc.php';
