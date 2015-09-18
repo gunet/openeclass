@@ -292,8 +292,10 @@ if (isset($_GET['modifyAnswers'])) {
             $nbrAnswers++;
         }
         // minimum 2 answers
-        if ($nbrAnswers < 2) {
+        if ($nbrAnswers == 1) {
             $nbrAnswers = 2;
+        } elseif ($nbrAnswers == 0) {
+            $nbrAnswers = 4;
         }
     } elseif ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
         if (!isset($submitAnswers) && !isset($buttonBack)) {
