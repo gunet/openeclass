@@ -121,18 +121,58 @@ if (isset($_POST['submit'])) {
         $telephone = get_config('phone');
         $emailsubject = "$langYourReg $siteName $type_message";
         $emailbody = "
-$langDestination $givenname_form $surname_form
+        $langDestination $givenname_form $surname_form
 
-$langYouAreReg $siteName $type_message, $langSettings $uname_form
-$langPass : $password
-$langAddress $siteName $langIs: $urlServer
-$langProblem
+        $langYouAreReg $siteName $type_message, $langSettings $uname_form
+        $langPass : $password
+        $langAddress $siteName $langIs: $urlServer
+        $langProblem
 
-" . get_config('admin_name') . "
-$langManager $siteName
-$langTel $telephone
-$langEmail : " . get_config('email_helpdesk') . "\n";
-        send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
+        " . get_config('admin_name') . "
+        $langManager $siteName
+        $langTel $telephone
+        $langEmail : " . get_config('email_helpdesk') . "\n";
+
+        $emailheader = "
+            <!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langYouAreReg $siteName $type_message $langWithSuccess</div>
+                </div>
+            </div>";
+
+        $emailmain = "
+        <!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div>$langSettings</div>
+            <div id='mail-body-inner'>
+                <ul id='forum-category'>
+                    <li><span><b>$langUserCodename: </b></span> <span>$uname_form</span></li>
+                    <li><span><b>$langPass: </b></span> <span>$password</span></li>
+                    <li><span><b>$langAddress $siteName $langIs: </b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+            </div>
+            <div>
+            <br>
+                <p>$langProblem" . get_config('admin_name') . ":
+                <ul id='forum-category'>
+                    <li>$langManager: $siteName</li>
+                    <li>$langTel: $telephone</li>
+                    <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                </ul></p>
+            </div>
+        </div>";
+
+
+        $emailbody = $emailheader.$emailmain;
+
+        $emailbodyplain = html2text($emailbody);
+
+        //send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
+        send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody, $charset);
+
         Session::Messages(array($message,
             "$langTheU \"$givenname_form $surname_form\" $langAddedU" .
             ((isset($auth) and $auth == 1)? " $langAndP": '')), 'alert-success');
