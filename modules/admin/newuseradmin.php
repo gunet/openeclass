@@ -120,18 +120,6 @@ if (isset($_POST['submit'])) {
         // send email
         $telephone = get_config('phone');
         $emailsubject = "$langYourReg $siteName $type_message";
-        $emailbody = "
-        $langDestination $givenname_form $surname_form
-
-        $langYouAreReg $siteName $type_message, $langSettings $uname_form
-        $langPass : $password
-        $langAddress $siteName $langIs: $urlServer
-        $langProblem
-
-        " . get_config('admin_name') . "
-        $langManager $siteName
-        $langTel $telephone
-        $langEmail : " . get_config('email_helpdesk') . "\n";
 
         $emailheader = "
             <!-- Header Section -->
