@@ -96,36 +96,58 @@ if (isset($_GET['start'])) {
 
 if ($total_topics > $topics_per_page) { // navigation
     $base_url = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;forum=$forum_id&amp;start=";
-    $tool_content .= "<div class='table-responsive'><table class='table-default'><tr>";
-    $tool_content .= "<td width='50%' class='text-left'><span class='row'><strong class='pagination'>
-		<span class='pagination'>$langPages:&nbsp;";
+    $paging = array();
+
     $current_page = $first_topic / $topics_per_page + 1; // current page
     for ($x = 1; $x <= $pages; $x++) { // display navigation numbers
         if ($current_page == $x) {
-            $tool_content .= "$x&nbsp;";
+            $paging[] = "<li class='active'><a href='#'>$x</a></li>";
         } else {
             $start = ($x - 1) * $topics_per_page;
-            $tool_content .= "<a href='$base_url&amp;start=$start'>$x&nbsp;</a>";
+            $paging[] = "<li><a href='$base_url&amp;start=$start'>$x</a></li>";
         }
     }
-    $tool_content .= "</span></strong></span></td>";
-    $tool_content .= "<td colspan='4' class='text-right'>";
 
     $next = $first_topic + $topics_per_page;
     $prev = $first_topic - $topics_per_page;
     if ($prev < 0) {
         $prev = 0;
     }
-
     if ($first_topic == 0) { // beginning
-        $tool_content .= "<a href='$base_url$next'>$langNextPage</a>";
+        $nexturlclass = "";
+        $privurlclass = "class='disabled'";
+        $nexturl = $base_url.$next;
+        $prevurl = "#";
     } elseif ($first_topic + $topics_per_page < $total_topics) {
-        $tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>&nbsp|&nbsp;
-		<a href='$base_url$next'>$langNextPage</a>";
+        $nexturlclass = "";
+        $privurlclass = "";
+        $prevurl = $base_url.$prev;
+        $nexturl = $base_url.$next;
     } elseif ($start - $topics_per_page < $total_topics) { // end
-        $tool_content .= "<a href='$base_url$prev'>$langPreviousPage</a>";
+        $nexturlclass = "class='disabled'";
+        $privurlclass = "";
+        $nexturl = "#";
+        $prevurl = $base_url.$prev;
     }
-    $tool_content .= "</td></tr></table></div>";
+
+    $tool_content .= "
+    <nav class='clearfix'>
+      <ul class='pagination pull-right'>
+        <li $privurlclass>
+            <a href='$prevurl' aria-label='Previous'>
+                <span aria-hidden='true'>&laquo;</span>
+            </a>
+        </li>
+        ".implode($paging)."
+        <li $nexturlclass>
+          <a href='$nexturl' aria-label='Next'>
+            <span aria-hidden='true'>&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    ";
+
 }
 
 // delete topic
