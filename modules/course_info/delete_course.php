@@ -23,6 +23,7 @@ $require_current_course = TRUE;
 $require_course_admin = TRUE;
 require_once '../../include/baseTheme.php';
 require_once 'include/log.php';
+require_once 'archive_functions.php';
 
 $toolName = $langCourseInfo;
 $pageName = $langDelCourse;
@@ -35,7 +36,17 @@ if (isset($_POST['delete'])) {
             'icon' => 'fa-reply',
             'level' => 'primary-label')));
     
+    // first archive course
+    doArchive($course_id, $course_code);    
+    
+    $garbage = "$webDir/courses/garbage";
+    if (!is_dir($garbage)) {
+        mkdir($garbage, 0775);
+    }
+    rename("$webDir/courses/archive/$course_code", "$garbage/$course_code");
+     
     delete_course($course_id);
+    
     // logging
     Log::record(0, 0, LOG_DELETE_COURSE, array('id' => $course_id,
                                                'code' => $course_code,

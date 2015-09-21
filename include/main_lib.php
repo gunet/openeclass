@@ -1476,13 +1476,8 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM tag WHERE id NOT IN(SELECT DISTINCT tag_id FROM tag_element_module WHERE course_id != ?d)", $cid);    
     Database::get()->query("DELETE FROM tag_element_module WHERE course_id = ?d", $cid);
 
-
-    $garbage = "$webDir/courses/garbage";
-    if (!is_dir($garbage)) {
-        mkdir($garbage, 0775);
-    }
-    rename("$webDir/courses/$course_code", "$garbage/$course_code");
-    removeDir("$webDir/video/$course_code");
+    removeDir("$webDir/courses/$course_code");
+    removeDir("$webDir/video/$course_code");    
     // refresh index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
