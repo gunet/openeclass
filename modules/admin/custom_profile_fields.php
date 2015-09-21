@@ -403,7 +403,7 @@ if (isset($_GET['add_cat'])) { //add a new category form
     }
     
     foreach ($_POST['fields'] as $field) {
-        $field_id = substr($field, 6); echo $field_id." ".$fields_counter."<br/>";
+        $field_id = substr($field, 6);
         Database::get()->query("UPDATE custom_profile_fields SET sortorder = ?d WHERE id = ?d", $fields_counter, $field_id);
         $fields_counter--;
     }
