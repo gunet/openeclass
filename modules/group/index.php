@@ -55,6 +55,43 @@ unset($_SESSION['forum_id']);
 $user_groups = user_group_info($uid, $course_id);
 
 if ($is_editor) {
+
+	if (isset($_GET['urlview'])) {
+		$urlview = urlencode($_GET['urlview']);
+	} else {
+		$urlview = '';
+	}
+	
+	if (isset($_GET['socialview'])) {
+		$socialview = true;
+		$socialview_param = '&amp;socialview';
+	} else {
+		$socialview = false;
+		$socialview_param = '';
+	}
+	
+	if (isset($_GET['deletecategory'])) {
+		$id = $_GET['id'];
+		delete_category($id);
+		Session::Messages($langGroupCategoryDeleted, 'alert-success');
+		redirect_to_home_page("modules/group/index.php");
+	}
+	/*if (isset($_GET['action'])) {
+		switch ($_GET['action']) {
+			case 'addcategory':
+				$pageName = $langCategoryAdd;
+				break;
+			case 'editcategory':
+				$pageName = $langCategoryMod;
+				break;
+			case 'deletecategory':
+				delete_category($id);
+				Session::Messages($langGroupCategoryDeleted, 'alert-success');
+				redirect_to_home_page("modules/group/index.php");
+				break;
+		}
+	}*/
+
     if (isset($_GET['group'])) {
 		$group_name = $_POST['name'];
 		$group_desc = $_POST['description'];
@@ -221,8 +258,9 @@ if ($is_editor) {
                                              name = '$langGroup $group_num',
                                              forum_id =  ?d,
                                              max_members = ?d,
-                                             secret_directory = ?s",
-                                    $course_id, $forum_id, $group_max, $secretDirectory)->lastInsertID;
+                                             secret_directory = ?s,
+											 category_id = ?d",
+                                    $course_id, $forum_id, $group_max, $secretDirectory, intval(getDirectReference($_POST['selectcategory'])))->lastInsertID;
 									
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
                                                                     group_id = ?d, self_registration = ?d, 
@@ -495,7 +533,7 @@ if ($is_editor) {
                     'icon' => 'fa-gear',
                     'level' => 'primary'),*/
 				array('title' => $langCategoryAdd,
-                      'url' => "group_category.php?course=$course_code",
+                      'url' => "group_category.php?course=$course_code&amp;addcategory=1",
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
                       'level' => 'primary-label'),
@@ -568,8 +606,8 @@ if ($is_editor) {
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     }
-
-} else {
+}
+ else {
     // Begin student view
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     if (count($q) == 0) {
@@ -622,35 +660,124 @@ if ($is_editor) {
             $totalRegistered += $member_count;
         }
         $tool_content .= "</table></div>";
-    }
-	
-}
-
-function submit_category() {
-    global $course_id, $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description;
-
-    register_posted_variables(array('categoryname' => true,
-                                    'description' => true), 'all', 'trim');
-    $set_sql = "SET name = ?s, description = ?s";
-    $terms = array($categoryname, purify($description));
-
-    if (isset($_POST['id'])) {
-        $id = getDirectReference($_POST['id']);
-        Database::get()->query("UPDATE `group_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
-        $log_type = LOG_MODIFY;
+		}
+	}
+	$display_tools = $is_editor && !$is_in_tinymce;
+	if (!in_array($action, array('addcategory', 'editcategory'))) {
+    if ($social_bookmarks_enabled == 1) {
+        $countgroups = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `group` WHERE course_id = ?d AND category_id <> ?d", $course_id, -1)->cnt;
     } else {
-        $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `link_category`
-                                      WHERE course_id = ?d", $course_id)->maxorder;
-        $order++;
-        $id = Database::get()->query("INSERT INTO `group_category` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
-        $log_type = LOG_INSERT;
+        $countgroups = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `group` WHERE course_id = ?d AND category_id <> ?d AND category_id <> ?d", $course_id, -1, -2)->cnt;
     }
-    $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
-    Log::record($course_id, MODULE_ID_LINKS, $log_type, array('id' => $id,
-        'category' => $categoryname,
-        'description' => $txt_description));
-}
+
+    if ($countgroups > 0) {
+	
+	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
+	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
+	$aantalcategories = count($cat);
+	$tool_content .= "
+        <div class='row'>
+          <div class='col-sm-12'>
+            <div class='table-responsive'>
+            <table class='table-default  category-links'>";
+    if ($aantalcategories > 0) {
+        $tool_content .= "<tr class='list-header'><th>";
+
+       $tool_content .= "$langCategorisedGroups&nbsp;";
+            if (isset($urlview) and abs($urlview) == 0) {
+                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
+            } else {
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
+            }
+            $tool_content .= "</th>";
+            if ($display_tools) {
+                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+            }
+            $tool_content .= "</tr>";
+        } else {
+            $tool_content .= "<tr><th>";
+
+            $tool_content .= "$langCategorisedGroups&nbsp;";
+       if (isset($urlview) and abs($urlview) == 0) {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
+            } else {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
+            }$tool_content .= "</th>";
+            if ($display_tools) {
+                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+            }
+            $tool_content .= "</tr>";
+            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupCategories - </td>" .
+                ($display_tools? '<td></td>': '') . "</tr>";
+		}
+	if ($urlview === '') {
+            $urlview = str_repeat('0', $aantalcategories);
+        }
+        $i = 0;
+        $catcounter = 0;
+        foreach ($cat as $myrow) {
+            if (empty($urlview)) {
+                // No $view set in the url, thus for each category link it should be all zeros except it's own
+                $view = makedefaultviewcode($i);
+            } else {
+                $view = $urlview;
+                $view[$i] = '1';
+            }
+            // if the $urlview has a 1 for this categorie, this means it is expanded and should be displayed as a
+            // - instead of a +, the category is no longer clickable and all the links of this category are displayed
+            $description = standard_text_escape($myrow->description);
+            if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
+                $newurlview = $urlview;
+                $newurlview[$i] = '0';
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
+                if (!empty($description)) {
+                    $tool_content .= "<br><span class='link-description'>$description</span></th>";
+                } else {
+                    $tool_content .= "</th>";
+                }
+
+                if ($display_tools) {
+                    $tool_content .= "<td class='option-btn-cell'>";
+                    showcategoryadmintools($myrow->id);
+                    $tool_content .= "</td>";
+                }
+
+                $tool_content .= "</tr>";
+
+                showgroupsofcategory($myrow->id);
+                if ($groups_num == 1) {
+                    $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>" .
+                        ($display_tools? '<td></td>': '') . "<tr>";
+                }
+
+            } else {
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)
+                    . "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
+                $tool_content .= is_array($view) ? implode('', $view) : $view;
+                $tool_content .= $tinymce_params . "' class='open-category'>" . q($myrow->name) . "</a>";
+                $description = standard_text_escape($myrow->description);
+                if (!empty($description)) {
+                    $tool_content .= "<br><span class='link-description'>$description</span</th>";
+                } else {
+                    $tool_content .= "</th>";
+                }
+
+                if ($display_tools) {
+                    $tool_content .= "<td class='option-btn-cell'>";
+                    showcategoryadmintools($myrow->id);
+                    $tool_content .= "</td>";
+                }
+
+                $tool_content .= "</tr>";
+            }
+            $i++;
+        }
+        $tool_content .= "</table></div></div></div>";
+	}else {   // no links
+        $tool_content .= "<div class='alert alert-warning'>$langNoLinksExist</div>";
+    }
 
 add_units_navigation(TRUE);
+}
 draw($tool_content, 2, null, $head_content);
