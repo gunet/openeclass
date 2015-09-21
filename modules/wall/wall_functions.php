@@ -405,6 +405,7 @@ function show_document($title, $resource_id, $doc_id) {
         $status = 'del';
         $image = 'fa-times';
         $link = "<span class='not_visible'>" . q($title) . " ($langWasDeleted)</span>";
+        $module_visible = true;
     } else {
         $status = $file->visible;
         $file->title = $title;
@@ -413,13 +414,12 @@ function show_document($title, $resource_id, $doc_id) {
         
         if ($file->subsystem == MYDOCS) { //my documents
             $module_visible = ($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'));
-            define('MY_DOCUMENTS', true);
         } else { //main documents
             $module_visible = visible_module(MODULE_ID_DOCS);
         }
                 
-        $file_obj->setAccessURL(file_url($file->path, $file->filename));
-        $file_obj->setPlayURL(file_playurl($file->path, $file->filename));
+        $file_obj->setAccessURL(file_url_replacement($file->path, $file->filename, $file->subsystem, $file->subsystem_id));
+        $file_obj->setPlayURL(file_playurl_replacement($file->path, $file->filename, $file->subsystem, $file->subsystem_id));
         $link = MultimediaHelper::chooseMediaAhref($file_obj);
     }
     
@@ -501,4 +501,36 @@ function show_video($table, $title, $resource_id, $video_id) {
     $ret_str = "<tr$class_vis><td width='1'>".icon($imagelink)."</td><td>$videolink</td></tr>";
     
     return $ret_str;
+}
+
+function file_playurl_replacement($path, $filename, $subsystem, $uid) {
+    global $urlServer;
+    
+    if ($subsystem == MYDOCS) {
+        $course_code = '';
+        $group_sql = "subsystem = $subsystem AND subsystem_id = $uid";
+    } else {
+        global $course_code, $course_id;
+        $group_sql = "course_id = $course_id AND subsystem = $subsystem";
+    }
+    
+    return htmlspecialchars($urlServer .
+            "modules/document/play.php/$course_code" .
+            public_file_path($path, $filename), ENT_QUOTES);
+}
+
+function file_url_replacement($path, $filename, $subsystem, $uid) {
+    global $urlServer;
+    
+    if ($subsystem == MYDOCS) {
+        $course_code = "user,$uid";
+        $group_sql = "subsystem = $subsystem AND subsystem_id = $uid";
+    } else {
+        global $course_code, $course_id;
+        $group_sql = "course_id = $course_id AND subsystem = $subsystem";
+    }
+    
+    return htmlspecialchars($urlServer .
+            "modules/document/file.php/$course_code" .
+            public_file_path($path, $filename), ENT_QUOTES);
 }
