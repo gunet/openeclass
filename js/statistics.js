@@ -39,7 +39,19 @@ var xMinVal = null;
 var xMaxVal = null;
 var xTicks = null;
 var department_details = new Array();
-var tableOptions = {'a': {1:{sumCols:[3,4,5,6], colDefs:[], durCol:null}, 2:{sumCols:[], colDefs:[]}, durCol:null}, 'u':{1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;} }]}}, 'c':{1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}]}}};
+var tableOptions = {
+    'a': {
+        1:{sumCols:[3,4,5,6], colDefs:[], durCol:null}, 
+        2:{sumCols:[], colDefs:[], durCol:null}
+    }, 
+    'u':{
+        1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;} }]}
+    }, 
+    'c':{
+        1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}]},
+        2:{sumCols:[], durCol:null, colDefs:[]}
+    }
+};
 charts = new Object();
 
 $(document).ready(function(){
@@ -157,8 +169,17 @@ $(document).ready(function(){
         colDefs = tableOptions[stats][tableid].colDefs;
         detailsTables[tableElId] = $('#'+tableElId).DataTable({
            'sPaginationType': 'full_numbers',
-            'buttons': [
-                'copyHtml5', 'csvHtml5','excelHtml5', 'pdfHtml5','print'
+            'buttons': [{
+                        extend:'print',
+                        text: langPrint},
+                    {
+                        extend:'copyHtml5',
+                        text: langCopy}, 
+                    {
+                        extend: 'collection',
+                        text: langExport+'...',
+                        buttons: ['csvHtml5','excelHtml5', 'pdfHtml5']
+                    }
             ],
             dom: 'Bfrtip',
             columnDefs: colDefs,
@@ -359,10 +380,39 @@ function refresh_course_module_plot(mdl){
              charts.cm.destroy();
         }*/
         charts.cm = refreshChart("cm", options);
+        refresh_course_reg_plot();
         $.getJSON('results.php',{t:'cd', s:startdate, e:enddate, i:interval, u:user, c:course, m:module},function(data){
             refreshDataTable($('#cdetails1'), data);
         });
     });
+}
+
+function refresh_course_reg_plot(){
+    $.getJSON('results.php',{t:'crs', s:startdate, e:enddate, i:interval, c:course},function(data){
+        var options = {
+            data: {
+                json: data.chartdata,
+                x: 'time',
+                xFormat: '%Y-%m-%d',
+                type:'bar',
+                groups:[['regs','unregs']],
+                names:{
+                    regs: langRegs,
+                    unregs: langUnregs
+                }
+            },
+            size:{height:250},
+            axis:{ x: {type:'timeseries', tick:{format: xAxisDateFormat[interval], values:xTicks, fit:false}, label: xAxisLabels[interval], min: xMinVal}, y:{label:langHits, min: 0, padding:{top:0, bottom:0}}, y2: {show: true, label:'sec', min: 0, padding:{top:0, bottom:0}}},
+            bar:{width:{ratio:0.3}},
+            bindto: '#coursereg_stats'
+        };
+        charts.cr = refreshChart("cr", options);
+        
+        $.getJSON('results.php',{t:'crd', s:startdate, e:enddate, c:course},function(data){
+            refreshDataTable($('#cdetails2'), data);
+        });
+    });
+
 }
 
 function refresh_generic_user_plot(){

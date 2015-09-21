@@ -89,6 +89,12 @@ if(isset($_REQUEST['t'])){
         case 'uld':
             $result = get_user_login_details($startdate, $enddate, $interval, $plotuser, $plotcourse, $plotmodule);
             break;
+        case 'crd':
+            $result = get_course_registration_details($startdate, $enddate, $plotcourse);
+            break;
+        case 'crs':
+            $result = get_course_registration_stats($startdate, $enddate, $interval, $plotcourse);
+            break;
     }
     
 }

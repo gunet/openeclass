@@ -20,6 +20,8 @@
  * ======================================================================== 
  */
 
+require_once 'include/log.php';
+
 /**
  * Get statistics of visits and visit duration to a course. The results are 
  * depicted in te first plot of course statistics 
@@ -51,6 +53,58 @@ function get_course_stats($start = null, $end = null, $interval, $cid, $user_id 
            $formattedr['hits'][] = $record->hits;
            $formattedr['duration'][] = $record->dur;
         }
+    }
+    return $formattedr;
+}
+
+/**
+ * Get statistics of user register and unregister actions of a course. The results are 
+ * depicted in the last plot of course statistics 
+ * @param date $start the start of period to retrieve statistics for
+ * @param date $end the end of period to retrieve statistics for
+ * @param string $interval the time interval to aggregate statistics on
+ * @param int $cid the id of the course
+*/
+function get_course_registration_stats($start = null, $end = null, $interval, $cid)
+{
+    $formattedr = array('time'=> array(), 'regs'=> array(), 'unregs'=> array());
+    if(!is_null($start) && !is_null($end && !empty($start) && !empty($end))){
+        $g_reg = build_group_selector_cond($interval, 'reg_date');
+        $groupby_reg = $g_reg['groupby'];
+        $date_components_reg = $g_reg['select'];
+        $reg_t = "SELECT $date_components_reg, COUNT(user_id) regs FROM course_user WHERE course_id=?d AND reg_date BETWEEN ?t AND ?t $groupby_reg";
+        $g_unreg = build_group_selector_cond($interval, 'ts');
+        $groupby_unreg = $g_unreg['groupby'];
+        $date_components_unreg = $g_unreg['select'];
+        $unreg_t = "SELECT $date_components_unreg, COUNT(user_id) unregs FROM log WHERE module_id=".MODULE_ID_USERS." AND action_type=".LOG_DELETE." AND course_id=?d AND ts BETWEEN ?t AND ?t $groupby_unreg";
+        $q = "SELECT cat_title, ifnull(regs,0) regs, ifnull(unregs,0) unregs FROM ((SELECT cat_title, regs, unregs FROM ($reg_t) x NATURAL LEFT JOIN ($unreg_t) y) UNION (SELECT cat_title, regs, unregs FROM ($unreg_t) x NATURAL LEFT JOIN ($reg_t) y)) z";
+        error_log("course_id=".$cid);
+        $r = Database::get()->queryArray($q, $cid, $start, $end, $cid, $start, $end, $cid, $start, $end, $cid, $start, $end);
+        foreach($r as $record){
+           $formattedr['time'][] = $record->cat_title;
+           $formattedr['regs'][] = $record->regs;
+           $formattedr['unregs'][] = $record->unregs;
+        }
+    }
+    return array('chartdata'=>$formattedr);
+}
+
+/**
+ * Detailed list of user register and unregister actions of a course. The results are 
+ * listed in the second table of course detailed statistics 
+ * @param date $start the start of period to retrieve statistics for
+ * @param date $end the end of period to retrieve statistics for
+ * @param int $cid the id of the course
+*/
+function get_course_registration_details($start = null, $end = null, $cid)
+{
+    $formattedr = array();
+    $reg_t = "SELECT reg_date day, user_id, CONCAT(surname, ' ', givenname,' (',email,')') uname, 1 action FROM course_user cu JOIN user u ON cu.user_id=u.id WHERE cu.course_id=?d AND cu.reg_date BETWEEN ?t AND ?t ORDER BY cu.reg_date";
+    $unreg_t = "SELECT ts day, user_id, CONCAT(surname, ' ', givenname,' (',email,')') uname, 0 action FROM log l JOIN user u ON l.user_id=u.id WHERE l.module_id=".MODULE_ID_USERS." AND l.action_type=".LOG_DELETE." AND l.course_id=?d AND l.ts BETWEEN ?t AND ?t ORDER BY ts";
+    $q = "SELECT DATE_FORMAT(x.day,'%d-%m-%Y') day, uname, action FROM (($reg_t) UNION ($unreg_t)) x  ORDER BY day";
+    $r = Database::get()->queryArray($q, $cid, $start, $end, $cid, $start, $end);
+    foreach($r as $record){
+       $formattedr[] = array($record->day, $record->uname, $record->action);
     }
     return $formattedr;
 }
@@ -353,15 +407,15 @@ function build_group_selector_cond($interval = 'month', $date_field = 'day')
     $select = "";
     switch($interval){
         case 'year':
-            $select = "DATE_FORMAT($date_field, '%Y-01-01') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $select = "DATE_FORMAT($date_field, '%Y-01-01') cat_title, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y";
             break;
         case 'month':
-            $select = "DATE_FORMAT($date_field, '%Y-%m-01') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $select = "DATE_FORMAT($date_field, '%Y-%m-01') cat_title, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y, m";
             break;
         case 'week':
-            $select = "STR_TO_DATE(DATE_FORMAT($date_field, '%Y%u Monday'), '%X%V %W') cat_title, DATE_FORMAT($date_field,'%d') d, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
+            $select = "STR_TO_DATE(DATE_FORMAT($date_field, '%Y%u Monday'), '%X%V %W') cat_title, DATE_FORMAT($date_field,'%u') w, DATE_FORMAT($date_field, '%m') m, DATE_FORMAT($date_field, '%Y') y";
             $groupby = "GROUP BY y, w";
             break;
         case 'day':

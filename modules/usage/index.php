@@ -76,6 +76,12 @@ $head_content .= "
     var langFrom = '$langFrom2';
     var langResults = '$langResults2';
     var langSearch = '$langSearch';
+    var langActions = '$langActions';
+    var langRegs = '$langRegisterActions';
+    var langUnregs = '$langUnregisterActions';
+    var langCopy = '$langCopy';
+    var langPrint = '$langPrint';
+    var langExport = '$langSaveAs';
 </script>";
 load_js('datatables');
 load_js('datatables_filtering_delay');

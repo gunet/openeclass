@@ -41,6 +41,11 @@ $tool_content .= "<div id='module' style='width:60%;float:left;'>".
         "<ul class='list-group'><li class='list-group-item'><label id='moduletitle'></label></li><li class='list-group-item'><div id='module_stats'></div></li></ul>".
         "</div>";
 $tool_content .= "</div></div></div></div>";
+
+$tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+$tool_content .= "<div id='coursereg_stats'></div>";
+$tool_content .= "</div></div></div></div>";
+
 /****   Datatables   ****/
 $tool_content .= "<div class='row detailscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
 $tool_content .= "<table id='cdetails1' class='table table-striped table-bordered'><caption class='well'>$langHits $langAnd $langDuration</caption>"
@@ -53,6 +58,17 @@ $tool_content .= "<table id='cdetails1' class='table table-striped table-bordere
         . "</tr></thead>"
         . "<tbody></tbody>"
         . "<tfoot><tr><th>$langTotal</th><th></th><th></th><th></th><th></th></tr></tfoot>"       
+        . "</table>";
+$tool_content .= "</div></div></div></div>";
+
+$tool_content .= "<div class='row detailscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
+$tool_content .= "<table id='cdetails2' class='table table-striped table-bordered'><caption class='well'>$langMonthlyCourseRegistrations</caption>"
+        . "<thead><tr>"
+        . "<th>$langDate</th>"
+        . "<th>$langUser</th>"
+        . "<th>$langAction</th>"
+        . "</tr></thead>"
+        . "<tbody></tbody>"      
         . "</table>";
 $tool_content .= "</div></div></div></div>";
 
