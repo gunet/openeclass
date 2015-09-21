@@ -312,7 +312,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
         }
         return $html;
     } elseif (!is_array($user)) {
-        $r = Database::get()->querySingle("SELECT id, surname, givenname, email, has_icon FROM user WHERE id = ?d", $user);
+        $r = Database::get()->querySingle("SELECT id, surname, givenname, username, email, has_icon FROM user WHERE id = ?d", $user);
         if ($r) {
             $user = $r;
         } else {
@@ -339,8 +339,9 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
     }
 
     $token = token_generate($user->id, true);
+    $student_name = $user->surname || $user->givenname ? q($user->surname) . " " .  q($user->givenname) : $user->username;
     return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
-            q($user->surname) . " " .  q($user->givenname) . "</a>" .
+            $student_name . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
 

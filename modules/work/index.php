@@ -543,7 +543,8 @@ function add_assignment() {
 
             $secret = work_secret($id);
             if ($id) {
-                $local_name = uid_to_name($uid);
+                $student_name = trim(uid_to_name($user_id));
+                $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
                 if (!empty($am)) {
                     $local_name .= $am;
@@ -665,7 +666,8 @@ function edit_assignment($id) {
                  $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
                  return;
              }
-             $local_name = uid_to_name($uid);
+            $student_name = trim(uid_to_name($user_id));
+            $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
              $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
              if (!empty($am)) {
                  $local_name .= $am;
@@ -782,7 +784,8 @@ function submit_work($id, $on_behalf_of = null) {
             if ($row->group_submissions) {
                 $local_name = isset($gids[$group_id]) ? greek_to_latin($gids[$group_id]) : '';
             } else {
-                $local_name = uid_to_name($user_id);
+                $student_name = trim(uid_to_name($user_id));
+                $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
                 if (!empty($am)) {
                     $local_name .= $am;
