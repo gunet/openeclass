@@ -161,10 +161,12 @@ if (isset($_POST['submit'])) {
             if ($course_id != 0 || isset($_POST['course'])) {//message in course context
                 $c = course_id_to_title($cid);
                 $subject_dropbox = "$c (".course_id_to_code($cid).") - $langNewDropboxFile";
+
                 foreach ($recipients as $userid) {
                     if (get_user_email_notification($userid, $cid)) {
                         $linkhere = "<a href='${urlServer}main/profile/emailunsubscribe.php?cid=$cid'>$langHere</a>.";
                         $unsubscribe = "<br />" . sprintf($langLinkUnsubscribe, $c);
+                        $datetime = date('l jS \of F Y h:i:s A');
 
                         $header_dropbox_message = "
                             <!-- Header Section -->
@@ -174,11 +176,11 @@ if (isset($_POST['submit'])) {
                                     <div id='header-title'>Ενημέρωση για καινούριο μήνυμα στο μάθημα <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
                                         <ul id='forum-category'>
                                             <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                            <li><span><b>$langdate:</b></span> <span> --- </span></li>
+                                            <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
                                         </ul>
                                 </div>
                             </div>";
-                        
+
                         $main_dropbox_message = "
                             <!-- Body Section -->
                             <div id='mail-body'>
@@ -221,6 +223,7 @@ if (isset($_POST['submit'])) {
                         //$body_dropbox_message = "$langSender: " . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). " <br /><br /> $subject <br /><br />" . $_POST['body']. "<br />";
                         //$body_dropbox_message .= "$langNote: $langDoNotReply <a href='$msgURL'>$langHere</a>.<br />";
                         //$body_dropbox_message .= "$unsubscribe $linkhere";
+                        $datetime = date('l jS \of F Y h:i:s A');
                         $header_dropbox_message = "
                             <!-- Header Section -->
                             <div id='mail-header'>
@@ -229,7 +232,7 @@ if (isset($_POST['submit'])) {
                                     <div id='header-title'>Ενημέρωση για καινούριο μήνυμα στο μάθημα <a href='{$urlServer}courses/$course_code'>$c</a>.</div>
                                         <ul id='forum-category'>
                                             <li><span><b>$langSender:</b></span> <span>" . q($_SESSION['givenname']) . " " . q($_SESSION['surname']). "</span></li>
-                                            <li><span><b>$langdate:</b></span> <span> --- </span></li>
+                                            <li><span><b>$langdate:</b></span> <span>$datetime</span></li>
                                         </ul>
                                 </div>
                             </div>";

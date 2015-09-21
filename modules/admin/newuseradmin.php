@@ -158,7 +158,6 @@ if (isset($_POST['submit'])) {
 
         $emailbodyplain = html2text($emailbody);
 
-        //send_mail('', '', '', $email_form, $emailsubject, $emailbody, $charset);
         send_mail_multipart('', '', '', $email_form, $emailsubject, $emailbodyplain, $emailbody, $charset);
 
         Session::Messages(array($message,

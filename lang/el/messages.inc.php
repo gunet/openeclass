@@ -96,7 +96,7 @@ $langHelpManageDepartment = "Διαχειρίζεται τα τμήματα γι
 // index
 $langComments = "Σχόλια";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
-$langState = "Διαχείριση Εξυπηρετητή";
+$langState = "Διαχείριση εξυπηρετητή";
 $langDevAdmin = "Διαχείριση Βάσης Δεδομένων";
 $langSysInfo = "Πληροφορίες Συστήματος";
 $langCheckDatabase = "Ελεγχος κύριας βάσης δεδομένων";
@@ -127,7 +127,7 @@ $langAdminManual = "Εγχειρίδιο Διαχειριστή";
 $langDBaseAdmin = "Διαχείριση Β.Δ. (phpMyAdmin)";
 $langActions = "Ενέργειες";
 $langAdminProf = "Διαχείριση $langOfTeachers";
-$langAdminCours = "Διαχείριση Μαθημάτων";
+$langAdminCours = "Διαχείριση μαθημάτων";
 $langGenAdmin = "Άλλα Εργαλεία";
 $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
 $langPlatformIdentity = "Σχετικά";
