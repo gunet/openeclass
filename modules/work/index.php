@@ -748,7 +748,7 @@ function submit_work($id, $on_behalf_of = null) {
 
     $submit_ok = FALSE; // Default do not allow submission
     if (isset($uid) && $uid) { // check if logged-in
-        if ($GLOBALS['status'] == 10) { // user is guest
+        if ($GLOBALS['status'] == USER_GUEST) { // user is guest
             $submit_ok = FALSE;
         } else { // user NOT guest
             if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
@@ -814,6 +814,8 @@ function submit_work($id, $on_behalf_of = null) {
                 $success_msgs[] = $langUploadSuccess;
             } else {
                 $error_msgs[] = $langUploadError;
+                Session::Messages($error_msgs, 'alert-danger');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             }
         }
 
@@ -979,8 +981,7 @@ function submit_work($id, $on_behalf_of = null) {
         }
         // End Auto-judge
 
-        Session::Messages($success_msgs, 'alert-success');
-        Session::Messages($error_msgs);
+        Session::Messages($success_msgs, 'alert-success');        
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else { // not submit_ok
         Session::Messages($langExerciseNotPermit);
