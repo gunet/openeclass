@@ -83,8 +83,7 @@ Class Commenting {
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
-            //$comments_title = "<a id='comments_title' href='javascript:void(0)' onclick='showComments(\"$this->rid\")'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</a><br>";
-            $comments_title = "<button type='button' class='btn btn-info btn-lg' data-toggle='modal' data-target='#commentArea-$this->rid'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</button>";
+            $comments_title = "<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#commentArea-$this->rid'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</button>";
             $out = "$comments_title
                     <div class='modal fade' id='commentArea-$this->rid' role='dialog'>
                       <div class='modal-dialog modal-lg'>
