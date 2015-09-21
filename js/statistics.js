@@ -39,9 +39,7 @@ var xMinVal = null;
 var xMaxVal = null;
 var xTicks = null;
 var department_details = new Array();
-var tableOptions = {'a': {1:{sumCols:[3,4,5,6]}, 2:{sumCols:[]}}, 'u':{1:{sumCols:[3,4]}}, 'c':{1:{sumCols:[3,4]}}};
-    
-
+var tableOptions = {'a': {1:{sumCols:[3,4,5,6], colDefs:[], durCol:null}, 2:{sumCols:[], colDefs:[]}, durCol:null}, 'u':{1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;} }]}}, 'c':{1:{sumCols:[3,4], durCol:4, colDefs:[{'targets':4, 'render': function ( data, type, full, meta ) {return type === 'display' ? userFriendlyDuration(data): data;}}]}}};
 charts = new Object();
 
 $(document).ready(function(){
@@ -135,25 +133,38 @@ $(document).ready(function(){
             tabApi = $('#'+tabEl).dataTable().api();
             for(i=0;i<tableOptions[stats][tabId].sumCols.length;i++){
                        c = tableOptions[stats][tabId].sumCols[i];
-                       $( tabApi.columns( c ).footer() ).html(
-                            tabApi.column( c ).data().reduce( function ( a, b ) {
-                                return parseInt(a) + parseInt(b);
-                            }, 0 )
-                        );
+                       if(c == tableOptions[stats][tabId].durCol){
+                           $( tabApi.columns( c ).footer() ).html( userFriendlyDuration(
+                               tabApi.column( c ).data().reduce( function ( a, b ) {
+                                   return parseInt(a) + parseInt(b);
+                               }, 0 )
+                           ));    
+                       }
+                       else{
+                           $( tabApi.columns( c ).footer() ).html(
+                               tabApi.column( c ).data().reduce( function ( a, b ) {
+                                   return parseInt(a) + parseInt(b);
+                               }, 0 )
+                           );
+                       }
+                       
                     }
         }
     }
     
     for(tableid in tableOptions[stats]){
         tableElId = stats+'details'+tableid;
+        colDefs = tableOptions[stats][tableid].colDefs;
         detailsTables[tableElId] = $('#'+tableElId).DataTable({
            'sPaginationType': 'full_numbers',
             'buttons': [
                 'copyHtml5', 'csvHtml5','excelHtml5', 'pdfHtml5','print'
             ],
             dom: 'Bfrtip',
+            columnDefs: colDefs,
             'bAutoWidth': true,                
             'footerCallback': footerCB(tableid, tableElId),
+            'columnDefs': colDefs,
             'oLanguage': {
             'sLengthMenu':   langDisplay +' _MENU_ '+ langResults,
             'sZeroRecords':  langNoResult,
@@ -662,5 +673,16 @@ function fillTableTotalUsers(){
     });
 }
     
+function userFriendlyDuration(seconds){
+    hours = Math.floor(seconds / 3600);
+    mins = Math.floor((seconds - (hours*3600)) / 60);
+    secs = Math.floor(seconds % 60);
+    fd = (hours<10)? '0'+hours:''+hours;
+    fd += ':';
+    fd += (mins<10)? '0'+mins:mins;
+    fd += ':';
+    fd += (secs<10)? '0'+secs:secs;
+    return fd;
+}
 
 
