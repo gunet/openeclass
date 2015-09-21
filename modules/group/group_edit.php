@@ -80,8 +80,9 @@ if (isset($_POST['modify'])) {
         Database::get()->query("UPDATE `group`
                                         SET name = ?s,
                                             description = ?s,
-                                            max_members = ?d
-                                        WHERE id = ?d", $name, $description, $maxStudent, $group_id);
+                                            max_members = ?d,
+											category_id = ?d
+                                        WHERE id = ?d", $name, $description, $maxStudent, intval(getDirectReference($_POST['selectcategory'])), $group_id);
 
         Database::get()->query("UPDATE forum SET name = ?s WHERE id =
                             (SELECT forum_id FROM `group` WHERE id = ?d)
