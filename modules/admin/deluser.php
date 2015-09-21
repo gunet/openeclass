@@ -74,7 +74,7 @@ if (!isset($_POST['doit'])) {
         } else {
             Session::Messages($langErrorDelete, 'alert-danger');
         }
-        redirect_to_home_page('modules/admin/');
+        redirect_to_home_page('modules/admin/listusers.php');
     }
 }
 draw($tool_content, 3);
