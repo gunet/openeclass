@@ -1213,6 +1213,12 @@ $langCatagoryMain = "Αρχή";
 $langCatagoryGroup = "Συζητήσεις Ομάδων χρηστών";
 $langNoGroup = "Δεν έχουν οριστεί ομάδες χρηστών";
 $langGroupMembersNum = "Μέλη";
+$langCategorisedGroups = "Κατηγορίες ομάδων χρηστών";
+$langNoGroupCategories = "Δεν υπάρχουν κατηγορίες ομάδων χρηστών";
+$langGroupDelconfirm = "Θέλετε να διαγράψετε την ομάδα χρηστών;";
+$langNoGroupInCategory = "Δεν υπάρχουν ομάδες χρηστών σε αυτή την κατηγορία";
+$langGroupCatDel = "Οταν διαγράψετε μια κατηγορία, θα διαγραφούν όλες οι ομάδες χρηστών της κατηγορίας. Είστε βέβαιος ότι θέλετε να διαγράψετε την κατηγορία;";
+$langGroupCategoryDeleted = "Η κατηγορία διαγράφηκε μαζί με όλες τις ομάδες χρηστών της";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";

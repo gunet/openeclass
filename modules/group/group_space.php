@@ -274,5 +274,6 @@ $tool_content .= "
     $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
 }
 
+
 draw($tool_content, 2);
 
