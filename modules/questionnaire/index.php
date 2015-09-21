@@ -86,7 +86,7 @@ if ($is_editor) {
                     continue;
                 }
             }
-            if ($ok || $is_editor) {
+            if ($ok || $is_course_admin) {
                 $poll = Database::get()->querySingle("SELECT * FROM poll WHERE pid = ?d", $pid);
                 $questions = Database::get()->queryArray("SELECT * FROM poll_question WHERE pid = ?d ORDER BY q_position", $pid);
 
