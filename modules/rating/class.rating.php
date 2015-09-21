@@ -478,7 +478,7 @@ Class Rating {
                     $out .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
                 }
 
-                $out .= '</div><span id="rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'" class="ratestar"> <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="'.$langRateIt.'"><span class="fa fa-plus-square"></span></a></span>';
+                $out .= '</div><span id="rateitwrapdiv-'.$this->rtype.'-'.$this->rid.'" class="ratestar"> <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="'.$langRateIt.'"><span class="fa fa-plus-circle"></span></a></span>';
 
                 /* *** Original ***
                 $out .= '<div id="sdf rateit-info-'.$this->rtype.'-'.$this->rid.'">';
