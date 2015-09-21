@@ -80,7 +80,20 @@ $head_content .= "
 load_js('datatables');
 load_js('datatables_filtering_delay');
 load_js('datatables_bootstrap');
-load_js('datatables_tabletools');
+//load_js('datatables_tabletools');
+load_js('datatables_buttons');
+load_js('datatables_buttons_jqueryui');
+load_js('datatables_buttons_bootstrap');
+load_js('datatables_buttons_print');
+//load_js('datatables_buttons_flash');
+load_js('jszip');
+load_js('pdfmake');
+load_js('vfs_fonts');
+load_js('datatables_buttons_html5');
+//load_js('datatables_buttons_colVis');
+//load_js('datatables_buttons_foundation');
+        
+
 load_js('bootstrap-datetimepicker');
 load_js('statistics.js');
 $pageName = $langUsage;

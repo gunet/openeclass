@@ -80,7 +80,7 @@ $(document).ready(function(){
             selectedview = 'list';
             $('.plotscontainer').hide();
             $('.detailscontainer').show();
-            redrawflashbuttons();
+            //redrawflashbuttons();
         }
         else{
             selectedview = 'plots';
@@ -118,8 +118,16 @@ $(document).ready(function(){
             refresh_plots();
         });
     }
+    if($('#department').length){
+        department = $('#department option:selected').val();
+        $('#department').change(function(){
+            department = $('#department option:selected').val();
+            refresh_plots();
+        });
+    }
     detailsTables = new Object();
     tableTools = new Object();
+    
     /*******************/
     
     function footerCB(tabId,tabEl){
@@ -140,6 +148,10 @@ $(document).ready(function(){
         tableElId = stats+'details'+tableid;
         detailsTables[tableElId] = $('#'+tableElId).DataTable({
            'sPaginationType': 'full_numbers',
+            'buttons': [
+                'copyHtml5', 'csvHtml5','excelHtml5', 'pdfHtml5','print'
+            ],
+            dom: 'Bfrtip',
             'bAutoWidth': true,                
             'footerCallback': footerCB(tableid, tableElId),
             'oLanguage': {
@@ -160,10 +172,7 @@ $(document).ready(function(){
             }
            }
         });
-        tableTools[tableElId] = new $.fn.dataTable.TableTools( detailsTables[tableElId], {
-            "sSwfPath": "http://eclass.test.noc.ntua.gr/newui/js/datatables/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-        });
-        $( tableTools[tableElId].fnContainer() ).insertBefore('#'+tableElId);
+        
     }
     /**************/
     /*************
@@ -652,18 +661,6 @@ function fillTableTotalUsers(){
         $(detailsTable1api.columns(2).footer()).html(data.chartdata[header][0]);
     });
 }
+    
 
-function redrawflashbuttons(){
-    var datatables = $('table.table');
-    var oTableTools = null;
-    if(datatables.length > 0){
-        for(i=0;i<datatables.length;i++){
-            oTableTools = TableTools.fnGetInstance( datatables[i] );
-            if ( oTableTools != null && oTableTools.fnResizeRequired() )
-            {
-                oTableTools.fnResizeButtons();
-            }
-        }
-    }
-}
 

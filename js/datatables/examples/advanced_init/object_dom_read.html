@@ -12,7 +12,7 @@
 	<style type="text/css" class="init">
 
 	</style>
-	<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -46,22 +46,22 @@ $(document).ready(function() {
 				into an array that DataTables stores internally. Each array element represents a column.</p>
 
 				<p>It can be very useful to have DataTables read the information into an object rather than an array, an option that can be triggered using the <a href=
-				"//datatables.net/reference/option/columns.data"><code class="option" title="DataTables initialisation option">columns.data<span>DT</span></code></a>
-				initialisation option to define how you want the data to be stored. Typically <a href="//datatables.net/reference/option/columns.data"><code class="option" title=
-				"DataTables initialisation option">columns.data<span>DT</span></code></a> is used with <a href="../ajax/objects.html">Ajax sourced data</a> to tell DataTables
-				where to read data from, but as can be seen here it also tells DataTables where to write the data to.</p>
+				"//datatables.net/reference/option/columns.data"><code class="option" title="DataTables initialisation option">columns.data</code></a> initialisation option to
+				define how you want the data to be stored. Typically <a href="//datatables.net/reference/option/columns.data"><code class="option" title=
+				"DataTables initialisation option">columns.data</code></a> is used with <a href="../ajax/objects.html">Ajax sourced data</a> to tell DataTables where to read data
+				from, but as can be seen here it also tells DataTables where to write the data to.</p>
 
 				<p>This ability to store data into an object can be very useful when working with the DataTables API after the table has been initialised.</p>
 
 				<p>In the example shown here, the data read from each row in the table is read into a Javascript object with the structure:</p>
 				<pre>
 <code class="multiline language-js">{
-	"name":	   "...",
-	"position":   "...",
-	"office":	 "...",
-	"age":		"...",
+	"name": "...",
+	"position": "...",
+	"office": "...",
+	"age": "...",
 	"start_date": "...",
-	"salary":	 "..."
+	"salary": "..."
 }
 </code>
 </pre>
@@ -578,7 +578,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
-						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
+						<li><a href="//code.jquery.com/jquery-1.11.3.min.js">//code.jquery.com/jquery-1.11.3.min.js</a></li>
 						<li><a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a></li>
 					</ul>
 				</div>
@@ -637,9 +637,9 @@ $(document).ready(function() {
 							<li><a href="../basic_init/state_save.html">State saving</a></li>
 							<li><a href="../basic_init/alt_pagination.html">Alternative pagination</a></li>
 							<li><a href="../basic_init/scroll_y.html">Scroll - vertical</a></li>
+							<li><a href="../basic_init/scroll_y_dynamic.html">Scroll - vertical, dynamic height</a></li>
 							<li><a href="../basic_init/scroll_x.html">Scroll - horizontal</a></li>
 							<li><a href="../basic_init/scroll_xy.html">Scroll - horizontal and vertical</a></li>
-							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI ThemeRoller</a></li>
 							<li><a href="../basic_init/comma-decimal.html">Language - Comma decimal place</a></li>
 							<li><a href="../basic_init/language.html">Language options</a></li>
 						</ul>
@@ -653,7 +653,7 @@ $(document).ready(function() {
 							<li><a href="./column_render.html">Column rendering</a></li>
 							<li><a href="./length_menu.html">Page length options</a></li>
 							<li><a href="./dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="./complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="./complex_header.html">Complex headers with column visibility</a></li>
 							<li class="active"><a href="./object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="./html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="./html5-data-options.html">HTML5 data-* attributes - table options</a></li>
@@ -708,7 +708,7 @@ $(document).ready(function() {
 							<li><a href="../api/counter_columns.html">Index column</a></li>
 							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
 							<li><a href="../api/api_in_init.html">Using API in callbacks</a></li>
-							<li><a href="../api/tabs_and_scrolling.html">Scrolling and jQuery UI tabs</a></li>
+							<li><a href="../api/tabs_and_scrolling.html">Scrolling and Bootstrap tabs</a></li>
 							<li><a href="../api/regex.html">Search API (regular expressions)</a></li>
 						</ul>
 					</div>
@@ -758,8 +758,8 @@ $(document).ready(function() {
 
 				<div class="epilogue">
 					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
-					which extend the capabilities of DataTables.</p>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extensions">extensions</a> and <a href=
+					"http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of DataTables.</p>
 
 					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>

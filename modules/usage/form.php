@@ -44,7 +44,16 @@ if($stats_type == 'course'){
     }
 }
 elseif($stats_type == 'admin'){
-    
+    /**Get course departments/categories**/
+    $result = Database::get()->queryArray("SELECT id, name, depth FROM hierarchy_depth ORDER BY lft");
+    $statsDepOptions = "";
+    foreach($result as $d){
+       $indentation = "";
+       for($i=0;$i<$d->depth;$i++){
+           $indentation .= "&nbsp;&nbsp;";
+       }
+       $statsDepOptions .= '<option value="'.$d->id.'" >' . $indentation.$d->name . "</option>\n"; 
+    }    
 }
 else{
     /**Get courses of user**/
@@ -84,7 +93,8 @@ if($stats_type == 'course'){
     <div class="col-sm-3 col-xs-3"><select name="user" id="user" class="form-control">' . $statsUserOptions . '</select></div>';
 }
 elseif($stats_type == 'admin'){
-    
+    $tool_content .= '
+    <div class="col-sm-3 col-xs-3"><select name="department" id="department" class="form-control">' . $statsDepOptions . '</select></div>';
 }
 elseif($stats_type == 'user'){
     $tool_content .= '

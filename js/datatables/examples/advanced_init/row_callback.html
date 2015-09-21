@@ -17,7 +17,7 @@
 	}
 
 	</style>
-	<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
@@ -25,7 +25,7 @@
 
 
 $(document).ready(function() {
-	$('#example').dataTable( {
+	$('#example').DataTable( {
 		"createdRow": function ( row, data, index ) {
 			if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
 				$('td', row).eq(5).addClass('highlight');
@@ -45,12 +45,12 @@ $(document).ready(function() {
 
 			<div class="info">
 				<p>The following example shows how a callback function can be used to format a particular row at draw time. For each row that is generated for display, the
-				<a href="//datatables.net/reference/option/createdRow"><code class="option" title="DataTables initialisation option">createdRow<span>DT</span></code></a> function
-				is called once and once only. It is passed the create row node which can then be modified.</p>
+				<a href="//datatables.net/reference/option/createdRow"><code class="option" title="DataTables initialisation option">createdRow</code></a> function is called once
+				and once only. It is passed the create row node which can then be modified.</p>
 
 				<p>In this case a trivial example of making the 'salary' column blue and bold by adding a CSS class to the container cell if the salary is greater than $4,000.
 				Note that <a href="//datatables.net/reference/option/columns.createdCell"><code class="option" title=
-				"DataTables initialisation option">columns.createdCell<span>DT</span></code></a> could also be used to create exactly the same effect.</p>
+				"DataTables initialisation option">columns.createdCell</code></a> could also be used to create exactly the same effect.</p>
 			</div>
 
 			<table id="example" class="display" cellspacing="0" width="100%">
@@ -547,7 +547,7 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('#example').dataTable( {
+	$('#example').DataTable( {
 		&quot;createdRow&quot;: function ( row, data, index ) {
 			if ( data[5].replace(/[\$,]/g, '') * 1 &gt; 150000 ) {
 				$('td', row).eq(5).addClass('highlight');
@@ -559,7 +559,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
-						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
+						<li><a href="//code.jquery.com/jquery-1.11.3.min.js">//code.jquery.com/jquery-1.11.3.min.js</a></li>
 						<li><a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a></li>
 					</ul>
 				</div>
@@ -621,9 +621,9 @@ $(document).ready(function() {
 							<li><a href="../basic_init/state_save.html">State saving</a></li>
 							<li><a href="../basic_init/alt_pagination.html">Alternative pagination</a></li>
 							<li><a href="../basic_init/scroll_y.html">Scroll - vertical</a></li>
+							<li><a href="../basic_init/scroll_y_dynamic.html">Scroll - vertical, dynamic height</a></li>
 							<li><a href="../basic_init/scroll_x.html">Scroll - horizontal</a></li>
 							<li><a href="../basic_init/scroll_xy.html">Scroll - horizontal and vertical</a></li>
-							<li><a href="../basic_init/scroll_y_theme.html">Scroll - vertical with jQuery UI ThemeRoller</a></li>
 							<li><a href="../basic_init/comma-decimal.html">Language - Comma decimal place</a></li>
 							<li><a href="../basic_init/language.html">Language options</a></li>
 						</ul>
@@ -637,7 +637,7 @@ $(document).ready(function() {
 							<li><a href="./column_render.html">Column rendering</a></li>
 							<li><a href="./length_menu.html">Page length options</a></li>
 							<li><a href="./dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="./complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="./complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="./object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="./html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="./html5-data-options.html">HTML5 data-* attributes - table options</a></li>
@@ -692,7 +692,7 @@ $(document).ready(function() {
 							<li><a href="../api/counter_columns.html">Index column</a></li>
 							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
 							<li><a href="../api/api_in_init.html">Using API in callbacks</a></li>
-							<li><a href="../api/tabs_and_scrolling.html">Scrolling and jQuery UI tabs</a></li>
+							<li><a href="../api/tabs_and_scrolling.html">Scrolling and Bootstrap tabs</a></li>
 							<li><a href="../api/regex.html">Search API (regular expressions)</a></li>
 						</ul>
 					</div>
@@ -742,8 +742,8 @@ $(document).ready(function() {
 
 				<div class="epilogue">
 					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
-					which extend the capabilities of DataTables.</p>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extensions">extensions</a> and <a href=
+					"http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of DataTables.</p>
 
 					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>

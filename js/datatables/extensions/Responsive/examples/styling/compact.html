@@ -7,7 +7,7 @@
 
 	<title>Responsive example - Compact styling</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
-	<link rel="stylesheet" type="text/css" href="../../css/dataTables.responsive.css">
+	<link rel="stylesheet" type="text/css" href="../../css/responsive.datatables.css">
 	<link rel="stylesheet" type="text/css" href="../../../../examples/resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../../../../examples/resources/demo.css">
 	<style type="text/css" class="init">
@@ -15,7 +15,7 @@
 	div.container { max-width: 1200px }
 
 	</style>
-	<script type="text/javascript" language="javascript" src="../../../../media/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../../../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../../js/dataTables.responsive.js"></script>
 	<script type="text/javascript" language="javascript" src="../../../../examples/resources/syntax/shCore.js"></script>
@@ -25,9 +25,9 @@
 
 
 $(document).ready(function() {
-	var table = $('#example').DataTable();
-
-	new $.fn.dataTable.Responsive( table );
+	var table = $('#example').DataTable( {
+		responsive: true
+	} );
 } );
 
 
@@ -703,15 +703,15 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	var table = $('#example').DataTable();
-
-	new $.fn.dataTable.Responsive( table );
+	var table = $('#example').DataTable( {
+		responsive: true
+	} );
 } );</code>
 
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
-						<li><a href="../../../../media/js/jquery.js">../../../../media/js/jquery.js</a></li>
+						<li><a href="//code.jquery.com/jquery-1.11.3.min.js">//code.jquery.com/jquery-1.11.3.min.js</a></li>
 						<li><a href="../../../../media/js/jquery.dataTables.js">../../../../media/js/jquery.dataTables.js</a></li>
 						<li><a href="../../js/dataTables.responsive.js">../../js/dataTables.responsive.js</a></li>
 					</ul>
@@ -731,7 +731,7 @@ $(document).ready(function() {
 
 					<ul>
 						<li><a href="../../../../media/css/jquery.dataTables.css">../../../../media/css/jquery.dataTables.css</a></li>
-						<li><a href="../../css/dataTables.responsive.css">../../css/dataTables.responsive.css</a></li>
+						<li><a href="../../css/responsive.datatables.css">../../css/responsive.datatables.css</a></li>
 					</ul>
 				</div>
 
@@ -773,8 +773,9 @@ $(document).ready(function() {
 						<ul class="toc active">
 							<li><a href="./bootstrap.html">Bootstrap styling</a></li>
 							<li><a href="./foundation.html">Foundation styling</a></li>
-							<li><a href="./scrolling.html">Vertical scrolling</a></li>
+							<li><a href="./jqueryui.html">jQuery UI styling</a></li>
 							<li class="active"><a href="./compact.html">Compact styling</a></li>
+							<li><a href="./scrolling.html">Vertical scrolling</a></li>
 						</ul>
 					</div>
 
@@ -803,8 +804,8 @@ $(document).ready(function() {
 
 				<div class="epilogue">
 					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
-					which extend the capabilities of DataTables.</p>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extensions">extensions</a> and <a href=
+					"http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of DataTables.</p>
 
 					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>

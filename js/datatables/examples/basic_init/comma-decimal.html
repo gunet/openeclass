@@ -12,14 +12,14 @@
 	<style type="text/css" class="init">
 
 	</style>
-	<script type="text/javascript" language="javascript" src="../../media/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/syntax/shCore.js"></script>
 	<script type="text/javascript" language="javascript" src="../resources/demo.js"></script>
 	<script type="text/javascript" language="javascript" class="init">
 
 $(document).ready(function() {
-	$('#example').dataTable( {
+	$('#example').DataTable( {
 		"language": {
 			"decimal": ",",
 			"thousands": "."
@@ -41,14 +41,14 @@ $(document).ready(function() {
 				the decimal place in a displayed number.</p>
 
 				<p>When reading such numbers, Javascript won't automatically recognise them as numbers, however, DataTables' type detection and sorting methods can be instructed
-				through the <a href="//datatables.net/reference/option/language.decimal"><code class="option" title=
-				"DataTables initialisation option">language.decimal<span>DT</span></code></a> option which character is used as the decimal place in your numbers. This will be
-				used to correctly adjust DataTables' type detection and sorting algorithms to sort numbers in your table.</p>
+				through the <a href="//datatables.net/reference/option/language.decimal"><code class="option" title="DataTables initialisation option">language.decimal</code></a>
+				option which character is used as the decimal place in your numbers. This will be used to correctly adjust DataTables' type detection and sorting algorithms to
+				sort numbers in your table.</p>
 
 				<p>Any character can be passed in using the <a href="//datatables.net/reference/option/language.decimal"><code class="option" title=
-				"DataTables initialisation option">language.decimal<span>DT</span></code></a> option, although the decimal place character used in a single table must be
-				consistent (i.e. numbers with a dot decimal place and comma decimal place cannot both appear in the same table). Different tables on the same page can use
-				different decimal characters if required.</p>
+				"DataTables initialisation option">language.decimal</code></a> option, although the decimal place character used in a single table must be consistent (i.e. numbers
+				with a dot decimal place and comma decimal place cannot both appear in the same table). Different tables on the same page can use different decimal characters if
+				required.</p>
 
 				<p>The example below shows a comma being used as the decimal place in the currency numbers shown in the final column.</p>
 			</div>
@@ -547,7 +547,7 @@ $(document).ready(function() {
 			<div class="tabs">
 				<div class="js">
 					<p>The Javascript shown below is used to initialise the table shown in this example:</p><code class="multiline language-js">$(document).ready(function() {
-	$('#example').dataTable( {
+	$('#example').DataTable( {
 		&quot;language&quot;: {
 			&quot;decimal&quot;: &quot;,&quot;,
 			&quot;thousands&quot;: &quot;.&quot;
@@ -558,7 +558,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
-						<li><a href="../../media/js/jquery.js">../../media/js/jquery.js</a></li>
+						<li><a href="//code.jquery.com/jquery-1.11.3.min.js">//code.jquery.com/jquery-1.11.3.min.js</a></li>
 						<li><a href="../../media/js/jquery.dataTables.js">../../media/js/jquery.dataTables.js</a></li>
 					</ul>
 				</div>
@@ -617,9 +617,9 @@ $(document).ready(function() {
 							<li><a href="./state_save.html">State saving</a></li>
 							<li><a href="./alt_pagination.html">Alternative pagination</a></li>
 							<li><a href="./scroll_y.html">Scroll - vertical</a></li>
+							<li><a href="./scroll_y_dynamic.html">Scroll - vertical, dynamic height</a></li>
 							<li><a href="./scroll_x.html">Scroll - horizontal</a></li>
 							<li><a href="./scroll_xy.html">Scroll - horizontal and vertical</a></li>
-							<li><a href="./scroll_y_theme.html">Scroll - vertical with jQuery UI ThemeRoller</a></li>
 							<li class="active"><a href="./comma-decimal.html">Language - Comma decimal place</a></li>
 							<li><a href="./language.html">Language options</a></li>
 						</ul>
@@ -633,7 +633,7 @@ $(document).ready(function() {
 							<li><a href="../advanced_init/column_render.html">Column rendering</a></li>
 							<li><a href="../advanced_init/length_menu.html">Page length options</a></li>
 							<li><a href="../advanced_init/dom_multiple_elements.html">Multiple table control elements</a></li>
-							<li><a href="../advanced_init/complex_header.html">Complex headers (rowspan / colspan)</a></li>
+							<li><a href="../advanced_init/complex_header.html">Complex headers with column visibility</a></li>
 							<li><a href="../advanced_init/object_dom_read.html">Read HTML to data objects</a></li>
 							<li><a href="../advanced_init/html5-data-attributes.html">HTML5 data-* attributes - cell data</a></li>
 							<li><a href="../advanced_init/html5-data-options.html">HTML5 data-* attributes - table options</a></li>
@@ -688,7 +688,7 @@ $(document).ready(function() {
 							<li><a href="../api/counter_columns.html">Index column</a></li>
 							<li><a href="../api/show_hide.html">Show / hide columns dynamically</a></li>
 							<li><a href="../api/api_in_init.html">Using API in callbacks</a></li>
-							<li><a href="../api/tabs_and_scrolling.html">Scrolling and jQuery UI tabs</a></li>
+							<li><a href="../api/tabs_and_scrolling.html">Scrolling and Bootstrap tabs</a></li>
 							<li><a href="../api/regex.html">Search API (regular expressions)</a></li>
 						</ul>
 					</div>
@@ -738,8 +738,8 @@ $(document).ready(function() {
 
 				<div class="epilogue">
 					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
-					which extend the capabilities of DataTables.</p>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extensions">extensions</a> and <a href=
+					"http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of DataTables.</p>
 
 					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>

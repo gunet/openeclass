@@ -7,14 +7,14 @@
 
 	<title>Responsive example - Class control</title>
 	<link rel="stylesheet" type="text/css" href="../../../../media/css/jquery.dataTables.css">
-	<link rel="stylesheet" type="text/css" href="../../css/dataTables.responsive.css">
+	<link rel="stylesheet" type="text/css" href="../../css/responsive.datatables.css">
 	<link rel="stylesheet" type="text/css" href="../../../../examples/resources/syntax/shCore.css">
 	<link rel="stylesheet" type="text/css" href="../../../../examples/resources/demo.css">
 	<style type="text/css" class="init">
 
 
 	</style>
-	<script type="text/javascript" language="javascript" src="../../../../media/js/jquery.js"></script>
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../../../../media/js/jquery.dataTables.js"></script>
 	<script type="text/javascript" language="javascript" src="../../js/dataTables.responsive.js"></script>
 	<script type="text/javascript" language="javascript" src="../../../../examples/resources/syntax/shCore.js"></script>
@@ -30,7 +30,6 @@ $(document).ready(function() {
 			{ "data": "name" },
 			{ "data": "position" },
 			{ "data": "office" },
-			{ "data": "age" },
 			{ "data": "start_date" },
 			{ "data": "salary" },
 			{ "data": "extn" }
@@ -71,16 +70,14 @@ $(document).ready(function() {
 					<li><code>all</code> - Always display</li>
 					<li><code>none</code> - Don't display as a column, but show in the child row</li>
 					<li><code>never</code> - Never display</li>
-					<li><code>control</code> - Used for the <code>column</code> <a href=
-					"//datatables.net/extensions/responsive/reference/option/responsive.details.type"><code class="option" title=
-					"Responsive initialisation option">responsive.details.type<span>R</span></code></a> option.</li>
+					<li><code>control</code> - Used for the <code>column</code> <a href="//datatables.net/reference/option/responsive.details.type"><code class="option" title=
+					"Responsive initialisation option">responsive.details.type</code></a> option.</li>
 				</ul>
 
 				<p>Please <a href="//datatables.net/extensions/responsive/">refer to the Responsive manual</a> for further details of these options.</p>
 
-				<p>This example shows the <code>salary</code> column visible on a desktop only - <code>office</code> and <code>age</code> require a tablet, while the
-				<code>position</code> column requires a phone in landscape or larger. The <code>name</code> column is always visible and the <code>start date</code> is never
-				visible.</p>
+				<p>This example shows the <code>salary</code> column visible on a desktop only - <code>office</code> requires a tablet, while the <code>position</code> column
+				requires a phone in landscape or larger. The <code>name</code> column is always visible and the <code>start date</code> is never visible.</p>
 
 				<p>This can be useful if you wish to change the format of the data shown on different devices, for example using a combination of <code>mobile</code> and
 				<code>not-mobile</code> on two different columns would allow information to be formatted suitable for each device type.</p>
@@ -94,7 +91,6 @@ $(document).ready(function() {
 						<th class="all">Name</th>
 						<th class="min-phone-l">Position</th>
 						<th class="min-tablet">Office</th>
-						<th class="min-tablet">Age</th>
 						<th class="never">Start date</th>
 						<th class="desktop">Salary</th>
 						<th class="none">Extn.</th>
@@ -106,7 +102,6 @@ $(document).ready(function() {
 						<th>Name</th>
 						<th>Position</th>
 						<th>Office</th>
-						<th>Age</th>
 						<th>Start date</th>
 						<th>Salary</th>
 						<th>Extn.</th>
@@ -131,7 +126,6 @@ $(document).ready(function() {
 			{ &quot;data&quot;: &quot;name&quot; },
 			{ &quot;data&quot;: &quot;position&quot; },
 			{ &quot;data&quot;: &quot;office&quot; },
-			{ &quot;data&quot;: &quot;age&quot; },
 			{ &quot;data&quot;: &quot;start_date&quot; },
 			{ &quot;data&quot;: &quot;salary&quot; },
 			{ &quot;data&quot;: &quot;extn&quot; }
@@ -142,7 +136,7 @@ $(document).ready(function() {
 					<p>In addition to the above code, the following Javascript library files are loaded for use in this example:</p>
 
 					<ul>
-						<li><a href="../../../../media/js/jquery.js">../../../../media/js/jquery.js</a></li>
+						<li><a href="//code.jquery.com/jquery-1.11.3.min.js">//code.jquery.com/jquery-1.11.3.min.js</a></li>
 						<li><a href="../../../../media/js/jquery.dataTables.js">../../../../media/js/jquery.dataTables.js</a></li>
 						<li><a href="../../js/dataTables.responsive.js">../../js/dataTables.responsive.js</a></li>
 					</ul>
@@ -162,7 +156,7 @@ $(document).ready(function() {
 
 					<ul>
 						<li><a href="../../../../media/css/jquery.dataTables.css">../../../../media/css/jquery.dataTables.css</a></li>
-						<li><a href="../../css/dataTables.responsive.css">../../css/dataTables.responsive.css</a></li>
+						<li><a href="../../css/responsive.datatables.css">../../css/responsive.datatables.css</a></li>
 					</ul>
 				</div>
 
@@ -204,8 +198,9 @@ $(document).ready(function() {
 						<ul class="toc">
 							<li><a href="../styling/bootstrap.html">Bootstrap styling</a></li>
 							<li><a href="../styling/foundation.html">Foundation styling</a></li>
-							<li><a href="../styling/scrolling.html">Vertical scrolling</a></li>
+							<li><a href="../styling/jqueryui.html">jQuery UI styling</a></li>
 							<li><a href="../styling/compact.html">Compact styling</a></li>
+							<li><a href="../styling/scrolling.html">Vertical scrolling</a></li>
 						</ul>
 					</div>
 
@@ -234,8 +229,8 @@ $(document).ready(function() {
 
 				<div class="epilogue">
 					<p>Please refer to the <a href="http://www.datatables.net">DataTables documentation</a> for full information about its API properties and methods.<br>
-					Additionally, there are a wide range of <a href="http://www.datatables.net/extras">extras</a> and <a href="http://www.datatables.net/plug-ins">plug-ins</a>
-					which extend the capabilities of DataTables.</p>
+					Additionally, there are a wide range of <a href="http://www.datatables.net/extensions">extensions</a> and <a href=
+					"http://www.datatables.net/plug-ins">plug-ins</a> which extend the capabilities of DataTables.</p>
 
 					<p class="copyright">DataTables designed and created by <a href="http://www.sprymedia.co.uk">SpryMedia Ltd</a> &#169; 2007-2015<br>
 					DataTables is licensed under the <a href="http://www.datatables.net/mit">MIT license</a>.</p>

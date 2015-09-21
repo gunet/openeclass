@@ -1,36 +1,28 @@
 # ColReorder
 
-ColReorder adds the ability for the end user to click and drag column headers to reorder a table as they see fit, to DataTables. Key features include:
-
-* Very easy integration with DataTables
-* Tight integration with all other DataTables plug-ins
-* The ability to exclude the first (or more) column from being movable
-* Predefine a column order
-* Save staving integration with DataTables
-
-
-# Installation
-
-To use ColReorder, first download DataTables ( http://datatables.net/download ) and place the unzipped ColReorder package into a `extensions` directory in the DataTables package. This will allow the pages in the examples to operate correctly. To see the examples running, open the `examples` directory in your web-browser.
+ColReorder adds the ability for the end user to click and drag column headers to reorder a table as they see fit, to DataTables. See the [documentation](http://datatables.net/extensions/colreorder/) for full details.
 
 
 # Basic usage
 
-ColReorder is initialised using the `$.fn.dataTable.ColReorder` constructor. For example:
+ColReorder is initialised using the `colReorder` option in the DataTables constructor - a simple boolean `true` will enable the feature. Further options can be specified using this option as an object - see the documentation for details.
+
+Example:
 
 ```js
 $(document).ready( function () {
-    $('#example').DataTable();
-
-    new $.fn.dataTable.ColReorder( table );
+    $('#myTable').DataTable( {
+    	colReorder: true
+    } );
 } );
 ```
 
 
 # Documentation / support
 
-* Documentation: http://datatables.net/extensions/colreorder/
-* DataTables support forums: http://datatables.net/forums
+* [Documentation](https://datatables.net/extensions/colreorder/)
+* [DataTables support forums](http://datatables.net/forums)
+
 
 
 # GitHub
