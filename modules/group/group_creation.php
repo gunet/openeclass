@@ -31,10 +31,12 @@ $require_editor = true;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/course_settings.php';
+require_once 'group_functions.php';
 
 $toolName = $langGroups;
 $pageName = $langNewGroupCreate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
+
 
 $tool_content .= action_bar(array(
     array(
@@ -44,6 +46,16 @@ $tool_content .= action_bar(array(
         'url' => "index.php?course=$course_code"
     )
 ));
+
+load_js('select2');
+
+$head_content .= "<script type='text/javascript'>
+    $(document).ready(function () {
+        $('#select-tutor').select2();              
+    });
+    </script>
+    <script type='text/javascript' src='{$urlAppend}js/tools.js'></script>\n    
+";
 
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
@@ -149,8 +161,55 @@ if (isset($_GET['all'])) {
               $tool_content_tutor
           </div>
         </div>";
+
+$tool_content_max_student = $max_members ? $max_members : 1;
+$tool_content_group_description = q($group_description);
+
+	if ($multi_reg) {
+    // Students registered to the course but not members of this group
+    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
+                        FROM user u, course_user cu
+                        WHERE cu.course_id = ?d AND
+                              cu.user_id = u.id AND
+                              u.id NOT IN (SELECT user_id FROM group_members WHERE group_id = ?d) AND
+                              cu.status = " . USER_STUDENT . "
+                        GROUP BY u.id
+                        ORDER BY u.surname, u.givenname", $course_id, $group_id);
+	} else {
+    // Students registered to the course but members of no group
+    $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
+                        FROM (user u, course_user cu)
+                        WHERE cu.course_id = $course_id AND
+                              cu.user_id = u.id AND
+                              cu.status = " . USER_STUDENT . " AND
+                              u.id NOT IN (SELECT user_id FROM group_members, `group`
+                                                               WHERE `group`.id = group_members.group_id AND
+                                                               `group`.course_id = ?d)
+                        GROUP BY u.id
+                        ORDER BY u.surname, u.givenname", $course_id);
+	}
+
+	$tool_content_not_Member = '';
+	foreach ($resultNotMember as $myNotMember) {
+		$tool_content_not_Member .= "<option value='$myNotMember->id'>" .
+            q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
+	}
+
+	$q = Database::get()->queryArray("SELECT user.id, user.surname, user.givenname
+               FROM user, group_members
+               WHERE group_members.user_id = user.id AND
+                     group_members.group_id = ?d AND
+                     group_members.is_tutor = 0
+               ORDER BY user.surname, user.givenname", $group_id);
+
+	$tool_content_group_members = '';
+	foreach ($q as $member) {
+    $tool_content_group_members .= "<option value='$member->id'>" . q("$member->surname $member->givenname") .
+            "</option>";
+	}
+
         // Students registered to the course but members of no group
-        $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
+       /* $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
                                                 FROM (user u, course_user cu)
                                                     WHERE cu.course_id = $course_id AND
                                                           cu.user_id = u.id AND
@@ -164,7 +223,9 @@ if (isset($_GET['all'])) {
         foreach ($resultNotMember as $myNotMember) {
             $tool_content_not_Member .= "<option value='$myNotMember->id'>" .
                     q("$myNotMember->surname $myNotMember->givenname") . (!empty($myNotMember->am) ? q(" ($myNotMember->am)") : "") . "</option>";
-        }
+        }*/
+		
+		
         $tool_content .= "<div class='form-group'>
             <label class='col-sm-2 control-label'>$langGroupMembers:</label>
         <div class='col-sm-10'>
@@ -194,7 +255,7 @@ if (isset($_GET['all'])) {
                           </td>
                           <td class='text-right'>
                             <select class='form-control' id='members_box' name='ingroup[]' size='15' multiple>
-                                $tool_content_group_members
+                              $tool_content_group_members
                             </select>
                           </td>
                         </tr>
@@ -292,7 +353,7 @@ if (isset($_GET['all'])) {
         <div class='form-group'>
             <div class='col-sm-10 col-sm-offset-2'>
                 <input class='btn btn-primary' type='submit' value='$langCreate' name='creation'>
-                <a class='btn btn-default' href='index.php?course=$course_code'>$langCancel</a>
+                <a class='btn btn-default' href='$_SERVER[SCRIPT_NAME]?course=$course_code'>$langCancel</a>
             </div>
         </div>
         </fieldset>

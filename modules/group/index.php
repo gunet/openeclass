@@ -76,21 +76,12 @@ if ($is_editor) {
 		Session::Messages($langGroupCategoryDeleted, 'alert-success');
 		redirect_to_home_page("modules/group/index.php");
 	}
-	/*if (isset($_GET['action'])) {
-		switch ($_GET['action']) {
-			case 'addcategory':
-				$pageName = $langCategoryAdd;
-				break;
-			case 'editcategory':
-				$pageName = $langCategoryMod;
-				break;
-			case 'deletecategory':
-				delete_category($id);
-				Session::Messages($langGroupCategoryDeleted, 'alert-success');
-				redirect_to_home_page("modules/group/index.php");
-				break;
-		}
-	}*/
+	elseif (isset($_GET['deletegroup'])) {
+			$id = $_GET['id'];
+            delete_group($id);
+            Session::Messages($langGroupDeleted, 'alert-success');
+            redirect_to_home_page("modules/group/index.php");
+    }
 
     if (isset($_GET['group'])) {
 		$group_name = $_POST['name'];
@@ -528,15 +519,14 @@ if ($is_editor) {
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
-				/*array('title' => $langGroupProperties,
-                    'url' => "group_properties.php?course=$course_code",
-                    'icon' => 'fa-gear',
-                    'level' => 'primary'),*/
-				array('title' => $langCategoryAdd,
+				/*array('title' => $langCategoryAdd,
                       'url' => "group_category.php?course=$course_code&amp;addcategory=1",
                       'icon' => 'fa-plus-circle',
                       'button-class' => 'btn-success',
-                      'level' => 'primary-label'),
+                      'level' => 'primary-label'),*/
+			    array('title' => $langCategoryAdd,
+                      'url' => "group_category.php?course=$course_code&amp;addcategory=1",
+                      'icon' => 'fa-plus-circle'),
                 array('title' => $langDeleteGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
                     'icon' => 'fa-times',
@@ -555,7 +545,7 @@ if ($is_editor) {
                     'confirm_title' => $langEmtpyGroupsAll,
                     'show' => $num_of_groups > 0)));
 
-    $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+    $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     $myIterator = 0;
     $num_of_groups = count($groupSelect);
     // groups list
@@ -591,7 +581,7 @@ if ($is_editor) {
                             'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
                             'icon' => 'fa-gear'),
                         array('title' => $langEditChange,
-                            'url' => "group_edit.php?course=$course_code&amp;group_id=$group->id",
+                            'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),
                         array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
@@ -662,6 +652,16 @@ if ($is_editor) {
         $tool_content .= "</table></div>";
 		}
 	}
+	
+/*	if (isset($_GET['down'])) {
+    move_order('group', 'id', intval(getDirectReference($_GET['down'])), 'order', 'down', "course_id = $course_id");
+	} elseif (isset($_GET['up'])) {
+    move_order('group', 'id', intval(getDirectReference($_GET['up'])), 'order', 'up', "course_id = $course_id");
+	} elseif (isset($_GET['cdown'])) {
+    move_order('group_category', 'id', intval(getDirectReference($_GET['cdown'])), 'order', 'down', "course_id = $course_id");
+	} elseif (isset($_GET['cup'])) {
+    move_order('group_category', 'id', intval(getDirectReference($_GET['cup'])), 'order', 'up', "course_id = $course_id");
+}*/
 	$display_tools = $is_editor && !$is_in_tinymce;
 	if (!in_array($action, array('addcategory', 'editcategory'))) {
     if ($social_bookmarks_enabled == 1) {
@@ -691,7 +691,7 @@ if ($is_editor) {
             }
             $tool_content .= "</th>";
             if ($display_tools) {
-                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+                $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
         } else {
@@ -704,7 +704,7 @@ if ($is_editor) {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
             }$tool_content .= "</th>";
             if ($display_tools) {
-                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+                $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupCategories - </td>" .

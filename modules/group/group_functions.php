@@ -138,26 +138,12 @@ function user_group_info($uid, $course_id, $as_id = NULL) {
 }
 
 function showcategoryadmintools($categoryid) {
-    global $urlview, $aantalcategories, $catcounter, $langDelete,
-    $langEditChange, $langUp, $langDown, $langGroupCatDel, $tool_content,
-    $course_code;
+    global $langDelete, $langEditChange, $langGroupCatDel, $tool_content, $course_code;
 
-    $basecaturl = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=" . getIndirectReference($categoryid) . "&amp;urlview=$urlview&amp;";
     $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
-                      //'url' => "$basecaturl" . "action=editcategory"),
 					  'url' => "group_category.php?course=$course_code&amp;editcategory=1&amp;id=$categoryid"),
-                array('title' => $langUp,
-                      'level' => 'primary',
-                      'icon' => 'fa-arrow-up',
-                      'disabled' => $catcounter == 0,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cup=" . getIndirectReference($categoryid)),
-                array('title' => $langDown,
-                       'level' => 'primary',
-                       'icon' => 'fa-arrow-down',
-                       'disabled' => $catcounter == $aantalcategories-1,
-                       'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;cdown=" . getIndirectReference($categoryid)),
                 array('title' => $langDelete,
                         'icon' => 'fa-times',
                         //'url' => "$basecaturl" . "action=deletecategory",
@@ -165,29 +151,24 @@ function showcategoryadmintools($categoryid) {
                         'class' => 'delete',
                         'confirm' => $langGroupCatDel)
                 ));           
-    $catcounter++;
 }
 
 
 
 function showgroupsofcategory($catid) {
     global $is_editor, $course_id, $urlview, $socialview_param, $tool_content,
-    $urlServer, $course_code, $langGroupDelconfirm, $langDelete, $langUp, $langDown,
-    $langEditChange, $is_in_tinymce, $groups_num, $langLinkSubmittedBy;
+    $course_code, $langGroupDelconfirm, $langDelete, $langUp, $langDown,
+    $langEditChange, $is_in_tinymce, $groups_num;
 
     $tool_content .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
                                    ORDER BY `id`", $course_id, $catid);
-    $numberofgroups = count($result);
-    $groups_num = 1;    
+  
     foreach ($result as $myrow) {
         $name = empty($myrow->name) ? $myrow->description : $myrow->name;        
-        //$aclass = ($is_in_tinymce) ? " class='fileURL' " : '';
         $tool_content .= "<td class='nocategory-link'>" . q($name) . "&nbsp;&nbsp;";
-       /* if ($catid == -2 ) {
-            $tool_content .= "<small> - $langLinkSubmittedBy ".display_user($myrow->user_id, false, false)."</small>";
-        }*/
+
         if (!empty($myrow->description)) {
             $tool_content .= "<br />" . standard_text_escape($myrow->description);
         }
@@ -200,34 +181,18 @@ function showgroupsofcategory($catid) {
         
         if ($is_editor && !$is_in_tinymce) {   
             $tool_content .= "<td class='option-btn-cell'>";
-           /* $editgroup = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editgroup&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
-            if (isset($category)) {
-                $editgroup .= "&amp;category=" . getIndirectReference($category);
-            }*/
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
-                      'url' => "group_edit.php?course=$course_code&amp;group_id=$myrow->id"),
-                array('title' => $langUp,
-                      'level' => 'primary',
-                      'icon' => 'fa-arrow-up',
-                      'disabled' => $groups_num == 1,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;up=" . getIndirectReference($myrow->id) . $socialview_param,
-                      ),
-                array('title' => $langDown,
-                      'level' => 'primary',
-                      'icon' => 'fa-arrow-down',
-                      'disabled' => $groups_num >= $numberofgroups,
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$urlview&amp;down=" . getIndirectReference($myrow->id) . $socialview_param,
-                      ),
+                      'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$myrow->id"),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletegroup&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;deletegroup=1&amp;id=$myrow->id",
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";
-        } elseif ($catid == -2 && !$is_in_tinymce) {
+        } /*elseif ($catid == -2 && !$is_in_tinymce) {
             if (isset($_SESSION['uid'])) {
                 if (is_link_creator($myrow->id)) {
                     $tool_content .= "<td class='option-btn-cell'>";
@@ -253,10 +218,9 @@ function showgroupsofcategory($catid) {
                     }
                 }
             }
-        }
+        }*/
         
         $tool_content .= "</tr>";
-        $groups_num++;
     }
 }
 
@@ -272,28 +236,42 @@ function delete_category($id) {
 
 function submit_category() {
     global $course_id, $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description;
-
+    $categoryname, $description, $langFormErrors;
+			
+	
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');
     $set_sql = "SET name = ?s, description = ?s";
     $terms = array($categoryname, purify($description));
 
     if (isset($_POST['id'])) {
-        $id = getDirectReference($_POST['id']);
-        Database::get()->query("UPDATE `group_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
-        $log_type = LOG_MODIFY;
-    } else {
+
+		
+			$id = getDirectReference($_POST['id']);
+			Database::get()->query("UPDATE `group_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
+			$log_type = LOG_MODIFY;
+	}
+
+	else {
+		/*$v = new Valitron\Validator($_POST);
+		$v->rule('required', array('categoryname'));
+		if($v->validate()) {*/
         $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `group_category`
                                       WHERE course_id = ?d", $course_id)->maxorder;
         $order++;
         $id = Database::get()->query("INSERT INTO `group_category` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
         $log_type = LOG_INSERT;
-    }
+
+		/*} else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/group/group_category.php?course=$course_code&amp;addcategory=1");
+		}*/
+	}
     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
     Log::record($course_id, MODULE_ID_LINKS, $log_type, array('id' => $id,
         'category' => $categoryname,
         'description' => $txt_description));
+
 }
 
 function category_form_defaults($id) {
@@ -314,4 +292,16 @@ function makedefaultviewcode($locatie) {
     $view = str_repeat('0', $aantalcategories);
     $view[$locatie] = '1';
     return $view;
+}
+
+function delete_group($id) {
+    global $course_id, $langGroupDeleted;
+
+    $tuple = Database::get()->querySingle("SELECT name, category_id FROM group WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $name = $tuple->name;
+    $category_id = $tuple->category_id;
+
+    Database::get()->query("DELETE FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('id' => $id,
+																'name' => $name));
 }

@@ -45,6 +45,8 @@ $tool_content .= action_bar(array(
 ));
 
 	if (isset($_GET['addcategory'])) {
+
+		$categoryname = $_POST['categoryname'];
         $navigation[] = array('url' => "$_SERVER[SCRIPT_NAME]?course=$course_code", 'name' => $langGroups);
         $tool_content .= "<div class = 'form-wrapper'>";
         $tool_content .= "<form class = 'form-horizontal' role='form' method='post' action='index.php?course=$course_code&amp;addcategory=1' onsubmit=\"return checkrequired(this, 'categoryname');\">";
@@ -56,13 +58,13 @@ $tool_content .= action_bar(array(
                         <div class='form-group'>
                             <label for='CatName' class='col-sm-2 control-label'>$langCategoryName:</label>
                             <div class='col-sm-10'>
-                                <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName' $form_name>
+                                <input class='form-control' type='text' name='categoryname' size='53' placeholder='$langCategoryName'>
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='CatDesc' class='col-sm-2 control-label'>$langDescription:</label>
                             <div class='col-sm-10'>
-                                <textarea class='form-control' rows='5' name='description'>$form_description</textarea>
+                                <textarea class='form-control' rows='5' name='description'></textarea>
                             </div>
                         </div>
                         <div class='form-group'>
@@ -103,7 +105,7 @@ $tool_content .= action_bar(array(
                         <div class='form-group'>
                             <div class='col-sm-10 col-sm-offset-2'>
                                 <input type='submit' class='btn btn-primary' name='submitCategory' value='$form_legend' />
-                                <a href='$_SERVER[SCRIPT_NAME]?course=$course_code' class='btn btn-default'>$langCancel</a>
+                                <a href='index.php?course=$course_code' class='btn btn-default'>$langCancel</a>
                             </div>
                         </div>
                         </fieldset>
