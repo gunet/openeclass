@@ -26,7 +26,7 @@ require_once 'insert_video.php';
 require_once 'insert_doc.php';
 require_once 'include/log.php';
 
-ModalBoxHelper::loadModalBox(true);
+ModalBoxHelper::loadModalBox(false);
 
 $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
@@ -384,7 +384,16 @@ if (isset($_GET['showPost'])) { //show comments case
                                   element: $(".infinite-container")[0]
                               })
                           </script>';
-    }
+        
+        $tool_content .= "<script>
+                            $('body').on('click', '.colorboxframe', function() {
+                              $('.colorboxframe').colorbox();
+                            });
+                            $('body').on('click', '.colorbox', function() {
+                              $('.colorbox').colorbox();
+                            });
+                          </script>";
+    }   
 }
 
 draw($tool_content, 2, null, $head_content);
