@@ -91,7 +91,7 @@ if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and
 }
 
 // authenticate user via hybridauth if requested by URL
-$user_data = '';
+$user_data = null;
 if (!empty($provider_name)) {
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
@@ -176,25 +176,29 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='Name' class='col-sm-2 control-label'>$langName:</label>
                 <div class='col-sm-10'>
-                  <input class='form-control' type='text' name='givenname_form' size='30' maxlength='50' value='" . $user_data->firstName . "' placeholder='$langName'>
+                    <input class='form-control' type='text' name='givenname_form' size='30' maxlength='100'" .
+                      ($user_data? (" value='" . q($user_data->firstName) . "'"): '') . " placeholder='$langName'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value='" . $user_data->lastName . "' placeholder='$langSurname'>
+                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100'" .
+                      ($user_data? (" value='" . q($user_data->lastName) . "'"): '') . " placeholder='$langSurname'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='uname' value='" . q(str_replace(' ', '', $user_data->displayName)) . "' size='30' maxlength='30'  autocomplete='off' placeholder='$langUserNotice'>
+                    <input class='form-control' type='text' name='uname'" .
+                      ($user_data? (" value='" . q(str_replace(' ', '', $user_data->displayName)) . "'"): '') .
+                      " size='30' maxlength='100' autocomplete='off' placeholder='$langUserNotice'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
+                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='$langUserNotice'><span id='result'></span>
                 </div>
             </div>
             <div class='form-group'>
@@ -206,7 +210,8 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='email' size='30' maxlength='100' value='" . $user_data->email . "' placeholder='$email_message'>
+                    <input class='form-control' type='text' name='email' size='30' maxlength='100'" .
+                      ($user_data? (" value='" . q($user_data->email) . "'"): '') . " placeholder='$email_message'>
                 </div>
             </div>
             <div class='form-group'>
@@ -218,7 +223,8 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='phone' size='20' maxlength='20' value='" . $user_data->phone . "' placeholder = '$langOptional'>
+                    <input class='form-control' type='text' name='phone' size='20' maxlength='20'" .
+                      ($user_data? (" value='" . q($user_data->phone) . "'"): '') . " placeholder='$langOptional'>
                 </div>
             </div>
             <div class='form-group'>
