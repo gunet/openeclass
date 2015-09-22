@@ -85,7 +85,11 @@ $total_topics = Database::get()->querySingle("SELECT num_topics FROM forum
                 AND course_id = ?d", $forum_id, $course_id)->num_topics;
 
 if ($total_topics > $topics_per_page) {
-    $pages = intval($total_topics / $topics_per_page) + 1; // get total number of pages
+    if(($total_topics % $topics_per_page) == 0) {
+        $pages = intval($total_topics / $topics_per_page); // get total number of pages
+    } else {
+        $pages = intval($total_topics / $topics_per_page) + 1; // get total number of pages
+    }
 }
 
 if (isset($_GET['start'])) {
