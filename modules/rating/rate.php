@@ -105,9 +105,9 @@ if ($is_link || setting_get($setting_id, $course_id) == 1) {
             }
             
             if ($num_ratings['fivestar'] == 1) {
-                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVote.'</small>';
+                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVote.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
             } else {
-                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'</small>';
+                $response[0] .= '<small class="text-muted">&nbsp;&nbsp;|&nbsp;&nbsp;'.$num_ratings['fivestar'].$langRatingVotes.'&nbsp;&nbsp;|&nbsp;&nbsp;</small>';
             }
             
         }
