@@ -29,6 +29,23 @@ $head_content .=
         course = $course_id;
         stats = 'c';
     </script>";
+
+/**** Summary info    ****/
+$visits = course_visits($course_id);
+$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel-body'>";
+$tool_content .="<table class='table-default'>"
+        . "<tr class='even'>"
+        . "<td><div class='row margin-bottom-thin'><div class='col-sm-4'><strong>$langUsers</strong></div><div class='col-sm-2'><span class='badge'>".count_course_users($course_id)."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langTeachers</div><div class='col-sm-2'><span class='badge'>".count_course_users($course_id,USER_TEACHER)."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langStudents</div><div class='col-sm-2'><span class='badge'>".count_course_users($course_id,USER_STUDENT)."</span></div></div>"
+        . "</td>"
+        . "<td><div class='row margin-bottom-thin'><div class='col-sm-4'><strong>$langHits</strong></div><div class='col-sm-2'><span class='badge'>".$visits['hits']."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langDuration</div><div class='col-sm-2'><span class='badge'>".$visits['duration']."</span></div></div>"
+        . "</td>"
+        . "</tr>"
+        . "</table></div></div></div>";
+
+
 require_once('form.php');
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";

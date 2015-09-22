@@ -40,6 +40,7 @@ else{ // expecting $_REQUEST['t'] == 'u'
 $helpTopic = 'Usage';
 $require_login = true;
 require_once '../../include/baseTheme.php';
+require_once 'usage.lib.php';
 
 load_js('tools.js');
 load_js('bootstrap-datetimepicker');

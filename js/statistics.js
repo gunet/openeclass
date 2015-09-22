@@ -83,19 +83,22 @@ $(document).ready(function(){
         adjust_interval_options();
         refresh_plots();
     });
-    $('#toggle-view').click(function(){
-        $(this).children("i").attr('class', views[selectedview].class);
-        $(this).children("i").attr('data-original-title', views[selectedview].title);
-        if(selectedview == 'plots'){
-            selectedview = 'list';
-            $('.plotscontainer').hide();
-            $('.detailscontainer').show();
-            //redrawflashbuttons();
-        }
-        else{
+   $('#plots-view').click(function(){
+        if(selectedview == 'list'){
+            $('#list-view').removeClass("active");
+            $(this).addClass("active");
             selectedview = 'plots';
             $('.plotscontainer').show();
             $('.detailscontainer').hide();
+        }
+    });
+    $('#list-view').click(function(){
+        if(selectedview == 'plots'){
+            $('#plots-view').removeClass("active");
+            $(this).addClass("active");
+            selectedview = 'list';
+            $('.detailscontainer').show();
+            $('.plotscontainer').hide();
         }
     });
     sdate = $('#startdate').datepicker("getDate");

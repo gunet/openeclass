@@ -66,8 +66,8 @@ else{
 
 
 
-$tool_content .= '<div class="form-wrapper">';
-$tool_content .= '<div class="form-group">';  
+$tool_content .= '<div class="form-wrapper" data-placement="top">';
+$tool_content .= '<div class="form-group" data-placement="top">';  
         
 $endDate_obj = new DateTime();
 $enddate = $endDate_obj->format('d-m-Y');
@@ -76,17 +76,17 @@ $startDate_obj = $endDate_obj->sub(new DateInterval('P1Y'));
 $startdate = $startDate_obj->format('d-m-Y');
 $showFrom = q($startdate);
 
-$tool_content .= "<label class='col-sm-1 control-label'>$langFrom:</label>
+$tool_content .= "<label class='pull-left control-label'>$langFrom:</label>
         <div class='col-xs-2 col-sm-2'>               
             <input class='form-control' name='startdate' id='startdate' type='text' value = '$showFrom'>
         </div>";        
-$tool_content .= "<label class='col-sm-1 control-label'>$langUntil:</label>
+$tool_content .= "<label class='pull-left control-label'>$langUntil:</label>
             <div class='col-xs-2 col-sm-2'>
                 <input class='form-control' name='enddate' id='enddate' type='text' value = '$showUntil'>
             </div>";
 $tool_content .= '<div class="col-sm-2 col-xs-2"><select name="interval" id="interval" class="form-control">' . $statsIntervalOptions . '</select></div>';
 
-$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
+//$tool_content .= "<a id='toggle-view'><i class='fa fa-list' data-toggle='tooltip' data-placement='top' title data-original-title='lala'></i></a>";
 
 if($stats_type == 'course'){
     $tool_content .= '
@@ -100,5 +100,12 @@ elseif($stats_type == 'user'){
     $tool_content .= '
     <div class="col-sm-3 col-xs-3"><select name="course" id="course" class="form-control">' . $statsCourseOptions . '</select></div>';
 }
+
+$tool_content .= '<div class="pull-right">
+    <div id="toggle-view" class="btn-group">
+    	<a id="plots-view" class="btn btn-default active"  data-placement="top" title="'.$langPlots.'" data-toggle="tooltip" data-original-title="'.$langPlots.'"><i class="fa fa-bar-chart"  data-toggle="tooltip" data-placement="top"></i></a>
+        <a id="list-view" class="btn btn-default"  data-placement="top" title="'.$langDetails.'" data-toggle="tooltip" data-original-title="'.$langDetails.'"><i class="fa fa-list"  data-toggle="tooltip" data-placement="top"></i></a>
+    </div>
+</div>';
 
 $tool_content .= '</div></div>';

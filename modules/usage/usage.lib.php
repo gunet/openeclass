@@ -426,3 +426,73 @@ function build_group_selector_cond($interval = 'month', $date_field = 'day')
     return array('groupby'=>$groupby,'select'=>$select);
 }
 
+/**
+ * Count users of the system based on their type
+ * @param int $user_type a value among USER_TEACHER, USER_STUDENT, USER_GUEST
+ * @return int the number of all the users or of specific type of the system 
+*/
+function count_users($user_type = null){
+    if(is_null($user_type)){
+        return Database::get()->querySingle("SELECT COUNT(*) as count FROM user")->count;
+    }
+    elseif(!in_array($user_type,array(USER_TEACHER, USER_STUDENT, USER_GUEST))){
+        return 0;
+    }
+    else{
+        return Database::get()->querySingle("SELECT COUNT(*) as count FROM user WHERE status = ?d", $user_type)->count;
+    }
+}
+
+/**
+ * Count courses of the system based on their type
+ * @param int $course_type a value among COURSE_INACTIVE, COURSE_OPEN, COURSE_REGISTRATION, COURSE_CLOSED
+ * @return int the number of all the users or of specific type of the system 
+*/
+function count_courses($course_type = null){
+    if(is_null($course_type)){
+        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course")->count;
+    }
+    elseif(!in_array($course_type,array(COURSE_INACTIVE, COURSE_OPEN, COURSE_REGISTRATION, COURSE_CLOSED))){
+        return 0;
+    }
+    else{
+        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course WHERE visible != ?d", $course_type)->count;
+    }
+}
+
+/**
+ * Count users of the system based on their type
+ * @param int cid a value among USER_TEACHER, USER_STUDENT
+ * @param int $user_type a value among USER_TEACHER, USER_STUDENT
+ * @return int the number of all the users or of specific type of the system 
+*/
+function count_course_users($cid, $user_type = null){
+    
+    if(is_null($user_type)){
+        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course_user WHERE course_id = ?d", $cid)->count;
+    }
+    elseif(!in_array($user_type,array(USER_TEACHER, USER_STUDENT, USER_GUEST))){
+        return 0;
+    }
+    else{
+        return Database::get()->querySingle("SELECT COUNT(*) as count FROM course_user WHERE course_id = ?d AND status = ?d", $cid, $user_type)->count;
+    }
+}
+
+function course_visits($cid){
+    $r = Database::get()->querySingle("SELECT sum(hits) hits, sum(duration) dur FROM actions_daily WHERE course_id=?d", $cid);
+    return array('hits' => $r->hits, 'duration' => user_friendly_seconds($r->dur));
+}
+
+
+function user_friendly_seconds($seconds){
+    $hours = floor($seconds / 3600);
+    $mins = floor(($seconds - ($hours*3600)) / 60);
+    $secs = floor($seconds % 60);
+    $fd = ($hours<10)? '0'.$hours:$hours;
+    $fd .= ':';
+    $fd .= ($mins<10)? '0'.$mins:$mins;
+    $fd .= ':';
+    $fd .= ($secs<10)? '0'.$secs:$secs;
+    return $fd;
+}

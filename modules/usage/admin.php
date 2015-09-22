@@ -30,7 +30,27 @@ $head_content .=
         course = null;
         stats = 'a';
     </script>";
+
+/**** Summary info    ****/
+$tool_content .= "<div class='row'><div class='col-xs-12'><div class='panel-body'>";
+$tool_content .="<table class='table-default'>"
+        . "<tr class='even'>"
+        . "<td><div class='row margin-bottom-thin'><div class='col-sm-4'><strong>$langCoursesHeader</strong></div><div class='col-sm-2'><span class='badge'>".count_courses()."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langOpenCoursesShort</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_OPEN)."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langOpenCourseWithRegistration</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_REGISTRATION)."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langClosedCourses</div><div class='col-sm-2'><span class='badge'>".count_courses(COURSE_CLOSED)."</span></div></div></td>"
+        . "<td><div class='row margin-bottom-thin'><div class='col-sm-4'><strong>$langUsers</strong></div><div class='col-sm-2'><span class='badge'>".count_users()."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langTeachers</div><div class='col-sm-2'><span class='badge'>".count_users(USER_TEACHER)."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langStudents</div><div class='col-sm-2'><span class='badge'>".count_users(USER_STUDENT)."</span></div></div>"
+        . "<div class='row margin-bottom-thin'><div class='col-sm-4'>$langGuest</div><div class='col-sm-2'><span class='badge'>".count_users(USER_GUEST)."</span></div></div></td>"
+        . "</tr>"
+        . "</table>";
+$tool_content .= "</div></div></div>";
+
+
+/****   Form   ****/
 require_once('form.php');
+
 /****   Plots   ****/
 $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
 $tool_content .= "<ul class='list-group'><li class='list-group-item'><label id='userlogins_title'>$langNbLogin</label></li><li class='list-group-item'><div id='userlogins_stats'></div></li></ul>";
@@ -39,6 +59,7 @@ $tool_content .= "<div class='row plotscontainer'><div class='col-xs-12'><div cl
 $tool_content .= "<div id='depuser' style='width:49%;float:left;margin-right:2%;'><ul class='list-group' style=''><li class='list-group-item'><label id='depuser_title'>$langUsers</label></li><li class='list-group-item'><div id='depuser_stats'></div></li></ul></div>";
 $tool_content .= "<div id='depcourse' style='width:49%;float:left;'><ul class='list-group'><li class='list-group-item'><label id='depcourse_title'>$langCoursesHeader</label></li><li class='list-group-item'><div id='depcourse_stats'></div></li></ul></div>";
 $tool_content .= "</div></div></div></div>";
+
 /****   Datatables   ****/
 $tool_content .= "<div class='row detailscontainer'><div class='col-xs-12'><div class='panel'><div class='panel-body'>";
 $tool_content .= "<table id='adetails1' class='table table-striped table-bordered'><caption class='well'>$langUsers $langAnd $langCourses</caption>"
