@@ -2539,6 +2539,7 @@ $langPages = "Σελίδες";
 $langNoForums = "Δεν υπάρχουν διαθέσιμες περιοχές συζητήσεων";
 $langNoForumsCat = "Δεν υπάρχουν περιοχές συζητήσεων σε αυτή την κατηγορία.";
 $langNewTopic = "Νέο θέμα";
+$langTopicStored = "Το νέο θέμα αποθυκεύτηκε";
 $langTopicData = "Στοιχεία θέματος";
 $langTopicAnswer = "Απάντηση στο θέμα συζήτησης";
 $langGroupDocumentsLink = "Έγγραφα ομάδας ";

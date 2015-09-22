@@ -1407,6 +1407,7 @@ $langLoginBeforePost3 = "login on the Campus";
 $langPages = "Pages";
 $langNoForums = "No Forums available";
 $langNewTopic = "New topic";
+$langTopicStored = "New topic is saved";
 $langTopicData = "Topic elements";
 $langTopicAnswer = "Topic Answer";
 $langGroupDocumentsLink = "Documents of the group ";

@@ -120,7 +120,7 @@ if (isset($_POST['submit'])) {
 
     notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $time);
 
-    Session::Messages($langStored, 'alert-success');
+    Session::Messages($langTopicStored, 'alert-success');
     redirect_to_home_page("modules/forum/viewforum.php?course=$course_code&forum=$forum_id");
 } else {
     $tool_content .= "
