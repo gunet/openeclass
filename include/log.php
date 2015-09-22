@@ -69,7 +69,7 @@ class Log {
                                 details = ?s,
                                 action_type = ?d,
                                 ts = " . DBHelper::timeAfter() . ",
-                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, $_SERVER['SERVER_ADDR']);
+                                ip = ?s", $userid, $course_id, $module_id, serialize($details), $action_type, $_SERVER['REMOTE_ADDR']);
         return;
     }
 
