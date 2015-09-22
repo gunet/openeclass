@@ -86,7 +86,7 @@ if (isset($_POST['submit'])) {
                     $q = Database::get()->query('UPDATE user_department
                         SET department = ?d WHERE user = ?d AND department = ?d',
                         $dest_dep, $u, $old_dep);
-                    if ($q) {
+                    if ($q and $q->affectedRows) {
                         $success_mgs[] = sprintf($langUserMoved, $line);
                         $count++;
                     } else {
@@ -207,6 +207,11 @@ if (isset($_POST['submit'])) {
             $pref = ($c) ? 'a' : 'user';
             $criteria[] = $pref . '.id = user_department.user';
             $criteria[] = 'department IN (' . implode(', ', array_fill(0, $count, '?s')) . ')';
+        }
+
+        if (isset($_POST['move_submit'])) {
+            $criteria[] = 'department = ?d';
+            $terms[] = $dep;
         }
 
         $qry_criteria = (count($criteria)) ? implode(' AND ', $criteria) : '';

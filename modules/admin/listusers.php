@@ -496,7 +496,7 @@ foreach ($_REQUEST as $key => $value) {
     $tool_content .= "<input type='hidden' name='$key' value='$value' />";
 }
 
-if (isset($_GET['department']) and $_GET['department']) {
+if (isset($_GET['department']) and $_GET['department'] and is_numeric($_GET['department'])) {
     $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
 }
 
