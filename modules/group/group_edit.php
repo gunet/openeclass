@@ -285,17 +285,10 @@ $tool_content .= "<div class='form-wrapper'>
             <div class='col-sm-3'>
                 <select class='form-control' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
-        if ($social_bookmarks_enabled) {
-            $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
-            if (isset($category) and -2 == $category) {
-                $tool_content .= " selected='selected'";
-            }
-            $tool_content .= ">$langSocialCategory</option>";
-        }
-        $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `order`", $course_id);
+        $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
-            $tool_content .= "<option value='" . getIndirectReference($myrow->id) . "'";
-            if (isset($category) and $myrow->id == $category) {
+            $tool_content .= "<option value='$myrow->id'";
+            if (isset($_GET['category']) and $_GET['category'] == $myrow->id) {
                 $tool_content .= " selected='selected'";
             }
             $tool_content .= '>' . q($myrow->name) . "</option>";
@@ -304,6 +297,7 @@ $tool_content .= "<div class='form-wrapper'>
             </select>
             </div>
     </div>
+				
     <div class='form-group'>
     <div class='col-sm-10 col-sm-offset-2'>".
         form_buttons(array(
@@ -314,7 +308,7 @@ $tool_content .= "<div class='form-wrapper'>
                 'javascript' => "selectAll('members_box',true)"
             ),
             array(
-                'href'  =>  $back_url
+                'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code"
             )
         ))
         ."</div>  
