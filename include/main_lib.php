@@ -2038,6 +2038,7 @@ function glossary_expand($text) {
 
 function glossary_expand_callback($matches) {
     static $glossary_seen_terms;
+    global $langGlossaryUrl, $langComments;
 
     $term = mb_strtolower($matches[0], 'UTF-8');
     if (isset($glossary_seen_terms[$term])) {
@@ -2045,18 +2046,16 @@ function glossary_expand_callback($matches) {
     }
     $glossary_seen_terms[$term] = true;
     if (!empty($_SESSION['glossary'][$term])) {
-        $definition = ' title="' . q($_SESSION['glossary'][$term]) . '"';
+        $term_notes = isset($_SESSION['glossary_notes'][$term]) ? q('<hr><small class="text-muted">'.$langComments.': '.$_SESSION['glossary_notes'][$term].'</small>') : '';
+        $term_url = isset($_SESSION['glossary_url'][$term]) ? q('<hr><a href="'.$_SESSION['glossary_url'][$term].'">'.$langGlossaryUrl.'</a>') : '';
+        $definition = ' title="'.$matches[0].'" data-trigger="focus" data-html="true" data-content="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'"';
     } else {
         $definition = '';
     }
-    if (isset($_SESSION['glossary_url'][$term])) {
-        return '<a href="' . q($_SESSION['glossary_url'][$term]) .
-                '" target="_blank" class="glossary"' .
-                $definition . '>' . $matches[0] . '</a>';
-    } else {
-        return '<span class="glossary"' .
-                $definition . '>' . $matches[0] . '</span>';
-    }
+
+    return '<a href="#" class="glossary"' .
+            $definition . '>' . $matches[0] . '</a>';
+
 }
 
 function get_glossary_terms($course_id) {
