@@ -77,12 +77,13 @@ if (isset($_POST['modify'])) {
             $maxStudent = $student_members;
             $message .= "<div class='alert alert-warning'>$langGroupMembersUnchanged</div>";
         }                
+		$category_id = intval($_POST['selectcategory']);
         Database::get()->query("UPDATE `group`
                                         SET name = ?s,
                                             description = ?s,
                                             max_members = ?d,
                                             category_id = ?d
-                                        WHERE id = ?d", $name, $description, $maxStudent, $_POST['selectcategory'], $group_id);
+                                        WHERE id = ?d", $name, $description, $maxStudent, $category_id, $group_id);
 
         Database::get()->query("UPDATE forum SET name = ?s WHERE id =
                             (SELECT forum_id FROM `group` WHERE id = ?d)
@@ -119,11 +120,12 @@ if (isset($_POST['modify'])) {
                                           VALUES (?d, ?d)", $_POST['ingroup'][$i], $group_id);
             }
             $message .= "<div class='alert alert-success'>$langGroupSettingsModified</div>";
+			redirect_to_home_page("modules/group/index.php?course=$course_code");
         }    
         initialize_group_info($group_id);
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/group/group_edit.php?course=$course_code&group_id=$group_id");
+        redirect_to_home_page("modules/group/group_edit.php?course=$course_code&category=$category_id&group_id=$group_id");
     }
 }
 
@@ -213,6 +215,7 @@ $tool_content .=  action_bar(array(
           'url' => $back_url,
            )
   ));
+  
 
 $tool_content .= "<div class='form-wrapper'>
         <form class='form-horizontal' role='form' name='groupedit' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "?course=$course_code&amp;group_id=$group_id' onsubmit=\"return checkrequired(this,'name');\">
@@ -288,6 +291,7 @@ $tool_content .= "<div class='form-wrapper'>
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
             $tool_content .= "<option value='$myrow->id'";
+			$category_id = $myrow->id;
             if (isset($_GET['category']) and $_GET['category'] == $myrow->id) {
                 $tool_content .= " selected='selected'";
             }
@@ -308,7 +312,7 @@ $tool_content .= "<div class='form-wrapper'>
                 'javascript' => "selectAll('members_box',true)"
             ),
             array(
-                'href'  =>  "$_SERVER[SCRIPT_NAME]?course=$course_code"
+                'href'  =>  "index.php?course=$course_code"
             )
         ))
         ."</div>  

@@ -2883,7 +2883,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `course_id` INT(11) NOT NULL,
                                 `name` VARCHAR(255) NOT NULL,
                                 `description` TEXT,
-                                `order` INT(6) NOT NULL DEFAULT 0,
                                 PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 
         if (!DBHelper::fieldExists('group', 'category_id')) {

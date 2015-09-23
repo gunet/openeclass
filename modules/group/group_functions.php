@@ -236,41 +236,36 @@ function delete_category($id) {
 
 function submit_category() {
     global $course_id, $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description, $langFormErrors;
+    $categoryname, $description, $langFormErrors, $course_code;
 			
 	
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');
     $set_sql = "SET name = ?s, description = ?s";
     $terms = array($categoryname, purify($description));
+	$v = new Valitron\Validator($_POST);
+	$v->rule('required', array('categoryname'));
+	if($v->validate()) {
 
-    if (isset($_POST['id'])) {
-
-		
+		if (isset($_POST['id'])) {
 			$id = getDirectReference($_POST['id']);
 			Database::get()->query("UPDATE `group_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
 			$log_type = LOG_MODIFY;
-	}
+		}
+		else {
+			$id = Database::get()->query("INSERT INTO `group_category` $set_sql, course_id = ?d", $terms, $course_id)->lastInsertID;
+			$log_type = LOG_INSERT;
+		}
 
-	else {
-		/*$v = new Valitron\Validator($_POST);
-		$v->rule('required', array('categoryname'));
-		if($v->validate()) {*/
-        $order = Database::get()->querySingle("SELECT MAX(`order`) as maxorder FROM `group_category`
-                                      WHERE course_id = ?d", $course_id)->maxorder;
-        $order++;
-        $id = Database::get()->query("INSERT INTO `group_category` $set_sql, course_id = ?d, `order` = ?d", $terms, $course_id, $order)->lastInsertID;
-        $log_type = LOG_INSERT;
-
-		/*} else {
-        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
-        redirect_to_home_page("modules/group/group_category.php?course=$course_code&amp;addcategory=1");
-		}*/
-	}
     $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
     Log::record($course_id, MODULE_ID_LINKS, $log_type, array('id' => $id,
         'category' => $categoryname,
         'description' => $txt_description));
+	} 
+	else {
+        Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+        redirect_to_home_page("modules/group/group_category.php?course=$course_code&addcategory=1");
+		}
 
 }
 
