@@ -604,7 +604,7 @@ if ($is_editor) {
             }
             $cunits_content .= "<div class='col-xs-12'><div class='panel clearfix'><div class='col-xs-12'>
                                     <div class='item-content'>
-                                        <div class='item-header'>
+                                        <div class='item-header clearfix'>
                                             <h4 class='item-title'>$href</h4>";
                                 if ($is_editor) {
                 if ($course_info->view_type == 'weekly') { // actions for course weekly format
