@@ -1076,10 +1076,9 @@ function parse_backup_php($file) {
                     $sql = $args[0];
                     if (preg_match('/^INSERT INTO `(\w+)` \(([^)]+)\) VALUES\s+(.*)$/si', $sql, $matches)) {
                         $table = $matches[1];
-                        // Skip tables not used any longer
-                        if ($table != 'stat_accueil' and $table != 'users') {
-                            $fields = parse_fields($matches[2]);
-                            $values = parse_values($matches[3]);
+                        // Skip 'stat_accueil' and 'users' (not used any longer) and
+                        // 'actions' and 'logins' which can grow very large
+                        if (!in_array($table, array('stat_accueil', 'users', 'actions', 'logins'))) {
                             $info['query'][] = array(
                                 'table' => $table,
                                 'fields' => parse_fields($matches[2]),
