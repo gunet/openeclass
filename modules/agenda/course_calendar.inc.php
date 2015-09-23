@@ -116,7 +116,7 @@ require_once 'include/lib/references.class.php';
             $q .= " UNION ";
         }
         $dc = str_replace('start','ag.start',$datecond);
-        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%s') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
+        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + ag.duration, '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                 . "FROM agenda ag "
                 . "WHERE cg.course_id =?d "
                 . $dc;
@@ -128,7 +128,7 @@ require_once 'include/lib/references.class.php';
                 $q .= " UNION ";
             }
             $dc = str_replace('start','bbb.start_date',$datecond);
-            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%s') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
+            $q .= "SELECT bbb.id, bbb.title, bbb.start_date start, date_format(bbb.start_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(bbb.start_date + '00:00', '%Y-%m-%d %H:%i') `end`, bbb.description content, 'course' event_group, 'event-info' class, 'teleconference' event_type,  c.code course "
                     . "FROM bbb_session bbb  "
                     . "WHERE bbb.course_id =?d "
                     . $dc;
@@ -138,7 +138,7 @@ require_once 'include/lib/references.class.php';
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ass.deadline',$datecond);
-            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
+            $q .= "SELECT ass.id, ass.title, ass.deadline start, date_format(ass.deadline,'%Y-%m-%d') startdate, '00:00' duration, date_format(ass.deadline + '00:00', '%Y-%m-%d %H:%i') `end`, concat(ass.description,'\n','(deadline: ',deadline,')') content, 'deadline' event_group, 'event-important' class, 'assignment' event_type, c.code course "
                     . "FROM assignment ass  "
                     . "WHERE ass.course_id =?d "
                     . $dc;
@@ -149,7 +149,7 @@ require_once 'include/lib/references.class.php';
                 $q .= " UNION ";
             }
             $dc = str_replace('start','ex.end_date',$datecond);
-            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%s') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
+            $q .= "SELECT ex.id, ex.title, ex.end_date start, date_format(ex.end_date,'%Y-%m-%d') startdate, '00:00' duration, date_format(ex.end_date + '00:00', '%Y-%m-%d %H:%i') `end`, concat(ex.description,'\n','(deadline: ',end_date,')') content, 'deadline' event_group, 'event-important' class, 'exercise' event_type, c.code course "
                     . "FROM exercise ex "
                     . "WHERE ex.course_id =?d "
                     . $dc;
@@ -198,6 +198,9 @@ require_once 'include/lib/references.class.php';
             } else {
                 $enddate = $d1->format('Y-m-d H:i');
             }
+        }
+        if (!preg_match('/[0-9]+(:[0-9]+){0,2}/', $duration)) {
+            $duration = '0:00';
         }
         if($is_editor || $is_admin){
             $eventid = Database::get()->query("INSERT INTO agenda "
@@ -265,6 +268,10 @@ require_once 'include/lib/references.class.php';
     function update_event($eventid, $title, $start, $duration, $content, $recursion, $recursivelly = false){
         global $uid, $langNotValidInput, $course_id;
         
+        if (!preg_match('/[0-9]+(:[0-9]+){0,2}/', $duration)) {
+            $duration = '0:00';
+        }
+
         if($recursivelly && !is_null($recursion)){
             $oldrec = get_event_recursion($eventid, $course_id);
             $p = "P".$recursion['repeat'].$recursion['unit'];
@@ -457,11 +464,17 @@ require_once 'include/lib/references.class.php';
             'agenda' => 'modules/agenda/?id=thisid&course=thiscourse',
             'teleconference' => 'modules/bbb/?course=thiscourse');
        
-       $fromdatetime = date("Y-m-d H:i:s",$from/1000);
-       $todatetime = date("Y-m-d H:i:s",$to/1000);
-       $eventlist = get_course_events("month", $fromdatetime, $todatetime);       
+       $fromdatetime = date('Y-m-d H:i:s', $from / 1000);
+       $todatetime = date('Y-m-d H:i:s', $to / 1000);
+       $eventlist = get_course_events('month', $fromdatetime, $todatetime);
        $events = array();
        foreach($eventlist as $event){
+           if (!preg_match('/[0-9]+(:[0-9]+){0,2}/', $event->duration)) {
+               $event->duration = '0:00';
+           }
+           $event->title = q($event->title);
+           $event->content = q($event->content);
+           $event->course = q($event->course);
            $startdatetime = new DateTime($event->start);
            $event->start = $startdatetime->getTimestamp()*1000;
            $event->start_hour = $startdatetime->format("H:i");
@@ -738,7 +751,7 @@ require_once 'include/lib/references.class.php';
             $q .= " UNION ";
         }
         $dc = str_replace('start','ag.start',$datecond);
-        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(ag.start + time(ag.duration), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
+        $q .= "SELECT ag.id, ag.title, ag.start, date_format(ag.start,'%Y-%m-%d') startdate, ag.duration, date_format(addtime(ag.start, if(ag.duration = '', '0:00', ag.duration)), '%Y-%m-%d %H:%i') `end`, content, 'course' event_group, 'event-info' class, 'agenda' event_type,  c.code course "
                 . "FROM agenda ag JOIN course c ON ag.course_id=c.id "
                 . "WHERE ag.course_id =?d "
                 . $dc;
