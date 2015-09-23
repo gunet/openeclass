@@ -89,7 +89,8 @@ class Log {
 
         global $tool_content, $modules;
         global $langNoUsersLog, $langDate, $langUser, $langAction, $langDetail,
-            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo;
+            $langCourse, $langModule, $langAdminUsers, $langExternalLinks, $langCourseInfo, 
+            $langModifyInfo;
 
         $q1 = $q2 = $q3 = $q4 = '';
 
@@ -170,16 +171,16 @@ class Log {
                         $tool_content .= "<td>" . $langAdminUsers . "</td>";
                     } elseif ($mid == MODULE_ID_TOOLADMIN) {
                         $tool_content .= "<td>" . $langExternalLinks . "</td>";
-                    } elseif ($mid == MODULE_ID_SETTINGS) {
-                        $tool_content .= "<td>" . $langCourseInfo . "</td>";
-                    } else {                        
+                    } elseif ($mid == MODULE_ID_COURSEINFO) {
+                        $tool_content .= "<td>" . $langModifyInfo . "</td>";                         
+                    } else {
                         $tool_content .= "<td>" . $modules[$mid]['title'] . "</td>";
                     }
                 }
                 $tool_content .= "<td>" . $this->get_action_names($r->action_type) . "</td>";
                 if ($course_id == 0 or $module_id == 0) { // system logging
                     $tool_content .= "<td>" . $this->other_action_details($r->action_type, $r->details) . "</td>";
-                } else { // course logging
+                } else { // course logging                    
                     $tool_content .= "<td>" . $this->course_action_details($r->module_id, $r->details) . "</td>";
                 }
                 $tool_content .= "</tr>";
@@ -266,6 +267,8 @@ class Log {
                 break;
             case MODULE_ID_TOOLADMIN: $content = $this->external_link_action_details($details);
                 break;
+            case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);            
+                break;
             default: $content = $langUnknownModule;
                 break;
         }
@@ -288,9 +291,7 @@ class Log {
             case LOG_CREATE_COURSE: $content = $this->create_course_action_details($details);
                 break;
             case LOG_DELETE_COURSE: $content = $this->delete_course_action_details($details);
-                break;
-            case LOG_MODIFY_COURSE: $content = $this->modify_course_action_details($details);
-                break;
+                break;            
             case LOG_PROFILE: $content = $this->profile_action_details($details);
                 break;
             case LOG_LOGIN_FAILURE: $content = $this->login_failure_action_details($details);
@@ -339,13 +340,37 @@ class Log {
         return $content;
     }
 
+    /**
+     * @brief display action details while modifying course info
+     * @global type $langCourseStatusChange
+     * @global type $langIn
+     * @global type $langClosedCourse
+     * @global type $langRegCourse
+     * @global type $langOpenCourse
+     * @global type $langInactiveCourse
+     * @param type $details
+     * @return string
+     */
     private function modify_course_action_details($details) {
 
-        global $langTitle;
+        global $langCourseStatusChange, $langIn, $langClosedCourse, 
+               $langRegCourse, $langOpenCourse, $langInactiveCourse;
 
         $details = unserialize($details);
 
-        $content = "$langTitle &laquo;" . q($details['title']) . "&raquo;";
+        switch ($details['visible']) {
+            case COURSE_CLOSED: $mes = "".q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&nbsp;&raquo;";
+                break;
+            case COURSE_REGISTRATION: $mes = "".q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&nbsp;&raquo;";
+                break;
+            case COURSE_OPEN: $mes = "".q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&nbsp;&raquo;";
+                break;
+            case COURSE_INACTIVE: $mes = "".q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&nbsp;&raquo;";
+                break;
+            default: $mes = '';
+                break;
+        }
+        $content = "$langCourseStatusChange $mes";
         $content .= "&nbsp;(" . q($details['public_code']) . ")";
 
         return $content;
@@ -791,7 +816,7 @@ class Log {
     private function get_action_names($action_type) {
 
         global $langInsert, $langModify, $langDelete, $langModProfile, $langLoginFailures,
-        $langFinalize, $langCourseDel, $langCourseInfoEdit, $langUnregUsers, $langUnknownAction;
+        $langFinalize, $langCourseDel, $langModifyInfo, $langUnregUsers, $langUnknownAction;
 
         switch ($action_type) {
             case LOG_INSERT: return $langInsert;
@@ -800,7 +825,7 @@ class Log {
             case LOG_PROFILE: return $langModProfile;
             case LOG_CREATE_COURSE: return $langFinalize;
             case LOG_DELETE_COURSE: return $langCourseDel;
-            case LOG_MODIFY_COURSE: return $langCourseInfoEdit;
+            case LOG_MODIFY_COURSE: return $langModifyInfo;
             case LOG_LOGIN_FAILURE: return $langLoginFailures;
             case LOG_DELETE_USER: return $langUnregUsers;
             default: return $langUnknownAction;

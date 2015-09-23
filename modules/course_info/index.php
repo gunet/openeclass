@@ -353,11 +353,12 @@ if (isset($_POST['submit'])) {
                             WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);
             $course->refresh($course_id, $departments);
 
-            Log::record(0, 0, LOG_MODIFY_COURSE, array('title' => $_POST['title'],
-                'public_code' => $_POST['fcode'],
-                'visible' => $_POST['formvisible'],
-                'prof_names' => $_POST['titulary'],
-                'lang' => $session->language));
+            Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY_COURSE, 
+                array('title' => $_POST['title'],
+                      'public_code' => $_POST['fcode'],
+                      'visible' => $_POST['formvisible'],
+                      'prof_names' => $_POST['titulary'],
+                      'lang' => $session->language));
 
             if (isset($_POST['s_radio'])) {
                 setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
