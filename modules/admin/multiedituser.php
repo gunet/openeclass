@@ -29,45 +29,82 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$toolName = $langMultiDelUser;
+if (isset($_POST['activate_submit'])) {
+    $toolName = $langAddSixMonths;
+} elseif (isset($_POST['move_submit'])) {
+    $toolName = $langChangeDepartment;
+} else {
+    $toolName = $langMultiDelUser;
+}
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 
-
 if (isset($_POST['submit'])) {
+    if (isset($_POST['months'])) {
+        $months = intval($_POST['months']);
+    } elseif (isset($_POST['department'])) {
+        $dest_dep = $_POST['department'][0];
+        $old_dep = $_POST['old_dep'];
+    }
 
+    $count = 0;
     $line = strtok($_POST['user_names'], "\n");
     while ($line !== false) {
         // strip comments
         $line = preg_replace('/#.*/', '', trim($line));
-        
+
         if (!empty($line)) {
-            // fetch uid
-            $u = usernameToUid($line);
-            // for real uids not equal to admin
-            if ($u !== false && $u > 1) {
-                // delete user
-                $success = deleteUser($u, true);
-                // progress report
-                if ($success === true) {
-                    $success_mgs[] = "$langUserWithId $line $langWasDeleted";                   
-                } else {
-                    $error_mgs[] = "$langErrorDelete: $line";
-                }
+            $u = usernameToUid($line); // fetch uid
+            $line = q($line); // escape for messages below
+            if (!$u) {
+                $error_mgs[] = "$langErrorDelete: " . q($line);
             } else {
-                $error_mgs[] = "$langErrorDelete: $line";
+                if (isset($_POST['delete'])) {
+                    // for uids with no admin rights
+                    if (get_admin_rights($u) < 0) {
+                        // delete user progress report
+                        if (deleteUser($u, true)) {
+                            $success_mgs[] = "$langWithUsername $line $langWasDeleted";
+                            $count++;
+                        } else {
+                            $error_mgs[] = "$langErrorDelete: " . $line;
+                        }
+                    } else {
+                        $error_mgs[] = "$langDeleteAdmin $line $langNotFeasible";
+                    }
+                } elseif (isset($months)) {
+                    $q = Database::get()->query('UPDATE user
+                        SET expires_at = expires_at + INTERVAL ?d MONTH
+                        WHERE id = ?d', $months, $u);
+                    if ($q) {
+                        $success_mgs[] = sprintf($langUserDurationExtended, $line, $months);
+                        $count++;
+                    } else {
+                        $error_mgs[] = sprintf($langUserDurationError, $line);
+                    }
+                } elseif (isset($dest_dep)) {
+                    $q = Database::get()->query('UPDATE user_department
+                        SET department = ?d WHERE user = ?d AND department = ?d',
+                        $dest_dep, $u, $old_dep);
+                    if ($q and $q->affectedRows) {
+                        $success_mgs[] = sprintf($langUserMoved, $line);
+                        $count++;
+                    } else {
+                        $error_mgs[] = sprintf($langUserMoveError, $line);
+                    }
+                }
             }
+            $line = strtok("\n");
         }
-        $line = strtok("\n");
     }
     if (isset($success_mgs)) Session::Messages($success_mgs, 'alert-success');
     if (isset($error_mgs)) Session::Messages($error_mgs, 'alert-danger');
-    redirect_to_home_page('modules/admin/multideluser.php');
+    redirect_to_home_page('modules/admin/multiedituser.php');
 } else {
 
     $usernames = '';
 
-    if (isset($_POST['dellall_submit'])) {       
+    if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $c = isset($_POST['c']) ? intval($_POST['c']) : '';
@@ -168,8 +205,13 @@ if (isset($_POST['submit'])) {
             }
 
             $pref = ($c) ? 'a' : 'user';
-            $criteria[] = $pref . '.user.id = user_department.user';
-            $criteria[] = 'department IN (' . array_fill(0, $count, '?s') . ')';
+            $criteria[] = $pref . '.id = user_department.user';
+            $criteria[] = 'department IN (' . implode(', ', array_fill(0, $count, '?s')) . ')';
+        }
+
+        if (isset($_POST['move_submit'])) {
+            $criteria[] = 'department = ?d';
+            $terms[] = $dep;
         }
 
         $qry_criteria = (count($criteria)) ? implode(' AND ', $criteria) : '';
@@ -208,11 +250,45 @@ if (isset($_POST['submit'])) {
                 'icon' => 'fa-reply',
                 'level' => 'primary-label')));
 
+    if (isset($_POST['activate_submit'])) {
+        $infoText = $langActivateUserInfo;
+        $monthsField = "
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label' for='months-id'>$langActivateMonths:</label>
+                    <div class='col-sm-9'>
+                        <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
+                    </div>
+                </div>";
+        $confirm = '';
+    } elseif (isset($_POST['move_submit'])) {
+        $nodePickerParams = array(
+            'defaults' => $dep,
+            'multiple' => false);
+        if (isDepartmentAdmin()) {
+            $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
+        }
+        load_js('jstree3');
+        list($js, $html) = $tree->buildUserNodePicker($nodePickerParams);
+        $head_content .= $js;
+        $infoText = sprintf($langMoveUserInfo, '<b>' . q($tree->getNodeName($dep)) . '</b>');
+        $monthsField = "
+                <input type='hidden' name='old_dep' value='$dep'>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label' for='dialog-set-value'>$langFaculty:</label>
+                    <div class='col-sm-9 '>$html</div>
+                </div>";
+        $confirm = '';
+    } else {
+        $infoText = $langMultiDelUserInfo;
+        $monthsField = '';
+        $confirm = " onclick='return confirmation(\"" . q($langMultiDelUserConfirm) . "\");'";
+    }
     $tool_content .= "
-    <div class='alert alert-info'>$langMultiDelUserInfo</div>
+    <div class='alert alert-info'>$infoText</div>
         <div class='form-wrapper'>
         <form role='form' class='form-horizontal' method='post' action='" . $_SERVER['SCRIPT_NAME'] . "'>
             <fieldset>
+                $monthsField
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langMultiDelUserData:</label>
                     <div class='col-sm-9'>
@@ -220,11 +296,11 @@ if (isset($_POST['submit'])) {
                     </div>
                 </div>
                 <div class='form-group'>
-                    <div class='col-sm-10 col-sm-offset-2'>            
-                        <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "' onclick='return confirmation(\"" . $langMultiDelUserConfirm . "\");' />
+                    <div class='col-sm-10 col-sm-offset-2'>
+                        <input class='btn btn-primary' type='submit' name='submit' value='" . $langSubmit . "'$confirm>
                         <a href='index.php' class='btn btn-default'>$langCancel</a>
                     </div>
-                </div>        
+                </div>
             </fieldset>
         </form>
     </div>";
@@ -239,8 +315,9 @@ draw($tool_content, 3, '', $head_content);
  */
 function usernameToUid($uname) {
     $r = Database::get()->querySingle("SELECT id FROM user WHERE username = ?s", $uname);
-    if ($r)
+    if ($r) {
         return $r->id;
-    else
+    } else {
         return false;
+    }
 }

@@ -24,7 +24,7 @@ $langIntro = "Η πλατφόρμα <b>$siteName</b> είναι ένα ολοκ�
 $langVersion = "Έκδοση";
 $langAboutText = "Η έκδοση της πλατφόρμας είναι";
 $langHostName = "Ο υπολογιστής στον οποίο βρίσκεται η πλατφόρμα είναι ο ";
-$langMySqlVersion = "Έκδοση της MySql ";
+$langMySqlVersion = "Έκδοση της MySQL";
 $langWebServerVersion = "Έκδοση του Web Server";
 $langNoMysql = "Η MySql δεν λειτουργεί !";
 $langUptime = "Λειτουργεί από τις";
@@ -59,7 +59,7 @@ $langUserHeader = "Χρήστης:";
 $langUserS = "χρήστης";
 $langOfUser = "χρήστη";
 $langSupportUser = "Υπεύθυνος Υποστήριξης:";
-$langAdminUsers = "Διαχείριση Χρηστών";
+$langAdminUsers = "Διαχείριση χρηστών";
 $langOnlineUsers = "Συνδεδεμένοι χρήστες";
 
 /* * ******************************************
@@ -96,7 +96,7 @@ $langHelpManageDepartment = "Διαχειρίζεται τα τμήματα γι
 // index
 $langComments = "Σχόλια";
 $langAdmin = "Εργαλεία Διαχείρισης Πλατφόρμας";
-$langState = "Διαχείριση Εξυπηρετητή";
+$langState = "Διαχείριση εξυπηρετητή";
 $langDevAdmin = "Διαχείριση Βάσης Δεδομένων";
 $langSysInfo = "Πληροφορίες Συστήματος";
 $langCheckDatabase = "Ελεγχος κύριας βάσης δεδομένων";
@@ -127,7 +127,7 @@ $langAdminManual = "Εγχειρίδιο Διαχειριστή";
 $langDBaseAdmin = "Διαχείριση Β.Δ. (phpMyAdmin)";
 $langActions = "Ενέργειες";
 $langAdminProf = "Διαχείριση $langOfTeachers";
-$langAdminCours = "Διαχείριση Μαθημάτων";
+$langAdminCours = "Διαχείριση μαθημάτων";
 $langGenAdmin = "Άλλα Εργαλεία";
 $langBackAdmin = "Επιστροφή στη σελίδα διαχείρισης";
 $langPlatformIdentity = "Σχετικά";
@@ -388,6 +388,17 @@ $langMultiDelUser = 'Μαζική διαγραφή λογαριασμών χρη
 $langMultiDelUserConfirm = "Η ενέργεια αυτή θα διαγράψει επίσης όλα τα ίχνη των χρηστών στην πλατφόρμα, όπως στατιστικά, συμμετοχές στα forums, κ.α.";
 $langMultiDelUserData = "Ονόματα Λογαριασμών Χρηστών (usernames)";
 $langMultiDelUserInfo = 'Εισάγετε στην παρακάτω περιοχή μια λίστα με τα ονόματα χρηστών (usernames), μία γραμμή ανα χρήστη που επιθυμείτε να διαγραφεί. Οι γραμμές που αρχίζουν από # αγνοούνται.';
+$langActivateUserInfo = 'Εισάγετε στην παρακάτω περιοχή τα ονόματα χρηστών (usernames), ένα ανά γραμμή, των λογαριασμών που επιθυμείτε να επεκτείνετε. Οι γραμμές που αρχίζουν από # αγνοούνται.';
+$langMoveUserInfo = 'Εισάγετε στην παρακάτω περιοχή τα ονόματα χρηστών
+    (usernames), ένα ανά γραμμή, των λογαριασμών που επιθυμείτε να μεταφέρετε
+    σε άλλο τμήμα από το τρέχον τμήμα «%s». Άλλα τμήματα στα οποία τυχόν
+    ανήκουν οι χρήστες δεν αλλάζουν. Οι γραμμές που αρχίζουν από #
+    αγνοούνται.';
+$langUserDurationExtended = 'Στην ημερομηνία λήξης του λογαριασμού "%s" προστέθηκαν %d μήνες.';
+$langUserDurationError = 'Σφάλμα επέκτασης λήξης λογαριασμού "%s".';
+$langUserMoved = 'Ο λογαριασμός "%s" μεταφέρθηκε.';
+$langUserMoveError = 'Σφάλμα μεταφοράς λογαριασμού "%s".';
+$langActivateMonths = 'Μήνες επέκτασης διάρκειας λογαριασμών';
 $langMultiRegUser = 'Μαζική δημιουργία λογαριασμών χρηστών';
 $langMultiRegCourseUser = 'Μαζική εγγραφή χρηστών σε μαθήματα';
 $langCourseCodes = "Κωδικοί μαθημάτων";
@@ -424,7 +435,7 @@ $langSearchCourses = "Αναζήτηση μαθημάτων";
 $langActSuccess = "Μόλις ενεργοποιήσατε την ";
 $langDeactSuccess = "Μόλις απενεργοποιήσατε την ";
 $langThe = "Η ";
-$langLdapNotWork = "Η php δεν έχει ενεργοποιμένη την υποστήριξη για ldap. Βεβαιωθείτε ότι η ldap υποστήριξη είναι εγκατεστημένη και ενεργοποιημένη.";
+$langLdapNotWork = "Η PHP δεν υποστηρίζει LDAP. Βεβαιωθείτε ότι η υποστήριξη LDAP είναι εγκατεστημένη και ενεργοποιημένη.";
 $langCASLoggedIN = "Προειδοποίηση: Θα πρέπει να βγείτε από το CAS πριν αλλάξετε τις ρυθμίσεις του";
 $langCASNotWork = "Προειδοποίηση: Η PHP δεν έχει υποστήριξη για CAS. Βεβαιωθείτε ότι η phpCAS είναι εγκατεστημένη.";
 $langShibEmail = "Shibboleth Email";
@@ -465,7 +476,8 @@ $langUserType = "Τύπος χρήστη";
 // search
 $langSearchUsers = "Αναζήτηση Χρηστών";
 $langInactiveUsers = "Μη ενεργοί χρήστες";
-$langAddSixMonths = "Προσθήκη διάρκειας λογαριασμού: 6 μήνες";
+$langAddSixMonths = "Επέκταση διάρκειας λογαριασμών";
+$langChangeDepartment = 'Αλλαγή σχολής - τμήματος';
 
 // eclassconf
 $langRestoredValues = "Επαναφορά προηγούμενων τιμών";

@@ -362,10 +362,10 @@ $head_content .= "<script type='text/javascript'>
                     var api = this.api();
                     var column = api.column(4);
                     var select = $('<select id=\'select_role\'>'+
-                                        '<option value=\'0\'>-- Όλοι --</option>'+
-                                        '<option value=\'".USER_TEACHER."\'>$langTeacher</option>'+"
-        . "                             '<option value=\'".USER_STUDENT."\'>$langStudent</option>'+"
-        . "                             '<option value=\'".USER_GUEST."\'>$langVisitor</option>'+
+                                 '<option value=\'0\'>-- " . js_escape($langAll) . " --</option>'+
+                                 '<option value=\'".USER_TEACHER."\'>" . js_escape($langTeacher) . "</option>'+
+                                 '<option value=\'".USER_STUDENT."\'>" . js_escape($langStudent) . "</option>'+
+                                 '<option value=\'".USER_GUEST."\'>" . js_escape($langVisitor) . "</option>'+
                                     '</select>')
                                     .appendTo( $(column.footer()).empty() );
                 },
@@ -377,7 +377,7 @@ $head_content .= "<script type='text/javascript'>
                 'sAjaxSource': '$_SERVER[REQUEST_URI]',
                 'aLengthMenu': [
                    [10, 15, 20 , -1],
-                   [10, 15, 20, '$langAllOfThem'] // change per page values here
+               [10, 15, 20, '" . js_escape($langAllOfThem) . "'] // change per page values here
                 ],
                 'sPaginationType': 'full_numbers',
                 'bAutoWidth': false,
@@ -390,13 +390,13 @@ $head_content .= "<script type='text/javascript'>
                     {'bSortable' : false, 'sClass': 'text-center' },
                 ],
                 'oLanguage': {
-                   'sLengthMenu':   '$langDisplay _MENU_ $langResults2',
-                   'sZeroRecords':  '" . $langNoResult . "',
-                   'sInfo':         '$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults',
-                   'sInfoEmpty':    '$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2',
+               'sLengthMenu':   '" . js_escape("$langDisplay _MENU_ $langResults2") . "',
+               'sZeroRecords':  '" . js_escape($langNoResult) . "',
+               'sInfo':         '" . js_escape("$langDisplayed _START_ $langTill _END_ $langFrom2 _TOTAL_ $langTotalResults") . "',
+               'sInfoEmpty':    '" . js_escape("$langDisplayed 0 $langTill 0 $langFrom2 0 $langResults2") . "',
                    'sInfoFiltered': '',
                    'sInfoPostFix':  '',
-                   'sSearch':       '" . $langSearch . "',
+               'sSearch':       '" . js_escape($langSearch) . "',
                    'sUrl':          '',
                    'oPaginate': {
                        'sFirst':    '&laquo;',
@@ -469,14 +469,21 @@ $tool_content .= "<table id='search_results_table' class='display'>
 $tool_content .= "<tbody></tbody></table>";
 
 $tool_content .= "<div align='right' style='margin-top: 60px; margin-bottom:10px;'>";
-// delete all function
-$tool_content .= " <form action='multideluser.php' method='post' name='delall_user_search'>";
+
+// Edit all function
+$tool_content .= " <form action='multiedituser.php' method='post'>";
 // redirect all request vars towards delete all action
 foreach ($_REQUEST as $key => $value) {
     $tool_content .= "<input type='hidden' name='$key' value='$value' />";
 }
 
-$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'></form></div>";
+if (isset($_GET['department']) and $_GET['department'] and is_numeric($_GET['department'])) {
+    $tool_content .= "<input class='btn btn-primary' type='submit' name='move_submit' value='$langChangeDepartment'> ";
+}
+
+$tool_content .= "<input class='btn btn-primary' type='submit' name='dellall_submit' value='$langDelList'>
+    <input class='btn btn-primary' type='submit' name='activate_submit' value='$langAddSixMonths'>
+  </form></div>";
 
 draw($tool_content, 3, null, $head_content);
 
