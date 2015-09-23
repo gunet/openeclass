@@ -2075,25 +2075,24 @@ function glossary_expand($text) {
 
 function glossary_expand_callback($matches) {
     static $glossary_seen_terms;
+    global $langGlossaryUrl, $langComments;
 
     $term = mb_strtolower($matches[0], 'UTF-8');
     if (isset($glossary_seen_terms[$term])) {
         return $matches[0];
     }
     $glossary_seen_terms[$term] = true;
+
     if (!empty($_SESSION['glossary'][$term])) {
-        $definition = ' title="' . q($_SESSION['glossary'][$term]) . '"';
+        $term_notes = isset($_SESSION['glossary_notes'][$term]) ? q('<hr><small class="text-muted">'.$langComments.': '.$_SESSION['glossary_notes'][$term].'</small>') : '';
+        $term_url = isset($_SESSION['glossary_url'][$term]) ? q('<hr><a href="'.$_SESSION['glossary_url'][$term].'">'.$langGlossaryUrl.'</a>') : '';
+        $definition = ' title="'.$matches[0].'" data-trigger="focus" data-html="true" data-content="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'"';
     } else {
         $definition = '';
     }
-    if (isset($_SESSION['glossary_url'][$term])) {
-        return '<a href="' . q($_SESSION['glossary_url'][$term]) .
-                '" target="_blank" class="glossary"' .
-                $definition . '>' . $matches[0] . '</a>';
-    } else {
-        return '<span class="glossary"' .
-                $definition . '>' . $matches[0] . '</span>';
-    }
+
+    return '<a href="#" class="glossary"' .
+            $definition . '>' . $matches[0] . '</a>';
 }
 
 function get_glossary_terms($course_id) {
@@ -2104,7 +2103,7 @@ function get_glossary_terms($course_id) {
         return false;
     }
 
-    $q = Database::get()->queryArray("SELECT term, definition, url FROM glossary
+    $q = Database::get()->queryArray("SELECT term, definition, url, notes FROM glossary
                               WHERE course_id = $course_id GROUP BY term");
 
     if (count($q) > intval(get_config('max_glossary_terms'))) {
@@ -2113,12 +2112,17 @@ function get_glossary_terms($course_id) {
 
     $_SESSION['glossary'] = array();
     $_SESSION['glossary_url'] = array();
+    $_SESSION['glossary_notes'] = array();
+
     foreach ($q as $row) {
         $term = mb_strtolower($row->term, 'UTF-8');
         $_SESSION['glossary'][$term] = $row->definition;
         if (!empty($row->url)) {
             $_SESSION['glossary_url'][$term] = $row->url;
         }
+        if (!empty($row->notes)) {
+            $_SESSION['glossary_notes'][$term] = $row->notes;
+        }        
     }
     $_SESSION['glossary_course_id'] = $course_id;
     return true;
@@ -3210,7 +3214,7 @@ function action_button($options, $secondary_menu_options = array()) {
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
     $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
     if (count($out_secondary)) {
-        $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
+        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
                 <a tabindex='1' class='btn $secondary_btn_class' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>
