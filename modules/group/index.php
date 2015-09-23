@@ -31,6 +31,7 @@ $require_help = TRUE;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'group_functions.php';
 require_once 'include/log.php';
 /* * ***Required classes for wiki creation*** */
@@ -53,6 +54,9 @@ unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
 $user_groups = user_group_info($uid, $course_id);
+
+//check if social bookmarking is enabled for this course
+$social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
 
 if ($is_editor) {
 
@@ -123,7 +127,7 @@ if ($is_editor) {
                 mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
                 touch("courses/$course_code/group/index.php");
                 touch("courses/$course_code/group/$secretDirectory/index.php");
-			$category_id = intval(getDirectReference($_POST['selectcategory']));
+			$category_id = $_POST['selectcategory'];
 			$id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
                                     VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
 				
@@ -250,8 +254,8 @@ if ($is_editor) {
                                              forum_id =  ?d,
                                              max_members = ?d,
                                              secret_directory = ?s,
-											 category_id = ?d",
-                                    $course_id, $forum_id, $group_max, $secretDirectory, intval(getDirectReference($_POST['selectcategory'])))->lastInsertID;
+                                             category_id = ?d",
+                                    $course_id, $forum_id, $group_max, $secretDirectory, $_POST['selectcategory'])->lastInsertID;
 									
                 $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
                                                                     group_id = ?d, self_registration = ?d, 
@@ -545,13 +549,11 @@ if ($is_editor) {
                     'confirm_title' => $langEmtpyGroupsAll,
                     'show' => $num_of_groups > 0)));
 
-    $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
-    $myIterator = 0;
+    $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
     $num_of_groups = count($groupSelect);
     // groups list
     if ($num_of_groups > 0) {
-        $tool_content .= "
-                <div class='table-responsive'>
+        $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
                   <th>$langGroupName</th>
@@ -567,7 +569,7 @@ if ($is_editor) {
                         <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {
-                $tool_content .= display_user($t->user_id) . "<br />";
+                $tool_content .= display_user($t->user_id) . "<br>";
             }
             $tool_content .= "</td><td class='text-center'>$member_count</td>";
             if ($max_members == 0) {
@@ -577,7 +579,7 @@ if ($is_editor) {
             }
             $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
-						array('title' => $langConfig,
+                        array('title' => $langConfig,
                             'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
                             'icon' => 'fa-gear'),
                         array('title' => $langEditChange,
@@ -589,15 +591,13 @@ if ($is_editor) {
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete))) .
                         "</td></tr>";
-            $totalRegistered += $member_count;
-            $myIterator++;
+            $totalRegistered += $member_count;            
         }
         $tool_content .= "</table></div><br>";
     } else {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     }
-}
- else {
+} else {
     // Begin student view
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
     if (count($q) == 0) {
@@ -632,7 +632,7 @@ if ($is_editor) {
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>";
             foreach ($tutors as $t) {
-                $tool_content .= display_user($t->user_id) . "<br />";
+                $tool_content .= display_user($t->user_id) . "<br>";
             }
             $tool_content .= "</td>";
 
@@ -652,26 +652,16 @@ if ($is_editor) {
         $tool_content .= "</table></div>";
 		}
 	}
-	
-/*	if (isset($_GET['down'])) {
-    move_order('group', 'id', intval(getDirectReference($_GET['down'])), 'order', 'down', "course_id = $course_id");
-	} elseif (isset($_GET['up'])) {
-    move_order('group', 'id', intval(getDirectReference($_GET['up'])), 'order', 'up', "course_id = $course_id");
-	} elseif (isset($_GET['cdown'])) {
-    move_order('group_category', 'id', intval(getDirectReference($_GET['cdown'])), 'order', 'down', "course_id = $course_id");
-	} elseif (isset($_GET['cup'])) {
-    move_order('group_category', 'id', intval(getDirectReference($_GET['cup'])), 'order', 'up', "course_id = $course_id");
-}*/
-	$display_tools = $is_editor && !$is_in_tinymce;
-	if (!in_array($action, array('addcategory', 'editcategory'))) {
-    if ($social_bookmarks_enabled == 1) {
-        $countgroups = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `group` WHERE course_id = ?d AND category_id <> ?d", $course_id, -1)->cnt;
-    } else {
-        $countgroups = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `group` WHERE course_id = ?d AND category_id <> ?d AND category_id <> ?d", $course_id, -1, -2)->cnt;
-    }
+        
+    $display_tools = $is_editor && !$is_in_tinymce;
+    if (!in_array($action, array('addcategory', 'editcategory'))) {
+        if ($social_bookmarks_enabled == 1) {
+            $countgroups = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `group` WHERE course_id = ?d AND category_id <> ?d", $course_id, -1)->cnt;
+        } else {
+            $countgroups = Database::get()->querySingle("SELECT COUNT(*) AS cnt FROM `group` WHERE course_id = ?d AND category_id <> ?d AND category_id <> ?d", $course_id, -1, -2)->cnt;
+        }
 
-    if ($countgroups > 0) {
-	
+    if ($countgroups > 0) {        
 	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
 	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `order`", $course_id);
 	$aantalcategories = count($cat);

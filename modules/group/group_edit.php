@@ -67,8 +67,8 @@ if (isset($_POST['modify'])) {
     $v->labels(array(
         'name' => "$langTheField $langNewGroups",
         'maxStudent' => "$langTheField $langMax $langGroupPlacesThis"
-    ));
-    if($v->validate()) {    
+    ));    
+    if($v->validate()) {
         // Update main group settings
         register_posted_variables(array('name' => true, 'description' => true), 'all');
         register_posted_variables(array('maxStudent' => true), 'all');
@@ -76,13 +76,13 @@ if (isset($_POST['modify'])) {
         if ($maxStudent != 0 and $student_members > $maxStudent) {
             $maxStudent = $student_members;
             $message .= "<div class='alert alert-warning'>$langGroupMembersUnchanged</div>";
-        }
+        }                
         Database::get()->query("UPDATE `group`
                                         SET name = ?s,
                                             description = ?s,
                                             max_members = ?d,
-											category_id = ?d
-                                        WHERE id = ?d", $name, $description, $maxStudent, intval(getDirectReference($_POST['selectcategory'])), $group_id);
+                                            category_id = ?d
+                                        WHERE id = ?d", $name, $description, $maxStudent, $_POST['selectcategory'], $group_id);
 
         Database::get()->query("UPDATE forum SET name = ?s WHERE id =
                             (SELECT forum_id FROM `group` WHERE id = ?d)
