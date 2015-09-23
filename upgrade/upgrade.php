@@ -1888,24 +1888,6 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     
     if (version_compare($oldversion, '3.1.6', '<')) {
         refreshHierarchyProcedures();
-        
-        Database::get()->query("CREATE TABLE IF NOT EXISTS `wall_post` (
-                    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    `course_id` INT(11) NOT NULL,
-                    `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
-                    `content` TEXT DEFAULT '',
-                    `youtube` VARCHAR(250) DEFAULT '',
-                    `timestamp` INT(11) NOT NULL DEFAULT 0,
-                    `pinned` TINYINT(1) NOT NULL DEFAULT 0,
-                    INDEX `wall_post_index` (`course_id`)) $charset_spec");
-        
-        Database::get()->query("CREATE TABLE `wall_post_resources` (
-                    `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                    `post_id` INT(11) NOT NULL,
-                    `title` VARCHAR(255) NOT NULL DEFAULT '',
-                    `res_id` INT(11) NOT NULL,
-                    `type` VARCHAR(255) NOT NULL DEFAULT '',
-                    INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
     }
 
     // Rename table `cours` to `course` and `cours_user` to `course_user`
@@ -2579,7 +2561,25 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (version_compare($oldversion, '3.2', '<')) {
         set_config('ext_bigbluebutton_enabled',
             Database::get()->querySingle("SELECT COUNT(*) AS count FROM bbb_servers WHERE enabled='true'")->count > 0? '1': '0');
-
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `wall_post` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `course_id` INT(11) NOT NULL,
+            `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+            `content` TEXT DEFAULT '',
+            `youtube` VARCHAR(250) DEFAULT '',
+            `timestamp` INT(11) NOT NULL DEFAULT 0,
+            `pinned` TINYINT(1) NOT NULL DEFAULT 0,
+            INDEX `wall_post_index` (`course_id`)) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE `wall_post_resources` (
+            `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            `post_id` INT(11) NOT NULL,
+            `title` VARCHAR(255) NOT NULL DEFAULT '',
+            `res_id` INT(11) NOT NULL,
+            `type` VARCHAR(255) NOT NULL DEFAULT '',
+            INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
+        
         // Autojudge fields
         if (!DBHelper::fieldExists('assignment', 'auto_judge')) {
             Database::get()->query("ALTER TABLE `assignment`
