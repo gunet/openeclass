@@ -1,7 +1,7 @@
 <?php
 
 // Message file for language es
-// Generated 2015-08-05 15:49:21
+// Generated 2015-09-23 18:34:59
 
 $langCourse = "Curso";
 $langIntro = "El <b>$siteName</b> platforma es un completo Sistema de Administración eCursos que soporta el Servicio Asincrónico de eAprendizaje en <a href=\"$InstitutionUrl\"target=\"_blank\"class=mainpage>$Institution</a>.";
@@ -770,8 +770,8 @@ $langDoAnEx = "Haz un ejercicio";
 $langCorrect = "Verdad";
 $langExerciseNotFound = "La respuesta no fue encontrada";
 $langAlreadyAnswered = "Tu ya has respondido en la pregunta";
-$langStart = "Empezar";
-$langEnd = "Final";
+$langExerciseStart = "Empezar";
+$langExerciseEnd = "Final";
 $langExerciseDuration = "Duración del ejercicio";
 $langExerciseConstrain = "Tiempo obligado";
 $langExerciseEg = "ej.";
@@ -2534,8 +2534,7 @@ $langOtherOptions = "Other Options";
 $langDefaultQuota = "Default Quota for New Courses";
 $langCreateBackup = "Create configuration backup";
 $langInvalidMail = "have invalid email address or there is no email address at all";
-$langLinkUnsubscribe = "Note: You have received this email because you are registered  in course '%s'.<br />
-                If you don't wish to receive any more email messages from course click";
+$langLinkUnsubscribe = "Note: You have received this email because you are registered  in course '%s'. If you wish to stop receiving messages from the course, please click";
 $langEmailUnsubscribe = "Course notifications";
 $langInfoUnsubscribe = "You can modify email notifications from courses below. If you don't wish to receive email from a course, uncheck it and click 'Submit'. <br />(Note: you won't be unregistered from the course).";
 $langEmailUnsubSuccess = "Emails from course '%s' will not be sent";
@@ -3158,6 +3157,7 @@ $langGradebookMEANS = "Values";
 $langGradebookActiveUsers = "Gradebook users";
 $langGradebookActiveUsersSemester = "Students registerd in the last six months";
 $langGradebookRange = "Gradebook range";
+$langGradebookWeightAlert = "The weight you have entered for the activity is larger than allowed.";
 $langGradeNoBookAlert = "You cannot enter grades. Weight you have not assigned to an activity:";
 $langGradebookNewUser = "You should click on 'Submit' to create a gradebook record for the user";
 $langGradebookWeight = "Contribution percentage";
@@ -3719,7 +3719,7 @@ $langProfileMemberSince = 'Member since';
 $langBBBConnectionError = "Unable to connect to the teleconference server";
 $langBBBGetUsersError = "Unable to retrieve teleconference information ";
 $langBBBCreationRoomError = "Unable to create a room on the teleconference server";
-$langBBBImportRecordingsNo = "Unable to import to multimedia because recording is disabled.";
+$langBBBImportRecordingsNo = "Unable to import to multimedia, either because recording is disabled or because processing is not yet finished.";
 $langThemeSettings = 'Theme Settings';
 $langActiveThemeSettings = 'Active Theme Settings';
 $langDefaultThemeSettings = 'Open eClass Default';
@@ -3993,6 +3993,7 @@ $langDropBoxOutbox = "Outbox";
 $langAvailableGradebooks = 'Available Gradebooks';
 $langNoGradeBooks = "No gradebooks available";
 $langGradebookRemainingGrade = "remaining grading weight";
+$langGradebookGradeAlert2 = "You haven't entered the weighting remaining";
 $langGradebookGradeAlert3 = "Some activities have no contribution to the final grade (contribution percentage 0%).";
 $langGradebookExams = "Written exams";
 $langGradebookLabs = "Lab grade";
@@ -4139,7 +4140,7 @@ $langAttendanceDeleted = "Attendance book deleted";
 $langNoAttendances = "No attendance books available";
 $langAvailableAttendances = 'Available attendance books';
 $langGradebookAutoUpdate = 'Automatic grade update';
-$langCopyDuplicate = "<span class='text-muted'>&nbsp;&nbsp;(Copy)</span>";
+$langCopyDuplicate = "(Copy)";
 $langProviderIdAlreadyExists = 'An existent account in the platform is already linked with your profile';
 $langAuthSettingsSaved = 'Your connection settings have been stored';
 $langProviderConnectWithAlternativeProviders = 'Sign-in or register with alternative providers';
@@ -4159,3 +4160,75 @@ $langProviderError7 = 'User profile request failed. Most likely the user is not 
 $langProviderError8 = 'User not connected to the provider';
 $langProviderError9 = 'There is already another user authenticated with this provider.';
 $langGradeScaleNotEditable = "Grading scale is not editable anymore as it has been used for the grading of 1 or more assignments.";
+$langMoveUserInfo = 'Enter below the usernames, one per line, of the accounts you wish to move from "%s" to another department. Lines starting with # are ignored. Other departments the users may belong to are not affected.';
+$langUserMoved = 'Account "%s" moved.';
+$langUserMoveError = 'Error moving account "%s".';
+$langChangeDepartment = 'Move to another faculty / department';
+$langRefernce = "Citations";
+$langGradebookSum = "Sum";
+$langCategorisedGroups = "User group categories";
+$langNoGroupCategories = "No user group categories";
+$langGroupDelconfirm = "Are you sure you want to delete the user group?";
+$langNoGroupInCategory = "No user groups in this category";
+$langGroupCatDel = "When you delete a category, all user groups in it will also be deleted. Are you sure you want to delete the category?";
+$langGroupCategoryDeleted = "The category and all user groups belonging to it were deleted";
+$langGroupDeleted = "User group deleted";
+$langCreationGroups = "Create multiple user groups";
+$langGroupAssignments = "Group Assignments";
+$langStart = "Start";
+$langTopicStored = "New topic is saved";
+$langForumFrom = "From member";
+$langWithSuccess = "";
+$langUserCodename = "Username:";
+$langDirectoryCreateError = 'Unable to create subdirectory "%s".';
+$langInnoDBMissing = 'The MySQL database server does not support the InnoDB storage engine. You need to enable it before continuing, since it is necessary for proper platform operation.';
+$langErrorConnectDatabase = "Error connecting to database server:";
+$langCheckDatabaseSettings = "Please check the database settings and try again.";
+$langDatabaseExists = 'Warning: A database named "%s" already exists. Tables contained in it
+    will be deleted if they have names same as that used by the platform (either
+    coincidentally or because they belong to an existing Open eClass installation. 
+    Before continuing, please ensure there is no conflict or return to the previous
+    step and enter another database name.';
+$langCMeta['course_instructor_registrationCode'] = "Registration code";
+$langBBBImportRecordingsNoNew = "No newer recordings found for this session.";
+$langCPFAdmin = 'Custom profile fields administration';
+$langCPFCategoryNameAlert = 'The category name field is mandatory';
+$langCPFCatAddedSuccess = 'The profile fields category was successfully added';
+$langCPFNoCats = 'There are no profile fields categories';
+$langCPFNewField = 'Add profile field';
+$langCPFConfirmCatDelete = 'Deleting this category will result in the deletion of the profile fields that belong to it and of the respective users profile data.
+Are you sure you want to proceed with the deletion?';
+$langCPFConfirmFieldDelete = 'Deleting this field will result in the deletion of the respective users profile data. Are you sure you want to proceed with the deletion?';
+$langCPFCatDelSuccess = 'The profile fields category was successfully deleted';
+$langCPFCatModSuccess = 'The profile fields category was successfully modified';
+$langCPFFieldDescr = 'Description';
+$langCPFShortName = 'Short name';
+$langCPFText = 'Text field';
+$langCPFTextarea = 'Textarea';
+$langCPFDate = 'Date Field';
+$langCPFMenu = 'Selection Menu';
+$langCPFLink = 'Link Field';
+$langCPFFieldDatatype = 'Field datatype';
+$langCPFFieldDelSuccess = 'The profile field was successfully deleted';
+$langCPFFieldRequired = 'Required field';
+$langCPFFieldRegistration = 'Appears in registration form';
+$langCPFFieldUserType = 'User type';
+$langCPFFieldVisibility = 'Visible';
+$langCPFFieldNameAlert = 'The profile field name is mandatory';
+$langCPFFieldShortNameAlert = 'The profile field shortname is mandatory';
+$langCPFFieldAddSuccess = 'The profile field was successfully added';
+$langCPFFieldEdit = 'Edit field';
+$langCPFFieldEditSuccess = 'The profile field was successfully edited';
+$langCPFNoFieldinCat = 'There are no custom profile fields in this category';
+$langCPFUniqueShortname = 'The profile field\'s shortname must be unique in the platform';
+$langCPFCreateUniqueShortnameError = 'The provided profile field\'s shortname is already in use. The creation of the profile field was canceled.';
+$langCPFEditUniqueShortnameError = 'The provided profile field\'s shortname is already in use. The editing of the profile field was canceled.';
+$langCPFMenuOptions = 'Menu options';
+$langCPFMenuOptionsExplan = 'Insert one option per line';
+$langCPFMenuOptionsAlert = 'You must specify at least one menu option';
+$langCPFMenuOptionsChangeExplan = 'Changing menu options may lead to inconsistencies for fields that already have stored values';
+$langCPFChangeOrder = 'Change order';
+$langCPFSortOrderSuccess = 'The sort order of categories and fields was saved.';
+$langCPFAdminSideMenuLink = 'User profile fields';
+$langCPFLinkValidFail = 'Field %s is not a valid url. ';
+$langCPFDateValidFail = 'Field %s is not a valid date. ';
