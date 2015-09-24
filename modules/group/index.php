@@ -130,7 +130,7 @@ if ($is_editor) {
                 mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
                 touch("courses/$course_code/group/index.php");
                 touch("courses/$course_code/group/$secretDirectory/index.php");
-			$category_id = $_POST['selectcategory'];
+			$category_id = intval($_POST['selectcategory']);
 			$id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
                                     VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
 				
@@ -554,8 +554,31 @@ if ($is_editor) {
 
     $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
     $num_of_groups = count($groupSelect);
+	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
+	$num_of_cat = count($cat);
+	$q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
     // groups list
-    if ($num_of_groups > 0) {
+	if ($num_of_groups==0 && $num_of_cat==0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
+    }
+	elseif ($num_of_groups==0 && $num_of_cat>0) {
+         $tool_content .= "
+            <div class='row'>
+                <div class='col-sm-12'>
+                <div class='table-responsive'>
+                <table class='table-default nocategory-links'>
+				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>";
+			if ($display_tools) {
+                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+            }
+            $tool_content .= "</tr>";
+            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>";
+            if ($display_tools) {
+                $tool_content .= "<td></td>";
+            }
+			 $tool_content .= "</tr></table></div></div></div>";
+    }
+    elseif ($num_of_groups > 0) {
         $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
@@ -597,8 +620,6 @@ if ($is_editor) {
             $totalRegistered += $member_count;            
         }
         $tool_content .= "</table></div><br>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     }
 } else {
     // Begin student view
