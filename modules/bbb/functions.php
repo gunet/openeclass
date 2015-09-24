@@ -308,7 +308,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session). "</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session). "</div>
                     </div>
                 </div>
             ";
@@ -346,7 +346,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session)."</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session)."</div>
                     </div>
                 </div>
             ";
@@ -455,7 +455,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session)."</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session)."</div>
                     </div>
                 </div>
             ";
@@ -493,7 +493,7 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session) . "</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  " $langBBBScheduleSessionInfo2" . q($start_session) . "</div>
                     </div>
                 </div>
             ";
