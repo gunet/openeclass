@@ -1349,7 +1349,9 @@ function wall_map_function(&$data, $maps) {
     list($document_map, $video_map, $videolink_map) = $maps;
     $type = $data['type'];
     if ($type == 'document') {
-        $data['res_id'] = @$document_map[$data['res_id']];
+        if (isset($document_map[$data['res_id']])) {
+            $data['res_id'] = @$document_map[$data['res_id']];
+        }
     } elseif ($type == 'video') {
         $data['res_id'] = @$video_map[$data['res_id']];
     } elseif ($type == 'videolink') {
