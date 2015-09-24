@@ -242,7 +242,7 @@ function new_bbb_session() {
  */
 function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
-    global $langBBBScheduledSession, $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin;
+    global $langBBBScheduledSession, $langBBBScheduleSessionInfo , $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin, $langDescr;
 
     // Groups of participants per session
     $r_group = '';
@@ -297,7 +297,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             }
         }
         if (count($recipients) > 0) {
-            //$emailsubject = $langBBBScheduledSession;
+            $emailsubject = $langBBBScheduledSession;
             //$emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session);
             //$emailcontent = $emailbody;
 
@@ -308,7 +308,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session). "</div>
                     </div>
                 </div>
             ";
@@ -339,12 +339,14 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
             foreach ($recipients as $row) {
                 //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=" . urlencode($q->meeting_id) . "&username=" . urlencode($row);
+                $emailsubject = $langBBBScheduledSession;
                 $emailheader = "
             <!-- Header Section -->
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session)."</div>
                     </div>
                 </div>
             ";
@@ -402,7 +404,7 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
 function update_bbb_session($session_id,$title,$desc,$start_session,$type,$status,$notifyUsers,$minutes_before,$external_users,$record,$sessionUsers)
 {
     global $course_id;
-    global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin;
+    global $langBBBScheduleSessionInfo , $langBBBScheduledSession, $langBBBScheduleSessionInfo2, $langBBBScheduleSessionInfoJoin, $langDescr;
 
     // Groups of participants per session
     $r_group = "";
@@ -447,12 +449,13 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             }
         }
         if (count($recipients) > 0) {
+            $emailsubject = $langBBBScheduledSession;
             $emailheader = "
             <!-- Header Section -->
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session)."</div>
                     </div>
                 </div>
             ";
@@ -483,12 +486,14 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $_GET['id']);
             foreach ($recipients as $row) {
                 //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
+                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=" . urlencode($q->meeting_id) . "&username=" . urlencode($row);
+                $emailsubject = $langBBBScheduledSession;
                 $emailheader = "
             <!-- Header Section -->
                 <div id='mail-header'>
                     <br>
                     <div>
-                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo" . q($title) .  "$langBBBScheduleSessionInfo2" . q($start_session) . "</div>
                     </div>
                 </div>
             ";
