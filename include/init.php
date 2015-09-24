@@ -31,6 +31,7 @@ date_default_timezone_set("Europe/Athens");
 
 $webDir = dirname(dirname(__FILE__));
 chdir($webDir);
+require 'vendor/autoload.php';
 require_once 'include/main_lib.php';
 
 // If session isn't started, start it
@@ -87,9 +88,8 @@ if (isset($language)) {
     $language = $session->language;    
 }
 //Initializing Valitron (form validation library)
-require_once 'include/Valitron/Validator.php';
 use Valitron\Validator as V;
-V::langDir(__DIR__.'/Valitron/lang'); // always set langDir before lang.
+V::langDir($webDir.'/vendor/vlucas/valitron/lang'); // always set langDir before lang.
 V::lang($language);
 
 // Managing Session Flash Data
