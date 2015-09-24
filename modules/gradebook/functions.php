@@ -1756,12 +1756,17 @@ function update_gradebook_book($uid, $id, $grade, $activity, $gradebook_id = 0)
         foreach($gradebookActivities as $gradebookActivity){
             $gradebook_book = Database::get()->querySingle("SELECT grade FROM gradebook_book WHERE gradebook_activity_id = $gradebookActivity->id AND uid = ?d", $uid);
             if ($gradebook_book) {
-                if ($grade > $gradebook_book->grade) {
+                if (!is_null($grade) && ($grade > $gradebook_book->grade || $grade < $gradebook_book->grade && $activity == GRADEBOOK_ACTIVITY_ASSIGNMENT)) {
                     Database::get()->query("UPDATE gradebook_book "
                             . "SET grade = ?f "
                             . "WHERE gradebook_activity_id = $gradebookActivity->id "
                             . "AND uid = ?d", 
                             $grade, $uid);
+                } else {
+                    Database::get()->query("DELETE FROM gradebook_book "
+                            . "WHERE gradebook_activity_id = $gradebookActivity->id "
+                            . "AND uid = ?d", 
+                            $uid);
                 }
             } else {
                 Database::get()->query("INSERT INTO gradebook_book "
