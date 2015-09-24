@@ -95,7 +95,7 @@ function links_autodetection($text) {
             $completeUrl = $match[1][0] ? $url : "http://$url";
     
             // Print the hyperlink.
-            $ret_text .= sprintf('<a href="%s">%s</a>', htmlspecialchars($completeUrl), htmlspecialchars("$domain$port$path"));
+            $ret_text .= sprintf('<a target="_blank" href="%s">%s</a>', htmlspecialchars($completeUrl), htmlspecialchars("$domain$port$path"));
         }
         else
         {
