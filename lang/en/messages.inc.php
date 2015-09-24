@@ -2392,6 +2392,7 @@ $langEBookSectionsModified = "E-book sections modified";
 $langEBookAdmin = "E-book administration";
 $langFileAdmin = "File administration";
 $langInCourses = "In course";
+$langInCoursesL = "in course";
 $langOfSite = "of platform";
 $langElaboration = "Edit";
 $langStudentsOnly = "only in " . $langsOfStudentss . "";

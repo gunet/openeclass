@@ -297,9 +297,39 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             }
         }
         if (count($recipients) > 0) {
-            $emailsubject = $langBBBScheduledSession;
-            $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session);
-            $emailcontent = $emailbody;
+            //$emailsubject = $langBBBScheduledSession;
+            //$emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session);
+            //$emailcontent = $emailbody;
+
+            $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=" . urlencode($q->meeting_id) . "&username=" . urlencode($row);
+
+            $emailheader = "
+            <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                    </div>
+                </div>
+            ";
+
+            $emailmain = "
+            <!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div><b>$langDescr:</b></div>
+                <div id='mail-body-inner'>
+                    $desc
+                    <br><br>$langBBBScheduleSessionInfoJoin:<br>$bbblink
+                </div>
+            </div>
+            ";
+
+
+            $emailcontent = $emailheader.$emailmain;
+
+            $emailbody = html2text($emailcontent);
+
             //Notify course users for new bbb session
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
         }
@@ -309,10 +339,32 @@ function add_bbb_session($course_id,$title,$desc,$start_session,$type,$status,$n
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $q->lastInsertID);
             foreach ($recipients as $row) {
                 //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
-                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=" . urlencode($q->meeting_id) . "&username=" . urlencode($row);
-                $emailsubject = $langBBBScheduledSession;
-                $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
-                $emailcontent = $emailbody;
+                $emailheader = "
+            <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                    </div>
+                </div>
+            ";
+
+                $emailmain = "
+            <!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div><b>$langDescr:</b></div>
+                <div id='mail-body-inner'>
+                    $desc
+                    <br><br>$langBBBScheduleSessionInfoJoin:<br>$bbblink
+                </div>
+            </div>
+            ";
+
+
+                $emailcontent = $emailheader.$emailmain;
+
+                $emailbody = html2text($emailcontent);
                 send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
             }
         }
@@ -395,9 +447,32 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             }
         }
         if (count($recipients) > 0) {
-            $emailsubject = $langBBBScheduledSession;
-            $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "";
-            $emailcontent = $emailbody;
+            $emailheader = "
+            <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                    </div>
+                </div>
+            ";
+
+            $emailmain = "
+            <!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div><b>$langDescr:</b></div>
+                <div id='mail-body-inner'>
+                    $desc
+                    <br><br>$langBBBScheduleSessionInfoJoin:<br>$bbblink
+                </div>
+            </div>
+            ";
+
+
+            $emailcontent = $emailheader.$emailmain;
+
+            $emailbody = html2text($emailcontent);
             //Notify course users for new bbb session
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
         }
@@ -408,10 +483,32 @@ function update_bbb_session($session_id,$title,$desc,$start_session,$type,$statu
             $q = Database::get()->querySingle("SELECT meeting_id, att_pw FROM bbb_session WHERE id = ?d", $_GET['id']);
             foreach ($recipients as $row) {
                 //$bbblink = bbb_join_user($q->meeting_id, $q->att_pw, $row, '');
-                $bbblink = get_config('base_url')."modules/bbb/ext.php?meeting_id=" . urlencode($q->meeting_id) . "&username=" . urlencode($row);
-                $emailsubject = $langBBBScheduledSession;
-                $emailbody = $langBBBScheduleSessionInfo . " \"" . q($title) . "\" " . $langBBBScheduleSessionInfo2 . " " . q($start_session) . "<br><br>$langBBBScheduleSessionInfoJoin:<br> $bbblink";
-                $emailcontent = $emailbody;
+                $emailheader = "
+            <!-- Header Section -->
+                <div id='mail-header'>
+                    <br>
+                    <div>
+                        <div id='header-title'>$langBBBScheduleSessionInfo . q($title) .  $langBBBScheduleSessionInfo2 . q($start_session)</div>
+                    </div>
+                </div>
+            ";
+
+                $emailmain = "
+            <!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div><b>$langDescr:</b></div>
+                <div id='mail-body-inner'>
+                    $desc
+                    <br><br>$langBBBScheduleSessionInfoJoin:<br>$bbblink
+                </div>
+            </div>
+            ";
+
+
+                $emailcontent = $emailheader.$emailmain;
+
+                $emailbody = html2text($emailcontent);
                 send_mail_multipart('', '', '', $row, $emailsubject, $emailbody, $emailcontent, 'UTF-8');
             }
         }

@@ -37,6 +37,7 @@ $langAboutUsers = "H πλατφόρμα διαθέτει";
 $langOperation = "Λειτουργία";
 $langContactInfo = "Στοιχεία επικοινωνίας";
 $langInCourses = "Στο μάθημα";
+$langInCoursesL = "στο μάθημα";
 $langOfSite = "της πλατφόρμας";
 $langResourceBrowser = 'Αναζήτηση πόρων';
 
