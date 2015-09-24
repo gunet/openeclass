@@ -1344,7 +1344,9 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                         if ($grd) {
                             $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $grd->group_id);
                             foreach ($user_ids as $user_id) {
-                                update_gradebook_book($user_id, $id, $grd->grade/$grd->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                                if (isset($grd->grade)) {
+                                    update_gradebook_book($user_id, $id, $grd->grade/$grd->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                                }
                             }
                         }
                     }
@@ -1356,7 +1358,7 @@ function add_gradebook_activity($gradebook_id, $id, $type) {
                             . "WHERE assignment_submit.assignment_id = assignment.id "
                             . "AND assignment.id =?d "
                             . "AND assignment_submit.uid = $u->uid", $id);
-                    if ($grd) {
+                    if ($grd && isset($grd->grade)) {
                         update_gradebook_book($u->uid, $id, $grd->grade/$grd->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
                     }
                 }                
@@ -1472,7 +1474,7 @@ function update_user_gradebook_activities($gradebook_id, $uid) {
                         . "AND assignment_submit.submission_date >= '$gradebook->start_date' "                         
                         . "AND assignment_submit.uid = $uid", $gradebookActivity->module_auto_id);                
             }
-            if (isset($grd) && $grd) {
+            if (isset($grd) && $grd && isset($grd->grade)) {
                 $grade = $grd->grade/$grd->max_grade;            
                 $allow_insert = TRUE;
             }         
