@@ -834,13 +834,13 @@ function submit_work($id, $on_behalf_of = null) {
         } else {
             if ($row->group_submissions) {
                 if (array_key_exists($group_id, $gids)) {
-                    $del_submission_msg = delete_submissions_by_uid(-1, $group_id, $row->id);
+                    $del_submission_msg = delete_submissions_by_uid(-1, $group_id, $row->id, $filename);
                     if (!empty($del_submission_msg)) {
                         $success_msgs[] = $del_submission_msg;
                     }
                 }
             } else {
-                $del_submission_msg = delete_submissions_by_uid($user_id, -1, $row->id);
+                $del_submission_msg = delete_submissions_by_uid($user_id, -1, $row->id, $filename);
                 if (!empty($del_submission_msg)) {
                     $success_msgs[] = $del_submission_msg;
                 }
