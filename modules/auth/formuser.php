@@ -22,6 +22,7 @@
 include '../../include/baseTheme.php';
 include 'include/sendMail.inc.php';
 include 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 require_once 'modules/auth/auth.inc.php';
 
 $tree = new Hierarchy();
@@ -61,19 +62,23 @@ if (!$prof and $eclass_stud_reg != 1) {
 $am_required = !$prof && get_config('am_required');
 $errors = array();
 
-$all_set = register_posted_variables(array(
-    'usercomment' => true,
-    'givenname' => true,
-    'surname' => true,
-    'username' => true,
-    'userphone' => $prof,
-    'usermail' => true,
-    'am' => $am_required,
-    'department' => true,
+$var_arr = array('usercomment' => true,
+                'givenname' => true,
+                'surname' => true,
+                'username' => true,
+                'userphone' => $prof,
+                'usermail' => true,
+                'am' => $am_required,
+                'department' => true,
     'captcha_code' => false,
     'provider' => false,
     'provider_name' => false,
-    'provider_id' => false));
+    'provider_id' => false);
+
+//add custom profile fields required variables
+augment_registered_posted_variables_arr($var_arr);
+
+$all_set = register_posted_variables($var_arr);
 
 if (!$all_set) {
     $errors[] = $langFieldsMissing;
@@ -106,6 +111,16 @@ if ($display_captcha) {
     if ($securimage->check($captcha_code) == false) {
         $errors[] = $langCaptchaWrong;
         $all_set = false;
+    }
+}
+
+//check for validation errors in custom profile fields
+$cpf_check = cpf_validate_format();
+if ($cpf_check[0] === false) {
+    $all_set = false;
+    unset($cpf_check[0]);
+    foreach ($cpf_check as $cpf_error) {
+        $errors[] = $cpf_error;
     }
 }
 
@@ -222,7 +237,10 @@ if ($all_set) {
                 $givenname, $surname, $username, $usermail, $am, $department, $userphone, $verified_mail, $usercomment, $language, $_SERVER['REMOTE_ADDR']);
     }
     $request_id = $res->lastInsertID;
-
+    
+    //save custom profile fields values in pending table
+    process_profile_fields_data(array('user_request_id' => $request_id, 'pending' => true));
+    
     // email does not need verification -> mail helpdesk
     if (!$email_verification_required) {
         //----------------------------- Email Request Message --------------------------
@@ -372,7 +390,8 @@ if ($all_set) {
           </div>
           </div>";
     }
-
+    //add custom profile fields
+    $tool_content .= render_profile_fields_form(array('origin' => 'teacher_register'));
     $tool_content .= "<div class='form-group'><div class='col-sm-offset-2 col-sm-10'>
                     <input class='btn btn-primary' type='submit' name='submit' value='" . q($langSubmitNew) . "' />
                     </div></div>

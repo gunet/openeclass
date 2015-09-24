@@ -44,7 +44,11 @@ function user_duration_query($course_id, $start = false, $end = false, $group = 
         $and = "AND groups.group_id = ?d";        
         $terms[] = $group;
     } else {
-        $from = " (SELECT * FROM user UNION (SELECT 0 as id,
+        $from = " (SELECT 
+                            id, surname, givenname, username, password, email, parent_email, status, phone, am, 
+                            registered_at, expires_at, lang, description, has_icon, verified_mail, receive_mail, email_public, 
+                            phone_public, am_public, whitelist, last_passreminder 
+                          FROM user UNION (SELECT 0 as id,
                             '' as surname,
                             'Anonymous' as givenname,
                             null as username,

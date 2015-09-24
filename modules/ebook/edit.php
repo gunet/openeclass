@@ -184,7 +184,7 @@ if (isset($_GET['delete'])) {
     } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());      
     }
-    $redirect_link = isset($_POST['csid']) ? "modules/ebook/edit.php?course=$course_code&id=$ebook_id&s=$_POST[csid]&editEbook=1" : "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1";
+    $redirect_link = isset($_POST['csid']) ? "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1" : "modules/ebook/edit.php?course=$course_code&id=$ebook_id&editEbook=1";
     redirect_to_home_page($redirect_link);
 } elseif (isset($_POST['title_submit'])) {
     $info = Database::get()->querySingle("SELECT id, title FROM `ebook` WHERE course_id = ?d AND id = ?d", $course_id, $ebook_id);

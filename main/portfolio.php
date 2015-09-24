@@ -253,7 +253,7 @@ $tool_content .= "
                         <div class='not_visible text-center' style='margin:0px;'>".q($_SESSION['uname'])."</div>
                     </div>
                     <div class='col-xs-8 col-sm-5'>
-                    <h3 style='font-size: 18px; margin: 10px 0 10px 0;'>".q("$_SESSION[givenname] $_SESSION[surname]")."</h3>
+                    <h3 style='font-size: 18px; margin: 10px 0 10px 0;'><a href='".$urlServer."main/profile/display_profile.php'>".q("$_SESSION[givenname] $_SESSION[surname]")."</a></h3>
                     <div><h5><span class='tag'>$langHierarchyNode :</span></h5><span class='tag-value text-muted'>";
                     $departments = $user->getDepartmentIds($uid);
                         $i = 1;

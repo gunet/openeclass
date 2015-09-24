@@ -94,10 +94,25 @@ define('MODULE_ID_ABUSE_REPORT', 42);
 define('MODULE_ID_WALL', 43);
 
 // user modules
-define('MODULE_ID_SETTINGS', 31);
+
+// not used only for backward compatibility in logs
+define('MODULE_ID_SETTINGS', 31); // use MODULE_ID_COURSEINFO instead !
 define('MODULE_ID_NOTES', 35);
 define('MODULE_ID_PERSONALCALENDAR',36);
 define('MODULE_ID_ADMINCALENDAR', 43);
+
+// Available course settings
+define('SETTING_BLOG_COMMENT_ENABLE', 1);
+define('SETTING_BLOG_STUDENT_POST', 2);
+define('SETTING_BLOG_RATING_ENABLE', 3);
+define('SETTING_BLOG_SHARING_ENABLE', 4);
+define('SETTING_COURSE_SHARING_ENABLE', 5);
+define('SETTING_COURSE_RATING_ENABLE', 6);
+define('SETTING_COURSE_COMMENT_ENABLE', 7);
+define('SETTING_COURSE_ANONYMOUS_RATING_ENABLE', 8);
+define('SETTING_FORUM_RATING_ENABLE', 9);
+define('SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE', 10);
+define('SETTING_COURSE_ABUSE_REPORT_ENABLE', 11);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);
@@ -256,6 +271,8 @@ function load_js($file, $init='') {
         }   elseif ($file == 'spectrum') {
             $head_content .= css_link('spectrum/spectrum.css');
             $file = 'spectrum/spectrum.js';
+        } elseif ($file == 'sortable') {
+            $file = "sortable/Sortable.min.js";
         } elseif ($file == 'filetree') {
             $head_content .= css_link('jquery_filetree/jqueryFileTree.css');
             $file = 'jquery_filetree/jqueryFileTree.js';            
@@ -314,7 +331,7 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
         }
         return $html;
     } elseif (!is_array($user)) {
-        $r = Database::get()->querySingle("SELECT id, surname, givenname, email, has_icon FROM user WHERE id = ?d", $user);
+        $r = Database::get()->querySingle("SELECT id, surname, givenname, username, email, has_icon FROM user WHERE id = ?d", $user);
         if ($r) {
             $user = $r;
         } else {
@@ -341,8 +358,9 @@ function display_user($user, $print_email = false, $icon = true, $class = "") {
     }
 
     $token = token_generate($user->id, true);
+    $student_name = $user->surname || $user->givenname ? q($user->surname) . " " .  q($user->givenname) : $user->username;
     return "$icon<a $class_str href='{$urlAppend}main/profile/display_profile.php?id=$user->id&amp;token=$token'>" .
-            q($user->surname) . " " .  q($user->givenname) . "</a>" .
+            $student_name . "</a>" .
             ($print_email ? (' (' . mailto(trim($user->email), 'e-mail address hidden') . ')') : '');
 }
 
@@ -770,16 +788,20 @@ function imap_literal($s) {
  * @return string
  */
 function new_code($fac) {
-    $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
-        FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d)", $fac);
-    if ($gencode) {
+
+ $gencode = Database::get()->querySingle("SELECT code, MAX(generator) AS generator
+       FROM hierarchy WHERE code = (SELECT code FROM hierarchy WHERE id = ?d)", $fac);
+   if ($gencode) {
         do {
-            $gencode->generator += 1;
             $code = $gencode->code . $gencode->generator;
+            $gencode->generator += 1;
+			$code = $gencode->code . $gencode->generator;
+            Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
         } while (file_exists("courses/" . $code));
-        Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
+		Database::get()->query("UPDATE hierarchy SET generator = ?d WHERE id = ?d", $gencode->generator, $fac);
+
+    // Make sure the code returned isn't empty!
     } else {
-        // Make sure the code returned isn't empty!
         die("Course Code is empty!");
     }
     return $code;
@@ -1421,8 +1443,10 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM glossary WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE FROM group_members WHERE group_id IN
                          (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
+    Database::get()->query("DELETE FROM group_properties WHERE group_id IN
+                         (SELECT id FROM `group` WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM `group` WHERE course_id = ?d", $cid);
-    Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
+    Database::get()->query("DELETE FROM `group_category` WHERE course_id = ?d", $cid);
     Database::get()->query("DELETE `rating` FROM `rating` INNER JOIN `link` ON `rating`.`rid` = `link`.`id`
                             WHERE `rating`.`rtype` = ?s AND `link`.`course_id` = ?d", 'link', $cid);
     Database::get()->query("DELETE `rating_cache` FROM `rating_cache` INNER JOIN `link` ON `rating_cache`.`rid` = `link`.`id`
@@ -1508,13 +1532,8 @@ function delete_course($cid) {
     Database::get()->query("DELETE FROM attendance_users WHERE attendance_id IN (SELECT id FROM attendance WHERE course_id = ?d)", $cid);
     Database::get()->query("DELETE FROM attendance WHERE course_id = ?d", $cid);
 
-
-    $garbage = "$webDir/courses/garbage";
-    if (!is_dir($garbage)) {
-        mkdir($garbage, 0775);
-    }
-    rename("$webDir/courses/$course_code", "$garbage/$course_code");
-    removeDir("$webDir/video/$course_code");
+    removeDir("$webDir/courses/$course_code");
+    removeDir("$webDir/video/$course_code");    
     // refresh index
     require_once 'modules/search/indexer.class.php';
     Indexer::queueAsync(Indexer::REQUEST_REMOVEALLBYCOURSE, Indexer::RESOURCE_IDX, $cid);
@@ -1579,6 +1598,7 @@ function deleteUser($id, $log) {
             Database::get()->query("DELETE FROM note WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar WHERE user_id = ?d" , $u);
             Database::get()->query("DELETE FROM personal_calendar_settings WHERE user_id = ?d" , $u);
+            Database::get()->query("DELETE FROM custom_profile_fields_data WHERE user_id = ?d", $u);
             Database::get()->query("DELETE abuse_report FROM abuse_report INNER JOIN `link` ON abuse_report.rid = `link`.id
                                     WHERE abuse_report.rtype = ?s AND `link`.user_id = ?d", 'link', $u);
             Database::get()->query("DELETE FROM `link` WHERE user_id = ?d", $u);
@@ -2086,25 +2106,24 @@ function glossary_expand($text) {
 
 function glossary_expand_callback($matches) {
     static $glossary_seen_terms;
+    global $langGlossaryUrl, $langComments;
 
     $term = mb_strtolower($matches[0], 'UTF-8');
     if (isset($glossary_seen_terms[$term])) {
         return $matches[0];
     }
     $glossary_seen_terms[$term] = true;
+
     if (!empty($_SESSION['glossary'][$term])) {
-        $definition = ' title="' . q($_SESSION['glossary'][$term]) . '"';
+        $term_notes = isset($_SESSION['glossary_notes'][$term]) ? q('<hr><small class="text-muted">'.$langComments.': '.$_SESSION['glossary_notes'][$term].'</small>') : '';
+        $term_url = isset($_SESSION['glossary_url'][$term]) ? q('<hr><a href="'.$_SESSION['glossary_url'][$term].'">'.$langGlossaryUrl.'</a>') : '';
+        $definition = ' title="'.$matches[0].'" data-trigger="focus" data-html="true" data-content="' . q($_SESSION['glossary'][$term]) . $term_notes . $term_url .'"';
     } else {
         $definition = '';
     }
-    if (isset($_SESSION['glossary_url'][$term])) {
-        return '<a href="' . q($_SESSION['glossary_url'][$term]) .
-                '" target="_blank" class="glossary"' .
-                $definition . '>' . $matches[0] . '</a>';
-    } else {
-        return '<span class="glossary"' .
-                $definition . '>' . $matches[0] . '</span>';
-    }
+
+    return '<a href="#" class="glossary"' .
+            $definition . '>' . $matches[0] . '</a>';
 }
 
 function get_glossary_terms($course_id) {
@@ -2115,7 +2134,7 @@ function get_glossary_terms($course_id) {
         return false;
     }
 
-    $q = Database::get()->queryArray("SELECT term, definition, url FROM glossary
+    $q = Database::get()->queryArray("SELECT term, definition, url, notes FROM glossary
                               WHERE course_id = $course_id GROUP BY term");
 
     if (count($q) > intval(get_config('max_glossary_terms'))) {
@@ -2124,12 +2143,17 @@ function get_glossary_terms($course_id) {
 
     $_SESSION['glossary'] = array();
     $_SESSION['glossary_url'] = array();
+    $_SESSION['glossary_notes'] = array();
+
     foreach ($q as $row) {
         $term = mb_strtolower($row->term, 'UTF-8');
         $_SESSION['glossary'][$term] = $row->definition;
         if (!empty($row->url)) {
             $_SESSION['glossary_url'][$term] = $row->url;
         }
+        if (!empty($row->notes)) {
+            $_SESSION['glossary_notes'][$term] = $row->notes;
+        }        
     }
     $_SESSION['glossary_course_id'] = $course_id;
     return true;
@@ -2205,7 +2229,7 @@ function greek_to_latin($string) {
         'ρ', 'σ', 'τ', 'υ', 'φ', 'χ', 'ψ', 'ω', 'Α', 'Β', 'Γ', 'Δ', 'Ε', 'Ζ', 'Η', 'Θ',
         'Ι', 'Κ', 'Λ', 'Μ', 'Ν', 'Ξ', 'Ο', 'Π', 'Ρ', 'Σ', 'Τ', 'Υ', 'Φ', 'Χ', 'Ψ', 'Ω',
         'ς', 'ά', 'έ', 'ή', 'ί', 'ύ', 'ό', 'ώ', 'Ά', 'Έ', 'Ή', 'Ί', 'Ύ', 'Ό', 'Ώ', 'ϊ',
-        'ΐ', 'ϋ', 'ΰ', '�', 'Ϋ', '–'), array(
+        'ΐ', 'ϋ', 'ΰ', 'ϊ', 'Ϋ', '–'), array(
         'a', 'b', 'g', 'd', 'e', 'z', 'i', 'th', 'i', 'k', 'l', 'm', 'n', 'x', 'o', 'p',
         'r', 's', 't', 'y', 'f', 'x', 'ps', 'o', 'A', 'B', 'G', 'D', 'E', 'Z', 'H', 'Th',
         'I', 'K', 'L', 'M', 'N', 'X', 'O', 'P', 'R', 'S', 'T', 'Y', 'F', 'X', 'Ps', 'O',
@@ -2217,7 +2241,7 @@ function greek_to_latin($string) {
 // Limited coverage for now
 function remove_accents($string) {
     return strtr(mb_strtoupper($string, 'UTF-8'), array('Ά' => 'Α', 'Έ' => 'Ε', 'Ί' => 'Ι', 'Ή' => 'Η', 'Ύ' => 'Υ',
-        'Ό' => 'Ο', 'Ώ' => 'Ω', '�' => 'Ι', 'Ϋ' => 'Υ',
+        'Ό' => 'Ο', 'Ώ' => 'Ω', 'Ϊ' => 'Ι', 'Ϋ' => 'Υ',
         'À' => 'A', 'Á' => 'A', 'Â' => 'A', 'Ã' => 'A', 'Ä' => 'A',
         'Ç' => 'C', 'Ñ' => 'N', 'Ý' => 'Y',
         'È' => 'E', 'É' => 'E', 'Ê' => 'E', 'Ë' => 'E',
@@ -3221,7 +3245,7 @@ function action_button($options, $secondary_menu_options = array()) {
     $secondary_icon = isset($secondary_menu_options['secondary_icon']) ? $secondary_menu_options['secondary_icon'] : "fa-gear";
     $secondary_btn_class = isset($secondary_menu_options['secondary_btn_class']) ? $secondary_menu_options['secondary_btn_class'] : "btn-default";
     if (count($out_secondary)) {
-        $action_list = q("<div class='list-group'>".implode('', $out_secondary)."</div>");
+        $action_list = q("<div class='list-group' id='action_button_menu'>".implode('', $out_secondary)."</div>");
         $action_button = "
                 <a tabindex='1' class='btn $secondary_btn_class' data-container='body' data-toggle='popover' data-trigger='manual' data-html='true' data-placement='bottom' data-content='$action_list'>
                     <i class='fa $secondary_icon'></i> <span class='hidden-xs'>$secondary_title</span> <span class='caret'></span>

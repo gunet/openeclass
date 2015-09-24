@@ -24,7 +24,6 @@
  * @brief installation data base queries
  */
 require_once '../include/phpass/PasswordHash.php';
-require_once '../modules/db/database.php';
 require_once '../modules/db/foreignkeys.php';
 
 if (!defined('ECLASS_VERSION')) {
@@ -32,8 +31,6 @@ if (!defined('ECLASS_VERSION')) {
 }
 
 set_time_limit(0);
-
-Database::core()->query("DROP DATABASE IF EXISTS `$mysqlMainDb`");
 
 // set default storage engine
 Database::core()->query("SET storage_engine = InnoDB");
@@ -391,7 +388,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
     `lock_user_id` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
-    `course_id` INT(11) NOT NULL PRIMARY KEY ,
+    `course_id` INT(11) NOT NULL,
+    `group_id` INT(11) NOT NULL PRIMARY KEY,	
     `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
     `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
     `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
@@ -407,6 +405,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `group` (
     `name` varchar(100) NOT NULL DEFAULT '',
     `description` TEXT,
     `forum_id` int(11) NULL,
+    `category_id` int(11) NULL,
     `max_members` int(11) NOT NULL DEFAULT 0,
     `secret_directory` varchar(30) NOT NULL DEFAULT 0) $charset_spec");
 
@@ -416,6 +415,13 @@ $db->query("CREATE TABLE IF NOT EXISTS `group_members` (
     `is_tutor` int(11) NOT NULL DEFAULT 0,
     `description` TEXT,
     PRIMARY KEY (`group_id`, `user_id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `group_category` (
+    `id` INT(6) NOT NULL AUTO_INCREMENT,
+    `course_id` INT(11) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `description` TEXT,
+    PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `glossary` (
     `id` MEDIUMINT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -766,6 +772,37 @@ $db->query("CREATE TABLE IF NOT EXISTS `abuse_report` (
     `status` TINYINT(1) NOT NULL DEFAULT 1,
     INDEX `abuse_report_index_1` (`rid`, `rtype`, `user_id`, `status`),
     INDEX `abuse_report_index_2` (`course_id`, `status`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,                
+                `shortname` VARCHAR(255) NOT NULL,
+                `name` MEDIUMTEXT NOT NULL,
+                `description` MEDIUMTEXT NULL DEFAULT NULL,
+                `datatype` VARCHAR(255) NOT NULL,
+                `categoryid` INT(11) NOT NULL DEFAULT 0,
+                `sortorder`  INT(11) NOT NULL DEFAULT 0,
+                `required` TINYINT NOT NULL DEFAULT 0,
+                `visibility` TINYINT NOT NULL DEFAULT 0,
+                `user_type` TINYINT NOT NULL,
+                `registration` TINYINT NOT NULL DEFAULT 0,
+                `data` TEXT NULL DEFAULT NULL) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
+                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                `field_id` INT(11) NOT NULL,
+                `data` TEXT NOT NULL,
+                PRIMARY KEY (`user_id`, `field_id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data_pending` (
+                `user_request_id` INT(11) NOT NULL DEFAULT 0,
+                `field_id` INT(11) NOT NULL,
+                `data` TEXT NOT NULL,
+                PRIMARY KEY (`user_request_id`, `field_id`)) $charset_spec");
+
+$db->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
+                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `name` MEDIUMTEXT NOT NULL,
+                `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `wall_post` (
                 `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,

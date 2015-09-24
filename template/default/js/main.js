@@ -27,6 +27,7 @@ function act_confirm() {
 }
 
 function popover_init() {
+    $('.glossary').popover();
     var click_in_process = false;
     var hidePopover = function () {
         if (!click_in_process) {
@@ -35,6 +36,7 @@ function popover_init() {
     }
     , togglePopover = function () {
         $(this).popover('toggle');
+        $('#action_button_menu').parent().parent().addClass('menu-popover');
     };
     $('[data-toggle="popover"]').popover().on('click', togglePopover).on('blur', hidePopover);
     $('[data-toggle="popover"]').on('shown.bs.popover', function () {

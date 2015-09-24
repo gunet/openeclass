@@ -256,6 +256,10 @@ function loggedInMenu() {
 
     require_once 'modules/dropbox/class.mailbox.php';
 
+    array_push($sideMenuText, $GLOBALS['langMyCourses']);
+    array_push($sideMenuLink, $urlServer . "main/my_courses.php");
+    array_push($sideMenuImg, "fa-graduation-cap");
+
     $mbox = new Mailbox($uid, 0);
     $new_msgs = $mbox->unreadMsgsNumber();
     if ($new_msgs == 0) {
@@ -265,10 +269,6 @@ function loggedInMenu() {
     }
     array_push($sideMenuLink, $urlServer . "modules/dropbox/index.php");
     array_push($sideMenuImg, "fa-envelope-o");
-
-    array_push($sideMenuText, $GLOBALS['langMyCourses']);
-    array_push($sideMenuLink, $urlServer . "main/my_courses.php");
-    array_push($sideMenuImg, "fa-graduation-cap");
 
     array_push($sideMenuText, $GLOBALS['langMyAnnouncements']);
     array_push($sideMenuLink, $urlServer . "modules/announcements/myannouncements.php");
@@ -443,6 +443,9 @@ function adminMenu() {
 
         array_push($sideMenuText, $GLOBALS['langChangeUser']);
         array_push($sideMenuLink, "../admin/change_user.php");
+        array_push($sideMenuImg, "arrow.png");
+        array_push($sideMenuText, $GLOBALS['langCPFAdminSideMenuLink']);
+        array_push($sideMenuLink, "../admin/custom_profile_fields.php");
         array_push($sideMenuImg, "arrow.png");
     }
 

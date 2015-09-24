@@ -91,6 +91,12 @@ if (!DBHelper::tableExists('config')) {
     exit;
 }
 
+if (!check_engine()) {
+    $tool_content .= "<div class='alert alert-warning'>$langInnoDBMissing</div>";
+    draw($tool_content, 0);
+    exit;
+}
+
 // Upgrade user table first if needed
 if (!DBHelper::fieldExists('user', 'id')) {
     // check for multiple usernames
@@ -439,7 +445,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                         `language` VARCHAR(16) NOT NULL DEFAULT '',
                         `copyrighted` TINYINT(4) NOT NULL DEFAULT 0) $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `group_properties` (
-                        `course_id` INT(11) NOT NULL PRIMARY KEY ,
+                        `course_id` INT(11) NOT NULL,
+						`group_id` TINYINT(4) NOT NULL  PRIMARY KEY,
                         `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
                         `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
                         `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
@@ -755,12 +762,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `featured_books`, `order`, `icon`) VALUES (9, 'a:2:{s:2:\"el\";s:47:\"Προτεινόμενα συγγράμματα\";s:2:\"en\";s:9:\"Textbooks\";}', 1, 9, '8.png')");
             Database::get()->query("INSERT INTO `course_description_type` (`id`, `title`, `order`, `icon`) VALUES (10, 'a:2:{s:2:\"el\";s:22:\"Περισσότερα\";s:2:\"en\";s:15:\"Additional info\";}', 11, 'default.png')");
         }
-
-        // Drop obsolete course_description table if needed
-        if (DBHelper::tableExists('course_description') and
-            DBHelper::fieldExists('course_description', 'upDate')) {
-            Database::get()->query('DROP TABLE course_description');
-        }
+		
+		// Drop obsolete course_description table if needed
+       if (DBHelper::tableExists('course_description') and
+           DBHelper::fieldExists('course_description', 'upDate')) {
+           Database::get()->query('DROP TABLE course_description');
+       }
 
         if (!DBHelper::tableExists('course_description')) {
             Database::get()->query("CREATE TABLE IF NOT EXISTS `course_description` (
@@ -1397,8 +1404,9 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `group_submissions` CHAR(1) DEFAULT 0 NOT NULL,
                             `max_grade` FLOAT DEFAULT NULL,
                             `assign_to_specific` CHAR(1) DEFAULT '0' NOT NULL,
-                            file_path VARCHAR(200) DEFAULT '' NOT NULL,
-                            file_name VARCHAR(200) DEFAULT '' NOT NULL)
+                            `file_path` VARCHAR(200) DEFAULT '' NOT NULL,
+                            `file_name` VARCHAR(200) DEFAULT '' NOT NULL,
+							`grading_method` TINYINT(2) DEFAULT '' NOT NULL)
                             $charset_spec");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `assignment_submit` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1421,6 +1429,51 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                             `assignment_id` int(11) NOT NULL,
                             PRIMARY KEY (user_id, group_id, assignment_id)
                           ) $charset_spec");
+		Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric` (
+							`id` int(11) NOT NULL AUTO_INCREMENT,
+							`title` varchar(200) NOT NULL,
+							`description` text NOT NULL,
+							`preview_rubric` tinyint(1) NOT NULL DEFAULT '0',
+							`rubric_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+							`rubric_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+							`points_during_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+							`points_to_graded` tinyint(1) NOT NULL DEFAULT '0',
+							`uid` INT(11) NOT NULL,
+							PRIMARY KEY (`id`)
+						  ) $charset_spec");
+		Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_rel` (
+							`id` INT(11) NOT NULL AUTO_INCREMENT,
+							`rubric_id` INT(11) NOT NULL,
+							`course_id` INT(11) NOT NULL,
+							`module_id` INT(11) NOT NULL,
+							`resource_id` INT(11) NOT NULL,
+							PRIMARY KEY (`id`)
+						  )	$charset_spec");				
+		Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_criteria` (
+							`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+							`rubric_id` int(11) NOT NULL,
+							`sortorder` varchar(30) NOT NULL,
+							`description` text,
+							PRIMARY KEY (`id`)
+						 ) $charset_spec");
+		Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_levels` (
+							`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+							`rubric_id` int(11) NOT NULL,
+							`criterionid` int(10) unsigned NOT NULL,
+							`score` decimal(5,0) NOT NULL,
+							`definition` text NOT NULL,
+							PRIMARY KEY (`id`)
+						  )	$charset_spec");	
+		Database::get()->query("CREATE TABLE IF NOT EXISTS `rubric_assesment` (
+							`id` int(11) NOT NULL AUTO_INCREMENT,
+							`as_sub_id` int(11) NOT NULL,
+							`uid` int(11) NOT NULL,
+							`level_chosen_id` int(11) NOT NULL,
+							`level_feedback` varchar(60) NOT NULL,
+							PRIMARY KEY (`id`)
+						  ) $charset_spec ");	
+
+						
         Database::get()->query("DROP TABLE IF EXISTS agenda");
         Database::get()->query("CREATE TABLE IF NOT EXISTS `agenda` (
                             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1885,7 +1938,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 INDEX `field_index` (`field`) )");
         }
     }
-    
+
     if (version_compare($oldversion, '3.1.6', '<')) {
         refreshHierarchyProcedures();
     }
@@ -1991,6 +2044,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
     if (DBHelper::indexExists('unit_resources', 'unit_resources_title')) {
         Database::get()->query("ALTER TABLE unit_resources DROP INDEX unit_resources_title");
     }
+
 
     // // ----------------------------------
     // creation of indices
@@ -2345,8 +2399,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
     if (version_compare($oldversion, '3.0', '<')) {
         Database::get()->query("USE `$mysqlMainDb`");
-        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
-        
+		Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', 0)");
+
         if (!DBHelper::fieldExists('auth', 'auth_title')) {
             Database::get()->query("ALTER table `auth` ADD `auth_title` TEXT");
         }
@@ -2361,7 +2415,8 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         }
         if (!DBHelper::fieldExists('attendance', 'title')) {
             Database::get()->query("ALTER table `attendance` ADD `title` VARCHAR(250) DEFAULT NULL");
-        }        
+        }
+        Database::get()->query("INSERT IGNORE INTO `auth` VALUES (7, 'cas', '', '', '', 0, 0)");
         Database::get()->query("CREATE TABLE IF NOT EXISTS tags (
                 `id` MEDIUMINT(11) NOT NULL auto_increment,
                 `element_type` VARCHAR(255) NOT NULL DEFAULT '',
@@ -2393,6 +2448,12 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                                 `styles` LONGTEXT NOT NULL,
                                 PRIMARY KEY (`id`)) $charset_spec");
 
+
+            if ($q = Database::get()->querySingle("SELECT id FROM theme_options WHERE name = ?s", $theme['name'])) {
+                Database::get()->query("UPDATE theme_options SET styles = ?s WHERE id = ?d", $theme['styles'], $q->id);
+            } else {
+        }
+        copyThemeImages();
 
         if (!DBHelper::fieldExists('poll_question', 'q_scale')) {
             Database::get()->query("ALTER TABLE poll_question ADD q_scale INT(11) NULL DEFAULT NULL");
@@ -2580,6 +2641,38 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `type` VARCHAR(255) NOT NULL DEFAULT '',
             INDEX `wall_post_resources_index` (`post_id`)) $charset_spec");
         
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `shortname` VARCHAR(255) NOT NULL,
+                                `name` MEDIUMTEXT NOT NULL,
+                                `description` MEDIUMTEXT NULL DEFAULT NULL,
+                                `datatype` VARCHAR(255) NOT NULL,
+                                `categoryid` INT(11) NOT NULL DEFAULT 0,
+                                `sortorder`  INT(11) NOT NULL DEFAULT 0,
+                                `required` TINYINT NOT NULL DEFAULT 0,
+                                `visibility` TINYINT NOT NULL DEFAULT 0,
+                                `user_type` TINYINT NOT NULL,
+                                `registration` TINYINT NOT NULL DEFAULT 0,
+                                `data` TEXT NULL DEFAULT NULL) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data` (
+                                `user_id` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT 0,
+                                `field_id` INT(11) NOT NULL,
+                                `data` TEXT NOT NULL,
+                                PRIMARY KEY (`user_id`, `field_id`)) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_data_pending` (
+                                `user_request_id` INT(11) NOT NULL DEFAULT 0,
+                                `field_id` INT(11) NOT NULL,
+                                `data` TEXT NOT NULL,
+                                PRIMARY KEY (`user_request_id`, `field_id`)) $charset_spec");
+        
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `custom_profile_fields_category` (
+                                `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                `name` MEDIUMTEXT NOT NULL,
+                                `sortorder`  INT(11) NOT NULL DEFAULT 0) $charset_spec");
+        
+
         // Autojudge fields
         if (!DBHelper::fieldExists('assignment', 'auto_judge')) {
             Database::get()->query("ALTER TABLE `assignment`
@@ -2606,7 +2699,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `entryid` int(11) NOT NULL,
             `entrydata` varchar(4000) NOT NULL,
             KEY `entryid` (`entryid`), KEY `tablename` (`tablename`)) $charset_spec");
-        
+
         // Auto-enroll rules tables
         Database::get()->query("CREATE TABLE IF NOT EXISTS `autoenroll_rule` (
             `id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -2649,19 +2742,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
 
         // Delete old key 'language' (it has been replaced by 'default_language')
         Database::get()->query("DELETE FROM config WHERE `key` = 'language'");
-        
+
         // Add grading scales table
         Database::get()->query("CREATE TABLE IF NOT EXISTS `grading_scale` (
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `title` varchar(255) NOT NULL,
             `scales` text NOT NULL,
             `course_id` int(11) NOT NULL,
-            KEY `course_id` (`course_id`)) $charset_spec");   
+            KEY `course_id` (`course_id`)) $charset_spec");
 
         // Add grading_scale_id field to assignments
         if (!DBHelper::fieldExists('assignment', 'grading_scale_id')) {
             Database::get()->query("ALTER TABLE `assignment` ADD `grading_scale_id` INT(11) NOT NULL DEFAULT '0' AFTER `max_grade`");
-        }       
+        }
 
         // Add show results to participants field
         if (!DBHelper::fieldExists('poll', 'show_results')) {
@@ -2672,7 +2765,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `user_id` int(11) NULL,
             `group_id` int(11) NULL,
-            `poll_id` int(11) NOT NULL ) $charset_spec");        
+            `poll_id` int(11) NOT NULL ) $charset_spec");
 
         if (!DBHelper::fieldExists('poll', 'assign_to_specific')) {
             Database::get()->query("ALTER TABLE `poll` ADD `assign_to_specific` TINYINT NOT NULL DEFAULT '0'");
@@ -2692,7 +2785,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (DBHelper::indexExists('user_department', 'udep_id')) {
             Database::get()->query('DROP INDEX `udep_id` ON user_department');
         }
-                
+
         if (!DBHelper::indexExists('user_department', 'udep_unique')) {
             Database::get()->queryFunc('SELECT user_department.id FROM user
                         RIGHT JOIN user_department ON user.id = user_department.user
@@ -2759,24 +2852,23 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
             uid VARCHAR(64) NOT NULL,
             UNIQUE KEY (user_request_id, auth_id),
             FOREIGN KEY (`user_request_id`) REFERENCES `user_request` (`id`) ON DELETE CASCADE)
-            $charset_spec"); 
-        
+            $charset_spec");
+
         if (!DBHelper::fieldExists('gradebook', 'start_date')) {
             Database::get()->query("ALTER TABLE `gradebook` ADD `start_date` DATETIME NOT NULL");
             Database::get()->query("UPDATE `gradebook` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months before
+            $q = Database::get()->queryArray("SELECT gradebook_book.id, grade,`range` FROM gradebook, gradebook_activities, gradebook_book
+                                                    WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id
+                                                    AND gradebook_activities.gradebook_id = gradebook.id");
+            foreach ($q as $data) {
+                Database::get()->query("UPDATE gradebook_book SET grade = $data->grade/$data->range WHERE id = $data->id");
+            }
         }
         if (!DBHelper::fieldExists('gradebook', 'end_date')) {
             Database::get()->query("ALTER TABLE `gradebook` ADD `end_date` DATETIME NOT NULL");
             Database::get()->query("UPDATE `gradebook` SET `end_date` = " . DBHelper::timeAfter(6*30*24*60*60) . ""); // 6 months after
         }
-        $q = Database::get()->queryArray("SELECT gradebook_book.id, grade,`range` FROM gradebook, gradebook_activities, gradebook_book 
-                                                    WHERE gradebook_book.gradebook_activity_id = gradebook_activities.id 
-                                                    AND gradebook_activities.gradebook_id = gradebook.id");
-        foreach ($q as $data) {
-            Database::get()->query("UPDATE gradebook_book SET grade = $data->grade/$data->range WHERE id = $data->id");
-        }
-        
-        
+
         if (!DBHelper::fieldExists('attendance', 'start_date')) {
             Database::get()->query("ALTER TABLE `attendance` ADD `start_date` DATETIME NOT NULL");
             Database::get()->query("UPDATE `attendance` SET `start_date` = " . DBHelper::timeAfter(-6*30*24*60*60) . ""); // 6 months after
@@ -2784,7 +2876,7 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         if (!DBHelper::fieldExists('attendance', 'end_date')) {
             Database::get()->query("ALTER TABLE `attendance` ADD `end_date` DATETIME NOT NULL");
             Database::get()->query("UPDATE `attendance` SET `end_date` = " . DBHelper::timeAfter(6*30*24*60*60) . ""); // 6 months after
-        }      
+        }
         // Cancelled exercises total weighting fix
         $exercises = Database::get()->queryArray("SELECT exercise.id AS id, exercise.course_id AS course_id, exercise_user_record.eurid AS eurid "
                 . "FROM exercise_user_record, exercise "
@@ -2794,18 +2886,57 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
         foreach ($exercises as $exercise) {
             $totalweight = Database::get()->querySingle("SELECT SUM(exercise_question.weight) AS totalweight
                                             FROM exercise_question, exercise_with_questions
-                                            WHERE exercise_question.course_id = ?d 
+                                            WHERE exercise_question.course_id = ?d
                                             AND exercise_question.id = exercise_with_questions.question_id
-                                            AND exercise_with_questions.exercise_id = ?d", $exercise->course_id, $exercise->id)->totalweight;    
+                                            AND exercise_with_questions.exercise_id = ?d", $exercise->course_id, $exercise->id)->totalweight;
             Database::get()->query("UPDATE exercise_user_record SET total_weighting = ?f WHERE eurid = ?d", $totalweight, $exercise->eurid);
         }
-        
+		
         if (DBHelper::fieldExists('link', 'hits')) { // not needed
-            delete_field('link', 'hits');
+           delete_field('link', 'hits');
         }
-    }
+	
+        Database::get()->query("CREATE TABLE IF NOT EXISTS `group_category` (
+                                `id` INT(6) NOT NULL AUTO_INCREMENT,
+                                `course_id` INT(11) NOT NULL,
+                                `name` VARCHAR(255) NOT NULL,
+                                `description` TEXT,
+                                PRIMARY KEY (`id`, `course_id`)) $charset_spec");
 
- 
+        if (!DBHelper::fieldExists('group', 'category_id')) {
+            Database::get()->query("ALTER TABLE `group` ADD `category_id` INT(11) NULL");
+        }
+		//Group Mapping due to group_id addition in group_properties table
+        if (!DBHelper::fieldExists('group_properties', 'group_id')) {
+            Database::get()->query("ALTER TABLE `group_properties` ADD `group_id` INT(11) NOT NULL DEFAULT 0");
+            Database::get()->query("ALTER TABLE `group_properties` DROP PRIMARY KEY");
+
+            $group_info = Database::get()->queryArray("SELECT * FROM group_properties");
+            foreach ($group_info as $group) {
+                $cid = $group->course_id;
+                $self_reg = $group->self_registration;
+                $multi_reg = $group->multiple_registration;
+                $unreg = $group->allow_unregister;
+                $forum = $group->forum;
+                $priv_forum = $group->private_forum;
+                $documents = $group->documents;
+                $wiki = $group->wiki;
+                $agenda = $group->agenda;
+                Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
+
+                $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $cid);
+				
+                foreach ($num as $group_num) {
+                        $group_id = $group_num->id;			
+                        Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, multiple_registration, allow_unregister, forum, private_forum, documents, wiki, agenda)
+                                                                                   VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $multi_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);									
+                }
+            }
+            Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
+        }
+	}
+
+
     // update eclass version
     Database::get()->query("UPDATE config SET `value` = ?s WHERE `key`='version'", ECLASS_VERSION);
 

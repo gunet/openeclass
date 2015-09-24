@@ -57,9 +57,21 @@ if (isset($_GET['submit'])) {
 function show_assignments() {
     global $m, $uid, $group_id, $langSubmit, $langDays, $langNoAssign, $tool_content,
     $langWorks, $course_id, $course_code, $themeimg, $langCancel, $urlServer;
+    
+    $gids = user_group_info($uid, $course_id);
+    if (!empty($gids)) {
+        $gids_sql_ready = implode(',',array_keys($gids));
+    } else {
+        $gids_sql_ready = "''";
+    }
+    
+    $res = Database::get()->queryArray("SELECT *, CAST(UNIX_TIMESTAMP(deadline)-UNIX_TIMESTAMP(NOW()) AS SIGNED) AS time
+                                 FROM assignment WHERE course_id = ?d AND active = '1' AND
+                                 (assign_to_specific = '0' OR assign_to_specific = '1' AND id IN
+                                    (SELECT assignment_id FROM assignment_to_specific WHERE user_id = ?d UNION SELECT assignment_id FROM assignment_to_specific WHERE group_id IN ($gids_sql_ready))
+                                 )
+                                 ORDER BY CASE WHEN CAST(deadline AS UNSIGNED) = '0' THEN 1 ELSE 0 END, deadline", $course_id, $uid);
 
-    $res = Database::get()->queryArray("SELECT *, (TO_DAYS(deadline) - TO_DAYS(NOW())) AS days
-		 FROM assignment WHERE course_id = ?d", $course_id);
     if (count($res) == 0) {
         $tool_content .= $langNoAssign;
         return;
@@ -74,15 +86,11 @@ function show_assignments() {
 			<img style='padding-top:2px;' src='$themeimg/arrow.png' alt=''></td>
 			<td><div align='left'><a href='index.php?course=$course_code&amp;id=$row->id'>" . q($row->title) . "</a></td>
 			<td align='center'>" . nice_format($row->deadline);
-        if ($row->days > 1) {
-            $table_content .= " ($m[in]&nbsp;$row->days&nbsp;$langDays";
-        } elseif ($row->days < 0) {
-            $table_content .= " ($m[expired])";
-        } elseif ($row->days == 1) {
-            $table_content .= " ($m[tomorrow])";
-        } else {
-            $table_content .= " ($m[today])";
-        }
+                        if ($row->time > 0) {
+                            $table_content .= "<br>(<small>$langDaysLeft" . format_time_duration($row->time) . "</small>)";
+                        } else if($row->deadline){
+                            $table_content .= "<br> (<small><span class='expired'>$m[expired]</span></small>)";
+                        }
 
         $table_content .= "</div></td>\n      <td align=\"center\">";
         $subm = was_submitted($uid, $group_id, $row->id);
@@ -94,7 +102,7 @@ function show_assignments() {
             $table_content .= $m['no'];
         }
         $table_content .= "</td><td align=\"center\">";
-        if ($row->days >= 0 and !was_graded($uid, $row->id) and is_group_assignment($row->id)) {
+        if ($row->time >= 0 and !was_graded($uid, $row->id) and is_group_assignment($row->id)) {
             $table_content .= "<input type='radio' name='assign' value='$row->id'>";
         } else {
             $table_content .= '-';

@@ -26,10 +26,12 @@
  */
 
 $require_current_course = TRUE;
+$require_login = TRUE;
 $require_help = TRUE;
 $helpTopic = 'Group';
 
 require_once '../../include/baseTheme.php';
+require_once 'include/course_settings.php';
 require_once 'group_functions.php';
 require_once 'include/log.php';
 /* * ***Required classes for wiki creation*** */
@@ -51,15 +53,154 @@ unset($message);
 unset($_SESSION['secret_directory']);
 unset($_SESSION['forum_id']);
 
-if (!$uid or !$courses[$course_code]) {
-    forbidden();
-}
-
-initialize_group_info();
 $user_groups = user_group_info($uid, $course_id);
 
+//check if social bookmarking is enabled for this course
+$social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+
 if ($is_editor) {
-    if (isset($_POST['creation'])) {
+
+	if (isset($_GET['urlview'])) {
+		$urlview = urlencode($_GET['urlview']);
+	} else {
+		$urlview = '';
+	}
+	
+	if (isset($_GET['socialview'])) {
+		$socialview = true;
+		$socialview_param = '&amp;socialview';
+	} else {
+		$socialview = false;
+		$socialview_param = '';
+	}
+	
+	if (isset($_GET['deletecategory'])) {
+		$id = $_GET['id'];
+		delete_category($id);
+		Session::Messages($langGroupCategoryDeleted, 'alert-success');
+		redirect_to_home_page("modules/group/index.php");
+	}
+	elseif (isset($_GET['deletegroup'])) {
+			$id = $_GET['id'];
+            delete_group($id);
+            Session::Messages($langGroupDeleted, 'alert-success');
+            redirect_to_home_page("modules/group/index.php");
+    }
+
+    if (isset($_GET['group'])) {
+		$group_name = $_POST['name'];
+		$group_desc = $_POST['description'];
+		$v = new Valitron\Validator($_POST);
+			$v->rule('required', array('maxStudent'));
+			$v->rule('numeric', array('maxStudent'));
+			$v->rule('required', array('name'));
+        if($v->validate()) {
+            if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
+                $group_max = intval($_POST['maxStudent']);
+            } else {
+                $group_max = 0;
+            }
+
+	$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
+	$menuTypeID = ($is_in_tinymce) ? 5 : 2;
+	$tinymce_params = '';			
+
+// Create a hidden category for group forums
+            $req = Database::get()->querySingle("SELECT id FROM forum_category
+                                    WHERE cat_order = -1
+                                    AND course_id = ?d", $course_id);
+            if ($req) {
+                $cat_id = $req->id;
+            } else {
+                $req2 = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
+                                             VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
+                $cat_id = $req2->lastInsertID;
+            }
+
+                $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_name . "'");
+
+                $forumname = "$langForumGroup $group_name";
+                $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
+                                                        `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
+                $forum_id = $q->lastInsertID;
+
+                // Create a unique path to group documents to try (!)
+                // avoiding groups entering other groups area
+                $secretDirectory = uniqid('');
+                mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
+                touch("courses/$course_code/group/index.php");
+                touch("courses/$course_code/group/$secretDirectory/index.php");
+			$category_id = intval($_POST['selectcategory']);
+			$id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
+                                    VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
+				
+	if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on'){
+		$self_reg = 1;
+	}
+	else $self_reg = 0;
+	
+	if (isset($_POST['multi_reg']) and $_POST['multi_reg'] == 'on'){
+		$multi_reg = 1;
+	}
+	else $multi_reg = 0;
+	
+	if (isset($_POST['forum']) and $_POST['forum'] == 'on'){
+            $has_forum = 1;
+	}
+	else $has_forum = 0;
+	
+	if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+            $documents = 1;
+	}
+	else $documents = 0;
+	
+	if (isset($_POST['wiki']) and $_POST['wiki'] == 'on') {
+            $wiki = 1;
+	}
+	else $wiki = 0;
+        
+        $private_forum = $_POST['private_forum'];
+									
+        $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d, group_id = ?d, self_registration = ?d, multiple_registration = ?d, allow_unregister = ?d, forum = ?d, private_forum = ?d, documents = ?d, wiki = ?d, agenda = ?d",
+                                                $course_id, $id, $self_reg, $multi_reg, 0, $has_forum, $private_forum, $documents, $wiki, 0);
+
+	/** ********Create Group Wiki*********** */
+        //Set ACL
+        $wikiACL = array();
+        $wikiACL['course_read'] = true;
+        $wikiACL['course_edit'] = false;
+        $wikiACL['course_create'] = false;
+        $wikiACL['group_read'] = true;
+        $wikiACL['group_edit'] = true;
+        $wikiACL['group_create'] = true;
+        $wikiACL['other_read'] = false;
+        $wikiACL['other_edit'] = false;
+        $wikiACL['other_create'] = false;
+
+        $wiki = new Wiki();
+        $wiki->setTitle($langGroup . " - Wiki");
+        $wiki->setDescription('');
+        $wiki->setACL($wikiACL);
+        $wiki->setGroupId($id);
+        $wikiId = $wiki->save();
+
+        $mainPageContent = $langWikiMainPageContent;
+
+        $wikiPage = new WikiPage($wikiId);
+        $wikiPage->create($uid, '__MainPage__', $mainPageContent, '', date("Y-m-d H:i:s"), true);
+        /*             * ************************************ */
+
+        Log::record($course_id, MODULE_ID_GROUPS, LOG_INSERT, array('id' => $id,
+                                                                    'name' => $group_name,
+                                                                    'max_members' => $group_max,
+                                                                    'secret_directory' => $secretDirectory));
+
+        $message = "$langGroupAdded";
+    } else {
+            Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
+            redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
+        }        
+    } elseif (isset($_POST['creation'])) {
         $v = new Valitron\Validator($_POST);
         $v->rule('required', array('group_quantity'));
         $v->rule('numeric', array('group_quantity'));
@@ -115,10 +256,19 @@ if ($is_editor) {
                                              name = '$langGroup $group_num',
                                              forum_id =  ?d,
                                              max_members = ?d,
-                                             secret_directory = ?s",
-                                    $course_id, $forum_id, $group_max, $secretDirectory)->lastInsertID;
+                                             secret_directory = ?s,
+                                             category_id = ?d",
+                                    $course_id, $forum_id, $group_max, $secretDirectory, $_POST['selectcategory'])->lastInsertID;
+									
+                $group_info = Database::get()->query("INSERT INTO `group_properties` SET course_id = ?d,
+                                                                    group_id = ?d, self_registration = ?d, 
+                                                                    multiple_registration = ?d, allow_unregister = ?d, 
+                                                                    forum = ?d, private_forum = ?d, 
+                                                                    documents = ?d, wiki = ?d, 
+                                                                    agenda = ?d",
+                                                                $course_id, $id, 1, 0, 0, 1, 0, 1, 0, 0);
 
-                /*             * ********Create Group Wiki*********** */
+                /** ********Create Group Wiki*********** */
                 //Set ACL
                 $wikiACL = array();
                 $wikiACL['course_read'] = true;
@@ -159,23 +309,54 @@ if ($is_editor) {
             redirect_to_home_page("modules/group/group_creation.php?course=$course_code");
         }
     } elseif (isset($_POST['properties'])) {
-        register_posted_variables(array(
-            'self_reg' => true,
-            'multi_reg' => true,
-            'private_forum' => true,
-            'has_forum' => true,
-            'documents' => true,
-            'wiki' => true), 'all');
-        Database::get()->query("UPDATE group_properties SET
-                                 self_registration = ?d,
-                                 multiple_registration = ?d,
-                                 private_forum = ?d,
-                                 forum = ?d,
-                                 documents = ?d,
-                                 wiki = ?d WHERE course_id = ?d",
-                    $self_reg, $multi_reg, $private_forum, $has_forum, $documents, $wiki, $course_id);
+	
+	if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on') {
+		$self_reg = 1;
+	}
+	else $self_reg = 0;
+	
+	if (isset($_POST['multi_reg']) and $_POST['multi_reg'] == 'on') {
+		$multi_reg = 1;
+	}
+	else $multi_reg = 0;
+	
+	if (isset($_POST['forum']) and $_POST['forum'] == 'on') {
+		$has_forum = 1;
+	}
+	else $has_forum = 0;
+	
+	if (isset($_POST['documents']) and $_POST['documents'] == 'on'){
+		$documents = 1;
+	}
+	else $documents = 0;
+	
+	if (isset($_POST['wiki']) and $_POST['wiki'] == 'on'){
+		$wiki = 1;
+	}
+	else $wiki = 0;
+
+	$private_forum = $_POST['private_forum'];
+	$group_id = $_POST['group_id'];
+	    
+	Database::get()->query("UPDATE group_properties SET
+                                self_registration = ?d,
+                                multiple_registration = ?d,
+                                forum = ?d,
+                                private_forum = ?d,
+                                documents = ?d,
+                                wiki = ?d WHERE course_id = ?d AND group_id = ?d",
+                     $self_reg, $multi_reg,  $has_forum, $private_forum, $documents, $wiki, $course_id, $group_id);
         $message = $langGroupPropertiesModified;
-    } elseif (isset($_REQUEST['delete_all'])) {
+
+    }
+    elseif (isset($_POST['submitCategory'])) {
+        if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
+        submit_category();
+        $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
+        Session::Messages($messsage, 'alert-success');
+        redirect_to_home_page("modules/group/index.php");
+    }
+	elseif (isset($_REQUEST['delete_all'])) {
         /*         * ************Delete All Group Wikis********** */
         $sql = "SELECT id "
                 . "FROM wiki_properties "
@@ -254,6 +435,7 @@ if ($is_editor) {
 
         Database::get()->query("DELETE FROM document WHERE course_id = ?d AND subsystem = 1 AND subsystem_id = ?d", $course_id, $id);
         Database::get()->query("DELETE FROM group_members WHERE group_id = ?d", $id);
+		Database::get()->query("DELETE FROM group_properties WHERE group_id = ?d", $id);
         Database::get()->query("DELETE FROM `group` WHERE id = ?d", $id);
 
         /*         * ********Delete Group Wiki*********** */
@@ -339,12 +521,28 @@ if ($is_editor) {
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
-                array('title' => $langGroupProperties,
-                    'url' => "group_properties.php?course=$course_code",
-                    'icon' => 'fa-gear'),
+				array('title' => $langCreationGroups,
+                    'url' => "group_creation.php?course=$course_code&amp;all=1",
+                    'icon' => 'fa-plus-circle',
+                    'level' => 'primary-label',
+                    'button-class' => 'btn-success'),
+				/*array('title' => $langCategoryAdd,
+                      'url' => "group_category.php?course=$course_code&amp;addcategory=1",
+                      'icon' => 'fa-plus-circle',
+                      'button-class' => 'btn-success',
+                      'level' => 'primary-label'),*/
+			    array('title' => $langCategoryAdd,
+                      'url' => "group_category.php?course=$course_code&amp;addcategory=1",
+                      'icon' => 'fa-plus-circle'),
+                array('title' => $langDeleteGroups,
+                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
+                    'icon' => 'fa-times',
+                    'confirm' => $langDeleteGroupAllWarn,
+                    'show' => $num_of_groups > 0),
                 array('title' => $langFillGroupsAll,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
                     'icon' => 'fa-pencil',
+                    'level' => 'primary',
                     'show' => $num_of_groups > 0),
                 array('title' => $langEmtpyGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes",
@@ -352,20 +550,36 @@ if ($is_editor) {
                     'class' => 'delete',
                     'confirm' => $langEmtpyGroups,
                     'confirm_title' => $langEmtpyGroupsAll,
-                    'show' => $num_of_groups > 0),
-                array('title' => $langDeleteGroups,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
-                    'icon' => 'fa-times',
-                    'confirm' => $langDeleteGroupAllWarn,
                     'show' => $num_of_groups > 0)));
 
-    $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
-    $myIterator = 0;
+    $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
     $num_of_groups = count($groupSelect);
+	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
+	$num_of_cat = count($cat);
+	$q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
     // groups list
-    if ($num_of_groups > 0) {
-        $tool_content .= "
+	if ($num_of_groups==0 && $num_of_cat==0) {
+        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
+    }
+	elseif ($num_of_groups==0 && $num_of_cat>0) {
+         $tool_content .= "
+            <div class='row'>
+                <div class='col-sm-12'>
                 <div class='table-responsive'>
+                <table class='table-default nocategory-links'>
+				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>";
+			if ($display_tools) {
+                $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
+            }
+            $tool_content .= "</tr>";
+            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>";
+            if ($display_tools) {
+                $tool_content .= "<td></td>";
+            }
+			 $tool_content .= "</tr></table></div></div></div>";
+    }
+    elseif ($num_of_groups > 0) {
+        $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
                   <th>$langGroupName</th>
@@ -381,7 +595,7 @@ if ($is_editor) {
                         <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {
-                $tool_content .= display_user($t->user_id) . "<br />";
+                $tool_content .= display_user($t->user_id) . "<br>";
             }
             $tool_content .= "</td><td class='text-center'>$member_count</td>";
             if ($max_members == 0) {
@@ -391,8 +605,11 @@ if ($is_editor) {
             }
             $tool_content .= "<td class='option-btn-cell'>" .
                     action_button(array(
+                        array('title' => $langConfig,
+                            'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
+                            'icon' => 'fa-gear'),
                         array('title' => $langEditChange,
-                            'url' => "group_edit.php?course=$course_code&amp;group_id=$group->id",
+                            'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),
                         array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
@@ -400,14 +617,10 @@ if ($is_editor) {
                             'class' => 'delete',
                             'confirm' => $langConfirmDelete))) .
                         "</td></tr>";
-            $totalRegistered += $member_count;
-            $myIterator++;
+            $totalRegistered += $member_count;            
         }
         $tool_content .= "</table></div><br>";
-    } else {
-        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     }
-
 } else {
     // Begin student view
     $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
@@ -443,7 +656,7 @@ if ($is_editor) {
             $tool_content .= "</td>";
             $tool_content .= "<td class='text-center'>";
             foreach ($tutors as $t) {
-                $tool_content .= display_user($t->user_id) . "<br />";
+                $tool_content .= display_user($t->user_id) . "<br>";
             }
             $tool_content .= "</td>";
 
@@ -461,8 +674,114 @@ if ($is_editor) {
             $totalRegistered += $member_count;
         }
         $tool_content .= "</table></div>";
-    }
-}
+		}
+	}
+        
+    $display_tools = $is_editor && !$is_in_tinymce;
+    if (!in_array($action, array('addcategory', 'editcategory'))) {
+	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
+	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
+	$aantalcategories = count($cat);
+	$tool_content .= "
+        <div class='row'>
+          <div class='col-sm-12'>
+            <div class='table-responsive'>
+            <table class='table-default  category-links'>";
+    if ($aantalcategories > 0) {
+        $tool_content .= "<tr class='list-header'><th>";
+
+       $tool_content .= "$langCategorisedGroups&nbsp;";
+            if (isset($urlview) and abs($urlview) == 0) {
+                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
+            } else {
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
+            }
+            $tool_content .= "</th>";
+            if ($display_tools) {
+                $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
+            }
+            $tool_content .= "</tr>";
+        } else {
+            $tool_content .= "<tr><th>";
+
+            $tool_content .= "$langCategorisedGroups&nbsp;";
+       if (isset($urlview) and abs($urlview) == 0) {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
+            } else {
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
+            }$tool_content .= "</th>";
+            if ($display_tools) {
+                $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
+            }
+            $tool_content .= "</tr>";
+            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupCategories - </td>" .
+                ($display_tools? '<td></td>': '') . "</tr>";
+		}
+	if ($urlview === '') {
+            $urlview = str_repeat('0', $aantalcategories);
+        }
+        $i = 0;
+        $catcounter = 0;
+        foreach ($cat as $myrow) {
+            if (empty($urlview)) {
+                // No $view set in the url, thus for each category link it should be all zeros except it's own
+                $view = makedefaultviewcode($i);
+            } else {
+                $view = $urlview;
+                $view[$i] = '1';
+            }
+            // if the $urlview has a 1 for this categorie, this means it is expanded and should be displayed as a
+            // - instead of a +, the category is no longer clickable and all the links of this category are displayed
+            $description = standard_text_escape($myrow->description);
+            if ((isset($urlview[$i]) and $urlview[$i] == '1')) {
+                $newurlview = $urlview;
+                $newurlview[$i] = '0';
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
+                if (!empty($description)) {
+                    $tool_content .= "<br><span class='link-description'>$description</span></th>";
+                } else {
+                    $tool_content .= "</th>";
+                }
+
+                if ($display_tools) {
+                    $tool_content .= "<td class='option-btn-cell'>";
+                    showcategoryadmintools($myrow->id);
+                    $tool_content .= "</td>";
+                }
+
+                $tool_content .= "</tr>";
+
+                showgroupsofcategory($myrow->id);
+                if ($groups_num == 1) {
+                    $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>" .
+                        ($display_tools? '<td></td>': '') . "<tr>";
+                }
+
+            } else {
+                $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)
+                    . "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
+                $tool_content .= is_array($view) ? implode('', $view) : $view;
+                $tool_content .= $tinymce_params . "' class='open-category'>" . q($myrow->name) . "</a>";
+                $description = standard_text_escape($myrow->description);
+                if (!empty($description)) {
+                    $tool_content .= "<br><span class='link-description'>$description</span</th>";
+                } else {
+                    $tool_content .= "</th>";
+                }
+
+                if ($display_tools) {
+                    $tool_content .= "<td class='option-btn-cell'>";
+                    showcategoryadmintools($myrow->id);
+                    $tool_content .= "</td>";
+                }
+
+                $tool_content .= "</tr>";
+            }
+            $i++;
+        }
+        $tool_content .= "</table></div></div></div>";
 
 add_units_navigation(TRUE);
+}
 draw($tool_content, 2, null, $head_content);

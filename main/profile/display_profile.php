@@ -26,6 +26,7 @@ include '../../include/baseTheme.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/hierarchy.class.php';
 require_once 'include/lib/user.class.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $tree = new Hierarchy();
 $user = new User();
@@ -226,6 +227,8 @@ if ($userdata) {
             </div>
         </div>
     </div>";
+//render custom profile fields content
+$tool_content .= render_profile_fields_content(array('user_id' => $id));
 $tool_content .= "</div>
         </div>
     </div>

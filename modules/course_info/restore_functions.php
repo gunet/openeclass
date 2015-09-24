@@ -50,7 +50,7 @@ function unpack_zip_inner($zipfile, $clone) {
 
     $destdir = $webDir . '/courses/tmpUnzipping/' . $uid;
     if (!is_dir($destdir)) {
-        mkdir($destdir, 0755);
+        mkdir($destdir, 0755, true);
     }
     chdir($destdir);
     $zip->extract();
@@ -723,6 +723,7 @@ function create_restored_course(&$tool_content, $restoreThis, $course_code, $cou
             $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
         }
 
+        
         // Course_settings
         if (file_exists("$restoreThis/course_settings")) {
             restore_table($restoreThis, 'course_settings', array('set' => array('course_id' => $new_course_id)), $url_prefix_map, $backupData, $restoreHelper);
@@ -1007,7 +1008,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
             $now = date('Y-m-d H:i:s', time());
             $user_id = Database::get()->query("INSERT INTO user SET surname = ?s, "
                 . "givenname = ?s, username = ?s, password = ?s, email = ?s, status = ?d, phone = ?s, "
-                . "registered_at = ?t, expires_at = ?t, document_timestamp = ?t",
+                . "registered_at = ?t, expires_at = ?t",
                 (isset($data[$restoreHelper->getField('user', 'surname')])) ? $data[$restoreHelper->getField('user', 'surname')] : '',
                 (isset($data[$restoreHelper->getField('user', 'givenname')])) ? $data[$restoreHelper->getField('user', 'givenname')] : '',
                 $data['username'],
@@ -1016,8 +1017,7 @@ function restore_users($users, $cours_user, $departments, $restoreHelper) {
                 intval($data[$restoreHelper->getField('course_user', 'status')]),
                 isset($data['phone'])? $data['phone']: '',
                 $now,
-                date('Y-m-d H:i:s', time() + get_config('account_duration')),
-                isset($data['document_timestamp'])? $data['document_timestamp']: $now)->lastInsertID;
+                date('Y-m-d H:i:s', time() + get_config('account_duration')))->lastInsertID;
             $userid_map[$data[$restoreHelper->getField('user', 'id')]] = $user_id;
             $user = new User();
             $user->refresh($user_id, $departments);
@@ -1104,10 +1104,9 @@ function parse_backup_php($file) {
                     $sql = $args[0];
                     if (preg_match('/^INSERT INTO `(\w+)` \(([^)]+)\) VALUES\s+(.*)$/si', $sql, $matches)) {
                         $table = $matches[1];
-                        // Skip tables not used any longer
-                        if ($table != 'stat_accueil' and $table != 'users') {
-                            $fields = parse_fields($matches[2]);
-                            $values = parse_values($matches[3]);
+                        // Skip 'stat_accueil' and 'users' (not used any longer) and
+                        // 'actions' and 'logins' which can grow very large
+                        if (!in_array($table, array('stat_accueil', 'users', 'actions', 'logins'))) {
                             $info['query'][] = array(
                                 'table' => $table,
                                 'fields' => parse_fields($matches[2]),

@@ -543,7 +543,8 @@ function add_assignment() {
 
             $secret = work_secret($id);
             if ($id) {
-                $local_name = uid_to_name($uid);
+                $student_name = trim(uid_to_name($user_id));
+                $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
                 if (!empty($am)) {
                     $local_name .= $am;
@@ -665,7 +666,8 @@ function edit_assignment($id) {
                  $tool_content .= "<a href=\"$_SERVER[SCRIPT_NAME]?course=$course_code&amp;id=$id\">$langBack</a></p><br />";
                  return;
              }
-             $local_name = uid_to_name($uid);
+            $student_name = trim(uid_to_name($user_id));
+            $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
              $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
              if (!empty($am)) {
                  $local_name .= $am;
@@ -746,7 +748,7 @@ function submit_work($id, $on_behalf_of = null) {
 
     $submit_ok = FALSE; // Default do not allow submission
     if (isset($uid) && $uid) { // check if logged-in
-        if ($GLOBALS['status'] == 10) { // user is guest
+        if ($GLOBALS['status'] == USER_GUEST) { // user is guest
             $submit_ok = FALSE;
         } else { // user NOT guest
             if (isset($_SESSION['courses']) && isset($_SESSION['courses'][$_SESSION['dbname']])) {
@@ -782,7 +784,8 @@ function submit_work($id, $on_behalf_of = null) {
             if ($row->group_submissions) {
                 $local_name = isset($gids[$group_id]) ? greek_to_latin($gids[$group_id]) : '';
             } else {
-                $local_name = uid_to_name($user_id);
+                $student_name = trim(uid_to_name($user_id));
+                $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $user_id)->am;
                 if (!empty($am)) {
                     $local_name .= $am;
@@ -811,6 +814,8 @@ function submit_work($id, $on_behalf_of = null) {
                 $success_msgs[] = $langUploadSuccess;
             } else {
                 $error_msgs[] = $langUploadError;
+                Session::Messages($error_msgs, 'alert-danger');
+                redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
             }
         }
 
@@ -829,13 +834,13 @@ function submit_work($id, $on_behalf_of = null) {
         } else {
             if ($row->group_submissions) {
                 if (array_key_exists($group_id, $gids)) {
-                    $del_submission_msg = delete_submissions_by_uid(-1, $group_id, $row->id);
+                    $del_submission_msg = delete_submissions_by_uid(-1, $group_id, $row->id, $filename);
                     if (!empty($del_submission_msg)) {
                         $success_msgs[] = $del_submission_msg;
                     }
                 }
             } else {
-                $del_submission_msg = delete_submissions_by_uid($user_id, -1, $row->id);
+                $del_submission_msg = delete_submissions_by_uid($user_id, -1, $row->id, $filename);
                 if (!empty($del_submission_msg)) {
                     $success_msgs[] = $del_submission_msg;
                 }
@@ -871,12 +876,20 @@ function submit_work($id, $on_behalf_of = null) {
                 'filename' => $file_name,
                 'comments' => $stud_comments,
                 'group_id' => $group_id));
-
-            $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-            // update attendance book as well
-            update_attendance_book($quserid, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
-            //update gradebook if needed
-            update_gradebook_book($quserid, $id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+            if ($row->group_submissions) {
+                $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
+                $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
+                foreach ($user_ids as $user_id) {
+                    update_attendance_book($user_id, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    update_gradebook_book($user_id, $row->id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                }
+            } else {   
+                $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                // update attendance book as well
+                update_attendance_book($quserid, $row->id, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                //update gradebook if needed
+                update_gradebook_book($quserid, $id, $grade/$row->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+            }
             if ($on_behalf_of and isset($_POST['email'])) {
                 $email_grade = $_POST['grade'];
                 $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
@@ -968,8 +981,7 @@ function submit_work($id, $on_behalf_of = null) {
         }
         // End Auto-judge
 
-        Session::Messages($success_msgs, 'alert-success');
-        Session::Messages($error_msgs);
+        Session::Messages($success_msgs, 'alert-success');        
         redirect_to_home_page("modules/work/index.php?course=$course_code&id=$id");
     } else { // not submit_ok
         Session::Messages($langExerciseNotPermit);
@@ -2830,10 +2842,10 @@ function show_assignments() {
 function submit_grade_comments($args) {
     global $tool_content, $langGrades, $langWorkWrongInput, $course_id,
            $langTheField, $m, $course_code, $langFormErrors;
-
-    $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $args['assignment'])->max_grade;
+    
     $id = $args['assignment'];
     $sid = $args['submission'];
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $id);
 
     $v = new Valitron\Validator($args);
     $v->addRule('emptyOrNumeric', function($field, $value, array $params) {
@@ -2842,7 +2854,7 @@ function submit_grade_comments($args) {
     $v->rule('numeric', array('assignment', 'submission'));
     $v->rule('emptyOrNumeric', array('grade'));
     $v->rule('min', array('grade'), 0);
-    $v->rule('max', array('grade'), $max_grade);
+    $v->rule('max', array('grade'), $assignment->max_grade);
     $v->labels(array(
         'grade' => "$langTheField $m[grade]"
     ));
@@ -2858,14 +2870,21 @@ function submit_grade_comments($args) {
                                     SET grade = ?f, grade_comments = ?s,
                                     grade_submission_date = NOW(), grade_submission_ip = ?s
                                     WHERE id = ?d", $grade, $comment, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows>0) {
-            $title = Database::get()->querySingle("SELECT title FROM assignment WHERE id = ?d", $id)->title;
             Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-                    'title' => $title,
+                    'title' => $assignment->title,
                     'grade' => $grade,
                     'comments' => $comment));
-            //update gradebook if needed
-            $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-            update_gradebook_book($quserid, $id, $grade/$max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+            if ($assignment->group_submissions) {
+                $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
+                $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
+                foreach ($user_ids as $user_id) {
+                    update_gradebook_book($user_id, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                }
+            } else {
+                //update gradebook if needed
+                $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                update_gradebook_book($quserid, $id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);                
+            }
         }
         if (isset($args['email'])) {
             grade_email_notify($id, $sid, $grade, $comment);
@@ -2883,7 +2902,7 @@ function submit_grade_comments($args) {
 function submit_grades($grades_id, $grades, $email = false) {
     global $tool_content, $langGrades, $langWorkWrongInput, $course_id,
            $course_code, $langFormErrors, $langTheField, $m;
-    $max_grade = Database::get()->querySingle("SELECT max_grade FROM assignment WHERE id = ?d", $grades_id)->max_grade;
+    $assignment = Database::get()->querySingle("SELECT * FROM assignment WHERE id = ?d", $grades_id);
     $errors = [];
 
     foreach ($grades as $key => $grade) {
@@ -2893,7 +2912,7 @@ function submit_grades($grades_id, $grades, $email = false) {
         });
         $v->rule('emptyOrNumeric', array('grade'));
         $v->rule('min', array('grade'), 0);
-        $v->rule('max', array('grade'), $max_grade);
+        $v->rule('max', array('grade'), $assignment->max_grade);
         $v->labels(array(
             'grade' => "$langTheField $m[grade]"
         ));
@@ -2913,15 +2932,21 @@ function submit_grades($grades_id, $grades, $email = false) {
                 if (Database::get()->query("UPDATE assignment_submit
                                             SET grade = ?f, grade_submission_date = NOW(), grade_submission_ip = ?s
                                             WHERE id = ?d", $grade, $_SERVER['REMOTE_ADDR'], $sid)->affectedRows > 0) {
-                    $assign_id = Database::get()->querySingle("SELECT assignment_id FROM assignment_submit WHERE id = ?d", $sid)->assignment_id;
-                    $title = Database::get()->querySingle("SELECT title FROM assignment WHERE assignment.id = ?d", $assign_id)->title;
                     Log::record($course_id, MODULE_ID_ASSIGN, LOG_MODIFY, array('id' => $sid,
-                            'title' => $title,
+                            'title' => $assignment->title,
                             'grade' => $grade));
 
                     //update gradebook if needed
-                    $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
-                    update_gradebook_book($quserid, $assign_id, $grade/$max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    if ($assignment->group_submissions) {
+                        $group_id = Database::get()->querySingle("SELECT group_id FROM assignment_submit WHERE id = ?d", $sid)->group_id;
+                        $user_ids = Database::get()->queryArray("SELECT user_id FROM group_members WHERE group_id = ?d", $group_id);
+                        foreach ($user_ids as $user_id) {
+                            update_gradebook_book($user_id, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                        }
+                    } else {                    
+                        $quserid = Database::get()->querySingle("SELECT uid FROM assignment_submit WHERE id = ?d", $sid)->uid;
+                        update_gradebook_book($quserid, $assignment->id, $grade/$assignment->max_grade, GRADEBOOK_ACTIVITY_ASSIGNMENT);
+                    }
 
                     if ($email) {
                         grade_email_notify($grades_id, $sid, $grade, '');

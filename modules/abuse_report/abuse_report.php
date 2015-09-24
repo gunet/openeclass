@@ -59,7 +59,7 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
                  <div class="modal-dialog">
                      <div class="modal-content">
                          <div class="modal-header">
-                             <button type="button" class="close" data-dismiss="modal" aria-label="'.$langClose.'"><span aria-hidden="true">&times;</span></button>
+                             <button type="button" class="close" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');" aria-label="'.$langClose.'"><span aria-hidden="true">&times;</span></button>
                              <h4 class="modal-title" id="abuse_modal_label_'.$rtype.'_'.$rid.'">'.$langAbuseReport.'</h4>
                          </div>
                          <div class="modal-body" id="abuse_modal_body_'.$rtype.'_'.$rid.'">
@@ -84,7 +84,7 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
 		                     </form>
                          </div>
                          <div class="modal-footer">
-                             <button type="button" class="btn btn-default" data-dismiss="modal">'.$langClose.'</button>
+                             <button type="button" class="btn btn-default" onClick="$(\'#abuse_modal_'.$rtype.'_'.$rid.'\').modal(\'hide\');">'.$langClose.'</button>
                              <button type="button" class="btn btn-primary" id="abuse_submit_'.$rtype.'_'.$rid.'">'.$langSend.'</button>
                          </div>
                      </div>

@@ -201,7 +201,7 @@ function notify_users($forum_id, $forum_name, $topic_id, $subject, $message, $to
     <div id='mail-body'>
         <br>
         <div><b>$langSubject:</b> <span class='left-space'><a href='{$urlServer}modules/forum/viewforum.php?course=$course_code&amp;forum=$forum_id&amp;topic=$topic_id'>" . q($subject) . "</a></span></div><br>
-        <div><b>$langMailBody</b></div>
+        <div><b>$langMailBody:</b></div>
         <div id='mail-body-inner'>
             $message
         </div>

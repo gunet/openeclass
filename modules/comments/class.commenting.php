@@ -83,18 +83,23 @@ Class Commenting {
         $commentsNum = $this->getCommentsNum();
 
         if (!$always_open) {
-            $comments_title = "<a id='comments_title' href='javascript:void(0)' onclick='showComments(\"$this->rid\")'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</a><br>";
-            $comments_display = "style='display:none'";
+            $comments_title = "<button type='button' class='btn btn-primary' data-toggle='modal' data-target='#commentArea-$this->rid'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</button>";
+            $out = "$comments_title
+                    <div class='modal fade' id='commentArea-$this->rid' role='dialog'>
+                      <div class='modal-dialog modal-lg'>
+                        <div class='modal-content' style='padding:1%'>
+                          <div class='modal-header'>
+                            <button type='button' class='close' data-dismiss='modal'>&times;</button>
+                              <h4 class='modal-title'>$langComments</h4>
+                          </div>
+                          <div class='modal-body' id='comments-$this->rid'>";
         } else {
             $comments_title = "<h3 id='comments_title'>$langComments (<span id='commentsNum-$this->rid'>$commentsNum</span>)</h3><br>";
-            $comments_display = "";            
+            $out = "<div class='commenting'>
+                        $comments_title
+                    <div class='commentArea' id='commentArea-$this->rid'>
+                    <div id='comments-$this->rid'>";
         }
-        //the array is declared in commenting.js
-        $out = "<script type='text/javascript'>showCommentArea[$this->rid] = false;</script>
-                <div class='commenting'>
-                    $comments_title
-                <div class='commentArea' id='commentArea-$this->rid' $comments_display>
-                <div id='comments-$this->rid'>";
         
         if ($commentsNum != 0) {
             //retrieve comments
@@ -165,6 +170,13 @@ Class Commenting {
                 $out .= '<input class="btn btn-primary" name="send_button" type="submit" value="'.$langSubmit.'" />';
                 $out .= '</form>';
             }
+        }
+        
+        if (!$always_open) {
+            $out .= '<div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                     </div>';
+            $out .= '</div>';
         }
         
         $out .= '</div>';

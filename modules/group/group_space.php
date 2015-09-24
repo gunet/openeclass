@@ -65,7 +65,66 @@ if (!$is_member and !$is_editor) {
     draw($tool_content, 2);
     exit;
 }
+if (isset($_GET['group_as'])) {
 
+	$group_id = $_GET['group_id'];
+
+    $result = Database::get()->queryArray("SELECT * FROM assignment as a LEFT JOIN assignment_to_specific as b ON a.id=b.assignment_id 
+										   WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) ORDER BY a.id", $course_id, 1, $group_id);
+					
+	if (count($result)>0) {
+		$tool_content .= "
+            <div class='row'><div class='col-sm-12'>
+			        <div class='panel-heading'>       
+						<h3 class='panel-title'>
+							$langGroupAssignments
+						</h3>
+					</div>
+                    <div class='table-responsive'>
+                    <table class='table-default'>
+                    <tr class='list-header'>
+                      <th style='width:45%;'>$m[title]</th>
+                      <th class='text-center'>$m[subm]</th>
+                      <th class='text-center'>$m[nogr]</th>
+                      <th class='text-center'>$m[deadline]</th>
+                    </tr>";
+
+        $index = 0;
+        foreach ($result as $row) {
+            // Check if assignment contains submissions
+            $num_submitted = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d", $row->id)->count;
+            $num_ungraded = Database::get()->querySingle("SELECT COUNT(*) AS count FROM assignment_submit WHERE assignment_id = ?d AND grade IS NULL", $row->id)->count;
+            if (!$num_ungraded) {
+                if ($num_submitted > 0) {
+                    $num_ungraded = '0';
+                } else {
+                    $num_ungraded = '-';
+                }
+            }
+
+            $tool_content .= "<tr class='".(!$row->active ? "not_visible":"")."'>";
+            $deadline = (int)$row->deadline ? nice_format($row->deadline, true) : $m['no_deadline'];
+            $tool_content .= "<td>
+                                <a href='../work/index.php?course=$course_code&amp;id={$row->id}'>" . q($row->title) . "</a>
+                                <br><small class='text-muted'>".($row->group_submissions? $m['group_work'] : $m['user_work'])."</small>
+                            </td>
+                            <td class='text-center'>$num_submitted</td>
+                            <td class='text-center'>$num_ungraded</td>
+                            <td class='text-center'>$deadline";
+            if ($row->time > 0) {
+                $tool_content .= " <br><span class='label label-warning'><small>$langDaysLeft" . format_time_duration($row->time) . "</small></span>";
+            } else if((int)$row->deadline){
+                $tool_content .= " <br><span class='label label-danger'><small>$m[expired]</small></span>";
+            }
+           $tool_content .= "</td>
+							</tr>";
+			$index++;
+            
+        }
+		   $tool_content .= '</table></div></div></div>';	
+	}
+	     
+}
 $tool_content .= action_bar(array(
             array('title' => $langRegIntoGroup,
                 'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;registration=1&amp;group_id=$group_id",
@@ -84,6 +143,11 @@ $tool_content .= action_bar(array(
                 'show' => $documents),
             array('title' => $langWiki,
                 'url' => "../wiki/?course=$course_code&amp;gid=$group_id",
+                'icon' => 'fa-globe',
+                'level' => 'primary',
+                'show' => $wiki),
+            array('title' => $langGroupAssignments,
+                'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
                 'icon' => 'fa-globe',
                 'level' => 'primary',
                 'show' => $wiki),
@@ -165,7 +229,7 @@ $tool_content .= "
     </div>";
 
 // members
-if (count($members) > 0) { 
+if (count($members) > 0) {
 $tool_content .= "   
                     <div class='row'>
                         <div class='col-xs-12'>
@@ -209,6 +273,7 @@ $tool_content .= "
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
 }
+
 
 draw($tool_content, 2);
 

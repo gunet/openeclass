@@ -25,19 +25,6 @@
 
 require_once 'include/log.php';
 
-// Available settings
-define('SETTING_BLOG_COMMENT_ENABLE', 1);
-define('SETTING_BLOG_STUDENT_POST', 2);
-define('SETTING_BLOG_RATING_ENABLE', 3);
-define('SETTING_BLOG_SHARING_ENABLE', 4);
-define('SETTING_COURSE_SHARING_ENABLE', 5);
-define('SETTING_COURSE_RATING_ENABLE', 6);
-define('SETTING_COURSE_COMMENT_ENABLE', 7);
-define('SETTING_COURSE_ANONYMOUS_RATING_ENABLE', 8);
-define('SETTING_FORUM_RATING_ENABLE', 9);
-define('SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE', 10);
-define('SETTING_COURSE_ABUSE_REPORT_ENABLE', 11);
-
 /** Get the default value of a course setting.
  * 
  * @param int $setting_id   One of the SETTING_... constants
@@ -90,6 +77,8 @@ function setting_get($setting_id, $course_id=null) {
  * @param int $course_id    The course id (default: the current course id)
  */
 function setting_set($setting_id, $value, $course_id=null) {
+    global $course_code;
+    
     if (!$course_id) {
         $course_id = $GLOBALS['course_id'];
     }
@@ -98,7 +87,7 @@ function setting_set($setting_id, $value, $course_id=null) {
                                           VALUES (?d, ?d, ?d)",
                                      $setting_id, $course_id, $value);
     if ($result) {
-        Log::record($course_id, MODULE_ID_SETTINGS, LOG_MODIFY_COURSE,
+        Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY,
             array('id' => $setting_id, 'value' => $value));
     }
 }

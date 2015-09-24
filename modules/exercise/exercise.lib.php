@@ -80,7 +80,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
     }
 
     if ($answerType == FILL_IN_BLANKS || $answerType == FILL_IN_BLANKS_TOLERANT) {
-        $tool_content .= "<div class='form-inline'>";
+        $tool_content .= "<div class='form-inline' style='line-height:2.2;'>";
     }
 
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -95,7 +95,7 @@ function showQuestion(&$objQuestionTmp, $exerciseResult = array()) {
                     static $id = 0;
                     $id++;
                     $value = (isset($exerciseResult[$questionId][$id])) ? 'value = '.$exerciseResult[$questionId][$id] : '';
-                    return "<input type='text' name='choice[$questionId][$id]' $value>";
+                    return "<input type='text' style='line-height:normal;' name='choice[$questionId][$id]' $value>";
             };
             $answer = preg_replace_callback('/\[[^]]+\]/', $replace_callback, standard_text_escape(($answer)));
         }

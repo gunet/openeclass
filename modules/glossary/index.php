@@ -138,20 +138,6 @@ if ($is_editor) {
             ));
     }
     
-    if (isset($_POST['url'])) {
-        $url = trim($_POST['url']);
-        if (!is_url_accepted($url,"(https?|ftp)")){
-            $tool_content .= "<div class='error'>$langLinkNotPermitted</div>";
-            draw($tool_content, 2, null, $head_content);
-            exit;
-        }
-        if (!empty($url)) {
-            $url = canonicalize_url($url);
-        }
-    } else {
-        $url = '';
-    }
-
     if (isset($_POST['submit_config'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
         $expand_glossary = isset($_POST['expand']) ? 1 : 0;
@@ -178,6 +164,15 @@ if ($is_editor) {
                 $category_id = NULL;
             } else {
                 $category_id = intval(getDirectReference($_POST['category_id']));
+            }
+
+            if (isset($_POST['url'])) {
+                $url = trim($_POST['url']);
+                if (!empty($url)) {
+                    $url = canonicalize_url($url);
+                }
+            } else {
+                $url = '';
             }
 
             if (isset($_POST['id'])) {

@@ -82,10 +82,41 @@ if (isset($_POST['submit']) && ($_POST['body_mail'] != '') && ($_POST['submit'] 
         if (get_user_email_notification($user_id)) {
             array_push($recipients, $emailTo);
         }
-        $linkhere = "&nbsp;<a href='${urlServer}main/profile/profile.php'>$langHere</a>.";
-        $unsubscribe = "<br /><br />" . sprintf($langLinkUnsubscribeFromPlatform, $siteName);        
-        $emailcontent = $emailbody . $unsubscribe . $linkhere;
-        $emailbody = html2text($emailbody);        
+
+        $emailheader = "
+        <!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langAdminMessage.</div>
+            </div>
+        </div>";
+
+        $emailmain = "
+        <!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div><b>$langSubject:</b> <span class='left-space'>$_POST[email_title]</span></div><br>
+            <div><b>$langMailBody:</b></div>
+            <div id='mail-body-inner'>
+                $_POST[body_mail]
+            </div>
+        </div>
+        ";
+
+        $emailfooter = "
+        <!-- Footer Section -->
+        <div id='mail-footer'>
+            <br>
+            <div>
+                <small>" . sprintf($langLinkUnsubscribeFromPlatform, $siteName) ." <a href='${urlServer}main/profile/emailunsubscribe.php?cid=$course_id'>$langHere</a></small>
+            </div>
+        </div>
+        ";
+
+        $emailcontent = $emailheader.$emailmain.$emailfooter;
+
+        $emailbody = html2text($emailcontent);
         if (count($recipients) >= 50) {
             send_mail_multipart('', '', '', $recipients, $emailsubject, $emailbody, $emailcontent, $charset);
             $recipients = array();

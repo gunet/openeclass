@@ -29,13 +29,22 @@ require_once 'hierarchy_validations.php';
 $tree = new Hierarchy();
 $user = new User();
 
-$toolName = isset($_POST['activate_submit']) ? $langAddSixMonths : $langMultiDelUser;
+if (isset($_POST['activate_submit'])) {
+    $toolName = $langAddSixMonths;
+} elseif (isset($_POST['move_submit'])) {
+    $toolName = $langChangeDepartment;
+} else {
+    $toolName = $langMultiDelUser;
+}
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);
 load_js('tools.js');
 
 if (isset($_POST['submit'])) {
     if (isset($_POST['months'])) {
         $months = intval($_POST['months']);
+    } elseif (isset($_POST['department'])) {
+        $dest_dep = $_POST['department'][0];
+        $old_dep = $_POST['old_dep'];
     }
 
     $count = 0;
@@ -73,6 +82,16 @@ if (isset($_POST['submit'])) {
                     } else {
                         $error_mgs[] = sprintf($langUserDurationError, $line);
                     }
+                } elseif (isset($dest_dep)) {
+                    $q = Database::get()->query('UPDATE user_department
+                        SET department = ?d WHERE user = ?d AND department = ?d',
+                        $dest_dep, $u, $old_dep);
+                    if ($q and $q->affectedRows) {
+                        $success_mgs[] = sprintf($langUserMoved, $line);
+                        $count++;
+                    } else {
+                        $error_mgs[] = sprintf($langUserMoveError, $line);
+                    }
                 }
             }
             $line = strtok("\n");
@@ -85,7 +104,7 @@ if (isset($_POST['submit'])) {
 
     $usernames = '';
 
-    if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit'])) {
+    if (isset($_POST['dellall_submit']) or isset($_POST['activate_submit']) or isset($_POST['move_submit'])) {
         // get the incoming values
         $search = isset($_POST['search']) ? $_POST['search'] : '';
         $c = isset($_POST['c']) ? intval($_POST['c']) : '';
@@ -190,6 +209,11 @@ if (isset($_POST['submit'])) {
             $criteria[] = 'department IN (' . implode(', ', array_fill(0, $count, '?s')) . ')';
         }
 
+        if (isset($_POST['move_submit'])) {
+            $criteria[] = 'department = ?d';
+            $terms[] = $dep;
+        }
+
         $qry_criteria = (count($criteria)) ? implode(' AND ', $criteria) : '';
         // end filter/criteria
 
@@ -234,6 +258,24 @@ if (isset($_POST['submit'])) {
                     <div class='col-sm-9'>
                         <input name='months' id='months-id' class='form-control' type='number' min='1' step='1' value='6'>
                     </div>
+                </div>";
+        $confirm = '';
+    } elseif (isset($_POST['move_submit'])) {
+        $nodePickerParams = array(
+            'defaults' => $dep,
+            'multiple' => false);
+        if (isDepartmentAdmin()) {
+            $nodePickerParams['allowables'] = $user->getDepartmentIds($uid);
+        }
+        load_js('jstree3');
+        list($js, $html) = $tree->buildUserNodePicker($nodePickerParams);
+        $head_content .= $js;
+        $infoText = sprintf($langMoveUserInfo, '<b>' . q($tree->getNodeName($dep)) . '</b>');
+        $monthsField = "
+                <input type='hidden' name='old_dep' value='$dep'>
+                <div class='form-group'>
+                    <label class='col-sm-2 control-label' for='dialog-set-value'>$langFaculty:</label>
+                    <div class='col-sm-9 '>$html</div>
                 </div>";
         $confirm = '';
     } else {

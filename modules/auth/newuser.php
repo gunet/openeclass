@@ -31,6 +31,7 @@ require_once 'modules/auth/auth.inc.php';
 
 require_once 'include/lib/user.class.php';
 require_once 'include/lib/hierarchy.class.php';
+require_once 'modules/admin/custom_profile_fields_functions.php';
 
 $display_captcha = get_config("display_captcha") && function_exists('imagettfbbox');
 
@@ -90,7 +91,7 @@ if (isset($_GET['auth']) and is_numeric($_GET['auth']) and $_GET['auth'] > 7 and
 }
 
 // authenticate user via hybridauth if requested by URL
-$user_data = '';
+$user_data = null;
 if (!empty($provider_name)) {
     require_once 'modules/auth/methods/hybridauth/config.php';
     require_once 'modules/auth/methods/hybridauth/Hybrid/Auth.php';
@@ -175,25 +176,29 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='Name' class='col-sm-2 control-label'>$langName:</label>
                 <div class='col-sm-10'>
-                  <input class='form-control' type='text' name='givenname_form' size='30' maxlength='50' value='" . $user_data->firstName . "' placeholder='$langName'>
+                    <input class='form-control' type='text' name='givenname_form' size='30' maxlength='100'" .
+                      ($user_data? (" value='" . q($user_data->firstName) . "'"): '') . " placeholder='$langName'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='SurName' class='col-sm-2 control-label'>$langSurname:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100' value='" . $user_data->lastName . "' placeholder='$langSurname'>
+                    <input class='form-control' type='text' name='surname_form' size='30' maxlength='100'" .
+                      ($user_data? (" value='" . q($user_data->lastName) . "'"): '') . " placeholder='$langSurname'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserName' class='col-sm-2 control-label'>$langUsername:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='uname' value='" . q(str_replace(' ', '', $user_data->displayName)) . "' size='30' maxlength='30'  autocomplete='off' placeholder='$langUserNotice'>
+                    <input class='form-control' type='text' name='uname'" .
+                      ($user_data? (" value='" . q(str_replace(' ', '', $user_data->displayName)) . "'"): '') .
+                      " size='30' maxlength='100' autocomplete='off' placeholder='$langUserNotice'>
                 </div>
             </div>
             <div class='form-group'>
                 <label for='UserPass' class='col-sm-2 control-label'>$langPass:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off'  id='password' placeholder='$langUserNotice'><span id='result'></span>
+                    <input class='form-control' type='password' name='password1' size='30' maxlength='30' autocomplete='off' id='password' placeholder='$langUserNotice'><span id='result'></span>
                 </div>
             </div>
             <div class='form-group'>
@@ -205,7 +210,8 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='UserEmail' class='col-sm-2 control-label'>$langEmail:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='email' size='30' maxlength='100' value='" . $user_data->email . "' placeholder='$email_message'>
+                    <input class='form-control' type='text' name='email' size='30' maxlength='100'" .
+                      ($user_data? (" value='" . q($user_data->email) . "'"): '') . " placeholder='$email_message'>
                 </div>
             </div>
             <div class='form-group'>
@@ -217,7 +223,8 @@ if (!isset($_POST['submit'])) {
             <div class='form-group'>
                 <label for='UserPhone' class='col-sm-2 control-label'>$langPhone:</label>
                 <div class='col-sm-10'>
-                    <input class='form-control' type='text' name='phone' size='20' maxlength='20' value='" . $user_data->phone . "' placeholder = '$langOptional'>
+                    <input class='form-control' type='text' name='phone' size='20' maxlength='20'" .
+                      ($user_data? (" value='" . q($user_data->phone) . "'"): '') . " placeholder='$langOptional'>
                 </div>
             </div>
             <div class='form-group'>
@@ -241,6 +248,8 @@ if (!isset($_POST['submit'])) {
                       <div class='col-sm-10'><input type='text' name='captcha_code' maxlength='6'/></div>
                     </div>";
             }
+        //add custom profile fields 
+        $tool_content .= render_profile_fields_form(array('origin' => 'student_register'));
 
         //check if provider_id from an authenticated user and a valid provider name are set so as to show the relevant form
         if(!empty($provider_name) && !empty($provider_id)) {
@@ -275,14 +284,20 @@ if (!isset($_POST['submit'])) {
     } else {
         $am_arr_value = false;
     }
-    $missing = register_posted_variables(array('uname' => true,
-        'surname_form' => true,
-        'givenname_form' => true,
-        'password' => true,
-        'password1' => true,
-        'email' => $email_arr_value,
-        'phone' => false,
-        'am' => $am_arr_value));
+    
+    $var_arr = array('uname' => true,
+                    'surname_form' => true,
+                    'givenname_form' => true,
+                    'password' => true,
+                    'password1' => true,
+                    'email' => $email_arr_value,
+                    'phone' => false,
+                    'am' => $am_arr_value);
+    
+    //add custom profile fields required variables
+    augment_registered_posted_variables_arr($var_arr);
+    
+    $missing = register_posted_variables($var_arr);
 
     if (!isset($_POST['department'])) {
         $departments = array();
@@ -318,6 +333,14 @@ if (!isset($_POST['submit'])) {
     }
     if ($password != $_POST['password1']) { // check if the two passwords match
         $registration_errors[] = $langPassTwice;
+    }
+    //check for validation errors in custom profile fields
+    $cpf_check = cpf_validate_format();
+    if ($cpf_check[0] === false) {
+        unset($cpf_check[0]);
+        foreach ($cpf_check as $cpf_error) {
+            $registration_errors[] = $cpf_error;
+        }
     }
 
     // validate HybridAuth provider and user id and check if it's already in the db (shouldn't be
@@ -415,7 +438,10 @@ if (!isset($_POST['submit'])) {
         $last_id = $q1->lastInsertID;
         $userObj->refresh($last_id, $departments);
         user_hook($last_id);
-
+        
+        //fill custom profile fields
+        process_profile_fields_data(array('uid' => $last_id, 'origin' => 'student_register'));
+        
         if ($vmail) {
             $hmac = token_generate($uname . $email . $last_id);
         }
@@ -488,6 +514,7 @@ if (!isset($_POST['submit'])) {
                 '&amp;email=' . urlencode($email) .
                 '&amp;am=' . urlencode($am) .
                 '&amp;phone=' . urlencode($phone) .
+                augment_url_refill_custom_profile_fields_registr() . 
                 "'>$langAgain</a></p>";
     }
 } // end of registration
