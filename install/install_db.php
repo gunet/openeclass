@@ -388,7 +388,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `document` (
     `lock_user_id` INT(11) NOT NULL DEFAULT 0) $charset_spec");
 
 $db->query("CREATE TABLE IF NOT EXISTS `group_properties` (
-    `course_id` INT(11) NOT NULL PRIMARY KEY ,
+    `course_id` INT(11) NOT NULL,
+    `group_id` INT(11) NOT NULL PRIMARY KEY,	
     `self_registration` TINYINT(4) NOT NULL DEFAULT 1,
     `multiple_registration` TINYINT(4) NOT NULL DEFAULT 0,
     `allow_unregister` TINYINT(4) NOT NULL DEFAULT 0,
