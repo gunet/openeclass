@@ -93,10 +93,25 @@ define('MODULE_ID_WEEKS', 41);
 define('MODULE_ID_ABUSE_REPORT', 42);
 
 // user modules
-define('MODULE_ID_SETTINGS', 31);
+
+// not used only for backward compatibility in logs
+define('MODULE_ID_SETTINGS', 31); // use MODULE_ID_COURSEINFO instead !
 define('MODULE_ID_NOTES', 35);
 define('MODULE_ID_PERSONALCALENDAR',36);
 define('MODULE_ID_ADMINCALENDAR', 43);
+
+// Available course settings
+define('SETTING_BLOG_COMMENT_ENABLE', 1);
+define('SETTING_BLOG_STUDENT_POST', 2);
+define('SETTING_BLOG_RATING_ENABLE', 3);
+define('SETTING_BLOG_SHARING_ENABLE', 4);
+define('SETTING_COURSE_SHARING_ENABLE', 5);
+define('SETTING_COURSE_RATING_ENABLE', 6);
+define('SETTING_COURSE_COMMENT_ENABLE', 7);
+define('SETTING_COURSE_ANONYMOUS_RATING_ENABLE', 8);
+define('SETTING_FORUM_RATING_ENABLE', 9);
+define('SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE', 10);
+define('SETTING_COURSE_ABUSE_REPORT_ENABLE', 11);
 
 // exercise answer types
 define('UNIQUE_ANSWER', 1);

@@ -276,6 +276,8 @@ class Log {
             case MODULE_ID_ABUSE_REPORT: $content = $this->abuse_report_action_details($details);
                 break;
             case MODULE_ID_COURSEINFO: $content = $this->modify_course_action_details($details);            
+                break;            
+            case MODULE_ID_SETTINGS: $content = $this->modify_course_action_details($details); // <-- for backward compatibility only !!!
                 break;
             default: $content = $langUnknownModule;
                 break;
@@ -356,31 +358,86 @@ class Log {
      * @global type $langRegCourse
      * @global type $langOpenCourse
      * @global type $langInactiveCourse
+     * @global type $langActivate
+     * @global type $langDeactivate
+     * @global type $langBlogComment
+     * @global type $langBlogRating
+     * @global type $langsCourseSharing
+     * @global type $langBlogSharing
+     * @global type $langsCourseSharing
+     * @global type $langCourseComment
+     * @global type $langCourseAnonymousRating
+     * @global type $langsCoursesRating
+     * @global type $langForumRating
+     * @global type $langCourseSocialBookmarks
+     * @global type $langCourseAbuseReport
      * @param type $details
      * @return string
      */
     private function modify_course_action_details($details) {
 
         global $langCourseStatusChange, $langIn, $langClosedCourse, 
-               $langRegCourse, $langOpenCourse, $langInactiveCourse;
-
+               $langRegCourse, $langOpenCourse, $langInactiveCourse,
+               $langActivate, $langDeactivate, $langBlogComment, $langBlogRating,
+               $langsCourseSharing, $langBlogSharing, $langCourseSharing,
+               $langCourseComment, $langsCourseAnonymousRating, $langsCourseRating, 
+               $langForumRating, $langCourseSocialBookmarks, $langCourseAbuseReport;
+               
         $details = unserialize($details);
-
-        switch ($details['visible']) {
-            case COURSE_CLOSED: $mes = "".q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&nbsp;&raquo;";
-                break;
-            case COURSE_REGISTRATION: $mes = "".q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&nbsp;&raquo;";
-                break;
-            case COURSE_OPEN: $mes = "".q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&nbsp;&raquo;";
-                break;
-            case COURSE_INACTIVE: $mes = "".q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&nbsp;&raquo;";
-                break;
-            default: $mes = '';
-                break;
+        
+        if (isset($details['visible'])) {
+            switch ($details['visible']) {
+                case COURSE_CLOSED: $mes = "".q($langIn). "&nbsp;&laquo;". q($langClosedCourse) . "&raquo;";
+                    break;
+                case COURSE_REGISTRATION: $mes = "".q($langIn). "&nbsp;&laquo;". q($langRegCourse) . "&raquo;";
+                    break;
+                case COURSE_OPEN: $mes = "".q($langIn). "&nbsp;&laquo;". q($langOpenCourse) . "&raquo;";
+                    break;
+                case COURSE_INACTIVE: $mes = "".q($langIn). "&nbsp;&laquo;". q($langInactiveCourse) . "&raquo;";
+                    break;
+                default: $mes = '';
+                    break;
+            }
+            $content = "$langCourseStatusChange $mes";
+            $content .= "&nbsp;(" . q($details['public_code']) . ")";
+        } else {
+            $lm = '';
+            switch ($details['id']) {
+                case SETTING_BLOG_COMMENT_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langBlogComment";
+                    break;
+                case SETTING_BLOG_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langBlogRating";
+                    break;
+                case SETTING_BLOG_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langBlogSharing";
+                    break;
+                case SETTING_COURSE_SHARING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langsCourseSharing";
+                    break;
+                case SETTING_COURSE_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langsCourseRating";
+                    break;
+                case SETTING_COURSE_COMMENT_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langCourseComment";
+                    break;
+                case SETTING_COURSE_ANONYMOUS_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langsCourseAnonymousRating";
+                    break;
+                case SETTING_FORUM_RATING_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langForumRating";
+                    break;
+                case SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langCourseSocialBookmarks";
+                    break;
+                case SETTING_COURSE_ABUSE_REPORT_ENABLE: $lm = ($details['value']) ?  "$langActivate" : "$langDeactivate";
+                    $mes = "$lm $langCourseAbuseReport";
+                    break;
+                default: $mes = '';
+                    break;
+            }            
+            $content = "$mes";
         }
-        $content = "$langCourseStatusChange $mes";
-        $content .= "&nbsp;(" . q($details['public_code']) . ")";
-
         return $content;
     }
 

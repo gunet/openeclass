@@ -310,7 +310,7 @@ $langListUsers = "Λίστα Χρηστών";
 $langTakeBackup = "Λήψη Αντιγράφου Ασφαλείας";
 $langStatsCourse = "Στατιστικά Μαθήματος";
 
-// infocours.php
+// course_info.php
 $langCourseEditSuccess = "Τα στοιχεία του μαθήματος άλλαξαν με επιτυχία!";
 $langCourseInfoEdit = "Αλλαγή στοιχείων μαθήματος";
 $langBackCourse = "Επιστροφή στην αρχική σελίδα του μαθήματος";
@@ -321,6 +321,16 @@ $langCourseSimpleFormat = 'Απλή μορφή';
 $langAddWeek = 'Προσθήκη εβδομάδας';
 $langEditWeek = 'Επεξεργασία εβδομάδας';
 $langWeekTitle = "Τίτλος εβδομάδας";
+$langBlogComment = "σχολιασμού ιστολογίου";
+$langBlogRating = "αξιολόγησης ιστολογίου";
+$langBlogSharing = "διαμοιρασμού ιστολογίου";
+$langsCourseSharing = "διαμοιρασμού μαθήματος σε κοινωνικά δίκτυα";
+$langsCourseRating = "αξιολόγησης μαθήματος";
+$langCourseComment = "σχολιασμού μαθήματος";
+$langsCourseAnonymousRating = "σχολιασμού μαθήματος από ανώνυμους χρήστες";
+$langForumRating = "αξιολόγησης συζητήσεων";
+$langCourseSocialBookmarks = "συλλογικών συνδέσμων";
+$langCourseAbuseReport = "αναφορά κατάχρησης";
 
 // listreq.php
 $langOpenProfessorRequests = "Ανοικτές Αιτήσεις " . $langOfTeachers;

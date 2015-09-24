@@ -359,7 +359,7 @@ if (isset($_POST['submit'])) {
                             WHERE id = ?d", $_POST['title'], $_POST['fcode'], $_POST['course_keywords'], $_POST['formvisible'], $course_license, $_POST['titulary'], $session->language, $password, $view_type, $_POST['start_date'], $_POST['finish_date'], $course_id);
             $course->refresh($course_id, $departments);
 
-            Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY_COURSE, 
+            Log::record($course_id, MODULE_ID_COURSEINFO, LOG_MODIFY, 
                 array('title' => $_POST['title'],
                       'public_code' => $_POST['fcode'],
                       'visible' => $_POST['formvisible'],
