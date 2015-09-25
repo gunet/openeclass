@@ -119,6 +119,7 @@ $(document).ready(function(){
     
     $('#submitbtn').on('click', 
             function(e){
+                e.preventDefault();
                 checkrequired($('#agendaform'));
     });
 
@@ -333,7 +334,8 @@ if ($is_editor) {
                                 array(
                                     'text'  => $langSave,
                                     'name'  => 'submitbtn',
-                                    'value' => $langAddModify
+                                    'value' => $langAddModify,
+                                    'id' => 'submitbtn'
                                 ),
                                 array(
                                     'href' => "index.php?course=$course_code",
