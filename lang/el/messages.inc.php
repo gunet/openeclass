@@ -905,7 +905,6 @@ $langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρε�
 /* * *******************************************
  * course_info.php
  * ******************************************* */
-
 $langCourseIden = "Ταυτότητα Μαθήματος";
 $langBackupCourse = "Αντίγραφο ασφαλείας";
 $langCloneCourse = "Κλώνος μαθήματος";
@@ -1241,6 +1240,7 @@ $langGroupCategoryDeleted = "Η κατηγορία διαγράφηκε μαζί
 $langGroupDeleted = "Η ομάδα χρηστών διαγράφηκε";
 $langGroupTutor = "Υπεύθυνος ομάδας";
 $langGroupTeam = "Γενικές Ομάδες Χρηστών";
+$langInvalidNumericValue = "άκυρη τιμή πεδίου";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";

@@ -116,20 +116,16 @@ if (isset($_GET['all'])) {
         </form>
     </div>";
 } else {
-	if ($is_editor) {
+	if ($is_editor) {            
             $tool_content_tutor = "<select name='tutor[]' multiple id='select-tutor' class='form-control'>";
-            $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname,
-                                   user.id IN (SELECT user_id FROM group_members
-                                                              WHERE group_id = ?d AND
-                                                                    is_tutor = 1) AS is_tutor
-                          FROM course_user, user 
-                          WHERE course_user.user_id = user.id AND
-                                course_user.tutor = 1 AND
-                                course_user.course_id = ?d
-                              ORDER BY surname, givenname, user_id", $group_id, $course_id);
-            foreach ($q as $row) {
-                $selected = $row->is_tutor ? ' selected="selected"' : '';
-                $tool_content_tutor .= "<option value='$row->user_id'$selected>" . q($row->surname) .
+            $q = Database::get()->queryArray("SELECT user.id AS user_id, surname, givenname                         
+                                                FROM course_user, user 
+                                                WHERE course_user.user_id = user.id AND
+                                                      course_user.tutor = 1 AND
+                                                      course_user.course_id = ?d
+                                                ORDER BY surname, givenname, user_id", $course_id);
+            foreach ($q as $row) {                
+                $tool_content_tutor .= "<option value='$row->user_id'>" . q($row->surname) .
 					' ' . q($row->givenname) . "</option>\n";
             }
             $tool_content_tutor .= '</select>';

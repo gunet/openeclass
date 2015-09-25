@@ -222,15 +222,16 @@ function showgroupsofcategory($catid) {
  * @global type $course_code
  */
 function submit_group_category() {
-    global $course_id, $langCategoryAdded, $langCategoryModded,
-    $categoryname, $description, $langFormErrors, $course_code;
+    global $course_id, $langTheFieldIsRequired,
+           $categoryname, $description, $langFormErrors, 
+           $course_code;
 				
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');
     $set_sql = "SET name = ?s, description = ?s";
     $terms = array($categoryname, purify($description));
     $v = new Valitron\Validator($_POST);
-    $v->rule('required', array('categoryname'));
+    $v->rule('required', array('categoryname'))->message($langTheFieldIsRequired)->label('');
     if($v->validate()) {
         if (isset($_POST['id'])) {
                 $id = getDirectReference($_POST['id']);

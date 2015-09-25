@@ -88,12 +88,12 @@ if ($is_editor) {
     }
 
     if (isset($_GET['group'])) {
-		$group_name = $_POST['name'];
-		$group_desc = $_POST['description'];
-		$v = new Valitron\Validator($_POST);
-			$v->rule('required', array('maxStudent'));
-			$v->rule('numeric', array('maxStudent'));
-			$v->rule('required', array('name'));
+            $group_name = $_POST['name'];
+            $group_desc = $_POST['description'];
+            $v = new Valitron\Validator($_POST);
+            $v->rule('required', array('maxStudent'))->message($langTheFieldIsRequired)->label('');
+            $v->rule('numeric', array('maxStudent'))->message($langInvalidNumericValue)->label('');
+            $v->rule('required', array('name'))->message($langTheFieldIsRequired)->label('');;
         if($v->validate()) {
             if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
                 $group_max = intval($_POST['maxStudent']);
@@ -518,17 +518,12 @@ if ($is_editor) {
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
-				array('title' => $langCreationGroups,
+                array('title' => $langCreationGroups,
                     'url' => "group_creation.php?course=$course_code&amp;all=1",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'),
-				/*array('title' => $langCategoryAdd,
-                      'url' => "group_category.php?course=$course_code&amp;addcategory=1",
-                      'icon' => 'fa-plus-circle',
-                      'button-class' => 'btn-success',
-                      'level' => 'primary-label'),*/
-			    array('title' => $langCategoryAdd,
+                    'button-class' => 'btn-success'),				
+                array('title' => $langCategoryAdd,
                       'url' => "group_category.php?course=$course_code&amp;addcategory=1",
                       'icon' => 'fa-plus-circle'),
                 array('title' => $langDeleteGroups,
