@@ -18,7 +18,6 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-use Hautelook\Phpass\PasswordHash;
 
 define('UPGRADE', true);
 

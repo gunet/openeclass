@@ -19,6 +19,8 @@
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
 
+use Hautelook\Phpass\PasswordHash;
+
 // ----------------------------------------------------------------
 // Functions used for upgrade
 // ----------------------------------------------------------------
@@ -177,8 +179,9 @@ function update_assignment_submit() {
 
 // checks if admin user
 function is_admin($username, $password) {
+    
     global $mysqlMainDb, $session;
-
+        
     if (DBHelper::fieldExists('user', 'user_id')) {
         $user = Database::get()->querySingle("SELECT * FROM user, admin
 				WHERE admin.idUser = user.user_id AND
