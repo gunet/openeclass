@@ -273,13 +273,8 @@ require_once 'include/lib/references.class.php';
         }
 
         if($recursivelly && !is_null($recursion)){
-            $oldrec = get_event_recursion($eventid, $course_id);
-            $p = "P".$recursion['repeat'].$recursion['unit'];
-            $e = DateTime::createFromFormat('d-m-Y', $recursion['end'])->format('Y-m-d');
-            if($oldrec->recursion_period != $p || $oldrec->recursion_end != $e){
-                delete_recursive_event($eventid);
-                return add_event($title, $content, $start, $duration, $recursion);
-            }
+            delete_recursive_event($eventid);
+            return add_event($title, $content, $start, $duration, $recursion);
         }
 
         if(!is_null($recursion) && !is_recursive($eventid))
