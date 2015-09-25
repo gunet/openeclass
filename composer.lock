@@ -5,6 +5,7 @@
         "This file is @generated automatically"
     ],
     "hash": "f3f524653ac16abbbab0d8eb64517ed6",
+    "content-hash": "8ad3725b81ffb58c64316f99cc19ce18",
     "packages": [
         {
             "name": "hautelook/phpass",

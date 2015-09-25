@@ -137,7 +137,7 @@ function user_group_info($uid, $course_id, $as_id = NULL) {
     return $gids;
 }
 
-function showcategoryadmintools($categoryid) {
+function showgroupcategoryadmintools($categoryid) {
     global $langDelete, $langEditChange, $langGroupCatDel, $tool_content, $course_code;
 
     $tool_content .= action_button(array(

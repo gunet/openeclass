@@ -100,10 +100,7 @@ if ($is_editor) {
             } else {
                 $group_max = 0;
             }
-
-	$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
-	$menuTypeID = ($is_in_tinymce) ? 5 : 2;
-	$tinymce_params = '';			
+	
 
 // Create a hidden category for group forums
             $req = Database::get()->querySingle("SELECT id FROM forum_category
@@ -568,12 +565,12 @@ if ($is_editor) {
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
 				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>";
-			if ($display_tools) {
+			if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>";
-            if ($display_tools) {
+            if ($is_editor) {
                 $tool_content .= "<td></td>";
             }
 			 $tool_content .= "</tr></table></div></div></div>";
@@ -676,8 +673,7 @@ if ($is_editor) {
         $tool_content .= "</table></div>";
 		}
 	}
-        
-    $display_tools = $is_editor && !$is_in_tinymce;
+            
     if (!in_array($action, array('addcategory', 'editcategory'))) {
 	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
 	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
@@ -692,12 +688,12 @@ if ($is_editor) {
 
        $tool_content .= "$langCategorisedGroups&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
+                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
             }
             $tool_content .= "</th>";
-            if ($display_tools) {
+            if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
@@ -706,16 +702,16 @@ if ($is_editor) {
 
             $tool_content .= "$langCategorisedGroups&nbsp;";
        if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
             } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
             }$tool_content .= "</th>";
-            if ($display_tools) {
+            if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupCategories - </td>" .
-                ($display_tools? '<td></td>': '') . "</tr>";
+                ($is_editor? '<td></td>': '') . "</tr>";
 		}
 	if ($urlview === '') {
             $urlview = str_repeat('0', $aantalcategories);
@@ -737,16 +733,16 @@ if ($is_editor) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
                     $tool_content .= "</th>";
                 }
 
-                if ($display_tools) {
+                if ($is_editor) {
                     $tool_content .= "<td class='option-btn-cell'>";
-                    showcategoryadmintools($myrow->id);
+                    showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 }
 
@@ -755,14 +751,14 @@ if ($is_editor) {
                 showgroupsofcategory($myrow->id);
                 if ($groups_num == 1) {
                     $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>" .
-                        ($display_tools? '<td></td>': '') . "<tr>";
+                        ($is_editor? '<td></td>': '') . "<tr>";
                 }
 
             } else {
                 $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)
                     . "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
-                $tool_content .= $tinymce_params . "' class='open-category'>" . q($myrow->name) . "</a>";
+                $tool_content .= "' class='open-category'>" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span</th>";
@@ -770,9 +766,9 @@ if ($is_editor) {
                     $tool_content .= "</th>";
                 }
 
-                if ($display_tools) {
+                if ($is_editor) {
                     $tool_content .= "<td class='option-btn-cell'>";
-                    showcategoryadmintools($myrow->id);
+                    showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 }
 
