@@ -4,7 +4,7 @@
  *   Open eClass 3.0
  *   E-learning and Course Management System
  * ========================================================================
- *  Copyright(c) 2003-2012  Greek Universities Network - GUnet
+ *  Copyright(c) 2003-2014  Greek Universities Network - GUnet
  */
 
 function initialize_group_id($param = 'group_id') {
@@ -114,8 +114,14 @@ function group_tutors($group_id) {
     return $tutors;
 }
 
-// fills an array with user groups (group_id => group_name)
-// passing $as_id will give back only the groups that have been given the specific assignment
+/**
+ * @brief fills an array with user groups (group_id => group_name)
+ * passing $as_id will give back only the groups that have been given the specific assignment
+ * @param type $uid
+ * @param type $course_id
+ * @param type $as_id
+ * @return type
+ */
 function user_group_info($uid, $course_id, $as_id = NULL) {
     $gids = array();
 
@@ -137,28 +143,37 @@ function user_group_info($uid, $course_id, $as_id = NULL) {
     return $gids;
 }
 
+/**
+ * 
+ * @global type $langDelete
+ * @global type $langEditChange
+ * @global type $langGroupCatDel
+ * @global type $tool_content
+ * @global type $course_code
+ * @param type $categoryid
+ */
+
 function showgroupcategoryadmintools($categoryid) {
     global $langDelete, $langEditChange, $langGroupCatDel, $tool_content, $course_code;
 
     $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
-					  'url' => "group_category.php?course=$course_code&amp;editcategory=1&amp;id=$categoryid"),
+                      'url' => "group_category.php?course=$course_code&amp;editcategory=1&amp;id=$categoryid"),
                 array('title' => $langDelete,
-                        'icon' => 'fa-times',
-                        //'url' => "$basecaturl" . "action=deletecategory",
-						'url' => "index.php?course=$course_code&amp;deletecategory=1&amp;id=$categoryid",
+                        'icon' => 'fa-times',                        
+                        'url' => "index.php?course=$course_code&amp;deletecategory=1&amp;id=$categoryid",
                         'class' => 'delete',
                         'confirm' => $langGroupCatDel)
                 ));           
 }
 
 
-
 function showgroupsofcategory($catid) {
-    global $is_editor, $course_id, $urlview, $socialview_param, $tool_content,
-    $course_code, $langGroupDelconfirm, $langDelete, $langUp, $langDown,
-    $langEditChange, $is_in_tinymce, $groups_num;
+    
+    global $is_editor, $course_id, $tool_content,
+    $course_code, $langGroupDelconfirm, $langDelete,
+    $langEditChange, $groups_num;
 
     $tool_content .= "<tr>";
     $result = Database::get()->queryArray("SELECT * FROM `group`
@@ -167,10 +182,9 @@ function showgroupsofcategory($catid) {
   
     foreach ($result as $myrow) {
         $name = empty($myrow->name) ? $myrow->description : $myrow->name;        
-        $tool_content .= "<td class='nocategory-link'>" . q($name) . "&nbsp;&nbsp;";
-
+        $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$myrow->id'>" . q($myrow->name) . "</a>";        
         if (!empty($myrow->description)) {
-            $tool_content .= "<br />" . standard_text_escape($myrow->description);
+            $tool_content .= "<br>" . standard_text_escape($myrow->description);
         }
         if ($catid == -2) { 
             global $uid;
@@ -179,7 +193,7 @@ function showgroupsofcategory($catid) {
         }
         $tool_content .= "</td>";
         
-        if ($is_editor && !$is_in_tinymce) {   
+        if ($is_editor) {  
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
@@ -192,87 +206,54 @@ function showgroupsofcategory($catid) {
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";
-        } /*elseif ($catid == -2 && !$is_in_tinymce) {
-            if (isset($_SESSION['uid'])) {
-                if (is_link_creator($myrow->id)) {
-                    $tool_content .= "<td class='option-btn-cell'>";
-                    $editgroup = "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=editgroup&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param;
-                    $tool_content .= action_button(array(
-                            array('title' => $langEditChange,
-                                    'icon' => 'fa-edit',
-                                    'url' => $editgroup),
-                            array('title' => $langDelete,
-                                    'icon' => 'fa-times',
-                                    'class' => 'delete',
-                                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;action=deletegroup&amp;id=" . getIndirectReference($myrow->id) . "&amp;urlview=$urlview".$socialview_param,
-                                    'confirm' => $langGroupDelconfirm)
-                    ));
-                    $tool_content .= "</td>";
-                } else {
-                    if (abuse_report_show_flag('group', $myrow->id , $course_id, $is_editor)) {
-                        $flag_arr = abuse_report_action_button_flag('group', $myrow->id, $course_id);
-                    
-                        $tool_content .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
-                    } else {
-                        $tool_content .= "<td>&nbsp;</td>";
-                    }
-                }
-            }
-        }*/
-        
+        }        
         $tool_content .= "</tr>";
     }
 }
 
-function delete_category($id) {
-    global $course_id, $langGroupCategoryDeleted;
-
-    Database::get()->query("DELETE FROM `group` WHERE course_id = ?d AND category_id = ?d", $course_id, $id);
-    $category = Database::get()->querySingle("SELECT name FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id)->name;
-    Database::get()->query("DELETE FROM `group_category` WHERE course_id = ?d AND id = ?d", $course_id, $id);
-    Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('cat_id' => $id,
-                                                               'category' => $category));
-}
-
-function submit_category() {
+/**
+ * @brief submit new group category
+ * @global type $course_id
+ * @global type $langCategoryAdded
+ * @global type $langCategoryModded
+ * @global type $categoryname
+ * @global type $description
+ * @global type $langFormErrors
+ * @global type $course_code
+ */
+function submit_group_category() {
     global $course_id, $langCategoryAdded, $langCategoryModded,
     $categoryname, $description, $langFormErrors, $course_code;
-			
-	
+				
     register_posted_variables(array('categoryname' => true,
                                     'description' => true), 'all', 'trim');
     $set_sql = "SET name = ?s, description = ?s";
     $terms = array($categoryname, purify($description));
-	$v = new Valitron\Validator($_POST);
-	$v->rule('required', array('categoryname'));
-	if($v->validate()) {
-
-		if (isset($_POST['id'])) {
-			$id = getDirectReference($_POST['id']);
-			Database::get()->query("UPDATE `group_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
-			$log_type = LOG_MODIFY;
-		}
-		else {
-			$id = Database::get()->query("INSERT INTO `group_category` $set_sql, course_id = ?d", $terms, $course_id)->lastInsertID;
-			$log_type = LOG_INSERT;
-		}
-
-    $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
-    Log::record($course_id, MODULE_ID_LINKS, $log_type, array('id' => $id,
-        'category' => $categoryname,
-        'description' => $txt_description));
-	} 
-	else {
+    $v = new Valitron\Validator($_POST);
+    $v->rule('required', array('categoryname'));
+    if($v->validate()) {
+        if (isset($_POST['id'])) {
+                $id = getDirectReference($_POST['id']);
+                Database::get()->query("UPDATE `group_category` $set_sql WHERE course_id = ?d AND id = ?d", $terms, $course_id, $id);
+                $log_type = LOG_MODIFY;
+        } else {
+                $id = Database::get()->query("INSERT INTO `group_category` $set_sql, course_id = ?d", $terms, $course_id)->lastInsertID;
+                $log_type = LOG_INSERT;
+        }
+        $txt_description = ellipsize(canonicalize_whitespace(strip_tags($description)), 50, '+');
+        Log::record($course_id, MODULE_ID_LINKS, $log_type, array('id' => $id,
+                                                                  'category' => $categoryname,
+                                                                  'description' => $txt_description));
+    } else {
         Session::flashPost()->Messages($langFormErrors)->Errors($v->errors());
         redirect_to_home_page("modules/group/group_category.php?course=$course_code&addcategory=1");
-		}
-
+    }
 }
 
 function category_form_defaults($id) {
     global $course_id, $form_name, $form_description;
 
-    $myrow = Database::get()->querySingle("SELECT name,description  FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    $myrow = Database::get()->querySingle("SELECT name,description FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id);
     if ($myrow) {
         $form_name = ' value="' . q($myrow->name) . '"';
         $form_description = q($myrow->description);
@@ -289,6 +270,12 @@ function makedefaultviewcode($locatie) {
     return $view;
 }
 
+/**
+ * @brief delete group
+ * @global type $course_id
+ * @global type $langGroupDeleted
+ * @param type $id
+ */
 function delete_group($id) {
     global $course_id, $langGroupDeleted;
 
@@ -299,4 +286,20 @@ function delete_group($id) {
     Database::get()->query("DELETE FROM `group` WHERE course_id = ?d AND id = ?d", $course_id, $id);
     Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('id' => $id,
 																'name' => $name));
+}
+
+/**
+ * @brief delete group category
+ * @global type $course_id
+ * @global type $langGroupCategoryDeleted
+ * @param type $id
+ */
+function delete_group_category($id) {
+    global $course_id;
+
+    Database::get()->query("DELETE FROM `group` WHERE course_id = ?d AND category_id = ?d", $course_id, $id);
+    $category = Database::get()->querySingle("SELECT name FROM group_category WHERE course_id = ?d AND id = ?d", $course_id, $id)->name;
+    Database::get()->query("DELETE FROM `group_category` WHERE course_id = ?d AND id = ?d", $course_id, $id);
+    Log::record($course_id, MODULE_ID_GROUPS, LOG_DELETE, array('cat_id' => $id,
+                                                               'category' => $category));
 }

@@ -76,7 +76,7 @@ if ($is_editor) {
 	
 	if (isset($_GET['deletecategory'])) {
 		$id = $_GET['id'];
-		delete_category($id);
+		delete_group_category($id);
 		Session::Messages($langGroupCategoryDeleted, 'alert-success');
 		redirect_to_home_page("modules/group/index.php");
 	}
@@ -348,7 +348,7 @@ if ($is_editor) {
     }
     elseif (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        submit_category();
+        submit_group_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
         Session::Messages($messsage, 'alert-success');
         redirect_to_home_page("modules/group/index.php");
@@ -588,8 +588,7 @@ if ($is_editor) {
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
-            $tool_content .= "<td>
-                        <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
+            $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br>";
@@ -671,8 +670,8 @@ if ($is_editor) {
             $totalRegistered += $member_count;
         }
         $tool_content .= "</table></div>";
-		}
-	}
+    }
+}
             
     if (!in_array($action, array('addcategory', 'editcategory'))) {
 	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
@@ -682,11 +681,10 @@ if ($is_editor) {
         <div class='row'>
           <div class='col-sm-12'>
             <div class='table-responsive'>
-            <table class='table-default  category-links'>";
-    if ($aantalcategories > 0) {
-        $tool_content .= "<tr class='list-header'><th>";
-
-       $tool_content .= "$langCategorisedGroups&nbsp;";
+            <table class='table-default category-links'>";
+        if ($aantalcategories > 0) {
+            $tool_content .= "<tr class='list-header'><th>";
+           $tool_content .= "$langCategorisedGroups&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
                     $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
             } else {
@@ -701,7 +699,7 @@ if ($is_editor) {
             $tool_content .= "<tr><th>";
 
             $tool_content .= "$langCategorisedGroups&nbsp;";
-       if (isset($urlview) and abs($urlview) == 0) {
+            if (isset($urlview) and abs($urlview) == 0) {
                     $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
             } else {
                 $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
@@ -712,7 +710,7 @@ if ($is_editor) {
             $tool_content .= "</tr>";
             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupCategories - </td>" .
                 ($is_editor? '<td></td>': '') . "</tr>";
-		}
+        }
 	if ($urlview === '') {
             $urlview = str_repeat('0', $aantalcategories);
         }
@@ -771,13 +769,11 @@ if ($is_editor) {
                     showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 }
-
                 $tool_content .= "</tr>";
             }
             $i++;
         }
-        $tool_content .= "</table></div></div></div>";
-
-add_units_navigation(TRUE);
+    $tool_content .= "</table></div></div></div>";
+    add_units_navigation(TRUE);
 }
 draw($tool_content, 2, null, $head_content);
