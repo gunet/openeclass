@@ -25,7 +25,6 @@
  *        It is included in every file via baseTheme.php
  */
 
-
 // set default time zone
 date_default_timezone_set("Europe/Athens");
 

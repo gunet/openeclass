@@ -20,7 +20,7 @@
  * ======================================================================== */
 
 header('Content-Type: application/xml; charset=utf-8');
-
+use Hautelook\Phpass\PasswordHash;
 if (isset($_POST['token'])) {
     $require_mlogin = true;
     $require_noerrors = true;
@@ -72,7 +72,6 @@ if (isset($_POST['uname']) && isset($_POST['pass'])) {
     require_once ('minit.php');
     require_once ('include/CAS/CAS.php');
     require_once ('modules/auth/auth.inc.php');
-    require_once ('include/phpass/PasswordHash.php');
 
     $uname = canonicalize_whitespace($_POST['uname']);
     $pass = $_POST['pass'];

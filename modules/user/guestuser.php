@@ -18,6 +18,7 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
+use Hautelook\Phpass\PasswordHash;
 
 $require_current_course = true;
 $require_course_admin = true;
@@ -25,7 +26,6 @@ $require_help = TRUE;
 $helpTopic = 'Guest';
 
 require_once '../../include/baseTheme.php';
-require_once 'include/phpass/PasswordHash.php';
 
 if (get_config('course_guest') == 'off') {
     redirect_to_home_page('modules/user/?course=' . $course_code);
