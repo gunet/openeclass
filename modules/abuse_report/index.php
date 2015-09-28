@@ -51,6 +51,9 @@ if (isset($_GET['choice']) && $_GET['choice'] == 'close') { //close report
                 
                 } elseif ($comm_rtype == 'course') {
                     $url = $urlServer."courses/".$course_code;
+                } elseif ($comm_rtype == 'wallpost') {
+                    $url = $urlServer."modules/wall/index.php?course=".$course_code.
+                    "&showPost=".$comm_rid."#comments_title";
                 }
                 $content_type = $langAComment;
                 $content = q($result->content);
@@ -180,6 +183,8 @@ if (!$nbrReports) {
                 $visiturl = $urlServer."modules/blog/index.php?course=".$course_code."&action=showPost&pId=".$comm_rid."#comments_title";
             } elseif ($comm_rtype == 'course') {
                 $visiturl = $urlServer."courses/".$course_code;
+            } elseif ($comm_rtype == 'wallpost') {
+                $visiturl = $urlServer."modules/wall/index.php?course=".$course_code."&showPost=".$comm_rid."#comments_title";;
             }
             
             $options = action_button(array(
