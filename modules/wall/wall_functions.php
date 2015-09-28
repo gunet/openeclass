@@ -512,7 +512,7 @@ function show_video($table, $title, $resource_id, $video_id) {
 }
 
 function file_playurl_replacement($path, $filename, $subsystem, $uid) {
-    global $urlServer;
+    global $urlServer, $group_sql;
     
     if ($subsystem == MYDOCS) {
         $course_code = '';
@@ -528,7 +528,7 @@ function file_playurl_replacement($path, $filename, $subsystem, $uid) {
 }
 
 function file_url_replacement($path, $filename, $subsystem, $uid) {
-    global $urlServer;
+    global $urlServer, $group_sql;
     
     if ($subsystem == MYDOCS) {
         $course_code = "user,$uid";
