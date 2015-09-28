@@ -62,8 +62,7 @@ if (!$is_member and !$is_editor) {
     exit;
 }
 if (isset($_GET['group_as'])) {
-
-	$group_id = $_GET['group_id'];
+    $group_id = $_GET['group_id'];
 
     $result = Database::get()->queryArray("SELECT * FROM assignment as a LEFT JOIN assignment_to_specific as b ON a.id=b.assignment_id 
                                                         WHERE a.course_id = ?d AND a.group_submissions= ?d AND (b.group_id= ?d OR b.group_id is null) ORDER BY a.id", $course_id, 1, $group_id);
@@ -113,9 +112,16 @@ if (isset($_GET['group_as'])) {
            $tool_content .= "</td></tr>";
         }
         $tool_content .= '</table></div></div></div>';	
-    }
-	     
+    }	     
 }
+        
+
+
+/*$tool_content .= action_bar(array(
+                array('title' => $langModify,
+                        'url' => '../forum/viewforum.php?course=$course_code&amp;forum=$forum_id',
+                        'icon' => 'fa-comments',
+                        'level' => 'primary'))); */
 $tool_content .= action_bar(array(
             array('title' => $langModify,
                   'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
@@ -130,20 +136,20 @@ $tool_content .= action_bar(array(
                   'show' => !($is_editor or $is_tutor) && ($max_members == 0 or $member_count < $max_members)),                            
             array('title' => $langForums,
                   'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
-                  'icon' => 'fa-comments',                  
-                  'show' => $has_forum and $forum_id <> 0),
+                  'icon' => 'fa-comments',
+                  'level' => 'primary'),
             array('title' => $langGroupDocumentsLink,
                   'url' => "document.php?course=$course_code&amp;group_id=$group_id",
-                  'icon' => 'fa-folder-open',                  
-                  'show' => $documents),
+                  'icon' => 'fa-folder-open',
+                  'level' => 'primary'),
             array('title' => $langWiki,
                   'url' => "../wiki/?course=$course_code&amp;gid=$group_id",
-                  'icon' => 'fa-globe',                  
-                  'show' => $wiki),
+                  'icon' => 'fa-globe',
+                  'level' => 'primary'),
             array('title' => $langGroupAssignments,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
-                  'icon' => 'fa-globe',                  
-                  'show' => $wiki),
+                  'icon' => 'fa-globe',
+                  'level' => 'primary'),
             array('title' => $langEmailGroup,
                   'url' => "group_email.php?course=$course_code&amp;group_id=$group_id",
                   'icon' => 'fa-envelope',                  
@@ -155,8 +161,7 @@ $tool_content .= action_bar(array(
             array('title' => "$langDumpUser ( $langcsvenc2 )",
                   'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id&amp;u=1",
                   'icon' => 'fa-file-archive-o',
-                  'show' => $is_editor)
-        ));
+                  'show' => $is_editor)));
 
 $tutors = array();
 $members = array();
@@ -215,12 +220,7 @@ if (count($members) > 0) {
     $tool_content .= "<div class='row'>
                     <div class='col-xs-12'>
                       <ul class='list-group'>
-                          <li class='list-group-item list-header'>
-                            <div class='row'>
-                                <div class='text-center'>
-                                    <b>$langGroupMembers</b>
-                                </div>
-                            </div>
+                          <li class='list-group-item list-header'>                           
                               <div class='row'>
                                   <div class='col-xs-4'>$langSurnameName</div>
                                   <div class='col-xs-4'>$langAm</div>
@@ -254,7 +254,6 @@ if (count($members) > 0) {
 } else {
     $tool_content .= "<div class='alert alert-warning'>$langGroupNoneMasc</div>";
 }
-
 
 draw($tool_content, 2);
 
