@@ -24,7 +24,7 @@ require_once 'include/course_settings.php';
  * Needed javascript for abuse report to work
  * @return string
  */
-function abuse_report_add_js() {
+function abuse_report_add_js($deleg_selector = NULL) {
     global $urlServer, $langError;
     static $loaded;
     
@@ -34,9 +34,13 @@ function abuse_report_add_js() {
      
     $loaded = true;
     
+    if (is_null($deleg_selector)) {
+        $deleg_selector = ".modal-footer";
+    }
+    
     return '<script>
               $(function() {
-                $(".modal-footer").on("click", "button.btn-primary", function(event){
+                $("'.$deleg_select.'").on("click", "button.btn-primary", function(event){
                   var id = $(this).attr("id");
                   var sub_id = id.substr(13);
                   var splitted_id = sub_id.split("_");
