@@ -57,80 +57,76 @@ $user_groups = user_group_info($uid, $course_id);
 
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+if (isset($_GET['socialview'])) {
+    $socialview = true;
+    $socialview_param = '&amp;socialview';
+} else {
+    $socialview = false;
+    $socialview_param = '';
+}
+if (isset($_GET['urlview'])) {
+    $urlview = urlencode($_GET['urlview']);
+} else {
+    $urlview = '';
+}
 
-if ($is_editor) {
-
-	if (isset($_GET['urlview'])) {
-		$urlview = urlencode($_GET['urlview']);
-	} else {
-		$urlview = '';
-	}
-	
-	if (isset($_GET['socialview'])) {
-		$socialview = true;
-		$socialview_param = '&amp;socialview';
-	} else {
-		$socialview = false;
-		$socialview_param = '';
-	}
-	
-	if (isset($_GET['deletecategory'])) {
-		$id = $_GET['id'];
-		delete_group_category($id);
-		Session::Messages($langGroupCategoryDeleted, 'alert-success');
-		redirect_to_home_page("modules/group/index.php");
-	}
-	elseif (isset($_GET['deletegroup'])) {
-			$id = $_GET['id'];
-            delete_group($id);
-            Session::Messages($langGroupDeleted, 'alert-success');
-            redirect_to_home_page("modules/group/index.php");
+if ($is_editor) {    	
+    if (isset($_GET['deletecategory'])) {
+        $id = $_GET['id'];
+        delete_group_category($id);
+        Session::Messages($langGroupCategoryDeleted, 'alert-success');
+        redirect_to_home_page("modules/group/index.php");
+    } elseif (isset($_GET['deletegroup'])) {
+        $id = $_GET['id'];
+        delete_group($id);
+        Session::Messages($langGroupDeleted, 'alert-success');
+        redirect_to_home_page("modules/group/index.php");
     }
 
     if (isset($_GET['group'])) {
-            $group_name = $_POST['name'];
-            $group_desc = $_POST['description'];
-            $v = new Valitron\Validator($_POST);
-            $v->rule('required', array('maxStudent'))->message($langTheFieldIsRequired)->label('');
-            $v->rule('numeric', array('maxStudent'))->message($langInvalidNumericValue)->label('');
-            $v->rule('required', array('name'))->message($langTheFieldIsRequired)->label('');;
-        if($v->validate()) {
-            if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
-                $group_max = intval($_POST['maxStudent']);
-            } else {
-                $group_max = 0;
-            }
+        $group_name = $_POST['name'];
+        $group_desc = $_POST['description'];
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('maxStudent'))->message($langTheFieldIsRequired)->label('');
+        $v->rule('numeric', array('maxStudent'))->message($langInvalidNumericValue)->label('');
+        $v->rule('required', array('name'))->message($langTheFieldIsRequired)->label('');;
+    if($v->validate()) {
+        if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
+            $group_max = intval($_POST['maxStudent']);
+        } else {
+            $group_max = 0;
+        }
 	
 
 // Create a hidden category for group forums
-            $req = Database::get()->querySingle("SELECT id FROM forum_category
-                                    WHERE cat_order = -1
-                                    AND course_id = ?d", $course_id);
-            if ($req) {
-                $cat_id = $req->id;
-            } else {
-                $req2 = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
-                                             VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
-                $cat_id = $req2->lastInsertID;
-            }
+    $req = Database::get()->querySingle("SELECT id FROM forum_category
+                            WHERE cat_order = -1
+                            AND course_id = ?d", $course_id);
+    if ($req) {
+        $cat_id = $req->id;
+    } else {
+        $req2 = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
+                                     VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
+        $cat_id = $req2->lastInsertID;
+    }
 
-                $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_name . "'");
+        $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_name . "'");
 
-                $forumname = "$langForumGroup $group_name";
-                $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
-                                                        `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
-                $forum_id = $q->lastInsertID;
+        $forumname = "$langForumGroup $group_name";
+        $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
+                                                `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
+        $forum_id = $q->lastInsertID;
 
-                // Create a unique path to group documents to try (!)
-                // avoiding groups entering other groups area
-                $secretDirectory = uniqid('');
-                mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
-                touch("courses/$course_code/group/index.php");
-                touch("courses/$course_code/group/$secretDirectory/index.php");
-			$category_id = intval($_POST['selectcategory']);
-			$id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
-                                    VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
-				
+        // Create a unique path to group documents to try (!)
+        // avoiding groups entering other groups area
+        $secretDirectory = uniqid('');
+        mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
+        touch("courses/$course_code/group/index.php");
+        touch("courses/$course_code/group/$secretDirectory/index.php");
+                $category_id = intval($_POST['selectcategory']);
+                $id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
+                            VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
+
 	if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on'){
 		$self_reg = 1;
 	}
@@ -513,7 +509,7 @@ if ($is_editor) {
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $num_of_groups = count($groupSelect);
     $tool_content .= action_bar(array(
-                array('title' => $langCreate,
+                array('title' => $langCreateOneGroup,
                     'url' => "group_creation.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
@@ -522,26 +518,25 @@ if ($is_editor) {
                     'url' => "group_creation.php?course=$course_code&amp;all=1",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
-                    'button-class' => 'btn-success'),				
+                    'button-class' => 'btn-success'),
                 array('title' => $langCategoryAdd,
                       'url' => "group_category.php?course=$course_code&amp;addcategory=1",
                       'icon' => 'fa-plus-circle'),
+                array('title' => $langFillGroupsAll,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
+                      'icon' => 'fa-pencil',    
+                      'show' => $num_of_groups > 0),
                 array('title' => $langDeleteGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
                     'icon' => 'fa-times',
                     'confirm' => $langDeleteGroupAllWarn,
-                    'show' => $num_of_groups > 0),
-                array('title' => $langFillGroupsAll,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
-                    'icon' => 'fa-pencil',
-                    'level' => 'primary',
-                    'show' => $num_of_groups > 0),
-                array('title' => $langEmtpyGroups,
+                    'show' => $num_of_groups > 0),                
+                array('title' => $langEmptyGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes",
                     'icon' => 'fa-trash',
                     'class' => 'delete',
-                    'confirm' => $langEmtpyGroups,
-                    'confirm_title' => $langEmtpyGroupsAll,
+                    'confirm' => $langEmptyGroups,
+                    'confirm_title' => $langEmptyGroupsAll,
                     'show' => $num_of_groups > 0)));
 
     $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
@@ -598,10 +593,10 @@ if ($is_editor) {
                     action_button(array(
                         array('title' => $langConfig,
                             'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
-                            'icon' => 'fa-gear'),
+                            'icon' => 'fa-gear'),                        
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
-                            'icon' => 'fa-edit'),
+                            'icon' => 'fa-edit'),                        
                         array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
                             'icon' => 'fa-times',
