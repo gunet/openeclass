@@ -61,7 +61,7 @@ function getNumberOfLinks($catid) {
  */
 function showlinksofcategory($catid) {
     global $is_editor, $course_id, $urlview, $socialview_param, $tool_content,
-    $urlServer, $course_code,
+    $urlServer, $course_code, $head_content,
     $langLinkDelconfirm, $langDelete, $langUp, $langDown,
     $langEditChange, $is_in_tinymce, $links_num, $langLinkSubmittedBy;
 
@@ -135,6 +135,7 @@ function showlinksofcategory($catid) {
                     $tool_content .= "</td>";
                 } else {
                     if (abuse_report_show_flag('link', $myrow->id , $course_id, $is_editor)) {
+                        $head_content .= abuse_report_add_js();
                         $flag_arr = abuse_report_action_button_flag('link', $myrow->id, $course_id);
                     
                         $tool_content .= "<td class='option-btn-cell'>".action_button(array($flag_arr[0])).$flag_arr[1]."</td>"; //action button option
