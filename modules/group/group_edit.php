@@ -36,7 +36,7 @@ require_once 'include/course_settings.php';
 require_once 'group_functions.php';
 
 $toolName = $langGroups;
-$pageName = $langEditGroup;
+$pageName = $langModify;
 
 initialize_group_id();
 initialize_group_info($group_id);
