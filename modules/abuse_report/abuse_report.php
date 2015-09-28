@@ -40,7 +40,7 @@ function abuse_report_add_js($deleg_selector = NULL) {
     
     return '<script>
               $(function() {
-                $("'.$deleg_select.'").on("click", "button.btn-primary", function(event){
+                $("'.$deleg_selector.'").on("click", "button.btn-primary", function(event){
                   var id = $(this).attr("id");
                   var sub_id = id.substr(13);
                   var splitted_id = sub_id.split("_");
