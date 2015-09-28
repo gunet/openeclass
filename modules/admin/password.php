@@ -23,6 +23,7 @@
  * @file password.php
  * @brief change user password
  */
+use Hautelook\Phpass\PasswordHash;
 
 $require_login = true;
 $require_admin = TRUE;
@@ -30,7 +31,6 @@ $helpTopic = 'Profile';
 $require_valid_uid = TRUE;
 
 include '../../include/baseTheme.php';
-require_once 'include/phpass/PasswordHash.php';
 
 $toolName = $langChangePass;
 $navigation[] = array('url' => 'index.php', 'name' => $langAdmin);

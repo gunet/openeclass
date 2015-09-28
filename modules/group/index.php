@@ -57,83 +57,76 @@ $user_groups = user_group_info($uid, $course_id);
 
 //check if social bookmarking is enabled for this course
 $social_bookmarks_enabled = setting_get(SETTING_COURSE_SOCIAL_BOOKMARKS_ENABLE, $course_id);
+if (isset($_GET['socialview'])) {
+    $socialview = true;
+    $socialview_param = '&amp;socialview';
+} else {
+    $socialview = false;
+    $socialview_param = '';
+}
+if (isset($_GET['urlview'])) {
+    $urlview = urlencode($_GET['urlview']);
+} else {
+    $urlview = '';
+}
 
-if ($is_editor) {
-
-	if (isset($_GET['urlview'])) {
-		$urlview = urlencode($_GET['urlview']);
-	} else {
-		$urlview = '';
-	}
-	
-	if (isset($_GET['socialview'])) {
-		$socialview = true;
-		$socialview_param = '&amp;socialview';
-	} else {
-		$socialview = false;
-		$socialview_param = '';
-	}
-	
-	if (isset($_GET['deletecategory'])) {
-		$id = $_GET['id'];
-		delete_category($id);
-		Session::Messages($langGroupCategoryDeleted, 'alert-success');
-		redirect_to_home_page("modules/group/index.php");
-	}
-	elseif (isset($_GET['deletegroup'])) {
-			$id = $_GET['id'];
-            delete_group($id);
-            Session::Messages($langGroupDeleted, 'alert-success');
-            redirect_to_home_page("modules/group/index.php");
+if ($is_editor) {    	
+    if (isset($_GET['deletecategory'])) {
+        $id = $_GET['id'];
+        delete_group_category($id);
+        Session::Messages($langGroupCategoryDeleted, 'alert-success');
+        redirect_to_home_page("modules/group/index.php");
+    } elseif (isset($_GET['deletegroup'])) {
+        $id = $_GET['id'];
+        delete_group($id);
+        Session::Messages($langGroupDeleted, 'alert-success');
+        redirect_to_home_page("modules/group/index.php");
     }
 
     if (isset($_GET['group'])) {
-		$group_name = $_POST['name'];
-		$group_desc = $_POST['description'];
-		$v = new Valitron\Validator($_POST);
-			$v->rule('required', array('maxStudent'));
-			$v->rule('numeric', array('maxStudent'));
-			$v->rule('required', array('name'));
-        if($v->validate()) {
-            if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
-                $group_max = intval($_POST['maxStudent']);
-            } else {
-                $group_max = 0;
-            }
-
-	$is_in_tinymce = (isset($_REQUEST['embedtype']) && $_REQUEST['embedtype'] == 'tinymce') ? true : false;
-	$menuTypeID = ($is_in_tinymce) ? 5 : 2;
-	$tinymce_params = '';			
+        $group_name = $_POST['name'];
+        $group_desc = $_POST['description'];
+        $v = new Valitron\Validator($_POST);
+        $v->rule('required', array('maxStudent'))->message($langTheFieldIsRequired)->label('');
+        $v->rule('numeric', array('maxStudent'))->message($langInvalidNumericValue)->label('');
+        $v->rule('required', array('name'))->message($langTheFieldIsRequired)->label('');;
+    if($v->validate()) {
+        if (preg_match('/^[0-9]/', $_POST['maxStudent'])) {
+            $group_max = intval($_POST['maxStudent']);
+        } else {
+            $group_max = 0;
+        }
+	
 
 // Create a hidden category for group forums
-            $req = Database::get()->querySingle("SELECT id FROM forum_category
-                                    WHERE cat_order = -1
-                                    AND course_id = ?d", $course_id);
-            if ($req) {
-                $cat_id = $req->id;
-            } else {
-                $req2 = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
-                                             VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
-                $cat_id = $req2->lastInsertID;
-            }
+    $req = Database::get()->querySingle("SELECT id FROM forum_category
+                            WHERE cat_order = -1
+                            AND course_id = ?d", $course_id);
+    if ($req) {
+        $cat_id = $req->id;
+    } else {
+        $req2 = Database::get()->query("INSERT INTO forum_category (cat_title, cat_order, course_id)
+                                     VALUES (?s, -1, ?d)", $langCatagoryGroup, $course_id);
+        $cat_id = $req2->lastInsertID;
+    }
 
-                $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_name . "'");
+        $res = Database::get()->query("SELECT id FROM `group` WHERE name = '$langGroup ". $group_name . "'");
 
-                $forumname = "$langForumGroup $group_name";
-                $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
-                                                        `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
-                $forum_id = $q->lastInsertID;
+        $forumname = "$langForumGroup $group_name";
+        $q = Database::get()->query("INSERT INTO forum SET name = '$forumname',
+                                                `desc` = ' ', num_topics = 0, num_posts = 0, last_post_id = 1, cat_id = ?d, course_id = ?d", $cat_id, $course_id);
+        $forum_id = $q->lastInsertID;
 
-                // Create a unique path to group documents to try (!)
-                // avoiding groups entering other groups area
-                $secretDirectory = uniqid('');
-                mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
-                touch("courses/$course_code/group/index.php");
-                touch("courses/$course_code/group/$secretDirectory/index.php");
-			$category_id = intval($_POST['selectcategory']);
-			$id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
-                                    VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
-				
+        // Create a unique path to group documents to try (!)
+        // avoiding groups entering other groups area
+        $secretDirectory = uniqid('');
+        mkdir("courses/$course_code/group/$secretDirectory", 0777, true);
+        touch("courses/$course_code/group/index.php");
+        touch("courses/$course_code/group/$secretDirectory/index.php");
+                $category_id = intval($_POST['selectcategory']);
+                $id = Database::get()->query("INSERT INTO `group` (course_id, name, description, forum_id, category_id, max_members, secret_directory)
+                            VALUES (?d, ?s, ?s, ?d, ?d, ?d, ?s)",  $course_id, $group_name, $group_desc, $forum_id, $category_id, $group_max, $secretDirectory)->lastInsertID;
+
 	if (isset($_POST['self_reg']) and $_POST['self_reg'] == 'on'){
 		$self_reg = 1;
 	}
@@ -351,7 +344,7 @@ if ($is_editor) {
     }
     elseif (isset($_POST['submitCategory'])) {
         if (!isset($_POST['token']) || !validate_csrf_token($_POST['token'])) csrf_token_error();
-        submit_category();
+        submit_group_category();
         $messsage = isset($_POST['id']) ? $langCategoryModded : $langCategoryAdded;
         Session::Messages($messsage, 'alert-success');
         redirect_to_home_page("modules/group/index.php");
@@ -516,40 +509,34 @@ if ($is_editor) {
     $groupSelect = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY id", $course_id);
     $num_of_groups = count($groupSelect);
     $tool_content .= action_bar(array(
-                array('title' => $langCreate,
+                array('title' => $langCreateOneGroup,
                     'url' => "group_creation.php?course=$course_code",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
-				array('title' => $langCreationGroups,
+                array('title' => $langCreationGroups,
                     'url' => "group_creation.php?course=$course_code&amp;all=1",
                     'icon' => 'fa-plus-circle',
                     'level' => 'primary-label',
                     'button-class' => 'btn-success'),
-				/*array('title' => $langCategoryAdd,
-                      'url' => "group_category.php?course=$course_code&amp;addcategory=1",
-                      'icon' => 'fa-plus-circle',
-                      'button-class' => 'btn-success',
-                      'level' => 'primary-label'),*/
-			    array('title' => $langCategoryAdd,
+                array('title' => $langCategoryAdd,
                       'url' => "group_category.php?course=$course_code&amp;addcategory=1",
                       'icon' => 'fa-plus-circle'),
+                array('title' => $langFillGroupsAll,
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
+                      'icon' => 'fa-pencil',    
+                      'show' => $num_of_groups > 0),
                 array('title' => $langDeleteGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete_all=yes",
                     'icon' => 'fa-times',
                     'confirm' => $langDeleteGroupAllWarn,
-                    'show' => $num_of_groups > 0),
-                array('title' => $langFillGroupsAll,
-                    'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;fill=yes",
-                    'icon' => 'fa-pencil',
-                    'level' => 'primary',
-                    'show' => $num_of_groups > 0),
-                array('title' => $langEmtpyGroups,
+                    'show' => $num_of_groups > 0),                
+                array('title' => $langEmptyGroups,
                     'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;empty=yes",
                     'icon' => 'fa-trash',
                     'class' => 'delete',
-                    'confirm' => $langEmtpyGroups,
-                    'confirm_title' => $langEmtpyGroupsAll,
+                    'confirm' => $langEmptyGroups,
+                    'confirm_title' => $langEmptyGroupsAll,
                     'show' => $num_of_groups > 0)));
 
     $groupSelect = Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
@@ -568,12 +555,12 @@ if ($is_editor) {
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
 				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>";
-			if ($display_tools) {
+			if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>";
-            if ($display_tools) {
+            if ($is_editor) {
                 $tool_content .= "<td></td>";
             }
 			 $tool_content .= "</tr></table></div></div></div>";
@@ -591,8 +578,7 @@ if ($is_editor) {
         foreach ($groupSelect as $group) {
             initialize_group_info($group->id);
             $tool_content .= "<tr>";
-            $tool_content .= "<td>
-                        <a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
+            $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$group->id'>" . q($group_name) . "</a><p>$group_description</p></td>";
             $tool_content .= "<td class='center'>";
             foreach ($tutors as $t) {
                 $tool_content .= display_user($t->user_id) . "<br>";
@@ -607,10 +593,10 @@ if ($is_editor) {
                     action_button(array(
                         array('title' => $langConfig,
                             'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
-                            'icon' => 'fa-gear'),
+                            'icon' => 'fa-gear'),                        
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
-                            'icon' => 'fa-edit'),
+                            'icon' => 'fa-edit'),                        
                         array('title' => $langDelete,
                             'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;delete=$group->id",
                             'icon' => 'fa-times',
@@ -674,10 +660,9 @@ if ($is_editor) {
             $totalRegistered += $member_count;
         }
         $tool_content .= "</table></div>";
-		}
-	}
-        
-    $display_tools = $is_editor && !$is_in_tinymce;
+    }
+}
+            
     if (!in_array($action, array('addcategory', 'editcategory'))) {
 	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
 	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
@@ -686,18 +671,17 @@ if ($is_editor) {
         <div class='row'>
           <div class='col-sm-12'>
             <div class='table-responsive'>
-            <table class='table-default  category-links'>";
-    if ($aantalcategories > 0) {
-        $tool_content .= "<tr class='list-header'><th>";
-
-       $tool_content .= "$langCategorisedGroups&nbsp;";
+            <table class='table-default category-links'>";
+        if ($aantalcategories > 0) {
+            $tool_content .= "<tr class='list-header'><th>";
+           $tool_content .= "$langCategorisedGroups&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
+                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
             } else {
-                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
             }
             $tool_content .= "</th>";
-            if ($display_tools) {
+            if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
@@ -705,18 +689,18 @@ if ($is_editor) {
             $tool_content .= "<tr><th>";
 
             $tool_content .= "$langCategorisedGroups&nbsp;";
-       if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
+            if (isset($urlview) and abs($urlview) == 0) {
+                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
             } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $tinymce_params . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
+                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
             }$tool_content .= "</th>";
-            if ($display_tools) {
+            if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
             $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupCategories - </td>" .
-                ($display_tools? '<td></td>': '') . "</tr>";
-		}
+                ($is_editor? '<td></td>': '') . "</tr>";
+        }
 	if ($urlview === '') {
             $urlview = str_repeat('0', $aantalcategories);
         }
@@ -737,16 +721,16 @@ if ($is_editor) {
                 $newurlview = $urlview;
                 $newurlview[$i] = '0';
                 $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-open-o', $shownone)."&nbsp;
-                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$tinymce_params$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
+                            <a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=$newurlview$socialview_param' class='open-category'>" . q($myrow->name) . "</a>";
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span></th>";
                 } else {
                     $tool_content .= "</th>";
                 }
 
-                if ($display_tools) {
+                if ($is_editor) {
                     $tool_content .= "<td class='option-btn-cell'>";
-                    showcategoryadmintools($myrow->id);
+                    showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 }
 
@@ -755,14 +739,14 @@ if ($is_editor) {
                 showgroupsofcategory($myrow->id);
                 if ($groups_num == 1) {
                     $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupInCategory - </td>" .
-                        ($display_tools? '<td></td>': '') . "<tr>";
+                        ($is_editor? '<td></td>': '') . "<tr>";
                 }
 
             } else {
                 $tool_content .= "<tr class='link-subcategory-title'><th class = 'text-left category-link'>".icon('fa-folder-o', $showall)
                     . "&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=";
                 $tool_content .= is_array($view) ? implode('', $view) : $view;
-                $tool_content .= $tinymce_params . "' class='open-category'>" . q($myrow->name) . "</a>";
+                $tool_content .= "' class='open-category'>" . q($myrow->name) . "</a>";
                 $description = standard_text_escape($myrow->description);
                 if (!empty($description)) {
                     $tool_content .= "<br><span class='link-description'>$description</span</th>";
@@ -770,18 +754,16 @@ if ($is_editor) {
                     $tool_content .= "</th>";
                 }
 
-                if ($display_tools) {
+                if ($is_editor) {
                     $tool_content .= "<td class='option-btn-cell'>";
-                    showcategoryadmintools($myrow->id);
+                    showgroupcategoryadmintools($myrow->id);
                     $tool_content .= "</td>";
                 }
-
                 $tool_content .= "</tr>";
             }
             $i++;
         }
-        $tool_content .= "</table></div></div></div>";
-
-add_units_navigation(TRUE);
+    $tool_content .= "</table></div></div></div>";
+    add_units_navigation(TRUE);
 }
 draw($tool_content, 2, null, $head_content);

@@ -23,7 +23,7 @@
  * @file install_db.php
  * @brief installation data base queries
  */
-require_once '../include/phpass/PasswordHash.php';
+use Hautelook\Phpass\PasswordHash;
 require_once '../modules/db/foreignkeys.php';
 
 if (!defined('ECLASS_VERSION')) {

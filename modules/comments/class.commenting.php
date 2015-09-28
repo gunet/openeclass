@@ -125,12 +125,14 @@ Class Commenting {
                         $post_actions .= icon('fa-times', $langDelete).'</a>';
                 
                         if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
+                            $head_content .= abuse_report_add_js();
                             $post_actions .= abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)); 
                         }
                 
                         $post_actions .='</div>';
                     } else {
                         if (abuse_report_show_flag('comment', $comment->getId(), course_code_to_id($courseCode), $isEditor)) {
+                            $head_content .= abuse_report_add_js();
                             $post_actions = '<div class="pull-right">'.abuse_report_icon_flag ('comment', $comment->getId(), course_code_to_id($courseCode)).'</div>';
                         } else {
                             $post_actions = '';

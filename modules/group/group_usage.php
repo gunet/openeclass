@@ -90,11 +90,11 @@ $tool_content .= action_bar(array(
                 'show' => $type == "lp",
                 'level' => 'primary'),
             array('title' => "$langDumpUserDurationToFile ($langCodeUTF)",
-                'url' => "dumpgroupduration.php?course=$course_code&amp;group_id=$group_id$append_url_link",
+                'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id$append_url_link",
                 'icon' => 'fa-file-archive-o',
                 'level' => 'primary'),
             array('title' => "$langDumpUserDurationToFile ($langCodeWin)",
-                'url' => "dumpgroupduration.php?course=$course_code&amp;group_id=$group_id$append_url_link",
+                'url' => "dumpgroup.php?course=$course_code&amp;group_id=$group_id$append_url_link",
                 'icon' => 'fa-file-archive-o',                
                 'level' => 'primary')));
 

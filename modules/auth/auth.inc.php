@@ -32,12 +32,12 @@
 
   ==============================================================================
  */
+use Hautelook\Phpass\PasswordHash;
 
 require_once 'include/log.php';
 require_once 'include/lib/user.class.php';
 // pop3 class
 require_once 'modules/auth/methods/pop3.php';
-require_once 'include/phpass/PasswordHash.php';
 
 $auth_ids = array(1 => 'eclass',
     2 => 'pop3',

@@ -55,7 +55,6 @@ require_once 'include/baseTheme.php';
 require_once 'include/CAS/CAS.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/textLib.inc.php';
-require_once 'include/phpass/PasswordHash.php';
 
 // unset system that records visitor only once by course for statistics
 require_once 'include/action.php';

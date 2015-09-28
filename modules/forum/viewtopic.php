@@ -344,6 +344,7 @@ foreach ($result as $myrow) {
             'icon' => 'fa-reply');
     }
     if (abuse_report_show_flag('forum_post', $myrow->id, $course_id, $is_editor)) {
+        $head_content .= abuse_report_add_js();
         $flag_arr = abuse_report_action_button_flag('forum_post', $myrow->id, $course_id);
         
         $dyntools[] = $flag_arr[0]; //action button option

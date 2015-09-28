@@ -905,7 +905,6 @@ $langCourseInvalidDepartmentPrompt = 'Παρακαλούμε %sμεταφέρε�
 /* * *******************************************
  * course_info.php
  * ******************************************* */
-
 $langCourseIden = "Ταυτότητα Μαθήματος";
 $langBackupCourse = "Αντίγραφο ασφαλείας";
 $langCloneCourse = "Κλώνος μαθήματος";
@@ -1241,6 +1240,7 @@ $langGroupCategoryDeleted = "Η κατηγορία διαγράφηκε μαζί
 $langGroupDeleted = "Η ομάδα χρηστών διαγράφηκε";
 $langGroupTutor = "Υπεύθυνος ομάδας";
 $langGroupTeam = "Γενικές Ομάδες Χρηστών";
+$langInvalidNumericValue = "άκυρη τιμή πεδίου";
 
 //neos odhgos dhmiourgias mathimaton
 $langEnterMetadata = "Μπορείτε να αλλάξετε τις ρυθμίσεις του μαθήματος μέσα από τη λειτουργία 'Διαχείριση Μαθήματος'";
@@ -1339,7 +1339,8 @@ $langDownloadAndZipEnd = "Το αρχείο .zip ανέβηκε και αποσ�
 $langParentDir = "αρχικό κατάλογο";
 $langInvalidDir = "Ακυρο ή μη υπαρκτό όνομα καταλόγου";
 $langInvalidGroupDir = "Σφάλμα! Ο κατάλογος των ομάδων χρηστών δεν υπάρχει!";
-$langCreationGroups = "Δημιουργία πολλών ομάδων χρηστών";
+$langCreateOneGroup = "Δημιουργία μιας ομάδας";
+$langCreationGroups = "Δημιουργία πολλών ομάδων";
 $langGroupAssignments =  "Ομαδικές Εργασίες";
 
 //prosthikes gia v2 - metadata
@@ -1805,17 +1806,17 @@ $langNewGroupMembers = "Αριθμός συμμετεχόντων";
 $langMax = "Μέγ.";
 $langPlaces = "συμμετέχοντες στην ομάδα χρηστών";
 $langGroupPlacesThis = "συμμετέχοντες";
-$langDeleteGroups = "Διαγραφή όλων των ομάδων χρηστών";
+$langDeleteGroups = "Διαγραφή όλων των ομάδων";
 $langGroupsAdded = "ομάδες χρηστών έχουν προστεθεί";
 $langGroupAdded = "ομάδα χρηστών έχει προστεθεί";
 $langGroupsDeleted = "Ολες οι ομάδες χρηστών έχουν διαγραφεί";
 $langGroupDel = "Η ομάδα χρηστών διαγράφηκε";
 $langGroupsEmptied = "Όλες οι ομάδες χρηστών είναι άδειες";
-$langEmtpyGroups = "Εκκαθάριση όλων των ομάδων χρηστών";
-$langEmtpyGroupsAll = "Εκκαθάριση Όλων";
+$langEmptyGroups = "Εκκαθάριση όλων των ομάδων";
+$langEmptyGroupsAll = "Εκκαθάριση Όλων";
 $langGroupsFilled = "Όλες οι ομάδες χρηστών έχουν συμπληρωθεί";
 $langFillGroups = "Συμπλήρωση των ομάδων χρηστών";
-$langFillGroupsAll = "Συμπλήρωση Όλων";
+$langFillGroupsAll = "Αυτόματη συμπλήρωση όλων των ομάδων";
 $langStudentRegAllowed = "Οι χρήστες επιτρέπεται να γραφτούν στις ομάδες";
 $langStudentRegNotAllowed = "Οι χρήστες δεν επιτρέπεται να γραφτούν στις ομάδες";
 $langTools = "Εργαλεία";
@@ -1850,7 +1851,6 @@ $langPrivate_3 = "ελεύθερη πρόσβαση (μόνο για ανάγν�
 // Group space
 $langGroupThisSpace = "Περιοχή για την ομάδα χρηστών";
 $langGroupName = "Όνομα ομάδας χρηστών";
-$langEditGroup = "Διόρθωση στοιχείων ομάδας";
 $langOptional = "(προαιρετικό)";
 $langNoGroupStudents = "Μη εγγεγραμμένοι " . $langsStudents . " ";
 $langGroupMembers = "Μέλη ομάδας χρηστών";

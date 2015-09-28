@@ -29,11 +29,11 @@
  * his/hers  information through a challenge/response system.
  *
  */
+use Hautelook\Phpass\PasswordHash;
 
 include '../../include/baseTheme.php';
 include 'auth.inc.php';
 include 'include/sendMail.inc.php';
-require_once 'include/phpass/PasswordHash.php';
 $pageName = $lang_remind_pass;
 
 // javascript

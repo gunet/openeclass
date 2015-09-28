@@ -30,7 +30,7 @@ header('Content-Type: text/html; charset=UTF-8');
  * @abstract This is the installation wizard of eclass.
  *
  */
-
+require_once '../vendor/autoload.php';
 require_once '../include/main_lib.php';
 require_once '../include/lib/pwgen.inc.php';
 require_once '../modules/db/database.php';

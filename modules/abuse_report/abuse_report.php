@@ -21,6 +21,53 @@
 require_once 'include/course_settings.php';
 
 /**
+ * Needed javascript for abuse report to work
+ * @return string
+ */
+function abuse_report_add_js() {
+    global $urlServer, $langError;
+    static $loaded;
+    
+    if ($loaded) {
+        return;
+    }
+     
+    $loaded = true;
+    
+    return '<script>
+              $(function() {
+                $(".modal-footer").on("click", "button.btn-primary", function(event){
+                  var id = $(this).attr("id");
+                  var sub_id = id.substr(13);
+                  var splitted_id = sub_id.split("_");
+                  if(splitted_id[0] == "forum") {
+                    var rtype = splitted_id[0]+"_"+splitted_id[1];
+                    var rid = splitted_id[2];
+                  } else {
+                    var rtype = splitted_id[0];
+                    var rid = splitted_id[1];
+                  }
+                  $.ajax({
+                    type: "POST",
+                    url: "'.$urlServer.'modules/abuse_report/process_report.php",
+                    data: $("form#abuse_form_"+rtype+"_"+rid).serialize(),
+                    dataType: "json",
+                    success: function(data){
+                      $("#abuse_modal_body_"+rtype+"_"+rid).html(data[1]);
+                      if (data[0] != "fail") {
+                        $("#abuse_submit_"+rtype+"_"+rid).hide();
+                      }
+                  },
+                  error: function(){
+                      alert("'.$langError.'");
+                  }
+                  });
+                });
+              });
+          </script>';
+}
+
+/**
  * Inject code for report flag icon
  * @param string $rtype
  * @param int $rid
@@ -28,31 +75,8 @@ require_once 'include/course_settings.php';
  * @return string html flag icon
  */
 function abuse_report_icon_flag ($rtype, $rid, $course_id) {
-    global $head_content, $langAbuseReport, $urlServer, $langClose, $langSend, $langError, 
+    global $head_content, $langAbuseReport, $langClose, $langSend, 
     $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
-    
-    load_js('jquery');
-    $head_content .= '<script>
-                          $(function() {
-                              $("button#abuse_submit_'.$rtype.'_'.$rid.'").click(function(){
-		   	                      $.ajax({
-    		   	                      type: "POST",
-			                          url: "'.$urlServer.'modules/abuse_report/process_report.php",
-			                          data: $("form#abuse_form_'.$rtype.'_'.$rid.'").serialize(),
-			                          dataType: "json",
-        		                      success: function(data){
-					                      $("#abuse_modal_body_'.$rtype.'_'.$rid.'").html(data[1]);
-					                      if (data[0] != "fail") {
-					                          $("#abuse_submit_'.$rtype.'_'.$rid.'").hide();
-					                      }
- 		                              },
-			                          error: function(){
-				                          alert("'.$langError.'");
-				                      }
-      			                  });
-	                          });
-                          });
-                      </script>';
     
     $out = '<a href="javascript:void(0);" data-toggle="modal" data-target="#abuse_modal_'.$rtype.'_'.$rid.'">'.icon('fa-flag-o', $langAbuseReport).'</a>';
     $out .= '<div class="modal fade" id="abuse_modal_'.$rtype.'_'.$rid.'" tabindex="-1" role="dialog" aria-labelledby="abuse_modal_label_'.$rtype.'_'.$rid.'" aria-hidden="true">
@@ -104,29 +128,6 @@ function abuse_report_icon_flag ($rtype, $rid, $course_id) {
 function abuse_report_action_button_flag ($rtype, $rid, $course_id) {
     global $head_content, $langAbuseReport, $urlServer, $langClose, $langSend, $langError,
     $langAbuseReportCat, $langMessage, $langSpam, $langRudeness, $langOther;
-    
-    load_js('jquery');
-    $head_content .= '<script>
-                          $(function() {
-                              $("button#abuse_submit_'.$rtype.'_'.$rid.'").click(function(){
-		   	                      $.ajax({
-    		   	                      type: "POST",
-			                          url: "'.$urlServer.'modules/abuse_report/process_report.php",
-			                          data: $("form#abuse_form_'.$rtype.'_'.$rid.'").serialize(),
-			                          dataType: "json",
-        		                      success: function(data){
-					                      $("#abuse_modal_body_'.$rtype.'_'.$rid.'").html(data[1]);
-					                      if (data[0] != "fail") {
-					                          $("#abuse_submit_'.$rtype.'_'.$rid.'").hide();
-					                      }
- 		                              },
-			                          error: function(){
-				                          alert("'.$langError.'");
-				                      }
-      			                  });
-	                          });
-                          });
-                      </script>';
     
     $ret = array();
     

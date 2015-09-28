@@ -23,10 +23,10 @@
  * @file newuser.php
  * @brief user registration process
  */
+use Hautelook\Phpass\PasswordHash;
 
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-require_once 'include/phpass/PasswordHash.php';
 require_once 'modules/auth/auth.inc.php';
 
 require_once 'include/lib/user.class.php';

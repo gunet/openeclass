@@ -18,14 +18,12 @@
  *                  Panepistimiopolis Ilissia, 15784, Athens, Greece
  *                  e-mail: info@openeclass.org
  * ======================================================================== */
-
-
+use Hautelook\Phpass\PasswordHash;
 define('SUFFIX_LEN', 4);
 
 $require_usermanage_user = true;
 require_once '../../include/baseTheme.php';
 require_once 'include/sendMail.inc.php';
-require_once 'include/phpass/PasswordHash.php';
 require_once 'include/lib/pwgen.inc.php';
 require_once 'modules/auth/auth.inc.php';
 require_once 'include/lib/user.class.php';
