@@ -175,9 +175,10 @@ function render_profile_fields_form($context, $valitron = false) {
                         } elseif (isset($_REQUEST['cpf_'.$f->shortname]) && isset($_REQUEST['cpf_'.$f->shortname]) != '') {
                             $def_selection = intval($_REQUEST['cpf_'.$f->shortname]);
                         } else {
-                            $def_selection = 0;
+                            $def_selection = 1;
                         }
                         $options = unserialize($f->data);
+                        $options = array_combine(range(1, count($options)), array_values($options));
                         $return_string .= selection($options, 'cpf_'.$f->shortname, $def_selection);
                         break;
                     case CPF_LINK:
@@ -363,6 +364,7 @@ function render_profile_fields_content($context) {
                         break;
                     case CPF_MENU:
                         $options = unserialize($f->data);
+                        $options = array_combine(range(1, count($options)), array_values($options));
                         $return_str .= "<span class='tag-value'>".q($options[$fdata_res->data])."</span>";
                         break;
                     case CPF_LINK:
