@@ -232,9 +232,10 @@ if (isset($_GET['add_cat'])) { //add a new category form
                                     datatype = ?d,
                                     required = ?d,
                                     visibility = ?d,
+                                    user_type = ?d,
                                     registration = ?d,
                                     data = ?s
-                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $registration, $data, $fieldid);
+                                    WHERE id = ?d", $name, $shortname, $description, $datatype, $required, $visibility, $user_type, $registration, $data, $fieldid);
             Session::Messages($langCPFFieldEditSuccess, 'alert-success');
             redirect_to_home_page("modules/admin/custom_profile_fields.php");
         } else {
