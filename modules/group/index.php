@@ -546,16 +546,16 @@ if ($is_editor) {
 	$q = count(Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id));
     // groups list
 	if ($num_of_groups==0 && $num_of_cat==0) {
-        $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
-    }
+            $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
+        }
 	elseif ($num_of_groups==0 && $num_of_cat>0) {
-         $tool_content .= "
+            $tool_content .= "
             <div class='row'>
                 <div class='col-sm-12'>
                 <div class='table-responsive'>
                 <table class='table-default nocategory-links'>
 				<tr class='list-header'><th class='text-left list-header'>$langGroupTeam</th>";
-			if ($is_editor) {
+            if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:109px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
@@ -563,10 +563,9 @@ if ($is_editor) {
             if ($is_editor) {
                 $tool_content .= "<td></td>";
             }
-			 $tool_content .= "</tr></table></div></div></div>";
-    }
-    elseif ($num_of_groups > 0) {
-        $tool_content .= "<div class='table-responsive'>
+            $tool_content .= "</tr></table></div></div></div>";
+        } elseif ($num_of_groups > 0) {
+            $tool_content .= "<div class='table-responsive'>
                 <table class='table-default'>
                 <tr class='list-header'>
                   <th>$langGroupName</th>
@@ -667,16 +666,15 @@ if ($is_editor) {
 	$numberofzerocategory = count(Database::get()->queryArray("SELECT * FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL)", $course_id));
 	$cat = Database::get()->queryArray("SELECT * FROM `group_category` WHERE course_id = ?d ORDER BY `name`", $course_id);
 	$aantalcategories = count($cat);
-	$tool_content .= "
-        <div class='row'>
-          <div class='col-sm-12'>
+	$tool_content .= "<div class='row'>
+            <div class='col-sm-12'>
             <div class='table-responsive'>
             <table class='table-default category-links'>";
         if ($aantalcategories > 0) {
             $tool_content .= "<tr class='list-header'><th>";
-           $tool_content .= "$langCategorisedGroups&nbsp;";
+            $tool_content .= "$langCategorisedGroups&nbsp;";
             if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
+                $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>" . icon('fa-folder', $showall)."</a>";
             } else {
                 $tool_content .= "&nbsp;&nbsp;<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>" .icon('fa-folder-open', $shownone)."</a>";
             }
@@ -685,21 +683,6 @@ if ($is_editor) {
                 $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
             }
             $tool_content .= "</tr>";
-        } else {
-            $tool_content .= "<tr><th>";
-
-            $tool_content .= "$langCategorisedGroups&nbsp;";
-            if (isset($urlview) and abs($urlview) == 0) {
-                    $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('1', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder', $showall)."</a>";
-            } else {
-                $tool_content .= "<a href='$_SERVER[SCRIPT_NAME]?course=$course_code&amp;urlview=" . str_repeat('0', $aantalcategories) . $socialview_param . "'>&nbsp;&nbsp;" .icon('fa-folder-open', $shownone)."</a>";
-            }$tool_content .= "</th>";
-            if ($is_editor) {
-                $tool_content .= "<th class='text-center' style='width:45px;'>" . icon('fa-gears') . "</th>";
-            }
-            $tool_content .= "</tr>";
-            $tool_content .= "<tr><td class='text-left not_visible nocategory-link'> - $langNoGroupCategories - </td>" .
-                ($is_editor? '<td></td>': '') . "</tr>";
         }
 	if ($urlview === '') {
             $urlview = str_repeat('0', $aantalcategories);
@@ -714,7 +697,7 @@ if ($is_editor) {
                 $view = $urlview;
                 $view[$i] = '1';
             }
-            // if the $urlview has a 1 for this categorie, this means it is expanded and should be displayed as a
+            // if the $urlview has a 1 for this category, this means it is expanded and should be displayed as a
             // - instead of a +, the category is no longer clickable and all the links of this category are displayed
             $description = standard_text_escape($myrow->description);
             if ((isset($urlview[$i]) and $urlview[$i] == '1')) {

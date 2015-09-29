@@ -37,7 +37,6 @@ $toolName = $langGroups;
 $pageName = $langNewGroupCreate;
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langGroups);
 
-
 $tool_content .= action_bar(array(
     array(
         'title' => $langBack,
@@ -88,15 +87,15 @@ if (isset($_GET['all'])) {
                 <select class='form-control' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         if ($social_bookmarks_enabled) {
-            $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
-            if (isset($category) and -2 == $category) {
+            $tool_content .= "<option value='-2'";
+            if (isset($category) and $category == -2) {
                 $tool_content .= " selected='selected'";
             }
             $tool_content .= ">$langSocialCategory</option>";
         }
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
-            $tool_content .= "<option value='" . getIndirectReference($myrow->id) . "'";
+            $tool_content .= "<option value='" . $myrow->id . "'";
             if (isset($category) and $myrow->id == $category) {
                 $tool_content .= " selected='selected'";
             }
@@ -221,7 +220,7 @@ if (isset($_GET['all'])) {
                 <select class='form-control' name='selectcategory' id='selectcategory'>
                 <option value='0'>--</option>";
         if ($social_bookmarks_enabled) {
-            $tool_content .= "<option value='" . getIndirectReference(-2) . "'";
+            $tool_content .= "<option value='-2'";
             if (isset($category) and -2 == $category) {
                 $tool_content .= " selected='selected'";
             }
@@ -229,7 +228,7 @@ if (isset($_GET['all'])) {
         }
         $resultcategories = Database::get()->queryArray("SELECT * FROM group_category WHERE course_id = ?d ORDER BY `name`", $course_id);
         foreach ($resultcategories as $myrow) {
-            $tool_content .= "<option value='" . getIndirectReference($myrow->id) . "'";
+            $tool_content .= "<option value='"  . $myrow->id . "'";
             if (isset($category) and $myrow->id == $category) {
                 $tool_content .= " selected='selected'";
             }

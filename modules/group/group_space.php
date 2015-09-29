@@ -114,14 +114,7 @@ if (isset($_GET['group_as'])) {
         $tool_content .= '</table></div></div></div>';	
     }	     
 }
-        
 
-
-/*$tool_content .= action_bar(array(
-                array('title' => $langModify,
-                        'url' => '../forum/viewforum.php?course=$course_code&amp;forum=$forum_id',
-                        'icon' => 'fa-comments',
-                        'level' => 'primary'))); */
 $tool_content .= action_bar(array(
             array('title' => $langModify,
                   'url' => "group_edit.php?course=$course_code&group_id=$group_id&from=group",
@@ -137,15 +130,18 @@ $tool_content .= action_bar(array(
             array('title' => $langForums,
                   'url' => "../forum/viewforum.php?course=$course_code&amp;forum=$forum_id",
                   'icon' => 'fa-comments',
-                  'level' => 'primary'),
+                  'level' => 'primary',
+                   'show' => $has_forum and $forum_id <> 0),
             array('title' => $langGroupDocumentsLink,
                   'url' => "document.php?course=$course_code&amp;group_id=$group_id",
                   'icon' => 'fa-folder-open',
-                  'level' => 'primary'),
+                  'level' => 'primary',
+                  'show' => $documents),
             array('title' => $langWiki,
                   'url' => "../wiki/?course=$course_code&amp;gid=$group_id",
-                  'icon' => 'fa-globe',
-                  'level' => 'primary'),
+                  'icon' => 'fa-wikipedia',
+                  'level' => 'primary',
+                  'show' => $wiki),
             array('title' => $langGroupAssignments,
                   'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;group_id=$group_id&amp;group_as=1",
                   'icon' => 'fa-globe',
