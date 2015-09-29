@@ -259,7 +259,7 @@ if (isset($_GET['showPost'])) { //show comments case
                         <fieldset>
                             <div class="form-group">
                                 <label for="message_input">'.$langMessage.'</label>
-                                <textarea class="form-control" rows="6" name="message" id="message_input">'.$content.'</textarea>
+                                <textarea class="form-control" rows="6" name="message" id="message_input">'.strip_tags($content).'</textarea>
                             </div>
                             <ul class="nav nav-pills">
                                 <li class="active"><a data-toggle="pill" href="#youtube_video_div">'.$langWallYoutubeVideo.'</a></li>
