@@ -34,6 +34,12 @@ function list_docs($id = NULL, $subsystem = NULL) {
         $input_id = 'mydocs';
     }
     
+    if (!is_null($id)) {
+        $id_str = '&post_id='.$id;
+    } else {
+        $id_str = '';
+    }
+    
     $ret_str = '<div id="'.$div_id.'"></div>';
     
     $ret_str .= "<script>
@@ -53,7 +59,7 @@ function list_docs($id = NULL, $subsystem = NULL) {
                            'responsive': true
                          },
 	                     'data' : {
-                           'url' : 'load_doc.php?course=$course_code$sys',
+                           'url' : 'load_doc.php?course=$course_code$sys$id_str',
                            'data' : function (node) {
                              return { 'id' : node.id };
                            }
@@ -74,20 +80,6 @@ function list_docs($id = NULL, $subsystem = NULL) {
                      });
                    });
                  </script>";
-    
-    
-    if (!is_null($id)) {
-        $doc_res = Database::get()->queryArray("SELECT res_id FROM wall_post_resources WHERE post_id = ?d AND type = ?s", $id, 'document');
-        if (count($doc_res)) {
-            $ret_str .= "<script>
-                           $('#$div_id').on('ready.jstree', function (e, data) {";
-            foreach ($doc_res as $doc) {
-                $ret_str .= "$('#$div_id').jstree('select_node', '".$doc->res_id."');";
-            }
-            $ret_str .= "  });
-                         </script>";
-        }
-    }
     
     return $ret_str;
 }

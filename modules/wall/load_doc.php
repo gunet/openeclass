@@ -37,6 +37,10 @@ if (isset($_GET['subsystem']) AND $_GET['subsystem'] == 'mydocs') { //MY DOCUMEN
 }
 
 if (isset($_GET['id'])) {
+    if (isset($_GET['post_id'])) {
+        $post_id = intval($_GET['post_id']);
+    }
+    
     if ($_GET['id'] == '#') {
         $path = '';
     } else {
@@ -59,7 +63,17 @@ if (isset($_GET['id'])) {
         if ($row->format == '.dir') {
             $data[] = array('id'=> $row->id, 'text' => $text, 'children' => true, 'state' => array('opened' => true), 'type' => 'folder');
         } else {
-            $data[] = array('id'=> $row->id, 'text' => $text, 'type' => 'file');
+            if (isset($post_id)) {
+                $selected = Database::get()->querySingle("SELECT COUNT(*) as cnt FROM wall_post_resources WHERE post_id=?d AND res_id=?d AND type=?s", $post_id, $row->id, 'document');
+                if ($selected->cnt > 0) {
+                    $sel_arr = array('selected' => true);
+                } else {
+                    $sel_arr = array('selected' => false);
+                }
+            } else {
+                $sel_arr = array('selected' => false);
+            }
+            $data[] = array('id'=> $row->id, 'text' => $text, 'type' => 'file', 'state' => $sel_arr);
         }
     }
 }
