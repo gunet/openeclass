@@ -105,7 +105,7 @@ function form() {
  * @return type
  */
 function email_profs($course_id, $content, $from_name, $from_address) {
-    global $langSendingMessage, $langHeaderMessage, $langContactIntro;
+    global $langSendingMessage, $langHeaderMessage, $langContactIntro, $langNote, $langMessage, $langContactIntroFooter;
 
     $title = course_id_to_title($course_id);
     $ret = "<div class='alert alert-info'>$langSendingMessage $title</div>";
@@ -115,15 +115,45 @@ function email_profs($course_id, $content, $from_name, $from_address) {
                            FROM course_user JOIN user ON user.id = course_user.user_id
                            WHERE course_id = ?d AND course_user.status = " . USER_TEACHER . "", $course_id);
 
-    $message = sprintf($langContactIntro, $from_name, $from_address, $content);
     $subject = "$langHeaderMessage ($public_code - $title)";
+
+
+    $mailHeader = "
+    <!-- Header Section -->
+	<div id='mail-header'>
+		<div>
+			<br>
+			<div id='header-title'>".q(sprintf($langContactIntro, $from_name, $from_address))."</div>
+		</div>
+	</div>";
+    
+    $mailMain = "
+    <!-- Body Section -->
+	<div id='mail-body'>
+		<br>
+		<div><b>$langMessage:</b></div>
+		<div id='mail-body-inner'>
+			$content
+        </div>
+	</div>";
+    
+    $mailFooter = "
+    <!-- Footer Section -->
+	<div id='mail-footer'>
+		<br>
+		<div id='alert'><small><b class='notice'>$langNote:</b> $langContactIntroFooter.</small></div>
+	</div>";
+
+    $message = $mailHeader.$mailMain.$mailFooter;
+    $plainMessage = html2text($message);
+
     foreach ($profs as $prof) {
         if (!get_user_email_notification_from_courses($prof->prof_uid) or (!get_user_email_notification($prof->prof_uid, $course_id))) {            
             continue;
         } else {
             $to_name = $prof->givenname . ' ' . $prof->surname;
             $ret .= "<div class='alert alert-success'>" . icon('fa-university') . "&nbsp;" . q($to_name) . "</div>";
-            if (!send_mail($from_name, $from_address, $to_name, $prof->email, $subject, $message, $GLOBALS['charset'])) {
+            if (!send_mail_multipart($from_name, $from_address, $to_name, $prof->email, $subject, $plainMessage, $message, $GLOBALS['charset'])) {
                 $ret .= "<div class='alert alert-warning'>$GLOBALS[langErrorSendingMessage]</div>";
             }
         }

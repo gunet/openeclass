@@ -515,11 +515,9 @@ $langContactMessage = "Contact course $langsTeachers. Enter your message here:";
 $langSendingMessage = "Your message is now sent to:";
 $langErrorSendingMessage = "Error! The message was not sent.";
 $langContactIntro = "An $siteName user named <%s> with e-mail address
-%s has sent you the following message. If you reply to
-this message, the answer will be addressed to this user.
-
-%s
+%s has sent you the following message.
 ";
+$langContactIntroFooter = "If you reply to this message, the answer will be addressed to this user.";
 $langNonUserContact = "To contact this course\'s $langsTeachers, you
 must have a valid account and be logged-in to the system. Please
 visit the <a href='%s'>login page</a>.";
