@@ -158,7 +158,7 @@ function printform($message) {
     $ret .= "<fieldset>
                 <div class='form-group'>
                     <label for='username' class='col-sm-2 control-label'>" . $message . "</label>
-                    <div class='col-sm-10'><input type='text' name='username' size='30' maxlength='30' placeholder='$langUsername'></div>
+                    <div class='col-sm-10'><input class='form-control' type='text' name='username' size='30' maxlength='30' placeholder='$langUsername'></div>
                 </div>
                 <div class='form-group'>
                     <label class='col-sm-2 control-label'>$langAddRole</label>
