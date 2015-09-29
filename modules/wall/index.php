@@ -32,7 +32,7 @@ $head_content .= '<link rel="stylesheet" type="text/css" href="css/wall.css">';
 
 load_js('waypoints-infinite');
 
-$posts_per_page = 5;
+$posts_per_page = 10;
 
 $navigation[] = array("url" => "index.php?course=$course_code", "name" => $langWall);
 $toolName = $langWall;
