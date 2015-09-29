@@ -254,16 +254,16 @@ if (!empty($show) and $show == 'closed') {
                             $emailhelpdesk = get_config('email_helpdesk');
                             $emailsubject = $langemailsubjectBlocked;
                             $emailbody = "$langemailbodyBlocked
-$langComments:> $_POST[comment]
+$langComments: $_POST[comment]
 $langManager $siteName
 $administratorName
 $langPhone: $telephone
 $langEmail: $emailhelpdesk";
                             send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
                         }
-                        $tool_content .= "<div class='alert alert-success'>" . ($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject;
+                        $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
                         $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></div>";
-                        $tool_content .= "<br><p><b>$langComments:</b><br />$_POST[comment]</p>\n";
+                        $tool_content .= "<br><p><b>$langComments:</b><br>$_POST[comment]</p>\n";
                     }
                 }
             } else {
