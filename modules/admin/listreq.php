@@ -253,13 +253,37 @@ if (!empty($show) and $show == 'closed') {
                             $administratorName = get_config('admin_name');
                             $emailhelpdesk = get_config('email_helpdesk');
                             $emailsubject = $langemailsubjectBlocked;
-                            $emailbody = "$langemailbodyBlocked
-$langComments: $_POST[comment]
-$langManager $siteName
-$administratorName
-$langPhone: $telephone
-$langEmail: $emailhelpdesk";
-                            send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
+
+                            $emailHeader = "
+                                <!-- Header Section -->
+                                <div id='mail-header'>
+                                    <div>
+                                        <br>
+                                        <div id='header-title'>$langemailbodyBlocked</div>
+                                    </div>
+                                </div>";
+
+                            $emailMain = "
+                            <!-- Body Section -->
+                            <div id='mail-body'>
+                                <br>
+                                <div id='mail-body-inner'>
+                                    $_POST[comment]<br><br>
+                                    <ul id='forum-category'>
+                                        <li><span><b>$langManager $siteName:</b></span> <span class='left-space'>$administratorName</span></li>
+                                        <li><span><b>$langPhone:</b></span> <span class='left-space'>$telephone</span></li>
+                                        <li><span><b>$langEmail:</b></span> <span class='left-space'>$emailhelpdesk</span></li>
+                                    </ul>
+                                </div>
+                            </div>";
+
+                            $emailbody = $emailHeader.$emailMain;
+
+                            $emailPlainBody = html2text($emailbody);
+
+                            send_mail_multipart('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailPlainBody, $emailbody, $charset);
+
+                            //send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
                         }
                         $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
                         $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></div>";
