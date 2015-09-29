@@ -283,7 +283,6 @@ if (!empty($show) and $show == 'closed') {
 
                             send_mail_multipart('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailPlainBody, $emailbody, $charset);
 
-                            //send_mail('', '', "$_POST[prof_givenname] $_POST[prof_surname]", $_POST['prof_email'], $emailsubject, $emailbody, $charset);
                         }
                         $tool_content .= "<div class='alert alert-success'>" . (($list_status == 1) ? $langTeacherRequestHasRejected : $langRequestReject);
                         $tool_content .= " $langRequestMessageHasSent <b>$_POST[prof_email]</b></div>";

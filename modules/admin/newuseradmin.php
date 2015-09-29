@@ -143,7 +143,7 @@ if (isset($_POST['submit'])) {
             </div>
             <div>
             <br>
-                <p>$langProblem</p><br>" . get_config('admin_name') . ":
+                <p>$langProblem</p><br>" . get_config('admin_name') . "
                 <ul id='forum-category'>
                     <li>$langManager: $siteName</li>
                     <li>$langTel: $telephone</li>

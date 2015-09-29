@@ -260,8 +260,8 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $langSettings, $langPass, $langAddress, $langIs, $urlServer,
     $langProblem, $langPassSameAuth,
     $langManager, $langTel, $langEmail,
-    $profsuccess, $usersuccess,
-    $user, $auth_ids, $auth_methods_form;
+    $profsuccess, $usersuccess, $langWithSuccess,
+    $user, $langUserCodename, $uname_form, $auth_ids, $auth_methods_form;
 
     if ($status == 1) {
         $message = $profsuccess;
@@ -304,20 +304,57 @@ function create_user($status, $uname, $password, $surname, $givenname, $email, $
     $emailhelpdesk = get_config('email_helpdesk');
     $emailsubject = "$langYourReg $siteName $type_message"; 
     $emailbody = "
-$langDestination $givenname $surname
+    $langDestination $givenname $surname
 
-$langYouAreReg $siteName$type_message $langSettings $uname
-$langPass : $mail_message
-$langAddress $siteName $langIs: $urlServer
-$langProblem
+    $langYouAreReg $siteName$type_message $langSettings $uname
+    $langPass : $mail_message
+    $langAddress $siteName $langIs: $urlServer
+    $langProblem
 
-$administratorName
-$langManager: $siteName
-$langTel: $telephone
-$langEmail: $emailhelpdesk
-";    
+    $administratorName
+    $langManager: $siteName
+    $langTel: $telephone
+    $langEmail: $emailhelpdesk
+    ";
+
+    $emailHeader = "
+    <!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langYouAreReg $siteName $type_message $langWithSuccess</div>
+                </div>
+            </div>";
+
+    $emailMain = "
+    <!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div>$langSettings</div>
+            <div id='mail-body-inner'>
+                <ul id='forum-category'>
+                    <li><span><b>$langUserCodename: </b></span> <span>$uname_form</span></li>
+                    <li><span><b>$langPass: </b></span> <span>$password</span></li>
+                    <li><span><b>$langAddress $siteName $langIs: </b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+            </div>
+            <div>
+            <br>
+                <p>$langProblem</p><br>" . get_config('admin_name') . "
+                <ul id='forum-category'>
+                    <li>$langManager: $siteName</li>
+                    <li>$langTel: $telephone</li>
+                    <li>$langEmail: " . get_config('email_helpdesk') . "</li>
+                </ul></p>
+            </div>
+        </div>";
+
+    $emailbody = $emailHeader.$emailMain;
+
+
+    $emailPlainBody = html2text($emailbody);
     if ($send_mail) {
-        send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+        send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $emailbody, $charset);
     }
 
     return array($id, $surname, $givenname, $email, $phone, $am, $uname, $password);
