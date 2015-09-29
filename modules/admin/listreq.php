@@ -198,9 +198,9 @@ if (!empty($show) and $show == 'closed') {
         $sql = Database::get()->queryArray("SELECT id, givenname, surname, username, email,
                                         faculty_id, phone, am, date_open, date_closed, comment
                                         FROM user_request
-                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_open DESC");        
+                                        WHERE (state = 3 AND status = $list_status $depqryadd) ORDER BY date_open DESC");
         $tool_content .= "<tbody>";
-        foreach ($sql as $req) {            
+        foreach ($sql as $req) {
             $tool_content .= "<tr>";
             $tool_content .= "<td>" . q($req->givenname) . "&nbsp;" . q($req->surname) . "</td>";
             $tool_content .= "<td>" . q($req->username) . "&nbsp;</td>";
@@ -211,10 +211,10 @@ if (!empty($show) and $show == 'closed') {
 				<small>" . nice_format(date('Y-m-d', strtotime($req->date_closed))) . "</small></td>";
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
-                                array('title' => $langRestore, 
+                                array('title' => $langRestore,
                                       'url' => "$_SERVER[SCRIPT_NAME]?id=$req->id&amp;show=closed$reqtype",
                                       'icon' => 'fa-retweet')));
-            $tool_content .= "</td></tr>";            
+            $tool_content .= "</td></tr>";
         }
     }
     $tool_content .= "</tbody>";
@@ -390,7 +390,7 @@ function table_header($addon = FALSE, $message = FALSE) {
         $rowspan = 2;
         $datestring = "<th colspan='2'>$langDate</th>
 		<th scope='col' rowspan='$rowspan'><div align='center'>$langActions</div></th>
-		</tr><tr>
+		</tr><tr class='list-header'>
 		<th>$langDateRequest_small</th>
 		<th>$message</th>";
     } else {
@@ -399,7 +399,7 @@ function table_header($addon = FALSE, $message = FALSE) {
 		<th scope='col'><div align='center'>$langActions</div></th>";
     }
 
-    $string .= "<tr>
+    $string .= "<tr class='list-header'>
 	<th scope='col' rowspan='$rowspan'><div align='left'>&nbsp;&nbsp;$langName $langSurname</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='left'>$langUsername</div></th>
 	<th scope='col' rowspan='$rowspan'><div align='center'>$langFaculty</div></th>";
