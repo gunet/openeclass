@@ -421,7 +421,12 @@ function show_document($title, $resource_id, $doc_id) {
         $file_obj = MediaResourceFactory::initFromDocument($file);
         
         if ($file->subsystem == MYDOCS) { //my documents
-            $module_visible = ($is_editor && get_config('mydocs_teacher_enable')) || (!$is_editor && get_config('mydocs_student_enable'));
+            $sql = Database::get()->querySingle("SELECT status FROM course_user WHERE course_id = ?d AND user_id = ?d", $course_id, $file->subsystem_id);
+            if ($sql->status == USER_TEACHER) {
+                $module_visible = get_config('mydocs_teacher_enable');
+            } else {
+                $module_visible = get_config('mydocs_student_enable');
+            }
         } else { //main documents
             $module_visible = visible_module(MODULE_ID_DOCS);
         }
