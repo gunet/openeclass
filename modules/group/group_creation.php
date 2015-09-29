@@ -191,7 +191,7 @@ if (isset($_GET['all'])) {
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-control' id='users_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-control' id='useers_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
@@ -245,12 +245,7 @@ if (isset($_GET['all'])) {
                     <label>
                      <input type='checkbox' name='self_reg' checked>$langGroupAllowStudentRegistration
                    </label>
-                 </div>
-                <div class='checkbox'>
-                    <label>
-                        <input type='checkbox' name='multi_reg'>$langGroupAllowMultipleRegistration                        
-                      </label>
-                    </div>                    
+                 </div>                
                 </div>
             </div>        
             <div class='form-group'>

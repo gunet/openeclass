@@ -369,7 +369,6 @@ if (isset($_POST['submit'])) {
             if (isset($_POST['s_radio'])) {
                 setting_set(SETTING_COURSE_SHARING_ENABLE, $_POST['s_radio'], $course_id);
             }
-
             if (isset($_POST['r_radio'])) {
                 setting_set(SETTING_COURSE_RATING_ENABLE, $_POST['r_radio'], $course_id);
             }

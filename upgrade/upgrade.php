@@ -24,6 +24,7 @@ define('UPGRADE', true);
 require '../include/baseTheme.php';
 require_once 'include/lib/fileUploadLib.inc.php';
 require_once 'include/lib/forcedownload.php';
+require_once 'include/course_settings.php';
 require_once 'modules/db/recycle.php';
 require_once 'modules/db/foreignkeys.php';
 require_once 'upgradeHelper.php';
@@ -2903,15 +2904,19 @@ $mysqlMainDb = ' . quote($mysqlMainDb) . ';
                 $documents = $group->documents;
                 $wiki = $group->wiki;
                 $agenda = $group->agenda;
+                
                 Database::get()->query("DELETE FROM group_properties WHERE course_id = ?d", $cid);
-
+                
+                delete_field('group_properties', 'multiple_registration');
+                
                 $num = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d", $cid);
 				
                 foreach ($num as $group_num) {
                         $group_id = $group_num->id;			
-                        Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, multiple_registration, allow_unregister, forum, private_forum, documents, wiki, agenda)
-                                                                                   VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $multi_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);									
+                        Database::get()->query("INSERT INTO `group_properties` (course_id, group_id, self_registration, allow_unregister, forum, private_forum, documents, wiki, agenda)
+                                                                                   VALUES  (?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d, ?d)", $cid, $group_id, $self_reg, $unreg, $forum, $priv_forum, $documents, $wiki, $agenda);									
                 }
+                setting_set(SETTING_GROUP_MULTIPLE_REGISTRATION, $multi_reg, $cid);
             }
             Database::get()->query("ALTER TABLE `group_properties` ADD PRIMARY KEY (group_id)");
         }

@@ -1837,9 +1837,9 @@ $langInGroup = "στην ομάδα χρηστών";
 
 // Group Properties
 $langGroupProperties = "Ρυθμίσεις Ομάδων Χρηστών";
-$langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπονται να εγγραφούν στις ομάδες χρηστών";
-$langGroupAllowMultipleRegistration = "Δυνατότητα εγγραφής σε περισσότερες από μία ομάδες";
-$langGroupStudentRegistrationType = "Δυνατότητα Εγγραφής";
+$langGroupAllowStudentRegistration = "Οι " . $langsStudents . " επιτρέπονται να εγγραφούν";
+$langGroupAllowMultipleRegistration = "Δυνατότητα εγγραφής χρηστών σε περισσότερες από μία ομάδες";
+$langGroupStudentRegistrationType = "Δυνατότητα εγγραφής";
 $langGroupAllowUnregister = "Δυνατότητα απεγγραφής από ομάδα";
 $langGroupPrivatise = "Κλειστές περιοχές συζητήσεων ομάδων χρηστών";
 $langGroupForum = "Περιοχή συζητήσεων";
@@ -4752,6 +4752,7 @@ $langExtAppDescription = "Περιγραφή";
 $langClearSettings = "Καθαρισμός Ρυθμίσεων";
 $langNotConfigured = 'Δεν έχει ρυθμιστεί';
 $langEnableAfterConfig = 'Για να ενεργοποιήσετε αυτό το εργαλείο θα πρέπει πρώτα να εισάγετε τις απαιτούμενες ρυθμίσεις.';
+$langUnknownSetting = 'Άγνωστη ρύθμιση';
 
 /* * ***********************************************************
  * Auto Judge

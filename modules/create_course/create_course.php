@@ -560,16 +560,7 @@ if (!isset($_POST['create_course'])) {
                                         reg_date = " . DBHelper::timeAfter() . ",
                                         document_timestamp = " . DBHelper::timeAfter() . "",
                            intval($new_course_id), intval($uid));
-
-    Database::get()->query("INSERT INTO group_properties SET
-                                        course_id = ?d,
-                                        self_registration = 1,
-                                        multiple_registration = 0,
-                                        forum = 1,
-                                        private_forum = 0,
-                                        documents = 1,
-                                        wiki = 0,
-                                        agenda = 0", intval($new_course_id));
+    
     $course->refresh($new_course_id, $departments);
 
     // create courses/<CODE>/index.php

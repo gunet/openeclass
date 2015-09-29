@@ -51,11 +51,10 @@ function initialize_group_info($group_id) {
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
 
-    if (!(isset($self_reg) and isset($multi_reg) and isset($has_forum) and isset($private_forum) and isset($documents) and isset($wiki))) {
-        $grp_property_item = Database::get()->querySingle("SELECT self_registration, multiple_registration, forum, private_forum, documents, wiki
+    if (!(isset($self_reg) and isset($has_forum) and isset($private_forum) and isset($documents) and isset($wiki))) {
+        $grp_property_item = Database::get()->querySingle("SELECT self_registration, forum, private_forum, documents, wiki
                          FROM group_properties WHERE course_id = ?d AND group_id = ?d", $course_id, $group_id);
-        $self_reg = $grp_property_item->self_registration;
-        $multi_reg = $grp_property_item->multiple_registration;
+        $self_reg = $grp_property_item->self_registration;        
         $has_forum = $grp_property_item->forum;
         $private_forum = $grp_property_item->private_forum;
         $documents = $grp_property_item->documents;
@@ -169,40 +168,88 @@ function showgroupcategoryadmintools($categoryid) {
 }
 
 
+/**
+ * @brief display groups of specified category
+ * @global type $is_editor
+ * @global type $course_id
+ * @global type $tool_content
+ * @global type $course_code
+ * @global type $langGroupDelconfirm
+ * @global type $langDelete
+ * @global type $langEditChange
+ * @global type $groups_num
+ * @global type $uid
+ * @param type $catid
+ */
 function showgroupsofcategory($catid) {
     
     global $is_editor, $course_id, $tool_content,
-    $course_code, $langGroupDelconfirm, $langDelete,
-    $langEditChange, $groups_num;
+    $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
+    $langModify, $is_member, $multi_reg, $langMyGroup,
+    $langEditChange, $groups_num, $uid, $totalRegistered, 
+    $tutors, $group_name, $self_reg, $user_group_description, $user_groups, $max_members;
 
-    $tool_content .= "<tr>";
-    $result = Database::get()->queryArray("SELECT * FROM `group`
+    $q = Database::get()->queryArray("SELECT id FROM `group`
                                    WHERE course_id = ?d AND category_id = ?d
                                    ORDER BY `id`", $course_id, $catid);
-  
-    foreach ($result as $myrow) {
-        $name = empty($myrow->name) ? $myrow->description : $myrow->name;        
-        $tool_content .= "<td><a href='group_space.php?course=$course_code&amp;group_id=$myrow->id'>" . q($myrow->name) . "</a>";        
-        if (!empty($myrow->description)) {
-            $tool_content .= "<br>" . standard_text_escape($myrow->description);
+          
+    foreach ($q as $row) {
+        $tool_content .= "<tr><td>";
+        $group_id = $row->id;
+        initialize_group_info($group_id);
+        if ($is_editor) {
+            $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
+        } else {
+            if ($is_member) {
+                $tool_content .= "<a href='group_space.php?course=$course_code&amp;group_id=$group_id'>" . q($group_name) . "</a>";
+                $tool_content .= "<span style='color:#900; weight:bold;'>($langMyGroup)</span>";
+            } else {
+                $tool_content .= q($group_name);
+            }
         }
-        if ($catid == -2) { 
-            global $uid;
-            $rating = new Rating('thumbs_up', 'group', $myrow->id);
-            $tool_content .= $rating->put($is_editor, $uid, $course_id);
+        if ($user_group_description) {
+            $tool_content .= "<br />" . q($user_group_description) . "&nbsp;&nbsp;" .
+                    icon('fa-edit', $langModify, "group_description.php?course=$course_code&amp;group_id=$group_id") . "&nbsp;" .
+                    icon('fa-times', $langDelete, "group_description.php?course=$course_code&amp;group_id=$group_id&amp;delete=true", 'onClick="return confirmation();"');
+        } elseif ($is_member) {
+            $tool_content .= "<br /><a href='group_description.php?course=$course_code&amp;group_id=$group_id'><i>$langAddDescription</i></a>";
+        }
+        $tool_content .= "</td>";
+        $tool_content .= "<td class='text-center'>";
+        foreach ($tutors as $t) {
+            $tool_content .= display_user($t->user_id) . "<br>";
         }
         $tool_content .= "</td>";
         
+        if (!$is_editor) {
+            $tool_content .= "<td class='text-center'>";
+            // If self-registration and multi registration allowed by admin and group is not full        
+            if ($uid and $self_reg and ( !$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
+                $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
+            } else {
+                $tool_content .= "-";
+            }
+            $tool_content .= "</td>";
+        }        
+
+        if ($catid == -2) {
+            $rating = new Rating('thumbs_up', 'group', $group_id);
+            $tool_content .= $rating->put($is_editor, $uid, $course_id);
+        }
+        $tool_content .= "<td class='text-center'>$member_count</td><td class='text-center'>" .
+                ($max_members ? $max_members : '-') . "</td>";
+        $totalRegistered += $member_count;
+
         if ($is_editor) {  
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
-                      'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$myrow->id"),
+                      'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$group_id"),
                 array('title' => $langDelete,
                       'icon' => 'fa-times',
                       'class' => 'delete',
-                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;deletegroup=1&amp;id=$myrow->id",
+                      'url' => "$_SERVER[SCRIPT_NAME]?course=$course_code&amp;deletegroup=1&amp;id=$group_id",
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";
