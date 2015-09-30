@@ -107,7 +107,7 @@ if ($is_editor or $is_tutor) {
             }
         }
         // aldo send email to professor
-        send_mail($sender_name, $sender_email, '', $sender_email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset);
+        send_mail_multipart($sender_name, $sender_email, '', $sender_email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset);
         $tool_content .= "<div class='alert alert-success'>$langEmailSuccess<br>";
         $tool_content .= "<a href='index.php?course=$course_code'>$langBack</a></div>";
     } else {
