@@ -155,7 +155,7 @@ if ($is_editor) {
 $tool_content_max_student = $max_members ? $max_members : 1;
 $tool_content_group_description = q($group_description);
 
-
+$multi_reg = Database::get()->querySingle("SELECT value FROM course_settings WHERE course_id = ?d AND setting_id = ?d", $course_id, SETTING_GROUP_MULTIPLE_REGISTRATION)->value;
 if ($multi_reg) {
     // Students registered to the course but not members of this group
     $resultNotMember = Database::get()->queryArray("SELECT u.id, u.surname, u.givenname, u.am
