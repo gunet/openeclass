@@ -590,7 +590,7 @@ function adminMenu() {
         array_push($sideMenuImg, "arrow.png");
 
         array_push($sideMenuText, $GLOBALS['langStat']);
-        array_push($sideMenuLink, "modules/usage/?t=a");
+        array_push($sideMenuLink, "../../modules/usage/?t=a");
         array_push($sideMenuImg, "arrow.png");
 
         if (get_config('enable_common_docs')) {
