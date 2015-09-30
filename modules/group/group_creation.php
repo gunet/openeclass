@@ -191,7 +191,7 @@ if (isset($_GET['all'])) {
                     <tbody>
                         <tr>
                           <td>
-                            <select class='form-control' id='useers_box' name='nogroup[]' size='15' multiple>
+                            <select class='form-control' id='users_box' name='nogroup[]' size='15' multiple>
                               $tool_content_not_Member
                             </select>
                           </td>
