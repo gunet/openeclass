@@ -450,19 +450,41 @@ if (!isset($_POST['submit'])) {
         $telephone = get_config('phone');
         $administratorName = get_config('admin_name');
         $emailhelpdesk = get_config('email_helpdesk');
-        $emailbody = "$langDestination $givenname_form $surname_form\n" .
-                "$langYouAreReg $siteName $langSettings $uname\n" .
-                "$langPass: $password\n$langAddress $siteName: " .
-                "$urlServer\n" .
-                ($vmail ? "\n$langMailVerificationSuccess.\n$langMailVerificationClick\n$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id . "\n" : "") .
-                "$langProblem\n$langFormula\n" .
-                "$administratorName\n" .
-                "$langManager $siteName \n$langTel $telephone\n" .
-                "$langEmail: $emailhelpdesk";
+
+
+        $header_html_topic_notify = "<!-- Header Section -->
+        <div id='mail-header'>
+            <br>
+            <div>
+                <div id='header-title'>$langYouAreReg $siteName</div>
+            </div>
+        </div>";
+
+        $body_html_topic_notify = "<!-- Body Section -->
+        <div id='mail-body'>
+            <br>
+            <div id='mail-body-inner'>
+            <p>$langSettings</p>
+                <ul id='forum-category'>
+                    <li><span><b>$langUsername:</b></span> <span>$uname</span></li>
+                    <li><span><b>$langPass:</b></span> <span>$password</span></li>
+                    <li><span><b>$langAddress $siteName:</b></span> <span><a href='$urlServer'>$urlServer</a></span></li>
+                </ul>
+                <p>".($vmail ? "$langMailVerificationSuccess"."<br>"."$langMailVerificationClick "."<a href='"."$urlServer." . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id."'>"."$urlServer" . "modules/auth/mail_verify.php?h=" . $hmac . "&id=" . $last_id."</a>" : "") .
+                "<br><br>"."$langProblem"."<br><br><br>"."$langFormula" .
+                "<br>"."$administratorName" ."<br><br>".
+                "$langTel: $telephone " ."<br>".
+                "$langEmail: $emailhelpdesk"."</p>
+            </div>
+        </div>";
+
+        $html_topic_notify = $header_html_topic_notify.$body_html_topic_notify;
+
+        $emailPlainBody = html2text($html_topic_notify);
 
         // send email to user
         if (!empty($email)) {
-            send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+            send_mail_multipart('', '', '', $email, $emailsubject, $emailPlainBody, $html_topic_notify, $charset);
             $user_msg = $langPersonalSettings;
         } else {
             $user_msg = $langPersonalSettingsLess;
