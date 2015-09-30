@@ -47,20 +47,19 @@ function initialize_group_id($param = 'group_id') {
  */
 function initialize_group_info($group_id) {
     
-    global $course_id, $status, $self_reg, $multi_reg, $has_forum, $private_forum, $documents, $wiki,
+    global $course_id, $status, $self_reg, $has_forum, $private_forum, $documents, $wiki,
     $group_name, $group_description, $forum_id, $max_members, $secret_directory, $tutors,
     $member_count, $is_tutor, $is_member, $uid, $urlServer, $user_group_description, $course_code;
-
-    if (!(isset($self_reg) and isset($has_forum) and isset($private_forum) and isset($documents) and isset($wiki))) {
-        $grp_property_item = Database::get()->querySingle("SELECT self_registration, forum, private_forum, documents, wiki
-                         FROM group_properties WHERE course_id = ?d AND group_id = ?d", $course_id, $group_id);
-        $self_reg = $grp_property_item->self_registration;        
-        $has_forum = $grp_property_item->forum;
-        $private_forum = $grp_property_item->private_forum;
-        $documents = $grp_property_item->documents;
-        $wiki = $grp_property_item->wiki;
-    }
-
+ 
+    $grp_property_item = Database::get()->querySingle("SELECT self_registration, forum, private_forum, documents, wiki
+                     FROM group_properties WHERE course_id = ?d AND group_id = ?d", $course_id, $group_id);
+    $self_reg = $grp_property_item->self_registration;        
+    $has_forum = $grp_property_item->forum;
+    $private_forum = $grp_property_item->private_forum;
+    $documents = $grp_property_item->documents;
+    $wiki = $grp_property_item->wiki;
+    
+   
     // Guest users aren't allowed to register in a group
     if ($status == USER_GUEST) {
         $self_reg = 0;
@@ -183,7 +182,7 @@ function showgroupcategoryadmintools($categoryid) {
  */
 function showgroupsofcategory($catid) {
     
-    global $is_editor, $course_id, $tool_content,
+    global $is_editor, $course_id, $tool_content, $langConfig,
     $course_code, $langGroupDelconfirm, $langDelete, $langRegister, $member_count,
     $langModify, $is_member, $multi_reg, $langMyGroup,
     $langEditChange, $groups_num, $uid, $totalRegistered, 
@@ -232,6 +231,9 @@ function showgroupsofcategory($catid) {
         if ($is_editor) {
             $tool_content .= "<td class='option-btn-cell'>";
             $tool_content .= action_button(array(
+                array('title' => $langConfig,
+                      'icon' => 'fa-gear',
+                      'url' => "group_properties.php?course=$course_code&amp;group_id=$group_id"),                        
                 array('title' => $langEditChange,
                       'icon' => 'fa-edit',
                       'url' => "group_edit.php?course=$course_code&amp;category=$catid&amp;group_id=$group_id"),
@@ -242,10 +244,10 @@ function showgroupsofcategory($catid) {
                       'confirm' => $langGroupDelconfirm)
             ));
             $tool_content .= "</td>";
-        } else {
+        } else {            
             $tool_content .= "<td class='text-center'>";
             // If self-registration and multi registration allowed by admin and group is not full        
-            if ($uid and $self_reg and ( !$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
+            if ($uid and $self_reg and (!$user_groups or $multi_reg) and !$is_member and (!$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
             } else {
                 $tool_content .= "-";

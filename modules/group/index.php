@@ -459,11 +459,8 @@ if ($is_editor) {
                                                                   WHERE `group`.id = group_members.group_id AND
                                                                         `group`.course_id = ?d)
                                 GROUP BY u.id
-                                ORDER BY u.surname, u.givenname", $course_id, $course_id);
-        //die(var_dump(max($placeAvailableInGroups)));
-        //['20' => 1]
-        // gets highest group value 1
-        //finds groups with  highest value 1
+                                ORDER BY u.surname, u.givenname", $course_id, $course_id);        
+        
         // gets first group with highest value and adds user id
         foreach ($resUserSansGroupe as $idUser) {
             
@@ -583,7 +580,7 @@ if ($is_editor) {
                     action_button(array(
                         array('title' => $langConfig,
                             'url' => "group_properties.php?course=$course_code&amp;group_id=$group->id",
-                            'icon' => 'fa-gear'),                        
+                            'icon' => 'fa-gear'),
                         array('title' => $langEditChange,
                             'url' => "group_edit.php?course=$course_code&amp;category=$group->category_id&amp;group_id=$group->id",
                             'icon' => 'fa-edit'),                        
@@ -599,7 +596,7 @@ if ($is_editor) {
     }
 } else {
     // Begin student view
-    $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d ORDER BY name", $course_id);
+    $q = Database::get()->queryArray("SELECT id FROM `group` WHERE course_id = ?d AND (category_id = 0 OR category_id IS NULL) ORDER BY name", $course_id);
     if (count($q) == 0) {
         $tool_content .= "<div class='alert alert-warning'>$langNoGroup</div>";
     } else {
@@ -614,7 +611,9 @@ if ($is_editor) {
                 </tr>";
         foreach ($q as $row) {
             $group_id = $row->id;
+            
             initialize_group_info($group_id);
+            
             $tool_content .= "<td class='text-left'>";
             // Allow student to enter group only if member
             if ($is_member) {
@@ -640,7 +639,8 @@ if ($is_editor) {
                     ($max_members ? $max_members : '-') . "</td>";
             // If self-registration and multi registration allowed by admin and group is not full
             $tool_content .= "<td class='text-center'>";
-            if ($uid and $self_reg and ( !$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
+            echo $is_member;
+            if ($uid and $self_reg and (!$user_groups or $multi_reg) and ! $is_member and ( !$max_members or $member_count < $max_members)) {
                 $tool_content .= icon('fa-sign-in', $langRegister, "group_space.php?course=$course_code&amp;selfReg=1&amp;group_id=$group_id");
             } else {
                 $tool_content .= "-";
