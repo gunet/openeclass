@@ -892,7 +892,7 @@ function submit_work($id, $on_behalf_of = null) {
             }
             if ($on_behalf_of and isset($_POST['email'])) {
                 $email_grade = $_POST['grade'];
-                $email_comments = "\n$auto_comments\n\n" . $_POST['stud_comments'];
+                $email_comments = $_POST['stud_comments'];
                 grade_email_notify($row->id, $sid, $email_grade, $email_comments);
             }
         }
@@ -3117,34 +3117,56 @@ function grade_email_notify($assignment_id, $submission_id, $grade, $comments) {
     $subject = sprintf($m['work_email_subject'], $title);
     $body = sprintf($m['work_email_message'], $title, $currentCourseName) . "\n\n";
     if ($grade != '') {
-        $body .= "$m[grade]: $grade\n";
+        $body .= ": $m[grade]$grade\n";
     }
     if ($comments) {
         $body .= "$m[gradecomments]: $comments\n";
     }
-    $body .= "\n$m[link_follows]\n{$urlServer}modules/work/index.php?course=$course_code&id=$assignment_id\n";
+
+    $header_html_topic_notify = "<!-- Header Section -->
+    <div id='mail-header'>
+        <br>
+        <div>
+            <div id='header-title'>".sprintf($m['work_email_message'], $title, $currentCourseName)."</a>.</div>
+        </div>
+    </div>";
+
+    $body_html_topic_notify = "<!-- Body Section -->
+    <div id='mail-body'>
+        <br>
+        <div><b>$m[grade]: </b> <span class='left-space'>$grade</span></div><br>
+        <div><b>$m[gradecomments]: </b></div>
+        <div id='mail-body-inner'>
+            $comments<br><br>
+        </div>
+        $m[link_follows] <a href='{$urlServer}modules/work/index.php?course=$course_code&id=$assignment_id'>{$urlServer}modules/work/index.php?course=$course_code&id=$assignment_id</a>
+    </div>";
+
+    $body = $header_html_topic_notify.$body_html_topic_notify;
+
+    $plainBody = html2text($body);
     if (!$group or !$info->group_id) {
-        send_mail_to_user_id($info->uid, $subject, $body);
+        send_mail_to_user_id($info->uid, $subject, $plainBody, $body);
     } else {
-        send_mail_to_group_id($info->group_id, $subject, $body);
+        send_mail_to_group_id($info->group_id, $subject, $plainBody, $body);
     }
 }
 
-function send_mail_to_group_id($gid, $subject, $body) {
+function send_mail_to_group_id($gid, $subject, $plainBody, $body) {
     global $charset;
     $res = Database::get()->queryArray("SELECT surname, givenname, email
                                  FROM user, group_members AS members
                                  WHERE members.group_id = ?d
                                  AND user.id = members.user_id", $gid);
     foreach ($res as $info) {
-        send_mail('', '', "$info->givenname $info->surname", $info->email, $subject, $body, $charset);
+        send_mail_multipart('', '', "$info->givenname $info->surname", $info->email, $subject, $plainBody, $body, $charset);
     }
 }
 
-function send_mail_to_user_id($uid, $subject, $body) {
+function send_mail_to_user_id($uid, $subject, $plainBody, $body) {
     global $charset;
     $user = Database::get()->querySingle("SELECT surname, givenname, email FROM user WHERE id = ?d", $uid);
-    send_mail('', '', "$user->givenname $user->surname", $user->email, $subject, $body, $charset);
+    send_mail_multipart('', '', "$user->givenname $user->surname", $user->email, $subject, $plainBody, $body, $charset);
 }
 
 // Return a list of users with no submissions for assignment $id
