@@ -40,27 +40,23 @@ $toolName = $langGroups;
 $pageName = $group_name;
 $navigation[] = array('url' => 'index.php?course=' . $course_code, 'name' => $langGroups);
 
-if (!$is_member and !$is_editor) {
-    $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
-    draw($tool_content, 2);
-    exit;
-}
-
-if (isset($_GET['selfReg'])) {
+if (isset($_GET['selfReg']) and ($self_reg == 1)) {  // if group self registration is enabled
     if (!$is_member and $status != USER_GUEST and ($max_members == 0 or $member_count < $max_members)) {
         $id = Database::get()->query("INSERT INTO group_members SET user_id = ?d, group_id = ?d, description = ''", $uid, $group_id);
         $group = gid_to_name($group_id);
         Log::record($course_id, MODULE_ID_GROUPS, LOG_MODIFY, array('id' => $id,
-            'uid' => $uid,
-            'name' => $group));
+                                                                    'uid' => $uid,
+                                                                    'name' => $group));
 
         Session::Messages($langGroupNowMember, 'alert-success');
         redirect_to_home_page("modules/group/group_space.php?course=$course_code&group_id=$group_id");
     } else {
-        $tool_content .= "<div class='alert alert-danger'>$langForbidden</div>";
-        draw($tool_content, 2);
-        exit;
+        Session::Messages($langForbidden, 'alert-danger');
+        redirect_to_home_page("modules/group/index.php?course=$course_code");
     }
+} else {
+    Session::Messages($langForbidden, 'alert-danger');
+    redirect_to_home_page("modules/group/index.php?course=$course_code");       
 }
 
 if (isset($_GET['group_as'])) {
