@@ -51,7 +51,29 @@ if (isset($_GET['add'])) {
         if (!empty($email) and email_seems_valid($email)) {
             $emailsubject = "$langYourReg " . course_id_to_title($course_id);
             $emailbody = "$langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2 $langFormula \n$gunet";
-            send_mail('', '', '', $email, $emailsubject, $emailbody, $charset);
+
+            $header_html_topic_notify = "<!-- Header Section -->
+            <div id='mail-header'>
+                <br>
+                <div>
+                    <div id='header-title'>$langYourReg " . course_id_to_title($course_id)."</div>
+                </div>
+            </div>";
+
+            $body_html_topic_notify = "<!-- Body Section -->
+            <div id='mail-body'>
+                <br>
+                <div id='mail-body-inner'>
+                    $langNotifyRegUser1 '" . course_id_to_title($course_id) . "' $langNotifyRegUser2
+                    <br><br>$langFormula<br>$gunet
+                </div>
+            </div>";
+
+            $emailbody = $header_html_topic_notify.$body_html_topic_notify;
+
+            $plainemailbody = html2text($emailbody);
+
+            send_mail_multipart('', '', '', $email, $emailsubject, $plainemailbody, $emailbody, $charset);
         }
     } else {
         Session::Messages( $langAddError, "alert alert-warning");
