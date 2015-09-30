@@ -543,8 +543,8 @@ function add_assignment() {
 
             $secret = work_secret($id);
             if ($id) {
-                $student_name = trim(uid_to_name($user_id));
-                $local_name = !empty($student_name)? $student_name : uid_to_name($user_id, 'username');
+                $student_name = trim(uid_to_name($uid));
+                $local_name = !empty($student_name)? $student_name : uid_to_name($uid, 'username');
                 $am = Database::get()->querySingle("SELECT am FROM user WHERE id = ?d", $uid)->am;
                 if (!empty($am)) {
                     $local_name .= $am;
